@@ -11,26 +11,26 @@ use File::Spec::Functions;
 # ELRA RESOURCES SCHEME
 # -----------------------
 #
-#  0 resource type					-> 15 	(genre)
-#  1 catalogue_item_reference 		-> 25	(refs)
-#  2 resource_fullname 				-> 2 	(name)
-#  3 resource_shortname 				IGNORED	
-#  4 date_of_availability 			-> 4 	(date)
-#  5 resource_short_description 		-> 3 	(title)	
-#  6 languages_resource     			-> 28 (languageName)	
-#  7 member academic research 	
-#  8 member commercial research 	
-#  9 member academic commercial 	
-# 10 member commercial commercial 	
-# 11 member academic evaluation 	
-# 12 member commercial evaluation 	
-# 13 non_member academic research 	
-# 14 non_member commercial research 	
-# 15 non_member academic commercial 	
-# 16 non_member commercial commercial 	
-# 17 non_member academic evaluation 	
-# 18 non_member commercial evaluation 	
-# 19 special_price 
+#  0 resource type						-> 15 	(genre)
+#  1 catalogue_item_reference 			-> 25	(refs)
+#  2 resource_fullname 					-> 2 	(name)
+#  3 resource_shortname 					IGNORED	
+#  4 date_of_availability 				-> 4 	(date)
+#  5 resource_short_description 			-> 3 	(title)	
+#  6 languages_resource     				-> 28 (languageName)	
+#  7 member academic research 			IGNORED
+#  8 member commercial research 			IGNORED	
+#  9 member academic commercial 			IGNORED	
+# 10 member commercial commercial 		IGNORED
+# 11 member academic evaluation 			IGNORED	
+# 12 member commercial evaluation 		IGNORED
+# 13 non_member academic research 		IGNORED
+# 14 non_member commercial research 		IGNORED	
+# 15 non_member academic commercial 		IGNORED	
+# 16 non_member commercial commercial 	IGNORED
+# 17 non_member academic evaluation 		IGNORED	
+# 18 non_member commercial evaluation 	IGNORED
+# 19 special_price						IGNORED 
 
 
 my $basedir = "/home/alekoe/projects/flamenco/fromperl";

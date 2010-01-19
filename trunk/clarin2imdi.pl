@@ -135,8 +135,8 @@ close $target_file;
 # sub routines    #
 #==================
 
-#----------------------------(  cleanString )-------------------------------------#
-#  FUNCTION:    cleanString                                                       #
+#----------------------------(  clean_up )----------------------------------------#
+#  FUNCTION:    clean_up                                                          #
 #  PURPOSE:     nomalise a string by removing leading and trailing whitespaces,   #
 #               double whitespaces, tabs and doublequotes          .              #
 #  ARGS:        $string - the string to be cleaned                                #
