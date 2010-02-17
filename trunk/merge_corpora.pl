@@ -18,7 +18,7 @@ foreach my $file (@files)
     if ($file =~/imdi_(.*)\.csv/) 
     { 
 		my $postfix = $1;
-		print "Now handling $file i.e. corpus $postfix\n";
+		print "Now handling $file i.e. origin: $postfix\n";
 		open (my $src_file, "<", $file) or die "Cannot open IMDI source file $file. $!";
 		while (my $imdiLine = <$src_file> )
 		{

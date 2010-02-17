@@ -36,7 +36,7 @@ while (my $imdiLine = <$src_data> )
 {
     my @imdiFields=split(/\t/, $imdiLine); # split the database row into fields
 
-    my $corpus = cleanString( $imdiFields[0] );
+    my $origin = cleanString( $imdiFields[0] );
 
 	# first print the index number into the tsv files
     $counter++;
@@ -62,7 +62,7 @@ while (my $imdiLine = <$src_data> )
     my $temp3 = cleanString( $imdiFields[28] );
     
     # country, language, and organisation have other separators in CLARIN data
-    if ( $corpus eq "clarin" ) 
+    if ( $origin eq "clarin" ) 
     {
 		analyseFill_clarin( $imdiFields[6],  \%hash_table_x6 );
 		analyseFill_clarin( $imdiFields[14], \%hash_table_x14 );
@@ -120,7 +120,7 @@ fix_hash_values( \%hash_table_x26 );
 fix_hash_values( \%hash_table_x28 );
 
 # create all the facet_terms.tsv file
-create_facet_tsv( "facetCorpus",         %hash_table_x0);
+create_facet_tsv( "facetOrigin",         %hash_table_x0);
 create_facet_tsv( "facetContinent",      %hash_table_x5);
 create_facet_tsv( "facetCountry",        %hash_table_x6);
 create_facet_tsv( "facetOrganisation",   %hash_table_x14);
@@ -145,7 +145,7 @@ print "Started creating facet term files.\n";
 my $newCounter = 0;
 open($src_data, "<", catfile($HOME,"imdi.csv")) || die("Cannot open IMDI source file.\n");
 
-open(my $corpus_data,         ">$HOME/facetCorpus_map.tsv") || die("Cannot open facetCorpus_map target.\n");
+open(my $origin_data,         ">$HOME/facetOrigin_map.tsv") || die("Cannot open facetOrigin_map target.\n");
 open(my $continent_data,      ">$HOME/facetContinent_map.tsv") || die("Cannot open facetContinent_map target.\n");
 open(my $country_data,        ">$HOME/facetCountry_map.tsv") || die("Cannot open facetCountry_map target.\n");
 open(my $organisation_data,   ">$HOME/facetOrganisation_map.tsv") || die("Cannot open facetOrganisation_map target.\n");
@@ -165,14 +165,14 @@ while (my $imdiLine = <$src_data> )
     my @imdiFields=split(/\t/, $imdiLine);
 
     $newCounter++;
-    my $corpus = &cleanString( $imdiFields[0] );
+    my $origin = &cleanString( $imdiFields[0] );
 
-    process_x( $imdiFields[0],  \%hash_table_x0,  $corpus_data, $newCounter );
+    process_x( $imdiFields[0],  \%hash_table_x0,  $origin_data, $newCounter );
     process_x( $imdiFields[5],  \%hash_table_x5,  $continent_data, $newCounter );
 
     my $temp3 = cleanString( $imdiFields[28] );
 
-    if ( $corpus eq "clarin" ) 
+    if ( $origin eq "clarin" ) 
     {
 		process_x_clarin( $imdiFields[6],  \%hash_table_x6, $country_data, $newCounter );
 		process_x_clarin( $imdiFields[14], \%hash_table_x14, $organisation_data, $newCounter );
@@ -208,7 +208,7 @@ while (my $imdiLine = <$src_data> )
 }
                 
 close $src_data;
-close $corpus_data;
+close $origin_data;
 close $continent_data;
 close $country_data;
 close $organisation_data;
@@ -343,7 +343,7 @@ sub analyseFill_olac{
 # special routine for CLARIN DATA
 sub analyseFill_clarin{
     my( $currentContent, $currentHash ) = @_;
-    my @contentFields = split(/\|\|/, $currentContent);
+    my @contentFields = split(/;|\|\|/, $currentContent);
     foreach my $ct (@contentFields)
     {
 	$ct = cleanString($ct);

@@ -91,6 +91,23 @@ my $csv = Text::CSV_XS->new ({ binary => 1, eol => $/ });
 	my $project = clean_up($clarin_fields[26]); # 26 project         -> 8	(projectname)
 	my $nid = clean_up($clarin_fields[41]); # 41 nid             -> 1	(nodeId)
 
+	# collect org fields and concatenate them to institution
+  	my $org1 = clean_up($clarin_fields[42]);
+    my $org2 = clean_up($clarin_fields[43]);
+    my $org3 = clean_up($clarin_fields[44]);
+    my $org4 = clean_up($clarin_fields[45]);
+    my $org5 = clean_up($clarin_fields[46]);
+    
+    for my $element ($org1, $org2, $org3, $org4, $org5)
+    {
+    		next if $element =~ /^\s*$/;
+    		if ($institution !~ /^\s*$/)
+    		{
+    			$institution .= "; ";
+    		}
+    		$institution .= $element;
+    	}
+	
 	# we don't want the first line
 	next if $resource_type eq 'Resource Type (field_resource_type)';
 
