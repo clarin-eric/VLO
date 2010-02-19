@@ -1,0 +1,29 @@
+topNode	IMDI Top Node
+nodeId	Session Node Identifier
+name	Name
+title	Title
+date	Date
+continent	Continent
+country	Country
+address	Address
+projectname	Project Name
+projecttitle	Project Title
+projectid	Project Identifier
+contactname	Project Contact Name
+contactaddress	Project Contact Address
+contactemail	Project Contact Email
+contactorganisation	Project Contact Organisation
+genre	Genre
+subgenre	Subgenre
+task	Task
+modalities	Modalities
+interactivity	Interactivity
+planningtype	Planning Type
+involvement	Involvement
+socialcontext	Social Context
+eventstructure	Event Structure
+channel	Channel
+refs	References
+subject	Subject
+languageCode	Language Code
+languageName	Language
