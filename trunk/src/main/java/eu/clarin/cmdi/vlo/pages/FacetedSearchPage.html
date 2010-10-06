@@ -9,22 +9,24 @@
 
 <div class="title">
 <h1>CLARIN Virtual Language Observatory - Resources</h1>
-<h2>Demonstrator with IMDI, OLAC, ELRA and CLARIN data
-(contact:vlw@clarin.eu)</h2>
+<h2>Demonstrator with IMDI, OLAC, ELRA and CLARIN data (contact:vlw@clarin.eu)</h2>
 </div>
-<div class="opening">
+<div class="middlegame">
 <p />
-<table border="0" class="opening" cellspacing="0" cellpadding="0"
-	width="100%">
+<table border="0" class="opening" cellspacing="0" cellpadding="0" width="100%">
 	<tr>
 		<td>
-		<form class="search">
+		<form class="search" wicket:id="searchForm">
 		<table border="0" cellpadding="0" cellspacing="0">
 			<tr valign="bottom">
-				<td><input type="text" name="words" size="14">&nbsp; <input
-					type="submit" value="search"> <input type="hidden" name="q"
-					value=""> <input type="hidden" name="facet" value="">
-				<input type="hidden" name="in" value="all"></td>
+				<td>
+                    <input type="text"  wicket:id="searchQuery" />&nbsp;
+                    <button wicket:id="searchSubmit">submit</button>
+<!--				    <input type="submit" value="search"> -->
+<!--				    <input type="hidden" name="q" value=""> -->
+<!--			        <input type="hidden" name="facet" value=""> -->
+<!--			        <input type="hidden" name="in" value="all">-->
+			    </td>
 			</tr>
 		</table>
 		</form>
@@ -32,8 +34,7 @@
 	</tr>
 	<tr>
 		<td>
-		<table border="0" class="matrix" cellspacing="0" cellpadding="0"
-			width="100%">
+		<table border="0" class="matrix" cellspacing="0" cellpadding="0" width="100%">
 			<tr wicket:id="facetColumns" valign="top">
 				<td wicket:id="cols" width="50%" class="column">
 				<p><span wicket:id="facetBox"></span>

@@ -13,8 +13,12 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColu
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.WicketURLDecoder;
@@ -40,8 +44,36 @@ public class FacetedSearchPage extends WebPage {
         } else {
             query = SearchPageQuery.getDefaultQuery();
         }
+        addSearchBox();
         addFacetColumns();
         addSearchResults();
+    }
+
+    @SuppressWarnings("serial")
+    private class SearchBoxForm extends Form<SearchPageQuery> {
+
+        private TextField searchBox;
+
+        public SearchBoxForm(String id, SearchPageQuery query) {
+            super(id, new CompoundPropertyModel<SearchPageQuery>(query));
+            searchBox = new TextField("searchQuery");
+            add(searchBox);
+            Button submit = new Button("searchSubmit");
+            add(submit);
+        }
+
+        @Override
+        protected void onSubmit() {
+            SearchPageQuery query = getModelObject();
+            PageParameters pageParameters = new PageParameters();
+            pageParameters.put(FacetedSearchPage.PARAM_QUERY, query.getSolrQuery().toString());
+            setResponsePage(FacetedSearchPage.class, pageParameters);
+        }
+
+    }
+
+    private void addSearchBox() {
+        add(new SearchBoxForm("searchForm", query));
     }
 
     @SuppressWarnings("serial")

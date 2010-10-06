@@ -4,6 +4,7 @@
 package eu.clarin.cmdi.vlo.pages;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 public class DocumentAttribute implements Serializable{
 
@@ -12,10 +13,15 @@ public class DocumentAttribute implements Serializable{
     private String field;
     private String value = "";
 
-    public DocumentAttribute(String field, Object value) {
+    public DocumentAttribute(String field, Collection<Object> values) {
         this.field = field;
         if (value != null) {
-            this.value = value.toString();
+            for (Object o : values) {
+                if (!value.isEmpty()) {
+                    this.value += ", ";
+                }
+                this.value += o.toString();
+            }
         }
     }
 

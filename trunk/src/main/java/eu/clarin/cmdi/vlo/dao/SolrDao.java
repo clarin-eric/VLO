@@ -12,13 +12,15 @@ import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.clarin.cmdi.vlo.Configuration;
+
 public class SolrDao {
 
     private final static Logger LOG = LoggerFactory.getLogger(SolrDao.class);
     private final static CommonsHttpSolrServer SOLR_SERVER;
     static {
         try {
-            SOLR_SERVER = new CommonsHttpSolrServer("http://localhost:8080/vlo_solr");
+            SOLR_SERVER = new CommonsHttpSolrServer(Configuration.getInstance().getSolrUrl());
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
