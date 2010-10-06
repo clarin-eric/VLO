@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 
@@ -19,9 +20,9 @@ public class DocumentAttributesDataProvider extends SortableDataProvider<Documen
     public DocumentAttributesDataProvider(String docId) {
         SolrDocument solrDocument = DaoLocator.getSearchResultsDao().getSolrDocument(docId);
         if (solrDocument != null) {
-            attributeList = new DocumentAttributeList(solrDocument.getFieldValueMap());
+            attributeList = new DocumentAttributeList(solrDocument.getFieldValuesMap());
         } else {
-            attributeList = new DocumentAttributeList(Collections.singletonMap("Document not found", null));
+            attributeList = new DocumentAttributeList(Collections.singletonMap("Document not found", (Collection<Object>)null));
         }
     }
 

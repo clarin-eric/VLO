@@ -13,7 +13,6 @@ public class FacetHeaderPanel extends Panel {
     @SuppressWarnings("serial")
     public FacetHeaderPanel(String id, IModel<FacetModel> model, final SearchPageQuery query) {
         super(id, model);
-        add(new Label("headerLabel", model.getObject().getFacetField().getName()));
         add(new Link<FacetModel>("allLink", model) {
 
             @Override

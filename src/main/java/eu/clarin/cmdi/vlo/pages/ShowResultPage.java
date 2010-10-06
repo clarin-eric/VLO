@@ -28,11 +28,11 @@ public class ShowResultPage extends WebPage {
         String docId = getPageParameters().getString(PARAM_DOC_ID, null);
         PageParameters params = new PageParameters();
         params.put(FacetedSearchPage.PARAM_QUERY, parameters.get(FacetedSearchPage.PARAM_QUERY));
-        BookmarkablePageLink docLink = new BookmarkablePageLink("backLink", FacetedSearchPage.class, params);
-        add(docLink);
+        BookmarkablePageLink backLink = new BookmarkablePageLink("backLink", FacetedSearchPage.class, params);
+        add(backLink);
         //TODO PD configure browser url http://corpus1.mpi.nl/ds/imdi_browser or http://catalog.clarin.eu/ds/imdi_browser/????? 
-        //TODO PD strip test from handle
-        add(new ExternalLink("openBrowserLink", "http://corpus1.mpi.nl/ds/imdi_browser?openpath=" + docId));
+        String handle = docId.substring("test-".length()); 
+        add(new ExternalLink("openBrowserLink", "http://corpus1.mpi.nl/ds/imdi_browser?openpath=" + handle));
         addAttributesTable(docId);
     }
 

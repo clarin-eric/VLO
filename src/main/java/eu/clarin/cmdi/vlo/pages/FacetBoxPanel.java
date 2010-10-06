@@ -1,9 +1,12 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import java.util.List;
+
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -28,14 +31,21 @@ public class FacetBoxPanel extends Panel {
         final FacetField facetField = (FacetField) getDefaultModelObject();
         facetModel = new FacetModel(facetField);
         facetModel.setSelectedValue(query.getSelectedValue(facetField));
-        label = new Label("facetHeaderPanel", facetField.getName());
+        label = new Label("headerLabel", facetField.getName());
+        add(label);
         facetHeaderPanel = new FacetHeaderPanel("facetHeaderPanel", new Model<FacetModel>(facetModel), query);
         if (facetModel.isSelected()) {
             add(facetHeaderPanel);
         } else {
-            add(label);
+            add(new WebMarkupContainer("facetHeaderPanel"));
         }
-        ListView<Count> facetList = new ListView<Count>("facetList", facetField.getValues()) {
+        List<Count> allValues = facetField.getValues();
+        List<Count> values = allValues;
+        final boolean showMore = allValues != null && allValues.size() > 5; 
+        if (showMore) {
+            values = allValues.subList(0, 5);
+        }
+        ListView<Count> facetList = new ListView<Count>("facetList", values) {
             @Override
             protected void populateItem(ListItem<Count> item) {
                 item.add(new FacetLinkPanel("facetLinks", item.getModel(), query));
@@ -47,6 +57,11 @@ public class FacetBoxPanel extends Panel {
             }
         };
         add(facetList);
+        add(new Label("showMore", "more... (coming soon)") {
+            public boolean isVisible() {
+                return !facetModel.isSelected() && showMore;
+            }
+        });
         return this;
     }
 

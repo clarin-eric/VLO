@@ -1,16 +1,17 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
 public class DocumentAttributeList implements Iterator<DocumentAttribute> {
 
-    private final Map<String, Object> fieldValueMap;
+    private final Map<String, Collection<Object>> fieldValueMap;
     Iterator<String> iterator;
 
-    public DocumentAttributeList(Map<String, Object> fieldValueMap) {
-        this.fieldValueMap = fieldValueMap;
-        this.iterator = fieldValueMap.keySet().iterator();
+    public DocumentAttributeList(Map<String, Collection<Object>> map) {
+        this.fieldValueMap = map;
+        this.iterator = map.keySet().iterator();
     }
 
     @Override

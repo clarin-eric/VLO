@@ -45,7 +45,8 @@ public class SearchPageQuery implements Serializable {
         query.setStart(0);
         query.setFields("name", "id");
         query.setFacet(true);
-        query.addFacetField("continent", "organisation", "country", "language", "genre");//, "subject", "description");
+        query.setFacetMinCount(1);
+        query.addFacetField("origin", "continent", "organisation", "country", "language", "genre");//, "subject", "description");
         return new SearchPageQuery(query);
     }
 
@@ -76,6 +77,21 @@ public class SearchPageQuery implements Serializable {
 
     public String getSelectedValue(FacetField field) {
         return filterqueryMap.get(field.getName());
+    }
+
+    public void setSearchQuery(String searchQuery) {
+        if (searchQuery == null || searchQuery.isEmpty()) {
+            searchQuery = "*:*"; //search all
+        }
+        query.setQuery(searchQuery);
+    }
+
+    public String getSearchQuery() {
+        String result = query.getQuery();
+        if (result.equals("*:*")) {
+            result = "";
+        }
+        return result;
     }
 
 }
