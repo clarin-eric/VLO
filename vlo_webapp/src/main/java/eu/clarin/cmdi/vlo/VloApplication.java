@@ -13,14 +13,12 @@ import eu.clarin.cmdi.vlo.pages.FacetedSearchPage;
  */
 public class VloApplication extends WebApplication {
 
-    private final SearchResultsDao searchResults = new SearchResultsDao();
+    private final SearchResultsDao searchResults;
 
-    /**
-     * Constructor
-     */
     public VloApplication() {
         BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { "applicationContext.xml" });
         factory.getBean("configuration"); //Use Configuration.getInstance to get the Configuration just loading the instance here.
+        searchResults = new SearchResultsDao();
     }
 
     /**

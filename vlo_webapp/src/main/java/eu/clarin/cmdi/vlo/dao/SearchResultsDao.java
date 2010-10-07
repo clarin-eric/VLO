@@ -14,6 +14,7 @@ public class SearchResultsDao extends SolrDao {
     private QueryResponse response;
 
     public SearchResultsDao() { //TODO Patrick doing query twice not good.
+        super();
     }
 
     public SolrDocumentList getResults(SolrQuery query) {
