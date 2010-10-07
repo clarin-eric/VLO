@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>eu.clarin.cmdi</groupId>
   <artifactId>vlo</artifactId>
-  <packaging>war</packaging>
+  <packaging>${packaging}</packaging>
   <version>2.0-SNAPSHOT</version>
   <name>VirtualLanguageObservatory</name>
   <description></description>
@@ -83,6 +83,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <packaging>war</packaging>
   </properties>
 
   <build>
@@ -113,6 +114,23 @@
           <target>1.6</target>
         </configuration>
       </plugin>
+      <!--
+        Assembly helper to create the Importer tool a command line tool which can help fill in a solr server with
+        cmdi files. Build the tool with: mvn -Dpackaging=jar -Dmaven.test.skip=true assembly:assembly
+        This creates a in "target" a vlo_solr-1.0-SNAPSHOT-Importer directory with a bin and share
+        directory. You can start the tool from the bin dir.
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <attach>false</attach>
+          <ignoreDirFormatExtensions>true</ignoreDirFormatExtensions>
+          <descriptors>
+            <descriptor>src/main/assembly/importer.xml</descriptor>
+          </descriptors>
+        </configuration>
+      </plugin>      
     </plugins>
   </build>
 
