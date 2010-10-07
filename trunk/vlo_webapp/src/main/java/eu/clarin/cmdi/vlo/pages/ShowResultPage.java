@@ -17,6 +17,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import eu.clarin.cmdi.vlo.Configuration;
 import eu.clarin.cmdi.vlo.StringUtils;
 
 public class ShowResultPage extends WebPage {
@@ -30,9 +31,8 @@ public class ShowResultPage extends WebPage {
         params.put(FacetedSearchPage.PARAM_QUERY, parameters.get(FacetedSearchPage.PARAM_QUERY));
         BookmarkablePageLink backLink = new BookmarkablePageLink("backLink", FacetedSearchPage.class, params);
         add(backLink);
-        //TODO PD configure browser url http://corpus1.mpi.nl/ds/imdi_browser or http://catalog.clarin.eu/ds/imdi_browser/????? 
-        String handle = docId.substring("test-".length()); 
-        add(new ExternalLink("openBrowserLink", "http://corpus1.mpi.nl/ds/imdi_browser?openpath=" + handle));
+        String handle = docId.substring("test-".length());
+        add(new ExternalLink("openBrowserLink", Configuration.getInstance().getIMDIBrowserUrl(handle)));
         addAttributesTable(docId);
     }
 
