@@ -5,9 +5,11 @@ import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -16,6 +18,7 @@ import org.apache.wicket.model.Model;
 
 public class FacetBoxPanel extends Panel {
 
+    private static final int MAX_NR_OF_FACET_VALUES = 5;
     private static final long serialVersionUID = 1L;
     private Label label;
     private FacetHeaderPanel facetHeaderPanel;
@@ -41,9 +44,9 @@ public class FacetBoxPanel extends Panel {
         }
         List<Count> allValues = facetField.getValues();
         List<Count> values = allValues;
-        final boolean showMore = allValues != null && allValues.size() > 5; 
+        final boolean showMore = allValues != null && allValues.size() > MAX_NR_OF_FACET_VALUES;
         if (showMore) {
-            values = allValues.subList(0, 5);
+            values = allValues.subList(0, MAX_NR_OF_FACET_VALUES);
         }
         ListView<Count> facetList = new ListView<Count>("facetList", values) {
             @Override
@@ -57,10 +60,14 @@ public class FacetBoxPanel extends Panel {
             }
         };
         add(facetList);
-        add(new Label("showMore", "more... (coming soon)") {
+        PageParameters pageParameters = query.getPageParameters();
+        pageParameters.add(ShowAllFacetValuesPage.SELECTED_FACET_PARAM, facetField.getName());
+        add(new BookmarkablePageLink("showMore", ShowAllFacetValuesPage.class, pageParameters) { //TODO PD when nr of facet values is 6 show all instead of 5+more
+
             public boolean isVisible() {
                 return !facetModel.isSelected() && showMore;
             }
+
         });
         return this;
     }

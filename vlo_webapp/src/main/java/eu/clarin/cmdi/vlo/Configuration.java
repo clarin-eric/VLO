@@ -3,13 +3,19 @@ package eu.clarin.cmdi.vlo;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+/**
+ * see applicationContext.xml resource for proper values.
+ * 
+ **/
 public final class Configuration {
-
+    
     private final static Configuration INSTANCE = new Configuration();
 
     private String solrUrl;
 
-    private String imdiBrowserUrl = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=";
+    private String imdiBrowserUrl;// = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=";
+
+    private String[] facetFields;// = new String[] { "origin", "organisation", "continent", "genre", "country", "subject", "language" };
 
     private Configuration() {
     }
@@ -40,4 +46,11 @@ public final class Configuration {
         return result;
     }
 
+    public String[] getFacetFields() {
+        return facetFields;
+    }
+
+    public void setFacetFields(String[] facetFields) {
+        this.facetFields = facetFields;
+    }
 }
