@@ -15,9 +15,8 @@ public class DocumentLinkPanel extends Panel {
     public DocumentLinkPanel(String id, IModel<SolrDocument> model, SearchPageQuery query) {
         super(id, model);
         SolrDocument doc = model.getObject();
-        String param = ShowResultPage.PARAM_DOC_ID + "=" + WicketURLEncoder.QUERY_INSTANCE.encode(doc.getFieldValue("id").toString());
-        PageParameters pageParameters = new PageParameters(param);
-        pageParameters.put(FacetedSearchPage.PARAM_QUERY, query.getSolrQuery());
+        PageParameters pageParameters = query.getPageParameters();
+        pageParameters.put(ShowResultPage.PARAM_DOC_ID, WicketURLEncoder.QUERY_INSTANCE.encode(doc.getFieldValue("id").toString()));
         BookmarkablePageLink<ShowResultPage> docLink = new BookmarkablePageLink<ShowResultPage>("docLink", ShowResultPage.class,
                 pageParameters);
         add(docLink);

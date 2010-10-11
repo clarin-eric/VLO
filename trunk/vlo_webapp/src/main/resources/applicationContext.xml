@@ -6,6 +6,17 @@
     <property name="solrUrl" value="http://localhost:8080/vlo_solr" />
     <!--        <property name="solrUrl" value="http://lux16.mpi.nl:8080/vlo_solr" />-->
     <property name="IMDIBrowserUrl" value="http://corpus1.mpi.nl/ds/imdi_browser?openpath=" />
+    <property name="facetFields">
+      <list> <!-- List of facets to be shown as columns, the order specified is kept in the application -->
+        <value>origin</value>
+        <value>organisation</value>
+        <value>continent</value>
+        <value>genre</value>
+        <value>country</value>
+        <value>subject</value>
+        <value>language</value>
+      </list>
+    </property>
   </bean>
 
 </beans>

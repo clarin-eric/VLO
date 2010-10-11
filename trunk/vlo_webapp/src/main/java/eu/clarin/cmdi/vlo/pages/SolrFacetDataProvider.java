@@ -16,9 +16,11 @@ public class SolrFacetDataProvider extends SortableDataProvider<FacetField> {
 
     private static final long serialVersionUID = 1L;
     private final SolrQuery query;
+    private List<FacetField> facets;
 
     public SolrFacetDataProvider(SolrQuery query) {
         this.query = query;
+        query.setFacet(true).setStart(0).setRows(0); //only get facets
     }
 
     private SearchResultsDao getSearchResultsDao() {
@@ -27,10 +29,15 @@ public class SolrFacetDataProvider extends SortableDataProvider<FacetField> {
 
     @Override
     public Iterator<? extends FacetField> iterator(int first, int count) {
-        SearchResultsDao searchResultsDao = getSearchResultsDao();
-        query.setStart(first).setRows(count);
-        List<FacetField> facets = searchResultsDao.getFacets(query);
         return facets.iterator();
+    }
+
+    private List<FacetField> getFacets() {
+        if (facets == null) {
+            SearchResultsDao searchResultsDao = getSearchResultsDao();
+            facets = searchResultsDao.getFacets(query);
+        }
+        return facets;
     }
 
     @Override
@@ -40,7 +47,7 @@ public class SolrFacetDataProvider extends SortableDataProvider<FacetField> {
 
     @Override
     public int size() {
-        return (int) getSearchResultsDao().getFacets(query).size();
+        return (int) getFacets().size();
     }
 
 }
