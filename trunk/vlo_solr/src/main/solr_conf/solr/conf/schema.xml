@@ -401,14 +401,14 @@
 
  <fields>
    <field name="id" type="string" indexed="true" stored="true" required="true"/>
-   <field name="origin" type="string" indexed="true" stored="true" />
-   <field name="name" type="string" indexed="true" stored="true" />
+   <field name="origin" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="name" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="continent" type="string" indexed="true" stored="true" />
    <field name="country" type="string" indexed="true" stored="true" />
    <field name="language" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="organisation"  type="string" indexed="true" stored="true" />
-   <field name="genre"  type="string" indexed="true" stored="true" />
-   <field name="subject"  type="string" indexed="true" stored="true" />
+   <field name="genre"  type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="subject"  type="string" indexed="true" stored="true" multiValued="true" />
    <field name="description" type="text" indexed="true" stored="true" multiValued="true" />
 
    <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
