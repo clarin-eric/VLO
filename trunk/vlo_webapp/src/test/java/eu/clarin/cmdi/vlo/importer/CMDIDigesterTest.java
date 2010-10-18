@@ -13,6 +13,8 @@ import org.apache.solr.common.SolrInputDocument;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import eu.clarin.cmdi.vlo.importer.CMDIDigester;
 
@@ -65,7 +67,7 @@ public class CMDIDigesterTest {
         content += "   </Components>\n";
         content += "</CMD>\n";
         File cmdiFile = createCmdiFile("testCorpus", content);
-        CMDIDigester digester = new CMDIDigester();
+        CMDIDigester digester = new CMDIDigester(getIMDIFacetMap());
         CMDIData data = digester.process(cmdiFile);
         assertEquals("test-hdl:1839/00-0000-0000-0000-0001-D", data.getId());
         List<String> resources = data.getResources();
@@ -361,7 +363,7 @@ public class CMDIDigesterTest {
         content += "   </Components>\n";
         content += "</CMD>\n";
         File cmdiFile = createCmdiFile("testSession", content);
-        CMDIDigester digester = new CMDIDigester();
+        CMDIDigester digester = new CMDIDigester(getIMDIFacetMap());
         CMDIData data = digester.process(cmdiFile);
         assertEquals("test-hdl:1839/00-0000-0000-0009-294C-9", data.getId());
         List<String> resources = data.getResources();
@@ -371,6 +373,7 @@ public class CMDIDigesterTest {
         assertEquals(7, doc.getFieldNames().size());
         assertEquals("kleve-route", doc.getFieldValue("name"));
         assertEquals("Europe", doc.getFieldValue("continent"));
+        assertEquals("English", doc.getFieldValue("language"));
         assertEquals("Netherlands", doc.getFieldValue("country"));
         assertEquals("Max Planck Institute for Psycholinguistics", doc.getFieldValue("organisation"));
         assertEquals("Unspecified", doc.getFieldValue("genre"));
@@ -378,6 +381,210 @@ public class CMDIDigesterTest {
         assertEquals(
                 "This  recording was made to generate a freely available test resource including speech and gestures. The annotations were created by Peter and Kita who is gesture researcher at the MPI for Psycholinguistics.",
                 doc.getFieldValue("description"));
+    }
+
+    @Test
+    public void testEmptyFieldsShouldBeNull() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
+        content += "     xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438204/xsd\">\n";
+        content += "   <Header>\n";
+        content += "      <MdCreationDate>2008-05-27</MdCreationDate>\n";
+        content += "      <MdSelfLink>test-hdl:1839/00-0000-0000-0009-294C-9</MdSelfLink>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1271859438204</MdProfile>\n";
+        content += "   </Header>\n";
+        content += "   <Resources>\n";
+        content += "      <ResourceProxyList>\n";
+        content += "      </ResourceProxyList>\n";
+        content += "      <JournalFileProxyList/>\n";
+        content += "      <ResourceRelationList/>\n";
+        content += "   </Resources>\n";
+        content += "   <Components>\n";
+        content += "      <Session>\n";
+        content += "         <Name>kleve-route</Name>\n";
+        content += "         <Title>route description to Kleve</Title>\n";
+        content += "         <Date>2002-10-30</Date>\n";
+        content += "         <descriptions>\n";
+        content += "            <Description LanguageId=\"ISO639-2:eng\">Test.</Description>\n";
+        content += "         </descriptions>\n";
+        content += "         <MDGroup>\n";
+        content += "            <Location>\n";
+        content += "               <Continent>Europe</Continent>\n";
+        content += "               <Country>Netherlands</Country>\n";
+        content += "               <Region/>\n";
+        content += "               <Address>Wundtlaan 1, Nijmegen</Address>\n";
+        content += "            </Location>\n";
+        content += "            <Project>\n";
+        content += "               <Name>Peter Wittenburg</Name>\n";
+        content += "               <Title>Route description test resource</Title>\n";
+        content += "               <Id/>\n";
+        content += "               <Contact>\n";
+        content += "                  <Name></Name>\n";
+        content += "                  <Address></Address>\n";
+        content += "                  <Email></Email>\n";
+        content += "                  <Organisation></Organisation>\n";
+        content += "               </Contact>\n";
+        content += "               <descriptions>\n";
+        content += "                  <Description LanguageId=\"\"/>\n";
+        content += "               </descriptions>\n";
+        content += "            </Project>\n";
+        content += "            <Keys>\n";
+        content += "            </Keys>\n";
+        content += "            <Content>\n";
+        content += "               <Genre>Unspecified</Genre>\n";
+        content += "               <SubGenre>Unspecified</SubGenre>\n";
+        content += "               <Task>route description</Task>\n";
+        content += "               <Modalities>Speech; Gestures</Modalities>\n";
+        content += "               <CommunicationContext>\n";
+        content += "               </CommunicationContext>\n";
+        content += "               <Content_Languages>\n";
+        content += "               </Content_Languages>\n";
+        content += "               <descriptions>\n";
+        content += "               </descriptions>\n";
+        content += "            </Content>\n";
+        content += "            <Actors>\n";
+        content += "            </Actors>\n";
+        content += "         </MDGroup>\n";
+        content += "         <Resources>\n";
+        content += "         </Resources>\n";
+        content += "      </Session>\n";
+        content += "   </Components>\n";
+        content += "</CMD>\n";
+        File cmdiFile = createCmdiFile("testSession", content);
+        CMDIDigester digester = new CMDIDigester(getIMDIFacetMap());
+        CMDIData data = digester.process(cmdiFile);
+        assertEquals("test-hdl:1839/00-0000-0000-0009-294C-9", data.getId());
+        List<String> resources = data.getResources();
+        assertEquals(0, resources.size());
+        SolrInputDocument doc = data.getSolrDocument();
+        assertNotNull(doc);
+        assertEquals(5, doc.getFieldNames().size());
+        assertEquals("kleve-route", doc.getFieldValue("name"));
+        assertEquals("Europe", doc.getFieldValue("continent"));
+        assertEquals("Netherlands", doc.getFieldValue("country"));
+        assertEquals("Unspecified", doc.getFieldValue("genre"));
+        assertEquals("Test.", doc.getFieldValue("description"));
+        assertEquals("Should be null not empty string", null, doc.getFieldValue("organisation"));
+        assertEquals(null, doc.getFieldValue("language"));
+        assertEquals(null, doc.getFieldValue("subject"));
+    }
+
+    @Test
+    public void testOlac() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
+        content += "     xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n";
+        content += "     xmlns:oai_dc=\"http://www.openarchives.org/OAI/2.0/oai_dc/\"\n";
+        content += "     xmlns:defns=\"http://www.openarchives.org/OAI/2.0/\"\n";
+        content += "     xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438236/xsd\">\n";
+        content += "   <Header>\n";
+        content += "      <MdCreator>olac2cmdi.xsl</MdCreator>\n";
+        content += "      <MdCreationDate>2002-12-14</MdCreationDate>\n";
+        content += "      <MdSelfLink>oai:ailla.utexas.edu:1</MdSelfLink>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1271859438236</MdProfile>\n";
+        content += "   </Header>\n";
+        content += "   <Resources>\n";
+        content += "      <ResourceProxyList/>\n";
+        content += "      <JournalFileProxyList/>\n";
+        content += "      <ResourceRelationList/>\n";
+        content += "   </Resources>\n";
+        content += "   <Components>\n";
+        content += "      <olac>\n";
+        content += "         <olac-creator>Joel Sherzer (recorder)</olac-creator>\n";
+        content += "         <olac-description>\n";
+        content += "    Channel: Talking;\n";
+        content += "    Genre: Traditional Narrative / Story;\n";
+        content += "    Country: Panama;\n";
+        content += "    Place of Recording: Mulatuppu;\n";
+        content += "    Event: Community Gathering;\n";
+        content += "    Institutional Affiliation: University of Texas at Austin;\n";
+        content += "    Participant Information: Political Leader;\n";
+        content += "      </olac-description>\n";
+        content += "         <olac-description>The one-eyed grandmother is one of many traditional Kuna stories performed in the Kuna gathering house. This story, performed here by Pedro Arias, combines European derived motifs (Tom Thumb and Hansel and Gretel) with themes that seem more Kuna in origin. All are woven together and a moral is provided. Pedro Arias performed this story before a gathered audience in the morning..\n";
+        content += "      </olac-description>\n";
+        content += "         <olac-identifier>http://uts.cc.utexas.edu/~ailla/audio/sherzer/one_eyed_grandmother.ram</olac-identifier>\n";
+        content += "         <olac-identifier>http://uts.cc.utexas.edu/~ailla/texts/sherzer/one_eyed_grandmother.pdf</olac-identifier>\n";
+        content += "         <olac-language/>\n";
+        content += "         <olac-subject>Kuna</olac-subject>\n";
+        content += "         <type>Transcription</type>\n";
+        content += "      </olac>\n";
+        content += "   </Components>\n";
+        content += "</CMD>\n";
+
+        File cmdiFile = createCmdiFile("testOlac", content);
+        CMDIDigester digester = new CMDIDigester(getOlacFacetMap());
+        CMDIData data = digester.process(cmdiFile);
+        assertEquals("oai:ailla.utexas.edu:1", data.getId());
+        List<String> resources = data.getResources();
+        assertEquals(0, resources.size());
+        SolrInputDocument doc = data.getSolrDocument();
+        assertNotNull(doc);
+        assertEquals(3, doc.getFieldNames().size());
+        assertEquals(null, doc.getFieldValue("name"));
+        assertEquals(null, doc.getFieldValue("continent"));
+        assertEquals(null, doc.getFieldValue("language"));
+        assertEquals(null, doc.getFieldValue("country"));
+        assertEquals(null, doc.getFieldValue("organisation"));
+        assertEquals("Transcription", doc.getFieldValue("genre"));
+        assertEquals("Kuna", doc.getFieldValue("subject"));
+        assertEquals(2, doc.getFieldValues("description").size());
+    }
+
+    @Test
+    public void testOlacCollection() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
+        content += "    xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438236/xsd\">\n";
+        content += "    <Header>\n";
+        content += "        <MdCreator>dir2cmdicollection.py</MdCreator>\n";
+        content += "        <MdCreationDate>2010-10-11</MdCreationDate>\n";
+        content += "        <MdSelfLink>collection_ATILF_Resources.cmdi</MdSelfLink>\n";
+        content += "        <MdProfile>clarin.eu:cr1:p_1271859438236</MdProfile>\n";
+        content += "    </Header>\n";
+        content += "    <Resources>\n";
+        content += "        <ResourceProxyList>\n";
+        content += "<ResourceProxy id=\"ATILF_Resources_0_oai_atilf_inalf_fr_0001.xml.cmdi\"><ResourceType>Metadata</ResourceType><ResourceRef>ATILF_Resources/0/oai_atilf_inalf_fr_0001.xml.cmdi</ResourceRef></ResourceProxy>\n";
+        content += "<ResourceProxy id=\"ATILF_Resources_0_oai_atilf_inalf_fr_0002.xml.cmdi\"><ResourceType>Metadata</ResourceType><ResourceRef>ATILF_Resources/0/oai_atilf_inalf_fr_0002.xml.cmdi</ResourceRef></ResourceProxy>\n";
+        content += "<ResourceProxy id=\"ATILF_Resources_0_oai_atilf_inalf_fr_0003.xml.cmdi\"><ResourceType>Metadata</ResourceType><ResourceRef>ATILF_Resources/0/oai_atilf_inalf_fr_0003.xml.cmdi</ResourceRef></ResourceProxy>\n";
+        content += "<ResourceProxy id=\"ATILF_Resources_0_oai_atilf_inalf_fr_0004.xml.cmdi\"><ResourceType>Metadata</ResourceType><ResourceRef>ATILF_Resources/0/oai_atilf_inalf_fr_0004.xml.cmdi</ResourceRef></ResourceProxy>\n";
+        content += "<ResourceProxy id=\"ATILF_Resources_0_oai_atilf_inalf_fr_0005_a.xml.cmdi\"><ResourceType>Metadata</ResourceType><ResourceRef>ATILF_Resources/0/oai_atilf_inalf_fr_0005_a.xml.cmdi</ResourceRef></ResourceProxy>\n";
+        content += "<ResourceProxy id=\"ATILF_Resources_0_oai_atilf_inalf_fr_0005_b.xml.cmdi\"><ResourceType>Metadata</ResourceType><ResourceRef>ATILF_Resources/0/oai_atilf_inalf_fr_0005_b.xml.cmdi</ResourceRef></ResourceProxy>\n";
+        content += "<ResourceProxy id=\"ATILF_Resources_0_oai_atilf_inalf_fr_0006.xml.cmdi\"><ResourceType>Metadata</ResourceType><ResourceRef>ATILF_Resources/0/oai_atilf_inalf_fr_0006.xml.cmdi</ResourceRef></ResourceProxy>\n";
+        content += "<ResourceProxy id=\"ATILF_Resources_0_oai_atilf_inalf_fr_M277.xml.cmdi\"><ResourceType>Metadata</ResourceType><ResourceRef>ATILF_Resources/0/oai_atilf_inalf_fr_M277.xml.cmdi</ResourceRef></ResourceProxy>\n";
+        content += "<ResourceProxy id=\"ATILF_Resources_0_oai_atilf_inalf_fr_M592.xml.cmdi\"><ResourceType>Metadata</ResourceType><ResourceRef>ATILF_Resources/0/oai_atilf_inalf_fr_M592.xml.cmdi</ResourceRef></ResourceProxy>\n";
+        content += "        </ResourceProxyList>\n";
+        content += "        <JournalFileProxyList/>\n";
+        content += "        <ResourceRelationList/>\n";
+        content += "    </Resources>\n";
+        content += "    <Components>\n";
+        content += "        <olac></olac>\n";
+        content += "    </Components>\n";
+        content += "</CMD>\n";
+
+        File cmdiFile = createCmdiFile("testOlac", content);
+        CMDIDigester digester = new CMDIDigester(getOlacFacetMap());
+        CMDIData data = digester.process(cmdiFile);
+        assertEquals("collection_ATILF_Resources.cmdi", data.getId());
+        List<String> resources = data.getResources();
+        assertEquals(9, resources.size());
+        SolrInputDocument doc = data.getSolrDocument();
+        assertNull(doc);
+
+    }
+
+    private FacetMapping getOlacFacetMap() {
+        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { "importerConfig.xml" }); //TODO PD doesn't work on the command line.
+        FacetMapping facetMapping = (FacetMapping) factory.getBean("olacMapping");
+        return facetMapping;
+    }
+
+    private FacetMapping getIMDIFacetMap() {
+        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { "importerConfig.xml" });
+        FacetMapping facetMapping = (FacetMapping) factory.getBean("imdiMapping");
+        return facetMapping;
     }
 
     private File createCmdiFile(String name, String content) throws IOException {

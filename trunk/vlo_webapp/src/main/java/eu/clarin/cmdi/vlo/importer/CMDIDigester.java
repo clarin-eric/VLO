@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.importer;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Map;
 
 import org.apache.commons.digester.Digester;
 import org.xml.sax.InputSource;
@@ -10,12 +11,13 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-
 public class CMDIDigester {
 
     private Digester digester;
+    private final FacetMapping facetMapping;
 
-    public CMDIDigester() {
+    public CMDIDigester(FacetMapping facetMapping) {
+        this.facetMapping = facetMapping;
         try {
             digester = createDigester();
         } catch (SAXException e) {
@@ -36,18 +38,14 @@ public class CMDIDigester {
         digester.setValidating(false);
 
         digester.addObjectCreate("CMD", CMDIData.class);
-        digester.addBeanPropertySetter("CMD/Header/MdSelfLink", "id");
+        digester.addBeanPropertySetter(facetMapping.getIdMapping(), "id");
         digester.addCallMethod("CMD/Resources/ResourceProxyList/ResourceProxy/", "addResource", 2);
         digester.addCallParam("CMD/Resources/ResourceProxyList/ResourceProxy/ResourceRef", 0);
         digester.addCallParam("CMD/Resources/ResourceProxyList/ResourceProxy/ResourceType", 1);
-        matchDocumentField(digester, "CMD/Components/Session/Name", "name");
-        matchDocumentField(digester, "CMD/Components/Session/MDGroup/Location/Continent", "continent");
-        matchDocumentField(digester, "CMD/Components/Session/MDGroup/Location/Country", "country");
-        matchDocumentField(digester, "CMD/Components/Session/MDGroup/Content/Content_Languages/Content_Language/Name", "language");
-        matchDocumentField(digester, "CMD/Components/Session/MDGroup/Project/Contact/Organisation", "organisation");
-        matchDocumentField(digester, "CMD/Components/Session/MDGroup/Content/Genre", "genre");
-        matchDocumentField(digester, "CMD/Components/Session/MDGroup/Content/Subject", "subject");
-        matchDocumentField(digester, "CMD/Components/Session/descriptions/Description", "description");
+        Map<String, String> facetMap = facetMapping.getFacetMap();
+        for (String facet : facetMap.keySet()) {
+            matchDocumentField(digester, facetMap.get(facet), facet);
+        }
         return digester;
     }
 

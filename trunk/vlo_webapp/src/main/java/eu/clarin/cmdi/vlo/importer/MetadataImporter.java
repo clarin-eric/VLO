@@ -29,22 +29,16 @@ public final class MetadataImporter {
     private final StreamingUpdateSolrServer solrServer;
 
     private Set<String> processedIds = new HashSet<String>();
-
-    /**
-     * @param args
-     * @throws MalformedURLException
-     */
-    public static void main(String[] args) throws MalformedURLException {
-        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { "applicationContext.xml" });
-        factory.getBean("configuration");
-        MetadataImporter importer = new MetadataImporter();
-        importer.startImport();
-    }
-
     private List<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
-    private int nrOFDocumentsUpdated;
+    private final ImporterConfig config;
 
-    public MetadataImporter() throws MalformedURLException {
+    private int nrOFDocumentsUpdated;
+    private int nrOfNonExistendResourceFiles = 0;
+    private int nrOfFilesAnalyzed = 0;
+    private int nrOfFilesWithoutId = 0;
+
+    public MetadataImporter(ImporterConfig config) throws MalformedURLException {
+        this.config = config;
         String solrUrl = Configuration.getInstance().getSolrUrl();
         LOG.info("Initializing Solr Server on " + solrUrl);
         solrServer = new StreamingUpdateSolrServer(solrUrl, 1000, 2) {
@@ -63,12 +57,8 @@ public final class MetadataImporter {
                 "/Users/patdui/data/data/corpora/qfs1/media-archive/CORP_ORAL/Corpusstructure/CORP_ORAL.imdi.cmdi"));
         originRootMap.put("DoBeS archive", new File(
                 "/Users/patdui/data/data/corpora/qfs1/media-archive/dobes_data/Corpusstructure/dobes.imdi.cmdi"));
-        originRootMap.put("ESF corpus", new File("/Users/patdui/data/data/corpora/esf_conv/Corpusstructure/esf.imdi.cmdi"));
         originRootMap.put("ECHO", new File("/Users/patdui/data/data/corpora/qfs1/media-archive/echo_data/Corpusstructure/echo.imdi.cmdi"));
         originRootMap.put("DBD", new File("/Users/patdui/data/data/corpora/qfs1/media-archive/dbd_data/Corpusstructure/dbd.imdi.cmdi"));
-        originRootMap
-                .put("CGN corpus", new File("/Users/patdui/data/data/corpora/CGN/COREX6/data/meta/imdi_3.0_eaf/corpora/cgn.imdi.cmdi"));
-        originRootMap.put("IFA corpus", new File("/Users/patdui/data/data/corpora/IFAcorpus/IMDI/IFAcorpus.imdi.cmdi"));
         originRootMap.put("Sign Language", new File(
                 "/Users/patdui/data/data/corpora/qfs1/media-archive/Corpusstructure/sign_language.imdi.cmdi"));
         originRootMap.put("Endagered Languages", new File(
@@ -83,17 +73,32 @@ public final class MetadataImporter {
                 "/Users/patdui/data/data/corpora/qfs1/media-archive/Bildungsforschung/Corpusstructure/MPI_Bildungsforschung.imdi.cmdi"));
         originRootMap.put("Humanethologisches Filmarchiv", new File(
                 "/Users/patdui/data/data/corpora/qfs1/media-archive/humanethology/Corpusstructure/humanethology.imdi.cmdi"));
-        originRootMap.put("OLAC Metadata Providers", new File(
-                "/Users/patdui/data/data/corpora/qfs1/media-archive/olac/OLAC/Corpusstructure/OLAC.imdi.cmdi")); //TODO PD OLAC is not there yet
         originRootMap.put("SUCA", new File("/Users/patdui/data/data/corpora/qfs1/media-archive/suca_data/Corpusstructure/suca.imdi.cmdi"));
         originRootMap.put("Nijmegen corpora of casual speech", new File(
                 "/Users/patdui/data/data/corpora/qfs1/media-archive/casual_speech/Corpusstructure/casual_speech.imdi.cmdi"));
+
+        //TODO This file is already added in the above list originRootMap.put("ESF corpus", new File("/Users/patdui/data/data/corpora/qfs1/media-archive/acqui_data/ac-ESF/Corpusstructure/esf.imdi.cmdi"));
+//TODO PD these two do not exist in the dataset and ESF is different then what I find in the root cmdi file.
+        //originRootMap.put("IFA corpus", new File("/Users/patdui/data/data/corpora/IFAcorpus/IMDI/IFAcorpus.imdi.cmdi"));
+//        originRootMap
+//        .put("CGN corpus", new File("/Users/patdui/data/data/corpora/qfs1/media-archive/NCGN/Corpusstructure/cgn.imdi.cmdi"));
+
+        //        originRootMap.put("OLAC Metadata Providers", new File("/Users/patdui/data/olac/olac-cmdi-20101011/collection_root.cmdi")); 
+
+        
+        for (File file : originRootMap.values()) {
+            if (!file.exists()) {
+                LOG.error("Root file " + file + " does not exist. Probable configuration error so stopping import.");
+                System.exit(1);
+            }
+        }
+
 
         // root file       File file = new File("/Users/patdui/data/data/corpora/qfs1/media-archive/Corpusstructure/MPI.imdi.cmdi");
         long start = System.currentTimeMillis();
         try {
             solrServer.deleteByQuery("*:*");//Delete the whole solr db.
-            CMDIDigester digester = new CMDIDigester();
+            CMDIDigester digester = new CMDIDigester(config.getFacetMapping());
             for (String origin : originRootMap.keySet()) {
                 processCmdi(originRootMap.get(origin), origin, digester);
             }
@@ -115,10 +120,13 @@ public final class MetadataImporter {
             }
         }
         long took = (System.currentTimeMillis() - start) / 1000;
-        LOG.info("Update of " + nrOFDocumentsUpdated + " took " + took + " secs.");
+        LOG.info("Found " + nrOfNonExistendResourceFiles + " non existing resources files.");
+        LOG.info("Found " + nrOfFilesWithoutId + " file(s) without an id.");
+        LOG.info("Update of " + nrOFDocumentsUpdated + " took " + took + " secs. Total nr of files analyzed " + nrOfFilesAnalyzed);
     }
 
     private void processCmdi(File file, String origin, CMDIDigester digester) throws SolrServerException, IOException {
+        nrOfFilesAnalyzed++;
         CMDIData cmdiData = null;
         try {
             cmdiData = digester.process(file);
@@ -138,6 +146,7 @@ public final class MetadataImporter {
                 if (resourceFile.exists()) {
                     processCmdi(resourceFile, origin, digester);
                 } else {
+                    nrOfNonExistendResourceFiles++;
                     LOG.error("Found nonexistent resource file (" + cmdiResource + ") in cmdi: " + file);
                 }
 
@@ -148,6 +157,7 @@ public final class MetadataImporter {
     private void updateDocument(SolrInputDocument solrDocument, CMDIData cmdiData, File file, String origin) throws SolrServerException,
             IOException {
         if (cmdiData.getId() == null || cmdiData.getId().isEmpty()) {
+            nrOfFilesWithoutId++;
             LOG.info("Ignoring document without id, fileName: " + file);
         } else {
             solrDocument.addField("origin", origin);
@@ -166,6 +176,18 @@ public final class MetadataImporter {
             throw new SolrServerException(serverError);
         }
         docs = new ArrayList<SolrInputDocument>();
+    }
+
+    /**
+     * @param args
+     * @throws MalformedURLException
+     */
+    public static void main(String[] args) throws MalformedURLException {
+        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { "applicationContext.xml", "importerConfig.xml" });
+        factory.getBean("configuration");
+        ImporterConfig config = (ImporterConfig) factory.getBean("importerConfig", ImporterConfig.class);
+        MetadataImporter importer = new MetadataImporter(config);
+        importer.startImport();
     }
 
 }

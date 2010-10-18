@@ -32,7 +32,7 @@ public class SearchPageQueryTest {
 
         params = new PageParameters();
         params.add(CommonParams.Q, "test");
-        params.add(CommonParams.FQ, "country:New\\ Zealand");
+        params.add(CommonParams.FQ, "country:New Zealand");
         q = new SearchPageQuery(params);
         assertEquals("test", q.getSearchQuery());
         assertEquals("test", q.getSolrQuery().getQuery());
@@ -42,7 +42,7 @@ public class SearchPageQueryTest {
         assertEquals("continent", q.getSolrQuery().getFacetFields()[1]);
         assertEquals(1, q.getSolrQuery().getFilterQueries().length);
         assertEquals("country:New\\ Zealand", q.getSolrQuery().getFilterQueries()[0]);
-        assertEquals("New\\ Zealand", q.getSelectedValue(new FacetField("country")));
+        assertEquals("New Zealand", q.getSelectedValue(new FacetField("country")));
         assertNull(q.getSelectedValue(new FacetField("genre")));
     }
 }

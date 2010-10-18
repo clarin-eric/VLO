@@ -20,7 +20,12 @@ public class DocumentLinkPanel extends Panel {
         BookmarkablePageLink<ShowResultPage> docLink = new BookmarkablePageLink<ShowResultPage>("docLink", ShowResultPage.class,
                 pageParameters);
         add(docLink);
-        docLink.add(new Label("docLabel", doc.getFirstValue("name").toString()));
+        Object nameValue = doc.getFirstValue("name");
+        String name = "<no name>";
+        if (nameValue != null) {
+            name = nameValue.toString();
+        }
+        docLink.add(new Label("docLabel", name));
     }
 
 }

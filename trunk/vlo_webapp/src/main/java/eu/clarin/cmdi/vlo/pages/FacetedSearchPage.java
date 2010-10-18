@@ -68,7 +68,8 @@ public class FacetedSearchPage extends BasePage {
 
     @SuppressWarnings("serial")
     private void addFacetColumns() {
-        GridView<FacetField> facetColumns = new GridView<FacetField>("facetColumns", new SolrFacetDataProvider(query.getSolrQuery().getCopy())) {
+        GridView<FacetField> facetColumns = new GridView<FacetField>("facetColumns", new SolrFacetDataProvider(query.getSolrQuery()
+                .getCopy())) {
             @Override
             protected void populateItem(Item<FacetField> item) {
                 item.add(new FacetBoxPanel("facetBox", item.getModel()).create(query, searchResultList));
@@ -93,8 +94,8 @@ public class FacetedSearchPage extends BasePage {
                 cellItem.add(new DocumentLinkPanel(componentId, rowModel, query));
             }
         });
-        searchResultList = new AjaxFallbackDefaultDataTable("searchResults", columns, new SolrDocumentDataProvider(query.getSolrQuery().getCopy()),
-                10);
+        searchResultList = new AjaxFallbackDefaultDataTable("searchResults", columns, new SolrDocumentDataProvider(query.getSolrQuery()
+                .getCopy()), 10);
         add(searchResultList);
     }
 

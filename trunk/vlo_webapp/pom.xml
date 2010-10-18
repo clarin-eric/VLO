@@ -69,9 +69,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-context</artifactId>
-        <version>2.5.6</version>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>2.5.6</version>
     </dependency>
 
     <dependency>
@@ -91,6 +91,9 @@
       <resource>
         <filtering>true</filtering>
         <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>importerConfig.xml</exclude> <!-- Not needed for normal build used in Importer and tests -->
+        </excludes>
       </resource>
       <resource>
         <filtering>false</filtering>
@@ -115,10 +118,10 @@
         </configuration>
       </plugin>
       <!--
-        Assembly helper to create the Importer tool a command line tool which can help fill in a solr server with
-        cmdi files. Build the tool with: mvn -Dpackaging=jar -Dmaven.test.skip=true assembly:assembly
-        This creates a in "target" a vlo_solr-1.0-SNAPSHOT-Importer directory with a bin and share
-        directory. You can start the tool from the bin dir.
+        Assembly helper to create the Importer tool a command line tool which can help fill in a solr server with cmdi
+        files. Build the tool with: mvn -Dpackaging=jar -Dmaven.test.skip=true assembly:assembly This creates a in
+        "target" a vlo_solr-1.0-SNAPSHOT-Importer directory with a bin and share directory. You can start the tool from
+        the bin dir.
       -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -130,7 +133,7 @@
             <descriptor>src/main/assembly/importer.xml</descriptor>
           </descriptors>
         </configuration>
-      </plugin>      
+      </plugin>
     </plugins>
   </build>
 
