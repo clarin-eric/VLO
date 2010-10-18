@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.pages;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.PageParameters;
@@ -17,15 +18,15 @@ public class ShowAllFacetValuesPage extends BasePage {
         super(parameters);
         final SearchPageQuery query = new SearchPageQuery(parameters);
 
-        String[] filterQueries = query.getSolrQuery().getFilterQueries();
+        Map<String, String> filterQueries = query.getFilterQueryMap();
         RepeatingView filteredFacets = new RepeatingView("filteredFacets");
         if (filterQueries != null) {
             WebMarkupContainer wmc = new WebMarkupContainer(filteredFacets.newChildId());
             wmc.add(new Label("filteredFacet", "Selected categories:"));
             filteredFacets.add(wmc);
-            for (String fq : filterQueries) {
+            for (String fq : filterQueries.keySet()) {
                 wmc = new WebMarkupContainer(filteredFacets.newChildId());
-                wmc.add(new Label("filteredFacet", fq));
+                wmc.add(new Label("filteredFacet", fq + " = " + filterQueries.get(fq)));
                 filteredFacets.add(wmc);
             }
         }

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.params.CommonParams;
 import org.apache.wicket.PageParameters;
 
@@ -24,30 +25,59 @@ public class SearchPageQuery implements Serializable {
 
     public SearchPageQuery(PageParameters parameters) {
         query = getDefaultQuery();
-        query.setQuery(parameters.getString(CommonParams.Q, SOLR_SEARCH_ALL));
+        String queryParam = parameters.getString(CommonParams.Q);
+        setSearchQuery(queryParam);
+        if (queryParam != null) {
+            query.setQuery(escapeSolrQuery(queryParam));
+        } else {
+            query.setQuery(SOLR_SEARCH_ALL);
+
+        }
         String[] filterQueries = parameters.getStringArray(CommonParams.FQ);
-        query.setFilterQueries(filterQueries);
-        init();
-    }
-
-    public SearchPageQuery(SolrQuery query) {
-        this.query = query;
-        init();
-    }
-
-    private void init() {
-        searchQuery = query.getQuery();
-        String[] filterQueries = query.getFilterQueries();
         if (filterQueries != null) {
-            for (String fq : filterQueries) {
-                String[] keyValue = fq.split(":");
+            String[] encodedQueries = new String[filterQueries.length];
+            for (int i = 0; i < filterQueries.length; i++) {
+                String fq = filterQueries[i];
+                String[] keyValue = fq.split(":", 2);
                 filterQueryMap.put(keyValue[0], keyValue[1]);
+                encodedQueries[i] = keyValue[0] + ":" + ClientUtils.escapeQueryChars(keyValue[1]);
             }
+            query.setFilterQueries(encodedQueries);
         }
     }
 
+    //    public static String escapeQueryChars(String s) { //TODO PD copied from solr, removed whitespace escaping this fixes some of the issues I am having. Moet ik solr escapen en dan url escapen?
+    //        StringBuilder sb = new StringBuilder();
+    //        for (int i = 0; i < s.length(); i++) {
+    //          char c = s.charAt(i);
+    //          // These characters are part of the query syntax and must be escaped
+    //          if (c == '\\' || c == '+' || c == '-' || c == '!'  || c == '(' || c == ')' || c == ':'
+    //            || c == '^' || c == '[' || c == ']' || c == '\"' || c == '{' || c == '}' || c == '~'
+    //            || c == '*' || c == '?' || c == '|' || c == '&'  || c == ';'
+    //            ) {
+    //            sb.append('\\');
+    //          }
+    //          sb.append(c);
+    //        }
+    //        return sb.toString();
+    //      }
+
+    private String escapeSolrQuery(String value) {
+        String result = null;
+        if (value != null) {
+            result = ClientUtils.escapeQueryChars(value);
+        }
+        return result;
+    }
+
+    private SearchPageQuery(SearchPageQuery searchPageQuery) {
+        this.query = searchPageQuery.query;
+        this.filterQueryMap = new HashMap(searchPageQuery.filterQueryMap);
+        this.searchQuery = searchPageQuery.searchQuery;
+    }
+
     public SearchPageQuery getShallowCopy() {
-        return new SearchPageQuery(query);
+        return new SearchPageQuery(this);
     }
 
     private SolrQuery getDefaultQuery() {
@@ -81,11 +111,14 @@ public class SearchPageQuery implements Serializable {
         return filterQueryMap.get(field.getName());
     }
 
+    public Map<String, String> getFilterQueryMap() {
+        return filterQueryMap;
+    }
+
     public void setSearchQuery(String searchQuery) {
         if (searchQuery == null || searchQuery.isEmpty()) {
             searchQuery = SOLR_SEARCH_ALL;
         }
-        query.setQuery(searchQuery);
         this.searchQuery = searchQuery;
     }
 

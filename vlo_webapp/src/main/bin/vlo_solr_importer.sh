@@ -1,7 +1,7 @@
 #!/bin/sh
 
 LIB=../share
-CLASSPATH=.:./log4j.properties
+CLASSPATH=.:./log4j.properties:./importerConfig.xml
 JAVA=java
 
 for f in `ls $LIB`

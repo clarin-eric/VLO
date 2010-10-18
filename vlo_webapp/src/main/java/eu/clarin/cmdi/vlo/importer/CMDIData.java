@@ -20,7 +20,9 @@ public class CMDIData {
         if (doc == null) {
             doc = new SolrInputDocument();
         }
-        doc.addField(name, value);
+        if (value != null && !value.isEmpty()) {
+            doc.addField(name, value);
+        }
     }
 
     public List<String> getResources() {

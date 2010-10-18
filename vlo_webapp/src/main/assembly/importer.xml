@@ -1,31 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <assembly>
-    <id>importer</id>
-    <formats>
-        <format>dir</format>
-    </formats>
-    <includeBaseDirectory>false</includeBaseDirectory>
-    <dependencySets>
-      <dependencySet>
-        <useDefaultExcludes/>
-        <outputDirectory>/share</outputDirectory>
-      </dependencySet>
-    </dependencySets>
-    <fileSets>
-        <fileSet>
-            <directory>src/main/bin</directory>
-            <includes>
-                <include>log4j.properties</include> <!-- Copy log4j to the bin dir to make it a bit easier to change values in it -->
-            </includes>
-            <outputDirectory>bin</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>src/main/bin</directory>
-            <includes>
-                <include>*.sh</include> 
-            </includes>
-            <outputDirectory>bin</outputDirectory>
-            <fileMode>0755</fileMode>
-        </fileSet>
-    </fileSets>
+  <id>importer</id>
+  <formats>
+    <format>dir</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <dependencySets>
+    <dependencySet>
+      <useDefaultExcludes />
+      <outputDirectory>/share</outputDirectory>
+    </dependencySet>
+  </dependencySets>
+  <fileSets>
+    <fileSet>
+      <directory>src/main/bin</directory>
+      <includes>
+        <include>log4j.properties</include> <!-- Copy log4j to the bin dir to make it a bit easier to change values in it -->
+      </includes>
+      <outputDirectory>bin</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>src/main/bin</directory>
+      <includes>
+        <include>*.sh</include>
+      </includes>
+      <outputDirectory>bin</outputDirectory>
+      <fileMode>0755</fileMode>
+    </fileSet>
+    <fileSet>
+      <directory>src/main/resources</directory>
+      <includes>
+        <include>importerConfig.xml</include>
+      </includes>
+      <outputDirectory>bin</outputDirectory>
+    </fileSet>
+  </fileSets>
 </assembly>

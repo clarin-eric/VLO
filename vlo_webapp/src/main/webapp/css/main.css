@@ -884,3 +884,6 @@ div.removebox {
 .donebox A {
     color: #ffffff;
 }
+.navigation .navigator {
+    clear:both;
+}
