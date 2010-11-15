@@ -578,7 +578,7 @@ public class CMDIDigesterTest {
     }
 
     private FacetMapping getOlacFacetMap() {
-        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { "importerConfig.xml" }); //TODO PD doesn't work on the command line.
+        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { "importerConfig.xml" }); 
         FacetMapping facetMapping = (FacetMapping) factory.getBean("olacMapping");
         return facetMapping;
     }
