@@ -13,7 +13,7 @@ Installation:
 - run: mvn package 
 - unzip: target/vlo_solr-1.4.1-vlo_solr_conf.zip to your favorite location (e.g. production server).
 - check the log4j.properties (inside the war) and vlo_solr.xml for proper solr_home/log directories
-- copy example tomcat context file: vlo_solr.xml to <Tomcat-Home>/conf/Catalina/localhost
+- copy example tomcat context file: vlo_solr.xml to: <Tomcat-Home>/conf/Catalina/localhost
 - Go to e.g: http://localhost:8080/vlo_solr to see if the instance is working properly.
 
 If you see the Welcome to Solr! message you have the solr server up and running and ready to be used.
