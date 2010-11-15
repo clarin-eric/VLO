@@ -3,9 +3,123 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
   <bean id="importerConfig" class="eu.clarin.cmdi.vlo.importer.ImporterConfig">
-    <property name="facetMapping" ref="imdiMapping" />
+    <property name="dataRoots">
+      <list>
+         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="OLAC Metadata Providers" />
+          <property name="rootFile" value="/Users/patdui/data/snapshots2/olac-cmdi-20101105/_corpusstructure/collection_root.cmdi" />
+          <property name="facetMapping" ref="olacMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="Nijmegen corpora of casual speech" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/casual_speech/Corpusstructure/casual_speech.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="MPI corpora" />
+          <property name="rootFile" value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/Corpusstructure/MPI.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="CORP-ORAL" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/CORP_ORAL/Corpusstructure/CORP_ORAL.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="DoBeS archive" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/dobes_data/Corpusstructure/dobes.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="ECHO" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/echo_data/Corpusstructure/echo.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="DBD" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/dbd_data/Corpusstructure/dbd.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="Sign Language" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/Corpusstructure/sign_language.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="Endagered Languages" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/Corpusstructure/endangered_languages.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="ANDES" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/ANDES_data/Corpusstructure/ANDES.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="Leiden Archives" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/LeidenArchives/Corpusstructure/LeidenArchives.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="ILSP INTERA Contribution" />
+          <property name="rootFile" value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/ilsp_data/ILSP_INTERA.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="MPI für Bildungsforschung" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/Bildungsforschung/Corpusstructure/MPI_Bildungsforschung.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="Humanethologisches Filmarchiv" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/humanethology/Corpusstructure/humanethology.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="SUCA" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/suca_data/Corpusstructure/suca.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="Nijmegen corpora of casual speech" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/casual_speech/Corpusstructure/casual_speech.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="ESF corpus" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/esf_conv/Corpusstructure/esf.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+       <!--  <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="IFA corpus" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/IFAcorpus/IMDI/IFAcorpus.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="CGN corpus" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/CGN/COREX6/data/meta/imdi_3.0_eaf/corpora/cgn.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>-->
+        <!-- Pisa test resources? -->
+      </list>
+    </property>
   </bean>
-
   <!--
     Mapping of facets to XPATH expressions. The facets should correspond to the facets described in the
     solr/conf/schema.xml file of the SOLR Server installation
@@ -44,35 +158,45 @@
   </bean>
 
   <bean id="olacMapping" class="eu.clarin.cmdi.vlo.importer.FacetMapping">
-    <property name="idMapping" value="CMD/Header/MdSelfLink" />
+    <property name="idMapping" value="CMD/Header/MdSelfLink" /> <!-- And some other example see http://trac.clarin.eu/wiki/CmdiVirtualLanguageObservatory -->
     <property name="facetMap">
       <map>
         <entry key="name">
-          <value>CMD/Components/olac/title</value>
+          <value>CMD/Components/OLAC-DcmiTerms/title</value>
         </entry>
-<!--         <entry key="continent">
-          <value>CMD/Components/olac</value>
-        </entry>
+        <!--
+          <entry key="continent"> <value>CMD/Components/olac</value> </entry>-->
         <entry key="country">
-          <value>CMD/Components/Session/MDGroup/Location/Country</value>
-        </entry>-->
-        <entry key="language">
-          <value>CMD/Components/olac/olac-language</value>
+          <!--
+            /CMD/Components/OLAC-DcmiTerms/spatial[@dcterms-type="ISO3166"] -> country
+            /CMD/Components/OLAC-DcmiTerms/coverage[@dcterms-type="ISO3166"] -> country
+          -->
+          <value>/CMD/Components/OLAC-DcmiTerms/spatial</value>
         </entry>
-        <!-- <entry key="organisation">
-          <value>CMD/Components/Session/MDGroup/Project/Contact/Organisation</value>
-        </entry> -->
+        <entry key="language">
+          <value>CMD/Components/OLAC-DcmiTerms/language,@olac-language</value>
+        </entry>
+        <entry key="organisation">
+          <value>/CMD/Components/OLAC-DcmiTerms/publisher</value>
+        </entry>
         <entry key="genre">
-          <value>CMD/Components/olac/type</value> <!-- TODO PD is this correct, what about creator/contributor should we add as well? Title is also very often not set??-->
+          <value>CMD/Components/OLAC-DcmiTerms/type,@olac-linguistic-type</value>
         </entry>
         <entry key="subject">
-          <value>CMD/Components/olac/olac-subject</value>
+          <value>CMD/Components/OLAC-DcmiTerms/subject</value> <!-- [@dcterms-type="LCSH"]  -->
         </entry>
         <entry key="description">
-          <value>CMD/Components/olac/olac-description</value>
+          <value>CMD/Components/OLAC-DcmiTerms/description</value>
         </entry>
       </map>
     </property>
   </bean>
 
 </beans>
+
+  <!--
+    Java Properties perhaps? <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"> <properties>
+    <comment>This query returns something extremely useful. </comment> <entry key="something.extremely.useful.sql">
+
+    </entry> </properties>
+  -->

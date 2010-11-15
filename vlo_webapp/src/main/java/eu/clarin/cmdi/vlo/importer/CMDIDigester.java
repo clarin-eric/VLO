@@ -13,15 +13,15 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 public class CMDIDigester {
 
-    private Digester digester;
     private final FacetMapping facetMapping;
+    private XMLReader xmlReader;
 
     public CMDIDigester(FacetMapping facetMapping) {
         this.facetMapping = facetMapping;
         try {
-            digester = createDigester();
+            xmlReader = createXmlReader();
         } catch (SAXException e) {
-            throw new RuntimeException("Cannot instantiate Digester", e);
+            throw new RuntimeException("Cannot instantiate xmlReader:", e);
         }
     }
 
@@ -29,14 +29,19 @@ public class CMDIDigester {
         CMDIData result = null;
         InputSource inputSource = new InputSource(new FileInputStream(file));
         inputSource.setSystemId(file.toString());
-        result = (CMDIData) digester.parse(inputSource);
+
+        /**
+         * Do not reuse the digester it holds state on bad parses. We can reuse the xmlReader. Creating a new Digester or reusing an
+         * instance gives similar performance.
+         * @see org.apache.commons.digester.Digester
+         */
+        result = (CMDIData) createDigester().parse(inputSource);
         return result;
     }
 
-    private Digester createDigester() throws SAXException {
-        Digester digester = new Digester(createXmlReader());
+    private Digester createDigester() {
+        Digester digester = new Digester(xmlReader);
         digester.setValidating(false);
-
         digester.addObjectCreate("CMD", CMDIData.class);
         digester.addBeanPropertySetter(facetMapping.getIdMapping(), "id");
         digester.addCallMethod("CMD/Resources/ResourceProxyList/ResourceProxy/", "addResource", 2);
@@ -50,9 +55,12 @@ public class CMDIDigester {
     }
 
     private void matchDocumentField(Digester digester, String pattern, String fieldName) {
-        digester.addCallMethod(pattern, "addDocField", 2);
-        digester.addObjectParam(pattern, 0, fieldName);
-        digester.addCallParam(pattern, 1);
+        String[] split = pattern.split(",@", 2);
+        String path = split[0];
+        String attribute = split.length == 2 ? split[1] : null;
+        digester.addCallMethod(path, "addDocField", 2);
+        digester.addObjectParam(path, 0, fieldName);
+        digester.addCallParam(path, 1, attribute);
     }
 
     private XMLReader createXmlReader() throws SAXException {

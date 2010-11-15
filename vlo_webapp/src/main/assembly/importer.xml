@@ -30,7 +30,7 @@
     <fileSet>
       <directory>src/main/resources</directory>
       <includes>
-        <include>importerConfig.xml</include>
+        <include>*.xml</include>
       </includes>
       <outputDirectory>bin</outputDirectory>
     </fileSet>
