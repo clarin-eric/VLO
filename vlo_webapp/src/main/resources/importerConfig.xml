@@ -5,11 +5,11 @@
   <bean id="importerConfig" class="eu.clarin.cmdi.vlo.importer.ImporterConfig">
     <property name="dataRoots">
       <list>
-         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="OLAC Metadata Providers" />
-          <property name="rootFile" value="/Users/patdui/data/snapshots2/olac-cmdi-20101105/_corpusstructure/collection_root.cmdi" />
-          <property name="facetMapping" ref="olacMapping"></property>
-        </bean>
+<!--         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">-->
+<!--          <property name="originName" value="OLAC Metadata Providers" />-->
+<!--          <property name="rootFile" value="/Users/patdui/data/snapshots2/olac-cmdi-20101105/_corpusstructure/collection_root.cmdi" />-->
+<!--          <property name="facetMapping" ref="olacMapping"></property>-->
+<!--        </bean>-->
         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
           <property name="originName" value="Nijmegen corpora of casual speech" />
           <property name="rootFile"
@@ -194,9 +194,3 @@
 
 </beans>
 
-  <!--
-    Java Properties perhaps? <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"> <properties>
-    <comment>This query returns something extremely useful. </comment> <entry key="something.extremely.useful.sql">
-
-    </entry> </properties>
-  -->
