@@ -1,15 +1,17 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import java.util.List;
+
 public class ImporterConfig {
 
-    private FacetMapping facetMapping;
+    private List<DataRoot> dataRoots;
 
-    public void setFacetMapping(FacetMapping facetMapping) {
-        this.facetMapping = facetMapping;
+    public List<DataRoot> getDataRoots() {
+        return dataRoots;
     }
-
-    public FacetMapping getFacetMapping() {
-        return facetMapping;
+    
+    public void setDataRoots(List<DataRoot> dataRoots) {
+        this.dataRoots = dataRoots;
     }
 
 }

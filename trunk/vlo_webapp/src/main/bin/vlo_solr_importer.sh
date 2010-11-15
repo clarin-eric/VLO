@@ -1,8 +1,21 @@
 #!/bin/sh
 
+# This means it the script only works started from the bin directory, 
+# adjust the workdir if you installed this somewhere and want to run it from anywhere.
+WORKDIR=.
 LIB=../share
-CLASSPATH=.:./log4j.properties:./importerConfig.xml
+CLASSPATH=.
 JAVA=java
+
+for f in `ls $WORKDIR/*.properties`
+do
+    CLASSPATH=$CLASSPATH:$WORKDIR/$f
+done
+
+for f in `ls $WORKDIR/*.xml`
+do
+    CLASSPATH=$CLASSPATH:$WORKDIR/$f
+done
 
 for f in `ls $LIB`
 do

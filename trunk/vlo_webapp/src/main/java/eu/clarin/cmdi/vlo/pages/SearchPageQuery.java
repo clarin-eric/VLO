@@ -91,7 +91,7 @@ public class SearchPageQuery implements Serializable {
         return result;
     }
 
-    public SolrQuery getSolrQuery() {
+    public SolrQuery getSolrQuery() { //TODO fix tests and check incoming parameter decoding in solr_server I think I sent it properly
         return query;
     }
 
