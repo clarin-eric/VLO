@@ -99,3 +99,40 @@ img{
 .navigation .navigator {
     clear:both;
 }
+
+
+.categorylist{
+
+}
+.anchorpanel{
+    padding:5px;
+    margin-top: 20px;
+    background-color: #2E6B99;
+    color: #FFFFFF;
+}
+.alphaNavigation{
+    margin-left: 11px;
+    background-color: #d4deef;
+    font-size:14px;
+}
+.alphaNavigation li{
+    display: inline;
+}
+.alphaNavigation ul{
+    list-style-type: none;
+    padding:0;
+}
+.alphaNavigation a{
+    display: inline-block;
+    padding-left: 25px;
+}
+.sortedFacet{
+    background-color: #BCCEE8;
+    margin-left: 11px;
+}
+.sortedFacet .facetLinkPanel{
+    padding-top: 3px;
+}
+
+
+
