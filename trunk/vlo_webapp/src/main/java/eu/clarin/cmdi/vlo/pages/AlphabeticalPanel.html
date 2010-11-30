@@ -9,7 +9,20 @@
     </div>
     <br>
     <br>
-    <div class="sortedFacet" wicket:id="sortedDataView"></div>
+    <div class="facetBody">
+        <div class="facetLeftPanel">
+            <div class="sortedFacet" wicket:id="sortedDataViewLeft">
+                <div wicket:id="anchorPanel"/>
+                <div wicket:id="valueList"/>
+            </div>
+        </div>
+        <div class="facetRightPanel">
+            <div class="sortedFacet" wicket:id="sortedDataViewRight">
+                <div wicket:id="anchorPanel"/>
+                <div wicket:id="valueList"/>
+            </div>
+        </div>
+    </div>
     <br>
     <br>
 </wicket:panel>

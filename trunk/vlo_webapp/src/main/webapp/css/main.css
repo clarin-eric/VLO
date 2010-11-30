@@ -101,9 +101,7 @@ img{
 }
 
 
-.categorylist{
 
-}
 .anchorpanel{
     padding:5px;
     margin-top: 20px;
@@ -126,9 +124,20 @@ img{
     display: inline-block;
     padding-left: 25px;
 }
+
+.facetBody .facetRightPanel{
+    width: 49.9%;
+    float: left;
+}
+
+.facetBody .facetLeftPanel{
+    width: 50%;
+    float: left;
+}
+
 .sortedFacet{
     background-color: #BCCEE8;
-    margin-left: 11px;
+    margin: 0px 11px;
 }
 .sortedFacet .facetLinkPanel{
     padding-top: 3px;
