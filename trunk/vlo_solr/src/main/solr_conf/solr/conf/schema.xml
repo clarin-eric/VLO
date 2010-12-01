@@ -403,13 +403,14 @@
    <field name="id" type="string" indexed="true" stored="true" required="true"/>
    <field name="origin" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="name" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="continent" type="string" indexed="true" stored="true" />
-   <field name="country" type="string" indexed="true" stored="true" />
+   <field name="continent" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="country" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="language" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="organisation"  type="string" indexed="true" stored="true" />
+   <field name="organisation"  type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="genre"  type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="subject"  type="string" indexed="true" stored="true" multiValued="true" />
    <field name="description" type="text" indexed="true" stored="true" multiValued="true" />
+   <field name="year" type="text" indexed="true" stored="true" multiValued="true" />
 
    <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
    <copyField source="description" dest="text"/>
@@ -421,11 +422,12 @@
    <copyField source="organisation" dest="text"/>
    <copyField source="genre" dest="text"/>
    <copyField source="subject" dest="text"/>
+   <copyField source="year" dest="text"/>
  </fields>
 
  <uniqueKey>id</uniqueKey>
  <defaultSearchField>text</defaultSearchField>
 
- <solrQueryParser defaultOperator="OR"/>
+ <solrQueryParser defaultOperator="AND"/>
 
 </schema>
