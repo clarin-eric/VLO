@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -370,17 +371,21 @@ public class CMDIDigesterTest {
         assertEquals(0, resources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(7, doc.getFieldNames().size());
+        assertEquals(8, doc.getFieldNames().size());
         assertEquals("kleve-route", doc.getFieldValue("name"));
         assertEquals("Europe", doc.getFieldValue("continent"));
         assertEquals("English", doc.getFieldValue("language"));
         assertEquals("Netherlands", doc.getFieldValue("country"));
         assertEquals("Max Planck Institute for Psycholinguistics", doc.getFieldValue("organisation"));
         assertEquals("Unspecified", doc.getFieldValue("genre"));
-        assertEquals(null, doc.getFieldValue("subject"));
         assertEquals(
                 "This  recording was made to generate a freely available test resource including speech and gestures. The annotations were created by Peter and Kita who is gesture researcher at the MPI for Psycholinguistics.",
                 doc.getFieldValue("description"));
+        assertEquals("2002-10-30", doc.getFieldValue("year")); //TODO PD curate year needs to be only the year also for olac, lrt
+        assertEquals(null, doc.getFieldValue("subject"));
+//TODO PD make it work check TRAC ticket to get resources in
+//        Collection<Object> fieldValue = doc.getFieldValues("resource");
+//        assertEquals(2, fieldValue.size());
     }
 
     @Test
@@ -404,7 +409,7 @@ public class CMDIDigesterTest {
         content += "      <Session>\n";
         content += "         <Name>kleve-route</Name>\n";
         content += "         <Title>route description to Kleve</Title>\n";
-        content += "         <Date>2002-10-30</Date>\n";
+        content += "         <Date></Date>\n";
         content += "         <descriptions>\n";
         content += "            <Description LanguageId=\"ISO639-2:eng\">Test.</Description>\n";
         content += "         </descriptions>\n";
@@ -468,6 +473,7 @@ public class CMDIDigesterTest {
         assertEquals("Should be null not empty string", null, doc.getFieldValue("organisation"));
         assertEquals(null, doc.getFieldValue("language"));
         assertEquals(null, doc.getFieldValue("subject"));
+        assertEquals(null, doc.getFieldValue("year"));
     }
 
     @Test
@@ -577,6 +583,8 @@ public class CMDIDigesterTest {
 
     }
 
+    //TODO PD add LRT test
+    
     private FacetMapping getOlacFacetMap() {
         BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { "importerConfig.xml" }); 
         FacetMapping facetMapping = (FacetMapping) factory.getBean("olacMapping");

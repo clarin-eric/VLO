@@ -60,13 +60,19 @@ public final class MetadataImporter {
 
         long start = System.currentTimeMillis();
         try {
-            //solrServer.deleteByQuery("*:*");//Delete the whole solr db.
+            if (config.isDeleteFirst()) {
+                LOG.info("Deleting original data...");
+                solrServer.deleteByQuery("*:*");//Delete the whole solr db.
+                LOG.info("Deleting original data done.");
+            }
             for (DataRoot dataRoot : dataRoots) {
+                LOG.info("Start of processing: "+dataRoot.getOriginName());
                 CMDIDigester digester = new CMDIDigester(dataRoot.getFacetMapping());
                 processCmdi(dataRoot.getRootFile(), dataRoot.getOriginName(), digester);
                 if (!docs.isEmpty()) {
                     sendDocs();
                 }
+                LOG.info("End of processing: "+dataRoot.getOriginName());
             }
         } catch (SolrServerException e) {
             LOG.error("error updating files:\n", e);
@@ -133,6 +139,7 @@ public final class MetadataImporter {
     }
 
     private void sendDocs() throws SolrServerException, IOException {
+        LOG.info("Sending "+docs.size()+" docs to solr server. Total number of docs updated till now: "+nrOFDocumentsUpdated);
         nrOFDocumentsUpdated += docs.size();
         solrServer.add(docs);
         if (serverError != null) {

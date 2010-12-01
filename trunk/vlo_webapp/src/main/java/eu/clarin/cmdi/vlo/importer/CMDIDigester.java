@@ -30,6 +30,16 @@ public class CMDIDigester {
         InputSource inputSource = new InputSource(new FileInputStream(file));
         inputSource.setSystemId(file.toString());
 
+        //        XPath xpath = XPathFactory.newInstance().newXPath(); TODO PD investigate XPATH for this.
+        //        String expression = "/widgets/widget";
+        //        InputSource inputSource = new InputSource(new FileInputStream(file));
+        //        try {
+        //            NodeList nodes = (NodeList) xpath.evaluate(expression, inputSource, XPathConstants.NODESET);
+        //            
+        //        } catch (XPathExpressionException e) {
+        //            e.printStackTrace();
+        //        }
+
         /**
          * Do not reuse the digester it holds state on bad parses. We can reuse the xmlReader. Creating a new Digester or reusing an
          * instance gives similar performance.

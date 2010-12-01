@@ -7,6 +7,9 @@
 <!--    <property name="solrUrl" value="http://lux16.mpi.nl:8080/vlo_solr" />-->
     <property name="IMDIBrowserUrl" value="http://corpus1.mpi.nl/ds/imdi_browser?openpath=" />
     <property name="facetFields">
+    <!-- The possible values of facets are defined in the schema.xml of the solr_server installation. 
+         If you want to add a facet you need to adjust this schema.xml and reindex the data. 
+         -->
       <list> <!-- List of facets to be shown as columns, the order specified is kept in the application -->
         <value>origin</value>
         <value>organisation</value>
@@ -15,6 +18,7 @@
         <value>country</value>
         <value>subject</value>
         <value>language</value>
+        <value>year</value>
       </list>
     </property>
   </bean>
