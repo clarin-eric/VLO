@@ -116,7 +116,7 @@
       </plugin>
       <!--
         Assembly helper to create the Importer tool a command line tool which can help fill in a solr server with cmdi
-        files. Build the tool with: mvn -Dpackaging=jar -Dmaven.test.skip=true assembly:assembly This creates a in
+        files. Build the tool with: mvn -Dpackaging=jar -Dmaven.test.skip=true assembly:assembly This creates in
         "target" a vlo_solr-1.0-SNAPSHOT-Importer directory with a bin and share directory. You can start the tool from
         the bin dir.
       -->
