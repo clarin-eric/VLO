@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+  <bean id="configuration" class="eu.clarin.cmdi.vlo.Configuration" factory-method="getInstance">
+<!--    <property name="solrUrl" value="http://localhost:8080/vlo_solr" />-->
+<!--    <property name="solrUrl" value="http://lux16.mpi.nl:8080/vlo_solr" />-->
+    <property name="solrUrl" value="http://catalog.clarin.eu:8080/vlo_solr" />
+    <property name="IMDIBrowserUrl" value="http://corpus1.mpi.nl/ds/imdi_browser?openpath=" />
+    <property name="facetFields">
+    <!-- The possible values of facets are defined in the schema.xml of the solr_server installation. 
+         If you want to add a facet you need to adjust this schema.xml and reindex the data. 
+         -->
+      <list> <!-- List of facets to be shown as columns, the order specified is kept in the application -->
+        <value>origin</value>
+        <value>organisation</value>
+        <value>continent</value>
+        <value>genre</value>
+        <value>country</value>
+        <value>subject</value>
+        <value>language</value>
+<!--        <value>year</value>-->
+      </list>
+    </property>
+  </bean>
+
+</beans>

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+  <bean id="importerConfig" class="eu.clarin.cmdi.vlo.importer.ImporterConfig">
+    <property name="deleteFirst" value="true"/>
+    <property name="dataRoots">
+      <list>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="OLAC Metadata Providers" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/olac-cmdi-20101105/_corpusstructure/collection_root.cmdi" />
+          <property name="facetMapping" ref="olacMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="Nijmegen corpora of casual speech" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/casual_speech/Corpusstructure/casual_speech.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="MPI corpora" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/Corpusstructure/MPI.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="CORP-ORAL" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/CORP_ORAL/Corpusstructure/CORP_ORAL.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="DoBeS archive" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/dobes_data/Corpusstructure/dobes.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="ECHO" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/echo_data/Corpusstructure/echo.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="DBD" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/dbd_data/Corpusstructure/dbd.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="Sign Language" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/Corpusstructure/sign_language.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="Endagered Languages" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/Corpusstructure/endangered_languages.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="ANDES" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/ANDES_data/Corpusstructure/ANDES.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="Leiden Archives" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/LeidenArchives/Corpusstructure/LeidenArchives.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="ILSP INTERA Contribution" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/ilsp_data/ILSP_INTERA.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="MPI für Bildungsforschung" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/Bildungsforschung/Corpusstructure/MPI_Bildungsforschung.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="Humanethologisches Filmarchiv" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/humanethology/Corpusstructure/humanethology.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="SUCA" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/suca_data/Corpusstructure/suca.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="Nijmegen corpora of casual speech" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/casual_speech/Corpusstructure/casual_speech.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="ESF corpus" />
+          <property name="rootFile" value="/Users/patdui/data/snapshots2/data/corpora/esf_conv/Corpusstructure/esf.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="IFA corpus" />
+          <property name="rootFile" value="/Users/patdui/data/snapshots2/data/corpora/IFAcorpus/IMDI/IFAcorpus.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="CGN corpus" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/data/corpora/CGN/COREX6/data/meta/imdi_3.0_eaf/corpora/cgn.imdi.cmdi" />
+          <property name="facetMapping" ref="imdiMapping"></property>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="clarin.eu" />
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots2/lrt-20101117/_corpusstructure/collection_lrt_inventory.cmdi" />
+          <property name="facetMapping" ref="lrtMapping"></property>
+        </bean>
+      </list>
+    </property>
+  </bean>
+  
+  <!--
+    Mapping of facets to XPATH expressions. The facets should correspond to the facets described in the
+    solr/conf/schema.xml file of the SOLR Server installation
+  -->
+
+  <bean id="imdiMapping" class="eu.clarin.cmdi.vlo.importer.FacetMapping"> <!-- add year? -->
+    <property name="idMapping" value="CMD/Header/MdSelfLink" />
+    <property name="facetMap">
+      <map>
+        <entry key="name">
+          <value>CMD/Components/Session/Name</value>
+        </entry>
+        <entry key="year">
+          <value>CMD/Components/Session/Date</value>
+        </entry>
+        <entry key="continent">
+          <value>CMD/Components/Session/MDGroup/Location/Continent</value>
+        </entry>
+        <entry key="country">
+          <value>CMD/Components/Session/MDGroup/Location/Country</value>
+        </entry>
+        <entry key="language">
+          <value>CMD/Components/Session/MDGroup/Content/Content_Languages/Content_Language/Name</value>
+        </entry>
+        <entry key="organisation">
+          <value>CMD/Components/Session/MDGroup/Project/Contact/Organisation</value>
+        </entry>
+        <entry key="genre">
+          <value>CMD/Components/Session/MDGroup/Content/Genre</value>
+        </entry>
+        <entry key="subject">
+          <value>CMD/Components/Session/MDGroup/Content/Subject</value>
+        </entry>
+        <entry key="description">
+          <value>CMD/Components/Session/descriptions/Description</value>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+
+<!-- /CMD/Components/OLAC-DcmiTerms/identifier (if starting with http://) -> open in original context (now: IMDI browser)  -->
+    
+  <bean id="olacMapping" class="eu.clarin.cmdi.vlo.importer.FacetMapping">
+    <property name="idMapping" value="CMD/Header/MdSelfLink" /> <!-- And some other example see http://trac.clarin.eu/wiki/CmdiVirtualLanguageObservatory -->
+    <property name="facetMap">
+      <map>
+        <entry key="name">
+          <value>CMD/Components/OLAC-DcmiTerms/title</value>
+        </entry>
+        <!--
+          <entry key="continent"> <value>CMD/Components/olac</value> </entry>-->
+        <entry key="country">
+          <!--
+            /CMD/Components/OLAC-DcmiTerms/spatial[@dcterms-type="ISO3166"] -> country
+            /CMD/Components/OLAC-DcmiTerms/coverage[@dcterms-type="ISO3166"] -> country
+          -->
+          <value>/CMD/Components/OLAC-DcmiTerms/spatial</value>
+        </entry>
+        <entry key="language">
+          <value>CMD/Components/OLAC-DcmiTerms/language,@olac-language</value>
+        </entry>
+        <entry key="organisation">
+          <value>/CMD/Components/OLAC-DcmiTerms/publisher</value>
+        </entry>
+        <entry key="genre">
+          <value>CMD/Components/OLAC-DcmiTerms/type,@olac-linguistic-type</value>
+        </entry>
+<!--        <entry key="subject">-->
+<!--          <value>CMD/Components/OLAC-DcmiTerms/subject</value> -->
+          <!-- [@dcterms-type="LCSH"]  -->
+<!--        </entry>-->
+        <entry key="description">
+          <value>CMD/Components/OLAC-DcmiTerms/description</value>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+
+
+
+
+<!-- /CMD/Components/LrtInventoryResource/LrtCommon/MetadataLink (if not existing: ReferenceLink?) -> open in original context -->
+
+<!--/CMD/Components/LrtInventoryResource/LrtCommon/ResourceType -> resource type-->
+<!--/CMD/Components/LrtInventoryResource/LrtCommon/Format-> format 
+Resource type and format need to talk to Dieter what will the implications be?
+Also need to think about a way to get language and country codes, human readable?
+-->
+
+  <bean id="lrtMapping" class="eu.clarin.cmdi.vlo.importer.FacetMapping">
+    <property name="idMapping" value="CMD/Header/MdSelfLink" />
+    <property name="facetMap">
+      <map>
+        <entry key="name">
+          <value>CMD/Components/LrtInventoryResource/LrtCommon/ResourceName</value>
+        </entry>
+<!--        <entry key="continent">-->
+<!--          <value></value>-->
+<!--        </entry>-->
+        <entry key="country">
+          <value>CMD/Components/LrtInventoryResource/LrtCommon/Countries/Country/code</value>
+        </entry>
+        <entry key="language">
+          <value>CMD/Components/LrtInventoryResource/LrtCommon/Languages/ISO639/iso-639-3-code</value>
+        </entry>
+        <entry key="organisation">
+          <value>CMD/Components/LrtInventoryResource/LrtCommon/Institute</value>
+        </entry>
+<!--        <entry key="genre">-->
+<!--          <value></value>-->
+<!--        </entry>-->
+<!--        <entry key="subject">-->
+<!--          <value></value>-->
+<!--        </entry>-->
+        <entry key="description">
+          <value>CMD/Components/LrtInventoryResource/LrtCommon/Description</value>
+        </entry>
+        <entry key="year">
+          <value>CMD/Components/LrtInventoryResource/LrtCommon/FinalizationYearResourceCreation</value>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+</beans>
+
