@@ -196,9 +196,10 @@
         <entry key="genre">
           <value>CMD/Components/OLAC-DcmiTerms/type,@olac-linguistic-type</value>
         </entry>
-        <entry key="subject">
-          <value>CMD/Components/OLAC-DcmiTerms/subject</value> <!-- [@dcterms-type="LCSH"]  -->
-        </entry>
+<!--        <entry key="subject">-->
+<!--          <value>CMD/Components/OLAC-DcmiTerms/subject</value> -->
+          <!-- [@dcterms-type="LCSH"]  -->
+<!--        </entry>-->
         <entry key="description">
           <value>CMD/Components/OLAC-DcmiTerms/description</value>
         </entry>
