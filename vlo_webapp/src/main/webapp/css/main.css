@@ -88,9 +88,8 @@ img{
 .resulttable tbody{
     background-color:#BCCEE8;
 }
-.endgame .resulttable{
-    display:none;
-
+.resulttable{
+    margin-left: 11px;
 }
 .endgame div{
     margin-left: 11px;
