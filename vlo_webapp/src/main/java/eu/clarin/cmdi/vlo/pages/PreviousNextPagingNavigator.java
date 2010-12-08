@@ -1,15 +1,11 @@
 package eu.clarin.cmdi.vlo.pages;
 
-import java.util.Iterator;
-import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigationIncrementLink;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
-import org.apache.wicket.protocol.http.WicketURLEncoder;
 
 /**
  *
@@ -62,6 +58,7 @@ public class PreviousNextPagingNavigator extends PagingNavigator {
                 pageable.setCurrentPage(getPageNumber());
                 //send new data to ShowResultPage
                 parent.setCurrentPage(getPageNumber());
+
 
 //                SolrDocumentDataProvider dataProvider = new SolrDocumentDataProvider(query.getSolrQuery().getCopy());
 //                Iterator it = dataProvider.iterator(getPageNumber(), 1);
