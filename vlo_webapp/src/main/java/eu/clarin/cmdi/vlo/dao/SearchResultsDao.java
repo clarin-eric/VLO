@@ -28,4 +28,13 @@ public class SearchResultsDao extends SolrDao {
         return response.getFacetFields();
     }
 
+    public SolrDocumentList getDocIdList(SolrQuery query) {
+        query.setFields(FacetConstants.FIELD_ID);
+        query.setFacet(false);
+        query.setStart(0);
+        query.setRows(Integer.MAX_VALUE);
+        QueryResponse queryResponse = fireQuery(query);
+        return queryResponse.getResults();
+    }
+
 }

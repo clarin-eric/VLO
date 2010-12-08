@@ -96,6 +96,7 @@ public class FacetedSearchPage extends BasePage {
         });
         searchResultList = new AjaxFallbackDefaultDataTable("searchResults", columns, new SolrDocumentDataProvider(query.getSolrQuery()
                 .getCopy()), 10);
+        
         add(searchResultList);
     }
 
