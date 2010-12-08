@@ -12,6 +12,8 @@ import org.apache.wicket.model.Model;
 
 class AnchorPanel extends Panel {
 
+    private static final long serialVersionUID = 1L;
+
     public AnchorPanel(String id, String value) {
         super(id);
         ExternalLink link = new ExternalLink("anchorName", value);

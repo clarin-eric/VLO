@@ -12,6 +12,7 @@ import org.apache.solr.common.params.CommonParams;
 import org.apache.wicket.PageParameters;
 
 import eu.clarin.cmdi.vlo.Configuration;
+import eu.clarin.cmdi.vlo.dao.FacetConstants;
 
 public class SearchPageQuery implements Serializable {
 
@@ -46,22 +47,6 @@ public class SearchPageQuery implements Serializable {
         }
     }
 
-    //    public static String escapeQueryChars(String s) { //TODO PD copied from solr, removed whitespace escaping this fixes some of the issues I am having. Moet ik solr escapen en dan url escapen?
-    //        StringBuilder sb = new StringBuilder();
-    //        for (int i = 0; i < s.length(); i++) {
-    //          char c = s.charAt(i);
-    //          // These characters are part of the query syntax and must be escaped
-    //          if (c == '\\' || c == '+' || c == '-' || c == '!'  || c == '(' || c == ')' || c == ':'
-    //            || c == '^' || c == '[' || c == ']' || c == '\"' || c == '{' || c == '}' || c == '~'
-    //            || c == '*' || c == '?' || c == '|' || c == '&'  || c == ';'
-    //            ) {
-    //            sb.append('\\');
-    //          }
-    //          sb.append(c);
-    //        }
-    //        return sb.toString();
-    //      }
-
     private String escapeSolrQuery(String value) {
         String result = null;
         if (value != null) {
@@ -84,14 +69,14 @@ public class SearchPageQuery implements Serializable {
         SolrQuery result = new SolrQuery();
         result.setRows(10);
         result.setStart(0);
-        result.setFields("name", "id");
+        result.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID);
         result.setFacet(true);
         result.setFacetMinCount(1);
         result.addFacetField(Configuration.getInstance().getFacetFields());
         return result;
     }
 
-    public SolrQuery getSolrQuery() { //TODO fix tests and check incoming parameter decoding in solr_server I think I sent it properly
+    public SolrQuery getSolrQuery() {
         return query;
     }
 
