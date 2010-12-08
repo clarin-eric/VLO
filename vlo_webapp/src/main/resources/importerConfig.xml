@@ -150,7 +150,8 @@
           <value>CMD/Components/Session/MDGroup/Location/Country</value>
         </entry>
         <entry key="language">
-          <value>CMD/Components/Session/MDGroup/Content/Content_Languages/Content_Language/Name</value>
+<!--          <value>CMD/Components/Session/MDGroup/Content/Content_Languages/Content_Language/Name</value>-->
+          <value>CMD/Components/Session/MDGroup/Content/Content_Languages/Content_Language/Id</value>
         </entry>
         <entry key="organisation">
           <value>CMD/Components/Session/MDGroup/Project/Contact/Organisation</value>

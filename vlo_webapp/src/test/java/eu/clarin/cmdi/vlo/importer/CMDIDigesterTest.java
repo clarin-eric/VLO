@@ -374,7 +374,8 @@ public class CMDIDigesterTest {
         assertEquals(8, doc.getFieldNames().size());
         assertEquals("kleve-route", doc.getFieldValue("name"));
         assertEquals("Europe", doc.getFieldValue("continent"));
-        assertEquals("English", doc.getFieldValue("language"));
+        assertEquals("ISO639-3:eng", doc.getFieldValue("language"));
+//        assertEquals("English", doc.getFieldValue("language"));
         assertEquals("Netherlands", doc.getFieldValue("country"));
         assertEquals("Max Planck Institute for Psycholinguistics", doc.getFieldValue("organisation"));
         assertEquals("Unspecified", doc.getFieldValue("genre"));
