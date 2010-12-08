@@ -45,10 +45,7 @@ img{
 .opening .valuebox .column:first-child {
     padding: 0;
 }
-.opening .facetbox {
-    font-size: 14px;
-}
-.middlegame .facetbox {
+.facetbox {
     font-size: 14px;
     padding: 2px 5px;
 }
@@ -84,24 +81,41 @@ img{
 .barlink{
     color: #BCCEE8;
 }
-.resulttable{
-    margin-left: 11px;
+.headers{
+    background-color: #2E6B99;
+    color:#FFFFFF;
 }
-.endgame{
+.resulttable tbody{
+    background-color:#BCCEE8;
+}
+.endgame .resulttable{
+    display:none;
+
+}
+.endgame div{
     margin-left: 11px;
+    border: none;
+    padding: 0;
+}
+.resultAttributes{
+    margin: 0px;
+    padding: 0px;
+    border: none;
 }
 .endgame .attribute {
     font-weight: bold;
+    background-color: #BCCEE8;
+}
+.endgame .headers .attribute{
+    background-color: #2E6B99;    
 }
 .endgame .attributesTbody {
     vertical-align: top;
+    background-color:#d4deef;
 }
 .navigation .navigator {
     clear:both;
 }
-
-
-
 .anchorpanel{
     padding:5px;
     margin-top: 20px;
