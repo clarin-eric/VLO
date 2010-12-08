@@ -38,10 +38,10 @@ public class ShowResultPage extends BasePage {
         String handle = docId.substring("test-".length());
         add(new ExternalLink("openBrowserLink", Configuration.getInstance().getIMDIBrowserUrl(handle)));
         addPrevNextLabels(docId, query);
-        addAttributesTable(docId, query);
+        addAttributesTable(docId);
     }
 
-    private void addAttributesTable(final String docId, SearchPageQuery query) {
+    private void addAttributesTable(final String docId) {
         DocumentAttributesDataProvider attributeProvider = new DocumentAttributesDataProvider(docId);
         DataTable table = new DataTable("attributesTable", createAttributesColumns(), attributeProvider, 250);
         table.setTableBodyCss("attributesTbody");
