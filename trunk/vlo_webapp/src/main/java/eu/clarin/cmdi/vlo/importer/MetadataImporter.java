@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.xml.xpath.XPathExpressionException;
+
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.StreamingUpdateSolrServer;
 import org.apache.solr.common.SolrInputDocument;
@@ -18,6 +20,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.xml.sax.SAXException;
 
 import eu.clarin.cmdi.vlo.Configuration;
+import eu.clarin.cmdi.vlo.dao.FacetConstants;
 
 @SuppressWarnings("serial")
 public final class MetadataImporter {
@@ -103,6 +106,8 @@ public final class MetadataImporter {
             LOG.error("error in file: " + file + " Exception", e);
         } catch (SAXException e) {
             LOG.error("error in file: " + file + " Exception", e);
+        } catch (XPathExpressionException e) {
+            LOG.error("error in file: " + file + " Exception", e);
         }
         if (cmdiData != null && processedIds.add(cmdiData.getId())) {
             SolrInputDocument solrDocument = cmdiData.getSolrDocument();
@@ -129,8 +134,9 @@ public final class MetadataImporter {
             nrOfFilesWithoutId++;
             LOG.info("Ignoring document without id, fileName: " + file);
         } else {
-            solrDocument.addField("origin", origin);
-            solrDocument.addField("id", cmdiData.getId());
+            solrDocument.addField(FacetConstants.FIELD_ORIGIN, origin);
+            solrDocument.addField(FacetConstants.FIELD_ID, cmdiData.getId());
+            solrDocument.addField(FacetConstants.FIELD_FILENAME, file.toString());
             docs.add(solrDocument);
             if (docs.size() == 1000) {
                 sendDocs();
