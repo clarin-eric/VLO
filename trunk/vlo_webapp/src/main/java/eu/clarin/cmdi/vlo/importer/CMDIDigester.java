@@ -87,7 +87,7 @@ public class CMDIDigester {
         NodeList nodes = (NodeList) xpath.evaluate(facetConfig.getPattern(), doc, XPathConstants.NODESET);
         if (nodes != null) {
             for (int i = 0; i < nodes.getLength(); i++) {
-                result.addDocField(facetConfig.getName(), nodes.item(i).getNodeValue(), facetConfig.isCaseSensitive());
+                result.addDocField(facetConfig.getName(), nodes.item(i).getNodeValue(), facetConfig.isCaseInsensitive());
             }
         } // else do nothing it is perfectly acceptable that not all data is in a cmdi file so not everything will be matched. E.G xpath expression evaluation CMDI session files will never match on CMD corpus files.
     }
