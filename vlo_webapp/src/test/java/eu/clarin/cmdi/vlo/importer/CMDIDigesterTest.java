@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -16,8 +15,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import eu.clarin.cmdi.vlo.importer.CMDIDigester;
 
 public class CMDIDigesterTest {
 

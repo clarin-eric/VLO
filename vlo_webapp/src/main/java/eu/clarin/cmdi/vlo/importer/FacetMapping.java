@@ -1,12 +1,12 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import java.util.Map;
+import java.util.List;
 
 public class FacetMapping {
-    
+
     private String idMapping;
-    
-    private Map<String, String> facetMap;
+
+    private List<FacetConfiguration> facets;
 
     public void setIdMapping(String idMapping) {
         this.idMapping = idMapping;
@@ -16,12 +16,12 @@ public class FacetMapping {
         return idMapping;
     }
 
-    public void setFacetMap(Map<String, String> facetMap) {
-        this.facetMap = facetMap;
+    public void setFacets(List<FacetConfiguration> facets) {
+        this.facets = facets;
     }
 
-    public Map<String, String> getFacetMap() {
-        return facetMap;
+    public List<FacetConfiguration> getFacets() {
+        return facets;
     }
 
 }
