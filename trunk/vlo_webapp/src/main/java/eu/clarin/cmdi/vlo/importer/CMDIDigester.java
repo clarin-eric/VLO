@@ -77,17 +77,17 @@ public class CMDIDigester {
         }
         List<FacetConfiguration> facetList = facetMapping.getFacets();
         for (FacetConfiguration facetConfiguration : facetList) {
-            matchDocumentField(result, facetConfiguration.getPattern(), facetConfiguration.getName(), doc, xpath);
+            matchDocumentField(result, facetConfiguration, doc, xpath);
         }
         return result;
     }
 
-    private void matchDocumentField(CMDIData result, String pattern, String fieldName, Document doc, XPath xpath)
+    private void matchDocumentField(CMDIData result, FacetConfiguration facetConfig, Document doc, XPath xpath)
             throws XPathExpressionException {
-        NodeList nodes = (NodeList) xpath.evaluate(pattern, doc, XPathConstants.NODESET);
+        NodeList nodes = (NodeList) xpath.evaluate(facetConfig.getPattern(), doc, XPathConstants.NODESET);
         if (nodes != null) {
             for (int i = 0; i < nodes.getLength(); i++) {
-                result.addDocField(fieldName, nodes.item(i).getNodeValue());
+                result.addDocField(facetConfig.getName(), nodes.item(i).getNodeValue(), facetConfig.isCaseSensitive());
             }
         } // else do nothing it is perfectly acceptable that not all data is in a cmdi file so not everything will be matched. E.G xpath expression evaluation CMDI session files will never match on CMD corpus files.
     }

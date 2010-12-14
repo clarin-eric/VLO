@@ -374,7 +374,7 @@ public class CMDIDigesterTest {
         assertEquals("ISO639-3:eng", doc.getFieldValue("language"));
         assertEquals("Netherlands", doc.getFieldValue("country"));
         assertEquals("Max Planck Institute for Psycholinguistics", doc.getFieldValue("organisation"));
-        assertEquals("Unspecified", doc.getFieldValue("genre"));
+        assertEquals("unspecified", doc.getFieldValue("genre"));
         assertEquals(
                 "This  recording was made to generate a freely available test resource including speech and gestures. The annotations were created by Peter and Kita who is gesture researcher at the MPI for Psycholinguistics.",
                 doc.getFieldValue("description"));
@@ -465,7 +465,7 @@ public class CMDIDigesterTest {
         assertEquals("kleve-route", doc.getFieldValue("name"));
         assertEquals("Europe", doc.getFieldValue("continent"));
         assertEquals("Netherlands", doc.getFieldValue("country"));
-        assertEquals("Unspecified", doc.getFieldValue("genre"));
+        assertEquals("unspecified", doc.getFieldValue("genre"));
         assertEquals("Test.", doc.getFieldValue("description"));
         assertEquals("Should be null not empty string", null, doc.getFieldValue("organisation"));
         assertEquals(null, doc.getFieldValue("language"));
@@ -532,7 +532,7 @@ public class CMDIDigesterTest {
         assertEquals("x-sil-CHN", doc.getFieldValue("language"));
         assertEquals(null, doc.getFieldValue("country"));
         assertEquals(null, doc.getFieldValue("organisation"));
-        assertEquals("Transcription", doc.getFieldValue("genre"));
+        assertEquals("transcription", doc.getFieldValue("genre"));
       //  assertEquals("Kuna", doc.getFieldValue("subject"));
         assertEquals(2, doc.getFieldValues("description").size());
     }
