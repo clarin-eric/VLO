@@ -4,14 +4,14 @@ public class FacetConfiguration {
 
     private String name;
     private String pattern;
-    private boolean caseSensitive= false;
+    private boolean caseInsensitive= false;
 
-    public void setCaseSensitive(boolean caseSensitive) {
-        this.caseSensitive = caseSensitive;
+    public void setCaseInsensitive(boolean caseValue) {
+        this.caseInsensitive = caseValue;
     }
 
-    public boolean isCaseSensitive() {
-        return caseSensitive;
+    public boolean isCaseInsensitive() {
+        return caseInsensitive;
     }
 
     public void setPattern(String pattern) {

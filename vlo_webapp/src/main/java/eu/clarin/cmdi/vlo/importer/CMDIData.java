@@ -16,12 +16,12 @@ public class CMDIData {
         return doc;
     }
 
-    public void addDocField(String name, String value, boolean caseSensitive) {
+    public void addDocField(String name, String value, boolean caseInsensitive) {
         if (doc == null) {
             doc = new SolrInputDocument();
         }
         if (value != null && !value.isEmpty()) {
-            if (caseSensitive) {
+            if (caseInsensitive) {
                 doc.addField(name, value.toLowerCase());
             } else {
                 doc.addField(name, value);
