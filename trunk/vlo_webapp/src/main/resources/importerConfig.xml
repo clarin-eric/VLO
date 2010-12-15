@@ -165,12 +165,12 @@
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="genre" />
           <property name="pattern" value="CMD/Components/Session/MDGroup/Content/Genre/text()" />
-          <property name="caseSensitive" value="true" />
+          <property name="caseInsensitive" value="true" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="subject" />
           <property name="pattern" value="CMD/Components/Session/MDGroup/Content/Subject/text()" />
-          <property name="caseSensitive" value="true" />
+          <property name="caseInsensitive" value="true" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="description" />
@@ -212,7 +212,7 @@
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="genre" />
           <property name="pattern" value="CMD/Components/OLAC-DcmiTerms/type/@olac-linguistic-type" />
-          <property name="caseSensitive" value="true" />
+          <property name="caseInsensitive" value="true" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="description" />
