@@ -378,11 +378,8 @@ public class CMDIDigesterTest {
         assertEquals(
                 "This  recording was made to generate a freely available test resource including speech and gestures. The annotations were created by Peter and Kita who is gesture researcher at the MPI for Psycholinguistics.",
                 doc.getFieldValue("description"));
-        assertEquals("2002-10-30", doc.getFieldValue("year")); //TODO PD curate year needs to be only the year also for olac, lrt
+        assertEquals("2002-10-30", doc.getFieldValue("year"));
         assertEquals(null, doc.getFieldValue("subject"));
-//TODO PD make it work check TRAC ticket to get resources in
-//        Collection<Object> fieldValue = doc.getFieldValues("resource");
-//        assertEquals(2, fieldValue.size());
     }
 
     @Test
@@ -533,7 +530,7 @@ public class CMDIDigesterTest {
         assertEquals(null, doc.getFieldValue("country"));
         assertEquals(null, doc.getFieldValue("organisation"));
         assertEquals("transcription", doc.getFieldValue("genre"));
-      //  assertEquals("Kuna", doc.getFieldValue("subject"));
+        //  assertEquals("Kuna", doc.getFieldValue("subject"));
         assertEquals(2, doc.getFieldValues("description").size());
     }
 
@@ -580,10 +577,65 @@ public class CMDIDigesterTest {
 
     }
 
-    //TODO PD add LRT test
-    
+    @Test
+    public void testLrtCollection() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD ns0:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1289827960126/xsd\" xmlns:ns0=\"http://www.w3.org/2001/XMLSchema-instance\">\n";
+        content += "    <Header>\n";
+        content += "        <MdCreator>lrt2cmdi.py</MdCreator>\n";
+        content += "        <MdCreationDate>2010-11-17</MdCreationDate>\n";
+        content += "        <MdSelfLink>clarin.eu:lrt:433</MdSelfLink>\n";
+        content += "        <MdProfile>clarin.eu:cr1:p_1289827960126</MdProfile>\n";
+        content += "    </Header>\n";
+        content += "    <Resources>\n";
+        content += "        <ResourceProxyList />\n";
+        content += "        <JournalFileProxyList />\n";
+        content += "        <ResourceRelationList />\n";
+        content += "    </Resources>\n";
+        content += "    <Components>\n";
+        content += "        <LrtInventoryResource>\n";
+        content += "            <LrtCommon>\n";
+        content += "                <ResourceName>Corpus of Present-day Written Estonian</ResourceName>\n";
+        content += "                <ResourceType>Written Corpus</ResourceType>\n";
+        content += "                <LanguagesOther />\n";
+        content += "                <Description>written general; 95 mio words; TEI/SGML</Description>\n";
+        content += "                <ContactPerson>Kadri.Muischnek@ut.ee</ContactPerson>\n";
+        content += "                <Format />\n";
+        content += "                <Institute>Test</Institute>\n";
+        content += "                <MetadataLink />\n";
+        content += "                <Publications />\n";
+        content += "                <ReadilyAvailable>true</ReadilyAvailable>\n";
+        content += "                <ReferenceLink />         \n";
+        content += "                <Languages><ISO639><iso-639-3-code>est</iso-639-3-code></ISO639></Languages>\n";
+        content += "                <Countries><Country><Code>EE</Code></Country></Countries>\n";
+        content += "            </LrtCommon>\n";
+        content += "       </LrtInventoryResource>\n";
+        content += "    </Components>\n";
+        content += "</CMD>\n";
+
+        File cmdiFile = createCmdiFile("testOlac", content);
+        CMDIDigester digester = new CMDIDigester(getLrtFacetMap());
+        CMDIData data = digester.process(cmdiFile);
+        assertEquals("clarin.eu:lrt:433", data.getId());
+        List<String> resources = data.getResources();
+        assertEquals(0, resources.size());
+        SolrInputDocument doc = data.getSolrDocument();
+        assertNotNull(doc);
+        assertEquals(5, doc.getFieldNames().size());
+        assertEquals("Corpus of Present-day Written Estonian", doc.getFieldValue("name"));
+        assertEquals(null, doc.getFieldValue("continent"));
+        assertEquals(1, doc.getFieldValues("language").size());
+        assertEquals("est", doc.getFieldValue("language"));
+        assertEquals("EE", doc.getFieldValue("country"));
+        assertEquals("Test", doc.getFieldValue("organisation"));
+        assertEquals(null, doc.getFieldValue("year"));
+        assertEquals(null, doc.getFieldValue("genre"));
+        assertEquals("written general; 95 mio words; TEI/SGML", doc.getFieldValue("description"));
+    }
+
     private FacetMapping getOlacFacetMap() {
-        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { "importerConfig.xml" }); 
+        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { "importerConfig.xml" });
         FacetMapping facetMapping = (FacetMapping) factory.getBean("olacMapping");
         return facetMapping;
     }
@@ -591,6 +643,12 @@ public class CMDIDigesterTest {
     private FacetMapping getIMDIFacetMap() {
         BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { "importerConfig.xml" });
         FacetMapping facetMapping = (FacetMapping) factory.getBean("imdiMapping");
+        return facetMapping;
+    }
+
+    private FacetMapping getLrtFacetMap() {
+        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { "importerConfig.xml" });
+        FacetMapping facetMapping = (FacetMapping) factory.getBean("lrtMapping");
         return facetMapping;
     }
 
