@@ -135,46 +135,46 @@
   -->
 
   <bean id="imdiMapping" class="eu.clarin.cmdi.vlo.importer.FacetMapping"> <!-- add year? -->
-    <property name="idMapping" value="CMD/Header/MdSelfLink/text()" />
+    <property name="idMapping" value="/CMD/Header/MdSelfLink/text()" />
     <property name="facets">
       <list>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="name" />
-          <property name="pattern" value="CMD/Components/Session/Name/text()" />
+          <property name="pattern" value="/CMD/Components/Session/Name/text()" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="year" />
-          <property name="pattern" value="CMD/Components/Session/Date/text()" />
+          <property name="pattern" value="/CMD/Components/Session/Date/text()" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="continent" />
-          <property name="pattern" value="CMD/Components/Session/MDGroup/Location/Continent/text()" />
+          <property name="pattern" value="/CMD/Components/Session/MDGroup/Location/Continent/text()" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="country" />
-          <property name="pattern" value="CMD/Components/Session/MDGroup/Location/Country/text()" />
+          <property name="pattern" value="/CMD/Components/Session/MDGroup/Location/Country/text()" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="language" />
-          <property name="pattern" value="CMD/Components/Session/MDGroup/Content/Content_Languages/Content_Language/Id/text()" />
+          <property name="pattern" value="/CMD/Components/Session/MDGroup/Content/Content_Languages/Content_Language/Id/text()" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="organisation" />
-          <property name="pattern" value="CMD/Components/Session/MDGroup/Project/Contact/Organisation/text()" />
+          <property name="pattern" value="/CMD/Components/Session/MDGroup/Project/Contact/Organisation/text()" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="genre" />
-          <property name="pattern" value="CMD/Components/Session/MDGroup/Content/Genre/text()" />
+          <property name="pattern" value="/CMD/Components/Session/MDGroup/Content/Genre/text()" />
           <property name="caseInsensitive" value="true" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="subject" />
-          <property name="pattern" value="CMD/Components/Session/MDGroup/Content/Subject/text()" />
+          <property name="pattern" value="/CMD/Components/Session/MDGroup/Content/Subject/text()" />
           <property name="caseInsensitive" value="true" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="description" />
-          <property name="pattern" value="CMD/Components/Session/descriptions/Description/text()" />
+          <property name="pattern" value="/CMD/Components/Session/descriptions/Description/text()" />
         </bean>
       </list>
     </property>
@@ -186,16 +186,16 @@
   -->
 
   <bean id="olacMapping" class="eu.clarin.cmdi.vlo.importer.FacetMapping">
-    <property name="idMapping" value="CMD/Header/MdSelfLink/text()" /> <!-- And some other example see http://trac.clarin.eu/wiki/CmdiVirtualLanguageObservatory -->
+    <property name="idMapping" value="/CMD/Header/MdSelfLink/text()" /> <!-- And some other example see http://trac.clarin.eu/wiki/CmdiVirtualLanguageObservatory -->
     <property name="facets">
       <list>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="name" />
-          <property name="pattern" value="CMD/Components/OLAC-DcmiTerms/title/text()" />
+          <property name="pattern" value="/CMD/Components/OLAC-DcmiTerms/title/text()" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="country" />
-          <property name="pattern" value="CMD/Components/OLAC-DcmiTerms/spatial/text()" />
+          <property name="pattern" value="/CMD/Components/OLAC-DcmiTerms/spatial/text()" />
           <!--
             /CMD/Components/OLAC-DcmiTerms/spatial[@dcterms-type="ISO3166"] -> country
             /CMD/Components/OLAC-DcmiTerms/coverage[@dcterms-type="ISO3166"] -> country
@@ -203,20 +203,20 @@
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="language" />
-          <property name="pattern" value="CMD/Components/OLAC-DcmiTerms/language/@olac-language" />
+          <property name="pattern" value="/CMD/Components/OLAC-DcmiTerms/language/@olac-language" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="organisation" />
-          <property name="pattern" value="CMD/Components/OLAC-DcmiTerms/publisher/text()" />
+          <property name="pattern" value="/CMD/Components/OLAC-DcmiTerms/publisher/text()" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="genre" />
-          <property name="pattern" value="CMD/Components/OLAC-DcmiTerms/type/@olac-linguistic-type" />
+          <property name="pattern" value="/CMD/Components/OLAC-DcmiTerms/type/@olac-linguistic-type" />
           <property name="caseInsensitive" value="true" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="description" />
-          <property name="pattern" value="CMD/Components/OLAC-DcmiTerms/description/text()" />
+          <property name="pattern" value="/CMD/Components/OLAC-DcmiTerms/description/text()" />
         </bean>
         <!--
           <entry key="continent"> <value>CMD/Components/olac</value> </entry>-->
@@ -243,33 +243,33 @@
   -->
 
   <bean id="lrtMapping" class="eu.clarin.cmdi.vlo.importer.FacetMapping">
-    <property name="idMapping" value="CMD/Header/MdSelfLink/text()" />
+    <property name="idMapping" value="/CMD/Header/MdSelfLink/text()" />
     <property name="facets">
       <list>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="name" />
-          <property name="pattern" value="CMD/Components/LrtInventoryResource/LrtCommon/ResourceName/text()" />
+          <property name="pattern" value="/CMD/Components/LrtInventoryResource/LrtCommon/ResourceName/text()" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="country" />
-          <property name="pattern" value="CMD/Components/LrtInventoryResource/LrtCommon/Countries/Country/code/text()" />
+          <property name="pattern" value="/CMD/Components/LrtInventoryResource/LrtCommon/Countries/Country/Code/text()" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="language" />
-          <property name="pattern" value="CMD/Components/LrtInventoryResource/LrtCommon/Languages/ISO639/iso-639-3-code/text()" />
+          <property name="pattern" value="/CMD/Components/LrtInventoryResource/LrtCommon/Languages/ISO639/iso-639-3-code/text()" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="organisation" />
-          <property name="pattern" value="CMD/Components/LrtInventoryResource/LrtCommon/Institute/text()" />
+          <property name="pattern" value="/CMD/Components/LrtInventoryResource/LrtCommon/Institute/text()" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="year" />
           <property name="pattern"
-            value="CMD/Components/LrtInventoryResource/LrtCommon/FinalizationYearResourceCreation/text()" />
+            value="/CMD/Components/LrtInventoryResource/LrtCommon/FinalizationYearResourceCreation/text()" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="description" />
-          <property name="pattern" value="CMD/Components/LrtInventoryResource/LrtCommon/Description/text()" />
+          <property name="pattern" value="/CMD/Components/LrtInventoryResource/LrtCommon/Description/text()" />
         </bean>
         <!--        <entry key="continent">-->
         <!--          <value></value>-->

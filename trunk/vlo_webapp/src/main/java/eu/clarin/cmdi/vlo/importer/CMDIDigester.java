@@ -24,7 +24,6 @@ import org.xml.sax.SAXException;
 public class CMDIDigester {
     private final static Logger LOG = LoggerFactory.getLogger(CMDIDigester.class);
     private final FacetMapping facetMapping;
-    //    private XMLReader xmlReader;
     private DocumentBuilder builder;
 
     public CMDIDigester(FacetMapping facetMapping) {
@@ -36,11 +35,6 @@ public class CMDIDigester {
         } catch (ParserConfigurationException e) {
             throw new RuntimeException("Cannot instantiate documentBuilder:", e);
         }
-        //        try {
-        //            xmlReader = createXmlReader();
-        //        } catch (SAXException e) {
-        //            throw new RuntimeException("Cannot instantiate xmlReader:", e);
-        //        }
     }
 
     public CMDIData process(File file) throws IOException, SAXException, XPathExpressionException {
@@ -49,13 +43,6 @@ public class CMDIDigester {
         inputSource.setSystemId(file.toString());
         XPath xpath = XPathFactory.newInstance().newXPath();
         result = createCMDIData(xpath, inputSource);
-
-        /**
-         * Do not reuse the digester it holds state on bad parses. We can reuse the xmlReader. Creating a new Digester or reusing an
-         * instance gives similar performance.
-         * @see org.apache.commons.digester.Digester
-         */
-        //result = (CMDIData) createDigester().parse(inputSource);
         return result;
     }
 
@@ -91,37 +78,4 @@ public class CMDIDigester {
             }
         } // else do nothing it is perfectly acceptable that not all data is in a cmdi file so not everything will be matched. E.G xpath expression evaluation CMDI session files will never match on CMD corpus files.
     }
-
-    //    private Digester createDigester() {
-    //        Digester digester = new Digester(xmlReader);
-    //        digester.setValidating(false);
-    //        digester.addObjectCreate("CMD", CMDIData.class);
-    //        digester.addBeanPropertySetter(facetMapping.getIdMapping(), "id");
-    //        digester.addCallMethod("CMD/Resources/ResourceProxyList/ResourceProxy/", "addResource", 2);
-    //        digester.addCallParam("CMD/Resources/ResourceProxyList/ResourceProxy/ResourceRef", 0);
-    //        digester.addCallParam("CMD/Resources/ResourceProxyList/ResourceProxy/ResourceType", 1);
-    //        //        Map<String, String> facetMap = facetMapping.getFacetMap();
-    //        //        for (String facet : facetMap.keySet()) {
-    //        //            matchDocumentField(digester, facetMap.get(facet), facet);
-    //        //        }
-    //        return digester;
-    //    }
-    //
-    //    private void matchDocumentField(Digester digester, String pattern, String fieldName) {
-    //        String[] split = pattern.split(",@", 2);
-    //        String path = split[0];
-    //        String attribute = split.length == 2 ? split[1] : null;
-    //        digester.addCallMethod(path, "addDocField", 2);
-    //        digester.addObjectParam(path, 0, fieldName);
-    //        digester.addCallParam(path, 1, attribute);
-    //    }
-    //
-    //    private XMLReader createXmlReader() throws SAXException {
-    //        XMLReader xmlReader = XMLReaderFactory.createXMLReader();
-    //        xmlReader.setFeature("http://xml.org/sax/features/validation", true);
-    //        xmlReader.setFeature("http://xml.org/sax/features/namespaces", true);
-    //        xmlReader.setProperty("http://java.sun.com/xml/jaxp/properties/schemaLanguage", "http://www.w3.org/2001/XMLSchema");
-    //        return xmlReader;
-    //    }
-
 }
