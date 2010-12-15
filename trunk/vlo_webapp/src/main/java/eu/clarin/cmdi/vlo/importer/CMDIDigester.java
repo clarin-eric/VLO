@@ -13,16 +13,20 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class CMDIDigester {
-    private final static Logger LOG = LoggerFactory.getLogger(CMDIDigester.class);
+
+/**
+ * @deprecated 
+ * Dom parsing implementation, use the @see CMDIParserVTDXML it is much faster. 
+ * Keeping this for now just in case we run into issues with the vlt parsing.
+ * patdui 15 December 2010
+ */
+public class CMDIDigester implements CMDIDataProcessor {
     private final FacetMapping facetMapping;
     private DocumentBuilder builder;
 

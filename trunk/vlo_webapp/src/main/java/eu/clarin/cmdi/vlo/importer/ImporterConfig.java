@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ImporterConfig {
 
-    private boolean deleteFirst = false;
+    private boolean deleteAllFirst = false;
     
     private List<DataRoot> dataRoots;
 
@@ -16,12 +16,12 @@ public class ImporterConfig {
         this.dataRoots = dataRoots;
     }
 
-    public void setDeleteFirst(boolean deleteFirst) {
-        this.deleteFirst = deleteFirst;
+    public void setDeleteAllFirst(boolean deleteAllFirst) {
+        this.deleteAllFirst = deleteAllFirst;
     }
 
-    public boolean isDeleteFirst() {
-        return deleteFirst;
+    public boolean isDeleteAllFirst() {
+        return deleteAllFirst;
     }
 
 }

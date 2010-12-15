@@ -6,6 +6,9 @@ import static org.junit.Assert.assertNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -16,9 +19,14 @@ import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class CMDIDigesterTest {
+public class CMDIDataProcessorTest {
 
     private static File testDir;
+
+    private CMDIDataProcessor getDataParser(FacetMapping map) {
+        return new CMDIParserVTDXML(map);
+        //        return new CMDIDigester(map);
+    }
 
     @Test
     public void testCreateCMDIDataFromCorpus() throws Exception {
@@ -65,8 +73,8 @@ public class CMDIDigesterTest {
         content += "   </Components>\n";
         content += "</CMD>\n";
         File cmdiFile = createCmdiFile("testCorpus", content);
-        CMDIDigester digester = new CMDIDigester(getIMDIFacetMap());
-        CMDIData data = digester.process(cmdiFile);
+        CMDIDataProcessor processor = getDataParser(getIMDIFacetMap());
+        CMDIData data = processor.process(cmdiFile);
         assertEquals("test-hdl:1839/00-0000-0000-0000-0001-D", data.getId());
         List<String> resources = data.getResources();
         assertEquals(3, resources.size());
@@ -361,8 +369,8 @@ public class CMDIDigesterTest {
         content += "   </Components>\n";
         content += "</CMD>\n";
         File cmdiFile = createCmdiFile("testSession", content);
-        CMDIDigester digester = new CMDIDigester(getIMDIFacetMap());
-        CMDIData data = digester.process(cmdiFile);
+        CMDIDataProcessor processor = getDataParser(getIMDIFacetMap());
+        CMDIData data = processor.process(cmdiFile);
         assertEquals("test-hdl:1839/00-0000-0000-0009-294C-9", data.getId());
         List<String> resources = data.getResources();
         assertEquals(0, resources.size());
@@ -451,8 +459,8 @@ public class CMDIDigesterTest {
         content += "   </Components>\n";
         content += "</CMD>\n";
         File cmdiFile = createCmdiFile("testSession", content);
-        CMDIDigester digester = new CMDIDigester(getIMDIFacetMap());
-        CMDIData data = digester.process(cmdiFile);
+        CMDIDataProcessor processor = getDataParser(getIMDIFacetMap());
+        CMDIData data = processor.process(cmdiFile);
         assertEquals("test-hdl:1839/00-0000-0000-0009-294C-9", data.getId());
         List<String> resources = data.getResources();
         assertEquals(0, resources.size());
@@ -504,6 +512,7 @@ public class CMDIDigesterTest {
         content += "      </description>\n";
         content += "         <description>The one-eyed grandmother is one of many traditional Kuna stories performed in the Kuna gathering house. This story, performed here by Pedro Arias, combines European derived motifs (Tom Thumb and Hansel and Gretel) with themes that seem more Kuna in origin. All are woven together and a moral is provided. Pedro Arias performed this story before a gathered audience in the morning..\n";
         content += "      </description>\n";
+        content += "         <description>Test</description>\n";
         content += "         <identifier>http://uts.cc.utexas.edu/~ailla/audio/sherzer/one_eyed_grandmother.ram</identifier>\n";
         content += "         <identifier>http://uts.cc.utexas.edu/~ailla/texts/sherzer/one_eyed_grandmother.pdf</identifier>\n";
         content += "         <language olac-language=\"x-sil-CHN\"/>\n";
@@ -515,8 +524,8 @@ public class CMDIDigesterTest {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testOlac", content);
-        CMDIDigester digester = new CMDIDigester(getOlacFacetMap());
-        CMDIData data = digester.process(cmdiFile);
+        CMDIDataProcessor processor = getDataParser(getOlacFacetMap());
+        CMDIData data = processor.process(cmdiFile);
         assertEquals("oai:ailla.utexas.edu:1", data.getId());
         List<String> resources = data.getResources();
         assertEquals(0, resources.size());
@@ -531,7 +540,20 @@ public class CMDIDigesterTest {
         assertEquals(null, doc.getFieldValue("organisation"));
         assertEquals("transcription", doc.getFieldValue("genre"));
         //  assertEquals("Kuna", doc.getFieldValue("subject"));
-        assertEquals(2, doc.getFieldValues("description").size());
+        Collection<Object> fieldValues = doc.getFieldValues("description");
+        assertEquals(3, fieldValues.size());
+        List<String> descriptions = new ArrayList(fieldValues);
+        Collections.sort(descriptions);
+        assertEquals("\n    Channel: Talking;\n    Genre: Traditional Narrative / Story;\n    Country: Panama;\n"
+                + "    Place of Recording: Mulatuppu;\n    Event: Community Gathering;\n"
+                + "    Institutional Affiliation: University of Texas at Austin;\n    Participant Information: Political Leader;\n"
+                + "      ", descriptions.get(0).toString());
+        assertEquals("Test", descriptions.get(1).toString());
+        assertEquals("The one-eyed grandmother is one of many traditional Kuna stories performed "
+                + "in the Kuna gathering house. This story, performed here by Pedro Arias, combines "
+                + "European derived motifs (Tom Thumb and Hansel and Gretel) with themes that seem more "
+                + "Kuna in origin. All are woven together and a moral is provided. Pedro Arias performed "
+                + "this story before a gathered audience in the morning..\n      ", descriptions.get(2).toString());
     }
 
     @Test
@@ -567,8 +589,8 @@ public class CMDIDigesterTest {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testOlac", content);
-        CMDIDigester digester = new CMDIDigester(getOlacFacetMap());
-        CMDIData data = digester.process(cmdiFile);
+        CMDIDataProcessor processor = getDataParser(getOlacFacetMap());
+        CMDIData data = processor.process(cmdiFile);
         assertEquals("collection_ATILF_Resources.cmdi", data.getId());
         List<String> resources = data.getResources();
         assertEquals(9, resources.size());
@@ -615,8 +637,8 @@ public class CMDIDigesterTest {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testOlac", content);
-        CMDIDigester digester = new CMDIDigester(getLrtFacetMap());
-        CMDIData data = digester.process(cmdiFile);
+        CMDIDataProcessor processor = getDataParser(getLrtFacetMap());
+        CMDIData data = processor.process(cmdiFile);
         assertEquals("clarin.eu:lrt:433", data.getId());
         List<String> resources = data.getResources();
         assertEquals(0, resources.size());

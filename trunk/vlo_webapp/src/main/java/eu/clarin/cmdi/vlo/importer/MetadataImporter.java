@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.xpath.XPathExpressionException;
-
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.StreamingUpdateSolrServer;
 import org.apache.solr.common.SolrInputDocument;
@@ -17,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.xml.sax.SAXException;
 
 import eu.clarin.cmdi.vlo.Configuration;
 import eu.clarin.cmdi.vlo.dao.FacetConstants;
@@ -51,7 +48,6 @@ public final class MetadataImporter {
         };
     }
 
-    //TODO PD can have multiple origins
     private void startImport() {
         List<DataRoot> dataRoots = config.getDataRoots();
         for (DataRoot dataRoot : dataRoots) {
@@ -63,19 +59,24 @@ public final class MetadataImporter {
 
         long start = System.currentTimeMillis();
         try {
-            if (config.isDeleteFirst()) {
+            if (config.isDeleteAllFirst()) {
                 LOG.info("Deleting original data...");
                 solrServer.deleteByQuery("*:*");//Delete the whole solr db.
                 LOG.info("Deleting original data done.");
             }
             for (DataRoot dataRoot : dataRoots) {
-                LOG.info("Start of processing: "+dataRoot.getOriginName());
-                CMDIDigester digester = new CMDIDigester(dataRoot.getFacetMapping());
-                processCmdi(dataRoot.getRootFile(), dataRoot.getOriginName(), digester);
+                LOG.info("Start of processing: " + dataRoot.getOriginName());
+                if (dataRoot.isDeleteFirst()) {
+                    LOG.info("Deleting data for origin: " + dataRoot.getOriginName());
+                    solrServer.deleteByQuery(FacetConstants.FIELD_ORIGIN + ":" + dataRoot.getOriginName());
+                    LOG.info("Deleting data for origin done.");
+                }
+                CMDIDataProcessor processor = new CMDIParserVTDXML(dataRoot.getFacetMapping());
+                processCmdi(dataRoot.getRootFile(), dataRoot.getOriginName(), processor);
                 if (!docs.isEmpty()) {
                     sendDocs();
                 }
-                LOG.info("End of processing: "+dataRoot.getOriginName());
+                LOG.info("End of processing: " + dataRoot.getOriginName());
             }
         } catch (SolrServerException e) {
             LOG.error("error updating files:\n", e);
@@ -97,16 +98,12 @@ public final class MetadataImporter {
         LOG.info("Update of " + nrOFDocumentsUpdated + " took " + took + " secs. Total nr of files analyzed " + nrOfFilesAnalyzed);
     }
 
-    private void processCmdi(File file, String origin, CMDIDigester digester) throws SolrServerException, IOException {
+    private void processCmdi(File file, String origin, CMDIDataProcessor processor) throws SolrServerException, IOException {
         nrOfFilesAnalyzed++;
         CMDIData cmdiData = null;
         try {
-            cmdiData = digester.process(file);
-        } catch (IOException e) {
-            LOG.error("error in file: " + file + " Exception", e);
-        } catch (SAXException e) {
-            LOG.error("error in file: " + file + " Exception", e);
-        } catch (XPathExpressionException e) {
+            cmdiData = processor.process(file);
+        } catch (Exception e) {
             LOG.error("error in file: " + file + " Exception", e);
         }
         if (cmdiData != null && processedIds.add(cmdiData.getId())) {
@@ -118,7 +115,7 @@ public final class MetadataImporter {
             for (String cmdiResource : resources) {
                 File resourceFile = new File(file.getParentFile(), cmdiResource);
                 if (resourceFile.exists()) {
-                    processCmdi(resourceFile, origin, digester);
+                    processCmdi(resourceFile, origin, processor);
                 } else {
                     nrOfNonExistendResourceFiles++;
                     LOG.error("Found nonexistent resource file (" + cmdiResource + ") in cmdi: " + file);
@@ -145,7 +142,7 @@ public final class MetadataImporter {
     }
 
     private void sendDocs() throws SolrServerException, IOException {
-        LOG.info("Sending "+docs.size()+" docs to solr server. Total number of docs updated till now: "+nrOFDocumentsUpdated);
+        LOG.info("Sending " + docs.size() + " docs to solr server. Total number of docs updated till now: " + nrOFDocumentsUpdated);
         nrOFDocumentsUpdated += docs.size();
         solrServer.add(docs);
         if (serverError != null) {
