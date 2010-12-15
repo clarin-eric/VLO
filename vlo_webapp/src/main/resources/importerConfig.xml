@@ -3,10 +3,11 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
   <bean id="importerConfig" class="eu.clarin.cmdi.vlo.importer.ImporterConfig">
-    <!--    <property name="deleteFirst" value="true"/>-->
+    <property name="deleteAllFirst" value="true"/>
     <property name="dataRoots">
       <list>
         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+<!--          <property name="deleteFirst"  value="true"/>-->
           <property name="originName" value="OLAC Metadata Providers" />
           <property name="rootFile"
             value="/Users/patdui/data/snapshots2/olac-cmdi-20101105/_corpusstructure/collection_root.cmdi" />
@@ -15,7 +16,6 @@
         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
           <property name="originName" value="Nijmegen corpora of casual speech" />
           <property name="rootFile"
-
             value="/Users/patdui/data/snapshots2/data/corpora/qfs1/media-archive/casual_speech/Corpusstructure/casual_speech.imdi.cmdi" />
           <property name="facetMapping" ref="imdiMapping"></property>
         </bean>
