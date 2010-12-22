@@ -24,7 +24,7 @@ public class CMDIData {
         if (doc == null) {
             doc = new SolrInputDocument();
         }
-        if (value != null && !value.isEmpty()) {
+        if (value != null && !value.trim().isEmpty()) {
             if (caseInsensitive) {
                 doc.addField(name, value.toLowerCase());
             } else {
