@@ -12,7 +12,7 @@ import org.apache.solr.common.params.CommonParams;
 import org.apache.wicket.PageParameters;
 
 import eu.clarin.cmdi.vlo.Configuration;
-import eu.clarin.cmdi.vlo.dao.FacetConstants;
+import eu.clarin.cmdi.vlo.FacetConstants;
 
 public class SearchPageQuery implements Serializable {
 

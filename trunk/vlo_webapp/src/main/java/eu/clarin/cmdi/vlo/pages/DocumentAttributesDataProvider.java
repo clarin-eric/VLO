@@ -9,16 +9,13 @@ import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvid
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import eu.clarin.cmdi.vlo.dao.DaoLocator;
-
 public class DocumentAttributesDataProvider extends SortableDataProvider<DocumentAttribute> {
 
     private static final long serialVersionUID = 1L;
 
     private transient DocumentAttributeList attributeList;
 
-    public DocumentAttributesDataProvider(String docId) {
-        SolrDocument solrDocument = DaoLocator.getSearchResultsDao().getSolrDocument(docId);
+    public DocumentAttributesDataProvider(SolrDocument solrDocument) {
         if (solrDocument != null) {
             attributeList = new DocumentAttributeList(solrDocument.getFieldValuesMap());
         } else {

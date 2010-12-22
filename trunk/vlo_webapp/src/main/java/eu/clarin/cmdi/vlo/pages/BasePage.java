@@ -8,7 +8,8 @@ public class BasePage extends WebPage {
 
     public BasePage(PageParameters parameters) {
         super(parameters);
-
+        
         add(new BookmarkablePageLink("homeLink", FacetedSearchPage.class));
     }
+    
 }

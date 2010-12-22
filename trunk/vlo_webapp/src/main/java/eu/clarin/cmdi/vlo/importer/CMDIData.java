@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.solr.common.SolrInputDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CMDIData {
-
+    private final static Logger LOG = LoggerFactory.getLogger(CMDIData.class);
     private static final String METADATA_TYPE = "Metadata";
+    private static final String DATA_RESOURCE_TYPE = "Resource";
     private String id;
-    private List<String> resources = new ArrayList<String>();
+    private List<Resource> metaDataResources = new ArrayList<Resource>();
     private SolrInputDocument doc;
+    private List<Resource> dataResources = new ArrayList<Resource>();
 
     public SolrInputDocument getSolrDocument() {
         return doc;
@@ -29,16 +33,24 @@ public class CMDIData {
         }
     }
 
-    public List<String> getResources() {
-        return resources;
+    public List<Resource> getDataResources() {
+        return dataResources;
     }
 
-    public void addResource(String resource, String type) {
+    public List<Resource> getMetadataResources() {
+        return metaDataResources;
+    }
+
+    public void addResource(String resource, String type, String mimeType) {
         if (METADATA_TYPE.equals(type)) {
-            resources.add(resource);
+            metaDataResources.add(new Resource(resource, mimeType));
+        } else if (DATA_RESOURCE_TYPE.equals(type)) {
+            dataResources.add(new Resource(resource, mimeType));
+        } else {
+            LOG.warn("Found unsupported resource it will be ignored: type=" + type + ", name=" + resource);
         }
     }
-
+    
     public void setId(String id) {
         this.id = id;
     }
@@ -46,4 +58,5 @@ public class CMDIData {
     public String getId() {
         return id;
     }
+
 }

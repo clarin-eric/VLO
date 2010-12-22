@@ -4,6 +4,8 @@ import java.util.List;
 
 public class ImporterConfig {
 
+    public static final String CONFIG_FILE = "importerConfig.xml";
+
     private boolean deleteAllFirst = false;
     
     private List<DataRoot> dataRoots;

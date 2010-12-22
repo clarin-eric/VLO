@@ -4,9 +4,7 @@ import java.util.List;
 
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
-import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -17,7 +15,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 public class FacetBoxPanel extends Panel {
-
+    
     private static final int MAX_NR_OF_FACET_VALUES = 5;
     private static final long serialVersionUID = 1L;
     private Label label;
@@ -30,7 +28,7 @@ public class FacetBoxPanel extends Panel {
     }
 
     @SuppressWarnings("serial")
-    public FacetBoxPanel create(final SearchPageQuery query, final AjaxFallbackDefaultDataTable<SolrDocument> searchResultList) {
+    public FacetBoxPanel create(final SearchPageQuery query) {
         final FacetField facetField = (FacetField) getDefaultModelObject();
         facetModel = new FacetModel(facetField);
         facetModel.setSelectedValue(query.getSelectedValue(facetField));
@@ -62,7 +60,7 @@ public class FacetBoxPanel extends Panel {
         add(facetList);
         PageParameters pageParameters = query.getPageParameters();
         pageParameters.add(ShowAllFacetValuesPage.SELECTED_FACET_PARAM, facetField.getName());
-        add(new BookmarkablePageLink("showMore", ShowAllFacetValuesPage.class, pageParameters) { //TODO PD when nr of facet values is 6 show all instead of 5+more
+        add(new BookmarkablePageLink("showMore", ShowAllFacetValuesPage.class, pageParameters) {
 
             public boolean isVisible() {
                 return !facetModel.isSelected() && showMore;

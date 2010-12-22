@@ -11,11 +11,15 @@ public final class Configuration {
     
     private final static Configuration INSTANCE = new Configuration();
 
+    public static final String CONFIG_FILE = "applicationContext.xml";
+
     private String solrUrl;
 
     private String imdiBrowserUrl;// = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=";
 
     private String[] facetFields;// = new String[] { "origin", "organisation", "continent", "genre", "country", "subject", "language" };
+
+    private String handleServerUrl; //"http://hdl.handle.net/"
 
     private Configuration() {
     }
@@ -53,4 +57,14 @@ public final class Configuration {
     public void setFacetFields(String[] facetFields) {
         this.facetFields = facetFields;
     }
+
+    public String getHandleServerUrl() {
+        return handleServerUrl;
+    }
+
+    public void setHandleServerUrl(String handleServerUrl) {
+        this.handleServerUrl = handleServerUrl;
+    }
+    
+    
 }
