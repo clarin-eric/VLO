@@ -16,18 +16,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.Configuration;
-import eu.clarin.cmdi.vlo.dao.FacetConstants;
+import eu.clarin.cmdi.vlo.FacetConstants;
 
 @SuppressWarnings("serial")
-public final class MetadataImporter {
+public class MetadataImporter {
 
     private final static Logger LOG = LoggerFactory.getLogger(MetadataImporter.class);
     private static Throwable serverError;
-    private final StreamingUpdateSolrServer solrServer;
+    private StreamingUpdateSolrServer solrServer;
 
     private Set<String> processedIds = new HashSet<String>();
-    private List<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
+    protected List<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
     private final ImporterConfig config;
 
     private int nrOFDocumentsUpdated;
@@ -35,20 +36,12 @@ public final class MetadataImporter {
     private int nrOfFilesAnalyzed = 0;
     private int nrOfFilesWithoutId = 0;
 
-    public MetadataImporter(ImporterConfig config) throws MalformedURLException {
+    public MetadataImporter(ImporterConfig config) {
         this.config = config;
-        String solrUrl = Configuration.getInstance().getSolrUrl();
-        LOG.info("Initializing Solr Server on " + solrUrl);
-        solrServer = new StreamingUpdateSolrServer(solrUrl, 1000, 2) {
-            @Override
-            public void handleError(Throwable ex) {
-                super.handleError(ex);
-                serverError = ex;
-            }
-        };
     }
 
-    private void startImport() {
+    void startImport() throws MalformedURLException {
+        initSolrServer();
         List<DataRoot> dataRoots = config.getDataRoots();
         for (DataRoot dataRoot : dataRoots) {
             if (!dataRoot.getRootFile().exists()) {
@@ -85,7 +78,8 @@ public final class MetadataImporter {
             LOG.error("error updating files:\n", e);
         } finally {
             try {
-                solrServer.commit();
+                if (solrServer != null)
+                    solrServer.commit();
             } catch (SolrServerException e) {
                 LOG.error("cannot commit:\n", e);
             } catch (IOException e) {
@@ -96,6 +90,18 @@ public final class MetadataImporter {
         LOG.info("Found " + nrOfNonExistendResourceFiles + " non existing resources files.");
         LOG.info("Found " + nrOfFilesWithoutId + " file(s) without an id.");
         LOG.info("Update of " + nrOFDocumentsUpdated + " took " + took + " secs. Total nr of files analyzed " + nrOfFilesAnalyzed);
+    }
+
+    protected void initSolrServer() throws MalformedURLException {
+        String solrUrl = Configuration.getInstance().getSolrUrl();
+        LOG.info("Initializing Solr Server on " + solrUrl);
+        solrServer = new StreamingUpdateSolrServer(solrUrl, 1000, 2) {
+            @Override
+            public void handleError(Throwable ex) {
+                super.handleError(ex);
+                serverError = ex;
+            }
+        };
     }
 
     private void processCmdi(File file, String origin, CMDIDataProcessor processor) throws SolrServerException, IOException {
@@ -111,16 +117,15 @@ public final class MetadataImporter {
             if (solrDocument != null) {
                 updateDocument(solrDocument, cmdiData, file, origin);
             }
-            List<String> resources = cmdiData.getResources();
-            for (String cmdiResource : resources) {
-                File resourceFile = new File(file.getParentFile(), cmdiResource);
+            List<Resource> resources = cmdiData.getMetadataResources();
+            for (Resource cmdiResource : resources) {
+                File resourceFile = new File(file.getParentFile(), cmdiResource.getResourceName());
                 if (resourceFile.exists()) {
                     processCmdi(resourceFile, origin, processor);
                 } else {
                     nrOfNonExistendResourceFiles++;
                     LOG.error("Found nonexistent resource file (" + cmdiResource + ") in cmdi: " + file);
                 }
-
             }
         }
     }
@@ -132,8 +137,18 @@ public final class MetadataImporter {
             LOG.info("Ignoring document without id, fileName: " + file);
         } else {
             solrDocument.addField(FacetConstants.FIELD_ORIGIN, origin);
+            solrDocument.addField(FacetConstants.FIELD_DATA_ROOT, origin);
             solrDocument.addField(FacetConstants.FIELD_ID, cmdiData.getId());
-            solrDocument.addField(FacetConstants.FIELD_FILENAME, file.toString());
+            solrDocument.addField(FacetConstants.FIELD_FILENAME, file.getAbsolutePath());
+            List<Resource> resources = cmdiData.getDataResources();
+            for (Resource resource : resources) {
+                String mimeType = resource.getMimeType();
+                if (mimeType == null) {
+                    mimeType = "unknown";
+                }
+                solrDocument.addField(FacetConstants.FIELD_RESOURCE_TYPE, CommonUtils.normalizeMimeType(mimeType));
+                solrDocument.addField(FacetConstants.FIELD_RESOURCE, mimeType + "," + resource.getResourceName());
+            }
             docs.add(solrDocument);
             if (docs.size() == 1000) {
                 sendDocs();
@@ -141,7 +156,7 @@ public final class MetadataImporter {
         }
     }
 
-    private void sendDocs() throws SolrServerException, IOException {
+    protected void sendDocs() throws SolrServerException, IOException {
         LOG.info("Sending " + docs.size() + " docs to solr server. Total number of docs updated till now: " + nrOFDocumentsUpdated);
         nrOFDocumentsUpdated += docs.size();
         solrServer.add(docs);
@@ -156,7 +171,7 @@ public final class MetadataImporter {
      * @throws MalformedURLException
      */
     public static void main(String[] args) throws MalformedURLException {
-        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { "applicationContext.xml", "importerConfig.xml" });
+        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { Configuration.CONFIG_FILE, ImporterConfig.CONFIG_FILE });
         factory.getBean("configuration");
         ImporterConfig config = (ImporterConfig) factory.getBean("importerConfig", ImporterConfig.class);
         MetadataImporter importer = new MetadataImporter(config);

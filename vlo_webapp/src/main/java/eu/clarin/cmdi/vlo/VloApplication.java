@@ -16,7 +16,7 @@ public class VloApplication extends WebApplication {
     private final SearchResultsDao searchResults;
 
     public VloApplication() {
-        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { "applicationContext.xml" });
+        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { Configuration.CONFIG_FILE });
         factory.getBean("configuration"); //Use Configuration.getInstance to get the Configuration just loading the instance here.
         searchResults = new SearchResultsDao();
     }

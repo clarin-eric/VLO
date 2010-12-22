@@ -7,6 +7,7 @@
 <!--    <property name="solrUrl" value="http://lux16.mpi.nl:8080/vlo_solr" />-->
 <!--    <property name="solrUrl" value="http://catalog.clarin.eu:8080/vlo_solr" />-->
     <property name="IMDIBrowserUrl" value="http://corpus1.mpi.nl/ds/imdi_browser?openpath=" />
+    <property name="handleServerUrl" value="http://hdl.handle.net/" />    
     <property name="facetFields">
     <!-- The possible values of facets are defined in the schema.xml of the solr_server installation. 
          If you want to add a facet you need to adjust this schema.xml and reindex the data. 
@@ -19,6 +20,7 @@
         <value>country</value>
         <value>subject</value>
         <value>language</value>
+        <value>resourceType</value>
 <!--        <value>year</value>-->
       </list>
     </property>

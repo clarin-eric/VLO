@@ -7,6 +7,8 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
+
 public class SearchResultsDao extends SolrDao {
 
     //private final static Logger LOG = LoggerFactory.getLogger(SearchResultsDao.class);

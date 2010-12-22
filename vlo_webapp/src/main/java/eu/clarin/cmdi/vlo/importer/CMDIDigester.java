@@ -14,17 +14,15 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-
 /**
- * @deprecated 
- * Dom parsing implementation, use the @see CMDIParserVTDXML it is much faster. 
- * Keeping this for now just in case we run into issues with the vlt parsing.
- * patdui 15 December 2010
+ * @deprecated Dom parsing implementation, use the @see CMDIParserVTDXML it is much faster. Keeping this for now just in case we run into
+ *             issues with the vlt parsing. patdui 15 December 2010
  */
 public class CMDIDigester implements CMDIDataProcessor {
     private final FacetMapping facetMapping;
@@ -61,9 +59,18 @@ public class CMDIDigester implements CMDIDataProcessor {
         for (int i = 0; i < nodes.getLength(); i++) {
             Node resourceNode = nodes.item(i);
             Node ref = (Node) xpath.evaluate("ResourceRef/text()", resourceNode, XPathConstants.NODE);
-            Node type = (Node) xpath.evaluate("ResourceType/text()", resourceNode, XPathConstants.NODE);
-            if (ref != null && type != null) {
-                result.addResource(ref.getNodeValue(), type.getNodeValue());
+            Node nodeType = (Node) xpath.evaluate("ResourceType", resourceNode, XPathConstants.NODE);
+            if (ref != null && nodeType != null) {
+                String mimeType = null;
+                NamedNodeMap attributes = nodeType.getAttributes();
+                if (attributes != null) {
+                    Node n = attributes.getNamedItem("mimetype");
+                    if (n != null) {
+                        mimeType = n.getNodeValue();
+                    }
+                }
+                String type = nodeType.getTextContent();
+                result.addResource(ref.getNodeValue(), type, mimeType);
             }
         }
         List<FacetConfiguration> facetList = facetMapping.getFacets();
@@ -75,11 +82,25 @@ public class CMDIDigester implements CMDIDataProcessor {
 
     private void matchDocumentField(CMDIData result, FacetConfiguration facetConfig, Document doc, XPath xpath)
             throws XPathExpressionException {
-        NodeList nodes = (NodeList) xpath.evaluate(facetConfig.getPattern(), doc, XPathConstants.NODESET);
+        List<String> patterns = facetConfig.getPatterns();
+        for (String pattern : patterns) {
+            boolean matchedPattern = matchPattern(result, facetConfig, doc, xpath, pattern);
+            if (matchedPattern) {
+                break;
+            }
+        }
+    }
+
+    private boolean matchPattern(CMDIData result, FacetConfiguration facetConfig, Document doc, XPath xpath, String pattern)
+            throws XPathExpressionException {
+        boolean matchedPattern = false;
+        NodeList nodes = (NodeList) xpath.evaluate(pattern, doc, XPathConstants.NODESET);
         if (nodes != null) {
+            matchedPattern = true;
             for (int i = 0; i < nodes.getLength(); i++) {
                 result.addDocField(facetConfig.getName(), nodes.item(i).getNodeValue(), facetConfig.isCaseInsensitive());
             }
         } // else do nothing it is perfectly acceptable that not all data is in a cmdi file so not everything will be matched. E.G xpath expression evaluation CMDI session files will never match on CMD corpus files.
+        return matchedPattern;
     }
 }

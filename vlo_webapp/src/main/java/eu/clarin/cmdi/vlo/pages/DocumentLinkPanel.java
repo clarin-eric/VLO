@@ -6,7 +6,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
-import eu.clarin.cmdi.vlo.dao.FacetConstants;
+import eu.clarin.cmdi.vlo.FacetConstants;
 
 public class DocumentLinkPanel extends Panel {
 

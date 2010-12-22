@@ -19,13 +19,14 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
+
+import eu.clarin.cmdi.vlo.Resources;
 
 public class FacetedSearchPage extends BasePage {
 
     private static final long serialVersionUID = 1L;
 
-    private AjaxFallbackDefaultDataTable<SolrDocument> searchResultList;
     private SearchPageQuery query;
 
     /**
@@ -72,7 +73,7 @@ public class FacetedSearchPage extends BasePage {
                 .getCopy())) {
             @Override
             protected void populateItem(Item<FacetField> item) {
-                item.add(new FacetBoxPanel("facetBox", item.getModel()).create(query, searchResultList));
+                item.add(new FacetBoxPanel("facetBox", item.getModel()).create(query));
             }
 
             @Override
@@ -87,16 +88,16 @@ public class FacetedSearchPage extends BasePage {
     @SuppressWarnings("serial")
     private void addSearchResults() {
         List<IColumn<SolrDocument>> columns = new ArrayList<IColumn<SolrDocument>>();
-        columns.add(new AbstractColumn<SolrDocument>(new Model<String>("Results")) {
+        columns.add(new AbstractColumn<SolrDocument>(new ResourceModel(Resources.RESULTS)) {
 
             @Override
             public void populateItem(Item<ICellPopulator<SolrDocument>> cellItem, String componentId, IModel<SolrDocument> rowModel) {
                 cellItem.add(new DocumentLinkPanel(componentId, rowModel, query));
             }
         });
-        searchResultList = new AjaxFallbackDefaultDataTable("searchResults", columns, new SolrDocumentDataProvider(query.getSolrQuery()
-                .getCopy()), 10);
-        
+        AjaxFallbackDefaultDataTable<SolrDocument> searchResultList = new AjaxFallbackDefaultDataTable("searchResults", columns,
+                new SolrDocumentDataProvider(query.getSolrQuery().getCopy()), 10);
+
         add(searchResultList);
     }
 

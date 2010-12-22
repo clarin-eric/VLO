@@ -1,10 +1,14 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class FacetConfiguration {
 
     private String name;
-    private String pattern;
     private boolean caseInsensitive= false;
+    private List<String> patterns = new ArrayList<String>();
 
     public void setCaseInsensitive(boolean caseValue) {
         this.caseInsensitive = caseValue;
@@ -14,12 +18,16 @@ public class FacetConfiguration {
         return caseInsensitive;
     }
 
-    public void setPattern(String pattern) {
-        this.pattern = pattern;
+    public void setPatterns(List<String> patterns) {
+        this.patterns = patterns;
     }
 
-    public String getPattern() {
-        return pattern;
+    public void setPattern(String pattern) {
+        this.patterns = Collections.singletonList(pattern);
+    }
+
+    public List<String> getPatterns() {
+        return patterns;
     }
 
     public void setName(String name) {
@@ -32,6 +40,6 @@ public class FacetConfiguration {
     
     @Override
     public String toString() {
-        return "name="+name+", pattern="+pattern;
+        return "name="+name+", pattern="+patterns;
     }
 }

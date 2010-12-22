@@ -5,23 +5,15 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.solr.common.SolrInputDocument;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class CMDIDataProcessorTest {
-
-    private static File testDir;
+public class CMDIDataProcessorTest extends ImporterTestcase {
 
     private CMDIDataProcessor getDataParser(FacetMapping map) {
         return new CMDIParserVTDXML(map);
@@ -76,8 +68,12 @@ public class CMDIDataProcessorTest {
         CMDIDataProcessor processor = getDataParser(getIMDIFacetMap());
         CMDIData data = processor.process(cmdiFile);
         assertEquals("test-hdl:1839/00-0000-0000-0000-0001-D", data.getId());
-        List<String> resources = data.getResources();
+        List<Resource> resources = data.getMetadataResources();
         assertEquals(3, resources.size());
+        Resource res = resources.get(0);
+        assertEquals("../acqui_data/Corpusstructure/acqui.imdi.cmdi", res.getResourceName());
+        assertEquals(null, res.getMimeType());
+        assertEquals(0, data.getDataResources().size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNull(doc);
     }
@@ -96,12 +92,12 @@ public class CMDIDataProcessorTest {
         content += "   <Resources>\n";
         content += "      <ResourceProxyList>\n";
         content += "         <ResourceProxy id=\"d314e408\">\n";
-        content += "            <ResourceType>Resource</ResourceType>\n";
+        content += "            <ResourceType mimetype=\"video/x-mpeg1\" >Resource</ResourceType>\n";
         content += "            <ResourceRef>../Media/elan-example1.mpg</ResourceRef>\n";
         content += "         </ResourceProxy>\n";
         content += "         <ResourceProxy id=\"d314e471\">\n";
-        content += "            <ResourceType>Resource</ResourceType>\n";
-        content += "            <ResourceRef>../Media/elan-example1.mp4</ResourceRef>\n";
+        content += "            <ResourceType mimetype=\"audio/mpeg\" >Resource</ResourceType>\n";
+        content += "            <ResourceRef>../Media/elan-example1.mp3</ResourceRef>\n";
         content += "         </ResourceProxy>\n";
         content += "      </ResourceProxyList>\n";
         content += "      <JournalFileProxyList/>\n";
@@ -372,8 +368,16 @@ public class CMDIDataProcessorTest {
         CMDIDataProcessor processor = getDataParser(getIMDIFacetMap());
         CMDIData data = processor.process(cmdiFile);
         assertEquals("test-hdl:1839/00-0000-0000-0009-294C-9", data.getId());
-        List<String> resources = data.getResources();
+        List<Resource> resources = data.getMetadataResources();
         assertEquals(0, resources.size());
+        List<Resource> dataResources = data.getDataResources();
+        assertEquals(2, dataResources.size());
+        Resource res = dataResources.get(0);
+        assertEquals("../Media/elan-example1.mpg", res.getResourceName());
+        assertEquals("video/x-mpeg1", res.getMimeType());
+        res = dataResources.get(1);
+        assertEquals("../Media/elan-example1.mp3", res.getResourceName());
+        assertEquals("audio/mpeg", res.getMimeType());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
         assertEquals(8, doc.getFieldNames().size());
@@ -462,7 +466,7 @@ public class CMDIDataProcessorTest {
         CMDIDataProcessor processor = getDataParser(getIMDIFacetMap());
         CMDIData data = processor.process(cmdiFile);
         assertEquals("test-hdl:1839/00-0000-0000-0009-294C-9", data.getId());
-        List<String> resources = data.getResources();
+        List<Resource> resources = data.getMetadataResources();
         assertEquals(0, resources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
@@ -517,7 +521,7 @@ public class CMDIDataProcessorTest {
         content += "         <identifier>http://uts.cc.utexas.edu/~ailla/texts/sherzer/one_eyed_grandmother.pdf</identifier>\n";
         content += "         <language olac-language=\"x-sil-CHN\"/>\n";
         content += "         <language>Chinese</language>\n";
-        content += "         <subject>Kuna</subject>\n";
+        content += "         <subject olac-linguistic-field=\"testSubject\">Kuna</subject>\n";
         content += "         <type olac-linguistic-type=\"Transcription\"/>\n";
         content += "      </OLAC-DcmiTerms>\n";
         content += "   </Components>\n";
@@ -527,11 +531,13 @@ public class CMDIDataProcessorTest {
         CMDIDataProcessor processor = getDataParser(getOlacFacetMap());
         CMDIData data = processor.process(cmdiFile);
         assertEquals("oai:ailla.utexas.edu:1", data.getId());
-        List<String> resources = data.getResources();
+        List<Resource> resources = data.getMetadataResources();
         assertEquals(0, resources.size());
+        List<Resource> dataResources = data.getDataResources();
+        assertEquals(0, dataResources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(3, doc.getFieldNames().size());
+        assertEquals(4, doc.getFieldNames().size());
         assertEquals(null, doc.getFieldValue("name"));
         assertEquals(null, doc.getFieldValue("continent"));
         assertEquals(1, doc.getFieldValues("language").size());
@@ -539,7 +545,7 @@ public class CMDIDataProcessorTest {
         assertEquals(null, doc.getFieldValue("country"));
         assertEquals(null, doc.getFieldValue("organisation"));
         assertEquals("transcription", doc.getFieldValue("genre"));
-        //  assertEquals("Kuna", doc.getFieldValue("subject"));
+        assertEquals("testsubject", doc.getFieldValue("subject"));
         Collection<Object> fieldValues = doc.getFieldValues("description");
         assertEquals(3, fieldValues.size());
         List<String> descriptions = new ArrayList(fieldValues);
@@ -554,6 +560,84 @@ public class CMDIDataProcessorTest {
                 + "European derived motifs (Tom Thumb and Hansel and Gretel) with themes that seem more "
                 + "Kuna in origin. All are woven together and a moral is provided. Pedro Arias performed "
                 + "this story before a gathered audience in the morning..\n      ", descriptions.get(2).toString());
+    }
+
+    @Test
+    public void testOlacMultiFacets() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD>\n";
+        content += "   <Components>\n";
+        content += "      <OLAC-DcmiTerms>\n";
+        content += "         <subject olac-linguistic-field=\"testSubject\">Kuna</subject>\n";
+        content += "         <subject dcterms-type=\"LCSH\">testSubjectFallback</subject>\n";
+        content += "         <spatial dcterms-type=\"ISO3166\">testCountry1</spatial>\n";
+        content += "         <coverage dcterms-type=\"ISO3166\">testCountry2</coverage>\n";
+        content += "         <language olac-language=\"language1\">test1</language>\n";
+        content += "         <subject olac-language=\"language2\">test2</subject>\n";
+        content += "      </OLAC-DcmiTerms>\n";
+        content += "   </Components>\n";
+        content += "</CMD>\n";
+
+        File cmdiFile = createCmdiFile("testOlac", content);
+        CMDIDataProcessor processor = getDataParser(getOlacFacetMap());
+        CMDIData data = processor.process(cmdiFile);
+        SolrInputDocument doc = data.getSolrDocument();
+        assertEquals(1, doc.getFieldValues("subject").size());
+        assertEquals("testsubject", doc.getFieldValue("subject"));
+        assertEquals(1, doc.getFieldValues("country").size());
+        assertEquals("testCountry1", doc.getFieldValue("country"));
+        assertEquals(1, doc.getFieldValues("language").size());
+        assertEquals("language1", doc.getFieldValue("language"));
+
+        content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD>\n";
+        content += "   <Components>\n";
+        content += "      <OLAC-DcmiTerms>\n";
+        content += "         <subject dcterms-type=\"LCSH\">testSubjectFallback</subject>\n";
+        content += "         <coverage dcterms-type=\"ISO3166\">testCountry2</coverage>\n";
+        content += "         <subject olac-language=\"language2\">test2</subject>\n";
+        content += "      </OLAC-DcmiTerms>\n";
+        content += "   </Components>\n";
+        content += "</CMD>\n";
+
+        cmdiFile = createCmdiFile("testOlac", content);
+        processor = getDataParser(getOlacFacetMap());
+        data = processor.process(cmdiFile);
+        doc = data.getSolrDocument();
+        assertEquals(1, doc.getFieldValues("subject").size());
+        assertEquals("testsubjectfallback", doc.getFieldValue("subject"));
+        assertEquals(1, doc.getFieldValues("country").size());
+        assertEquals("testCountry2", doc.getFieldValue("country"));
+        assertEquals(1, doc.getFieldValues("language").size());
+        assertEquals("language2", doc.getFieldValue("language"));
+
+        content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD>\n";
+        content += "   <Components>\n";
+        content += "      <OLAC-DcmiTerms>\n";
+        content += "         <subject dcterms-type=\"LCSH\">testSubjectFallback</subject>\n";
+        content += "         <subject olac-linguistic-field=\"testSubject\">Kuna</subject>\n";
+        content += "         <coverage dcterms-type=\"ISO3166\">testCountry2</coverage>\n";
+        content += "         <spatial dcterms-type=\"ISO3166\">testCountry1</spatial>\n";
+        content += "         <subject olac-language=\"language2\">test2</subject>\n";
+        content += "         <language olac-language=\"language1\">test1</language>\n";
+        content += "      </OLAC-DcmiTerms>\n";
+        content += "   </Components>\n";
+        content += "</CMD>\n";
+
+        cmdiFile = createCmdiFile("testOlac", content);
+        processor = getDataParser(getOlacFacetMap());
+        data = processor.process(cmdiFile);
+        doc = data.getSolrDocument();
+        assertEquals(1, doc.getFieldValues("subject").size());
+        assertEquals("testsubject", doc.getFieldValue("subject"));
+        assertEquals(1, doc.getFieldValues("country").size());
+        assertEquals("testCountry1", doc.getFieldValue("country"));
+        assertEquals(1, doc.getFieldValues("language").size());
+        assertEquals("language1", doc.getFieldValue("language"));
     }
 
     @Test
@@ -592,11 +676,16 @@ public class CMDIDataProcessorTest {
         CMDIDataProcessor processor = getDataParser(getOlacFacetMap());
         CMDIData data = processor.process(cmdiFile);
         assertEquals("collection_ATILF_Resources.cmdi", data.getId());
-        List<String> resources = data.getResources();
+        List<Resource> resources = data.getMetadataResources();
         assertEquals(9, resources.size());
+        Resource res = resources.get(0);
+        assertEquals("ATILF_Resources/0/oai_atilf_inalf_fr_0001.xml.cmdi", res.getResourceName());
+        assertEquals(null, res.getMimeType());
+        assertEquals(0, data.getDataResources().size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNull(doc);
-
+        List<Resource> dataResources = data.getDataResources();
+        assertEquals(0, dataResources.size());
     }
 
     @Test
@@ -640,8 +729,10 @@ public class CMDIDataProcessorTest {
         CMDIDataProcessor processor = getDataParser(getLrtFacetMap());
         CMDIData data = processor.process(cmdiFile);
         assertEquals("clarin.eu:lrt:433", data.getId());
-        List<String> resources = data.getResources();
+        List<Resource> resources = data.getMetadataResources();
         assertEquals(0, resources.size());
+        List<Resource> dataResources = data.getDataResources();
+        assertEquals(0, dataResources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
         assertEquals(5, doc.getFieldNames().size());
@@ -654,43 +745,6 @@ public class CMDIDataProcessorTest {
         assertEquals(null, doc.getFieldValue("year"));
         assertEquals(null, doc.getFieldValue("genre"));
         assertEquals("written general; 95 mio words; TEI/SGML", doc.getFieldValue("description"));
-    }
-
-    private FacetMapping getOlacFacetMap() {
-        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { "importerConfig.xml" });
-        FacetMapping facetMapping = (FacetMapping) factory.getBean("olacMapping");
-        return facetMapping;
-    }
-
-    private FacetMapping getIMDIFacetMap() {
-        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { "importerConfig.xml" });
-        FacetMapping facetMapping = (FacetMapping) factory.getBean("imdiMapping");
-        return facetMapping;
-    }
-
-    private FacetMapping getLrtFacetMap() {
-        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { "importerConfig.xml" });
-        FacetMapping facetMapping = (FacetMapping) factory.getBean("lrtMapping");
-        return facetMapping;
-    }
-
-    private File createCmdiFile(String name, String content) throws IOException {
-        File file = File.createTempFile(name, "cmdi", testDir);
-        FileUtils.writeStringToFile(file, content, "UTF-8");
-        return file;
-    }
-
-    @AfterClass
-    public static void cleanup() {
-        FileUtils.deleteQuietly(testDir);
-    }
-
-    @BeforeClass
-    public static void setup() {
-        final String baseTempPath = System.getProperty("java.io.tmpdir");
-        testDir = new File(baseTempPath + File.separator + "testRegistry_" + System.currentTimeMillis());
-        testDir.mkdir();
-        testDir.deleteOnExit();
     }
 
 }

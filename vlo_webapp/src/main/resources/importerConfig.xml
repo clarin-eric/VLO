@@ -10,7 +10,7 @@
 <!--          <property name="deleteFirst"  value="true"/>-->
           <property name="originName" value="OLAC Metadata Providers" />
           <property name="rootFile"
-            value="/Users/patdui/data/snapshots2/olac-cmdi-20101105/_corpusstructure/collection_root.cmdi" />
+            value="/Users/patdui/data/snapshots2/olac-cmdi-20101214/_corpusstructure/collection_root.cmdi" />
           <property name="facetMapping" ref="olacMapping"></property>
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
@@ -120,7 +120,7 @@
           <property name="facetMapping" ref="imdiMapping"></property>
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="CLARIN LRT" />
+          <property name="originName" value="CLARIN LRT inventory" />
           <property name="rootFile"
             value="/Users/patdui/data/snapshots2/lrt-20101117/_corpusstructure/collection_lrt_inventory.cmdi" />
           <property name="facetMapping" ref="lrtMapping"></property>
@@ -129,12 +129,10 @@
     </property>
   </bean>
 
-  <!--
-    Mapping of facets to XPATH expressions. The facets should correspond to the facets described in the
-    solr/conf/schema.xml file of the SOLR Server installation
-  -->
+<!--    Mapping of facets to XPATH expressions. The facets should correspond to the facets described in the-->
+<!--    solr/conf/schema.xml file of the SOLR Server installation-->
 
-  <bean id="imdiMapping" class="eu.clarin.cmdi.vlo.importer.FacetMapping"> <!-- add year? -->
+  <bean id="imdiMapping" class="eu.clarin.cmdi.vlo.importer.FacetMapping">  <!-- add year? -->
     <property name="idMapping" value="/CMD/Header/MdSelfLink/text()" />
     <property name="facets">
       <list>
@@ -195,15 +193,21 @@
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="country" />
-          <property name="pattern" value="/CMD/Components/OLAC-DcmiTerms/spatial/text()" />
-          <!--
-            /CMD/Components/OLAC-DcmiTerms/spatial[@dcterms-type="ISO3166"] -> country
-            /CMD/Components/OLAC-DcmiTerms/coverage[@dcterms-type="ISO3166"] -> country
-          -->
+          <property name="patterns">
+            <list>
+                <value>/CMD/Components/OLAC-DcmiTerms/spatial[@dcterms-type="ISO3166"]/text()</value>
+                <value>/CMD/Components/OLAC-DcmiTerms/coverage[@dcterms-type="ISO3166"]/text()</value>
+            </list>
+          </property>
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="language" />
-          <property name="pattern" value="/CMD/Components/OLAC-DcmiTerms/language/@olac-language" />
+          <property name="patterns">
+            <list>
+                <value>/CMD/Components/OLAC-DcmiTerms/language/@olac-language</value>
+                <value>/CMD/Components/OLAC-DcmiTerms/subject/@olac-language</value>
+            </list>
+          </property>
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="organisation" />
@@ -218,12 +222,16 @@
           <property name="name" value="description" />
           <property name="pattern" value="/CMD/Components/OLAC-DcmiTerms/description/text()" />
         </bean>
-        <!--
-          <entry key="continent"> <value>CMD/Components/olac</value> </entry>-->
-        <!--        <entry key="subject">-->
-        <!--          <value>CMD/Components/OLAC-DcmiTerms/subject</value> -->
-        <!-- [@dcterms-type="LCSH"]  -->
-        <!--        </entry>-->
+        <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
+          <property name="name" value="subject" />
+          <property name="patterns">
+            <list>
+                <value>/CMD/Components/OLAC-DcmiTerms/subject/@olac-linguistic-field</value>
+                <value>/CMD/Components/OLAC-DcmiTerms/subject[@dcterms-type="LCSH"]/text()</value>
+            </list>
+          </property>
+          <property name="caseInsensitive" value="true" />
+        </bean>
       </list>
     </property>
   </bean>
