@@ -639,6 +639,25 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(1, doc.getFieldValues("language").size());
         assertEquals("language1", doc.getFieldValue("language"));
     }
+    
+    @Test
+    public void testIgnoreWhiteSpaceFacets() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD>\n";
+        content += "   <Components>\n";
+        content += "      <OLAC-DcmiTerms>\n";
+        content += "         <subject olac-linguistic-field=\"\n\n\t\t\t\">Kuna</subject>\n";
+        content += "      </OLAC-DcmiTerms>\n";
+        content += "   </Components>\n";
+        content += "</CMD>\n";
+
+        File cmdiFile = createCmdiFile("testOlac", content);
+        CMDIDataProcessor processor = getDataParser(getOlacFacetMap());
+        CMDIData data = processor.process(cmdiFile);
+        SolrInputDocument doc = data.getSolrDocument();
+        assertEquals(null, doc.getFieldValues("subject"));
+    }
 
     @Test
     public void testOlacCollection() throws Exception {
