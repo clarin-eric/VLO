@@ -779,7 +779,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(null, doc.getFieldValue("continent"));
         assertEquals(1, doc.getFieldValues("language").size());
         assertEquals("est", doc.getFieldValue("language"));
-        assertEquals("EE", doc.getFieldValue("country"));
+        assertEquals("Estonia", doc.getFieldValue("country"));
         assertEquals("Test", doc.getFieldValue("organisation"));
         assertEquals(null, doc.getFieldValue("year"));
         assertEquals(null, doc.getFieldValue("genre"));
