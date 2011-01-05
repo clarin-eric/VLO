@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
@@ -14,9 +15,11 @@ import com.ximpleware.VTDNav;
 
 public class CMDIParserVTDXML implements CMDIDataProcessor {
     private final FacetMapping facetMapping;
+    private final Map<String, PostProcessor> postProcessors;
 
-    public CMDIParserVTDXML(FacetMapping facetMapping) {
+    public CMDIParserVTDXML(FacetMapping facetMapping, Map<String, PostProcessor> postProcessors) {
         this.facetMapping = facetMapping;
+        this.postProcessors = postProcessors;
     }
 
     public CMDIData process(File file) throws VTDException, IOException {
@@ -78,9 +81,20 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                 index++;
             }
             String value = nav.toString(index);
+            value = postProcess(config.getName(), value);
             result.addDocField(config.getName(), value, config.isCaseInsensitive());
             index = ap.evalXPath();
         }
         return matchedPattern;
     }
+    
+    private String postProcess(String name, String value) {
+        String result = value;
+        if (postProcessors.containsKey(name)) {
+            PostProcessor processor = postProcessors.get(name);
+            result = processor.process(value);
+        }
+        return result;
+    }
+
 }

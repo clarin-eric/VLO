@@ -13,11 +13,12 @@ import java.util.List;
 import org.apache.solr.common.SolrInputDocument;
 import org.junit.Test;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
+
 public class CMDIDataProcessorTest extends ImporterTestcase {
 
     private CMDIDataProcessor getDataParser(FacetMapping map) {
-        return new CMDIParserVTDXML(map);
-        //        return new CMDIDigester(map);
+        return new CMDIParserVTDXML(map, MetadataImporter.POST_PROCESSORS);
     }
 
     @Test
@@ -657,6 +658,25 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         CMDIData data = processor.process(cmdiFile);
         SolrInputDocument doc = data.getSolrDocument();
         assertEquals(null, doc.getFieldValues("subject"));
+    }
+    
+    @Test
+    public void testCountryCodesPostProcessing() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD>\n";
+        content += "   <Components>\n";
+        content += "      <OLAC-DcmiTerms>\n";
+        content += "         <coverage dcterms-type=\"ISO3166\">NL</coverage>\n";
+        content += "      </OLAC-DcmiTerms>\n";
+        content += "   </Components>\n";
+        content += "</CMD>\n";
+
+        File cmdiFile = createCmdiFile("testOlac", content);
+        CMDIDataProcessor processor = getDataParser(getOlacFacetMap());
+        CMDIData data = processor.process(cmdiFile);
+        SolrInputDocument doc = data.getSolrDocument();
+        assertEquals("Netherlands", doc.getFieldValue(FacetConstants.FIELD_COUNTRY));
     }
 
     @Test

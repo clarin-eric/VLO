@@ -26,10 +26,9 @@ public class CMDIData {
         }
         if (value != null && !value.trim().isEmpty()) {
             if (caseInsensitive) {
-                doc.addField(name, value.toLowerCase());
-            } else {
-                doc.addField(name, value);
+                value = value.toLowerCase();
             }
+            doc.addField(name, value);
         }
     }
 
@@ -50,7 +49,7 @@ public class CMDIData {
             LOG.warn("Found unsupported resource it will be ignored: type=" + type + ", name=" + resource);
         }
     }
-    
+
     public void setId(String id) {
         this.id = id;
     }

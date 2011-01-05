@@ -6,6 +6,7 @@ public class FacetConstants {
     public static final String FIELD_ID = "id";
     public static final String FIELD_ORIGIN = "origin";
     public static final String FIELD_RESOURCE_TYPE = "resourceType";
+    public static final String FIELD_COUNTRY = "country";
     //The _ facets are not meant to be shown to users.
     public static final String FIELD_FILENAME = "_fileName";
     public static final String FIELD_RESOURCE = "_resourceRef";
