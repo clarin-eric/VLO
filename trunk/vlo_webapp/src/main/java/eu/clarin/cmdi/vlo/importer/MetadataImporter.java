@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrServerException;
@@ -26,6 +28,11 @@ public class MetadataImporter {
     private final static Logger LOG = LoggerFactory.getLogger(MetadataImporter.class);
     private static Throwable serverError;
     private StreamingUpdateSolrServer solrServer;
+
+    final static Map<String, PostProcessor> POST_PROCESSORS = new HashMap<String, PostProcessor>();
+    static {
+        POST_PROCESSORS.put(FacetConstants.FIELD_COUNTRY, new CountryNamePostProcessor());
+    }
 
     private Set<String> processedIds = new HashSet<String>();
     protected List<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
@@ -64,7 +71,7 @@ public class MetadataImporter {
                     solrServer.deleteByQuery(FacetConstants.FIELD_ORIGIN + ":" + dataRoot.getOriginName());
                     LOG.info("Deleting data for origin done.");
                 }
-                CMDIDataProcessor processor = new CMDIParserVTDXML(dataRoot.getFacetMapping());
+                CMDIDataProcessor processor = new CMDIParserVTDXML(dataRoot.getFacetMapping(), POST_PROCESSORS);
                 processCmdi(dataRoot.getRootFile(), dataRoot.getOriginName(), processor);
                 if (!docs.isEmpty()) {
                     sendDocs();
