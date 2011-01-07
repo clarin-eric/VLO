@@ -32,6 +32,7 @@ public class MetadataImporter {
     final static Map<String, PostProcessor> POST_PROCESSORS = new HashMap<String, PostProcessor>();
     static {
         POST_PROCESSORS.put(FacetConstants.FIELD_COUNTRY, new CountryNamePostProcessor());
+        POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGE, new LanguageCodePostProcessor());
     }
 
     private Set<String> processedIds = new HashSet<String>();
@@ -151,7 +152,7 @@ public class MetadataImporter {
             for (Resource resource : resources) {
                 String mimeType = resource.getMimeType();
                 if (mimeType == null) {
-                    mimeType = "unknown";
+                    mimeType = "unknownType";
                 }
                 solrDocument.addField(FacetConstants.FIELD_RESOURCE_TYPE, CommonUtils.normalizeMimeType(mimeType));
                 solrDocument.addField(FacetConstants.FIELD_RESOURCE, mimeType + "," + resource.getResourceName());

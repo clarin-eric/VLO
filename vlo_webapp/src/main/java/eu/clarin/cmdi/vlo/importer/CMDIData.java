@@ -1,7 +1,9 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
@@ -11,6 +13,12 @@ public class CMDIData {
     private final static Logger LOG = LoggerFactory.getLogger(CMDIData.class);
     private static final String METADATA_TYPE = "Metadata";
     private static final String DATA_RESOURCE_TYPE = "Resource";
+    private static final Set<String> IGNORABLE_VALUES = new HashSet<String>();
+    static {
+        IGNORABLE_VALUES.add("unknown");
+        IGNORABLE_VALUES.add("unspecified");
+    }
+
     private String id;
     private List<Resource> metaDataResources = new ArrayList<Resource>();
     private SolrInputDocument doc;
@@ -24,7 +32,7 @@ public class CMDIData {
         if (doc == null) {
             doc = new SolrInputDocument();
         }
-        if (value != null && !value.trim().isEmpty()) {
+        if (value != null && !value.trim().isEmpty() && !IGNORABLE_VALUES.contains(value.toLowerCase())) {
             if (caseInsensitive) {
                 value = value.toLowerCase();
             }

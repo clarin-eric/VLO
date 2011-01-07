@@ -22,10 +22,14 @@ public final class Configuration {
     private String handleServerUrl; //"http://hdl.handle.net/"
 
     /**
-     * Default value you can overwrite in applicationContext.xml: <property name="countryComponentUrl" value="" />
+     * Default values you can overwrite in applicationContext.xml: e.g. <property name="countryComponentUrl" value="" />
      */
     private String countryComponentUrl = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml";
-
+    private String language2LetterCodeComponentUrl = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438109/xml";
+    private String language3LetterCodeComponentUrl = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438110/xml";
+    private String silToISO639CodesUrl = "http://www.clarin.eu/cmd/xslt/sil_to_iso6393.xml";
+    
+    
     private Configuration() {
     }
 
@@ -79,4 +83,27 @@ public final class Configuration {
         this.countryComponentUrl = countryComponentUrl;
     }
 
+    public String getLanguage2LetterCodeComponentUrl() {
+        return language2LetterCodeComponentUrl;
+    }
+    
+    public void setLanguage2LetterCodeComponentUrl(String language2LetterCodeComponentUrl) {
+        this.language2LetterCodeComponentUrl = language2LetterCodeComponentUrl;
+    }
+    
+    public String getLanguage3LetterCodeComponentUrl() {
+        return language3LetterCodeComponentUrl;
+    }
+
+    public void setLanguage3LetterCodeComponentUrl(String language3LetterCodeComponentUrl) {
+        this.language3LetterCodeComponentUrl = language3LetterCodeComponentUrl;
+    }
+
+    public String getSilToISO639CodesUrl() {
+        return silToISO639CodesUrl;
+    }
+    
+    public void setSilToISO639CodesUrl(String silToISO639CodesUrl) {
+        this.silToISO639CodesUrl = silToISO639CodesUrl;
+    }
 }

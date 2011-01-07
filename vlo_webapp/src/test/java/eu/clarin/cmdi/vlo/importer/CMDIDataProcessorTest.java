@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.solr.common.SolrInputDocument;
@@ -138,7 +139,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "               <Key Name=\"conversion.IMDI.1.9to3.0.warning\">Unknown mapping of Genre: conversation|explanation|unspecified --&gt; ???</Key>\n";
         content += "            </Keys>\n";
         content += "            <Content>\n";
-        content += "               <Genre>Unspecified</Genre>\n";
+        content += "               <Genre>Demo</Genre>\n";
         content += "               <SubGenre>Unspecified</SubGenre>\n";
         content += "               <Task>route description</Task>\n";
         content += "               <Modalities>Speech; Gestures</Modalities>\n";
@@ -384,10 +385,10 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(8, doc.getFieldNames().size());
         assertEquals("kleve-route", doc.getFieldValue("name"));
         assertEquals("Europe", doc.getFieldValue("continent"));
-        assertEquals("ISO639-3:eng", doc.getFieldValue("language"));
+        assertEquals("English", doc.getFieldValue("language"));
         assertEquals("Netherlands", doc.getFieldValue("country"));
         assertEquals("Max Planck Institute for Psycholinguistics", doc.getFieldValue("organisation"));
-        assertEquals("unspecified", doc.getFieldValue("genre"));
+        assertEquals("demo", doc.getFieldValue("genre"));
         assertEquals(
                 "This  recording was made to generate a freely available test resource including speech and gestures. The annotations were created by Peter and Kita who is gesture researcher at the MPI for Psycholinguistics.",
                 doc.getFieldValue("description"));
@@ -444,7 +445,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "            <Keys>\n";
         content += "            </Keys>\n";
         content += "            <Content>\n";
-        content += "               <Genre>Unspecified</Genre>\n";
+        content += "               <Genre>Demo</Genre>\n";
         content += "               <SubGenre>Unspecified</SubGenre>\n";
         content += "               <Task>route description</Task>\n";
         content += "               <Modalities>Speech; Gestures</Modalities>\n";
@@ -475,7 +476,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("kleve-route", doc.getFieldValue("name"));
         assertEquals("Europe", doc.getFieldValue("continent"));
         assertEquals("Netherlands", doc.getFieldValue("country"));
-        assertEquals("unspecified", doc.getFieldValue("genre"));
+        assertEquals("demo", doc.getFieldValue("genre"));
         assertEquals("Test.", doc.getFieldValue("description"));
         assertEquals("Should be null not empty string", null, doc.getFieldValue("organisation"));
         assertEquals(null, doc.getFieldValue("language"));
@@ -483,6 +484,35 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(null, doc.getFieldValue("year"));
     }
 
+    @Test
+    public void testIgnoreNonMeaningfulValues() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD>\n";
+        content += "   <Header>\n";
+        content += "      <MdCreationDate>2008-05-27</MdCreationDate>\n";
+        content += "      <MdSelfLink>test-hdl:1839/00-0000-0000-0009-294C-9</MdSelfLink>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1271859438204</MdProfile>\n";
+        content += "   </Header>\n";
+        content += "   <Components>\n";
+        content += "      <Session>\n";
+        content += "         <MDGroup>\n";
+        content += "            <Location>\n";
+        content += "               <Continent>Unknown</Continent>\n";
+        content += "               <Country>Unspecified</Country>\n";
+        content += "            </Location>\n";
+        content += "         </MDGroup>\n";
+        content += "      </Session>\n";
+        content += "   </Components>\n";
+        content += "</CMD>\n";
+        File cmdiFile = createCmdiFile("testSession", content);
+        CMDIDataProcessor processor = getDataParser(getIMDIFacetMap());
+        CMDIData data = processor.process(cmdiFile);
+        SolrInputDocument doc = data.getSolrDocument();
+        assertNotNull(doc);
+        assertEquals(0, doc.getFieldNames().size());
+    }
+    
     @Test
     public void testOlac() throws Exception {
         String content = "";
@@ -678,6 +708,30 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         SolrInputDocument doc = data.getSolrDocument();
         assertEquals("Netherlands", doc.getFieldValue(FacetConstants.FIELD_COUNTRY));
     }
+    
+    @Test
+    public void testLanguageCodesPostProcessing() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD>\n";
+        content += "   <Components>\n";
+        content += "      <OLAC-DcmiTerms>\n";
+        content += "         <language olac-language=\"fr\"/>\n";
+        content += "         <language olac-language=\"spa\"/>\n";
+        content += "      </OLAC-DcmiTerms>\n";
+        content += "   </Components>\n";
+        content += "</CMD>\n";
+
+        File cmdiFile = createCmdiFile("testOlac", content);
+        CMDIDataProcessor processor = getDataParser(getOlacFacetMap());
+        CMDIData data = processor.process(cmdiFile);
+        SolrInputDocument doc = data.getSolrDocument();
+        Collection<Object> values = doc.getFieldValues(FacetConstants.FIELD_LANGUAGE);
+        assertEquals(2, values.size());
+        Iterator<Object> iter = values.iterator();
+        assertEquals("French", iter.next());
+        assertEquals("Spanish; Castilian", iter.next());
+    }
 
     @Test
     public void testOlacCollection() throws Exception {
@@ -778,7 +832,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("Corpus of Present-day Written Estonian", doc.getFieldValue("name"));
         assertEquals(null, doc.getFieldValue("continent"));
         assertEquals(1, doc.getFieldValues("language").size());
-        assertEquals("est", doc.getFieldValue("language"));
+        assertEquals("Estonian", doc.getFieldValue("language"));
         assertEquals("Estonia", doc.getFieldValue("country"));
         assertEquals("Test", doc.getFieldValue("organisation"));
         assertEquals(null, doc.getFieldValue("year"));
