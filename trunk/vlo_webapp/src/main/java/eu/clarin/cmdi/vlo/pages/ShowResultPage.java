@@ -1,5 +1,7 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
 
 import org.apache.solr.common.SolrDocument;
@@ -23,6 +25,8 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.protocol.http.WicketURLEncoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.Configuration;
 import eu.clarin.cmdi.vlo.FacetConstants;
@@ -32,6 +36,8 @@ import eu.clarin.cmdi.vlo.dao.DaoLocator;
 
 public class ShowResultPage extends BasePage {
 
+    private final static Logger LOG = LoggerFactory.getLogger(ShowResultPage.class);
+
     public static final String PARAM_DOC_ID = "docId";
 
     public ShowResultPage(final PageParameters parameters) {
@@ -40,12 +46,36 @@ public class ShowResultPage extends BasePage {
         SearchPageQuery query = new SearchPageQuery(parameters);
         BookmarkablePageLink backLink = new BookmarkablePageLink("backLink", FacetedSearchPage.class, query.getPageParameters());
         add(backLink);
-        String handle = docId.substring("test-".length());
-        add(new ExternalLink("openBrowserLink", Configuration.getInstance().getIMDIBrowserUrl(handle)));
+        String href = getHref(docId);
+        if (href != null) {
+            add(new ExternalLink("openBrowserLink", href, new ResourceModel(Resources.OPEN_IN_ORIGINAL_CONTEXT).getObject()));
+        } else {
+            add(new Label("openBrowserLink", ""));
+        }
         addPrevNextLabels(docId, query);
         SolrDocument solrDocument = DaoLocator.getSearchResultsDao().getSolrDocument(docId);
         addAttributesTable(solrDocument);
         addResourceLinks(solrDocument);
+    }
+
+    private String getHref(String linkToOriginalContext) {
+        String result = linkToOriginalContext;
+        if (linkToOriginalContext != null) {
+            if (linkToOriginalContext.startsWith(FacetConstants.TEST_HANDLE_PREFIX)) {
+                linkToOriginalContext = linkToOriginalContext.replace(FacetConstants.TEST_HANDLE_PREFIX, FacetConstants.HANDLE_PREFIX);
+            }
+            if (linkToOriginalContext.startsWith(FacetConstants.HANDLE_PREFIX)) {
+                result = Configuration.getInstance().getIMDIBrowserUrl(linkToOriginalContext);
+            } else {
+                try {
+                    new URL(linkToOriginalContext);
+                } catch (MalformedURLException e) {
+                    LOG.debug("Link to original context is incorrect:", e);
+                    result = null;
+                }
+            }
+        }
+        return result;
     }
 
     private void addAttributesTable(final SolrDocument solrDocument) {

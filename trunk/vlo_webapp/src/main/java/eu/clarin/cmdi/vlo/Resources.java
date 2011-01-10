@@ -11,7 +11,8 @@ public interface Resources {
     public static final String FIELD = "field";
     public final static String NO_RESOURCE_FOUND = "noResourceFound";
     public static final String VALUE = "value";
-    public static final String RESULTS = "results";    
+    public static final String RESULTS = "results";
+    public static final String OPEN_IN_ORIGINAL_CONTEXT = "openInOriginalContext";    
     
 
 }
