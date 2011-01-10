@@ -1,6 +1,9 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
@@ -15,7 +18,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 public class FacetBoxPanel extends Panel {
-    
+    private static final Set<String> IGNORABLE_VALUES = new HashSet<String>();
+    static {
+        IGNORABLE_VALUES.add("unknown");
+        IGNORABLE_VALUES.add("unspecified");
+    }
     private static final int MAX_NR_OF_FACET_VALUES = 5;
     private static final long serialVersionUID = 1L;
     private Label label;
@@ -40,12 +47,8 @@ public class FacetBoxPanel extends Panel {
         } else {
             add(new WebMarkupContainer("facetHeaderPanel"));
         }
-        List<Count> allValues = facetField.getValues();
-        List<Count> values = allValues;
-        final boolean showMore = allValues != null && allValues.size() > MAX_NR_OF_FACET_VALUES;
-        if (showMore) {
-            values = allValues.subList(0, MAX_NR_OF_FACET_VALUES);
-        }
+        final boolean showMore = facetField.getValueCount() > MAX_NR_OF_FACET_VALUES + 1;
+        List<Count> values = getFacetListForBox(facetField, showMore);
         ListView<Count> facetList = new ListView<Count>("facetList", values) {
             @Override
             protected void populateItem(ListItem<Count> item) {
@@ -68,6 +71,35 @@ public class FacetBoxPanel extends Panel {
 
         });
         return this;
+    }
+
+    List<Count> getFacetListForBox(final FacetField facetField, final boolean showMore) {
+        List<Count> allValues = facetField.getValues();
+        List<Count> values = new ArrayList<Count>();
+        if (showMore) {
+            if (facetField.getValueCount() == MAX_NR_OF_FACET_VALUES || facetField.getValueCount() == MAX_NR_OF_FACET_VALUES + 1) { //Show all values, the "more" link can be used as the extra facet
+                values = allValues;
+            } else {// make a sublist
+                //IGNORABLE_VALUES (like "unknown") are move to the back of the list and should only be shown when you click "more...", unless the list is too small then whe can just show them.
+                List<Count> ignorables = new ArrayList<Count>();
+                for (int i = 0; values.size() < MAX_NR_OF_FACET_VALUES && i < allValues.size(); i++) {
+                    Count count = allValues.get(i);
+                    if (!IGNORABLE_VALUES.contains(count.getName().toLowerCase())) {
+                        values.add(count);
+                    } else {
+                        ignorables.add(count);
+                    }
+                }
+                int stillToAdd = MAX_NR_OF_FACET_VALUES - values.size();
+                for (int i = 0; i < stillToAdd && i < ignorables.size(); i++) {
+                    values.add(ignorables.get(i));
+
+                }
+            }
+        } else { //show all values
+            values = allValues;
+        }
+        return values;
     }
 
     public void replaceHeader(boolean isSelected, String selectedValue) {
