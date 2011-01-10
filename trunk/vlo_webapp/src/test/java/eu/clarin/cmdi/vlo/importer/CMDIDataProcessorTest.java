@@ -485,35 +485,6 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     }
 
     @Test
-    public void testIgnoreNonMeaningfulValues() throws Exception {
-        String content = "";
-        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD>\n";
-        content += "   <Header>\n";
-        content += "      <MdCreationDate>2008-05-27</MdCreationDate>\n";
-        content += "      <MdSelfLink>test-hdl:1839/00-0000-0000-0009-294C-9</MdSelfLink>\n";
-        content += "      <MdProfile>clarin.eu:cr1:p_1271859438204</MdProfile>\n";
-        content += "   </Header>\n";
-        content += "   <Components>\n";
-        content += "      <Session>\n";
-        content += "         <MDGroup>\n";
-        content += "            <Location>\n";
-        content += "               <Continent>Unknown</Continent>\n";
-        content += "               <Country>Unspecified</Country>\n";
-        content += "            </Location>\n";
-        content += "         </MDGroup>\n";
-        content += "      </Session>\n";
-        content += "   </Components>\n";
-        content += "</CMD>\n";
-        File cmdiFile = createCmdiFile("testSession", content);
-        CMDIDataProcessor processor = getDataParser(getIMDIFacetMap());
-        CMDIData data = processor.process(cmdiFile);
-        SolrInputDocument doc = data.getSolrDocument();
-        assertNotNull(doc);
-        assertEquals(0, doc.getFieldNames().size());
-    }
-    
-    @Test
     public void testOlac() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
