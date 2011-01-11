@@ -122,7 +122,7 @@
         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
           <property name="originName" value="CLARIN LRT inventory" />
           <property name="rootFile"
-            value="/Users/patdui/data/snapshots2/lrt-20101117/_corpusstructure/collection_lrt_inventory.cmdi" />
+            value="/Users/patdui/data/snapshots2/lrt-20110106/_corpusstructure/collection_lrt_inventory.cmdi" />
           <property name="facetMapping" ref="lrtMapping"></property>
         </bean>
       </list>
@@ -257,6 +257,10 @@
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="name" />
           <property name="pattern" value="/CMD/Components/LrtInventoryResource/LrtCommon/ResourceName/text()" />
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
+          <property name="name" value="resourceType" />
+          <property name="pattern" value="/CMD/Components/LrtInventoryResource/LrtCommon/ResourceType/text()" />
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.FacetConfiguration">
           <property name="name" value="country" />

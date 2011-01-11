@@ -67,15 +67,50 @@ public class MetadataImporterTest extends ImporterTestcase {
         content += "</CMD>\n";
         File rootFile = createCmdiFile("rootFile", content);
 
-        List<SolrInputDocument> docs = importData(rootFile);
+        List<SolrInputDocument> docs = importData(rootFile, getIMDIFacetMap());
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
         assertEquals("testID1Session", getValue(doc, FacetConstants.FIELD_ID));
         assertEquals("testRoot", getValue(doc, FacetConstants.FIELD_ORIGIN)); //TODO PD make _dataRoot and origin facet, make all none showable fields start with _
         assertEquals("kleve-route", getValue(doc, FacetConstants.FIELD_NAME));
         assertEquals(sessionFile.getAbsolutePath(), getValue(doc, FacetConstants.FIELD_FILENAME));
-        assertEquals("video", getValue(doc, FacetConstants.FIELD_RESOURCE_TYPE)); 
-        assertEquals("video/x-mpeg1,../Media/elan-example1.mpg", getValue(doc, FacetConstants.FIELD_RESOURCE));
+        assertEquals("video", getValue(doc, FacetConstants.FIELD_RESOURCE_TYPE));
+        assertEquals("video/x-mpeg1|../Media/elan-example1.mpg", getValue(doc, FacetConstants.FIELD_RESOURCE));
+    }
+
+    @Test
+    public void testImportWithMimeTypeOverride() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD>\n";
+        content += "   <Header>\n";
+        content += "      <MdSelfLink>testID2</MdSelfLink>\n";
+        content += "   </Header>\n";
+        content += "   <Resources>\n";
+        content += "      <ResourceProxyList>\n";
+        content += "         <ResourceProxy id=\"refLink\">\n";
+        content += "            <ResourceType>Resource</ResourceType>\n";
+        content += "            <ResourceRef>http://terminotica.upf.es/CREL/LIC01.htm</ResourceRef>\n";
+        content += "         </ResourceProxy>\n";
+        content += "      </ResourceProxyList>\n";
+        content += "   </Resources>\n";
+        content += "   <Components>\n";
+        content += "     <LrtInventoryResource>\n";
+        content += "         <LrtCommon>\n";
+        content += "             <ResourceName>PALIC</ResourceName>\n";
+        content += "             <ResourceType>Application / Tool</ResourceType>\n";
+        content += "         </LrtCommon>\n";
+        content += "     </LrtInventoryResource>\n";
+        content += "   </Components>\n";
+        content += "</CMD>\n";
+        File rootFile = createCmdiFile("rootFile", content);
+
+        List<SolrInputDocument> docs = importData(rootFile, getLrtFacetMap());
+        assertEquals(1, docs.size());
+        SolrInputDocument doc = docs.get(0);
+        assertEquals("PALIC", getValue(doc, FacetConstants.FIELD_NAME));
+        assertEquals("Application / Tool", getValue(doc, FacetConstants.FIELD_RESOURCE_TYPE));
+        assertEquals("unknown type|http://terminotica.upf.es/CREL/LIC01.htm", getValue(doc, FacetConstants.FIELD_RESOURCE));
     }
 
     private Object getValue(SolrInputDocument doc, String field) {
@@ -83,9 +118,9 @@ public class MetadataImporterTest extends ImporterTestcase {
         return doc.getFieldValue(field);
     }
 
-    private List<SolrInputDocument> importData(File rootFile) throws MalformedURLException {
+    private List<SolrInputDocument> importData(File rootFile, FacetMapping facetMapping) throws MalformedURLException {
         final List<SolrInputDocument> result = new ArrayList<SolrInputDocument>();
-        ImporterConfig config = createConfig(rootFile);
+        ImporterConfig config = createConfig(rootFile, facetMapping);
         MetadataImporter importer = new MetadataImporter(config) {
             @Override
             protected void initSolrServer() throws MalformedURLException {
@@ -103,9 +138,8 @@ public class MetadataImporterTest extends ImporterTestcase {
         return result;
     }
 
-    private ImporterConfig createConfig(File rootFile) {
+    private ImporterConfig createConfig(File rootFile, FacetMapping facetMapping) {
         ImporterConfig config = new ImporterConfig();
-        FacetMapping facetMapping = getIMDIFacetMap();
         DataRoot dataRoot = new DataRoot();
         dataRoot.setFacetMapping(facetMapping);
         dataRoot.setDeleteFirst(false);//cannot delete not using real solrServer

@@ -55,6 +55,8 @@ public final class CommonUtils {
         String type = mimeType;
         if (type != null) {
             type = type.toLowerCase();
+        } else {
+            type = "";
         }
         String result = "unknown type";
         if (ANNOTATION_MIMETYPES.contains(type)) {

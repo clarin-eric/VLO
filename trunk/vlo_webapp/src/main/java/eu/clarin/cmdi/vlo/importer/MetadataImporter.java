@@ -148,19 +148,42 @@ public class MetadataImporter {
             solrDocument.addField(FacetConstants.FIELD_DATA_ROOT, origin);
             solrDocument.addField(FacetConstants.FIELD_ID, cmdiData.getId());
             solrDocument.addField(FacetConstants.FIELD_FILENAME, file.getAbsolutePath());
-            List<Resource> resources = cmdiData.getDataResources();
-            for (Resource resource : resources) {
-                String mimeType = resource.getMimeType();
-                if (mimeType == null) {
-                    mimeType = "unknownType";
-                }
-                solrDocument.addField(FacetConstants.FIELD_RESOURCE_TYPE, CommonUtils.normalizeMimeType(mimeType));
-                solrDocument.addField(FacetConstants.FIELD_RESOURCE, mimeType + "," + resource.getResourceName());
-            }
+            addResourceData(solrDocument, cmdiData);
             docs.add(solrDocument);
             if (docs.size() == 1000) {
                 sendDocs();
             }
+        }
+    }
+
+    /**
+     * Adds two fields FIELD_RESOURCE_TYPE and FIELD_RESOURCE The Type can be specified in the "ResourceType" element of an imdi file or
+     * possibly overwritten by some more specific xpath (as in the LRT cmdi files). So if a type is overwritten and already in the
+     * solrDocument we take that type.
+     */
+    private void addResourceData(SolrInputDocument solrDocument, CMDIData cmdiData) {
+        List<Object> fieldValues = solrDocument.containsKey(FacetConstants.FIELD_RESOURCE_TYPE) ? new ArrayList(solrDocument
+                .getFieldValues(FacetConstants.FIELD_RESOURCE_TYPE)) : null;
+        solrDocument.removeField(FacetConstants.FIELD_RESOURCE_TYPE); //Remove old values they might be overwritten.
+        List<Resource> resources = cmdiData.getDataResources();
+        for (int i = 0; i < resources.size(); i++) {
+            Resource resource = resources.get(i);
+            String mimeType = resource.getMimeType();
+            String resourceType = mimeType;
+            if (mimeType == null) {
+                if (fieldValues != null && i < fieldValues.size()) {
+                    resourceType = fieldValues.get(i).toString(); //assuming there will be as many resource types overwritten as there are specified
+                    mimeType = CommonUtils.normalizeMimeType(resourceType);
+                } else {
+                    mimeType = CommonUtils.normalizeMimeType("");
+                    resourceType = mimeType;
+                }
+            } else {
+                resourceType = CommonUtils.normalizeMimeType(mimeType);
+            }
+            solrDocument.addField(FacetConstants.FIELD_RESOURCE_TYPE, resourceType);
+            solrDocument.addField(FacetConstants.FIELD_RESOURCE, mimeType + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR
+                    + resource.getResourceName());
         }
     }
 
