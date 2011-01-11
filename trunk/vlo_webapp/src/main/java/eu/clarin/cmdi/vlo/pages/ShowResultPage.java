@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
@@ -18,7 +19,6 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.repeater.Item;
@@ -104,12 +104,12 @@ public class ShowResultPage extends BasePage {
             public void populateItem(Item<ICellPopulator<DocumentAttribute>> cellItem, String componentId,
                     IModel<DocumentAttribute> rowModel) {
                 DocumentAttribute attribute = rowModel.getObject();
-                cellItem.add(new MultiLineLabel(componentId, attribute.getValue()) {
+                cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
 
                     @Override
                     protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
                         CharSequence body = StringUtils.toMultiLineHtml(getDefaultModelObjectAsString());
-                        replaceComponentTagBody(markupStream, openTag, body);
+                        replaceComponentTagBody(markupStream, openTag, getSmartLink(body));
                     }
                 });
             }
