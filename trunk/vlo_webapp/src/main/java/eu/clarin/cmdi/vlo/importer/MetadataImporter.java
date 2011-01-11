@@ -132,7 +132,7 @@ public class MetadataImporter {
                     processCmdi(resourceFile, origin, processor);
                 } else {
                     nrOfNonExistendResourceFiles++;
-                    LOG.error("Found nonexistent resource file (" + cmdiResource + ") in cmdi: " + file);
+                    LOG.error("Found nonexistent resource file (" + resourceFile + ") in cmdi: " + file);
                 }
             }
         }
