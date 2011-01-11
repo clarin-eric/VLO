@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.pages;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.regex.Pattern;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -148,7 +149,7 @@ public class ShowResultPage extends BasePage {
         if (solrDocument.containsKey(FacetConstants.FIELD_RESOURCE)) {
             Collection<Object> resources = solrDocument.getFieldValues(FacetConstants.FIELD_RESOURCE);
             for (Object resource : resources) {
-                String[] split = resource.toString().split(",", 2);
+                String[] split = resource.toString().split(Pattern.quote(FacetConstants.FIELD_RESOURCE_SPLIT_CHAR), 2);
                 String mimeType = split[0];
                 String resourceLink = split[1];
                 repeatingView.add(new ResourceLinkPanel(repeatingView.newChildId(), mimeType, resourceLink));

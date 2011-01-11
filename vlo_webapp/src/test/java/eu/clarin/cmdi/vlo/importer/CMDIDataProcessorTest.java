@@ -799,7 +799,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(0, dataResources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(5, doc.getFieldNames().size());
+        assertEquals(6, doc.getFieldNames().size());
         assertEquals("Corpus of Present-day Written Estonian", doc.getFieldValue("name"));
         assertEquals(null, doc.getFieldValue("continent"));
         assertEquals(1, doc.getFieldValues("language").size());
@@ -809,6 +809,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(null, doc.getFieldValue("year"));
         assertEquals(null, doc.getFieldValue("genre"));
         assertEquals("written general; 95 mio words; TEI/SGML", doc.getFieldValue("description"));
+        assertEquals("Written Corpus", doc.getFieldValue(FacetConstants.FIELD_RESOURCE_TYPE));
     }
 
 }
