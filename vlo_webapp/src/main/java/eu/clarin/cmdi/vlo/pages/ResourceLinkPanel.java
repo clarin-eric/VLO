@@ -49,7 +49,8 @@ public class ResourceLinkPanel extends Panel {
         String result = resourceLink;
         if (resourceLink != null) {
             if (resourceLink.startsWith(FacetConstants.HANDLE_PREFIX)) {
-                result = Configuration.getInstance().getHandleServerUrl() + resourceLink;
+                String handle = resourceLink.substring(FacetConstants.HANDLE_PREFIX.length());
+                result = Configuration.getInstance().getHandleServerUrl() + handle;
             }
         }
         return result;
