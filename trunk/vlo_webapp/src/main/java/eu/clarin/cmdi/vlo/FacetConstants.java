@@ -23,8 +23,8 @@ public class FacetConstants {
     public static final String RESOURCE_TYPE_IMAGE = "image";
     public static final String RESOURCE_TYPE_ANNOTATION = "annotation";
     
-    public static final String HANDLE_PREFIX = "hdl";
-    public static final String TEST_HANDLE_PREFIX = "test-hdl";
+    public static final String HANDLE_PREFIX = "hdl:";
+    public static final String TEST_HANDLE_PREFIX = "test-hdl:";
     public static final String FIELD_RESOURCE_SPLIT_CHAR = "|";
 
 }
