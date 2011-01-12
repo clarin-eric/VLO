@@ -96,14 +96,20 @@ img{
     border: none;
     padding: 0;
 }
-.resultAttributes{
+.endgame .resultAttributes{
     margin: 0px;
-    padding: 0px;
+    padding-left: 5px;
     border: none;
+}
+
+.endgame .headers{
+    text-align: left;
 }
 .endgame .attribute {
     font-weight: bold;
     background-color: #BCCEE8;
+    text-align: right;
+    padding-right: 5px;
 }
 .endgame .headers .attribute{
     background-color: #2E6B99;    
