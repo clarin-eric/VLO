@@ -12,7 +12,7 @@
           <!--          <property name="deleteFirst"  value="true"/>-->
           <property name="originName" value="OLAC Metadata Providers"/>
           <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/olac/olac-cmdi-20101214/_corpusstructure/collection_root.cmdi"/>
+            value="/lat/tools/vlo_importer/data/olac/olac-cmdi-20110112/_corpusstructure/collection_root.cmdi"/>
           <property name="facetMapping" ref="olacMapping"/>
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">

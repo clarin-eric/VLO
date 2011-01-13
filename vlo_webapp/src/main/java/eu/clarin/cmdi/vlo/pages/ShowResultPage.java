@@ -51,7 +51,7 @@ public class ShowResultPage extends BasePage {
         if (href != null) {
             add(new ExternalLink("openBrowserLink", href, new ResourceModel(Resources.OPEN_IN_ORIGINAL_CONTEXT).getObject()));
         } else {
-            add(new Label("openBrowserLink", ""));
+            add(new Label("openBrowserLink", new ResourceModel(Resources.ORIGINAL_CONTEXT_NOT_AVAILABLE).getObject()));
         }
         addPrevNextLabels(docId, query);
         SolrDocument solrDocument = DaoLocator.getSearchResultsDao().getSolrDocument(docId);
@@ -112,6 +112,11 @@ public class ShowResultPage extends BasePage {
                         replaceComponentTagBody(markupStream, openTag, getSmartLink(body));
                     }
                 });
+            }
+            
+            @Override
+            public String getCssClass() {
+                return "attributeValue";
             }
         };
         return columns;
