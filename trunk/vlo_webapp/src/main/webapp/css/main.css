@@ -109,8 +109,13 @@ img{
     font-weight: bold;
     background-color: #BCCEE8;
     text-align: right;
-    padding-right: 5px;
+    padding-right: 8px;
 }
+
+.endgame .attributeValue{
+    padding-left: 8px;
+}
+
 .endgame .headers .attribute{
     background-color: #2E6B99;    
 }
