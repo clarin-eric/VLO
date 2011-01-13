@@ -4,8 +4,8 @@
 
   <bean id="configuration" class="eu.clarin.cmdi.vlo.Configuration" factory-method="getInstance">
 <!--    <property name="solrUrl" value="http://localhost:8080/vlo_solr" />-->
-    <property name="solrUrl" value="http://lux16.mpi.nl:8080/vlo_solr" />
-<!--    <property name="solrUrl" value="http://catalog.clarin.eu:8080/vlo_solr" />-->
+<!--    <property name="solrUrl" value="http://lux16.mpi.nl:8080/vlo_solr" />-->
+    <property name="solrUrl" value="http://catalog.clarin.eu:8080/vlo_solr" />
     <property name="IMDIBrowserUrl" value="http://corpus1.mpi.nl/ds/imdi_browser?openpath=" />
     <property name="handleServerUrl" value="http://hdl.handle.net/" />
     <property name="facetFields">
