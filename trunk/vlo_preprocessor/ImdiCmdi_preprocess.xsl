@@ -2,7 +2,8 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
     <xsl:output method="xml" indent="yes"/>
     <xsl:variable name="organisations"
-        select="doc('/Users/paucas/SVN/vlo/vlo_preprocessor/OrganisationControlledVocabulary.xml')"/>
+        select="doc('/lat/tools/vlo_importer/data/imdi/OrganisationControlledVocabulary.xml')"/>
+    <xsl:variable name="newLine" select="system-property('line.separator')"/>
 
     <xsl:template match="Organisation">
         <xsl:variable name="org" select="normalize-space(.)"/>
@@ -28,9 +29,12 @@
 
     <xsl:template name="main">
         <xsl:for-each
-            select="collection('file:////Users/paucas/corpus_copy/test?select=*.cmdi;recurse=yes;on-error=ignore')">
+            select="collection('file:////lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora?select=*.cmdi;recurse=yes;on-error=ignore')">
             <xsl:result-document href="{document-uri(.)}">
-                <xsl:comment>Preprocessed by version 0.1 of the VLO preprocessor</xsl:comment>
+                <xsl:comment>
+                    <xsl:text>Preprocessed by version 0.1 of the VLO preprocessor</xsl:text>
+                </xsl:comment>
+                <xsl:value-of select="$newLine"/>
                 <xsl:apply-templates select="."/>
             </xsl:result-document>
         </xsl:for-each>

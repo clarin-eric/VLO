@@ -9,4 +9,19 @@
         <Variation>Max Planck Institute for Psycholinguisticsc</Variation>
         <Variation>Max-Planck-Institüt für Psycholinguïstik</Variation>
     </Organisation>
+    <Organisation name="University of Abidjan">
+        <Variation>Abidjan : L'Universite d'Abidjan</Variation>
+        <Variation>Abidjan : L'Université</Variation>
+        <Variation>Abidjan : Universite d'Abidjan</Variation>
+        <Variation>Abidjan : Universite de Abidjan</Variation>
+        <Variation>Abidjan : Université d'Abidjan</Variation>
+        <Variation>Abidjan : Université d'Abidjan, Institut de linguistique appliquée : Société internationale de linguistique</Variation>
+        <Variation>Abidjan : l'Universite d'Abidjan</Variation>
+        <Variation>Abidjan : l'Université d'Abidjan</Variation>
+        <Variation>Abidjan, Cote d'Ivoire : The University</Variation>
+        <Variation>Abidjan, Cote d'Ivoire : University of Abidjan</Variation>
+        <Variation>Abidjan, Cote d'Ivoire : Universityof Abidjan</Variation>
+        <Variation>Abidjan, Côte-d'Ivoire : [L'Université d'Abidjan]</Variation>
+        <Variation>Abidjan, Ivory Coast : Université Abidjan</Variation>
+    </Organisation>
 </Organisations>
