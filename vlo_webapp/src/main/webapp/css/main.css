@@ -3,7 +3,6 @@ head {
     http-equiv: Content-Type;
 }
 body, td {
-    /*    background-color: url(http://ems06.mpi.nl/clarin/demonstrator.gif) #248 50% repeat;*/
     font-family: Verdana, Geneva, sans-serif;
     font-size: 11px;
     margin: 0;
@@ -33,6 +32,23 @@ img{
     left:498px;
     height: 176px;
 }
+.opening .matrix{
+    border:0px;
+    width: 66%;
+}
+
+.opening .resulttable{
+    width: 33%;
+    margin-left: 11px;
+}
+.opening .resulttable .headers{
+    background-color: #6b824a;
+}
+
+.resulttable tbody{
+    background-color:#BCCEE8;
+}
+
 .opening .matrix .column {
     padding: 0 11px 0 0;
 }
@@ -85,12 +101,7 @@ img{
     background-color: #2E6B99;
     color:#FFFFFF;
 }
-.resulttable tbody{
-    background-color:#BCCEE8;
-}
-.resulttable{
-    margin-left: 11px;
-}
+
 .endgame div{
     margin-left: 11px;
     border: none;
