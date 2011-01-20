@@ -23,7 +23,7 @@ public class FacetBoxPanel extends Panel {
         IGNORABLE_VALUES.add("unknown");
         IGNORABLE_VALUES.add("unspecified");
     }
-    private static final int MAX_NR_OF_FACET_VALUES = 5;
+    private static final int MAX_NR_OF_FACET_VALUES = 10;
     private static final long serialVersionUID = 1L;
     private Label label;
     private FacetHeaderPanel facetHeaderPanel;
