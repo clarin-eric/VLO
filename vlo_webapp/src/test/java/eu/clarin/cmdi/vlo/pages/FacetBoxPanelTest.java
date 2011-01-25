@@ -22,6 +22,7 @@ public class FacetBoxPanelTest {
     @Test
     public void testCalculateFacetBoxPanel() throws Exception {
         FacetBoxPanel panel = new FacetBoxPanel("test", null);
+        panel.setMaxNrOfFacetValues(5);
         FacetField facetField = new FacetField("test");
         facetField.add("name5", 5);
         facetField.add("name4", 4);
