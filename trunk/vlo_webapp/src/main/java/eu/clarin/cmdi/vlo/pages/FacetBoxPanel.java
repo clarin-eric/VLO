@@ -28,12 +28,14 @@ public class FacetBoxPanel extends Panel {
     private Label label;
     private FacetHeaderPanel facetHeaderPanel;
     private FacetModel facetModel;
+    private int maxNrOfFacetValues;
 
     public FacetBoxPanel(String id, IModel<FacetField> model) {
         super(id, model);
         setOutputMarkupId(true);
+        setMaxNrOfFacetValues(MAX_NR_OF_FACET_VALUES);
     }
-
+    
     @SuppressWarnings("serial")
     public FacetBoxPanel create(final SearchPageQuery query) {
         final FacetField facetField = (FacetField) getDefaultModelObject();
@@ -47,7 +49,7 @@ public class FacetBoxPanel extends Panel {
         } else {
             add(new WebMarkupContainer("facetHeaderPanel"));
         }
-        final boolean showMore = facetField.getValueCount() > MAX_NR_OF_FACET_VALUES + 1;
+        final boolean showMore = facetField.getValueCount() > maxNrOfFacetValues + 1;
         List<Count> values = getFacetListForBox(facetField, showMore);
         ListView<Count> facetList = new ListView<Count>("facetList", values) {
             @Override
@@ -77,12 +79,12 @@ public class FacetBoxPanel extends Panel {
         List<Count> allValues = facetField.getValues();
         List<Count> values = new ArrayList<Count>();
         if (showMore) {
-            if (facetField.getValueCount() == MAX_NR_OF_FACET_VALUES || facetField.getValueCount() == MAX_NR_OF_FACET_VALUES + 1) { //Show all values, the "more" link can be used as the extra facet
+            if (facetField.getValueCount() == maxNrOfFacetValues || facetField.getValueCount() == maxNrOfFacetValues + 1) { //Show all values, the "more" link can be used as the extra facet
                 values = allValues;
             } else {// make a sublist
                 //IGNORABLE_VALUES (like "unknown") are move to the back of the list and should only be shown when you click "more...", unless the list is too small then whe can just show them.
                 List<Count> ignorables = new ArrayList<Count>();
-                for (int i = 0; values.size() < MAX_NR_OF_FACET_VALUES && i < allValues.size(); i++) {
+                for (int i = 0; values.size() < maxNrOfFacetValues && i < allValues.size(); i++) {
                     Count count = allValues.get(i);
                     if (!IGNORABLE_VALUES.contains(count.getName().toLowerCase())) {
                         values.add(count);
@@ -90,7 +92,7 @@ public class FacetBoxPanel extends Panel {
                         ignorables.add(count);
                     }
                 }
-                int stillToAdd = MAX_NR_OF_FACET_VALUES - values.size();
+                int stillToAdd = maxNrOfFacetValues - values.size();
                 for (int i = 0; i < stillToAdd && i < ignorables.size(); i++) {
                     values.add(ignorables.get(i));
 
@@ -110,6 +112,10 @@ public class FacetBoxPanel extends Panel {
             facetHeaderPanel.replaceWith(label);
         }
 
+    }
+
+    void setMaxNrOfFacetValues(int maxNrOfFacetValues) {
+        this.maxNrOfFacetValues = maxNrOfFacetValues;
     }
 
 }
