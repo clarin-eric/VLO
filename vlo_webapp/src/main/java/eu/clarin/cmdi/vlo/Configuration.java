@@ -28,6 +28,8 @@ public final class Configuration {
     private String language2LetterCodeComponentUrl = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438109/xml";
     private String language3LetterCodeComponentUrl = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438110/xml";
     private String silToISO639CodesUrl = "http://www.clarin.eu/cmd/xslt/sil_to_iso6393.xml";
+
+    private String vloHomeLink = "http://www.clarin.eu/vlo";//default can be overridden in xml
     
     
     private Configuration() {
@@ -105,5 +107,13 @@ public final class Configuration {
     
     public void setSilToISO639CodesUrl(String silToISO639CodesUrl) {
         this.silToISO639CodesUrl = silToISO639CodesUrl;
+    }
+
+    public String getVloHomeLink() {
+        return vloHomeLink;
+    }
+    
+    public void setVloHomeLink(String vloHomeLink) {
+        this.vloHomeLink = vloHomeLink;
     }
 }

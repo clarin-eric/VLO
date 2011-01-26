@@ -70,10 +70,17 @@ img{
     padding-top: 11px;
     padding-bottom: 11px;
 }
-#searchmodule{
-    margin-left:50%;
-    margin-right: auto;
+
+.middlegame .searchmodule {
+    margin-left:20%;
+    display:inline
 }
+
+.middlegame .homeLink {
+    margin-left: 11px;
+    display:inline
+}
+
 .facet_facetOrigin .facetbox {
     background-color: #2E6B99;
     color:#FFFFFF;
