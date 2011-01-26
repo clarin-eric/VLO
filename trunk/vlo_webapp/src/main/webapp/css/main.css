@@ -23,14 +23,11 @@ img{
 }
 #topleft{
     position: absolute;
-    width: 498px;
     left:0px;
-    height: 176px;
 }
 #topright{
     position: absolute;
-    left:498px;
-    height: 176px;
+    left:497px;
 }
 .opening .matrix{
     border:0px;
