@@ -15,12 +15,14 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 
+import eu.clarin.cmdi.vlo.Configuration;
 import eu.clarin.cmdi.vlo.Resources;
 
 public class FacetedSearchPage extends BasePage {
@@ -48,6 +50,7 @@ public class FacetedSearchPage extends BasePage {
 
         public SearchBoxForm(String id, SearchPageQuery query) {
             super(id, new CompoundPropertyModel<SearchPageQuery>(query));
+            add(new ExternalLink("vloHomeLink", Configuration.getInstance().getVloHomeLink()));
             searchBox = new TextField("searchQuery");
             add(searchBox);
             Button submit = new Button("searchSubmit");

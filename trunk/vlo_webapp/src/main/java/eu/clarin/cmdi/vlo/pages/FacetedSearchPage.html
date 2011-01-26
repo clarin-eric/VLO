@@ -7,9 +7,11 @@
             <p />
             <div border="0" class="opening" width="100%">
                 <form class="search" wicket:id="searchForm">
-                    <div id="searchmodule">
-                        <input type="text"  wicket:id="searchQuery" />&nbsp;
-                        <button wicket:id="searchSubmit"><wicket:message key="search">[search]</wicket:message></button>
+                    <div class="homeLink"><a wicket:id="vloHomeLink"><wicket:message key="VLO_home"/></a> &gt;&gt; <a><wicket:message key="facetedBrowserResources"/></a></div>
+                    <div style="display: none;"><input name="id1_hf_0" id="id1_hf_0" type="hidden"></div>
+                    <div class="searchmodule">
+                        <input name="searchQuery" type="text">&nbsp;
+                        <button name="searchSubmit" id="id2"><wicket:message key="search"/></button>
                     </div>
                 </form>
                 <div class="tableBody">
