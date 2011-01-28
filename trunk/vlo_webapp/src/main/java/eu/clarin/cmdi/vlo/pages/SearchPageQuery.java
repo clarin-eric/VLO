@@ -1,6 +1,5 @@
 package eu.clarin.cmdi.vlo.pages;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,12 +8,13 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.params.CommonParams;
+import org.apache.wicket.IClusterable;
 import org.apache.wicket.PageParameters;
 
 import eu.clarin.cmdi.vlo.Configuration;
 import eu.clarin.cmdi.vlo.FacetConstants;
 
-public class SearchPageQuery implements Serializable {
+public class SearchPageQuery implements IClusterable {
 
     private static final String SOLR_SEARCH_ALL = "*:*";
 
