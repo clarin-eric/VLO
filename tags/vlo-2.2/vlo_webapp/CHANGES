@@ -1,0 +1,30 @@
+Bug Fixes and Features
+
+Release VLO-2.2 (28 Januari 2011):
+http://trac.clarin.eu/ticket/93 Scaling of images fixed (and typo in image resolved)
+http://trac.clarin.eu/ticket/92 Breadcrumb to original vlo page added
+http://trac.clarin.eu/ticket/63 Frontpage layout changed
+http://trac.clarin.eu/ticket/55 Preprocess of imdi files in place
+Created correct links from original vlo page to new faceted browser.
+
+Release VLO-2.1 (13 Januari 2011):
+http://trac.clarin.eu/ticket/54 	Change columnheaders of results
+http://trac.clarin.eu/ticket/26 	add prev/next links to show result page
+http://trac.clarin.eu/ticket/42 	capitalization
+http://trac.clarin.eu/ticket/62 	10 facet values instead of 5
+http://trac.clarin.eu/ticket/43 	origin for LRT should be CLARIN LRT inventory
+http://trac.clarin.eu/ticket/37 	extract proper country names from country code facets
+http://trac.clarin.eu/ticket/38 	extract proper language names from language code facets
+http://trac.clarin.eu/ticket/60 	remove Unspecified and Unknown from initial facet list
+http://trac.clarin.eu/ticket/46 	open in original context for the LRT inventory
+http://trac.clarin.eu/ticket/29 	Link to correct archives based on the metadata
+http://trac.clarin.eu/ticket/45 	make all links clickable
+http://trac.clarin.eu/ticket/34 	make partner images clickable
+- Added resourceType facet (still todo for OLAC data)
+- Added resource list and links to download resources (still todo show names for handles)
+
+
+
+Release VLO-2.0 (2 December 2010):
+New implementation of the original vlo facetted browser using SOLR as a backend and the Wicket framework for the java frontend. We now support CMDI metadata only.
+- Initial version working and performing very nicely.
