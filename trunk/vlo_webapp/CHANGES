@@ -1,5 +1,12 @@
 Bug Fixes and Features
 
+Release VLO-2.2 (28 Januari 2011):
+http://trac.clarin.eu/ticket/93 Scaling of images fixed (and typo in image resolved)
+http://trac.clarin.eu/ticket/92 Breadcrumb to original vlo page added
+http://trac.clarin.eu/ticket/63 Frontpage layout changed
+http://trac.clarin.eu/ticket/55 Preprocess of imdi files in place
+Created correct links from original vlo page to new faceted browser.
+
 Release VLO-2.1 (13 Januari 2011):
 http://trac.clarin.eu/ticket/54 	Change columnheaders of results
 http://trac.clarin.eu/ticket/26 	add prev/next links to show result page
