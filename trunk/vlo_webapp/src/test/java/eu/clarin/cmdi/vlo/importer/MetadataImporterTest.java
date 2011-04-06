@@ -45,7 +45,7 @@ public class MetadataImporterTest extends ImporterTestcase {
 
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD>\n";
+        content += "<CMD xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1274880881885/xsd\">\n";
         content += "   <Header>\n";
         content += "      <MdSelfLink>testID2</MdSelfLink>\n";
         content += "   </Header>\n";
@@ -67,11 +67,11 @@ public class MetadataImporterTest extends ImporterTestcase {
         content += "</CMD>\n";
         File rootFile = createCmdiFile("rootFile", content);
 
-        List<SolrInputDocument> docs = importData(rootFile, getIMDIFacetMap());
+        List<SolrInputDocument> docs = importData(rootFile);
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
         assertEquals("testID1Session", getValue(doc, FacetConstants.FIELD_ID));
-        assertEquals("testRoot", getValue(doc, FacetConstants.FIELD_ORIGIN)); //TODO PD make _dataRoot and origin facet, make all none showable fields start with _
+        assertEquals("testRoot", getValue(doc, FacetConstants.FIELD_ORIGIN));
         assertEquals("kleve-route", getValue(doc, FacetConstants.FIELD_NAME));
         assertEquals(sessionFile.getAbsolutePath(), getValue(doc, FacetConstants.FIELD_FILENAME));
         assertEquals("video", getValue(doc, FacetConstants.FIELD_RESOURCE_TYPE));
@@ -85,6 +85,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         content += "<CMD>\n";
         content += "   <Header>\n";
         content += "      <MdSelfLink>testID2</MdSelfLink>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1289827960126</MdProfile>\n";
         content += "   </Header>\n";
         content += "   <Resources>\n";
         content += "      <ResourceProxyList>\n";
@@ -105,7 +106,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         content += "</CMD>\n";
         File rootFile = createCmdiFile("rootFile", content);
 
-        List<SolrInputDocument> docs = importData(rootFile, getLrtFacetMap());
+        List<SolrInputDocument> docs = importData(rootFile);
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
         assertEquals("PALIC", getValue(doc, FacetConstants.FIELD_NAME));
@@ -118,9 +119,9 @@ public class MetadataImporterTest extends ImporterTestcase {
         return doc.getFieldValue(field);
     }
 
-    private List<SolrInputDocument> importData(File rootFile, FacetMapping facetMapping) throws MalformedURLException {
+    private List<SolrInputDocument> importData(File rootFile) throws MalformedURLException {
         final List<SolrInputDocument> result = new ArrayList<SolrInputDocument>();
-        ImporterConfig config = createConfig(rootFile, facetMapping);
+        ImporterConfig config = createConfig(rootFile);
         MetadataImporter importer = new MetadataImporter(config) {
             @Override
             protected void initSolrServer() throws MalformedURLException {
@@ -138,10 +139,9 @@ public class MetadataImporterTest extends ImporterTestcase {
         return result;
     }
 
-    private ImporterConfig createConfig(File rootFile, FacetMapping facetMapping) {
+    private ImporterConfig createConfig(File rootFile) {
         ImporterConfig config = new ImporterConfig();
         DataRoot dataRoot = new DataRoot();
-        dataRoot.setFacetMapping(facetMapping);
         dataRoot.setDeleteFirst(false);//cannot delete not using real solrServer
         dataRoot.setOriginName("testRoot");
         dataRoot.setRootFile(rootFile);

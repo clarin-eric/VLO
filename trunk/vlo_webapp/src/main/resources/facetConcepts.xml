@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<facetConcepts>
+  <facetConcept name="name">
+    <concept>http://www.isocat.org/datcat/DC-2544</concept>
+    <concept>http://purl.org/dc/terms/title</concept>
+    <pattern>/CMD/Components/LrtInventoryResource/LrtCommon/ResourceName/text()</pattern> <!-- no concept in lrt schema -->
+  </facetConcept>
+  <facetConcept name="year">
+    <concept>http://www.isocat.org/datcat/DC-2510</concept>
+    <concept>http://www.isocat.org/datcat/DC-2509</concept>
+  </facetConcept>
+  <facetConcept name="continent">
+    <concept>http://www.isocat.org/datcat/DC-2531</concept>
+  </facetConcept>
+  <facetConcept name="country">
+    <concept>http://www.isocat.org/datcat/DC-2532</concept>
+    <pattern>/CMD/Components/OLAC-DcmiTerms/spatial[@dcterms-type="ISO3166"]/text()</pattern>
+    <pattern>/CMD/Components/OLAC-DcmiTerms/coverage[@dcterms-type="ISO3166"]/text()</pattern>
+  </facetConcept>
+  <facetConcept name="language">
+    <concept>http://www.isocat.org/datcat/DC-2482</concept>
+    <pattern>/CMD/Components/OLAC-DcmiTerms/language/@olac-language</pattern>
+    <pattern>/CMD/Components/OLAC-DcmiTerms/subject/@olac-language</pattern>
+    <pattern>/CMD/Components/LrtInventoryResource/LrtCommon/Languages/ISO639/iso-639-3-code/text()</pattern>
+  </facetConcept>
+  <facetConcept name="organisation">
+    <concept>http://www.isocat.org/datcat/DC-2459</concept>
+    <concept>http://purl.org/dc/terms/publisher</concept>
+  </facetConcept>
+  <facetConcept name="genre" isCaseInsensitive="true">
+    <concept>http://www.isocat.org/datcat/DC-2470</concept>
+    <pattern>/CMD/Components/OLAC-DcmiTerms/type/@olac-linguistic-type</pattern> <!-- Find concept and add attribute somehow -->
+  </facetConcept>
+  <facetConcept name="subject" isCaseInsensitive="true">
+    <concept>http://www.isocat.org/datcat/DC-2591</concept>
+    <pattern>/CMD/Components/OLAC-DcmiTerms/subject/@olac-linguistic-field</pattern>
+    <pattern>/CMD/Components/OLAC-DcmiTerms/subject[@dcterms-type="LCSH"]/text()</pattern>
+  </facetConcept>
+  <facetConcept name="description">
+    <concept>http://www.isocat.org/datcat/DC-2520</concept>
+    <concept>http://purl.org/dc/terms/description</concept>
+  </facetConcept>
+  <facetConcept name="resourceType">
+    <pattern>/CMD/Components/LrtInventoryResource/LrtCommon/ResourceType/text()</pattern>
+  </facetConcept>
+</facetConcepts>

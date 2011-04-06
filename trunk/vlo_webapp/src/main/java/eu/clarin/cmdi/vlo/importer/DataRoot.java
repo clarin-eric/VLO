@@ -4,18 +4,9 @@ import java.io.File;
 
 public class DataRoot {
 
-    private FacetMapping facetMapping;
     private String originName;
     private File rootFile;
     private boolean deleteFirst = false;
-
-    public void setFacetMapping(FacetMapping facetMapping) {
-        this.facetMapping = facetMapping;
-    }
-
-    public FacetMapping getFacetMapping() {
-        return facetMapping;
-    }
 
     public String getOriginName() {
         return originName;

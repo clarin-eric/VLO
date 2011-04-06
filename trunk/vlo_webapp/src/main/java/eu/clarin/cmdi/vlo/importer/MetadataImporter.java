@@ -40,9 +40,10 @@ public class MetadataImporter {
     private final ImporterConfig config;
 
     private int nrOFDocumentsUpdated;
-    private int nrOfNonExistendResourceFiles = 0;
+    private int nrOfNonExistentResourceFiles = 0;
     private int nrOfFilesAnalyzed = 0;
     private int nrOfFilesWithoutId = 0;
+    private int nrOfFilesWithoutDataResources = 0;
 
     public MetadataImporter(ImporterConfig config) {
         this.config = config;
@@ -72,7 +73,7 @@ public class MetadataImporter {
                     solrServer.deleteByQuery(FacetConstants.FIELD_ORIGIN + ":" + dataRoot.getOriginName());
                     LOG.info("Deleting data for origin done.");
                 }
-                CMDIDataProcessor processor = new CMDIParserVTDXML(dataRoot.getFacetMapping(), POST_PROCESSORS);
+                CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS);
                 processCmdi(dataRoot.getRootFile(), dataRoot.getOriginName(), processor);
                 if (!docs.isEmpty()) {
                     sendDocs();
@@ -95,8 +96,9 @@ public class MetadataImporter {
             }
         }
         long took = (System.currentTimeMillis() - start) / 1000;
-        LOG.info("Found " + nrOfNonExistendResourceFiles + " non existing resources files.");
+        LOG.info("Found " + nrOfNonExistentResourceFiles + " non existing resources files.");
         LOG.info("Found " + nrOfFilesWithoutId + " file(s) without an id.");
+        LOG.info("Found " + nrOfFilesWithoutDataResources + " file(s) without data resources (metadata descriptions without resources are ignored).");
         LOG.info("Update of " + nrOFDocumentsUpdated + " took " + took + " secs. Total nr of files analyzed " + nrOfFilesAnalyzed);
     }
 
@@ -123,7 +125,16 @@ public class MetadataImporter {
         if (cmdiData != null && processedIds.add(cmdiData.getId())) {
             SolrInputDocument solrDocument = cmdiData.getSolrDocument();
             if (solrDocument != null) {
-                updateDocument(solrDocument, cmdiData, file, origin);
+                if (!cmdiData.getDataResources().isEmpty() || cmdiData.getMetadataResources().isEmpty()) {
+                    // We only add metadata files that have data resources (1) or files that don't link to other metadata files (2):
+                    //  1) files with data resources are obviously interesting
+                    //  2) files without metadata links and without dataResource can be interesting e.g. olac files describing a corpus with a link to the original archive.
+                    // Other files will have only metadata resources and are considered 'collection' metadata files they 
+                    // are usually not very interesting (think imdi corpus files) and will not be included.
+                    updateDocument(solrDocument, cmdiData, file, origin);
+                } else {
+                    nrOfFilesWithoutDataResources++;
+                }
             }
             List<Resource> resources = cmdiData.getMetadataResources();
             for (Resource cmdiResource : resources) {
@@ -131,7 +142,7 @@ public class MetadataImporter {
                 if (resourceFile.exists()) {
                     processCmdi(resourceFile, origin, processor);
                 } else {
-                    nrOfNonExistendResourceFiles++;
+                    nrOfNonExistentResourceFiles++;
                     LOG.error("Found nonexistent resource file (" + resourceFile + ") in cmdi: " + file);
                 }
             }
