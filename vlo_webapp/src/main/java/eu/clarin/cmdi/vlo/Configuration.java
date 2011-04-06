@@ -12,7 +12,7 @@ public final class Configuration {
     private final static Configuration INSTANCE = new Configuration();
 
     public static final String CONFIG_FILE = "applicationContext.xml";
-
+    private final static String PROFILE_ID_PLACEHOLDER = "{PROFILE_ID}";
     private String solrUrl;
 
     private String imdiBrowserUrl;// = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=";
@@ -28,10 +28,11 @@ public final class Configuration {
     private String language2LetterCodeComponentUrl = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438109/xml";
     private String language3LetterCodeComponentUrl = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438110/xml";
     private String silToISO639CodesUrl = "http://www.clarin.eu/cmd/xslt/sil_to_iso6393.xml";
+    private String profileSchemaUrl = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/" + PROFILE_ID_PLACEHOLDER
+            + "/xsd";
 
     private String vloHomeLink = "http://www.clarin.eu/vlo";//default can be overridden in xml
-    
-    
+
     private Configuration() {
     }
 
@@ -88,11 +89,11 @@ public final class Configuration {
     public String getLanguage2LetterCodeComponentUrl() {
         return language2LetterCodeComponentUrl;
     }
-    
+
     public void setLanguage2LetterCodeComponentUrl(String language2LetterCodeComponentUrl) {
         this.language2LetterCodeComponentUrl = language2LetterCodeComponentUrl;
     }
-    
+
     public String getLanguage3LetterCodeComponentUrl() {
         return language3LetterCodeComponentUrl;
     }
@@ -104,7 +105,7 @@ public final class Configuration {
     public String getSilToISO639CodesUrl() {
         return silToISO639CodesUrl;
     }
-    
+
     public void setSilToISO639CodesUrl(String silToISO639CodesUrl) {
         this.silToISO639CodesUrl = silToISO639CodesUrl;
     }
@@ -112,8 +113,18 @@ public final class Configuration {
     public String getVloHomeLink() {
         return vloHomeLink;
     }
-    
+
     public void setVloHomeLink(String vloHomeLink) {
         this.vloHomeLink = vloHomeLink;
     }
+
+    public String getComponentRegistryProfileSchema(String profileId) {
+        return profileSchemaUrl.replace(PROFILE_ID_PLACEHOLDER, profileId);
+    }
+
+    public void setProfileSchemaUrl(String profileSchemaUrl) {
+        this.profileSchemaUrl = profileSchemaUrl;
+    }
+    
+
 }

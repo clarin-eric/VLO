@@ -26,6 +26,9 @@ public class FacetConfiguration {
         this.patterns = Collections.singletonList(pattern);
     }
 
+    /**
+     * @return List of Strings which are xpaths expressions.
+     */
     public List<String> getPatterns() {
         return patterns;
     }

@@ -18,8 +18,8 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 
 public class CMDIDataProcessorTest extends ImporterTestcase {
 
-    private CMDIDataProcessor getDataParser(FacetMapping map) {
-        return new CMDIParserVTDXML(map, MetadataImporter.POST_PROCESSORS);
+    private CMDIDataProcessor getDataParser() {
+        return new CMDIParserVTDXML(MetadataImporter.POST_PROCESSORS);
     }
 
     @Test
@@ -30,7 +30,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "   <Header>\n";
         content += "      <MdCreationDate>2003-01-14</MdCreationDate>\n";
         content += "      <MdSelfLink>test-hdl:1839/00-0000-0000-0000-0001-D</MdSelfLink>\n";
-        content += "      <MdProfile>clarin.eu:cr1:p_1274880881885</MdProfile>\n";
+        content += "      <MdProfile>  clarin.eu:cr1:p_1274880881885   </MdProfile>\n";
         content += "   </Header>\n";
         content += "   <Resources>\n";
         content += "      <ResourceProxyList>\n";
@@ -67,7 +67,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "   </Components>\n";
         content += "</CMD>\n";
         File cmdiFile = createCmdiFile("testCorpus", content);
-        CMDIDataProcessor processor = getDataParser(getIMDIFacetMap());
+        CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
         assertEquals("test-hdl:1839/00-0000-0000-0000-0001-D", data.getId());
         List<Resource> resources = data.getMetadataResources();
@@ -77,7 +77,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(null, res.getMimeType());
         assertEquals(0, data.getDataResources().size());
         SolrInputDocument doc = data.getSolrDocument();
-        assertNull(doc);
+        assertNotNull(doc);
     }
 
     @Test
@@ -367,7 +367,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "   </Components>\n";
         content += "</CMD>\n";
         File cmdiFile = createCmdiFile("testSession", content);
-        CMDIDataProcessor processor = getDataParser(getIMDIFacetMap());
+        CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
         assertEquals("test-hdl:1839/00-0000-0000-0009-294C-9", data.getId());
         List<Resource> resources = data.getMetadataResources();
@@ -396,6 +396,31 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(null, doc.getFieldValue("subject"));
     }
 
+    @Test
+    public void testCreateCMDISessionSmall() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
+        content += "     xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438204/xsd\">\n";
+        content += "   <Header>\n";
+        content += "      <MdCreationDate>2008-05-27</MdCreationDate>\n";
+        content += "      <MdSelfLink>test-hdl:1839/00-0000-0000-0009-294C-9</MdSelfLink>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1271859438204</MdProfile>\n";
+        content += "   </Header>\n";
+        content += "   <Resources>\n";
+        content += "    </Resources>\n";
+        content += "   <Components>\n";
+        content += "      <Session>\n";
+        content += "         <Name>kleve-route</Name>\n";
+        content += "      </Session>\n";
+        content += "   </Components>\n";
+        content += "</CMD>\n";
+        File cmdiFile = createCmdiFile("testSession", content);
+        CMDIDataProcessor processor = getDataParser();
+        CMDIData data = processor.process(cmdiFile);
+        assertEquals("kleve-route", data.getSolrDocument().getFieldValue(FacetConstants.FIELD_NAME));
+    }
+    
     @Test
     public void testEmptyFieldsShouldBeNull() throws Exception {
         String content = "";
@@ -465,7 +490,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "   </Components>\n";
         content += "</CMD>\n";
         File cmdiFile = createCmdiFile("testSession", content);
-        CMDIDataProcessor processor = getDataParser(getIMDIFacetMap());
+        CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
         assertEquals("test-hdl:1839/00-0000-0000-0009-294C-9", data.getId());
         List<Resource> resources = data.getMetadataResources();
@@ -492,12 +517,12 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "     xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n";
         content += "     xmlns:oai_dc=\"http://www.openarchives.org/OAI/2.0/oai_dc/\"\n";
         content += "     xmlns:defns=\"http://www.openarchives.org/OAI/2.0/\"\n";
-        content += "     xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438236/xsd\">\n";
+        content += "     xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026/xsd\">\n";
         content += "   <Header>\n";
         content += "      <MdCreator>olac2cmdi.xsl</MdCreator>\n";
         content += "      <MdCreationDate>2002-12-14</MdCreationDate>\n";
         content += "      <MdSelfLink>oai:ailla.utexas.edu:1</MdSelfLink>\n";
-        content += "      <MdProfile>clarin.eu:cr1:p_1271859438236</MdProfile>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1288172614026</MdProfile>\n";
         content += "   </Header>\n";
         content += "   <Resources>\n";
         content += "      <ResourceProxyList/>\n";
@@ -530,7 +555,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testOlac", content);
-        CMDIDataProcessor processor = getDataParser(getOlacFacetMap());
+        CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
         assertEquals("oai:ailla.utexas.edu:1", data.getId());
         List<Resource> resources = data.getMetadataResources();
@@ -569,6 +594,9 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD>\n";
+        content += "   <Header>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1288172614026</MdProfile>\n";
+        content += "   </Header>\n";
         content += "   <Components>\n";
         content += "      <OLAC-DcmiTerms>\n";
         content += "         <subject olac-linguistic-field=\"testSubject\">Kuna</subject>\n";
@@ -582,7 +610,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testOlac", content);
-        CMDIDataProcessor processor = getDataParser(getOlacFacetMap());
+        CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
         SolrInputDocument doc = data.getSolrDocument();
         assertEquals(1, doc.getFieldValues("subject").size());
@@ -595,6 +623,9 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD>\n";
+        content += "   <Header>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1288172614026</MdProfile>\n";
+        content += "   </Header>\n";
         content += "   <Components>\n";
         content += "      <OLAC-DcmiTerms>\n";
         content += "         <subject dcterms-type=\"LCSH\">testSubjectFallback</subject>\n";
@@ -605,7 +636,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
 
         cmdiFile = createCmdiFile("testOlac", content);
-        processor = getDataParser(getOlacFacetMap());
+        processor = getDataParser();
         data = processor.process(cmdiFile);
         doc = data.getSolrDocument();
         assertEquals(1, doc.getFieldValues("subject").size());
@@ -618,6 +649,9 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD>\n";
+        content += "   <Header>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1288172614026</MdProfile>\n";
+        content += "   </Header>\n";
         content += "   <Components>\n";
         content += "      <OLAC-DcmiTerms>\n";
         content += "         <subject dcterms-type=\"LCSH\">testSubjectFallback</subject>\n";
@@ -631,7 +665,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
 
         cmdiFile = createCmdiFile("testOlac", content);
-        processor = getDataParser(getOlacFacetMap());
+        processor = getDataParser();
         data = processor.process(cmdiFile);
         doc = data.getSolrDocument();
         assertEquals(1, doc.getFieldValues("subject").size());
@@ -647,6 +681,9 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD>\n";
+        content += "   <Header>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1288172614026</MdProfile>\n";
+        content += "   </Header>\n";
         content += "   <Components>\n";
         content += "      <OLAC-DcmiTerms>\n";
         content += "         <subject olac-linguistic-field=\"\n\n\t\t\t\">Kuna</subject>\n";
@@ -655,7 +692,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testOlac", content);
-        CMDIDataProcessor processor = getDataParser(getOlacFacetMap());
+        CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
         SolrInputDocument doc = data.getSolrDocument();
         assertEquals(null, doc.getFieldValues("subject"));
@@ -666,6 +703,9 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD>\n";
+        content += "   <Header>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1288172614026</MdProfile>\n";
+        content += "   </Header>\n";
         content += "   <Components>\n";
         content += "      <OLAC-DcmiTerms>\n";
         content += "         <coverage dcterms-type=\"ISO3166\">NL</coverage>\n";
@@ -674,7 +714,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testOlac", content);
-        CMDIDataProcessor processor = getDataParser(getOlacFacetMap());
+        CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
         SolrInputDocument doc = data.getSolrDocument();
         assertEquals("Netherlands", doc.getFieldValue(FacetConstants.FIELD_COUNTRY));
@@ -685,6 +725,9 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD>\n";
+        content += "   <Header>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1288172614026</MdProfile>\n";
+        content += "   </Header>\n";
         content += "   <Components>\n";
         content += "      <OLAC-DcmiTerms>\n";
         content += "         <language olac-language=\"fr\"/>\n";
@@ -694,7 +737,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testOlac", content);
-        CMDIDataProcessor processor = getDataParser(getOlacFacetMap());
+        CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
         SolrInputDocument doc = data.getSolrDocument();
         Collection<Object> values = doc.getFieldValues(FacetConstants.FIELD_LANGUAGE);
@@ -709,12 +752,12 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
-        content += "    xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438236/xsd\">\n";
+        content += "    xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026/xsd\">\n";
         content += "    <Header>\n";
         content += "        <MdCreator>dir2cmdicollection.py</MdCreator>\n";
         content += "        <MdCreationDate>2010-10-11</MdCreationDate>\n";
         content += "        <MdSelfLink>collection_ATILF_Resources.cmdi</MdSelfLink>\n";
-        content += "        <MdProfile>clarin.eu:cr1:p_1271859438236</MdProfile>\n";
+        content += "        <MdProfile>clarin.eu:cr1:p_1288172614026</MdProfile>\n";
         content += "    </Header>\n";
         content += "    <Resources>\n";
         content += "        <ResourceProxyList>\n";
@@ -737,7 +780,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testOlac", content);
-        CMDIDataProcessor processor = getDataParser(getOlacFacetMap());
+        CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
         assertEquals("collection_ATILF_Resources.cmdi", data.getId());
         List<Resource> resources = data.getMetadataResources();
@@ -790,7 +833,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testOlac", content);
-        CMDIDataProcessor processor = getDataParser(getLrtFacetMap());
+        CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
         assertEquals("clarin.eu:lrt:433", data.getId());
         List<Resource> resources = data.getMetadataResources();
