@@ -7,7 +7,9 @@ import java.util.regex.Pattern;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
@@ -114,7 +116,7 @@ public class ShowResultPage extends BasePage {
                     }
                 });
             }
-            
+
             @Override
             public String getCssClass() {
                 return "attributeValue";
@@ -149,6 +151,7 @@ public class ShowResultPage extends BasePage {
         }
     }
 
+    @SuppressWarnings("serial")
     private void addResourceLinks(SolrDocument solrDocument) {
         RepeatingView repeatingView = new RepeatingView("resourceList");
         add(repeatingView);
@@ -156,9 +159,15 @@ public class ShowResultPage extends BasePage {
             Collection<Object> resources = solrDocument.getFieldValues(FacetConstants.FIELD_RESOURCE);
             for (Object resource : resources) {
                 String[] split = resource.toString().split(Pattern.quote(FacetConstants.FIELD_RESOURCE_SPLIT_CHAR), 2);
-                String mimeType = split[0];
-                String resourceLink = split[1];
-                repeatingView.add(new ResourceLinkPanel(repeatingView.newChildId(), mimeType, resourceLink));
+                final String mimeType = split[0];
+                final String resourceLink = split[1];
+                repeatingView.add(new AjaxLazyLoadPanel(repeatingView.newChildId()) {
+                    @Override
+                    public Component getLazyLoadComponent(String markupId) {
+                        return new ResourceLinkPanel(markupId, mimeType, resourceLink);
+                    }
+
+                });
             }
         } else {
             repeatingView.add(new Label(repeatingView.newChildId(), new ResourceModel(Resources.NO_RESOURCE_FOUND)));

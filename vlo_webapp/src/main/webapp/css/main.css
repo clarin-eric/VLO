@@ -182,5 +182,17 @@ img{
     padding-top: 3px;
 }
 
+.resourceItem { 
+     padding:0; 
+     margin:0; 
+} 
+.resourceItem li {
+     list-style-type:none; 
+}
 
+.resourceItem img {
+     display:inline; 
+     vertical-align:middle;
+     padding-right:5px;
+}
 
