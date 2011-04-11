@@ -3,15 +3,24 @@ package eu.clarin.cmdi.vlo.pages;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
+
 public class DocumentAttributesDataProvider extends SortableDataProvider<DocumentAttribute> {
+    
+    private static final Set<String> IGNORE_FACETS = new HashSet<String>();
+    static {
+        IGNORE_FACETS.add(FacetConstants.FIELD_RESOURCE_TYPE);
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -22,7 +31,7 @@ public class DocumentAttributesDataProvider extends SortableDataProvider<Documen
             Map<String, Collection<Object>> fieldMap = new HashMap<String, Collection<Object>>();
             Map<String, Collection<Object>> fieldValuesMap = solrDocument.getFieldValuesMap();
             for (String entry : fieldValuesMap.keySet()) {
-                if (!entry.startsWith("_")) { //Filter out all '_' starting (internal) fields
+                if (!ignoreEntry(entry)) { //Filter out all '_' starting (internal) fields
                     fieldMap.put(entry, fieldValuesMap.get(entry));
                 }
             }
@@ -30,6 +39,10 @@ public class DocumentAttributesDataProvider extends SortableDataProvider<Documen
         } else {
             attributeList = new DocumentAttributeList(Collections.singletonMap("Document not found", (Collection<Object>) null));
         }
+    }
+
+    private boolean ignoreEntry(String entry) {
+        return entry.startsWith("_") || IGNORE_FACETS.contains(entry);
     }
 
     @Override
