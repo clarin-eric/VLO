@@ -3,17 +3,26 @@ package eu.clarin.cmdi.vlo.pages;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.handle.hdllib.HandleException;
+import net.handle.hdllib.HandleResolver;
+import net.handle.hdllib.HandleValue;
+
 import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.resource.ContextRelativeResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.Configuration;
 import eu.clarin.cmdi.vlo.FacetConstants;
 
 public class ResourceLinkPanel extends Panel {
+
+    private final static Logger LOG = LoggerFactory.getLogger(ResourceLinkPanel.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -40,9 +49,12 @@ public class ResourceLinkPanel extends Panel {
         String title = imageResouce.getTitle() + " (" + mimeType + ")";
         resourceImg.add(new SimpleAttributeModifier("title", title));
         resourceImg.add(new SimpleAttributeModifier("alt", title));
-        add(resourceImg);
         String href = getHref(resourceLink);
-        add(new ExternalLink("resourceLink", href, resourceLink));
+        String name = getNameFromLink(resourceLink);
+        ExternalLink link = new ExternalLink("resourceLink", href);
+        link.add(resourceImg);
+        link.add(new Label("resourceLabel", name));
+        add(link);
     }
 
     private String getHref(String resourceLink) {
@@ -51,6 +63,32 @@ public class ResourceLinkPanel extends Panel {
             if (resourceLink.startsWith(FacetConstants.HANDLE_PREFIX)) {
                 String handle = resourceLink.substring(FacetConstants.HANDLE_PREFIX.length());
                 result = Configuration.getInstance().getHandleServerUrl() + handle;
+            }
+        }
+        return result;
+    }
+
+    private String getNameFromLink(String resourceLink) {
+        String result = resourceLink;
+        if (resourceLink != null) {
+            if (resourceLink.startsWith(FacetConstants.HANDLE_PREFIX)) {
+                try {
+                    String handle = resourceLink.substring(FacetConstants.HANDLE_PREFIX.length());
+                    HandleValue values[] = new HandleResolver().resolveHandle(handle, new String[] { "URL" }, null);
+                    for (HandleValue handleValue : values) {
+                        String url = handleValue.getDataAsString();
+                        int index = url.lastIndexOf('/');
+                        if (index != -1) {
+                            String name = url.substring(index + 1).trim();
+                            if (name.length() > 1) {
+                                result = name + " (" + resourceLink + ")";
+                            }
+                            break;
+                        }
+                    }
+                } catch (HandleException e) {
+                    LOG.warn("Error trying to get the name of the handle", e);
+                }
             }
         }
         return result;
