@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.regex.Pattern;
 
 import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
@@ -19,7 +18,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -44,10 +42,11 @@ public class ShowResultPage extends BasePage {
 
     public static final String PARAM_DOC_ID = "docId";
 
+    @SuppressWarnings("serial")
     public ShowResultPage(final PageParameters parameters) {
         super(parameters);
-        String docId = WicketURLDecoder.QUERY_INSTANCE.decode(getPageParameters().getString(PARAM_DOC_ID, null));
-        SearchPageQuery query = new SearchPageQuery(parameters);
+        final String docId = WicketURLDecoder.QUERY_INSTANCE.decode(getPageParameters().getString(PARAM_DOC_ID, null));
+        final SearchPageQuery query = new SearchPageQuery(parameters);
         BookmarkablePageLink backLink = new BookmarkablePageLink("backLink", FacetedSearchPage.class, query.getPageParameters());
         add(backLink);
         String href = getHref(docId);
@@ -56,7 +55,21 @@ public class ShowResultPage extends BasePage {
         } else {
             add(new Label("openBrowserLink", new ResourceModel(Resources.ORIGINAL_CONTEXT_NOT_AVAILABLE).getObject()));
         }
-        addPrevNextLabels(docId, query);
+        long start = System.currentTimeMillis();
+        add(new AjaxLazyLoadPanel("prevNextHeader") {
+
+            @Override
+            public Component getLazyLoadComponent(String markupId) {
+                return new PrevNextHeaderPanel(markupId, docId, query);
+            }
+
+            @Override
+            public Component getLoadingComponent(String markupId) {
+                return new PrevNextHeaderPanel(markupId);
+            }
+        });
+        LOG.info("PrevNext took: " + (System.currentTimeMillis() - start) + " ms.");
+
         SolrDocument solrDocument = DaoLocator.getSearchResultsDao().getSolrDocument(docId);
         addAttributesTable(solrDocument);
         addResourceLinks(solrDocument);
@@ -123,32 +136,6 @@ public class ShowResultPage extends BasePage {
             }
         };
         return columns;
-    }
-
-    private void addPrevNextLabels(String docId, SearchPageQuery query) {
-        int index = -1;
-        SolrDocumentList docIdList = DaoLocator.getSearchResultsDao().getDocIdList(query.getSolrQuery().getCopy());
-        for (int i = 0; i < docIdList.size(); i++) {
-            SolrDocument doc = docIdList.get(i);
-            if (doc.getFieldValue(FacetConstants.FIELD_ID).equals(docId)) {
-                index = i;
-                break;
-            }
-        }
-        if (index > 0) {
-            String prevDocId = docIdList.get(index - 1).getFieldValue(FacetConstants.FIELD_ID).toString();
-            BookmarkablePageLink<ShowResultPage> prev = createBookMarkableLink("prev", query, prevDocId);
-            add(prev);
-        } else {
-            add(new WebMarkupContainer("prev"));
-        }
-        if (index < (docIdList.size() - 1) && index >= 0) {
-            String prevDocId = docIdList.get(index + 1).getFieldValue(FacetConstants.FIELD_ID).toString();
-            BookmarkablePageLink<ShowResultPage> next = createBookMarkableLink("next", query, prevDocId);
-            add(next);
-        } else {
-            add(new WebMarkupContainer("next"));
-        }
     }
 
     @SuppressWarnings("serial")
