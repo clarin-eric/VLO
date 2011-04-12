@@ -55,7 +55,6 @@ public class ShowResultPage extends BasePage {
         } else {
             add(new Label("openBrowserLink", new ResourceModel(Resources.ORIGINAL_CONTEXT_NOT_AVAILABLE).getObject()));
         }
-        long start = System.currentTimeMillis();
         add(new AjaxLazyLoadPanel("prevNextHeader") {
 
             @Override
@@ -68,7 +67,6 @@ public class ShowResultPage extends BasePage {
                 return new PrevNextHeaderPanel(markupId);
             }
         });
-        LOG.info("PrevNext took: " + (System.currentTimeMillis() - start) + " ms.");
 
         SolrDocument solrDocument = DaoLocator.getSearchResultsDao().getSolrDocument(docId);
         addAttributesTable(solrDocument);
