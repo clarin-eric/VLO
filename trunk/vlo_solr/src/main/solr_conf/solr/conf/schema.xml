@@ -403,6 +403,7 @@
    <field name="id" type="string" indexed="true" stored="true" required="true"/>
    <field name="origin" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="name" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="projectName" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="continent" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="country" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="language" type="string" indexed="true" stored="true" multiValued="true" />
@@ -416,6 +417,7 @@
    <copyField source="description" dest="text"/>
    <copyField source="origin" dest="text"/>
    <copyField source="name" dest="text"/>
+   <copyField source="projectName" dest="text"/>
    <copyField source="continent" dest="text"/>
    <copyField source="country" dest="text"/>
    <copyField source="language" dest="text"/>
