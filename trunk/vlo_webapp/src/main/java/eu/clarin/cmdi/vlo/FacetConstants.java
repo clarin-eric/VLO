@@ -14,6 +14,7 @@ public class FacetConstants {
     public static final String FIELD_SUBJECT = "subject";
     public static final String FIELD_ORGANISATION = "organisation";
     public static final String FIELD_RESOURCE_TYPE = "resourceType"; 
+    public static final String FIELD_PROJECT_NAME = "projectName";
 
     //The _ facets are not meant to be shown to users.
     public static final String FIELD_FILENAME = "_fileName";

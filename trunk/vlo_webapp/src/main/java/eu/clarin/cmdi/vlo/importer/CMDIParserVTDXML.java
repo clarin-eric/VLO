@@ -3,7 +3,6 @@ package eu.clarin.cmdi.vlo.importer;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,50 +20,51 @@ import eu.clarin.cmdi.vlo.Configuration;
 
 public class CMDIParserVTDXML implements CMDIDataProcessor {
     private final Map<String, PostProcessor> postProcessors;
-    private Map<String, FacetMapping> facetMaps = new HashMap<String, FacetMapping>();
 
-    public CMDIParserVTDXML( Map<String, PostProcessor> postProcessors) {
+    public CMDIParserVTDXML(Map<String, PostProcessor> postProcessors) {
         this.postProcessors = postProcessors;
     }
 
     public CMDIData process(File file) throws VTDException, IOException {
-        CMDIData result = null;
+        CMDIData result = new CMDIData();
         VTDGen vg = new VTDGen();
         vg.setDoc(IOUtils.toByteArray(new FileInputStream(file)));
         vg.parse(true);
         VTDNav nav = vg.getNav();
+        setNameSpace(nav);//setting namespace once, all other instance of AutoPilot keep the setting (a bit tricky).
         FacetMapping facetMapping = getFacetMapping(nav);
-        result = new CMDIData();
-        AutoPilot id = new AutoPilot(nav);
-        id.selectXPath(facetMapping.getIdMapping());
-        result.setId(id.evalXPathToString());
+        nav.toElement(VTDNav.ROOT);
         processResources(result, nav);
         processFacets(result, nav, facetMapping);
         return result;
     }
 
+    static void setNameSpace(VTDNav nav) {
+        AutoPilot ap = new AutoPilot(nav);
+        ap.declareXPathNameSpace("c", "http://www.clarin.eu/cmd/");
+    }
+
     private FacetMapping getFacetMapping(VTDNav nav) throws VTDException {
-        FacetMapping result;
-            String xsd = getXsdFromHeader(nav);
-            if (xsd == null) {
-                xsd = getXsdFromSchemaLocation(nav);
-            }
-            if (xsd == null) {
-                throw new RuntimeException("Cannot get xsd schema so cannot get a proper mapping. Parse failed!");
-            }
-            result = facetMaps.get(xsd);
-            if (result == null) {
-                result = FacetMappingFactory.getFacetMapping(xsd);
-                facetMaps.put(xsd, result);
-            }
-        return result;
+        String xsd = extractXsd(nav);
+        if (xsd == null) {
+            throw new RuntimeException("Cannot get xsd schema so cannot get a proper mapping. Parse failed!");
+        }
+        return FacetMappingFactory.getFacetMapping(xsd);
+    }
+
+    String extractXsd(VTDNav nav) throws VTDException {
+        String xsd = getXsdFromHeader(nav);
+        if (xsd == null) {
+            xsd = getXsdFromSchemaLocation(nav);
+        }
+        return xsd;
     }
 
     private String getXsdFromHeader(VTDNav nav) throws XPathParseException, XPathEvalException, NavException {
         String result = null;
         nav.toElement(VTDNav.ROOT);
         AutoPilot ap = new AutoPilot(nav);
-        ap.selectXPath("/CMD/Header/MdProfile/text()");
+        ap.selectXPath("/c:CMD/c:Header/c:MdProfile/text()");
         int index = ap.evalXPath();
         if (index != -1) {
             String profileId = nav.toString(index).trim();
@@ -76,23 +76,28 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private String getXsdFromSchemaLocation(VTDNav nav) throws NavException {
         String result = null;
         nav.toElement(VTDNav.ROOT);
-        int index = nav.getAttrVal("xsi:schemaLocation");
+        int index = nav.getAttrValNS("http://www.w3.org/2001/XMLSchema-instance", "schemaLocation");
         if (index != -1) {
             String schemaLocation = nav.toNormalizedString(index);
-            result = schemaLocation.split(" ")[1];//"http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438204/xsd";
+            result = schemaLocation.split(" ")[1];
+        } else {
+            index = nav.getAttrValNS("http://www.w3.org/2001/XMLSchema-instance", "noNamespaceSchemaLocation");
+            if (index != -1) {
+                result = nav.toNormalizedString(index);
+            }
         }
         return result;
     }
 
     private void processResources(CMDIData result, VTDNav nav) throws VTDException {
         AutoPilot resourceProxy = new AutoPilot(nav);
-        resourceProxy.selectXPath("/CMD/Resources/ResourceProxyList/ResourceProxy");
+        resourceProxy.selectXPath("/c:CMD/c:Resources/c:ResourceProxyList/c:ResourceProxy");
         AutoPilot resourceRef = new AutoPilot(nav);
-        resourceRef.selectXPath("ResourceRef");
+        resourceRef.selectXPath("c:ResourceRef");
         AutoPilot resourceType = new AutoPilot(nav);
-        resourceType.selectXPath("ResourceType");
+        resourceType.selectXPath("c:ResourceType");
         AutoPilot resourceMimeType = new AutoPilot(nav);
-        resourceMimeType.selectXPath("ResourceType/@mimetype");
+        resourceMimeType.selectXPath("c:ResourceType/@mimetype");
         while (resourceProxy.evalXPath() != -1) {
             String ref = resourceRef.evalXPathToString();
             String type = resourceType.evalXPathToString();
@@ -109,7 +114,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             List<String> patterns = config.getPatterns();
             for (String pattern : patterns) {
                 boolean matchedPattern = matchPattern(result, nav, config, pattern);
-                if (matchedPattern) {
+                if (matchedPattern && !config.getAllowMultipleValues()) {
                     break;
                 }
             }

@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -26,7 +27,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testCreateCMDIDataFromCorpus() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n";
         content += "   <Header>\n";
         content += "      <MdCreationDate>2003-01-14</MdCreationDate>\n";
         content += "      <MdSelfLink>test-hdl:1839/00-0000-0000-0000-0001-D</MdSelfLink>\n";
@@ -84,7 +85,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testCreateCMDIDataFromSession() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
         content += "     xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438204/xsd\">\n";
         content += "   <Header>\n";
         content += "      <MdCreationDate>2008-05-27</MdCreationDate>\n";
@@ -382,8 +383,9 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("audio/mpeg", res.getMimeType());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(8, doc.getFieldNames().size());
+        assertEquals(10, doc.getFieldNames().size());
         assertEquals("kleve-route", doc.getFieldValue("name"));
+        assertEquals("Peter Wittenburg", doc.getFieldValue(FacetConstants.FIELD_PROJECT_NAME));
         assertEquals("Europe", doc.getFieldValue("continent"));
         assertEquals("English", doc.getFieldValue("language"));
         assertEquals("Netherlands", doc.getFieldValue("country"));
@@ -393,6 +395,10 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
                 "This  recording was made to generate a freely available test resource including speech and gestures. The annotations were created by Peter and Kita who is gesture researcher at the MPI for Psycholinguistics.",
                 doc.getFieldValue("description"));
         assertEquals("2002-10-30", doc.getFieldValue("year"));
+        List<String> fieldValues = new ArrayList(doc.getFieldValues(FacetConstants.FIELD_RESOURCE_TYPE));
+        assertEquals(2, fieldValues.size());
+        assertEquals("video/x-mpeg1", fieldValues.get(0));
+        assertEquals("video/mp4", fieldValues.get(1));
         assertEquals(null, doc.getFieldValue("subject"));
     }
 
@@ -400,7 +406,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testCreateCMDISessionSmall() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
         content += "     xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438204/xsd\">\n";
         content += "   <Header>\n";
         content += "      <MdCreationDate>2008-05-27</MdCreationDate>\n";
@@ -425,7 +431,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testEmptyFieldsShouldBeNull() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
         content += "     xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438204/xsd\">\n";
         content += "   <Header>\n";
         content += "      <MdCreationDate>2008-05-27</MdCreationDate>\n";
@@ -454,8 +460,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "               <Address>Wundtlaan 1, Nijmegen</Address>\n";
         content += "            </Location>\n";
         content += "            <Project>\n";
-        content += "               <Name>Peter Wittenburg</Name>\n";
-        content += "               <Title>Route description test resource</Title>\n";
+        content += "               <Name></Name>\n";
+        content += "               <Title></Title>\n";
         content += "               <Id/>\n";
         content += "               <Contact>\n";
         content += "                  <Name></Name>\n";
@@ -513,7 +519,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testOlac() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
         content += "     xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n";
         content += "     xmlns:oai_dc=\"http://www.openarchives.org/OAI/2.0/oai_dc/\"\n";
         content += "     xmlns:defns=\"http://www.openarchives.org/OAI/2.0/\"\n";
@@ -593,7 +599,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testOlacMultiFacets() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD>\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
         content += "   <Header>\n";
         content += "      <MdProfile>clarin.eu:cr1:p_1288172614026</MdProfile>\n";
         content += "   </Header>\n";
@@ -613,16 +619,18 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
         SolrInputDocument doc = data.getSolrDocument();
-        assertEquals(1, doc.getFieldValues("subject").size());
-        assertEquals("testsubject", doc.getFieldValue("subject"));
-        assertEquals(1, doc.getFieldValues("country").size());
-        assertEquals("testCountry1", doc.getFieldValue("country"));
-        assertEquals(1, doc.getFieldValues("language").size());
-        assertEquals("language1", doc.getFieldValue("language"));
+        assertEquals(1, doc.getFieldValues(FacetConstants.FIELD_SUBJECT).size());
+        assertTrue(doc.getFieldValues(FacetConstants.FIELD_SUBJECT).contains("testsubject"));
+        assertEquals(2, doc.getFieldValues(FacetConstants.FIELD_COUNTRY).size());
+        assertTrue(doc.getFieldValues(FacetConstants.FIELD_COUNTRY).contains("testCountry1"));
+        assertTrue(doc.getFieldValues(FacetConstants.FIELD_COUNTRY).contains("testCountry2"));
+        assertEquals(2, doc.getFieldValues(FacetConstants.FIELD_LANGUAGE).size());
+        assertTrue(doc.getFieldValues(FacetConstants.FIELD_LANGUAGE).contains("language1"));
+        assertTrue(doc.getFieldValues(FacetConstants.FIELD_LANGUAGE).contains("language2"));
 
         content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD>\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
         content += "   <Header>\n";
         content += "      <MdProfile>clarin.eu:cr1:p_1288172614026</MdProfile>\n";
         content += "   </Header>\n";
@@ -639,16 +647,16 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         processor = getDataParser();
         data = processor.process(cmdiFile);
         doc = data.getSolrDocument();
-        assertEquals(1, doc.getFieldValues("subject").size());
-        assertEquals("testsubjectfallback", doc.getFieldValue("subject"));
-        assertEquals(1, doc.getFieldValues("country").size());
-        assertEquals("testCountry2", doc.getFieldValue("country"));
-        assertEquals(1, doc.getFieldValues("language").size());
-        assertEquals("language2", doc.getFieldValue("language"));
+        assertEquals(1, doc.getFieldValues(FacetConstants.FIELD_SUBJECT).size());
+        assertEquals("testsubjectfallback", doc.getFieldValue(FacetConstants.FIELD_SUBJECT));
+        assertEquals(1, doc.getFieldValues(FacetConstants.FIELD_COUNTRY).size());
+        assertEquals("testCountry2", doc.getFieldValue(FacetConstants.FIELD_COUNTRY));
+        assertEquals(1, doc.getFieldValues(FacetConstants.FIELD_LANGUAGE).size());
+        assertEquals("language2", doc.getFieldValue(FacetConstants.FIELD_LANGUAGE));
 
         content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD>\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
         content += "   <Header>\n";
         content += "      <MdProfile>clarin.eu:cr1:p_1288172614026</MdProfile>\n";
         content += "   </Header>\n";
@@ -658,7 +666,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "         <subject olac-linguistic-field=\"testSubject\">Kuna</subject>\n";
         content += "         <coverage dcterms-type=\"ISO3166\">testCountry2</coverage>\n";
         content += "         <spatial dcterms-type=\"ISO3166\">testCountry1</spatial>\n";
-        content += "         <subject olac-language=\"language2\">test2</subject>\n";
+        content += "         <subject olac-language=\"language1\">test2</subject>\n";
         content += "         <language olac-language=\"language1\">test1</language>\n";
         content += "      </OLAC-DcmiTerms>\n";
         content += "   </Components>\n";
@@ -670,17 +678,18 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         doc = data.getSolrDocument();
         assertEquals(1, doc.getFieldValues("subject").size());
         assertEquals("testsubject", doc.getFieldValue("subject"));
-        assertEquals(1, doc.getFieldValues("country").size());
-        assertEquals("testCountry1", doc.getFieldValue("country"));
-        assertEquals(1, doc.getFieldValues("language").size());
-        assertEquals("language1", doc.getFieldValue("language"));
+        assertEquals(2, doc.getFieldValues(FacetConstants.FIELD_COUNTRY).size());
+        assertTrue(doc.getFieldValues(FacetConstants.FIELD_COUNTRY).contains("testCountry1"));
+        assertTrue(doc.getFieldValues(FacetConstants.FIELD_COUNTRY).contains("testCountry2"));
+        assertEquals(1, doc.getFieldValues(FacetConstants.FIELD_LANGUAGE).size());
+        assertTrue(doc.getFieldValues(FacetConstants.FIELD_LANGUAGE).contains("language1"));
     }
     
     @Test
     public void testIgnoreWhiteSpaceFacets() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD>\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
         content += "   <Header>\n";
         content += "      <MdProfile>clarin.eu:cr1:p_1288172614026</MdProfile>\n";
         content += "   </Header>\n";
@@ -702,7 +711,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testCountryCodesPostProcessing() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD>\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
         content += "   <Header>\n";
         content += "      <MdProfile>clarin.eu:cr1:p_1288172614026</MdProfile>\n";
         content += "   </Header>\n";
@@ -724,7 +733,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testLanguageCodesPostProcessing() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD>\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
         content += "   <Header>\n";
         content += "      <MdProfile>clarin.eu:cr1:p_1288172614026</MdProfile>\n";
         content += "   </Header>\n";
@@ -751,7 +760,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testOlacCollection() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
         content += "    xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026/xsd\">\n";
         content += "    <Header>\n";
         content += "        <MdCreator>dir2cmdicollection.py</MdCreator>\n";
@@ -799,7 +808,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testLrtCollection() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD ns0:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1289827960126/xsd\" xmlns:ns0=\"http://www.w3.org/2001/XMLSchema-instance\">\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" ns0:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1289827960126/xsd\" xmlns:ns0=\"http://www.w3.org/2001/XMLSchema-instance\">\n";
         content += "    <Header>\n";
         content += "        <MdCreator>lrt2cmdi.py</MdCreator>\n";
         content += "        <MdCreationDate>2010-11-17</MdCreationDate>\n";

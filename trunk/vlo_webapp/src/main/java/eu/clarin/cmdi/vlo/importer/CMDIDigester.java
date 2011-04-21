@@ -51,10 +51,6 @@ public class CMDIDigester implements CMDIDataProcessor {
     private CMDIData createCMDIData(XPath xpath, InputSource inputSource) throws XPathExpressionException, SAXException, IOException {
         CMDIData result = new CMDIData();
         Document doc = builder.parse(inputSource);
-        Node node = (Node) xpath.evaluate(facetMapping.getIdMapping(), doc, XPathConstants.NODE);
-        if (node != null) {
-            result.setId(node.getNodeValue());
-        }
         NodeList nodes = (NodeList) xpath.evaluate("CMD/Resources/ResourceProxyList/ResourceProxy", doc, XPathConstants.NODESET);
         for (int i = 0; i < nodes.getLength(); i++) {
             Node resourceNode = nodes.item(i);

@@ -21,10 +21,10 @@ public class MetadataImporterTest extends ImporterTestcase {
     public void testImporterSimple() throws Exception {
         String session = "";
         session += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        session += "<CMD>\n";
+        session += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
         session += "   <Header>\n";
         session += "      <MdCreationDate>2008-05-27</MdCreationDate>\n";
-        session += "      <MdSelfLink>testID1Session</MdSelfLink>\n";
+        session += "      <MdSelfLink> testID1Session</MdSelfLink>\n";
         session += "      <MdProfile>clarin.eu:cr1:p_1271859438204</MdProfile>\n";
         session += "   </Header>\n";
         session += "   <Resources>\n";
@@ -38,6 +38,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         session += "   <Components>\n";
         session += "      <Session>\n";
         session += "         <Name>kleve-route</Name>\n";
+        session += "         <Title>kleve-route-title</Title>\n";
         session += "      </Session>\n";
         session += "   </Components>\n";
         session += "</CMD>\n";
@@ -45,7 +46,7 @@ public class MetadataImporterTest extends ImporterTestcase {
 
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1274880881885/xsd\">\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1274880881885/xsd\">\n";
         content += "   <Header>\n";
         content += "      <MdSelfLink>testID2</MdSelfLink>\n";
         content += "   </Header>\n";
@@ -82,7 +83,7 @@ public class MetadataImporterTest extends ImporterTestcase {
     public void testImportWithMimeTypeOverride() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD>\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
         content += "   <Header>\n";
         content += "      <MdSelfLink>testID2</MdSelfLink>\n";
         content += "      <MdProfile>clarin.eu:cr1:p_1289827960126</MdProfile>\n";
@@ -112,6 +113,101 @@ public class MetadataImporterTest extends ImporterTestcase {
         assertEquals("PALIC", getValue(doc, FacetConstants.FIELD_NAME));
         assertEquals("Application / Tool", getValue(doc, FacetConstants.FIELD_RESOURCE_TYPE));
         assertEquals("unknown type|http://terminotica.upf.es/CREL/LIC01.htm", getValue(doc, FacetConstants.FIELD_RESOURCE));
+    }
+
+    @Test
+    public void testImportWithNameSpaceGalore() throws Exception {
+        String content = "";
+        content += "<cmdi:CMD CMDVersion=\"1.1\" xmlns:cmdi=\"http://www.clarin.eu/cmd/\"\n";
+        content += "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.clarin.eu/cmd/ http://hdl.handle.net/11858/00-175C-0000-0001-09A8-7?urlappend=/XSD\">\n";
+        content += "    <cmdi:Header/>\n";
+        content += "    <cmdi:Resources>\n";
+        content += "        <cmdi:ResourceProxyList>\n";
+        content += "            <cmdi:ResourceProxy id=\"TEI\">\n";
+        content += "                <cmdi:ResourceType>Resource</cmdi:ResourceType>\n";
+        content += "                <cmdi:ResourceRef>http://hdl.handle.net/11858/00-175C-0000-0000-E180-8?urlappend=/TEI</cmdi:ResourceRef>\n";
+        content += "            </cmdi:ResourceProxy>\n";
+        content += "        </cmdi:ResourceProxyList>\n";
+        content += "        <cmdi:JournalFileProxyList/>\n";
+        content += "        <cmdi:ResourceRelationList/>\n";
+        content += "    </cmdi:Resources>\n";
+        content += "    <cmdi:Components>\n";
+        content += "        <cmdi:EastRepublican ref=\"TEI\">\n";
+        content += "            <cmdi:GeneralInformation>\n";
+        content += "                <cmdi:Identifier>hdl:11858/00-175C-0000-0000-E180-8</cmdi:Identifier>\n";
+        content += "                <cmdi:Title>L'Est RŽpublicain : Ždition du 17 mai 1999</cmdi:Title>\n";
+        content += "            </cmdi:GeneralInformation>\n";
+        content += "        </cmdi:EastRepublican>\n";
+        content += "    </cmdi:Components>\n";
+        content += "</cmdi:CMD>\n";
+
+        File rootFile = createCmdiFile("rootFile", content);
+
+        List<SolrInputDocument> docs = importData(rootFile);
+        assertEquals(1, docs.size());
+        SolrInputDocument doc = docs.get(0);
+        assertEquals("hdl:11858/00-175C-0000-0000-E180-8", getValue(doc, FacetConstants.FIELD_ID));
+        assertEquals("L'Est RŽpublicain : Ždition du 17 mai 1999", getValue(doc, FacetConstants.FIELD_NAME));
+        assertEquals("unknown type|http://hdl.handle.net/11858/00-175C-0000-0000-E180-8?urlappend=/TEI", getValue(doc,
+                FacetConstants.FIELD_RESOURCE));
+    }
+
+    @Test
+    public void testNoIdTakeFileName() throws Exception {
+        String session = "";
+        session += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        session += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
+        session += "   <Header>\n";
+        session += "      <MdProfile>clarin.eu:cr1:p_1271859438204</MdProfile>\n";
+        session += "   </Header>\n";
+        session += "   <Resources>\n";
+        session += "   </Resources>\n";
+        session += "   <Components>\n";
+        session += "      <Session>\n";
+        session += "         <Name>kleve-route</Name>\n";
+        session += "         <Title>kleve-route-title</Title>\n";
+        session += "      </Session>\n";
+        session += "   </Components>\n";
+        session += "</CMD>\n";
+        File sessionFile = createCmdiFile("testSession", session);
+
+        List<SolrInputDocument> docs = importData(sessionFile);
+        assertEquals(1, docs.size());
+        SolrInputDocument doc = docs.get(0);
+        assertEquals("testRoot/" + sessionFile.getName(), getValue(doc, FacetConstants.FIELD_ID));
+    }
+
+    @Test
+    public void testTakeProjectNameAsOrigin() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
+        content += "   <Header>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1280305685235</MdProfile>\n";
+        content += "   </Header>\n";
+        content += "   <Resources>\n";
+        content += "   </Resources>\n";
+        content += "    <Components>\n";
+        content += "        <DynaSAND>\n";
+        content += "            <Collection>\n";
+        content += "                <GeneralInfo>\n";
+        content += "                    <Name>DiDDD</Name>\n";
+        content += "                    <ID>id1234</ID>\n";
+        content += "                </GeneralInfo>\n";
+        content += "                <Project>\n";
+        content += "                    <Name>DiDDD-project</Name>\n";
+        content += "                </Project>\n";
+        content += "            </Collection>\n";
+        content += "        </DynaSAND>\n";
+        content += "    </Components>\n";
+        content += "</CMD>\n";
+        File sessionFile = createCmdiFile("testSession", content);
+
+        List<SolrInputDocument> docs = importData(sessionFile);
+        assertEquals(1, docs.size());
+        SolrInputDocument doc = docs.get(0);
+        assertEquals("DiDDD-project", getValue(doc, FacetConstants.FIELD_ORIGIN));
+        assertEquals("DiDDD-project", getValue(doc, FacetConstants.FIELD_PROJECT_NAME));
     }
 
     private Object getValue(SolrInputDocument doc, String field) {
