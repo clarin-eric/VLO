@@ -4,12 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.StreamingUpdateSolrServer;
 import org.apache.solr.common.SolrInputDocument;
@@ -25,6 +27,7 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 @SuppressWarnings("serial")
 public class MetadataImporter {
 
+    private static final String[] VALID_CMDI_EXTENSIONS = new String[] { "xml", "cmdi" };
     private final static Logger LOG = LoggerFactory.getLogger(MetadataImporter.class);
     private static Throwable serverError;
     private StreamingUpdateSolrServer solrServer;
@@ -44,6 +47,7 @@ public class MetadataImporter {
     private int nrOfFilesAnalyzed = 0;
     private int nrOfFilesWithoutId = 0;
     private int nrOfFilesWithoutDataResources = 0;
+    private int nrOfFilesWithError = 0;
 
     public MetadataImporter(ImporterConfig config) {
         this.config = config;
@@ -51,14 +55,7 @@ public class MetadataImporter {
 
     void startImport() throws MalformedURLException {
         initSolrServer();
-        List<DataRoot> dataRoots = config.getDataRoots();
-        for (DataRoot dataRoot : dataRoots) {
-            if (!dataRoot.getRootFile().exists()) {
-                LOG.error("Root file " + dataRoot.getRootFile() + " does not exist. Probable configuration error so stopping import.");
-                System.exit(1);
-            }
-        }
-
+        List<DataRoot> dataRoots = checkDataRoots();
         long start = System.currentTimeMillis();
         try {
             if (config.isDeleteAllFirst()) {
@@ -74,7 +71,10 @@ public class MetadataImporter {
                     LOG.info("Deleting data for origin done.");
                 }
                 CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS);
-                processCmdi(dataRoot.getRootFile(), dataRoot.getOriginName(), processor);
+                List<File> files = getFilesFromDataRoot(dataRoot.getRootFile());
+                for (File file : files) {
+                    processCmdi(file, dataRoot.getOriginName(), processor);
+                }
                 if (!docs.isEmpty()) {
                     sendDocs();
                 }
@@ -97,9 +97,38 @@ public class MetadataImporter {
         }
         long took = (System.currentTimeMillis() - start) / 1000;
         LOG.info("Found " + nrOfNonExistentResourceFiles + " non existing resources files.");
-        LOG.info("Found " + nrOfFilesWithoutId + " file(s) without an id.");
-        LOG.info("Found " + nrOfFilesWithoutDataResources + " file(s) without data resources (metadata descriptions without resources are ignored).");
+        LOG.info("Found " + nrOfFilesWithoutId + " file(s) without an id. (id is generated based on fileName but that may not be unique)");
+        LOG.info("Found " + nrOfFilesWithError + " file(s) with errors.");
+        LOG.info("Found " + nrOfFilesWithoutDataResources
+                + " file(s) without data resources (metadata descriptions without resources are ignored).");
         LOG.info("Update of " + nrOFDocumentsUpdated + " took " + took + " secs. Total nr of files analyzed " + nrOfFilesAnalyzed);
+    }
+
+    private List<DataRoot> checkDataRoots() {
+        List<DataRoot> dataRoots = config.getDataRoots();
+        for (DataRoot dataRoot : dataRoots) {
+            if (!dataRoot.getRootFile().exists()) {
+                LOG.error("Root file " + dataRoot.getRootFile() + " does not exist. Probable configuration error so stopping import.");
+                System.exit(1);
+            }
+        }
+        return dataRoots;
+    }
+
+    /**
+     * 
+     * @param rootFile
+     * @return The rootFile if it is a file or when it is a directory the files in that directory
+     */
+    private List<File> getFilesFromDataRoot(File rootFile) {
+        List<File> result = new ArrayList<File>();
+        if (rootFile.isFile()) {
+            result.add(rootFile);
+        } else {
+            Collection listFiles = FileUtils.listFiles(rootFile, VALID_CMDI_EXTENSIONS, true);
+            result.addAll(listFiles);
+        }
+        return result;
     }
 
     protected void initSolrServer() throws MalformedURLException {
@@ -119,8 +148,13 @@ public class MetadataImporter {
         CMDIData cmdiData = null;
         try {
             cmdiData = processor.process(file);
+            if (!idOk(cmdiData.getId())) {
+                cmdiData.setId(origin + "/" + file.getName()); //No id found in the metadata file so making one up based on the file name. Not quaranteed to be unique, but we have to set something.
+                nrOfFilesWithoutId++;
+            }
         } catch (Exception e) {
             LOG.error("error in file: " + file + " Exception", e);
+            nrOfFilesWithError++;
         }
         if (cmdiData != null && processedIds.add(cmdiData.getId())) {
             SolrInputDocument solrDocument = cmdiData.getSolrDocument();
@@ -149,26 +183,40 @@ public class MetadataImporter {
         }
     }
 
+    private boolean idOk(String id) {
+        return id != null && !id.isEmpty();
+    }
+
     private void updateDocument(SolrInputDocument solrDocument, CMDIData cmdiData, File file, String origin) throws SolrServerException,
             IOException {
-        if (cmdiData.getId() == null || cmdiData.getId().isEmpty()) {
-            nrOfFilesWithoutId++;
-            LOG.info("Ignoring document without id, fileName: " + file);
-        } else {
-            solrDocument.addField(FacetConstants.FIELD_ORIGIN, origin);
-            solrDocument.addField(FacetConstants.FIELD_DATA_ROOT, origin);
-            solrDocument.addField(FacetConstants.FIELD_ID, cmdiData.getId());
-            solrDocument.addField(FacetConstants.FIELD_FILENAME, file.getAbsolutePath());
-            addResourceData(solrDocument, cmdiData);
-            docs.add(solrDocument);
-            if (docs.size() == 1000) {
-                sendDocs();
-            }
+        solrDocument.addField(FacetConstants.FIELD_ORIGIN, selectOrigin(origin, solrDocument));
+        solrDocument.addField(FacetConstants.FIELD_DATA_ROOT, origin);
+        solrDocument.addField(FacetConstants.FIELD_ID, cmdiData.getId());
+        solrDocument.addField(FacetConstants.FIELD_FILENAME, file.getAbsolutePath());
+        addResourceData(solrDocument, cmdiData);
+        docs.add(solrDocument);
+        if (docs.size() == 1000) {
+            sendDocs();
         }
     }
 
     /**
-     * Adds two fields FIELD_RESOURCE_TYPE and FIELD_RESOURCE The Type can be specified in the "ResourceType" element of an imdi file or
+     * 
+     * @param origin
+     * @param solrDocument
+     * @return origin or the extracted projectName ({@link FacetConstants#FIELD_PROJECT_NAME})
+     */
+    private String selectOrigin(String origin, SolrInputDocument solrDocument) {
+        String result = origin;
+        String projectName = (String) solrDocument.getFieldValue(FacetConstants.FIELD_PROJECT_NAME);
+        if (projectName != null && !projectName.trim().isEmpty()) {
+            result = projectName;
+        }
+        return result;
+    }
+
+    /**
+     * Adds two fields FIELD_RESOURCE_TYPE and FIELD_RESOURCE. The Type can be specified in the "ResourceType" element of an imdi file or
      * possibly overwritten by some more specific xpath (as in the LRT cmdi files). So if a type is overwritten and already in the
      * solrDocument we take that type.
      */
@@ -210,14 +258,19 @@ public class MetadataImporter {
 
     /**
      * @param args
-     * @throws MalformedURLException
+     * @throws IOException
      */
-    public static void main(String[] args) throws MalformedURLException {
+    public static void main(String[] args) throws IOException {
         BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { Configuration.CONFIG_FILE, ImporterConfig.CONFIG_FILE });
         factory.getBean("configuration");
         ImporterConfig config = (ImporterConfig) factory.getBean("importerConfig", ImporterConfig.class);
         MetadataImporter importer = new MetadataImporter(config);
         importer.startImport();
+        if (config.isPrintMapping()) {
+            File file = new File("xsdMapping.txt");
+            FacetMappingFactory.printMapping(file);
+            LOG.info("Printed facetMapping in " + file);
+        }
     }
 
 }

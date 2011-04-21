@@ -7,6 +7,7 @@ public class ImporterConfig {
     public static final String CONFIG_FILE = "importerConfig.xml";
 
     private boolean deleteAllFirst = false;
+    private boolean printMapping = false;
     
     private List<DataRoot> dataRoots;
 
@@ -24,6 +25,14 @@ public class ImporterConfig {
 
     public boolean isDeleteAllFirst() {
         return deleteAllFirst;
+    }
+
+    public void setPrintMapping(boolean printMapping) {
+        this.printMapping = printMapping;
+    }
+
+    public boolean isPrintMapping() {
+        return printMapping;
     }
 
 }

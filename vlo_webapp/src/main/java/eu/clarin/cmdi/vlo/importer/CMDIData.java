@@ -1,11 +1,14 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import eu.clarin.cmdi.vlo.FacetConstants;
 
 public class CMDIData {
     private final static Logger LOG = LoggerFactory.getLogger(CMDIData.class);
@@ -22,6 +25,14 @@ public class CMDIData {
     }
 
     public void addDocField(String name, String value, boolean caseInsensitive) {
+        if (FacetConstants.FIELD_ID.equals(name)) {
+            setId(value.trim());
+        } else {
+            handleDocField(name, value, caseInsensitive);
+        }
+    }
+
+    private void handleDocField(String name, String value, boolean caseInsensitive) {
         if (doc == null) {
             doc = new SolrInputDocument();
         }
@@ -29,7 +40,10 @@ public class CMDIData {
             if (caseInsensitive) {
                 value = value.toLowerCase();
             }
-            doc.addField(name, value);
+            Collection<Object> fieldValues = doc.getFieldValues(name);
+            if (fieldValues == null || !fieldValues.contains(value)) {
+                doc.addField(name, value);
+            } //ignore double values don't add them
         }
     }
 

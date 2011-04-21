@@ -1,11 +1,17 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,24 +49,24 @@ public class FacetMappingFactory {
 
     private FacetMapping createMapping(String xsd) {
         FacetMapping result = new FacetMapping();
-        addDefaults(result);
         FacetConceptMapping conceptMapping = VLOMarshaller.getFacetConceptMapping();
         try {
-            VTDGen vg = new VTDGen();
-            vg.parseHttpUrl(xsd, true);
-            VTDNav vn = vg.getNav();
+            Map<String, List<String>> conceptLinkPathMapping = createConceptLinkPathMapping(xsd);
             for (FacetConcept facetConcept : conceptMapping.getFacetConcepts()) {
                 FacetConfiguration config = new FacetConfiguration();
                 List<String> xpaths = new ArrayList<String>();
-                List<String> concepts = facetConcept.getConcepts();
-                List<String> xpathsFound = createXpathFromConceptLink(concepts, vn);
-                vn.toElement(VTDNav.ROOT);
-                xpaths.addAll(xpathsFound);
-                if (xpathsFound.isEmpty()) {
+                for (String concept : facetConcept.getConcepts()) {
+                    List<String> paths = conceptLinkPathMapping.get(concept);
+                    if (paths != null) {
+                        xpaths.addAll(paths);
+                    }
+                }
+                if (xpaths.isEmpty()) {
                     //add hardcoded patterns only when there is no xpath generated from conceptlink
                     xpaths.addAll(facetConcept.getPatterns());
                 }
                 config.setCaseInsensitive(facetConcept.isCaseInsensitive());
+                config.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
                 config.setPatterns(xpaths);
                 config.setName(facetConcept.getName());
                 if (!config.getPatterns().isEmpty()) {
@@ -73,12 +79,11 @@ public class FacetMappingFactory {
         return result;
     }
 
-    private void addDefaults(FacetMapping result) {
-        result.setIdMapping("/CMD/Header/MdSelfLink/text()");
-    }
-
-    private List<String> createXpathFromConceptLink(List<String> concepts, VTDNav vn) throws NavException {
-        List<String> result = new ArrayList<String>();
+    private Map<String, List<String>> createConceptLinkPathMapping(String xsd) throws NavException {
+        Map<String, List<String>> result = new HashMap<String, List<String>>();
+        VTDGen vg = new VTDGen();
+        vg.parseHttpUrl(xsd, true);
+        VTDNav vn = vg.getNav();
         AutoPilot ap = new AutoPilot(vn);
         ap.selectElement("xs:element");
         Deque<Token> elementPath = new LinkedList<Token>();
@@ -87,25 +92,47 @@ public class FacetMappingFactory {
             if (i != -1) {
                 String elementName = vn.toNormalizedString(i);
                 updateElementPath(vn, elementPath, elementName);
-                int t = vn.getAttrValNS("http://www.isocat.org/ns/dcr", "datcat");
-                if (t != -1) {
-                    String dataCategoryValue = vn.toNormalizedString(t);
-                    for (String conceptLink : concepts) {
-                        if (dataCategoryValue.equalsIgnoreCase(conceptLink)) {
-                            String xpath = "/";
-                            for (Token token : elementPath) {
-                                xpath += token.name + "/";
-                            }
-                            result.add(xpath + "text()");
-                        }
+                int datcatIndex = getDatcatIndex(vn);
+                if (datcatIndex != -1) {
+                    String conceptLink = vn.toNormalizedString(datcatIndex);
+                    String xpath = createXpath(elementPath);
+                    List<String> values = result.get(conceptLink);
+                    if (values == null) {
+                        values = new ArrayList<String>();
+                        result.put(conceptLink, values);
                     }
+                    values.add(xpath);
                 }
             }
         }
         return result;
     }
 
-    private void updateElementPath(VTDNav vn, Deque<Token> elementPath, String elementName) throws NavException {
+    /**
+     * Goal is to get the "datcat" attribute. Tries a number of different favors that were found in the xsd's.
+     * @return -1 if index is not found.
+     */
+    private int getDatcatIndex(VTDNav vn) throws NavException {
+        int result = -1;
+        result = vn.getAttrValNS("http://www.isocat.org/ns/dcr", "datcat");
+        if (result == -1) {
+            result = vn.getAttrValNS("http://www.isocat.org", "datcat");
+        }
+        if (result == -1) {
+            result = vn.getAttrVal("dcr:datcat");
+        }
+        return result;
+    }
+
+    private String createXpath(Deque<Token> elementPath) {
+        StringBuilder xpath = new StringBuilder("/");
+        for (Token token : elementPath) {
+            xpath.append("c:").append(token.name).append("/");
+        }
+        return xpath.append("text()").toString();
+    }
+
+    private void updateElementPath(VTDNav vn, Deque<Token> elementPath, String elementName) {
         int previousDepth = elementPath.isEmpty() ? -1 : elementPath.peekLast().depth;
         int currentDepth = vn.getCurrentDepth();
         if (currentDepth == previousDepth) {
@@ -132,5 +159,29 @@ public class FacetMappingFactory {
         public String toString() {
             return name + ":" + depth;
         }
+    }
+
+    public static void printMapping(File file) throws IOException {
+        Set<String> xsdNames = INSTANCE.mapping.keySet();
+        FileWriter fileWriter = new FileWriter(file);
+        fileWriter.append("This file is generated on " + DateFormat.getDateTimeInstance().format(new Date())
+                + " and only used to document the mapping.\n");
+        fileWriter.append("This file contains xsd name and a list of conceptName with xpath mappings that are generated.\n");
+        fileWriter.append("---------------------\n");
+        fileWriter.flush();
+        for (String xsd : xsdNames) {
+            FacetMapping facetMapping = INSTANCE.mapping.get(xsd);
+            fileWriter.append(xsd + "\n");
+            for (FacetConfiguration config : facetMapping.getFacets()) {
+                fileWriter.append("FacetName:" + config.getName() + "\n");
+                fileWriter.append("Mappings:\n");
+                for (String pattern : config.getPatterns()) {
+                    fileWriter.append("    " + pattern + "\n");
+                }
+            }
+            fileWriter.append("---------------------\n");
+            fileWriter.flush();
+        }
+        fileWriter.close();
     }
 }

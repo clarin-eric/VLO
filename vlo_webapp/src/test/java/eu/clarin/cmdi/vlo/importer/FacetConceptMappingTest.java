@@ -22,7 +22,7 @@ public class FacetConceptMappingTest {
         content += "        <concept>http://www.isocat.org/datcat/DC-2544</concept>\n";
         content += "        <concept>conceptLink2</concept>\n";
         content += "    </facetConcept>\n";
-        content += "    <facetConcept name=\"subject\" isCaseInsensitive=\"true\">\n";
+        content += "    <facetConcept name=\"subject\" isCaseInsensitive=\"true\" allowMultipleValues=\"false\">\n";
         content += "        <concept>conceptLink1</concept>\n";
         content += "        <pattern>/xpath/pattern/text()</pattern>\n";
         content += "    </facetConcept>\n";
@@ -34,6 +34,7 @@ public class FacetConceptMappingTest {
         FacetConcept facetConcept = facetConcepts.get(0);
         assertEquals("name", facetConcept.getName());
         assertFalse(facetConcept.isCaseInsensitive());
+        assertTrue(facetConcept.isAllowMultipleValues());
         List<String> concepts = facetConcept.getConcepts();
         assertEquals(2, concepts.size());
         assertEquals("http://www.isocat.org/datcat/DC-2544", concepts.get(0));
@@ -44,6 +45,7 @@ public class FacetConceptMappingTest {
         facetConcept = facetConcepts.get(1);
         assertEquals("subject", facetConcept.getName());
         assertTrue(facetConcept.isCaseInsensitive());
+        assertFalse(facetConcept.isAllowMultipleValues());
         concepts = facetConcept.getConcepts();
         assertEquals(1, concepts.size());
         assertEquals("conceptLink1", concepts.get(0));

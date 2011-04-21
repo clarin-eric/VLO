@@ -9,6 +9,7 @@ public class FacetConfiguration {
     private String name;
     private boolean caseInsensitive= false;
     private List<String> patterns = new ArrayList<String>();
+    private boolean allowMultipleValues = true;
 
     public void setCaseInsensitive(boolean caseValue) {
         this.caseInsensitive = caseValue;
@@ -44,5 +45,13 @@ public class FacetConfiguration {
     @Override
     public String toString() {
         return "name="+name+", pattern="+patterns;
+    }
+
+    public boolean getAllowMultipleValues() {
+        return allowMultipleValues;
+    }
+    
+    public void setAllowMultipleValues(boolean allowMultipleValues) {
+        this.allowMultipleValues = allowMultipleValues;
     }
 }
