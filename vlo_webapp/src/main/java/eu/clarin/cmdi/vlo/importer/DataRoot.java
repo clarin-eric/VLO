@@ -20,6 +20,10 @@ public class DataRoot {
         return rootFile;
     }
     
+    /**
+     * Root cmdi file (Metadata links defined in the file will be read) or root directory (*.cmdi and *.xml files will be recursively read).
+     * @param rootFile
+     */
     public void setRootFile(File rootFile) {
         this.rootFile = rootFile;
     }
