@@ -1,9 +1,9 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -426,7 +426,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         CMDIData data = processor.process(cmdiFile);
         assertEquals("kleve-route", data.getSolrDocument().getFieldValue(FacetConstants.FIELD_NAME));
     }
-    
+
     @Test
     public void testEmptyFieldsShouldBeNull() throws Exception {
         String content = "";
@@ -684,7 +684,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(1, doc.getFieldValues(FacetConstants.FIELD_LANGUAGE).size());
         assertTrue(doc.getFieldValues(FacetConstants.FIELD_LANGUAGE).contains("language1"));
     }
-    
+
     @Test
     public void testIgnoreWhiteSpaceFacets() throws Exception {
         String content = "";
@@ -706,7 +706,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         SolrInputDocument doc = data.getSolrDocument();
         assertEquals(null, doc.getFieldValues("subject"));
     }
-    
+
     @Test
     public void testCountryCodesPostProcessing() throws Exception {
         String content = "";
@@ -728,7 +728,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         SolrInputDocument doc = data.getSolrDocument();
         assertEquals("Netherlands", doc.getFieldValue(FacetConstants.FIELD_COUNTRY));
     }
-    
+
     @Test
     public void testLanguageCodesPostProcessing() throws Exception {
         String content = "";
