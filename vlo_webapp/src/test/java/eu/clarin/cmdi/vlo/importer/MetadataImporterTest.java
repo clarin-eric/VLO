@@ -135,7 +135,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         content += "        <cmdi:EastRepublican ref=\"TEI\">\n";
         content += "            <cmdi:GeneralInformation>\n";
         content += "                <cmdi:Identifier>hdl:11858/00-175C-0000-0000-E180-8</cmdi:Identifier>\n";
-        content += "                <cmdi:Title>L'Est RŽpublicain : Ždition du 17 mai 1999</cmdi:Title>\n";
+        content += "                <cmdi:Title>L'Est R\u00e9publicain : \u00e9dition du 17 mai 1999</cmdi:Title>\n";
         content += "            </cmdi:GeneralInformation>\n";
         content += "        </cmdi:EastRepublican>\n";
         content += "    </cmdi:Components>\n";
@@ -147,7 +147,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
         assertEquals("hdl:11858/00-175C-0000-0000-E180-8", getValue(doc, FacetConstants.FIELD_ID));
-        assertEquals("L'Est RŽpublicain : Ždition du 17 mai 1999", getValue(doc, FacetConstants.FIELD_NAME));
+        assertEquals("L'Est R\u00e9publicain : \u00e9dition du 17 mai 1999", getValue(doc, FacetConstants.FIELD_NAME));
         assertEquals("unknown type|http://hdl.handle.net/11858/00-175C-0000-0000-E180-8?urlappend=/TEI", getValue(doc,
                 FacetConstants.FIELD_RESOURCE));
     }
