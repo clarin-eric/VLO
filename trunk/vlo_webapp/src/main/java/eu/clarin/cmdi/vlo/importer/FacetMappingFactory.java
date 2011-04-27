@@ -21,6 +21,7 @@ import com.ximpleware.NavException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
 
 public class FacetMappingFactory {
@@ -55,6 +56,7 @@ public class FacetMappingFactory {
             for (FacetConcept facetConcept : conceptMapping.getFacetConcepts()) {
                 FacetConfiguration config = new FacetConfiguration();
                 List<String> xpaths = new ArrayList<String>();
+                handleId(xpaths, facetConcept);
                 for (String concept : facetConcept.getConcepts()) {
                     List<String> paths = conceptLinkPathMapping.get(concept);
                     if (paths != null) {
@@ -77,6 +79,17 @@ public class FacetMappingFactory {
             LOG.error("Error creating facetMapping from xsd: " + xsd + " ", e);
         }
         return result;
+    }
+
+    /**
+     * The id facet is special case and patterns must be added first.
+     * The standard pattern to get the id out of the header is the most reliable and it should fall back on concept matching of nothing matches. 
+     * (Note this is the exact opposite of other facets where the concept match is probably better then the 'hardcoded' pattern). 
+     */
+    private void handleId(List<String> xpaths, FacetConcept facetConcept) {
+        if (FacetConstants.FIELD_ID.equals(facetConcept.getName())) {
+            xpaths.addAll(facetConcept.getPatterns());
+        }
     }
 
     private Map<String, List<String>> createConceptLinkPathMapping(String xsd) throws NavException {

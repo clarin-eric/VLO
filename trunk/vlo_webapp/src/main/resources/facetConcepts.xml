@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <facetConcepts>
-  <facetConcept name="id">
+  <facetConcept name="id" allowMultipleValues="false">
     <concept>http://www.isocat.org/datcat/DC-2573</concept>
     <pattern>/c:CMD/c:Header/c:MdSelfLink/text()</pattern> 
   </facetConcept>
