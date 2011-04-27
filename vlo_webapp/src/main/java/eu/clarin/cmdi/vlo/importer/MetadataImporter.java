@@ -189,7 +189,7 @@ public class MetadataImporter {
 
     private void updateDocument(SolrInputDocument solrDocument, CMDIData cmdiData, File file, String origin) throws SolrServerException,
             IOException {
-        solrDocument.addField(FacetConstants.FIELD_ORIGIN, selectOrigin(origin, solrDocument));
+        solrDocument.addField(FacetConstants.FIELD_ORIGIN, origin);
         solrDocument.addField(FacetConstants.FIELD_DATA_ROOT, origin);
         solrDocument.addField(FacetConstants.FIELD_ID, cmdiData.getId());
         solrDocument.addField(FacetConstants.FIELD_FILENAME, file.getAbsolutePath());
@@ -198,21 +198,6 @@ public class MetadataImporter {
         if (docs.size() == 1000) {
             sendDocs();
         }
-    }
-
-    /**
-     * 
-     * @param origin
-     * @param solrDocument
-     * @return origin or the extracted projectName ({@link FacetConstants#FIELD_PROJECT_NAME})
-     */
-    private String selectOrigin(String origin, SolrInputDocument solrDocument) {
-        String result = origin;
-        String projectName = (String) solrDocument.getFieldValue(FacetConstants.FIELD_PROJECT_NAME);
-        if (projectName != null && !projectName.trim().isEmpty()) {
-            result = projectName;
-        }
-        return result;
     }
 
     /**

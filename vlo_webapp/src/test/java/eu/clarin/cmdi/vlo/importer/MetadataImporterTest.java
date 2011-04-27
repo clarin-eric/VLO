@@ -178,7 +178,7 @@ public class MetadataImporterTest extends ImporterTestcase {
     }
 
     @Test
-    public void testTakeProjectNameAsOrigin() throws Exception {
+    public void testProjectName() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
@@ -206,7 +206,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         List<SolrInputDocument> docs = importData(sessionFile);
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
-        assertEquals("DiDDD-project", getValue(doc, FacetConstants.FIELD_ORIGIN));
+        assertEquals("testRoot", getValue(doc, FacetConstants.FIELD_ORIGIN));
         assertEquals("DiDDD-project", getValue(doc, FacetConstants.FIELD_PROJECT_NAME));
     }
 
