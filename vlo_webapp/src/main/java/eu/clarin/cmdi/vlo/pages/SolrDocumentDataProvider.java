@@ -9,6 +9,7 @@ import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvid
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.dao.DaoLocator;
 import eu.clarin.cmdi.vlo.dao.SearchResultsDao;
 
@@ -20,6 +21,9 @@ public class SolrDocumentDataProvider extends SortableDataProvider<SolrDocument>
 
     public SolrDocumentDataProvider(SolrQuery query) {
         this.query = query;
+        if (query.getSortField() == null) {
+            query.setSortField(FacetConstants.FIELD_NAME, SolrQuery.ORDER.asc);
+        }
         query.setFacet(false);
     }
 
