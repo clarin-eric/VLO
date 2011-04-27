@@ -180,8 +180,9 @@ public class FacetMappingFactoryTest {
         List<FacetConfiguration> facets = facetMapping.getFacets();
         FacetConfiguration facet = facets.get(0);
         assertEquals(FacetConstants.FIELD_ID, facet.getName());
-        assertEquals(1, facet.getPatterns().size());
-        assertEquals("/c:CMD/c:Components/c:EastRepublican/c:GeneralInformation/c:Identifier/text()", facet.getPatterns().get(0));
+        assertEquals(2, facet.getPatterns().size());
+        assertEquals("/c:CMD/c:Header/c:MdSelfLink/text()", facet.getPatterns().get(0));
+        assertEquals("/c:CMD/c:Components/c:EastRepublican/c:GeneralInformation/c:Identifier/text()", facet.getPatterns().get(1));
     }
 
 }
