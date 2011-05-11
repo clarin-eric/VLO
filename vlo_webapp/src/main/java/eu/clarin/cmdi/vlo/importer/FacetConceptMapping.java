@@ -9,6 +9,16 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+
+/**
+ * Corresponds to the facetConcepts.xml file.
+ * This class holds the mapping of facet name -> facetConcepts/patterns
+ * A facetConcept is a ISCAT conceptLink e.g.: http://www.isocat.org/datcat/DC-2544
+ * the conceptLink will be analysed and translated into a valid Xpath expression to extract data out of the metadata. 
+ * Valid xpath expression e.g. /c:CMD/c:Header/c:MdSelfLink/text(), the 'c' namespace will be mapped to http://www.clarin.eu/cmd/ in the parser.
+ * A pattern is an xpath expression used directly on the metadata. Use patterns only when you cannot a conceptLink does not suffice. 
+ *
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "facetConcepts")
 public class FacetConceptMapping {
@@ -31,7 +41,7 @@ public class FacetConceptMapping {
         private String name;
 
         /**
-         * Values will be stored lowercase by default, set isCaseinsensitive to true if you want to keep the case of the value
+         * Values will be stored lowercase by default, set isCaseInsensitive to true if you want to keep the case of the value
          */
         @XmlAttribute
         private boolean isCaseInsensitive = false;
