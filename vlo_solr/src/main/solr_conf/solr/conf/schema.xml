@@ -413,6 +413,7 @@
    <field name="description" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="year" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="resourceType" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="dataProvider" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
    <copyField source="description" dest="text"/>
    <copyField source="origin" dest="text"/>
@@ -426,10 +427,10 @@
    <copyField source="subject" dest="text"/>
    <copyField source="year" dest="text"/>
    <copyField source="resourceType" dest="text"/>
+   <copyField source="dataProvider" dest="text"/>
 
     <!-- Not in the copyfield list so we don't search in them -->
    <field name="_fileName" type="string" indexed="true" stored="true" multiValued="false" />
-   <field name="_dataRoot" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="_resourceRef" type="string" indexed="true" stored="true" multiValued="true" />
 
  </fields>
