@@ -21,6 +21,7 @@
         <value>subject</value>
         <value>language</value>
         <value>resourceType</value>
+        <value>dataProvider</value>
 <!--        <value>year</value>-->
       </list>
     </property>

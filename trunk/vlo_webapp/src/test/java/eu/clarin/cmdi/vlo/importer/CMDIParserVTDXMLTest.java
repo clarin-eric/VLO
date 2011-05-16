@@ -5,11 +5,6 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
-import com.ximpleware.EOFException;
-import com.ximpleware.EncodingException;
-import com.ximpleware.EntityException;
-import com.ximpleware.ParseException;
-import com.ximpleware.VTDException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 
@@ -60,7 +55,7 @@ public class CMDIParserVTDXMLTest {
         assertNull(xsd);
     }
 
-    private String getXsd(String content) throws EncodingException, EOFException, EntityException, ParseException, VTDException {
+    private String getXsd(String content) throws Exception {
         VTDGen vg = new VTDGen();
         vg.setDoc(content.getBytes());
         vg.parse(true);

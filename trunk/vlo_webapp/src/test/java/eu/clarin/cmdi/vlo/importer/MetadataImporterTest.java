@@ -25,6 +25,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         session += "   <Header>\n";
         session += "      <MdCreationDate>2008-05-27</MdCreationDate>\n";
         session += "      <MdSelfLink> testID1Session</MdSelfLink>\n";
+        session += "      <MdCollectionDisplayName>CollectionName</MdCollectionDisplayName>\n";
         session += "      <MdProfile>clarin.eu:cr1:p_1271859438204</MdProfile>\n";
         session += "   </Header>\n";
         session += "   <Resources>\n";
@@ -72,7 +73,8 @@ public class MetadataImporterTest extends ImporterTestcase {
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
         assertEquals("testID1Session", getValue(doc, FacetConstants.FIELD_ID));
-        assertEquals("testRoot", getValue(doc, FacetConstants.FIELD_ORIGIN));
+        assertEquals("CollectionName", getValue(doc, FacetConstants.FIELD_ORIGIN));
+        assertEquals("testRoot", getValue(doc, FacetConstants.FIELD_DATA_PROVIDER));
         assertEquals("kleve-route", getValue(doc, FacetConstants.FIELD_NAME));
         assertEquals(sessionFile.getAbsolutePath(), getValue(doc, FacetConstants.FIELD_FILENAME));
         assertEquals("video", getValue(doc, FacetConstants.FIELD_RESOURCE_TYPE));

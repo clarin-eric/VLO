@@ -4,6 +4,7 @@ public class FacetConstants {
 
     public static final String FIELD_NAME = "name";
     public static final String FIELD_ID = "id";
+    public static final String FIELD_DATA_PROVIDER = "dataProvider";
     public static final String FIELD_DESCRIPTION = "description";
     public static final String FIELD_ORIGIN = "origin";
     public static final String FIELD_COUNTRY = "country";
@@ -19,7 +20,6 @@ public class FacetConstants {
     //The _ facets are not meant to be shown to users.
     public static final String FIELD_FILENAME = "_fileName";
     public static final String FIELD_RESOURCE = "_resourceRef";
-    public static final String FIELD_DATA_ROOT = "_dataRoot";
     
     //Normalized mimeTypes
     public static final String RESOURCE_TYPE_AUDIO = "audio";
