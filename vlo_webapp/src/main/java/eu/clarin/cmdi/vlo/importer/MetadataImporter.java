@@ -66,9 +66,9 @@ public class MetadataImporter {
             for (DataRoot dataRoot : dataRoots) {
                 LOG.info("Start of processing: " + dataRoot.getOriginName());
                 if (dataRoot.isDeleteFirst()) {
-                    LOG.info("Deleting data for origin: " + dataRoot.getOriginName());
-                    solrServer.deleteByQuery(FacetConstants.FIELD_ORIGIN + ":" + dataRoot.getOriginName());
-                    LOG.info("Deleting data for origin done.");
+                    LOG.info("Deleting data for data provider: " + dataRoot.getOriginName());
+                    solrServer.deleteByQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + dataRoot.getOriginName());
+                    LOG.info("Deleting data of provider done.");
                 }
                 CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS);
                 List<File> files = getFilesFromDataRoot(dataRoot.getRootFile());
@@ -143,13 +143,13 @@ public class MetadataImporter {
         };
     }
 
-    private void processCmdi(File file, String origin, CMDIDataProcessor processor) throws SolrServerException, IOException {
+    private void processCmdi(File file, String dataOrigin, CMDIDataProcessor processor) throws SolrServerException, IOException {
         nrOfFilesAnalyzed++;
         CMDIData cmdiData = null;
         try {
             cmdiData = processor.process(file);
             if (!idOk(cmdiData.getId())) {
-                cmdiData.setId(origin + "/" + file.getName()); //No id found in the metadata file so making one up based on the file name. Not quaranteed to be unique, but we have to set something.
+                cmdiData.setId(dataOrigin + "/" + file.getName()); //No id found in the metadata file so making one up based on the file name. Not quaranteed to be unique, but we have to set something.
                 nrOfFilesWithoutId++;
             }
         } catch (Exception e) {
@@ -165,7 +165,7 @@ public class MetadataImporter {
                     //  2) files without metadata links and without dataResource can be interesting e.g. olac files describing a corpus with a link to the original archive.
                     // Other files will have only metadata resources and are considered 'collection' metadata files they 
                     // are usually not very interesting (think imdi corpus files) and will not be included.
-                    updateDocument(solrDocument, cmdiData, file, origin);
+                    updateDocument(solrDocument, cmdiData, file, dataOrigin);
                 } else {
                     nrOfFilesWithoutDataResources++;
                 }
@@ -174,7 +174,7 @@ public class MetadataImporter {
             for (Resource cmdiResource : resources) {
                 File resourceFile = new File(file.getParentFile(), cmdiResource.getResourceName());
                 if (resourceFile.exists()) {
-                    processCmdi(resourceFile, origin, processor);
+                    processCmdi(resourceFile, dataOrigin, processor);
                 } else {
                     nrOfNonExistentResourceFiles++;
                     LOG.error("Found nonexistent resource file (" + resourceFile + ") in cmdi: " + file);
@@ -187,10 +187,12 @@ public class MetadataImporter {
         return id != null && !id.isEmpty();
     }
 
-    private void updateDocument(SolrInputDocument solrDocument, CMDIData cmdiData, File file, String origin) throws SolrServerException,
+    private void updateDocument(SolrInputDocument solrDocument, CMDIData cmdiData, File file, String dataOrigin) throws SolrServerException,
             IOException {
-        solrDocument.addField(FacetConstants.FIELD_ORIGIN, origin);
-        solrDocument.addField(FacetConstants.FIELD_DATA_ROOT, origin);
+        if (!solrDocument.containsKey(FacetConstants.FIELD_ORIGIN)) {
+            solrDocument.addField(FacetConstants.FIELD_ORIGIN, dataOrigin);
+        }
+        solrDocument.addField(FacetConstants.FIELD_DATA_PROVIDER, dataOrigin);
         solrDocument.addField(FacetConstants.FIELD_ID, cmdiData.getId());
         solrDocument.addField(FacetConstants.FIELD_FILENAME, file.getAbsolutePath());
         addResourceData(solrDocument, cmdiData);

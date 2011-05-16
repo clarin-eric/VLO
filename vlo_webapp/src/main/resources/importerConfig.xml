@@ -3,110 +3,30 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
   <bean id="importerConfig" class="eu.clarin.cmdi.vlo.importer.ImporterConfig">
-    <property name="deleteAllFirst" value="true"/><!-- You can delete everything first -->
+<!--    <property name="deleteAllFirst" value="true"/> You can delete everything first -->
+<!--    <property name="printMapping" value="true"/> Can print the mapping of facets to xpath patterns for every xsd, so it can be checked manually. -->
     <property name="dataRoots">
       <list>
         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <!-- You can also delete per dataroot <property name="deleteFirst"  value="true"/>-->
+          <property name="originName" value="MPI IMDI Archive"/>
+          <property name="rootFile"
+            value="/lat/tools/oai/mpi-self-harvest/workspace/harvested/results"/>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="CMDI Providers"/>
+          <property name="rootFile"
+            value="/lat/tools/oai/cmdi-providers/workspace/harvested/results/"/>
+        </bean>
+         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
           <property name="originName" value="OLAC Metadata Providers"/>
           <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/olac/olac-cmdi-20110113/_corpusstructure/collection_root.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="Nijmegen corpora of casual speech"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/qfs1/media-archive/casual_speech/Corpusstructure/casual_speech.imdi.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="MPI corpora"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/qfs1/media-archive/Corpusstructure/MPI.imdi.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="CORP-ORAL"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/qfs1/media-archive/CORP_ORAL/Corpusstructure/CORP_ORAL.imdi.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="DoBeS archive"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/qfs1/media-archive/dobes_data/Corpusstructure/dobes.imdi.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="ECHO"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/qfs1/media-archive/echo_data/Corpusstructure/echo.imdi.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="DBD"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/qfs1/media-archive/dbd_data/Corpusstructure/dbd.imdi.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="Sign Language"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/qfs1/media-archive/Corpusstructure/sign_language.imdi.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="Endagered Languages"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/qfs1/media-archive/Corpusstructure/endangered_languages.imdi.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="ANDES"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/qfs1/media-archive/ANDES_data/Corpusstructure/ANDES.imdi.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="Leiden Archives"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/qfs1/media-archive/LeidenArchives/Corpusstructure/LeidenArchives.imdi.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="ILSP INTERA Contribution"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/qfs1/media-archive/ilsp_data/ILSP_INTERA.imdi.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="MPI für Bildungsforschung"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/qfs1/media-archive/Bildungsforschung/Corpusstructure/MPI_Bildungsforschung.imdi.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="Humanethologisches Filmarchiv"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/qfs1/media-archive/humanethology/Corpusstructure/humanethology.imdi.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="SUCA"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/qfs1/media-archive/suca_data/Corpusstructure/suca.imdi.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="Nijmegen corpora of casual speech"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/qfs1/media-archive/casual_speech/Corpusstructure/casual_speech.imdi.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="ESF corpus"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/esf_conv/Corpusstructure/esf.imdi.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="IFA corpus"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/IFAcorpus/IMDI/IFAcorpus.imdi.cmdi"/>
-        </bean>
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="CGN corpus"/>
-          <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/imdi/imdi-20110106/corpora/CGN/COREX6/data/meta/imdi_3.0_eaf/corpora/cgn.imdi.cmdi"/>
+            value="/lat/tools/oai/olac-and-dc-providers/workspace/harvested/results"/>
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
           <property name="originName" value="CLARIN LRT inventory"/>
           <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/lrt/lrt-20110106/_corpusstructure/collection_lrt_inventory.cmdi"/>
-        </bean>
+            value="/lat/tools/vlo_importer/data/lrt/lrt-20110106/"/>
+        </bean> 
       </list>
     </property>
   </bean>
