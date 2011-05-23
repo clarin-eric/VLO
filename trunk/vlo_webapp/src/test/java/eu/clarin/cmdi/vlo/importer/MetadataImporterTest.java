@@ -121,7 +121,7 @@ public class MetadataImporterTest extends ImporterTestcase {
     public void testImportWithNameSpaceGalore() throws Exception {
         String content = "";
         content += "<cmdi:CMD CMDVersion=\"1.1\" xmlns:cmdi=\"http://www.clarin.eu/cmd/\"\n";
-        content += "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.clarin.eu/cmd/ http://hdl.handle.net/11858/00-175C-0000-0001-09A8-7?urlappend=/XSD\">\n";
+        content += "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.clarin.eu/cmd/ http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1290431694629/xsd\">\n";
         content += "    <cmdi:Header/>\n";
         content += "    <cmdi:Resources>\n";
         content += "        <cmdi:ResourceProxyList>\n";

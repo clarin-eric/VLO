@@ -192,7 +192,7 @@ public class FacetMappingFactoryTest {
     @Test
     public void testGetIdMapping() throws Exception {
         FacetMapping facetMapping = FacetMappingFactory
-                .getFacetMapping("http://hdl.handle.net/11858/00-175C-0000-0001-09A8-7?urlappend=/XSD");
+                .getFacetMapping("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1290431694629/xsd");
         List<FacetConfiguration> facets = facetMapping.getFacets();
         FacetConfiguration facet = facets.get(0);
         assertEquals(FacetConstants.FIELD_ID, facet.getName());
