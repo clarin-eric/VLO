@@ -43,7 +43,6 @@ public class MetadataImporter {
     private final ImporterConfig config;
 
     private int nrOFDocumentsUpdated;
-    private int nrOfNonExistentResourceFiles = 0;
     private int nrOfFilesAnalyzed = 0;
     private int nrOfFilesWithoutId = 0;
     private int nrOfFilesWithoutDataResources = 0;
@@ -96,7 +95,6 @@ public class MetadataImporter {
             }
         }
         long took = (System.currentTimeMillis() - start) / 1000;
-        LOG.info("Found " + nrOfNonExistentResourceFiles + " non existing resources files.");
         LOG.info("Found " + nrOfFilesWithoutId + " file(s) without an id. (id is generated based on fileName but that may not be unique)");
         LOG.info("Found " + nrOfFilesWithError + " file(s) with errors.");
         LOG.info("Found " + nrOfFilesWithoutDataResources
@@ -168,16 +166,6 @@ public class MetadataImporter {
                     updateDocument(solrDocument, cmdiData, file, dataOrigin);
                 } else {
                     nrOfFilesWithoutDataResources++;
-                }
-            }
-            List<Resource> resources = cmdiData.getMetadataResources();
-            for (Resource cmdiResource : resources) {
-                File resourceFile = new File(file.getParentFile(), cmdiResource.getResourceName());
-                if (resourceFile.exists()) {
-                    processCmdi(resourceFile, dataOrigin, processor);
-                } else {
-                    nrOfNonExistentResourceFiles++;
-                    LOG.error("Found nonexistent resource file (" + resourceFile + ") in cmdi: " + file);
                 }
             }
         }

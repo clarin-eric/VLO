@@ -69,7 +69,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         content += "</CMD>\n";
         File rootFile = createCmdiFile("rootFile", content);
 
-        List<SolrInputDocument> docs = importData(rootFile);
+        List<SolrInputDocument> docs = importData(rootFile.getParentFile());
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
         assertEquals("testID1Session", getValue(doc, FacetConstants.FIELD_ID));
