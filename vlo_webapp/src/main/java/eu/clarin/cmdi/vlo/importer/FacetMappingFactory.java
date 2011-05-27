@@ -95,7 +95,10 @@ public class FacetMappingFactory {
     private Map<String, List<String>> createConceptLinkPathMapping(String xsd) throws NavException {
         Map<String, List<String>> result = new HashMap<String, List<String>>();
         VTDGen vg = new VTDGen();
-        vg.parseHttpUrl(xsd, true);
+        boolean parseSuccess = vg.parseHttpUrl(xsd, true);
+        if (!parseSuccess) {
+            throw new RuntimeException("Cannot create ConceptLink Map from xsd (xsd is probably not reachable): "+xsd);
+        }
         VTDNav vn = vg.getNav();
         AutoPilot ap = new AutoPilot(vn);
         ap.selectElement("xs:element");
