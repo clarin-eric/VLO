@@ -25,6 +25,7 @@ public class DocumentAttributesDataProvider extends SortableDataProvider<Documen
     private static final long serialVersionUID = 1L;
 
     private transient DocumentAttributeList attributeList;
+    private transient DocumentAttribute metadata;
 
     public DocumentAttributesDataProvider(SolrDocument solrDocument) {
         if (solrDocument != null) {
@@ -35,6 +36,7 @@ public class DocumentAttributesDataProvider extends SortableDataProvider<Documen
                     fieldMap.put(entry, fieldValuesMap.get(entry));
                 }
             }
+            metadata = new DocumentAttribute(FacetConstants.FIELD_COMPLETE_METADATA,fieldValuesMap.get(FacetConstants.FIELD_COMPLETE_METADATA));
             attributeList = new DocumentAttributeList(fieldMap);
         } else {
             attributeList = new DocumentAttributeList(Collections.singletonMap("Document not found", (Collection<Object>) null));
@@ -42,7 +44,15 @@ public class DocumentAttributesDataProvider extends SortableDataProvider<Documen
     }
 
     private boolean ignoreEntry(String entry) {
+//        if(entry.equals(FacetConstants.FIELD_COMPLETE_METADATA)){
+//            return false; // Do not ignore the "complete metadata" entry, even though it starts with a _
+//        }
         return entry.startsWith("_") || IGNORE_FACETS.contains(entry);
+    }
+
+    public DocumentAttribute getMetadata()
+    {
+        return metadata;
     }
 
     @Override
