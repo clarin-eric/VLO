@@ -97,7 +97,8 @@ public class FacetMappingFactory {
         VTDGen vg = new VTDGen();
         boolean parseSuccess = vg.parseHttpUrl(xsd, true);
         if (!parseSuccess) {
-            throw new RuntimeException("Cannot create ConceptLink Map from xsd (xsd is probably not reachable): "+xsd);
+            LOG.error("Cannot create ConceptLink Map from xsd (xsd is probably not reachable): "+xsd+". All metadats instances that use this xsd will not be imported correctly.");
+            return result; //return empty map, so the incorrect xsd is not tried for all metadata instances that specify it.
         }
         VTDNav vn = vg.getNav();
         AutoPilot ap = new AutoPilot(vn);
