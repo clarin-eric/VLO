@@ -183,6 +183,8 @@ public class MetadataImporter {
         solrDocument.addField(FacetConstants.FIELD_DATA_PROVIDER, dataOrigin);
         solrDocument.addField(FacetConstants.FIELD_ID, cmdiData.getId());
         solrDocument.addField(FacetConstants.FIELD_FILENAME, file.getAbsolutePath());
+        solrDocument.addField(FacetConstants.FIELD_COMPLETE_METADATA, "test"); // TODO: add the contents of the metadata file here
+
         addResourceData(solrDocument, cmdiData);
         docs.add(solrDocument);
         if (docs.size() == 1000) {

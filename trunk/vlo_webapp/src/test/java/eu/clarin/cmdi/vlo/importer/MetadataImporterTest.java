@@ -206,7 +206,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         File sessionFile = createCmdiFile("testSession", content);
 
         List<SolrInputDocument> docs = importData(sessionFile);
-        assertEquals(1, docs.size());
+        assertEquals(1, docs.size()); // FAILS at the moment.
         SolrInputDocument doc = docs.get(0);
         assertEquals("testRoot", getValue(doc, FacetConstants.FIELD_ORIGIN));
         assertEquals("DiDDD-project", getValue(doc, FacetConstants.FIELD_PROJECT_NAME));

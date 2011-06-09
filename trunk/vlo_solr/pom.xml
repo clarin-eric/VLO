@@ -43,7 +43,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <vlo.solr.home>${user.home}/Applications/vlo_solr</vlo.solr.home>
+    <vlo.solr.home>${user.home}/Desktop/CLARIN-svn/env/vlo_solr</vlo.solr.home>
 <!--    <vlo.solr.home>/lat/tools/vlo_solr</vlo.solr.home>-->
     <vlo.solr.log>${vlo.solr.home}/logs/vlo_solr.log</vlo.solr.log>
     <vlo.war.name>${build.finalName}.war</vlo.war.name>
