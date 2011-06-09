@@ -14,12 +14,12 @@
          -->
       <list> <!-- List of facets to be shown as columns, the order specified is kept in the application -->
         <value>origin</value>
-        <value>organisation</value>
+        <value>language</value>
         <value>continent</value>
         <value>genre</value>
         <value>country</value>
         <value>subject</value>
-        <value>language</value>
+        <value>organisation</value>
         <value>resourceType</value>
         <value>dataProvider</value>
 <!--        <value>year</value>-->
