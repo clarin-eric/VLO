@@ -20,6 +20,7 @@ public class FacetConstants {
     //The _ facets are not meant to be shown to users.
     public static final String FIELD_FILENAME = "_fileName";
     public static final String FIELD_RESOURCE = "_resourceRef";
+    public static final String FIELD_COMPLETE_METADATA = "_completeMD";
     
     //Normalized mimeTypes
     public static final String RESOURCE_TYPE_AUDIO = "audio";
