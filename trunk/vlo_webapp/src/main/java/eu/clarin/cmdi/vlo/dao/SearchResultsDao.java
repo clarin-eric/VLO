@@ -16,27 +16,35 @@ public class SearchResultsDao extends SolrDao {
     private QueryResponse response;
 
     public SearchResultsDao() {
-        super();
+	super();
     }
 
     public SolrDocumentList getResults(SolrQuery query) {
-        response = fireQuery(query);
-        SolrDocumentList results = response.getResults();
-        return results;
+	setDefaultSortField(query);
+	response = fireQuery(query);
+	SolrDocumentList results = response.getResults();
+	return results;
     }
 
     public List<FacetField> getFacets(SolrQuery query) {
-        response = fireQuery(query);
-        return response.getFacetFields();
+	response = fireQuery(query);
+	return response.getFacetFields();
     }
 
     public SolrDocumentList getDocIdList(SolrQuery query) {
-        query.setFields(FacetConstants.FIELD_ID);
-        query.setFacet(false);
-        query.setStart(0);
-        query.setRows(Integer.MAX_VALUE);
-        QueryResponse queryResponse = fireQuery(query);
-        return queryResponse.getResults();
+	setDefaultSortField(query);
+	query.setFields(FacetConstants.FIELD_ID);
+	query.setFacet(false);
+	query.setStart(0);
+	query.setRows(Integer.MAX_VALUE);
+	QueryResponse queryResponse = fireQuery(query);
+	return queryResponse.getResults();
+    }
+
+    private void setDefaultSortField(SolrQuery query) {
+	if (query.getSortField() == null) {
+	    query.setSortField(FacetConstants.FIELD_NAME, SolrQuery.ORDER.asc);
+	}
     }
 
 }
