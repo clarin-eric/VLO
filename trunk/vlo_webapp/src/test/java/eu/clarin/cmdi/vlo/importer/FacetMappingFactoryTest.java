@@ -22,7 +22,7 @@ public class FacetMappingFactoryTest {
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Header/c:MdSelfLink/text()", mapping.getPatterns().get(0));
         mapping = facets.get(index++);
-        assertEquals(FacetConstants.FIELD_ORIGIN, mapping.getName());
+        assertEquals(FacetConstants.FIELD_COLLECTION, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_PROJECT_NAME, mapping.getName());
@@ -91,7 +91,7 @@ public class FacetMappingFactoryTest {
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Header/c:MdSelfLink/text()", mapping.getPatterns().get(0));
         mapping = facets.get(index++);
-        assertEquals(FacetConstants.FIELD_ORIGIN, mapping.getName());
+        assertEquals(FacetConstants.FIELD_COLLECTION, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Header/c:MdCollectionDisplayName/text()", mapping.getPatterns().get(0));
         mapping = facets.get(index++);
@@ -144,7 +144,7 @@ public class FacetMappingFactoryTest {
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Header/c:MdSelfLink/text()", mapping.getPatterns().get(0));
         mapping = facets.get(index++);
-        assertEquals(FacetConstants.FIELD_ORIGIN, mapping.getName());
+        assertEquals(FacetConstants.FIELD_COLLECTION, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_NAME, mapping.getName());

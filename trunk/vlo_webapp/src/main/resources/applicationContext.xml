@@ -13,7 +13,7 @@
          If you want to add a facet you need to adjust this schema.xml and reindex the data. 
          -->
       <list> <!-- List of facets to be shown as columns, the order specified is kept in the application -->
-        <value>origin</value>
+        <value>collection</value>
         <value>language</value>
         <value>continent</value>
         <value>genre</value>

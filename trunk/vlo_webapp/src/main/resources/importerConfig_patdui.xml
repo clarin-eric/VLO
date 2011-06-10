@@ -13,9 +13,9 @@
             value="/Users/patdui/data/oai_cmdi/results"/>
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="OAI Harvester"/>
+          <property name="originName" value="CMDI Providers"/>
           <property name="rootFile"
-            value="/Users/patdui/data/harvested/harvested/results/cmdi/"/>
+            value="/Users/patdui/data/harvested/harvested/results/cmdi2/"/>
         </bean>
          <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
           <property name="originName" value="OLAC Metadata Providers"/>
