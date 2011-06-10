@@ -5,8 +5,8 @@
 WORKDIR=.
 LIB=../share
 CLASSPATH=.
-JAVA=java
-if [ ! -z "$JAVA" ]; then
+JAVA=`which java`
+if [  -z $JAVA ]; then
 #set java for mpi servers
 JAVA=/lat/java/bin/java
 fi
