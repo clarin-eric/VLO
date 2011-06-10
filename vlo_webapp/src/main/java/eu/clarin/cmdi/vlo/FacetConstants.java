@@ -6,7 +6,7 @@ public class FacetConstants {
     public static final String FIELD_ID = "id";
     public static final String FIELD_DATA_PROVIDER = "dataProvider";
     public static final String FIELD_DESCRIPTION = "description";
-    public static final String FIELD_ORIGIN = "origin";
+    public static final String FIELD_COLLECTION = "collection";
     public static final String FIELD_COUNTRY = "country";
     public static final String FIELD_CONTINENT = "continent";
     public static final String FIELD_LANGUAGE = "language";

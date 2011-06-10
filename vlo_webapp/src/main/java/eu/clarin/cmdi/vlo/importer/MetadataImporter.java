@@ -177,8 +177,8 @@ public class MetadataImporter {
 
     private void updateDocument(SolrInputDocument solrDocument, CMDIData cmdiData, File file, String dataOrigin) throws SolrServerException,
             IOException {
-        if (!solrDocument.containsKey(FacetConstants.FIELD_ORIGIN)) {
-            solrDocument.addField(FacetConstants.FIELD_ORIGIN, dataOrigin);
+        if (!solrDocument.containsKey(FacetConstants.FIELD_COLLECTION)) {
+            solrDocument.addField(FacetConstants.FIELD_COLLECTION, dataOrigin);
         }
         solrDocument.addField(FacetConstants.FIELD_DATA_PROVIDER, dataOrigin);
         solrDocument.addField(FacetConstants.FIELD_ID, cmdiData.getId());

@@ -4,7 +4,7 @@
     <concept>http://www.isocat.org/datcat/DC-2573</concept>
     <pattern>/c:CMD/c:Header/c:MdSelfLink/text()</pattern> 
   </facetConcept>
-  <facetConcept name="origin">
+  <facetConcept name="collection">
     <pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
   </facetConcept>
   <facetConcept name="projectName">

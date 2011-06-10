@@ -73,7 +73,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
         assertEquals("testID1Session", getValue(doc, FacetConstants.FIELD_ID));
-        assertEquals("CollectionName", getValue(doc, FacetConstants.FIELD_ORIGIN));
+        assertEquals("CollectionName", getValue(doc, FacetConstants.FIELD_COLLECTION));
         assertEquals("testRoot", getValue(doc, FacetConstants.FIELD_DATA_PROVIDER));
         assertEquals("kleve-route", getValue(doc, FacetConstants.FIELD_NAME));
         assertEquals(sessionFile.getAbsolutePath(), getValue(doc, FacetConstants.FIELD_FILENAME));
@@ -206,9 +206,9 @@ public class MetadataImporterTest extends ImporterTestcase {
         File sessionFile = createCmdiFile("testSession", content);
 
         List<SolrInputDocument> docs = importData(sessionFile);
-        assertEquals(1, docs.size()); // FAILS at the moment.
+        assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
-        assertEquals("testRoot", getValue(doc, FacetConstants.FIELD_ORIGIN));
+        assertEquals("testRoot", getValue(doc, FacetConstants.FIELD_COLLECTION));
         assertEquals("DiDDD-project", getValue(doc, FacetConstants.FIELD_PROJECT_NAME));
     }
 
