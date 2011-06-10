@@ -17,22 +17,24 @@ import eu.clarin.cmdi.vlo.Configuration;
 public class SolrDao {
 
     private final static Logger LOG = LoggerFactory.getLogger(SolrDao.class);
-    private final static CommonsHttpSolrServer SOLR_SERVER;
-    static {
+    private final CommonsHttpSolrServer solrServer;
+
+    public SolrDao() {
+        String solrUrl = Configuration.getInstance().getSolrUrl();
         try {
-            SOLR_SERVER = new CommonsHttpSolrServer(Configuration.getInstance().getSolrUrl());
+            solrServer = new CommonsHttpSolrServer(solrUrl);
         } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("URL: " + solrUrl, e);
         }
     }
 
     protected CommonsHttpSolrServer getSolrserver() {
-        return SOLR_SERVER;
+        return solrServer;
     }
 
     protected QueryResponse fireQuery(SolrQuery query) {
         try {
-            return SOLR_SERVER.query(query);
+            return solrServer.query(query);
         } catch (SolrServerException e) {
             LOG.error("Error getting data:", e);
             throw new RuntimeException(e);

@@ -11,25 +11,24 @@ import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFal
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.protocol.http.WicketURLDecoder;
+import org.apache.wicket.model.ResourceModel;
 
-public class FacetedSearchPage extends WebPage {
+import eu.clarin.cmdi.vlo.Configuration;
+import eu.clarin.cmdi.vlo.Resources;
+
+public class FacetedSearchPage extends BasePage {
 
     private static final long serialVersionUID = 1L;
 
-    public static final String PARAM_QUERY = "query";
-
-    private AjaxFallbackDefaultDataTable<SolrDocument> searchResultList;
     private SearchPageQuery query;
 
     /**
@@ -38,12 +37,7 @@ public class FacetedSearchPage extends WebPage {
      */
     public FacetedSearchPage(final PageParameters parameters) {
         super(parameters);
-        String queryParam = WicketURLDecoder.QUERY_INSTANCE.decode(parameters.getString(PARAM_QUERY, null));
-        if (queryParam != null) {
-            query = new SearchPageQuery(queryParam);
-        } else {
-            query = SearchPageQuery.getDefaultQuery();
-        }
+        query = new SearchPageQuery(parameters);
         addSearchBox();
         addFacetColumns();
         addSearchResults();
@@ -56,6 +50,7 @@ public class FacetedSearchPage extends WebPage {
 
         public SearchBoxForm(String id, SearchPageQuery query) {
             super(id, new CompoundPropertyModel<SearchPageQuery>(query));
+            add(new ExternalLink("vloHomeLink", Configuration.getInstance().getVloHomeLink()));
             searchBox = new TextField("searchQuery");
             add(searchBox);
             Button submit = new Button("searchSubmit");
@@ -65,8 +60,7 @@ public class FacetedSearchPage extends WebPage {
         @Override
         protected void onSubmit() {
             SearchPageQuery query = getModelObject();
-            PageParameters pageParameters = new PageParameters();
-            pageParameters.put(FacetedSearchPage.PARAM_QUERY, query.getSolrQuery().toString());
+            PageParameters pageParameters = query.getPageParameters();
             setResponsePage(FacetedSearchPage.class, pageParameters);
         }
 
@@ -78,10 +72,11 @@ public class FacetedSearchPage extends WebPage {
 
     @SuppressWarnings("serial")
     private void addFacetColumns() {
-        GridView<FacetField> facetColumns = new GridView<FacetField>("facetColumns", new SolrFacetDataProvider(query.getSolrQuery())) {
+        GridView<FacetField> facetColumns = new GridView<FacetField>("facetColumns", new SolrFacetDataProvider(query.getSolrQuery()
+                .getCopy())) {
             @Override
             protected void populateItem(Item<FacetField> item) {
-                item.add(new FacetBoxPanel("facetBox", item.getModel()).create(query, searchResultList));
+                item.add(new FacetBoxPanel("facetBox", item.getModel()).create(query));
             }
 
             @Override
@@ -96,15 +91,16 @@ public class FacetedSearchPage extends WebPage {
     @SuppressWarnings("serial")
     private void addSearchResults() {
         List<IColumn<SolrDocument>> columns = new ArrayList<IColumn<SolrDocument>>();
-        columns.add(new AbstractColumn<SolrDocument>(new Model<String>("Name")) {
+        columns.add(new AbstractColumn<SolrDocument>(new ResourceModel(Resources.RESULTS)) {
 
             @Override
             public void populateItem(Item<ICellPopulator<SolrDocument>> cellItem, String componentId, IModel<SolrDocument> rowModel) {
                 cellItem.add(new DocumentLinkPanel(componentId, rowModel, query));
             }
         });
-        searchResultList = new AjaxFallbackDefaultDataTable("searchResults", columns, new SolrDocumentDataProvider(query.getSolrQuery()),
-                10);
+        AjaxFallbackDefaultDataTable<SolrDocument> searchResultList = new AjaxFallbackDefaultDataTable("searchResults", columns,
+                new SolrDocumentDataProvider(query.getSolrQuery().getCopy()), 10);
+
         add(searchResultList);
     }
 

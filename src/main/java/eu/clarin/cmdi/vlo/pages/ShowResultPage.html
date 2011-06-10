@@ -1,21 +1,24 @@
 <!doctype html public "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
-<head>
-<link rel=stylesheet type="text/css" href="css/main.css">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>CLARIN Virtual Language Observatory - Resources</title>
-</head>
-<body>
-
-<div class="title">
-<h1>CLARIN Virtual Language Observatory - Resources</h1>
-<h2>Demonstrator with IMDI, OLAC, ELRA and CLARIN data (contact:vlw@clarin.eu)</h2>
-</div>
-
-<div class="endgame">
-<div><a wicket:id="backLink" href="#">back to results</a>&nbsp;|&nbsp;<a wicket:id="openBrowserLink" href="#">open in IMDI Browser</a><p/></div>
-<table wicket:id="attributesTable">
-</table>
-</div>
+    <head></head>
+    <body>
+    <wicket:extend>
+        <div class="endgame"><br>
+            <div><a wicket:id="backLink" href="#"><wicket:message key="backToResult">[back]</wicket:message></a>&nbsp;|&nbsp;<a wicket:id="openBrowserLink"></a>
+                <p />
+            </div>
+            <br>
+            <br>
+            <span wicket:id="prevNextHeader"></span>
+            <div class="resultAttributes">
+                <table wicket:id="attributesTable" />
+            </div>
+            <div class="resourceList"><span><wicket:message key="resources">[Resources]</wicket:message>:</span>
+                <ul class="resourceItem" >
+                    <li wicket:id="resourceList"></li>
+                </ul>
+            </div>
+        </div>
+    </wicket:extend>
 </body>
 </html>

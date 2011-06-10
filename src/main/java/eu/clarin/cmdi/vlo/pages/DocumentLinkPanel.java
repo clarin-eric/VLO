@@ -1,12 +1,12 @@
 package eu.clarin.cmdi.vlo.pages;
 
 import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.protocol.http.WicketURLEncoder;
+
+import eu.clarin.cmdi.vlo.FacetConstants;
 
 public class DocumentLinkPanel extends Panel {
 
@@ -15,13 +15,15 @@ public class DocumentLinkPanel extends Panel {
     public DocumentLinkPanel(String id, IModel<SolrDocument> model, SearchPageQuery query) {
         super(id, model);
         SolrDocument doc = model.getObject();
-        String param = ShowResultPage.PARAM_DOC_ID + "=" + WicketURLEncoder.QUERY_INSTANCE.encode(doc.getFieldValue("id").toString());
-        PageParameters pageParameters = new PageParameters(param);
-        pageParameters.put(FacetedSearchPage.PARAM_QUERY, query.getSolrQuery());
-        BookmarkablePageLink<ShowResultPage> docLink = new BookmarkablePageLink<ShowResultPage>("docLink", ShowResultPage.class,
-                pageParameters);
+        BookmarkablePageLink<ShowResultPage> docLink = ShowResultPage.createBookMarkableLink("docLink", query, doc.getFieldValue(
+                FacetConstants.FIELD_ID).toString());
         add(docLink);
-        docLink.add(new Label("docLabel", doc.getFirstValue("name").toString()));
+        Object nameValue = doc.getFirstValue(FacetConstants.FIELD_NAME);
+        String name = "<no name>";
+        if (nameValue != null) {
+            name = nameValue.toString();
+        }
+        docLink.add(new Label("docLabel", name));
     }
 
 }

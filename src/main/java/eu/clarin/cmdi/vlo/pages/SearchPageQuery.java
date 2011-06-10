@@ -1,95 +1,127 @@
 package eu.clarin.cmdi.vlo.pages;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
+import org.apache.solr.client.solrj.util.ClientUtils;
+import org.apache.solr.common.params.CommonParams;
+import org.apache.wicket.IClusterable;
+import org.apache.wicket.PageParameters;
 
-public class SearchPageQuery implements Serializable {
+import eu.clarin.cmdi.vlo.Configuration;
+import eu.clarin.cmdi.vlo.FacetConstants;
+
+public class SearchPageQuery implements IClusterable {
+
+    private static final String SOLR_SEARCH_ALL = "*:*";
 
     private static final long serialVersionUID = 1L;
 
     private SolrQuery query;
-    private Map<String, String> filterqueryMap = new HashMap<String, String>();
+    private Map<String, String> filterQueryMap = new HashMap<String, String>();
+    private String searchQuery;
 
-    public SearchPageQuery(String queryParam) {
-        //http://localhost:8983/solr/select/?wt=json&indent=on&q=*:*&fl=name&facet=true&facet.field=cat&facet.field=inStock
-        //TODO PD test for encoding etc etcc, maybe don't encapulate the solr params inside on request param? 
-        query = new SolrQuery();
-        String[] params = queryParam.split("&");
-        for (String param : params) {
-            String[] keyValue = param.split("=");
-            query.add(keyValue[0], keyValue[1]);
+    public SearchPageQuery(PageParameters parameters) {
+        query = getDefaultQuery();
+        String queryParam = parameters.getString(CommonParams.Q);
+        setSearchQuery(queryParam);
+        if (queryParam != null) {
+            query.setQuery(escapeSolrQuery(queryParam));
+        } else {
+            query.setQuery(SOLR_SEARCH_ALL);
+
         }
-        String[] filterQueries = query.getFilterQueries();
+        String[] filterQueries = parameters.getStringArray(CommonParams.FQ);
         if (filterQueries != null) {
-            for (String fq : filterQueries) {
-                String[] fqSplit = fq.split(":");
-                String facet = fqSplit[0];
-                filterqueryMap.put(facet, fqSplit[1]);
+            String[] encodedQueries = new String[filterQueries.length];
+            for (int i = 0; i < filterQueries.length; i++) {
+                String fq = filterQueries[i];
+                String[] keyValue = fq.split(":", 2);
+                filterQueryMap.put(keyValue[0], keyValue[1]);
+                encodedQueries[i] = keyValue[0] + ":" + ClientUtils.escapeQueryChars(keyValue[1]);
             }
+            query.setFilterQueries(encodedQueries);
         }
     }
 
-    public SearchPageQuery(SolrQuery query) {
-        this.query = query;
+    private String escapeSolrQuery(String value) {
+        String result = null;
+        if (value != null) {
+            result = ClientUtils.escapeQueryChars(value);
+        }
+        return result;
     }
 
-    public static SearchPageQuery getDefaultQuery() {
-        SolrQuery query = new SolrQuery();
-        query.setQuery("*:*");
-        query.setRows(10);
-        query.setStart(0);
-        query.setFields("name", "id");
-        query.setFacet(true);
-        query.setFacetMinCount(1);
-        query.addFacetField("origin", "continent", "organisation", "country", "language", "genre");//, "subject", "description");
-        return new SearchPageQuery(query);
+    private SearchPageQuery(SearchPageQuery searchPageQuery) {
+        this.query = searchPageQuery.query;
+        this.filterQueryMap = new HashMap(searchPageQuery.filterQueryMap);
+        this.searchQuery = searchPageQuery.searchQuery;
+    }
+
+    public SearchPageQuery getShallowCopy() {
+        return new SearchPageQuery(this);
+    }
+
+    private SolrQuery getDefaultQuery() {
+        SolrQuery result = new SolrQuery();
+        result.setRows(10);
+        result.setStart(0);
+        result.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID);
+        result.setFacet(true);
+        result.setFacetMinCount(1);
+        result.addFacetField(Configuration.getInstance().getFacetFields());
+        return result;
     }
 
     public SolrQuery getSolrQuery() {
         return query;
     }
 
-    public void setFilterQuery(Count count) {
-        filterqueryMap.put(count.getFacetField().getName(), count.getName());
-        setFilterQuery();
-    }
-
-    private void setFilterQuery() {
-        query.setFilterQueries((String[]) null);
-        for (String facet : filterqueryMap.keySet()) {
-            query.addFilterQuery(facet + ":" + filterqueryMap.get(facet));
-        }
-    }
-
     public void removeFilterQuery(FacetField facetField) {
-        filterqueryMap.remove(facetField.getName());
-        setFilterQuery();
+        filterQueryMap.remove(facetField.getName());
+    }
+
+    public void setFilterQuery(Count count) {
+        filterQueryMap.put(count.getFacetField().getName(), count.getName());
     }
 
     public boolean isSelected(FacetField facetField) {
-        return filterqueryMap.containsKey(facetField.getName());
+        return filterQueryMap.containsKey(facetField.getName());
     }
 
     public String getSelectedValue(FacetField field) {
-        return filterqueryMap.get(field.getName());
+        return filterQueryMap.get(field.getName());
+    }
+
+    public Map<String, String> getFilterQueryMap() {
+        return filterQueryMap;
     }
 
     public void setSearchQuery(String searchQuery) {
         if (searchQuery == null || searchQuery.isEmpty()) {
-            searchQuery = "*:*"; //search all
+            searchQuery = SOLR_SEARCH_ALL;
         }
-        query.setQuery(searchQuery);
+        this.searchQuery = searchQuery;
     }
 
     public String getSearchQuery() {
-        String result = query.getQuery();
-        if (result.equals("*:*")) {
-            result = "";
+        if (searchQuery.equals(SOLR_SEARCH_ALL)) {
+            searchQuery = "";
+        }
+        return searchQuery;
+    }
+
+    public PageParameters getPageParameters() {
+        PageParameters result = new PageParameters();
+        if (!getSearchQuery().isEmpty()) {
+            result.add(CommonParams.Q, getSearchQuery());
+        }
+        for (String facet : filterQueryMap.keySet()) {
+            String facetValue = filterQueryMap.get(facet);
+            result.add(CommonParams.FQ, facet + ":" + facetValue);
         }
         return result;
     }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+  <bean id="importerConfig" class="eu.clarin.cmdi.vlo.importer.ImporterConfig">
+    <property name="deleteAllFirst" value="true"/><!-- You can delete everything first -->
+<!--    <property name="printMapping" value="true"/> Can print the mapping of facets to xpath patterns for every xsd, so it can be checked manually. -->
+    <property name="dataRoots">
+      <list>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="MPI IMDI Archive"/>
+          <property name="rootFile"
+            value="/Users/patdui/data/oai_cmdi/results"/>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="CMDI Providers"/>
+          <property name="rootFile"
+            value="/Users/patdui/data/harvested/harvested/results/cmdi2/"/>
+        </bean>
+         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="OLAC Metadata Providers"/>
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots3/olac/olac-cmdi-20110113/"/>
+        </bean>
+        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+          <property name="originName" value="CLARIN LRT inventory"/>
+          <property name="rootFile"
+            value="/Users/patdui/data/snapshots3/lrt/lrt-20110106/"/>
+        </bean> 
+      </list>
+    </property>
+  </bean>
+
+  
+</beans>
+

@@ -1,53 +1,34 @@
 <!doctype html public "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
-<head>
-<link rel=stylesheet type="text/css" href="css/main.css">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>CLARIN Virtual Language Observatory - Resources</title>
-</head>
-<body onload="">
-
-<div class="title">
-<h1>CLARIN Virtual Language Observatory - Resources</h1>
-<h2>Demonstrator with IMDI, OLAC, ELRA and CLARIN data (contact:vlw@clarin.eu)</h2>
-</div>
-<div class="middlegame">
-<p />
-<table border="0" class="opening" cellspacing="0" cellpadding="0" width="100%">
-	<tr>
-		<td>
-		<form class="search" wicket:id="searchForm">
-		<table border="0" cellpadding="0" cellspacing="0">
-			<tr valign="bottom">
-				<td>
-                    <input type="text"  wicket:id="searchQuery" />&nbsp;
-                    <button wicket:id="searchSubmit">submit</button>
-<!--				    <input type="submit" value="search"> -->
-<!--				    <input type="hidden" name="q" value=""> -->
-<!--			        <input type="hidden" name="facet" value=""> -->
-<!--			        <input type="hidden" name="in" value="all">-->
-			    </td>
-			</tr>
-		</table>
-		</form>
-		</td>
-	</tr>
-	<tr>
-		<td>
-		<table border="0" class="matrix" cellspacing="0" cellpadding="0" width="100%">
-			<tr wicket:id="facetColumns" valign="top">
-				<td wicket:id="cols" width="50%" class="column">
-				<p><span wicket:id="facetBox"></span>
-				<p>
-				</td>
-			</tr>
-		</table>
-		</td>
-	</tr>
-</table>
-<table cellspacing="0" wicket:id="searchResults">
-	[searchResultTable]
-</table>
-</div>
+    <head></head>
+    <body>
+    <wicket:extend>
+        <div class="middlegame">
+            <p />
+            <div border="0" class="opening" width="100%">
+                <form class="search" wicket:id="searchForm">
+                    <div class="homeLink"><a wicket:id="vloHomeLink"><wicket:message key="VLO_home"/></a> &gt;&gt; <a><wicket:message key="facetedBrowserResources"/></a></div>
+                    <div class="searchmodule">
+                        <input wicket:id="searchQuery" type="text">&nbsp;
+                        <button wicket:id="searchSubmit"><wicket:message key="search"/></button>
+                    </div>
+                </form>
+                <div class="tableBody">
+                    <table class="matrix" align="left">
+                        <tr wicket:id="facetColumns" valign="top">
+                            <td wicket:id="cols" width="50%" class="column">
+                                <p><span wicket:id="facetBox"></span>
+                                <p>
+                            </td>
+                        </tr>
+                    </table>
+                    <table wicket:id="searchResults" class="resulttable" cellpadding="0" cellspacing="0">
+                        	[searchResultTable]
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br><br><br>
+    </wicket:extend>
 </body>
 </html>
