@@ -128,7 +128,7 @@ public class FacetMappingFactoryTest {
         assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:description/text()", mapping.getPatterns().get(0));
         mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_RESOURCE_TYPE, mapping.getName());
-        assertEquals(1, mapping.getPatterns().size());
+        assertEquals(2, mapping.getPatterns().size());
         assertEquals("check to see we tested them all", facets.size(), index);
     }
 
@@ -184,7 +184,7 @@ public class FacetMappingFactoryTest {
         assertEquals("/c:CMD/c:Components/c:LrtInventoryResource/c:LrtIPR/c:Description/text()", mapping.getPatterns().get(1));
         mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_RESOURCE_TYPE, mapping.getName());
-        assertEquals(1, mapping.getPatterns().size());
+        assertEquals(2, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceType/text()", mapping.getPatterns().get(0));
         assertEquals("check to see we tested them all", facets.size(), index);
     }
