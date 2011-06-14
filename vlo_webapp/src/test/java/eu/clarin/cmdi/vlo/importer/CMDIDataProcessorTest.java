@@ -556,6 +556,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "         <language>Chinese</language>\n";
         content += "         <subject olac-linguistic-field=\"testSubject\">Kuna</subject>\n";
         content += "         <type olac-linguistic-type=\"Transcription\"/>\n";
+        content += "         <format>WAV</format>\n";
+        content += "        <type dcterms-type=\"DCMIType\">Sound</type>\n";
         content += "      </OLAC-DcmiTerms>\n";
         content += "   </Components>\n";
         content += "</CMD>\n";
@@ -570,7 +572,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(0, dataResources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(4, doc.getFieldNames().size());
+        assertEquals(5, doc.getFieldNames().size());
         assertEquals(null, doc.getFieldValue("name"));
         assertEquals(null, doc.getFieldValue("continent"));
         assertEquals(1, doc.getFieldValues("language").size());
@@ -593,6 +595,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
                 + "European derived motifs (Tom Thumb and Hansel and Gretel) with themes that seem more "
                 + "Kuna in origin. All are woven together and a moral is provided. Pedro Arias performed "
                 + "this story before a gathered audience in the morning..\n      ", descriptions.get(2).toString());
+        assertEquals("audio", doc.getFieldValue(FacetConstants.FIELD_RESOURCE_TYPE));
     }
 
     @Test

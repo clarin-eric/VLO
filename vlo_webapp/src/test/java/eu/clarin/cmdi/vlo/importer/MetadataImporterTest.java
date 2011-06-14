@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -96,6 +97,10 @@ public class MetadataImporterTest extends ImporterTestcase {
         content += "            <ResourceType>Resource</ResourceType>\n";
         content += "            <ResourceRef>http://terminotica.upf.es/CREL/LIC01.htm</ResourceRef>\n";
         content += "         </ResourceProxy>\n";
+        content += "         <ResourceProxy id=\"refLink2\">\n";
+        content += "            <ResourceType>Resource</ResourceType>\n";
+        content += "            <ResourceRef>file://bla.resource2.txt</ResourceRef>\n";
+        content += "         </ResourceProxy>\n";
         content += "      </ResourceProxyList>\n";
         content += "   </Resources>\n";
         content += "   <Components>\n";
@@ -103,6 +108,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         content += "         <LrtCommon>\n";
         content += "             <ResourceName>PALIC</ResourceName>\n";
         content += "             <ResourceType>Application / Tool</ResourceType>\n";
+        content += "             <ResourceType>Text</ResourceType>\n";
         content += "         </LrtCommon>\n";
         content += "     </LrtInventoryResource>\n";
         content += "   </Components>\n";
@@ -113,8 +119,18 @@ public class MetadataImporterTest extends ImporterTestcase {
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
         assertEquals("PALIC", getValue(doc, FacetConstants.FIELD_NAME));
-        assertEquals("Application / Tool", getValue(doc, FacetConstants.FIELD_RESOURCE_TYPE));
-        assertEquals("unknown type|http://terminotica.upf.es/CREL/LIC01.htm", getValue(doc, FacetConstants.FIELD_RESOURCE));
+        Collection<Object> fieldValues = doc.getFieldValues(FacetConstants.FIELD_RESOURCE_TYPE);
+        assertEquals(2, fieldValues.size());
+        List<String> values = new ArrayList(fieldValues);
+        Collections.sort(values);
+        assertEquals("Application / Tool", values.get(0));
+        assertEquals("text", values.get(1));
+        fieldValues = doc.getFieldValues(FacetConstants.FIELD_RESOURCE);
+        assertEquals(2, fieldValues.size());
+        values = new ArrayList(fieldValues);
+        Collections.sort(values);
+        assertEquals("text|file://bla.resource2.txt", values.get(0));
+        assertEquals("unknown type|http://terminotica.upf.es/CREL/LIC01.htm", values.get(1));
     }
 
     @Test
