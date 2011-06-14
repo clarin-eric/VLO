@@ -614,6 +614,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "         <coverage dcterms-type=\"ISO3166\">testCountry2</coverage>\n";
         content += "         <language olac-language=\"language1\">test1</language>\n";
         content += "         <subject olac-language=\"language2\">test2</subject>\n";
+        content += "         <subject olac-language=\"language2\">test2</subject>\n";
         content += "      </OLAC-DcmiTerms>\n";
         content += "   </Components>\n";
         content += "</CMD>\n";
