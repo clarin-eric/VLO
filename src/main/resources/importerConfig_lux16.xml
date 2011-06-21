@@ -10,22 +10,22 @@
         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
           <property name="originName" value="MPI IMDI Archive"/>
           <property name="rootFile"
-            value="/lat/apache/htdocs/oai-harvester/mpi-self-harvest/harvested/results/cmdi/"/>
+            value="/lat/tools/oai/mpi-self-harvest/workspace/harvested/results"/>
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
           <property name="originName" value="CMDI Providers"/>
           <property name="rootFile"
-            value="/lat/apache/htdocs/oai-harvester/cmdi-providers/harvested/results/cmdi/"/>
+            value="/lat/tools/oai/cmdi-providers/workspace/harvested/results/"/>
         </bean>
          <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
           <property name="originName" value="OLAC Metadata Providers"/>
           <property name="rootFile"
-            value="/lat/apache/htdocs/oai-harvester/olac-and-dc-providers/harvested/results/cmdi/"/>
+            value="/lat/tools/oai/olac-and-dc-providers/workspace/harvested/results"/>
         </bean>
         <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="CLARIN LRT inventory"/>	
+          <property name="originName" value="CLARIN LRT inventory"/>
           <property name="rootFile"
-            value="/lat/apache/htdocs/oai-harvester/lrt/harvester/results/cmdi/"/>
+            value="/lat/tools/vlo_importer/data/lrt/lrt-20110106/"/>
         </bean> 
       </list>
     </property>
