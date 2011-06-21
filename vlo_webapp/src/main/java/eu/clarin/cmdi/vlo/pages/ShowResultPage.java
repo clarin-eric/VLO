@@ -81,10 +81,10 @@ public class ShowResultPage extends BasePage {
     private String getHref(String linkToOriginalContext) {
 	String result = linkToOriginalContext;
 	if (linkToOriginalContext != null) {
-	    if (linkToOriginalContext.startsWith(FacetConstants.TEST_HANDLE_PREFIX)) {
-		linkToOriginalContext = linkToOriginalContext.replace(FacetConstants.TEST_HANDLE_PREFIX, FacetConstants.HANDLE_PREFIX);
+	    if (linkToOriginalContext.startsWith(FacetConstants.TEST_HANDLE_MPI_PREFIX)) {
+		linkToOriginalContext = linkToOriginalContext.replace(FacetConstants.TEST_HANDLE_MPI_PREFIX, FacetConstants.HANDLE_MPI_PREFIX);
 	    }
-	    if (linkToOriginalContext.startsWith(FacetConstants.HANDLE_PREFIX)) {
+	    if (linkToOriginalContext.startsWith(FacetConstants.HANDLE_MPI_PREFIX)) {
 		result = Configuration.getInstance().getIMDIBrowserUrl(linkToOriginalContext);
 	    } else {
 		try {
