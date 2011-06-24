@@ -14,6 +14,7 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.StreamingUpdateSolrServer;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +68,7 @@ public class MetadataImporter {
                 LOG.info("Start of processing: " + dataRoot.getOriginName());
                 if (dataRoot.isDeleteFirst()) {
                     LOG.info("Deleting data for data provider: " + dataRoot.getOriginName());
-                    solrServer.deleteByQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + dataRoot.getOriginName());
+                    solrServer.deleteByQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
                     LOG.info("Deleting data of provider done.");
                 }
                 CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS);
