@@ -259,6 +259,8 @@ public class MetadataImporterTest extends ImporterTestcase {
         dataRoot.setDeleteFirst(false);//cannot delete not using real solrServer
         dataRoot.setOriginName("testRoot");
         dataRoot.setRootFile(rootFile);
+        dataRoot.setTostrip("");
+        dataRoot.setPrefix("http://example.com");
         config.setDataRoots(Collections.singletonList(dataRoot));
         return config;
     }
