@@ -25,15 +25,15 @@
                     <property name="originName" value="OLAC Metadata Providers"/>
                     <property name="rootFile"
             value="/lat/tools/oai/olac-and-dc-providers/workspace/harvested/results"/>
-                    <property name="prefix" value="http://catalog.clarin.eu/oai-harvester/ac-and-dc-providers"/>
+                    <property name="prefix" value="http://catalog.clarin.eu/oai-harvester/olac-and-dc-providers"/>
                     <property name="tostrip" value="/lat/tools/oai/olac-and-dc-providers/workspace"/>
                 </bean>
                 <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
                     <property name="originName" value="CLARIN LRT inventory"/>
                     <property name="rootFile"
             value="/lat/tools/vlo_importer/data/lrt/lrt-20110106/"/>
-                    <property name="prefix" value="http://catalog.clarin.eu/oai-harvester/lrt"/>
-                    <property name="tostrip" value="/lat/tools/vlo_importer/data/lrt"/>
+                    <property name="prefix" value="http://catalog.clarin.eu/oai-harvester/lrt/harvester/results/cmdi/"/>
+                    <property name="tostrip" value="/lat/tools/vlo_importer/data/lrt/lrt-20110106/"/>
                 </bean>
             </list>
         </property>
