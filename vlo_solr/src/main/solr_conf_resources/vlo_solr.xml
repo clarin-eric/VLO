@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Example tomcat context file. Deploy this file in tomcat and the make sure the Environment value 
+solr/home is set to the dir where you installed solr this dir will be used to store the data. 
+See http://wiki.apache.org/solr for more information on how solr can be configured.
+See the war should be unpacked in the docBase directory.
+-->
+<Context path="vlo_solr" docBase="${vlo.solr.home}/${vlo.war.name}" debug="0" crossContext="true">
+  <Environment name="solr/home" type="java.lang.String" value="${vlo.solr.home}/solr" override="true"/>
+</Context>
