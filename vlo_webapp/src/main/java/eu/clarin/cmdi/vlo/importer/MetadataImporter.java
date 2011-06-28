@@ -189,10 +189,10 @@ public class MetadataImporter {
         solrDocument.addField(FacetConstants.FIELD_FILENAME, file.getAbsolutePath());
 
         String completeMDUrl = dataOrigin.getPrefix();
-        System.out.println(dataOrigin.getTostrip());
-        System.out.println(dataOrigin.getTostrip().length());
-        System.out.println(dataOrigin.getRootFile().getAbsolutePath());
-        completeMDUrl += dataOrigin.getRootFile().getAbsolutePath().substring(dataOrigin.getTostrip().length());
+        //System.out.println(dataOrigin.getTostrip());
+        //System.out.println(dataOrigin.getTostrip().length());
+        //System.out.println(file.getAbsolutePath());
+        completeMDUrl += file.getAbsolutePath().substring(dataOrigin.getTostrip().length());
 
         solrDocument.addField(FacetConstants.FIELD_COMPLETE_METADATA, completeMDUrl); // TODO: add the contents of the metadata file here
 
