@@ -3,9 +3,11 @@ package eu.clarin.cmdi.vlo.pages;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.handle.hdllib.AbstractRequest;
 import net.handle.hdllib.HandleException;
 import net.handle.hdllib.HandleResolver;
 import net.handle.hdllib.HandleValue;
+import net.handle.hdllib.SiteInfo;
 
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
@@ -70,27 +72,31 @@ public class ResourceLinkPanel extends Panel {
 
     private String getNameFromLink(String resourceLink) {
         String result = resourceLink;
-        if (resourceLink != null) {
-            if (resourceLink.startsWith(FacetConstants.HANDLE_PREFIX)) {
-                try {
-                    String handle = resourceLink.substring(FacetConstants.HANDLE_PREFIX.length());
-                    HandleValue values[] = new HandleResolver().resolveHandle(handle, new String[] { "URL" }, null);
-                    for (HandleValue handleValue : values) {
-                        String url = handleValue.getDataAsString();
-                        int index = url.lastIndexOf('/');
-                        if (index != -1) {
-                            String name = url.substring(index + 1).trim();
-                            if (name.length() > 1) {
-                                result = name + " (" + resourceLink + ")";
-                            }
-                            break;
-                        }
-                    }
-                } catch (HandleException e) {
-                    LOG.warn("Error trying to get the name of the handle", e);
-                }
-            }
-        }
+// HandleResolver does not work at the moment on the clarin server see http://trac.clarin.eu/ticket/136, Disabled it for the release.        
+//        if (resourceLink != null) {
+//            if (resourceLink.startsWith(FacetConstants.HANDLE_PREFIX)) {
+//                try {
+//                    String handle = resourceLink.substring(FacetConstants.HANDLE_PREFIX.length());
+//                    HandleResolver handleResolver = new HandleResolver();
+//                    handleResolver.setTcpTimeout(5000);//5 secs, default is one minute
+//                    HandleValue values[] = handleResolver.resolveHandle(handle, new String[] { "URL" }, null);
+//                    
+//                    for (HandleValue handleValue : values) {
+//                        String url = handleValue.getDataAsString();
+//                        int index = url.lastIndexOf('/');
+//                        if (index != -1) {
+//                            String name = url.substring(index + 1).trim();
+//                            if (name.length() > 1) {
+//                                result = name + " (" + resourceLink + ")";
+//                            }
+//                            break;
+//                        }
+//                    }
+//                } catch (HandleException e) {
+//                    LOG.warn("Error trying to get the name of the handle", e);
+//                }
+//            }
+//        }
         return result;
     }
 
