@@ -24,6 +24,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.Configuration;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 @SuppressWarnings("serial")
 public class MetadataImporter {
@@ -74,7 +76,7 @@ public class MetadataImporter {
                 CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS);
                 List<File> files = getFilesFromDataRoot(dataRoot.getRootFile());
                 for (File file : files) {
-                    processCmdi(file, dataRoot.getOriginName(), processor);
+                    processCmdi(file, dataRoot, processor);
                 }
                 if (!docs.isEmpty()) {
                     sendDocs();
@@ -143,13 +145,13 @@ public class MetadataImporter {
         };
     }
 
-    private void processCmdi(File file, String dataOrigin, CMDIDataProcessor processor) throws SolrServerException, IOException {
+    private void processCmdi(File file, DataRoot dataOrigin, CMDIDataProcessor processor) throws SolrServerException, IOException {
         nrOfFilesAnalyzed++;
         CMDIData cmdiData = null;
         try {
             cmdiData = processor.process(file);
             if (!idOk(cmdiData.getId())) {
-                cmdiData.setId(dataOrigin + "/" + file.getName()); //No id found in the metadata file so making one up based on the file name. Not quaranteed to be unique, but we have to set something.
+                cmdiData.setId(dataOrigin.getOriginName() + "/" + file.getName()); //No id found in the metadata file so making one up based on the file name. Not quaranteed to be unique, but we have to set something.
                 nrOfFilesWithoutId++;
             }
         } catch (Exception e) {
@@ -177,15 +179,22 @@ public class MetadataImporter {
         return id != null && !id.isEmpty();
     }
 
-    private void updateDocument(SolrInputDocument solrDocument, CMDIData cmdiData, File file, String dataOrigin) throws SolrServerException,
+    private void updateDocument(SolrInputDocument solrDocument, CMDIData cmdiData, File file, DataRoot dataOrigin) throws SolrServerException,
             IOException {
         if (!solrDocument.containsKey(FacetConstants.FIELD_COLLECTION)) {
-            solrDocument.addField(FacetConstants.FIELD_COLLECTION, dataOrigin);
+            solrDocument.addField(FacetConstants.FIELD_COLLECTION, dataOrigin.getOriginName());
         }
-        solrDocument.addField(FacetConstants.FIELD_DATA_PROVIDER, dataOrigin);
+        solrDocument.addField(FacetConstants.FIELD_DATA_PROVIDER, dataOrigin.getOriginName());
         solrDocument.addField(FacetConstants.FIELD_ID, cmdiData.getId());
         solrDocument.addField(FacetConstants.FIELD_FILENAME, file.getAbsolutePath());
-        solrDocument.addField(FacetConstants.FIELD_COMPLETE_METADATA, "test"); // TODO: add the contents of the metadata file here
+
+        String completeMDUrl = dataOrigin.getPrefix();
+        System.out.println(dataOrigin.getTostrip());
+        System.out.println(dataOrigin.getTostrip().length());
+        System.out.println(dataOrigin.getRootFile().getAbsolutePath());
+        completeMDUrl += dataOrigin.getRootFile().getAbsolutePath().substring(dataOrigin.getTostrip().length());
+
+        solrDocument.addField(FacetConstants.FIELD_COMPLETE_METADATA, completeMDUrl); // TODO: add the contents of the metadata file here
 
         addResourceData(solrDocument, cmdiData);
         docs.add(solrDocument);

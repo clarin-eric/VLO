@@ -104,10 +104,6 @@ public class ShowResultPage extends BasePage {
 	table.setTableBodyCss("attributesTbody");
 	table.addTopToolbar(new HeadersToolbar(table, null));
 	add(table);
-
-        // We also add the metadata field.
-        Label metadata = new Label("completeMD",attributeProvider.getMetadata().getValue());
-        add(metadata);
     }
 
     @SuppressWarnings("serial")
