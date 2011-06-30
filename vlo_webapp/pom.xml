@@ -30,14 +30,24 @@
             <version>1.4.8</version>
         </dependency>
         <dependency>
+          <groupId>com.55minutes</groupId>
+          <artifactId>fiftyfive-wicket</artifactId>
+          <version>2.0.5</version>
+        </dependency>
+        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.3</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.5.5</version>
+            <version>1.6.1</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -139,5 +149,14 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+          <id>55Minutes_wicket</id>
+           <name>55Minutes opensource wicket extensions</name>
+          <url>http://opensource.55minutes.com/maven/</url>
+        </repository>
+     </repositories>
+
 
 </project>

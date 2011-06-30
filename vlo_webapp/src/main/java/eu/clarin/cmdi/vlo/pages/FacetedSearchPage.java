@@ -23,7 +23,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 
 import eu.clarin.cmdi.vlo.Configuration;
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.Resources;
+import fiftyfive.wicket.basic.TruncatedLabel;
 
 public class FacetedSearchPage extends BasePage {
 
@@ -91,11 +93,20 @@ public class FacetedSearchPage extends BasePage {
     @SuppressWarnings("serial")
     private void addSearchResults() {
         List<IColumn<SolrDocument>> columns = new ArrayList<IColumn<SolrDocument>>();
-        columns.add(new AbstractColumn<SolrDocument>(new ResourceModel(Resources.RESULTS)) {
-
+        columns.add(new AbstractColumn<SolrDocument>(new ResourceModel(Resources.NAME)) {
+            
             @Override
             public void populateItem(Item<ICellPopulator<SolrDocument>> cellItem, String componentId, IModel<SolrDocument> rowModel) {
                 cellItem.add(new DocumentLinkPanel(componentId, rowModel, query));
+            }
+        });
+        columns.add(new AbstractColumn<SolrDocument>(new ResourceModel(Resources.DESCRIPTION)) {
+
+            @Override
+            public void populateItem(Item<ICellPopulator<SolrDocument>> cellItem, String componentId, IModel<SolrDocument> rowModel) {
+        	String descriptionText = (String) rowModel.getObject().getFirstValue(FacetConstants.FIELD_DESCRIPTION);
+                cellItem.add(new TruncatedLabel(componentId, 100, descriptionText));
+                
             }
         });
         AjaxFallbackDefaultDataTable<SolrDocument> searchResultList = new AjaxFallbackDefaultDataTable("searchResults", columns,

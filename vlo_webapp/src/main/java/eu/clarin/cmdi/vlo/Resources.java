@@ -12,6 +12,8 @@ public interface Resources {
     public final static String NO_RESOURCE_FOUND = "noResourceFound";
     public static final String VALUE = "value";
     public static final String RESULTS = "results";
+    public static final String NAME = "name";
+    public static final String DESCRIPTION = "description";
     public static final String OPEN_IN_ORIGINAL_CONTEXT = "openInOriginalContext";
     public static final String ORIGINAL_CONTEXT_NOT_AVAILABLE = "originalContextNotAvailable";    
     
