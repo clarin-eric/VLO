@@ -1,5 +1,8 @@
 Bug Fixes and Features
 
+Release VLO-2.3.1 (28 June 2011):
+Disabled handleResolving to get the resource name on showResult panel, see made ticket to fix it: http://trac.clarin.eu/ticket/136. Did not work on clarin server.
+
 Release VLO-2.3 (10 June 2011):
 Most notable change is the importing now is based on conceptlink mapping, allowing the importer to automatically parse new flavours of cmdi.
 http://trac.clarin.eu/ticket/105 Create import based on conceptlinks
