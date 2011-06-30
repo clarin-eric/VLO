@@ -69,7 +69,7 @@ public class SearchPageQuery implements IClusterable {
         SolrQuery result = new SolrQuery();
         result.setRows(10);
         result.setStart(0);
-        result.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID);
+        result.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID, FacetConstants.FIELD_DESCRIPTION);
         result.setFacet(true);
         result.setFacetMinCount(1);
         result.addFacetField(Configuration.getInstance().getFacetFields());

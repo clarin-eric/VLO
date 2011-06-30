@@ -134,9 +134,6 @@ img{
     vertical-align: top;
     background-color:#d4deef;
 }
-.navigation .navigator {
-    clear:both;
-}
 .anchorpanel{
     padding:5px;
     margin-top: 20px;
@@ -192,3 +189,6 @@ img{
      padding-right:5px;
 }
 
+.resulttable tbody tr.odd {
+    background-color: #CEDCEF;
+}

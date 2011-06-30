@@ -24,7 +24,7 @@ public class SearchPageQueryTest {
         SearchPageQuery q = new SearchPageQuery(params);
         assertEquals("", q.getSearchQuery());
         assertEquals("*:*", q.getSolrQuery().getQuery());
-        assertEquals("name,id", q.getSolrQuery().getFields());
+        assertEquals("name,id,description", q.getSolrQuery().getFields());
         assertEquals(6, q.getSolrQuery().getFacetFields().length);
         assertEquals("collection", q.getSolrQuery().getFacetFields()[0]);
         assertEquals("continent", q.getSolrQuery().getFacetFields()[1]);
@@ -36,7 +36,7 @@ public class SearchPageQueryTest {
         q = new SearchPageQuery(params);
         assertEquals("test", q.getSearchQuery());
         assertEquals("test", q.getSolrQuery().getQuery());
-        assertEquals("name,id", q.getSolrQuery().getFields());
+        assertEquals("name,id,description", q.getSolrQuery().getFields());
         assertEquals(6, q.getSolrQuery().getFacetFields().length);
         assertEquals("collection", q.getSolrQuery().getFacetFields()[0]);
         assertEquals("continent", q.getSolrQuery().getFacetFields()[1]);
