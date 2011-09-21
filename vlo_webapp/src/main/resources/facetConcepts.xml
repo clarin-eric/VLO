@@ -36,6 +36,13 @@
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-language</pattern>
     <pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()</pattern>
   </facetConcept>
+  <facetConcept name="languageLink">
+    <concept>http://www.isocat.org/datcat/DC-2482</concept> <!-- language code -->
+    <concept>http://www.isocat.org/datcat/DC-2484</concept> <!-- language name -->
+    <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:language/@olac-language</pattern>
+    <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-language</pattern>
+    <pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()</pattern>
+  </facetConcept>
   <facetConcept name="organisation">
     <concept>http://www.isocat.org/datcat/DC-2459</concept>
     <concept>http://www.isocat.org/datcat/DC-2979</concept>

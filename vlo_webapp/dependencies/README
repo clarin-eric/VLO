@@ -1,0 +1,7 @@
+THere are some problems resolving some maven dependencies.
+Instead of depending on hundreds of external repos, add them to your own!
+
+Do the following with the appropriate values for the handle-client and vtd-xml:
+
+mvn install:install-file -Dfile=vtd-xml.jar -DgroupId=com.ximpleware -DartifactId=vtd-xml -Dversion=2.10 -Dpackaging=jar
+mvn install:install-file -Dfile=handle-client.jar -DgroupId=net.handle -DartifactId=handle-client -Dversion=7.0 -Dpackaging=jar
