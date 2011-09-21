@@ -19,7 +19,7 @@ import org.w3c.dom.NodeList;
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.Configuration;
 
-public class LanguageCodePostProcessor implements PostProcessor {
+public class LanguageCodePostProcessor implements PostProcessor{
 
     private final static Logger LOG = LoggerFactory.getLogger(LanguageCodePostProcessor.class);
 
@@ -56,7 +56,7 @@ public class LanguageCodePostProcessor implements PostProcessor {
         return result;
     }
 
-    private String extractLanguageCode(String value) {
+    protected String extractLanguageCode(String value) {
         String result = value;
         if (value.length() != 2 && value.length() != 3) {
             if (value.startsWith(ISO639_3_PREFIX)) {
