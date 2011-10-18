@@ -8,7 +8,13 @@ import org.junit.Test;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 public class FacetMappingFactoryTest {
+
+    private final static Logger LOG = LoggerFactory.getLogger(FacetMappingFactoryTest.class);
 
     @Test
     public void testGetImdiMapping() {
@@ -167,10 +173,13 @@ public class FacetMappingFactoryTest {
         assertEquals("/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Countries/c:Country/c:Code/text()", mapping.getPatterns().get(1));
         mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_LANGUAGE, mapping.getName());
-        assertEquals(3, mapping.getPatterns().size());
-        assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:language/@olac-language", mapping.getPatterns().get(0));
-        assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-language", mapping.getPatterns().get(1));
-        assertEquals("/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()", mapping.getPatterns().get(2));
+
+        
+        LOG.info("XXXXX: " + mapping.getPatterns().get(0));
+        assertEquals(1, mapping.getPatterns().size());
+//        assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:language/@olac-language", mapping.getPatterns().get(0));
+//        assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-language", mapping.getPatterns().get(1));
+        assertEquals("/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()", mapping.getPatterns().get(0));
         mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_LANGUAGE_LINK, mapping.getName());
         mapping = facets.get(index++);

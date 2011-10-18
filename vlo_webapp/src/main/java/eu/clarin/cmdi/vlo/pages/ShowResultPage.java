@@ -123,7 +123,17 @@ public class ShowResultPage extends BasePage {
                     IModel<DocumentAttribute> rowModel) {
                 DocumentAttribute attribute = rowModel.getObject();
                 if (attribute.getField().equals(FacetConstants.FIELD_LANGUAGE)) {
-                    //Dostuff
+
+                    // Maybe create a custom panel here?
+                    
+                    cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
+
+                        @Override
+                        protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+                            CharSequence body = StringUtils.toMultiLineHtml(getDefaultModelObjectAsString());
+                            replaceComponentTagBody(markupStream, openTag, getSmartLink(body));
+                        }
+                    });
                 } else if (attribute.getField().equals(FacetConstants.FIELD_COMPLETE_METADATA)) {
                     //Do other stuff
                 } else {
