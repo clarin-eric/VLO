@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -23,6 +25,7 @@ import org.w3c.dom.NodeList;
 public class NationalProjectPostProcessor extends LanguageCodePostProcessor {
 	private final static Logger LOG = LoggerFactory.getLogger(NationalProjectPostProcessor.class);
 	
+	private static String mappingFileName = "nationalProjectsMapping";
 	private static Map<String, String> nationalProjectMap = null;
 	
 	/**
@@ -54,7 +57,11 @@ public class NationalProjectPostProcessor extends LanguageCodePostProcessor {
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             domFactory.setNamespaceAware(true);
 
-            File mappingFile = new File("nationalProjectsMapping.xml");
+            File mappingFile = new File(mappingFileName);
+            if(!mappingFile.exists()) {		// mapping file not accessible?
+            	LOG.info("National project mapping file does not exist - using minimal test file.");
+            	mappingFile = createMinimalMappingFile();
+            }
             DocumentBuilder builder = domFactory.newDocumentBuilder();
             Document doc = builder.parse(mappingFile);
             XPath xpath = XPathFactory.newInstance().newXPath();
@@ -68,5 +75,28 @@ public class NationalProjectPostProcessor extends LanguageCodePostProcessor {
         } catch (Exception e) {
             throw new RuntimeException("Cannot instantiate postProcessor:", e);
         }
+	}
+	
+	/**
+	 * Create temporary and minimal mapping file for testing purposes and as backup solution
+	 * @return minimal file for national projects mapping (e.g. ANDES -> CLARIN-EU)
+	 */
+	private File createMinimalMappingFile() {
+		String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
+        content += "<nationalProjects>\n";
+        content += "   <nationalProjectMapping><MdCollectionDisplayName>ANDES</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>\n";
+        content += "</nationalProjects>\n";
+        
+        File file = null;
+        try {
+        	file = File.createTempFile("vlo.nationalTestMapping", ".map");
+        	FileUtils.writeStringToFile(file, content, "UTF-8");
+        } catch (IOException ioe) {
+        	ioe.printStackTrace();
+        	LOG.error("Could not create temporary national project mapping file");
+        }
+        
+        return file;
 	}
 }
