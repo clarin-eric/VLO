@@ -103,5 +103,34 @@ public final class CommonUtils {
         }
         return result;
     }
+    
+    /**
+     * Create a mapping out of simple CMDI components for instance: lists of items: <item AppInfo="Tigrinya">ti</item> Will become key,
+     * values: Tigrinya, ti
+     * @param urlToComponent
+     * @return Map with item_value, AppInfo_value pairs
+     * @throws XPathExpressionException
+     * @throws IOException
+     * @throws SAXException
+     * @throws ParserConfigurationException
+     */
+    public static Map<String, String> createReverseCMDIComponentItemMap(String urlToComponent) throws XPathExpressionException, SAXException,
+            IOException, ParserConfigurationException {
+        Map<String, String> result = new HashMap<String, String>();
+        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+        domFactory.setNamespaceAware(true);
+        URL url = new URL(urlToComponent);
+        DocumentBuilder builder = domFactory.newDocumentBuilder();
+        Document doc = builder.parse(url.openStream());
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        NodeList nodeList = (NodeList) xpath.evaluate("//item", doc, XPathConstants.NODESET);
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            String shortName = node.getTextContent();
+            String longName = node.getAttributes().getNamedItem("AppInfo").getNodeValue();
+            result.put(longName, shortName.toUpperCase());
+        }
+        return result;
+    }
 
 }
