@@ -48,7 +48,7 @@ public class ShowResultPage extends BasePage {
         SolrDocument solrDocument = DaoLocator.getSearchResultsDao().getSolrDocument(docId);
         if (solrDocument != null) {
             final SearchPageQuery query = new SearchPageQuery(parameters);
-            BookmarkablePageLink backLink = new BookmarkablePageLink("backLink", FacetedSearchPage.class, query.getPageParameters());
+            BookmarkablePageLink<String> backLink = new BookmarkablePageLink<String>("backLink", FacetedSearchPage.class, query.getPageParameters());
             add(backLink);
             String href = getHref(docId);
             if (href != null) {
@@ -97,45 +97,52 @@ public class ShowResultPage extends BasePage {
         return result;
     }
 
-    private void addAttributesTable(final SolrDocument solrDocument) {
+	private void addAttributesTable(final SolrDocument solrDocument) {
+		solrDocument.remove(FacetConstants.FIELD_LANGUAGE);	// ignore language entry, because of FIELD_LANGUAGE_LINK
         DocumentAttributesDataProvider attributeProvider = new DocumentAttributesDataProvider(solrDocument);
-        DataTable table = new DataTable("attributesTable", createAttributesColumns(), attributeProvider, 250);
+        @SuppressWarnings("unchecked")
+		DataTable table = new DataTable("attributesTable", createAttributesColumns(), attributeProvider, 250);
         table.setTableBodyCss("attributesTbody");
         table.addTopToolbar(new HeadersToolbar(table, null));
         add(table);
     }
 
-    @SuppressWarnings("serial")
+    @SuppressWarnings({ "serial" })
     private IColumn[] createAttributesColumns() {
         IColumn[] columns = new IColumn[2];
 
-        columns[0] = new PropertyColumn(new ResourceModel(Resources.FIELD), "field") {
+        columns[0] = new PropertyColumn<Object>(new ResourceModel(Resources.FIELD), "field") {
 
             @Override
             public String getCssClass() {
                 return "attribute";
             }
         };
+
         columns[1] = new AbstractColumn<DocumentAttribute>(new ResourceModel(Resources.VALUE)) {
-
             @Override
-            public void populateItem(Item<ICellPopulator<DocumentAttribute>> cellItem, String componentId,
-                    IModel<DocumentAttribute> rowModel) {
+            public void populateItem(Item<ICellPopulator<DocumentAttribute>> cellItem, String componentId, IModel<DocumentAttribute> rowModel) {
                 DocumentAttribute attribute = rowModel.getObject();
+                
                 if (attribute.getField().equals(FacetConstants.FIELD_LANGUAGE)) {
-
-                    // Maybe create a custom panel here?
-                    
                     cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
-
+                    	
                         @Override
                         protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
                             CharSequence body = StringUtils.toMultiLineHtml(getDefaultModelObjectAsString());
                             replaceComponentTagBody(markupStream, openTag, getSmartLink(body));
                         }
                     });
-                } else if (attribute.getField().equals(FacetConstants.FIELD_COMPLETE_METADATA)) {
-                    //Do other stuff
+                } else if(attribute.getField().equals(FacetConstants.FIELD_LANGUAGE_LINK)) {
+                    cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
+                    	
+                        @Override
+                        protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+                        	setEscapeModelStrings(false);
+                            CharSequence body = getDefaultModelObjectAsString();
+                            replaceComponentTagBody(markupStream, openTag, body);
+                        }
+                    });
                 } else {
                     cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
 
@@ -153,6 +160,7 @@ public class ShowResultPage extends BasePage {
                 return "attributeValue";
             }
         };
+
         return columns;
     }
 
