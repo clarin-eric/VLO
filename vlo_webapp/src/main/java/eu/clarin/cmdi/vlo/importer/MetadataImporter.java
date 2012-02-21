@@ -24,10 +24,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.Configuration;
 import eu.clarin.cmdi.vlo.FacetConstants;
-import java.io.BufferedReader;
-import java.io.FileReader;
 
-@SuppressWarnings("serial")
+
+@SuppressWarnings({"serial"})
 public class MetadataImporter {
 
     private static final String[] VALID_CMDI_EXTENSIONS = new String[] { "xml", "cmdi" };
@@ -41,6 +40,7 @@ public class MetadataImporter {
         POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGE, new LanguageCodePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_RESOURCE_TYPE, new ResourceTypePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGE_LINK, new LanguageLinkPostProcessor());
+        POST_PROCESSORS.put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostProcessor());
     }
 
     private Set<String> processedIds = new HashSet<String>();
@@ -57,14 +57,19 @@ public class MetadataImporter {
         this.config = config;
     }
 
+    /**
+     * Retrieve all files with VALID_CMDI_EXTENSIONS from all DataRoot entries and starts processing for every single file
+     * @throws MalformedURLException
+     */
     void startImport() throws MalformedURLException {
         initSolrServer();
         List<DataRoot> dataRoots = checkDataRoots();
         long start = System.currentTimeMillis();
         try {
+        	// Delete the whole Solr db
             if (config.isDeleteAllFirst()) {
                 LOG.info("Deleting original data...");
-                solrServer.deleteByQuery("*:*");//Delete the whole solr db.
+                solrServer.deleteByQuery("*:*"); 
                 LOG.info("Deleting original data done.");
             }
             for (DataRoot dataRoot : dataRoots) {
@@ -107,6 +112,10 @@ public class MetadataImporter {
         LOG.info("Update of " + nrOFDocumentsUpdated + " took " + took + " secs. Total nr of files analyzed " + nrOfFilesAnalyzed);
     }
 
+    /**
+     * Check a List of DataRoots for existence of RootFile (typically parent directory of metadata files)
+     * @return
+     */
     private List<DataRoot> checkDataRoots() {
         List<DataRoot> dataRoots = config.getDataRoots();
         for (DataRoot dataRoot : dataRoots) {
@@ -119,21 +128,25 @@ public class MetadataImporter {
     }
 
     /**
-     * 
+     * Get the rootFile or all files with VALID_CMDI_EXTENSIONS if rootFile is a directory
      * @param rootFile
-     * @return The rootFile if it is a file or when it is a directory the files in that directory
+     * @return List with the rootFile or all contained files if rootFile is a directory
      */
     private List<File> getFilesFromDataRoot(File rootFile) {
         List<File> result = new ArrayList<File>();
         if (rootFile.isFile()) {
             result.add(rootFile);
         } else {
-            Collection listFiles = FileUtils.listFiles(rootFile, VALID_CMDI_EXTENSIONS, true);
+			Collection<File> listFiles = FileUtils.listFiles(rootFile, VALID_CMDI_EXTENSIONS, true);
             result.addAll(listFiles);
         }
         return result;
     }
 
+    /**
+     * Initialize SolrServer as specified in configuration file
+     * @throws MalformedURLException
+     */
     protected void initSolrServer() throws MalformedURLException {
         String solrUrl = Configuration.getInstance().getSolrUrl();
         LOG.info("Initializing Solr Server on " + solrUrl);
@@ -146,6 +159,14 @@ public class MetadataImporter {
         };
     }
 
+    /**
+     * Process single CMDI file with CMDIDataProcessor
+     * @param file CMDI input file
+     * @param dataOrigin
+     * @param processor
+     * @throws SolrServerException
+     * @throws IOException
+     */
     private void processCmdi(File file, DataRoot dataOrigin, CMDIDataProcessor processor) throws SolrServerException, IOException {
         nrOfFilesAnalyzed++;
         CMDIData cmdiData = null;
@@ -176,10 +197,24 @@ public class MetadataImporter {
         }
     }
 
+    /**
+     * Check id for validness
+     * @param id
+     * @return true if id is acceptable, false otherwise
+     */
     private boolean idOk(String id) {
         return id != null && !id.isEmpty();
     }
 
+    /**
+     * Adds some additional information from DataRoot to solrDocument, add solrDocument to document list, submits list to SolrServer every 1000 files
+     * @param solrDocument
+     * @param cmdiData
+     * @param file
+     * @param dataOrigin
+     * @throws SolrServerException
+     * @throws IOException
+     */
     private void updateDocument(SolrInputDocument solrDocument, CMDIData cmdiData, File file, DataRoot dataOrigin) throws SolrServerException,
             IOException {
         if (!solrDocument.containsKey(FacetConstants.FIELD_COLLECTION)) {
@@ -196,7 +231,7 @@ public class MetadataImporter {
         completeMDUrl += file.getAbsolutePath().substring(dataOrigin.getTostrip().length());
 
         solrDocument.addField(FacetConstants.FIELD_COMPLETE_METADATA, completeMDUrl); // TODO: add the contents of the metadata file here
-
+        
         addResourceData(solrDocument, cmdiData);
         docs.add(solrDocument);
         if (docs.size() == 1000) {
@@ -210,7 +245,7 @@ public class MetadataImporter {
      * solrDocument we take that type.
      */
     private void addResourceData(SolrInputDocument solrDocument, CMDIData cmdiData) {
-        List<Object> fieldValues = solrDocument.containsKey(FacetConstants.FIELD_RESOURCE_TYPE) ? new ArrayList(solrDocument
+        List<Object> fieldValues = solrDocument.containsKey(FacetConstants.FIELD_RESOURCE_TYPE) ? new ArrayList<Object>(solrDocument
                 .getFieldValues(FacetConstants.FIELD_RESOURCE_TYPE)) : null;
         solrDocument.removeField(FacetConstants.FIELD_RESOURCE_TYPE); //Remove old values they might be overwritten.
         List<Resource> resources = cmdiData.getDataResources();
@@ -235,6 +270,11 @@ public class MetadataImporter {
         }
     }
 
+    /**
+     * Send current list of SolrImputDocuments to SolrServer and clears list afterwards
+     * @throws SolrServerException
+     * @throws IOException
+     */
     protected void sendDocs() throws SolrServerException, IOException {
         LOG.info("Sending " + docs.size() + " docs to solr server. Total number of docs updated till now: " + nrOFDocumentsUpdated);
         nrOFDocumentsUpdated += docs.size();

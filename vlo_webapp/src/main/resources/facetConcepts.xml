@@ -66,4 +66,7 @@
     <pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceType/text()</pattern>
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type[@dcterms-type="DCMIType"]/text()</pattern>
   </facetConcept>
+  <facetConcept name="nationalProject">
+    <pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
+  </facetConcept>
 </facetConcepts>
