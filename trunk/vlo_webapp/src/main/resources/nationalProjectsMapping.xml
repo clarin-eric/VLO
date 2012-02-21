@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- This file contains the mapping from MDCollectionDisplayName entries in meta data files to their national projects --> 
+<nationalProjects>
+	<nationalProjectMapping><MdCollectionDisplayName>Berlin-Brandenburgische Akademie der Wissenschaften</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>CLARIN LRT inventory</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>WebLicht Webservice Orchestrator</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Tübingen Language Resources</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Acquisition</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Adaptive Listening Group</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>AILLA</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>ANDES</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Bavarian Archive for Speech Signals (BAS)</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>childes</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Comparative cognitive anthropology</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Comprehension</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>CORP-ORAL</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>DBD</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Demo</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>ECHO</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Endangered Languages</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Evolutionary Processes in Language and Culture</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>GTRP Corpus</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Humanethologisches Filmarchiv</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>IFA corpus</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>ILSP INTERA contribution</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Individual differences in language processing</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Language and Cognition</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Leiden Archives</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>LexoBlock registry</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>MPI CGN</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>MPI für Bildungsforschung</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Multilingualism</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Neurobiology of language</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Nijmegen corpora of casual speech</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>SUCA</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Sign Language</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Sign Language Typology</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>talkbank</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+</nationalProjects>
