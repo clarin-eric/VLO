@@ -36,4 +36,5 @@
 	<nationalProjectMapping><MdCollectionDisplayName>Sign Language</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>Sign Language Typology</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>talkbank</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>CLARIN-NL webservices</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
 </nationalProjects>
