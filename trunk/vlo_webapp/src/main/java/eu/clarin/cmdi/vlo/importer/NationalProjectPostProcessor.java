@@ -25,7 +25,7 @@ import org.w3c.dom.NodeList;
 public class NationalProjectPostProcessor extends LanguageCodePostProcessor {
 	private final static Logger LOG = LoggerFactory.getLogger(NationalProjectPostProcessor.class);
 	
-	private static String mappingFileName = "nationalProjectsMapping";
+	private static String mappingFileName = "nationalProjectsMapping.xml";
 	private static Map<String, String> nationalProjectMap = null;
 	
 	/**
