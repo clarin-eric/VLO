@@ -70,6 +70,7 @@ public class MetadataImporter {
             if (config.isDeleteAllFirst()) {
                 LOG.info("Deleting original data...");
                 solrServer.deleteByQuery("*:*"); 
+                solrServer.commit();
                 LOG.info("Deleting original data done.");
             }
             for (DataRoot dataRoot : dataRoots) {
