@@ -23,8 +23,9 @@ public class LanguageCodePostProcessor implements PostProcessor{
 
     private final static Logger LOG = LoggerFactory.getLogger(LanguageCodePostProcessor.class);
 
-    private static final String ISO639_3_PREFIX = "ISO639-3:";
-    private static final String SIL_CODE_PREFIX = "RFC1766:x-sil-";
+    protected static final String ISO639_3_PREFIX = "ISO639-3:";
+    protected static final String SIL_CODE_PREFIX = "RFC1766:x-sil-";
+    protected static final String SIL_CODE_PREFIX_alt = "RFC-1766:x-sil-";
 
     private Map<String, String> twoLetterCodesMap;
     private Map<String, String> threeLetterCodesMap;
@@ -63,16 +64,13 @@ public class LanguageCodePostProcessor implements PostProcessor{
         if (value.length() != 2 && value.length() != 3) {
             if (value.startsWith(ISO639_3_PREFIX)) {
                 result = value.substring(ISO639_3_PREFIX.length());
-            } else if (value.startsWith(SIL_CODE_PREFIX)) {
-                result = value.substring(SIL_CODE_PREFIX.length());
+            } else if (value.startsWith(SIL_CODE_PREFIX) || value.startsWith(SIL_CODE_PREFIX_alt)) {
+                result = value.substring(value.lastIndexOf("-")+1);
                 Map<String, String> silToISOMap = getSilToIso639Map();
                 String isoCode = silToISOMap.get(result.toUpperCase());
                 if (isoCode != null) {
                     result = isoCode;
                 }
-            } else {				// guessing based on language name
-            	if(getLanguageNameToIso639Map().containsKey(value))
-            		result = getLanguageNameToIso639Map().get(value).toLowerCase();
             }
         }
         return result;
@@ -87,7 +85,7 @@ public class LanguageCodePostProcessor implements PostProcessor{
     	return result;
     }
 
-    private Map<String, String> getSilToIso639Map() {
+    protected Map<String, String> getSilToIso639Map() {
         if (silToIso639Map == null) {
             silToIso639Map = createSilToIsoCodeMap();
         }
@@ -108,7 +106,7 @@ public class LanguageCodePostProcessor implements PostProcessor{
         return threeLetterCodesMap;
     }
     
-    private Map<String, String> getLanguageNameToIso639Map() {
+    protected Map<String, String> getLanguageNameToIso639Map() {
     	if (languageNameToIso639Map == null) {
     			languageNameToIso639Map = createReverseCodeMap(Configuration.getInstance().getLanguage3LetterCodeComponentUrl()); 
     	}
