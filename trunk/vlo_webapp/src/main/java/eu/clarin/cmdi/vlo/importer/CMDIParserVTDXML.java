@@ -17,9 +17,13 @@ import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 
 import eu.clarin.cmdi.vlo.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CMDIParserVTDXML implements CMDIDataProcessor {
     private final Map<String, PostProcessor> postProcessors;
+    private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
+
 
     public CMDIParserVTDXML(Map<String, PostProcessor> postProcessors) {
         this.postProcessors = postProcessors;
@@ -32,7 +36,12 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         vg.parse(true);
         VTDNav nav = vg.getNav();
         setNameSpace(nav);//setting namespace once, all other instance of AutoPilot keep the setting (a bit tricky).
-        FacetMapping facetMapping = getFacetMapping(nav);
+        FacetMapping facetMapping = getFacetMapping(nav.cloneNav(), file.getAbsolutePath());
+        /** New nice error log to find erroneous files */
+        if(facetMapping.getFacets().size() == 0){
+            LOG.error("Problems mapping facets for file: " + file.getAbsolutePath());
+        }
+
         nav.toElement(VTDNav.ROOT);
         processResources(result, nav);
         processFacets(result, nav, facetMapping);
@@ -44,10 +53,16 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         ap.declareXPathNameSpace("c", "http://www.clarin.eu/cmd/");
     }
 
-    private FacetMapping getFacetMapping(VTDNav nav) throws VTDException {
+    private FacetMapping getFacetMapping(VTDNav nav, String tolog) throws VTDException {
         String xsd = extractXsd(nav);
         if (xsd == null) {
             throw new RuntimeException("Cannot get xsd schema so cannot get a proper mapping. Parse failed!");
+        }
+        if (xsd.indexOf("http") != xsd.lastIndexOf("http")){
+            System.out.println("FILE WITH WEIRD HTTP THINGY! " + tolog);
+        }
+        if(xsd.indexOf("p_1307535113335") > -1){
+            System.out.println("FOUND a p_1307535113335 XSD: " + nav + " FILE: " + tolog);
         }
         return FacetMappingFactory.getFacetMapping(xsd);
     }
