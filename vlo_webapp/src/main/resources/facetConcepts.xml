@@ -2,7 +2,7 @@
 <facetConcepts>
   <facetConcept name="id" allowMultipleValues="false">
     <concept>http://www.isocat.org/datcat/DC-2573</concept>
-    <pattern>/c:CMD/c:Header/c:MdSelfLink/text()</pattern> 
+    <pattern>/c:CMD/c:Header/c:MdSelfLink/text()</pattern>
   </facetConcept>
   <facetConcept name="collection">
     <pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
@@ -14,6 +14,7 @@
   <facetConcept name="name" allowMultipleValues="false">
     <concept>http://www.isocat.org/datcat/DC-2544</concept>
     <concept>http://www.isocat.org/datcat/DC-2545</concept>
+    <concept>http://www.isocat.org/rest/dc/4160</concept>
     <concept>http://purl.org/dc/terms/title</concept>
     <pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceName/text()</pattern> <!-- no concept in lrt schema -->
   </facetConcept>

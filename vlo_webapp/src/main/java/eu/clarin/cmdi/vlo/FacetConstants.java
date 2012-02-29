@@ -15,9 +15,9 @@ public class FacetConstants {
     public static final String FIELD_GENRE = "genre";
     public static final String FIELD_SUBJECT = "subject";
     public static final String FIELD_ORGANISATION = "organisation";
-    public static final String FIELD_RESOURCE_TYPE = "resourceType"; 
+    public static final String FIELD_RESOURCE_TYPE = "resourceType";
     public static final String FIELD_PROJECT_NAME = "projectName";
-    public static final String FIELD_COMPLETE_METADATA = "completeMD";
+    public static final String FIELD_COMPLETE_METADATA = "Source";
     public static final String FIELD_NATIONAL_PROJECT = "nationalProject";
 
     //The _ facets are not meant to be shown to users.
@@ -33,7 +33,7 @@ public class FacetConstants {
     public static final String RESOURCE_TYPE_TEXT = "text";
     public static final String RESOURCE_TYPE_IMAGE = "image";
     public static final String RESOURCE_TYPE_ANNOTATION = "annotation";
-    
+
     public static final String HANDLE_MPI_PREFIX = "hdl:1839";
     public static final String HANDLE_PREFIX = "hdl:";
     public static final String TEST_HANDLE_MPI_PREFIX = "test-hdl:1839";
