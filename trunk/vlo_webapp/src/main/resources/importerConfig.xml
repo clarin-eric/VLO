@@ -9,36 +9,34 @@
             <list>
                 <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
                     <property name="originName" value="MPI IMDI Archive"/>
-                    <property name="rootFile"
-            value="/lat/tools/oai/mpi-self-harvest/workspace/harvested/results"/>
-                    <property name="prefix" value="http://catalog.clarin.eu/oai-harvester/mpi-self-harvest"/>
-                    <property name="tostrip" value="/lat/tools/oai/mpi-self-harvest/workspace"/>
+                    <property name="rootFile" value="/lat/tools/vlo_cmdi_files/mpi"/>
+                    <property name="prefix" value="http://catalog.clarin.eu/oai-harvester/mpi-self-harvest/harvested"/>
+                    <property name="tostrip" value="/lat/tools/vlo_cmdi_files/mpi"/>
                 </bean>
                 <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
                     <property name="originName" value="CMDI Providers"/>
                     <property name="rootFile"
-            value="/lat/tools/oai/cmdi-providers/workspace/harvested/results/"/>
-                    <property name="prefix" value="http://catalog.clarin.eu/oai-harvester/cmdi-providers"/>
-                    <property name="tostrip" value="/lat/tools/oai/cmdi-providers/workspace"/>
+                              value="/lat/tools/vlo_cmdi_files/providers"/>
+                    <property name="prefix" value="http://catalog.clarin.eu/oai-harvester/cmdi-providers/harvested"/>
+                    <property name="tostrip" value="/lat/tools/vlo_cmdi_files/mpi/providers"/>
                 </bean>
                 <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
                     <property name="originName" value="OLAC Metadata Providers"/>
                     <property name="rootFile"
-            value="/lat/tools/oai/olac-and-dc-providers/workspace/harvested/results"/>
-                    <property name="prefix" value="http://catalog.clarin.eu/oai-harvester/olac-and-dc-providers"/>
-                    <property name="tostrip" value="/lat/tools/oai/olac-and-dc-providers/workspace"/>
+                              value="/lat/tools/vlo_cmdi_files/olac"/>
+                    <property name="prefix" value="http://catalog.clarin.eu/oai-harvester/olac-and-dc-providers/harvested"/>
+                    <property name="tostrip" value="/lat/tools/vlo_cmdi_files/olac"/>
                 </bean>
                 <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
                     <property name="originName" value="CLARIN LRT inventory"/>
-                    <property name="rootFile"
-            value="/lat/tools/vlo_importer/data/lrt/lrt-20110106/"/>
-                    <property name="prefix" value="http://catalog.clarin.eu/oai-harvester/lrt/harvester/results/cmdi/"/>
-                    <property name="tostrip" value="/lat/tools/vlo_importer/data/lrt/lrt-20110106/"/>
+                    <property name="rootFile" value="/lat/tools/vlo_cmdi_files/lrt"/>
+                    <property name="prefix" value="http://catalog.clarin.eu/oai-harvester/lrt"/>
+                    <property name="tostrip" value="/lat/tools/vlo_cmdi_files/lrt"/>
                 </bean>
             </list>
         </property>
     </bean>
 
-  
+
 </beans>
 
