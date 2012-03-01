@@ -22,6 +22,7 @@
         <value>organisation</value>
         <value>resourceType</value>
         <value>dataProvider</value>
+        <value>nationalProject</value>
 <!--        <value>year</value>-->
       </list>
     </property>
