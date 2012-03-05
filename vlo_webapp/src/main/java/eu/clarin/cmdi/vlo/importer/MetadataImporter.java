@@ -39,7 +39,7 @@ public class MetadataImporter {
         POST_PROCESSORS.put(FacetConstants.FIELD_COUNTRY, new CountryNamePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGE, new LanguageCodePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_RESOURCE_TYPE, new ResourceTypePostProcessor());
-        POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGE_LINK, new LanguageLinkPostProcessor());
+        POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGES, new LanguageLinkPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostProcessor());
     }
 
@@ -225,13 +225,13 @@ public class MetadataImporter {
         solrDocument.addField(FacetConstants.FIELD_ID, cmdiData.getId());
         solrDocument.addField(FacetConstants.FIELD_FILENAME, file.getAbsolutePath());
 
-        String completeMDUrl = dataOrigin.getPrefix();
+        String metadataSourceUrl = dataOrigin.getPrefix();
         //System.out.println(dataOrigin.getTostrip());
         //System.out.println(dataOrigin.getTostrip().length());
         //System.out.println(file.getAbsolutePath());
-        completeMDUrl += file.getAbsolutePath().substring(dataOrigin.getTostrip().length());
+        metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getTostrip().length());
 
-        solrDocument.addField(FacetConstants.FIELD_COMPLETE_METADATA, completeMDUrl); // TODO: add the contents of the metadata file here
+        solrDocument.addField(FacetConstants.FIELD_COMPLETE_METADATA, metadataSourceUrl); // TODO: add the contents of the metadata file here
         
         addResourceData(solrDocument, cmdiData);
         docs.add(solrDocument);
