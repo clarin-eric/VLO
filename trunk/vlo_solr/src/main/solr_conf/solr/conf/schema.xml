@@ -71,7 +71,7 @@
     -->
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
 
-    <fieldType name="completeMD" class="solr.TextField" sortMissingLast="false" omitNorms="true" indexed="false" stored="true" />
+    <fieldType name="metadataSource" class="solr.TextField" sortMissingLast="false" omitNorms="true" indexed="false" stored="true" />
 
     <!-- boolean type: "true" or "false" -->
     <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" omitNorms="true"/>
@@ -436,8 +436,8 @@
     <!-- Not in the copyfield list so we don't search in them -->
    <field name="_fileName" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="_resourceRef" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="completeMD" type="completeMD" indexed="false" stored="true" multiValued="true" />
-   <field name="languageLink" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="metadataSource" type="metadataSource" indexed="false" stored="true" multiValued="true" />
+   <field name="languages" type="string" indexed="true" stored="true" multiValued="true" />
 
  </fields>
 
