@@ -59,7 +59,7 @@ public class FacetMappingFactoryTest {
         assertEquals("/c:CMD/c:Components/c:Session/c:MDGroup/c:Actors/c:Actor/c:Actor_Languages/c:Actor_Language/c:Id/text()", mapping.getPatterns().get(1));
         assertEquals("/c:CMD/c:Components/c:Session/c:Resources/c:WrittenResource/c:LanguageId/text()", mapping.getPatterns().get(2));
         mapping = facets.get(index++);
-        assertEquals(FacetConstants.FIELD_LANGUAGE_LINK, mapping.getName());
+        assertEquals(FacetConstants.FIELD_LANGUAGES, mapping.getName());
         mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_ORGANISATION, mapping.getName());
         assertEquals(6, mapping.getPatterns().size());
@@ -121,7 +121,7 @@ public class FacetMappingFactoryTest {
         assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-language", mapping.getPatterns().get(1));
         assertEquals("/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()", mapping.getPatterns().get(2));
         mapping = facets.get(index++);
-        assertEquals(FacetConstants.FIELD_LANGUAGE_LINK, mapping.getName());
+        assertEquals(FacetConstants.FIELD_LANGUAGES, mapping.getName());
         mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_ORGANISATION, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
@@ -187,7 +187,7 @@ public class FacetMappingFactoryTest {
 //        assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-language", mapping.getPatterns().get(1));
         assertEquals("/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()", mapping.getPatterns().get(0));
         mapping = facets.get(index++);
-        assertEquals(FacetConstants.FIELD_LANGUAGE_LINK, mapping.getName());
+        assertEquals(FacetConstants.FIELD_LANGUAGES, mapping.getName());
         mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_ORGANISATION, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());

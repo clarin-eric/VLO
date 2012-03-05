@@ -133,7 +133,7 @@ public class ShowResultPage extends BasePage {
                             replaceComponentTagBody(markupStream, openTag, getSmartLink(body));
                         }
                     });
-                } else if(attribute.getField().equals(FacetConstants.FIELD_LANGUAGE_LINK)) {
+                } else if(attribute.getField().equals(FacetConstants.FIELD_LANGUAGES)) {
                     cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
                     	
                         @Override
