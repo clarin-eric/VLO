@@ -128,7 +128,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         for (FacetConfiguration config : facetList) {
             List<String> patterns = config.getPatterns();
             for (String pattern : patterns) {
-                boolean matchedPattern = matchPattern(result, nav, config, pattern);
+                boolean matchedPattern = matchPattern(result, nav, config, pattern, config.getAllowMultipleValues());
                 if (matchedPattern && !config.getAllowMultipleValues()) {
                     break;
                 }
@@ -136,7 +136,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         }
     }
 
-    private boolean matchPattern(CMDIData result, VTDNav nav, FacetConfiguration config, String pattern) throws VTDException {
+    private boolean matchPattern(CMDIData result, VTDNav nav, FacetConfiguration config, String pattern, Boolean allowMultipleValues) throws VTDException {
         boolean matchedPattern = false;
         AutoPilot ap = new AutoPilot(nav);
         ap.selectXPath(pattern);
@@ -151,6 +151,9 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             value = postProcess(config.getName(), value);
             result.addDocField(config.getName(), value, config.isCaseInsensitive());
             index = ap.evalXPath();
+            
+            if(!allowMultipleValues)
+            	break;
         }
         return matchedPattern;
     }
