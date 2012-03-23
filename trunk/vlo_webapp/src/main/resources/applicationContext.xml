@@ -7,6 +7,7 @@
  	        (in this case admin users list)
  		    -->
     <bean class="org.springframework.web.context.support.ServletContextPropertyPlaceholderConfigurer">
+        <!--<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>-->
     </bean>
 
     <bean id="configuration" class="eu.clarin.cmdi.vlo.Configuration" factory-method="getInstance">

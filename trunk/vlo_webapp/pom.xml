@@ -1,6 +1,6 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo</artifactId>
@@ -30,9 +30,9 @@
             <version>1.4.8</version>
         </dependency>
         <dependency>
-          <groupId>com.55minutes</groupId>
-          <artifactId>fiftyfive-wicket</artifactId>
-          <version>2.0.5</version>
+            <groupId>com.55minutes</groupId>
+            <artifactId>fiftyfive-wicket</artifactId>
+            <version>2.0.5</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -90,6 +90,11 @@
             <version>2.5.6</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>2.5.6</version>
+        </dependency>
+        <dependency>
             <groupId>com.ximpleware</groupId>
             <artifactId>vtd-xml</artifactId>
             <version>2.10</version>
@@ -130,12 +135,12 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
-      <!--
-        Assembly helper to create the Importer tool a command line tool which can help fill in a solr server with cmdi
-        files. Build the tool with: mvn -Dpackaging=jar -Dmaven.test.skip=true assembly:assembly This creates in
-        "target" a vlo_solr-1.0-SNAPSHOT-Importer directory with a bin and share directory. You can start the tool from
-        the bin dir.
-      -->
+            <!--
+              Assembly helper to create the Importer tool a command line tool which can help fill in a solr server with cmdi
+              files. Build the tool with: mvn -Dpackaging=jar -Dmaven.test.skip=true assembly:assembly This creates in
+              "target" a vlo_solr-1.0-SNAPSHOT-Importer directory with a bin and share directory. You can start the tool from
+              the bin dir.
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -152,11 +157,11 @@
 
     <repositories>
         <repository>
-          <id>55Minutes_wicket</id>
-           <name>55Minutes opensource wicket extensions</name>
-          <url>http://opensource.55minutes.com/maven/</url>
+            <id>55Minutes_wicket</id>
+            <name>55Minutes opensource wicket extensions</name>
+            <url>http://opensource.55minutes.com/maven/</url>
         </repository>
-     </repositories>
+    </repositories>
 
 
 </project>
