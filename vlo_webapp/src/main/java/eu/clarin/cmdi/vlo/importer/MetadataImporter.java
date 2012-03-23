@@ -69,7 +69,7 @@ public class MetadataImporter {
         	// Delete the whole Solr db
             if (config.isDeleteAllFirst()) {
                 LOG.info("Deleting original data...");
-                solrServer.deleteByQuery("*:*"); 
+                solrServer.deleteByQuery("*:*");
                 solrServer.commit();
                 LOG.info("Deleting original data done.");
             }
@@ -188,7 +188,7 @@ public class MetadataImporter {
                     // We only add metadata files that have data resources (1) or files that don't link to other metadata files (2):
                     //  1) files with data resources are obviously interesting
                     //  2) files without metadata links and without dataResource can be interesting e.g. olac files describing a corpus with a link to the original archive.
-                    // Other files will have only metadata resources and are considered 'collection' metadata files they 
+                    // Other files will have only metadata resources and are considered 'collection' metadata files they
                     // are usually not very interesting (think imdi corpus files) and will not be included.
                     updateDocument(solrDocument, cmdiData, file, dataOrigin);
                 } else {
@@ -232,7 +232,7 @@ public class MetadataImporter {
         metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getTostrip().length());
 
         solrDocument.addField(FacetConstants.FIELD_COMPLETE_METADATA, metadataSourceUrl); // TODO: add the contents of the metadata file here
-        
+
         addResourceData(solrDocument, cmdiData);
         docs.add(solrDocument);
         if (docs.size() == 1000) {
@@ -294,13 +294,16 @@ public class MetadataImporter {
         BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { Configuration.CONFIG_FILE, ImporterConfig.CONFIG_FILE });
         factory.getBean("configuration");
         ImporterConfig config = (ImporterConfig) factory.getBean("importerConfig", ImporterConfig.class);
-        MetadataImporter importer = new MetadataImporter(config);
-        importer.startImport();
+        Configuration test = Configuration.getInstance();
+        System.out.println(test.getSolrUrl());
+
+        //MetadataImporter importer = new MetadataImporter(config);
+/*        importer.startImport();
         if (config.isPrintMapping()) {
             File file = new File("xsdMapping.txt");
             FacetMappingFactory.printMapping(file);
             LOG.info("Printed facetMapping in " + file);
-        }
+        }*/
     }
 
 }
