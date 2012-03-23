@@ -1,5 +1,11 @@
 Bug Fixes and Features
 
+TODO: https://trac.mpi.nl/ticket/1630
+Make one distribution
+
+Release VLO 2.5 (22 march 2012):
+Lot's of bugfixes and small enhancements.
+
 Release VLO-2.3.1 (28 June 2011):
 Disabled handleResolving to get the resource name on showResult panel, see made ticket to fix it: http://trac.clarin.eu/ticket/136. Did not work on clarin server.
 

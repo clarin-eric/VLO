@@ -1,0 +1,4 @@
+<Context path="/ds/vlo" docBase="/lat/webapps/vlo/current" debug="0" privileged="true">
+    <Parameter name="eu.clarin.cmdi.vlo.solrUrl" value="http://localhost/ds/vlosolr" override="false"/>
+</Context>
+
