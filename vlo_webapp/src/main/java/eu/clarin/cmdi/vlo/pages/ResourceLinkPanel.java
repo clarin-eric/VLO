@@ -70,7 +70,7 @@ public class ResourceLinkPanel extends Panel {
             if (resourceLink.startsWith(FacetConstants.HANDLE_PREFIX)) {
                 String handle = resourceLink.substring(FacetConstants.HANDLE_PREFIX.length());
                 result = Configuration.getInstance().getHandleServerUrl() + handle;
-            } else if(resourceLink.startsWith(FacetConstants.HANDLE_URN_NBN_PREFIX)) {
+            } else if(resourceLink.startsWith(FacetConstants.URN_NBN_PREFIX)) {
                 result = URN_NBN_RESOLVER_URL+resourceLink;
             }
         }

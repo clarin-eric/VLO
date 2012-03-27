@@ -38,5 +38,6 @@ public class FacetConstants {
     public static final String HANDLE_PREFIX = "hdl:";
     public static final String TEST_HANDLE_MPI_PREFIX = "test-hdl:1839";
     public static final String FIELD_RESOURCE_SPLIT_CHAR = "|";
+    public static final String URN_NBN_PREFIX = "urn:nbn";
 
 }
