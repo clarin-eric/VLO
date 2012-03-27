@@ -25,6 +25,8 @@ public class ResourceLinkPanel extends Panel {
     private final static Logger LOG = LoggerFactory.getLogger(ResourceLinkPanel.class);
 
     private static final long serialVersionUID = 1L;
+    
+    private final static String URN_NBN_RESOLVER_URL = "http://www.nbn-resolving.org/redirect/";
 
     private final static ImageResource ANNOTATION = new ImageResource(new ContextRelativeResource("Images/text-x-log.png"),
             "Annotation file");
@@ -57,12 +59,19 @@ public class ResourceLinkPanel extends Panel {
         add(link);
     }
 
+    /**
+     * Modifies resourceLink if necessary (adds support for different URN resolvers) 
+     * @param resourceLink
+     * @return Modified resourceLink, if no modifications are necessary original parameter resourceLink is returned
+     */
     private String getHref(String resourceLink) {
         String result = resourceLink;
         if (resourceLink != null) {
             if (resourceLink.startsWith(FacetConstants.HANDLE_PREFIX)) {
                 String handle = resourceLink.substring(FacetConstants.HANDLE_PREFIX.length());
                 result = Configuration.getInstance().getHandleServerUrl() + handle;
+            } else if(resourceLink.startsWith(FacetConstants.HANDLE_URN_NBN_PREFIX)) {
+                result = URN_NBN_RESOLVER_URL+resourceLink;
             }
         }
         return result;
@@ -106,5 +115,4 @@ public class ResourceLinkPanel extends Panel {
         }
         return image;
     }
-
 }
