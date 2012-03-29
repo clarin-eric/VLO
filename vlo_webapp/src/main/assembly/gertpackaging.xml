@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Provides a pretty Assembly output.
+    According to the official MPI packaging scheme (as mandated by the application managers).
+    It aims at the following structure:
+    /vlo-${VERSION}
+        /doc
+        /bin/importer (importer-stuff here)
+        /config (all config stuff here)
+            /solr (the solr config directory
+            /vlo (the vlo context fragment with which parameters to use)
+        /war
+            /solr (the solr war)
+            /vlo (the vlo war)
+-->
+<assembly>
+    <id>Distribution</id>
+    <formats>
+        <format>dir</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <dependencySets>
+        <!-- IMPORTER: Dependencies -->
+        <dependencySet>
+            <useDefaultExcludes/>
+            <outputDirectory>/importer/lib</outputDirectory>
+        </dependencySet>
+    </dependencySets>
+    <fileSets>
+        <!-- DOCS -->
+        <fileSet>
+            <directory>../docs</directory>
+            <includes>*.*</includes>
+            <outputDirectory>/doc</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>.</directory>
+            <includes>CHANGES</includes>
+            <includes>DEPLOY-README</includes>
+            <outputDirectory>/doc</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../vlo_solr</directory>
+            <includes>README.TXT</includes>
+            <outputDirectory>/doc/vlosolr</outputDirectory>
+        </fileSet>
+        <!-- IMPORTER -->
+            <!-- run script -->
+            <fileSet>
+                <directory>src/main/bin</directory>
+                <includes>
+                    <include>*.sh</include>
+                    <fileMode>0755</fileMode>
+                </includes>
+                <outputDirectory>importer/bin</outputDirectory>
+            </fileSet>
+            <!-- config files -->
+            <fileSet>
+              <directory>src/main/bin</directory>
+              <includes>
+                <include>log4j.properties</include>
+              </includes>
+              <outputDirectory>importer/bin</outputDirectory>
+            </fileSet>
+            <fileSet>
+              <directory>src/main/resources</directory>
+              <includes>
+                <include>*.xml</include>
+              </includes>
+              <outputDirectory>importer/bin</outputDirectory>
+            </fileSet>
+            <fileSet>
+              <directory>src/main/resources</directory>
+              <includes>
+                <include>*.xml</include>
+              </includes>
+              <outputDirectory>importer/bin</outputDirectory>
+            </fileSet>
+            <!-- OVERWRITE applicationcontext.xml with the test version.
+                The normal (VLO_webapp) version contains a context parameter.
+                The importer does not have context parameters, being run from the commandline -->
+            <fileSet>
+              <directory>src/test/resources</directory>
+              <includes>
+                <include>applicationContext.xml</include>
+              </includes>
+              <outputDirectory>importer/bin</outputDirectory>
+            </fileSet>
+        <!-- VLO WAR FILE -->
+            <!-- WAR FILE -->
+            <fileSet>
+                <directory>target</directory>
+                <includes>
+                    <include>*.war</include>
+                </includes>
+            </fileSet>
+            <!-- config -->
+
+        <!-- SOLR -->
+            <!-- SOLR WAR FILE -->
+
+            <!-- SOLR CONFIG -->
+    </fileSets>
+
+</assembly>
