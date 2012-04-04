@@ -5,7 +5,7 @@ import java.net.URLEncoder;
 
 /**
  * see applicationContext.xml resource for proper values.
- * 
+ *
  **/
 public final class Configuration {
 
@@ -14,6 +14,16 @@ public final class Configuration {
     public static final String CONFIG_FILE = "applicationContext.xml";
     private final static String PROFILE_ID_PLACEHOLDER = "{PROFILE_ID}";
     private String solrUrl;
+
+    public String getImporterConfigFile() {
+        return importerConfigFile;
+    }
+
+    public void setImporterConfigFile(String importerConfigFile) {
+        this.importerConfigFile = importerConfigFile;
+    }
+
+    private String importerConfigFile;
 
     private String imdiBrowserUrl;// = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=";
 
@@ -125,6 +135,6 @@ public final class Configuration {
     public void setProfileSchemaUrl(String profileSchemaUrl) {
         this.profileSchemaUrl = profileSchemaUrl;
     }
-    
+
 
 }

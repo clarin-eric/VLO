@@ -18,91 +18,106 @@
         <format>dir</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
-    <dependencySets>
-        <!-- IMPORTER: Dependencies -->
-        <dependencySet>
-            <useDefaultExcludes/>
-            <outputDirectory>bin/importer/lib</outputDirectory>
-        </dependencySet>
-    </dependencySets>
     <fileSets>
-        <!-- DOCS -->
+<!-- DOCS -->
         <fileSet>
-            <directory>../docs</directory>
-            <includes>*.*</includes>
-            <outputDirectory>/doc</outputDirectory>
+            <directory>docs</directory>
+            <includes>
+                <include>*.*</include>
+            </includes>
+            <outputDirectory>doc</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>.</directory>
-            <includes>CHANGES</includes>
-            <includes>DEPLOY-README</includes>
-            <outputDirectory>/doc</outputDirectory>
+            <directory>vlo_webapp</directory>
+            <includes>
+                <include>CHANGES</include>
+                <include>DEPLOY-README</include>
+            </includes>
+            <outputDirectory>doc</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../vlo_solr</directory>
-            <includes>README.TXT</includes>
-            <outputDirectory>/doc/vlosolr</outputDirectory>
+            <directory>vlo_solr</directory>
+            <includes>
+                <include>README.TXT</include>
+            </includes>
+            <outputDirectory>doc/vlosolr</outputDirectory>
         </fileSet>
-        <!-- IMPORTER -->
-            <!-- run script -->
-            <fileSet>
-                <directory>src/main/bin</directory>
-                <includes>
-                    <include>*.sh</include>
-                    <fileMode>0755</fileMode>
-                </includes>
-                <outputDirectory>bin/importer/bin</outputDirectory>
-            </fileSet>
-            <!-- config files -->
-            <fileSet>
-              <directory>src/main/bin</directory>
-              <includes>
-                <include>log4j.properties</include>
-              </includes>
-              <outputDirectory>bin/importer/bin</outputDirectory>
-            </fileSet>
-            <fileSet>
-              <directory>src/main/resources</directory>
-              <includes>
-                <include>*.xml</include>
-              </includes>
-              <outputDirectory>bin/importer/bin</outputDirectory>
-            </fileSet>
-            <fileSet>
-              <directory>src/main/resources</directory>
-              <includes>
-                <include>*.xml</include>
-              </includes>
-              <outputDirectory>bin/importer/bin</outputDirectory>
-            </fileSet>
-            <!-- OVERWRITE applicationcontext.xml with the test version.
-                The normal (VLO_webapp) version contains a context parameter.
-                The importer does not have context parameters, being run from the commandline -->
-            <fileSet>
-              <directory>src/test/resources</directory>
-              <includes>
-                <include>applicationContext.xml</include>
-              </includes>
-              <outputDirectory>bin/importer/bin</outputDirectory>
-            </fileSet>
-        <!-- VLO WAR FILE -->
-            <!-- WAR FILE -->
-            <fileSet>
-                <directory>target</directory>
-                <includes>
-                    <include>*.war</include>
-                </includes>
-                <outputDirectory>war/vlo</outputDirectory>
-            </fileSet>
-            <!-- config -->
-            <fileSet>
-                <directory></directory>
-            </fileSet>
+<!-- IMPORTER -->
+        <!-- Jar File -->
+        <fileSet>
+            <directory>vlo_webapp/target</directory>
+            <includes>
+                <include>*jar-with-dependencies.jar</include>
+            </includes>
+            <outputDirectory>bin/importer</outputDirectory>
+        </fileSet>
+        <!-- run script -->
+        <fileSet>
+            <directory>vlo_webapp/src/main/bin</directory>
+            <includes>
+                <include>*.sh</include>
+            </includes>
+            <fileMode>0755</fileMode>
+            <outputDirectory>bin/importer</outputDirectory>
+        </fileSet>
+        <!-- config files -->
+        <fileSet>
+            <directory>vlo_webapp/src/main/bin</directory>
+            <includes>
+                <include>*.properties</include>
+            </includes>
+            <outputDirectory>bin/importer</outputDirectory>
+        </fileSet>
+        <fileSet><!-- TODO: Make NOT NEEDED, need properties instead! -->
+            <directory>vlo_webapp/src/main/resources</directory>
+            <includes>
+                <include>importerConfig.xml</include>
+                <include>application.properties</include>
+            </includes>
+            <outputDirectory>bin/importer</outputDirectory>
+        </fileSet>
+<!-- VLO WAR FILE -->
+        <!-- WAR FILE -->
+        <fileSet>
+            <directory>vlo_webapp/target</directory>
+            <includes>
+                <include>*.war</include>
+            </includes>
+            <outputDirectory>war/vlo</outputDirectory>
+        </fileSet>
+        <!-- config -->
+        <fileSet>
+            <directory>vlo_webapp/src/main/resources</directory>
+            <includes>
+                <include>contextfragment.xml</include>
+            </includes>
+            <outputDirectory>config/vlo</outputDirectory>
+        </fileSet>
 
-        <!-- SOLR -->
-            <!-- SOLR WAR FILE -->
+<!-- SOLR -->
+        <!-- SOLR WAR FILE -->
+        <fileSet>
+            <directory>vlo_solr/target</directory>
+            <includes>
+                <include>*.war</include>
+            </includes>
+            <outputDirectory>war/solr</outputDirectory>
+        </fileSet>
 
-            <!-- SOLR CONFIG -->
+        <!-- SOLR CONFIG -->
+        <fileSet>
+            <directory>vlo_solr/target/vlo_solr-1.4.2-vlo_solr_conf</directory>
+            <includes>
+                <include>solr</include>
+            </includes>
+            <outputDirectory>config/solr/solrconfig</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>vlo_solr/target/vlo_solr-1.4.2-vlo_solr_conf</directory>
+            <includes>
+                <include>vlo_solr.xml</include>
+            </includes>
+            <outputDirectory>config/solr</outputDirectory>
+        </fileSet>
     </fileSets>
-
 </assembly>
