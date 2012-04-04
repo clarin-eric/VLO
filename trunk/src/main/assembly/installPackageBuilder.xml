@@ -47,9 +47,17 @@
         <fileSet>
             <directory>vlo_webapp/target</directory>
             <includes>
-                <include>*jar-with-dependencies.jar</include>
+                <include>*.jar</include>
             </includes>
             <outputDirectory>bin/importer</outputDirectory>
+        </fileSet>
+        <!-- Dependencies -->
+        <fileSet>
+            <directory>vlo_webapp/target/lib</directory>
+            <includes>
+                <include>*.*</include>
+            </includes>
+            <outputDirectory>bin/importer/lib</outputDirectory>
         </fileSet>
         <!-- run script -->
         <fileSet>
@@ -68,7 +76,7 @@
             </includes>
             <outputDirectory>bin/importer</outputDirectory>
         </fileSet>
-        <fileSet><!-- TODO: Make NOT NEEDED, need properties instead! -->
+        <fileSet>
             <directory>vlo_webapp/src/main/resources</directory>
             <includes>
                 <include>importerConfig.xml</include>

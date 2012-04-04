@@ -1,10 +1,9 @@
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo</artifactId>
-    <packaging>war</packaging>
+    <packaging>${packaging}</packaging>
     <version>2.5-SNAPSHOT</version>
     <name>VirtualLanguageObservatory</name>
     <description></description>
@@ -135,23 +134,6 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
-            <!--
-              Assembly helper to create the Importer tool a command line tool which can help fill in a solr server with cmdi
-              files. Build the tool with: mvn -Dpackaging=jar -Dmaven.test.skip=true assembly:assembly This creates in
-              "target" a vlo_solr-1.0-SNAPSHOT-Importer directory with a bin and share directory. You can start the tool from
-              the bin dir.
-            -->
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <attach>false</attach>
-                    <ignoreDirFormatExtensions>true</ignoreDirFormatExtensions>
-                    <descriptors>
-                        <descriptor>src/main/assembly/importer.xml</descriptor>
-                    </descriptors>
-                </configuration>
-            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -164,26 +146,40 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <classesDirectory>target/classes</classesDirectory>
+                    <includes>
+                        <include>**/*</include>
+                    </includes>
+                    <archive>
+                        <index>false</index>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>. lib/</classpathPrefix>
+                            <mainClass>eu.clarin.cmdi.vlo.importer.MetadataImporter</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.3</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>copy-dependencies</goal>
                         </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 
