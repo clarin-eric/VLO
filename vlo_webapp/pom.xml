@@ -4,16 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo</artifactId>
-    <packaging>${packaging}</packaging>
+    <packaging>war</packaging>
     <version>2.5-SNAPSHOT</version>
     <name>VirtualLanguageObservatory</name>
     <description></description>
     <dependencies>
-        <dependency>
-            <groupId>eu.clarin.cmdi</groupId>
-            <artifactId>vlo_solr</artifactId>
-            <version>1.4.2</version>
-        </dependency>
         <dependency>
             <groupId>net.handle</groupId>
             <artifactId>handle-client</artifactId>
@@ -146,7 +141,7 @@
               "target" a vlo_solr-1.0-SNAPSHOT-Importer directory with a bin and share directory. You can start the tool from
               the bin dir.
             -->
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
@@ -156,6 +151,19 @@
                         <descriptor>src/main/assembly/importer.xml</descriptor>
                     </descriptors>
                 </configuration>
+            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>make-a-jar</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
