@@ -66,7 +66,7 @@ public class MetadataImporter {
         List<DataRoot> dataRoots = checkDataRoots();
         long start = System.currentTimeMillis();
         try {
-        	// Delete the whole Solr db
+            // Delete the whole Solr db
             if (config.isDeleteAllFirst()) {
                 LOG.info("Deleting original data...");
                 solrServer.deleteByQuery("*:*");
@@ -138,7 +138,7 @@ public class MetadataImporter {
         if (rootFile.isFile()) {
             result.add(rootFile);
         } else {
-			Collection<File> listFiles = FileUtils.listFiles(rootFile, VALID_CMDI_EXTENSIONS, true);
+            Collection<File> listFiles = FileUtils.listFiles(rootFile, VALID_CMDI_EXTENSIONS, true);
             result.addAll(listFiles);
         }
         return result;
@@ -291,19 +291,21 @@ public class MetadataImporter {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { Configuration.CONFIG_FILE, ImporterConfig.CONFIG_FILE });
+        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { Configuration.CONFIG_FILE });
         factory.getBean("configuration");
-        ImporterConfig config = (ImporterConfig) factory.getBean("importerConfig", ImporterConfig.class);
-        Configuration test = Configuration.getInstance();
-        System.out.println(test.getSolrUrl());
+        Configuration cfg = Configuration.getInstance();
 
-        //MetadataImporter importer = new MetadataImporter(config);
-/*        importer.startImport();
+        BeanFactory factory2 = new ClassPathXmlApplicationContext(new String[] { cfg.getImporterConfigFile() } );
+
+        ImporterConfig config = (ImporterConfig) factory2.getBean("importerConfig", ImporterConfig.class);
+
+        MetadataImporter importer = new MetadataImporter(config);
+        importer.startImport();
         if (config.isPrintMapping()) {
             File file = new File("xsdMapping.txt");
             FacetMappingFactory.printMapping(file);
             LOG.info("Printed facetMapping in " + file);
-        }*/
+        }
     }
 
 }
