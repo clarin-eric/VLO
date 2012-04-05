@@ -37,4 +37,5 @@
 	<nationalProjectMapping><MdCollectionDisplayName>Sign Language Typology</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>talkbank</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>CLARIN-NL webservices</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Universität des Saarlandes CLARIN-D-Zentrum</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping> 
 </nationalProjects>
