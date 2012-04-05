@@ -13,6 +13,9 @@ Deze bestaat weer uit 3 sub-delen:
 3) de file "vlo_solr.xml", welk een tomcat context file is, die intern moet verwijzen naar 1 en 2!
         - de vlo_solr context path moet als docBase de war file locatie hebben.
         - als environment variabele binnen die context moet de solr/home verwijzen naar de directory (file #2) met configuratie-meuk
+NOTE: de log4j properties moeten wel ge-edit worden in de webapp om te zorgen dat er gelogd wordt!
+
+
 
 Stap 2)
 Onder stage 2 zit de vlo metadata importer.
@@ -27,3 +30,4 @@ Deze gebruik je op de volgende manier:
 Stap 3)
 De webapp is een normale webapp. Als stap 1 en 2 goed zijn gegaan moet dit vrij triviaal zijn.
 Wel: uitpakken en applicationcontext.xml fixorren om naar de solr te verwijzen!
+
