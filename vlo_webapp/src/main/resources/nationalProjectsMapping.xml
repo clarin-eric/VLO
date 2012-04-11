@@ -37,5 +37,10 @@
 	<nationalProjectMapping><MdCollectionDisplayName>Sign Language Typology</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>talkbank</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>CLARIN-NL webservices</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Meertens Collection: Soundbites</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Meertens Collection: Dynamische Fonologische en Morfologische Atlas van de Nederlandse Dialecten (GTRP)</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Meertens Collection</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Meertens Collection: Diversity in Dutch DP Design (DiDDD)</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Meertens Collection: Dynamische Syntactische Atlas van de Nederlandse Dialecten (DynaSAND)</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>Universität des Saarlandes CLARIN-D-Zentrum</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping> 
 </nationalProjects>
