@@ -81,6 +81,7 @@
             <includes>
                 <include>importerConfig.xml</include>
                 <include>application.properties</include>
+                <include>nationalProjectsMapping.xml</include>
             </includes>
             <outputDirectory>bin/importer</outputDirectory>
         </fileSet>

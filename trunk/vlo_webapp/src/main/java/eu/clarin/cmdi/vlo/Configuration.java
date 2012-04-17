@@ -25,6 +25,16 @@ public final class Configuration {
 
     private String importerConfigFile;
 
+    public String getNationalProjectMapping() {
+        return nationalProjectMapping;
+    }
+
+    public void setNationalProjectMapping(String nationalProjectMapping) {
+        this.nationalProjectMapping = nationalProjectMapping;
+    }
+
+    private String nationalProjectMapping;
+
     private String imdiBrowserUrl;// = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=";
 
     private String[] facetFields;// = new String[] { "collection", "organisation", "continent", "genre", "country", "subject", "language" };
