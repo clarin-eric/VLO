@@ -25,6 +25,8 @@ public final class Configuration {
 
     private String importerConfigFile;
 
+    private String nationalProjectMapping = "nationalProjectsMapping.xml";
+
     public String getNationalProjectMapping() {
         return nationalProjectMapping;
     }
@@ -33,7 +35,6 @@ public final class Configuration {
         this.nationalProjectMapping = nationalProjectMapping;
     }
 
-    private String nationalProjectMapping;
 
     private String imdiBrowserUrl;// = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=";
 
