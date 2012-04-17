@@ -53,6 +53,9 @@ public class NationalProjectPostProcessor extends LanguageCodePostProcessor {
 
 	private Map<String, String> getNationalProjectMapping() {
         String mappingFileName = Configuration.getInstance().getNationalProjectMapping();
+        if(mappingFileName == null){
+            throw new RuntimeException("Configuration Error, NationalProjectMapping is null");
+        }
 		LOG.debug("Creating national project map.");
         try {
             Map<String, String> result = new HashMap<String, String>();
