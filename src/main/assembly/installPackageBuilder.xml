@@ -15,9 +15,9 @@
 <assembly>
     <id>Distribution</id>
     <formats>
-        <format>dir</format>
+        <format>tar.gz</format>
     </formats>
-    <includeBaseDirectory>false</includeBaseDirectory>
+    <includeBaseDirectory>true</includeBaseDirectory>
     <fileSets>
 <!-- DOCS -->
         <fileSet>
@@ -117,7 +117,7 @@
         <fileSet>
             <directory>vlo_solr/target/vlo_solr-1.4.2-vlo_solr_conf</directory>
             <includes>
-                <include>solr</include>
+                <include>**/*</include>
             </includes>
             <outputDirectory>config/solr/solrconfig</outputDirectory>
         </fileSet>

@@ -4,7 +4,7 @@
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo</artifactId>
     <packaging>${packaging}</packaging>
-    <version>2.5-SNAPSHOT</version>
+    <version>2.7</version>
     <name>VirtualLanguageObservatory</name>
     <description></description>
 
