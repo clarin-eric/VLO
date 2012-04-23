@@ -42,5 +42,7 @@
 	<nationalProjectMapping><MdCollectionDisplayName>Meertens Collection</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>Meertens Collection: Diversity in Dutch DP Design (DiDDD)</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>Meertens Collection: Dynamische Syntactische Atlas van de Nederlandse Dialecten (DynaSAND)</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Meertens collections: Liederenbank</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Meertens Collection: Heiloo toponiemen</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>Universität des Saarlandes CLARIN-D-Zentrum</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping> 
 </nationalProjects>
