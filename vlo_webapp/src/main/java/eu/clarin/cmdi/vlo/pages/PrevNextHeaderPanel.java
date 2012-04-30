@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.pages;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 
@@ -31,15 +32,20 @@ public class PrevNextHeaderPanel extends Panel {
     public PrevNextHeaderPanel(String id) {
         super(id);
         addDummyPrev();
+        addDummyResultCount();
         addDummyNext();
     }
 
     private void addDummyPrev() {
-        add(new WebMarkupContainer("prev"));
+        add(new WebMarkupContainer("prev").setVisible(false));
     }
 
     private void addDummyNext() {
-        add(new WebMarkupContainer("next"));
+        add(new WebMarkupContainer("next").setVisible(false));
+    }
+    
+    private void addDummyResultCount() {
+    	add(new WebMarkupContainer("resultcount"));
     }
 
     private void addPrevNextLabels(String docId, SearchPageQuery query) {
@@ -63,6 +69,9 @@ public class PrevNextHeaderPanel extends Panel {
         } else {
             addDummyPrev();
         }
+        
+        add(new Label("resultcount", "Record "+(index+1)+" out of "+docIdList.size()));
+        
         if (index < (docIdList.size() - 1) && index >= 0) {
             String prevDocId = docIdList.get(index + 1).getFieldValue(FacetConstants.FIELD_ID).toString();
             BookmarkablePageLink<ShowResultPage> next = ShowResultPage.createBookMarkableLink("next", query, prevDocId);
