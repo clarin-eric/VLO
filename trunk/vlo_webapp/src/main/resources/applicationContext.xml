@@ -6,18 +6,17 @@
  		        Property placeholder that allows init parameters defined in servlet context to be used as property values
  	        (in this case admin users list)
  		    -->
-    <bean class="org.springframework.web.context.support.ServletContextPropertyPlaceholderConfigurer">
-       <property name="location" value="classpath:application.properties"/>
-    </bean>
+    <!--<bean class="org.springframework.web.context.support.ServletContextPropertyPlaceholderConfigurer"/>
+     Nice Idea, but in practise getting some un-explained errors on the catalog server. We should try again when there is a new stack on the catalog (tomcat and so on).
+    -->
 
     <bean id="configuration" class="eu.clarin.cmdi.vlo.Configuration" factory-method="getInstance">
-        <property name="solrUrl" value="${eu.clarin.cmdi.vlo.solrUrl}" />
-        <!--<property name="solrUrl" value="http://localhost:8080/vlo_solr" />-->
-        <!--    <property name="solrUrl" value="http://lux16.mpi.nl:8080/vlo_solr" />-->
-        <!--    <property name="solrUrl" value="http://catalog.clarin.eu:8080/vlo_solr" />-->
-        <property name="importerConfigFile" value="${eu.clarin.cmdi.vlo.importerConfigFile}" />
+        <property name="solrUrl" value="--> PATH HERE <--" />
 
-        <property name="nationalProjectMapping" value="${eu.clarin.cmdi.vlo.nationalProjectMapping}" />
+        <!-- ImporterConfigFile and nationalProjectMapping are only used by the importer, not by the webapp! -->
+        <property name="importerConfigFile" value="XXX" />
+
+        <property name="nationalProjectMapping" value="XXX" />
 
         <property name="IMDIBrowserUrl" value="http://corpus1.mpi.nl/ds/imdi_browser?openpath=" />
         <property name="handleServerUrl" value="http://hdl.handle.net/" />

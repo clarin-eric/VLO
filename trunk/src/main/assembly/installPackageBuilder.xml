@@ -36,6 +36,13 @@
             <outputDirectory>doc</outputDirectory>
         </fileSet>
         <fileSet>
+            <directory>.</directory>
+            <includes>
+                <include>DEPLOY-README</include>
+            </includes>
+            <outputDirectory>doc</outputDirectory>
+        </fileSet>
+        <fileSet>
             <directory>vlo_solr</directory>
             <includes>
                 <include>README.TXT</include>
@@ -49,15 +56,7 @@
             <includes>
                 <include>*.jar</include>
             </includes>
-            <outputDirectory>bin/importer</outputDirectory>
-        </fileSet>
-        <!-- Dependencies -->
-        <fileSet>
-            <directory>vlo_webapp/target/lib</directory>
-            <includes>
-                <include>*.*</include>
-            </includes>
-            <outputDirectory>bin/importer/lib</outputDirectory>
+            <outputDirectory>bin</outputDirectory>
         </fileSet>
         <!-- run script -->
         <fileSet>
@@ -66,7 +65,7 @@
                 <include>*.sh</include>
             </includes>
             <fileMode>0755</fileMode>
-            <outputDirectory>bin/importer</outputDirectory>
+            <outputDirectory>bin</outputDirectory>
         </fileSet>
         <!-- config files -->
         <fileSet>
@@ -74,7 +73,7 @@
             <includes>
                 <include>*.properties</include>
             </includes>
-            <outputDirectory>bin/importer</outputDirectory>
+            <outputDirectory>bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>vlo_webapp/src/main/resources</directory>
@@ -83,7 +82,7 @@
                 <include>application.properties</include>
                 <include>nationalProjectsMapping.xml</include>
             </includes>
-            <outputDirectory>bin/importer</outputDirectory>
+            <outputDirectory>bin</outputDirectory>
         </fileSet>
 <!-- VLO WAR FILE -->
         <!-- WAR FILE -->
@@ -126,7 +125,7 @@
             <includes>
                 <include>vlo_solr.xml</include>
             </includes>
-            <outputDirectory>config/solr</outputDirectory>
+            <outputDirectory>config</outputDirectory>
         </fileSet>
     </fileSets>
 </assembly>
