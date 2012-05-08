@@ -1,6 +1,9 @@
 <Context path="/ds/vlo" docBase="/lat/webapps/vlo/current" debug="0" privileged="true">
-    <Parameter name="eu.clarin.cmdi.vlo.solrUrl" value="http://localhost/ds/vlosolr" override="false"/>
+<!--
+        MOMENTARILY Not used, as spring context thingy seems to have a problem with our software stack on the catalog.
+
+   <Parameter name="eu.clarin.cmdi.vlo.solrUrl" value="http://localhost/ds/vlosolr" override="false"/>
     <Parameter name="eu.clarin.cmdi.vlo.importerConfigFile" value="/PATH/TO/IMPORTERCONFIG!"/>
-    <Parameter name="eu.clarin.cmdi.vlo.nationalProjectMapping" value="/PATH/TO/DOESN'T MATTER!"/>
+    <Parameter name="eu.clarin.cmdi.vlo.nationalProjectMapping" value="/PATH/TO/DOESN'T MATTER!"/> -->
 </Context>
 

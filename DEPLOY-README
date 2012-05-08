@@ -1,0 +1,50 @@
+== INTRODUCTION ==
+
+Deploying the VLO happens in three steps.
+These steps have to be performed in order, each step depends on the previous one(s).
+The steps are:
+1) Installing and configuring the solr server.
+2) Setting up the ingester (putting data in the solr server).
+3) Installing the VLO webapp.
+This readme is found in the doc directory of the package.
+
+The package contains the follwing structure:
+doc: the documentation (including this file).
+config: configuration (context fragments and solr config directory)
+war: the war files; the solr one and the vlo one.
+
+== INSTALLATION ==
+
+STEP 1: INSTALLING SOLR.
+
+Unpack the solr war file.
+IF you want logging edit the log4j properties file.
+
+Move the solr configuration directory to the desired location.
+Note that this directory will also contain the solr database, so the user running the webapp needs read/write rights in this directory.
+
+Note down the location where the solr war file is unpacked and the location of the config directory.
+
+Prepare the solr context fragment (found under config, called vlo_solr.xml).
+Fill in the two locations and install the fragment.
+
+STEP 2: RUNNING THE INGESTER
+
+Go to the bin directory.
+Edit the following files:
+application.properties (set the location of the solr server, importerconfig and nationalprojectmapping).
+If upgrading an existing solr database with new data (e.g., changed mappings or facets) set deleteAllFirst in the importerConfig.
+
+run: vlo_solr_importer.sh from the bin directory.
+
+If deleteAllFirst was set, unset it.
+
+Optionally: add the vlo_solr_importer.sh script to the crontab.
+
+STEP 3: INSTALLING THE VLO.
+
+Unpack the vlo war file.
+edit the applicationContext.xml file to point to the solr installation.
+If you want logging edit the log4j properties file.
+
+edit the contextfragment.xml file (found in config/vlo) and deploy it.
