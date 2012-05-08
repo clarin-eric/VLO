@@ -15,24 +15,20 @@ war: the war files; the solr one and the vlo one.
 
 == INSTALLATION ==
 
+STEP 0: run the setvalues.pl script and answer the questions correctly. This will _PERMANENTLY_ set some configuration values.
+
 STEP 1: INSTALLING SOLR.
 
-Unpack the solr war file.
-IF you want logging edit the log4j properties file.
+IF you want different from default logging edit the log4j properties file in war/solr/WEB-inf/classes
 
-Move the solr configuration directory to the desired location.
-Note that this directory will also contain the solr database, so the user running the webapp needs read/write rights in this directory.
+Make sure that the solr configuration directory (config/solr/) and all its children are readable AND writable by the user that runs the webapp.
+This directory also contains the lucene database.
 
-Note down the location where the solr war file is unpacked and the location of the config directory.
-
-Prepare the solr context fragment (found under config, called vlo_solr.xml).
-Fill in the two locations and install the fragment.
+install the context fragment found in the config directory.
 
 STEP 2: RUNNING THE INGESTER
 
 Go to the bin directory.
-Edit the following files:
-application.properties (set the location of the solr server, importerconfig and nationalprojectmapping).
 If upgrading an existing solr database with new data (e.g., changed mappings or facets) set deleteAllFirst in the importerConfig.
 
 run: vlo_solr_importer.sh from the bin directory.
@@ -43,8 +39,6 @@ Optionally: add the vlo_solr_importer.sh script to the crontab.
 
 STEP 3: INSTALLING THE VLO.
 
-Unpack the vlo war file.
-edit the applicationContext.xml file to point to the solr installation.
-If you want logging edit the log4j properties file.
+If you want to change the default logging edit the log4j properties file in war/vlo/WEB-inf/classes.
 
-edit the contextfragment.xml file (found in config/vlo) and deploy it.
+install the context fragment found in the config directory.

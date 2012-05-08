@@ -11,7 +11,7 @@
     -->
 
     <bean id="configuration" class="eu.clarin.cmdi.vlo.Configuration" factory-method="getInstance">
-        <property name="solrUrl" value="--> PATH HERE <--" />
+        <property name="solrUrl" value="[[SOLRURL]]" />
 
         <!-- ImporterConfigFile and nationalProjectMapping are only used by the importer, not by the webapp! -->
         <property name="importerConfigFile" value="XXX" />

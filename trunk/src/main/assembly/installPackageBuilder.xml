@@ -19,6 +19,15 @@
     </formats>
     <includeBaseDirectory>true</includeBaseDirectory>
     <fileSets>
+<!-- COOL SCRIPT FOR Application management -->
+        <fileSet>
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>setvalues.pl</include>
+            </includes>
+            <fileMode>777</fileMode>
+            <outputDirectory>.</outputDirectory>
+        </fileSet>
 <!-- DOCS -->
         <fileSet>
             <directory>docs</directory>
@@ -99,7 +108,7 @@
             <includes>
                 <include>contextfragment.xml</include>
             </includes>
-            <outputDirectory>config/vlo</outputDirectory>
+            <outputDirectory>config</outputDirectory>
         </fileSet>
 
 <!-- SOLR -->
@@ -118,7 +127,7 @@
             <includes>
                 <include>**/*</include>
             </includes>
-            <outputDirectory>config/solr/solrconfig</outputDirectory>
+            <outputDirectory>config/solr/</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>vlo_solr/target/vlo_solr-1.4.2-vlo_solr_conf</directory>
