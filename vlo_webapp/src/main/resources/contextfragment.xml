@@ -1,4 +1,4 @@
-<Context path="/ds/vlo" docBase="/lat/webapps/vlo/current" debug="0" privileged="true">
+<Context path="[[VLOPATH]]" docBase="[[PACKAGEDIR]]/war/vlo" debug="0" privileged="true">
 <!--
         MOMENTARILY Not used, as spring context thingy seems to have a problem with our software stack on the catalog.
 
