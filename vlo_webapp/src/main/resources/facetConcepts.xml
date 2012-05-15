@@ -70,4 +70,7 @@
   <facetConcept name="nationalProject">
     <pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
   </facetConcept>
+    <facetConcept name="_componentProfile">
+        <pattern>/c:CMD/c:Header/c:MdProfile/text()</pattern>
+    </facetConcept>
 </facetConcepts>
