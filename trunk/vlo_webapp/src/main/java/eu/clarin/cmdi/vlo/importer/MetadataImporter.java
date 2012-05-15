@@ -41,6 +41,7 @@ public class MetadataImporter {
         POST_PROCESSORS.put(FacetConstants.FIELD_RESOURCE_TYPE, new ResourceTypePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGES, new LanguageLinkPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostProcessor());
+        // TODO: Define tools postprocessor and create input file and so on. Maybe do this dynamicly?
     }
 
     private Set<String> processedIds = new HashSet<String>();
@@ -231,7 +232,7 @@ public class MetadataImporter {
         //System.out.println(file.getAbsolutePath());
         metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getTostrip().length());
 
-        solrDocument.addField(FacetConstants.FIELD_COMPLETE_METADATA, metadataSourceUrl); // TODO: add the contents of the metadata file here
+        solrDocument.addField(FacetConstants.FIELD_COMPLETE_METADATA, metadataSourceUrl);
 
         addResourceData(solrDocument, cmdiData);
         docs.add(solrDocument);
