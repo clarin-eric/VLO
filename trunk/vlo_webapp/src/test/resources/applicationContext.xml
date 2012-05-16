@@ -17,6 +17,7 @@
         <!--    <property name="solrUrl" value="http://catalog.clarin.eu:8080/vlo_solr" />-->
         <property name="importerConfigFile" value="${eu.clarin.cmdi.vlo.importerConfigFile}" />
         <property name="nationalProjectMapping" value="${eu.clarin.cmdi.vlo.nationalProjectMapping}" />
+        <property name="componentRegistryRESTURL" value="${eu.clarin.cmdi.vlo.componentRegistryRESTURL}" />
 
 
         <property name="IMDIBrowserUrl" value="http://corpus1.mpi.nl/ds/imdi_browser?openpath=" />

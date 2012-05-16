@@ -18,6 +18,8 @@
 
         <property name="nationalProjectMapping" value="XXX" />
 
+        <property name="componentRegistryRESTURL" value="XXX" />
+
         <property name="IMDIBrowserUrl" value="http://corpus1.mpi.nl/ds/imdi_browser?openpath=" />
         <property name="handleServerUrl" value="http://hdl.handle.net/" />
         <property name="facetFields">
