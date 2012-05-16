@@ -79,6 +79,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(null, res.getMimeType());
         assertEquals(0, data.getDataResources().size());
         SolrInputDocument doc = data.getSolrDocument();
+        // TODO FIX bad test case. Depends on the presence of an internet connection! (BAD!)
+        assertTrue(doc.getFieldValues(FacetConstants.FIELD_CLARIN_PROFILE).contains("imdi-corpus"));
         assertNotNull(doc);
     }
 

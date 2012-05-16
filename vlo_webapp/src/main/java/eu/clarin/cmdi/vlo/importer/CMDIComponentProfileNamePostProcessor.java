@@ -15,7 +15,7 @@ import java.net.URL;
  */
 public class CMDIComponentProfileNamePostProcessor implements PostProcessor{
 
-    private static String XPATH = "/c:CMD_ComponentSpec/c:Header/c:Name/text()";
+    private static String XPATH = "/CMD_ComponentSpec/Header/Name/text()";
     private String BASE_URL = null;
     AutoPilot ap = null;
     VTDGen vg = null;
@@ -31,11 +31,13 @@ public class CMDIComponentProfileNamePostProcessor implements PostProcessor{
         if(value != null){
             setup();
             if(vg.parseHttpUrl(BASE_URL + value, true)){
+                LOG.info("PARSED: "+BASE_URL+value);
                 vn = vg.getNav();
                 ap.bind(vn);
                 int idx;
                 try {
                     idx = ap.evalXPath();
+                    LOG.info("EVALUATED XPATH: "+XPATH+ " found idx: "+idx);
                     if(idx == -1){ // idx represent the nodeId in the xml file, if -1 the xpath evaluates to nothing.
                         return result;
                     }
