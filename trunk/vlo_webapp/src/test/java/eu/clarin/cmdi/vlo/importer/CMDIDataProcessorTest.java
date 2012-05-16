@@ -32,7 +32,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "   <Header>\n";
         content += "      <MdCreationDate>2003-01-14</MdCreationDate>\n";
         content += "      <MdSelfLink>test-hdl:1839/00-0000-0000-0000-0001-D</MdSelfLink>\n";
-        content += "      <MdProfile>  clarin.eu:cr1:p_1274880881885   </MdProfile>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1274880881885</MdProfile>\n";
         content += "   </Header>\n";
         content += "   <Resources>\n";
         content += "      <ResourceProxyList>\n";
