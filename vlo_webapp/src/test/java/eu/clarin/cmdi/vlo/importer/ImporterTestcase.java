@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.importer;
 import java.io.File;
 import java.io.IOException;
 
+import eu.clarin.cmdi.vlo.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -27,6 +28,7 @@ public abstract class ImporterTestcase {
         testDir = new File(baseTempPath + File.separator + "testRegistry_" + System.currentTimeMillis());
         testDir.mkdir();
         testDir.deleteOnExit();
+        Configuration.getInstance().setComponentRegistryRESTURL("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/");
     }
 
 }

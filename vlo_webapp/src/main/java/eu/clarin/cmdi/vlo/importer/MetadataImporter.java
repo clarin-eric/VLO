@@ -41,7 +41,7 @@ public class MetadataImporter {
         POST_PROCESSORS.put(FacetConstants.FIELD_RESOURCE_TYPE, new ResourceTypePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGES, new LanguageLinkPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostProcessor());
-        // TODO: Define tools postprocessor and create input file and so on. Maybe do this dynamicly?
+        POST_PROCESSORS.put(FacetConstants.FIELD_CLARIN_PROFILE, new CMDIComponentProfileNamePostProcessor());
     }
 
     private Set<String> processedIds = new HashSet<String>();
@@ -63,6 +63,7 @@ public class MetadataImporter {
      * @throws MalformedURLException
      */
     void startImport() throws MalformedURLException {
+
         initSolrServer();
         List<DataRoot> dataRoots = checkDataRoots();
         long start = System.currentTimeMillis();

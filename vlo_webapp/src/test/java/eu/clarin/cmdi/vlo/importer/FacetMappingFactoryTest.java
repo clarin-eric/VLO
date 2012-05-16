@@ -188,7 +188,7 @@ public class FacetMappingFactoryTest {
         assertEquals(FacetConstants.FIELD_LANGUAGE, mapping.getName());
 
 
-        LOG.info("XXXXX: " + mapping.getPatterns().get(0));
+        //LOG.info("XXXXX: " + mapping.getPatterns().get(0));
         assertEquals(1, mapping.getPatterns().size());
 //        assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:language/@olac-language", mapping.getPatterns().get(0));
 //        assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-language", mapping.getPatterns().get(1));

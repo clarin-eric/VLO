@@ -35,6 +35,15 @@ public final class Configuration {
         this.nationalProjectMapping = nationalProjectMapping;
     }
 
+    private String componentRegistryRESTURL = "NOT_OVERRIDDEN!";
+    public String getComponentRegistryRESTURL() {
+        return componentRegistryRESTURL;
+    }
+
+    public void setComponentRegistryRESTURL(String componentRegistryRESTURL) {
+        this.componentRegistryRESTURL = componentRegistryRESTURL;
+    }
+
 
     private String imdiBrowserUrl;// = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=";
 
@@ -146,6 +155,4 @@ public final class Configuration {
     public void setProfileSchemaUrl(String profileSchemaUrl) {
         this.profileSchemaUrl = profileSchemaUrl;
     }
-
-
 }
