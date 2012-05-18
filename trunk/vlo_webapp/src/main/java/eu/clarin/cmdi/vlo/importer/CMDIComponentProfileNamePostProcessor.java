@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.HashMap;
 
 /**
  * Takes the value of the componentprofileid and uses the componentregistry REST service to transform this to the name of the componentprofile.
@@ -25,30 +26,38 @@ public class CMDIComponentProfileNamePostProcessor implements PostProcessor{
 
     private final static Logger LOG = LoggerFactory.getLogger(CMDIComponentProfileNamePostProcessor.class);
 
+    private HashMap<String, String> cache = new HashMap<String, String>();
+
     @Override
     public String process(String value) {
         String result = _EMPTY_STRING;
         if(value != null){
             setup();
-            if(vg.parseHttpUrl(BASE_URL + value, true)){
-                LOG.info("PARSED: "+BASE_URL+value);
-                vn = vg.getNav();
-                ap.bind(vn);
-                int idx;
-                try {
-                    idx = ap.evalXPath();
-                    LOG.info("EVALUATED XPATH: "+XPATH+ " found idx: "+idx);
-                    if(idx == -1){ // idx represent the nodeId in the xml file, if -1 the xpath evaluates to nothing.
-                        return result;
-                    }
-                    result = vn.toString(idx);
-                } catch (Exception e) {
-                    LOG.error(e.getLocalizedMessage());
-                    return result;
-                }
+            if(cache.containsKey(value)){
+                result = cache.get(value);
             }
             else{
-                LOG.error("CANNOT OPEN AND/OR PARSE: " + BASE_URL + value);
+                if(vg.parseHttpUrl(BASE_URL + value, true)){
+                    LOG.info("PARSED: "+BASE_URL+value);
+                    vn = vg.getNav();
+                    ap.bind(vn);
+                    int idx;
+                    try {
+                        idx = ap.evalXPath();
+                        LOG.info("EVALUATED XPATH: "+XPATH+ " found idx: "+idx);
+                        if(idx == -1){ // idx represent the nodeId in the xml file, if -1 the xpath evaluates to nothing.
+                            return result;
+                        }
+                        result = vn.toString(idx);
+                        cache.put(value, result);
+                    } catch (Exception e) {
+                        LOG.error(e.getLocalizedMessage());
+                        return result;
+                    }
+                }
+                else{
+                    LOG.error("CANNOT OPEN AND/OR PARSE: " + BASE_URL + value);
+                }
             }
         }
         return result;
