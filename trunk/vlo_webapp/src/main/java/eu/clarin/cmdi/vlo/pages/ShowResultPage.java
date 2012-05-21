@@ -1,13 +1,16 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.RequestCycle;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
@@ -25,6 +28,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.protocol.http.WicketURLDecoder;
 import org.apache.wicket.protocol.http.WicketURLEncoder;
 import org.slf4j.Logger;
@@ -40,6 +44,7 @@ public class ShowResultPage extends BasePage {
 
     private final static Logger LOG = LoggerFactory.getLogger(ShowResultPage.class);
     public static final String PARAM_DOC_ID = "docId";
+    public static final String feedbackfromURL = "http://www.clarin.eu/node/3502?url=";
 
     @SuppressWarnings("serial")
     public ShowResultPage(final PageParameters parameters) {
@@ -74,7 +79,13 @@ public class ShowResultPage extends BasePage {
         } else {
             setResponsePage(new ResultNotFoundPage(parameters));
         }
-
+        String thisURL = RequestUtils.toAbsolutePath(RequestCycle.get().urlFor(this).toString());
+        try {
+            thisURL = URLEncoder.encode(thisURL,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            LOG.error(e.toString());
+        }
+        add(new ExternalLink("feedback", feedbackfromURL+thisURL, "Give Feedback"));
     }
 
     private String getHref(String linkToOriginalContext) {
@@ -123,10 +134,10 @@ public class ShowResultPage extends BasePage {
             @Override
             public void populateItem(Item<ICellPopulator<DocumentAttribute>> cellItem, String componentId, IModel<DocumentAttribute> rowModel) {
                 DocumentAttribute attribute = rowModel.getObject();
-                
+
                 if (attribute.getField().equals(FacetConstants.FIELD_LANGUAGE)) {
                     cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
-                    	
+
                         @Override
                         protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
                             CharSequence body = StringUtils.toMultiLineHtml(getDefaultModelObjectAsString());
@@ -135,7 +146,7 @@ public class ShowResultPage extends BasePage {
                     });
                 } else if(attribute.getField().equals(FacetConstants.FIELD_LANGUAGES)) {
                     cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
-                    	
+
                         @Override
                         protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
                         	setEscapeModelStrings(false);
