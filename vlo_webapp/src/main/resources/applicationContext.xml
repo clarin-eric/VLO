@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-
+        <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	        xmlns:context="http://www.springframework.org/schema/context"
+	        xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:/org/springframework/beans/factory/xml/spring-beans-2.5.xsd
+	                           http://www.springframework.org/schema/context classpath:/org/springframework/context/config/spring-context-2.5.xsd">
     <!--
  		        Property placeholder that allows init parameters defined in servlet context to be used as property values
  	        (in this case admin users list)
