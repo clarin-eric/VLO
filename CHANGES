@@ -1,7 +1,11 @@
 Bug Fixes and Features
 
-TODO: https://trac.mpi.nl/ticket/1630
-Make one distribution
+Release VLO 2.8 (23 may 2012):
+Many small fixes.
+Streamlined the deployment procedure.
+Added facet for the component profile (hidden facet, not shown in interface) for future use.
+Added feedback option.
+Removed the dependency on external xml stylesheets (caused a large-scale outage for spring-users around the 21st of may).
 
 Release VLO 2.5 (22 march 2012):
 Lot's of bugfixes and small enhancements.
