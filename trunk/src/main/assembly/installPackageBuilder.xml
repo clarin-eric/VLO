@@ -127,7 +127,7 @@
             <includes>
                 <include>**/*</include>
             </includes>
-            <outputDirectory>config/solr/</outputDirectory>
+            <outputDirectory>config/</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>vlo_solr/target/vlo_solr-1.4.2-vlo_solr_conf</directory>
