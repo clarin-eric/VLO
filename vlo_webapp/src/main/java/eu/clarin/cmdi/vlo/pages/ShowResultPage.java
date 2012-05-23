@@ -79,7 +79,8 @@ public class ShowResultPage extends BasePage {
         } else {
             setResponsePage(new ResultNotFoundPage(parameters));
         }
-        String thisURL = RequestUtils.toAbsolutePath(RequestCycle.get().urlFor(this).toString());
+
+        String thisURL = RequestUtils.toAbsolutePath(RequestCycle.get().urlFor(ShowResultPage.class, parameters).toString());
         try {
             thisURL = URLEncoder.encode(thisURL,"UTF-8");
         } catch (UnsupportedEncodingException e) {

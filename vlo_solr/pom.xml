@@ -44,7 +44,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <vlo.solr.home>[[PACKAGEDIR]]</vlo.solr.home>
-      <vlo.solr.conf>config/solr/</vlo.solr.conf>
+      <vlo.solr.conf>config/solr</vlo.solr.conf>
 <!--    <vlo.solr.home>/lat/tools/vlo_solr</vlo.solr.home>-->
     <vlo.war.name>war/solr/</vlo.war.name>
   </properties>
