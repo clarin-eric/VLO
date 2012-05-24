@@ -386,7 +386,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("audio/mpeg", res.getMimeType());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(11, doc.getFieldNames().size());
+        assertEquals(12, doc.getFieldNames().size());
         assertEquals("kleve-route", doc.getFieldValue("name"));
         assertEquals("Peter Wittenburg", doc.getFieldValue(FacetConstants.FIELD_PROJECT_NAME));
         assertEquals("Europe", doc.getFieldValue("continent"));
@@ -506,7 +506,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(0, resources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(5, doc.getFieldNames().size());
+        assertEquals(6, doc.getFieldNames().size());
         assertEquals("kleve-route", doc.getFieldValue("name"));
         assertEquals("Europe", doc.getFieldValue("continent"));
         assertEquals("Netherlands", doc.getFieldValue("country"));
@@ -575,7 +575,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(0, dataResources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(6, doc.getFieldNames().size());
+        assertEquals(7, doc.getFieldNames().size());
         assertEquals(null, doc.getFieldValue("name"));
         assertEquals(null, doc.getFieldValue("continent"));
         assertEquals(1, doc.getFieldValues("language").size());
@@ -858,7 +858,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(0, dataResources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(7, doc.getFieldNames().size());
+        assertEquals(8, doc.getFieldNames().size());
         assertEquals("Corpus of Present-day Written Estonian", doc.getFieldValue("name"));
         assertEquals(null, doc.getFieldValue("continent"));
         assertEquals(1, doc.getFieldValues("language").size());

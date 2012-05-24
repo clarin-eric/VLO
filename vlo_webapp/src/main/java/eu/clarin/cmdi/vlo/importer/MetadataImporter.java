@@ -85,6 +85,7 @@ public class MetadataImporter {
                 CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS);
                 List<File> files = getFilesFromDataRoot(dataRoot.getRootFile());
                 for (File file : files) {
+                    LOG.debug("PROCESSING FILE: " + file.getAbsolutePath());
                     processCmdi(file, dataRoot, processor);
                 }
                 if (!docs.isEmpty()) {
