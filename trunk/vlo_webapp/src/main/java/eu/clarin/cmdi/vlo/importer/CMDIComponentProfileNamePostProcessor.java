@@ -32,11 +32,11 @@ public class CMDIComponentProfileNamePostProcessor implements PostProcessor{
     public String process(String value) {
         String result = _EMPTY_STRING;
         if(value != null){
-            setup();
             if(cache.containsKey(value)){
                 result = cache.get(value);
             }
             else{
+                setup();
                 if(vg.parseHttpUrl(BASE_URL + value, true)){
                     LOG.info("PARSED: "+BASE_URL+value);
                     vn = vg.getNav();
@@ -64,16 +64,14 @@ public class CMDIComponentProfileNamePostProcessor implements PostProcessor{
     }
 
     private void setup() {
-        if(ap == null){
-            ap = new AutoPilot();
-            try {
-                ap.selectXPath(XPATH);
-            } catch (XPathParseException e) {
-                LOG.error(e.getLocalizedMessage());
-                ap = null;
-            }
-            vg = new VTDGen();
-            BASE_URL = Configuration.getInstance().getComponentRegistryRESTURL();
+        ap = new AutoPilot();
+        try {
+            ap.selectXPath(XPATH);
+        } catch (XPathParseException e) {
+            LOG.error(e.getLocalizedMessage());
+            ap = null;
         }
+        vg = new VTDGen();
+        BASE_URL = Configuration.getInstance().getComponentRegistryRESTURL();
     }
 }
