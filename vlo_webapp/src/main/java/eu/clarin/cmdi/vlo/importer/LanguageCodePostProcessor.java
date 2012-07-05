@@ -31,7 +31,7 @@ public class LanguageCodePostProcessor implements PostProcessor{
     private Map<String, String> threeLetterCodesMap;
     private Map<String, String> silToIso639Map;
     private Map<String, String> languageNameToIso639Map;
-    private Map<String, String> iso639ToLanguageNameMap;   
+    private Map<String, String> iso639ToLanguageNameMap;
 
     /**
      * Returns the language name based on the mapping defined in the CMDI components: See http://trac.clarin.eu/ticket/40 for the mapping.
@@ -73,15 +73,18 @@ public class LanguageCodePostProcessor implements PostProcessor{
                 }
             }
         }
+        // Convert to lowercase to capture erroneously capitalized language codes in the CMDI files.
+        // NOTE: In the mappings themselves we do not capitalize.
+        result = result.toLowerCase();
         return result;
     }
-    
+
     public String getLanguageNameForLanguageCode(String langCode) {
     	String result = getIso639ToLanguageNameMap().get(langCode);
-    	
+
     	if(result == null)
     		result = langCode;
-    	
+
     	return result;
     }
 
@@ -105,22 +108,22 @@ public class LanguageCodePostProcessor implements PostProcessor{
         }
         return threeLetterCodesMap;
     }
-    
+
     protected Map<String, String> getLanguageNameToIso639Map() {
     	if (languageNameToIso639Map == null) {
-    			languageNameToIso639Map = createReverseCodeMap(Configuration.getInstance().getLanguage3LetterCodeComponentUrl()); 
+    			languageNameToIso639Map = createReverseCodeMap(Configuration.getInstance().getLanguage3LetterCodeComponentUrl());
     	}
     	return languageNameToIso639Map;
     }
-    
+
     private Map<String, String> getIso639ToLanguageNameMap() {
     	if (iso639ToLanguageNameMap == null) {
     		iso639ToLanguageNameMap = createCodeMap(Configuration.getInstance().getLanguage3LetterCodeComponentUrl());
     	}
-    	
+
     	return iso639ToLanguageNameMap;
     }
-    
+
     private Map<String, String> createCodeMap(String url) {
         LOG.debug("Creating language code map.");
         try {
@@ -130,7 +133,7 @@ public class LanguageCodePostProcessor implements PostProcessor{
             throw new RuntimeException("Cannot instantiate postProcessor:", e);
         }
     }
-    
+
     private Map<String, String> createReverseCodeMap(String url) {
         LOG.debug("Creating language code map.");
         try {
