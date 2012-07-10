@@ -61,6 +61,9 @@ public class ShowResultPage extends BasePage {
             } else {
                 add(new Label("openBrowserLink", new ResourceModel(Resources.ORIGINAL_CONTEXT_NOT_AVAILABLE).getObject()));
             }
+            addAttributesTable(solrDocument);
+            addResourceLinks(solrDocument);
+            
             add(new AjaxLazyLoadPanel("prevNextHeader") {
 
                 @Override
@@ -73,9 +76,6 @@ public class ShowResultPage extends BasePage {
                     return new PrevNextHeaderPanel(markupId);
                 }
             });
-
-            addAttributesTable(solrDocument);
-            addResourceLinks(solrDocument);
         } else {
             setResponsePage(new ResultNotFoundPage(parameters));
         }
