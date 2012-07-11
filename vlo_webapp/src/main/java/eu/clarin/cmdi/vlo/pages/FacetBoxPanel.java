@@ -36,7 +36,7 @@ public class FacetBoxPanel extends Panel {
         setMaxNrOfFacetValues(MAX_NR_OF_FACET_VALUES);
     }
     
-    @SuppressWarnings("serial")
+    @SuppressWarnings({"serial"})
     public FacetBoxPanel create(final SearchPageQuery query) {
         final FacetField facetField = (FacetField) getDefaultModelObject();
         facetModel = new FacetModel(facetField);
@@ -65,9 +65,11 @@ public class FacetBoxPanel extends Panel {
         add(facetList);
         PageParameters pageParameters = query.getPageParameters();
         pageParameters.add(ShowAllFacetValuesPage.SELECTED_FACET_PARAM, facetField.getName());
+        pageParameters.add(ShowAllFacetValuesPage.FACET_MIN_OCCURS, "1");
         add(new BookmarkablePageLink("showMore", ShowAllFacetValuesPage.class, pageParameters) {
 
-            public boolean isVisible() {
+            @Override
+			public boolean isVisible() {
                 return !facetModel.isSelected() && showMore;
             }
 
