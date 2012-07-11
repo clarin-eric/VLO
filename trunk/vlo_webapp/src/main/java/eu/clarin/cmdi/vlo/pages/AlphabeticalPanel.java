@@ -12,9 +12,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -27,10 +27,12 @@ import org.apache.wicket.model.Model;
 public class AlphabeticalPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
-    private List<String> foundCharacters = new LinkedList<String>();
+    private final List<String> foundCharacters = new LinkedList<String>();
+    private final Integer facetMinOccurs;
 
-    public AlphabeticalPanel(String id, IDataProvider data, final SearchPageQuery query) {
+    public AlphabeticalPanel(String id, IDataProvider data, final SearchPageQuery query, Integer facetMinOccurs) {
         super(id);
+        this.facetMinOccurs = facetMinOccurs;
 
         RepeatingView sortedDataViewLeft = new RepeatingView("sortedDataViewLeft");
         RepeatingView sortedDataViewRight = new RepeatingView("sortedDataViewRight");
@@ -96,6 +98,8 @@ public class AlphabeticalPanel extends Panel {
         List<Count> otherCount = new ArrayList<Count>();
         while (iter.hasNext()) {
             Count count = iter.next();
+            if(count.getCount() < facetMinOccurs)
+            	continue;
             Character key = count.getName().trim().charAt(0);
             if (Character.isDigit(key)) {
                 numericalCount.add(count);
