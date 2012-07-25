@@ -47,4 +47,6 @@
 	<nationalProjectMapping><MdCollectionDisplayName>Nederlands Instituut voor Beeld en Geluid Academia collectie</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>INL Taalbank Nederlands</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>Universität des Saarlandes CLARIN-D-Zentrum</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping> 
+	<nationalProjectMapping><MdCollectionDisplayName>DK-CLARIN Repository</MdCollectionDisplayName><NationalProject>DK-CLARIN</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>LINDAT-Clarin repository</MdCollectionDisplayName><NationalProject>LINDAT (CLARIN-CZ)</NationalProject></nationalProjectMapping>
 </nationalProjects>
