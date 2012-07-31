@@ -42,7 +42,7 @@ public class FacetMappingFactoryTest {
         assertEquals("/c:CMD/c:Components/c:Session/c:Title/text()", mapping.getPatterns().get(1));
         mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_YEAR, mapping.getName());
-        assertEquals(1, mapping.getPatterns().size());
+        assertEquals(2, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Components/c:Session/c:Date/text()", mapping.getPatterns().get(0));
         mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_CONTINENT, mapping.getName());
