@@ -86,7 +86,7 @@ public class ResourceLinkPanel extends Panel {
         return result;
     }
 
-    private String getNameFromLink(String resourceLink) {
+    protected String getNameFromLink(String resourceLink) {
         String result = resourceLink;
         // We ALWAYS backoff to the resourceLink as default thingy.
 
@@ -130,6 +130,7 @@ public class ResourceLinkPanel extends Panel {
                 URL u;
                 try{
                     u = new URL(resourceLink);
+                    System.out.println(resourceLink);
                     URLConnection c = u.openConnection();
                     if(c instanceof HttpURLConnection){
                         con = (HttpURLConnection) c;
@@ -138,11 +139,16 @@ public class ResourceLinkPanel extends Panel {
                         if(con.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM ||
                                 con.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP ||
                                 con.getResponseCode() == HttpURLConnection.HTTP_SEE_OTHER){
-                            for (Map.Entry<String, List<String>> header : con.getHeaderFields().entrySet()) {
-                                if(header.getKey().equals("Location")){
-                                    result = header.getValue().get(0);
+                           result = con.getURL().toString();
+/*                            for (Map.Entry<String, List<String>> header : con.getHeaderFields().entrySet()) {
+                                if(header != null && header.getKey() != null){
+                                    System.out.println("XXX:" + header.getKey());
+                                    System.out.println(header.getValue().get(0));
+                                    if(header.getKey().equals("Location")){
+                                        result = header.getValue().get(0);
+                                    }
                                 }
-                            }
+                            }*/
                         }
                     }
                 } catch (MalformedURLException e) {
