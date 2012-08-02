@@ -20,6 +20,7 @@
       </exclusions>
     </dependency>
     <dependency>
+        <!-- PAY ATTENTION: when changing the version of the solr ALSO ALWAYS UPDATE the parent assembly xml-->
       <groupId>org.apache.solr</groupId>
       <artifactId>solr-dataimporthandler</artifactId>
       <version>3.6.0</version>
