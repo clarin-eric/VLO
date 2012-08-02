@@ -123,14 +123,14 @@
 
         <!-- SOLR CONFIG -->
         <fileSet>
-            <directory>vlo_solr/target/vlo_solr-1.4.2-vlo_solr_conf</directory>
+            <directory>vlo_solr/target/vlo_solr-3.6.0-vlo_solr_conf</directory>
             <includes>
                 <include>**/*</include>
             </includes>
             <outputDirectory>config/</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>vlo_solr/target/vlo_solr-1.4.2-vlo_solr_conf</directory>
+            <directory>vlo_solr/target/vlo_solr-3.6.0-vlo_solr_conf</directory>
             <includes>
                 <include>vlo_solr.xml</include>
             </includes>
