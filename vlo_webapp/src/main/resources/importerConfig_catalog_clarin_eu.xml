@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
   <bean id="importerConfig" class="eu.clarin.cmdi.vlo.importer.ImporterConfig">
-<!--    <property name="deleteAllFirst" value="true"/> You can delete everything first -->
+    <property name="deleteAllFirst" value="true"/> <!-- You can delete everything first -->
 <!--    <property name="printMapping" value="true"/> Can print the mapping of facets to xpath patterns for every xsd, so it can be checked manually. -->
     <property name="dataRoots">
       <list>
@@ -29,15 +29,6 @@
             value="/lat/apache/htdocs/oai-harvester/olac-and-dc-providers/harvested/results/cmdi/"/>
              <property name="prefix" value="http://catalog.clarin.eu/"/>
              <property name="tostrip" value="/lat/apache/htdocs/"/>
-        </bean>
-
-        <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
-          <property name="originName" value="CLARIN LRT inventory"/>
-          <property name="rootFile"
-            value="/lat/apache/htdocs/oai-harvester/lrt/harvester/results/cmdi/"/>
-            <property name="prefix" value="http://catalog.clarin.eu/"/>
-            <property name="tostrip" value="/lat/apache/htdocs/"/>
-
         </bean>
       </list>
     </property>
