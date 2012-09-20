@@ -12,6 +12,8 @@
     <concept>http://www.isocat.org/datcat/DC-2537</concept>
   </facetConcept>
   <facetConcept name="name" allowMultipleValues="false">
+      <concept>http://www.isocat.org/datcat/DC-4160</concept><!-- CLARIN-D Webservices name -->
+      <concept>http://www.isocat.org/datcat/DC-4114</concept>
     <concept>http://www.isocat.org/datcat/DC-2544</concept>
     <concept>http://www.isocat.org/datcat/DC-2545</concept>
     <concept>http://www.isocat.org/rest/dc/4160</concept>
