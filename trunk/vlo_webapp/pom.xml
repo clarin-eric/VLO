@@ -4,6 +4,8 @@
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo</artifactId>
     <packaging>${packaging}</packaging>
+
+    <!-- WHEN UPDATING THE VERSION NUMBER ALSO UPDATE vlo_solr_importer.sh in src/main/bin -->
     <version>2.10</version>
     <name>VirtualLanguageObservatory</name>
     <description></description>
