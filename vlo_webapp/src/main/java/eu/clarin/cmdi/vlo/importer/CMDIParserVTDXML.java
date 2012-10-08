@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
@@ -17,8 +19,6 @@ import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 
 import eu.clarin.cmdi.vlo.Configuration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CMDIParserVTDXML implements CMDIDataProcessor {
     private final Map<String, PostProcessor> postProcessors;
@@ -29,7 +29,8 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         this.postProcessors = postProcessors;
     }
 
-    public CMDIData process(File file) throws VTDException, IOException {
+    @Override
+	public CMDIData process(File file) throws VTDException, IOException {
         CMDIData result = new CMDIData();
         VTDGen vg = new VTDGen();
         vg.setDoc(IOUtils.toByteArray(new FileInputStream(file)));
@@ -164,7 +165,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             PostProcessor processor = postProcessors.get(name);
             result = processor.process(value);
         }
-        return result;
+        return result.trim();
     }
 
 }
