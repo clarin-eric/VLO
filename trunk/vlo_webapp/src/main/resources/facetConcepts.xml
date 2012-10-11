@@ -67,7 +67,7 @@
   <facetConcept name="resourceType">
     <concept>http://www.isocat.org/datcat/DC-2571</concept>
     <pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceType/text()</pattern>
-    <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type[@dcterms-type="DCMIType"]/text()</pattern>
+    <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/text()</pattern>
   </facetConcept>
   <facetConcept name="nationalProject">
     <pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
