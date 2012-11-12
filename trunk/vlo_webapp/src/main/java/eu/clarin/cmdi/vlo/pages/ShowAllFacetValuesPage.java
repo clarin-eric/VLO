@@ -18,23 +18,12 @@ public class ShowAllFacetValuesPage extends BasePage {
 		super(parameters);
 		final SearchPageQuery query = new SearchPageQuery(parameters);
 
-		Map<String, String> filterQueries = query.getFilterQueryMap();
-
+		// show facets that were already chosen
+		addFilteredFacets(query);
+		
 		// filter for minimal frequency of values
 		addOccurrencesFilter(parameters);
 		
-		RepeatingView filteredFacets = new RepeatingView("filteredFacets");
-		if (filterQueries != null && !filterQueries.isEmpty()) {
-			WebMarkupContainer wmc = new WebMarkupContainer(filteredFacets.newChildId());
-			wmc.add(new Label("filteredFacet", "Selected categories:"));
-			filteredFacets.add(wmc);
-			for (String fq : filterQueries.keySet()) {
-				wmc = new WebMarkupContainer(filteredFacets.newChildId());
-				wmc.add(new Label("filteredFacet", fq + " = " + filterQueries.get(fq)));
-				filteredFacets.add(wmc);
-			}
-		}
-		add(filteredFacets);
 		String selectedFacet = parameters.getString(SELECTED_FACET_PARAM);
 		Integer facetMinOccurs = parameters.getAsInteger(FACET_MIN_OCCURS, 1);
 		add(new Label("category", selectedFacet));
@@ -55,5 +44,25 @@ public class ShowAllFacetValuesPage extends BasePage {
 		} else {
 			add(new BookmarkablePageLink<Void>("filter", ShowAllFacetValuesPage.class, newParameters).add(new Label("filterLabel", "Show all values")));
 		}
+	}
+	
+	/**
+	 * Add view that shows already selected facets
+	 * @param query
+	 */
+	private void addFilteredFacets(SearchPageQuery query) {
+		Map<String, String> filterQueries = query.getFilterQueryMap();
+		RepeatingView filteredFacets = new RepeatingView("filteredFacets");
+		if (filterQueries != null && !filterQueries.isEmpty()) {
+			WebMarkupContainer wmc = new WebMarkupContainer(filteredFacets.newChildId());
+			wmc.add(new Label("filteredFacet", "Selected categories:"));
+			filteredFacets.add(wmc);
+			for (String fq : filterQueries.keySet()) {
+				wmc = new WebMarkupContainer(filteredFacets.newChildId());
+				wmc.add(new Label("filteredFacet", fq + " = " + filterQueries.get(fq)));
+				filteredFacets.add(wmc);
+			}
+		}
+		add(filteredFacets);		
 	}
 }
