@@ -11,6 +11,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.RequestCycle;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
@@ -22,6 +23,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColu
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.repeater.Item;
@@ -31,6 +33,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.protocol.http.WicketURLDecoder;
 import org.apache.wicket.protocol.http.WicketURLEncoder;
+import org.apache.wicket.resource.ContextRelativeResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +48,8 @@ public class ShowResultPage extends BasePage {
     private final static Logger LOG = LoggerFactory.getLogger(ShowResultPage.class);
     public static final String PARAM_DOC_ID = "docId";
     public static final String feedbackfromURL = "http://www.clarin.eu/node/3502?url=";
+    
+    private final static ImageResource FEEDBACK_IMAGE = new ImageResource(new ContextRelativeResource("Images/feedback.png"), "Report an Error");
 
     @SuppressWarnings("serial")
     public ShowResultPage(final PageParameters parameters) {
@@ -80,13 +85,8 @@ public class ShowResultPage extends BasePage {
             setResponsePage(new ResultNotFoundPage(parameters));
         }
 
-        String thisURL = RequestUtils.toAbsolutePath(RequestCycle.get().urlFor(ShowResultPage.class, parameters).toString());
-        try {
-            thisURL = URLEncoder.encode(thisURL,"UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            LOG.error(e.toString());
-        }
-        add(new ExternalLink("feedback", feedbackfromURL+thisURL, "Give Feedback"));
+        // add feedback link
+        addFeedbackLink(parameters);
     }
 
     private String getHref(String linkToOriginalContext) {
@@ -197,6 +197,26 @@ public class ShowResultPage extends BasePage {
         } else {
             repeatingView.add(new Label(repeatingView.newChildId(), new ResourceModel(Resources.NO_RESOURCE_FOUND)));
         }
+    }
+    
+    private void addFeedbackLink(final PageParameters parameters) {
+        String thisURL = RequestUtils.toAbsolutePath(RequestCycle.get().urlFor(ShowResultPage.class, parameters).toString());
+        try {
+            thisURL = URLEncoder.encode(thisURL,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            LOG.error(e.toString());
+        }
+    	
+        Image resourceImg = new Image("feedbackImage", FEEDBACK_IMAGE.getResource());
+        String title = "Report an error";
+        resourceImg.add(new SimpleAttributeModifier("title", title));
+        resourceImg.add(new SimpleAttributeModifier("alt", title));
+        String href = getHref(feedbackfromURL+thisURL);
+        String name = feedbackfromURL+thisURL;
+        ExternalLink link = new ExternalLink("feedbackLink", href);
+        link.add(resourceImg);
+        link.add(new Label("feedbackLabel", name));
+        add(link);
     }
 
     public static BookmarkablePageLink<ShowResultPage> createBookMarkableLink(String linkId, SearchPageQuery query, String docId) {
