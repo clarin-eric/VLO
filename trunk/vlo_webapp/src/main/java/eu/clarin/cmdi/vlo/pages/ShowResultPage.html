@@ -5,6 +5,7 @@
     <wicket:extend>
         <div class="endgame"><br>
             <div><a wicket:id="backLink" href="#"><wicket:message key="backToResult">[back]</wicket:message></a>&nbsp;|&nbsp;<a wicket:id="openBrowserLink"></a>
+            <a wicket:id="feedbackLink" style="float:right;" href="#"><img wicket:id="feedbackImage" height="32" width="32"/></a>
                 <p />
             </div>
             <br>
@@ -17,9 +18,6 @@
                 <ul class="resourceItem" >
                     <li wicket:id="resourceList"></li>
                 </ul>
-            </div>
-            <div>
-                <a wicket:id="feedback" href=""#">[[Feedback]]</a>
             </div>
         </div>
     </wicket:extend>
