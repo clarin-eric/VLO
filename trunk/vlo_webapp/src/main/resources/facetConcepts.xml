@@ -57,8 +57,9 @@
   </facetConcept>
   <facetConcept name="subject" isCaseInsensitive="true" allowMultipleValues="false">
     <concept>http://www.isocat.org/datcat/DC-2591</concept>
+     <concept>http://purl.org/dc/terms/subject</concept>
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-linguistic-field</pattern>
-    <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject[@dcterms-type="LCSH"]/text()</pattern>
+    <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject[@dcterms-type="LCSH"]/text()</pattern>   
   </facetConcept>
   <facetConcept name="description">
     <concept>http://www.isocat.org/datcat/DC-2520</concept>
@@ -66,8 +67,9 @@
   </facetConcept>
   <facetConcept name="resourceType">
     <concept>http://www.isocat.org/datcat/DC-2571</concept>
+    <concept>http://purl.org/dc/terms/type</concept>
     <pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceType/text()</pattern>
-    <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/text()</pattern>
+    <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/text()</pattern>    
   </facetConcept>
   <facetConcept name="nationalProject">
     <pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
