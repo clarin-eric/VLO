@@ -28,7 +28,7 @@ public class LanguageLinkPostProcessor extends LanguageCodePostProcessor {
      * @return ISO 639-3 code, or parameter value if it could not determined
      */
     protected String extractISO639LanguageCode(String value) {
-        String result = value;
+        String result = value.toLowerCase();
         if (value.length() != 2 && value.length() != 3) {
             if (value.startsWith(ISO639_3_PREFIX)) {
                 result = value.substring(ISO639_3_PREFIX.length());
