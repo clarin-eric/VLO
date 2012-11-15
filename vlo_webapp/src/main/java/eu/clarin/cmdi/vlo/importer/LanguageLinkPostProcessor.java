@@ -5,14 +5,15 @@ import java.util.Map;
 import eu.clarin.cmdi.vlo.FacetConstants;
 
 public class LanguageLinkPostProcessor extends LanguageCodePostProcessor {
+	private static LanguageCodePostProcessor languageCodePostProcessor = new LanguageCodePostProcessor();
 	
     /**
      * Returns the link to language information
      * If no mapping is found the original value is returned.
      */
     @Override
-    public String process(String value) {
-        String result = value;
+    public String process(String value) {        
+		String result = languageCodePostProcessor.process(value);
         if (value != null) {
             String langCode = extractISO639LanguageCode(value);
             if(langCode.length() == 3)
