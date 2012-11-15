@@ -76,7 +76,7 @@ public final class CommonUtils {
     }
 
     /**
-     * Create a mapping out of simple CMDI components for instance: lists of items: <item AppInfo="Tigrinya">ti</item> Will become key,
+     * Create a mapping out of simple CMDI components for instance: lists of items: <item AppInfo="Tigrinya (ti)">ti</item> Will become key (after removal of trailing 2 or 3 letter codes),
      * values: ti, Tigrinya
      * @param urlToComponent
      * @return Map with item_value, AppInfo_value pairs
@@ -98,14 +98,14 @@ public final class CommonUtils {
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
             String shortName = node.getTextContent();
-            String longName = node.getAttributes().getNamedItem("AppInfo").getNodeValue();
+            String longName = node.getAttributes().getNamedItem("AppInfo").getNodeValue().replaceAll(" \\([a-zA-Z]+\\)$", "");
             result.put(shortName.toUpperCase(), longName);
         }
         return result;
     }
     
     /**
-     * Create a mapping out of simple CMDI components for instance: lists of items: <item AppInfo="Tigrinya">ti</item> Will become key,
+     * Create a mapping out of simple CMDI components for instance: lists of items: <item AppInfo="Tigrinya">ti</item> Will become key (after removal of trailing 2 or 3 letter codes),
      * values: Tigrinya, ti
      * @param urlToComponent
      * @return Map with item_value, AppInfo_value pairs
@@ -127,7 +127,7 @@ public final class CommonUtils {
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
             String shortName = node.getTextContent();
-            String longName = node.getAttributes().getNamedItem("AppInfo").getNodeValue();
+            String longName = node.getAttributes().getNamedItem("AppInfo").getNodeValue().replaceAll(" \\([a-zA-Z]+\\)$", "");
             result.put(longName, shortName.toUpperCase());
         }
         return result;
