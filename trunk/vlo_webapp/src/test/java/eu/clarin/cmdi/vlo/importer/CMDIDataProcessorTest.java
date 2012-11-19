@@ -1,22 +1,13 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
+import eu.clarin.cmdi.vlo.FacetConstants;
 import org.apache.solr.common.SolrInputDocument;
-import org.junit.Before;
 import org.junit.Test;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
+import java.io.File;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 public class CMDIDataProcessorTest extends ImporterTestcase {
 
@@ -583,21 +574,20 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(null, doc.getFieldValue("country"));
         assertEquals(null, doc.getFieldValue("organisation"));
         assertEquals("transcription", doc.getFieldValue("genre"));
-        assertEquals("testsubject", doc.getFieldValue("subject"));
+        assertEquals("kuna", doc.getFieldValue("subject"));
         Collection<Object> fieldValues = doc.getFieldValues("description");
         assertEquals(3, fieldValues.size());
         List<String> descriptions = new ArrayList(fieldValues);
         Collections.sort(descriptions);
-        assertEquals("\n    Channel: Talking;\n    Genre: Traditional Narrative / Story;\n    Country: Panama;\n"
+        assertEquals("Channel: Talking;\n    Genre: Traditional Narrative / Story;\n    Country: Panama;\n"
                 + "    Place of Recording: Mulatuppu;\n    Event: Community Gathering;\n"
-                + "    Institutional Affiliation: University of Texas at Austin;\n    Participant Information: Political Leader;\n"
-                + "      ", descriptions.get(0).toString());
+                + "    Institutional Affiliation: University of Texas at Austin;\n    Participant Information: Political Leader;", descriptions.get(0).toString());
         assertEquals("Test", descriptions.get(1).toString());
         assertEquals("The one-eyed grandmother is one of many traditional Kuna stories performed "
                 + "in the Kuna gathering house. This story, performed here by Pedro Arias, combines "
                 + "European derived motifs (Tom Thumb and Hansel and Gretel) with themes that seem more "
                 + "Kuna in origin. All are woven together and a moral is provided. Pedro Arias performed "
-                + "this story before a gathered audience in the morning..\n      ", descriptions.get(2).toString());
+                + "this story before a gathered audience in the morning..", descriptions.get(2).toString());
         assertEquals("audio", doc.getFieldValue(FacetConstants.FIELD_RESOURCE_TYPE));
     }
 
@@ -627,7 +617,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         CMDIData data = processor.process(cmdiFile);
         SolrInputDocument doc = data.getSolrDocument();
         assertEquals(1, doc.getFieldValues(FacetConstants.FIELD_SUBJECT).size());
-        assertTrue(doc.getFieldValues(FacetConstants.FIELD_SUBJECT).contains("testsubject"));
+        assertTrue(doc.getFieldValues(FacetConstants.FIELD_SUBJECT).contains("kuna"));
         assertEquals(2, doc.getFieldValues(FacetConstants.FIELD_COUNTRY).size());
         assertTrue(doc.getFieldValues(FacetConstants.FIELD_COUNTRY).contains("testCountry1"));
         assertTrue(doc.getFieldValues(FacetConstants.FIELD_COUNTRY).contains("testCountry2"));
@@ -684,7 +674,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         data = processor.process(cmdiFile);
         doc = data.getSolrDocument();
         assertEquals(1, doc.getFieldValues("subject").size());
-        assertEquals("testsubject", doc.getFieldValue("subject"));
+        assertEquals("testsubjectfallback", doc.getFieldValue("subject"));
         assertEquals(2, doc.getFieldValues(FacetConstants.FIELD_COUNTRY).size());
         assertTrue(doc.getFieldValues(FacetConstants.FIELD_COUNTRY).contains("testCountry1"));
         assertTrue(doc.getFieldValues(FacetConstants.FIELD_COUNTRY).contains("testCountry2"));
@@ -711,7 +701,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
         SolrInputDocument doc = data.getSolrDocument();
-        assertEquals(null, doc.getFieldValues("subject"));
+        assertTrue(doc.getFieldValues("subject").contains("kuna"));
     }
 
     @Test
