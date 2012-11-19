@@ -1,15 +1,13 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import static org.junit.Assert.assertEquals;
+import eu.clarin.cmdi.vlo.FacetConstants;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-import org.junit.Test;
-
-import eu.clarin.cmdi.vlo.FacetConstants;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.junit.Assert.assertEquals;
 
 
 public class FacetMappingFactoryTest {
@@ -135,16 +133,16 @@ public class FacetMappingFactoryTest {
         assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/@olac-linguistic-type", mapping.getPatterns().get(0));
         mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_SUBJECT, mapping.getName());
-        assertEquals(2, mapping.getPatterns().size());
-        assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-linguistic-field", mapping.getPatterns().get(0));
-        assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject[@dcterms-type=\"LCSH\"]/text()", mapping.getPatterns().get(1));
+        assertEquals(1, mapping.getPatterns().size());
+        assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/text()", mapping.getPatterns().get(0));
+        //assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject[@dcterms-type=\"LCSH\"]/text()", mapping.getPatterns().get(1));
         mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_DESCRIPTION, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:description/text()", mapping.getPatterns().get(0));
         mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_RESOURCE_TYPE, mapping.getName());
-        assertEquals(2, mapping.getPatterns().size());
+        assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
         assertEquals("/c:CMD/c:Header/c:MdCollectionDisplayName/text()", mapping.getPatterns().get(0));
         assertEquals(1, mapping.getPatterns().size());
