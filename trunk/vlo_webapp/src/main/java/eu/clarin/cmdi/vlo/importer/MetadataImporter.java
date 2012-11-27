@@ -1,16 +1,8 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import eu.clarin.cmdi.vlo.CommonUtils;
+import eu.clarin.cmdi.vlo.Configuration;
+import eu.clarin.cmdi.vlo.FacetConstants;
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.StreamingUpdateSolrServer;
@@ -21,19 +13,45 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import eu.clarin.cmdi.vlo.CommonUtils;
-import eu.clarin.cmdi.vlo.Configuration;
-import eu.clarin.cmdi.vlo.FacetConstants;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.*;
 
+
+/**
+ * The main metadataImporter class. Also contains the main function.
+ *
+ * The metadataimporter reads all the config files and then, for each metadatafile in each defined directory structure parses and imports them as defined in the configuration.
+ * The startImport function starts the importing and so on.
+ */
 
 @SuppressWarnings({"serial"})
 public class MetadataImporter {
 
+    /**
+     * Defines which files to try and parse.
+     * In this case all files ending in "xml" or "cmdi".
+     */
     private static final String[] VALID_CMDI_EXTENSIONS = new String[] { "xml", "cmdi" };
+
+    /**
+     * Log log log log
+     */
     private final static Logger LOG = LoggerFactory.getLogger(MetadataImporter.class);
+    /**
+     * Some place to store errors.
+     */
     private static Throwable serverError;
+    /**
+     * the solr server.
+     */
     private StreamingUpdateSolrServer solrServer;
 
+    /**
+     * Defines the post-processor associations.
+     * At import, for each facet value, this map is checked and all postprocessors associated with the facet _type_ are applied to the value before storing the new value in the solr document.
+     */
     final static Map<String, PostProcessor> POST_PROCESSORS = new HashMap<String, PostProcessor>();
     static {
         POST_PROCESSORS.put(FacetConstants.FIELD_COUNTRY, new CountryNamePostProcessor());
@@ -44,16 +62,31 @@ public class MetadataImporter {
         POST_PROCESSORS.put(FacetConstants.FIELD_CLARIN_PROFILE, new CMDIComponentProfileNamePostProcessor());
     }
 
+    /**
+     * Contains MDSelflinks (usually).
+     * Just to know what we have already done.
+     */
     private Set<String> processedIds = new HashSet<String>();
+    /**
+     * Some caching for solr documents (we are more efficient if we ram a whole bunch to the solr server at once.
+     */
     protected List<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
+    /**
+     * Config.
+     */
     private final ImporterConfig config;
 
+    // SOME STATS
     private int nrOFDocumentsUpdated;
     private int nrOfFilesAnalyzed = 0;
     private int nrOfFilesWithoutId = 0;
     private int nrOfFilesWithoutDataResources = 0;
     private int nrOfFilesWithError = 0;
 
+    /**
+     * Constructor, wants to know the config.
+     * @param config the config.
+     */
     public MetadataImporter(ImporterConfig config) {
         this.config = config;
     }

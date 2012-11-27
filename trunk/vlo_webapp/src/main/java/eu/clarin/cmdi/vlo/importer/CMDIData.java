@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Represents a document of cmdi data.
+ */
+
 public class CMDIData {
     private final static Logger LOG = LoggerFactory.getLogger(CMDIData.class);
     private static final String METADATA_TYPE = "Metadata";
