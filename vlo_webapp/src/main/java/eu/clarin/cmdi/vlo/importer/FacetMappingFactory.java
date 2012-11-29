@@ -1,28 +1,25 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
-
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.util.*;
+
+/**
+ * Creates facet-mappings (xpaths) from a configuration.
+ * As they say "this is where the magic happens".
+ * Also does some cashing.
+ */
 
 public class FacetMappingFactory {
 
@@ -30,6 +27,9 @@ public class FacetMappingFactory {
 
     private Map<String, FacetMapping> mapping = new HashMap<String, FacetMapping>();
 
+    /**
+     * Our one instance of the FMF.
+     */
     private final static FacetMappingFactory INSTANCE = new FacetMappingFactory();
 
     private FacetMappingFactory() {
@@ -39,6 +39,11 @@ public class FacetMappingFactory {
         return INSTANCE.getOrCreateMapping(xsd);
     }
 
+    /**
+     * If cashed gives that result, otherwise makes a new one (in the createMapping method below)..
+     * @param xsd
+     * @return
+     */
     private FacetMapping getOrCreateMapping(String xsd) {
         FacetMapping result = mapping.get(xsd);
         if (result == null) {
@@ -48,11 +53,20 @@ public class FacetMappingFactory {
         return result;
     }
 
+    /**
+     * Asks conceptLinkPathMapping to create the actual xpaths.
+     * Does a bunch of bookkeeping in order to get the FacetMapping.
+     * @param xsd
+     * @return
+     */
     private FacetMapping createMapping(String xsd) {
         FacetMapping result = new FacetMapping();
+        // Gets the configuration. VLOMarchaller only reads in the facetconceptmapping.xml file and returns the result (though the reading in is implicit).
         FacetConceptMapping conceptMapping = VLOMarshaller.getFacetConceptMapping();
         try {
+            //The magic
             Map<String, List<String>> conceptLinkPathMapping = createConceptLinkPathMapping(xsd);
+            // Below we put the stuff we found into the configuration class.
             for (FacetConcept facetConcept : conceptMapping.getFacetConcepts()) {
                 FacetConfiguration config = new FacetConfiguration();
                 List<String> xpaths = new ArrayList<String>();
@@ -83,8 +97,8 @@ public class FacetMappingFactory {
 
     /**
      * The id facet is special case and patterns must be added first.
-     * The standard pattern to get the id out of the header is the most reliable and it should fall back on concept matching of nothing matches. 
-     * (Note this is the exact opposite of other facets where the concept match is probably better then the 'hardcoded' pattern). 
+     * The standard pattern to get the id out of the header is the most reliable and it should fall back on concept matching if nothing matches.
+     * (Note this is the exact opposite of other facets where the concept match is probably better then the 'hardcoded' pattern).
      */
     private void handleId(List<String> xpaths, FacetConcept facetConcept) {
         if (FacetConstants.FIELD_ID.equals(facetConcept.getName())) {
@@ -92,6 +106,13 @@ public class FacetMappingFactory {
         }
     }
 
+    /**
+     * "this is where the magic happens".
+     * Finds paths in the xsd to all concepts (isocat data catagories).
+     * @param xsd
+     * @return
+     * @throws NavException
+     */
     private Map<String, List<String>> createConceptLinkPathMapping(String xsd) throws NavException {
         Map<String, List<String>> result = new HashMap<String, List<String>>();
         VTDGen vg = new VTDGen();
@@ -141,6 +162,11 @@ public class FacetMappingFactory {
         return result;
     }
 
+    /**
+     * Given an xml-token path thingy create an xpath.
+     * @param elementPath
+     * @return
+     */
     private String createXpath(Deque<Token> elementPath) {
         StringBuilder xpath = new StringBuilder("/");
         for (Token token : elementPath) {
@@ -149,6 +175,12 @@ public class FacetMappingFactory {
         return xpath.append("text()").toString();
     }
 
+    /**
+     * does some updating after a step. To keep the path proper and path-y.
+     * @param vn
+     * @param elementPath
+     * @param elementName
+     */
     private void updateElementPath(VTDNav vn, Deque<Token> elementPath, String elementName) {
         int previousDepth = elementPath.isEmpty() ? -1 : elementPath.peekLast().depth;
         int currentDepth = vn.getCurrentDepth();

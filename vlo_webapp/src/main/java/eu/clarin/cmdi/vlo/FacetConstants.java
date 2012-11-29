@@ -1,5 +1,9 @@
 package eu.clarin.cmdi.vlo;
 
+/**
+ * A bunch of important constants.
+ * Constants for each facet, resource types and some urls.
+ */
 public class FacetConstants {
 
     public static final String FIELD_NAME = "name";
