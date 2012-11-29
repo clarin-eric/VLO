@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * Represents a document of cmdi data.
+ * Quite a central class to the metadata importer process.
  */
 
 public class CMDIData {
@@ -19,9 +20,17 @@ public class CMDIData {
     private static final String DATA_RESOURCE_TYPE = "Resource";
     private static final String SEARCH_SERVICE_TYPE = "SearchService";
 
+    /**
+     * The unique identifier of the cmdi file.
+     */
     private String id;
-    private List<Resource> metaDataResources = new ArrayList<Resource>();
+    /**
+     * The associated solr document (not send to the solr server yet)
+     */
     private SolrInputDocument doc;
+
+    // Lists for different types of resources.
+    private List<Resource> metaDataResources = new ArrayList<Resource>();
     private List<Resource> dataResources = new ArrayList<Resource>();
     private List<Resource> searchResources = new ArrayList<Resource>();
 
@@ -29,6 +38,12 @@ public class CMDIData {
         return doc;
     }
 
+    /**
+     * Sets a field in the doc to a certain value. Well, at least calls another (private) method that actually does this.
+     * @param name
+     * @param value
+     * @param caseInsensitive
+     */
     public void addDocField(String name, String value, boolean caseInsensitive) {
         if (FacetConstants.FIELD_ID.equals(name)) {
             setId(value.trim());
@@ -37,6 +52,13 @@ public class CMDIData {
         }
     }
 
+    /**
+     * Sets a field in the doc to a certain value.
+     * Before adding checks for duplicates.
+     * @param name
+     * @param value
+     * @param caseInsensitive
+     */
     private void handleDocField(String name, String value, boolean caseInsensitive) {
         if (doc == null) {
             doc = new SolrInputDocument();
@@ -60,12 +82,22 @@ public class CMDIData {
         return metaDataResources;
     }
 
-    //TODO CLARIN-type search resources (CQL endpoints) are not dealth with yet.
-    //You can use this method to get the list and add it to the solr somehow :)
+    /**
+     * //TODO CLARIN-type search resources (CQL endpoints) are not dealth with yet.
+     * you can use this method to get the list of SearchResources (== cql endpoints) and add it to the solr somehow :)
+     */
     public List<Resource> getSearchResources() {
         return searchResources;
     }
 
+    /**
+     * Processes a resource by adding it to the internal lists.
+     * Supports metadata, data, and search service type of resources.
+     * Emits a warning if another type of resource is encountered (not allowed according to the cmdi spec, but we try to be a tad robust).
+     * @param resource
+     * @param type
+     * @param mimeType
+     */
     public void addResource(String resource, String type, String mimeType) {
         if (METADATA_TYPE.equals(type)) {
             metaDataResources.add(new Resource(resource,type, mimeType));

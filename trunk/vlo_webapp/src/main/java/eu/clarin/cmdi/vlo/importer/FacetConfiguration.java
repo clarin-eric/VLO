@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Once created contains the information about the facets and such.
+ * Just a container for some information, doesn't do processing.
+ */
+
 public class FacetConfiguration {
 
     private String name;
@@ -41,7 +46,7 @@ public class FacetConfiguration {
     public String getName() {
         return name;
     }
-    
+
     @Override
     public String toString() {
         return "name="+name+", pattern="+patterns;
@@ -50,7 +55,7 @@ public class FacetConfiguration {
     public boolean getAllowMultipleValues() {
         return allowMultipleValues;
     }
-    
+
     public void setAllowMultipleValues(boolean allowMultipleValues) {
         this.allowMultipleValues = allowMultipleValues;
     }
