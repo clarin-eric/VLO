@@ -437,7 +437,7 @@
    <field name="_fileName" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="_resourceRef" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="_componentProfile" type="string" indexed="true" stored="true" multiValued="false" />
-   <field name="_contentSearchRef" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="_contentSearchRef" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="metadataSource" type="metadataSource" indexed="false" stored="true" multiValued="true" />
    <field name="languages" type="string" indexed="true" stored="true" multiValued="true" />
 
