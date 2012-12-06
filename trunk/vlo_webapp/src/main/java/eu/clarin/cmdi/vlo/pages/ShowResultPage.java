@@ -215,7 +215,7 @@ public class ShowResultPage extends BasePage {
         String name = feedbackfromURL+thisURL;
         ExternalLink link = new ExternalLink("feedbackLink", href);
         link.add(resourceImg);
-        link.add(new Label("feedbackLabel", name));
+        add(new Label("feedbackLabel", "Found an error?"));
         add(link);
     }
 
