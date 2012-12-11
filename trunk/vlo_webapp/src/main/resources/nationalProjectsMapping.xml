@@ -56,4 +56,7 @@
 	<nationalProjectMapping><MdCollectionDisplayName>Lindat-Clarin: UFAL - Published Software</MdCollectionDisplayName><NationalProject>LINDAT (CLARIN-CZ)</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>Lindat-Clarin: ZČU - Published Data</MdCollectionDisplayName><NationalProject>LINDAT (CLARIN-CZ)</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>Leipzig Corpora Collection</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Hamburg Adult Bilingual LAnguage (HABLA)</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Hamburg Corpus of Argentinean Spanish (HaCASpa)</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Hamburg Corpus of Polish in Gemany (HamCoPoliG)</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
 </nationalProjects>
