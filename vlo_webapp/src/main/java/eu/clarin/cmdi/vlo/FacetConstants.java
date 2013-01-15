@@ -23,12 +23,13 @@ public class FacetConstants {
     public static final String FIELD_PROJECT_NAME = "projectName";
     public static final String FIELD_COMPLETE_METADATA = "metadataSource";
     public static final String FIELD_NATIONAL_PROJECT = "nationalProject";
-
+    
     //The _ facets are not meant to be shown to users.
     public static final String FIELD_FILENAME = "_fileName";
     public static final String FIELD_RESOURCE = "_resourceRef";
     public static final String FIELD_CLARIN_PROFILE = "_componentProfile";
-
+    public static final String FIELD_SEARCH_SERVICE = "_contentSearchRef";
+    
     // PREFIX URL for the language-link
     public static final String LANGUAGE_LINK_PREFIX = "http://www.clarin.eu/external/language.php?code=";
 
