@@ -60,6 +60,7 @@ public final class Configuration {
     private String silToISO639CodesUrl = "http://www.clarin.eu/cmd/xslt/sil_to_iso6393.xml";
     private String profileSchemaUrl = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/" + PROFILE_ID_PLACEHOLDER
             + "/xsd";
+    private final String federatedContentSearchUrl ="http://weblicht.sfs.uni-tuebingen.de/Aggregator/";
 
     private String vloHomeLink = "http://www.clarin.eu/vlo";//default can be overridden in xml
 
@@ -154,5 +155,9 @@ public final class Configuration {
 
     public void setProfileSchemaUrl(String profileSchemaUrl) {
         this.profileSchemaUrl = profileSchemaUrl;
+    }
+    
+    public String getFederatedContentSearchUrl() {
+    	return federatedContentSearchUrl;
     }
 }
