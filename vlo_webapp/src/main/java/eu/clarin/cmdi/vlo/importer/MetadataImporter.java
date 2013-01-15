@@ -1,8 +1,16 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import eu.clarin.cmdi.vlo.CommonUtils;
-import eu.clarin.cmdi.vlo.Configuration;
-import eu.clarin.cmdi.vlo.FacetConstants;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.StreamingUpdateSolrServer;
@@ -13,10 +21,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.*;
+import eu.clarin.cmdi.vlo.CommonUtils;
+import eu.clarin.cmdi.vlo.Configuration;
+import eu.clarin.cmdi.vlo.FacetConstants;
 
 
 /**
@@ -66,7 +73,7 @@ public class MetadataImporter {
      * Contains MDSelflinks (usually).
      * Just to know what we have already done.
      */
-    private Set<String> processedIds = new HashSet<String>();
+    private final Set<String> processedIds = new HashSet<String>();
     /**
      * Some caching for solr documents (we are more efficient if we ram a whole bunch to the solr server at once.
      */
@@ -268,7 +275,11 @@ public class MetadataImporter {
         metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getTostrip().length());
 
         solrDocument.addField(FacetConstants.FIELD_COMPLETE_METADATA, metadataSourceUrl);
-
+        
+        // add SearchServices (should be CQL endpoint)
+        for(Resource resource : cmdiData.getSearchResources())
+        	solrDocument.addField(FacetConstants.FIELD_SEARCH_SERVICE, resource.getResourceName());        
+        
         addResourceData(solrDocument, cmdiData);
         docs.add(solrDocument);
         if (docs.size() == 1000) {
