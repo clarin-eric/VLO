@@ -1,13 +1,14 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import eu.clarin.cmdi.vlo.FacetConstants;
 
 /**
  * Represents a document of cmdi data.
@@ -30,9 +31,9 @@ public class CMDIData {
     private SolrInputDocument doc;
 
     // Lists for different types of resources.
-    private List<Resource> metaDataResources = new ArrayList<Resource>();
-    private List<Resource> dataResources = new ArrayList<Resource>();
-    private List<Resource> searchResources = new ArrayList<Resource>();
+    private final List<Resource> metaDataResources = new ArrayList<Resource>();
+    private final List<Resource> dataResources = new ArrayList<Resource>();
+    private final List<Resource> searchResources = new ArrayList<Resource>();
 
     public SolrInputDocument getSolrDocument() {
         return doc;
@@ -83,8 +84,7 @@ public class CMDIData {
     }
 
     /**
-     * //TODO CLARIN-type search resources (CQL endpoints) are not dealth with yet.
-     * you can use this method to get the list of SearchResources (== cql endpoints) and add it to the solr somehow :)
+     * Returns list of all search interfaces (preferably CQL interfaces)
      */
     public List<Resource> getSearchResources() {
         return searchResources;
@@ -103,7 +103,7 @@ public class CMDIData {
             metaDataResources.add(new Resource(resource,type, mimeType));
         } else if (DATA_RESOURCE_TYPE.equals(type)) {
             dataResources.add(new Resource(resource,type, mimeType));
-        }else if (SEARCH_SERVICE_TYPE.equals(type)){
+        } else if (SEARCH_SERVICE_TYPE.equals(type)){
             searchResources.add(new Resource(resource,type, mimeType));
         } else {
             LOG.warn("Found unsupported resource it will be ignored: type=" + type + ", name=" + resource);
