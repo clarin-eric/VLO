@@ -1,6 +1,17 @@
 <!doctype html public "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
-    <head></head>
+	<wicket:head>
+		<script language="JavaScript">
+			function toogleDiv(strID, linkElement){
+				document.getElementById(linkElement).innerHTML = (document.getElementById(strID).style.display == 'none' ) ? '<b>Remove complete CMDI metadata</b>' : '<b>Show complete CMDI metadata</b>';
+				document.getElementById(strID).style.display = (document.getElementById(strID).style.display == 'none' ) ? 'block' : 'none';
+				document.getElementById(strID + "_shown").style.display = (document.getElementById(strID + "_shown").style.display == 'none' ) ? 'block' : 'none';
+				document.getElementById(strID + "_hidden").style.display = (document.getElementById(strID + "_hidden").style.display == 'none' ) ? 'block' : 'none';
+			}
+		</script>
+		<script src="javascript/searchhi.js" type="text/javascript" language="JavaScript"></script>
+	</wicket:head>
+	
     <body>
     <wicket:extend>
         <div class="endgame"><br>
@@ -28,6 +39,14 @@
             	<span wicket:id="contentSearchForm"></span>
             </div>
             
+            <div id="completeCmdiView">
+            	<span>
+            		<a href="javascript:/" id="toogleLink" onClick="toogleDiv('completeCmdi', 'toogleLink');"></a>
+            	</span>
+            	<span id="completeCmdi" wicket:id="completeCmdi"></span>
+            </div>       		
+            <br>
+            <br>            
         </div>
     </wicket:extend>
 </body>

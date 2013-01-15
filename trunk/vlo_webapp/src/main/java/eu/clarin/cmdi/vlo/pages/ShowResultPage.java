@@ -1,5 +1,7 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -7,12 +9,21 @@ import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
+import javax.xml.transform.stream.StreamSource;
+
 import net.sf.json.JSONObject;
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.Serializer;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XsltCompiler;
+import net.sf.saxon.s9api.XsltExecutable;
+import net.sf.saxon.s9api.XsltTransformer;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.RequestCycle;
+import org.apache.wicket.behavior.AbstractBehavior;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
@@ -24,6 +35,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
@@ -53,6 +65,7 @@ public class ShowResultPage extends BasePage {
     public static final String feedbackfromURL = "http://www.clarin.eu/node/3502?url=";
     
     private final static ImageResource FEEDBACK_IMAGE = new ImageResource(new ContextRelativeResource("Images/feedback.png"), "Report an Error");
+    private final URL xslFile = getClass().getResource("/cmdi2xhtml.xsl");
 
     @SuppressWarnings("serial")
     public ShowResultPage(final PageParameters parameters) {
@@ -72,6 +85,7 @@ public class ShowResultPage extends BasePage {
             addAttributesTable(solrDocument);
             addResourceLinks(solrDocument);
             addSearchServiceForm(solrDocument);
+            addCompleteCmdiView(solrDocument);
             
             add(new AjaxLazyLoadPanel("prevNextHeader") {
 
@@ -265,5 +279,49 @@ public class ShowResultPage extends BasePage {
 		} else {
 			contentSearchContainer.setVisible(false);
 		}
+	}
+	
+	/**
+	 * Add complete CMDI view
+	 * @param solrDocument
+	 */
+	private void addCompleteCmdiView(final SolrDocument solrDocument) {
+		StringWriter strWriter = new StringWriter();
+
+        final Processor proc = new Processor(false);
+        final XsltCompiler comp = proc.newXsltCompiler();
+
+        try {
+                final XsltExecutable exp = comp.compile(new StreamSource(xslFile.getFile()));
+                final XdmNode source = proc.newDocumentBuilder().build(
+                                new StreamSource(new InputStreamReader(new URL(solrDocument.getFirstValue(FacetConstants.FIELD_COMPLETE_METADATA).toString()).openStream())));
+                final Serializer out = new Serializer();
+                out.setOutputProperty(Serializer.Property.METHOD, "html");
+                out.setOutputProperty(Serializer.Property.INDENT, "yes");
+                out.setOutputWriter(strWriter);
+                final XsltTransformer trans = exp.load();
+
+                trans.setInitialContextNode(source);
+                trans.setDestination(out);
+                trans.transform();
+        } catch (Exception e) {
+                LOG.error(e.getMessage()+" "+e.getCause());
+                strWriter = new StringWriter().append("<b>Could not load complete CMDI metadata</b>");
+        }		
+		
+        Label completeCmdiLabel = new Label("completeCmdi", strWriter.toString());
+		completeCmdiLabel.setEscapeModelStrings(false);
+		add(completeCmdiLabel);
+		
+		// remove complete CMDI view on page load
+		add(new AbstractBehavior() {
+			private static final long serialVersionUID = 1865219352602175954L;
+
+			@Override
+			public void renderHead(IHeaderResponse response) {
+				super.renderHead(response);
+				response.renderOnLoadJavascript("toogleDiv('completeCmdi', 'toogleLink')");
+			}
+		});
 	}
 }
