@@ -7,6 +7,8 @@ import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
+import net.sf.json.JSONObject;
+
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
@@ -22,6 +24,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -68,6 +71,7 @@ public class ShowResultPage extends BasePage {
             }
             addAttributesTable(solrDocument);
             addResourceLinks(solrDocument);
+            addSearchServiceForm(solrDocument);
             
             add(new AjaxLazyLoadPanel("prevNextHeader") {
 
@@ -226,4 +230,40 @@ public class ShowResultPage extends BasePage {
                 pageParameters);
         return docLink;
     }
+    
+	/**
+	 * Add contentSearch form
+	 * @param solrDocument
+	 */
+	private void addSearchServiceForm(final SolrDocument solrDocument) {
+		final WebMarkupContainer contentSearchContainer = new WebMarkupContainer("contentSearch");
+		add(contentSearchContainer);
+		
+		if (solrDocument.containsKey(FacetConstants.FIELD_SEARCH_SERVICE)) {
+			try {
+				StringBuffer contentFormString = new StringBuffer();
+				JSONObject json = new JSONObject();
+				json.put(solrDocument.getFieldValue(FacetConstants.FIELD_ID).toString(), solrDocument.getFieldValue(FacetConstants.FIELD_SEARCH_SERVICE).toString());
+				contentFormString.append("<form method=\"post\" action=\""+Configuration.getInstance().getFederatedContentSearchUrl()+"\"> \n"
+						+ "<fieldset style=\"border:0px;\"> \n"
+						+ "\t  <label for=\"query\">CQL query:</label> \n"
+						+ "\t <input id=\"query\" type=\"text\" name=\"query\" size=\"50\" /> \n"
+						+ "\t <input type=\"hidden\" name=\"x-aggregation-context\" value=\""+URLEncoder.encode(json.toString(2), "UTF-8")+"\"> \n"
+						+ "\t <input type=\"hidden\" name=\"operation\" value=\"searchRetrieve\"> \n"
+						+ "\t <input type=\"hidden\" name=\"version\" value=\"1.2\"> \n"
+						+ "\t <input type=\"submit\" value=\"Send query!\" /> \n"
+						+ "</fieldset> \n"
+						+ "</form> \n");
+				
+				Label contentSearchLabel = new Label("contentSearchForm", contentFormString.toString());
+				contentSearchLabel.setEscapeModelStrings(false);
+				
+				contentSearchContainer.add(contentSearchLabel);
+			} catch (UnsupportedEncodingException uee) {
+				contentSearchContainer.setVisible(false);
+			}
+		} else {
+			contentSearchContainer.setVisible(false);
+		}
+	}
 }
