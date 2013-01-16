@@ -257,7 +257,7 @@ public class ShowResultPage extends BasePage {
 			try {
 				StringBuffer contentFormString = new StringBuffer();
 				JSONObject json = new JSONObject();
-				json.put(solrDocument.getFieldValue(FacetConstants.FIELD_ID).toString(), solrDocument.getFieldValue(FacetConstants.FIELD_SEARCH_SERVICE).toString());
+				json.put(solrDocument.getFirstValue(FacetConstants.FIELD_SEARCH_SERVICE).toString(), solrDocument.getFirstValue(FacetConstants.FIELD_ID).toString());
 				contentFormString.append("<form method=\"post\" action=\""+Configuration.getInstance().getFederatedContentSearchUrl()+"\"> \n"
 						+ "<fieldset style=\"border:0px;\"> \n"
 						+ "\t  <label for=\"query\">CQL query:</label> \n"
