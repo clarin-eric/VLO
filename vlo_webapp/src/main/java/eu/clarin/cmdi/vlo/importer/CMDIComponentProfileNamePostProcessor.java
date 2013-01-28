@@ -1,15 +1,16 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import com.ximpleware.*;
-import eu.clarin.cmdi.vlo.Configuration;
+import java.util.HashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-import java.util.HashMap;
+import com.ximpleware.AutoPilot;
+import com.ximpleware.VTDGen;
+import com.ximpleware.VTDNav;
+import com.ximpleware.XPathParseException;
+
+import eu.clarin.cmdi.vlo.Configuration;
 
 /**
  * Takes the value of the componentprofileid and uses the componentregistry REST service to transform this to the name of the componentprofile.
@@ -23,10 +24,8 @@ public class CMDIComponentProfileNamePostProcessor implements PostProcessor{
     VTDNav vn = null;
 
     private static final String _EMPTY_STRING = "";
-
     private final static Logger LOG = LoggerFactory.getLogger(CMDIComponentProfileNamePostProcessor.class);
-
-    private HashMap<String, String> cache = new HashMap<String, String>();
+    private final HashMap<String, String> cache = new HashMap<String, String>();
 
     @Override
     public String process(String value) {
