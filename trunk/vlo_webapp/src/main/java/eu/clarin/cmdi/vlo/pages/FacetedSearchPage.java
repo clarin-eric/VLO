@@ -1,8 +1,13 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
@@ -13,6 +18,7 @@ import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFal
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -45,6 +51,7 @@ public class FacetedSearchPage extends BasePage {
         addSearchBox();
         addFacetColumns();
         addSearchResults();
+        addSearchServiceForm();
     }
 
     @SuppressWarnings("serial")
@@ -120,4 +127,59 @@ public class FacetedSearchPage extends BasePage {
         add(searchResultList);
     }
     
+	/**
+	 * Add contentSearch form (FCS)
+	 * @param solrDocument
+	 */
+	private void addSearchServiceForm() {
+		final WebMarkupContainer contentSearchContainer = new WebMarkupContainer("contentSearch");
+		add(contentSearchContainer);
+		
+		// get all documents with an entry for the FCS
+		SearchServiceDataProvider dataProvider = new SearchServiceDataProvider(query.getSolrQuery());
+		if(dataProvider.size() > 0 && dataProvider.size() <= 200) {	// at least one and not more than x records with FCS endpoint in result set?
+			try {
+				HashMap<String, JSONArray> aggregationContext = new HashMap<String, JSONArray>();
+				
+				// building map (CQL endpoint -> List of resource IDs)
+				JSONObject json = new JSONObject();
+				
+				int offset = 0;
+				int fetchSize = 1000;
+				int totalResults = dataProvider.size();
+				while (offset < totalResults) {
+					Iterator<SolrDocument> iter = dataProvider.iterator(offset, fetchSize);
+					while(iter.hasNext()) {
+						SolrDocument document = iter.next();
+						String id = document.getFirstValue(FacetConstants.FIELD_ID).toString();
+						String fcsEndpoint = document.getFirstValue(FacetConstants.FIELD_SEARCH_SERVICE).toString();
+						if(aggregationContext.containsKey(fcsEndpoint)) {
+							aggregationContext.get(fcsEndpoint).add(id);
+						} else {
+							JSONArray idArray = new JSONArray();
+							idArray.add(id);
+							aggregationContext.put(fcsEndpoint, idArray);
+						}
+					}
+					
+					offset += fetchSize;
+				}
+
+				Iterator<String> aggregationContextIter = aggregationContext.keySet().iterator();
+				while(aggregationContextIter.hasNext()) {
+					String key = aggregationContextIter.next();
+					json.put(key, aggregationContext.get(key));
+				}
+				
+				// add HTML form to container
+				Label contentSearchLabel = new Label("contentSearchForm", HtmlFormCreator.getContentSearchForm(json));
+				contentSearchLabel.setEscapeModelStrings(false);
+				contentSearchContainer.add(contentSearchLabel);
+			} catch (UnsupportedEncodingException uee) {
+				contentSearchContainer.setVisible(false);
+			}
+		} else {
+			contentSearchContainer.setVisible(false);
+		}
+	}    
 }
