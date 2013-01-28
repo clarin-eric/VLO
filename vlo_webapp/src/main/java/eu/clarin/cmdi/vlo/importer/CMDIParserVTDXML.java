@@ -60,10 +60,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             throw new RuntimeException("Cannot get xsd schema so cannot get a proper mapping. Parse failed!");
         }
         if (xsd.indexOf("http") != xsd.lastIndexOf("http")){
-            System.out.println("FILE WITH WEIRD HTTP THINGY! " + tolog);
-        }
-        if(xsd.indexOf("p_1307535113335") > -1){
-            System.out.println("FOUND a p_1307535113335 XSD: " + nav + " FILE: " + tolog);
+            LOG.info("FILE WITH WEIRD HTTP THINGY! " + tolog);
         }
         return FacetMappingFactory.getFacetMapping(xsd);
     }
