@@ -16,6 +16,8 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.StreamingUpdateSolrServer;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.params.MapSolrParams;
+import org.apache.solr.common.params.SolrParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
@@ -140,8 +142,10 @@ public class MetadataImporter {
             LOG.error("error updating files:\n", e);
         } finally {
             try {
-                if (solrServer != null)
+                if (solrServer != null) {
                     solrServer.commit();
+                    buildSuggesterIndex();
+                }                
             } catch (SolrServerException e) {
                 LOG.error("cannot commit:\n", e);
             } catch (IOException e) {
@@ -331,6 +335,20 @@ public class MetadataImporter {
             throw new SolrServerException(serverError);
         }
         docs = new ArrayList<SolrInputDocument>();
+    }
+    
+    /**
+     * Builds suggester index for autocompletion
+     * @throws SolrServerException
+     * @throws MalformedURLException
+     */
+    private void buildSuggesterIndex() throws SolrServerException, MalformedURLException {
+    	LOG.info("Building index for autocompletion.");
+    	HashMap<String,String> paramMap = new HashMap<String, String>();
+    	paramMap.put("qt", "/suggest");
+    	paramMap.put("spellcheck.build", "true");
+    	SolrParams params = new MapSolrParams(paramMap);
+    	solrServer.query(params);
     }
 
     /**
