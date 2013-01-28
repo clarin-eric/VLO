@@ -398,7 +398,14 @@
          any data added to them will be ignored outright.  -->
     <fieldtype name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" />
 
+    <!-- field for autocompletion -->
+    <fieldType name="textauto" class="solr.TextField">
+    <analyzer>
+      <tokenizer class="solr.LowerCaseTokenizerFactory"/>
+    </analyzer>
+  </fieldType>
  </types>
+
 
 
  <fields>
@@ -418,29 +425,18 @@
    <field name="dataProvider" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="nationalProject" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
-   <copyField source="description" dest="text"/>
-   <copyField source="collection" dest="text"/>
-   <copyField source="name" dest="text"/>
-   <copyField source="projectName" dest="text"/>
-   <copyField source="continent" dest="text"/>
-   <copyField source="country" dest="text"/>
-   <copyField source="language" dest="text"/>
-   <copyField source="organisation" dest="text"/>
-   <copyField source="genre" dest="text"/>
-   <copyField source="subject" dest="text"/>
-   <copyField source="year" dest="text"/>
-   <copyField source="resourceType" dest="text"/>
-   <copyField source="dataProvider" dest="text"/>
-   <copyField source="nationalProject" dest="text"/>
 
-    <!-- Not in the copyfield list so we don't search in them -->
+   
    <field name="_fileName" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="_resourceRef" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="_componentProfile" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="_contentSearchRef" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="metadataSource" type="metadataSource" indexed="false" stored="true" multiValued="true" />
    <field name="languages" type="string" indexed="true" stored="true" multiValued="true" />
-
+   
+   <!-- Field for autocompletion (suggester) -->
+   <field name="_suggester" type="textauto" indexed="true" stored="false"/>
+   <copyField source="name" dest="_suggester"/>
  </fields>
 
  <uniqueKey>id</uniqueKey>

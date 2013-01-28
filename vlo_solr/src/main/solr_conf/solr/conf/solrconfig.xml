@@ -717,6 +717,30 @@
       <str>tvComponent</str>
     </arr>
   </requestHandler>
+  
+  
+  <!-- a suggester component for autocomplete -->
+  <searchComponent class="solr.SpellCheckComponent" name="suggest">
+    <lst name="spellchecker">
+    	<str name="name">suggest</str>
+    	<str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
+    	<str name="lookupImpl">org.apache.solr.spelling.suggest.tst.TSTLookup</str>
+    	<str name="field">_suggester</str>
+    </lst>
+  </searchComponent>
+  <!-- Req Handler for suggest searchComponent -->
+  <requestHandler class="org.apache.solr.handler.component.SearchHandler" name="/suggest">
+    <lst name="defaults">
+      <str name="spellcheck">true</str>
+      <str name="spellcheck.dictionary">suggest</str>
+      <str name="spellcheck.onlyMorePopular">true</str>
+      <str name="spellcheck.count">5</str>
+    </lst>
+    <arr name="components">
+      <str>suggest</str>
+    </arr>
+  </requestHandler>
+  
 
   <!-- Clustering Component
        http://wiki.apache.org/solr/ClusteringComponent
