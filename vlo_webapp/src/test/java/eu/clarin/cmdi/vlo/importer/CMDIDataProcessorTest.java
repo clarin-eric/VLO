@@ -1,13 +1,20 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.solr.common.SolrInputDocument;
 import org.junit.Test;
 
-import java.io.File;
-import java.util.*;
-
-import static org.junit.Assert.*;
+import eu.clarin.cmdi.vlo.FacetConstants;
 
 public class CMDIDataProcessorTest extends ImporterTestcase {
 
@@ -377,7 +384,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("audio/mpeg", res.getMimeType());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(12, doc.getFieldNames().size());
+        assertEquals(13, doc.getFieldNames().size());
         assertEquals("kleve-route", doc.getFieldValue("name"));
         assertEquals("Peter Wittenburg", doc.getFieldValue(FacetConstants.FIELD_PROJECT_NAME));
         assertEquals("Europe", doc.getFieldValue("continent"));
@@ -497,7 +504,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(0, resources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(6, doc.getFieldNames().size());
+        assertEquals(7, doc.getFieldNames().size());
         assertEquals("kleve-route", doc.getFieldValue("name"));
         assertEquals("Europe", doc.getFieldValue("continent"));
         assertEquals("Netherlands", doc.getFieldValue("country"));
@@ -566,7 +573,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(0, dataResources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(7, doc.getFieldNames().size());
+        assertEquals(8, doc.getFieldNames().size());
         assertEquals(null, doc.getFieldValue("name"));
         assertEquals(null, doc.getFieldValue("continent"));
         assertEquals(1, doc.getFieldValues("language").size());
@@ -848,7 +855,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(0, dataResources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(8, doc.getFieldNames().size());
+        assertEquals(9, doc.getFieldNames().size());
         assertEquals("Corpus of Present-day Written Estonian", doc.getFieldValue("name"));
         assertEquals(null, doc.getFieldValue("continent"));
         assertEquals(1, doc.getFieldValues("language").size());

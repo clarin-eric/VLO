@@ -1,13 +1,14 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
+import static org.junit.Assert.assertEquals;
+
+import java.util.List;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
+import eu.clarin.cmdi.vlo.FacetConstants;
 
 
 public class FacetMappingFactoryTest {
@@ -19,7 +20,7 @@ public class FacetMappingFactoryTest {
         FacetMapping facetMapping = FacetMappingFactory
                 .getFacetMapping("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438204/xsd");//IMDI Session profile xsd
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(16, facets.size());
+        assertEquals(17, facets.size());
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_ID, mapping.getName());
@@ -86,6 +87,9 @@ public class FacetMappingFactoryTest {
         assertEquals("/c:CMD/c:Header/c:MdCollectionDisplayName/text()", mapping.getPatterns().get(0));
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
+        assertEquals("/c:CMD//text()", mapping.getPatterns().get(0));
+        assertEquals(1, mapping.getPatterns().size());
+        mapping = facets.get(index++);
         assertEquals("/c:CMD/c:Header/c:MdProfile/text()", mapping.getPatterns().get(0));
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("check to see we tested them all", facets.size(), index);
@@ -96,7 +100,7 @@ public class FacetMappingFactoryTest {
         FacetMapping facetMapping = FacetMappingFactory
                 .getFacetMapping("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026/xsd");
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(13, facets.size());
+        assertEquals(14, facets.size());
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_ID, mapping.getName());
@@ -147,6 +151,9 @@ public class FacetMappingFactoryTest {
         assertEquals("/c:CMD/c:Header/c:MdCollectionDisplayName/text()", mapping.getPatterns().get(0));
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
+        assertEquals("/c:CMD//text()", mapping.getPatterns().get(0));
+        assertEquals(1, mapping.getPatterns().size());
+        mapping = facets.get(index++);
         assertEquals("/c:CMD/c:Header/c:MdProfile/text()", mapping.getPatterns().get(0));
         assertEquals(1, mapping.getPatterns().size());
 
@@ -158,7 +165,7 @@ public class FacetMappingFactoryTest {
         FacetMapping facetMapping = FacetMappingFactory
                 .getFacetMapping("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1289827960126/xsd");
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(14, facets.size());
+        assertEquals(15, facets.size());
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_ID, mapping.getName());
@@ -214,6 +221,9 @@ public class FacetMappingFactoryTest {
         assertEquals("/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceType/text()", mapping.getPatterns().get(0));
         mapping = facets.get(index++);
         assertEquals("/c:CMD/c:Header/c:MdCollectionDisplayName/text()", mapping.getPatterns().get(0));
+        assertEquals(1, mapping.getPatterns().size());
+        mapping = facets.get(index++);
+        assertEquals("/c:CMD//text()", mapping.getPatterns().get(0));
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
         assertEquals("/c:CMD/c:Header/c:MdProfile/text()", mapping.getPatterns().get(0));
