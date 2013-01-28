@@ -246,7 +246,7 @@ public class ShowResultPage extends BasePage {
     }
     
 	/**
-	 * Add contentSearch form
+	 * Add contentSearch form (FCS)
 	 * @param solrDocument
 	 */
 	private void addSearchServiceForm(final SolrDocument solrDocument) {
@@ -255,23 +255,10 @@ public class ShowResultPage extends BasePage {
 		
 		if (solrDocument.containsKey(FacetConstants.FIELD_SEARCH_SERVICE)) {
 			try {
-				StringBuffer contentFormString = new StringBuffer();
 				JSONObject json = new JSONObject();
 				json.put(solrDocument.getFirstValue(FacetConstants.FIELD_SEARCH_SERVICE).toString(), solrDocument.getFirstValue(FacetConstants.FIELD_ID).toString());
-				contentFormString.append("<form method=\"post\" action=\""+Configuration.getInstance().getFederatedContentSearchUrl()+"\"> \n"
-						+ "<fieldset style=\"border:0px;\"> \n"
-						+ "\t  <label for=\"query\">CQL query:</label> \n"
-						+ "\t <input id=\"query\" type=\"text\" name=\"query\" size=\"50\" /> \n"
-						+ "\t <input type=\"hidden\" name=\"x-aggregation-context\" value=\""+URLEncoder.encode(json.toString(2), "UTF-8")+"\"> \n"
-						+ "\t <input type=\"hidden\" name=\"operation\" value=\"searchRetrieve\"> \n"
-						+ "\t <input type=\"hidden\" name=\"version\" value=\"1.2\"> \n"
-						+ "\t <input type=\"submit\" value=\"Send query!\" /> \n"
-						+ "</fieldset> \n"
-						+ "</form> \n");
-				
-				Label contentSearchLabel = new Label("contentSearchForm", contentFormString.toString());
-				contentSearchLabel.setEscapeModelStrings(false);
-				
+				Label contentSearchLabel = new Label("contentSearchForm", HtmlFormCreator.getContentSearchForm(json));
+				contentSearchLabel.setEscapeModelStrings(false);				
 				contentSearchContainer.add(contentSearchLabel);
 			} catch (UnsupportedEncodingException uee) {
 				contentSearchContainer.setVisible(false);
@@ -305,7 +292,7 @@ public class ShowResultPage extends BasePage {
                 trans.setDestination(out);
                 trans.transform();
         } catch (Exception e) {
-                LOG.error(e.getMessage()+" "+e.getCause());
+                LOG.error("Couldn't create CMDI metadata: "+e.getMessage());
                 strWriter = new StringWriter().append("<b>Could not load complete CMDI metadata</b>");
         }		
 		
