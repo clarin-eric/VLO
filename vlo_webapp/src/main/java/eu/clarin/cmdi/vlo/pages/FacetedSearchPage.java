@@ -6,9 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.common.SolrDocument;
@@ -139,10 +136,8 @@ public class FacetedSearchPage extends BasePage {
 		SearchServiceDataProvider dataProvider = new SearchServiceDataProvider(query.getSolrQuery());
 		if(dataProvider.size() > 0 && dataProvider.size() <= 200) {	// at least one and not more than x records with FCS endpoint in result set?
 			try {
-				HashMap<String, JSONArray> aggregationContext = new HashMap<String, JSONArray>();
-				
 				// building map (CQL endpoint -> List of resource IDs)
-				JSONObject json = new JSONObject();
+				HashMap<String, List<String>> aggregationContextMap = new HashMap<String, List<String>>();				
 				
 				int offset = 0;
 				int fetchSize = 1000;
@@ -153,26 +148,20 @@ public class FacetedSearchPage extends BasePage {
 						SolrDocument document = iter.next();
 						String id = document.getFirstValue(FacetConstants.FIELD_ID).toString();
 						String fcsEndpoint = document.getFirstValue(FacetConstants.FIELD_SEARCH_SERVICE).toString();
-						if(aggregationContext.containsKey(fcsEndpoint)) {
-							aggregationContext.get(fcsEndpoint).add(id);
+						if(aggregationContextMap.containsKey(fcsEndpoint)) {
+							aggregationContextMap.get(fcsEndpoint).add(id);
 						} else {
-							JSONArray idArray = new JSONArray();
+							List<String> idArray = new ArrayList<String>();
 							idArray.add(id);
-							aggregationContext.put(fcsEndpoint, idArray);
+							aggregationContextMap.put(fcsEndpoint, idArray);
 						}
 					}
 					
 					offset += fetchSize;
 				}
 
-				Iterator<String> aggregationContextIter = aggregationContext.keySet().iterator();
-				while(aggregationContextIter.hasNext()) {
-					String key = aggregationContextIter.next();
-					json.put(key, aggregationContext.get(key));
-				}
-				
 				// add HTML form to container
-				Label contentSearchLabel = new Label("contentSearchForm", HtmlFormCreator.getContentSearchForm(json));
+				Label contentSearchLabel = new Label("contentSearchForm", HtmlFormCreator.getContentSearchForm(aggregationContextMap));
 				contentSearchLabel.setEscapeModelStrings(false);
 				contentSearchContainer.add(contentSearchLabel);
 			} catch (UnsupportedEncodingException uee) {

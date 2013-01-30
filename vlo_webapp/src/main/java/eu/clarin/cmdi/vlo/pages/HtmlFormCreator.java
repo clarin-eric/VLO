@@ -1,8 +1,11 @@
 package eu.clarin.cmdi.vlo.pages;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import eu.clarin.cmdi.vlo.Configuration;
 
@@ -15,21 +18,32 @@ import eu.clarin.cmdi.vlo.Configuration;
 public class HtmlFormCreator {
 	/**
 	 * Creates an HTML form for the content search (FCS).
-	 * @param aggregationContextJson information about aggregationContext (CQL endpoint URL + identifier) as JSON
+	 * @param aggregationContextMap Mapping CQL endpoint -> List of resource IDs
 	 * @return HTML content search form as String
 	 * @throws UnsupportedEncodingException
 	 */
-	public static String getContentSearchForm(JSONObject aggregationContextJson) throws UnsupportedEncodingException {
-		String json = "<form method=\"post\" action=\""+Configuration.getInstance().getFederatedContentSearchUrl()+"\"> \n"
+	public static String getContentSearchForm(Map<String, List<String>> aggregationContextMap) throws UnsupportedEncodingException {
+		JSONObject aggregationJson = new JSONObject();
+		Iterator<String> aggregationContextIter = aggregationContextMap.keySet().iterator();
+		while(aggregationContextIter.hasNext()) {
+			String endpoint = aggregationContextIter.next();
+			JSONArray idArray = new JSONArray();
+			for(String id : aggregationContextMap.get(endpoint)) {
+				idArray.add(id);
+			}
+			aggregationJson.put(endpoint, idArray);
+		}		
+		
+		String form = "<form method=\"post\" action=\""+Configuration.getInstance().getFederatedContentSearchUrl()+"\"> \n"
 				+ "<fieldset style=\"border:0px;\"> \n"
 				+ "\t  <label for=\"query\">CQL query:</label> \n"
 				+ "\t <input id=\"query\" type=\"text\" name=\"query\" size=\"30\" /> \n"
-				+ "\t <input type=\"hidden\" name=\"x-aggregation-context\" value=\""+URLEncoder.encode(aggregationContextJson.toString(2), "UTF-8")+"\"> \n"
-				+ "\t <input type=\"hidden\" name=\"operation\" value=\"searchRetrieve\"> \n"
-				+ "\t <input type=\"hidden\" name=\"version\" value=\"1.2\"> \n"
+				+ "\t <input type=\"hidden\" name=\"x-aggregation-context\" value=\'"+aggregationJson.toString(2)+"\' /> \n"
+				+ "\t <input type=\"hidden\" name=\"operation\" value=\"searchRetrieve\" /> \n"
+				+ "\t <input type=\"hidden\" name=\"version\" value=\"1.2\" /> \n"
 				+ "\t <input type=\"submit\" value=\"Send query\" /> \n"
 				+ "</fieldset> \n"
 				+ "</form> \n";
-		return json;	
+		return form;	
 	}
 }
