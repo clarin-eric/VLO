@@ -6,12 +6,14 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.xml.transform.stream.StreamSource;
 
-import net.sf.json.JSONObject;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XdmNode;
@@ -255,9 +257,12 @@ public class ShowResultPage extends BasePage {
 		
 		if (solrDocument.containsKey(FacetConstants.FIELD_SEARCH_SERVICE)) {
 			try {
-				JSONObject json = new JSONObject();
-				json.put(solrDocument.getFirstValue(FacetConstants.FIELD_SEARCH_SERVICE).toString(), solrDocument.getFirstValue(FacetConstants.FIELD_ID).toString());
-				Label contentSearchLabel = new Label("contentSearchForm", HtmlFormCreator.getContentSearchForm(json));
+				// building map (CQL endpoint -> List with resource ID)
+				HashMap<String, List<String>> aggregrationContextMap = new HashMap<String, List<String>>();
+				List<String> idList = new ArrayList<String>();
+				idList.add(solrDocument.getFirstValue(FacetConstants.FIELD_ID).toString());
+				aggregrationContextMap.put(solrDocument.getFirstValue(FacetConstants.FIELD_SEARCH_SERVICE).toString(), idList);
+				Label contentSearchLabel = new Label("contentSearchForm", HtmlFormCreator.getContentSearchForm(aggregrationContextMap));
 				contentSearchLabel.setEscapeModelStrings(false);				
 				contentSearchContainer.add(contentSearchLabel);
 			} catch (UnsupportedEncodingException uee) {
