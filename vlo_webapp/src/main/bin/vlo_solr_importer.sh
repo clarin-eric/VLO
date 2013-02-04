@@ -11,4 +11,4 @@ JAVA=/lat/java/bin/java
 fi
 
 
-$JAVA -Xmx1024M -cp .:vlo-2.11-jar.jar eu.clarin.cmdi.vlo.importer.MetadataImporter
+$JAVA -Xmx1024M -cp .:vlo-2.12-jar.jar eu.clarin.cmdi.vlo.importer.MetadataImporter
