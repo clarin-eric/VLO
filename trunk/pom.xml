@@ -7,7 +7,9 @@
     <artifactId>vlo_parent</artifactId>
     <name>Virtual Language Observatory (parent pom)</name>
     <packaging>pom</packaging>
-    <version>2.11</version>
+    <!-- When updating the version number here, also update the version number
+    in the module's pom.xml -->
+    <version>2.12</version>
     <description>Parent pom for the whole vlo project (in order to be able to do fancy packaging.</description>
 
     <parent>
