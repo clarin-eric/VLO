@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	        xmlns:context="http://www.springframework.org/schema/context"
+	        xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:/org/springframework/beans/factory/xml/spring-beans-2.5.xsd
+	                           http://www.springframework.org/schema/context classpath:/org/springframework/context/config/spring-context-2.5.xsd">
+    <!--
+ 		        Property placeholder that allows init parameters defined in servlet context to be used as property values
+ 	        (in this case admin users list)
+ 		    -->
+    <!--<bean class="org.springframework.web.context.support.ServletContextPropertyPlaceholderConfigurer"/>
+     Nice Idea, but in practise getting some un-explained errors on the catalog server. We should try again when there is a new stack on the catalog (tomcat and so on).
+    -->
+
+    <bean id="configuration" class="eu.clarin.cmdi.vlo.Configuration" factory-method="getInstance">
+        <property name="solrUrl" value="[[SOLRURL]]" />
+
+        <!-- ImporterConfigFile and nationalProjectMapping are only used by the importer, not by the webapp! -->
+        <property name="importerConfigFile" value="XXX" />
+
+        <property name="nationalProjectMapping" value="XXX" />
+
+        <property name="componentRegistryRESTURL" value="XXX" />
+
+        <property name="IMDIBrowserUrl" value="http://corpus1.mpi.nl/ds/imdi_browser?openpath=" />
+        <property name="handleServerUrl" value="http://hdl.handle.net/" />
+        <property name="facetFields">
+            <!-- The possible values of facets are defined in the schema.xml of the solr_server installation.
+            If you want to add a facet you need to adjust this schema.xml and reindex the data.
+            -->
+            <list> <!-- List of facets to be shown as columns, the order specified is kept in the application -->
+                <value>collection</value>
+                <value>language</value>
+                <value>continent</value>
+                <value>genre</value>
+                <value>country</value>
+                <value>subject</value>
+                <value>organisation</value>
+                <value>resourceType</value>
+                <value>dataProvider</value>
+                <value>nationalProject</value>
+                <!--        <value>year</value>-->
+            </list>
+        </property>
+    </bean>
+
+</beans>

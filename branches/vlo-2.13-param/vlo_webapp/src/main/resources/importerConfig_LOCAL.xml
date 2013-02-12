@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+ <bean id="importerConfig" class="eu.clarin.cmdi.vlo.importer.ImporterConfig">
+    <property name="deleteAllFirst" value="true"/>
+<!--    <property name="printMapping" value="true"/> Can print the mapping of facets to xpath patterns for every xsd, so it can be checked manually. -->
+   <property name="dataRoots">
+     <list>
+       <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+         <property name="originName" value="MPI IMDI Archive"/>
+         <property name="rootFile"
+           value="/Users/herste/Desktop/webapps/test-cmdi/mpi-self/"/>
+           <property name="prefix" value="http://catalog.clarin.eu/"/>
+           <property name="tostrip" value="/lat/apache/htdocs/"/>
+       </bean>
+
+                <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+         <property name="originName" value="MPI IMDI Archive"/>
+         <property name="rootFile"
+           value="/Users/herste/Desktop/webapps/test-cmdi/lrt/"/>
+           <property name="prefix" value="http://catalog.clarin.eu/"/>
+           <property name="tostrip" value="/lat/apache/htdocs/"/>
+       </bean>
+
+                <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+         <property name="originName" value="MPI IMDI Archive"/>
+         <property name="rootFile"
+           value="/Users/herste/Desktop/webapps/test-cmdi/providers/"/>
+           <property name="prefix" value="http://catalog.clarin.eu/"/>
+           <property name="tostrip" value="/lat/apache/htdocs/"/>
+       </bean>
+
+                <bean class="eu.clarin.cmdi.vlo.importer.DataRoot">
+         <property name="originName" value="MPI IMDI Archive"/>
+         <property name="rootFile"
+           value="/Users/herste/Desktop/webapps/test-cmdi/cmdi-providers/"/>
+           <property name="prefix" value="http://catalog.clarin.eu/"/>
+           <property name="tostrip" value="/lat/apache/htdocs/"/>
+       </bean>
+     </list>
+   </property>
+ </bean>
+
+
+</beans>

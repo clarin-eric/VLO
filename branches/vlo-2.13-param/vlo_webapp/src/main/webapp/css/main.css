@@ -1,0 +1,211 @@
+body, td {
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 11px;
+    margin: 0;
+}
+body{
+    padding: 0;
+    margin: 0;
+}
+img{
+    border: none;
+    display: block;
+}
+.top{
+    background-color: #d4deef;
+    width: 100%;
+    height: 176px;
+    border: none;
+}
+#topleft{
+    position: absolute;
+    left:0px;
+}
+#topright{
+    position: absolute;
+    left:497px;
+}
+.opening .matrix{
+    border:0px;
+    width: 66%;
+}
+
+.opening .resulttable{
+    width: 33%;
+    margin-left: 11px;
+}
+.opening .resulttable .headers{
+    background-color: #6b824a;
+}
+
+.resulttable tbody{
+    background-color:#BCCEE8;
+}
+
+.opening .matrix .column {
+    padding: 0 11px 0 0;
+}
+.opening .matrix .column:first-child {
+    padding: 0 11px;
+}
+.opening .valuebox .column {
+    padding: 0;
+}
+.opening .valuebox .column:first-child {
+    padding: 0;
+}
+.facetbox {
+    font-size: 14px;
+    padding: 2px 5px;
+}
+.middlegame .search {
+    background-color: #BCCEE8;
+    padding-top: 11px;
+    padding-bottom: 11px;
+}
+
+.middlegame .searchmodule {
+    margin-left:20%;
+    display:inline
+}
+
+.middlegame .homeLink {
+    margin-left: 11px;
+    display:inline
+}
+
+.facet_facetOrigin .facetbox {
+    background-color: #2E6B99;
+    color:#FFFFFF;
+    padding: 3px 5px;
+}
+.facet {
+    font-size: 90%;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.facet_facetOrigin .valuebox {
+    background-color: #BCCEE8;
+    padding: 5px;
+}
+.value {
+    color: #4040ff;
+}
+.value.sel {
+    color: #FFFFFF;
+}
+.barlink{
+    color: #BCCEE8;
+}
+.headers{
+    background-color: #2E6B99;
+    color:#FFFFFF;
+}
+
+.endgame div{
+    margin-left: 11px;
+    border: none;
+    padding: 0;
+}
+.endgame .resultAttributes{
+    margin: 0px;
+    padding-left: 5px;
+    border: none;
+}
+
+.endgame .headers{
+    text-align: left;
+}
+.endgame .attribute {
+    font-weight: bold;
+    background-color: #BCCEE8;
+    text-align: right;
+    padding-right: 8px;
+}
+
+.endgame .attributeValue{
+    padding-left: 8px;
+}
+
+.endgame .headers .attribute{
+    background-color: #2E6B99;    
+}
+.endgame .attributesTbody {
+    vertical-align: top;
+    background-color:#d4deef;
+}
+.anchorpanel{
+    padding:5px;
+    margin-top: 20px;
+    background-color: #2E6B99;
+    color: #FFFFFF;
+}
+.alphaNavigation{
+    margin-left: 11px;
+    background-color: #d4deef;
+    font-size:14px;
+}
+.alphaNavigation li{
+    display: inline;
+}
+.alphaNavigation ul{
+    list-style-type: none;
+    padding:0;
+}
+.alphaNavigation a{
+    display: inline-block;
+    padding-left: 25px;
+}
+
+.facetBody .facetRightPanel{
+    width: 49.9%;
+    float: left;
+}
+
+.facetBody .facetLeftPanel{
+    width: 50%;
+    float: left;
+}
+
+.sortedFacet{
+    background-color: #BCCEE8;
+    margin: 0px 11px;
+}
+.sortedFacet .facetLinkPanel{
+    padding-top: 3px;
+}
+
+.resourceItem { 
+     padding:0; 
+     margin:0; 
+} 
+.resourceItem li {
+     list-style-type:none; 
+}
+
+.resourceItem img {
+     display:inline; 
+     vertical-align:middle;
+     padding-right:5px;
+}
+
+.resulttable tbody tr.odd {
+    background-color: #CEDCEF;
+}
+
+div.wicket-aa {background-color:white;
+    border:1px solid #CCCCCC;
+    color:black;
+}
+
+div.wicket-aa ul {
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:none;
+    margin:0pt;
+    padding:5px;
+}
+
+div.wicket-aa ul li.selected {
+    background-color:#CCCCCC;
+}

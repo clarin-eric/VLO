@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	        xmlns:context="http://www.springframework.org/schema/context"
+	        xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:/org/springframework/beans/factory/xml/spring-beans-2.5.xsd
+	                           http://www.springframework.org/schema/context classpath:/org/springframework/context/config/spring-context-2.5.xsd">
+    <!--
+ 		        Property placeholder that allows init parameters defined in servlet context to be used as property values
+ 	        (in this case admin users list)
+ 		    -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:application.properties" />
+    </bean>
+
+    <bean id="configuration" class="eu.clarin.cmdi.vlo.Configuration" factory-method="getInstance">
+        <property name="solrUrl" value="${eu.clarin.cmdi.vlo.solrUrl}" />
+        <!--<property name="solrUrl" value="http://localhost:8080/vlo_solr" />-->
+        <!--    <property name="solrUrl" value="http://lux16.mpi.nl:8080/vlo_solr" />-->
+        <!--    <property name="solrUrl" value="http://catalog.clarin.eu:8080/vlo_solr" />-->
+        <property name="importerConfigFile" value="${eu.clarin.cmdi.vlo.importerConfigFile}" />
+        <property name="nationalProjectMapping" value="${eu.clarin.cmdi.vlo.nationalProjectMapping}" />
+        <property name="componentRegistryRESTURL" value="${eu.clarin.cmdi.vlo.componentRegistryRESTURL}" />
+
+
+        <property name="IMDIBrowserUrl" value="http://corpus1.mpi.nl/ds/imdi_browser?openpath=" />
+        <property name="handleServerUrl" value="http://hdl.handle.net/" />
+        <property name="facetFields">
+            <!-- The possible values of facets are defined in the schema.xml of the solr_server installation.
+            If you want to add a facet you need to adjust this schema.xml and reindex the data.
+            -->
+            <list> <!-- List of facets to be shown as columns, the order specified is kept in the application -->
+                <value>collection</value>
+                <value>language</value>
+                <value>continent</value>
+                <value>genre</value>
+                <value>country</value>
+                <value>subject</value>
+                <value>organisation</value>
+                <value>resourceType</value>
+                <value>dataProvider</value>
+                <value>nationalProject</value>
+                <!--        <value>year</value>-->
+            </list>
+        </property>
+    </bean>
+
+</beans>
