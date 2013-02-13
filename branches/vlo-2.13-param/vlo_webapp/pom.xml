@@ -8,7 +8,7 @@
     <!-- When updating the version number here, also update
     vlo_solr_importer.sh in src/main/bin and the version number 
     in the parent's pom.xml -->
-    <version>2.12</version>
+    <version>2.13</version>
     <name>VirtualLanguageObservatory</name>
     <description></description>
 

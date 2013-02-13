@@ -3,7 +3,6 @@
    <profileSchemaUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/</profileSchemaUrl>
    <componentRegistryRESTURL>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/</componentRegistryRESTURL>
    <handleServerUrl>http://hdl.handle.net/</handleServerUrl>
-   <solrUrl>http://localhost:8084/vlo_solr/</solrUrl>
    <imdiBrowserUrl>http://corpus1.mpi.nl/ds/imdi_browser?openpath=</imdiBrowserUrl>
    <nationalProjectMapping>nationalProjectsMapping.xml</nationalProjectMapping>
    <facetFields length="6">

@@ -63,7 +63,7 @@ public abstract class ConfigFileParam {
     }
             
     /**
-     * Write a assigned values to an XML file.
+     * Write annotated member values to an XML file.
      *
      * @param config the object whose annotated members and values will be
      * written to a file in the form of an XML definition.
