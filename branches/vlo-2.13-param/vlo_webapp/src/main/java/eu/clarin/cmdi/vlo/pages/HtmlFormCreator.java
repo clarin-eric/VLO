@@ -35,7 +35,7 @@ public class HtmlFormCreator {
 			aggregationJson.put(endpoint, idArray);
 		}		
 		
-		String form = "<form method=\"post\" action=\""+WebAppConfig.get().getFederatedContentSearchUrl()+"\"> \n"
+		String form = "<form method=\"post\" action=\""+WebAppConfig.open().getFederatedContentSearchUrl()+"\"> \n"
 				+ "<fieldset style=\"border:0px;\"> \n"
 				+ "\t  <label for=\"query\">CQL query:</label> \n"
 				+ "\t <input id=\"query\" type=\"text\" name=\"query\" size=\"30\" /> \n"

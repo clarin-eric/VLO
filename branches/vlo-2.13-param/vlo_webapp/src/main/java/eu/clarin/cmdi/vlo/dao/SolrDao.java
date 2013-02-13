@@ -21,7 +21,7 @@ public class SolrDao {
     private final CommonsHttpSolrServer solrServer;
 
     public SolrDao() {
-        String solrUrl = WebAppConfig.get().getSolrUrl();
+        String solrUrl = WebAppConfig.open().getSolrUrl();
         try {
             solrServer = new CommonsHttpSolrServer(solrUrl);
         } catch (MalformedURLException e) {

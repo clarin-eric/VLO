@@ -79,7 +79,7 @@ public class ResourceLinkPanel extends Panel {
         if (resourceLink != null) {
             if (resourceLink.startsWith(FacetConstants.HANDLE_PREFIX)) {
                 String handle = resourceLink.substring(FacetConstants.HANDLE_PREFIX.length());
-                result = WebAppConfig.get().getHandleServerUrl() + handle;
+                result = WebAppConfig.open().getHandleServerUrl() + handle;
             } else if(resourceLink.startsWith(FacetConstants.URN_NBN_PREFIX)) {
                 result = URN_NBN_RESOLVER_URL+resourceLink;
             }
@@ -125,7 +125,7 @@ public class ResourceLinkPanel extends Panel {
         if (resourceLink != null) {
             if (resourceLink.startsWith(FacetConstants.HANDLE_PREFIX)) {
                 String handle = resourceLink.substring(FacetConstants.HANDLE_PREFIX.length());
-                resourceLink = WebAppConfig.get().getHandleServerUrl() + handle;
+                resourceLink = WebAppConfig.open().getHandleServerUrl() + handle;
                 // Now points to something like http://hdl.handle.net/1839/00-0000-0000-0004-3357-F
                 HttpURLConnection con = null;
                 URL u;

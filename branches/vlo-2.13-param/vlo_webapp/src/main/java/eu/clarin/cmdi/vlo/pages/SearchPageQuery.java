@@ -73,7 +73,7 @@ public class SearchPageQuery implements IClusterable {
         result.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID, FacetConstants.FIELD_DESCRIPTION);
         result.setFacet(true);
         result.setFacetMinCount(1);
-        result.addFacetField(WebAppConfig.get().getFacetFields());
+        result.addFacetField(WebAppConfig.open().getFacetFields());
         return result;
     }
 
