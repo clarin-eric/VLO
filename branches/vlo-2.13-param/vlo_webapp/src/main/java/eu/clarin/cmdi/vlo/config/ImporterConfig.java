@@ -17,7 +17,7 @@ import org.simpleframework.xml.Root;
  * @author keeloo
  */
 @Root // directive for Simple
-public class ImporterConfig extends ConfigFileParam {
+public class ImporterConfig extends ConfigFromFile {
     
     /**
      * Definition of the name of the configuration file.

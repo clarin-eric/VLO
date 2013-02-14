@@ -65,7 +65,7 @@ import org.slf4j.LoggerFactory;
  * @author keeloo
  */
 @Root
-public class WebAppConfig extends ConfigFileParam {
+public class WebAppConfig extends ConfigFromFile {
 
     // create a reference to the application logging
     private final static org.slf4j.Logger LOG =
@@ -93,7 +93,7 @@ public class WebAppConfig extends ConfigFileParam {
 
         ConfigFilePersister.setLogger(WebAppConfig.logger);
     }
-
+    
     /**
      * XML File in which the application configuration is stored
      */
@@ -160,6 +160,8 @@ public class WebAppConfig extends ConfigFileParam {
 
         /* Contrary to Simple, the servlet context parameters are not retrieved
          * by annotation. Get them by invoking a local method. 
+         * 
+         * Here also invoke a superclass method
          */
         config = addServletContext(config);
 
@@ -566,8 +568,10 @@ public class WebAppConfig extends ConfigFileParam {
     public static void setServletContext (ServletContext context){
         
         servletContext = context;
+        
+        // servletContest can be null 
     }
-
+    
     /**
      * Add properties of the {@literal servlet's} context<br><br>
      * 
@@ -581,8 +585,13 @@ public class WebAppConfig extends ConfigFileParam {
     static WebAppConfig addServletContext(WebAppConfig config) {
 
         // retrieve parameter valies from the servlet context
-
-        config.solrUrl = servletContext.getInitParameter("solrUrl");
+        
+        if (servletContext == null) {
+            // no servlet context yet
+            
+        } else {
+            config.solrUrl = servletContext.getInitParameter("solrUrl");
+        }
 
         return config;
     }
@@ -594,7 +603,6 @@ public class WebAppConfig extends ConfigFileParam {
      * parameters.
      */
     
-    @Element
     private String solrUrl = "";
 
     /**

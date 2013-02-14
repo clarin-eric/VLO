@@ -25,12 +25,12 @@ package eu.clarin.cmdi.vlo.config;
  *
  * @author keeloo
  */
-public abstract class ConfigFileParam {
+public abstract class ConfigFromFile {
 
     /**
      * Empty constructor
      */
-    public ConfigFileParam() {
+    public ConfigFromFile() {
     }
 
     /**
@@ -51,14 +51,14 @@ public abstract class ConfigFileParam {
      *
      * @return the object with values assigned to annotated members
      */
-    public static synchronized ConfigFileParam read(ConfigFileParam config) {
+    public static synchronized ConfigFromFile read(ConfigFromFile config) {
 
         ConfigFilePersister persister;
         // config itself might not reference a file name
         persister = new ConfigFilePersister(config, config.getFileName ());
 
         // assign the members their values
-        config = (ConfigFileParam) persister.ConfigFromFile();
+        config = (ConfigFromFile) persister.ConfigFromFile();
         return config;
     }
             
@@ -68,7 +68,7 @@ public abstract class ConfigFileParam {
      * @param config the object whose annotated members and values will be
      * written to a file in the form of an XML definition.
      */
-     public static void write(ConfigFileParam config) {
+     public static void write(ConfigFromFile config) {
         
         ConfigFilePersister persister;
         // config itself might not reference a file name

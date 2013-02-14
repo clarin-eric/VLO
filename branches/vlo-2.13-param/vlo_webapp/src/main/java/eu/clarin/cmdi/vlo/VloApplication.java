@@ -13,12 +13,20 @@ public class VloApplication extends WebApplication {
 
     private final SearchResultsDao searchResults;
 
+    static WebAppConfig config;
+    
     public VloApplication() {
-        // BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { Configuration.CONFIG_FILE });
-        // factory.getBean("configuration"); //Use Configuration.getInstance to get the Configuration just loading the instance here.
-        WebAppConfig.setServletContext(this.getServletContext());
-        String test = WebAppConfig.open().getSolrUrl();
-        
+        /**
+         * The new way of doing things. In case of the web application tests:
+         * just extend this class, and override the constructor by invoking the
+         * open method of the extended test web application configuration class.
+         * Also, change the way in which the get methods are being invoked. From
+         * now on, you only have to invoke config.get ...
+         */
+        config = WebAppConfig.open();
+        // String test;
+        // test = config.getVloHomeLink();
+
         searchResults = new SearchResultsDao();
     }
 

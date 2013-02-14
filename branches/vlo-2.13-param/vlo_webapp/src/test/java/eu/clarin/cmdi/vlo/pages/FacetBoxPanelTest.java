@@ -16,7 +16,8 @@ public class FacetBoxPanelTest {
 
     @Before
     public void setUp() {
-        new WicketTester(new VloApplication());
+        WicketTester wicketTester;
+        wicketTester = new WicketTester(new VloApplication());
     }
 
     @Test

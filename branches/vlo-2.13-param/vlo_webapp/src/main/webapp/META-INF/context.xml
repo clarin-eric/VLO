@@ -15,5 +15,5 @@ as<br><br>
 -->
 
 <Context antiJARLocking="true" path="/vlo">
-    <Parameter name=solrURL value="http://localhost:8084/vlo_solr/"/>
+    <Parameter name=solrUrl value="http://localhost:8084/vlo_solr/"/>
 </Context>
