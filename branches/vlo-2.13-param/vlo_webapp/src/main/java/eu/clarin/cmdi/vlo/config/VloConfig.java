@@ -2,7 +2,6 @@ package eu.clarin.cmdi.vlo.config;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import javax.servlet.GenericServlet;
 import javax.servlet.ServletContext;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementArray;
@@ -88,7 +87,6 @@ public class VloConfig extends ConfigFromFile {
      */
     public VloConfig() {
         // let the superclass know about the logger defined here
-        // ConfigFileParam.logger = webAppConfigLogger;
 
         logger = new WebAppConfigLogger();
 
@@ -99,7 +97,7 @@ public class VloConfig extends ConfigFromFile {
      * XML File in which the application configuration is stored
      */
     public static final String CONFIG_FILE =
-            VloConfig.class.getResource("/WebAppConfig.xml").getFile();
+            VloConfig.class.getResource("/VloConfig.xml").getFile();
 
     /**
      * Get the name of the XML file.
@@ -130,7 +128,7 @@ public class VloConfig extends ConfigFromFile {
 
     /**
      * kj: change the annotation. Instead of opening a context, it is now a 
-     * matter of initialising it. Make a new method for referencing.
+     * matter of initializing it. Make a new method for referencing.
      * 
      * Open a static context of WebAppConfig members, and assign values to
      * them.<br><br>
@@ -150,24 +148,15 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the web application configuration in a new static context
      */
-    public static VloConfig setWebApp(ServletContext context) {
+    public static VloConfig webApp() {
         if (config == null) {
             // the configuration is not there yet; create it now
             config = new VloConfig();
         }
 
-        /**
-         * get the XML file configuration from the file by invoking the
-         * superclass method
-         */
-        config = (VloConfig) read(config);
+        // get the XML file configuration from the file by invoking the
 
-        /* Contrary to Simple, the servlet context parameters are not retrieved
-         * by annotation. Get them by invoking a local method. 
-         * 
-         * Here also invoke a superclass method
-         */
-        config = addServletContext(config, context);
+        config = (VloConfig) read(config);
 
         return config;
     }
@@ -176,18 +165,19 @@ public class VloConfig extends ConfigFromFile {
      * kj: add comment, much in the same way as the annotation of the WepApp
      * method.
      * 
+     * In this method, exceptions to the normal web application context can 
+     * be made.
+     * 
      * @return 
      */
-    public static VloConfig WebAppTest() {
+    public static VloConfig testWebApp() {
         if (config == null) {
             // the configuration is not there yet; create it now
             config = new VloConfig();
         }
 
-        /**
-         * get the XML file configuration from the file by invoking the
-         * superclass method
-         */
+        // get the XML file configuration from the file by invoking the
+
         config = (VloConfig) read(config);
 
         return config;
@@ -606,8 +596,14 @@ public class VloConfig extends ConfigFromFile {
     }
             
     /**
-     * Add properties of the {@literal servlet's} context<br><br>
+     *
+     * kj: repair annotation
      * 
+     * Contrary to Simple, the web application's context parameters are not
+     * retrieved by annotation. Get them by invoking a local method.
+     *
+     * Add properties of the {@literal servlet's} context<br><br>
+     *  
      * Keep the properties in the static context of the WebAppConfig class, next
      * to the members representing the values in WebAppConfig.xml file.<br><br>
      *
@@ -615,7 +611,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the static WebAppConfig member
      */
-    static VloConfig addServletContext(VloConfig config, ServletContext context) {
+    public static VloConfig addServletContext(VloConfig config, ServletContext context) {
 
         // retrieve parameter valies from the servlet context
 

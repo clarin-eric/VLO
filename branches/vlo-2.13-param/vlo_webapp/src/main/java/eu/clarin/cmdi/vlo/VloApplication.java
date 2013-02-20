@@ -5,42 +5,82 @@ import eu.clarin.cmdi.vlo.dao.SearchResultsDao;
 import eu.clarin.cmdi.vlo.pages.FacetedSearchPage;
 import javax.servlet.ServletContext;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * Application object for your web application. If you want to run this 
- * application without deploying, run the Start class.
+ * {@literal VLO} web application.<br><br>
+ * 
+ * Because the class extends the WebApplication class, the VLO application 
+ * will normally be deployed on a web server. However, by running the Start
+ * class, the application outside of a server container. 
  * 
  */
 public class VloApplication extends WebApplication {
 
     private final SearchResultsDao searchResults;
     
-    static VloConfig config;  
+    // application configuration object
     
+    static VloConfig config;
+    
+    // flag indicating whether or not the application object lives in a context
+    
+    boolean inContext;
+
     /**
-     * 
+     * Method that will be invoked when the application starts
+     */
+    @Override
+    public void init() {
+
+        if (inContext) {
+            
+            // add the context parameters to the configuration
+
+            ServletContext servletContext;
+            servletContext = this.getServletContext();
+            config = VloConfig.addServletContext(config, servletContext);
+        }
+    }
+
+    /**
+     * Web application constructor<br><br>
+     *
+     * Create the application by invoking this constructor, whenever you want it
+     * to be an application deployed in a web server container, that is: as an
+     * application living in a web server context.
      */
     public VloApplication() {
 
         /**
-         * 
+         * Read the application's configuration. Because on instantiation a web
+         * application cannot said to be living in a context, context parameters
+         * can only be added to the configuration later, in this case: when the
+         * {@literal init()} method will be invoked.
          */
-        ServletContext servletContext;
-        servletContext = this.getServletContext();
-        config = VloConfig.setWebApp(servletContext);
-        
-        String test;
-        test = VloConfig.get().getSolrUrl();
-        
-        searchResults = new SearchResultsDao();        
+        config = VloConfig.webApp();
+
+        // let the {@literal init()} method know that there will be a context
+
+        inContext = true;
+
+        // start the application
+
+        searchResults = new SearchResultsDao();
     }
-    
+
     /**
-     * Invoke the application in test mode
+     * Web application constructor<br><br>
+     *
+     * Introduce the idea of a channel: the environment in which a test
+     * configuration object is created is in a way connected to this method.
+     *
      */
     public VloApplication(VloConfig testConfig) {
+
+        // let the application use the configuration created outside of it
+
+        inContext = false;
+
         config = testConfig;
 
         searchResults = new SearchResultsDao();
@@ -57,5 +97,4 @@ public class VloApplication extends WebApplication {
     public SearchResultsDao getSearchResultsDao() {
         return searchResults;
     }
-
 }

@@ -20,7 +20,7 @@ public class FacetBoxPanelTest {
     @Before
     public void setUp() {
         WicketTester wicketTester;
-        testConfig = VloConfig.WebAppTest();
+        testConfig = VloConfig.testWebApp();
         wicketTester = new WicketTester(new VloApplication(testConfig));
     }
 
