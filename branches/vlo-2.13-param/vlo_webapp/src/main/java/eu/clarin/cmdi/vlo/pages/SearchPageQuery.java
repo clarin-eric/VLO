@@ -13,7 +13,7 @@ import org.apache.wicket.PageParameters;
 
 import eu.clarin.cmdi.vlo.Configuration;
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.config.WebAppConfig;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 
 public class SearchPageQuery implements IClusterable {
 
@@ -73,7 +73,7 @@ public class SearchPageQuery implements IClusterable {
         result.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID, FacetConstants.FIELD_DESCRIPTION);
         result.setFacet(true);
         result.setFacetMinCount(1);
-        result.addFacetField(WebAppConfig.open().getFacetFields());
+        result.addFacetField(VloConfig.get().getFacetFields());
         return result;
     }
 

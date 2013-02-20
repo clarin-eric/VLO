@@ -2,6 +2,7 @@ package eu.clarin.cmdi.vlo.config;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import javax.servlet.GenericServlet;
 import javax.servlet.ServletContext;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementArray;
@@ -65,11 +66,11 @@ import org.slf4j.LoggerFactory;
  * @author keeloo
  */
 @Root
-public class WebAppConfig extends ConfigFromFile {
+public class VloConfig extends ConfigFromFile {
 
     // create a reference to the application logging
     private final static org.slf4j.Logger LOG =
-            LoggerFactory.getLogger(WebAppConfig.class);
+            LoggerFactory.getLogger(VloConfig.class);
 
     // connect to the logging framework
     private class WebAppConfigLogger implements ConfigFilePersister.Logger {
@@ -85,20 +86,20 @@ public class WebAppConfig extends ConfigFromFile {
     /**
      * Constructor method
      */
-    public WebAppConfig() {
+    public VloConfig() {
         // let the superclass know about the logger defined here
         // ConfigFileParam.logger = webAppConfigLogger;
 
         logger = new WebAppConfigLogger();
 
-        ConfigFilePersister.setLogger(WebAppConfig.logger);
+        ConfigFilePersister.setLogger(VloConfig.logger);
     }
     
     /**
      * XML File in which the application configuration is stored
      */
     public static final String CONFIG_FILE =
-            WebAppConfig.class.getResource("/WebAppConfig.xml").getFile();
+            VloConfig.class.getResource("/WebAppConfig.xml").getFile();
 
     /**
      * Get the name of the XML file.
@@ -125,9 +126,12 @@ public class WebAppConfig extends ConfigFromFile {
      * access the configuration. Access is granted by defining a member holding
      * the configuration, that is, by defining a member of type WebAppConfig.
      */
-    private static WebAppConfig config = null;
+    private static VloConfig config = null;
 
     /**
+     * kj: change the annotation. Instead of opening a context, it is now a 
+     * matter of initialising it. Make a new method for referencing.
+     * 
      * Open a static context of WebAppConfig members, and assign values to
      * them.<br><br>
      * 
@@ -146,25 +150,55 @@ public class WebAppConfig extends ConfigFromFile {
      *
      * @return the web application configuration in a new static context
      */
-    public static WebAppConfig open() {
+    public static VloConfig setWebApp(ServletContext context) {
         if (config == null) {
             // the configuration is not there yet; create it now
-            config = new WebAppConfig();
+            config = new VloConfig();
         }
 
         /**
          * get the XML file configuration from the file by invoking the
          * superclass method
          */
-        config = (WebAppConfig) read(config);
+        config = (VloConfig) read(config);
 
         /* Contrary to Simple, the servlet context parameters are not retrieved
          * by annotation. Get them by invoking a local method. 
          * 
          * Here also invoke a superclass method
          */
-        config = addServletContext(config);
+        config = addServletContext(config, context);
 
+        return config;
+    }
+
+    /**
+     * kj: add comment, much in the same way as the annotation of the WepApp
+     * method.
+     * 
+     * @return 
+     */
+    public static VloConfig WebAppTest() {
+        if (config == null) {
+            // the configuration is not there yet; create it now
+            config = new VloConfig();
+        }
+
+        /**
+         * get the XML file configuration from the file by invoking the
+         * superclass method
+         */
+        config = (VloConfig) read(config);
+
+        return config;
+    }
+    
+    /**
+     * kj: this is the new get context method
+     * 
+     * @return 
+     */
+    public static VloConfig get (){
         return config;
     }
 
@@ -200,11 +234,13 @@ public class WebAppConfig extends ConfigFromFile {
      * Please refer to the general VLO documentation for a description of the
      * member parameters.
      */
-
     @Element // annotation directive as defined by Simple
     private String vloHomeLink = "";
-
+    
+    @Element
+    private String solrUrl = "";
     // In the XML file, the value of the parameter is expanded by Maven.
+    
     @Element
     private String profileSchemaUrl = "";
 
@@ -290,6 +326,18 @@ public class WebAppConfig extends ConfigFromFile {
      */
     public void setVloHomeLink(String link) {
         this.vloHomeLink = link;
+    }
+
+    /**
+     * Get the SolrUrl parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param solrUrl the parameter
+     */
+    public String getSolrUrl() {
+        return solrUrl;
     }
 
     /**
@@ -556,22 +604,7 @@ public class WebAppConfig extends ConfigFromFile {
     public void setSilToISO639CodesUrl(String url) {
         this.silToISO639CodesUrl = url;
     }
-    
-    // reference to the servlet context
-    private static ServletContext servletContext = null;
-        
-    /**
-     * Set the {@literal servlet} context
-     * 
-     * Note: this method needs to be invoked before open() is invoked 
-     */
-    public static void setServletContext (ServletContext context){
-        
-        servletContext = context;
-        
-        // servletContest can be null 
-    }
-    
+            
     /**
      * Add properties of the {@literal servlet's} context<br><br>
      * 
@@ -582,16 +615,11 @@ public class WebAppConfig extends ConfigFromFile {
      *
      * @return the static WebAppConfig member
      */
-    static WebAppConfig addServletContext(WebAppConfig config) {
+    static VloConfig addServletContext(VloConfig config, ServletContext context) {
 
         // retrieve parameter valies from the servlet context
-        
-        if (servletContext == null) {
-            // no servlet context yet
-            
-        } else {
-            config.solrUrl = servletContext.getInitParameter("solrUrl");
-        }
+
+        config.solrUrl = context.getInitParameter("solrUrl");
 
         return config;
     }
@@ -601,23 +629,5 @@ public class WebAppConfig extends ConfigFromFile {
      *
      * The following defines the members corresponding to {@servlet} context
      * parameters.
-     */
-    
-    private String solrUrl = "";
-
-    /**
-     * Get methods for the {@literal servlet} context members
-     */
-    
-    /**
-     * Get the SolrUrl parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @param solrUrl the parameter
-     */
-    public String getSolrUrl() {
-        return solrUrl;
-    }
+     */    
 }

@@ -1,4 +1,6 @@
 <webAppConfig>
+   <!-- <solrUrl>${eu.clarin.cmdi.vlo.solrUrl}</solrUrl> -->
+   <solrUrl>http://localhost:8084/vlo_solr/</solrUrl>
    <vloHomeLink>http://www.clarin.eu/vlo</vloHomeLink>
    <profileSchemaUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/</profileSchemaUrl>
    <componentRegistryRESTURL>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/</componentRegistryRESTURL>

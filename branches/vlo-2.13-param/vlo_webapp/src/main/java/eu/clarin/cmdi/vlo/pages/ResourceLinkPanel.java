@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.Configuration;
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.config.WebAppConfig;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -79,7 +79,7 @@ public class ResourceLinkPanel extends Panel {
         if (resourceLink != null) {
             if (resourceLink.startsWith(FacetConstants.HANDLE_PREFIX)) {
                 String handle = resourceLink.substring(FacetConstants.HANDLE_PREFIX.length());
-                result = WebAppConfig.open().getHandleServerUrl() + handle;
+                result = VloConfig.get().getHandleServerUrl() + handle;
             } else if(resourceLink.startsWith(FacetConstants.URN_NBN_PREFIX)) {
                 result = URN_NBN_RESOLVER_URL+resourceLink;
             }
@@ -125,7 +125,7 @@ public class ResourceLinkPanel extends Panel {
         if (resourceLink != null) {
             if (resourceLink.startsWith(FacetConstants.HANDLE_PREFIX)) {
                 String handle = resourceLink.substring(FacetConstants.HANDLE_PREFIX.length());
-                resourceLink = WebAppConfig.open().getHandleServerUrl() + handle;
+                resourceLink = VloConfig.get().getHandleServerUrl() + handle;
                 // Now points to something like http://hdl.handle.net/1839/00-0000-0000-0004-3357-F
                 HttpURLConnection con = null;
                 URL u;

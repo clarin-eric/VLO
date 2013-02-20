@@ -8,7 +8,7 @@ import java.util.Map;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import eu.clarin.cmdi.vlo.Configuration;
-import eu.clarin.cmdi.vlo.config.WebAppConfig;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 
 /**
  * Little helper class that creates HTML forms as String
@@ -35,7 +35,7 @@ public class HtmlFormCreator {
 			aggregationJson.put(endpoint, idArray);
 		}		
 		
-		String form = "<form method=\"post\" action=\""+WebAppConfig.open().getFederatedContentSearchUrl()+"\"> \n"
+		String form = "<form method=\"post\" action=\""+VloConfig.get().getFederatedContentSearchUrl()+"\"> \n"
 				+ "<fieldset style=\"border:0px;\"> \n"
 				+ "\t  <label for=\"query\">CQL query:</label> \n"
 				+ "\t <input id=\"query\" type=\"text\" name=\"query\" size=\"30\" /> \n"

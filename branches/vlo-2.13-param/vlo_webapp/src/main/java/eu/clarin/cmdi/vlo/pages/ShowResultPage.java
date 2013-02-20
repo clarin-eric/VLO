@@ -58,7 +58,7 @@ import eu.clarin.cmdi.vlo.Configuration;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.Resources;
 import eu.clarin.cmdi.vlo.StringUtils;
-import eu.clarin.cmdi.vlo.config.WebAppConfig;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.DaoLocator;
 
 public class ShowResultPage extends BasePage {
@@ -117,7 +117,7 @@ public class ShowResultPage extends BasePage {
                 linkToOriginalContext = linkToOriginalContext.replace(FacetConstants.TEST_HANDLE_MPI_PREFIX, FacetConstants.HANDLE_MPI_PREFIX);
             }
             if (linkToOriginalContext.startsWith(FacetConstants.HANDLE_MPI_PREFIX)) {
-                result = WebAppConfig.open().getIMDIBrowserUrl(linkToOriginalContext);
+                result = VloConfig.get().getIMDIBrowserUrl(linkToOriginalContext);
             } else {
                 try {
                     new URL(linkToOriginalContext);

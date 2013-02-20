@@ -11,13 +11,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 import eu.clarin.cmdi.vlo.VloApplication;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 
 public class FacetBoxPanelTest {
+
+    static VloConfig testConfig;
 
     @Before
     public void setUp() {
         WicketTester wicketTester;
-        wicketTester = new WicketTester(new VloApplication());
+        testConfig = VloConfig.WebAppTest();
+        wicketTester = new WicketTester(new VloApplication(testConfig));
     }
 
     @Test

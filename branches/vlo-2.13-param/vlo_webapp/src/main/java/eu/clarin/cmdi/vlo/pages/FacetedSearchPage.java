@@ -29,7 +29,7 @@ import org.apache.wicket.model.ResourceModel;
 import eu.clarin.cmdi.vlo.Configuration;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.Resources;
-import eu.clarin.cmdi.vlo.config.WebAppConfig;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.AutoCompleteDao;
 import fiftyfive.wicket.basic.TruncatedLabel;
 
@@ -58,7 +58,7 @@ public class FacetedSearchPage extends BasePage {
 
 		public SearchBoxForm(String id, SearchPageQuery query) {
 			super(id, new CompoundPropertyModel<SearchPageQuery>(query));
-			add(new ExternalLink("vloHomeLink", WebAppConfig.open().getVloHomeLink()));
+			add(new ExternalLink("vloHomeLink", VloConfig.get().getVloHomeLink()));
 			searchBox = new AutoCompleteTextField<String>("searchQuery") {
 				@Override
 				protected Iterator<String> getChoices(String input) {

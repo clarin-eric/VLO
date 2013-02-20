@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!-- VLO application context file
 
 solrURL : URL through which the Solr server should be reached<br><br>
 
-Note that the VLO importer needs about this URL to. Because the
+Note that the VLO importer needs to know about this URL to. Because the
 importer is not a web application, the value of the parameter should
 be defined in the ImporterConfig.xml<br><br>
 
@@ -13,7 +12,6 @@ as<br><br>
 <solrUrl>http://localhost:8084/vlo_solr/</solrUrl><br><br>
 
 -->
-
 <Context antiJARLocking="true" path="/vlo">
-    <Parameter name=solrUrl value="http://localhost:8084/vlo_solr/"/>
+  <Parameter name="solrUrl" value="http://localhost:8084/vlo_solr/"/>
 </Context>
