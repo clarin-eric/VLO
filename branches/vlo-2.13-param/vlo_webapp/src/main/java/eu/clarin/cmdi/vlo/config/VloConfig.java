@@ -2,9 +2,11 @@ package eu.clarin.cmdi.vlo.config;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 import javax.servlet.ServletContext;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementArray;
+import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 import org.slf4j.LoggerFactory;
 
@@ -35,11 +37,11 @@ import org.slf4j.LoggerFactory;
  *
  * in the WebAppConfig class. When the application invokes Simple by<br><br>
  *
- * WebAppConfig.open();<br><br>
+ * WebAppConfig.get();<br><br>
  *
  * the parameter itself is accessed by<br><br>
  *
- * WebAppConfig.open().getParameterMember();<br><br>
+ * WebAppConfig.get().getParameterMember();<br><br>
  *
  * If you want to add a type of member that is not included in the class yet,
  * refer to the Simple framework's specification.<br><br>
@@ -116,11 +118,11 @@ public class VloConfig extends ConfigFromFile {
      *
      * WebAppConfig.getParameterMember()<br><br>
      *
-     * for example, would not be valid. On encountering open() however, a new
+     * for example, would not be valid. On encountering get() however, a new
      * static context is opened, and from that, getParameterMember() can be
      * invoked:<br><br>
      *
-     * WebAppConfig.open().getParameterMember()<br><br>
+     * WebAppConfig.get().getParameterMember()<br><br>
      * 
      * @param fileName
      *
@@ -173,7 +175,7 @@ public class VloConfig extends ConfigFromFile {
     }
 
     /**
-     * Web application parameter members<br><br>
+     * VLO application parameter members<br><br>
      *
      * Initialize a member corresponding to application parameters with an empty
      * string at least, for this will allow them to be linearized to
@@ -182,7 +184,33 @@ public class VloConfig extends ConfigFromFile {
      * Please refer to the general VLO documentation for a description of the
      * member parameters.
      */
-    @Element // annotation directive as defined by Simple
+    
+    /**
+     * Flag to signal the records in the data to be deleted before the ingestion
+     * starts.
+     */
+    @Element // directive for Simple
+    private boolean deleteAllFirst = false;
+    
+    /**
+     * Flag that leads to the printing of XPATH mappings encountered. Note: need
+     * to be more specific on this.
+     */
+    @Element
+    private boolean printMapping = false;
+    
+    /**
+     * A list of data roots, that is: directories from which the importer
+     * collects meta data. Note: need to elaborate on this.
+     */
+    @ElementList // directive for Simple
+    private List<DataRoot> dataRoots;
+    
+    public List<DataRoot> getDataRoots() {
+        return dataRoots;
+    }
+    
+    @Element
     private String vloHomeLink = "";
     
     @Element
@@ -215,15 +243,20 @@ public class VloConfig extends ConfigFromFile {
      * needs to be communicated to Simple. The following would be a correct
      * description of an array of three facet fields<br><br>
      *
-     * {@literal <facetFields length="3">}<br> {@literal    <facetField>}<br>
-     * {@literal       fieldOne}<br> {@literal    </facetField>}<br>
-     * {@literal    <facetField>}<br> {@literal       fieldTwo}<br>
-     * {@literal    </facetField>}<br> {@literal    <facetField>}<br>
-     * {@literal       fieldThree}<br> {@literal    </facetField>}<br>
+     * {@literal <facetFields length="3">}<br> 
+     * {@literal    <facetField>}<br>
+     * {@literal       fieldOne}<br> 
+     * {@literal    </facetField>}<br>
+     * {@literal    <facetField>}<br> 
+     * {@literal       fieldTwo}<br>
+     * {@literal    </facetField>}<br> 
+     * {@literal    <facetField>}<br>
+     * {@literal       fieldThree}<br> 
+     * {@literal    </facetField>}<br>
      * {@literal </facetFields>}<br><br>
      *
-     * To let Spring now it has to interpret the facetFields element as an
-     * array, use the ElementArray directive. Use the directive to let Spring
+     * To let Simple now it has to interpret the facetFields element as an
+     * array, use the ElementArray directive. Use the directive to let Simple
      * know that the elements inside 'facetFields' are named 'facetField'.
      */
     @ElementArray(entry = "facetField")
@@ -253,131 +286,191 @@ public class VloConfig extends ConfigFromFile {
      */
     
     /**
-     * Get the VloHomeLink parameter<br><br>
+     * Set the value of the dataRoots parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @return the parameter
+     * @param the value
+     */
+    public void setDataRoots(List<DataRoot> dataRoots) {
+        this.dataRoots = dataRoots;
+    }
+
+    /**
+     * Set the value deleteAllFirst parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public void setDeleteAllFirst(boolean deleteAllFirst) {
+        this.deleteAllFirst = deleteAllFirst;
+    }
+
+    /**
+     * Get the value of the deleteAllFirst parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public boolean isDeleteAllFirst() {
+        return deleteAllFirst;
+    }
+
+    /**
+     * Set the value of the printMapping parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param the value
+     */
+    public void setPrintMapping(boolean printMapping) {
+        this.printMapping = printMapping;
+    }
+
+    /**
+     * Get the value of the printMapping parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public boolean isPrintMapping() {
+        return printMapping;
+    }
+    
+    /**
+     * Get the value of the VloHomeLink parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
      */
     public String getVloHomeLink() {
         return vloHomeLink;
     }
 
     /**
-     * Set the VloHomeLink parameter<br><br>
+     * Set the value of the VloHomeLink parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param vloHomeLink the parameter
+     * @param vloHomeLink the value
      */
     public void setVloHomeLink(String link) {
         this.vloHomeLink = link;
     }
 
     /**
-     * Get the SolrUrl parameter<br><br>
+     * Get the value of the SolrUrl parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param solrUrl the parameter
+     * @param solrUrl the value
      */
     public String getSolrUrl() {
         return solrUrl;
     }
 
     /**
-     * Get the ProfileSchemaUrl by profileId parameter<br><br>
+     * Get the value of the ProfileSchemaUrl by profileId parameter<br><br>
      *
      * For a description of the schema, refer to the general VLO documentation.
      * Note: the profileId needs to be expanded.
      *
-     * @return the parameter
+     * @return the value
      */
     public String getComponentRegistryProfileSchema(String id) {
         return profileSchemaUrl.replace("${PROFILE_ID}", id);
     }
 
     /**
-     * Set the ProfileSchemaUrl parameter<br><br>
+     * Set the value of the ProfileSchemaUrl parameter<br><br>
      *
      * For a description of the schema, refer to the general VLO documentation.
      * Note: the profileId needs to be expanded.
      *
-     * @param profileId the parameter
+     * @param profileId the value
      */
     public void setProfileSchemaUrl(String url) {
         this.profileSchemaUrl = url;
     }
 
     /**
-     * Get the ComponentRegisteryRESTURL parameter<br><br>
+     * Get the value of the ComponentRegisteryRESTURL parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @return the parameter
+     * @return the value
      */
     public String getComponentRegistryRESTURL() {
         return componentRegistryRESTURL;
     }
 
     /**
-     * Set the ComponentRegisteryRESTURL parameter<br><br>
+     * Set the value of the ComponentRegisteryRESTURL parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param componentRegistryRESTURL the parameter
+     * @param componentRegistryRESTURL the value
      */
     public void setComponentRegistryRESTURL(String url) {
         this.componentRegistryRESTURL = url;
     }
 
     /**
-     * Get the HandleServerUrl parameter<br><br>
+     * Get the value of the HandleServerUrl parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @return the parameter
+     * @return the value
      */
     public String getHandleServerUrl() {
         return handleServerUrl;
     }
 
     /**
-     * Set the HandleServerUrl parameter<br><br>
+     * Set the value of the HandleServerUrl parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param handleServerUrl the parameter
+     * @param handleServerUrl the value
      */
     public void setHandleServerUrl(String url) {
         this.handleServerUrl = url;
     }
 
     /**
-     * Set the IMDIBrowserUrl parameter<br><br>
+     * Set the value of the IMDIBrowserUrl parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param imdiBrowserUrl the parameter
+     * @param imdiBrowserUrl the value
      */
     public void setIMDIBrowserUrl(String url) {
         this.imdiBrowserUrl = url;
     }
 
     /**
-     * Get ProfileSchemaUrl parameter combined with a handle<br><br>
+     * Get the value of the ProfileSchemaUrl parameter combined with a handle<br><br>
      *
      * For a description of the schema, refer to the general VLO documentation.
      *
-     * @param handle the handle to be combined with the parameter
+     * @param handle the value 
      */
     public String getIMDIBrowserUrl(String handle) {
         String result;
@@ -390,164 +483,168 @@ public class VloConfig extends ConfigFromFile {
     }
 
     /**
-     * Get the FederatedContentSearchUrl parameter<br><br>
+     * Get the value of the FederatedContentSearchUrl parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @return the parameter
+     * @return the value
      */
     public void setFederatedContentSearchUrl(String url) {
         this.FederatedContentSearchUrl = url;
     }
 
     /**
-     * Set the FederatedContentSearchUrl parameter<br><br>
+     * Set the value of the FederatedContentSearchUrl parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param FederatedContentSearchUrl the parameter
+     * @param FederatedContentSearchUrl the value
      */
     public String getFederatedContentSearchUrl() {
         return FederatedContentSearchUrl;
     }
 
     /**
-     * Set the NationalProjectMapping parameter<br><br>
+     * Set the value of the NationalProjectMapping parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param nationalProjectMapping the parameter
+     * @param nationalProjectMapping the value
      */
     public void setNationalProjectMapping(String mapping) {
         this.nationalProjectMapping = mapping;
     }
 
     /**
-     * Get the NationalProjectMapping parameter<br><br>
+     * Get the value of the NationalProjectMapping parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @return the parameter
+     * @return the value
      */
     public String getNationalProjectMapping() {
         return nationalProjectMapping;
     }
 
     /**
-     * Get the FacetFields parameter<br><br>
+     * Get the value of the FacetFields parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @return the parameter
+     * @return the value
      */
     public String[] getFacetFields() {
         return facetFields;
     }
 
     /**
-     * Set the FacetFields parameter<br><br>
+     * Set the value of the FacetFields parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param facetFields the parameter, a list of facet fields
+     * @param facetFields the value, a list of facet fields
      */
     public void setFacetFields(String[] fields) {
         this.facetFields = fields;
     }
 
     /**
-     * Get the CountryComponentUrl parameter<br><br>
+     * Get the value of the CountryComponentUrl parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @return the parameter
+     * @return the value
      */
     public String getCountryComponentUrl() {
         return countryComponentUrl;
     }
 
     /**
-     * Set the CountryComponentUrl parameter<br><br>
+     * Set the value of the CountryComponentUrl parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param countryComponentUrl the parameter
+     * @param countryComponentUrl the value
      */
     public void setCountryComponentUrl(String url) {
         this.countryComponentUrl = url;
     }
 
     /**
-     * Get the Language2LetterCodeComponentUrl parameter<br><br>
+     * Get the value of the Language2LetterCodeComponentUrl parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @return the parameter
+     * @return the value
      */
     public String getLanguage2LetterCodeComponentUrl() {
         return language2LetterCodeComponentUrl;
     }
 
     /**
-     * Set the Language2LetterCodeComponentUrl parameter<br><br>
+     * Set the value of the Language2LetterCodeComponentUrl parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param language2LetterCodeComponentUrl the parameter
+     * @param language2LetterCodeComponentUrl the value
      */
     public void setLanguage2LetterCodeComponentUrl(String url) {
         this.language2LetterCodeComponentUrl = url;
     }
 
     /**
-     * Get the Language3LetterCodeComponentUrl parameter<br><br> For a
-     * description of the parameter, refer to the general VLO documentation.
+     * Get the value of the Language3LetterCodeComponentUrl parameter<br><br> 
+     * 
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
      *
-     * @return the parameter
+     * @return the value
      */
     public String getLanguage3LetterCodeComponentUrl() {
         return language3LetterCodeComponentUrl;
     }
 
     /**
-     * Set the Language3LetterCodeComponentUrl parameter<br><br> For a
-     * description of the parameter, refer to the general VLO documentation.
+     * Set the value of the Language3LetterCodeComponentUrl parameter<br><br> 
+     * 
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
      *
-     * @param language3LetterCodeComponentUrl the parameter
+     * @param language3LetterCodeComponentUrl the value
      */
     public void setLanguage3LetterCodeComponentUrl(String url) {
         this.language3LetterCodeComponentUrl = url;
     }
 
     /**
-     * Get the SilToISO639CodesUrl parameter<br><br>
+     * Get the value of the SilToISO639CodesUrl parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @return the parameter
+     * @return the value
      */
     public String getSilToISO639CodesUrl() {
         return silToISO639CodesUrl;
     }
 
     /**
-     * Set the SilToISO639CodesUrl parameter<br><br>
+     * Set the value of the SilToISO639CodesUrl parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param silToISO639CodesUrl the parameter
+     * @param silToISO639CodesUrl the value
      */
     public void setSilToISO639CodesUrl(String url) {
         this.silToISO639CodesUrl = url;

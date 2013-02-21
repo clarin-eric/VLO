@@ -1,5 +1,10 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.CommonUtils;
+import eu.clarin.cmdi.vlo.Configuration;
+import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.DataRoot;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -10,7 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.StreamingUpdateSolrServer;
@@ -20,19 +24,15 @@ import org.apache.solr.common.params.MapSolrParams;
 import org.apache.solr.common.params.SolrParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import eu.clarin.cmdi.vlo.CommonUtils;
-import eu.clarin.cmdi.vlo.Configuration;
-import eu.clarin.cmdi.vlo.FacetConstants;
 
 
 /**
  * The main metadataImporter class. Also contains the main function.
  *
- * The metadataimporter reads all the config files and then, for each metadatafile in each defined directory structure parses and imports them as defined in the configuration.
- * The startImport function starts the importing and so on.
+ * The metadataimporter reads all the config files and then, for each
+ * metadatafile in each defined directory structure parses and imports them as
+ * defined in the configuration. The startImport function starts the importing
+ * and so on.
  */
 
 @SuppressWarnings({"serial"})
@@ -56,10 +56,11 @@ public class MetadataImporter {
      * the solr server.
      */
     private StreamingUpdateSolrServer solrServer;
-
     /**
-     * Defines the post-processor associations.
-     * At import, for each facet value, this map is checked and all postprocessors associated with the facet _type_ are applied to the value before storing the new value in the solr document.
+     * Defines the post-processor associations. At import, for each facet value,
+     * this map is checked and all postprocessors associated with the facet
+     * _type_ are applied to the value before storing the new value in the solr
+     * document.
      */
     final static Map<String, PostProcessor> POST_PROCESSORS = new HashMap<String, PostProcessor>();
     static {
@@ -70,6 +71,18 @@ public class MetadataImporter {
         POST_PROCESSORS.put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_CLARIN_PROFILE, new CMDIComponentProfileNamePostProcessor());
     }
+    
+    // VLO configuration
+    VloConfig config;
+    
+    /**
+     * Constructor
+     * 
+     * @param
+     */
+    public MetadataImporter (VloConfig config){
+        this.config = config;
+    }
 
     /**
      * Contains MDSelflinks (usually).
@@ -77,13 +90,10 @@ public class MetadataImporter {
      */
     private final Set<String> processedIds = new HashSet<String>();
     /**
-     * Some caching for solr documents (we are more efficient if we ram a whole bunch to the solr server at once.
+     * Some caching for solr documents (we are more efficient if we ram a whole
+     * bunch to the solr server at once.
      */
     protected List<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
-    /**
-     * Config.
-     */
-    private final ImporterConfig config;
 
     // SOME STATS
     private int nrOFDocumentsUpdated;
@@ -93,15 +103,9 @@ public class MetadataImporter {
     private int nrOfFilesWithError = 0;
 
     /**
-     * Constructor, wants to know the config.
-     * @param config the config.
-     */
-    public MetadataImporter(ImporterConfig config) {
-        this.config = config;
-    }
-
-    /**
-     * Retrieve all files with VALID_CMDI_EXTENSIONS from all DataRoot entries and starts processing for every single file
+     * Retrieve all files with VALID_CMDI_EXTENSIONS from all DataRoot entries
+     * and starts processing for every single file
+     *
      * @throws MalformedURLException
      */
     void startImport() throws MalformedURLException {
@@ -111,7 +115,7 @@ public class MetadataImporter {
         long start = System.currentTimeMillis();
         try {
             // Delete the whole Solr db
-            if (config.isDeleteAllFirst()) {
+            if (VloConfig.get().isDeleteAllFirst()) {
                 LOG.info("Deleting original data...");
                 solrServer.deleteByQuery("*:*");
                 solrServer.commit();
@@ -161,11 +165,13 @@ public class MetadataImporter {
     }
 
     /**
-     * Check a List of DataRoots for existence of RootFile (typically parent directory of metadata files)
+     * Check a List of DataRoots for existence of RootFile (typically parent
+     * directory of metadata files)
+     *
      * @return
      */
     private List<DataRoot> checkDataRoots() {
-        List<DataRoot> dataRoots = config.getDataRoots();
+        List<DataRoot> dataRoots = VloConfig.get().getDataRoots();
         for (DataRoot dataRoot : dataRoots) {
             if (!dataRoot.getRootFile().exists()) {
                 LOG.error("Root file " + dataRoot.getRootFile() + " does not exist. Probable configuration error so stopping import.");
@@ -176,9 +182,12 @@ public class MetadataImporter {
     }
 
     /**
-     * Get the rootFile or all files with VALID_CMDI_EXTENSIONS if rootFile is a directory
+     * Get the rootFile or all files with VALID_CMDI_EXTENSIONS if rootFile is a
+     * directory
+     *
      * @param rootFile
-     * @return List with the rootFile or all contained files if rootFile is a directory
+     * @return List with the rootFile or all contained files if rootFile is a
+     * directory
      */
     private List<File> getFilesFromDataRoot(File rootFile) {
         List<File> result = new ArrayList<File>();
@@ -193,6 +202,7 @@ public class MetadataImporter {
 
     /**
      * Initialize SolrServer as specified in configuration file
+     *
      * @throws MalformedURLException
      */
     protected void initSolrServer() throws MalformedURLException {
@@ -209,6 +219,7 @@ public class MetadataImporter {
 
     /**
      * Process single CMDI file with CMDIDataProcessor
+     *
      * @param file CMDI input file
      * @param dataOrigin
      * @param processor
@@ -247,6 +258,7 @@ public class MetadataImporter {
 
     /**
      * Check id for validness
+     *
      * @param id
      * @return true if id is acceptable, false otherwise
      */
@@ -255,7 +267,10 @@ public class MetadataImporter {
     }
 
     /**
-     * Adds some additional information from DataRoot to solrDocument, add solrDocument to document list, submits list to SolrServer every 1000 files
+     * Adds some additional information from DataRoot to solrDocument, add
+     * solrDocument to document list, submits list to SolrServer every 1000
+     * files
+     *
      * @param solrDocument
      * @param cmdiData
      * @param file
@@ -292,9 +307,10 @@ public class MetadataImporter {
     }
 
     /**
-     * Adds two fields FIELD_RESOURCE_TYPE and FIELD_RESOURCE. The Type can be specified in the "ResourceType" element of an imdi file or
-     * possibly overwritten by some more specific xpath (as in the LRT cmdi files). So if a type is overwritten and already in the
-     * solrDocument we take that type.
+     * Adds two fields FIELD_RESOURCE_TYPE and FIELD_RESOURCE. The Type can be
+     * specified in the "ResourceType" element of an imdi file or possibly
+     * overwritten by some more specific xpath (as in the LRT cmdi files). So if
+     * a type is overwritten and already in the solrDocument we take that type.
      */
     private void addResourceData(SolrInputDocument solrDocument, CMDIData cmdiData) {
         List<Object> fieldValues = solrDocument.containsKey(FacetConstants.FIELD_RESOURCE_TYPE) ? new ArrayList<Object>(solrDocument
@@ -323,7 +339,9 @@ public class MetadataImporter {
     }
 
     /**
-     * Send current list of SolrImputDocuments to SolrServer and clears list afterwards
+     * Send current list of SolrImputDocuments to SolrServer and clears list
+     * afterwards
+     *
      * @throws SolrServerException
      * @throws IOException
      */
@@ -339,6 +357,7 @@ public class MetadataImporter {
     
     /**
      * Builds suggester index for autocompletion
+     *
      * @throws SolrServerException
      * @throws MalformedURLException
      */
@@ -356,21 +375,31 @@ public class MetadataImporter {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        BeanFactory factory = new ClassPathXmlApplicationContext(new String[] { Configuration.CONFIG_FILE });
-        factory.getBean("configuration");
-        Configuration cfg = Configuration.getInstance();
 
-        BeanFactory factory2 = new ClassPathXmlApplicationContext(new String[] { cfg.getImporterConfigFile() } );
+        String fileName;
 
-        ImporterConfig config = (ImporterConfig) factory2.getBean("importerConfig", ImporterConfig.class);
+        VloConfig config;
+        
+        if (args.length > 0) {
 
-        MetadataImporter importer = new MetadataImporter(config);
-        importer.startImport();
-        if (config.isPrintMapping()) {
-            File file = new File("xsdMapping.txt");
-            FacetMappingFactory.printMapping(file);
-            LOG.info("Printed facetMapping in " + file);
+            // get the file name from the command line
+            fileName = VloConfig.class.getResource(args[0]).getFile();
+            
+            // test for file existence 
+
+            // optionally, modify the configuration before starting the importer
+
+            config = VloConfig.readConfig(fileName);
+            
+            MetadataImporter importer = new MetadataImporter(config);
+            
+            importer.startImport();
+            
+            if (config.isPrintMapping()) {
+                File file = new File("xsdMapping.txt");
+                FacetMappingFactory.printMapping(file);
+                LOG.info("Printed facetMapping in " + file);
+            }
         }
     }
-
 }

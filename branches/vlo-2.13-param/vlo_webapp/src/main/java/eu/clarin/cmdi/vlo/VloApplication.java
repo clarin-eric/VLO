@@ -19,7 +19,7 @@ public class VloApplication extends WebApplication {
 
     private final SearchResultsDao searchResults;
 
-    // application configuration object
+    // application configuration
     static VloConfig config;
     
     // flag indicating whether or not the application object lives in a context
@@ -39,20 +39,12 @@ public class VloApplication extends WebApplication {
             servletContext = this.getServletContext();
             
             /**
-             * Send the servlet context to the configuration object to enable it
-             * to read an externel VloConfig.xml configuration file.
+             * Send the application context to the configuration object to
+             * enable it to read an external {@literal VloConfig.xml}
+             * configuration file.
              */
             
             config = VloConfig.switchToExternalConfig(servletContext);
-
-            /**
-             * Instead of obtaining the SolrUrl parameter from the context, read
-             * the name of another instance - preferably the one that the
-             * importer uses for its configuration - from the context. Once this
-             * has been done, the whole web application configuration could be
-             * refreshed. Note: add a method for refreshing the current
-             * configuration to the VloConfig class.
-             */
         }
     }
 

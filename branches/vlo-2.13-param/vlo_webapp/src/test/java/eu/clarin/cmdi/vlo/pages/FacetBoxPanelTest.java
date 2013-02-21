@@ -17,6 +17,7 @@ public class FacetBoxPanelTest {
     @Before
     public void setUp() {
         WicketTester wicketTester;
+        
         String fileName = VloConfig.class.getResource("/VloConfig.xml").getFile();
         
         testConfig = VloConfig.readTestConfig(fileName);

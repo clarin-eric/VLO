@@ -1,7 +1,8 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import static org.junit.Assert.assertEquals;
-
+import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.DataRoot;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -9,12 +10,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-
-import eu.clarin.cmdi.vlo.FacetConstants;
 
 public class MetadataImporterTest extends ImporterTestcase {
 
@@ -235,8 +234,32 @@ public class MetadataImporterTest extends ImporterTestcase {
 
     private List<SolrInputDocument> importData(File rootFile) throws MalformedURLException {
         final List<SolrInputDocument> result = new ArrayList<SolrInputDocument>();
-        ImporterConfig config = createConfig(rootFile);
-        MetadataImporter importer = new MetadataImporter(config) {
+        
+        String fileName = VloConfig.class.getResource("/VloConfig.xml").getFile();
+        
+        VloConfig testConfig;
+        
+        /**
+         * Problem: at the moment the readTestConfig method is not prepared for
+         * a message from the importer. May rename readTestConfig to
+         * readWebAppTestConfig, so that we have space for a
+         * readImporterTestConfig also.
+         * 
+         * The best thing would be to have a directory for testing inside the
+         * package. You can always use an external configuration file for more
+         * elaborate testing.test directory inside the package.
+         */
+
+        testConfig = VloConfig.readTestConfig(fileName);
+        
+        // modify the test configuration a bit
+        
+        testConfig = modifyConfig(testConfig, rootFile);
+        
+        // ... and also the importer itself
+        
+        MetadataImporter importer;
+        importer = new MetadataImporter(testConfig) {
             @Override
             protected void initSolrServer() throws MalformedURLException {
                 //do nothing no solrserver in test
@@ -244,7 +267,7 @@ public class MetadataImporterTest extends ImporterTestcase {
 
             @Override
             protected void sendDocs() throws SolrServerException, IOException {
-                //overriding here so we can test the docs
+            //overriding here so we can test the docs
                 result.addAll(this.docs);
                 docs = new ArrayList<SolrInputDocument>();
             }
@@ -253,8 +276,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         return result;
     }
 
-    private ImporterConfig createConfig(File rootFile) {
-        ImporterConfig config = new ImporterConfig();
+    private VloConfig modifyConfig(VloConfig config, File rootFile) {
         DataRoot dataRoot = new DataRoot();
         dataRoot.setDeleteFirst(false);//cannot delete not using real solrServer
         dataRoot.setOriginName("testRoot");
