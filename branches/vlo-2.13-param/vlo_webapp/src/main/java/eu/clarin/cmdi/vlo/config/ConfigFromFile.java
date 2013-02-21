@@ -25,7 +25,7 @@ package eu.clarin.cmdi.vlo.config;
  *
  * @author keeloo
  */
-public abstract class ConfigFromFile {
+public class ConfigFromFile {
 
     /**
      * Empty constructor
@@ -34,28 +34,20 @@ public abstract class ConfigFromFile {
     }
 
     /**
-     * Constraint on a deriving class<br><br>
-     *
-     * Ask a deriving class to implement a method that returns the name of the
-     * file the persister object can read from or write to.<br><br>
-     *
-     * @return the name of an XML file
-     */
-    public abstract String getFileName();
-
-    /**
      * Configure by reading from an XML file
+     * 
+     * @param fileName
      *
      * @param config the object whose annotated members will be assigned a value
      * in accordance with the definition read from the XML file.
      *
      * @return the object with values assigned to annotated members
      */
-    public static synchronized ConfigFromFile read(ConfigFromFile config) {
+    public static synchronized ConfigFromFile read(String fileName, ConfigFromFile config) {
 
         ConfigFilePersister persister;
         // config itself might not reference a file name
-        persister = new ConfigFilePersister(config, config.getFileName ());
+        persister = new ConfigFilePersister(config, fileName);
 
         // assign the members their values
         config = (ConfigFromFile) persister.ConfigFromFile();
@@ -67,12 +59,14 @@ public abstract class ConfigFromFile {
      *
      * @param config the object whose annotated members and values will be
      * written to a file in the form of an XML definition.
+     * 
+     * @param 
      */
-     public static void write(ConfigFromFile config) {
+     public static void write(ConfigFromFile config, String fileName) {
         
         ConfigFilePersister persister;
         // config itself might not reference a file name
-        persister = new ConfigFilePersister(config, config.getFileName ());
+        persister = new ConfigFilePersister(config, fileName);
 
         // create the definition
         persister.ConfigToFile();

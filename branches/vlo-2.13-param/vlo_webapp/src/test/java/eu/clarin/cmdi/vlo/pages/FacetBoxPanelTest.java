@@ -1,17 +1,14 @@
 package eu.clarin.cmdi.vlo.pages;
 
-import static org.junit.Assert.assertEquals;
-
+import eu.clarin.cmdi.vlo.VloApplication;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.List;
-
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.util.tester.WicketTester;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
-
-import eu.clarin.cmdi.vlo.VloApplication;
-import eu.clarin.cmdi.vlo.config.VloConfig;
 
 public class FacetBoxPanelTest {
 
@@ -20,7 +17,12 @@ public class FacetBoxPanelTest {
     @Before
     public void setUp() {
         WicketTester wicketTester;
-        testConfig = VloConfig.testWebApp();
+        String fileName = VloConfig.class.getResource("/VloConfig.xml").getFile();
+        
+        testConfig = VloConfig.readTestConfig(fileName);
+        
+        // optionally, modify the test configuration here
+        
         wicketTester = new WicketTester(new VloApplication(testConfig));
     }
 

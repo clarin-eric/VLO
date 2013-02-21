@@ -94,30 +94,6 @@ public class VloConfig extends ConfigFromFile {
     }
     
     /**
-     * XML File in which the application configuration is stored
-     */
-    public static final String CONFIG_FILE =
-            VloConfig.class.getResource("/VloConfig.xml").getFile();
-
-    /**
-     * Get the name of the XML file.
-     *
-     * Represent the filename by a method primarily for making it available to
-     * the superclass. In other words: this method overrides a method in the
-     * superclass.
-     *
-     * @return the name of the application parameter XML file
-     */
-    @Override
-    public String getFileName() {
-        /**
-         * Check the name of the web application parameter file. May be turn it
-         * into a {@literal maven} parameter.
-         */
-        return CONFIG_FILE;
-    }
-    
-    /**
      * Make the configuration statically accessible<br><br>
      *
      * Both the Simple framework and the methods in the web application need to
@@ -145,10 +121,12 @@ public class VloConfig extends ConfigFromFile {
      * invoked:<br><br>
      *
      * WebAppConfig.open().getParameterMember()<br><br>
+     * 
+     * @param fileName
      *
      * @return the web application configuration in a new static context
      */
-    public static VloConfig webApp() {
+    public static VloConfig readConfig(String fileName) {
         if (config == null) {
             // the configuration is not there yet; create it now
             config = new VloConfig();
@@ -156,7 +134,7 @@ public class VloConfig extends ConfigFromFile {
 
         // get the XML file configuration from the file by invoking the
 
-        config = (VloConfig) read(config);
+        config = (VloConfig) read(fileName, config);
 
         return config;
     }
@@ -168,9 +146,11 @@ public class VloConfig extends ConfigFromFile {
      * In this method, exceptions to the normal web application context can 
      * be made.
      * 
+     * @param fileName
+     * 
      * @return 
      */
-    public static VloConfig testWebApp() {
+    public static VloConfig readTestConfig(String fileName) {
         if (config == null) {
             // the configuration is not there yet; create it now
             config = new VloConfig();
@@ -178,7 +158,7 @@ public class VloConfig extends ConfigFromFile {
 
         // get the XML file configuration from the file by invoking the
 
-        config = (VloConfig) read(config);
+        config = (VloConfig) read(fileName, config);
 
         return config;
     }
@@ -192,28 +172,6 @@ public class VloConfig extends ConfigFromFile {
         return config;
     }
 
-    /**
-     * Close the static context of WebAppConfig members<br><cr>
-     * 
-     * As a counterpart to open() the close() method just writes the value of
-     * the parameters in the XML file back to this file.
-     */
-    public void close() {
-        if (config == null) {
-            // no configuration is not there yet; no need to do anything
-        } else {
-            // put it away by invoking the superclass write method
-
-            write (config);
-
-            /**
-             * Contrary to web the application parameters, servlet context
-             * parameters can not be written back to where they reside, so there
-             * is nothing left to do here.
-             */
-        }
-    }
-    
     /**
      * Web application parameter members<br><br>
      *
@@ -611,11 +569,18 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the static WebAppConfig member
      */
-    public static VloConfig addServletContext(VloConfig config, ServletContext context) {
+    public static VloConfig switchToExternalConfig(ServletContext context) {
 
         // retrieve parameter valies from the servlet context
 
-        config.solrUrl = context.getInitParameter("solrUrl");
+        String fileName;
+        fileName = context.getInitParameter("externalConfig");
+        
+        if (fileName == null) {
+            // no external config
+        } else {
+            config = (VloConfig) read(fileName, config);
+        }
 
         return config;
     }

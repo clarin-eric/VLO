@@ -12,7 +12,6 @@ import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.clarin.cmdi.vlo.Configuration;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 
 public class SolrDao {
@@ -21,7 +20,8 @@ public class SolrDao {
     private final CommonsHttpSolrServer solrServer;
 
     public SolrDao() {
-        String solrUrl = VloConfig.get().getSolrUrl();
+        String solrUrl;
+        solrUrl = VloConfig.get().getSolrUrl();
         try {
             solrServer = new CommonsHttpSolrServer(solrUrl);
         } catch (MalformedURLException e) {

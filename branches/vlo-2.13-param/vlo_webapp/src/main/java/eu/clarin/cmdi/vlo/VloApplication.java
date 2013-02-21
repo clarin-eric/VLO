@@ -8,22 +8,21 @@ import org.apache.wicket.protocol.http.WebApplication;
 
 /**
  * {@literal VLO} web application.<br><br>
- * 
- * Because the class extends the WebApplication class, the VLO application 
- * will normally be deployed on a web server. However, by running the Start
- * class, the application outside of a server container. 
- * 
+ *
+ * Because the VloApplication class extends WebApplication, a class instance
+ * will normally reside inside a web server container. By running the Start
+ * class however, an instance of the application will reside outside a server
+ * container.
+ *
  */
 public class VloApplication extends WebApplication {
 
     private final SearchResultsDao searchResults;
-    
+
     // application configuration object
-    
     static VloConfig config;
     
     // flag indicating whether or not the application object lives in a context
-    
     boolean inContext;
 
     /**
@@ -34,20 +33,34 @@ public class VloApplication extends WebApplication {
 
         if (inContext) {
             
-            // add the context parameters to the configuration
-
+            // get the servlet's context
+            
             ServletContext servletContext;
             servletContext = this.getServletContext();
-            config = VloConfig.addServletContext(config, servletContext);
+            
+            /**
+             * Send the servlet context to the configuration object to enable it
+             * to read an externel VloConfig.xml configuration file.
+             */
+            
+            config = VloConfig.switchToExternalConfig(servletContext);
+
+            /**
+             * Instead of obtaining the SolrUrl parameter from the context, read
+             * the name of another instance - preferably the one that the
+             * importer uses for its configuration - from the context. Once this
+             * has been done, the whole web application configuration could be
+             * refreshed. Note: add a method for refreshing the current
+             * configuration to the VloConfig class.
+             */
         }
     }
 
     /**
      * Web application constructor<br><br>
      *
-     * Create the application by invoking this constructor, whenever you want it
-     * to be an application deployed in a web server container, that is: as an
-     * application living in a web server context.
+     * Create an application instance configured to be living inside a web
+     * server container.
      */
     public VloApplication() {
 
@@ -57,7 +70,9 @@ public class VloApplication extends WebApplication {
          * can only be added to the configuration later, in this case: when the
          * {@literal init()} method will be invoked.
          */
-        config = VloConfig.webApp();
+        String fileName = VloConfig.class.getResource("/VloConfig.xml").getFile();
+        
+        config = VloConfig.readConfig(fileName);
 
         // let the {@literal init()} method know that there will be a context
 
@@ -71,9 +86,20 @@ public class VloApplication extends WebApplication {
     /**
      * Web application constructor<br><br>
      *
-     * Introduce the idea of a channel: the environment in which a test
-     * configuration object is created is in a way connected to this method.
+     * Create an application instance configured to be living without a web
+     * server container context.<br><br>
      *
+     * @param testConfig a configuration that could be different from the
+     * packaged parameters
+     *
+     * An instance like this can for example be used for testing purposes. In
+     * the case of testing, the constructor is invoked from a class in a test
+     * package. Within such a class a configuration object can be manipulated
+     * according to specific needs. <br><br>
+     *
+     * Please note that in the case of a test configuration, while the
+     * application object could reside inside a web server container, the
+     * context associated with this container will be ignored.
      */
     public VloApplication(VloConfig testConfig) {
 

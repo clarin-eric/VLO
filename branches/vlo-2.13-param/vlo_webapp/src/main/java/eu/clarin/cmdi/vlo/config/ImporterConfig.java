@@ -19,17 +19,7 @@ import org.simpleframework.xml.Root;
 @Root // directive for Simple
 public class ImporterConfig extends ConfigFromFile {
     
-    /**
-     * Definition of the name of the configuration file.
-     *
-     * @return
-     */
-    @Override
-    public String getFileName() {
-        return "ImporterConfig.xml";
-    }
-    
-    // 'override' the base class method
+
     public static synchronized ImporterConfig get() {
         return (ImporterConfig)ImporterConfig.get();
     }
