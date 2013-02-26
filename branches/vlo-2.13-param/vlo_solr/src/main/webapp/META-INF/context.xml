@@ -2,7 +2,7 @@
 
 <!-- Solr context file
 
-solr/home : the directory in which the solr server will store it's data.
+solr/home : the directory in which the solr server will store it's data
 
 Please refer to http://wiki.apache.org/solr for more information on how the 
 solr server should be configured. The war should be unpacked in the docBase
@@ -10,7 +10,7 @@ directory.
 
 -->
 
-<Context path="vlo_solr" debug="0" crossContext="true">
+<Context path="/vlo_solr" debug="0" crossContext="true">
   <Environment name="solr/home" 
                type="java.lang.String" 
                value="${vlo.solr.home}/${vlo.solr.conf}" 
