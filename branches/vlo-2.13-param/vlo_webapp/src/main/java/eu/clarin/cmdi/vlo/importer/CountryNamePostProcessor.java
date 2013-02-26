@@ -1,12 +1,10 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.CommonUtils;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import eu.clarin.cmdi.vlo.CommonUtils;
-import eu.clarin.cmdi.vlo.Configuration;
 
 public class CountryNamePostProcessor implements PostProcessor {
 
@@ -42,7 +40,7 @@ public class CountryNamePostProcessor implements PostProcessor {
     private Map<String, String> createCountryCodeMap() {
         LOG.debug("Creating country code map.");
         try {
-            Map<String, String> result = CommonUtils.createCMDIComponentItemMap(Configuration.getInstance().getCountryComponentUrl());
+            Map<String, String> result = CommonUtils.createCMDIComponentItemMap(VloConfig.get().getCountryComponentUrl());
             return result;
         } catch (Exception e) {
             throw new RuntimeException("Cannot instantiate postProcessor:", e);

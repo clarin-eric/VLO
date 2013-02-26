@@ -1,8 +1,9 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
@@ -10,10 +11,6 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.params.CommonParams;
 import org.apache.wicket.IClusterable;
 import org.apache.wicket.PageParameters;
-
-import eu.clarin.cmdi.vlo.Configuration;
-import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.config.VloConfig;
 
 public class SearchPageQuery implements IClusterable {
 

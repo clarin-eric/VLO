@@ -1,11 +1,15 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.Resources;
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.dao.AutoCompleteDao;
+import fiftyfive.wicket.basic.TruncatedLabel;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.common.SolrDocument;
@@ -25,13 +29,6 @@ import org.apache.wicket.markup.repeater.data.GridView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
-
-import eu.clarin.cmdi.vlo.Configuration;
-import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.Resources;
-import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.dao.AutoCompleteDao;
-import fiftyfive.wicket.basic.TruncatedLabel;
 
 public class FacetedSearchPage extends BasePage {
     private static final long serialVersionUID = 1L;

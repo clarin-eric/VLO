@@ -45,13 +45,17 @@
     
     <nationalProjectMapping>nationalProjectsMapping.xml</nationalProjectMapping>
     
-    <facetFields length="6">
+    <facetFields length="10">
         <facetField>collection</facetField>
+        <facetField>language</facetField>
         <facetField>continent</facetField>
-        <facetField>organisation</facetField>
         <facetField>genre</facetField>
         <facetField>country</facetField>
-        <facetField>language</facetField>
+        <facetField>subject</facetField>
+        <facetField>organisation</facetField>
+        <facetField>resourceType</facetField>
+        <facetField>dataProvider</facetField>
+        <facetField>nationalProject</facetField>
     </facetFields>
     
     <countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>

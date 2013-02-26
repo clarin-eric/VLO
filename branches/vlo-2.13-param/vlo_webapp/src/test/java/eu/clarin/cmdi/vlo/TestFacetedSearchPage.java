@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,12 +9,21 @@ import org.junit.Test;
  * Simple test using the WicketTester
  */
 public class TestFacetedSearchPage {
-    private WicketTester tester;
+    
+    static VloConfig testConfig;
 
     @Before
     public void setUp() {
-        // Configuration.getInstance().setSolrUrl("http://localhost:8080/vlo_solr");
-        tester = new WicketTester(new VloApplication());
+
+        WicketTester wicketTester;
+
+        String fileName = VloConfig.class.getResource("/VloConfig.xml").getFile();
+
+        testConfig = VloConfig.readTestConfig(fileName);
+
+        // optionally, modify the test configuration here
+
+        wicketTester = new WicketTester(new VloApplication(testConfig));
     }
 
     @Test

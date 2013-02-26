@@ -6,4 +6,5 @@ explain about how the configurtion works
 -->
 <Context antiJARLocking="true" path="/vlo">
   <Parameter name="externalConfig" value="/Users/keeloo/VloConfig.xml"/>
+  <!--Parameter name="solrUrl" value="http://localhost:8084/vlo_solr/"/-->
 </Context>

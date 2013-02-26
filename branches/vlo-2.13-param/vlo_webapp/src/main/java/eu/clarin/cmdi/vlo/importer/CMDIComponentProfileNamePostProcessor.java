@@ -1,16 +1,13 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import java.util.HashMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.ximpleware.AutoPilot;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathParseException;
-
-import eu.clarin.cmdi.vlo.Configuration;
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import java.util.HashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Takes the value of the componentprofileid and uses the componentregistry REST service to transform this to the name of the componentprofile.
@@ -71,6 +68,6 @@ public class CMDIComponentProfileNamePostProcessor implements PostProcessor{
             ap = null;
         }
         vg = new VTDGen();
-        BASE_URL = Configuration.getInstance().getComponentRegistryRESTURL();
+        BASE_URL = VloConfig.get().getComponentRegistryRESTURL();
     }
 }

@@ -12,19 +12,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Web application configuration<br><br>
- *
- * A parameter that is part of the configuration of the VLO web application can
- * be of two types: it is either a parameter that is defined from within the
- * application, an application parameter, or it is a parameter that is defined
- * in the context in which the application will live as a {@literal servlet}.
- * Application parameters reside in the {@literal WebAppConfig.xml} file, while
- * {@literal servlet} context parameters are part of the Tomcat server
- * configuration. <br><br>
- *
- * An application parameter is defined an XML file in the resources directory of
- * the application package. For every application parameter, the WebApplication
- * class contains a member that is annotated according to the Simple framework
- * specification. So<br><br>
+ * 
+ * Map the elements in the packaged {@literal WebAppConfig.xml} file to the
+ * members in this class, the configuration of the VLO web application and
+ * importer according to the Simple framework specification. So<br><br>
  *
  * {@literal <parameterMember>}"the value of the
  * parameter"{@literal </parameterMember>}<br><br>
@@ -35,29 +26,29 @@ import org.slf4j.LoggerFactory;
  *
  * @element}<br> {@literal parameterMember}<br><br>
  *
- * in the WebAppConfig class. When the application invokes Simple by<br><br>
- *
- * WebAppConfig.get();<br><br>
- *
- * the parameter itself is accessed by<br><br>
- *
- * WebAppConfig.get().getParameterMember();<br><br>
- *
- * If you want to add a type of member that is not included in the class yet,
- * refer to the Simple framework's specification.<br><br>
- *
- * A context parameter also resides in an XML file. For more information on the
- * location and the format of this file, please refer to the Apache Tomcat
- * configuration reference.<br><br>
+ * in the VloConfig class. If you want to add a type of member that is not
+ * included in the class yet, refer to the Simple framework's
+ * specification.<br><br> 
  * 
- * Because the application is indifferent to the origin of a parameter, the
- * WebAppConfig class is the place to switch from one type of parameter to the
- * other. In other words: you do not have to change the application if you
- * replace an application parameter by a context parameter. The change is
- * reflected here, and not in the application. In a sense, this relieves the
- * need to use get and read methods. Such methods still have an advantage
- * though, because you can change a parameter without changing the rest of the
- * application.<br><br>
+ * The parameters are stored statically. This means that a parameter can be
+ * referenced from the application without first creating a configuration
+ * object. So get() in
+ *
+ * WebAppConfig.get().getSomeParameter();<br><br>
+ *
+ * will return the static configuration, and getSomeParameter() will return a
+ * specific parameter in this configuration. 
+ * 
+ * Through the get and set methods, the application is indifferent to the origin
+ * of a parameter: you can get and set the value of a parameter without having
+ * to worry about how the parameter was defined originally. By invoking the read
+ * method, and by querying the context, the web application, on initialization,
+ * determines which definition to use. 
+ * 
+ * Also, the get and set methods allow for a modification of the original value
+ * of the parameter. For example, if the format of a parameter changes, this 
+ * change can be handled in the get and set method once, instead of having to 
+ * modify every reference to the parameter in the application. 
  *
  * Please note on the explanation of the meaning of the parameters. Because the
  * meaning of a parameter is not local to this class, or even not local to the
@@ -96,37 +87,19 @@ public class VloConfig extends ConfigFromFile {
     }
     
     /**
-     * Make the configuration statically accessible<br><br>
-     *
-     * Both the Simple framework and the methods in the web application need to
-     * access the configuration. Access is granted by defining a member holding
-     * the configuration, that is, by defining a member of type WebAppConfig.
+     * Make the configuration statically accessible
      */
     private static VloConfig config = null;
 
     /**
-     * kj: change the annotation. Instead of opening a context, it is now a 
-     * matter of initializing it. Make a new method for referencing.
-     * 
-     * Open a static context of WebAppConfig members, and assign values to
-     * them.<br><br>
-     * 
-     * The web application can access a parameter by invoking one of the get or
-     * set methods defined below. Because these methods return a non-static
-     * value, while WebAppConfig on the other hand denotes a static
-     * context,<br><br>
+     * Read the configuration from an XML file. 
      *
-     * WebAppConfig.getParameterMember()<br><br>
+     * Please invoke this method from the web application or from the importer;
+     * the readTestConfig method is intended for testing purposes.
      *
-     * for example, would not be valid. On encountering get() however, a new
-     * static context is opened, and from that, getParameterMember() can be
-     * invoked:<br><br>
-     *
-     * WebAppConfig.get().getParameterMember()<br><br>
-     * 
      * @param fileName
      *
-     * @return the web application configuration in a new static context
+     * @return the web application configuration 
      */
     public static VloConfig readConfig(String fileName) {
         if (config == null) {
@@ -142,15 +115,16 @@ public class VloConfig extends ConfigFromFile {
     }
 
     /**
-     * kj: add comment, much in the same way as the annotation of the WepApp
-     * method.
+     * Read the configuration from an XML file. 
      * 
-     * In this method, exceptions to the normal web application context can 
-     * be made.
+     * Please invoke this method from the package tests. If the tests invoke a
+     * method different from the one used by the web application and the
+     * important, you can make some test specific changes to the parameters
+     * here. 
      * 
      * @param fileName
-     * 
-     * @return 
+     *
+     * @return the web application configuration in a new static context
      */
     public static VloConfig readTestConfig(String fileName) {
         if (config == null) {
@@ -166,7 +140,7 @@ public class VloConfig extends ConfigFromFile {
     }
     
     /**
-     * kj: this is the new get context method
+     * Return the configuration
      * 
      * @return 
      */
@@ -185,24 +159,12 @@ public class VloConfig extends ConfigFromFile {
      * member parameters.
      */
     
-    /**
-     * Flag to signal the records in the data to be deleted before the ingestion
-     * starts.
-     */
     @Element // directive for Simple
     private boolean deleteAllFirst = false;
     
-    /**
-     * Flag that leads to the printing of XPATH mappings encountered. Note: need
-     * to be more specific on this.
-     */
     @Element
     private boolean printMapping = false;
     
-    /**
-     * A list of data roots, that is: directories from which the importer
-     * collects meta data. Note: need to elaborate on this.
-     */
     @ElementList // directive for Simple
     private List<DataRoot> dataRoots;
     
@@ -215,7 +177,6 @@ public class VloConfig extends ConfigFromFile {
     
     @Element
     private String solrUrl = "";
-    // In the XML file, the value of the parameter is expanded by Maven.
     
     @Element
     private String profileSchemaUrl = "";
@@ -278,11 +239,11 @@ public class VloConfig extends ConfigFromFile {
     private String FederatedContentSearchUrl = " ";
 
     /**
-     * Get and read methods for web application parameter members<br><br>
+     * Get and set methods for web application parameter members<br><br>
      *
-     * By using a get or read method, you can apply an operation to a parameter
-     * here, in the WebAppConfig class, without the need to make changes in
-     * different parts of the application.
+     * By using a get or set method, you can apply an operation to a parameter
+     * here without the need to make changes in different parts of the
+     * application.
      */
     
     /**
@@ -375,10 +336,22 @@ public class VloConfig extends ConfigFromFile {
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param solrUrl the value
+     * @return the value
      */
     public String getSolrUrl() {
         return solrUrl;
+    }
+
+    /**
+     * Set the value of the SolrUrl parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param the parameter
+     */
+    public void setSolrUrl(String url) {
+        this.solrUrl = url;
     }
 
     /**
@@ -651,41 +624,67 @@ public class VloConfig extends ConfigFromFile {
     }
             
     /**
-     *
-     * kj: repair annotation
+     * Switch to external configuration.<br><br>
      * 
-     * Contrary to Simple, the web application's context parameters are not
-     * retrieved by annotation. Get them by invoking a local method.
+     * In addition to the definition of the configuration by the packaged in the
+     * {@literal VloConfig.xml} file, you can configure the web application by
+     * means of an XML file that resides outside the package. By letting a
+     * parameter named<br><br>
      *
-     * Add properties of the {@literal servlet's} context<br><br>
-     *  
-     * Keep the properties in the static context of the WebAppConfig class, next
-     * to the members representing the values in WebAppConfig.xml file.<br><br>
+     * externalConfig<br><br>
+     * 
+     * in the context reference an XML file similar to the packaged one, the
+     * parameters defined in this file will override the packaged parameters.
+     * Please note that the use of an external XML file is not
+     * compulsory.<br><br>
      *
+     * Another way to externally configure the web application is to define
+     * parameters by including them in the context fragment not via an XML file,
+     * but directly. At the moment, only the packaged <br><br>
+     * 
+     * solrUrl<br><br>
+     * 
+     * parameter can be overridden in this way.
+     * 
      * @param config static configuration 
      *
      * @return the static WebAppConfig member
      */
     public static VloConfig switchToExternalConfig(ServletContext context) {
+              
+        // assume that there is no file outside the package defining parameters
 
-        // retrieve parameter valies from the servlet context
+        boolean externalConfig = false;
+        
+        // check for a reference to of such a file
 
         String fileName;
         fileName = context.getInitParameter("externalConfig");
-        
+                
         if (fileName == null) {
-            // no external config
+            // no external configuration file
         } else {
             config = (VloConfig) read(fileName, config);
         }
+        
+        /**
+         * In addition to modifications via an external configuration file,
+         * check if the current configuration needs to be modified because of a
+         * parameter defined in the context directly.
+         */        
+        String url = context.getInitParameter("solrUrl");
+        
+        if (url == null){
+            // no overruling parameter in the context 
+        } else
+        {
+            // overrule the current value of solrUrl
+
+            VloConfig.get().setSolrUrl(url);
+        }
+        
+        // return the current configuration, modified or not
 
         return config;
-    }
-    
-    /**
-     * {@literal Servlet} context members<br><br>
-     *
-     * The following defines the members corresponding to {@servlet} context
-     * parameters.
-     */    
+    }   
 }

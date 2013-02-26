@@ -1,15 +1,13 @@
 package eu.clarin.cmdi.vlo;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
+import eu.clarin.cmdi.vlo.pages.SearchPageQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.common.params.CommonParams;
 import org.apache.wicket.PageParameters;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.Test;
-
-import eu.clarin.cmdi.vlo.pages.SearchPageQuery;
 
 public class SearchPageQueryTest {
 
@@ -25,7 +23,7 @@ public class SearchPageQueryTest {
         assertEquals("", q.getSearchQuery());
         assertEquals("*:*", q.getSolrQuery().getQuery());
         assertEquals("name,id,description", q.getSolrQuery().getFields());
-        assertEquals(6, q.getSolrQuery().getFacetFields().length);
+        assertEquals(10, q.getSolrQuery().getFacetFields().length);
         assertEquals("collection", q.getSolrQuery().getFacetFields()[0]);
         assertEquals("continent", q.getSolrQuery().getFacetFields()[1]);
         assertNull(q.getSolrQuery().getFilterQueries());

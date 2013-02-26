@@ -1,19 +1,15 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import eu.clarin.cmdi.vlo.CommonUtils;
+import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import net.handle.hdllib.HandleException;
-import net.handle.hdllib.HandleResolver;
-import net.handle.hdllib.HandleValue;
-
-import org.apache.commons.httpclient.HttpMethod;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
@@ -22,13 +18,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.resource.ContextRelativeResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import eu.clarin.cmdi.vlo.CommonUtils;
-import eu.clarin.cmdi.vlo.Configuration;
-import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.config.VloConfig;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class ResourceLinkPanel extends Panel {
 

@@ -1,15 +1,5 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
 import com.ximpleware.VTDException;
@@ -17,8 +7,15 @@ import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
-
-import eu.clarin.cmdi.vlo.Configuration;
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CMDIParserVTDXML implements CMDIDataProcessor {
     private final Map<String, PostProcessor> postProcessors;
@@ -81,7 +78,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         int index = ap.evalXPath();
         if (index != -1) {
             String profileId = nav.toString(index).trim();
-            result = Configuration.getInstance().getComponentRegistryProfileSchema(profileId);
+            result = VloConfig.get().getComponentRegistryProfileSchema(profileId);
         }
         return result;
     }

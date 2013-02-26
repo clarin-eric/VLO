@@ -17,7 +17,7 @@ import org.apache.wicket.protocol.http.WebApplication;
  */
 public class VloApplication extends WebApplication {
 
-    private final SearchResultsDao searchResults;
+    private SearchResultsDao searchResults;
 
     // application configuration
     static VloConfig config;
@@ -26,7 +26,8 @@ public class VloApplication extends WebApplication {
     boolean inContext;
 
     /**
-     * Method that will be invoked when the application starts
+     * Method that will be invoked when the application starts<br><br>
+     *
      */
     @Override
     public void init() {
@@ -46,6 +47,10 @@ public class VloApplication extends WebApplication {
             
             config = VloConfig.switchToExternalConfig(servletContext);
         }
+
+        // start the application
+
+        searchResults = new SearchResultsDao();
     }
 
     /**
@@ -68,11 +73,7 @@ public class VloApplication extends WebApplication {
 
         // let the {@literal init()} method know that there will be a context
 
-        inContext = true;
-
-        // start the application
-
-        searchResults = new SearchResultsDao();
+        inContext = true;  
     }
 
     /**

@@ -1,7 +1,6 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.CommonUtils;
-import eu.clarin.cmdi.vlo.Configuration;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -15,6 +14,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.PosixParser;
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.StreamingUpdateSolrServer;
@@ -206,7 +209,7 @@ public class MetadataImporter {
      * @throws MalformedURLException
      */
     protected void initSolrServer() throws MalformedURLException {
-        String solrUrl = Configuration.getInstance().getSolrUrl();
+        String solrUrl = VloConfig.get().getSolrUrl();
         LOG.info("Initializing Solr Server on " + solrUrl);
         solrServer = new StreamingUpdateSolrServer(solrUrl, 1000, 2) {
             @Override
@@ -374,32 +377,51 @@ public class MetadataImporter {
      * @param args
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
-
-        String fileName;
+    public static void main(String[] args) throws MalformedURLException, IOException {
 
         VloConfig config;
-        
-        if (args.length > 0) {
 
-            // get the file name from the command line
-            fileName = VloConfig.class.getResource(args[0]).getFile();
-            
-            // test for file existence 
+        Options options = new Options();
 
-            // optionally, modify the configuration before starting the importer
+        // add t option
+        options.addOption("f", true, "use parameters specified in -f <file>");
 
-            config = VloConfig.readConfig(fileName);
-            
-            MetadataImporter importer = new MetadataImporter(config);
-            
-            importer.startImport();
-            
-            if (config.isPrintMapping()) {
-                File file = new File("xsdMapping.txt");
-                FacetMappingFactory.printMapping(file);
-                LOG.info("Printed facetMapping in " + file);
+        CommandLineParser parser = new PosixParser();
+
+        try {
+            // parse the command line arguments
+            CommandLine cmd = parser.parse(options, args);
+            if (cmd.hasOption("f")) {
+                // get the value of the f option
+
+                String fileName;
+                fileName = cmd.getOptionValue("f");
+                
+                // include the full path in the name
+
+                fileName = VloConfig.class.getResource(fileName).getFile();
+
+                // optionally, check for file existence here
+                
+                // read the configuration defined in the file
+                
+                config = VloConfig.readConfig(fileName);
+
+                // optionally, modify the configuration here
+
+                MetadataImporter importer = new MetadataImporter(config);
+                importer.startImport();
+                if (config.isPrintMapping()) {
+                    File file = new File("xsdMapping.txt");
+                    FacetMappingFactory.printMapping(file);
+                    LOG.info("Printed facetMapping in " + file);
+                }
             }
+
+        } catch (org.apache.commons.cli.ParseException ex) {
+            LOG.error("Command line parsing failed.");
+
+            // System.err.println("Command line parsing failed. " + ex.getMessage());
         }
     }
 }

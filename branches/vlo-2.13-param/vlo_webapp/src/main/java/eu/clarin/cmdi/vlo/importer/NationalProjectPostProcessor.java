@@ -1,17 +1,15 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-
-import eu.clarin.cmdi.vlo.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +50,7 @@ public class NationalProjectPostProcessor extends LanguageCodePostProcessor {
 	}
 
 	private Map<String, String> getNationalProjectMapping() {
-        String mappingFileName = Configuration.getInstance().getNationalProjectMapping();
+        String mappingFileName = VloConfig.get().getNationalProjectMapping();
         if(mappingFileName == null){
             throw new RuntimeException("Configuration Error, NationalProjectMapping is null");
         }

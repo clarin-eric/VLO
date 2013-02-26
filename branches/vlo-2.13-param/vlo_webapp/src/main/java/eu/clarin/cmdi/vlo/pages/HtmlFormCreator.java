@@ -1,14 +1,12 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import eu.clarin.cmdi.vlo.Configuration;
-import eu.clarin.cmdi.vlo.config.VloConfig;
 
 /**
  * Little helper class that creates HTML forms as String
