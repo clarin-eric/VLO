@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pages.SearchPageQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.common.params.CommonParams;
@@ -11,11 +12,21 @@ import org.junit.Test;
 
 public class SearchPageQueryTest {
 
+    // application configuration
+    static VloConfig config;
+
     @Before
     public void setup() {
-        // Configuration.getInstance().setFacetFields(new String[] { "collection", "continent", "organisation", "genre", "country", "language" });
+        
+        // include the full path in the name of the packaged configuration file
+        String fileName = VloConfig.class.getResource("/VloConfig.xml").getFile();
+
+        // read the configuration defined in the file
+        config = VloConfig.readTestConfig(fileName);
+
+        // optionally, modify the configuration here
     }
-    
+
     @Test
     public void testQueryParse() throws Exception {
         PageParameters params = new PageParameters();
@@ -25,7 +36,7 @@ public class SearchPageQueryTest {
         assertEquals("name,id,description", q.getSolrQuery().getFields());
         assertEquals(10, q.getSolrQuery().getFacetFields().length);
         assertEquals("collection", q.getSolrQuery().getFacetFields()[0]);
-        assertEquals("continent", q.getSolrQuery().getFacetFields()[1]);
+        assertEquals("continent", q.getSolrQuery().getFacetFields()[2]);
         assertNull(q.getSolrQuery().getFilterQueries());
 
         params = new PageParameters();
@@ -35,9 +46,9 @@ public class SearchPageQueryTest {
         assertEquals("test", q.getSearchQuery());
         assertEquals("test", q.getSolrQuery().getQuery());
         assertEquals("name,id,description", q.getSolrQuery().getFields());
-        assertEquals(6, q.getSolrQuery().getFacetFields().length);
+        assertEquals(10, q.getSolrQuery().getFacetFields().length);
         assertEquals("collection", q.getSolrQuery().getFacetFields()[0]);
-        assertEquals("continent", q.getSolrQuery().getFacetFields()[1]);
+        assertEquals("continent", q.getSolrQuery().getFacetFields()[2]);
         assertEquals(1, q.getSolrQuery().getFilterQueries().length);
         assertEquals("country:New\\ Zealand", q.getSolrQuery().getFilterQueries()[0]);
         assertEquals("New Zealand", q.getSelectedValue(new FacetField("country")));

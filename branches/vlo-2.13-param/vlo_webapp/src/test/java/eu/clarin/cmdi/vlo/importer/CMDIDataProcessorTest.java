@@ -1,27 +1,26 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
+import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
 import org.apache.solr.common.SolrInputDocument;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
 import org.junit.Test;
-
-import eu.clarin.cmdi.vlo.FacetConstants;
 
 public class CMDIDataProcessorTest extends ImporterTestcase {
 
     private CMDIDataProcessor getDataParser() {
         return new CMDIParserVTDXML(MetadataImporter.POST_PROCESSORS);
     }
-
+    
     @Test
     public void testCreateCMDIDataFromCorpus() throws Exception {
         String content = "";

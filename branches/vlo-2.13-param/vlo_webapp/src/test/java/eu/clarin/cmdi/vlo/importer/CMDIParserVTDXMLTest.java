@@ -1,14 +1,34 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-import org.junit.Test;
-
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import org.junit.Before;
+import org.junit.Test;
 
 public class CMDIParserVTDXMLTest {
+
+    static VloConfig config;
+    // include the full path in the name of the packaged configuration file
+    
+    @Before
+    public void setUp() {
+        // application configuration
+        
+        String fileName = VloConfig.class.getResource("/VloConfig.xml").getFile();
+
+        // optionally, check for file existence here
+
+        // read the configuration defined in the file
+
+        config = VloConfig.readConfig(fileName);
+
+        // optionally, modify the configuration here
+
+        // apparantly, this does not make the configuration available
+    }
 
     @Test
     public void testExtractXsdFromHeader() throws Exception {

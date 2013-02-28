@@ -377,40 +377,51 @@ public class MetadataImporter {
      * @param args
      * @throws IOException
      */
+    /**
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws MalformedURLException, IOException {
 
+        // application configuration
         VloConfig config;
-
+        
+        // use the Apache cli framework for getting command line parameters
         Options options = new Options();
 
-        // add t option
-        options.addOption("f", true, "use parameters specified in -f <file>");
+        /**
+         * Add a "c" option, the option indicating the specification of an XML
+         * configuration file
+         */
+        options.addOption("c", true, "-c <file> : use parameters specified in <file>");
 
         CommandLineParser parser = new PosixParser();
 
         try {
             // parse the command line arguments
             CommandLine cmd = parser.parse(options, args);
-            if (cmd.hasOption("f")) {
-                // get the value of the f option
-
+            if (cmd.hasOption("c")) {
+                
+                // the "c" option was specified, now get its value
                 String fileName;
-                fileName = cmd.getOptionValue("f");
+                fileName = cmd.getOptionValue("c");
                 
                 // include the full path in the name
-
                 fileName = VloConfig.class.getResource(fileName).getFile();
 
                 // optionally, check for file existence here
                 
                 // read the configuration defined in the file
-                
                 config = VloConfig.readConfig(fileName);
 
                 // optionally, modify the configuration here
-
+                
+                // create and start the importer
                 MetadataImporter importer = new MetadataImporter(config);
                 importer.startImport();
+                
+                // finished importing
+                
                 if (config.isPrintMapping()) {
                     File file = new File("xsdMapping.txt");
                     FacetMappingFactory.printMapping(file);
@@ -419,9 +430,13 @@ public class MetadataImporter {
             }
 
         } catch (org.apache.commons.cli.ParseException ex) {
-            LOG.error("Command line parsing failed.");
-
-            // System.err.println("Command line parsing failed. " + ex.getMessage());
+            
+            // caught an exception caused by command line parsing
+            
+            String message = "Command line parsing failed. " + ex.getMessage();
+                   
+            LOG.error(message);
+            System.err.println(message);
         }
     }
 }

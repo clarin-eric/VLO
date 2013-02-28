@@ -363,7 +363,7 @@ public class VloConfig extends ConfigFromFile {
      * @return the value
      */
     public String getComponentRegistryProfileSchema(String id) {
-        return profileSchemaUrl.replace("${PROFILE_ID}", id);
+        return profileSchemaUrl.replace("{PROFILE_ID}", id);
     }
 
     /**

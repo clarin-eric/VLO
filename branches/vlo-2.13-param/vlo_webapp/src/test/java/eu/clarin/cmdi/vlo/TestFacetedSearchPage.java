@@ -10,20 +10,23 @@ import org.junit.Test;
  */
 public class TestFacetedSearchPage {
     
-    static VloConfig testConfig;
+    // application configuration
+    static VloConfig config;
 
     @Before
     public void setUp() {
 
         WicketTester wicketTester;
 
+        // include the full path in the name of the packaged configuration file
         String fileName = VloConfig.class.getResource("/VloConfig.xml").getFile();
 
-        testConfig = VloConfig.readTestConfig(fileName);
+        // read the configuration defined in the file
+        config = VloConfig.readTestConfig(fileName);
 
         // optionally, modify the test configuration here
 
-        wicketTester = new WicketTester(new VloApplication(testConfig));
+        wicketTester = new WicketTester(new VloApplication(config));
     }
 
     @Test
