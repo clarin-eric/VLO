@@ -57,7 +57,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author keeloo
  */
-@Root
+@Root(strict=false)
 public class VloConfig extends ConfigFromFile {
 
     // create a reference to the application logging

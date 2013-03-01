@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo</artifactId>
-    <packaging>${packaging}</packaging>
+    <packaging>jar</packaging>
 
     <!-- When updating the version number here, also update
     vlo_solr_importer.sh in src/main/bin and the version number 

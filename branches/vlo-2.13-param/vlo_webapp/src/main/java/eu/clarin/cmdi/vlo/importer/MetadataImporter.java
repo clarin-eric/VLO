@@ -406,13 +406,10 @@ public class MetadataImporter {
                 String fileName;
                 fileName = cmd.getOptionValue("c");
                 
-                // include the full path in the name
-                fileName = VloConfig.class.getResource(fileName).getFile();
-
                 // optionally, check for file existence here
                 
                 // read the configuration defined in the file
-                config = VloConfig.readConfig(fileName);
+                config = VloConfig.readTestConfig(fileName);
 
                 // optionally, modify the configuration here
                 
