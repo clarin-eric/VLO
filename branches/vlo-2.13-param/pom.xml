@@ -18,9 +18,9 @@
 
     <modules>
         <module>vlo_solr</module>
-        <module>vlo_webapp</module>
-    <module>vlo_web_app</module>
-  </modules>
+        <module>vlo_web_app</module>
+        <module>vlo_importer</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

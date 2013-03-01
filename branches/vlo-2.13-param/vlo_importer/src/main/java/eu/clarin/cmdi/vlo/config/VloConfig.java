@@ -89,7 +89,7 @@ public class VloConfig extends ConfigFromFile {
     /**
      * Make the configuration statically accessible
      */
-    private static VloConfig config = null;
+    protected static VloConfig config = null;
 
     /**
      * Read the configuration from an XML file. 
@@ -623,68 +623,5 @@ public class VloConfig extends ConfigFromFile {
         this.silToISO639CodesUrl = url;
     }
             
-    /**
-     * Switch to external configuration.<br><br>
-     * 
-     * In addition to the definition of the configuration by the packaged in the
-     * {@literal VloConfig.xml} file, you can configure the web application by
-     * means of an XML file that resides outside the package. By letting a
-     * parameter named<br><br>
-     *
-     * externalConfig<br><br>
-     * 
-     * in the context reference an XML file similar to the packaged one, the
-     * parameters defined in this file will override the packaged parameters.
-     * Please note that the use of an external XML file is not
-     * compulsory.<br><br>
-     *
-     * Another way to externally configure the web application is to define
-     * parameters by including them in the context fragment not via an XML file,
-     * but directly. At the moment, only the packaged <br><br>
-     * 
-     * solrUrl<br><br>
-     * 
-     * parameter can be overridden in this way.
-     * 
-     * @param config static configuration 
-     *
-     * @return the static WebAppConfig member
-     */
-    public static VloConfig switchToExternalConfig(ServletContext context) {
-              
-        // assume that there is no file outside the package defining parameters
-
-        boolean externalConfig = false;
-        
-        // check for a reference to of such a file
-
-        String fileName;
-        fileName = context.getInitParameter("externalConfig");
-                
-        if (fileName == null) {
-            // no external configuration file
-        } else {
-            config = (VloConfig) read(fileName, config);
-        }
-        
-        /**
-         * In addition to modifications via an external configuration file,
-         * check if the current configuration needs to be modified because of a
-         * parameter defined in the context directly.
-         */        
-        String url = context.getInitParameter("solrUrl");
-        
-        if (url == null){
-            // no overruling parameter in the context 
-        } else
-        {
-            // overrule the current value of solrUrl
-
-            VloConfig.get().setSolrUrl(url);
-        }
-        
-        // return the current configuration, modified or not
-
-        return config;
-    }   
+    
 }

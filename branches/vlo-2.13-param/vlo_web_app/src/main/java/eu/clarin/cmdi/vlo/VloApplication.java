@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.config.VloContextConfig;
 import eu.clarin.cmdi.vlo.dao.SearchResultsDao;
 import eu.clarin.cmdi.vlo.pages.FacetedSearchPage;
 import javax.servlet.ServletContext;
@@ -45,7 +46,7 @@ public class VloApplication extends WebApplication {
              * configuration file.
              */
             
-            config = VloConfig.switchToExternalConfig(servletContext);
+            config = VloContextConfig.switchToExternalConfig(servletContext);
         }
 
         // start the application

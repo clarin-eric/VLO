@@ -377,10 +377,6 @@ public class MetadataImporter {
      * @param args
      * @throws IOException
      */
-    /**
-     * @param args
-     * @throws IOException
-     */
     public static void main(String[] args) throws MalformedURLException, IOException {
 
         // application configuration

@@ -6,24 +6,12 @@
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
     <fileSets>
-        <!-- LIB -->
-       <!--<fileSet>
-            <directory>target/lib</directory>
-            <includes>
-                <include>*.*</include>
-            </includes>
-            <outputDirectory>lib</outputDirectory>
-        </fileSet> -->
         <!-- CLASSES -->
         <fileSet>
             <directory>target/classes</directory>
             <includes>
                 <include>**/*.*</include>
             </includes>
-            <excludes>
-                <exclude>applicationContext.xml</exclude>
-                <exclude>application.properties</exclude>
-            </excludes>
             <outputDirectory>/</outputDirectory>
         </fileSet>
 
@@ -32,19 +20,6 @@
             <directory>src/main/resources</directory>
             <includes>
                 <include>**/*.*</include>
-            </includes>
-            <excludes>
-                <exclude>applicationContext.xml</exclude>
-                <exclude>application.properties</exclude>
-            </excludes>
-            <outputDirectory>/</outputDirectory>
-        </fileSet>
-
-        <!-- Overwrite applicationContext.xml -->
-        <fileSet>
-            <directory>src/test/resources</directory>
-            <includes>
-                <include>applicationContext.xml</include>
             </includes>
             <outputDirectory>/</outputDirectory>
         </fileSet>
