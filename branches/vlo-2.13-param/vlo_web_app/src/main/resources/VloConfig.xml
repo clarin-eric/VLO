@@ -1,4 +1,4 @@
-<webAppConfig>
+<VloConfig>
    
     <deleteAllFirst>false</deleteAllFirst>
     
@@ -67,4 +67,4 @@
     <silToISO639CodesUrl>http://www.clarin.eu/cmd/xslt/sil_to_iso6393.xml</silToISO639CodesUrl>
     
     <FederatedContentSearchUrl>http://weblicht.sfs.uni-tuebingen.de/Aggregator/</FederatedContentSearchUrl>
-</webAppConfig>
+</VloConfig>

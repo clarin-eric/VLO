@@ -70,6 +70,8 @@ public class VloApplication extends WebApplication {
          */
         String fileName = VloConfig.class.getResource("/VloConfig.xml").getFile();
         
+        // configSource = getClass().getClassLoader().getResourceAsStream(fileName);
+        
         config = VloConfig.readConfig(fileName);
 
         // let the {@literal init()} method know that there will be a context
