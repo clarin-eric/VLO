@@ -2,6 +2,7 @@
 package eu.clarin.cmdi.vlo.config;
 
 import java.io.File;
+import java.io.InputStream;
 import org.simpleframework.xml.core.Persister;
 
 /**
@@ -129,14 +130,40 @@ public class ConfigFilePersister {
      * otherwise
      */
     public Object ConfigFromFile() {
+        
+        // may be change the name of to something reflecting the stream idea
 
         Object object;
 
-        File configSource;
-        configSource = new File(fileName);
+        // File configSource;
+        // configSource = new File(fileName);
+        
+        // configSource = new InputStream(filename);
+        
+        // seems to be clean, that is: without reference to context
+        
+        // configSource = getClass().getClassLoader().getResourceAsStream(fileName);
+        
+        Class c = null;
+        try {
+            c = Class.forName("eu.clarin.cmdi.vlo.config.ConfigFilePersister");
+        } catch (Exception ex) {
+            // This should not happen.
+        }
+        
+        /**
+         * The point is that here some merging will take place. Find a suitable
+         * name for c. Another point is that now the filename should take the
+         * place of the absName
+         */
+            
+        String absName = "/VloConfig.xml";
+        
+        InputStream configSource = c.getResourceAsStream(absName);
 
         try {
-            object = persister.read(configClass, configSource);
+            // object = persister.read(configClass, configSource);
+            object = persister.read(configClass, configSource, true);
         } catch (Exception e) {
             object = null;
             logger.log(e);

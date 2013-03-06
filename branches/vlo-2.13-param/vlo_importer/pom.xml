@@ -1,20 +1,23 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+
+>
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>eu.clarin.cmdi</groupId>
+
     <artifactId>vlo</artifactId>
+
     <packaging>jar</packaging>
 
-    <!-- When updating the version number here, also update
-    vlo_solr_importer.sh in src/main/bin and the version number 
-    in the parent's pom.xml -->
     <version>2.13</version>
     <name>vlo_importer</name>
     <description></description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <packaging>war</packaging>
+        <packaging>jar</packaging>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
     </properties>
 

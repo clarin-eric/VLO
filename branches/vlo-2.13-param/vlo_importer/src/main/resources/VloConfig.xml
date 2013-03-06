@@ -6,8 +6,7 @@
     
     <dataRoots>
         <DataRoot>
-            <originName>MPI IMDI Archive
-            </originName>
+            <originName>MPI IMDI Archive</originName>
             <rootFile>/lat/apache/htdocs/oai-harvester/mpi-self-harvest/harvested/results/cmdi/</rootFile>            
             <prefix>http://catalog.clarin.eu/</prefix>
             <tostrip>/lat/apache/htdocs/</tostrip>

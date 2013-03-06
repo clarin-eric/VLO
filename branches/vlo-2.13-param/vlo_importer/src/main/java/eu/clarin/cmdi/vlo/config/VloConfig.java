@@ -3,7 +3,6 @@ package eu.clarin.cmdi.vlo.config;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
-import javax.servlet.ServletContext;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementArray;
 import org.simpleframework.xml.ElementList;
@@ -11,95 +10,131 @@ import org.simpleframework.xml.Root;
 import org.slf4j.LoggerFactory;
 
 /**
- * Web application configuration<br><br>
+ * VLO configuration<br><br>
  * 
- * Map the elements in the packaged {@literal WebAppConfig.xml} file to the
- * members in this class, the configuration of the VLO web application and
- * importer according to the Simple framework specification. So<br><br>
- *
- * {@literal <parameterMember>}"the value of the
+ * The annotated members in this class are the parameters by means of which
+ * you can configure a VLO application like for example the VLO importer or
+ * the VLO web application.
+ * 
+ * A member is annotated by prepending @element. When the VloConfig class is
+ * reflected into the Simple framework, the framework will assign the values
+ * it finds in the VloConfig.xml file to the members in the VloConfig class. 
+ * 
+ * By invoking the get method defined in the VloConfig class, a VLO application 
+ * can query the value of a parameter. If you just instantiate an instance of 
+ * the VloConfig class, the members will be assigned values from the packaged 
+ * the VloConfig.xml file. 
+ * 
+ * Alternatively, the readConfig methods will let you specify an xml file of 
+ * your choice. 
+ * 
+ * Whenever you like to add a parameter the VLO configuration, add a member 
+ * with the appropriate name and type, and prepend an at aign to the 
+ * declaration, like this:
+ * 
+ * {@literal @element}<br> {@literal parameterMember}<br><br>
+ * 
+ * The xml file used should in this case contain a definition like
+ * 
+ * {@literal<parameterMember>} "the value of the
  * parameter"{@literal </parameterMember>}<br><br>
  *
- * in the XML file is accompanied by<br><br>
- *
- * {@literal
- *
- * @element}<br> {@literal parameterMember}<br><br>
- *
- * in the VloConfig class. If you want to add a type of member that is not
- * included in the class yet, refer to the Simple framework's
- * specification.<br><br> 
+ * If you want to add a type of member that is not included in VloConfig class 
+ * yet, or if you are looking for more information on the framework, please refer
+ * to <url> <br><br> 
  * 
- * The parameters are stored statically. This means that a parameter can be
- * referenced from the application without first creating a configuration
- * object. So get() in
+ * The parameters are stored statically. This means that after you have create 
+ * a VloConfig object, you can reference a parameter outside the scope in which
+ * the object was originally created. So after a VloConfig object has been 
+ * created, get() in 
  *
  * WebAppConfig.get().getSomeParameter();<br><br>
  *
- * will return the static configuration, and getSomeParameter() will return a
- * specific parameter in this configuration. 
+ * will return the configuration, and getSomeParameter() will return a
+ * specific parameter in it. 
  * 
  * Through the get and set methods, the application is indifferent to the origin
  * of a parameter: you can get and set the value of a parameter without having
- * to worry about how the parameter was defined originally. By invoking the read
- * method, and by querying the context, the web application, on initialization,
- * determines which definition to use. 
+ * to worry about how the parameter was defined originally. 
+ *
+ * By invoking the read method, and by querying the context, the web
+ * application, on initialization, determines which definition to use. 
  * 
  * Also, the get and set methods allow for a modification of the original value
  * of the parameter. For example, if the format of a parameter changes, this 
- * change can be handled in the get and set method once, instead of having to 
+ * change can be handled in the get and set methods, instead of having to 
  * modify every reference to the parameter in the application. 
  *
- * Please note on the explanation of the meaning of the parameters. Because the
+ * Note on the explanation of the meaning of the parameters. Because the
  * meaning of a parameter is not local to this class, or even not local to the
  * configuration package, they are described in the general VLO
  * documentation.<br><br>
  *
  * @author keeloo
  */
-@Root(strict=false)
+@Root
 public class VloConfig extends ConfigFromFile {
 
-    // create a reference to the application logging
+    /** 
+     * Create a reference through which a VloConfig class object can send
+     * messages to the logging framework that has been associated with the 
+     * application.
+     */
     private final static org.slf4j.Logger LOG =
             LoggerFactory.getLogger(VloConfig.class);
 
-    // connect to the logging framework
-    private class WebAppConfigLogger implements ConfigFilePersister.Logger {
+    /**
+     * Because the VloConfig class uses the Simple framework via the
+     * ConfigFilePersister class, implement the logging interface in 
+     * that class.
+     */
+    private class VloConfigLogger implements ConfigFilePersister.Logger {
 
         @Override
         public void log(Object data) {
-
+            
+            /**
+             * Send a message to the logging framework by using the 
+             * LOG reference.
+             */
             LOG.error(data.toString());
         }
     }
-    private static WebAppConfigLogger logger;
+  
+    // create a reference to the ConfigFilePersister's logging interface
+    private static VloConfigLogger logger;
 
     /**
      * Constructor method
      */
     public VloConfig() {
-        // let the superclass know about the logger defined here
+        // create the ConfigFilePersister's logging interface
+        logger = new VloConfigLogger();
 
-        logger = new WebAppConfigLogger();
-
+        /**
+         * Initialize the ConfigFilePersister's reference to the interface 
+         */
         ConfigFilePersister.setLogger(VloConfig.logger);
     }
     
     /**
-     * Make the configuration statically accessible
+     * Create a static reference to the class itself to collect the members
+     * denoting parameters. Because these members themselves are static, the 
+     * reference will point the a fixed set of parameters. Please note that the
+     * reference needs to be a protected reference because of access from one
+     * of the extending VloWebApp class.
      */
     protected static VloConfig config = null;
 
     /**
      * Read the configuration from an XML file. 
      *
-     * Please invoke this method from the web application or from the importer;
-     * the readTestConfig method is intended for testing purposes.
+     * Please invoke this method if you want a configuration different from
+     * the one that is represented in the packages XML file. 
+     * 
+     * @param fileName the name of the file to read the configuration from
      *
-     * @param fileName
-     *
-     * @return the web application configuration 
+     * @return the configuration 
      */
     public static VloConfig readConfig(String fileName) {
         if (config == null) {
@@ -107,8 +142,7 @@ public class VloConfig extends ConfigFromFile {
             config = new VloConfig();
         }
 
-        // get the XML file configuration from the file by invoking the
-
+        // get the XML file configuration from the file by invoking ...
         config = (VloConfig) read(fileName, config);
 
         return config;
@@ -117,14 +151,19 @@ public class VloConfig extends ConfigFromFile {
     /**
      * Read the configuration from an XML file. 
      * 
-     * Please invoke this method from the package tests. If the tests invoke a
-     * method different from the one used by the web application and the
-     * important, you can make some test specific changes to the parameters
-     * here. 
+     * Invole this method instead of readConfig() if you want to change
+     * the parameters because the application is run in a context different
+     * from the usual one. Here, modifications of the parameters inspired on
+     * the difference in context can be made.
      * 
-     * @param fileName
+     * A web application can serve as a tipical example of a difference in 
+     * context: the application itself runs in a web server container, while the
+     * tests associated with the web application will be run outside this 
+     * container.
+     *     
+     * @param fileName the name of the file to read the configuration from
      *
-     * @return the web application configuration in a new static context
+     * @return the configuration
      */
     public static VloConfig readTestConfig(String fileName) {
         if (config == null) {
@@ -132,17 +171,18 @@ public class VloConfig extends ConfigFromFile {
             config = new VloConfig();
         }
 
-        // get the XML file configuration from the file by invoking the
-
+        // get the XML file configuration from the file by invoking ...
         config = (VloConfig) read(fileName, config);
+        
+        // modify the parameters here
 
         return config;
     }
     
     /**
-     * Return the configuration
+     * Return the reference to the configuration
      * 
-     * @return 
+     * @return the configuration
      */
     public static VloConfig get (){
         return config;
@@ -151,9 +191,8 @@ public class VloConfig extends ConfigFromFile {
     /**
      * VLO application parameter members<br><br>
      *
-     * Initialize a member corresponding to application parameters with an empty
-     * string at least, for this will allow them to be linearized to
-     * corresponding elements in the XML file.
+     * Initialize the annotated members in a proper way. This will allow them to
+     * be linearized to corresponding elements in an XML file.
      * 
      * Please refer to the general VLO documentation for a description of the
      * member parameters.
@@ -201,8 +240,8 @@ public class VloConfig extends ConfigFromFile {
      * An array of facetFields<br><br>
      *
      * In case of an array of elements, the number of elements in the array
-     * needs to be communicated to Simple. The following would be a correct
-     * description of an array of three facet fields<br><br>
+     * needs to be communicated to the Simple framework. The following would be
+     * a correct description of an array of three facet fields<br><br>
      *
      * {@literal <facetFields length="3">}<br> 
      * {@literal    <facetField>}<br>
@@ -252,14 +291,14 @@ public class VloConfig extends ConfigFromFile {
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param the value
+     * @param dataRoots the value
      */
     public void setDataRoots(List<DataRoot> dataRoots) {
         this.dataRoots = dataRoots;
     }
 
     /**
-     * Set the value deleteAllFirst parameter<br><br>
+     * Set the value of the deleteAllFirst parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
@@ -288,7 +327,7 @@ public class VloConfig extends ConfigFromFile {
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param the value
+     * @param printMapping the value
      */
     public void setPrintMapping(boolean printMapping) {
         this.printMapping = printMapping;
@@ -348,7 +387,7 @@ public class VloConfig extends ConfigFromFile {
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param the parameter
+     * @param url the parameter
      */
     public void setSolrUrl(String url) {
         this.solrUrl = url;
@@ -443,7 +482,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * For a description of the schema, refer to the general VLO documentation.
      *
-     * @param handle the value 
+     * @return the value 
      */
     public String getIMDIBrowserUrl(String handle) {
         String result;
@@ -622,6 +661,4 @@ public class VloConfig extends ConfigFromFile {
     public void setSilToISO639CodesUrl(String url) {
         this.silToISO639CodesUrl = url;
     }
-            
-    
 }
