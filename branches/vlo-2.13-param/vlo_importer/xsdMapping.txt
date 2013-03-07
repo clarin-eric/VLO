@@ -1,4 +1,4 @@
-This file is generated on Mar 1, 2013 2:41:50 PM and only used to document the mapping.
+This file is generated on Mar 7, 2013 12:22:39 PM and only used to document the mapping.
 This file contains xsd name and a list of conceptName with xpath mappings that are generated.
 ---------------------
 http://www.openarchives.org/OAI/2.0/oai_dc.xsd

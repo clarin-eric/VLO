@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.config;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.logging.Level;
 import org.simpleframework.xml.core.Persister;
 
 /**
@@ -69,7 +70,8 @@ public class ConfigFilePersister {
     private Object configObject;
     
     /**
-     * The name of the XML file defining the members of the annotated class
+     * The absolute name of the XML file defining the members of the annotated 
+     * class.
      */
     private String fileName;
     
@@ -131,42 +133,31 @@ public class ConfigFilePersister {
      */
     public Object ConfigFromFile() {
         
-        // may be change the name of to something reflecting the stream idea
+        Object object = null;
 
-        Object object;
+        // try to resolve the absolute name of configuration file to a stream
+        InputStream sourceAsStream;
+        sourceAsStream = ConfigFilePersister.class.getResourceAsStream(fileName);
 
-        // File configSource;
-        // configSource = new File(fileName);
-        
-        // configSource = new InputStream(filename);
-        
-        // seems to be clean, that is: without reference to context
-        
-        // configSource = getClass().getClassLoader().getResourceAsStream(fileName);
-        
-        Class c = null;
-        try {
-            c = Class.forName("eu.clarin.cmdi.vlo.config.ConfigFilePersister");
-        } catch (Exception ex) {
-            // This should not happen.
-        }
-        
-        /**
-         * The point is that here some merging will take place. Find a suitable
-         * name for c. Another point is that now the filename should take the
-         * place of the absName
-         */
+        if (sourceAsStream == null) {
             
-        String absName = "/VloConfig.xml";
-        
-        InputStream configSource = c.getResourceAsStream(absName);
-
-        try {
-            // object = persister.read(configClass, configSource);
-            object = persister.read(configClass, configSource, true);
-        } catch (Exception e) {
-            object = null;
-            logger.log(e);
+            // the resource cannot be found inside the package, try outside
+            File sourceAsFile; 
+            
+            sourceAsFile = new File(fileName);
+            try {
+                object = persister.read(configClass, sourceAsFile, true);
+            } catch (Exception e) {
+                logger.log(e);
+            }
+            
+        } else {
+            // the resource can be found in eu.clarin.cmdi.vlo.config
+            try {
+                object = persister.read(configClass, sourceAsStream, true);
+            } catch (Exception e) {
+                logger.log(e);
+            }
         }
 
         return object;

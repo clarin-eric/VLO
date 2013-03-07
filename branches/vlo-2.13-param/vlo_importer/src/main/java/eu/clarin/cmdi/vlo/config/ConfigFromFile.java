@@ -36,7 +36,8 @@ public class ConfigFromFile {
     /**
      * Configure by reading from an XML file
      * 
-     * @param fileName
+     * @param fileName the absolute name of the file to read the configuration
+     * from, for example the packaged configuration file /VloConfig.xml
      *
      * @param config the object whose annotated members will be assigned a value
      * in accordance with the definition read from the XML file.

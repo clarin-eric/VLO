@@ -9,6 +9,11 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 import org.slf4j.LoggerFactory;
 
+
+    /**
+
+     */
+
 /**
  * VLO configuration<br><br>
  * 
@@ -39,17 +44,29 @@ import org.slf4j.LoggerFactory;
  * In the VloConfig class, the parameters are stored statically. This means that
  * after 
  * 
- * {@literal VloConfig.read();}<br><br>
- * 
- * or
- * 
- * {@literal VloConfig.read();}<br><br>
+ * {@literal VloConfig.readPackagedConfig();}<br><br>
  * 
  * has been issued from a certain context, you can reference a parameter by
  * 
  * {@literal WebAppConfig.getSomeParameter();}<br><br>
  *
  * in any scope, also the scope from which the read message was send.
+ * 
+ * 
+ * 
+ * Move the following remarks to a general remark in the class description, a
+ * remark indicating what you could do if you do not want to use the packaged
+ * configuration.
+ * 
+ * 
+ * Here, modifications of the parameters inspired on the difference
+ * in context can be made.
+ *
+ * A web application can serve as a typical example of a difference in context:
+ * the application itself runs in a web server container, while the tests
+ * associated with the web application will be run outside this container. *
+ *
+ * 
  *
  * Through the get and set methods, the application is indifferent to the origin
  * of a parameter: you can get and set the value of a parameter without having
@@ -113,72 +130,39 @@ public class VloConfig extends ConfigFromFile {
     }
     
     /**
-     * Create a static reference to the class itself to collect the members
-     * denoting parameters. Because these members themselves are static, the 
-     * reference will point the a fixed set of parameters. Please note that the
-     * reference needs to be a protected reference because of access from one
-     * of the extending VloWebApp class.
-     */
-    protected static VloConfig config = null;
-
-    /**
      * Read the configuration from the packaged XML configuration file.  
      * 
-     * @param fileName the name of the file to read the configuration from
-     *
-     * @return the configuration 
+     * @param fileName the name of the file to read the configuration from 
      */
     public static void readPackagedConfig() {
         
         // set the name of the packaged configuration file
-        String fileName = "/VloConfig";
+        String fileName = "/VloConfig.xml";
         
         VloConfig.readConfig (fileName);
-        
-        // return config;
     }
     
+    // VLO application configuration
+    static VloConfig config = null;
+
     /**
-     * Read the configuration from an XML file. 
+     * Read the configuration from a file. 
      *
-     * Please invoke this method if you want a configuration different from
-     * the one that is represented in the packages XML file. 
+     * Please invoke this method instead of readPackagedConfig if you want to 
+     * read the configuration from a file external to the VloConfig package.
      * 
      * @param fileName the name of the file to read the configuration from
-     *
-     * @return the configuration 
      */
     public static void readConfig(String fileName) {
-        
-        // may it is safe to first expand the name a litte bit more
 
         if (config == null) {
             // the configuration is not there yet; create it now
             config = new VloConfig();
         }
 
-        // get the XML file configuration from the file by invoking ...
+        // get the XML file configuration from the file
         read(fileName, config);
     }
-
-    /**
-     * Read the configuration from an XML file. 
-     * 
-     * Move the following remarks to a general remark in the class description, 
-     * a remark indicating what you could do if you do not want to use the 
-     * packaged configuration.
-     * 
-     * Invoke this method instead of readConfig() if you want to change
-     * the parameters because the application is run in a context different
-     * from the usual one. Here, modifications of the parameters inspired on
-     * the difference in context can be made.
-     * 
-     * A web application can serve as a typical example of a difference in 
-     * context: the application itself runs in a web server container, while the
-     * tests associated with the web application will be run outside this 
-     * container.
-     *     
-     */
 
     /**
      * VLO application parameter members<br><br>
@@ -198,10 +182,6 @@ public class VloConfig extends ConfigFromFile {
     
     @ElementList // directive for Simple
     private static List<DataRoot> dataRoots;
-    
-    public static List<DataRoot> getDataRoots() {
-        return dataRoots;
-    }
     
     @Element
     private static String vloHomeLink = "";
@@ -276,6 +256,9 @@ public class VloConfig extends ConfigFromFile {
      * here without the need to make changes in different parts of the
      * application.
      */
+    public static List<DataRoot> getDataRoots() {
+        return dataRoots;
+    }
     
     /**
      * Set the value of the dataRoots parameter<br><br>
