@@ -12,17 +12,11 @@ import org.junit.Test;
 
 public class SearchPageQueryTest {
 
-    // application configuration
-    static VloConfig config;
-
     @Before
     public void setup() {
         
-        // include the full path in the name of the packaged configuration file
-        String fileName = VloConfig.class.getResource("/VloConfig.xml").getFile();
-
-        // read the configuration defined in the file
-        config = VloConfig.readTestConfig(fileName);
+        // read the configuration from the packaged configuration file
+        VloConfig.readPackagedConfig();
 
         // optionally, modify the configuration here
     }

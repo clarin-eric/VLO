@@ -9,21 +9,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class CMDIParserVTDXMLTest {
-
-    static VloConfig config;
-    // include the full path in the name of the packaged configuration file
     
     @Before
     public void setUp() {
-        // application configuration
-        
-        String fileName = VloConfig.class.getResource("/VloConfig.xml").getFile();
 
-        // optionally, check for file existence here
-
-        // read the configuration defined in the file
-
-        config = VloConfig.readConfig(fileName);
+        // read the configuration from the packaged configuration file
+        VloConfig.readPackagedConfig();
 
         // optionally, modify the configuration here
 

@@ -235,10 +235,6 @@ public class MetadataImporterTest extends ImporterTestcase {
     private List<SolrInputDocument> importData(File rootFile) throws MalformedURLException {
         final List<SolrInputDocument> result = new ArrayList<SolrInputDocument>();
         
-        String fileName = VloConfig.class.getResource("/VloConfig.xml").getFile();
-        
-        VloConfig testConfig;
-        
         /**
          * Problem: at the moment the readTestConfig method is not prepared for
          * a message from the importer. May rename readTestConfig to
@@ -250,16 +246,16 @@ public class MetadataImporterTest extends ImporterTestcase {
          * elaborate testing.test directory inside the package.
          */
 
-        testConfig = VloConfig.readTestConfig(fileName);
+        // testConfig = VloConfig.readTestConfig(fileName);
         
-        // modify the test configuration a bit
+        VloConfig.readPackagedConfig();
         
-        testConfig = modifyConfig(testConfig, rootFile);
+        // make specific changes to the configuration
         
-        // ... and also the importer itself
+        modifyConfig(rootFile);
         
         MetadataImporter importer;
-        importer = new MetadataImporter(testConfig) {
+        importer = new MetadataImporter() {
             @Override
             protected void initSolrServer() throws MalformedURLException {
                 //do nothing no solrserver in test
@@ -276,15 +272,14 @@ public class MetadataImporterTest extends ImporterTestcase {
         return result;
     }
 
-    private VloConfig modifyConfig(VloConfig config, File rootFile) {
+    private void modifyConfig(File rootFile) {
         DataRoot dataRoot = new DataRoot();
         dataRoot.setDeleteFirst(false);//cannot delete not using real solrServer
         dataRoot.setOriginName("testRoot");
         dataRoot.setRootFile(rootFile);
         dataRoot.setTostrip("");
         dataRoot.setPrefix("http://example.com");
-        config.setDataRoots(Collections.singletonList(dataRoot));
-        return config;
+        VloConfig.setDataRoots(Collections.singletonList(dataRoot));
     }
 
 }

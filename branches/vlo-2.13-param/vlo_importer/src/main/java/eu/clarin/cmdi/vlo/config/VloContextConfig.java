@@ -37,7 +37,7 @@ public class VloContextConfig extends VloConfig {
      *
      * @return the configuration
      */
-    public static VloConfig switchToExternalConfig(ServletContext context) {
+    public static void switchToExternalConfig(ServletContext context) {
         
         if (config == null) {
             // the configuration is not there yet; create it now
@@ -70,8 +70,5 @@ public class VloContextConfig extends VloConfig {
 
             VloConfig.setSolrUrl(url);
         }
-        
-        // return the current configuration, modified or not
-        return (VloConfig)config;
     }
 }

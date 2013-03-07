@@ -75,16 +75,12 @@ public class MetadataImporter {
         POST_PROCESSORS.put(FacetConstants.FIELD_CLARIN_PROFILE, new CMDIComponentProfileNamePostProcessor());
     }
     
-    // VLO configuration
-    VloConfig config;
-    
     /**
      * Constructor
      * 
      * @param
      */
-    public MetadataImporter (VloConfig config){
-        this.config = config;
+    public MetadataImporter (){
     }
 
     /**
@@ -404,18 +400,18 @@ public class MetadataImporter {
                 
                 // optionally, check for file existence here
                 
-                // read the configuration defined in the file
-                config = VloConfig.readTestConfig(fileName);
+                // read the configuration from the externally supplied file
+                VloConfig.readConfig(fileName);
 
                 // optionally, modify the configuration here
                 
                 // create and start the importer
-                MetadataImporter importer = new MetadataImporter(config);
+                MetadataImporter importer = new MetadataImporter();
                 importer.startImport();
                 
                 // finished importing
                 
-                if (config.isPrintMapping()) {
+                if (VloConfig.isPrintMapping()) {
                     File file = new File("xsdMapping.txt");
                     FacetMappingFactory.printMapping(file);
                     LOG.info("Printed facetMapping in " + file);

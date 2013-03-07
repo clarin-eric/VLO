@@ -12,19 +12,18 @@ import org.junit.Test;
 
 public class FacetBoxPanelTest {
 
-    static VloConfig testConfig;
-
     @Before
     public void setUp() {
+        
         WicketTester wicketTester;
         
-        String fileName = VloConfig.class.getResource("/VloConfig.xml").getFile();
+        // read the configuration from the package configuration file
+        VloConfig.readPackagedConfig();
         
-        testConfig = VloConfig.readTestConfig(fileName);
+        // optionally, modify the configuration here
         
-        // optionally, modify the test configuration here
-        
-        wicketTester = new WicketTester(new VloWebApplication(testConfig));
+        // run the web application outside a web server container context
+        wicketTester = new WicketTester(new VloWebApplication(false));
     }
 
     @Test

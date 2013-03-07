@@ -10,8 +10,6 @@ import org.junit.Test;
 
 
 public class ResourceLinkPanelTest {
-    
-    static VloConfig testConfig;
 
     public static final String _SAME_STRING = "http://blabla";
     public static final String _RESOLVE_STRING = "hdl:1839/00-0000-0000-0004-3357-F";
@@ -21,13 +19,13 @@ public class ResourceLinkPanelTest {
         
         WicketTester wicketTester;
 
-        String fileName = VloConfig.class.getResource("/VloConfig.xml").getFile();
+        // read the configuration from the packaged configuration file
+        VloConfig.readPackagedConfig();
 
-        testConfig = VloConfig.readTestConfig(fileName);
-
-        // optionally, modify the test configuration here
-
-        wicketTester = new WicketTester(new VloWebApplication(testConfig));
+        // optionally, modify the configuration here
+        
+        // run the web application outside a web server container context
+        wicketTester = new WicketTester(new VloWebApplication(false));
     }
 
     @Test

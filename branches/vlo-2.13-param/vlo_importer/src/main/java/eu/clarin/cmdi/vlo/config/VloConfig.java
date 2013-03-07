@@ -128,14 +128,14 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the configuration 
      */
-    public static VloConfig readPackagedConfig() {
+    public static void readPackagedConfig() {
         
         // set the name of the packaged configuration file
         String fileName = "/VloConfig";
         
-        config = VloConfig.readConfig (fileName);
+        VloConfig.readConfig (fileName);
         
-        return config;
+        // return config;
     }
     
     /**
@@ -148,7 +148,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the configuration 
      */
-    public static VloConfig readConfig(String fileName) {
+    public static void readConfig(String fileName) {
         
         // may it is safe to first expand the name a litte bit more
 
@@ -158,13 +158,15 @@ public class VloConfig extends ConfigFromFile {
         }
 
         // get the XML file configuration from the file by invoking ...
-        config = (VloConfig) read(fileName, config);
-
-        return config;
+        read(fileName, config);
     }
 
     /**
      * Read the configuration from an XML file. 
+     * 
+     * Move the following remarks to a general remark in the class description, 
+     * a remark indicating what you could do if you do not want to use the 
+     * packaged configuration.
      * 
      * Invoke this method instead of readConfig() if you want to change
      * the parameters because the application is run in a context different
@@ -176,18 +178,7 @@ public class VloConfig extends ConfigFromFile {
      * tests associated with the web application will be run outside this 
      * container.
      *     
-     * @param fileName the name of the file to read the configuration from
-     *
-     * @return the configuration
      */
-    public static VloConfig readTestConfig(String fileName) {
-
-        config = VloConfig.readConfig (fileName);
-        
-        // modify the configuration here
-
-        return config;
-    }
 
     /**
      * VLO application parameter members<br><br>

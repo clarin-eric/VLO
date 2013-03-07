@@ -19,9 +19,6 @@ import org.apache.wicket.protocol.http.WebApplication;
 public class VloWebApplication extends WebApplication {
 
     private SearchResultsDao searchResults;
-
-    // application configuration
-    static VloConfig config;
     
     // flag indicating whether or not the application object lives in a context
     boolean inContext;
@@ -46,7 +43,7 @@ public class VloWebApplication extends WebApplication {
              * configuration file.
              */
             
-            config = VloContextConfig.switchToExternalConfig(servletContext);
+            VloContextConfig.switchToExternalConfig(servletContext);
         }
 
         // start the application
@@ -63,7 +60,7 @@ public class VloWebApplication extends WebApplication {
     public VloWebApplication() {
 
         /**
-         * Read the application's configuration. 
+         * Read the application's packaged configuration. 
          * 
          * Because on instantiation a web application cannot said to be living 
          * in a web server context, parameters defined in the context can only 
@@ -71,7 +68,7 @@ public class VloWebApplication extends WebApplication {
          * init()} method will be invoked.
          */
         
-        config = VloConfig.readPackagedConfig();
+        VloConfig.readPackagedConfig();
 
         // let the {@literal init()} method know that there will be a context
 
@@ -96,15 +93,11 @@ public class VloWebApplication extends WebApplication {
      * application object could reside inside a web server container, the
      * context associated with this container will be ignored.
      */
-    public VloWebApplication(VloConfig testConfig) {
+    public VloWebApplication(Boolean param) {
 
         // remember that the application does not live in a web server context
         
-        inContext = false;
-        
-        // set the current configuration to the test configuration
-
-        config = testConfig;
+        inContext = param;
 
         searchResults = new SearchResultsDao();
     }
