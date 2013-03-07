@@ -1,32 +1,41 @@
 package eu.clarin.cmdi.vlo;
 
-import eu.clarin.cmdi.vlo.config.VloConfig;
-import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Before;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.junit.Test;
 
 /**
  * Simple test using the WicketTester
  */
 public class TestFacetedSearchPage {
-
-    @Before
-    public void setUp() {
-
-        WicketTester wicketTester;
-
-        // read the packaged configuration 
-        VloConfig.readPackagedConfig();
-
-        // optionally, modify the configuration here
-
-        wicketTester = new WicketTester();
-    }
-
+    
+    /**
+     * Check Wicket with simple test taken from the WicketTester Javadoc
+     */
     @Test
-    public void testRenderMyPage() {
-//        tester.startPage(FacetedSearchPage.class);
-//        tester.assertRenderedPage(FacetedSearchPage.class);
-//        tester.assertLabel("message", "If you see this message wicket is properly configured and running");
+    //test code
+    public void testRenderYourPage() {
+
+        class PageWithLink extends WebPage {
+
+            public PageWithLink() {
+                add(new Label("myMessage", "Hello!"));
+                add(new Link("toYourPage") {
+                    @Override
+                    public void onClick() {
+                        setResponsePage(new LinkedPage("Hi!"));
+                    }
+                });
+            }
+
+            class LinkedPage extends WebPage {
+
+                public LinkedPage(String message) {
+                    add(new Label("yourMessage", message));
+                    info("Wicket Rocks ;-)");
+                }
+            }
+        }
     }
 }
