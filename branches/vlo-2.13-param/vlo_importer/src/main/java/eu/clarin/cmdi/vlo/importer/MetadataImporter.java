@@ -118,7 +118,7 @@ public class MetadataImporter {
         long start = System.currentTimeMillis();
         try {
             // Delete the whole Solr db
-            if (VloConfig.get().isDeleteAllFirst()) {
+            if (VloConfig.isDeleteAllFirst()) {
                 LOG.info("Deleting original data...");
                 solrServer.deleteByQuery("*:*");
                 solrServer.commit();
@@ -174,7 +174,7 @@ public class MetadataImporter {
      * @return
      */
     private List<DataRoot> checkDataRoots() {
-        List<DataRoot> dataRoots = VloConfig.get().getDataRoots();
+        List<DataRoot> dataRoots = VloConfig.getDataRoots();
         for (DataRoot dataRoot : dataRoots) {
             if (!dataRoot.getRootFile().exists()) {
                 LOG.error("Root file " + dataRoot.getRootFile() + " does not exist. Probable configuration error so stopping import.");
@@ -209,7 +209,7 @@ public class MetadataImporter {
      * @throws MalformedURLException
      */
     protected void initSolrServer() throws MalformedURLException {
-        String solrUrl = VloConfig.get().getSolrUrl();
+        String solrUrl = VloConfig.getSolrUrl();
         LOG.info("Initializing Solr Server on " + solrUrl);
         solrServer = new StreamingUpdateSolrServer(solrUrl, 1000, 2) {
             @Override

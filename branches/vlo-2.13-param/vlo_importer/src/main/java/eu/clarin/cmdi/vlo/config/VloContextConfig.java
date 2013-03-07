@@ -68,7 +68,7 @@ public class VloContextConfig extends VloConfig {
         {
             // overrule the current value of solrUrl
 
-            VloConfig.get().setSolrUrl(url);
+            VloConfig.setSolrUrl(url);
         }
         
         // return the current configuration, modified or not

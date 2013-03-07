@@ -40,7 +40,7 @@ public class CountryNamePostProcessor implements PostProcessor {
     private Map<String, String> createCountryCodeMap() {
         LOG.debug("Creating country code map.");
         try {
-            Map<String, String> result = CommonUtils.createCMDIComponentItemMap(VloConfig.get().getCountryComponentUrl());
+            Map<String, String> result = CommonUtils.createCMDIComponentItemMap(VloConfig.getCountryComponentUrl());
             return result;
         } catch (Exception e) {
             throw new RuntimeException("Cannot instantiate postProcessor:", e);

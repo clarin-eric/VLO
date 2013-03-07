@@ -97,28 +97,28 @@ public class LanguageCodePostProcessor implements PostProcessor{
 
     private Map<String, String> getTwoLetterCountryCodeMap() {
         if (twoLetterCodesMap == null) {
-            twoLetterCodesMap = createCodeMap(VloConfig.get().getLanguage2LetterCodeComponentUrl());
+            twoLetterCodesMap = createCodeMap(VloConfig.getLanguage2LetterCodeComponentUrl());
         }
         return twoLetterCodesMap;
     }
 
     private Map<String, String> getThreeLetterCountryCodeMap() {
         if (threeLetterCodesMap == null) {
-            threeLetterCodesMap = createCodeMap(VloConfig.get().getLanguage3LetterCodeComponentUrl());
+            threeLetterCodesMap = createCodeMap(VloConfig.getLanguage3LetterCodeComponentUrl());
         }
         return threeLetterCodesMap;
     }
 
     protected Map<String, String> getLanguageNameToIso639Map() {
     	if (languageNameToIso639Map == null) {
-    			languageNameToIso639Map = createReverseCodeMap(VloConfig.get().getLanguage3LetterCodeComponentUrl());
+    			languageNameToIso639Map = createReverseCodeMap(VloConfig.getLanguage3LetterCodeComponentUrl());
     	}
     	return languageNameToIso639Map;
     }
 
     private Map<String, String> getIso639ToLanguageNameMap() {
     	if (iso639ToLanguageNameMap == null) {
-    		iso639ToLanguageNameMap = createCodeMap(VloConfig.get().getLanguage3LetterCodeComponentUrl());
+    		iso639ToLanguageNameMap = createCodeMap(VloConfig.getLanguage3LetterCodeComponentUrl());
     	}
 
     	return iso639ToLanguageNameMap;
@@ -150,7 +150,7 @@ public class LanguageCodePostProcessor implements PostProcessor{
             Map<String, String> result = new HashMap<String, String>();
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             domFactory.setNamespaceAware(true);
-            URL url = new URL(VloConfig.get().getSilToISO639CodesUrl());
+            URL url = new URL(VloConfig.getSilToISO639CodesUrl());
             DocumentBuilder builder = domFactory.newDocumentBuilder();
             Document doc = builder.parse(url.openStream());
             XPath xpath = XPathFactory.newInstance().newXPath();

@@ -116,7 +116,7 @@ public class ShowResultPage extends BasePage {
                 linkToOriginalContext = linkToOriginalContext.replace(FacetConstants.TEST_HANDLE_MPI_PREFIX, FacetConstants.HANDLE_MPI_PREFIX);
             }
             if (linkToOriginalContext.startsWith(FacetConstants.HANDLE_MPI_PREFIX)) {
-                result = VloConfig.get().getIMDIBrowserUrl(linkToOriginalContext);
+                result = VloConfig.getIMDIBrowserUrl(linkToOriginalContext);
             } else {
                 try {
                     new URL(linkToOriginalContext);

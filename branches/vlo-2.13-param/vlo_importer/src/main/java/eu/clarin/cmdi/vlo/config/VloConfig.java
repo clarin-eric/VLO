@@ -16,50 +16,45 @@ import org.slf4j.LoggerFactory;
  * you can configure a VLO application like for example the VLO importer or
  * the VLO web application.
  * 
- * A member is annotated by prepending @element. When the VloConfig class is
- * reflected into the Simple framework, the framework will assign the values
- * it finds in the VloConfig.xml file to the members in the VloConfig class. 
+ * A member is annotated by prepending {@literal @element}. When the VloConfig 
+ * class is reflected into the Simple framework, the framework will assign the 
+ * values it finds in the VloConfig.xml file to the members in the VloConfig 
+ * class. 
  * 
- * By invoking the get method defined in the VloConfig class, a VLO application 
- * can query the value of a parameter. If you just instantiate an instance of 
- * the VloConfig class, the members will be assigned values from the packaged 
- * the VloConfig.xml file. 
- * 
- * Alternatively, the readConfig methods will let you specify an xml file of 
- * your choice. 
- * 
- * Whenever you like to add a parameter the VLO configuration, add a member 
- * with the appropriate name and type, and prepend an at aign to the 
+ * Whenever you need to add a parameter the VLO configuration, add a member 
+ * with the appropriate name and type, and prepend an at sign to the 
  * declaration, like this:
  * 
  * {@literal @element}<br> {@literal parameterMember}<br><br>
  * 
- * The xml file used should in this case contain a definition like
+ * The XML should in this case contain a definition like
  * 
  * {@literal<parameterMember>} "the value of the
  * parameter"{@literal </parameterMember>}<br><br>
  *
  * If you want to add a type of member that is not included in VloConfig class 
- * yet, or if you are looking for more information on the framework, please refer
- * to <url> <br><br> 
+ * yet, or if you are looking for more information on the framework, please 
+ * refer to <url> <br><br> 
  * 
- * The parameters are stored statically. This means that after you have create 
- * a VloConfig object, you can reference a parameter outside the scope in which
- * the object was originally created. So after a VloConfig object has been 
- * created, get() in 
- *
- * WebAppConfig.get().getSomeParameter();<br><br>
- *
- * will return the configuration, and getSomeParameter() will return a
- * specific parameter in it. 
+ * In the VloConfig class, the parameters are stored statically. This means that
+ * after 
  * 
+ * {@literal VloConfig.read();}<br><br>
+ * 
+ * or
+ * 
+ * {@literal VloConfig.read();}<br><br>
+ * 
+ * has been issued from a certain context, you can reference a parameter by
+ * 
+ * {@literal WebAppConfig.getSomeParameter();}<br><br>
+ *
+ * in any scope, also the scope from which the read message was send.
+ *
  * Through the get and set methods, the application is indifferent to the origin
  * of a parameter: you can get and set the value of a parameter without having
  * to worry about how the parameter was defined originally. 
  *
- * By invoking the read method, and by querying the context, the web
- * application, on initialization, determines which definition to use. 
- * 
  * Also, the get and set methods allow for a modification of the original value
  * of the parameter. For example, if the format of a parameter changes, this 
  * change can be handled in the get and set methods, instead of having to 
@@ -127,6 +122,23 @@ public class VloConfig extends ConfigFromFile {
     protected static VloConfig config = null;
 
     /**
+     * Read the configuration from the packaged XML configuration file.  
+     * 
+     * @param fileName the name of the file to read the configuration from
+     *
+     * @return the configuration 
+     */
+    public static VloConfig readPackagedConfig() {
+        
+        // set the name of the packaged configuration file
+        String fileName = "/VloConfig";
+        
+        config = VloConfig.readConfig (fileName);
+        
+        return config;
+    }
+    
+    /**
      * Read the configuration from an XML file. 
      *
      * Please invoke this method if you want a configuration different from
@@ -137,6 +149,9 @@ public class VloConfig extends ConfigFromFile {
      * @return the configuration 
      */
     public static VloConfig readConfig(String fileName) {
+        
+        // may it is safe to first expand the name a litte bit more
+
         if (config == null) {
             // the configuration is not there yet; create it now
             config = new VloConfig();
@@ -151,12 +166,12 @@ public class VloConfig extends ConfigFromFile {
     /**
      * Read the configuration from an XML file. 
      * 
-     * Invole this method instead of readConfig() if you want to change
+     * Invoke this method instead of readConfig() if you want to change
      * the parameters because the application is run in a context different
      * from the usual one. Here, modifications of the parameters inspired on
      * the difference in context can be made.
      * 
-     * A web application can serve as a tipical example of a difference in 
+     * A web application can serve as a typical example of a difference in 
      * context: the application itself runs in a web server container, while the
      * tests associated with the web application will be run outside this 
      * container.
@@ -166,25 +181,11 @@ public class VloConfig extends ConfigFromFile {
      * @return the configuration
      */
     public static VloConfig readTestConfig(String fileName) {
-        if (config == null) {
-            // the configuration is not there yet; create it now
-            config = new VloConfig();
-        }
 
-        // get the XML file configuration from the file by invoking ...
-        config = (VloConfig) read(fileName, config);
+        config = VloConfig.readConfig (fileName);
         
-        // modify the parameters here
+        // modify the configuration here
 
-        return config;
-    }
-    
-    /**
-     * Return the reference to the configuration
-     * 
-     * @return the configuration
-     */
-    public static VloConfig get (){
         return config;
     }
 
@@ -199,42 +200,42 @@ public class VloConfig extends ConfigFromFile {
      */
     
     @Element // directive for Simple
-    private boolean deleteAllFirst = false;
+    private static boolean deleteAllFirst = false;
     
     @Element
-    private boolean printMapping = false;
+    private static boolean printMapping = false;
     
     @ElementList // directive for Simple
-    private List<DataRoot> dataRoots;
+    private static List<DataRoot> dataRoots;
     
-    public List<DataRoot> getDataRoots() {
+    public static List<DataRoot> getDataRoots() {
         return dataRoots;
     }
     
     @Element
-    private String vloHomeLink = "";
+    private static String vloHomeLink = "";
     
     @Element
-    private String solrUrl = "";
+    private static String solrUrl = "";
     
     @Element
-    private String profileSchemaUrl = "";
+    private static String profileSchemaUrl = "";
 
     @Element
-    private String componentRegistryRESTURL = "";
+    private static String componentRegistryRESTURL = "";
     
     @Element
-    private String handleServerUrl = "";
+    private static String handleServerUrl = "";
     
     @Element
-    private String imdiBrowserUrl = "";
+    private static String imdiBrowserUrl = "";
     
     /**
      * Note: the national project mapping itself is not part of the web
      * application configuration.
      */
     @Element
-    private String nationalProjectMapping = "";
+    private static String nationalProjectMapping = "";
     
     /**
      * An array of facetFields<br><br>
@@ -260,22 +261,22 @@ public class VloConfig extends ConfigFromFile {
      * know that the elements inside 'facetFields' are named 'facetField'.
      */
     @ElementArray(entry = "facetField")
-    private String[] facetFields = {"", "", ""};
+    private static String[] facetFields = {"", "", ""};
     
     @Element
-    private String countryComponentUrl = "";
+    private static String countryComponentUrl = "";
     
     @Element
-    private String language2LetterCodeComponentUrl = "";
+    private static String language2LetterCodeComponentUrl = "";
     
     @Element
-    private String language3LetterCodeComponentUrl = "";
+    private static String language3LetterCodeComponentUrl = "";
     
     @Element
-    private String silToISO639CodesUrl = "";
+    private static String silToISO639CodesUrl = "";
     
     @Element
-    private String FederatedContentSearchUrl = " ";
+    private static String FederatedContentSearchUrl = " ";
 
     /**
      * Get and set methods for web application parameter members<br><br>
@@ -293,8 +294,8 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param dataRoots the value
      */
-    public void setDataRoots(List<DataRoot> dataRoots) {
-        this.dataRoots = dataRoots;
+    public static void setDataRoots(List<DataRoot> param) {
+        dataRoots = param;
     }
 
     /**
@@ -305,8 +306,8 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value
      */
-    public void setDeleteAllFirst(boolean deleteAllFirst) {
-        this.deleteAllFirst = deleteAllFirst;
+    public static void setDeleteAllFirst(boolean param) {
+        deleteAllFirst = param;
     }
 
     /**
@@ -317,7 +318,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value
      */
-    public boolean isDeleteAllFirst() {
+    public static boolean isDeleteAllFirst() {
         return deleteAllFirst;
     }
 
@@ -329,8 +330,8 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param printMapping the value
      */
-    public void setPrintMapping(boolean printMapping) {
-        this.printMapping = printMapping;
+    public static void setPrintMapping(boolean param) {
+        printMapping = param;
     }
 
     /**
@@ -341,7 +342,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value
      */
-    public boolean isPrintMapping() {
+    public static boolean isPrintMapping() {
         return printMapping;
     }
     
@@ -353,7 +354,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value
      */
-    public String getVloHomeLink() {
+    public static String getVloHomeLink() {
         return vloHomeLink;
     }
 
@@ -365,8 +366,8 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param vloHomeLink the value
      */
-    public void setVloHomeLink(String link) {
-        this.vloHomeLink = link;
+    public static void setVloHomeLink(String param) {
+        vloHomeLink = param;
     }
 
     /**
@@ -377,7 +378,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value
      */
-    public String getSolrUrl() {
+    static public String getSolrUrl() {
         return solrUrl;
     }
 
@@ -389,8 +390,8 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param url the parameter
      */
-    public void setSolrUrl(String url) {
-        this.solrUrl = url;
+    public static void setSolrUrl(String param) {
+        solrUrl = param;
     }
 
     /**
@@ -401,7 +402,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value
      */
-    public String getComponentRegistryProfileSchema(String id) {
+    public static String getComponentRegistryProfileSchema(String id) {
         return profileSchemaUrl.replace("{PROFILE_ID}", id);
     }
 
@@ -413,8 +414,8 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param profileId the value
      */
-    public void setProfileSchemaUrl(String url) {
-        this.profileSchemaUrl = url;
+    public static void setProfileSchemaUrl(String param) {
+        profileSchemaUrl = param;
     }
 
     /**
@@ -425,7 +426,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value
      */
-    public String getComponentRegistryRESTURL() {
+    public static String getComponentRegistryRESTURL() {
         return componentRegistryRESTURL;
     }
 
@@ -437,8 +438,8 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param componentRegistryRESTURL the value
      */
-    public void setComponentRegistryRESTURL(String url) {
-        this.componentRegistryRESTURL = url;
+    public static void setComponentRegistryRESTURL(String param) {
+        componentRegistryRESTURL = param;
     }
 
     /**
@@ -449,7 +450,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value
      */
-    public String getHandleServerUrl() {
+    public static String getHandleServerUrl() {
         return handleServerUrl;
     }
 
@@ -461,8 +462,8 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param handleServerUrl the value
      */
-    public void setHandleServerUrl(String url) {
-        this.handleServerUrl = url;
+    public static void setHandleServerUrl(String param) {
+        handleServerUrl = param;
     }
 
     /**
@@ -473,8 +474,8 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param imdiBrowserUrl the value
      */
-    public void setIMDIBrowserUrl(String url) {
-        this.imdiBrowserUrl = url;
+    public static void setIMDIBrowserUrl(String param) {
+        imdiBrowserUrl = param;
     }
 
     /**
@@ -484,7 +485,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value 
      */
-    public String getIMDIBrowserUrl(String handle) {
+    public static String getIMDIBrowserUrl(String handle) {
         String result;
         try {
             result = imdiBrowserUrl + URLEncoder.encode(handle, "UTF-8");
@@ -502,8 +503,8 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value
      */
-    public void setFederatedContentSearchUrl(String url) {
-        this.FederatedContentSearchUrl = url;
+    public static void setFederatedContentSearchUrl(String param) {
+        FederatedContentSearchUrl = param;
     }
 
     /**
@@ -514,7 +515,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param FederatedContentSearchUrl the value
      */
-    public String getFederatedContentSearchUrl() {
+    public static String getFederatedContentSearchUrl() {
         return FederatedContentSearchUrl;
     }
 
@@ -526,9 +527,10 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param nationalProjectMapping the value
      */
-    public void setNationalProjectMapping(String mapping) {
-        this.nationalProjectMapping = mapping;
+    public static void setNationalProjectMapping(String param) {
+        nationalProjectMapping = param;
     }
+   
 
     /**
      * Get the value of the NationalProjectMapping parameter<br><br>
@@ -538,7 +540,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value
      */
-    public String getNationalProjectMapping() {
+    public static String getNationalProjectMapping() {
         return nationalProjectMapping;
     }
 
@@ -550,7 +552,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value
      */
-    public String[] getFacetFields() {
+    public static String[] getFacetFields() {
         return facetFields;
     }
 
@@ -562,8 +564,8 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param facetFields the value, a list of facet fields
      */
-    public void setFacetFields(String[] fields) {
-        this.facetFields = fields;
+    public static void setFacetFields(String[] param) {
+        facetFields = param;
     }
 
     /**
@@ -574,7 +576,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value
      */
-    public String getCountryComponentUrl() {
+    public static String getCountryComponentUrl() {
         return countryComponentUrl;
     }
 
@@ -586,8 +588,8 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param countryComponentUrl the value
      */
-    public void setCountryComponentUrl(String url) {
-        this.countryComponentUrl = url;
+    public static void setCountryComponentUrl(String param) {
+        countryComponentUrl = param;
     }
 
     /**
@@ -598,7 +600,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value
      */
-    public String getLanguage2LetterCodeComponentUrl() {
+    public static String getLanguage2LetterCodeComponentUrl() {
         return language2LetterCodeComponentUrl;
     }
 
@@ -610,8 +612,8 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param language2LetterCodeComponentUrl the value
      */
-    public void setLanguage2LetterCodeComponentUrl(String url) {
-        this.language2LetterCodeComponentUrl = url;
+    public static void setLanguage2LetterCodeComponentUrl(String param) {
+        language2LetterCodeComponentUrl = param;
     }
 
     /**
@@ -622,7 +624,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value
      */
-    public String getLanguage3LetterCodeComponentUrl() {
+    public static String getLanguage3LetterCodeComponentUrl() {
         return language3LetterCodeComponentUrl;
     }
 
@@ -634,8 +636,8 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param language3LetterCodeComponentUrl the value
      */
-    public void setLanguage3LetterCodeComponentUrl(String url) {
-        this.language3LetterCodeComponentUrl = url;
+    public static void setLanguage3LetterCodeComponentUrl(String param) {
+        language3LetterCodeComponentUrl = param;
     }
 
     /**
@@ -646,7 +648,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value
      */
-    public String getSilToISO639CodesUrl() {
+    public static String getSilToISO639CodesUrl() {
         return silToISO639CodesUrl;
     }
 
@@ -658,7 +660,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param silToISO639CodesUrl the value
      */
-    public void setSilToISO639CodesUrl(String url) {
-        this.silToISO639CodesUrl = url;
+    public static void setSilToISO639CodesUrl(String param) {
+        silToISO639CodesUrl = param;
     }
 }

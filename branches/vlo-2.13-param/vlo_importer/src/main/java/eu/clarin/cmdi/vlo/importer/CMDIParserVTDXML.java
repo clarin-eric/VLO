@@ -78,7 +78,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         int index = ap.evalXPath();
         if (index != -1) {
             String profileId = nav.toString(index).trim();
-            result = VloConfig.get().getComponentRegistryProfileSchema(profileId);
+            result = VloConfig.getComponentRegistryProfileSchema(profileId);
         }
         return result;
     }

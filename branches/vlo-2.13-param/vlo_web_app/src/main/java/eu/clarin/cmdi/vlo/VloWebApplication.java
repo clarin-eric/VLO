@@ -10,13 +10,13 @@ import org.apache.wicket.protocol.http.WebApplication;
 /**
  * {@literal VLO} web application.<br><br>
  *
- * Because the VloApplication class extends WebApplication, a class instance
+ * Because the VloWebApplication class extends WebApplication, a class instance
  * will normally reside inside a web server container. By running the Start
  * class however, an instance of the application will reside outside a server
  * container.
  *
  */
-public class VloApplication extends WebApplication {
+public class VloWebApplication extends WebApplication {
 
     private SearchResultsDao searchResults;
 
@@ -60,19 +60,18 @@ public class VloApplication extends WebApplication {
      * Create an application instance configured to be living inside a web
      * server container.
      */
-    public VloApplication() {
+    public VloWebApplication() {
 
         /**
-         * Read the application's configuration. Because on instantiation a web
-         * application cannot said to be living in a context, context parameters
-         * can only be added to the configuration later, in this case: when the
-         * {@literal init()} method will be invoked.
+         * Read the application's configuration. 
+         * 
+         * Because on instantiation a web application cannot said to be living 
+         * in a web server context, parameters defined in the context can only 
+         * be added to the configuration later, in this case: when the {@literal
+         * init()} method will be invoked.
          */
-        String fileName = VloConfig.class.getResource("/VloConfig.xml").getFile();
         
-        // configSource = getClass().getClassLoader().getResourceAsStream(fileName);
-        
-        config = VloConfig.readConfig(fileName);
+        config = VloConfig.readPackagedConfig();
 
         // let the {@literal init()} method know that there will be a context
 
@@ -97,11 +96,13 @@ public class VloApplication extends WebApplication {
      * application object could reside inside a web server container, the
      * context associated with this container will be ignored.
      */
-    public VloApplication(VloConfig testConfig) {
+    public VloWebApplication(VloConfig testConfig) {
 
-        // let the application use the configuration created outside of it
-
+        // remember that the application does not live in a web server context
+        
         inContext = false;
+        
+        // set the current configuration to the test configuration
 
         config = testConfig;
 

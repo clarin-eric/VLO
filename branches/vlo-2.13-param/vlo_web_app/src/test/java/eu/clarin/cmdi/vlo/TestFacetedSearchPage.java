@@ -26,7 +26,7 @@ public class TestFacetedSearchPage {
 
         // optionally, modify the test configuration here
 
-        wicketTester = new WicketTester(new VloApplication(config));
+        wicketTester = new WicketTester(new VloWebApplication(config));
     }
 
     @Test

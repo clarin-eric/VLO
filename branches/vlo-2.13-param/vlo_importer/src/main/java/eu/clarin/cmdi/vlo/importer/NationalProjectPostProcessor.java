@@ -50,7 +50,7 @@ public class NationalProjectPostProcessor extends LanguageCodePostProcessor {
 	}
 
 	private Map<String, String> getNationalProjectMapping() {
-        String mappingFileName = VloConfig.get().getNationalProjectMapping();
+        String mappingFileName = VloConfig.getNationalProjectMapping();
         if(mappingFileName == null){
             throw new RuntimeException("Configuration Error, NationalProjectMapping is null");
         }

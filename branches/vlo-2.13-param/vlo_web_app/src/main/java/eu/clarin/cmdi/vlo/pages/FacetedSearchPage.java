@@ -55,7 +55,7 @@ public class FacetedSearchPage extends BasePage {
 
 		public SearchBoxForm(String id, SearchPageQuery query) {
 			super(id, new CompoundPropertyModel<SearchPageQuery>(query));
-			add(new ExternalLink("vloHomeLink", VloConfig.get().getVloHomeLink()));
+			add(new ExternalLink("vloHomeLink", VloConfig.getVloHomeLink()));
 			searchBox = new AutoCompleteTextField<String>("searchQuery") {
 				@Override
 				protected Iterator<String> getChoices(String input) {

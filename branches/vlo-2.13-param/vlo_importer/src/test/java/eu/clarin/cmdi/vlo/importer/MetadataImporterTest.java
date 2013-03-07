@@ -13,7 +13,6 @@ import java.util.List;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 import static org.junit.Assert.assertEquals;
-import org.junit.Before;
 import org.junit.Test;
 
 public class MetadataImporterTest extends ImporterTestcase {

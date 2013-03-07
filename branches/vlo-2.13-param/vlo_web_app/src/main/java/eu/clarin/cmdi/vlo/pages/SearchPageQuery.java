@@ -70,7 +70,7 @@ public class SearchPageQuery implements IClusterable {
         result.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID, FacetConstants.FIELD_DESCRIPTION);
         result.setFacet(true);
         result.setFacetMinCount(1);
-        result.addFacetField(VloConfig.get().getFacetFields());
+        result.addFacetField(VloConfig.getFacetFields());
         return result;
     }
 

@@ -40,7 +40,7 @@ public abstract class ImporterTestcase {
 
         // optionally, modify the configuration here
         
-        VloConfig.get().setComponentRegistryRESTURL("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/");
+        VloConfig.setComponentRegistryRESTURL("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/");
     }
 
 }

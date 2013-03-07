@@ -1,6 +1,6 @@
 package eu.clarin.cmdi.vlo.pages;
 
-import eu.clarin.cmdi.vlo.VloApplication;
+import eu.clarin.cmdi.vlo.VloWebApplication;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
@@ -24,7 +24,7 @@ public class FacetBoxPanelTest {
         
         // optionally, modify the test configuration here
         
-        wicketTester = new WicketTester(new VloApplication(testConfig));
+        wicketTester = new WicketTester(new VloWebApplication(testConfig));
     }
 
     @Test
