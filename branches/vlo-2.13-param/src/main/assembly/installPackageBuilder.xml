@@ -86,7 +86,7 @@
             </includes>
             <outputDirectory>bin</outputDirectory>
         </fileSet>
-<!-- VLO WAR FILE -->
+<!-- WEB APPLICATION -->
         <!-- WAR FILE -->
         <fileSet>
             <directory>vlo_web_app/target</directory>
@@ -102,9 +102,9 @@
                 <include>VloConfig.xml</include>
             </includes>
             <outputDirectory>config</outputDirectory>
-        </fileSet>
+        </fileSet> 
 
-<!-- SOLR -->
+<!-- SOLR SERVER -->
         <!-- SOLR WAR FILE -->
         <fileSet>
             <directory>vlo_solr/target</directory>

@@ -373,10 +373,13 @@ public class MetadataImporter {
      * @param args
      * @throws IOException
      */
-    public static void main(String[] args) throws MalformedURLException, IOException {
+    public static void main(String[] args) throws MalformedURLException, IOException { 
 
         // application configuration
         VloConfig config;
+        
+        // path to the configuration file
+        String configFile = null;
         
         // use the Apache cli framework for getting command line parameters
         Options options = new Options();
@@ -395,37 +398,50 @@ public class MetadataImporter {
             if (cmd.hasOption("c")) {
                 
                 // the "c" option was specified, now get its value
-                String fileName;
-                fileName = cmd.getOptionValue("c");
-                
-                // optionally, check for file existence here
-                
-                // read the configuration from the externally supplied file
-                VloConfig.readConfig(fileName);
-
-                // optionally, modify the configuration here
-                
-                // create and start the importer
-                MetadataImporter importer = new MetadataImporter();
-                importer.startImport();
-                
-                // finished importing
-                
-                if (VloConfig.printMapping()) {
-                    File file = new File("xsdMapping.txt");
-                    FacetMappingFactory.printMapping(file);
-                    LOG.info("Printed facetMapping in " + file);
-                }
+                configFile = cmd.getOptionValue("c");
             }
 
         } catch (org.apache.commons.cli.ParseException ex) {
             
-            // caught an exception caused by command line parsing
-            
+            /**
+             * Caught an exception caused by command line parsing. Try to get
+             * the name of the configuration file by querying the system
+             * property.
+             */
+
             String message = "Command line parsing failed. " + ex.getMessage();
-                   
             LOG.error(message);
             System.err.println(message);
+            
+            String key;
+            key = "configFile";
+            configFile = System.getProperty(key);
+        }
+            
+        if (configFile == null) {
+            
+            String message;
+            
+            message = "Could not get filename as system property either.";
+            LOG.error(message);
+            System.err.println(message);
+        } else {
+            // read the configuration from the externally supplied file
+            VloConfig.readConfig(configFile);
+
+            // optionally, modify the configuration here
+
+            // create and start the importer
+            MetadataImporter importer = new MetadataImporter();
+            importer.startImport();
+
+            // finished importing
+
+            if (VloConfig.printMapping()) {
+                File file = new File("xsdMapping.txt");
+                FacetMappingFactory.printMapping(file);
+                LOG.info("Printed facetMapping in " + file);
+            }
         }
     }
 }
