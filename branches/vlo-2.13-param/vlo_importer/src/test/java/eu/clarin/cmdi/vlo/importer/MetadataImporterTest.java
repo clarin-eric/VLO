@@ -234,20 +234,7 @@ public class MetadataImporterTest extends ImporterTestcase {
 
     private List<SolrInputDocument> importData(File rootFile) throws MalformedURLException {
         final List<SolrInputDocument> result = new ArrayList<SolrInputDocument>();
-        
-        /**
-         * Problem: at the moment the readTestConfig method is not prepared for
-         * a message from the importer. May rename readTestConfig to
-         * readWebAppTestConfig, so that we have space for a
-         * readImporterTestConfig also.
-         * 
-         * The best thing would be to have a directory for testing inside the
-         * package. You can always use an external configuration file for more
-         * elaborate testing.test directory inside the package.
-         */
-
-        // testConfig = VloConfig.readTestConfig(fileName);
-        
+                
         VloConfig.readPackagedConfig();
         
         // make specific changes to the configuration
