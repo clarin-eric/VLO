@@ -114,7 +114,7 @@ public class MetadataImporter {
         long start = System.currentTimeMillis();
         try {
             // Delete the whole Solr db
-            if (VloConfig.isDeleteAllFirst()) {
+            if (VloConfig.deleteAllFirst()) {
                 LOG.info("Deleting original data...");
                 solrServer.deleteByQuery("*:*");
                 solrServer.commit();
@@ -411,7 +411,7 @@ public class MetadataImporter {
                 
                 // finished importing
                 
-                if (VloConfig.isPrintMapping()) {
+                if (VloConfig.printMapping()) {
                     File file = new File("xsdMapping.txt");
                     FacetMappingFactory.printMapping(file);
                     LOG.info("Printed facetMapping in " + file);

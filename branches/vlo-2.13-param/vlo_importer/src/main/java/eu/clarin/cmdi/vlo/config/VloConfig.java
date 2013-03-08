@@ -273,6 +273,18 @@ public class VloConfig extends ConfigFromFile {
     }
 
     /**
+     * Get the value of the deleteAllFirst parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public static boolean deleteAllFirst() {
+        return deleteAllFirst;
+    }
+
+        /**
      * Set the value of the deleteAllFirst parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
@@ -285,17 +297,17 @@ public class VloConfig extends ConfigFromFile {
     }
 
     /**
-     * Get the value of the deleteAllFirst parameter<br><br>
+     * Get the value of the printMapping parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
      * @return the value
      */
-    public static boolean isDeleteAllFirst() {
-        return deleteAllFirst;
+    public static boolean printMapping() {
+        return printMapping;
     }
-
+    
     /**
      * Set the value of the printMapping parameter<br><br>
      *
@@ -308,18 +320,6 @@ public class VloConfig extends ConfigFromFile {
         printMapping = param;
     }
 
-    /**
-     * Get the value of the printMapping parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @return the value
-     */
-    public static boolean isPrintMapping() {
-        return printMapping;
-    }
-    
     /**
      * Get the value of the VloHomeLink parameter<br><br>
      *

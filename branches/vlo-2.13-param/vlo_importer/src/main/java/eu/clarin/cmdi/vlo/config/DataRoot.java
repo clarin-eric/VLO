@@ -6,12 +6,73 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 /**
- * Description of the location from which the ingester collects meta data.
+ * Description of the location from which the importer collects meta data.
  * 
  * @author keeloo
  */
 @Root // Simple directive 
-public class DataRoot {
+public class DataRoot extends Object {
+    
+    /**
+     * Constructor method
+     */
+    public DataRoot (){
+    }
+    
+    /**
+     * Constructor method
+     * 
+     * @param originName
+     * @param rootFile
+     * @param prefix
+     * @param toStrip
+     * @param deleteFirst 
+     */
+    public DataRoot(String originName, File rootFile, String prefix, String toStrip, Boolean deleteFirst) {
+        this.originName = originName;
+        this.rootFile = rootFile;
+        this.prefix = prefix;
+        this.tostrip = toStrip;
+        this.deleteFirst = deleteFirst;
+    }
+    
+    /**
+     *
+     * @param dataRoot
+     * @return
+     */
+    @Override
+    public boolean equals (Object object){
+        boolean equal = false;
+        
+        if (object == null) {
+            // define this object to be different from nothing
+        } else {
+            if (! (object instanceof DataRoot)) {
+                // the object is not a DataRoot, define it not to be equal 
+            } else {
+                equal = this.originName.equals(((DataRoot) object).originName);
+                equal = this.rootFile.equals(((DataRoot) object).rootFile) && equal;
+                equal = this.prefix.equals(((DataRoot) object).prefix) && equal;
+                equal = this.tostrip.equals(((DataRoot) object).tostrip) && equal;
+
+                equal = this.deleteFirst == ((DataRoot) object).deleteFirst && equal;
+            }
+        }
+        
+        return equal;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + (this.originName != null ? this.originName.hashCode() : 0);
+        hash = 29 * hash + (this.rootFile != null ? this.rootFile.hashCode() : 0);
+        hash = 29 * hash + (this.prefix != null ? this.prefix.hashCode() : 0);
+        hash = 29 * hash + (this.tostrip != null ? this.tostrip.hashCode() : 0);
+        hash = 29 * hash + (this.deleteFirst ? 1 : 0);
+        return hash;
+    }
 
     /**
      * Label of the data root. For example 
@@ -23,16 +84,16 @@ public class DataRoot {
      * "LRT Inventory"
      * 
      * The originName label can be used to reference the records the
-     * ingester has submitted to the SOLR server.
+     * importer has submitted to the SOLR server.
      */
     @Element // Simple directive
     private String originName;
  
     /**
-     * Meta data to be ingested. The rootFile can take the form of a root CMDI
-     * file, a file for which the ingester will follow the links defined in it.
-     * It can also be a directory with .xml and or .cmdi files to be ingested.
-     * The ingester will process the directories recursively.
+     * Meta data to be imported. The rootFile can take the form of a root CMDI
+     * file, a file for which the importer will follow the links defined in it.
+     * It can also be a directory with .xml and or .cmdi files to be imported.
+     * The importer will process the directories recursively.
      *    
      * Example:
      *
@@ -57,7 +118,7 @@ public class DataRoot {
      * http://catalog.clarin.eu/
      * 
      * If you remove toStrip from rootFile, and append the result to the prefix,
-     * you get the URL at which the ingester looks for files. In the case of the
+     * you get the URL at which the importer looks for files. In the case of the
      * examples this would be the result: 
      * 
      * http://catalog.clarin.eu/oai-harvester/mpi-self-harvest/harvested/results/cmdi/
@@ -72,11 +133,6 @@ public class DataRoot {
      */
     @Element
     private boolean deleteFirst = false;
-    
-    
-    /**
-     * Remove the get and set methods declared below one by one.
-     */
 
     public String getPrefix() {
         return prefix;
