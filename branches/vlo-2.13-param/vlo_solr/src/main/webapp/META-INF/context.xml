@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- Solr context file
 
-solr/home : the directory in which the solr server will store it's data
+<!-- Solr server context file
+
+path : solr server context path. If u is the url of the web server, the solr
+server will be reachable at u/path
+
+solr/home : the top level directory which is created on unpacking the solr 
+server war file. The solr server will store it's data in the tree starting at 
+this directory.
 
 Please refer to http://wiki.apache.org/solr for more information on how the 
-solr server should be configured. The war should be unpacked in the docBase
-directory.
+solr server should be configured.  
 
 -->
+
+
 
 <Context path="/vlo_solr" debug="0" crossContext="true">
   <Environment name="solr/home" 

@@ -9,28 +9,23 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 import org.slf4j.LoggerFactory;
 
-
-    /**
-
-     */
-
 /**
  * VLO configuration<br><br>
  * 
  * The annotated members in this class are the parameters by means of which
- * you can configure a VLO application like for example the VLO importer or
- * the VLO web application.
+ * you can configure a VLO application.
  * 
- * A member is annotated by prepending {@literal @element}. When the VloConfig 
- * class is reflected into the Simple framework, the framework will assign the 
- * values it finds in the VloConfig.xml file to the members in the VloConfig 
- * class. 
+ * A member is annotated by prepending {@literal @element} to it. When the 
+ * VloConfig class is reflected into the Simple framework, the framework will
+ * assign the values it finds in the {@literal VloConfig.xml} file to the 
+ * members in the VloConfig class.
  * 
  * Whenever you need to add a parameter the VLO configuration, add a member 
  * with the appropriate name and type, and prepend an at sign to the 
  * declaration, like this:
  * 
- * {@literal @element}<br> {@literal parameterMember}<br><br>
+ * {@literal @element}<br><br> 
+ * {@literal parameterMember}<br><br>
  * 
  * The XML should in this case contain a definition like
  * 
@@ -39,7 +34,7 @@ import org.slf4j.LoggerFactory;
  *
  * If you want to add a type of member that is not included in VloConfig class 
  * yet, or if you are looking for more information on the framework, please 
- * refer to <url> <br><br> 
+ * refer to VLO documentation.<br><br> 
  * 
  * In the VloConfig class, the parameters are stored statically. This means that
  * after 
@@ -50,23 +45,8 @@ import org.slf4j.LoggerFactory;
  * 
  * {@literal WebAppConfig.getSomeParameter();}<br><br>
  *
- * in any scope, also the scope from which the read message was send.
- * 
- * 
- * 
- * Move the following remarks to a general remark in the class description, a
- * remark indicating what you could do if you do not want to use the packaged
- * configuration.
- * 
- * 
- * Here, modifications of the parameters inspired on the difference
- * in context can be made.
- *
- * A web application can serve as a typical example of a difference in context:
- * the application itself runs in a web server container, while the tests
- * associated with the web application will be run outside this container. *
- *
- * 
+ * in any scope, also a scope different from the one in which the read message
+ * was send. 
  *
  * Through the get and set methods, the application is indifferent to the origin
  * of a parameter: you can get and set the value of a parameter without having
@@ -284,7 +264,7 @@ public class VloConfig extends ConfigFromFile {
         return deleteAllFirst;
     }
 
-        /**
+    /**
      * Set the value of the deleteAllFirst parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
@@ -362,7 +342,7 @@ public class VloConfig extends ConfigFromFile {
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param url the parameter
+     * @param url the value
      */
     public static void setSolrUrl(String param) {
         solrUrl = param;

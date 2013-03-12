@@ -6,8 +6,18 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 /**
- * Description of the location from which the importer collects meta data.
+ * A dataRoot describes the met data sources.
  * 
+ * In an XML file, a dataRoot is reflected like this:<br><br>
+ * 
+ * {@literal <DataRoot>} 
+ *      {@literal<originName>}name{@literal</originName>}
+ *      {@literal<rootFile>}topLevelMetadataDirectory/{@literal</rootFile>}
+ *      {@literal<prefix>}startOfUrl{@literal</prefix>}
+ *      {@literal<tostrip>}leftPartOfRootFile{@literal</tostrip>}
+ *      {@literal<deleteFirst>}falseOrTrue{@literal</deleteFirst>}
+ * {@literal</DataRoot>}
+ *  
  * @author keeloo
  */
 @Root // Simple directive 
@@ -22,10 +32,11 @@ public class DataRoot extends Object {
     /**
      * Constructor method
      * 
-     * @param originName
-     * @param rootFile
-     * @param prefix
-     * @param toStrip
+     * @param originName name describing the meta data
+     * @param rootFile top level directory in which the meta data is stored
+     * @param prefix left part of the rootFile
+     * @param toStrip if you want to create the URL to the meta data, this is 
+     * the part to be removed from the rootFile
      * @param deleteFirst 
      */
     public DataRoot(String originName, File rootFile, String prefix, String toStrip, Boolean deleteFirst) {
@@ -37,9 +48,10 @@ public class DataRoot extends Object {
     }
     
     /**
-     *
+     * Test for equality of the object itself and the object passed to it
+     * 
      * @param dataRoot
-     * @return
+     * @return true if the object equals this, false otherwise
      */
     @Override
     public boolean equals (Object object){
@@ -63,6 +75,11 @@ public class DataRoot extends Object {
         return equal;
     }
 
+    /**
+     * Generate by the ide
+     * 
+     * @return hash code
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -75,31 +92,13 @@ public class DataRoot extends Object {
     }
 
     /**
-     * Label of the data root. For example 
-     * 
-     * "MPI CMDIfied IMDI archive"
-     * 
-     * or 
-     * 
-     * "LRT Inventory"
-     * 
-     * The originName label can be used to reference the records the
-     * importer has submitted to the SOLR server.
+     * name describing the meta data
      */
     @Element // Simple directive
     private String originName;
  
     /**
-     * Meta data to be imported. The rootFile can take the form of a root CMDI
-     * file, a file for which the importer will follow the links defined in it.
-     * It can also be a directory with .xml and or .cmdi files to be imported.
-     * The importer will process the directories recursively.
-     *    
-     * Example:
-     *
-     * /lat/apache/htdocs/oai-harvester/mpi-self-harvest/harvested/results/cmdi/
-     * 
-     * Normally, rootFile resides under a web server.
+     * top level directory in which the meta data is stored
      */
     @Element
     private File rootFile;
@@ -113,64 +112,142 @@ public class DataRoot extends Object {
     private String prefix;
 
     /**
-     * Filesystem equivalent of the prefix. For example:
-     * 
-     * http://catalog.clarin.eu/
-     * 
-     * If you remove toStrip from rootFile, and append the result to the prefix,
-     * you get the URL at which the importer looks for files. In the case of the
-     * examples this would be the result: 
-     * 
-     * http://catalog.clarin.eu/oai-harvester/mpi-self-harvest/harvested/results/cmdi/
+     * Left part of the rootFile 
+     *
+     * By first removing {@literal tostrip} from {@literal rootFile} and then
+     * append the result of that operation to the {@literal prefix} you obtain
+     * the URL to the meta data.
      */
     @Element
-    private String tostrip; // refactor this to toStrip
+    private String tostrip;
     
     /**
-     * Flag to signal the removal of records SOLR server. This flag overrides
-     * the flag in the VLOConfig class. The deleteFirst flag controls the
+     * Flag to signal the removal of records from the Solr server
+     * 
+     * The value of this flag overrides the value defined in the {@lieteral 
+     * VloConfig.xml} file. With the deleteFirst flag you can control the 
      * removal of the records originating from originName.
      */
     @Element
     private boolean deleteFirst = false;
 
+    /**
+     * Get the value of the prefix element<br><br>
+     *
+     * For a description of the element, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
     public String getPrefix() {
         return prefix;
     }
 
+    /**
+     * Set the value of the prefix element<br><br>
+     *
+     * For a description of the element, refer to the general VLO
+     * documentation.
+     *
+     * @param prefix the value
+     */
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
 
-    public String getTostrip() {
+    /**
+     * Get the value of the {@literal tostrip} element<br><br>
+     *
+     * For a description of the element, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public String getToStrip() {
         return tostrip;
     }
 
+    /**
+     * Set the value of the {@literal tostrip} element<br><br>
+     *
+     * For a description of the element, refer to the general VLO
+     * documentation.
+     *
+     * @param tostrip the value
+     */
     public void setTostrip(String tostrip) {
         this.tostrip = tostrip;
     }
 
+    /**
+     * Get the value of the originName element<br><br>
+     *
+     * For a description of the element, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */    
     public String getOriginName() {
         return originName;
     }
 
+    /**
+     * Set the value of the originName element<br><br>
+     *
+     * For a description of the element, refer to the general VLO
+     * documentation.
+     *
+     * @param originName the value
+     */    
     public void setOriginName(String originName) {
         this.originName = originName;
     }
 
+    /**
+     * Get the value of the rootFile element<br><br>
+     *
+     * For a description of the element, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */    
     public File getRootFile() {
         return rootFile;
     }
 
+    /**
+     * Set the value of the rootFile element<br><br>
+     *
+     * For a description of the element, refer to the general VLO
+     * documentation.
+     *
+     * @param rootFile the value
+     */    
     public void setRootFile(File rootFile) {
         this.rootFile = rootFile;
     }
 
+    /**
+     * Set the value of the deleteFirst element<br><br>
+     *
+     * For a description of the element, refer to the general VLO
+     * documentation.
+     *
+     * @param deleteFirst the value
+     */    
     public void setDeleteFirst(boolean deleteFirst) {
         this.deleteFirst = deleteFirst;
     }
 
-    public boolean isDeleteFirst() {
+    /**
+     * Get the value of the deleteFirst element<br><br>
+     *
+     * For a description of the element, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */    
+    public boolean deleteFirst() {
         return deleteFirst;
     }
 }

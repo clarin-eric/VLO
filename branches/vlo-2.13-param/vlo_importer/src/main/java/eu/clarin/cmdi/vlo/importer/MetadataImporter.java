@@ -122,7 +122,7 @@ public class MetadataImporter {
             }
             for (DataRoot dataRoot : dataRoots) {
                 LOG.info("Start of processing: " + dataRoot.getOriginName());
-                if (dataRoot.isDeleteFirst()) {
+                if (dataRoot.deleteFirst()) {
                     LOG.info("Deleting data for data provider: " + dataRoot.getOriginName());
                     solrServer.deleteByQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
                     LOG.info("Deleting data of provider done.");
@@ -290,7 +290,7 @@ public class MetadataImporter {
         //System.out.println(dataOrigin.getTostrip());
         //System.out.println(dataOrigin.getTostrip().length());
         //System.out.println(file.getAbsolutePath());
-        metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getTostrip().length());
+        metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getToStrip().length());
 
         solrDocument.addField(FacetConstants.FIELD_COMPLETE_METADATA, metadataSourceUrl);
         
@@ -412,19 +412,27 @@ public class MetadataImporter {
             String message = "Command line parsing failed. " + ex.getMessage();
             LOG.error(message);
             System.err.println(message);
+        }
+        
+        if (configFile == null){
+
+            String message;
+
+            message = "Could not get configuration file name via the command line.";
+            LOG.error(message);
             
             String key;
+
             key = "configFile";
             configFile = System.getProperty(key);
         }
-            
+
         if (configFile == null) {
             
             String message;
             
-            message = "Could not get filename as system property either.";
+            message = "Could not get filename as system property either - stopping.";
             LOG.error(message);
-            System.err.println(message);
         } else {
             // read the configuration from the externally supplied file
             VloConfig.readConfig(configFile);
