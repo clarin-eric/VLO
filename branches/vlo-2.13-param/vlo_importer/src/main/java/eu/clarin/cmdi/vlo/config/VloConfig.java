@@ -157,6 +157,9 @@ public class VloConfig extends ConfigFromFile {
     @Element // directive for Simple
     private static boolean deleteAllFirst = false;
     
+    @Element 
+    private static int maxOnHeap = 1000;
+    
     @Element
     private static boolean printMapping = false;
     
@@ -236,12 +239,46 @@ public class VloConfig extends ConfigFromFile {
      * here without the need to make changes in different parts of the
      * application.
      */
+    
+    /**
+     * Get the value of the maxOnHeap parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public static int getMaxOnHeap (){
+        return maxOnHeap;
+    }
+    
+    
+    /**
+     * Set the value of the maxOnHeap parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public static void setMaxOnHeap (int param){
+        maxOnHeap = param;
+    }
+    
+    /**
+     * Get the list of dataRoots parameters<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
     public static List<DataRoot> getDataRoots() {
         return dataRoots;
     }
     
     /**
-     * Set the value of the dataRoots parameter<br><br>
+     * Set the value of a list of dataRoots parameters<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.

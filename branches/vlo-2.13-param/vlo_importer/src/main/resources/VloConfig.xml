@@ -2,6 +2,8 @@
    
     <deleteAllFirst>false</deleteAllFirst>
     
+    <maxOnHeap>500</maxOnHeap>
+    
     <printMapping>false</printMapping>
     
     <dataRoots>

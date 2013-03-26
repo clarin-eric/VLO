@@ -300,7 +300,7 @@ public class MetadataImporter {
         
         addResourceData(solrDocument, cmdiData);
         docs.add(solrDocument);
-        if (docs.size() == 1000) {
+        if (docs.size() == VloConfig.getMaxOnHeap()) {
             sendDocs();
         }
     }
