@@ -235,9 +235,7 @@ public class MetadataImporterTest extends ImporterTestcase {
     private List<SolrInputDocument> importData(File rootFile) throws MalformedURLException {
         final List<SolrInputDocument> result = new ArrayList<SolrInputDocument>();
                 
-        VloConfig.readPackagedConfig();
-        
-        // make specific changes to the configuration
+        // read configuration in ImporterTestCase.setup; change it now
         
         modifyConfig(rootFile);
         

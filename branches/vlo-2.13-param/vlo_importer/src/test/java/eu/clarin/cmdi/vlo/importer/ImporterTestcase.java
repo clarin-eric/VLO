@@ -1,9 +1,8 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.File;
 import java.io.IOException;
-
-import eu.clarin.cmdi.vlo.config.VloConfig;
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

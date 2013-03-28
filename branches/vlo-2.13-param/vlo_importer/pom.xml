@@ -7,7 +7,9 @@
 
     <groupId>eu.clarin.cmdi</groupId>
 
-    <artifactId>vlo</artifactId>
+    <artifactId>vlo</artifactId> <!-- kj: change this to vlo_importer on 
+
+    splitoff from base, the base could have vlo as its identity -->
 
     <packaging>jar</packaging>
 
