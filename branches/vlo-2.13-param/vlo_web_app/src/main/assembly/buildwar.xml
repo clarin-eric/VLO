@@ -21,7 +21,6 @@
     <files>
         <file>
             <source>${basedir}/target/${artifactId}-${version}.war</source>
-            <!-- kj: removed this also <outputDirectory>app</outputDirectory> -->
             <destName>${artifactId}-${version}.war</destName>
         </file>
     </files>
