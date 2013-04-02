@@ -1,0 +1,48 @@
+This file is generated on Mar 8, 2013 1:59:24 PM and only used to document the mapping.
+This file contains xsd name and a list of conceptName with xpath mappings that are generated.
+---------------------
+http://www.openarchives.org/OAI/2.0/oai_dc.xsd
+FacetName:id
+Mappings:
+    /c:CMD/c:Header/c:MdSelfLink/text()
+FacetName:collection
+Mappings:
+    /c:CMD/c:Header/c:MdCollectionDisplayName/text()
+FacetName:name
+Mappings:
+    /c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceName/text()
+FacetName:country
+Mappings:
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:spatial[@dcterms-type="ISO3166"]/text()
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:coverage[@dcterms-type="ISO3166"]/text()
+FacetName:language
+Mappings:
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:language/@olac-language
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-language
+    /c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()
+FacetName:languages
+Mappings:
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:language/@olac-language
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-language
+    /c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()
+FacetName:genre
+Mappings:
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/@olac-linguistic-type
+FacetName:subject
+Mappings:
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-linguistic-field
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject[@dcterms-type="LCSH"]/text()
+FacetName:resourceType
+Mappings:
+    /c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceType/text()
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/text()
+FacetName:nationalProject
+Mappings:
+    /c:CMD/c:Header/c:MdCollectionDisplayName/text()
+FacetName:text
+Mappings:
+    /c:CMD//text()
+FacetName:_componentProfile
+Mappings:
+    /c:CMD/c:Header/c:MdProfile/text()
+---------------------

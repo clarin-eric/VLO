@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly>
+    <id>importer</id> <!-- name of the jar that needs to be assembled -->
+    <formats>
+        <format>jar</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <!-- classes: end up in packages -->
+        <fileSet>
+            <directory>target/classes</directory>
+            <includes>
+                <include>**/*.*</include>
+            </includes>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+
+        <!-- resources: end up in the default package -->
+        <fileSet>
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>**/*.*</include>
+            </includes>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+
+    </fileSets>
+
+    <dependencySets>
+        <dependencySet>
+            <includes>
+                <include>*</include>
+            </includes>
+            <outputDirectory>/</outputDirectory>
+            <unpack>true</unpack>
+        </dependencySet>
+    </dependencySets>
+
+</assembly>

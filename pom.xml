@@ -1,26 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                       
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
+    
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo_parent</artifactId>
-    <name>Virtual Language Observatory (parent pom)</name>
+    <name>Virtual Language Observatory</name>
     <packaging>pom</packaging>
+    
     <!-- When updating the version number here, also update the version number
-    in the module's pom.xml -->
-    <version>2.12</version>
-    <description>Parent pom for the whole vlo project (in order to be able to do fancy packaging.</description>
+         in each module's pom.xml
+    -->
+    <version>2.13</version>
+    
+    <description>Virtual Language Observatory (VLO) parent project</description>
 
-    <parent>
-        <groupId>nl.mpi</groupId>
-        <artifactId>parent</artifactId>
-        <version>1.2</version>
-    </parent>
+    <!--    maybe this was the culprit
+        <parent>
+            <groupId>nl.mpi</groupId>
+            <artifactId>parent</artifactId>
+            <version>1.2</version>
+        </parent>
+    -->
 
     <modules>
         <module>vlo_solr</module>
-        <module>vlo_webapp</module>
+        <module>vlo_web_app</module>
+        <module>vlo_importer</module>
     </modules>
 
     <properties>
@@ -50,4 +60,3 @@
         </plugins>
     </build>
 </project>
-
