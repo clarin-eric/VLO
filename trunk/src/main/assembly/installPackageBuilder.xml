@@ -19,15 +19,7 @@
     </formats>
     <includeBaseDirectory>true</includeBaseDirectory>
     <fileSets>
-<!-- COOL SCRIPT FOR Application management -->
-        <fileSet>
-            <directory>src/main/resources</directory>
-            <includes>
-                <include>setvalues.pl</include>
-            </includes>
-            <fileMode>777</fileMode>
-            <outputDirectory>.</outputDirectory>
-        </fileSet>
+
 <!-- DOCS -->
         <fileSet>
             <directory>docs</directory>
@@ -37,7 +29,7 @@
             <outputDirectory>doc</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>vlo_webapp</directory>
+            <directory>vlo_web_app</directory>
             <includes>
                 <include>CHANGES</include>
                 <include>DEPLOY-README</include>
@@ -61,7 +53,7 @@
 <!-- IMPORTER -->
         <!-- Jar File -->
         <fileSet>
-            <directory>vlo_webapp/target</directory>
+            <directory>vlo_importer/target</directory>
             <includes>
                 <include>*.jar</include>
             </includes>
@@ -69,7 +61,7 @@
         </fileSet>
         <!-- run script -->
         <fileSet>
-            <directory>vlo_webapp/src/main/bin</directory>
+            <directory>vlo_importer/src/main/bin</directory>
             <includes>
                 <include>*.sh</include>
             </includes>
@@ -78,25 +70,26 @@
         </fileSet>
         <!-- config files -->
         <fileSet>
-            <directory>vlo_webapp/src/main/bin</directory>
+            <directory>vlo_importer/src/main/bin</directory>
             <includes>
                 <include>*.properties</include>
             </includes>
             <outputDirectory>bin</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>vlo_webapp/src/main/resources</directory>
+            <directory>vlo_importer/src/main/resources</directory>
             <includes>
-                <include>importerConfig.xml</include>
-                <include>application.properties</include>
+                <include>cmdi2xhtml.xsl</include>
+                <include>facetConcepts.xml</include>
                 <include>nationalProjectsMapping.xml</include>
+                <include>VloConfig.xml</include>
             </includes>
             <outputDirectory>bin</outputDirectory>
         </fileSet>
-<!-- VLO WAR FILE -->
+<!-- WEB APPLICATION -->
         <!-- WAR FILE -->
         <fileSet>
-            <directory>vlo_webapp/target</directory>
+            <directory>vlo_web_app/target</directory>
             <includes>
                 <include>*.war</include>
             </includes>
@@ -104,14 +97,14 @@
         </fileSet>
         <!-- config -->
         <fileSet>
-            <directory>vlo_webapp/src/main/resources</directory>
+            <directory>vlo_web_app/src/main/resources</directory>
             <includes>
-                <include>contextfragment.xml</include>
+                <include>VloConfig.xml</include>
             </includes>
             <outputDirectory>config</outputDirectory>
-        </fileSet>
+        </fileSet> 
 
-<!-- SOLR -->
+<!-- SOLR SERVER -->
         <!-- SOLR WAR FILE -->
         <fileSet>
             <directory>vlo_solr/target</directory>
