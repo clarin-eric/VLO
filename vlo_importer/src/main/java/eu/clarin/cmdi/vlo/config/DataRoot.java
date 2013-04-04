@@ -6,7 +6,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 /**
- * A dataRoot describes the met data sources.
+ * A dataRoot describes the meta data sources.
  * 
  * In an XML file, a dataRoot is reflected like this:<br><br>
  * 

@@ -398,7 +398,7 @@ public class VloConfigTest {
         
         System.out.println("getNationalProjectMapping");
         
-        String expResult = "nationalProjectsMapping.xml";
+        String expResult = "/nationalProjectsMapping.xml";
         String result = VloConfig.getNationalProjectMapping();
         
         assertEquals(expResult, result);
