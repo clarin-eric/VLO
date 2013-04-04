@@ -29,6 +29,7 @@ public class FacetConstants {
     public static final String FIELD_RESOURCE = "_resourceRef";
     public static final String FIELD_CLARIN_PROFILE = "_componentProfile";
     public static final String FIELD_SEARCH_SERVICE = "_contentSearchRef";
+    public static final String FIELD_LANDINGPAGE = "_landingPageRef";
     
     // PREFIX URL for the language-link
     public static final String LANGUAGE_LINK_PREFIX = "http://www.clarin.eu/external/language.php?code=";

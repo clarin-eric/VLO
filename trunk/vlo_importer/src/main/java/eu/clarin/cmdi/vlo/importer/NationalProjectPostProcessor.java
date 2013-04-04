@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.importer;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
@@ -60,13 +61,31 @@ public class NationalProjectPostProcessor extends LanguageCodePostProcessor {
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             domFactory.setNamespaceAware(true);
 
-            File mappingFile = new File(mappingFileName);
-            if(!mappingFile.exists()) {		// mapping file not accessible?
-            	LOG.info("National project mapping file does not exist - using minimal test file.");
-            	mappingFile = createMinimalMappingFile();
-            }
             DocumentBuilder builder = domFactory.newDocumentBuilder();
-            Document doc = builder.parse(mappingFile);
+            Document doc;
+
+            // File mappingFile = new File(mappingFileName);
+
+            // first, try to open the packaged mapping file
+            InputStream mappingFileAsStream;
+            mappingFileAsStream = NationalProjectPostProcessor.class.getResourceAsStream(mappingFileName);
+
+            if (mappingFileAsStream != null) {
+                doc = builder.parse(mappingFileAsStream);
+            } else {
+
+                // the resource cannot be found inside the package, try outside
+                File mappingAsFile;
+
+                mappingAsFile = new File(mappingFileName);
+
+                if (mappingAsFile == null) {
+                    LOG.info("National project mapping file does not exist - using minimal test file.");
+                    mappingAsFile = createMinimalMappingFile();
+                }
+                doc = builder.parse(mappingAsFile);
+            }
+         
             XPath xpath = XPathFactory.newInstance().newXPath();
             NodeList nodeList = (NodeList) xpath.evaluate("//nationalProjectMapping", doc, XPathConstants.NODESET);
             for (int i = 1; i <= nodeList.getLength(); i++) {

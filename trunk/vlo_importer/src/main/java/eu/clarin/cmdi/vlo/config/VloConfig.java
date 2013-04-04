@@ -139,6 +139,9 @@ public class VloConfig extends ConfigFromFile {
             // the configuration is not there yet; create it now
             config = new VloConfig();
         }
+        
+        // set lists to null because otherwise Simple will not overwrite it
+        dataRoots = null;
 
         // get the XML file configuration from the file
         read(fileName, config);

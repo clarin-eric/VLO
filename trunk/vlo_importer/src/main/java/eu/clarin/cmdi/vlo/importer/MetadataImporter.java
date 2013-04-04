@@ -293,10 +293,16 @@ public class MetadataImporter {
         metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getToStrip().length());
 
         solrDocument.addField(FacetConstants.FIELD_COMPLETE_METADATA, metadataSourceUrl);
-        
+
         // add SearchServices (should be CQL endpoint)
-        for(Resource resource : cmdiData.getSearchResources())
-        	solrDocument.addField(FacetConstants.FIELD_SEARCH_SERVICE, resource.getResourceName());        
+        for (Resource resource : cmdiData.getSearchResources()) {
+            solrDocument.addField(FacetConstants.FIELD_SEARCH_SERVICE, resource.getResourceName());
+        }
+
+        // add landing page resource
+        for (Resource resource : cmdiData.getLandingPageResources()) {
+            solrDocument.addField(FacetConstants.FIELD_LANDINGPAGE, resource.getResourceName());
+        }
         
         addResourceData(solrDocument, cmdiData);
         docs.add(solrDocument);
@@ -418,8 +424,8 @@ public class MetadataImporter {
 
             String message;
 
-            message = "Could not get configuration file name via the command line.";
-            LOG.error(message);
+            message = "Could not get config file name via the command line, trying the system properties.";
+            LOG.info(message);
             
             String key;
 

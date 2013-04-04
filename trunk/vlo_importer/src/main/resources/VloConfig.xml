@@ -1,4 +1,4 @@
-<webAppConfig>
+<VloConfig>
    
     <deleteAllFirst>false</deleteAllFirst>
     
@@ -6,7 +6,7 @@
     
     <printMapping>false</printMapping>
     
-    <dataRoots>
+    <dataRoots length="3">
         <DataRoot>
             <originName>MPI IMDI Archive</originName>
             <rootFile>/lat/apache/htdocs/oai-harvester/mpi-self-harvest/harvested/results/cmdi/</rootFile>            
@@ -44,7 +44,7 @@
     
     <imdiBrowserUrl>http://corpus1.mpi.nl/ds/imdi_browser?openpath=</imdiBrowserUrl>
     
-    <nationalProjectMapping>nationalProjectsMapping.xml</nationalProjectMapping>
+    <nationalProjectMapping>/nationalProjectsMapping.xml</nationalProjectMapping>
     
     <facetFields length="10">
         <facetField>collection</facetField>
@@ -68,4 +68,4 @@
     <silToISO639CodesUrl>http://www.clarin.eu/cmd/xslt/sil_to_iso6393.xml</silToISO639CodesUrl>
     
     <FederatedContentSearchUrl>http://weblicht.sfs.uni-tuebingen.de/Aggregator/</FederatedContentSearchUrl>
-</webAppConfig>
+</VloConfig>

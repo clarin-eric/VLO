@@ -21,6 +21,9 @@ public class ResourceTypePostProcessor implements PostProcessor {
 		return result;
 	}
 
+        /*
+         * kj: mime type versus resource type
+         */
 	private Map<String, String> getResourceTypeMap() {
 		if (resourceTypeMap == null) {
 			resourceTypeMap = new HashMap<String, String>();

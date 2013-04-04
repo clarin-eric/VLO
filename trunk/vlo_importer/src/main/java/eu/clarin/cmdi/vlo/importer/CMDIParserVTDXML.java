@@ -21,7 +21,6 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private final Map<String, PostProcessor> postProcessors;
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
 
-
     public CMDIParserVTDXML(Map<String, PostProcessor> postProcessors) {
         this.postProcessors = postProcessors;
     }
@@ -98,21 +97,30 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         }
         return result;
     }
-
+    
+    /*
+     * kj: describe 
+     */
     private void processResources(CMDIData result, VTDNav nav) throws VTDException {
+        
         AutoPilot resourceProxy = new AutoPilot(nav);
         resourceProxy.selectXPath("/c:CMD/c:Resources/c:ResourceProxyList/c:ResourceProxy");
+        
         AutoPilot resourceRef = new AutoPilot(nav);
         resourceRef.selectXPath("c:ResourceRef");
         AutoPilot resourceType = new AutoPilot(nav);
         resourceType.selectXPath("c:ResourceType");
         AutoPilot resourceMimeType = new AutoPilot(nav);
         resourceMimeType.selectXPath("c:ResourceType/@mimetype");
+        
         while (resourceProxy.evalXPath() != -1) {
             String ref = resourceRef.evalXPathToString();
             String type = resourceType.evalXPathToString();
             String mimeType = resourceMimeType.evalXPathToString();
-            if (ref != "" && type != "") {
+            
+         // if (!ref.equals("") && !type.equals("")){
+            if (!ref.equals("")){
+                // mime type is allowed to be an empty string, kj: check if this is allowed in general
                 result.addResource(ref, type, mimeType);
             }
         }

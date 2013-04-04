@@ -3,7 +3,6 @@ package eu.clarin.cmdi.vlo.config;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.logging.Level;
 import org.simpleframework.xml.core.Persister;
 
 /**
@@ -135,7 +134,7 @@ public class ConfigFilePersister {
         
         Object object = null;
 
-        // try to resolve the absolute name of configuration file to a stream
+        // try to resolve the absolute name of the configuration file to a stream
         InputStream sourceAsStream;
         sourceAsStream = ConfigFilePersister.class.getResourceAsStream(fileName);
 
