@@ -59,6 +59,7 @@ import eu.clarin.cmdi.vlo.Resources;
 import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.DaoLocator;
+import java.util.Iterator;
 
 public class ShowResultPage extends BasePage {
 
@@ -85,6 +86,7 @@ public class ShowResultPage extends BasePage {
                 add(new Label("openBrowserLink", new ResourceModel(Resources.ORIGINAL_CONTEXT_NOT_AVAILABLE).getObject()));
             }
             addAttributesTable(solrDocument);
+            addLandingPageLinks(solrDocument);
             addResourceLinks(solrDocument);
             addSearchServiceForm(solrDocument);
             addCompleteCmdiView(solrDocument);
@@ -194,6 +196,31 @@ public class ShowResultPage extends BasePage {
         };
 
         return columns;
+    }
+    
+    @SuppressWarnings("serial")
+    private void addLandingPageLinks(SolrDocument solrDocument){
+        
+        RepeatingView repeatingView = new RepeatingView("landingPageList");
+        add(repeatingView);
+        
+        if (solrDocument.containsKey(FacetConstants.FIELD_LANDINGPAGE)) {
+            
+            Collection<Object> landingPages = solrDocument.getFieldValues(FacetConstants.FIELD_LANDINGPAGE);
+            for (Iterator<Object> it = landingPages.iterator(); it.hasNext();) {
+                final Object landingPage;
+                landingPage = it.next();
+
+                repeatingView.add(new AjaxLazyLoadPanel(repeatingView.newChildId()) {
+                    @Override
+                    public Component getLazyLoadComponent(String markupId) {
+                        String landingPageLink;
+                        landingPageLink = landingPage.toString();
+                        return new ResourceLinkPanel(markupId, "", landingPage.toString());
+                    }
+                });
+            }
+        }
     }
 
     @SuppressWarnings("serial")
