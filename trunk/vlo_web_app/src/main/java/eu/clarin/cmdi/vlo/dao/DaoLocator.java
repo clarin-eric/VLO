@@ -1,9 +1,7 @@
 package eu.clarin.cmdi.vlo.dao;
 
-import org.apache.wicket.RequestCycle;
-
 import eu.clarin.cmdi.vlo.VloWebApplication;
-
+import org.apache.wicket.RequestCycle;
 
 public final class DaoLocator {
 

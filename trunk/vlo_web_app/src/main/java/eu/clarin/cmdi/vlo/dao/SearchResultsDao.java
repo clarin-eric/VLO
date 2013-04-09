@@ -1,13 +1,11 @@
 package eu.clarin.cmdi.vlo.dao;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
 import java.util.List;
-
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
-
-import eu.clarin.cmdi.vlo.FacetConstants;
 
 public class SearchResultsDao extends SolrDao {
 
