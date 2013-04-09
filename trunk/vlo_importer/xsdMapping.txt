@@ -1,4 +1,4 @@
-This file is generated on Apr 4, 2013 2:14:56 PM and only used to document the mapping.
+This file is generated on Apr 8, 2013 3:38:24 PM and only used to document the mapping.
 This file contains xsd name and a list of conceptName with xpath mappings that are generated.
 ---------------------
 http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1349361150622/xsd
