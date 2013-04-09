@@ -175,15 +175,15 @@ img{
     padding-top: 3px;
 }
 
-.resourceItem { 
+.resultItem { 
      padding:0; 
      margin:0; 
 } 
-.resourceItem li {
+.resultItem li {
      list-style-type:none; 
 }
 
-.resourceItem img {
+.resultItem img {
      display:inline; 
      vertical-align:middle;
      padding-right:5px;
