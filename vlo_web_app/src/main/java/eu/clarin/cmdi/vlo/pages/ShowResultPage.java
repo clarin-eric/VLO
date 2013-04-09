@@ -1,5 +1,10 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.Resources;
+import eu.clarin.cmdi.vlo.StringUtils;
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.dao.DaoLocator;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -9,18 +14,16 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
-
 import javax.xml.transform.stream.StreamSource;
-
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XsltCompiler;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
-
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
@@ -54,13 +57,11 @@ import org.apache.wicket.resource.ContextRelativeResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.Resources;
-import eu.clarin.cmdi.vlo.StringUtils;
-import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.dao.DaoLocator;
-import java.util.Iterator;
-
+/**
+ * Page showing VLO search results
+ * 
+ * @author keeloo, for the addLandingPage links method
+ */
 public class ShowResultPage extends BasePage {
 
     private final static Logger LOG = LoggerFactory.getLogger(ShowResultPage.class);
@@ -69,7 +70,7 @@ public class ShowResultPage extends BasePage {
     
     private final static ImageResource FEEDBACK_IMAGE = new ImageResource(new ContextRelativeResource("Images/feedback.png"), "Report an Error");
     private final URL xslFile = getClass().getResource("/cmdi2xhtml.xsl");
-
+    
     @SuppressWarnings("serial")
     public ShowResultPage(final PageParameters parameters) {
         super(parameters);
@@ -198,27 +199,74 @@ public class ShowResultPage extends BasePage {
         return columns;
     }
     
+    /**
+     * Add links to landing pages to the results shown.<br><br>
+     * 
+     * Depending on the number of links to be shown, at most one of the labels
+     * in the accompanying HTML page that is subject to Wicket is made
+     * visible.<br><br>
+     *
+     * @param solrDocument the document to add the landing page links to
+     */
     @SuppressWarnings("serial")
-    private void addLandingPageLinks(SolrDocument solrDocument){
-        
+    private void addLandingPageLinks(SolrDocument solrDocument) {
+
+        // add the labels defined in the HTML page
+        Label oneLandingPageText;
+        oneLandingPageText = new Label("oneLandingPage", 
+                new ResourceModel(Resources.LANDING_PAGE).getObject() + ":");
+        this.add(oneLandingPageText);
+
+        Label moreLandingPagesText;
+        moreLandingPagesText = new Label("moreLandingPages", 
+                new ResourceModel(Resources.LANDING_PAGES).getObject() + ":");
+        this.add(moreLandingPagesText);
+
+        // also, add the list of links
         RepeatingView repeatingView = new RepeatingView("landingPageList");
         add(repeatingView);
-        
-        if (solrDocument.containsKey(FacetConstants.FIELD_LANDINGPAGE)) {
+
+        if (!solrDocument.containsKey(FacetConstants.FIELD_LANDINGPAGE)) {
             
-            Collection<Object> landingPages = solrDocument.getFieldValues(FacetConstants.FIELD_LANDINGPAGE);
+            /* Since there are no links to be shown, make both labels defined in
+             * the page invisible
+             */
+            oneLandingPageText.setVisible(false);
+            moreLandingPagesText.setVisible(false);
+        } else {
+            //  make one of the two labels invisible
+
+            Collection<Object> landingPages = 
+                    solrDocument.getFieldValues(FacetConstants.FIELD_LANDINGPAGE);
+            if (landingPages.size() > 1) {
+                
+                // the list will contain more than one landing page link
+                oneLandingPageText.setVisible(false);
+                moreLandingPagesText.setVisible(true);
+            } else {
+                // the list will contain exactly one landing page link.
+                oneLandingPageText.setVisible(true);
+                moreLandingPagesText.setVisible(false);
+            }
+            
+            // generate the list of links
             for (Iterator<Object> it = landingPages.iterator(); it.hasNext();) {
                 final Object landingPage;
                 landingPage = it.next();
 
-                repeatingView.add(new AjaxLazyLoadPanel(repeatingView.newChildId()) {
-                    @Override
-                    public Component getLazyLoadComponent(String markupId) {
-                        String landingPageLink;
-                        landingPageLink = landingPage.toString();
-                        return new ResourceLinkPanel(markupId, "", landingPage.toString());
-                    }
-                });
+                // keeloo: describe this
+                repeatingView.add(
+                        new AjaxLazyLoadPanel(repeatingView.newChildId()) {
+                            @Override
+                            public Component getLazyLoadComponent(String markupId) {
+                                String landingPageLink;
+                                landingPageLink = landingPage.toString();
+                                
+                                // create a landing page link panel
+                                return new LandingPageLinkPanel(markupId,
+                                        landingPage.toString());
+                            }
+                        });
             }
         }
     }
