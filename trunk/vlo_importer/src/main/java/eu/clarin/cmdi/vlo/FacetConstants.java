@@ -1,5 +1,7 @@
 package eu.clarin.cmdi.vlo;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
+
 /**
  * A bunch of important constants.
  * Constants for each facet, resource types and some urls.
@@ -31,8 +33,8 @@ public class FacetConstants {
     public static final String FIELD_SEARCH_SERVICE = "_contentSearchRef";
     public static final String FIELD_LANDINGPAGE = "_landingPageRef";
     
-    // PREFIX URL for the language-link
-    public static final String LANGUAGE_LINK_PREFIX = "http://www.clarin.eu/external/language.php?code=";
+    // PREFIX URL for the language-link    
+    public static final String LANGUAGE_LINK_PREFIX = VloConfig.getLanguageLinkPrefix();
 
     //Normalized mimeTypes
     public static final String RESOURCE_TYPE_AUDIO = "audio";

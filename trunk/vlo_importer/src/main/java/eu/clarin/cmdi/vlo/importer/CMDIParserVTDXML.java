@@ -98,9 +98,6 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         return result;
     }
     
-    /*
-     * kj: describe 
-     */
     private void processResources(CMDIData result, VTDNav nav) throws VTDException {
         
         AutoPilot resourceProxy = new AutoPilot(nav);
@@ -118,9 +115,8 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             String type = resourceType.evalXPathToString();
             String mimeType = resourceMimeType.evalXPathToString();
             
-         // if (!ref.equals("") && !type.equals("")){
-            if (!ref.equals("")){
-                // mime type is allowed to be an empty string, kj: check if this is allowed in general
+            if (!ref.equals("") && !type.equals("")) {
+                // note that the mime type could be empty
                 result.addResource(ref, type, mimeType);
             }
         }

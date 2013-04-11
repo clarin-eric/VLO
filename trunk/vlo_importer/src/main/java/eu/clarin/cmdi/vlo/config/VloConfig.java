@@ -190,6 +190,10 @@ public class VloConfig extends ConfigFromFile {
     @Element
     private static String imdiBrowserUrl = "";
     
+    @Element
+    private static String languageLinkPrefix = 
+            "http://infra.clarin.eu/service/language/info.php?code=";
+    
     /**
      * Note: the national project mapping itself is not part of the web
      * application configuration.
@@ -487,22 +491,11 @@ public class VloConfig extends ConfigFromFile {
     }
 
     /**
-     * Set the value of the IMDIBrowserUrl parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @param param the value
-     */
-    public static void setIMDIBrowserUrl(String param) {
-        imdiBrowserUrl = param;
-    }
-
-    /**
      * Get the value of the ProfileSchemaUrl parameter combined with a handle<br><br>
      *
      * For a description of the schema, refer to the general VLO documentation.
      *
+     * @param handle the handle the URL is based on
      * @return the value 
      */
     public static String getIMDIBrowserUrl(String handle) {
@@ -515,6 +508,42 @@ public class VloConfig extends ConfigFromFile {
         return result;
     }
 
+    /**
+     * Set the value of the IMDIBrowserUrl parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value
+     */
+    public static void setIMDIBrowserUrl(String param) {
+        imdiBrowserUrl = param;
+    }
+
+    /**
+     * Get the value of the languageLinkPrefix parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public static String getLanguageLinkPrefix() {
+        return languageLinkPrefix;
+    }
+    
+    /**
+     * Set the value of the languageLinkPrefix parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value
+     */
+    public static void setLanguageLinkPrefix(String param) {
+        languageLinkPrefix = param;
+    }
+    
     /**
      * Get the value of the FederatedContentSearchUrl parameter<br><br>
      *
