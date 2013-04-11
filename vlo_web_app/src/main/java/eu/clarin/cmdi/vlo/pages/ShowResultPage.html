@@ -3,7 +3,7 @@
 	<wicket:head>
 		<script language="JavaScript">
 			function toogleDiv(strID, linkElement){
-				document.getElementById(linkElement).innerHTML = (document.getElementById(strID).style.display == 'none' ) ? '<b>Remove complete CMDI metadata</b>' : '<b>Show complete CMDI metadata</b>';
+				document.getElementById(linkElement).innerHTML = (document.getElementById(strID).style.display == 'none' ) ? '<b>Hide CMDI metadata</b>' : '<b>Show CMDI metadata</b>';
 				document.getElementById(strID).style.display = (document.getElementById(strID).style.display == 'none' ) ? 'block' : 'none';
 				document.getElementById(strID + "_shown").style.display = (document.getElementById(strID + "_shown").style.display == 'none' ) ? 'block' : 'none';
 				document.getElementById(strID + "_hidden").style.display = (document.getElementById(strID + "_hidden").style.display == 'none' ) ? 'block' : 'none';
