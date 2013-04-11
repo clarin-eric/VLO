@@ -62,6 +62,8 @@
     </facetFields>
     
     <countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
+    
+    <languageLinkPrefix>http://infra.clarin.eu/service/language/info.php?code=</languageLinkPrefix>
 
     <language2LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438109/xml</language2LetterCodeComponentUrl>
     

@@ -390,6 +390,37 @@ public class VloConfigTest {
         assertEquals(expResult, result);
     }
     
+        /**
+     * Test the getHandleServerUrl method
+     */
+    @Test
+    public void testGetLanguageLinkPrefix() {
+        
+        System.out.println("getLanguageLinkPrefix");
+        
+        String expResult = "http://infra.clarin.eu/service/language/info.php?code=";
+        String result = VloConfig.getLanguageLinkPrefix();
+        
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test the setHandleServerUrl method
+     */
+    @Test
+    public void testSetLanguageLinkPrefix() {
+        
+        System.out.println("setLanguageLinkPrefix");
+        
+        String param = "http://infra.clarin.eu/service/language/info.php?code=";
+        
+        VloConfig.setLanguageLinkPrefix(param);
+
+        String result = VloConfig.getLanguageLinkPrefix();
+        
+        assertEquals(param, result);
+    }
+    
     /**
      * Test the getFederatedContentSearchUrl method
      */
