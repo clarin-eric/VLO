@@ -4,6 +4,8 @@
     
     <maxOnHeap>500</maxOnHeap>
     
+    <useHandleResolver>false</useHandleResolver>
+    
     <printMapping>false</printMapping>
     
     <dataRoots length="3">
