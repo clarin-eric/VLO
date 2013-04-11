@@ -118,6 +118,37 @@ public class VloConfigTest {
     }
     
     /**
+     * Test the getHandleResolver method
+     */
+    @Test
+    public void testGetUseHandleResolver() {
+        
+        System.out.println("getMaxOnHeap");
+        
+        boolean expResult = false;
+        boolean result = VloConfig.getUseHandleResolver();
+        
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test the setUseHandleResolver method
+     */
+    @Test
+    public void testSetUseHandleResolver() {
+        
+        System.out.println("setMaxOnHeap");
+        
+        boolean param = true;
+        
+        VloConfig.setUseHandleResolver(param);
+
+        boolean result = VloConfig.getUseHandleResolver();
+        
+        assertEquals(param, result);
+    }
+
+    /**
      * Test the deleteAllFirst method
      */
     @Test
