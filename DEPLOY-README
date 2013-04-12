@@ -1,44 +1,197 @@
-== INTRODUCTION ==
 
-Deploying the VLO happens in three steps.
-These steps have to be performed in order, each step depends on the previous one(s).
-The steps are:
-1) Installing and configuring the solr server.
-2) Setting up the ingester (putting data in the solr server).
-3) Installing the VLO webapp.
-This readme is found in the doc directory of the package.
+0. What the VLO is about 
 
-The package contains the follwing structure:
-doc: the documentation (including this file).
-config: configuration (context fragments and solr config directory)
-war: the war files; the solr one and the vlo one.
+   The VLO application allows faceted browsing of meta data. Before
+   browsing the data by using the VLO web application, the application
+   needs to be deployed and the VLO importer needs to add meta data to
+   the database.
 
-== INSTALLATION ==
+1. The archive
 
-STEP 0: run the setvalues.pl script and answer the questions correctly. This will _PERMANENTLY_ set some configuration values.
+   The VLO importer and web application are contained in an
+   archive named like
 
-STEP 1: INSTALLING SOLR.
+   vlo_parent-2.13-Distribution.tar.gz 
 
-IF you want different from default logging edit the log4j properties file in war/solr/WEB-inf/classes
+   Deploying the VLO application means:
+   - unpacking the archive in a suitable location
+   - unpacking the war files contained in the archive
+   - adapt the application's context files
+   and 
+   - adapt the main configuration file.
 
-Make sure that the solr configuration directory (config/solr/) and all its children are readable AND writable by the user that runs the webapp.
-This directory also contains the lucene database.
+2. Archive unpacking
 
-install the context fragment found in the config directory.
+   Unpack the archive in directory x, 
+   for example: /var/lib/tomcat6/webapps/vlodist/
+   cd x
+   With tar -xvf vlo_parent-2.13-Distribution.tar.gz
+   vlo_parent-2.13 will be created.
+   Take y to be vlo_parent-2.13
 
-STEP 2: RUNNING THE INGESTER
+   Make the server's Tomcat user own the files unpacked.
 
-Go to the bin directory.
-If upgrading an existing solr database with new data (e.g., changed mappings or facets) set deleteAllFirst in the importerConfig.
+3. Solr server installation
 
-run: vlo_solr_importer.sh from the bin directory.
+   The VLO importer and web application use Solr as their database
+   server. 
 
-If deleteAllFirst was set, unset it.
+   Unpack x/y/war/solr/solr.war in a directory in which you want the Solr
+   server to reside, say z,
+   /var/lib/tomcat6/webapps/vlodist/vlo_parent-2.13/war/solr
+   cd z
+   unzip x/y/war/solr/vlo_solr.war
 
-Optionally: add the vlo_solr_importer.sh script to the crontab.
+   Make the Tomcat user owner of the files in the tree that starts in
+   the z directory. 
 
-STEP 3: INSTALLING THE VLO.
+   In the z directory, modify META-INF/context.xml   
+   Assign the desired context path value, for example: vlo_solr/
+   This means that if url is the url of the web server, the Solr
+   server will be reachable at url/vlo_solr/
+ 
+   Assign x/y/config/solr to the solr/home parameter. 
 
-If you want to change the default logging edit the log4j properties file in war/vlo/WEB-inf/classes.
+   Copy the META-INF/context.xml file to 
+   /var/lib/tomcat6/conf/Catalina/localhost/vlo_solr.xml
+   or to a directory equivalent to it.
+   If necessary, make the Tomcat user owner of the vlo_solr.xml file.
 
-install the context fragment found in the config directory.
+   Create a link for the Tomcat server so that it knows where to look
+   for the solr server installation:
+   ln -sf x/y/war/solr/ /var/lib/tomcat6/webapps/vlo_solr
+   or equivalent.
+   The link created should identify the path defined the context file,
+   vlo_solr in this case.
+
+   If necessary, change the onwnership of the link to the Tomcat user.
+
+   Please modify WEB-INF/classes/log4j.properties
+
+   if you would like logging configured different from the type of
+   logging packaged.
+
+   Restart tomcat:
+   /etc/init.d/tomcat6 restart
+
+   Inspect the Tomcat log file directory, inspect the solr.log file.
+
+4. Web application installation
+
+   Similar to the solr archive, unpack x/y/war/vlo.war in a directory
+   in which you want the vlo web application to reside, say z, x/y/vlo
+   itself.
+   
+   cd z
+   unzip x/y/war/solr/vlo.war
+
+   Make the Tomcat own the files in and below the z directory.
+
+   Modify META-INF/context.xml 
+   Assign the desired context path value, for example: vlo/
+   If url is the url of the web server, the vlo web application will be
+   reachable at url/vlo/
+
+   Because it is likely that the packaged configuration file is not
+   suitable, add a reference to another, external configuration file,
+   preferably the same file as the one used by the importer.
+
+   Most likely, you will need to assign another value to the solrUrl
+   parameter. This parameter is used to let the VLO web application
+   know where it can reach the Solr server. You can set the value of
+   this parameter in an external configuration file, or directly in
+   the context file. 
+
+   Copy the META-INF/context.xml context file to 
+   /var/lib/tomcat6/conf/Catalina/localhost/vlo.xml
+
+   Create a link for the Tomcat server so that it knows where to look
+   for the vlo web application installation:
+   ln -sf x/y/war/vlo/ /var/lib/tomcat6/webapps/vlo
+   Like in the case of the Solr server, the link created should
+   identify the path defined the context file.
+
+   Again, if necessary, change the ownership of the context file and 
+   the link to the Tomcat user.
+
+   Like in the case of the Solr server, you can change the web
+   application's way of logging. This time, modifications should be
+   applied to WEB-INF/classes/log4j.properties
+
+   Restart the Tomcat server:
+
+   /etc/init.d/tomcat6 restart
+ 
+   or equivalent. This will cause the new Solr server and vlo web
+   application to become active.
+   
+   Finally, inspect the Tomcat log file directory, and inspect the
+   vlo.log file.
+
+5. Importer configuration
+
+   The importer and web application's configuration is determined by
+   one and the same file, packaged in the archive:
+
+   x/y/bin/VloConfig.xml
+
+   Because the packaged configuration is suitable to very specific
+   (development) circumstances only, in most cases it does not
+   suffice. You can specify an alternative, external configuration by
+   letting the importer script
+
+   x/y/bin/vlo_solr_importer.sh
+
+   refer to a modified copy of the XML file residing outside the
+   package. If
+
+   path/VloConfig.xml would be that file, add 
+
+   -c path/VloConfig.xml
+
+   to the command in the importer script.
+
+   Most likely, the dataRoot values need to be changed. This is what a
+   dataRoot definition could look like:
+
+   <DataRoot>
+   	<originName>IPROSLA</originName>
+        <rootFile>/lat/apache/htdocs/static-data-for-vlo-importer/</rootFile>
+        <prefix>http://catalog.clarin.eu/</prefix>
+        <tostrip>/lat/apache/htdocs/</tostrip>
+        <deleteFirst>false</deleteFirst>
+   </DataRoot>
+
+   A dataRoot describes the meta data files. The toStrip part of the
+   description is left out of the rootFile part to create a link to the
+   meta data; the links starts with the prefix.
+
+   Apart from the dataRoot values, the solrUrl parameter might need to be
+   changed. Please note that the context path value defined in
+
+   /var/lib/tomcat6/conf/Catalina/localhost/vlo_solr.xml 
+
+   or in a file equivalent to this one, should be reflected in the value
+   of this parameter.
+
+   Whenever the definition of the database changes, it is recommended
+   to clear the database before starting an importer run. To do this,
+   make sure that the 'deletaAllFirst' parameter equals true before
+   the run. After that, the original value of the parameter could be
+   restored.
+
+6. Importing data
+
+   You can run the importer by starting the 
+
+   ./vlo_solr_importer.sh
+
+   script in the x/y/bin directory. Messages are logged to the
+   console. Because meta data is not static, it is recommended to run
+   the importer a couple of times a week. Please note that, given the
+   current (04.2013) set of data, a run could take more than four
+   hours.
+
+   
+
+   
