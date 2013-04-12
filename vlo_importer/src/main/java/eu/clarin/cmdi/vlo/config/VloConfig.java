@@ -191,8 +191,10 @@ public class VloConfig extends ConfigFromFile {
     private static String imdiBrowserUrl = "";
     
     @Element
-    private static String languageLinkPrefix = 
-            "http://infra.clarin.eu/service/language/info.php?code=";
+    private static String languageLinkPrefix = "";
+    
+    @Element
+    private static String feedbackFromUrl = "";
     
     /**
      * Note: the national project mapping itself is not part of the web
@@ -542,6 +544,30 @@ public class VloConfig extends ConfigFromFile {
      */
     public static void setLanguageLinkPrefix(String param) {
         languageLinkPrefix = param;
+    }
+    
+    /**
+     * Get the value of the feedbackFromUrl parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public static String getFeedbackFromUrl() {
+        return feedbackFromUrl;
+    }
+    
+    /**
+     * Set the value of the feedbackFromUrl parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value
+     */
+    public static void setFeedbackFromUrl(String param) {
+        feedbackFromUrl = param;
     }
     
     /**

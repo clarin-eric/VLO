@@ -302,8 +302,6 @@ public class MetadataImporter {
         // add landing page resource
         for (Resource resource : cmdiData.getLandingPageResources()) {
             solrDocument.addField(FacetConstants.FIELD_LANDINGPAGE, resource.getResourceName());
-            // solrDocument.addField(FacetConstants.FIELD_RESOURCE, resource.getResourceName());
-            // keeloo: this works, the web application stumbles because it assumes a mime type however
         }
         
         addResourceData(solrDocument, cmdiData);

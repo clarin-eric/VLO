@@ -94,7 +94,7 @@ public class VloConfigTest {
         
         System.out.println("getMaxOnHeap");
         
-        int expResult = 500;
+        int expResult = 128;
         int result = VloConfig.getMaxOnHeap();
         
         assertEquals(expResult, result);
@@ -390,8 +390,8 @@ public class VloConfigTest {
         assertEquals(expResult, result);
     }
     
-        /**
-     * Test the getHandleServerUrl method
+    /**
+     * Test the getLanguageLinkPrefix method
      */
     @Test
     public void testGetLanguageLinkPrefix() {
@@ -405,7 +405,7 @@ public class VloConfigTest {
     }
 
     /**
-     * Test the setHandleServerUrl method
+     * Test the setLanguageLinkPrefix method
      */
     @Test
     public void testSetLanguageLinkPrefix() {
@@ -417,6 +417,37 @@ public class VloConfigTest {
         VloConfig.setLanguageLinkPrefix(param);
 
         String result = VloConfig.getLanguageLinkPrefix();
+        
+        assertEquals(param, result);
+    }
+    
+    /**
+     * Test the getFeedbackFromUrl method
+     */
+    @Test
+    public void testGetFeedbackFromUrl() {
+        
+        System.out.println("getFeedBackFromUrl");
+        
+        String expResult = "http://www.clarin.eu/node/3759?url=";
+        String result = VloConfig.getFeedbackFromUrl();
+        
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test the setFeedbackFromUrl method
+     */
+    @Test
+    public void testSetFeedbackFromUrl() {
+        
+        System.out.println("setFeedbackFromUrl");
+        
+        String param = "http://www.clarin.eu/node/3759?url=";
+        
+        VloConfig.setFeedbackFromUrl(param);
+
+        String result = VloConfig.getFeedbackFromUrl();
         
         assertEquals(param, result);
     }

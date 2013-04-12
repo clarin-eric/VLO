@@ -2,7 +2,7 @@
    
     <deleteAllFirst>false</deleteAllFirst>
     
-    <maxOnHeap>500</maxOnHeap>
+    <maxOnHeap>128</maxOnHeap>
     
     <useHandleResolver>false</useHandleResolver>
     
@@ -64,6 +64,8 @@
     <countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
     
     <languageLinkPrefix>http://infra.clarin.eu/service/language/info.php?code=</languageLinkPrefix>
+    
+    <feedbackFromUrl>http://www.clarin.eu/node/3759?url=</feedbackFromUrl>
 
     <language2LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438109/xml</language2LetterCodeComponentUrl>
     
