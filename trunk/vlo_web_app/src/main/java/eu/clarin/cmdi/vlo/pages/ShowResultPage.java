@@ -66,7 +66,7 @@ public class ShowResultPage extends BasePage {
 
     private final static Logger LOG = LoggerFactory.getLogger(ShowResultPage.class);
     public static final String PARAM_DOC_ID = "docId";
-    public static final String feedbackfromURL = "http://www.clarin.eu/node/3502?url=";
+    public static final String feedbackfromURL = VloConfig.getFeedbackFromUrl();
     
     private final static ImageResource FEEDBACK_IMAGE = new ImageResource(new ContextRelativeResource("Images/feedback.png"), "Report an Error");
     private final URL xslFile = getClass().getResource("/cmdi2xhtml.xsl");
