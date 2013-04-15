@@ -1,6 +1,6 @@
 <VloConfig>
    
-    <deleteAllFirst>false</deleteAllFirst>
+    <deleteAllFirst>true</deleteAllFirst>
     
     <maxOnHeap>128</maxOnHeap>
     
