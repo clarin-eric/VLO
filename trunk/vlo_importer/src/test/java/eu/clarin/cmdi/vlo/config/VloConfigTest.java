@@ -156,7 +156,7 @@ public class VloConfigTest {
         
         System.out.println("deleteAllFirst");
         
-        boolean expResult = false;
+        boolean expResult = true;
         boolean result = VloConfig.deleteAllFirst();
         
         assertEquals(expResult, result);
@@ -170,7 +170,7 @@ public class VloConfigTest {
         
         System.out.println("setDeleteAllFirst");
         
-        boolean param = false;
+        boolean param = true;
         
         VloConfig.setDeleteAllFirst(param);
 
