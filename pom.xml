@@ -19,14 +19,6 @@
     
     <description>Virtual Language Observatory (VLO) parent project</description>
 
-    <!--    maybe this was the culprit
-        <parent>
-            <groupId>nl.mpi</groupId>
-            <artifactId>parent</artifactId>
-            <version>1.2</version>
-        </parent>
-    -->
-
     <modules>
         <module>vlo_solr</module>
         <module>vlo_web_app</module>

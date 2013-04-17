@@ -64,7 +64,7 @@
    The link created should identify the path defined the context file,
    vlo_solr in this case.
 
-   If necessary, change the onwnership of the link to the Tomcat user.
+   If necessary, change the ownership of the link to the Tomcat user.
 
    Please modify WEB-INF/classes/log4j.properties
 
@@ -92,9 +92,11 @@
    If url is the url of the web server, the vlo web application will be
    reachable at url/vlo/
 
-   Because it is likely that the packaged configuration file is not
-   suitable, add a reference to another, external configuration file,
-   preferably the same file as the one used by the importer.
+   Because the packaged configuration is suitable to very specific
+   (development) circumstances only, in most cases it does fit the 
+   production environment. You can specify an alternative, external 
+   configuration file, preferably the same file as the one used by 
+   the importer.
 
    Most likely, you will need to assign another value to the solrUrl
    parameter. This parameter is used to let the VLO web application
@@ -130,22 +132,11 @@
 
 5. Importer configuration
 
-   The importer and web application's configuration is determined by
-   one and the same file, packaged in the archive:
+   Both the web application and the importer should use one and the same
+   configuration file. So if, for example, the web application's configuration
+   is in 
 
-   x/y/bin/VloConfig.xml
-
-   Because the packaged configuration is suitable to very specific
-   (development) circumstances only, in most cases it does not
-   suffice. You can specify an alternative, external configuration by
-   letting the importer script
-
-   x/y/bin/vlo_solr_importer.sh
-
-   refer to a modified copy of the XML file residing outside the
-   package. If
-
-   path/VloConfig.xml would be that file, add 
+   path/VloConfig.xml, add 
 
    -c path/VloConfig.xml
 
