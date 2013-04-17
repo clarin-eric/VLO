@@ -6,16 +6,6 @@
         <format>zip</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
-    <dependencySets>
-      <dependencySet>
-        <useProjectArtifact>true</useProjectArtifact>
-        <useTransitiveDependencies>false</useTransitiveDependencies>
-         <includes>
-            <include>*:war</include>
-        </includes>
-        <outputDirectory></outputDirectory>
-      </dependencySet>
-    </dependencySets>
     <fileSets>
         <fileSet>
             <directory>src/main/solr_conf</directory>
