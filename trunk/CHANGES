@@ -1,5 +1,37 @@
 Bug Fixes and Features
 
+Beta release 2.13 (April 2013)
+
+A new package, eu.clarin.cmdi.vlo.config was added taking care of the web 
+application and importer's configuration. Spring is no longer used for 
+configuration; it was replaced by the Simple framework.
+
+Both the importer and the web application use the same base file for 
+configuration. The base file refers to cmdi2xhtml.xsl, 
+facetConcepts.xml, and nationalProjectsMapping.xml file. 
+
+The base VloConfig.xml file that is included in the /src/main/resources 
+directory of the package, can be replaced by an external instance. Additionally,
+the web application's context file can be used to overrule the solrUrl parameter
+defined in the packaged or external configuration file.
+
+Added the nationalProjectsMapping file to the default configuration. This means
+that it is no longer necessary to instance of the file external to the package. 
+By the default the importer and web application will look at the packaged instance.
+
+Landing page support on the result page was added; ticket 257.
+
+Heap memory consumption of the importer was limited. A parameter was added to
+to be able to tune the size of the buffer of documents waiting to be deposited 
+in the database.
+
+Repackaging was carried out. From version 2.13 the web application resides
+outside the importer package. Next to these packages the solr package is still
+there, and apart from the addition of a hidden facet supporting the landing 
+page, it has not been modified. In a future release the VLO base functions will
+be split off from the importer package.
+
+
 Release VLO 2.8 (23 may 2012):
 Many small fixes.
 Streamlined the deployment procedure.
