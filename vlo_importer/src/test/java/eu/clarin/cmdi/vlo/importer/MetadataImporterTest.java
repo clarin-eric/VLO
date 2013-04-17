@@ -259,12 +259,21 @@ public class MetadataImporterTest extends ImporterTestcase {
 
     private void modifyConfig(File rootFile) {
         DataRoot dataRoot = new DataRoot();
-        dataRoot.setDeleteFirst(false);//cannot delete not using real solrServer
+        dataRoot.setDeleteFirst(false); // cannot delete becanot using real solrServer
         dataRoot.setOriginName("testRoot");
         dataRoot.setRootFile(rootFile);
         dataRoot.setTostrip("");
         dataRoot.setPrefix("http://example.com");
         VloConfig.setDataRoots(Collections.singletonList(dataRoot));
+        
+        /**
+         * Please observe that if the deleteAllFirst parameter is true, the
+         * startImport method in the MetaDataImporter class will refer to an
+         * instance of the solr server. Because in this test initSolrServer
+         * method is empty, no solr server is create. Therefore, the value of
+         * the deleteAllFirst parameter needs to be false.
+         */
+        VloConfig.setDeleteAllFirst(false);
     }
 
 }
