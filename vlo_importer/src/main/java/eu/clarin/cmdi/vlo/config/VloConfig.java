@@ -161,7 +161,13 @@ public class VloConfig extends ConfigFromFile {
     private static boolean deleteAllFirst = false;
     
     @Element 
-    private static int maxOnHeap = 1000;
+    private static int maxOnHeap = 0;
+    
+    @Element 
+    private static boolean useMaxFileSize = false;
+    
+    @Element 
+    private static int maxFileSize = 0;
     
     @Element
     private static boolean useHandleResolver = false;
@@ -274,6 +280,54 @@ public class VloConfig extends ConfigFromFile {
      */
     public static void setMaxOnHeap (int param){
         maxOnHeap = param;
+    }
+    
+    /**
+     * Get the value of the useMaxFileSize parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public static boolean getUseMaxFileSize (){
+        return useMaxFileSize;
+    }
+    
+    /**
+     * Set the value of the useMaxFileSize parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value
+     */
+    public static void setUseMaxFileSize (boolean param){
+        useMaxFileSize = param;
+    }
+    
+    /**
+     * Get the value of the maxFileSize parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public static int getMaxFileSize (){
+        return maxFileSize;
+    }
+    
+    /**
+     * Set the value of the maxFileSize parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value
+     */
+    public static void setMaxFileSize (int param){
+        maxFileSize = param;
     }
     
     /**

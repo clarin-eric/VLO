@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 import static org.junit.Assert.assertEquals;
@@ -235,20 +237,90 @@ public class MetadataImporterTest extends ImporterTestcase {
     private List<SolrInputDocument> importData(File rootFile) throws MalformedURLException {
         final List<SolrInputDocument> result = new ArrayList<SolrInputDocument>();
                 
-        // read configuration in ImporterTestCase.setup; change it now
+        /*
+         * Read configuration in ImporterTestCase.setup and change the setup to
+         * suit the test.
+         */
         
         modifyConfig(rootFile);
         
         MetadataImporter importer;
         importer = new MetadataImporter() {
+            /*
+             * Because in the test, the solr server is not assumed to be 
+             * available, override the importer's class startImport method by
+             * leaving out interaction with server. 
+             * 
+             * By invoking the processCmdi method, the class being defined here
+             * needs to anticipate on an exception possibly thrown by the 
+             * processCmdi method invoking the sendDocs method. Please note 
+             * however, that the latter method is overriden, and the actual 
+             * database is being replaced by an array of documents.
+             */
             @Override
-            protected void initSolrServer() throws MalformedURLException {
-                //do nothing no solrserver in test
+            void startImport() throws MalformedURLException {
+
+                List<DataRoot> dataRoots = checkDataRoots();
+                long start = System.currentTimeMillis();
+                try {
+
+                    for (DataRoot dataRoot : dataRoots) {
+                        LOG.info("Start of processing: " + 
+                                dataRoot.getOriginName());
+                        CMDIDataProcessor processor = new 
+                                CMDIParserVTDXML(POST_PROCESSORS);
+                        List<File> files = 
+                                getFilesFromDataRoot(dataRoot.getRootFile());
+                        for (File file : files) {
+                            if (VloConfig.getUseMaxFileSize()
+                                    && file.length() > 
+                                    VloConfig.getMaxFileSize()) {
+                                LOG.info("Skipping " + file.getAbsolutePath() + 
+                                        " because it is too large.");
+                            } else {
+                                LOG.debug("PROCESSING FILE: " + 
+                                        file.getAbsolutePath());                
+                                /*
+                                 * Anticipate on the solr exception that will
+                                 * never by raised because sendDocs is overriden
+                                 * in a suitable way.
+                                 */
+                                try {
+                                    processCmdi(file, dataRoot, processor);
+                                } catch (SolrServerException ex) {
+                                    Logger.getLogger(MetadataImporterTest.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                        }
+                        if (!docs.isEmpty()) {
+                            sendDocs();
+                        }
+                        LOG.info("End of processing: " + 
+                                dataRoot.getOriginName());
+                    }
+                    
+                } catch (IOException e) {
+                    LOG.error("error updating files:\n", e);
+                } finally {
+
+                }
+                long took = (System.currentTimeMillis() - start) / 1000;
+                LOG.info("Found " + nrOfFilesWithoutId + 
+                        " file(s) without an id. (id is generated based on fileName but that may not be unique)");
+                LOG.info("Found " + nrOfFilesWithError + 
+                        " file(s) with errors.");
+                LOG.info("Found " + nrOfFilesWithoutDataResources
+                        + " file(s) without data resources (metadata descriptions without resources are ignored).");
+                LOG.info("Update of " + nrOFDocumentsUpdated + " took " + took + 
+                        " secs. Total nr of files analyzed " + nrOfFilesAnalyzed);
             }
 
+            /*
+             * Replace the server's database by a document array
+             */
             @Override
-            protected void sendDocs() throws SolrServerException, IOException {
-            //overriding here so we can test the docs
+            protected void sendDocs() throws IOException {
+                
                 result.addAll(this.docs);
                 docs = new ArrayList<SolrInputDocument>();
             }
@@ -265,15 +337,6 @@ public class MetadataImporterTest extends ImporterTestcase {
         dataRoot.setTostrip("");
         dataRoot.setPrefix("http://example.com");
         VloConfig.setDataRoots(Collections.singletonList(dataRoot));
-        
-        /**
-         * Please observe that if the deleteAllFirst parameter is true, the
-         * startImport method in the MetaDataImporter class will refer to an
-         * instance of the solr server. Because in this test initSolrServer
-         * method is empty, no solr server is create. Therefore, the value of
-         * the deleteAllFirst parameter needs to be false.
-         */
-        VloConfig.setDeleteAllFirst(false);
     }
 
 }
