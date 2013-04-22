@@ -50,7 +50,7 @@ public class MetadataImporter {
     /**
      * Log log log log
      */
-    private final static Logger LOG = LoggerFactory.getLogger(MetadataImporter.class);
+    protected final static Logger LOG = LoggerFactory.getLogger(MetadataImporter.class);
     /**
      * Some place to store errors.
      */
@@ -87,7 +87,7 @@ public class MetadataImporter {
      * Contains MDSelflinks (usually).
      * Just to know what we have already done.
      */
-    private final Set<String> processedIds = new HashSet<String>();
+    protected final Set<String> processedIds = new HashSet<String>();
     /**
      * Some caching for solr documents (we are more efficient if we ram a whole
      * bunch to the solr server at once.
@@ -95,11 +95,11 @@ public class MetadataImporter {
     protected List<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
 
     // SOME STATS
-    private int nrOFDocumentsUpdated;
-    private int nrOfFilesAnalyzed = 0;
-    private int nrOfFilesWithoutId = 0;
-    private int nrOfFilesWithoutDataResources = 0;
-    private int nrOfFilesWithError = 0;
+    protected int nrOFDocumentsUpdated;
+    protected int nrOfFilesAnalyzed = 0;
+    protected int nrOfFilesWithoutId = 0;
+    protected int nrOfFilesWithoutDataResources = 0;
+    protected int nrOfFilesWithError = 0;
 
     /**
      * Retrieve all files with VALID_CMDI_EXTENSIONS from all DataRoot entries
@@ -130,8 +130,13 @@ public class MetadataImporter {
                 CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS);
                 List<File> files = getFilesFromDataRoot(dataRoot.getRootFile());
                 for (File file : files) {
-                    LOG.debug("PROCESSING FILE: " + file.getAbsolutePath());
-                    processCmdi(file, dataRoot, processor);
+                    if (VloConfig.getUseMaxFileSize() && 
+                            file.length() > VloConfig.getMaxFileSize()) {
+                        LOG.info("Skipping " + file.getAbsolutePath() + " because it is too large.");
+                    } else {
+                        LOG.debug("PROCESSING FILE: " + file.getAbsolutePath());
+                        processCmdi(file, dataRoot, processor);
+                    }
                 }
                 if (!docs.isEmpty()) {
                     sendDocs();
@@ -169,7 +174,7 @@ public class MetadataImporter {
      *
      * @return
      */
-    private List<DataRoot> checkDataRoots() {
+    protected List<DataRoot> checkDataRoots() {
         List<DataRoot> dataRoots = VloConfig.getDataRoots();
         for (DataRoot dataRoot : dataRoots) {
             if (!dataRoot.getRootFile().exists()) {
@@ -188,7 +193,7 @@ public class MetadataImporter {
      * @return List with the rootFile or all contained files if rootFile is a
      * directory
      */
-    private List<File> getFilesFromDataRoot(File rootFile) {
+    protected List<File> getFilesFromDataRoot(File rootFile) {
         List<File> result = new ArrayList<File>();
         if (rootFile.isFile()) {
             result.add(rootFile);
@@ -225,7 +230,7 @@ public class MetadataImporter {
      * @throws SolrServerException
      * @throws IOException
      */
-    private void processCmdi(File file, DataRoot dataOrigin, CMDIDataProcessor processor) throws SolrServerException, IOException {
+    protected void processCmdi(File file, DataRoot dataOrigin, CMDIDataProcessor processor) throws SolrServerException, IOException {
         nrOfFilesAnalyzed++;
         CMDIData cmdiData = null;
         try {
@@ -261,7 +266,7 @@ public class MetadataImporter {
      * @param id
      * @return true if id is acceptable, false otherwise
      */
-    private boolean idOk(String id) {
+    protected boolean idOk(String id) {
         return id != null && !id.isEmpty();
     }
 
@@ -277,7 +282,7 @@ public class MetadataImporter {
      * @throws SolrServerException
      * @throws IOException
      */
-    private void updateDocument(SolrInputDocument solrDocument, CMDIData cmdiData, File file, DataRoot dataOrigin) throws SolrServerException,
+    protected void updateDocument(SolrInputDocument solrDocument, CMDIData cmdiData, File file, DataRoot dataOrigin) throws SolrServerException,
             IOException {
         if (!solrDocument.containsKey(FacetConstants.FIELD_COLLECTION)) {
             solrDocument.addField(FacetConstants.FIELD_COLLECTION, dataOrigin.getOriginName());
@@ -317,7 +322,7 @@ public class MetadataImporter {
      * overwritten by some more specific xpath (as in the LRT cmdi files). So if
      * a type is overwritten and already in the solrDocument we take that type.
      */
-    private void addResourceData(SolrInputDocument solrDocument, CMDIData cmdiData) {
+    protected void addResourceData(SolrInputDocument solrDocument, CMDIData cmdiData) {
         List<Object> fieldValues = solrDocument.containsKey(FacetConstants.FIELD_RESOURCE_TYPE) ? new ArrayList<Object>(solrDocument
                 .getFieldValues(FacetConstants.FIELD_RESOURCE_TYPE)) : null;
         solrDocument.removeField(FacetConstants.FIELD_RESOURCE_TYPE); //Remove old values they might be overwritten.

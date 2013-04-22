@@ -4,6 +4,10 @@
     
     <maxOnHeap>128</maxOnHeap>
     
+    <useMaxFileSize>false</useMaxFileSize>
+    
+    <maxFileSize>20000000</maxFileSize>
+    
     <useHandleResolver>false</useHandleResolver>
     
     <printMapping>false</printMapping>

@@ -87,7 +87,7 @@ public class VloConfigTest {
     }
 
     /**
-     * Test the getVloHomeLink method
+     * Test the getMaxOnHeap method
      */
     @Test
     public void testGetMaxOnHeap() {
@@ -101,7 +101,7 @@ public class VloConfigTest {
     }
 
     /**
-     * Test the setVloHomeLink method
+     * Test the setMaxOnHeap method
      */
     @Test
     public void testSetMaxOnHeap() {
@@ -118,12 +118,74 @@ public class VloConfigTest {
     }
     
     /**
+     * Test the getUseMaxFileSize method
+     */
+    @Test
+    public void testGetUseMaxFileSize() {
+        
+        System.out.println("getUseMaxFileSize");
+        
+        boolean expResult = false;
+        boolean result = VloConfig.getUseMaxFileSize();
+        
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test the setSetUseMaxFileSize method
+     */
+    @Test
+    public void testSetUseMaxFileSize() {
+        
+        System.out.println("setUseMaxFileSize");
+        
+        boolean param = true;
+        
+        VloConfig.setUseMaxFileSize(param);
+
+        boolean result = VloConfig.getUseMaxFileSize();
+        
+        assertEquals(param, result);
+    }
+    
+        /**
+     * Test the getMaxFileSize method
+     */
+    @Test
+    public void testGetMaxFileSize() {
+        
+        System.out.println("getMaxFileSize");
+        
+        int expResult = 20000000;
+        int result = VloConfig.getMaxFileSize();
+        
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test the setMaxFileSize method
+     */
+    @Test
+    public void testSetMaxFileSize() {
+        
+        System.out.println("setMaxFileSize");
+        
+        int param = 10000000;
+        
+        VloConfig.setMaxFileSize(param);
+
+        int result = VloConfig.getMaxFileSize();
+        
+        assertEquals(param, result);
+    }
+    
+    /**
      * Test the getHandleResolver method
      */
     @Test
     public void testGetUseHandleResolver() {
         
-        System.out.println("getMaxOnHeap");
+        System.out.println("getUseHandleResolver");
         
         boolean expResult = false;
         boolean result = VloConfig.getUseHandleResolver();
@@ -137,7 +199,7 @@ public class VloConfigTest {
     @Test
     public void testSetUseHandleResolver() {
         
-        System.out.println("setMaxOnHeap");
+        System.out.println("setUseHandleResolver");
         
         boolean param = true;
         
