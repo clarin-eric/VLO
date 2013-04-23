@@ -3,8 +3,7 @@ package eu.clarin.cmdi.vlo;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 
 /**
- * A bunch of important constants.
- * Constants for each facet, resource types and some urls.
+ * Definition of facet, resource type and URL constants.
  */
 public class FacetConstants {
 
@@ -32,7 +31,11 @@ public class FacetConstants {
     public static final String FIELD_RESOURCE = "_resourceRef";
     public static final String FIELD_CLARIN_PROFILE = "_componentProfile";
     public static final String FIELD_SEARCH_SERVICE = "_contentSearchRef";
+    
+    /** Facet constant associated with the landing page type. */
     public static final String FIELD_LANDINGPAGE = "_landingPageRef";
+    /** Facet constant associated with the search page type. */
+    public static final String FIELD_SEARCHPAGE = "_searchPageRef";
     
     // PREFIX URL for the language-link    
     public static final String LANGUAGE_LINK_PREFIX = VloConfig.getLanguageLinkPrefix();
@@ -49,5 +52,4 @@ public class FacetConstants {
     public static final String TEST_HANDLE_MPI_PREFIX = "test-hdl:1839";
     public static final String FIELD_RESOURCE_SPLIT_CHAR = "|";
     public static final String URN_NBN_PREFIX = "urn:nbn";
-
 }
