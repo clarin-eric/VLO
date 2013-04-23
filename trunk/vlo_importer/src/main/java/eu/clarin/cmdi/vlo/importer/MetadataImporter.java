@@ -309,6 +309,11 @@ public class MetadataImporter {
             solrDocument.addField(FacetConstants.FIELD_LANDINGPAGE, resource.getResourceName());
         }
         
+        // add search page resource
+        for (Resource resource : cmdiData.getSearchPageResources()) {
+            solrDocument.addField(FacetConstants.FIELD_SEARCHPAGE, resource.getResourceName());
+        }
+        
         addResourceData(solrDocument, cmdiData);
         docs.add(solrDocument);
         if (docs.size() == VloConfig.getMaxOnHeap()) {

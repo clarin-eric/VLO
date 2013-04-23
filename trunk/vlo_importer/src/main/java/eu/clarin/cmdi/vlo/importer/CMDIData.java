@@ -9,16 +9,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Represents a document of cmdi data.
- * Quite a central class to the metadata importer process.
+ * Represents a document of CMDI data.
  */
-
 public class CMDIData {
     private final static Logger LOG = LoggerFactory.getLogger(CMDIData.class);
     private static final String METADATA_TYPE = "Metadata";
     private static final String DATA_RESOURCE_TYPE = "Resource";
     private static final String SEARCH_SERVICE_TYPE = "SearchService";
+    //* Definition of the string denoting the landing page type. */
     private static final String LANDING_PAGE_TYPE = "LandingPage";
+    //* Definition of the string denoting the search page type. */
+    private static final String SEARCH_PAGE_TYPE = "SearchPage";
 
     /**
      * The unique identifier of the cmdi file.
@@ -35,6 +36,7 @@ public class CMDIData {
     private final List<Resource> dataResources = new ArrayList<Resource>();
     private final List<Resource> searchResources = new ArrayList<Resource>();
     private final List<Resource> landingPageResources = new ArrayList<Resource>();
+    private final List<Resource> searchPageResources = new ArrayList<Resource>();
 
     public SolrInputDocument getSolrDocument() {
         return doc;
@@ -93,21 +95,32 @@ public class CMDIData {
     }
 
     /**
-     * Return a list of landing page resources
+     * Return the list of landing page resources.
+     * 
+     * @return the list
      */
     public List<Resource> getLandingPageResources() {
         return landingPageResources;
     }
+    
+    /**
+     * Return the  list of search page resources.
+     * 
+     * @return the list
+     */
+    public List<Resource> getSearchPageResources() {
+        return searchPageResources;
+    }
 
     /**
-     * Processes a resource by adding it to the internal lists. Supports meta
-     * data, data, search service and landing page type of resources. Emits a
-     * warning if another type of resource is encountered (not allowed according
-     * to the cmdi spec, but we try to be a tad robust).
+     * Add a meta data resource to the list of resources of that type.
+     * 
+     * Whenever the type is not one of a type supported by the CMDI
+     * specification, a warning is logged.
      *
-     * @param resource
-     * @param type
-     * @param mimeType
+     * @param resource meta data resource
+     * @param type type of the resource
+     * @param mimeType mime type associated with the resource
      */
     public void addResource(String resource, String type, String mimeType) {
         if (METADATA_TYPE.equals(type)) {
@@ -118,8 +131,10 @@ public class CMDIData {
             searchResources.add(new Resource(resource,type, mimeType));
         } else if (LANDING_PAGE_TYPE.equals(type)){
             landingPageResources.add(new Resource(resource,type, mimeType));
+        } else if (SEARCH_PAGE_TYPE.equals(type)){
+            searchPageResources.add(new Resource(resource,type, mimeType));
         } else {
-            LOG.warn("Found unsupported resource it will be ignored: type=" + 
+            LOG.warn("Ignoring unsupported resource type " + 
                     type + ", name=" + resource);
         }
     }
