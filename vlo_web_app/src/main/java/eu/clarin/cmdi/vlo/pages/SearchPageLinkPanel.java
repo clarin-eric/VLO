@@ -8,50 +8,49 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.resource.ContextRelativeResource;
 
 /**
- * Panel showing a landing page link. 
+ * Panel showing a search link. 
  * 
  * In the extension of the link panel class, this class adds a label text and 
- * an icon that is specific for search page links
- * 
+ * an icon that is specific for search page links.
+ *
  * @author keeloo
  */
-public class LandingPageLinkPanel extends LinkPanel {
+public class SearchPageLinkPanel extends LinkPanel {
 
-    private final static ImageResource LANDINGPAGE_ICON =
-            new ImageResource(new ContextRelativeResource(
-            "Images/Crystal_Clear_mimetype_readme.png"),
+    private final static ImageResource SEARCHPAGE_ICON =
+            new ImageResource(new ContextRelativeResource("Images/readme.png"),
             "Landing page");
 
     /**
      * Panel constructor. 
      * 
      * @param id Wicket mark up identifier
-     * @param resourceLink URL to pointing to the resource.
+     * @param resourceLink URL to pointing to the resource
      */
-    public LandingPageLinkPanel(String id, String resourceLink) {
-        // ...
+    public SearchPageLinkPanel(String id, String resourceLink) {
+        // ... 
         super(id);
         
         // add the icon image
-        ImageResource imageResouce = LANDINGPAGE_ICON;
-        Image resourceImg = new Image("landingPageImage", imageResouce.getResource());
+        ImageResource imageResource = SEARCHPAGE_ICON;
+        Image resourceImg = new Image("searchPageImage", imageResource.getResource());
         
         // add the image's title
         String title;
-        title = imageResouce.getTitle();
+        title = imageResource.getTitle();
         resourceImg.add(new SimpleAttributeModifier("title", title));
         resourceImg.add(new SimpleAttributeModifier("alt", title));
-        
+
         // ...
         String href = getHref(resourceLink);
-        
+
         // get the name associated with the link
         String name = getNameFromLink(resourceLink);
-
+        
         // ... and add the link itself
-        ExternalLink link = new ExternalLink("landingPageLink", href);
+        ExternalLink link = new ExternalLink("searchPageLink", href);
         link.add(resourceImg);
-        link.add(new Label("landingPageLabel", name));
+        link.add(new Label("searchPageLabel", name));
         add(link);
     }
 }

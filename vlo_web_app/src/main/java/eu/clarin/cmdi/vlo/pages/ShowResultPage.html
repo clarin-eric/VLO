@@ -38,6 +38,17 @@
                     <li wicket:id="landingPageList"></li>
                 </ul>
             </div>
+            <!-- add a label to be shown in case there is one search  page -->
+            <div wicket:id="oneSearchPage">[Search page]</div>
+            <!-- add a label to be shown in case there are more search pages -->
+            <div wicket:id="moreSearchPages">[Search pages]</div>
+            <!-- Add the list of search page links. Again, use the same layout
+            as in the case of the resource list. -->
+            <div class="searchPageList">
+                <ul class="resultItem" >
+                    <li wicket:id="searchPageList"></li>
+                </ul>
+            </div>
             <div class="resourceList"><span><wicket:message key="resources">[Resources]</wicket:message>:</span>
                 <ul class="resultItem" >
                     <li wicket:id="resourceList"></li>

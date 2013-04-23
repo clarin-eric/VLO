@@ -87,8 +87,18 @@ public class ShowResultPage extends BasePage {
                 add(new Label("openBrowserLink", new ResourceModel(Resources.ORIGINAL_CONTEXT_NOT_AVAILABLE).getObject()));
             }
             addAttributesTable(solrDocument);
+            
+            /* If there are any, add the link or links to landing pages 
+             * contained in the solr document.
+             */
             addLandingPageLinks(solrDocument);
+            
+            // also, if there are any, add the link or links to search pages 
+            addSearchPageLinks(solrDocument);
+
+            // add the rest of the resource links to the result page
             addResourceLinks(solrDocument);
+            
             addSearchServiceForm(solrDocument);
             addCompleteCmdiView(solrDocument);
             
@@ -108,7 +118,7 @@ public class ShowResultPage extends BasePage {
             setResponsePage(new ResultNotFoundPage(parameters));
         }
 
-        // add feedback link
+        // add the feedback link to the result page
         addFeedbackLink(parameters);
     }
 
@@ -200,32 +210,30 @@ public class ShowResultPage extends BasePage {
     }
     
     /**
-     * Add links to landing pages to the results shown.<br><br>
-     * 
-     * Depending on the number of links to be shown, at most one of the labels
-     * in the accompanying HTML page that is subject to Wicket is made
-     * visible.<br><br>
+     * Add landing page links to the result page.
      *
-     * @param solrDocument the document to add the landing page links to
+     * @param solrDocument the document to get the links from
      */
-    @SuppressWarnings("serial")
     private void addLandingPageLinks(SolrDocument solrDocument) {
-
-        // add the labels defined in the HTML page
+        
         Label oneLandingPageText;
-        oneLandingPageText = new Label("oneLandingPage", 
+        oneLandingPageText = new Label("oneLandingPage",
                 new ResourceModel(Resources.LANDING_PAGE).getObject() + ":");
         this.add(oneLandingPageText);
 
         Label moreLandingPagesText;
-        moreLandingPagesText = new Label("moreLandingPages", 
+        moreLandingPagesText = new Label("moreLandingPages",
                 new ResourceModel(Resources.LANDING_PAGES).getObject() + ":");
         this.add(moreLandingPagesText);
 
-        // also, add the list of links
         RepeatingView repeatingView = new RepeatingView("landingPageList");
         add(repeatingView);
 
+        /*
+         * Depending on the number of links to be shown, at most one of the 
+         * labels in the accompanying HTML page that is subject to Wicket is 
+         * made visible.
+         */
         if (!solrDocument.containsKey(FacetConstants.FIELD_LANDINGPAGE)) {
             
             /* Since there are no links to be shown, make both labels defined in
@@ -254,15 +262,15 @@ public class ShowResultPage extends BasePage {
                 final Object landingPage;
                 landingPage = it.next();
 
-                // keeloo: describe this
+                // add a link to the list
                 repeatingView.add(
                         new AjaxLazyLoadPanel(repeatingView.newChildId()) {
                             @Override
                             public Component getLazyLoadComponent(String markupId) {
                                 String landingPageLink;
                                 landingPageLink = landingPage.toString();
-                                
-                                // create a landing page link panel
+
+                                // create a panel for the link
                                 return new LandingPageLinkPanel(markupId,
                                         landingPage.toString());
                             }
@@ -270,8 +278,83 @@ public class ShowResultPage extends BasePage {
             }
         }
     }
+    
+    /**
+     * Add search page links to the result page.
+     *
+     * @param solrDocument the document to get the links from
+     */
+    private void addSearchPageLinks(SolrDocument solrDocument) {
+        
+        Label oneSearchPageText;
+        oneSearchPageText = new Label("oneSearchPage",
+                new ResourceModel(Resources.SEARCH_PAGE).getObject() + ":");
+        this.add(oneSearchPageText);
 
-    @SuppressWarnings("serial")
+        Label moreSearchPagesText;
+        moreSearchPagesText = new Label("moreSearchPages",
+                new ResourceModel(Resources.SEARCH_PAGES).getObject() + ":");
+        this.add(moreSearchPagesText);
+
+        RepeatingView repeatingView = new RepeatingView("searchPageList");
+        add(repeatingView);
+
+        /*
+         * Depending on the number of links to be shown, at most one of the 
+         * labels in the accompanying HTML page that is subject to Wicket is 
+         * made visible.
+         */
+        if (!solrDocument.containsKey(FacetConstants.FIELD_SEARCHPAGE)) {
+            
+            /* Since there are no links to be shown, make both labels defined in
+             * the page invisible
+             */
+            oneSearchPageText.setVisible(false);
+            moreSearchPagesText.setVisible(false);
+        } else {
+            //  make one of the two labels invisible
+
+            Collection<Object> searchPages = 
+                    solrDocument.getFieldValues(FacetConstants.FIELD_SEARCHPAGE);
+            if (searchPages.size() > 1) {
+                
+                // the list will contain more than one landing page link
+                oneSearchPageText.setVisible(false);
+                moreSearchPagesText.setVisible(true);
+            } else {
+                // the list will contain exactly one landing page link.
+                oneSearchPageText.setVisible(true);
+                moreSearchPagesText.setVisible(false);
+            }
+            
+            // generate the list of links
+            for (Iterator<Object> it = searchPages.iterator(); it.hasNext();) {
+                final Object searchPage;
+                searchPage = it.next();
+
+                // add a link to the list
+                repeatingView.add(
+                        new AjaxLazyLoadPanel(repeatingView.newChildId()) {
+                            @Override
+                            public Component getLazyLoadComponent(String markupId) {
+                                String searchPageLink;
+                                searchPageLink = searchPage.toString();
+
+                                // create a panel for the link 
+                                return new SearchPageLinkPanel(markupId,
+                                        searchPage.toString());
+                            }
+                        });
+            }
+        }
+    }
+
+    /**
+     * Add links to resources other than search or landing pages to the result
+     * page.
+     *
+     * @param solrDocument the document to get the links from
+     */
     private void addResourceLinks(SolrDocument solrDocument) {
         RepeatingView repeatingView = new RepeatingView("resourceList");
         add(repeatingView);
