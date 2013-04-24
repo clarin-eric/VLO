@@ -435,6 +435,7 @@
    <field name="_componentProfile" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="_contentSearchRef" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="_landingPageRef" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="_searchPageRef" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="metadataSource" type="metadataSource" indexed="false" stored="true" multiValued="true" />
    <field name="languages" type="string" indexed="true" stored="true" multiValued="true" />
    
