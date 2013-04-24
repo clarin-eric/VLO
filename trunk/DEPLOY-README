@@ -2,9 +2,9 @@
 0. What the VLO is about 
 
    The VLO application allows faceted browsing of meta data. Before
-   browsing the data by using the VLO web application, the application
-   needs to be deployed and the VLO importer needs to add meta data to
-   the database.
+   being able to browse the data by using the VLO web application, it 
+   needs to be deployed and the VLO importer should be used to add
+   the meta data to the database.
 
 1. The archive
 
@@ -115,7 +115,7 @@
 
    /var/lib/tomcat6/conf/Catalina/localhost/vlo.xml
 
-   or to another, comparable path.
+   or to another, comparable path. Please make the Tomcat user own this file.
 
    Also, create a link for the Tomcat server so that it knows where to look
    for the vlo web application installation:
