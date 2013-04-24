@@ -18,8 +18,8 @@ import org.apache.wicket.resource.ContextRelativeResource;
 public class SearchPageLinkPanel extends LinkPanel {
 
     private final static ImageResource SEARCHPAGE_ICON =
-            new ImageResource(new ContextRelativeResource("Images/readme.png"),
-            "Landing page");
+            new ImageResource(new ContextRelativeResource("Images/Crystal_Clear_action_filefind.png"),
+            "Search page");
 
     /**
      * Panel constructor. 
