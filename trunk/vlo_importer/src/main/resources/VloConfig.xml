@@ -4,9 +4,9 @@
     
     <maxOnHeap>128</maxOnHeap>
     
-    <useMaxFileSize>false</useMaxFileSize>
+    <useMaxFileSize>true</useMaxFileSize>
     
-    <maxFileSize>20000000</maxFileSize>
+    <maxFileSize>10000000</maxFileSize>
     
     <useHandleResolver>false</useHandleResolver>
     
