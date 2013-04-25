@@ -24,7 +24,7 @@ public class FacetConstants {
     public static final String FIELD_PROJECT_NAME = "projectName";
     public static final String FIELD_COMPLETE_METADATA = "metadataSource";
     public static final String FIELD_NATIONAL_PROJECT = "nationalProject";
-    public static final String FIELD_TAG = "tag";
+    // public static final String FIELD_TAG = "tag";
     
     //The _ facets are not meant to be shown to users.
     public static final String FIELD_FILENAME = "_fileName";

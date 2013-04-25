@@ -125,7 +125,7 @@ public class VloConfigTest {
         
         System.out.println("getUseMaxFileSize");
         
-        boolean expResult = false;
+        boolean expResult = true;
         boolean result = VloConfig.getUseMaxFileSize();
         
         assertEquals(expResult, result);
@@ -156,7 +156,7 @@ public class VloConfigTest {
         
         System.out.println("getMaxFileSize");
         
-        int expResult = 20000000;
+        int expResult = 10000000;
         int result = VloConfig.getMaxFileSize();
         
         assertEquals(expResult, result);
