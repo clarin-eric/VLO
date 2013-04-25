@@ -426,7 +426,7 @@
    <field name="resourceType" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="dataProvider" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="nationalProject" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="tag" type="string" indexed="true" stored="true" multiValued="true"/>
+   // <field name="tag" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
 
    
