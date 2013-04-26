@@ -52,7 +52,7 @@
     
     <nationalProjectMapping>/nationalProjectsMapping.xml</nationalProjectMapping>
     
-    <facetFields length="10">
+    <facetFields length="11">
         <facetField>collection</facetField>
         <facetField>language</facetField>
         <facetField>continent</facetField>
@@ -63,6 +63,7 @@
         <facetField>resourceType</facetField>
         <facetField>dataProvider</facetField>
         <facetField>nationalProject</facetField>
+        <facetField>tag</facetField>
     </facetFields>
     
     <countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
