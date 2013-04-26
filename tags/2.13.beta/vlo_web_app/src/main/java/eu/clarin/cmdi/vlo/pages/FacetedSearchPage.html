@@ -1,0 +1,42 @@
+<!doctype html public "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+    <head></head>
+    <body>
+    <wicket:extend>
+        <div class="middlegame">
+            <p />
+            <div border="0" class="opening" width="100%">
+                <form class="search" wicket:id="searchForm">
+                    <div class="homeLink"><a wicket:id="vloHomeLink"><wicket:message key="VLO_home"/></a> &gt;&gt; <a><wicket:message key="facetedBrowserResources"/></a></div>
+                    <div class="searchmodule">
+                        <input wicket:id="searchQuery" type="text">
+                        <button wicket:id="searchSubmit"><wicket:message key="search"/></button>
+                    </div>
+                </form>
+                <div class="tableBody">
+                    <table class="matrix" align="left">
+                        <tr wicket:id="facetColumns" valign="top">
+                            <td wicket:id="cols" width="50%" class="column">
+                                <p><span wicket:id="facetBox"></span>
+                                <p>
+                            </td>
+                        </tr>
+                    </table>
+                    <div>
+	                    <table wicket:id="searchResults" class="resulttable" cellpadding="0" cellspacing="0">
+	                        	[searchResultTable]
+	                    </table>
+	                    <div wicket:id="contentSearch">
+	                    	<br>
+	                    	<span>Search in this result set:</span>
+	                    	<br>
+	                    	<span wicket:id="contentSearchForm"></span>
+	                   	</div>
+                   	</div>
+                </div>
+            </div>
+        </div>
+        <br><br><br>
+    </wicket:extend>
+</body>
+</html>

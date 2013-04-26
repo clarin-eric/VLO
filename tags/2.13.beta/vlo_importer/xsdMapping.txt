@@ -1,0 +1,97 @@
+This file is generated on Apr 8, 2013 3:38:24 PM and only used to document the mapping.
+This file contains xsd name and a list of conceptName with xpath mappings that are generated.
+---------------------
+http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1349361150622/xsd
+FacetName:id
+Mappings:
+    /c:CMD/c:Header/c:MdSelfLink/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:identificationInfo/c:identifier/text()
+FacetName:collection
+Mappings:
+    /c:CMD/c:Header/c:MdCollectionDisplayName/text()
+FacetName:projectName
+Mappings:
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceCreationInfo/c:fundingProject/c:projectName/text()
+FacetName:name
+Mappings:
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:identificationInfo/c:resourceName/text()
+    /c:CMD/c:Components/c:data/c:OLAC-DcmiTerms/c:title/text()
+FacetName:country
+Mappings:
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:spatial[@dcterms-type="ISO3166"]/text()
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:coverage[@dcterms-type="ISO3166"]/text()
+FacetName:language
+Mappings:
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:corpusInfo/c:corpusMediaType/c:corpusTextInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:corpusInfo/c:corpusMediaType/c:corpusAudioInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:corpusInfo/c:corpusMediaType/c:corpusVideoInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:corpusInfo/c:corpusMediaType/c:corpusImageInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:languageDescriptionInfo/c:languageDescriptionMediaType/c:languageDescriptionTextInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:languageDescriptionInfo/c:languageDescriptionMediaType/c:languageDescriptionVideoInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:languageDescriptionInfo/c:languageDescriptionMediaType/c:languageDescriptionImageInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:lexicalConceptualResourceInfo/c:lexicalConceptualResourceMediaType/c:lexicalConceptualResourceTextInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:lexicalConceptualResourceInfo/c:lexicalConceptualResourceMediaType/c:lexicalConceptualResourceAudioInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:lexicalConceptualResourceInfo/c:lexicalConceptualResourceMediaType/c:lexicalConceptualResourceVideoInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:lexicalConceptualResourceInfo/c:lexicalConceptualResourceMediaType/c:lexicalConceptualResourceImageInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:corpusInfo/c:corpusMediaType/c:corpusTextInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:corpusInfo/c:corpusMediaType/c:corpusAudioInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:corpusInfo/c:corpusMediaType/c:corpusVideoInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:corpusInfo/c:corpusMediaType/c:corpusImageInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:languageDescriptionInfo/c:languageDescriptionMediaType/c:languageDescriptionTextInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:languageDescriptionInfo/c:languageDescriptionMediaType/c:languageDescriptionVideoInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:languageDescriptionInfo/c:languageDescriptionMediaType/c:languageDescriptionImageInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:lexicalConceptualResourceInfo/c:lexicalConceptualResourceMediaType/c:lexicalConceptualResourceTextInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:lexicalConceptualResourceInfo/c:lexicalConceptualResourceMediaType/c:lexicalConceptualResourceAudioInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:lexicalConceptualResourceInfo/c:lexicalConceptualResourceMediaType/c:lexicalConceptualResourceVideoInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:lexicalConceptualResourceInfo/c:lexicalConceptualResourceMediaType/c:lexicalConceptualResourceImageInfo/c:languageInfo/c:languageName/text()
+FacetName:languages
+Mappings:
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:corpusInfo/c:corpusMediaType/c:corpusTextInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:corpusInfo/c:corpusMediaType/c:corpusAudioInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:corpusInfo/c:corpusMediaType/c:corpusVideoInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:corpusInfo/c:corpusMediaType/c:corpusImageInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:languageDescriptionInfo/c:languageDescriptionMediaType/c:languageDescriptionTextInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:languageDescriptionInfo/c:languageDescriptionMediaType/c:languageDescriptionVideoInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:languageDescriptionInfo/c:languageDescriptionMediaType/c:languageDescriptionImageInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:lexicalConceptualResourceInfo/c:lexicalConceptualResourceMediaType/c:lexicalConceptualResourceTextInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:lexicalConceptualResourceInfo/c:lexicalConceptualResourceMediaType/c:lexicalConceptualResourceAudioInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:lexicalConceptualResourceInfo/c:lexicalConceptualResourceMediaType/c:lexicalConceptualResourceVideoInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:lexicalConceptualResourceInfo/c:lexicalConceptualResourceMediaType/c:lexicalConceptualResourceImageInfo/c:languageInfo/c:languageId/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:corpusInfo/c:corpusMediaType/c:corpusTextInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:corpusInfo/c:corpusMediaType/c:corpusAudioInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:corpusInfo/c:corpusMediaType/c:corpusVideoInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:corpusInfo/c:corpusMediaType/c:corpusImageInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:languageDescriptionInfo/c:languageDescriptionMediaType/c:languageDescriptionTextInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:languageDescriptionInfo/c:languageDescriptionMediaType/c:languageDescriptionVideoInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:languageDescriptionInfo/c:languageDescriptionMediaType/c:languageDescriptionImageInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:lexicalConceptualResourceInfo/c:lexicalConceptualResourceMediaType/c:lexicalConceptualResourceTextInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:lexicalConceptualResourceInfo/c:lexicalConceptualResourceMediaType/c:lexicalConceptualResourceAudioInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:lexicalConceptualResourceInfo/c:lexicalConceptualResourceMediaType/c:lexicalConceptualResourceVideoInfo/c:languageInfo/c:languageName/text()
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:resourceComponentType/c:lexicalConceptualResourceInfo/c:lexicalConceptualResourceMediaType/c:lexicalConceptualResourceImageInfo/c:languageInfo/c:languageName/text()
+FacetName:organisation
+Mappings:
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:contactPerson/c:affiliation/c:organizationName/text()
+    /c:CMD/c:Components/c:data/c:OLAC-DcmiTerms/c:publisher/text()
+FacetName:genre
+Mappings:
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/@olac-linguistic-type
+FacetName:subject
+Mappings:
+    /c:CMD/c:Components/c:data/c:OLAC-DcmiTerms/c:subject/text()
+FacetName:description
+Mappings:
+    /c:CMD/c:Components/c:data/c:resourceInfo/c:identificationInfo/c:description/text()
+    /c:CMD/c:Components/c:data/c:OLAC-DcmiTerms/c:description/text()
+FacetName:resourceType
+Mappings:
+    /c:CMD/c:Components/c:data/c:OLAC-DcmiTerms/c:type/text()
+FacetName:nationalProject
+Mappings:
+    /c:CMD/c:Header/c:MdCollectionDisplayName/text()
+FacetName:text
+Mappings:
+    /c:CMD//text()
+FacetName:_componentProfile
+Mappings:
+    /c:CMD/c:Header/c:MdProfile/text()
+---------------------

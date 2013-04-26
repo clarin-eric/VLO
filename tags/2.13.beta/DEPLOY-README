@@ -1,0 +1,193 @@
+
+0. What the VLO is about 
+
+   The VLO application allows faceted browsing of meta data. Before
+   being able to browse the data by using the VLO web application, it 
+   needs to be deployed and the VLO importer should be used to add
+   the meta data to the database.
+
+1. The archive
+
+   The VLO importer and web application are contained in an
+   archive. In the case of version 2.13, the archive is named
+
+   vlo_parent-2.13-Distribution.tar.gz 
+
+   Deploying the VLO application means:
+   - unpacking the archive in a suitable location
+   - unpacking the war files contained in the archive
+   - adapt the application's context files
+   and 
+   - adapt the main configuration file.
+
+2. Archive unpacking
+
+   Unpack the archive in directory x, 
+   for example: /var/lib/tomcat6/webapps/vlodist/
+   cd x
+   With tar -xvf vlo_parent-2.13-Distribution.tar.gz
+   vlo_parent-2.13 will be created in the x directory.
+
+   To begin with, make the server's Tomcat user own the files unpacked.
+
+3. Solr server installation
+
+   The VLO importer and web application use Solr as their database
+   server. 
+
+   Unpack x/vlo_parent-2.13/war/solr.war in a directory named y in which you 
+   want the Solr server to reside. This could, for example be: 
+
+   /var/lib/tomcat6/webapps/vlodist/vlo_parent-2.13/war/solr 
+
+   cd y
+   unzip x/vlo_parent-2.13/war/vlo_solr.war
+
+   Make the Tomcat user owner of the files in the tree that starts in
+   the y directory. 
+
+   In y/META-INF/context.xml file you will probably need to modify some 
+   definitions.
+
+   - The context path value. If you define vlo_solr/ to be the value of the 
+     context path, and prefix is some string pointing to web server the 
+     application is installed on, the Solr server will be reachable at the 
+     
+     prefix/vlo_solr/ 
+
+     url.
+ 
+   - Assign x/vlo_parent-2.13/config/solr to the solr/home parameter. 
+
+   Next, copy the y/META-INF/context.xml file to 
+
+   /var/lib/tomcat6/conf/Catalina/localhost/vlo_solr.xml
+
+   or to a directory equivalent to it. If necessary, make the Tomcat user owner 
+   of the vlo_solr.xml file.
+
+   Create a link for the Tomcat server so that it knows where to look for the 
+   solr server installation:
+
+   ln -sf y/solr/ /var/lib/tomcat6/webapps/vlo_solr
+
+   or equivalent. The link created should identify the path defined the context 
+   file, vlo_solr in this case.
+
+   If necessary, change the ownership of the link to the Tomcat user. And if 
+   you would like logging to be configured different from the type of logging 
+   packaged, please modify 
+
+   y/WEB-INF/classes/log4j.properties
+
+   Restart tomcat:
+   /etc/init.d/tomcat6 restart
+
+   Inspect the Tomcat log file directory, and inspect the solr.log file.
+
+4. Web application installation
+
+   Similar to the solr archive, unpack x/vlo_parent-2.13/war/vlo.war in 
+   a directory z in which you want the vlo web application to reside.
+   
+   cd z
+   unzip x/vlo_parent-2.13/war/vlo.war
+
+   Make the Tomcat own the files in and below the z directory.
+
+   Modify the META-INF/context.xml file. Like in the case of the solr server,
+   assign the desired context path value. Again, if prefix is a string pointing
+   to the web server the application is installed on, the vlo web application 
+   will be reachable at the url/vlo/ url.
+
+   Because the packaged configuration is suitable to very specific (development)
+   circumstances only, in most cases it does fit the production environment. You
+   can specify an alternative, external configuration file, preferably the same 
+   file as the one used by the importer (see 5).
+
+   Most likely, you will need to assign another value to the solrUrl parameter. 
+   This parameter is used to let the VLO web application know where it can reach
+   the Solr server. You can set the value of this parameter in an external 
+   configuration file, or directly in the context file. 
+
+   Like in the case of the solr server, copy the z/META-INF/context.xml context 
+   file to:
+
+   /var/lib/tomcat6/conf/Catalina/localhost/vlo.xml
+
+   or to another, comparable path. Please make the Tomcat user own this file.
+
+   Also, create a link for the Tomcat server so that it knows where to look
+   for the vlo web application installation:
+
+   ln -sf z/solr /var/lib/tomcat6/webapps/vlo
+
+   Like in the case of the Solr server, the link created should identify the 
+   path defined the context file. Again, if necessary, change the ownership of 
+   the context file and the link to the Tomcat user.
+
+   If you like, you can change the web application's way of logging. This time, 
+   modifications should be applied to:
+
+   z/WEB-INF/classes/log4j.properties
+
+   Restart the Tomcat server:
+
+   /etc/init.d/tomcat6 restart
+ 
+   or equivalent. This will cause the new Solr server and vlo web application to
+   become active.
+   
+   Finally, inspect the Tomcat log file directory, and inspect the vlo.log file
+   also.
+
+5. Importer configuration
+
+   Both the web application and the importer should use one and the same
+   configuration file. So if, for example, the web application's configuration
+   is in 
+
+   path/VloConfig.xml, add 
+
+   -c path/VloConfig.xml
+
+   to the command in the importer script in the x/vlo_parent-2.13/bin directory.
+
+   Most likely, the dataRoot values need to be changed. This is what a
+   dataRoot definition could look like:
+
+   <DataRoot>
+   	<originName>IPROSLA</originName>
+        <rootFile>/lat/apache/htdocs/static-data-for-vlo-importer/</rootFile>
+        <prefix>http://catalog.clarin.eu/</prefix>
+        <tostrip>/lat/apache/htdocs/</tostrip>
+        <deleteFirst>false</deleteFirst>
+   </DataRoot>
+
+   A dataRoot describes the meta data files. The toStrip part of the
+   description is left out of the rootFile part to create a link to the
+   meta data; the links starts with the prefix.
+
+   Apart from the dataRoot values, the solrUrl parameter might need to be
+   changed. Please note that the context path value defined in
+
+   /var/lib/tomcat6/conf/Catalina/localhost/vlo_solr.xml 
+
+   or in a file equivalent to this one, should be reflected in the value of 
+   this parameter.
+
+   Whenever the definition of the database changes, it is recommended to clear
+   the database before starting an importer run. To do this, make sure that the
+   'deletaAllFirst' parameter equals true before the run. After that, the 
+   original value of the parameter could be restored.
+
+6. Importing data
+
+   You can run the importer by starting the 
+
+   ./vlo_solr_importer.sh
+
+   script in the x/x/vlo_parent-2.13/bin directory. Messages are logged to the 
+   console. Because meta data is not static, it is recommended to run the 
+   importer a couple of times a week. Please note that, given the current 
+   (04.2013) set of data, a run typically takes between four and file hours.
