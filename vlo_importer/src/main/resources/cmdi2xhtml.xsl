@@ -6,15 +6,18 @@
     exclude-result-prefixes="xs"
     version="2.0"
     xpath-default-namespace="http://www.clarin.eu/cmd/">
+    <!--    
+    <!DOCTYPE html>
+    -->
 
     <xsl:output
         method="html"
         encoding="UTF-8"
+        doctype-system="about:legacy-compat"
         indent="yes"
         cdata-section-elements="td"/>
     
     <xsl:param name="prune_Components_branches_without_text_values" as="xs:boolean" select='false()'/>
-    <xsl:param name="termValue"/>
     
 
     <xsl:template name="Component_tree" match="/CMD/Components">
@@ -22,12 +25,12 @@
 
         <ul>
             <xsl:for-each select="$nodeset/element()">
-                <!--fn:normalize-space(-->
                 <xsl:variable name="subnodes_text" select="fn:normalize-space(fn:string-join(descendant-or-self::element()/text(), ''))" as="xs:string+"/>
                 <xsl:if test="not($subnodes_text = '' and $prune_Components_branches_without_text_values)">
                     <xsl:variable name="nchildren" select="fn:count(child::element())"/>
-                     <li>                    
-                     <code>
+                     <li>
+                     
+                     <code class="node">
                          <xsl:value-of select="fn:concat(local-name(), ' ')"/>
                          <xsl:if test="count(@*) > 0">
                              <div class="attributes">
@@ -40,9 +43,20 @@
                     
                      <xsl:choose>
                          <xsl:when test="$nchildren = 0">
-                             <br /><br />
+                             <!--<br /><br />-->
                              <div class="Component_tree_node_content">
-                                  <sample><xsl:value-of select="self::element()"/></sample> 
+                                 <xsl:variable name="leaf_value" select="self::element()"                       as="xs:string"/>
+                                 <xsl:variable name="HTTP_URL"   select="starts-with($leaf_value, 'http://')"   as="xs:boolean"/> 
+                                 <code class="leaf">
+                                 <xsl:choose>
+                                     <xsl:when test="$HTTP_URL">
+                                         <a href="{$leaf_value}"><xsl:value-of select="$leaf_value"/></a>
+                                     </xsl:when>
+                                     <xsl:otherwise>                                    
+                                             <xsl:value-of select="$leaf_value"/>                                         
+                                     </xsl:otherwise>                                 
+                                 </xsl:choose>
+                                 </code>
                              </div>
                          </xsl:when>
                          <xsl:otherwise>
@@ -53,21 +67,15 @@
                              </ul>
                          </xsl:otherwise>
                      </xsl:choose>
-                    </li>
+                                     
+                    </li>                                
                 </xsl:if>
             </xsl:for-each>
         </ul>
     </xsl:template>
-    
+
+
     <xsl:template match="CMD">
-       <!-- TODO <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-            <meta charset="utf-8"/>
-            <head>
-                <title>CMDI collection "<xsl:value-of select="./Header/MdCollectionDisplayName" xmlns="cmd"/>"
-                </title>
-                    <link rel="stylesheet" type="text/css" href="http://catalog.clarin.eu/ds/vlo/css/main.css"/>
-             -->
-           
                 <style media="screen" type="text/css">
                     <![CDATA[
                     li
@@ -76,31 +84,43 @@
                         margin-left: -1.2em;
                     }
                     
-                    code
+                    .node
                     {
                         background-color: rgba(188, 205, 232, 0.8);
                         border: 1px ridge;
                         font-weight: bold;
                         padding: 5px;
-                    }
+                        /*float: left;*/
+                    }                    
+                    
+                    .leaf
+                    {
+                    }                    
                     
                     .Component_tree_node_content
                     {
                         background-color: rgba(188, 200, 232, 0.3);
                         border: 1px dotted red;                        
                         margin-top: 10px;
+                        margin-left: 10px;
                         padding: 5px;
-                        float: none;               
-                        display:table-cell;
+                        display: inline-block;
+                        /*float: left;*/       
+                        /*display: table-cell;*/
                     }                    
                     
                     .attributes
-                    {
+                    {                        
                         display: inline-block;
                         font-style: italic;
                         font-weight: normal;
-                        /* background-color: rgba(100, 201, 234, 0.4); */
+                        /*background-color: rgba(100, 201, 234, 0.4);*/
                     }
+                    
+                    footer
+                    {
+                        border: 1px dotted;
+                    }                    
                     
                     address
                     {
@@ -110,8 +130,6 @@
                     .searchword { background-color: yellow; }
                     ]]>
                 </style>
-         <!--   </head>
-            <body> -->
                 <article style="background-color:#EEEEEE">
                     <div class="endgame">
                         <p>
@@ -159,47 +177,11 @@
                             </table>
                         </p>
                     </div>
-
-                    <!--                   
-                    <p>
-                        <h1>Journal file proxy list</h1>
-                        <xsl:for-each select="JournalFileProxyList"> </xsl:for-each>
-                    </p>
-                    
-                    <p>
-                        <h1>Resource relations</h1>
-                        <xsl:for-each select="Resources/ResourceRelationList/ResourceRelation"> </xsl:for-each>
-                    </p>
-                    -->
                     
                     <p>
                         <h1>Metadata content</h1>
                         <xsl:call-template name="Component_tree"/>
                     </p>
-                    
-                    <!-- TODO<footer>
-                        <p>Created by <address class="author"> <xsl:value-of select="Header/MdCreator"/>
-                        </address> on <time datetime="{Header/MdCreationDate}">
-                                <xsl:value-of select="Header/MdCreationDate"
-                                /></time>
-                            <br />
-                            <small>Located at <a href="{Header/MdSelfLink}">
-                                    <xsl:value-of select="Header/MdSelfLink"/></a>
-                            </small>
-                            <br />
-                            <small>Belongs to <xsl:value-of select="Header/MdCollectionDisplayName"
-                                />
-                            </small>
-                            <br />
-                            <xsl:variable name="resource_URL"
-                                select="fn:concat('http://catalog.clarin.eu/ds/ComponentRegistry?item=',Header/MdProfile)"/>
-                            <small>Based on <a href="{$resource_URL}"><xsl:value-of select="$resource_URL"/></a>
-                            </small>
-                        </p>
-                    </footer>-->
                 </article>
-           <!--TODO </body>
-        </html> -->
-
     </xsl:template>
 </xsl:stylesheet>
