@@ -13,7 +13,7 @@
         <version>2.13</version>
     </parent>
 
-    <groupId>eu.clarin.cmdi</groupId> <!-- changed groupId from mpi to eu.clarin.cmdi -->
+    <groupId>eu.clarin.cmdi</groupId>
     
     <artifactId>vlo_web_app</artifactId>
     
@@ -82,12 +82,46 @@
                 </configuration>
             </plugin>
             
+            
+            <plugin>
+                <!-- add the remote resources plugin to obtain the cmdi2xhtml.xml
+                     file from the vlo_importer module. For more information
+                     on this plugin, please refer the Apache Maven Project website
+                -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-remote-resources-plugin</artifactId>
+                <version>1.4</version>
+                <configuration>
+                    <resourceBundles>
+                        <resourceBundle>eu.clarin.cmdi:vlo:${project.version}</resourceBundle>
+                    </resourceBundles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.1.1</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+                    
+                    <!-- Add the cmdi2xhtml file from the vlo_importer module
+                         to the web application archive file. Please note that
+                         the file will only be included in the archive: the file
+                         will not show up in the web application module in the
+                         Netbeans IDE.
+                    -->
+                    
+                    <srcFiles>
+                        <srcFile>${project.build.directory}/src/main/resources/cmdi2xhtml.xsl</srcFile>
+                    </srcFiles>
                 </configuration>
             </plugin>
             
