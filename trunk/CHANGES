@@ -1,14 +1,14 @@
 Bug Fixes and Features
 
-Beta release 2.13 (April 2013)
+Beta release 2.13 (May 2013)
 
 A new package, eu.clarin.cmdi.vlo.config was added taking care of the web 
 application and importer's configuration. Spring is no longer used for 
 configuration; it was replaced by the Simple framework.
 
 Both the importer and the web application use the same base file for 
-configuration. The base file refers to cmdi2xhtml.xsl, 
-facetConcepts.xml, and nationalProjectsMapping.xml file. 
+configuration. This file refers to external resources like for example
+the nationalProjectsMapping.xml file. 
 
 The base VloConfig.xml file that is included in the /src/main/resources 
 directory of the package, can be replaced by an external instance. Additionally,
