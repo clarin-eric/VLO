@@ -1,0 +1,82 @@
+Bug Fixes and Features
+
+Beta release 2.13 (May 2013)
+
+A new package, eu.clarin.cmdi.vlo.config was added taking care of the web 
+application and importer's configuration. Spring is no longer used for 
+configuration; it was replaced by the Simple framework.
+
+Both the importer and the web application use the same base file for 
+configuration. This file refers to external resources like for example
+the nationalProjectsMapping.xml file. 
+
+The base VloConfig.xml file that is included in the /src/main/resources 
+directory of the package, can be replaced by an external instance. Additionally,
+the web application's context file can be used to overrule the solrUrl parameter
+defined in the packaged or external configuration file.
+
+Added the nationalProjectsMapping file to the default configuration. This means
+that it is no longer necessary to instance of the file external to the package. 
+By the default the importer and web application will look at the packaged instance.
+
+Landing page support on the result page was added; ticket 257.
+
+Heap memory consumption of the importer was limited. A parameter was added to
+to be able to tune the size of the buffer of documents waiting to be deposited 
+in the database.
+
+Repackaging was carried out. From version 2.13 the web application resides
+outside the importer package. Next to these packages the solr package is still
+there, and apart from the addition of a hidden facet supporting the landing 
+page, it has not been modified. In a future release the VLO base functions will
+be split off from the importer package.
+
+
+Release VLO 2.8 (23 may 2012):
+Many small fixes.
+Streamlined the deployment procedure.
+Added facet for the component profile (hidden facet, not shown in interface) for future use.
+Added feedback option.
+Removed the dependency on external xml stylesheets (caused a large-scale outage for spring-users around the 21st of may).
+
+Release VLO 2.5 (22 march 2012):
+Lot's of bugfixes and small enhancements.
+
+Release VLO-2.3.1 (28 June 2011):
+Disabled handleResolving to get the resource name on showResult panel, see made ticket to fix it: http://trac.clarin.eu/ticket/136. Did not work on clarin server.
+
+Release VLO-2.3 (10 June 2011):
+Most notable change is the importing now is based on conceptlink mapping, allowing the importer to automatically parse new flavours of cmdi.
+http://trac.clarin.eu/ticket/105 Create import based on conceptlinks
+http://trac.clarin.eu/ticket/129 Rename origin to collection
+http://trac.clarin.eu/ticket/131 ShowResultPage should give proper error when result can not be loaded
+http://trac.clarin.eu/ticket/98	Record with duplicate id does not show
+http://trac.clarin.eu/ticket/84	Some links are changed from orginal in the result page
+http://trac.clarin.eu/ticket/27	Show list of resources (Written or Media etc...) in Show result page
+
+Release VLO-2.2 (28 Januari 2011):
+http://trac.clarin.eu/ticket/93 Scaling of images fixed (and typo in image resolved)
+http://trac.clarin.eu/ticket/92 Breadcrumb to original vlo page added
+http://trac.clarin.eu/ticket/63 Frontpage layout changed
+http://trac.clarin.eu/ticket/55 Preprocess of imdi files in place
+Created correct links from original vlo page to new faceted browser.
+
+Release VLO-2.1 (13 Januari 2011):
+http://trac.clarin.eu/ticket/54 	Change columnheaders of results
+http://trac.clarin.eu/ticket/26 	add prev/next links to show result page
+http://trac.clarin.eu/ticket/42 	capitalization
+http://trac.clarin.eu/ticket/62 	10 facet values instead of 5
+http://trac.clarin.eu/ticket/43 	origin for LRT should be CLARIN LRT inventory
+http://trac.clarin.eu/ticket/37 	extract proper country names from country code facets
+http://trac.clarin.eu/ticket/38 	extract proper language names from language code facets
+http://trac.clarin.eu/ticket/60 	remove Unspecified and Unknown from initial facet list
+http://trac.clarin.eu/ticket/46 	open in original context for the LRT inventory
+http://trac.clarin.eu/ticket/29 	Link to correct archives based on the metadata
+http://trac.clarin.eu/ticket/45 	make all links clickable
+http://trac.clarin.eu/ticket/34 	make partner images clickable
+- Added resourceType facet (still todo for OLAC data)
+- Added resource list and links to download resources (still todo show names for handles)
+
+Release VLO-2.0 (2 December 2010):
+New implementation of the original vlo facetted browser using SOLR as a backend and the Wicket framework for the java frontend. We now support CMDI metadata only.
+- Initial version working and performing very nicely.
