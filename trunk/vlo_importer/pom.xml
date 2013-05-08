@@ -7,9 +7,7 @@
 
     <groupId>eu.clarin.cmdi</groupId>
 
-    <artifactId>vlo</artifactId> <!-- kj: change this to vlo_importer on 
-
-    splitoff from base, the base could have vlo as its identity -->
+    <artifactId>vlo_importer</artifactId> 
 
     <packaging>jar</packaging>
 
@@ -70,71 +68,6 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>make-a-jar</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <classesDirectory>target/classes</classesDirectory>
-                    <includes>
-                        <include>**/*</include>
-                    </includes>
-                    <archive>
-                        <index>false</index>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>. lib/</classpathPrefix>
-                            <mainClass>eu.clarin.cmdi.vlo.importer.MetadataImporter</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>-->
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>-->
-            <!--<plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.3</version>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/buildwar.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assemblyW</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>-->
-            <!-- NOTE: Run importer from jar file with -cp .:$filename.jar eu.clarin.cmdi.vlo.importer.MetadataImporter -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.3</version>

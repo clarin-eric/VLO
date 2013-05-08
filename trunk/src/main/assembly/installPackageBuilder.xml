@@ -76,16 +76,7 @@
             </includes>
             <outputDirectory>bin</outputDirectory>
         </fileSet>
-        <fileSet>
-            <directory>vlo_importer/src/main/resources</directory>
-            <includes>
-                <include>cmdi2xhtml.xsl</include>
-                <include>facetConcepts.xml</include>
-                <include>nationalProjectsMapping.xml</include>
-                <include>VloConfig.xml</include>
-            </includes>
-            <outputDirectory>bin</outputDirectory>
-        </fileSet>
+
 <!-- WEB APPLICATION -->
         <!-- WAR FILE -->
         <fileSet>
