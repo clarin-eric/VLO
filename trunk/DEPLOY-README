@@ -26,23 +26,26 @@
 
    vlo_parent-2.13-Distribution.tar.gz
 
-   in a temporary directory temp. Copy the contents of the vlo_parent-2.13 
+   in a temporary directory temp. Next, stop the Tomcat server: 
+
+   /etc/init.d/tomcat6 stop 
+
+   After the server has stopped, copy the contents of the vlo_parent-2.13 
    directory just created to a permanent directory, vlo, for example. In the
    tree starting in vlo, the VLO configuration is stored. Also, from the 
 
    vlo/bin
    
-   directory, you can run the importer application.
+   directory, you can run the importer application. Since this application
+   relies on the solr server, we first need to install this server.
 
 3. Solr server installation
 
    The VLO importer and web application use Solr as their database
-   server. To install this server, first stop the Tomcat server:
-
-   /etc/init.d/tomcat6 stop 
-
-   Next, copy the Solr server web application archive to the Tomcat 
-   server web application directory. This could for example be
+   server. To install this server, assuming that the Tomcat server 
+   has not started yet, copy the Solr server web application archive 
+   to the Tomcat server web application directory. This could for 
+   example be
 
    /var/lib/tomcat6/webapps
 
@@ -77,18 +80,13 @@
 
    vlo/config/solr
 
-   to the Tomcat user, so that the solr server can store data in it.
-
-   Finally, start the Tomcat server:
-
-   /etc/init.d/tomcat6 start
-
-   To be sure the Solr server is working as it should, please inspect the Tomcat
-   log file directory, and inspect the solr.log file.
+   to the Tomcat user, so that the Solr server can store data in it. Now the
+   Solr server has been installed, the VLO importer and web application could 
+   use it. Next we will install the VLO web application.
 
 4. Web application installation
 
-   Similar to the Solr archive, stop the Tomcat server, and unpack 
+   Similar to the Solr archive, unpack 
 
    temp/vlo_parent-2.13/war/vlo.war in 
    
@@ -131,8 +129,8 @@
 
    apps/WEB-INF/classes/log4j.properties
 
-   Finally, start the Tomcat server, and inspect the Tomcat log file directory, 
-   especially the vlo.log file.
+   Now the web application has been installed and configured, we only need to 
+   have a look at the VLO importer's configuration.
 
 5. Importer configuration
 
@@ -174,11 +172,18 @@
    Whenever the definition of the database changes, it is recommended to clear
    the database before starting an importer run. To do this, make sure that the
    'deletaAllFirst' parameter equals true before the run. After that, the 
-   original value of the parameter could be restored.
+   original value of the parameter could be restored. 
 
 6. Importing data
 
-   You can run the importer by starting the 
+   Before starting data import, first start the Tomcat server:
+
+   /etc/init.d/tomcat6 start
+
+   To be sure the Solr server is working as it should, inspect the Tomcat log 
+   file directory, and in that directory, check the solr.log and vlo.log files. 
+
+   Next, you can run the importer by starting the 
 
    ./vlo_solr_importer.sh
 
