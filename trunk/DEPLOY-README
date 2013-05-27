@@ -1,10 +1,10 @@
 
 0. What the VLO is about 
 
-   The VLO application allows faceted browsing of meta data. Before
-   being able to browse the data by using the VLO web application, it 
-   needs to be deployed and the VLO importer should be used to add
-   the meta data to the database.
+   Using the VLO application, you can browse meta data by facet. The 
+   instructions below describe the installation of the applications necessary
+   for browsing: the VLO web application, the Solr server, and the meta data
+   importer.
 
 1. The archive
 
@@ -26,18 +26,19 @@
 
    vlo_parent-2.13-Distribution.tar.gz
 
-   in a temporary directory temp. Next, stop the Tomcat server: 
+   in a temporary directory: 'temp'. Next, stop the Tomcat server: 
 
    /etc/init.d/tomcat6 stop 
 
    After the server has stopped, copy the contents of the vlo_parent-2.13 
-   directory just created to a permanent directory, vlo, for example. In the
-   tree starting in vlo, the VLO configuration is stored. Also, from the 
+   directory just created to a permanent directory, 'vlo', for example. In the
+   tree starting in vlo, the configuration of the application is stored. Also, 
+   from the 
 
    vlo/bin
    
    directory, you can run the importer application. Since this application
-   relies on the solr server, we first need to install this server.
+   relies on the Solr server, we first need to install the Solr web application.
 
 3. Solr server installation
 
@@ -49,20 +50,25 @@
 
    /var/lib/tomcat6/webapps
 
-   Step into this directory, apps,
+   Step into this directory, lets call it 'apps',
 
    cd apps
  
-   cp temp/vlo_parent-2.13/war/solr.war .
+   cp temp/vlo_parent-2.13/war/vlo_solr-3.6.0.war .
 
    If it does not exist, create the vlo_solr directory, and unpack the web 
    application archive in it: 
 
    cd vlo_solr
-   unzip ../solr.war  
+   unzip ../vlo_solr-3.6.0.war  
 
-   In apps/META-INF/context.xml file you modify the solr/home parameter to the
-   path where the solr server finds its configuration and stores its data:
+   After unzipping, remove the vlo_solr-3.6.0.war file. Next, if necessary, 
+   modify the solr/home parameter in the 
+ 
+   apps/META-INF/context.xml
+
+   file to the path where the solr server finds its configuration and stores 
+   its data:
 
    vlo/config/solr 
 
@@ -80,15 +86,15 @@
 
    vlo/config/solr
 
-   to the Tomcat user, so that the Solr server can store data in it. Now the
-   Solr server has been installed, the VLO importer and web application could 
-   use it. Next we will install the VLO web application.
+   to that of the Tomcat user. This will enable the Solr server can store data 
+   in it. Now the Solr server has been installed, the importer and web 
+   application could use it. Next we will install the VLO web application.
 
 4. Web application installation
 
    Similar to the Solr archive, unpack 
 
-   temp/vlo_parent-2.13/war/vlo.war in 
+   temp/vlo_parent-2.13/war/vlo_web_app-2.13.war in 
    
    the  
 
@@ -149,7 +155,6 @@
    Most likely, in the configuration file, the dataRoot values need to be 
    changed. This is what a dataRoot definition could look like:
 
-
    <originName>MPI self harvest</originName>
      <rootFile>/var/www/vlomd/self/</rootFile>            
      <prefix>http://m12404423/vlomd/</prefix>
@@ -190,4 +195,4 @@
    script in the vlo/bin directory. Messages are logged to the console. Because 
    meta data is not static, it is recommended to run the importer a couple of 
    times a week. Please note that, given the current (04.2013) set of data, a  
-   run typically takes between four and file hours.
+   run typically takes between four and five hours.
