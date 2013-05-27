@@ -4,8 +4,15 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloContextConfig;
 import eu.clarin.cmdi.vlo.dao.SearchResultsDao;
 import eu.clarin.cmdi.vlo.pages.FacetedSearchPage;
+import java.util.Map;
 import javax.servlet.ServletContext;
+import org.apache.wicket.Request;
+import org.apache.wicket.RequestCycle;
+import org.apache.wicket.Response;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.protocol.http.WebRequestCycle;
+import org.apache.wicket.request.RequestParameters;
 
 /**
  * {@literal VLO} web application.
@@ -20,6 +27,91 @@ import org.apache.wicket.protocol.http.WebApplication;
  */
 public class VloWebApplication extends WebApplication {
 
+    private String theme = null;
+    
+    /**
+     * 
+     * @return 
+     */
+    public String getTheme (){
+        return theme;
+    }
+    
+    /**
+     * 
+     */
+    public void setTheme (String theme){
+        this.theme = theme;
+    }
+    
+    /**
+     * Client request interception<br><br>
+     * 
+     * Intercept client requests by adding to the default behavior of the web
+     * request handling. Define a request cycle that retrieves the URL
+     * parameters from the client requests. The URL parameters can then be
+     * reflected back in the pages created by the application.
+     */
+    private class VloRequestCycle extends WebRequestCycle {        
+        
+        // find out why this is necessary
+        VloRequestCycle (WebApplication app, WebRequest req, Response res){
+            super (app, req, res);
+        }   
+
+        /**
+         * Redefine the beginning of the processing of a request
+         * 
+         */
+        @Override
+        public void onBeginRequest() {
+            /* Invoke the superclass method in order to have the default
+             * processing.
+             */
+            super.onBeginRequest();
+            /* After that, get the request parameters. Note that these are
+             * more elaborate than the parameters supplied in the URL of the
+             * original request.
+             */            
+            RequestParameters reqParam = this.request.getRequestParameters();
+            // then, get the parameters in the URL from those
+            Map <String, String[]> map = this.getWebRequest().getParameterMap();
+            // check if there is a theme parameter among the URL parameters
+            
+            Object object = map.get("theme");
+            if (object == null) {
+                // no theme parameters included in the URL, reset stored value   
+            } else {
+                String value;
+                value = map.get("theme").toString();
+                // the client included the theme parameter in the URL, save it
+                // by referencing the set method in the outer class
+                VloWebApplication.this.setTheme(value);
+            }
+        }
+
+        /**
+         * 
+         */
+        @Override
+        public void onEndRequest() {
+            super.onEndRequest();
+        }
+    }
+
+    /**
+     * Install the custom request cycle. Note that the cast assumed to be safe.
+     * 
+     * @param req
+     * @param res
+     * @return
+     */
+    @Override
+    public RequestCycle newRequestCycle(Request req, Response res){
+        VloRequestCycle cycle = new VloRequestCycle(this, (WebRequest)req, res);
+        return cycle;
+    }
+
     private SearchResultsDao searchResults;
     
     /**
@@ -33,6 +125,10 @@ public class VloWebApplication extends WebApplication {
      */
     @Override
     public void init() {
+        
+        // this.setRequestCycleProvider(IRequestCycleProvider);
+        
+                
 
         if (inContext) {
             
@@ -52,7 +148,7 @@ public class VloWebApplication extends WebApplication {
 
         // start the application
 
-        searchResults = new SearchResultsDao();
+        searchResults = new SearchResultsDao();        
     }
 
     /**
