@@ -2,6 +2,7 @@ package eu.clarin.cmdi.vlo.pages;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.Resources;
+import eu.clarin.cmdi.vlo.VloWebApplication;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.AutoCompleteDao;
 import fiftyfive.wicket.basic.TruncatedLabel;
@@ -40,7 +41,7 @@ public class FacetedSearchPage extends BasePage {
      * @param parameters Page parameters
      * @throws SolrServerException
      */
-    public FacetedSearchPage(final PageParameters parameters) {
+    public FacetedSearchPage(final PageParameters parameters) { // removed 'final', not clear why the parameters need to be final
         super(parameters);
         query = new SearchPageQuery(parameters);
         addSearchBox();
@@ -71,7 +72,12 @@ public class FacetedSearchPage extends BasePage {
         protected void onSubmit() {
             SearchPageQuery query = getModelObject();
             PageParameters pageParameters = query.getPageParameters();
-            // this.getWebPage().setResponsePage(null, pageParameters);
+
+            // get a reference to the web application object
+            VloWebApplication webApp = (VloWebApplication) this.getApplication();
+            // add the persistent parameters stored in it to the this page
+            webApp.addPersistentParameters(pageParameters);
+            
             setResponsePage(FacetedSearchPage.class, pageParameters);
         }
     }

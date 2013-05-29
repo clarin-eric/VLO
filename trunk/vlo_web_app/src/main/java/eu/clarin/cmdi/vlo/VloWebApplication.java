@@ -6,7 +6,6 @@ import eu.clarin.cmdi.vlo.dao.SearchResultsDao;
 import eu.clarin.cmdi.vlo.pages.FacetedSearchPage;
 import java.util.Map;
 import javax.servlet.ServletContext;
-import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
@@ -17,46 +16,67 @@ import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.request.RequestParameters;
 
 /**
- * {@literal VLO} web application.
- *
- * The web application class defines an object representing the VLO web
- * application. 
+ * {@literal VLO} web application<br><br>
  * 
- * Because the VloWebApplication class extends WebApplication, a class instance
- * will reside inside a web server container. By running the Start class
- * however, an instance of the application will reside outside a server
- * container.
+ * Because the VloWebApplication class extends the WebApplication class, an
+ * instance of the VLO web application normally resides inside a web server
+ * container. However, by running the Start class, the application can also 
+ * exist outside such a container.
  */
 public class VloWebApplication extends WebApplication {
 
-    private String theme = null;
+    /**
+     * Remember the theme to be used. It is one of the elements in the list
+     * of parameters persisting with the application object.
+     */
+    private String theme = "testTheme";
     
     /**
+     * Get the theme stored<br><br>
      * 
-     * @return 
+     * @return the theme
      */
     public String getTheme (){
         return theme;
     }
     
     /**
-     * 
+     * Store the theme to be used 
      */
     public void setTheme (String theme){
         this.theme = theme;
     }
     
     /**
-     * Client request interception<br><br>
+     * Add the parameters persisting with the application object to an a list
+     * of parameters existing outside the object.<br><br>
      * 
-     * Add behavior to the web request handling by retrieving the URL parameters
-     * from the client requests, so that the web application can reflect them in
-     * the pages created.
+     * Invoke this method from a component, after generating a list of 
+     * parameters. 
+     * 
+     * @param parameters the existing list of parameters
+     * @return the concatenation of the exising list and the parameters 
+     * persisting with the application object. 
      */
-    private class VloRequestCycle extends WebRequestCycle {        
+    public PageParameters addPersistentParameters(PageParameters parameters) {
+
+        // get the theme parameter from the application
+
+        parameters.add("theme", getTheme());
+        return parameters;
+    }
+
+    /**
+     * Customized client request cycle<br><br>
+     * 
+     * Add behavior to the web request handling by retrieving persistent
+     * parameters to the application from from client requests, and store
+     * the in the application object.
+     */
+    private class CustomCycle extends WebRequestCycle {        
         
         // find out why this is necessary
-        VloRequestCycle (WebApplication app, WebRequest req, Response res){
+        CustomCycle (WebApplication app, WebRequest req, Response res){
             super (app, req, res);
         }   
 
@@ -69,75 +89,43 @@ public class VloWebApplication extends WebApplication {
             super.onBeginRequest();
             // after that, get the parameters of the request itself
             RequestParameters reqParam = this.request.getRequestParameters();
-            // from these, get the URL parameters
+            // from these, get the parameters represented in the URL
             Map <String, String[]> map = this.getWebRequest().getParameterMap();
             // check if there is a theme parameter        
             String[] object = map.get("theme");
             
             if (object == null) {
-                // no theme parameters included in the URL, reset stored value   
+                // no theme in the URL, do not change the value of the parameter
             } else {
-                // save the theme specified in the URL 
-                VloWebApplication.this.setTheme(object[0]);
-                
-                // determine the intended css and "install" it
-                // determine the intended picture and install it
-                // this might not have to be done for every page or every request
-            }
-        }
-
-        /**
-         * 
-         */
-        @Override
-        public void onEndRequest() {
-            super.onEndRequest();
-            
-            String theme;
-            
-            // get the theme from the application instance
-            theme = VloWebApplication.this.getTheme();        
-            if (theme == null) {
-                // no theme 
-            } else {
-                Page requestPage, responsePage;
-
-                // get the response page associated with the request
-                requestPage  = this.getRequest().getPage();
-                responsePage = this.getResponsePage();
-                
-                // may be need to check for response page not null
-                
-                PageParameters param;
-                
-                // get current response page parameters
-                param = this.getResponsePage().getPageParameters();
-                // add the theme to them
-                param.add("theme", theme);
-                
-                // pass the new parameter map to the response page
-                setResponsePage(responsePage.getPageClass(), param);
-                
-                // jc thinks the url might not be formatted correctly
-                // while the parameter is in the response. Maybe this
-                // can be checked by debugging in the browser
-                // note: with respect to components, wicket only updates
-                // a page. So when a component changes, that does not 
-                // mean that a page and consequently its url, changes
+                if (theme.equals(object[0])){
+                    // keep the theme that was installed on a previous request
+                } else {
+                    // theme not installed yet, first: remember it
+                    VloWebApplication.this.setTheme(object[0]);
+                    // after that: determine the intended css and "install" it
+                    // determine the intended picture and install it
+                }
             }
         }
     }
 
     /**
-     * Install the custom request cycle. Note that the cast assumed to be safe.
+     * Put the the customized request cycle up for installation<br><br>
      * 
-     * @param req
-     * @param res
-     * @return
+     * Note that casting the request to a WebRequest is assumed to be safe.
+     * 
+     * @param request the request to be passed on the the new handler
+     * @param response the response to be passed on the the new handler
+     * @return the new handler
      */
     @Override
-    public RequestCycle newRequestCycle(Request req, Response res){
-        VloRequestCycle cycle = new VloRequestCycle(this, (WebRequest)req, res);
+    public RequestCycle newRequestCycle(Request request, Response response){
+        
+        /* Pass on the application object and  parameters to new the request 
+         * cycle when creating it.
+         */
+        CustomCycle cycle = new CustomCycle(this, (WebRequest)request, response);
+        
         return cycle;
     }
 
@@ -155,10 +143,6 @@ public class VloWebApplication extends WebApplication {
     @Override
     public void init() {
         
-        // this.setRequestCycleProvider(IRequestCycleProvider);
-        
-                
-
         if (inContext) {
             
             // get the servlet's context
