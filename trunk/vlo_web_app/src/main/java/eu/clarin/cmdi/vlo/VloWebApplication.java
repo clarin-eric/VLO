@@ -6,6 +6,8 @@ import eu.clarin.cmdi.vlo.dao.SearchResultsDao;
 import eu.clarin.cmdi.vlo.pages.FacetedSearchPage;
 import java.util.Map;
 import javax.servlet.ServletContext;
+import org.apache.wicket.Page;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.Response;
@@ -47,10 +49,9 @@ public class VloWebApplication extends WebApplication {
     /**
      * Client request interception<br><br>
      * 
-     * Intercept client requests by adding to the default behavior of the web
-     * request handling. Define a request cycle that retrieves the URL
-     * parameters from the client requests. The URL parameters can then be
-     * reflected back in the pages created by the application.
+     * Add behavior to the web request handling by retrieving the URL parameters
+     * from the client requests, so that the web application can reflect them in
+     * the pages created.
      */
     private class VloRequestCycle extends WebRequestCycle {        
         
@@ -60,33 +61,28 @@ public class VloWebApplication extends WebApplication {
         }   
 
         /**
-         * Redefine the beginning of the processing of a request
-         * 
+         * Add the behavior to the beginning of the processing of a request
          */
         @Override
         public void onBeginRequest() {
-            /* Invoke the superclass method in order to have the default
-             * processing.
-             */
+            // first, invoke the default behavior
             super.onBeginRequest();
-            /* After that, get the request parameters. Note that these are
-             * more elaborate than the parameters supplied in the URL of the
-             * original request.
-             */            
+            // after that, get the parameters of the request itself
             RequestParameters reqParam = this.request.getRequestParameters();
-            // then, get the parameters in the URL from those
+            // from these, get the URL parameters
             Map <String, String[]> map = this.getWebRequest().getParameterMap();
-            // check if there is a theme parameter among the URL parameters
+            // check if there is a theme parameter        
+            String[] object = map.get("theme");
             
-            Object object = map.get("theme");
             if (object == null) {
                 // no theme parameters included in the URL, reset stored value   
             } else {
-                String value;
-                value = map.get("theme").toString();
-                // the client included the theme parameter in the URL, save it
-                // by referencing the set method in the outer class
-                VloWebApplication.this.setTheme(value);
+                // save the theme specified in the URL 
+                VloWebApplication.this.setTheme(object[0]);
+                
+                // determine the intended css and "install" it
+                // determine the intended picture and install it
+                // this might not have to be done for every page or every request
             }
         }
 
@@ -96,6 +92,39 @@ public class VloWebApplication extends WebApplication {
         @Override
         public void onEndRequest() {
             super.onEndRequest();
+            
+            String theme;
+            
+            // get the theme from the application instance
+            theme = VloWebApplication.this.getTheme();        
+            if (theme == null) {
+                // no theme 
+            } else {
+                Page requestPage, responsePage;
+
+                // get the response page associated with the request
+                requestPage  = this.getRequest().getPage();
+                responsePage = this.getResponsePage();
+                
+                // may be need to check for response page not null
+                
+                PageParameters param;
+                
+                // get current response page parameters
+                param = this.getResponsePage().getPageParameters();
+                // add the theme to them
+                param.add("theme", theme);
+                
+                // pass the new parameter map to the response page
+                setResponsePage(responsePage.getPageClass(), param);
+                
+                // jc thinks the url might not be formatted correctly
+                // while the parameter is in the response. Maybe this
+                // can be checked by debugging in the browser
+                // note: with respect to components, wicket only updates
+                // a page. So when a component changes, that does not 
+                // mean that a page and consequently its url, changes
+            }
         }
     }
 
