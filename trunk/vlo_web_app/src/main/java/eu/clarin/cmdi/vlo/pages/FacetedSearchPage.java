@@ -71,6 +71,7 @@ public class FacetedSearchPage extends BasePage {
         protected void onSubmit() {
             SearchPageQuery query = getModelObject();
             PageParameters pageParameters = query.getPageParameters();
+            // this.getWebPage().setResponsePage(null, pageParameters);
             setResponsePage(FacetedSearchPage.class, pageParameters);
         }
     }
