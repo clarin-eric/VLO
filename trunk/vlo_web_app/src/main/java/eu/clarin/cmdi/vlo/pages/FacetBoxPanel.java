@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import eu.clarin.cmdi.vlo.VloWebApplication;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -66,6 +67,13 @@ public class FacetBoxPanel extends Panel {
         PageParameters pageParameters = query.getPageParameters();
         pageParameters.add(ShowAllFacetValuesPage.SELECTED_FACET_PARAM, facetField.getName());
         pageParameters.add(ShowAllFacetValuesPage.FACET_MIN_OCCURS, "1");
+        
+        // get a reference to the web application object
+        VloWebApplication webApp = (VloWebApplication) this.getApplication();
+        // add the persistent parameters stored in it to the panel parameters
+        pageParameters = webApp.addPersistentParameters(pageParameters);
+        
+        
         add(new BookmarkablePageLink("showMore", ShowAllFacetValuesPage.class, pageParameters) {
 
             @Override

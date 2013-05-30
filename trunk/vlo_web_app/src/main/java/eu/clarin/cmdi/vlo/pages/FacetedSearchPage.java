@@ -76,7 +76,7 @@ public class FacetedSearchPage extends BasePage {
             // get a reference to the web application object
             VloWebApplication webApp = (VloWebApplication) this.getApplication();
             // add the persistent parameters stored in it to the this page
-            webApp.addPersistentParameters(pageParameters);
+            pageParameters = webApp.addPersistentParameters(pageParameters);
             
             setResponsePage(FacetedSearchPage.class, pageParameters);
         }

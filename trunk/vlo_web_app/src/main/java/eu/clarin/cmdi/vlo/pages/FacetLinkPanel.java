@@ -24,7 +24,7 @@ public class FacetLinkPanel extends Panel {
         // get a reference to the web application object
         VloWebApplication webApp = (VloWebApplication) this.getApplication();
         // add the persistent parameters stored in it to the panel parameters
-        webApp.addPersistentParameters(params);
+        params = webApp.addPersistentParameters(params);
         
         Link<Count> facetLink = new BookmarkablePageLink("facetLink", FacetedSearchPage.class, params);
         facetLink.add(new Label("facetLinkLabel", model.getObject().getName()));
