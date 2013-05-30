@@ -3,6 +3,9 @@ package eu.clarin.cmdi.vlo;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloContextConfig;
 import eu.clarin.cmdi.vlo.dao.SearchResultsDao;
+import eu.clarin.cmdi.vlo.pages.FacetBoxPanel;
+import eu.clarin.cmdi.vlo.pages.FacetHeaderPanel;
+import eu.clarin.cmdi.vlo.pages.FacetLinkPanel;
 import eu.clarin.cmdi.vlo.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.pages.ShowResultPage;
 import java.util.Map;
@@ -150,11 +153,23 @@ public class VloWebApplication extends WebApplication {
      */
     @Override
     public void init() {
-        
+                
         if (inContext) {
             
+            /*
+             * send messages to objects that need a static reference to this web
+             * application object. While this is only required in the case of the
+             * results page BookmarkablePageLink method, uniform approach might be
+             * the most prefarable one.
+             */
+            ShowResultPage.setWebApp(this);
+            FacetBoxPanel.setWebApp(this);
+            FacetHeaderPanel.setWebApp(this);
+            FacetLinkPanel.setWebApp(this);
+            FacetedSearchPage.setWebApp(this);
+
             // get the servlet's context
-            
+
             ServletContext servletContext;
             servletContext = this.getServletContext();
             
@@ -179,8 +194,6 @@ public class VloWebApplication extends WebApplication {
      * server container.
      */
     public VloWebApplication() {
-
-        ShowResultPage.setWebApp(this);
 
         /*
          * Read the application's packaged configuration. 

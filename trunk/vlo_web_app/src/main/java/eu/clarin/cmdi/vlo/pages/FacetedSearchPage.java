@@ -37,11 +37,23 @@ public class FacetedSearchPage extends BasePage {
     private final SearchPageQuery query;
     private final static AutoCompleteDao autoCompleteDao = new AutoCompleteDao();
     
+    // reference to the web application object
+    static VloWebApplication webApp;
+    
+    /**
+     * Make sure every web application object sends this message
+     * 
+     * @param vloWebApplication reference to the web application object
+     */
+    public static void setWebApp (VloWebApplication vloWebApplication){
+        webApp = vloWebApplication;
+    }
+    
     /**
      * @param parameters Page parameters
      * @throws SolrServerException
      */
-    public FacetedSearchPage(final PageParameters parameters) { // removed 'final', not clear why the parameters need to be final
+    public FacetedSearchPage(final PageParameters parameters) {
         super(parameters);
         query = new SearchPageQuery(parameters);
         addSearchBox();
@@ -73,9 +85,6 @@ public class FacetedSearchPage extends BasePage {
             SearchPageQuery query = getModelObject();
             PageParameters pageParameters = query.getPageParameters();
 
-            // get a reference to the web application object
-            VloWebApplication webApp = (VloWebApplication) this.getApplication();
-            // add the persistent parameters stored in it to the this page
             pageParameters = webApp.addPersistentParameters(pageParameters);
             
             setResponsePage(FacetedSearchPage.class, pageParameters);

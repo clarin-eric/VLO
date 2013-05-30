@@ -31,6 +31,18 @@ public class FacetBoxPanel extends Panel {
     private FacetModel facetModel;
     private int maxNrOfFacetValues;
 
+    // reference to the web application object
+    static VloWebApplication webApp;
+    
+    /**
+     * Make sure every web application object sends this message
+     * 
+     * @param vloWebApplication reference to the web application object
+     */
+    public static void setWebApp (VloWebApplication vloWebApplication){
+        webApp = vloWebApplication;
+    }
+    
     public FacetBoxPanel(String id, IModel<FacetField> model) {
         super(id, model);
         setOutputMarkupId(true);
@@ -67,12 +79,8 @@ public class FacetBoxPanel extends Panel {
         PageParameters pageParameters = query.getPageParameters();
         pageParameters.add(ShowAllFacetValuesPage.SELECTED_FACET_PARAM, facetField.getName());
         pageParameters.add(ShowAllFacetValuesPage.FACET_MIN_OCCURS, "1");
-        
-        // get a reference to the web application object
-        VloWebApplication webApp = (VloWebApplication) this.getApplication();
-        // add the persistent parameters stored in it to the panel parameters
+
         pageParameters = webApp.addPersistentParameters(pageParameters);
-        
         
         add(new BookmarkablePageLink("showMore", ShowAllFacetValuesPage.class, pageParameters) {
 
