@@ -52,7 +52,6 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.protocol.http.RequestUtils;
-import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WicketURLDecoder;
 import org.apache.wicket.protocol.http.WicketURLEncoder;
 import org.apache.wicket.resource.ContextRelativeResource;
@@ -407,23 +406,24 @@ public class ShowResultPage extends BasePage {
         add(link);
     }
     
+    // reference to the web application object
     static VloWebApplication webApp;
     
     /**
-     * Make sure the web application class invokes this method 
-     * @param app
+     * Make sure every web application object sends this message
+     * 
+     * @param vloWebApplication reference to the web application object
      */
-    public static void setWebApp (VloWebApplication app){
-        webApp = app;
+    public static void setWebApp (VloWebApplication vloWebApplication){
+        webApp = vloWebApplication;
     }
 
     public static BookmarkablePageLink<ShowResultPage> createBookMarkableLink(String linkId, SearchPageQuery query, String docId) {
         PageParameters pageParameters = query.getPageParameters();
         pageParameters.put(ShowResultPage.PARAM_DOC_ID, WicketURLEncoder.QUERY_INSTANCE.encode(docId));
-        // pageParameters.put("theme", "themeSetInShowResultPage");
-        pageParameters.put("theme", webApp.getTheme());
-        // this is where a link to the result page is create; the
-        // page itself is created when the link is clicked
+        
+        webApp.addPersistentParameters(pageParameters);
+        
         BookmarkablePageLink<ShowResultPage> docLink = new BookmarkablePageLink<ShowResultPage>(linkId, ShowResultPage.class,
                 pageParameters);
         return docLink;
