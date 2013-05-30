@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.pages;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.Resources;
 import eu.clarin.cmdi.vlo.StringUtils;
+import eu.clarin.cmdi.vlo.VloWebApplication;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.DaoLocator;
 import java.io.InputStreamReader;
@@ -51,6 +52,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.protocol.http.RequestUtils;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WicketURLDecoder;
 import org.apache.wicket.protocol.http.WicketURLEncoder;
 import org.apache.wicket.resource.ContextRelativeResource;
@@ -72,13 +74,21 @@ public class ShowResultPage extends BasePage {
     private final URL xslFile = getClass().getResource("/cmdi2xhtml.xsl");
     
     @SuppressWarnings("serial")
-    public ShowResultPage(final PageParameters parameters) {
-        super(parameters);
+    public ShowResultPage(final PageParameters currentParam) {
+        super(currentParam);
         final String docId = WicketURLDecoder.QUERY_INSTANCE.decode(getPageParameters().getString(PARAM_DOC_ID, null));
         SolrDocument solrDocument = DaoLocator.getSearchResultsDao().getSolrDocument(docId);
         if (solrDocument != null) {
-            final SearchPageQuery query = new SearchPageQuery(parameters);
-            BookmarkablePageLink<String> backLink = new BookmarkablePageLink<String>("backLink", FacetedSearchPage.class, query.getPageParameters());
+            final SearchPageQuery query = new SearchPageQuery(currentParam);
+            
+            // now the persistent parameters are not in the query parameters
+            PageParameters newParam = new PageParameters ();
+            // add the new query parameters to this map
+            newParam.putAll(query.getPageParameters());
+            // add the persistent parameters to this map
+            newParam = webApp.addPersistentParameters(newParam);
+            
+            BookmarkablePageLink<String> backLink = new BookmarkablePageLink<String>("backLink", FacetedSearchPage.class, newParam);
             add(backLink);
             String href = getHref(docId);
             if (href != null) {
@@ -115,11 +125,11 @@ public class ShowResultPage extends BasePage {
                 }
             });
         } else {
-            setResponsePage(new ResultNotFoundPage(parameters));
+            setResponsePage(new ResultNotFoundPage(currentParam));
         }
 
         // add the feedback link to the result page
-        addFeedbackLink(parameters);
+        addFeedbackLink(currentParam);
     }
 
     private String getHref(String linkToOriginalContext) {
@@ -396,10 +406,24 @@ public class ShowResultPage extends BasePage {
         add(new Label("feedbackLabel", "Found an error?"));
         add(link);
     }
+    
+    static VloWebApplication webApp;
+    
+    /**
+     * Make sure the web application class invokes this method 
+     * @param app
+     */
+    public static void setWebApp (VloWebApplication app){
+        webApp = app;
+    }
 
     public static BookmarkablePageLink<ShowResultPage> createBookMarkableLink(String linkId, SearchPageQuery query, String docId) {
         PageParameters pageParameters = query.getPageParameters();
         pageParameters.put(ShowResultPage.PARAM_DOC_ID, WicketURLEncoder.QUERY_INSTANCE.encode(docId));
+        // pageParameters.put("theme", "themeSetInShowResultPage");
+        pageParameters.put("theme", webApp.getTheme());
+        // this is where a link to the result page is create; the
+        // page itself is created when the link is clicked
         BookmarkablePageLink<ShowResultPage> docLink = new BookmarkablePageLink<ShowResultPage>(linkId, ShowResultPage.class,
                 pageParameters);
         return docLink;

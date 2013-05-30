@@ -4,6 +4,7 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloContextConfig;
 import eu.clarin.cmdi.vlo.dao.SearchResultsDao;
 import eu.clarin.cmdi.vlo.pages.FacetedSearchPage;
+import eu.clarin.cmdi.vlo.pages.ShowResultPage;
 import java.util.Map;
 import javax.servlet.ServletContext;
 import org.apache.wicket.PageParameters;
@@ -29,7 +30,7 @@ public class VloWebApplication extends WebApplication {
      * Remember the theme to be used. It is one of the elements in the list
      * of parameters persisting with the application object.
      */
-    private String theme = "testTheme";
+    private String theme = "defaultTheme";
     
     /**
      * Get the theme stored<br><br>
@@ -45,6 +46,13 @@ public class VloWebApplication extends WebApplication {
      */
     public void setTheme (String theme){
         this.theme = theme;
+    }
+    
+    PageParameters persistentParameters = new PageParameters ("theme", "defaultTheme");
+    
+    public PageParameters getPersistentParameters (){
+        
+        return persistentParameters;
     }
     
     /**
@@ -172,6 +180,8 @@ public class VloWebApplication extends WebApplication {
      */
     public VloWebApplication() {
 
+        ShowResultPage.setWebApp(this);
+
         /*
          * Read the application's packaged configuration. 
          * 
@@ -207,7 +217,7 @@ public class VloWebApplication extends WebApplication {
         // remember that the application does not live in a web server context
         
         this.inContext = inContext;
-
+        
         searchResults = new SearchResultsDao();
     }
 
