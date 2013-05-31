@@ -70,7 +70,7 @@ public class FacetMappingFactoryTest {
         assertEquals("/c:CMD/c:Components/c:Session/c:Resources/c:Anonyms/c:Access/c:Contact/c:Organisation/text()", mapping.getPatterns().get(5));
         mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_GENRE, mapping.getName());
-        assertEquals(1, mapping.getPatterns().size());
+        assertEquals(2, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Components/c:Session/c:MDGroup/c:Content/c:Genre/text()", mapping.getPatterns().get(0));
         mapping = facets.get(index++);
         assertEquals(FacetConstants.FIELD_SUBJECT, mapping.getName());
