@@ -34,7 +34,7 @@ public class FacetLinkPanel extends Panel {
         q.setFilterQuery(count);
         PageParameters params = q.getPageParameters();
 
-        params = webApp.addPersistentParameters(params);
+        params = webApp.addSessionParameters(params);
         
         Link<Count> facetLink = new BookmarkablePageLink("facetLink", FacetedSearchPage.class, params);
         facetLink.add(new Label("facetLinkLabel", model.getObject().getName()));

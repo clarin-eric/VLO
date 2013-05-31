@@ -80,7 +80,7 @@ public class FacetBoxPanel extends Panel {
         pageParameters.add(ShowAllFacetValuesPage.SELECTED_FACET_PARAM, facetField.getName());
         pageParameters.add(ShowAllFacetValuesPage.FACET_MIN_OCCURS, "1");
 
-        pageParameters = webApp.addPersistentParameters(pageParameters);
+        pageParameters = webApp.addSessionParameters(pageParameters);
         
         add(new BookmarkablePageLink("showMore", ShowAllFacetValuesPage.class, pageParameters) {
 

@@ -29,7 +29,7 @@ public class FacetHeaderPanel extends Panel {
         copy.removeFilterQuery(model.getObject().getFacetField());
         PageParameters pageParameters = copy.getPageParameters();
         
-        pageParameters = webApp.addPersistentParameters(pageParameters);
+        pageParameters = webApp.addSessionParameters(pageParameters);
         
         add(new BookmarkablePageLink("allLink", FacetedSearchPage.class, pageParameters));
         add(new Label("headerLabelSelect", model.getObject().getSelectedValue()));
