@@ -85,7 +85,7 @@ public class ShowResultPage extends BasePage {
             // add the new query parameters to this map
             newParam.putAll(query.getPageParameters());
             // add the persistent parameters to this map
-            newParam = webApp.addPersistentParameters(newParam);
+            newParam = webApp.addSessionParameters(newParam);
             
             BookmarkablePageLink<String> backLink = new BookmarkablePageLink<String>("backLink", FacetedSearchPage.class, newParam);
             add(backLink);
@@ -422,7 +422,7 @@ public class ShowResultPage extends BasePage {
         PageParameters pageParameters = query.getPageParameters();
         pageParameters.put(ShowResultPage.PARAM_DOC_ID, WicketURLEncoder.QUERY_INSTANCE.encode(docId));
         
-        webApp.addPersistentParameters(pageParameters);
+        webApp.addSessionParameters(pageParameters);
         
         BookmarkablePageLink<ShowResultPage> docLink = new BookmarkablePageLink<ShowResultPage>(linkId, ShowResultPage.class,
                 pageParameters);

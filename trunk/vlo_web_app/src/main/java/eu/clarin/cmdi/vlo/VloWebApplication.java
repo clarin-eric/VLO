@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloContextConfig;
 import eu.clarin.cmdi.vlo.dao.SearchResultsDao;
+import eu.clarin.cmdi.vlo.pages.BasePage;
 import eu.clarin.cmdi.vlo.pages.FacetBoxPanel;
 import eu.clarin.cmdi.vlo.pages.FacetHeaderPanel;
 import eu.clarin.cmdi.vlo.pages.FacetLinkPanel;
@@ -20,42 +21,62 @@ import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.request.RequestParameters;
 
 /**
- * {@literal VLO} web application<br><br>
  * 
- * Because the VloWebApplication class extends the WebApplication class, an
- * instance of the VLO web application normally resides inside a web server
- * container. However, by running the Start class, the application can also 
- * exist outside such a container.
+ * {@literal V}irtual {@literal L}anguage {@literal O}bservatory web 
+ * application<br><br>
+ * 
+ * <describe VLO>
+ * 
+ * While the application is intended to run inside a web server container, 
+ * running the Start class enables you to run it without outside one.
  */
 public class VloWebApplication extends WebApplication {
 
     /**
-     * Remember the theme to be used. It is one of the elements in the list
-     * of parameters persisting with the application object.
+     * Remember the theme to be used<br><br>
+     * 
+     * The theme parameter is one in a map of parameters that is associated
+     * with a session rather than with some page or pages.
      */
     private String theme = "defaultTheme";
     
     /**
-     * Get the theme stored<br><br>
+     * Get the name of the theme applied currently<br><br>
      * 
      * @return the theme
      */
-    public String getTheme (){
+    public String getThemeName (){
+        // maybe this method will not be needed anymore; query 
+        // the session parameters instead
         return theme;
     }
     
     /**
-     * Store the theme to be used 
+     * Set the name of the theme applied or to be applied
      */
-    public void setTheme (String theme){
+    public void setThemeName (String theme){
+        // store the name as a session parameter
         this.theme = theme;
     }
     
-    PageParameters persistentParameters = new PageParameters ("theme", "defaultTheme");
+    /**
+     * Install a theme
+     * 
+     * @param name the name of the theme to be installed
+     */
+    public void setTheme (String name){
+       // at some point invoke setThemeName (name) 
+       // at some point add the theme to the list of session parameters
+    }
     
-    public PageParameters getPersistentParameters (){
+    /**
+     * Remember a map of session level parameters<br><br>
+     */
+    PageParameters sessionParameters = new PageParameters ("theme", "defaultTheme");
+    
+    public PageParameters getSessionParameters (){
         
-        return persistentParameters;
+        return sessionParameters;
     }
     
     /**
@@ -66,19 +87,21 @@ public class VloWebApplication extends WebApplication {
      * parameters. 
      * 
      * @param parameters the existing list of parameters
-     * @return the concatenation of the exising list and the parameters 
+     * @return the concatenation of the existing list and the parameters 
      * persisting with the application object. 
      */
-    public PageParameters addPersistentParameters(PageParameters parameters) {
+    public PageParameters addSessionParameters(PageParameters parameters) {
 
         // get the theme parameter from the application
 
-        parameters.add("theme", getTheme());
+        parameters.add("theme", getThemeName());
         return parameters;
     }
 
     /**
      * Customized client request cycle<br><br>
+     * 
+     * <intercept resquest in order to update session parameter list>
      * 
      * Add behavior to the web request handling by retrieving persistent
      * parameters to the application from from client requests, and store
@@ -108,11 +131,12 @@ public class VloWebApplication extends WebApplication {
             if (object == null) {
                 // no theme in the URL, do not change the value of the parameter
             } else {
+                // try to replace the reference via the indexs
                 if (theme.equals(object[0])){
                     // keep the theme that was installed on a previous request
                 } else {
                     // theme not installed yet, first: remember it
-                    VloWebApplication.this.setTheme(object[0]);
+                    VloWebApplication.this.setThemeName(object[0]);
                     // after that: determine the intended css and "install" it
                     // determine the intended picture and install it
                 }
@@ -158,15 +182,17 @@ public class VloWebApplication extends WebApplication {
             
             /*
              * send messages to objects that need a static reference to this web
-             * application object. While this is only required in the case of the
-             * results page BookmarkablePageLink method, uniform approach might be
-             * the most prefarable one.
+             * application object. While this, at a one point in time, was only 
+             * required in the case of the results page BookmarkablePageLink 
+             * method, uniform approach might be the most prefarable one.
              */
             ShowResultPage.setWebApp(this);
             FacetBoxPanel.setWebApp(this);
             FacetHeaderPanel.setWebApp(this);
             FacetLinkPanel.setWebApp(this);
             FacetedSearchPage.setWebApp(this);
+            
+            // install theme -> compose theme
 
             // get the servlet's context
 
@@ -188,7 +214,7 @@ public class VloWebApplication extends WebApplication {
     }
 
     /**
-     * Web application constructor.
+     * Web application constructor<br><br>
      *
      * Create an application instance configured to be living inside a web
      * server container.
@@ -196,7 +222,7 @@ public class VloWebApplication extends WebApplication {
     public VloWebApplication() {
 
         /*
-         * Read the application's packaged configuration. 
+         * Read the application's packaged configuration
          * 
          * Because on instantiation a web application cannot said to be living 
          * in a web server context, parameters defined in the context can only 
@@ -212,13 +238,13 @@ public class VloWebApplication extends WebApplication {
     }
 
     /**
-     * Web application constructor.
+     * Web application constructor<br><br>
      *
      * Allows for the creation of an application instance that does not rely on
      * a web server context. When send the message 'false', this constructor
      * will create an object that will not look for an external configuration
      * file; it will exclusively rely on the packaged configuration. Typically,
-     * the application's tests will send false to the application constructor.
+     * the application's tests will send false to the application constructor.<br><br>
      * 
      * @param inContext If and only if this parameter equals true. later on, the
      * {@literal init} method will try to determine the web server's container 

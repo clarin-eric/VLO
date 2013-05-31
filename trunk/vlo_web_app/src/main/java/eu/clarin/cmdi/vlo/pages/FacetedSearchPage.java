@@ -85,7 +85,7 @@ public class FacetedSearchPage extends BasePage {
             SearchPageQuery query = getModelObject();
             PageParameters pageParameters = query.getPageParameters();
 
-            pageParameters = webApp.addPersistentParameters(pageParameters);
+            pageParameters = webApp.addSessionParameters(pageParameters);
             
             setResponsePage(FacetedSearchPage.class, pageParameters);
         }
