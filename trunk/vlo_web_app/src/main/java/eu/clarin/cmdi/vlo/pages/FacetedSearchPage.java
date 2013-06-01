@@ -175,7 +175,7 @@ public class FacetedSearchPage extends BasePage {
 				}
 
 				// add HTML form to container
-				Label contentSearchLabel = new Label("contentSearchForm", HtmlFormCreator.getContentSearchForm(aggregationContextMap));
+				Label contentSearchLabel = new Label("contentSearchForm", HtmlFormCreator.getContentSearchForm(aggregationContextMap, "Content search in result set"));
 				contentSearchLabel.setEscapeModelStrings(false);
 				contentSearchContainer.add(contentSearchLabel);
 			} catch (UnsupportedEncodingException uee) {
