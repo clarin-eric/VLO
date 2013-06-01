@@ -85,7 +85,7 @@ public class ShowResultPage extends BasePage {
             // add the new query parameters to this map
             newParam.putAll(query.getPageParameters());
             // add the persistent parameters to this map
-            newParam = webApp.addSessionParameters(newParam);
+            newParam = webApp.reflectPersistentParameters(newParam);
             
             BookmarkablePageLink<String> backLink = new BookmarkablePageLink<String>("backLink", FacetedSearchPage.class, newParam);
             add(backLink);
@@ -405,24 +405,12 @@ public class ShowResultPage extends BasePage {
         add(new Label("feedbackLabel", "Found an error?"));
         add(link);
     }
-    
-    // reference to the web application object
-    static VloWebApplication webApp;
-    
-    /**
-     * Make sure every web application object sends this message
-     * 
-     * @param vloWebApplication reference to the web application object
-     */
-    public static void setWebApp (VloWebApplication vloWebApplication){
-        webApp = vloWebApplication;
-    }
 
     public static BookmarkablePageLink<ShowResultPage> createBookMarkableLink(String linkId, SearchPageQuery query, String docId) {
         PageParameters pageParameters = query.getPageParameters();
         pageParameters.put(ShowResultPage.PARAM_DOC_ID, WicketURLEncoder.QUERY_INSTANCE.encode(docId));
         
-        webApp.addSessionParameters(pageParameters);
+        webApp.reflectPersistentParameters(pageParameters);
         
         BookmarkablePageLink<ShowResultPage> docLink = new BookmarkablePageLink<ShowResultPage>(linkId, ShowResultPage.class,
                 pageParameters);
