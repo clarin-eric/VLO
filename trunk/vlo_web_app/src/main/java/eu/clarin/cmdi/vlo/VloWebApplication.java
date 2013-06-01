@@ -130,7 +130,8 @@ public class VloWebApplication extends WebApplication {
     public Theme currentTheme = new Theme ("defaultTheme"); 
 
     /**
-     * A theme is defined by a CSS file, and two image files
+     * A theme is composed from a page title, a CSS file, two image files, and a
+     * partner link map relating coordinates in the right image to partner links
      */
     public class Theme {
 
