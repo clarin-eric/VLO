@@ -110,6 +110,20 @@ public class VloWebApplication extends WebApplication {
         return cycle;
     }
     
+    private String getPartnerLinkMap(){
+        String partnerLinkMap;
+        partnerLinkMap = "                <map name=\"partnerLinks\">\n" +
+"                    <AREA SHAPE=\"rect\" COORDS=\"114.00,65,167.50,104\" HREF=\"http://www.clarin.eu\" alt=\"clarin link\"/>\n" +
+"                    <AREA SHAPE=\"rect\" COORDS=\"177.00,65,214,104\" HREF=\"http://wals.info\" alt=\"wals link\"/>\n" +
+"                    <AREA SHAPE=\"rect\" COORDS=\"229,65,279,104\" HREF=\"http://linguistlist.org/\" alt=\"linguistlist link\"/>\n" +
+"                    <AREA SHAPE=\"rect\" COORDS=\"290,65,320,104\" HREF=\"http://www.elra.info/\" alt=\"elra link\"/>\n" +
+"                    <AREA SHAPE=\"rect\" COORDS=\"328,65,370,104\" HREF=\"http://www.mpi.nl/dobes\" alt=\"dobes link\"/>\n" +
+"                    <AREA SHAPE=\"rect\" COORDS=\"379,65,428,104\" HREF=\"http://www.dfki.de/web\" alt=\"dfki link\"/>\n" +
+"                    <AREA SHAPE=\"rect\" COORDS=\"434,65,484,104\" HREF=\"http://www.delaman.org/\" alt=\"deleman link\"/>\n" +
+"                </map>";
+        return partnerLinkMap;
+    }
+    
     /**
      * Theme currently applied in the VLO web application
      */
@@ -120,7 +134,8 @@ public class VloWebApplication extends WebApplication {
      */
     public class Theme {
 
-        public String name, topLeftImage, topRightImage, cssFile;
+        public String name, pageTitle, topLeftImage, topRightImage, cssFile, 
+                partnerLinkMap;
 
         /**
          * Compose a theme<br><br>
@@ -129,19 +144,22 @@ public class VloWebApplication extends WebApplication {
          */
         public Theme(String themeName) {
 
-            if (themeName.matches("Clarin-d")) {
-                // select the Clarin-d theme's components
+            if (themeName.matches("CLARIN-D")) {
+                // select the CLARIN-D theme's components
                 
+                pageTitle = "CLARIN-D Virtual Language Observatory - Resources";
                 topLeftImage = "Images/topleftvlo.gif";
                 topRightImage = "Images/toprightvlo.gif";
                 cssFile = "css/main.css";
-                name = "Clarin-d";
+                partnerLinkMap = getPartnerLinkMap();
+                name = "CLARIN-D";
             } else {
                 // select the default theme elements
-                
+                pageTitle = "CLARIN Virtual Language Observatory - Resources";
                 topLeftImage = "Images/topleftvlo.gif";
                 topRightImage = "Images/toprightvlo.gif";
                 cssFile = "css/main.css";
+                partnerLinkMap = getPartnerLinkMap();
                 name = "defaultTheme";
             }
             // remember the theme as a persistent parameter

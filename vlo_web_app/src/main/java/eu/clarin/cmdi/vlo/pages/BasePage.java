@@ -6,6 +6,7 @@ import org.apache.wicket.Resource;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.resource.ContextRelativeResource;
@@ -32,27 +33,33 @@ public class BasePage extends WebPage implements IHeaderContributor{
     /**
      * Install a VLO theme<br><br>
      * 
-     * A VLO theme is determined by a CSS file and a banner split in a left and
-     * right image. 
+     * A VLO theme is determined by a page title, a CSS file, and a banner split
+     * in a left and right image.
      * 
      * The left part of the banner serves as a link to the faceted search page,
-     * the 'local' home page. Next to this page there is the page the web
-     * application is launched from. This home page is defined in the VloConfig
-     * file.
-     *   
+     * the application's start page. In the field below banner there is a link
+     * to the page the web application is launched from; the applications home
+     * page. This link page is defined in the VloConfig file.
+     *     
      * @param parameters 
      */
     public BasePage(PageParameters parameters) {
 
         super(parameters);
         
-        // set the applications local home page link to the faceted search page
-        PageParameters homeLinkParameters = new PageParameters ();
+        // set the page title
         
-        webApp.reflectPersistentParameters(homeLinkParameters);
+        Label pageTitle;
+        pageTitle = new Label ("pagetitle", webApp.currentTheme.pageTitle);
+        add (pageTitle);
+        
+        // set the applications start page link to the faceted search page
+        PageParameters startPageParameters = new PageParameters ();
+        
+        webApp.reflectPersistentParameters(startPageParameters);
                 
-                BookmarkablePageLink link = new BookmarkablePageLink("homeLink", 
-                FacetedSearchPage.class, homeLinkParameters);
+                BookmarkablePageLink link = new BookmarkablePageLink("startpage", 
+                FacetedSearchPage.class, startPageParameters);
         add(link);
                        
         // refer to the the left part of the vlo banner as a resource
@@ -76,6 +83,14 @@ public class BasePage extends WebPage implements IHeaderContributor{
         
         // add it to the page
         add (rightImage);
+        
+        // set the partnerlinks
+        
+        Label partnerLinkMap;
+        partnerLinkMap = new Label ("partnerlinkmap", webApp.currentTheme.partnerLinkMap);
+        partnerLinkMap.setEscapeModelStrings(false);
+        add (partnerLinkMap);
+        
     }
 
     /**
