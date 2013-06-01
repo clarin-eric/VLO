@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.PageParameters;
@@ -14,11 +13,10 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-public class FacetBoxPanel extends Panel {
+public class FacetBoxPanel extends BasePanel {
     private static final Set<String> IGNORABLE_VALUES = new HashSet<String>();
     static {
         IGNORABLE_VALUES.add("unknown");
@@ -30,18 +28,6 @@ public class FacetBoxPanel extends Panel {
     private FacetHeaderPanel facetHeaderPanel;
     private FacetModel facetModel;
     private int maxNrOfFacetValues;
-
-    // reference to the web application object
-    static VloWebApplication webApp;
-    
-    /**
-     * Make sure every web application object sends this message
-     * 
-     * @param vloWebApplication reference to the web application object
-     */
-    public static void setWebApp (VloWebApplication vloWebApplication){
-        webApp = vloWebApplication;
-    }
     
     public FacetBoxPanel(String id, IModel<FacetField> model) {
         super(id, model);
@@ -80,7 +66,7 @@ public class FacetBoxPanel extends Panel {
         pageParameters.add(ShowAllFacetValuesPage.SELECTED_FACET_PARAM, facetField.getName());
         pageParameters.add(ShowAllFacetValuesPage.FACET_MIN_OCCURS, "1");
 
-        pageParameters = webApp.addSessionParameters(pageParameters);
+        pageParameters = webApp.reflectPersistentParameters(pageParameters);
         
         add(new BookmarkablePageLink("showMore", ShowAllFacetValuesPage.class, pageParameters) {
 

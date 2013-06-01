@@ -4,11 +4,8 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloContextConfig;
 import eu.clarin.cmdi.vlo.dao.SearchResultsDao;
 import eu.clarin.cmdi.vlo.pages.BasePage;
-import eu.clarin.cmdi.vlo.pages.FacetBoxPanel;
-import eu.clarin.cmdi.vlo.pages.FacetHeaderPanel;
-import eu.clarin.cmdi.vlo.pages.FacetLinkPanel;
+import eu.clarin.cmdi.vlo.pages.BasePanel;
 import eu.clarin.cmdi.vlo.pages.FacetedSearchPage;
-import eu.clarin.cmdi.vlo.pages.ShowResultPage;
 import java.util.Map;
 import javax.servlet.ServletContext;
 import org.apache.wicket.PageParameters;
@@ -21,9 +18,7 @@ import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.request.RequestParameters;
 
 /**
- * 
- * {@literal V}irtual {@literal L}anguage {@literal O}bservatory web 
- * application<br><br>
+ * Virtual Language Observatory web application<br><br>
  * 
  * <describe VLO>
  * 
@@ -31,70 +26,23 @@ import org.apache.wicket.request.RequestParameters;
  * running the Start class enables you to run it without outside one.
  */
 public class VloWebApplication extends WebApplication {
-
+    
     /**
-     * Remember the theme to be used<br><br>
+     * Remember the parameters that should persist in URLs to VLO pages <br><br>
+     */
+    public PageParameters persistentParameters = new PageParameters();
+            
+    /**
+     * Reflect the persistent parameters in the page parameter map<br><br>
      * 
-     * The theme parameter is one in a map of parameters that is associated
-     * with a session rather than with some page or pages.
+     * @param parameters a page parameter map
+     * @return the page parameter map including the current persistent parameters
      */
-    private String theme = "defaultTheme";
-    
-    /**
-     * Get the name of the theme applied currently<br><br>
-     * 
-     * @return the theme
-     */
-    public String getThemeName (){
-        // maybe this method will not be needed anymore; query 
-        // the session parameters instead
-        return theme;
-    }
-    
-    /**
-     * Set the name of the theme applied or to be applied
-     */
-    public void setThemeName (String theme){
-        // store the name as a session parameter
-        this.theme = theme;
-    }
-    
-    /**
-     * Install a theme
-     * 
-     * @param name the name of the theme to be installed
-     */
-    public void setTheme (String name){
-       // at some point invoke setThemeName (name) 
-       // at some point add the theme to the list of session parameters
-    }
-    
-    /**
-     * Remember a map of session level parameters<br><br>
-     */
-    PageParameters sessionParameters = new PageParameters ("theme", "defaultTheme");
-    
-    public PageParameters getSessionParameters (){
+    public PageParameters reflectPersistentParameters(PageParameters parameters) {
         
-        return sessionParameters;
-    }
-    
-    /**
-     * Add the parameters persisting with the application object to an a list
-     * of parameters existing outside the object.<br><br>
-     * 
-     * Invoke this method from a component, after generating a list of 
-     * parameters. 
-     * 
-     * @param parameters the existing list of parameters
-     * @return the concatenation of the existing list and the parameters 
-     * persisting with the application object. 
-     */
-    public PageParameters addSessionParameters(PageParameters parameters) {
+        parameters.putAll(persistentParameters);
 
-        // get the theme parameter from the application
-
-        parameters.add("theme", getThemeName());
+        // parameters.add("theme", "defaultTheme");
         return parameters;
     }
 
@@ -127,18 +75,16 @@ public class VloWebApplication extends WebApplication {
             Map <String, String[]> map = this.getWebRequest().getParameterMap();
             // check if there is a theme parameter        
             String[] object = map.get("theme");
-            
+                        
             if (object == null) {
-                // no theme in the URL, do not change the value of the parameter
+                // no theme choosen, keep the current one
             } else {
-                // try to replace the reference via the indexs
-                if (theme.equals(object[0])){
-                    // keep the theme that was installed on a previous request
+                // check if the users requests a different theme 
+                if (object[0].matches(currentTheme.name)) {
+                    // current theme requested, nothing to do
                 } else {
-                    // theme not installed yet, first: remember it
-                    VloWebApplication.this.setThemeName(object[0]);
-                    // after that: determine the intended css and "install" it
-                    // determine the intended picture and install it
+                    // different theme requested, compose it
+                    currentTheme = new Theme (object[0]);
                 }
             }
         }
@@ -163,9 +109,46 @@ public class VloWebApplication extends WebApplication {
         
         return cycle;
     }
-
-    private SearchResultsDao searchResults;
     
+    /**
+     * Theme currently applied in the VLO web application
+     */
+    public Theme currentTheme = new Theme ("defaultTheme"); 
+
+    /**
+     * A theme is defined by a CSS file, and two image files
+     */
+    public class Theme {
+
+        public String name, topLeftImage, topRightImage, cssFile;
+
+        /**
+         * Compose a theme<br><br>
+         *
+         * @param name the name of the theme to be composed
+         */
+        public Theme(String themeName) {
+
+            if (themeName.matches("Clarin-d")) {
+                // select the Clarin-d theme's components
+                
+                topLeftImage = "Images/topleftvlo.gif";
+                topRightImage = "Images/toprightvlo.gif";
+                cssFile = "css/main.css";
+                name = "Clarin-d";
+            } else {
+                // select the default theme elements
+                
+                topLeftImage = "Images/topleftvlo.gif";
+                topRightImage = "Images/toprightvlo.gif";
+                cssFile = "css/main.css";
+                name = "defaultTheme";
+            }
+            // remember the theme as a persistent parameter
+            persistentParameters.put("theme", name);
+        }
+    }
+
     /**
      * Flag indicating whether or not the application object lives in a web
      * server context.
@@ -186,11 +169,8 @@ public class VloWebApplication extends WebApplication {
              * required in the case of the results page BookmarkablePageLink 
              * method, uniform approach might be the most prefarable one.
              */
-            ShowResultPage.setWebApp(this);
-            FacetBoxPanel.setWebApp(this);
-            FacetHeaderPanel.setWebApp(this);
-            FacetLinkPanel.setWebApp(this);
-            FacetedSearchPage.setWebApp(this);
+            BasePage.setWebApp(this);
+            BasePanel.setWebApp(this);
             
             // install theme -> compose theme
 
@@ -208,11 +188,15 @@ public class VloWebApplication extends WebApplication {
             VloContextConfig.switchToExternalConfig(servletContext);
         }
 
-        // start the application
-
+        // creata an object referring to the search results
         searchResults = new SearchResultsDao();        
-    }
 
+        // hand over control to the application
+    }
+    
+    // remember the search results
+    private SearchResultsDao searchResults;
+    
     /**
      * Web application constructor<br><br>
      *
@@ -244,7 +228,8 @@ public class VloWebApplication extends WebApplication {
      * a web server context. When send the message 'false', this constructor
      * will create an object that will not look for an external configuration
      * file; it will exclusively rely on the packaged configuration. Typically,
-     * the application's tests will send false to the application constructor.<br><br>
+     * the application's tests will send false to the application constructor.
+     * <br><br>
      * 
      * @param inContext If and only if this parameter equals true. later on, the
      * {@literal init} method will try to determine the web server's container 

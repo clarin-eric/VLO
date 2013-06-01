@@ -37,18 +37,6 @@ public class FacetedSearchPage extends BasePage {
     private final SearchPageQuery query;
     private final static AutoCompleteDao autoCompleteDao = new AutoCompleteDao();
     
-    // reference to the web application object
-    static VloWebApplication webApp;
-    
-    /**
-     * Make sure every web application object sends this message
-     * 
-     * @param vloWebApplication reference to the web application object
-     */
-    public static void setWebApp (VloWebApplication vloWebApplication){
-        webApp = vloWebApplication;
-    }
-    
     /**
      * @param parameters Page parameters
      * @throws SolrServerException
@@ -85,7 +73,7 @@ public class FacetedSearchPage extends BasePage {
             SearchPageQuery query = getModelObject();
             PageParameters pageParameters = query.getPageParameters();
 
-            pageParameters = webApp.addSessionParameters(pageParameters);
+            pageParameters = webApp.reflectPersistentParameters(pageParameters);
             
             setResponsePage(FacetedSearchPage.class, pageParameters);
         }

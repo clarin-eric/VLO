@@ -10,28 +10,54 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.resource.ContextRelativeResource;
 
+/**
+ * Properties common to all VLO web application's page objects
+ * 
+ * @author keeloo
+ */
 public class BasePage extends WebPage implements IHeaderContributor{
     
+    // reference to the web application object
+    static VloWebApplication webApp;
+
+    /**
+     * Make sure every web application object sends this message
+     *
+     * @param vloWebApplication reference to the web application object
+     */
+    public static void setWebApp(VloWebApplication vloWebApplication) {
+        webApp = vloWebApplication;
+    }
+    
+    /**
+     * Install a VLO theme<br><br>
+     * 
+     * A VLO theme is determined by a CSS file and a banner split in a left and
+     * right image. 
+     * 
+     * The left part of the banner serves as a link to the faceted search page,
+     * the 'local' home page. Next to this page there is the page the web
+     * application is launched from. This home page is defined in the VloConfig
+     * file.
+     *   
+     * @param parameters 
+     */
     public BasePage(PageParameters parameters) {
+
         super(parameters);
         
-        // delete all parameters from the map, except theme
-        String theme;
-        theme = parameters.getKey("theme");
-        if (theme == null){
-            theme = "";
-        }
-        parameters = new PageParameters ();
-        parameters.add("theme", theme);
+        // set the applications local home page link to the faceted search page
+        PageParameters homeLinkParameters = new PageParameters ();
         
-        // set the applications (local) homelink to the faceted search page
+        webApp.reflectPersistentParameters(homeLinkParameters);
+                
                 BookmarkablePageLink link = new BookmarkablePageLink("homeLink", 
-                FacetedSearchPage.class, parameters);
+                FacetedSearchPage.class, homeLinkParameters);
         add(link);
-               
+                       
         // refer to the the left part of the vlo banner as a resource
         Resource leftImageRes;
-        leftImageRes = new ContextRelativeResource("Images/topleftvlo.gif");
+        leftImageRes = new ContextRelativeResource(webApp.currentTheme.topLeftImage);
 
         // create the image
         Image leftImage;
@@ -42,7 +68,7 @@ public class BasePage extends WebPage implements IHeaderContributor{
 
         // refer to the right part of the vlo banner as a resource
         Resource rightImageRes;
-        rightImageRes = new ContextRelativeResource("Images/toprightvlo.gif");
+        rightImageRes = new ContextRelativeResource(webApp.currentTheme.topRightImage);
         
         // create the image
         Image rightImage;
@@ -52,10 +78,17 @@ public class BasePage extends WebPage implements IHeaderContributor{
         add (rightImage);
     }
 
+    /**
+     * Include the theme's CSS file in the HTML page<br><br>
+     * 
+     * This method is invoked when Wicket renders a VLO page.
+     * 
+     * @param response 
+     */
     @Override
     public void renderHead(IHeaderResponse response) {
                 
-        response.renderCSSReference("css/main.css");
+        response.renderCSSReference(webApp.currentTheme.cssFile);
     }
     
 }
