@@ -18,10 +18,11 @@ public class HtmlFormCreator {
 	/**
 	 * Creates an HTML form for the content search (FCS).
 	 * @param aggregationContextMap Mapping CQL endpoint -> List of resource IDs
+	 * @param userString String that is presented to the user
 	 * @return HTML content search form as String
 	 * @throws UnsupportedEncodingException
 	 */
-	public static String getContentSearchForm(Map<String, List<String>> aggregationContextMap) throws UnsupportedEncodingException {
+	public static String getContentSearchForm(Map<String, List<String>> aggregationContextMap, String userString) throws UnsupportedEncodingException {
 		JSONObject aggregationJson = new JSONObject();
 		Iterator<String> aggregationContextIter = aggregationContextMap.keySet().iterator();
 		while(aggregationContextIter.hasNext()) {
@@ -33,16 +34,14 @@ public class HtmlFormCreator {
 			aggregationJson.put(endpoint, idArray);
 		}		
 		
-		String form = "<form method=\"post\" action=\""+VloConfig.getFederatedContentSearchUrl()+"\"> \n"
+		String form = "<form method=\"post\" name=\"fcsForm\" action=\""+VloConfig.getFederatedContentSearchUrl()+"\"> \n"
 				+ "<fieldset style=\"border:0px;\"> \n"
-				+ "\t  <label for=\"query\">CQL query:</label> \n"
-				+ "\t <input id=\"query\" type=\"text\" name=\"query\" size=\"30\" /> \n"
 				+ "\t <input type=\"hidden\" name=\"x-aggregation-context\" value=\'"+aggregationJson.toString(2)+"\' /> \n"
 				+ "\t <input type=\"hidden\" name=\"operation\" value=\"searchRetrieve\" /> \n"
 				+ "\t <input type=\"hidden\" name=\"version\" value=\"1.2\" /> \n"
-				+ "\t <input type=\"submit\" value=\"Send query\" /> \n"
 				+ "</fieldset> \n"
-				+ "</form> \n";
+				+ "</form> \n"
+				+ "<a href=\"#\" onclick=\"document.fcsForm.submit();\">"+userString+"</a>\n";
 		return form;	
 	}
 }
