@@ -34,7 +34,7 @@ public class HtmlFormCreator {
 			aggregationJson.put(endpoint, idArray);
 		}		
 		
-		String form = "<form method=\"post\" name=\"fcsForm\" action=\""+VloConfig.getFederatedContentSearchUrl()+"\"> \n"
+		String form = "<form method=\"post\" name=\"fcsForm\" target=\"_blank\" action=\""+VloConfig.getFederatedContentSearchUrl()+"\"> \n"
 				+ "<fieldset style=\"border:0px;\"> \n"
 				+ "\t <input type=\"hidden\" name=\"query\" id=\"query\" value=\"\" /> \n" 
 				+ "\t <input type=\"hidden\" name=\"x-aggregation-context\" value=\'"+aggregationJson.toString(2)+"\' /> \n"
