@@ -110,18 +110,84 @@ public class VloWebApplication extends WebApplication {
         return cycle;
     }
     
-    private String getPartnerLinkMap(){
-        String partnerLinkMap;
-        partnerLinkMap = "                <map name=\"partnerLinks\">\n" +
-"                    <AREA SHAPE=\"rect\" COORDS=\"114.00,65,167.50,104\" HREF=\"http://www.clarin.eu\" alt=\"clarin link\"/>\n" +
-"                    <AREA SHAPE=\"rect\" COORDS=\"177.00,65,214,104\" HREF=\"http://wals.info\" alt=\"wals link\"/>\n" +
-"                    <AREA SHAPE=\"rect\" COORDS=\"229,65,279,104\" HREF=\"http://linguistlist.org/\" alt=\"linguistlist link\"/>\n" +
-"                    <AREA SHAPE=\"rect\" COORDS=\"290,65,320,104\" HREF=\"http://www.elra.info/\" alt=\"elra link\"/>\n" +
-"                    <AREA SHAPE=\"rect\" COORDS=\"328,65,370,104\" HREF=\"http://www.mpi.nl/dobes\" alt=\"dobes link\"/>\n" +
-"                    <AREA SHAPE=\"rect\" COORDS=\"379,65,428,104\" HREF=\"http://www.dfki.de/web\" alt=\"dfki link\"/>\n" +
-"                    <AREA SHAPE=\"rect\" COORDS=\"434,65,484,104\" HREF=\"http://www.delaman.org/\" alt=\"deleman link\"/>\n" +
-"                </map>";
-        return partnerLinkMap;
+        /**
+     * Compose a map to be included in the HTML document, designating the 
+     * positions of the links to partner web sites
+     * 
+     * @return 
+     */
+    private String getClarinDPartnerLinkMap(){
+        String map;
+        
+        map = "<map name=\"partnerLinks\">\n";
+        map = map + "</map>";
+       
+        return map;
+    }
+    
+    /**
+     * Compose a map to be included in the HTML document, designating the 
+     * positions of the links to partner web sites
+     * 
+     * @return 
+     */
+    private String getDefaultPartnerLinkMap(){
+        String map;
+        
+        map = "<map name=\"partnerLinks\">\n";
+        map = appendToPartnerLinkMap (map,
+                "114.00,65,167.50,104",
+                "http://www.clarin.eu)",
+                "alt=\"clarin link");
+        map = appendToPartnerLinkMap (map,
+                "177.00,65,214,104",
+                "http://wals.info",
+                "wals link");
+        map = appendToPartnerLinkMap (map,
+                "229,65,279,104",
+                "http://linguistlist.org",
+                "linguistlist link");
+        map = appendToPartnerLinkMap (map,
+                "290,65,320,104",
+                "http://www.elra.info",
+                "elra link");
+        map = appendToPartnerLinkMap (map,
+                "328,65,370,104",
+                "http://www.mpi.nl/dobes",
+                "dobes link");
+        map = appendToPartnerLinkMap (map,
+                "379,65,428,104",
+                "http://www.dfki.de/web",
+                "dfki link");
+        map = appendToPartnerLinkMap (map,
+                "434,65,484,104",
+                "http://www.delaman.org",
+                "deleman link");
+        
+        map = map + "</map>";
+       
+        return map;
+    }
+    
+    /**
+     * Add a link location to the map indicating the partner links
+     * 
+     * @param map
+     * @return 
+     */
+    private String appendToPartnerLinkMap(String map, String coordinates,
+            String URL, String alt) {
+        
+        if (map == null) {
+          map = "<map name=\"partnerLinks\">\n";
+        } else if (map.equals("")) {
+            map = "<map name=\"partnerLinks\">\n";
+        }
+        
+        map = map + "<AREA SHAPE=\"rect\" COORDS=\"" + coordinates + "\" HREF=\"" + 
+                URL + "\" alt=\"" + alt + "\"\n";
+        
+        return map;
     }
     
     /**
@@ -149,10 +215,10 @@ public class VloWebApplication extends WebApplication {
                 // select the CLARIN-D theme's components
                 
                 pageTitle = "CLARIN-D Virtual Language Observatory - Resources";
-                topLeftImage = "Images/topleftvlo.gif";
-                topRightImage = "Images/toprightvlo.gif";
+                topLeftImage = "Images/topleft-clarin-d.png";
+                topRightImage = "Images/topright-clarin-d.png";
                 cssFile = "css/main.css";
-                partnerLinkMap = getPartnerLinkMap();
+                partnerLinkMap = getClarinDPartnerLinkMap();
                 name = "CLARIN-D";
             } else {
                 // select the default theme elements
@@ -160,7 +226,7 @@ public class VloWebApplication extends WebApplication {
                 topLeftImage = "Images/topleftvlo.gif";
                 topRightImage = "Images/toprightvlo.gif";
                 cssFile = "css/main.css";
-                partnerLinkMap = getPartnerLinkMap();
+                partnerLinkMap = getDefaultPartnerLinkMap();
                 name = "defaultTheme";
             }
             // remember the theme as a persistent parameter
