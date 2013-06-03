@@ -1,5 +1,11 @@
 Bug Fixes and Features
 
+Beta Release 2.14 (June 2013)
+
+Support for theming was added, as were some new facet mappings, and the 
+interface to the Federated Content Search was implemented in the form of 
+a link - not as a search box like it was originally foreseen.
+
 Beta release 2.13 (May 2013)
 
 A new package, eu.clarin.cmdi.vlo.config was added taking care of the web 
