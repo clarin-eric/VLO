@@ -4,8 +4,8 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWebApplication;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Before;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 
@@ -32,9 +32,10 @@ public class ResourceLinkPanelTest {
     public void getNameFromLinkTest(){
         ResourceLinkPanel totest = new ResourceLinkPanel("a", FacetConstants.RESOURCE_TYPE_AUDIO, "a");
         String uit = totest.getNameFromLink(_SAME_STRING);
-        // Assert.assertTrue("Returns the same string if it does not start with the handle-prefix",uit.equals(_SAME_STRING));
+        Assert.assertTrue("Returns the same string if it does not start with the handle-prefix",uit.equals(_SAME_STRING));
 
         uit = totest.getNameFromLink(_RESOLVE_STRING);
+        // from at least 29.05.2013 this was not working
         // Assert.assertTrue("Returns the resolved url of the handle pid", uit.equals(_RESOLVE_OUT));
     }
 }

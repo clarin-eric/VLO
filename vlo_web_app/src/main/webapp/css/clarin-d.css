@@ -1,0 +1,267 @@
+body, td {
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 11px;
+    margin: 0;
+}
+body{
+    padding: 0;
+    margin: 0;
+}
+img{
+    border: none;
+    display: block;
+}
+
+/* banner definitions */
+
+/* picture on the left */
+#topleft{
+    position: absolute;
+    left:0px;
+}
+
+/* picture on the right */
+#topright{
+    position: absolute;
+    left:497px;
+}
+
+/* extend the banner to the right, take color from the right side of the png */
+.top{
+    background-color: #88a1b9;
+    width: 100%;
+    height: 176px;
+    border: none;
+}
+
+/* end banner definitions */
+
+/* facet matrix related definitions */
+
+.opening .matrix{
+    border:0px;
+    width: 54%;
+}
+
+.opening .matrix .column {
+    padding: 0 11px 0 0;
+}
+.opening .matrix .column:first-child {
+    padding: 0 11px;
+}
+.opening .valuebox .column {
+    padding: 0;
+}
+.opening .valuebox .column:first-child {
+    padding: 0;
+}
+
+/* end facet matrix related definitions */
+
+/* definitions for result table on search page */
+
+.opening .resulttable{
+    width: 45%; /* the facet matrix will take 54 % */
+
+}
+/* for the table header, use the red from the banner */
+.opening .resulttable .headers{
+    background-color: #801418;
+    text-align: center;
+    opacity:0.8;
+    color:#FFFFFF;
+}
+
+.resulttable tbody tr.even {
+    background-color: #e7ebf0; /* color of background in odd table position */
+}
+
+.resulttable tbody tr.odd {
+    background-color: #ffffff; /* color of background in odd table position */
+    color: #000000;
+    opacity: 1.0
+}
+
+/* for the table header, take the red from the banner */
+.headers{
+    background-color: #801418;
+    opacity:0.8;
+    text-align: left; /* changed this myself */
+}
+/* end definitions for result table on search page */
+
+/* facet box related definitions */
+.facetbox {
+    font-size: 14px;
+    padding: 2px 5px;
+}
+
+/* end facet box related definitions */
+
+/* search box related definitions */
+
+/* take color from the right side of the banner */
+.middlegame .search {
+    background-color: #88a1b9;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    opacity: 0.9
+}
+.middlegame .searchmodule {
+    margin-left:20%;
+    display:inline
+}
+.middlegame .homeLink {
+    margin-left: 11px;
+    display:inline
+}
+/* end search box related definitions */
+
+/* facet box header, continue the banner and search box color */
+.facet_facetOrigin .facetbox {
+    background-color: #88a1b9;
+    color:#FFFFFF;
+    padding: 3px 5px;
+    opacity: 0.9
+}
+.facet {
+    font-size: 90%;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.facet_facetOrigin .valuebox {
+    background-color: #e7ebf0; /* facet box background */
+    padding: 5px;
+}
+.value {
+    color: #4040ff; 
+}
+.value.sel {
+    color: #e7ebf0;
+}
+.barlink{
+    color: #801418; /* when the value in the bar turns into a link was BCCEE8 */
+}
+
+/* definitions for result table on results page */
+
+.endgame div{
+    margin-left: 11px;
+    border: none;
+    padding: 0;
+}
+.endgame .headers{
+    text-align: left;
+    color:#FFFFFF;
+}
+
+.endgame .headers .attribute{
+    background-color: #801418;    
+    opacity: 1.0;
+}
+
+.endgame .headers .attributeValue{
+    background-color: #801418;    
+}
+
+.endgame .resultAttributes{
+    margin: 0px;
+    padding-left: 5px;
+    border: none;}
+
+.endgame .attribute {
+    font-weight: bold;
+    background-color: #88a1b9;
+    opacity: 0.7;
+    text-align: right;
+    padding-right: 8px;
+}
+
+.endgame .attributeValue{
+    background-color: #e7ebf0;
+    padding-left: 8px;
+}
+
+/* end definitions for result table on results page */
+
+
+/* not sure what this is for */
+.endgame .attributesTbody {
+    vertical-align: top;
+    background-color:#d4deef;
+}
+
+/* not sure where this is for*/
+.anchorpanel{
+    padding:5px;
+    margin-top: 20px;
+    background-color: #801418;
+    color: #FFFFFF;
+    opacity: 0.9
+}
+.alphaNavigation{
+    margin-left: 11px;
+    background-color: #d4deef;
+    font-size:14px;
+}
+.alphaNavigation li{
+    display: inline;
+}
+.alphaNavigation ul{
+    list-style-type: none;
+    padding:0;
+}
+.alphaNavigation a{
+    display: inline-block;
+    padding-left: 25px;
+}
+
+.facetBody .facetRightPanel{
+    width: 49.9%;
+    float: left;
+}
+
+.facetBody .facetLeftPanel{
+    width: 50%;
+    float: left;
+}
+
+.sortedFacet{
+    background-color: #BCCEE8;
+    margin: 0px 11px;
+}
+.sortedFacet .facetLinkPanel{
+    padding-top: 3px;
+}
+
+.resultItem { 
+     padding:0; 
+     margin:0; 
+} 
+.resultItem li {
+     list-style-type:none; 
+}
+
+.resultItem img {
+     display:inline; 
+     vertical-align:middle;
+     padding-right:5px;
+}
+
+
+div.wicket-aa {background-color:white;
+    border:1px solid #CCCCCC;
+    color:black;
+}
+
+div.wicket-aa ul {
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:none;
+    margin:0pt;
+    padding:5px;
+}
+
+div.wicket-aa ul li.selected {
+    background-color:#CCCCCC;
+}

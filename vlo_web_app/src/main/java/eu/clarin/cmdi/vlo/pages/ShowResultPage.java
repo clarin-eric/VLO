@@ -394,15 +394,15 @@ public class ShowResultPage extends BasePage {
             LOG.error(e.toString());
         }
     	
-        Image resourceImg = new Image("feedbackImage", FEEDBACK_IMAGE.getResource());
-        String title = "Report an error";
-        resourceImg.add(new SimpleAttributeModifier("title", title));
-        resourceImg.add(new SimpleAttributeModifier("alt", title));
+        // Image resourceImg = new Image("feedbackImage", FEEDBACK_IMAGE.getResource());
+        // String title = "Report an error";
+        // resourceImg.add(new SimpleAttributeModifier("title", title));
+        // resourceImg.add(new SimpleAttributeModifier("alt", title));
         String href = getHref(feedbackfromURL+thisURL);
         String name = feedbackfromURL+thisURL;
-        ExternalLink link = new ExternalLink("feedbackLink", href);
-        link.add(resourceImg);
-        add(new Label("feedbackLabel", "Found an error?"));
+        ExternalLink link = new ExternalLink("feedbackLink", href, "found an error?");
+        // link.add(resourceImg);
+        // add(new Label("feedbackLabel", "Found an error?"));
         add(link);
     }
 

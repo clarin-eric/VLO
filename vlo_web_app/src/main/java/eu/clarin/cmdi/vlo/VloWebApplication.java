@@ -217,7 +217,7 @@ public class VloWebApplication extends WebApplication {
                 pageTitle = "CLARIN-D Virtual Language Observatory - Resources";
                 topLeftImage = "Images/topleft-clarin-d.png";
                 topRightImage = "Images/topright-clarin-d.png";
-                cssFile = "css/main.css";
+                cssFile = "css/clarin-d.css";
                 partnerLinkMap = getClarinDPartnerLinkMap();
                 name = "CLARIN-D";
             } else {
