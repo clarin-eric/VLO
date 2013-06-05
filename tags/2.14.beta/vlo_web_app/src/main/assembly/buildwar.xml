@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<assembly>
+    <id>deployment</id>
+    <formats>
+        <format>dir</format>
+    </formats>
+    
+    <fileSets>
+        <fileSet>
+            <directory>
+                src/main/webapp                
+            </directory>
+            <includes>
+                <include>**/*.*</include>
+            </includes>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+    </fileSets>
+    
+    <files>
+        <file>
+            <source>${basedir}/target/${artifactId}-${version}.war</source>
+            <destName>${artifactId}-${version}.war</destName>
+        </file>
+    </files>
+</assembly>
+
+

@@ -1,0 +1,82 @@
+<VloConfig>
+   
+    <deleteAllFirst>true</deleteAllFirst>
+    
+    <maxOnHeap>128</maxOnHeap>
+    
+    <useMaxFileSize>true</useMaxFileSize>
+    
+    <maxFileSize>10000000</maxFileSize>
+    
+    <useHandleResolver>false</useHandleResolver>
+    
+    <printMapping>false</printMapping>
+    
+    <dataRoots length="3">
+        <DataRoot>
+            <originName>MPI IMDI Archive</originName>
+            <rootFile>/lat/apache/htdocs/oai-harvester/mpi-self-harvest/harvested/results/cmdi/</rootFile>            
+            <prefix>http://catalog.clarin.eu/</prefix>
+            <tostrip>/lat/apache/htdocs/</tostrip>
+            <deleteFirst>false</deleteFirst>
+        </DataRoot>
+
+        <DataRoot>
+            <originName>CMDI Providers</originName>
+            <rootFile>/lat/apache/htdocs/oai-harvester/cmdi-providers/harvested/results/cmdi/</rootFile>            
+            <prefix>http://catalog.clarin.eu/</prefix>
+            <tostrip>/lat/apache/htdocs/</tostrip>
+            <deleteFirst>false</deleteFirst>
+        </DataRoot>
+
+        <DataRoot>
+            <originName>OLAC Metadata Providers</originName>
+            <rootFile>/lat/apache/htdocs/oai-harvester/olac-and-dc-providers/harvested/results/cmdi/</rootFile>            
+            <prefix>http://catalog.clarin.eu/</prefix>
+            <tostrip>/lat/apache/htdocs/</tostrip>
+            <deleteFirst>false</deleteFirst>
+        </DataRoot>
+    </dataRoots>
+   
+    <vloHomeLink>http://www.clarin.eu/vlo</vloHomeLink>
+    
+    <solrUrl>http://localhost:8084/vlo_solr/</solrUrl>
+    
+    <profileSchemaUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/{PROFILE_ID}/xsd</profileSchemaUrl>
+    
+    <componentRegistryRESTURL>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/</componentRegistryRESTURL>
+    
+    <handleServerUrl>http://hdl.handle.net/</handleServerUrl>
+    
+    <imdiBrowserUrl>http://corpus1.mpi.nl/ds/imdi_browser?openpath=</imdiBrowserUrl>
+    
+    <nationalProjectMapping>/nationalProjectsMapping.xml</nationalProjectMapping>
+    
+    <facetFields length="11">
+        <facetField>collection</facetField>
+        <facetField>language</facetField>
+        <facetField>continent</facetField>
+        <facetField>genre</facetField>
+        <facetField>country</facetField>
+        <facetField>subject</facetField>
+        <facetField>organisation</facetField>
+        <facetField>resourceType</facetField>
+        <facetField>dataProvider</facetField>
+        <facetField>nationalProject</facetField>
+        <facetField>tag</facetField>
+    </facetFields>
+    
+    <countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
+    
+    <languageLinkPrefix>http://infra.clarin.eu/service/language/info.php?code=</languageLinkPrefix>
+    
+    <feedbackFromUrl>http://www.clarin.eu/node/3759?url=</feedbackFromUrl>
+
+    <language2LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438109/xml</language2LetterCodeComponentUrl>
+    
+    <language3LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438110/xml</language3LetterCodeComponentUrl>
+   
+    <silToISO639CodesUrl>http://www.clarin.eu/cmd/xslt/sil_to_iso6393.xml</silToISO639CodesUrl>
+    
+    <FederatedContentSearchUrl>http://weblicht.sfs.uni-tuebingen.de/Aggregator/</FederatedContentSearchUrl>
+</VloConfig>
