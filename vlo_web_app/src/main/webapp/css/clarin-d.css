@@ -36,7 +36,7 @@ img{
 
 /* end banner definitions */
 
-/* facet matrix related definitions */
+/* facet matrix definitions */
 
 .opening .matrix{
     border:0px;
@@ -56,7 +56,7 @@ img{
     padding: 0;
 }
 
-/* end facet matrix related definitions */
+/* end facet matrix definitions */
 
 /* definitions for result table on search page */
 
@@ -86,19 +86,19 @@ img{
 .headers{
     background-color: #801418;
     opacity:0.8;
-    text-align: left; /* changed this myself */
+    text-align: left;
 }
 /* end definitions for result table on search page */
 
-/* facet box related definitions */
+/* facet box definitions */
 .facetbox {
     font-size: 14px;
     padding: 2px 5px;
 }
 
-/* end facet box related definitions */
+/* end facet box definitions */
 
-/* search box related definitions */
+/* search box definitions */
 
 /* take color from the right side of the banner */
 .middlegame .search {
@@ -140,7 +140,7 @@ img{
     color: #e7ebf0;
 }
 .barlink{
-    color: #801418; /* when the value in the bar turns into a link was BCCEE8 */
+    color: #801418; /* when the value in the bar turns into a link */
 }
 
 /* definitions for result table on results page */
@@ -150,6 +150,7 @@ img{
     border: none;
     padding: 0;
 }
+
 .endgame .headers{
     text-align: left;
     color:#FFFFFF;
@@ -199,22 +200,33 @@ img{
     color: #FFFFFF;
     opacity: 0.9
 }
+
+/* definitions for the quick navigation bar on the page showing all facet values */
+
 .alphaNavigation{
     margin-left: 11px;
-    background-color: #d4deef;
+    background-color: #88a1b9; /* make the banner the same color as the banner on the search page  */
     font-size:14px;
+    color: #ffffff;
 }
 .alphaNavigation li{
     display: inline;
+    color: #ffffff;
 }
 .alphaNavigation ul{
     list-style-type: none;
     padding:0;
+    color: #ffffff;
 }
 .alphaNavigation a{
     display: inline-block;
     padding-left: 25px;
+    color: #ffffff;
 }
+
+/* end definitions for the quick navigation bar on the page showing all facet values */
+
+/* definitions for the extended facet value panel */
 
 .facetBody .facetRightPanel{
     width: 49.9%;
@@ -227,12 +239,14 @@ img{
 }
 
 .sortedFacet{
-    background-color: #BCCEE8;
+    background-color: #e7ebf0;
     margin: 0px 11px;
 }
 .sortedFacet .facetLinkPanel{
     padding-top: 3px;
 }
+
+/* end definitions for the extended facet value panel */
 
 .resultItem { 
      padding:0; 
@@ -247,7 +261,6 @@ img{
      vertical-align:middle;
      padding-right:5px;
 }
-
 
 div.wicket-aa {background-color:white;
     border:1px solid #CCCCCC;
