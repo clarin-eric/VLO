@@ -78,7 +78,7 @@
             
             
             <plugin>
-                <!-- add the remote resources plugin to obtain the cmdi2xhtml.xml
+                <!-- Add the remote resources plugin to obtain the cmdi2xhtml.xml
                      file from the vlo_importer module. For more information
                      on this plugin, please refer the Apache Maven Project website
                 -->
@@ -87,7 +87,7 @@
                 <version>1.4</version>
                 <configuration>
                     <resourceBundles>
-                        <resourceBundle>eu.clarin.cmdi:vlo:${project.version}</resourceBundle>
+                        <resourceBundle>eu.clarin.cmdi:vlo_importer:${project.version}</resourceBundle>
                     </resourceBundles>
                 </configuration>
                 <executions>
