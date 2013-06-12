@@ -98,7 +98,7 @@ public class MetadataImporter {
     protected int nrOFDocumentsUpdated;
     protected int nrOfFilesAnalyzed = 0;
     protected int nrOfFilesWithoutId = 0;
-    protected int nrOfFilesWithoutDataResources = 0;
+    protected int nrOfIgnoredFiles = 0;
     protected int nrOfFilesWithError = 0;
 
     /**
@@ -163,8 +163,8 @@ public class MetadataImporter {
         long took = (System.currentTimeMillis() - start) / 1000;
         LOG.info("Found " + nrOfFilesWithoutId + " file(s) without an id. (id is generated based on fileName but that may not be unique)");
         LOG.info("Found " + nrOfFilesWithError + " file(s) with errors.");
-        LOG.info("Found " + nrOfFilesWithoutDataResources
-                + " file(s) without data resources (metadata descriptions without resources are ignored).");
+        LOG.info("Found " + nrOfIgnoredFiles
+                + " file(s) that where ignored (files without resources or any link to a search service or landing page are ignored).");
         LOG.info("Update of " + nrOFDocumentsUpdated + " took " + took + " secs. Total nr of files analyzed " + nrOfFilesAnalyzed);
     }
 
@@ -246,15 +246,20 @@ public class MetadataImporter {
         if (cmdiData != null && processedIds.add(cmdiData.getId())) {
             SolrInputDocument solrDocument = cmdiData.getSolrDocument();
             if (solrDocument != null) {
-                if (!cmdiData.getDataResources().isEmpty() || cmdiData.getMetadataResources().isEmpty()) {
-                    // We only add metadata files that have data resources (1) or files that don't link to other metadata files (2):
-                    //  1) files with data resources are obviously interesting
-                    //  2) files without metadata links and without dataResource can be interesting e.g. olac files describing a corpus with a link to the original archive.
+                if (!cmdiData.getDataResources().isEmpty() || !cmdiData.getLandingPageResources().isEmpty()
+                		|| !cmdiData.getSearchResources().isEmpty() || !cmdiData.getSearchPageResources().isEmpty()
+                		|| cmdiData.getMetadataResources().isEmpty() ) {
+                    // We only add metadata files that have
+                    //  1) data resources or
+                	//	2) a landing page or
+                	//	3) a search service (like SRU/CQL) or
+                	//	4) a search page or 
+                    //  5) that have none of the above but also lack any metadata links (e.g. olac files describing a corpus with a link to the original archive).
                     // Other files will have only metadata resources and are considered 'collection' metadata files they
                     // are usually not very interesting (think imdi corpus files) and will not be included.
                     updateDocument(solrDocument, cmdiData, file, dataOrigin);
                 } else {
-                    nrOfFilesWithoutDataResources++;
+                    nrOfIgnoredFiles++;
                 }
             }
         }

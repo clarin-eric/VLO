@@ -309,8 +309,8 @@ public class MetadataImporterTest extends ImporterTestcase {
                         " file(s) without an id. (id is generated based on fileName but that may not be unique)");
                 LOG.info("Found " + nrOfFilesWithError + 
                         " file(s) with errors.");
-                LOG.info("Found " + nrOfFilesWithoutDataResources
-                        + " file(s) without data resources (metadata descriptions without resources are ignored).");
+                LOG.info("Found " + nrOfIgnoredFiles
+                        + " file(s) that where ignored (files without resources or any link to a search service or landing page are ignored).");
                 LOG.info("Update of " + nrOFDocumentsUpdated + " took " + took + 
                         " secs. Total nr of files analyzed " + nrOfFilesAnalyzed);
             }
