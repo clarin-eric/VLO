@@ -1,12 +1,12 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.VloWebApplication.ThemedSession;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-
-import eu.clarin.cmdi.vlo.FacetConstants;
 
 public class DocumentLinkPanel extends Panel {
 
@@ -16,7 +16,7 @@ public class DocumentLinkPanel extends Panel {
         super(id, model);
         SolrDocument doc = model.getObject();
         BookmarkablePageLink<ShowResultPage> docLink = ShowResultPage.createBookMarkableLink("docLink", query, doc.getFieldValue(
-                FacetConstants.FIELD_ID).toString());
+                FacetConstants.FIELD_ID).toString(), (ThemedSession)getSession());
         add(docLink);
         Object nameValue = doc.getFirstValue(FacetConstants.FIELD_NAME);
         String name = "<no name>";

@@ -8,6 +8,7 @@ import eu.clarin.cmdi.vlo.pages.BasePanel;
 import eu.clarin.cmdi.vlo.pages.FacetedSearchPage;
 import java.util.Map;
 import javax.servlet.ServletContext;
+import org.apache.wicket.Application;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
@@ -15,6 +16,7 @@ import org.apache.wicket.Response;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.protocol.http.WebRequestCycle;
+import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.RequestParameters;
 
 /**
@@ -27,25 +29,6 @@ import org.apache.wicket.request.RequestParameters;
  */
 public class VloWebApplication extends WebApplication {
     
-    /**
-     * Remember the parameters that should persist in URLs to VLO pages <br><br>
-     */
-    public PageParameters persistentParameters = new PageParameters();
-            
-    /**
-     * Reflect the persistent parameters in the page parameter map<br><br>
-     * 
-     * @param parameters a page parameter map
-     * @return the page parameter map including the current persistent parameters
-     */
-    public PageParameters reflectPersistentParameters(PageParameters parameters) {
-        
-        parameters.putAll(persistentParameters);
-
-        // parameters.add("theme", "defaultTheme");
-        return parameters;
-    }
-
     /**
      * Customized client request cycle<br><br>
      * 
@@ -80,11 +63,13 @@ public class VloWebApplication extends WebApplication {
                 // no theme choosen, keep the current one
             } else {
                 // check if the users requests a different theme 
-                if (object[0].matches(currentTheme.name)) {
+                if (object[0].matches(((ThemedSession)getSession()).getCurrentTheme().name)) {
                     // current theme requested, nothing to do
                 } else {
                     // different theme requested, compose it
-                    currentTheme = new Theme (object[0]);
+                    ((ThemedSession)getSession()).setCurrentTheme(new Theme (object[0]));
+                    // remember the theme as a persistent parameter
+                    ((ThemedSession)getSession()).persistentParameters.put("theme", object[0]);
                 }
             }
         }
@@ -190,11 +175,62 @@ public class VloWebApplication extends WebApplication {
         return map;
     }
     
-    /**
-     * Theme currently applied in the VLO web application
-     */
-    public Theme currentTheme = new Theme ("defaultTheme"); 
+    public class ThemedSession extends WebSession {
+        
+        /**
+         * Remember the parameters that should persist in URLs to VLO pages
+         * <br><br>
+         */
+        public PageParameters persistentParameters = new PageParameters();
+        
+        /**
+         *
+         * @return
+         */
+        public PageParameters getPersistentParameters (){
+            return persistentParameters; 
+        }
 
+        /**
+         * Reflect the persistent parameters in the page parameter map<br><br>
+         *
+         * @param parameters a page parameter map
+         * @return the page parameter map including the current persistent
+         * parameters
+         */
+        public PageParameters reflectPersistentParameters(PageParameters parameters) {
+
+            parameters.putAll(persistentParameters);
+
+            // parameters.add("theme", "defaultTheme");
+            return parameters;
+        }
+
+        /**
+         * Theme currently applied in the VLO web application
+         */
+        private Theme currentTheme = new Theme ("defaultTheme"); 
+
+        public ThemedSession(Application application, Request request) {
+            super(application, request);
+        }
+
+        public Theme getCurrentTheme() {
+            return currentTheme;
+        }
+
+        public void setCurrentTheme(Theme currentTheme) {
+            this.currentTheme = currentTheme;
+        }
+    }
+    
+
+    @Override
+    public ThemedSession newSession(Request request, Response response) {
+        
+        return new ThemedSession(this, request);
+    }
+    
     /**
      * A theme is composed from a page title, a CSS file, two image files, and a
      * partner link map relating coordinates in the right image to partner links
@@ -230,7 +266,7 @@ public class VloWebApplication extends WebApplication {
                 name = "defaultTheme";
             }
             // remember the theme as a persistent parameter
-            persistentParameters.put("theme", name);
+            // getPersistentParameters.put("theme", name);
         }
     }
 
