@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.pages;
 
 import eu.clarin.cmdi.vlo.VloWebApplication;
+import eu.clarin.cmdi.vlo.VloWebApplication.ThemedSession;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.Resource;
 import org.apache.wicket.markup.html.IHeaderContributor;
@@ -50,13 +51,13 @@ public class BasePage extends WebPage implements IHeaderContributor{
         // set the page title
         
         Label pageTitle;
-        pageTitle = new Label ("pagetitle", webApp.currentTheme.pageTitle);
+        pageTitle = new Label ("pagetitle", ((ThemedSession)getSession()).getCurrentTheme().pageTitle);
         add (pageTitle);
         
         // set the applications start page link to the faceted search page
         PageParameters startPageParameters = new PageParameters ();
         
-        webApp.reflectPersistentParameters(startPageParameters);
+        ((ThemedSession)getSession()).reflectPersistentParameters(startPageParameters);
                 
                 BookmarkablePageLink link = new BookmarkablePageLink("startpage", 
                 FacetedSearchPage.class, startPageParameters);
@@ -64,7 +65,7 @@ public class BasePage extends WebPage implements IHeaderContributor{
                        
         // refer to the the left part of the vlo banner as a resource
         Resource leftImageRes;
-        leftImageRes = new ContextRelativeResource(webApp.currentTheme.topLeftImage);
+        leftImageRes = new ContextRelativeResource(((ThemedSession)getSession()).getCurrentTheme().topLeftImage);
 
         // create the image
         Image leftImage;
@@ -75,7 +76,7 @@ public class BasePage extends WebPage implements IHeaderContributor{
 
         // refer to the right part of the vlo banner as a resource
         Resource rightImageRes;
-        rightImageRes = new ContextRelativeResource(webApp.currentTheme.topRightImage);
+        rightImageRes = new ContextRelativeResource(((ThemedSession)getSession()).getCurrentTheme().topRightImage);
         
         // create the image
         Image rightImage;
@@ -87,10 +88,9 @@ public class BasePage extends WebPage implements IHeaderContributor{
         // set the partnerlinks
         
         Label partnerLinkMap;
-        partnerLinkMap = new Label ("partnerlinkmap", webApp.currentTheme.partnerLinkMap);
+        partnerLinkMap = new Label ("partnerlinkmap", ((ThemedSession)getSession()).getCurrentTheme().partnerLinkMap);
         partnerLinkMap.setEscapeModelStrings(false);
         add (partnerLinkMap);
-        
     }
 
     /**
@@ -103,7 +103,7 @@ public class BasePage extends WebPage implements IHeaderContributor{
     @Override
     public void renderHead(IHeaderResponse response) {
                 
-        response.renderCSSReference(webApp.currentTheme.cssFile);
+        response.renderCSSReference(((ThemedSession)getSession()).getCurrentTheme().cssFile);
     }
     
 }

@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.VloWebApplication.ThemedSession;
 import eu.clarin.cmdi.vlo.dao.DaoLocator;
 
 public class PrevNextHeaderPanel extends Panel {
@@ -64,7 +65,7 @@ public class PrevNextHeaderPanel extends Panel {
         }
         if (index > 0) {
             String prevDocId = docIdList.get(index - 1).getFieldValue(FacetConstants.FIELD_ID).toString();
-            BookmarkablePageLink<ShowResultPage> prev = ShowResultPage.createBookMarkableLink("prev", query, prevDocId);
+            BookmarkablePageLink<ShowResultPage> prev = ShowResultPage.createBookMarkableLink("prev", query, prevDocId, (ThemedSession)getSession());
             add(prev);
         } else {
             addDummyPrev();
@@ -74,7 +75,7 @@ public class PrevNextHeaderPanel extends Panel {
         
         if (index < (docIdList.size() - 1) && index >= 0) {
             String prevDocId = docIdList.get(index + 1).getFieldValue(FacetConstants.FIELD_ID).toString();
-            BookmarkablePageLink<ShowResultPage> next = ShowResultPage.createBookMarkableLink("next", query, prevDocId);
+            BookmarkablePageLink<ShowResultPage> next = ShowResultPage.createBookMarkableLink("next", query, prevDocId, (ThemedSession)getSession());
             add(next);
         } else {
             addDummyNext();
