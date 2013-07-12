@@ -25,34 +25,35 @@ public class CMDIComponentProfileNamePostProcessor implements PostProcessor{
     private final HashMap<String, String> cache = new HashMap<String, String>();
 
     @Override
-    public String process(String value) {
+    public String process(String profileId) {
         String result = _EMPTY_STRING;
-        if(value != null){
-            if(cache.containsKey(value)){
-                result = cache.get(value);
+        if(profileId != null){
+            if(cache.containsKey(profileId)){
+                result = cache.get(profileId);
             }
             else{
                 setup();
-                if(vg.parseHttpUrl(BASE_URL + value, true)){
-                    LOG.info("PARSED: "+BASE_URL+value);
+                // get the name of the profile from the expanded xml in the component registry
+                if(vg.parseHttpUrl(BASE_URL + profileId + "/xml", true)){
+                    LOG.info("PARSED: "+BASE_URL+profileId);
                     vn = vg.getNav();
                     ap.bind(vn);
                     int idx;
-                    try {
+                    try { 
                         idx = ap.evalXPath();
                         LOG.info("EVALUATED XPATH: "+XPATH+ " found idx: "+idx);
                         if(idx == -1){ // idx represent the nodeId in the xml file, if -1 the xpath evaluates to nothing.
                             return result;
                         }
                         result = vn.toString(idx);
-                        cache.put(value, result);
+                        cache.put(profileId, result);
                     } catch (Exception e) {
                         LOG.error(e.getLocalizedMessage());
                         return result;
                     }
                 }
                 else{
-                    LOG.error("CANNOT OPEN AND/OR PARSE: " + BASE_URL + value);
+                    LOG.error("CANNOT OPEN AND/OR PARSE: " + BASE_URL + profileId);
                 }
             }
         }
