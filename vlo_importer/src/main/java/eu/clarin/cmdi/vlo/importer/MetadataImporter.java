@@ -212,7 +212,7 @@ public class MetadataImporter {
     protected void initSolrServer() throws MalformedURLException {
         String solrUrl = VloConfig.getSolrUrl();
         LOG.info("Initializing Solr Server on " + solrUrl);
-        solrServer = new StreamingUpdateSolrServer(solrUrl, 1000, 2) {
+        solrServer = new StreamingUpdateSolrServer(solrUrl, VloConfig.getMaxDocsInList(), 2) {
             @Override
             public void handleError(Throwable ex) {
                 super.handleError(ex);
@@ -321,7 +321,7 @@ public class MetadataImporter {
         
         addResourceData(solrDocument, cmdiData);
         docs.add(solrDocument);
-        if (docs.size() == VloConfig.getMaxOnHeap()) {
+        if (docs.size() == VloConfig.getMaxDocsInList()) {
             sendDocs();
         }
     }
@@ -357,22 +357,40 @@ public class MetadataImporter {
                     + resource.getResourceName());
         }
     }
-
+    
     /**
-     * Send current list of SolrImputDocuments to SolrServer and clears list
-     * afterwards
+     * Send the list of documents prepared to the solr server
      *
      * @throws SolrServerException
      * @throws IOException
      */
     protected void sendDocs() throws SolrServerException, IOException {
-        LOG.info("Sending " + docs.size() + " docs to solr server. Total number of docs updated till now: " + nrOFDocumentsUpdated);
+        int wait = 0;
+        boolean done = false;
+        
+        LOG.info("Sending " + docs.size() + 
+                " docs to solr server queue. Total number of docs updated till now: " 
+                + nrOFDocumentsUpdated);
+
         nrOFDocumentsUpdated += docs.size();
-        solrServer.add(docs);
-        if (serverError != null) {
+        // add the documents in the list to the solr queue
+        while (! done){
+            solrServer.add(docs); 
+            done = (serverError == null) && (wait <= 120);
+        }
+        
+        // turn wait into vlo parameter
+        
+        if (done) {
+            // the documents are in the queue now, create a new empty list
+            docs = new ArrayList<SolrInputDocument>();
+        } else {
+            if (wait > 120) {
+                // timeout
+                LOG.error("Timeout sending list of documents to solr queue");
+            }
             throw new SolrServerException(serverError);
         }
-        docs = new ArrayList<SolrInputDocument>();
     }
     
     /**

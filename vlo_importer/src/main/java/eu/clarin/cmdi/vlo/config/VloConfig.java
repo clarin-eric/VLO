@@ -161,7 +161,13 @@ public class VloConfig extends ConfigFromFile {
     private static boolean deleteAllFirst = false;
     
     @Element 
-    private static int maxOnHeap = 0;
+    private static int maxDocsInList = 0;
+    
+    @Element 
+    private static int maxDocsInSolrQueue = 0;
+    
+    @Element 
+    private static int solrTimeOut = 0;
     
     @Element 
     private static boolean useMaxFileSize = false;
@@ -259,27 +265,81 @@ public class VloConfig extends ConfigFromFile {
      */
     
     /**
-     * Get the value of the maxOnHeap parameter<br><br>
+     * Get the value of the maxDocsInList parameter<br><br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * The value of the parameter indicates the number of documents the importer
+     * stores in a list before sending them to the queue associated with the
+     * SOLR server.
      *
      * @return the value
      */
-    public static int getMaxOnHeap (){
-        return maxOnHeap;
+    public static int getMaxDocsInList (){
+        return maxDocsInList;
     }
     
     /**
-     * Set the value of the maxOnHeap parameter<br><br>
+     * Set the value of the maxDocsInList parameter<br><br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * The value of the parameter indicates the number of documents the importer
+     * stores in a list before sending them to the queue associated with the
+     * SOLR server.
      *
      * @param param the value
      */
-    public static void setMaxOnHeap (int param){
-        maxOnHeap = param;
+    public static void setMaxDocsInList (int param){
+        maxDocsInList = param;
+    }
+    
+    /**
+     * Get the value of the maxDocsSolrQueue parameter<br><br>
+     *
+     * The value of the parameter indicates the number of documents in the
+     * SOLR server queue before the threads associated with the server start
+     * emptying the queue.
+     *
+     * @return the value
+     */
+    public static int getDocsSolrQueue (){
+        return maxDocsInSolrQueue;
+    }
+    
+    /**
+     * Set the value of the maxDocsSolrQueue parameter<br><br>
+     *
+     * The value of the parameter indicates the number of documents in the
+     * SOLR server queue before the threads associated with the server start
+     * emptying the queue.
+     *
+     * @param param the value
+     */
+    public static void setDocsSolrQueue (int param){
+        maxDocsInSolrQueue = param;
+    }
+    
+    /**
+     * Get the value of the solrTimeOut parameter<br><br>
+     * 
+     * The value of the parameter indicates the interval during which the
+     * importer will try to reach the SOLR server. Values are incremented
+     * 1, 2, 4, 8, ...
+     *
+     * @return the value
+     */
+    public static int getSolrTimeOut (){
+        return solrTimeOut;
+    }
+    
+    /**
+     * Set the value of the solrTimeOut parameter<br><br>
+     *
+     * The value of the parameter indicates the interval during which the
+     * importer will try to reach the SOLR server. Values are incremented
+     * 1, 2, 4, 8, ...
+     *
+     * @param param the value
+     */
+    public static void setSolrTimeOut (int param){
+        solrTimeOut = param;
     }
     
     /**
@@ -297,8 +357,9 @@ public class VloConfig extends ConfigFromFile {
     /**
      * Set the value of the useMaxFileSize parameter<br><br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * If true, the importer will reject meta data files whose size exceeds 
+     * the value indicated by the maxFileSize parameter. If false, none of
+     * the files encountered will be rejected because of their size.
      *
      * @param param the value
      */
@@ -309,8 +370,8 @@ public class VloConfig extends ConfigFromFile {
     /**
      * Get the value of the maxFileSize parameter<br><br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * If the useMaxFileSize parameter equals true, maxFileSize is the upper
+     * limit to the size of meta data files that the importer will consider. 
      *
      * @return the value
      */
@@ -321,8 +382,8 @@ public class VloConfig extends ConfigFromFile {
     /**
      * Set the value of the maxFileSize parameter<br><br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * If the useMaxFileSize parameter equals true, maxFileSize is the upper
+     * limit to the size of meta data files that the importer will consider. 
      *
      * @param param the value
      */
@@ -333,8 +394,8 @@ public class VloConfig extends ConfigFromFile {
     /**
      * Get the value of the useHandleResolver parameter<br><br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * The parameter can be used to reject meta data files that exceed some
+     * maximum size.
      *
      * @return the value
      */

@@ -87,32 +87,63 @@ public class VloConfigTest {
     }
 
     /**
-     * Test the getMaxOnHeap method
+     * Test the getMaxDocsInList method
      */
     @Test
-    public void testGetMaxOnHeap() {
+    public void testGetMaxDocsInList() {
         
-        System.out.println("getMaxOnHeap");
+        System.out.println("getMaxDocsInList");
         
         int expResult = 128;
-        int result = VloConfig.getMaxOnHeap();
+        int result = VloConfig.getMaxDocsInList();
         
         assertEquals(expResult, result);
     }
 
     /**
-     * Test the setMaxOnHeap method
+     * Test the setMaxDocsInList method
      */
     @Test
-    public void testSetMaxOnHeap() {
+    public void testSetMaxDocsInList() {
         
-        System.out.println("setMaxOnHeap");
+        System.out.println("setMaxDocsInList");
         
         int param = 1000;
         
-        VloConfig.setMaxOnHeap(param);
+        VloConfig.setMaxDocsInList(param);
 
-        int result = VloConfig.getMaxOnHeap();
+        int result = VloConfig.getMaxDocsInList();
+        
+        assertEquals(param, result);
+    }
+    
+    /**
+     * Test the getMaxDocsInSolrQueue method
+     */
+    @Test
+    public void testGetMaxDocsInSolrQueue() {
+        
+        System.out.println("getMaxDocsInSolrQueue");
+        
+        int expResult = 128;
+        int result = VloConfig.getMaxDocsInList();
+        
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test the setMaxDocsInSolrQueue method
+     */
+    @Test
+    public void testSetMaxDocsInSolrQueue() {
+        
+        System.out.println("setMaxDocsInSolrQueue");
+        
+        int param = 1000;
+        
+        VloConfig.setMaxDocsInList(param);
+
+        int result = VloConfig.getMaxDocsInList();
         
         assertEquals(param, result);
     }

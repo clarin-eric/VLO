@@ -2,7 +2,11 @@
    
     <deleteAllFirst>true</deleteAllFirst>
     
-    <maxOnHeap>128</maxOnHeap>
+    <maxDocsInList>128</maxDocsInList>
+    
+    <maxDocsInSolrQueue>128</maxDocsInSolrQueue>
+    
+    <solrTimeOut>300</solrTimeOut>
     
     <useMaxFileSize>true</useMaxFileSize>
     
