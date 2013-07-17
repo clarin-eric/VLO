@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Provides a pretty Assembly output.
-    According to the official MPI packaging scheme (as mandated by the application managers).
-    It aims at the following structure:
-    /vlo-${VERSION}
-        /doc
-        /bin/importer (importer-stuff here)
-        /config (all config stuff here)
-            /solr (the solr config directory
-            /vlo (the vlo context fragment with which parameters to use)
-        /war
-            /solr (the solr war)
-            /vlo (the vlo war)
--->
+
+<!-- vlo package definition -->
+
 <assembly>
     <id>Distribution</id>
     <formats>
@@ -20,7 +10,7 @@
     <includeBaseDirectory>true</includeBaseDirectory>
     <fileSets>
 
-<!-- DOCS -->
+        <!-- documentation to be packaged -->
         <fileSet>
             <directory>docs</directory>
             <includes>
@@ -50,8 +40,9 @@
             </includes>
             <outputDirectory>doc/vlosolr</outputDirectory>
         </fileSet>
-<!-- IMPORTER -->
-        <!-- Jar File -->
+
+        <!-- importer related files to be packaged -->
+        <!-- jar file -->
         <fileSet>
             <directory>vlo_importer/target</directory>
             <includes>
@@ -70,15 +61,17 @@
         </fileSet>
         <!-- config files -->
         <fileSet>
-            <directory>vlo_importer/src/main/bin</directory>
+            <directory>vlo_importer/src/main/resources</directory>
             <includes>
                 <include>*.properties</include>
+                <include>*.xml</include>
+                <include>*.xsl</include>
             </includes>
             <outputDirectory>bin</outputDirectory>
         </fileSet>
 
-<!-- WEB APPLICATION -->
-        <!-- WAR FILE -->
+        <!-- the web application files to be packaged -->
+        <!-- war file -->
         <fileSet>
             <directory>vlo_web_app/target</directory>
             <includes>
@@ -88,15 +81,15 @@
         </fileSet>
         <!-- config -->
         <fileSet>
-            <directory>vlo_web_app/src/main/resources</directory>
+            <directory>vlo_importer/src/main/resources</directory>
             <includes>
                 <include>VloConfig.xml</include>
             </includes>
             <outputDirectory>config</outputDirectory>
         </fileSet> 
 
-<!-- SOLR SERVER -->
-        <!-- SOLR WAR FILE -->
+        <!-- solr server files to be packaged -->
+        <!-- war file -->
         <fileSet>
             <directory>vlo_solr/target</directory>
             <includes>
@@ -105,7 +98,7 @@
             <outputDirectory>war</outputDirectory>
         </fileSet>
 
-        <!-- SOLR CONFIG -->
+        <!-- solr configuration files -->
         <fileSet>
             <directory>vlo_solr/target/vlo_solr-3.6.0-vlo_solr_conf</directory>
             <includes>
