@@ -1,0 +1,83 @@
+Could not get config file name via the command line, trying the system properties.
+Initializing Solr Server on http://localhost:8084/vlo_solr/
+Deleting original data...
+Deleting original data done.
+Start of processing: Test
+Skipping /Library/WebServer/Documents/vlomd/test/results/oai_dp_1185800229C0000000317515dp5.xml because it is too large.
+PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1328259700945
+EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1328259700928
+EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1345561703673
+EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026
+EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1349361150622
+EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1345561703620
+EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+Sending 5 docs to solr server queue. Total number of docs updated till now: 0
+End of processing: Test
+Building index for autocompletion.
+Found 0 file(s) without an id. (id is generated based on fileName but that may not be unique)
+Found 0 file(s) with errors.
+Found 1 file(s) that where ignored (files without resources or any link to a search service or landing page are ignored).
+Update of 5 took 16 secs. Total nr of files analyzed 6
+Could not get config file name via the command line, trying the system properties.
+Initializing Solr Server on http://localhost:8084/vlo_solr/
+Deleting original data...
+Deleting original data done.
+Start of processing: Test
+Skipping /Library/WebServer/Documents/vlomd/test/results/oai_dp_1185800229C0000000317515dp5.xml because it is too large.
+PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1328259700945
+EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1328259700928
+EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1345561703673
+EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026
+EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1349361150622
+EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1345561703620
+EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+Sending 5 docs to solr server queue. Total number of docs updated till now: 0
+End of processing: Test
+Building index for autocompletion.
+Found 0 file(s) without an id. (id is generated based on fileName but that may not be unique)
+Found 0 file(s) with errors.
+Found 1 file(s) that where ignored (files without resources or any link to a search service or landing page are ignored).
+Update of 5 took 89 secs. Total nr of files analyzed 6
+2013-07-17 11:51:39,161 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#main:461] - Could not get config file name via the command line, trying the system properties.
+2013-07-17 11:51:39,365 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#initSolrServer:214] - Initializing Solr Server on http://localhost:8084/vlo_solr/
+2013-07-17 11:51:39,401 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:118] - Deleting original data...
+2013-07-17 11:51:39,495 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:121] - Deleting original data done.
+2013-07-17 11:51:39,496 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:124] - Start of processing: Test
+2013-07-17 11:51:39,510 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:135] - Skipping /Library/WebServer/Documents/vlomd/test/results/oai_dp_1185800229C0000000317515dp5.xml because it is too large.
+2013-07-17 11:51:41,093 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1328259700945
+2013-07-17 11:51:41,093 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-07-17 12:56:32,306 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#main:461] - Could not get config file name via the command line, trying the system properties.
+2013-07-17 12:56:32,503 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#initSolrServer:214] - Initializing Solr Server on http://localhost:8084/vlo_solr/
+2013-07-17 12:56:32,533 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:118] - Deleting original data...
+2013-07-17 12:56:32,614 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:121] - Deleting original data done.
+2013-07-17 12:56:32,614 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:124] - Start of processing: Test
+2013-07-17 12:56:32,647 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:135] - Skipping /Library/WebServer/Documents/vlomd/test/results/oai_dp_1185800229C0000000317515dp5.xml because it is too large.
+2013-07-17 12:56:34,197 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1328259700945
+2013-07-17 12:56:34,197 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-07-17 12:56:41,396 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1328259700928
+2013-07-17 12:56:41,396 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-07-17 12:56:41,604 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1345561703673
+2013-07-17 12:56:41,605 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-07-17 12:56:41,882 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026
+2013-07-17 12:56:41,883 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-07-17 12:56:46,647 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1349361150622
+2013-07-17 12:56:46,647 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-07-17 12:56:48,177 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1345561703620
+2013-07-17 12:56:48,177 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-07-17 12:56:48,177 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#sendDocs:371] - Sending 5 docs to solr server queue. Total number of docs updated till now: 0
+2013-07-17 12:56:48,179 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:144] - End of processing: Test
+2013-07-17 12:56:48,475 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#buildSuggesterIndex:403] - Building index for autocompletion.
+2013-07-17 12:56:48,484 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:164] - Found 0 file(s) without an id. (id is generated based on fileName but that may not be unique)
+2013-07-17 12:56:48,484 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:165] - Found 0 file(s) with errors.
+2013-07-17 12:56:48,484 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:166] - Found 1 file(s) that where ignored (files without resources or any link to a search service or landing page are ignored).
+2013-07-17 12:56:48,485 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:168] - Update of 5 took 15 secs. Total nr of files analyzed 6

@@ -26,21 +26,27 @@
             <resource>
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
+                <includes>
+                    <include>log4j.properties</include>
+                    <include>**/*.xml</include>                    
+                </includes>
             </resource>
             <resource>
                 <filtering>false</filtering>
                 <directory>src/main/java</directory>
                 <includes>
                     <include>**/*.html</include>
-                    <include>**/*.properties</include>
                 </includes>
             </resource>
         </resources>
         
         <plugins>
-            <!-- add the remote resources plugin to make the cmdi2xhtml.xml
+            
+            <!-- add the remote resources plugin to make the cmdi2xhtml.xsl
                  file available to the web application. For more information
                  on this plugin, please refer the Apache Maven Project website
+                 
+                 Check: this seems to be at archive level, not packaging
             -->
             <plugin>
                 <artifactId>maven-remote-resources-plugin</artifactId>
