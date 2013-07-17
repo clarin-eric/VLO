@@ -57,11 +57,22 @@
             <resource>
                 <directory>src/main/java</directory>
                 <excludes>
-                    <exclude>**/*.java</exclude> <!-- java not needed in the package -->
+                    <!-- Exclude java source files because they are not needed 
+                    in the archive. -->
+                    <exclude>**/*.java</exclude>
                 </excludes>
             </resource>
             <resource>
+                <!-- Include vlo importer resources in the WEB-INF/classes 
+                     directory. Including a source is not the same thing as 
+                     depending on it. When you depend on a source, it only needs
+                     to be in the location specified, it
+                     will not be included however.
+                -->
                 <directory>../vlo_importer/src/main/resources</directory>
+                <includes>
+                        <include>cmdi2xhtml.xsl</include>
+                </includes>                    
             </resource>
         </resources>
 
@@ -79,11 +90,11 @@
                 </configuration>
             </plugin>
             
-            
             <plugin>
-                <!-- Add the remote resources plugin to obtain the cmdi2xhtml.xml
-                     file from the vlo_importer module. For more information
-                     on this plugin, please refer the Apache Maven Project website
+                <!-- Add the remote resources plugin to let de web application
+                     depend on the cmdi2xhtml.xml file from the vlo_importer 
+                     module. For more information on this plugin, please refer
+                     the Apache Maven Project website
                 -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-remote-resources-plugin</artifactId>
@@ -111,8 +122,9 @@
                     
                     <!-- Add the cmdi2xhtml file from the vlo_importer module
                          to the web application archive file. Please note that
-                         the file will only be included in the archive: the file
-                         will not show up in the web application module in the
+                         because of this the archive the file it is in will be 
+                         included in its entirety. Please note that the file 
+                         will not show up in the web application module in the 
                          Netbeans IDE.
                     -->
                     
