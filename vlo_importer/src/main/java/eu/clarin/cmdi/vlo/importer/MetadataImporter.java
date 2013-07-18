@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
@@ -365,7 +366,7 @@ public class MetadataImporter {
      * @throws IOException
      */
     protected void sendDocs() throws SolrServerException, IOException {
-        int wait = 0;
+        int wait = 1;
         boolean done = false;
         
         LOG.info("Sending " + docs.size() + 
@@ -376,7 +377,17 @@ public class MetadataImporter {
         // add the documents in the list to the solr queue
         while (! done){
             solrServer.add(docs); 
-            done = (serverError == null) && (wait <= 120);
+            done = (serverError == null) && (wait <= VloConfig.getSolrTimeOut());
+            if (! done){
+                try {
+                    Thread.sleep (1000* wait);
+                } catch (InterruptedException ex) {
+                    java.util.logging.Logger.getLogger(
+                            MetadataImporter.class.getName()).log(Level.SEVERE, 
+                            null, ex);
+                }
+                wait = wait * 2;
+            }
         }
         
         // turn wait into vlo parameter
@@ -385,7 +396,7 @@ public class MetadataImporter {
             // the documents are in the queue now, create a new empty list
             docs = new ArrayList<SolrInputDocument>();
         } else {
-            if (wait > 120) {
+            if (wait > VloConfig.getSolrTimeOut()) {
                 // timeout
                 LOG.error("Timeout sending list of documents to solr queue");
             }
