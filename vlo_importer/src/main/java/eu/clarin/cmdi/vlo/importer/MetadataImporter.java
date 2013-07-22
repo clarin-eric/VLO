@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
@@ -206,18 +205,33 @@ public class MetadataImporter {
     }
 
     /**
-     * Initialize SolrServer as specified in configuration file
+     * Create an interface to the SOLR server. 
+     * 
+     * After the interface has been created the importer can send documents to
+     * the server. Sending documents involves a queue. The importer adds
+     * documents to a queue, and dedicated threads will empty it, and
+     * effectively store store the documents.
      *
      * @throws MalformedURLException
      */
     protected void initSolrServer() throws MalformedURLException {
         String solrUrl = VloConfig.getSolrUrl();
         LOG.info("Initializing Solr Server on " + solrUrl);
-        solrServer = new StreamingUpdateSolrServer(solrUrl, VloConfig.getMaxDocsInList(), 2) {
+        
+        /* Specify the number of documents in the queue that will trigger the
+         * threads, two of them, emptying it.
+         */
+        solrServer = new StreamingUpdateSolrServer(solrUrl, 
+                VloConfig.getMinDocsInSolrQueue(), 2) {
+                    /*
+                     * Let the super class method handle exceptions. Make the
+                     * exception available to the importer in the form of the
+                     * serverError variable.
+                     */
             @Override
-            public void handleError(Throwable ex) {
-                super.handleError(ex);
-                serverError = ex;
+            public void handleError(Throwable exception) {
+                super.handleError(exception);
+                serverError = exception;
             }
         };
     }
@@ -360,7 +374,7 @@ public class MetadataImporter {
     }
     
     /**
-     * Send the list of documents prepared to the solr server
+     * Send the current list of documents to the SOLR server
      *
      * @throws SolrServerException
      * @throws IOException
@@ -370,35 +384,37 @@ public class MetadataImporter {
         boolean done = false;
         
         LOG.info("Sending " + docs.size() + 
-                " docs to solr server queue. Total number of docs updated till now: " 
+                " docs to solr server queue. Number of docs updated till now: " 
                 + nrOFDocumentsUpdated);
 
         nrOFDocumentsUpdated += docs.size();
         // add the documents in the list to the solr queue
-        while (! done){
+        while (! done && wait <= VloConfig.getSolrTimeOut()){
             solrServer.add(docs); 
             done = (serverError == null) && (wait <= VloConfig.getSolrTimeOut());
             if (! done){
                 try {
-                    Thread.sleep (1000* wait);
-                } catch (InterruptedException ex) {
-                    java.util.logging.Logger.getLogger(
-                            MetadataImporter.class.getName()).log(Level.SEVERE, 
-                            null, ex);
+                    if (wait == 1) {
+                        LOG.info("Waiting 1 second for the solr server to respond");
+                    } else {
+                        LOG.info("Waiting ", wait,
+                                "seconds for the solr server to respond");
+                    }
+                    Thread.sleep(1000 * wait);
+                } catch (InterruptedException e) {
+                    LOG.info(e.toString());
                 }
                 wait = wait * 2;
             }
         }
         
-        // turn wait into vlo parameter
-        
         if (done) {
             // the documents are in the queue now, create a new empty list
             docs = new ArrayList<SolrInputDocument>();
         } else {
+            // the documents haven't reached the queue
             if (wait > VloConfig.getSolrTimeOut()) {
-                // timeout
-                LOG.error("Timeout sending list of documents to solr queue");
+                LOG.error("Timeout sending list of documents to solr server queue");
             }
             throw new SolrServerException(serverError);
         }

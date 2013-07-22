@@ -164,7 +164,7 @@ public class VloConfig extends ConfigFromFile {
     private static int maxDocsInList = 0;
     
     @Element 
-    private static int maxDocsInSolrQueue = 0;
+    private static int minDocsInSolrQueue = 0;
     
     @Element 
     private static int solrTimeOut = 0;
@@ -291,7 +291,7 @@ public class VloConfig extends ConfigFromFile {
     }
     
     /**
-     * Get the value of the maxDocsSolrQueue parameter<br><br>
+     * Get the value of the minDocsInSolrQueue parameter<br><br>
      *
      * The value of the parameter indicates the number of documents in the
      * SOLR server queue before the threads associated with the server start
@@ -299,12 +299,12 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value
      */
-    public static int getDocsSolrQueue (){
-        return maxDocsInSolrQueue;
+    public static int getMinDocsInSolrQueue (){
+        return minDocsInSolrQueue;
     }
     
     /**
-     * Set the value of the maxDocsSolrQueue parameter<br><br>
+     * Set the value of the minDocsInSolrQueue parameter<br><br>
      *
      * The value of the parameter indicates the number of documents in the
      * SOLR server queue before the threads associated with the server start
@@ -312,8 +312,8 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param param the value
      */
-    public static void setDocsSolrQueue (int param){
-        maxDocsInSolrQueue = param;
+    public static void setMinDocsInSolrQueue (int param){
+        minDocsInSolrQueue = param;
     }
     
     /**

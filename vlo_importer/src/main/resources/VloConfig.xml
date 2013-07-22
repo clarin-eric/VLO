@@ -4,7 +4,7 @@
     
     <maxDocsInList>128</maxDocsInList>
     
-    <maxDocsInSolrQueue>128</maxDocsInSolrQueue>
+    <minDocsInSolrQueue>128</minDocsInSolrQueue>
     
     <solrTimeOut>300</solrTimeOut>
     
