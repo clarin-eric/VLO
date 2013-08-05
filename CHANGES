@@ -1,5 +1,16 @@
 Bug Fixes and Features
 
+Production release 2.15 (August 2013)
+
+No changes compared to the beta release.
+
+Beta release 2.15 (July 2013)
+
+Repaired the incorrect reference to profiles, and made
+the connection to the solr server more tolerant. Files without
+resources will be shown in the web application if and only if there is
+a link to a landing page. 
+
 Beta Release 2.14 (June 2013)
 
 Support for theming was added, as were some new facet mappings, and the 
