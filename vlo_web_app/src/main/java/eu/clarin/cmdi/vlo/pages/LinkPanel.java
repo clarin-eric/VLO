@@ -94,25 +94,18 @@ public class LinkPanel extends Panel {
                 URL u;
                 try{
                     u = new URL(resourceLink);
-                    System.out.println(resourceLink);
                     URLConnection c = u.openConnection();
                     if(c instanceof HttpURLConnection){
                         con = (HttpURLConnection) c;
+                        con.setInstanceFollowRedirects(false);
                     }
                     if(con != null){
                         if(con.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM ||
                                 con.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP ||
-                                con.getResponseCode() == HttpURLConnection.HTTP_SEE_OTHER){
-                           result = con.getURL().toString();
-/*                            for (Map.Entry<String, List<String>> header : con.getHeaderFields().entrySet()) {
-                                if(header != null && header.getKey() != null){
-                                    System.out.println("XXX:" + header.getKey());
-                                    System.out.println(header.getValue().get(0));
-                                    if(header.getKey().equals("Location")){
-                                        result = header.getValue().get(0);
-                                    }
-                                }
-                            }*/
+                                con.getResponseCode() == HttpURLConnection.HTTP_SEE_OTHER) {
+                        	String location = con.getHeaderField("location");
+            				if(location != null)
+            					result = location;
                         }
                     }
                 } catch (MalformedURLException e) {

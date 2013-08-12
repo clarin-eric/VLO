@@ -35,7 +35,6 @@ public class ResourceLinkPanelTest {
         Assert.assertTrue("Returns the same string if it does not start with the handle-prefix",uit.equals(_SAME_STRING));
 
         uit = totest.getNameFromLink(_RESOLVE_STRING);
-        // from at least 29.05.2013 this was not working
-        // Assert.assertTrue("Returns the resolved url of the handle pid", uit.equals(_RESOLVE_OUT));
+        Assert.assertTrue("Returns the resolved url of the handle pid", uit.equals(_RESOLVE_OUT));
     }
 }
