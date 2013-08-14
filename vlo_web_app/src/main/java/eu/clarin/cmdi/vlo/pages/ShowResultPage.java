@@ -181,16 +181,7 @@ public class ShowResultPage extends BasePage {
             public void populateItem(Item<ICellPopulator<DocumentAttribute>> cellItem, String componentId, IModel<DocumentAttribute> rowModel) {
                 DocumentAttribute attribute = rowModel.getObject();
 
-                if (attribute.getField().equals(FacetConstants.FIELD_LANGUAGE)) {
-                    cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
-
-                        @Override
-                        protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-                            CharSequence body = StringUtils.toMultiLineHtml(getDefaultModelObjectAsString());
-                            replaceComponentTagBody(markupStream, openTag, getSmartLink(body));
-                        }
-                    });
-                } else if(attribute.getField().equals(FacetConstants.FIELD_LANGUAGES)) {
+                if(attribute.getField().equals(FacetConstants.FIELD_LANGUAGES)) {
                     cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
 
                         @Override
@@ -198,6 +189,16 @@ public class ShowResultPage extends BasePage {
                         	setEscapeModelStrings(false);
                             CharSequence body = getDefaultModelObjectAsString();
                             replaceComponentTagBody(markupStream, openTag, body);
+                        }
+                    });
+                } else if(attribute.getField().equals(FacetConstants.FIELD_COMPLETE_METADATA)) {
+                    cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
+
+                        @Override
+                        protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+                        	setEscapeModelStrings(false);
+                            CharSequence body = getDefaultModelObjectAsString();
+                            replaceComponentTagBody(markupStream, openTag, "<a href=\""+body+"\">"+body+"</a>");
                         }
                     });
                 } else {
