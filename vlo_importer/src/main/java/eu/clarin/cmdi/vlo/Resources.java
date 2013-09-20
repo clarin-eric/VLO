@@ -22,6 +22,8 @@ public interface Resources {
     
     public static final String FIELD = "field";
     public static final String NO_RESOURCE_FOUND = "noResourceFound";
+    public static final String RESOURCE = "resource";
+    public static final String RESOURCE_PL = "resource.PL";
     public static final String VALUE = "value";
     public static final String RESULTS = "results";
     public static final String NAME = "name";

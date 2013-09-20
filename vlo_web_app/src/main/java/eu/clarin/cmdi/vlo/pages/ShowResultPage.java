@@ -371,8 +371,13 @@ public class ShowResultPage extends BasePage {
     private void addResourceLinks(SolrDocument solrDocument) {
         RepeatingView repeatingView = new RepeatingView("resourceList");
         add(repeatingView);
-        if (solrDocument.containsKey(FacetConstants.FIELD_RESOURCE)) {
+        if (solrDocument.containsKey(FacetConstants.FIELD_RESOURCE)) {     
             Collection<Object> resources = solrDocument.getFieldValues(FacetConstants.FIELD_RESOURCE);
+            if (resources.size() > 1) {
+                repeatingView.add(new Label(repeatingView.newChildId(), new ResourceModel(Resources.RESOURCE_PL)));
+            } else {
+                repeatingView.add(new Label(repeatingView.newChildId(), new ResourceModel(Resources.RESOURCE)));
+            }
             for (Object resource : resources) {
                 String[] split = resource.toString().split(Pattern.quote(FacetConstants.FIELD_RESOURCE_SPLIT_CHAR), 2);
                 final String mimeType = split[0];
