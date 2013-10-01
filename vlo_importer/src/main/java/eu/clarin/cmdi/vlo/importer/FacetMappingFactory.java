@@ -6,6 +6,8 @@ import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
+import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.AcceptableContext;
+import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.RejectableContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,11 +63,12 @@ public class FacetMappingFactory {
      */
     private FacetMapping createMapping(String xsd) {
         FacetMapping result = new FacetMapping();
-        // Gets the configuration. VLOMarchaller only reads in the facetconceptmapping.xml file and returns the result (though the reading in is implicit).
+        // Gets the configuration. VLOMarshaller only reads in the facetconceptmapping.xml file and returns the result (though the reading in is implicit).
         FacetConceptMapping conceptMapping = VLOMarshaller.getFacetConceptMapping();
         try {
             //The magic
             Map<String, List<String>> conceptLinkPathMapping = createConceptLinkPathMapping(xsd);
+            Map<String, String> pathConceptLinkMapping = null;
             // Below we put the stuff we found into the configuration class.
             for (FacetConcept facetConcept : conceptMapping.getFacetConcepts()) {
                 FacetConfiguration config = new FacetConfiguration();
@@ -74,7 +77,58 @@ public class FacetMappingFactory {
                 for (String concept : facetConcept.getConcepts()) {
                     List<String> paths = conceptLinkPathMapping.get(concept);
                     if (paths != null) {
-                        xpaths.addAll(paths);
+                        if (facetConcept.hasContext()) {
+                            for (String path : paths) {
+                                // lazily instantiate the reverse mapping, i.e., from concept to path
+                                if (pathConceptLinkMapping == null) {
+                                    pathConceptLinkMapping = new HashMap<String, String>();
+                                    for (String c : conceptLinkPathMapping.keySet()) {
+                                        for (String p : conceptLinkPathMapping.get(c))
+                                            pathConceptLinkMapping.put(p,c);
+                                    }
+                                }
+                                String context = getContext(path,pathConceptLinkMapping);
+                                boolean handled = false;
+                                // check against acceptable context
+                                if (facetConcept.hasAcceptableContext()) {
+                                    AcceptableContext acceptableContext = facetConcept.getAcceptableContext();
+                                    if (context == null && acceptableContext.includeEmpty()) {
+                                        // no context is accepted
+                                        LOG.debug("facet["+facetConcept.getName()+"] path["+path+"] context["+context+"](empty) is accepted");
+                                        xpaths.add(path);
+                                        handled = true;
+                                    } else if (acceptableContext.getConcepts().contains(context)) {
+                                        // a specific context is accepted
+                                        LOG.debug("facet["+facetConcept.getName()+"] path["+path+"] context["+context+"] is accepted");
+                                        xpaths.add(path);
+                                        handled = true;
+                                    }
+                                }
+                                // check against rejectable context
+                                if (!handled && facetConcept.hasRejectableContext()) {
+                                    RejectableContext rejectableContext = facetConcept.getRejectableContext();
+                                    if (context == null && rejectableContext.includeEmpty()) {
+                                        // no context is rejected
+                                        LOG.debug("facet["+facetConcept.getName()+"] path["+path+"] context["+context+"](empty) is rejected");
+                                        handled = true;
+                                    } else if (rejectableContext.getConcepts().contains(context)) {
+                                        // a specific context is rejected
+                                        LOG.debug("facet["+facetConcept.getName()+"] path["+path+"] context["+context+"] is rejected");
+                                        handled = true;
+                                    } else if (rejectableContext.includeAny()) {
+                                        // any context is rejected
+                                        LOG.debug("facet["+facetConcept.getName()+"] path["+path+"] context["+context+"](any) is rejected");
+                                        handled = true;
+                                    }
+                                }
+                                if (!handled && context!=null && facetConcept.hasAcceptableContext() && facetConcept.getAcceptableContext().includeAny()) {
+                                    // any, not rejected context, is accepted
+                                    LOG.debug("facet["+facetConcept.getName()+"] path["+path+"] context["+context+"](any) is accepted");
+                                    xpaths.add(path);
+                                }
+                            }
+                        } else
+                            xpaths.addAll(paths);
                     }
                 }
                 if (xpaths.isEmpty()) {
@@ -93,6 +147,19 @@ public class FacetMappingFactory {
             LOG.error("Error creating facetMapping from xsd: " + xsd + " ", e);
         }
         return result;
+    }
+    
+    /**
+     * Look if there is a contextual (container) data category associated with an ancestor by walking back.
+     */
+    private String getContext(String path,Map<String,String> pathConceptLinkMapping) {
+        String context = null;
+        String cpath = path;
+        while (context==null && !cpath.equals("/text()")) {
+            cpath = cpath.replaceAll("/[^/]*/text\\(\\)","/text()");
+            context = pathConceptLinkMapping.get(cpath);
+        }
+        return context;
     }
 
     /**

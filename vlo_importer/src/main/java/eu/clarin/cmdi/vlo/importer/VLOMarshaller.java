@@ -22,6 +22,7 @@ public class VLOMarshaller {
             JAXBContext jc = JAXBContext.newInstance(FacetConceptMapping.class);
             Unmarshaller u = jc.createUnmarshaller();
             FacetConceptMapping result = (FacetConceptMapping) u.unmarshal(in);
+            result.check();
             return result;
         } catch (JAXBException e) {
             throw new RuntimeException(e);
