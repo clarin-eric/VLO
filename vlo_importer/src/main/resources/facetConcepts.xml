@@ -39,6 +39,10 @@
   <facetConcept name="language">
     <concept>http://www.isocat.org/datcat/DC-2482</concept> <!-- language code -->
     <concept>http://www.isocat.org/datcat/DC-2484</concept> <!-- language name -->
+    <acceptableContext includeAny="false" includeEmpty="true"/>
+    <rejectableContext includeAny="true"  includeEmpty="false">
+      <concept>http://www.isocat.org/datcat/DC-4146</concept> <!-- actor -->
+    </rejectableContext>
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:language/@olac-language</pattern>
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-language</pattern>
     <pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()</pattern>
