@@ -67,6 +67,7 @@ public class MetadataImporter {
      */
     final static Map<String, PostProcessor> POST_PROCESSORS = new HashMap<String, PostProcessor>();
     static {
+		POST_PROCESSORS.put(FacetConstants.FIELD_CONTINENT, new ContinentNamePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_COUNTRY, new CountryNamePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGE, new LanguageCodePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_RESOURCE_TYPE, new ResourceTypePostProcessor());
