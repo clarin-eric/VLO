@@ -150,8 +150,8 @@ public class VloConfig extends ConfigFromFile {
     /**
      * VLO application parameter members<br><br>
      *
-     * Initialize the annotated members in a proper way. This will allow them to
-     * be linearized to corresponding elements in an XML file.
+     * Initialise the annotated members in a proper way. This will allow them to
+     * be linearised to corresponding elements in an XML file.
      * 
      * Please refer to the general VLO documentation for a description of the
      * member parameters.
@@ -255,6 +255,12 @@ public class VloConfig extends ConfigFromFile {
     
     @Element
     private static String FederatedContentSearchUrl = " ";
+    
+    @Element
+    private static String reverseProxyPrefix = "";
+    
+    @Element 
+    private static Boolean expectReverseProxy = false;
 
     /**
      * Get and set methods for web application parameter members<br><br>
@@ -853,4 +859,53 @@ public class VloConfig extends ConfigFromFile {
     public static void setSilToISO639CodesUrl(String param) {
         silToISO639CodesUrl = param;
     }
+    
+    /**
+     * Get the value of the reverseProxyPath parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public static String getReverseProxyPrefix() {
+        return reverseProxyPrefix;
+    }
+
+    /**
+     * Set the value of the reverseProxyPrefix parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value
+     */
+    public static void setReverseProxyPrefix(String param) {
+        reverseProxyPrefix = param;
+    }
+    
+    /**
+     * Get the value of the expectReverseProxy parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public static Boolean getExpectReverseProxy() {
+        return expectReverseProxy;
+    }
+
+    /**
+     * Set the value of the expectReverseProxy parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value
+     */
+    public static void setExpectReverseProxy(Boolean param) {
+        expectReverseProxy = param;
+    }
+
 }

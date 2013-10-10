@@ -622,7 +622,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
         SolrInputDocument doc = data.getSolrDocument();
-        assertEquals(1, doc.getFieldValues(FacetConstants.FIELD_SUBJECT).size());
+        assertEquals(3, doc.getFieldValues(FacetConstants.FIELD_SUBJECT).size());
         assertTrue(doc.getFieldValues(FacetConstants.FIELD_SUBJECT).contains("kuna"));
         assertEquals(2, doc.getFieldValues(FacetConstants.FIELD_COUNTRY).size());
         assertTrue(doc.getFieldValues(FacetConstants.FIELD_COUNTRY).contains("testCountry1"));
@@ -650,7 +650,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         processor = getDataParser();
         data = processor.process(cmdiFile);
         doc = data.getSolrDocument();
-        assertEquals(1, doc.getFieldValues(FacetConstants.FIELD_SUBJECT).size());
+        assertEquals(2, doc.getFieldValues(FacetConstants.FIELD_SUBJECT).size());
         assertEquals("testsubjectfallback", doc.getFieldValue(FacetConstants.FIELD_SUBJECT));
         assertEquals(1, doc.getFieldValues(FacetConstants.FIELD_COUNTRY).size());
         assertEquals("testCountry2", doc.getFieldValue(FacetConstants.FIELD_COUNTRY));
@@ -679,7 +679,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         processor = getDataParser();
         data = processor.process(cmdiFile);
         doc = data.getSolrDocument();
-        assertEquals(1, doc.getFieldValues("subject").size());
+        assertEquals(3, doc.getFieldValues("subject").size());
         assertEquals("testsubjectfallback", doc.getFieldValue("subject"));
         assertEquals(2, doc.getFieldValues(FacetConstants.FIELD_COUNTRY).size());
         assertTrue(doc.getFieldValues(FacetConstants.FIELD_COUNTRY).contains("testCountry1"));

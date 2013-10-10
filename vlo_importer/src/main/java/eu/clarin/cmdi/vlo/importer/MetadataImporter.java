@@ -411,9 +411,11 @@ public class MetadataImporter {
                 }
                 // wait even longer
                 wait = wait * 2;
-                // re-initialise the server
+                // because of the 2.15 problems:
+                // do not re-initialise the server
                 serverError = null;
-                initSolrServer();
+                // and do not
+                // initSolrServer();
             }
         }
         

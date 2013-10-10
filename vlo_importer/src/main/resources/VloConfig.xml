@@ -83,4 +83,8 @@
     <silToISO639CodesUrl>http://www.clarin.eu/cmd/xslt/sil_to_iso6393.xml</silToISO639CodesUrl>
     
     <FederatedContentSearchUrl>http://weblicht.sfs.uni-tuebingen.de/Aggregator/</FederatedContentSearchUrl>
+    
+    <expectReverseProxy>false</expectReverseProxy>
+    
+    <reverseProxyPrefix>vlodev/</reverseProxyPrefix>
 </VloConfig>
