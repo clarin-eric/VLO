@@ -261,7 +261,11 @@ public class VloWebApplication extends WebApplication {
                 pageTitle = "CLARIN Virtual Language Observatory - Resources";
                 topLeftImage = "Images/topleftvlo.gif";
                 topRightImage = "Images/toprightvlo.gif";
-                cssFile = "css/main.css";
+                if (VloConfig.getExpectReverseProxy()) {
+                    cssFile = VloConfig.getReverseProxyPrefix() + "css/main.css";
+                } else {
+                    cssFile = "css/main.css";
+                }
                 partnerLinkMap = getDefaultPartnerLinkMap();
                 name = "defaultTheme";
             }
