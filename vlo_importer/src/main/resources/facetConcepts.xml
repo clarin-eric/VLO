@@ -88,7 +88,7 @@
     <pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
   </facetConcept>
   <facetConcept name="text">
-	<pattern>/c:CMD//text()</pattern>
+	<pattern>/c:CMD/c:Components//text()</pattern>
   </facetConcept>
   <facetConcept name="_componentProfile">
     <pattern>/c:CMD/c:Header/c:MdProfile/text()</pattern>
