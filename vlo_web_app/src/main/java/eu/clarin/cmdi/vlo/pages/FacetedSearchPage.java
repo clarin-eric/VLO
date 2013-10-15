@@ -2,12 +2,12 @@ package eu.clarin.cmdi.vlo.pages;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.Resources;
-import eu.clarin.cmdi.vlo.VloWebApplication;
 import eu.clarin.cmdi.vlo.VloWebApplication.ThemedSession;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.AutoCompleteDao;
 import fiftyfive.wicket.basic.TruncatedLabel;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,6 +16,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.RequestCycle;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteTextField;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
@@ -31,6 +32,7 @@ import org.apache.wicket.markup.repeater.data.GridView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.protocol.http.RequestUtils;
 
 public class FacetedSearchPage extends BasePage {
     private static final long serialVersionUID = 1L;
@@ -58,6 +60,7 @@ public class FacetedSearchPage extends BasePage {
 		public SearchBoxForm(String id, SearchPageQuery query) {
 			super(id, new CompoundPropertyModel<SearchPageQuery>(query));
 			add(new ExternalLink("vloHomeLink", VloConfig.getVloHomeLink()));
+			
 			searchBox = new AutoCompleteTextField<String>("searchQuery") {
 				@Override
 				protected Iterator<String> getChoices(String input) {
@@ -67,6 +70,16 @@ public class FacetedSearchPage extends BasePage {
             add(searchBox);
             Button submit = new Button("searchSubmit");
             add(submit);
+            
+            String thisURL = RequestUtils.toAbsolutePath(RequestCycle.get().urlFor(ShowResultPage.class, query.getPageParameters()).toString());
+            try {
+            	thisURL = URLEncoder.encode(thisURL,"UTF-8");
+            } catch (UnsupportedEncodingException e) {
+            }
+            
+            String href = VloConfig.getFeedbackFromUrl()+thisURL;
+            ExternalLink link = new ExternalLink("feedbackLink", href, "found an error?");
+            add(link);
         }
 
         @Override
@@ -181,5 +194,5 @@ public class FacetedSearchPage extends BasePage {
 		} else {
 			contentSearchContainer.setVisible(false);
 		}
-	}    
+	}
 }
