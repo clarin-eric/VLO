@@ -74,6 +74,10 @@ img{
     display:inline
 }
 
+.federatedSearch {
+	font-weight:bold;
+}
+
 .facet_facetOrigin .facetbox {
     background-color: #2E6B99;
     color:#FFFFFF;

@@ -117,6 +117,10 @@ img{
 }
 /* end search box related definitions */
 
+.federatedSearch {
+	font-weight:bold;
+}
+
 /* facet box header, continue the banner and search box color */
 .facet_facetOrigin .facetbox {
     background-color: #88a1b9;

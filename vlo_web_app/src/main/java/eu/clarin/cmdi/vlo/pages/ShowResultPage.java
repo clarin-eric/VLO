@@ -443,7 +443,7 @@ public class ShowResultPage extends BasePage {
 				List<String> idList = new ArrayList<String>();
 				idList.add(solrDocument.getFirstValue(FacetConstants.FIELD_ID).toString());
 				aggregrationContextMap.put(solrDocument.getFirstValue(FacetConstants.FIELD_SEARCH_SERVICE).toString(), idList);
-				Label contentSearchLabel = new Label("contentSearchForm", HtmlFormCreator.getContentSearchForm(aggregrationContextMap, "Content search in resource"));
+				Label contentSearchLabel = new Label("contentSearchForm", HtmlFormCreator.getContentSearchForm(aggregrationContextMap, "Plain text search via Federated Content Search"));
 				contentSearchLabel.setEscapeModelStrings(false);				
 				contentSearchContainer.add(contentSearchLabel);
 			} catch (UnsupportedEncodingException uee) {

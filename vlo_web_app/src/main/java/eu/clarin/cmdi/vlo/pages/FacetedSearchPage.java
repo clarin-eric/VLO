@@ -165,7 +165,14 @@ public class FacetedSearchPage extends BasePage {
 				}
 
 				// add HTML form to container
-				Label contentSearchLabel = new Label("contentSearchForm", HtmlFormCreator.getContentSearchForm(aggregationContextMap, "Content search in result set"));
+				String labelString;
+				if (totalResults == 1)
+					labelString = "Plain text search via Federated Content Search (supported by one resource in this result set)";
+				else
+					labelString = "Plain text search via Federated Content Search (supported by " + totalResults
+							+ " resources in this result set)";
+				Label contentSearchLabel = new Label("contentSearchForm", HtmlFormCreator.getContentSearchForm(
+						aggregationContextMap, labelString));
 				contentSearchLabel.setEscapeModelStrings(false);
 				contentSearchContainer.add(contentSearchLabel);
 			} catch (UnsupportedEncodingException uee) {
