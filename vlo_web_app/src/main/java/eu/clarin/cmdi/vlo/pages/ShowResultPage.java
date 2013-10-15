@@ -471,6 +471,7 @@ public class ShowResultPage extends BasePage {
                 final Serializer out = new Serializer();
                 out.setOutputProperty(Serializer.Property.METHOD, "html");
                 out.setOutputProperty(Serializer.Property.INDENT, "yes");
+                out.setOutputProperty(Serializer.Property.ENCODING, "UTF-8");
                 out.setOutputWriter(strWriter);
                 final XsltTransformer trans = exp.load();
 
