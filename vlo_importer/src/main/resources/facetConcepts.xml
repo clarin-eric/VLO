@@ -30,9 +30,11 @@
   </facetConcept>
   <facetConcept name="continent">
     <concept>http://www.isocat.org/datcat/DC-2531</concept>
+    <concept>http://www.isocat.org/datcat/DC-3791</concept>
   </facetConcept>
   <facetConcept name="country">
     <concept>http://www.isocat.org/datcat/DC-2532</concept>
+    <concept>http://www.isocat.org/datcat/DC-3792</concept>
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:spatial[@dcterms-type="ISO3166"]/text()</pattern>
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:coverage[@dcterms-type="ISO3166"]/text()</pattern>
   </facetConcept>
