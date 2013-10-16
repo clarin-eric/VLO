@@ -33,9 +33,11 @@
   </facetConcept>
   <facetConcept name="continent">
     <concept>http://www.isocat.org/datcat/DC-2531</concept>
+    <concept>http://www.isocat.org/datcat/DC-3791</concept>
   </facetConcept>
   <facetConcept name="country">
     <concept>http://www.isocat.org/datcat/DC-2532</concept>
+    <concept>http://www.isocat.org/datcat/DC-3792</concept>
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:spatial[@dcterms-type="ISO3166"]/text()</pattern>
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:coverage[@dcterms-type="ISO3166"]/text()</pattern>
   </facetConcept>
@@ -71,7 +73,7 @@
     <concept>http://www.isocat.org/datcat/DC-3899</concept>
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/@olac-linguistic-type</pattern> <!-- Find concept and add attribute somehow -->
   </facetConcept>
-  <facetConcept name="subject" isCaseInsensitive="true" allowMultipleValues="false">
+  <facetConcept name="subject" isCaseInsensitive="true" allowMultipleValues="true">
     <concept>http://www.isocat.org/datcat/DC-2591</concept>
     <concept>http://purl.org/dc/terms/subject</concept>
     <concept>http://purl.org/dc/elements/1.1/subject</concept>
@@ -97,7 +99,7 @@
     <pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
   </facetConcept>
   <facetConcept name="text">
-	<pattern>/c:CMD//text()</pattern>
+	<pattern>/c:CMD/c:Components//text()</pattern>
   </facetConcept>
   <facetConcept name="_componentProfile">
     <pattern>/c:CMD/c:Header/c:MdProfile/text()</pattern>
