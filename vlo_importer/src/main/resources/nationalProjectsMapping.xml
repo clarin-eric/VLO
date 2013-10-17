@@ -2,6 +2,7 @@
 <!-- This file contains the mapping from MDCollectionDisplayName entries in meta data files to their national projects --> 
 <nationalProjects>
 	<nationalProjectMapping><MdCollectionDisplayName>Berlin-Brandenburgische Akademie der Wissenschaften</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Deutsches Textarchiv (1600–1900)</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>CLARIN LRT inventory</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>WebLicht Webservice Orchestrator</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>Tübingen Language Resources</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
