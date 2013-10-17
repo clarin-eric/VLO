@@ -31,7 +31,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.behavior.AbstractBehavior;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
@@ -45,7 +44,6 @@ import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.repeater.Item;
@@ -62,7 +60,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Page showing VLO search results
  * 
- * @author keeloo, for the addLandingPage links method
+ * @author keeloo, for the addLandingPage links method and annotations
  */
 public class ShowResultPage extends BasePage {
 
@@ -70,11 +68,11 @@ public class ShowResultPage extends BasePage {
     public static final String PARAM_DOC_ID = "docId";
     public static final String feedbackfromURL = VloConfig.getFeedbackFromUrl();
     
-    private final static ImageResource FEEDBACK_IMAGE = new ImageResource(new ContextRelativeResource("Images/feedback.png"), "Report an Error");
     private final URL xslFile = getClass().getResource("/cmdi2xhtml.xsl");
     
     @SuppressWarnings("serial")
     public ShowResultPage(final PageParameters currentParam) {
+        
         super(currentParam);
         final String docId = WicketURLDecoder.QUERY_INSTANCE.decode(getPageParameters().getString(PARAM_DOC_ID, null));
         SolrDocument solrDocument = DaoLocator.getSearchResultsDao().getSolrDocument(docId);
@@ -154,20 +152,40 @@ public class ShowResultPage extends BasePage {
         return result;
     }
 
-	private void addAttributesTable(final SolrDocument solrDocument) {
-		solrDocument.remove(FacetConstants.FIELD_LANGUAGE);	// ignore language entry, because of FIELD_LANGUAGE_LINK
+    /*
+     * Based on the solr document, create a table of facet and value pairs
+     */
+    private void addAttributesTable(final SolrDocument solrDocument) {
+        // because of FIELD_LANGUAGE_LINK, remove the FIELD_LANDGUAGE facet
+        solrDocument.remove(FacetConstants.FIELD_LANGUAGE);
+        /* Use the data provider from the solrDocument object as a provider
+         * for the table to be instantiated here.
+         */
         DocumentAttributesDataProvider attributeProvider = new DocumentAttributesDataProvider(solrDocument);
-        @SuppressWarnings("unchecked")
-		DataTable table = new DataTable("attributesTable", createAttributesColumns(), attributeProvider, 250);
+
+        DataTable table;
+        /* Create table: use the provider, and pass a method to create the 
+         * columns.
+         */
+        table = new DataTable("attributesTable", createAttributesColumns(), attributeProvider, 250);
+        // associate css with table
         table.setTableBodyCss("attributesTbody");
-        table.addTopToolbar(new HeadersToolbar(table, null));
+        table.addTopToolbar(new HeadersToolbar(table, null));  
+        // add table to page
         add(table);
     }
 
-    @SuppressWarnings({ "serial" })
+    /**
+     * Create the columns for the table. 
+     * 
+     * Create one column for the facets and one column for the values.
+     * 
+     * @param
+     */
     private IColumn[] createAttributesColumns() {
         IColumn[] columns = new IColumn[2];
 
+        // create the column for the facet names
         columns[0] = new PropertyColumn<Object>(new ResourceModel(Resources.FIELD), "field") {
 
             @Override
@@ -176,34 +194,43 @@ public class ShowResultPage extends BasePage {
             }
         };
 
+        // create the column for the values of the attributes
         columns[1] = new AbstractColumn<DocumentAttribute>(new ResourceModel(Resources.VALUE)) {
             @Override
-            public void populateItem(Item<ICellPopulator<DocumentAttribute>> cellItem, String componentId, IModel<DocumentAttribute> rowModel) {
+            public void populateItem(Item<ICellPopulator<DocumentAttribute>> cellItem,
+                    String componentId, IModel<DocumentAttribute> rowModel) {
+
+                /*
+                 * While in the data for the table, the values (for the 
+                 * description) facets are structured. Creating a single 
+                 * attribute, these values are collapsed. Refer to the 
+                 * 
+                 * DocumentAttribute 
+                 * 
+                 * class.
+                 */
                 DocumentAttribute attribute = rowModel.getObject();
 
-                if(attribute.getField().equals(FacetConstants.FIELD_LANGUAGES)) {
+                if (attribute.getField().equals(FacetConstants.FIELD_LANGUAGES)) {
                     cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
-
                         @Override
                         protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-                        	setEscapeModelStrings(false);
+                            setEscapeModelStrings(false);
                             CharSequence body = getDefaultModelObjectAsString();
                             replaceComponentTagBody(markupStream, openTag, body);
                         }
                     });
-                } else if(attribute.getField().equals(FacetConstants.FIELD_COMPLETE_METADATA)) {
+                } else if (attribute.getField().equals(FacetConstants.FIELD_COMPLETE_METADATA)) {
                     cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
-
                         @Override
                         protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-                        	setEscapeModelStrings(false);
+                            setEscapeModelStrings(false);
                             CharSequence body = getDefaultModelObjectAsString();
-                            replaceComponentTagBody(markupStream, openTag, "<a href=\""+body+"\">"+body+"</a>");
+                            replaceComponentTagBody(markupStream, openTag, "<a href=\"" + body + "\">" + body + "</a>");
                         }
                     });
                 } else {
                     cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
-
                         @Override
                         protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
                             CharSequence body = StringUtils.toMultiLineHtml(getDefaultModelObjectAsString());

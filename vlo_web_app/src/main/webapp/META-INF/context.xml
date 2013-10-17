@@ -21,6 +21,6 @@ refer to the documentation.
 
 -->
 <Context antiJARLocking="true" path="/vlo">
-  <Parameter name="externalConfig" value="/home/keeloo/vlo/config/VloConfig.xml"/>
+  <Parameter name="externalConfig" value="/home/keeloo/vlo/config/VloConfig.Netbeans.xml"/>
   <!--Parameter name="solrUrl" value="http://localhost:8084/vlo_solr/"/-->
 </Context>

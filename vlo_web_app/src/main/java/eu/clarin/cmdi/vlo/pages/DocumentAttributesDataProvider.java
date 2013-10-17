@@ -23,7 +23,7 @@ public class DocumentAttributesDataProvider extends SortableDataProvider<Documen
     }
 
     private static final long serialVersionUID = 1L;
-
+    
     private transient DocumentAttributeList attributeList;
 
     public DocumentAttributesDataProvider(SolrDocument solrDocument) {
@@ -40,7 +40,7 @@ public class DocumentAttributesDataProvider extends SortableDataProvider<Documen
             attributeList = new DocumentAttributeList(Collections.singletonMap("Document not found", (Collection<Object>) null));
         }
     }
-
+    
     private boolean ignoreEntry(String entry) {
 //        if(entry.equals(FacetConstants.FIELD_COMPLETE_METADATA)){
 //            return false; // Do not ignore the "complete metadata" entry, even though it starts with a _
