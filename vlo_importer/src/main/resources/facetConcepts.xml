@@ -104,7 +104,7 @@
   <facetConcept name="_componentProfile">
     <pattern>/c:CMD/c:Header/c:MdProfile/text()</pattern>
   </facetConcept>
-  <facetConcept name="tag">
+  <facetConcept name="keywords">
 	<concept>http://www.isocat.org/datcat/DC-5436</concept>
 	<concept>http://www.isocat.org/rest/dc/5436</concept>  not an official ISOcat PID - added to support LrtInventoryResource, should be removed in the future 
   </facetConcept>

@@ -69,7 +69,7 @@
         <facetField>resourceType</facetField>
         <facetField>dataProvider</facetField>
         <facetField>nationalProject</facetField>
-        <facetField>tag</facetField>
+        <facetField>keywords</facetField>
     </facetFields>
     
     <countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>

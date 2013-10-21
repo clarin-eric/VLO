@@ -259,7 +259,7 @@ public class FacetMappingFactoryTest {
 		assertEquals("/c:CMD/c:Header/c:MdProfile/text()", mapping.getPatterns().get(0));
 		assertEquals(1, mapping.getPatterns().size());
 		mapping = facets.get(index++);
-		assertEquals(FacetConstants.FIELD_TAG, mapping.getName());
+		assertEquals(FacetConstants.FIELD_KEYWORDS, mapping.getName());
 		assertEquals(1, mapping.getPatterns().size());
 		assertEquals("/c:CMD/c:Components/c:LrtInventoryResource/c:tags/c:tag/text()", mapping.getPatterns().get(0));
 		assertEquals("check to see we tested them all", facets.size(), index);

@@ -626,7 +626,7 @@ public class VloConfigTest {
         "resourceType",
         "dataProvider",
         "nationalProject",
-        "tag"};
+        "keywords"};
     
         String[] result = VloConfig.getFacetFields();
     
@@ -651,7 +651,8 @@ public class VloConfigTest {
         "organisation",
         "resourceType",
         "dataProvider",
-        "nationalProject"};
+        "nationalProject",
+        "keywords"};
         
         VloConfig.setFacetFields(expResult);
         
