@@ -122,7 +122,7 @@ public class VloWebApplication extends WebApplication {
         map = "<map name=\"partnerLinks\">\n";
         map = appendToPartnerLinkMap (map,
                 "114.00,65,167.50,104",
-                "http://www.clarin.eu)",
+                "http://www.clarin.eu",
                 "alt=\"clarin link");
         map = appendToPartnerLinkMap (map,
                 "177.00,65,214,104",
