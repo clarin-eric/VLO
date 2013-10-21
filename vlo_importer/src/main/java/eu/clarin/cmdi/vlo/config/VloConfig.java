@@ -176,6 +176,9 @@ public class VloConfig extends ConfigFromFile {
     private static int maxFileSize = 0;
     
     @Element
+    private static int maxDaysToLife = 0;
+    
+    @Element
     private static boolean useHandleResolver = false;
     
     @Element
@@ -395,6 +398,34 @@ public class VloConfig extends ConfigFromFile {
      */
     public static void setMaxFileSize (int param){
         maxFileSize = param;
+    }
+    
+    /**
+     * Get the value of the maxDaysToLife parameter<br><br>
+     *
+     * If the maxDaysToLife parameter is larger than 0, maxDaysToLife is the
+     * maximal number of days that a document remains in the database without been
+     * seen by the importer, even when deleteAllFirst and deleteFirst are set
+     * to false.
+     *
+     * @return the value
+     */
+    public static int getMaxDaysToLife (){
+        return maxDaysToLife;
+    }
+    
+    /**
+     * Set the value of the maxDaysToLife parameter<br><br>
+     *
+     * If the maxDaysToLife parameter is larger than 0, maxDaysToLife is the
+     * maximal number of days that a document remains in the database without been
+     * seen by the importer, even when deleteAllFirst and deleteFirst are set
+     * to false.
+     *
+     * @param param the value
+     */
+    public static void setMaxDaysToLife (int param){
+    	maxDaysToLife = param;
     }
     
     /**

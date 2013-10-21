@@ -31,6 +31,7 @@ public class FacetConstants {
     public static final String FIELD_RESOURCE = "_resourceRef";
     public static final String FIELD_CLARIN_PROFILE = "_componentProfile";
     public static final String FIELD_SEARCH_SERVICE = "_contentSearchRef";
+    public static final String FIELD_LAST_SEEN = "_lastSeen";
     
     /** Facet constant associated with the landing page type. */
     public static final String FIELD_LANDINGPAGE = "_landingPageRef";

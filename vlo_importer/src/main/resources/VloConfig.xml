@@ -12,6 +12,8 @@
     
     <maxFileSize>10000000</maxFileSize>
     
+    <maxDaysToLife>0</maxDaysToLife>
+    
     <useHandleResolver>false</useHandleResolver>
     
     <printMapping>false</printMapping>

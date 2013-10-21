@@ -4,16 +4,20 @@ import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
@@ -121,6 +125,8 @@ public class MetadataImporter {
                 solrServer.commit();
                 LOG.info("Deleting original data done.");
             }
+            
+            // Import the specified data roots
             for (DataRoot dataRoot : dataRoots) {
                 LOG.info("Start of processing: " + dataRoot.getOriginName());
                 if (dataRoot.deleteFirst()) {
@@ -143,6 +149,13 @@ public class MetadataImporter {
                     sendDocs();
                 }
                 LOG.info("End of processing: " + dataRoot.getOriginName());
+            }
+            
+            // delete outdated entries (based on maxDaysToLife parameter)
+            if(VloConfig.getMaxDaysToLife() > 0 && VloConfig.deleteAllFirst() == false) {
+                LOG.info("Deleting old files that were not seen for more than "+VloConfig.getMaxDaysToLife()+" days...");
+                solrServer.deleteByQuery(FacetConstants.FIELD_LAST_SEEN+":[* TO NOW-"+VloConfig.getMaxDaysToLife()+"DAYS]");
+                LOG.info("Deleting old files done.");
             }
         } catch (SolrServerException e) {
             LOG.error("error updating files:\n", e);
@@ -313,9 +326,6 @@ public class MetadataImporter {
         solrDocument.addField(FacetConstants.FIELD_FILENAME, file.getAbsolutePath());
 
         String metadataSourceUrl = dataOrigin.getPrefix();
-        //System.out.println(dataOrigin.getTostrip());
-        //System.out.println(dataOrigin.getTostrip().length());
-        //System.out.println(file.getAbsolutePath());
         metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getToStrip().length());
 
         solrDocument.addField(FacetConstants.FIELD_COMPLETE_METADATA, metadataSourceUrl);
@@ -335,6 +345,12 @@ public class MetadataImporter {
             solrDocument.addField(FacetConstants.FIELD_SEARCHPAGE, resource.getResourceName());
         }
         
+        // add timestamp
+        Date dt = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        solrDocument.addField(FacetConstants.FIELD_LAST_SEEN, df.format(dt));
+        
+        // add resource proxys      
         addResourceData(solrDocument, cmdiData);
         docs.add(solrDocument);
         if (docs.size() == VloConfig.getMaxDocsInList()) {
