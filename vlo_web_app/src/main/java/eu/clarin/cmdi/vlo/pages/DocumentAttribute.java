@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 /*
- * Representation of facet values used in the show results page class
+ * Representation of meta data attribute values used in the show results page class
  */
 public class DocumentAttribute implements Serializable {
 
@@ -19,13 +19,13 @@ public class DocumentAttribute implements Serializable {
      * 
      * The representation is stored in the 'value' field. 
      *
-     * @param field the name of the facet to be represented
+     * @param field the name of the attribute to be represented
      * @param values structure in which the values of a facet are stored
      */
     public DocumentAttribute(String field, Collection<Object> values) {
         this.field = field;
         if (value != null) {
-            // represent the values in the structure associated with a facet
+            // represent the values in the structure associated with an attribute
             for (Object o : values) {
                 if (!value.isEmpty()) {
                     if (field.equals(FacetConstants.FIELD_DESCRIPTION)) {

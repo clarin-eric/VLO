@@ -153,7 +153,7 @@ public class ShowResultPage extends BasePage {
     }
 
     /*
-     * Based on the solr document, create a table of facet and value pairs
+     * Based on the solr document, create a table of meta data attribute and value pairs
      */
     private void addAttributesTable(final SolrDocument solrDocument) {
         // because of FIELD_LANGUAGE_LINK, remove the FIELD_LANDGUAGE facet
@@ -178,14 +178,14 @@ public class ShowResultPage extends BasePage {
     /**
      * Create the columns for the table. 
      * 
-     * Create one column for the facets and one column for the values.
+     * Create one column for the attributes and one column for their values.
      * 
      * @param
      */
     private IColumn[] createAttributesColumns() {
         IColumn[] columns = new IColumn[2];
 
-        // create the column for the facet names
+        // create the column for the attribute names
         columns[0] = new PropertyColumn<Object>(new ResourceModel(Resources.FIELD), "field") {
 
             @Override
@@ -202,7 +202,7 @@ public class ShowResultPage extends BasePage {
 
                 /*
                  * While in the data for the table, the values (for the 
-                 * description) facets are structured. Creating a single 
+                 * description) attribute are structured. Creating a single 
                  * attribute, these values are collapsed. Refer to the 
                  * 
                  * DocumentAttribute 

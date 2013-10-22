@@ -1,4 +1,15 @@
+
 Bug Fixes and Features
+
+Beta release 2.16 (July October 2013)
+
+Fixed broken web links (#311, #420)
+Fixed indexing problems (#387)
+Several improvement of the facet mapping (#285, #397, #407, #408, #418)
+Improvement of user interface (#391, #416)
+Improvement of error handling (importer, solr connection)
+Split description meta data attribute
+Added support for data from Universiteit Utrecht
 
 Production release 2.15 (August 2013)
 
