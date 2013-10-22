@@ -268,9 +268,11 @@ public class FacetMappingFactoryTest {
         mapping = facets.get(index++);
         
         assertEquals(FacetConstants.FIELD_NAME, mapping.getName());
-        assertEquals(1, mapping.getPatterns().size());
+        assertEquals(2, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceName/text()", 
                 mapping.getPatterns().get(0));
+        assertEquals("/c:CMD/c:Components/c:mods/c:titleInfo/title/text()", 
+                mapping.getPatterns().get(1));
         mapping = facets.get(index++);
         
         assertEquals(FacetConstants.FIELD_YEAR, mapping.getName());
