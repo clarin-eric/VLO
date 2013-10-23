@@ -391,67 +391,20 @@ public class MetadataImporter {
     }
     
     /**
-     * Send the current list of documents to the SOLR server
+     * Send current list of SolrImputDocuments to SolrServer and clears list
+     * afterwards
      *
-     * @throws SolrServerException in case the server does not respond. Ask the
-     * server is asked for a response after 1, 2, 4, 8 ...  seconds until the 
-     * timeout specified in the configuration file is reached.
-     *    
-     * @throws IOException when the waiting for another attempt to send documents
-     * to the server is interrupted.
+     * @throws SolrServerException
+     * @throws IOException
      */
     protected void sendDocs() throws SolrServerException, IOException {
-        int wait = 1;
-        boolean done = false;
-        
-        /* Start trying, or keep trying to send documents as long as the
-         * timeout value specified in the VloConfig.xml file has not been
-         * reached.
-         */
-        while (! done && wait <= VloConfig.getSolrTimeOut()){
-            solrServer.add(docs); 
-            done = (serverError == null) && (wait <= VloConfig.getSolrTimeOut());
-            if (! done){
-                try {
-                    if (wait == 1) {
-                        LOG.info("Waiting 1 second for the solr server to respond");
-                    } else {
-                        LOG.info("Waiting " + wait +
-                                " seconds for the solr server to respond");
-                    }
-                    // wait for the accumulated amount of time
-                    Thread.sleep(1000 * wait);
-                } catch (InterruptedException e) {
-                    // something has interrupted the waiting
-                    LOG.info(e.toString());
-                }
-                // wait even longer
-                wait = wait * 2;
-
-                serverError = null;
-            }
-        }
-        
-        if (done) {
-            /* The current list of documents has been added to the queue; update
-             * the number of documents that has been send to the server.
-             */            
-            nrOFDocumentsSend += docs.size();
-            LOG.info("Send " + docs.size()
-                    + " documents to solr server queue. Number that has been "
-                    + "send so far: "
-                    + nrOFDocumentsSend);
-            /* The documents from the current list are in the queue now, create 
-             * a new empty list.
-             */
-            docs = new ArrayList<SolrInputDocument>();
-        } else {
-            // the documents haven't reached the queue
-            if (wait > VloConfig.getSolrTimeOut()) {
-                LOG.error("Timeout sending the current document list to solr server queue");
-            }
+        LOG.info("Sending " + docs.size() + " docs to solr server. Total number of docs updated till now: " + nrOFDocumentsSend);
+        nrOFDocumentsSend += docs.size();
+        solrServer.add(docs);
+        if (serverError != null) {
             throw new SolrServerException(serverError);
         }
+        docs = new ArrayList<SolrInputDocument>();
     }
     
     /**
