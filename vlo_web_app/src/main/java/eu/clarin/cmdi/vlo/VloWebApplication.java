@@ -123,7 +123,7 @@ public class VloWebApplication extends WebApplication {
         map = appendToPartnerLinkMap (map,
                 "114.00,65,167.50,104",
                 "http://www.clarin.eu",
-                "alt=\"clarin link");
+                "clarin link");
         map = appendToPartnerLinkMap (map,
                 "177.00,65,214,104",
                 "http://wals.info",
@@ -170,7 +170,7 @@ public class VloWebApplication extends WebApplication {
         }
         
         map = map + "<AREA SHAPE=\"rect\" COORDS=\"" + coordinates + "\" HREF=\"" + 
-                URL + "\" alt=\"" + alt + "\"\n";
+                URL + "\" alt=\"" + alt + "\"/>\n";
         
         return map;
     }
