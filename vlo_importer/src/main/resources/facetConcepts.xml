@@ -97,6 +97,7 @@
     <concept>http://www.isocat.org/datcat/DC-2571</concept>
     <concept>http://purl.org/dc/terms/type</concept>
     <concept>http://purl.org/dc/elements/1.1/type</concept>
+    <concept>http://www.isocat.org/datcat/DC-5424</concept>
     <pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceType/text()</pattern>
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/text()</pattern>    
     <pattern>/c:CMD/c:Components/c:mods/c:typeOfResource/text()</pattern>    
