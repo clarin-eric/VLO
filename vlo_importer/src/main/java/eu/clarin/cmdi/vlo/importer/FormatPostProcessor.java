@@ -5,7 +5,7 @@ import java.util.Map;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 
-public class ResourceTypePostProcessor implements PostProcessor {
+public class FormatPostProcessor implements PostProcessor {
 
 	private Map<String, String> resourceTypeMap = null;
 

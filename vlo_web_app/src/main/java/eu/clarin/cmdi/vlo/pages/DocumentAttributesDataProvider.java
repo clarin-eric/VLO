@@ -19,7 +19,7 @@ public class DocumentAttributesDataProvider extends SortableDataProvider<Documen
     
     private static final Set<String> IGNORE_FACETS = new HashSet<String>();
     static {
-        IGNORE_FACETS.add(FacetConstants.FIELD_RESOURCE_TYPE);
+        IGNORE_FACETS.add(FacetConstants.FIELD_FORMAT);
     }
 
     private static final long serialVersionUID = 1L;

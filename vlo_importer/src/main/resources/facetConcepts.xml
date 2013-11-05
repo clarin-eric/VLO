@@ -96,15 +96,18 @@
     <concept>http://www.isocat.org/datcat/DC-6124</concept>
     <pattern>/c:CMD/c:Components/c:mods/c:abstract/text()</pattern>  
   </facetConcept>
-  <facetConcept name="resourceType" description="Resourcetype">
-    <concept>http://www.isocat.org/datcat/DC-2571</concept>
+  <facetConcept name="resourceClass" description="Class or type of the resource">
     <concept>http://purl.org/dc/terms/type</concept>
     <concept>http://purl.org/dc/elements/1.1/type</concept>
+    <concept>http://www.isocat.org/datcat/DC-3806</concept>
     <concept>http://www.isocat.org/datcat/DC-5424</concept>
     <pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceType/text()</pattern>
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/text()</pattern>    
     <pattern>/c:CMD/c:Components/c:mods/c:typeOfResource/text()</pattern>    
   </facetConcept>
+  <facetConcept name="format" description="Format of the resource based on MIME types">
+    <concept>http://www.isocat.org/datcat/DC-2571</concept>
+  </facetConcept>  
   <facetConcept name="nationalProject" description="The national project in which this resource is provided">
     <pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
   </facetConcept>

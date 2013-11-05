@@ -395,7 +395,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
                 "This  recording was made to generate a freely available test resource including speech and gestures. The annotations were created by Peter and Kita who is gesture researcher at the MPI for Psycholinguistics.",
                 doc.getFieldValue("description"));
         assertEquals("2002-10-30", doc.getFieldValue("year"));
-        List<String> fieldValues = new ArrayList(doc.getFieldValues(FacetConstants.FIELD_RESOURCE_TYPE));
+        List<String> fieldValues = new ArrayList(doc.getFieldValues(FacetConstants.FIELD_FORMAT));
         assertEquals(2, fieldValues.size());
         assertEquals("video/x-mpeg1", fieldValues.get(0));
         assertEquals("video/mp4", fieldValues.get(1));
@@ -594,7 +594,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
                 + "European derived motifs (Tom Thumb and Hansel and Gretel) with themes that seem more "
                 + "Kuna in origin. All are woven together and a moral is provided. Pedro Arias performed "
                 + "this story before a gathered audience in the morning..", descriptions.get(2).toString());
-        assertEquals("audio", doc.getFieldValue(FacetConstants.FIELD_RESOURCE_TYPE));
+        assertEquals("Sound", doc.getFieldValue(FacetConstants.FIELD_RESOURCE_CLASS));
     }
 
     @Test
@@ -864,7 +864,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(null, doc.getFieldValue("year"));
         assertEquals(null, doc.getFieldValue("genre"));
         assertEquals("written general; 95 mio words; TEI/SGML", doc.getFieldValue("description"));
-        assertEquals("Written Corpus", doc.getFieldValue(FacetConstants.FIELD_RESOURCE_TYPE));
+        assertEquals("Written Corpus", doc.getFieldValue(FacetConstants.FIELD_RESOURCE_CLASS));
     }
 
 }

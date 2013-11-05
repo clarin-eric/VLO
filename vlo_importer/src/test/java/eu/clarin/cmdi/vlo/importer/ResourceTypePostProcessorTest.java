@@ -9,7 +9,7 @@ public class ResourceTypePostProcessorTest {
     
     @Test
     public void testMapping() {
-	ResourceTypePostProcessor processor = new ResourceTypePostProcessor();
+	FormatPostProcessor processor = new FormatPostProcessor();
         assertEquals("audio", processor.process("Sound "));
         assertEquals("video", processor.process("Moving Image"));
         assertEquals("video", processor.process("Moving image"));

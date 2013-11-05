@@ -618,13 +618,14 @@ public class VloConfigTest {
         String[] expResult = {
         "collection",
         "language",
+        "resourceClass",
+        "modality",
         "continent",
         "genre",
         "country",
-        "modality",
         "subject",
         "organisation",
-        "resourceType",
+        "format",
         "dataProvider",
         "nationalProject",
         "keywords"};
@@ -645,13 +646,14 @@ public class VloConfigTest {
         String[] expResult = {
         "collection",
         "language",
+        "resourceClass",
+        "modality",
         "continent",
         "genre",
         "country",
-        "modality",
         "subject",
         "organisation",
-        "resourceType",
+        "format",
         "dataProvider",
         "nationalProject",
         "keywords"};

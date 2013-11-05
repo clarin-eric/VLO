@@ -21,7 +21,7 @@ public class FacetMappingFactoryTest {
         // profile xsd
         
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(19, facets.size());
+        assertEquals(20, facets.size());
         
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
@@ -125,9 +125,14 @@ public class FacetMappingFactoryTest {
                 mapping.getPatterns().get(0));
         mapping = facets.get(index++);
         
-        assertEquals(FacetConstants.FIELD_RESOURCE_TYPE, mapping.getName());
+        assertEquals(FacetConstants.FIELD_RESOURCE_CLASS, mapping.getName());
+        assertEquals(3, mapping.getPatterns().size());
+        mapping = facets.get(index++);
+        
+        assertEquals(FacetConstants.FIELD_FORMAT, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
+        
         assertEquals("/c:CMD/c:Header/c:MdCollectionDisplayName/text()", 
                 mapping.getPatterns().get(0));
         assertEquals(1, mapping.getPatterns().size());
@@ -228,13 +233,15 @@ public class FacetMappingFactoryTest {
                 mapping.getPatterns().get(0));
         mapping = facets.get(index++);
         
-        assertEquals(FacetConstants.FIELD_RESOURCE_TYPE, mapping.getName());
-        assertEquals(1, mapping.getPatterns().size());
+        assertEquals(FacetConstants.FIELD_RESOURCE_CLASS, mapping.getName());
+        assertEquals(1, mapping.getPatterns().size());        
         mapping = facets.get(index++);
+        
         assertEquals("/c:CMD/c:Header/c:MdCollectionDisplayName/text()", 
                 mapping.getPatterns().get(0));
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
+        
         assertEquals("/c:CMD/c:Components//text()", mapping.getPatterns().get(0));
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
@@ -336,8 +343,8 @@ public class FacetMappingFactoryTest {
                 mapping.getPatterns().get(1));
         mapping = facets.get(index++);
         
-        assertEquals(FacetConstants.FIELD_RESOURCE_TYPE, mapping.getName());
-        assertEquals(3, mapping.getPatterns().size());
+        assertEquals(FacetConstants.FIELD_RESOURCE_CLASS, mapping.getName());
+        assertEquals(1, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceType/text()", 
                 mapping.getPatterns().get(0));
         mapping = facets.get(index++);

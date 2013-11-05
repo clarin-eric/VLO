@@ -28,9 +28,9 @@ public class SearchPageQueryTest {
         assertEquals("", q.getSearchQuery());
         assertEquals("*:*", q.getSolrQuery().getQuery());
         assertEquals("name,id,description", q.getSolrQuery().getFields());
-        assertEquals(12, q.getSolrQuery().getFacetFields().length);
+        assertEquals(13, q.getSolrQuery().getFacetFields().length);
         assertEquals("collection", q.getSolrQuery().getFacetFields()[0]);
-        assertEquals("continent", q.getSolrQuery().getFacetFields()[2]);
+        assertEquals("resourceClass", q.getSolrQuery().getFacetFields()[2]);
         assertNull(q.getSolrQuery().getFilterQueries());
 
         params = new PageParameters();
@@ -40,9 +40,9 @@ public class SearchPageQueryTest {
         assertEquals("test", q.getSearchQuery());
         assertEquals("test", q.getSolrQuery().getQuery());
         assertEquals("name,id,description", q.getSolrQuery().getFields());
-        assertEquals(12, q.getSolrQuery().getFacetFields().length);
+        assertEquals(13, q.getSolrQuery().getFacetFields().length);
         assertEquals("collection", q.getSolrQuery().getFacetFields()[0]);
-        assertEquals("continent", q.getSolrQuery().getFacetFields()[2]);
+        assertEquals("resourceClass", q.getSolrQuery().getFacetFields()[2]);
         assertEquals(1, q.getSolrQuery().getFilterQueries().length);
         assertEquals("country:New\\ Zealand", q.getSolrQuery().getFilterQueries()[0]);
         assertEquals("New Zealand", q.getSelectedValue(new FacetField("country")));

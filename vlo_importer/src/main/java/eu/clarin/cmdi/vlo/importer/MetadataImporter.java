@@ -74,7 +74,7 @@ public class MetadataImporter {
 		POST_PROCESSORS.put(FacetConstants.FIELD_CONTINENT, new ContinentNamePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_COUNTRY, new CountryNamePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGE, new LanguageCodePostProcessor());
-        POST_PROCESSORS.put(FacetConstants.FIELD_RESOURCE_TYPE, new ResourceTypePostProcessor());
+        POST_PROCESSORS.put(FacetConstants.FIELD_FORMAT, new FormatPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGES, new LanguageLinkPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_CLARIN_PROFILE, new CMDIComponentProfileNamePostProcessor());
@@ -359,32 +359,34 @@ public class MetadataImporter {
     }
 
     /**
-     * Adds two fields FIELD_RESOURCE_TYPE and FIELD_RESOURCE. The Type can be
+     * Adds two fields FIELD_FORMAT and FIELD_RESOURCE. The Type can be
      * specified in the "ResourceType" element of an imdi file or possibly
      * overwritten by some more specific xpath (as in the LRT cmdi files). So if
      * a type is overwritten and already in the solrDocument we take that type.
+     * 
+     * TODO evaluate odd connection between FIELD_FORMAT and ResourceProxy-Mimetypes
      */
     protected void addResourceData(SolrInputDocument solrDocument, CMDIData cmdiData) {
-        List<Object> fieldValues = solrDocument.containsKey(FacetConstants.FIELD_RESOURCE_TYPE) ? new ArrayList<Object>(solrDocument
-                .getFieldValues(FacetConstants.FIELD_RESOURCE_TYPE)) : null;
-        solrDocument.removeField(FacetConstants.FIELD_RESOURCE_TYPE); //Remove old values they might be overwritten.
+        List<Object> fieldValues = solrDocument.containsKey(FacetConstants.FIELD_FORMAT) ? new ArrayList<Object>(solrDocument
+                .getFieldValues(FacetConstants.FIELD_FORMAT)) : null;
+        solrDocument.removeField(FacetConstants.FIELD_FORMAT); //Remove old values they might be overwritten.
         List<Resource> resources = cmdiData.getDataResources();
         for (int i = 0; i < resources.size(); i++) {
             Resource resource = resources.get(i);
             String mimeType = resource.getMimeType();
-            String resourceType = mimeType;
+            String format = mimeType;
             if (mimeType == null) {
                 if (fieldValues != null && i < fieldValues.size()) {
-                    resourceType = fieldValues.get(i).toString(); //assuming there will be as many resource types overwritten as there are specified
-                    mimeType = CommonUtils.normalizeMimeType(resourceType);
+                    format = fieldValues.get(i).toString(); //assuming there will be as many formats overwritten as there are specified
+                    mimeType = CommonUtils.normalizeMimeType(format);
                 } else {
                     mimeType = CommonUtils.normalizeMimeType("");
-                    resourceType = mimeType;
+                    format = mimeType;
                 }
             } else {
-                resourceType = CommonUtils.normalizeMimeType(mimeType);
+                format = CommonUtils.normalizeMimeType(mimeType);
             }
-            solrDocument.addField(FacetConstants.FIELD_RESOURCE_TYPE, resourceType);
+            solrDocument.addField(FacetConstants.FIELD_FORMAT, format);
             solrDocument.addField(FacetConstants.FIELD_RESOURCE, mimeType + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR
                     + resource.getResourceName());
         }

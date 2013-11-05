@@ -79,7 +79,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         assertEquals("testRoot", getValue(doc, FacetConstants.FIELD_DATA_PROVIDER));
         assertEquals("kleve-route", getValue(doc, FacetConstants.FIELD_NAME));
         assertEquals(sessionFile.getAbsolutePath(), getValue(doc, FacetConstants.FIELD_FILENAME));
-        assertEquals("video", getValue(doc, FacetConstants.FIELD_RESOURCE_TYPE));
+        assertEquals("video", getValue(doc, FacetConstants.FIELD_FORMAT));
         assertEquals("video/x-mpeg1|../Media/elan-example1.mpg", getValue(doc, FacetConstants.FIELD_RESOURCE));
     }
 
@@ -120,17 +120,17 @@ public class MetadataImporterTest extends ImporterTestcase {
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
         assertEquals("PALIC", getValue(doc, FacetConstants.FIELD_NAME));
-        Collection<Object> fieldValues = doc.getFieldValues(FacetConstants.FIELD_RESOURCE_TYPE);
+        Collection<Object> fieldValues = doc.getFieldValues(FacetConstants.FIELD_RESOURCE_CLASS);
         assertEquals(2, fieldValues.size());
         List<String> values = new ArrayList(fieldValues);
         Collections.sort(values);
         assertEquals("Application / Tool", values.get(0));
-        assertEquals("text", values.get(1));
+        assertEquals("Text", values.get(1));
         fieldValues = doc.getFieldValues(FacetConstants.FIELD_RESOURCE);
         assertEquals(2, fieldValues.size());
         values = new ArrayList(fieldValues);
         Collections.sort(values);
-        assertEquals("text|file://bla.resource2.txt", values.get(0));
+        assertEquals("unknown type|file://bla.resource2.txt", values.get(0));
         assertEquals("unknown type|http://terminotica.upf.es/CREL/LIC01.htm", values.get(1));
     }
 

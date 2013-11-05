@@ -58,16 +58,17 @@
     
     <nationalProjectMapping>/nationalProjectsMapping.xml</nationalProjectMapping>
     
-    <facetFields length="12">
+    <facetFields length="13">
         <facetField>collection</facetField>
         <facetField>language</facetField>
+        <facetField>resourceClass</facetField>
+        <facetField>modality</facetField>
         <facetField>continent</facetField>
         <facetField>genre</facetField>
         <facetField>country</facetField>
-        <facetField>modality</facetField>
         <facetField>subject</facetField>
         <facetField>organisation</facetField>
-        <facetField>resourceType</facetField>
+        <facetField>format</facetField>
         <facetField>dataProvider</facetField>
         <facetField>nationalProject</facetField>
         <facetField>keywords</facetField>
