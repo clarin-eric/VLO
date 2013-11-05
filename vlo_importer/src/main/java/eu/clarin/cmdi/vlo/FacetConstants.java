@@ -18,6 +18,7 @@ public class FacetConstants {
     public static final String FIELD_LANGUAGES = "languages";
     public static final String FIELD_YEAR = "year";
     public static final String FIELD_GENRE = "genre";
+    public static final String FIELD_MODALITY = "modality";
     public static final String FIELD_SUBJECT = "subject";
     public static final String FIELD_ORGANISATION = "organisation";
     public static final String FIELD_RESOURCE_TYPE = "resourceType";

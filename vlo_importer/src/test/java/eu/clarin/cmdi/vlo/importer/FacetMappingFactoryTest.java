@@ -21,7 +21,7 @@ public class FacetMappingFactoryTest {
         // profile xsd
         
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(18, facets.size());
+        assertEquals(19, facets.size());
         
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
@@ -106,6 +106,11 @@ public class FacetMappingFactoryTest {
         assertEquals(2, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Components/c:Session/c:MDGroup/c:Content/c:Genre/text()", 
                 mapping.getPatterns().get(0));
+        mapping = facets.get(index++);
+        
+        assertEquals(FacetConstants.FIELD_MODALITY, mapping.getName());
+        assertEquals(1, mapping.getPatterns().size());
+        assertEquals("/c:CMD/c:Components/c:Session/c:MDGroup/c:Content/c:Modalities/text()", mapping.getPatterns().get(0));
         mapping = facets.get(index++);
         
         assertEquals(FacetConstants.FIELD_SUBJECT, mapping.getName());

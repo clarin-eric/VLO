@@ -76,6 +76,9 @@
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/@olac-linguistic-type</pattern> <!-- Find concept and add attribute somehow -->
     <pattern>/c:CMD/c:Components/c:mods/c:genre/text()</pattern>
   </facetConcept>
+  <facetConcept name="modality" isCaseInsensitive="true" allowMultipleValues="true">
+    <concept>http://www.isocat.org/datcat/DC-2490</concept>
+  </facetConcept>
   <facetConcept name="subject" isCaseInsensitive="true" allowMultipleValues="true">
     <concept>http://www.isocat.org/datcat/DC-2591</concept>
     <concept>http://purl.org/dc/terms/subject</concept>

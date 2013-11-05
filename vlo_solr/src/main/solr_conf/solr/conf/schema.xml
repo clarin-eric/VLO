@@ -420,6 +420,7 @@
    <field name="language" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="organisation"  type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="genre"  type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="modality"  type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="subject"  type="string" indexed="true" stored="true" multiValued="true" />
    <field name="description" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="year" type="string" indexed="true" stored="true" multiValued="true" />
