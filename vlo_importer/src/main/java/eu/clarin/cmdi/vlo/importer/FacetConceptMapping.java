@@ -1,7 +1,9 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +41,14 @@ public class FacetConceptMapping {
         this.facetConcepts = facetConcepts;
     }
     
+    public Map<String, FacetConcept> getFacetConceptMap() {
+    	Map<String, FacetConcept> facetConceptMap = new HashMap<String, FacetConcept>();
+    	for(FacetConcept facet : getFacetConcepts())
+    		facetConceptMap.put(facet.getName(), facet);
+    	
+    	return facetConceptMap;
+    }
+    
     public void check() {
         for (FacetConcept facetConcept : getFacetConcepts()) {
             if (facetConcept.hasAcceptableContext() && facetConcept.hasRejectableContext()) {
@@ -70,6 +80,9 @@ public class FacetConceptMapping {
          */
         @XmlAttribute
         private boolean allowMultipleValues = true;
+        
+        @XmlAttribute
+        private String description = "";
 
         @XmlElement(name = "concept")
         private List<String> concepts = new ArrayList<String>();
@@ -141,6 +154,14 @@ public class FacetConceptMapping {
 
         public boolean isAllowMultipleValues() {
             return allowMultipleValues;
+        }
+        
+        public void setDescription(String description) {
+        	this.description = description;
+        }
+        
+        public String getDescription() {
+        	return this.description;
         }
 
         public void setPatterns(List<String> patterns) {

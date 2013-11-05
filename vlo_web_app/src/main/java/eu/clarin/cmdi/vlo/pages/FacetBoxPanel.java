@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -30,10 +31,12 @@ public class FacetBoxPanel extends BasePanel {
     private FacetModel facetModel;
     private int maxNrOfFacetValues;
     
-    public FacetBoxPanel(String id, IModel<FacetField> model) {
+    public FacetBoxPanel(String id, IModel<FacetField> model, String tooltipText) {
         super(id, model);
         setOutputMarkupId(true);
         setMaxNrOfFacetValues(MAX_NR_OF_FACET_VALUES);
+        SimpleAttributeModifier tooltip = new SimpleAttributeModifier("title", tooltipText);
+        add(tooltip);
     }
     
     @SuppressWarnings({"serial"})

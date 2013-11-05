@@ -4,15 +4,15 @@
     <concept>http://www.isocat.org/datcat/DC-2573</concept>
     <pattern>/c:CMD/c:Header/c:MdSelfLink/text()</pattern>
   </facetConcept>
-  <facetConcept name="collection">
+  <facetConcept name="collection" description="The collection to which the resource belongs">
     <pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
   </facetConcept>
-  <facetConcept name="projectName">
+  <facetConcept name="projectName" description="Projects that were involved in creation and distribution of the resource">
     <concept>http://www.isocat.org/datcat/DC-2536</concept>
     <concept>http://www.isocat.org/datcat/DC-2537</concept>
     <concept>http://www.isocat.org/datcat/DC-5414</concept>
   </facetConcept>
-  <facetConcept name="name" allowMultipleValues="false">
+  <facetConcept name="name" allowMultipleValues="false" description="Name of the resource">
     <concept>http://www.isocat.org/datcat/DC-5428</concept>
     <concept>http://www.isocat.org/datcat/DC-5127</concept>
     <concept>http://www.isocat.org/datcat/DC-4160</concept><!-- CLARIN-D Webservices name -->
@@ -32,17 +32,17 @@
     <concept>http://www.isocat.org/datcat/DC-2538</concept>
     <concept>http://www.isocat.org/datcat/DC-6176</concept>
   </facetConcept>
-  <facetConcept name="continent">
+  <facetConcept name="continent" description="Continent">
     <concept>http://www.isocat.org/datcat/DC-2531</concept>
     <concept>http://www.isocat.org/datcat/DC-3791</concept>
   </facetConcept>
-  <facetConcept name="country">
+  <facetConcept name="country" description="Country">
     <concept>http://www.isocat.org/datcat/DC-2532</concept>
     <concept>http://www.isocat.org/datcat/DC-3792</concept>
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:spatial[@dcterms-type="ISO3166"]/text()</pattern>
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:coverage[@dcterms-type="ISO3166"]/text()</pattern>
   </facetConcept>
-  <facetConcept name="language">
+  <facetConcept name="language" description="Language">
     <concept>http://www.isocat.org/datcat/DC-2482</concept> <!-- language code -->
     <concept>http://www.isocat.org/datcat/DC-2484</concept> <!-- language name -->
     <concept>http://www.isocat.org/datcat/DC-5361</concept> <!-- language usage (TEI) -->
@@ -63,23 +63,23 @@
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-language</pattern>
     <pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()</pattern>
   </facetConcept>
-  <facetConcept name="organisation">
+  <facetConcept name="organisation" description="Organisations that were involved in creation and distribution of the resource">
     <concept>http://www.isocat.org/datcat/DC-2459</concept>
     <concept>http://www.isocat.org/datcat/DC-2979</concept>
     <concept>http://purl.org/dc/terms/publisher</concept>
     <concept>http://purl.org/dc/elements/1.1/publisher</concept>
     <concept>http://www.isocat.org/datcat/DC-6134</concept>
   </facetConcept>
-  <facetConcept name="genre" isCaseInsensitive="true" allowMultipleValues="false">
+  <facetConcept name="genre" isCaseInsensitive="true" allowMultipleValues="false" description="Genre">
     <concept>http://www.isocat.org/datcat/DC-2470</concept>
     <concept>http://www.isocat.org/datcat/DC-3899</concept>
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/@olac-linguistic-type</pattern> <!-- Find concept and add attribute somehow -->
     <pattern>/c:CMD/c:Components/c:mods/c:genre/text()</pattern>
   </facetConcept>
-  <facetConcept name="modality" isCaseInsensitive="true" allowMultipleValues="true">
+  <facetConcept name="modality" isCaseInsensitive="true" allowMultipleValues="true" description="Modality">
     <concept>http://www.isocat.org/datcat/DC-2490</concept>
   </facetConcept>
-  <facetConcept name="subject" isCaseInsensitive="true" allowMultipleValues="true">
+  <facetConcept name="subject" isCaseInsensitive="true" allowMultipleValues="true" description="Subject">
     <concept>http://www.isocat.org/datcat/DC-2591</concept>
     <concept>http://purl.org/dc/terms/subject</concept>
     <concept>http://purl.org/dc/elements/1.1/subject</concept>
@@ -96,7 +96,7 @@
     <concept>http://www.isocat.org/datcat/DC-6124</concept>
     <pattern>/c:CMD/c:Components/c:mods/c:abstract/text()</pattern>  
   </facetConcept>
-  <facetConcept name="resourceType">
+  <facetConcept name="resourceType" description="Resourcetype">
     <concept>http://www.isocat.org/datcat/DC-2571</concept>
     <concept>http://purl.org/dc/terms/type</concept>
     <concept>http://purl.org/dc/elements/1.1/type</concept>
@@ -105,7 +105,7 @@
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/text()</pattern>    
     <pattern>/c:CMD/c:Components/c:mods/c:typeOfResource/text()</pattern>    
   </facetConcept>
-  <facetConcept name="nationalProject">
+  <facetConcept name="nationalProject" description="The national project in which this resource is provided">
     <pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
   </facetConcept>
   <facetConcept name="text">
@@ -114,7 +114,7 @@
   <facetConcept name="_componentProfile">
     <pattern>/c:CMD/c:Header/c:MdProfile/text()</pattern>
   </facetConcept>
-  <facetConcept name="keywords">
+  <facetConcept name="keywords" description="Keywords that describe the resource">
 	<concept>http://www.isocat.org/datcat/DC-5436</concept>
 	<concept>http://www.isocat.org/rest/dc/5436</concept>  not an official ISOcat PID - added to support LrtInventoryResource, should be removed in the future 
         <pattern>/c:CMD/c:Components/c:mods/c:classification/text()</pattern>

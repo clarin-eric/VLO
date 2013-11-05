@@ -5,6 +5,9 @@ import eu.clarin.cmdi.vlo.Resources;
 import eu.clarin.cmdi.vlo.VloWebApplication.ThemedSession;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.AutoCompleteDao;
+import eu.clarin.cmdi.vlo.importer.FacetConceptMapping;
+import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
+import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
 import fiftyfive.wicket.basic.TruncatedLabel;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -12,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.common.SolrDocument;
@@ -39,6 +44,7 @@ public class FacetedSearchPage extends BasePage {
 
     private final SearchPageQuery query;
     private final static AutoCompleteDao autoCompleteDao = new AutoCompleteDao();
+    private final static Map<String, FacetConcept> facetNameMap = VLOMarshaller.getFacetConceptMapping().getFacetConceptMap();
     
     /**
      * @param parameters Page parameters
@@ -104,7 +110,11 @@ public class FacetedSearchPage extends BasePage {
                 .getCopy())) {
             @Override
             protected void populateItem(Item<FacetField> item) {
-                item.add(new FacetBoxPanel("facetBox", item.getModel()).create(query));
+            	String facetName = ((FacetField)item.getDefaultModelObject()).getName();
+            	String descriptionTooltip = "";
+            	if(facetNameMap.containsKey(facetName))
+            		descriptionTooltip = facetNameMap.get(facetName).getDescription();
+            	item.add(new FacetBoxPanel("facetBox", item.getModel(), descriptionTooltip).create(query));
             }
 
             @Override
