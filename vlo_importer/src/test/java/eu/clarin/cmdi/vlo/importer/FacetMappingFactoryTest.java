@@ -137,9 +137,12 @@ public class FacetMappingFactoryTest {
                 mapping.getPatterns().get(0));
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
-        assertEquals("/c:CMD/c:Components//text()", mapping.getPatterns().get(0));
-        assertEquals(1, mapping.getPatterns().size());
+        
+        assertEquals("/c:CMD/c:Header//text()", mapping.getPatterns().get(0));
+        assertEquals("/c:CMD/c:Components//text()", mapping.getPatterns().get(1));
+        assertEquals(2, mapping.getPatterns().size());
         mapping = facets.get(index++);
+        
         assertEquals("/c:CMD/c:Header/c:MdProfile/text()", mapping.getPatterns().get(0));
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
@@ -242,9 +245,12 @@ public class FacetMappingFactoryTest {
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
         
-        assertEquals("/c:CMD/c:Components//text()", mapping.getPatterns().get(0));
-        assertEquals(1, mapping.getPatterns().size());
+        assertEquals("/c:CMD/c:Header//text()", mapping.getPatterns().get(0));
+        assertEquals("/c:CMD/c:Components//text()", mapping.getPatterns().get(1));
+        assertEquals(2, mapping.getPatterns().size());
         mapping = facets.get(index++);
+        
+        
         assertEquals("/c:CMD/c:Header/c:MdProfile/text()", mapping.getPatterns().get(0));
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
@@ -348,13 +354,17 @@ public class FacetMappingFactoryTest {
         assertEquals("/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceType/text()", 
                 mapping.getPatterns().get(0));
         mapping = facets.get(index++);
+        
         assertEquals("/c:CMD/c:Header/c:MdCollectionDisplayName/text()", 
                 mapping.getPatterns().get(0));
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
-        assertEquals("/c:CMD/c:Components//text()", mapping.getPatterns().get(0));
-        assertEquals(1, mapping.getPatterns().size());
+        
+        assertEquals("/c:CMD/c:Header//text()", mapping.getPatterns().get(0));
+        assertEquals("/c:CMD/c:Components//text()", mapping.getPatterns().get(1));
+        assertEquals(2, mapping.getPatterns().size());
         mapping = facets.get(index++);
+        
         assertEquals("/c:CMD/c:Header/c:MdProfile/text()", mapping.getPatterns().get(0));
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
