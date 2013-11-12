@@ -1,6 +1,14 @@
 
 Bug Fixes and Features
 
+Beta release 2.17 (november 2013)
+
+Added facet overview to the search bar
+Added tooltips to facets (ticket 404)
+Added modality facet (ticket 422)
+Increased the number of results to 30 (ticket 423)
+Added support for fulltext search on header (441)
+
 Beta release 2.16 (July October 2013)
 
 Fixed broken web links (#311, #420)

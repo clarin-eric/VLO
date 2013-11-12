@@ -29,10 +29,12 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColu
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.markup.repeater.data.GridView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -62,17 +64,84 @@ public class FacetedSearchPage extends BasePage {
     @SuppressWarnings("serial")
     private class SearchBoxForm extends Form<SearchPageQuery> {
         private final AutoCompleteTextField<String> searchBox;
+        
+        /*
+         * 
+         */
+        private void addFacetOverview() {
 
-		public SearchBoxForm(String id, SearchPageQuery query) {
-			super(id, new CompoundPropertyModel<SearchPageQuery>(query));
-			add(new ExternalLink("vloHomeLink", VloConfig.getVloHomeLink()));
-			
-			searchBox = new AutoCompleteTextField<String>("searchQuery") {
-				@Override
-				protected Iterator<String> getChoices(String input) {
-					return autoCompleteDao.getChoices(input).iterator();
-				}
-			};
+            // padding on the left works, remove inline from the css class
+
+            // this is the best candidate so far
+            // try and move the search box to the right
+            // improve on the 
+
+            // get a map of selected facets
+            Map<String, String> selectedFacets;
+            selectedFacets = query.getFilterQueryMap();
+
+            Iterator<Map.Entry<String, String>> entries = selectedFacets.entrySet().iterator();
+
+            // label to be used to show the list of facets that have been selected
+            MultiLineLabel facetOverview;
+
+            if (!entries.hasNext()) {
+                // not a single facet has been selected
+                facetOverview = new MultiLineLabel("facetOverview", "No facets values selected");
+            } else {
+                // at least one facet has been selected
+
+                String string = "Selected facet values:  ";
+
+                // build the multiline label here
+
+                String[] facetFields;
+                int i = 0, wrap = 0;
+                Boolean hasPrevious = false;
+
+                facetFields = VloConfig.getFacetFields();
+
+                while (i < facetFields.length) {
+
+                    // check if facet field is in selected facets map
+                    if (selectedFacets.containsKey(facetFields[i])) {
+                        String value = selectedFacets.get(facetFields[i]);
+                        wrap = wrap + value.length();
+
+                        if (hasPrevious) {
+                            string = string.concat(", ");
+                        }
+
+                        if (wrap > 30) {
+                            string = string.concat("\n");
+                            wrap = 0;
+                            hasPrevious = false;
+                        }
+
+                        string = string.concat(value);
+                        hasPrevious = true;
+                    }
+                    i++;
+                }
+
+                facetOverview = new MultiLineLabel("facetOverview", string);
+            }
+
+            // add the label
+            this.add(facetOverview);
+        }
+
+        public SearchBoxForm(String id, SearchPageQuery query) {
+            super(id, new CompoundPropertyModel<SearchPageQuery>(query));
+            add(new ExternalLink("vloHomeLink", VloConfig.getVloHomeLink()));
+
+            searchBox = new AutoCompleteTextField<String>("searchQuery") {
+                @Override
+                protected Iterator<String> getChoices(String input) {
+                    return autoCompleteDao.getChoices(input).iterator();
+                }
+            };
+            
             add(searchBox);
             Button submit = new Button("searchSubmit");
             add(submit);
@@ -86,6 +155,8 @@ public class FacetedSearchPage extends BasePage {
             String href = VloConfig.getFeedbackFromUrl()+thisURL;
             ExternalLink link = new ExternalLink("feedbackLink", href, "found an error?");
             add(link);
+            
+            addFacetOverview();
         }
 
         @Override
@@ -103,7 +174,7 @@ public class FacetedSearchPage extends BasePage {
     private void addSearchBox() {
         add(new SearchBoxForm("searchForm", query));
     }
-
+    
     @SuppressWarnings("serial")
     private void addFacetColumns() {
         GridView<FacetField> facetColumns = new GridView<FacetField>("facetColumns", new SolrFacetDataProvider(query.getSolrQuery()

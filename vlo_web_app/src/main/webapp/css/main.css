@@ -74,6 +74,11 @@ img{
     display:inline
 }
 
+.middlegame .facetOverview {
+    padding-top: 11px;
+    padding-left: 11px;
+}
+
 .federatedSearch {
 	font-weight:bold;
 }

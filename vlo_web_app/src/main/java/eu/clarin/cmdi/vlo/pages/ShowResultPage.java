@@ -506,9 +506,9 @@ public class ShowResultPage extends BasePage {
                 trans.setDestination(out);
                 trans.transform();
         } catch (Exception e) {
-                LOG.error("Couldn't create CMDI metadata: "+e.getMessage());
+                LOG.error("Couldn't create CMDI metadata: " + e.getMessage());
                 strWriter = new StringWriter().append("<b>Could not load complete CMDI metadata</b>");
-        }		
+            }
 		
         Label completeCmdiLabel = new Label("completeCmdi", strWriter.toString());
 		completeCmdiLabel.setEscapeModelStrings(false);
