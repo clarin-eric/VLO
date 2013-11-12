@@ -20,9 +20,8 @@ import java.util.*;
 /**
  * Creates facet-mappings (xpaths) from a configuration.
  * As they say "this is where the magic happens".
- * Also does some cashing.
+ * Also does some caching.
  */
-
 public class FacetMappingFactory {
 
     private final static Logger LOG = LoggerFactory.getLogger(FacetMappingFactory.class);
@@ -58,7 +57,7 @@ public class FacetMappingFactory {
     /**
      * Asks conceptLinkPathMapping to create the actual xpaths.
      * Does a bunch of bookkeeping in order to get the FacetMapping.
-     * @param xsd
+     * @param xsd  URL of XML Schema of some CMDI profile
      * @return
      */
     private FacetMapping createMapping(String xsd) {
@@ -87,7 +86,7 @@ public class FacetMappingFactory {
                                             pathConceptLinkMapping.put(p,c);
                                     }
                                 }
-                                String context = getContext(path,pathConceptLinkMapping);
+                                String context = getContext(path, pathConceptLinkMapping);
                                 boolean handled = false;
                                 // check against acceptable context
                                 if (facetConcept.hasAcceptableContext()) {
@@ -152,10 +151,10 @@ public class FacetMappingFactory {
     /**
      * Look if there is a contextual (container) data category associated with an ancestor by walking back.
      */
-    private String getContext(String path,Map<String,String> pathConceptLinkMapping) {
+    private String getContext(String path, Map<String,String> pathConceptLinkMapping) {
         String context = null;
         String cpath = path;
-        while (context==null && !cpath.equals("/text()")) {
+        while(context==null && !cpath.equals("/text()")) {
             cpath = cpath.replaceAll("/[^/]*/text\\(\\)","/text()");
             context = pathConceptLinkMapping.get(cpath);
         }
@@ -176,8 +175,8 @@ public class FacetMappingFactory {
     /**
      * "this is where the magic happens".
      * Finds paths in the xsd to all concepts (isocat data catagories).
-     * @param xsd
-     * @return
+     * @param xsd URL of XML Schema of some CMDI profile
+     * @return Map (Data Category -> List of XPath expressions linked to the key data category which can be found in CMDI files with this schema)
      * @throws NavException
      */
     private Map<String, List<String>> createConceptLinkPathMapping(String xsd) throws NavException {
