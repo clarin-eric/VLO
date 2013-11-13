@@ -185,8 +185,8 @@ img{
 }
 
 .resultItem { 
-     padding:0; 
-     margin:0; 
+    padding:0; 
+    margin:10px; 
 } 
 .resultItem li {
      list-style-type:none; 
