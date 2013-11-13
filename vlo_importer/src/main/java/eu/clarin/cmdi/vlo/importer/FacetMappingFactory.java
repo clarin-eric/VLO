@@ -130,10 +130,26 @@ public class FacetMappingFactory {
                             xpaths.addAll(paths);
                     }
                 }
+                
+                //add hardcoded patterns only when there is no xpath generated from conceptlink
                 if (xpaths.isEmpty()) {
-                    //add hardcoded patterns only when there is no xpath generated from conceptlink
                     xpaths.addAll(facetConcept.getPatterns());
                 }
+                
+                // pattern-based blacklisting: remove all XPath expressions that contain a blacklisted substring;
+                // this is basically a hack to enhance the quality of the visualised information in the VLO;
+                // should be replaced by a more intelligent approach in the future
+                for(String blacklistPattern : facetConcept.getBlacklistPatterns()) {
+                	Iterator<String> xpathIterator = xpaths.iterator();
+                	while(xpathIterator.hasNext()) {
+                		String xpath = xpathIterator.next();
+                		if(xpath.contains(blacklistPattern)) {
+                			LOG.debug("Rejecting "+xpath+" because of blacklisted substring "+blacklistPattern);
+                			xpathIterator.remove();
+                		}
+                	}
+                }                
+                
                 config.setCaseInsensitive(facetConcept.isCaseInsensitive());
                 config.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
                 config.setPatterns(xpaths);

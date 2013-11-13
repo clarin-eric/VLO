@@ -96,6 +96,9 @@ public class FacetConceptMapping {
         @XmlElement(name = "pattern")
         private List<String> patterns = new ArrayList<String>();
         
+        @XmlElement(name = "blacklistPattern")
+        private List<String> blacklistPatterns = new ArrayList<String>();
+        
         public void setConcepts(List<String> concepts) {
             this.concepts = concepts;
         }
@@ -170,6 +173,14 @@ public class FacetConceptMapping {
 
         public List<String> getPatterns() {
             return patterns;
+        }
+        
+        public void setBlacklistPatterns(List<String> blacklistPatterns) {
+            this.blacklistPatterns = blacklistPatterns;
+        }
+
+        public List<String> getBlacklistPatterns() {
+            return blacklistPatterns;
         }
 
         @Override
