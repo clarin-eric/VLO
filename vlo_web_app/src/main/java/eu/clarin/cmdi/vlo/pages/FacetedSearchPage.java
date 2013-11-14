@@ -5,7 +5,6 @@ import eu.clarin.cmdi.vlo.Resources;
 import eu.clarin.cmdi.vlo.VloWebApplication.ThemedSession;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.AutoCompleteDao;
-import eu.clarin.cmdi.vlo.importer.FacetConceptMapping;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
 import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
 import fiftyfive.wicket.basic.TruncatedLabel;
@@ -34,7 +33,6 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.markup.repeater.data.GridView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -66,39 +64,46 @@ public class FacetedSearchPage extends BasePage {
         private final AutoCompleteTextField<String> searchBox;
         
         /*
-         * 
+         * Add multiline list of selected facet values
          */
         private void addFacetOverview() {
 
-            // padding on the left works, remove inline from the css class
-
-            // this is the best candidate so far
-            // try and move the search box to the right
-            // improve on the 
-
-            // get a map of selected facets
+            // get a map of the facets currently selected
             Map<String, String> selectedFacets;
             selectedFacets = query.getFilterQueryMap();
 
-            Iterator<Map.Entry<String, String>> entries = selectedFacets.entrySet().iterator();
+            // create an interator for walking over the facets
+            Iterator<Map.Entry<String, String>> entries = 
+                    selectedFacets.entrySet().iterator();
 
-            // label to be used to show the list of facets that have been selected
+            /*
+             * Wicket label to be used to show the list of facets that have been 
+             * selected.
+             */
             MultiLineLabel facetOverview;
 
+            // walk over the facets
             if (!entries.hasNext()) {
                 // not a single facet has been selected
-                facetOverview = new MultiLineLabel("facetOverview", "No facets values selected");
+                facetOverview = new MultiLineLabel("facetOverview", 
+                        "No facets values selected");
             } else {
                 // at least one facet has been selected
 
                 String string = "Selected facet values:  ";
 
-                // build the multiline label here
-
+                // start building the the multiline label here
                 String[] facetFields;
-                int i = 0, wrap = 0;
+                int i = 0, lineLength = 0,
+                        maxLineLength = VloConfig.getFacetOverviewLength();
                 Boolean hasPrevious = false;
 
+                /* 
+                 * Get the facet fields. We need them in order to display
+                 * the values in the overview in the same order as their
+                 * respective facets are listed in the boxes. Store multiple
+                 * lines in one string.
+                 */
                 facetFields = VloConfig.getFacetFields();
 
                 while (i < facetFields.length) {
@@ -106,15 +111,15 @@ public class FacetedSearchPage extends BasePage {
                     // check if facet field is in selected facets map
                     if (selectedFacets.containsKey(facetFields[i])) {
                         String value = selectedFacets.get(facetFields[i]);
-                        wrap = wrap + value.length();
+                        lineLength = lineLength + value.length();
 
                         if (hasPrevious) {
                             string = string.concat(", ");
                         }
 
-                        if (wrap > 30) {
+                        if (lineLength > maxLineLength) {
                             string = string.concat("\n");
-                            wrap = 0;
+                            lineLength = 0;
                             hasPrevious = false;
                         }
 
@@ -124,10 +129,11 @@ public class FacetedSearchPage extends BasePage {
                     i++;
                 }
 
+                // create a new wicket multi line label
                 facetOverview = new MultiLineLabel("facetOverview", string);
             }
 
-            // add the label
+            // finally, add the label to the form
             this.add(facetOverview);
         }
 
@@ -146,15 +152,20 @@ public class FacetedSearchPage extends BasePage {
             Button submit = new Button("searchSubmit");
             add(submit);
             
+            // add link to help menu page 
+            String helpUrl = VloConfig.getHelpUrl();            
+            ExternalLink helpLink = new ExternalLink("helpLink", helpUrl, "help");
+            add(helpLink);
+            
             String thisURL = RequestUtils.toAbsolutePath(RequestCycle.get().urlFor(ShowResultPage.class, query.getPageParameters()).toString());
             try {
             	thisURL = URLEncoder.encode(thisURL,"UTF-8");
             } catch (UnsupportedEncodingException e) {
             }
             
-            String href = VloConfig.getFeedbackFromUrl()+thisURL;
-            ExternalLink link = new ExternalLink("feedbackLink", href, "found an error?");
-            add(link);
+            String feedbackFormUrl = VloConfig.getFeedbackFromUrl() + thisURL;
+            ExternalLink feedbackLink = new ExternalLink("feedbackLink", feedbackFormUrl, "found an error?");
+            add(feedbackLink);
             
             addFacetOverview();
         }
@@ -222,58 +233,79 @@ public class FacetedSearchPage extends BasePage {
         add(searchResultList);
     }
     
-	/**
-	 * Add contentSearch form (FCS)
-	 * @param solrDocument
-	 */
-	private void addSearchServiceForm() {
-		final WebMarkupContainer contentSearchContainer = new WebMarkupContainer("contentSearch");
-		add(contentSearchContainer);
-		
-		// get all documents with an entry for the FCS
-		SearchServiceDataProvider dataProvider = new SearchServiceDataProvider(query.getSolrQuery());
-		if(dataProvider.size() > 0 && dataProvider.size() <= 200) {	// at least one and not more than x records with FCS endpoint in result set?
-			try {
-				// building map (CQL endpoint -> List of resource IDs)
-				HashMap<String, List<String>> aggregationContextMap = new HashMap<String, List<String>>();				
-				
-				int offset = 0;
-				int fetchSize = 1000;
-				int totalResults = dataProvider.size();
-				while (offset < totalResults) {
-					Iterator<SolrDocument> iter = dataProvider.iterator(offset, fetchSize);
-					while(iter.hasNext()) {
-						SolrDocument document = iter.next();
-						String id = document.getFirstValue(FacetConstants.FIELD_ID).toString();
-						String fcsEndpoint = document.getFirstValue(FacetConstants.FIELD_SEARCH_SERVICE).toString();
-						if(aggregationContextMap.containsKey(fcsEndpoint)) {
-							aggregationContextMap.get(fcsEndpoint).add(id);
-						} else {
-							List<String> idArray = new ArrayList<String>();
-							idArray.add(id);
-							aggregationContextMap.put(fcsEndpoint, idArray);
-						}
-					}
-					
-					offset += fetchSize;
-				}
+    /**
+     * Add contentSearch form (FCS)
+     *
+     * @param solrDocument
+     */
+    private void addSearchServiceForm() {
+        
+        // get values for cql endpoint substitution
+        String cqlEndpointFilter = VloConfig.getCqlEndpointFilter();
+        String cqlEndpointAlternative = VloConfig.getCqlEndpointAlternative();
 
-				// add HTML form to container
-				String labelString;
-				if (totalResults == 1)
-					labelString = "Plain text search via Federated Content Search (supported by one resource in this result set)";
-				else
-					labelString = "Plain text search via Federated Content Search (supported by " + totalResults
-							+ " resources in this result set)";
-				Label contentSearchLabel = new Label("contentSearchForm", HtmlFormCreator.getContentSearchForm(
-						aggregationContextMap, labelString));
-				contentSearchLabel.setEscapeModelStrings(false);
-				contentSearchContainer.add(contentSearchLabel);
-			} catch (UnsupportedEncodingException uee) {
-				contentSearchContainer.setVisible(false);
-			}
-		} else {
-			contentSearchContainer.setVisible(false);
-		}
-	}
+        final WebMarkupContainer contentSearchContainer = new WebMarkupContainer("contentSearch");
+        add(contentSearchContainer);
+
+        // get all documents with an entry for the FCS
+        SearchServiceDataProvider dataProvider = new SearchServiceDataProvider(query.getSolrQuery());
+        if (dataProvider.size() > 0 && dataProvider.size() <= 200) {	// at least one and not more than x records with FCS endpoint in result set?
+            try {
+                // building map (CQL endpoint -> List of resource IDs)
+                HashMap<String, List<String>> aggregationContextMap = new HashMap<String, List<String>>();
+
+                int offset = 0;
+                int fetchSize = 1000;
+                int totalResults = dataProvider.size();
+                while (offset < totalResults) {
+                    Iterator<SolrDocument> iter = dataProvider.iterator(offset, fetchSize);
+                    while (iter.hasNext()) {
+                        SolrDocument document = iter.next();
+                        String id = document.getFirstValue(FacetConstants.FIELD_ID).toString();
+                        String fcsEndpoint = document.getFirstValue(FacetConstants.FIELD_SEARCH_SERVICE).toString();
+                        if (aggregationContextMap.containsKey(fcsEndpoint)) {
+                            aggregationContextMap.get(fcsEndpoint).add(id);
+                        } else {
+                            List<String> idArray = new ArrayList<String>();
+                            idArray.add(id);
+                            
+                            // substitute endpoint
+                            if (cqlEndpointFilter.length() == 0){
+                                // no substitution
+                            } else {
+                                // check for the need to substitute
+                            }
+                                
+                            if (cqlEndpointFilter.equals(cqlEndpointFilter)){
+                                // no substitution, take the value from the record
+                                aggregationContextMap.put(fcsEndpoint, idArray);
+                            } else {
+                                // substitution, take the alternative url
+                                aggregationContextMap.put(cqlEndpointAlternative, idArray);
+                            }
+                        }
+                    }
+
+                    offset += fetchSize;
+                }
+
+                // add HTML form to container
+                String labelString;
+                if (totalResults == 1) {
+                    labelString = "Plain text search via Federated Content Search (supported by one resource in this result set)";
+                } else {
+                    labelString = "Plain text search via Federated Content Search (supported by " + totalResults
+                            + " resources in this result set)";
+                }
+                Label contentSearchLabel = new Label("contentSearchForm", HtmlFormCreator.getContentSearchForm(
+                        aggregationContextMap, labelString));
+                contentSearchLabel.setEscapeModelStrings(false);
+                contentSearchContainer.add(contentSearchLabel);
+            } catch (UnsupportedEncodingException uee) {
+                contentSearchContainer.setVisible(false);
+            }
+        } else {
+            contentSearchContainer.setVisible(false);
+        }
+    }
 }

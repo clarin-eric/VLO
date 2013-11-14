@@ -108,12 +108,19 @@ img{
     opacity: 0.9
 }
 .middlegame .searchmodule {
-    margin-left:20%;
+    margin-left:0%;
+    float: right;
+    padding-right:11px;
     display:inline
 }
 .middlegame .homeLink {
     margin-left: 11px;
     display:inline
+}
+
+.middlegame .helpLink {
+    padding-left: 100px;
+    display:inline;
 }
 
 .middlegame .facetOverview {

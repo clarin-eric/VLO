@@ -7,13 +7,14 @@
             <p />
             <div border="0" class="opening" width="100%">
                 <form class="search" wicket:id="searchForm">
-                    <div class="homeLink">
+                    <div class="homeLink" align="left">
                     	<a wicket:id="vloHomeLink"><wicket:message key="VLO_home"/></a> &gt;&gt; <a><wicket:message key="facetedBrowserResources"/> </a>
                     	&nbsp;|&nbsp;<a wicket:id="feedbackLink"></a>
                     </div>
-                    <div class="searchmodule">
+                    <div class="searchmodule" align="right">
                         <input wicket:id="searchQuery" type="text">
                         <button wicket:id="searchSubmit"><wicket:message key="search"/></button>
+                        <a class="helpLink"wicket:id="helpLink" width ="20%>"this will be replaced by wicket"</a>
                     </div>
                     
                     <div class="facetOverview">

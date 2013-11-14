@@ -95,7 +95,7 @@ public class VloWebApplication extends WebApplication {
         return cycle;
     }
     
-        /**
+    /**
      * Compose a map to be included in the HTML document, designating the 
      * positions of the links to partner web sites
      * 
@@ -246,6 +246,8 @@ public class VloWebApplication extends WebApplication {
          * @param name the name of the theme to be composed
          */
         public Theme(String themeName) {
+            
+            String prefix = VloConfig.getReverseProxyPrefix();
 
             if (themeName.matches("CLARIN-D")) {
                 // select the CLARIN-D theme's components
@@ -253,7 +255,11 @@ public class VloWebApplication extends WebApplication {
                 pageTitle = "CLARIN-D Virtual Language Observatory - Resources";
                 topLeftImage = "Images/topleft-clarin-d.png";
                 topRightImage = "Images/topright-clarin-d.png";
-                cssFile = "css/clarin-d.css";
+                if (prefix.length() == 0) {
+                    cssFile = "css/clarin-d.css";
+                } else {
+                    cssFile = prefix + "css/clarin-d.css";
+                }
                 partnerLinkMap = getClarinDPartnerLinkMap();
                 name = "CLARIN-D";
             } else {
@@ -261,10 +267,11 @@ public class VloWebApplication extends WebApplication {
                 pageTitle = "CLARIN Virtual Language Observatory - Resources";
                 topLeftImage = "Images/topleftvlo.gif";
                 topRightImage = "Images/toprightvlo.gif";
-                if (VloConfig.getExpectReverseProxy()) {
-                    cssFile = VloConfig.getReverseProxyPrefix() + "css/main.css";
-                } else {
+
+                if (prefix.length() == 0) {
                     cssFile = "css/main.css";
+                } else {
+                    cssFile = prefix + "css/main.css";
                 }
                 partnerLinkMap = getDefaultPartnerLinkMap();
                 name = "defaultTheme";

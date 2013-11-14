@@ -11,7 +11,7 @@
     
     <artifactId>vlo_web_app</artifactId>
     
-    <version>2.17</version>
+    <version>2.18</version>
     
     <packaging>war</packaging>
 
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>eu.clarin.cmdi</groupId>
             <artifactId>vlo_importer</artifactId>
-            <version>2.17</version>
+            <version>2.18</version>
             <type>jar</type>
         </dependency>
         <dependency>

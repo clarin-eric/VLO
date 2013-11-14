@@ -65,13 +65,21 @@ img{
 }
 
 .middlegame .searchmodule {
-    margin-left:20%;
+    margin-left:0%;
+    float: right;
+    padding-right:11px;
     display:inline
 }
 
 .middlegame .homeLink {
     margin-left: 11px;
-    display:inline
+    display:inline;
+    float: left;
+}
+
+.middlegame .helpLink {
+    padding-left: 100px;
+    display:inline;
 }
 
 .middlegame .facetOverview {
@@ -186,7 +194,7 @@ img{
 
 .resultItem { 
     padding:0; 
-    margin:10px; 
+    margin:11px; 
 } 
 .resultItem li {
      list-style-type:none; 
