@@ -208,3 +208,108 @@ Caused by: java.net.ConnectException: Connection refused
 2013-11-12 11:56:20,171 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:179] - Found 0 file(s) with errors.
 2013-11-12 11:56:20,172 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:180] - Found 2 file(s) that where ignored (files without resources or any link to a search service or landing page are ignored).
 2013-11-12 11:56:20,172 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:182] - Update of 12 took 53 secs. Total nr of files analyzed 14
+2013-11-14 11:19:37,690 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#main:477] - Could not get config file name via the command line, trying the system properties.
+2013-11-14 11:19:37,806 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#initSolrServer:233] - Initializing Solr Server on http://localhost:8084/vlo_solr/
+2013-11-14 11:19:37,853 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:123] - Deleting original data...
+2013-11-14 11:19:38,132 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:126] - Deleting original data done.
+2013-11-14 11:19:38,132 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:131] - Start of processing: TEST
+2013-11-14 11:19:39,110 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1345561703673
+2013-11-14 11:19:39,111 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:19:45,320 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438204
+2013-11-14 11:19:45,320 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:19:47,116 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1289827960126
+2013-11-14 11:19:47,117 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:19:47,220 ERROR [eu.clarin.cmdi.vlo.importer.FacetMappingFactory#createConceptLinkPathMapping:203] - Cannot create ConceptLink Map from xsd (xsd is probably not reachable): http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1380203308465/xsd. All metadata instances that use this xsd will not be imported correctly.
+2013-11-14 11:19:47,377 ERROR [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:56] - CANNOT OPEN AND/OR PARSE: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1380203308465
+2013-11-14 11:19:52,232 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1349361150622
+2013-11-14 11:19:52,232 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:20:06,548 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1336550377513
+2013-11-14 11:20:06,549 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:20:06,564 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:142] - Skipping /var/www/data/small-test/results/cmdi/oai_dp_1185800229C0000000317515dp5.xml because it is too large.
+2013-11-14 11:20:19,672 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1355150532312
+2013-11-14 11:20:19,672 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:20:25,520 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1328259700928
+2013-11-14 11:20:25,521 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:20:26,092 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1328259700945
+2013-11-14 11:20:26,093 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:20:26,365 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026
+2013-11-14 11:20:26,365 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:20:27,958 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1345561703620
+2013-11-14 11:20:27,958 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:20:27,959 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#sendDocs:403] - Sending 12 docs to solr server. Total number of docs updated till now: 0
+2013-11-14 11:20:27,962 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:151] - End of processing: TEST
+2013-11-14 11:20:28,457 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#buildSuggesterIndex:419] - Building index for autocompletion.
+2013-11-14 11:20:28,464 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:178] - Found 1 file(s) without an id. (id is generated based on fileName but that may not be unique)
+2013-11-14 11:20:28,464 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:179] - Found 0 file(s) with errors.
+2013-11-14 11:20:28,464 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:180] - Found 2 file(s) that where ignored (files without resources or any link to a search service or landing page are ignored).
+2013-11-14 11:20:28,464 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:182] - Update of 12 took 50 secs. Total nr of files analyzed 14
+2013-11-14 11:20:39,710 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#main:477] - Could not get config file name via the command line, trying the system properties.
+2013-11-14 11:20:39,830 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#initSolrServer:233] - Initializing Solr Server on http://localhost:8084/vlo_solr/
+2013-11-14 11:20:39,853 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:123] - Deleting original data...
+2013-11-14 11:20:40,036 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:126] - Deleting original data done.
+2013-11-14 11:20:40,036 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:131] - Start of processing: TEST
+2013-11-14 11:20:40,963 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1345561703673
+2013-11-14 11:20:40,963 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:20:46,409 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438204
+2013-11-14 11:20:46,410 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:20:47,897 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1289827960126
+2013-11-14 11:20:47,897 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:20:47,997 ERROR [eu.clarin.cmdi.vlo.importer.FacetMappingFactory#createConceptLinkPathMapping:203] - Cannot create ConceptLink Map from xsd (xsd is probably not reachable): http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1380203308465/xsd. All metadata instances that use this xsd will not be imported correctly.
+2013-11-14 11:20:48,137 ERROR [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:56] - CANNOT OPEN AND/OR PARSE: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1380203308465
+2013-11-14 11:20:52,641 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1349361150622
+2013-11-14 11:20:52,642 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:21:06,916 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1336550377513
+2013-11-14 11:21:06,917 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:21:06,920 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:142] - Skipping /var/www/data/small-test/results/cmdi/oai_dp_1185800229C0000000317515dp5.xml because it is too large.
+2013-11-14 11:21:20,027 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1355150532312
+2013-11-14 11:21:20,027 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:21:25,773 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1328259700928
+2013-11-14 11:21:25,773 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:21:26,341 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1328259700945
+2013-11-14 11:21:26,341 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:21:29,584 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026
+2013-11-14 11:21:29,584 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:21:31,108 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1345561703620
+2013-11-14 11:21:31,108 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:21:31,109 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#sendDocs:403] - Sending 12 docs to solr server. Total number of docs updated till now: 0
+2013-11-14 11:21:31,110 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:151] - End of processing: TEST
+2013-11-14 11:21:31,579 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#buildSuggesterIndex:419] - Building index for autocompletion.
+2013-11-14 11:21:31,587 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:178] - Found 1 file(s) without an id. (id is generated based on fileName but that may not be unique)
+2013-11-14 11:21:31,587 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:179] - Found 0 file(s) with errors.
+2013-11-14 11:21:31,587 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:180] - Found 2 file(s) that where ignored (files without resources or any link to a search service or landing page are ignored).
+2013-11-14 11:21:31,587 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:182] - Update of 12 took 51 secs. Total nr of files analyzed 14
+2013-11-14 11:26:04,343 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#main:477] - Could not get config file name via the command line, trying the system properties.
+2013-11-14 11:26:04,460 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#initSolrServer:233] - Initializing Solr Server on http://localhost:8084/vlo_solr/
+2013-11-14 11:26:04,482 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:123] - Deleting original data...
+2013-11-14 11:26:04,679 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:126] - Deleting original data done.
+2013-11-14 11:26:04,680 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:131] - Start of processing: TEST
+2013-11-14 11:26:05,632 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1345561703673
+2013-11-14 11:26:05,632 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:26:11,002 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438204
+2013-11-14 11:26:11,002 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:26:12,514 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1289827960126
+2013-11-14 11:26:12,515 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:26:12,615 ERROR [eu.clarin.cmdi.vlo.importer.FacetMappingFactory#createConceptLinkPathMapping:203] - Cannot create ConceptLink Map from xsd (xsd is probably not reachable): http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1380203308465/xsd. All metadata instances that use this xsd will not be imported correctly.
+2013-11-14 11:26:12,812 ERROR [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:56] - CANNOT OPEN AND/OR PARSE: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1380203308465
+2013-11-14 11:26:17,293 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1349361150622
+2013-11-14 11:26:17,294 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:26:34,157 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1336550377513
+2013-11-14 11:26:34,157 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:26:34,161 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:142] - Skipping /var/www/data/small-test/results/cmdi/oai_dp_1185800229C0000000317515dp5.xml because it is too large.
+2013-11-14 11:26:47,133 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1355150532312
+2013-11-14 11:26:47,133 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:26:52,846 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1328259700928
+2013-11-14 11:26:52,846 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:26:53,425 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1328259700945
+2013-11-14 11:26:53,425 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:26:53,685 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026
+2013-11-14 11:26:53,685 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:26:55,325 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:38] - PARSED: http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1345561703620
+2013-11-14 11:26:55,326 INFO [eu.clarin.cmdi.vlo.importer.CMDIComponentProfileNamePostProcessor#process:44] - EVALUATED XPATH: /CMD_ComponentSpec/Header/Name/text() found idx: 18
+2013-11-14 11:26:55,326 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#sendDocs:403] - Sending 12 docs to solr server. Total number of docs updated till now: 0
+2013-11-14 11:26:55,327 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:151] - End of processing: TEST
+2013-11-14 11:26:55,787 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#buildSuggesterIndex:419] - Building index for autocompletion.
+2013-11-14 11:26:55,799 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:178] - Found 1 file(s) without an id. (id is generated based on fileName but that may not be unique)
+2013-11-14 11:26:55,799 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:179] - Found 0 file(s) with errors.
+2013-11-14 11:26:55,799 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:180] - Found 2 file(s) that where ignored (files without resources or any link to a search service or landing page are ignored).
+2013-11-14 11:26:55,800 INFO [eu.clarin.cmdi.vlo.importer.MetadataImporter#startImport:182] - Update of 12 took 51 secs. Total nr of files analyzed 14
