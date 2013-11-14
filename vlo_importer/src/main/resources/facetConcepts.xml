@@ -60,6 +60,11 @@
     
     
     <blacklistPattern>/c:HZSKCorpus/c:Collection/c:OriginLocation/c:Location/c:Continent</blacklistPattern> <!-- HZSK -->
+    <blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:PersonalBackground/c:BirthPlace/c:Location/c:Continent</blacklistPattern> <!-- IDSAGD_Speaker -->
+	<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:PersonalBackground/c:Residence/c:Location/c:Continent</blacklistPattern> <!-- IDSAGD_Speaker -->
+	<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:ProfessionalBackground/c:Education/c:Place/c:Location/c:Continent</blacklistPattern> <!-- IDSAGD_Speaker -->
+	<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:ProfessionalBackground/c:Employment/c:Place/c:Location/c:Continent</blacklistPattern> <!-- IDSAGD_Speaker -->
+	<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground/c:Competence/c:LanguageVariety/c:LanguageVarietyPlace/c:Location/c:Continent</blacklistPattern> <!-- IDSAGD_Speaker -->
   </facetConcept>
   <facetConcept name="country" description="Spatial information about the resource: country">
     <concept>http://www.isocat.org/datcat/DC-2532</concept>
@@ -72,6 +77,11 @@
     
     <blacklistPattern>/c:HZSKCorpus/c:Collection/c:OriginLocation/c:Location/c:Country</blacklistPattern> <!-- HZSK -->
     <blacklistPattern>/c:Location/c:Country/c:CountryName</blacklistPattern> <!-- IMS ToolProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:PersonalBackground/c:BirthPlace/c:Location/c:Country</blacklistPattern> <!-- IDSAGD_Speaker -->
+	<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:PersonalBackground/c:Residence/c:Location/c:Country</blacklistPattern> <!-- IDSAGD_Speaker -->
+	<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:ProfessionalBackground/c:Education/c:Place/c:Location/c:Country</blacklistPattern> <!-- IDSAGD_Speaker -->
+	<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:ProfessionalBackground/c:Employment/c:Place/c:Location/c:Country</blacklistPattern> <!-- IDSAGD_Speaker -->
+	<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground/c:Competence/c:LanguageVariety/c:LanguageVarietyPlace/c:Location/c:Country</blacklistPattern> <!-- IDSAGD_Speaker -->
   </facetConcept>
   <facetConcept name="language" description="Language of the content of the resource">
     <concept>http://www.isocat.org/datcat/DC-2482</concept> <!-- language code -->
@@ -87,11 +97,12 @@
     <pattern>/c:CMD/c:Components/c:mods/c:language/c:languageTerm/text()</pattern>
     
     
-    <concept>http://www.isocat.org/datcat/DC-2468</concept>	<!-- BAS -->
-        
+    <!--  <concept>http://www.isocat.org/datcat/DC-2468</concept> --> <!-- BAS REMOVED because of component SubjectLanguages -->
+            
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms-ref/c:language/@olac-language</pattern> <!-- IDS OLAC-DcmiTerms-ref -->
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms-ref-DWR/c:language/@olac-language</pattern> <!-- IDS OLAC-DcmiTerms-ref-DWR -->
     <!-- <pattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Operations/c:Operation/c:Input/c:ParameterGroup/c:Parameters/c:Parameter/c:Values/c:ParameterValue/c:Value/text()</pattern>--> <!--  WeblichtWebservices, breaks Tübingen Resources (oai_sfs_uni_tuebingen_de_FID_15.xml)-->
+    <blacklistPattern>/c:Actor_Languages/c:Actor_Language/</blacklistPattern> <!-- MPI (JK) -->
     <blacklistPattern>/c:ActorLanguage/c:Language/c:ISO639/c:iso-639-3-code</blacklistPattern>
     <blacklistPattern>/c:LanguageName</blacklistPattern> <!-- general -->
     <blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground</blacklistPattern> <!-- IDS IDSAGD_Speaker -->
@@ -115,11 +126,12 @@
  	<pattern>/c:CMD/c:Components/c:mods/c:language/c:languageTerm/text()</pattern>
 
 
-    <concept>http://www.isocat.org/datcat/DC-2468</concept>	<!-- BAS -->
+    <!--  <concept>http://www.isocat.org/datcat/DC-2468</concept>-->  <!-- BAS REMOVED because of component SubjectLanguages -->
 
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms-ref/c:language/@olac-language</pattern> <!-- IDS OLAC-DcmiTerms-ref -->
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms-ref-DWR/c:language/@olac-language</pattern> <!-- IDS OLAC-DcmiTerms-ref-DWR -->
 	<!-- <pattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Operations/c:Operation/c:Input/c:ParameterGroup/c:Parameters/c:Parameter/c:Values/c:ParameterValue/c:Value/text()</pattern>--> <!--  WeblichtWebservices -->
+    <blacklistPattern>/c:Actor_Languages/c:Actor_Language/</blacklistPattern> <!-- MPI (JK) -->
     <blacklistPattern>/c:ActorLanguage/c:Language/c:ISO639/c:iso-639-3-code</blacklistPattern> <!-- HZSK -->
     <blacklistPattern>/c:LanguageName</blacklistPattern> <!-- general -->
     <blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground</blacklistPattern> <!-- IDS IDSAGD_Speaker -->
