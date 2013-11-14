@@ -43,8 +43,10 @@
             <deleteFirst>false</deleteFirst>
         </DataRoot>
     </dataRoots>
-   
+    
     <vloHomeLink>http://www.clarin.eu/vlo</vloHomeLink>
+    
+    <helpUrl>http://www.clarin.eu/vlo</helpUrl>
     
     <solrUrl>http://localhost:8084/vlo_solr/</solrUrl>
     
@@ -74,6 +76,14 @@
         <facetField>keywords</facetField>
     </facetFields>
     
+    <languageFilters length="3">
+        <languageFilter>filterOne</languageFilter>
+        <languageFilter>filterTwo</languageFilter>
+        <languageFilter>filterThree</languageFilter>
+    </languageFilters>
+    
+    <facetOverviewLength>30</facetOverviewLength>
+    
     <countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
     
     <languageLinkPrefix>http://infra.clarin.eu/service/language/info.php?code=</languageLinkPrefix>
@@ -86,9 +96,11 @@
    
     <silToISO639CodesUrl>http://www.clarin.eu/cmd/xslt/sil_to_iso6393.xml</silToISO639CodesUrl>
     
+    <reverseProxyPrefix></reverseProxyPrefix>
+    
     <FederatedContentSearchUrl>http://weblicht.sfs.uni-tuebingen.de/Aggregator/</FederatedContentSearchUrl>
     
-    <expectReverseProxy>false</expectReverseProxy>
+    <cqlEndpointFilter>http://cqlservlet.mpi.nl/</cqlEndpointFilter>
     
-    <reverseProxyPrefix>vlodev/</reverseProxyPrefix>
+    <cqlEndpointAlternative>http://cqlservlet.mpi.nl/</cqlEndpointAlternative>
 </VloConfig>

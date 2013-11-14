@@ -160,6 +160,9 @@ public class VloConfig extends ConfigFromFile {
     @Element // directive for Simple
     private static boolean deleteAllFirst = false;
     
+    @Element
+    private static int facetOverviewLength = 0;
+    
     @Element 
     private static int maxDocsInList = 0;
     
@@ -189,6 +192,9 @@ public class VloConfig extends ConfigFromFile {
     
     @Element
     private static String vloHomeLink = "";
+    
+    @Element
+    private static String helpUrl = "";
     
     @Element
     private static String solrUrl = "";
@@ -244,6 +250,9 @@ public class VloConfig extends ConfigFromFile {
     @ElementArray(entry = "facetField")
     private static String[] facetFields = {"", "", ""};
     
+    @ElementArray(entry = "languageFilter")
+    private static String[] languageFilters = {"", "", ""};
+    
     @Element
     private static String countryComponentUrl = "";
     
@@ -259,11 +268,14 @@ public class VloConfig extends ConfigFromFile {
     @Element
     private static String FederatedContentSearchUrl = " ";
     
-    @Element
+    @Element(required = false)
     private static String reverseProxyPrefix = "";
     
-    @Element 
-    private static Boolean expectReverseProxy = false;
+    @Element(required = false)
+    private static String cqlEndpointFilter = "";
+
+    @Element(required = false)
+    private static String cqlEndpointAlternative= "";
 
     /**
      * Get and set methods for web application parameter members<br><br>
@@ -549,6 +561,30 @@ public class VloConfig extends ConfigFromFile {
     }
 
     /**
+     * Get the value of the helpUrl parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public static String getHelpUrl() {
+        return helpUrl;
+    }
+
+    /**
+     * Set the value of the helpUrl parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value
+     */
+    public static void setHelpUrl(String param) {
+        helpUrl = param;
+    }
+
+    /**
      * Get the value of the SolrUrl parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
@@ -770,7 +806,6 @@ public class VloConfig extends ConfigFromFile {
         nationalProjectMapping = param;
     }
    
-
     /**
      * Get the value of the FacetFields parameter<br><br>
      *
@@ -793,6 +828,54 @@ public class VloConfig extends ConfigFromFile {
      */
     public static void setFacetFields(String[] param) {
         facetFields = param;
+    }
+    
+    /**
+     * Get the value of the languageFields parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public static String[] getLanguageFilters() {
+        return languageFilters;
+    }
+
+    /**
+     * Set the value of the languageFilters parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value, a list of language filters
+     */
+    public static void setLanguageFilters(String[] param) {
+        languageFilters = param;
+    }
+    
+    /**
+     * Get the value of the getFacetOverviewLength parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public static int getFacetOverviewLength() {
+        return facetOverviewLength;
+    }
+
+    /**
+     * Set the value of the setFacetOverviewLength parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value
+     */
+    public void setFacetOverviewLength(Integer param) {
+        facetOverviewLength = param;
     }
 
     /**
@@ -916,27 +999,50 @@ public class VloConfig extends ConfigFromFile {
     }
     
     /**
-     * Get the value of the expectReverseProxy parameter<br><br>
+     * Get the value of the cqlEndpointFilter parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
      * @return the value
      */
-    public static Boolean getExpectReverseProxy() {
-        return expectReverseProxy;
+    public static String getCqlEndpointFilter() {
+        return cqlEndpointFilter;
     }
 
     /**
-     * Set the value of the expectReverseProxy parameter<br><br>
+     * Set the value of the cqlEndpointFilter parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
      * @param param the value
      */
-    public static void setExpectReverseProxy(Boolean param) {
-        expectReverseProxy = param;
+    public static void setCqlEndpointFilter(String param) {
+        cqlEndpointFilter = param;
+    }
+    
+    /**
+     * Get the value of the cqlEndpointAlternative parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public static String getCqlEndpointAlternative() {
+        return cqlEndpointAlternative;
     }
 
+    /**
+     * Set the value of the cqlEndpointAlternative parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value
+     */
+    public static void setCqlEndpointAlternative(String param) {
+        cqlEndpointAlternative = param;
+    }
 }

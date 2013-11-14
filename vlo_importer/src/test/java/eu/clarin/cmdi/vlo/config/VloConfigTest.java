@@ -179,7 +179,7 @@ public class VloConfigTest {
         assertEquals(param, result);
     }
     
-        /**
+    /**
      * Test the getMaxFileSize method
      */
     @Test
@@ -322,13 +322,44 @@ public class VloConfigTest {
     @Test
     public void testSetVloHomeLink() {
         
-        System.out.println("setSetVloHomeLink");
+        System.out.println("setVloHomeLink");
         
         String param = "http://www.clarin.eu/vlo";
         
         VloConfig.setVloHomeLink(param);
 
         String result = VloConfig.getVloHomeLink();
+        
+        assertEquals(param, result);
+    }
+
+    /**
+     * Test the getHelpUrl method
+     */
+    @Test
+    public void testGetHelpUrl() {
+        
+        System.out.println("getHelpUrl");
+        
+        String expResult = "http://www.clarin.eu/vlo";
+        String result = VloConfig.getHelpUrl();
+        
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test the setHelpUrl method
+     */
+    @Test
+    public void testSetHelpUrl() {
+        
+        System.out.println("setHelpUrl");
+        
+        String param = "http://www.clarin.eu/vlo";
+        
+        VloConfig.setHelpUrl(param);
+
+        String result = VloConfig.getHelpUrl();
         
         assertEquals(param, result);
     }
@@ -788,5 +819,97 @@ public class VloConfigTest {
         
         assertEquals(param, result);
     }
+    
+    /**
+     * Test the getReverseProxyPrefix method
+     */
+    @Test
+    public void testReverseProxyPrefix() {
+        
+        System.out.println("getReverseProxyPrefix");
+        
+        String expResult = "";
+        String result = VloConfig.getReverseProxyPrefix();
+        
+        assertEquals(expResult, result);
+    }
 
+    /**
+     * Test the setReverseProxyPrefix method
+     */
+    @Test
+    public void testSetReverseProxyPrefix() {
+        
+        System.out.println("setReverseProxyPrefix");
+        
+        String param = "vlodev/";
+        
+        VloConfig.setReverseProxyPrefix(param);
+
+        String result = VloConfig.getReverseProxyPrefix();
+        
+        assertEquals(param, result);
+    }
+
+    /**
+     * Test the getCqlEndpointFilter method
+     */
+    @Test
+    public void testGetCqlEndpointFilter() {
+        
+        System.out.println("getCqlEndpointFilter");
+        
+        String expResult = "http://cqlservlet.mpi.nl/";
+        String result = VloConfig.getCqlEndpointFilter();
+        
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test the setCqlEndpointFilter method
+     */
+    @Test
+    public void testSetCqlEndpointFilter() {
+        
+        System.out.println("setCqlEndpointFilter");
+        
+        String param = "http://cqlservlet.mpi.nl/";
+        
+        VloConfig.setCqlEndpointFilter(param);
+
+        String result = VloConfig.getCqlEndpointFilter();
+        
+        assertEquals(param, result);
+    }
+
+    /**
+     * Test the getCqlEndpointAlternative method
+     */
+    @Test
+    public void testGetCqlEndpointAlternative() {
+        
+        System.out.println("getCqlEndpointAlternative");
+        
+        String expResult = "http://cqlservlet.mpi.nl/";
+        String result = VloConfig.getCqlEndpointAlternative();
+        
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test the setCqlEndpointAlternative method
+     */
+    @Test
+    public void testSetCqlEndpointAlternative() {
+        
+        System.out.println("setCqlEndpointAlternative");
+        
+        String param = "http://cqlservlet.mpi.nl/";
+        
+        VloConfig.setCqlEndpointAlternative(param);
+
+        String result = VloConfig.getCqlEndpointAlternative();
+        
+        assertEquals(param, result);
+    }
 }
