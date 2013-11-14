@@ -74,7 +74,6 @@ public class MetadataImporter {
 		POST_PROCESSORS.put(FacetConstants.FIELD_CONTINENT, new ContinentNamePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_COUNTRY, new CountryNamePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGE, new LanguageCodePostProcessor());
-        POST_PROCESSORS.put(FacetConstants.FIELD_FORMAT, new FormatPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGES, new LanguageLinkPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_CLARIN_PROFILE, new CMDIComponentProfileNamePostProcessor());
@@ -386,7 +385,10 @@ public class MetadataImporter {
             } else {
                 format = CommonUtils.normalizeMimeType(mimeType);
             }
-            solrDocument.addField(FacetConstants.FIELD_FORMAT, format);
+            
+            // TODO check should probably be moved into Solr (by using some minimum length filter)
+            if(!mimeType.equals(""))
+            	solrDocument.addField(FacetConstants.FIELD_FORMAT, mimeType);
             solrDocument.addField(FacetConstants.FIELD_RESOURCE, mimeType + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR
                     + resource.getResourceName());
         }
