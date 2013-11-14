@@ -37,6 +37,8 @@
     <pattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:Label/text()</pattern> <!-- IDS IDSAGD_Speaker -->
     <pattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Publications/c:Publication</pattern> <!--  IMS TextCorpusProfile -->
     <blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Publications/c:Publication</blacklistPattern> <!-- IMS ToolProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Publications/c:Publication/c:PublicationTitle/</blacklistPattern> <!-- IMS c:LexicalResourceProfile -->
+  	<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Publications/c:Publication/c:PublicationTitle/</blacklistPattern> <!-- IMS c:MultimodalCorpus -->
   </facetConcept>
   <facetConcept name="year" description="Temporal information about the resource">
     <concept>http://www.isocat.org/datcat/DC-2509</concept>
@@ -52,7 +54,10 @@
     <pattern>/c:CMD/Components/c:teiHeader/c:fileDesc/c:sourceDesc/c:biblFull/c:publicationStmt/c:date[@type="publication"]/text()</pattern> <!-- BBAW teiHeader -->
     <pattern>/c:CMD/c:Components/c:teiHeader/c:fileDesc/c:publicationStmt/c:date[@type="publication"]/text()</pattern> <!-- BBAW teiHeader -->
     <blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Project/c:Duration</blacklistPattern> <!-- IMS TextCorpusProfile -->
-    <blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Project/c:Duration</blacklistPattern> <!-- IMS  ToolProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Project/c:Duration</blacklistPattern> <!-- IMS ToolProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Project/c:Duration/c:CompletionYear</blacklistPattern> <!-- IMS c:LexicalResourceProfile -->
+	<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Project/c:Duration/c:CompletionYear</blacklistPattern> <!-- c:MultimodalCorpus -->
+	<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Publications/c:Publication/c:PublicationDate</blacklistPattern> <!-- c:MultimodalCorpus -->
   </facetConcept>
   <facetConcept name="continent" description="Spatial information about the resource: continent">
     <concept>http://www.isocat.org/datcat/DC-2531</concept>
@@ -111,6 +116,8 @@
     <blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:DocumentationLanguages</blacklistPattern> <!-- IMS TextCorpusProfile -->
     <blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Documentations</blacklistPattern> <!-- IMS ToolProfile -->
     <blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:ToolContext/c:DocumentationLanguages</blacklistPattern> <!-- IMS ToolProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:DocumentationLanguages</blacklistPattern> <!-- IMS c:LexicalResourceProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:DocumentationLanguages</blacklistPattern> <!-- IMS c:MultimodalCorpus -->
   </facetConcept>
   <facetConcept name="languages" description="Language of the content of the resource">
     <concept>http://www.isocat.org/datcat/DC-2482</concept> <!-- language code -->
@@ -140,6 +147,8 @@
     <blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:DocumentationLanguages</blacklistPattern> <!-- IMS TextCorpusProfile -->
     <blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Documentations</blacklistPattern> <!-- IMS ToolProfile -->
     <blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:ToolContext/c:DocumentationLanguages</blacklistPattern> <!-- IMS ToolProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:DocumentationLanguages</blacklistPattern> <!-- IMS c:LexicalResourceProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:DocumentationLanguages</blacklistPattern> <!-- IMS c:MultimodalCorpus -->
   </facetConcept>
   <facetConcept name="organisation" description="Organisation involved in creation and/or distribution of the resource">
     <concept>http://www.isocat.org/datcat/DC-2459</concept>
@@ -226,6 +235,23 @@
     <blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Copyright</blacklistPattern> <!-- IMS ToolProfile -->
     <blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:ResourceContext</blacklistPattern> <!-- IMS ToolProfile -->
     <blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:ToolContext</blacklistPattern> <!-- IMS ToolProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Project</blacklistPattern> <!-- IMS LexicalResourceProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Publications</blacklistPattern> <!-- IMS LexicalResourceProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Creation</blacklistPattern> <!-- IMS LexicalResourceProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:DocumentationLanguages</blacklistPattern> <!-- IMS LexicalResourceProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Access</blacklistPattern> <!-- IMS LexicalResourceProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:LexiconContext</blacklistPattern> <!-- IMS LexicalResourceProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:SizeInfo</blacklistPattern> <!-- IMS LexicalResourceProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:TextTechnical</blacklistPattern> <!-- IMS LexicalResourceProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:GeneralInfo/c:ModalityInfo</blacklistPattern> <!-- IMS MultiModalCorpus -->
+    <blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Access</blacklistPattern> <!-- IMS MultiModalCorpus -->
+    <blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Creation</blacklistPattern> <!-- IMS MultiModalCorpus -->
+    <blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Project</blacklistPattern> <!-- IMS MultiModalCorpus -->
+    <blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Publications</blacklistPattern> <!-- IMS MultiModalCorpus -->
+    <blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:SubjectLanguages</blacklistPattern> <!-- IMS MultiModalCorpus -->
+    <blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:DocumentationLanguages</blacklistPattern> <!-- IMS MultiModalCorpus -->
+    <blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:MultimodalCorpusSpecific</blacklistPattern> <!-- IMS MultiModalCorpus -->
+    <blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:TechnicalInfo</blacklistPattern> <!-- IMS MultiModalCorpus -->
   </facetConcept>
   <facetConcept name="resourceClass" description="Class or type of the resource">
     <concept>http://purl.org/dc/terms/type</concept>
