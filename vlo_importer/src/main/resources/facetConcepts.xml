@@ -169,8 +169,10 @@
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/@olac-linguistic-type</pattern> <!-- Find concept and add attribute somehow -->
     <pattern>/c:CMD/c:Components/c:mods/c:genre/text()</pattern>
     
+    
     <pattern>/c:CMD/c:Components/c:media-corpus-profile/c:Corpus/c:Topic/text()</pattern> <!--  BAS media-corpus-profile -->
     <pattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Keyword/text()</pattern> <!-- IDS IDSAGD_Corpus -->
+    <blacklistPattern>/c:CMD/c:Components/c:teiHeader/c:profileDesc/c:textClass/c:classCode[@scheme="http://www.deutschestextarchiv.de/doku/klassifikation#DTACorpus"]</blacklistPattern> <!--  BBAW -->
   </facetConcept>
   <facetConcept name="modality" isCaseInsensitive="true" allowMultipleValues="true" description="The channel by which signs are transmitted">
     <concept>http://www.isocat.org/datcat/DC-2490</concept>
@@ -186,12 +188,12 @@
     <pattern>/c:CMD/c:Components/c:mods/c:subject/c:Topic/text()</pattern> 
     
     
-    <pattern>/c:CMD/c:Components/c:teiHeader/c:profileDesc/c:textClass/c:classCode[@scheme="http://www.deutschestextarchiv.de/doku/klassifikation#dwds1sub"]/text()</pattern> <!--  BBAW -->
     <pattern>/c:CMD/c:Components/c:media-session-profile/c:media-session/c:Content/c:Topic/text()</pattern> <!--  BAS -->
     <pattern>/c:CMD/c:Components/c:media-session-profile/c:media-session/c:Content/c:Task/text()</pattern> <!--  BAS -->
     <pattern>/c:CMD/c:Components/c:media-corpus-profile/c:Corpus/c:Topic/text()</pattern> <!--  BAS media-corpus-profile -->
     <pattern>/c:CMD/c:Components/c:IDSAGD_Event/c:IDSAGD_SpeechEvent/c:Topic/text()</pattern> <!-- IDS IDSAGD_Event -->
     <pattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Corpus/c:Modality/c:Modality/text()</pattern> <!-- IDS IDSAGD_Corpus -->
+    <blacklistPattern>/c:CMD/c:Components/c:teiHeader/c:profileDesc/c:textClass</blacklistPattern> <!-- BBAW -->
   </facetConcept>
   <facetConcept name="description" description="Description of the resource">
     <concept>http://www.isocat.org/datcat/DC-2520</concept>
