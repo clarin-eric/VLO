@@ -172,7 +172,6 @@
     
     <pattern>/c:CMD/c:Components/c:media-corpus-profile/c:Corpus/c:Topic/text()</pattern> <!--  BAS media-corpus-profile -->
     <pattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Keyword/text()</pattern> <!-- IDS IDSAGD_Corpus -->
-    <blacklistPattern>/c:CMD/c:Components/c:teiHeader/c:profileDesc/c:textClass/c:classCode[@scheme="http://www.deutschestextarchiv.de/doku/klassifikation#DTACorpus"]</blacklistPattern> <!--  BBAW -->
   </facetConcept>
   <facetConcept name="modality" isCaseInsensitive="true" allowMultipleValues="true" description="The channel by which signs are transmitted">
     <concept>http://www.isocat.org/datcat/DC-2490</concept>
