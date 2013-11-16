@@ -79,7 +79,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         assertEquals("testRoot", getValue(doc, FacetConstants.FIELD_DATA_PROVIDER));
         assertEquals("kleve-route", getValue(doc, FacetConstants.FIELD_NAME));
         assertEquals(sessionFile.getAbsolutePath(), getValue(doc, FacetConstants.FIELD_FILENAME));
-        assertEquals("video", getValue(doc, FacetConstants.FIELD_FORMAT));
+        assertEquals("video/x-mpeg1", getValue(doc, FacetConstants.FIELD_FORMAT));
         assertEquals("video/x-mpeg1|../Media/elan-example1.mpg", getValue(doc, FacetConstants.FIELD_RESOURCE));
     }
 
@@ -259,7 +259,10 @@ public class MetadataImporterTest extends ImporterTestcase {
              */
             @Override
             void startImport() throws MalformedURLException {
-
+                
+                // make sure the mapping file for testing is used
+                VloConfig.setFacetMappingFile("/facetConceptsTest.xml");
+                
                 List<DataRoot> dataRoots = checkDataRoots();
                 long start = System.currentTimeMillis();
                 try {

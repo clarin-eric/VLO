@@ -50,6 +50,8 @@
     
     <solrUrl>http://localhost:8084/vlo_solr/</solrUrl>
     
+    <facetMappingFile>/facetConceptMapping.xml</facetMappingFile>
+    
     <profileSchemaUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/{PROFILE_ID}/xsd</profileSchemaUrl>
     
     <componentRegistryRESTURL>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/</componentRegistryRESTURL>

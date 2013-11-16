@@ -199,6 +199,9 @@ public class VloConfig extends ConfigFromFile {
     @Element
     private static String solrUrl = "";
     
+    @Element(required = false)
+    private static String facetMappingFile = "";
+    
     @Element
     private static String profileSchemaUrl = "";
 
@@ -221,7 +224,7 @@ public class VloConfig extends ConfigFromFile {
      * Note: the national project mapping itself is not part of the web
      * application configuration.
      */
-    @Element
+    @Element(required = false)
     private static String nationalProjectMapping = "";
     
     /**
@@ -606,6 +609,30 @@ public class VloConfig extends ConfigFromFile {
      */
     public static void setSolrUrl(String param) {
         solrUrl = param;
+    }
+    
+    /**
+     * Get the value of the facetMappingFile parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    static public String getFacetConceptsFile() {
+        return facetMappingFile;
+    }
+
+    /**
+     * Set the value of the facetMappingFile parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value
+     */
+    public static void setFacetMappingFile(String param) {
+        facetMappingFile = param;
     }
 
     /**

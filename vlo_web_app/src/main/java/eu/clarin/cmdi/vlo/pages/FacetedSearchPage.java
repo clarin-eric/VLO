@@ -44,7 +44,8 @@ public class FacetedSearchPage extends BasePage {
 
     private final SearchPageQuery query;
     private final static AutoCompleteDao autoCompleteDao = new AutoCompleteDao();
-    private final static Map<String, FacetConcept> facetNameMap = VLOMarshaller.getFacetConceptMapping().getFacetConceptMap();
+    private final static String facetConceptsFile = VloConfig.getFacetConceptsFile();
+    private final static Map<String, FacetConcept> facetNameMap = VLOMarshaller.getFacetConceptMapping(facetConceptsFile).getFacetConceptMap();
     
     /**
      * @param parameters Page parameters

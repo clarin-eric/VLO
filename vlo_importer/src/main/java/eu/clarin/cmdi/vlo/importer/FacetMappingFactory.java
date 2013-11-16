@@ -36,34 +36,47 @@ public class FacetMappingFactory {
     private FacetMappingFactory() {
     }
 
-    public static FacetMapping getFacetMapping(String xsd) {
-        return INSTANCE.getOrCreateMapping(xsd);
+    public static FacetMapping getFacetMapping(String facetConceptsFile, String xsd) {
+        return INSTANCE.getOrCreateMapping(facetConceptsFile, xsd);
     }
 
     /**
-     * If cashed gives that result, otherwise makes a new one (in the createMapping method below)..
-     * @param xsd
-     * @return
+     * Get facet concept mapping. 
+     * 
+     * Get facet mapping used to map meta data based on a facet concepts
+     * file and url to cmdi meta data profile.
+
+     * @param facetConcepts name of the facet concepts file
+     * @param xsd url of xml schema of cmdi profile
+     * 
+     * @return facet concept mapping
      */
-    private FacetMapping getOrCreateMapping(String xsd) {
+    private FacetMapping getOrCreateMapping(String facetConcepts, String xsd) {
+        // check if concept mapping has already been created
         FacetMapping result = mapping.get(xsd);
         if (result == null) {
-            result = createMapping(xsd);
+            result = createMapping(facetConcepts, xsd);
             mapping.put(xsd, result);
         }
         return result;
     }
 
     /**
-     * Asks conceptLinkPathMapping to create the actual xpaths.
-     * Does a bunch of bookkeeping in order to get the FacetMapping.
-     * @param xsd  URL of XML Schema of some CMDI profile
-     * @return
+     * Create facet concept mapping.
+     * 
+     * Create facet mapping used to map meta data based on a facet concept
+     * mapping file and url to cmdi meta data profile.
+     * 
+     * @param facetConcepts name of the facet concepts file
+     * @param xsd url of xml schema of cmdi profile
+     * 
+     * @return the facet mapping used to map meta data to facets
      */
-    private FacetMapping createMapping(String xsd) {
+    private FacetMapping createMapping(String facetConcepts, String xsd) {
+
         FacetMapping result = new FacetMapping();
         // Gets the configuration. VLOMarshaller only reads in the facetconceptmapping.xml file and returns the result (though the reading in is implicit).
-        FacetConceptMapping conceptMapping = VLOMarshaller.getFacetConceptMapping();
+        FacetConceptMapping conceptMapping = VLOMarshaller.getFacetConceptMapping(facetConcepts);
         try {
             //The magic
             Map<String, List<String>> conceptLinkPathMapping = createConceptLinkPathMapping(xsd);
