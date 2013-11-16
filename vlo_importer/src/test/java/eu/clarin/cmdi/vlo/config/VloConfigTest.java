@@ -149,37 +149,6 @@ public class VloConfigTest {
     }
     
     /**
-     * Test the getUseMaxFileSize method
-     */
-    @Test
-    public void testGetUseMaxFileSize() {
-        
-        System.out.println("getUseMaxFileSize");
-        
-        boolean expResult = true;
-        boolean result = VloConfig.getUseMaxFileSize();
-        
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test the setSetUseMaxFileSize method
-     */
-    @Test
-    public void testSetUseMaxFileSize() {
-        
-        System.out.println("setUseMaxFileSize");
-        
-        boolean param = true;
-        
-        VloConfig.setUseMaxFileSize(param);
-
-        boolean result = VloConfig.getUseMaxFileSize();
-        
-        assertEquals(param, result);
-    }
-    
-    /**
      * Test the getMaxFileSize method
      */
     @Test
@@ -303,7 +272,7 @@ public class VloConfigTest {
     }
 
     /**
-     * Test the getVloHomeLink method
+     * Test the getHomeUrl method
      */
     @Test
     public void testGetVloHomeLink() {
@@ -311,13 +280,13 @@ public class VloConfigTest {
         System.out.println("getVloHomeLink");
         
         String expResult = "http://www.clarin.eu/vlo";
-        String result = VloConfig.getVloHomeLink();
+        String result = VloConfig.getHomeUrl();
         
         assertEquals(expResult, result);
     }
 
     /**
-     * Test the setVloHomeLink method
+     * Test the setHomeUrl method
      */
     @Test
     public void testSetVloHomeLink() {
@@ -326,9 +295,9 @@ public class VloConfigTest {
         
         String param = "http://www.clarin.eu/vlo";
         
-        VloConfig.setVloHomeLink(param);
+        VloConfig.setHomeUrl(param);
 
-        String result = VloConfig.getVloHomeLink();
+        String result = VloConfig.getHomeUrl();
         
         assertEquals(param, result);
     }
@@ -379,7 +348,7 @@ public class VloConfigTest {
     }
 
     /**
-     * Test the setVloHomeLink method
+     * Test the setHomeUrl method
      */
     @Test
     public void testSetSolrUrl() {

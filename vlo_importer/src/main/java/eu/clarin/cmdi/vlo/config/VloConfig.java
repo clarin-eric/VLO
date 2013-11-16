@@ -157,11 +157,13 @@ public class VloConfig extends ConfigFromFile {
      * member parameters.
      */
     
-    @Element // directive for Simple
-    private static boolean deleteAllFirst = false;
+    // data base related parameters
     
     @Element
-    private static int facetOverviewLength = 0;
+    private static String solrUrl = "";
+   
+    @Element // directive for Simple
+    private static boolean deleteAllFirst = false;
     
     @Element 
     private static int maxDocsInList = 0;
@@ -169,38 +171,53 @@ public class VloConfig extends ConfigFromFile {
     @Element 
     private static int minDocsInSolrQueue = 0;
     
-    @Element 
+    @Element(required = false)
     private static int solrTimeOut = 0;
     
-    @Element 
-    private static boolean useMaxFileSize = false;
+    // meta data input
+    
+    @ElementList // directive for Simple
+    private static List<DataRoot> dataRoots;
     
     @Element 
     private static int maxFileSize = 0;
     
     @Element
-    private static int maxDaysToLife = 0;
+    private static int maxDaysInSolr = 0;
     
-    @Element
-    private static boolean useHandleResolver = false;
+    // mapping
+    
+    @Element(required = false)
+    private static String facetConceptsFile = "";
+    
+    @ElementArray(entry = "languageFilter")
+    private static String[] languageFilters = {"", "", ""};
     
     @Element
     private static boolean printMapping = false;
     
-    @ElementList // directive for Simple
-    private static List<DataRoot> dataRoots;
-    
-    @Element
-    private static String vloHomeLink = "";
-    
-    @Element
-    private static String helpUrl = "";
-    
-    @Element
-    private static String solrUrl = "";
-    
     @Element(required = false)
-    private static String facetMappingFile = "";
+    private static String nationalProjectMapping = "";
+    
+    @Element
+    private static String countryComponentUrl = "";
+    
+    @Element
+    private static String language2LetterCodeComponentUrl = "";
+    
+    @Element
+    private static String language3LetterCodeComponentUrl = "";
+    
+    @Element
+    private static String silToISO639CodesUrl = "";
+    
+    // services
+    
+    @Element
+    private static String FederatedContentSearchUrl = "";
+    
+    @Element
+    private static boolean useHandleResolver = false;
     
     @Element
     private static String profileSchemaUrl = "";
@@ -217,15 +234,19 @@ public class VloConfig extends ConfigFromFile {
     @Element
     private static String languageLinkPrefix = "";
     
+    // web application user interface 
+    
+    @Element
+    private static int facetOverviewLength = 0;
+    
+    @Element
+    private static String homeUrl = "";
+    
+    @Element
+    private static String helpUrl = "";
+    
     @Element
     private static String feedbackFromUrl = "";
-    
-    /**
-     * Note: the national project mapping itself is not part of the web
-     * application configuration.
-     */
-    @Element(required = false)
-    private static String nationalProjectMapping = "";
     
     /**
      * An array of facetFields<br><br>
@@ -253,23 +274,7 @@ public class VloConfig extends ConfigFromFile {
     @ElementArray(entry = "facetField")
     private static String[] facetFields = {"", "", ""};
     
-    @ElementArray(entry = "languageFilter")
-    private static String[] languageFilters = {"", "", ""};
-    
-    @Element
-    private static String countryComponentUrl = "";
-    
-    @Element
-    private static String language2LetterCodeComponentUrl = "";
-    
-    @Element
-    private static String language3LetterCodeComponentUrl = "";
-    
-    @Element
-    private static String silToISO639CodesUrl = "";
-    
-    @Element
-    private static String FederatedContentSearchUrl = " ";
+    // test related parameters
     
     @Element(required = false)
     private static String reverseProxyPrefix = "";
@@ -279,6 +284,7 @@ public class VloConfig extends ConfigFromFile {
 
     @Element(required = false)
     private static String cqlEndpointAlternative= "";
+    
 
     /**
      * Get and set methods for web application parameter members<br><br>
@@ -289,11 +295,35 @@ public class VloConfig extends ConfigFromFile {
      */
     
     /**
+     * Get the value of the deleteAllFirst parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    
+    public static boolean deleteAllFirst() {
+        return deleteAllFirst;
+    }
+
+    /**
+     * Set the value of the deleteAllFirst parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value
+     */
+    public static void setDeleteAllFirst(boolean param) {
+        deleteAllFirst = param;
+    }
+    
+    /**
      * Get the value of the maxDocsInList parameter<br><br>
      *
-     * The value of the parameter indicates the number of documents the importer
-     * stores in a list before sending them to the queue associated with the
-     * SOLR server.
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
      *
      * @return the value
      */
@@ -304,9 +334,8 @@ public class VloConfig extends ConfigFromFile {
     /**
      * Set the value of the maxDocsInList parameter<br><br>
      *
-     * The value of the parameter indicates the number of documents the importer
-     * stores in a list before sending them to the queue associated with the
-     * SOLR server.
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
      *
      * @param param the value
      */
@@ -317,9 +346,8 @@ public class VloConfig extends ConfigFromFile {
     /**
      * Get the value of the minDocsInSolrQueue parameter<br><br>
      *
-     * The value of the parameter indicates the number of documents in the
-     * SOLR server queue before the threads associated with the server start
-     * emptying the queue.
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
      *
      * @return the value
      */
@@ -330,9 +358,8 @@ public class VloConfig extends ConfigFromFile {
     /**
      * Set the value of the minDocsInSolrQueue parameter<br><br>
      *
-     * The value of the parameter indicates the number of documents in the
-     * SOLR server queue before the threads associated with the server start
-     * emptying the queue.
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
      *
      * @param param the value
      */
@@ -343,10 +370,9 @@ public class VloConfig extends ConfigFromFile {
     /**
      * Get the value of the solrTimeOut parameter<br><br>
      * 
-     * The value of the parameter indicates the interval during which the
-     * importer will try to reach the SOLR server. Values are incremented
-     * 1, 2, 4, 8, ...
-     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     * 
      * @return the value
      */
     public static int getSolrTimeOut (){
@@ -356,9 +382,8 @@ public class VloConfig extends ConfigFromFile {
     /**
      * Set the value of the solrTimeOut parameter<br><br>
      *
-     * The value of the parameter indicates the interval during which the
-     * importer will try to reach the SOLR server. Values are incremented
-     * 1, 2, 4, 8, ...
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
      *
      * @param param the value
      */
@@ -367,35 +392,10 @@ public class VloConfig extends ConfigFromFile {
     }
     
     /**
-     * Get the value of the useMaxFileSize parameter<br><br>
+     * Get the value of the maxFileSize parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
-     *
-     * @return the value
-     */
-    public static boolean getUseMaxFileSize (){
-        return useMaxFileSize;
-    }
-    
-    /**
-     * Set the value of the useMaxFileSize parameter<br><br>
-     *
-     * If true, the importer will reject meta data files whose size exceeds 
-     * the value indicated by the maxFileSize parameter. If false, none of
-     * the files encountered will be rejected because of their size.
-     *
-     * @param param the value
-     */
-    public static void setUseMaxFileSize (boolean param){
-        useMaxFileSize = param;
-    }
-    
-    /**
-     * Get the value of the maxFileSize parameter<br><br>
-     *
-     * If the useMaxFileSize parameter equals true, maxFileSize is the upper
-     * limit to the size of meta data files that the importer will consider. 
      *
      * @return the value
      */
@@ -406,8 +406,8 @@ public class VloConfig extends ConfigFromFile {
     /**
      * Set the value of the maxFileSize parameter<br><br>
      *
-     * If the useMaxFileSize parameter equals true, maxFileSize is the upper
-     * limit to the size of meta data files that the importer will consider. 
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
      *
      * @param param the value
      */
@@ -416,31 +416,27 @@ public class VloConfig extends ConfigFromFile {
     }
     
     /**
-     * Get the value of the maxDaysToLife parameter<br><br>
+     * Get the value of the maxDaysInSolr parameter<br><br>
      *
-     * If the maxDaysToLife parameter is larger than 0, maxDaysToLife is the
-     * maximal number of days that a document remains in the database without been
-     * seen by the importer, even when deleteAllFirst and deleteFirst are set
-     * to false.
+     * If the parameter is larger than 0, it denotes the maximal number of days
+     * that a document can remain in the database.
      *
      * @return the value
      */
-    public static int getMaxDaysToLife (){
-        return maxDaysToLife;
+    public static int getMaxDaysInSolr (){
+        return maxDaysInSolr;
     }
     
     /**
-     * Set the value of the maxDaysToLife parameter<br><br>
+     * Set the value of the maxDaysInSolr parameter<br><br>
      *
-     * If the maxDaysToLife parameter is larger than 0, maxDaysToLife is the
-     * maximal number of days that a document remains in the database without been
-     * seen by the importer, even when deleteAllFirst and deleteFirst are set
-     * to false.
+     * If the parameter is larger than 0, it denotes the maximal number of days
+     * that a document can remain in the database.
      *
      * @param param the value
      */
-    public static void setMaxDaysToLife (int param){
-    	maxDaysToLife = param;
+    public static void setMaxDaysInSolr (int param){
+    	maxDaysInSolr = param;
     }
     
     /**
@@ -492,30 +488,6 @@ public class VloConfig extends ConfigFromFile {
     }
 
     /**
-     * Get the value of the deleteAllFirst parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @return the value
-     */
-    public static boolean deleteAllFirst() {
-        return deleteAllFirst;
-    }
-
-    /**
-     * Set the value of the deleteAllFirst parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @param param the value
-     */
-    public static void setDeleteAllFirst(boolean param) {
-        deleteAllFirst = param;
-    }
-
-    /**
      * Get the value of the printMapping parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
@@ -547,8 +519,8 @@ public class VloConfig extends ConfigFromFile {
      *
      * @return the value
      */
-    public static String getVloHomeLink() {
-        return vloHomeLink;
+    public static String getHomeUrl() {
+        return homeUrl;
     }
 
     /**
@@ -559,8 +531,8 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param param the value
      */
-    public static void setVloHomeLink(String param) {
-        vloHomeLink = param;
+    public static void setHomeUrl(String param) {
+        homeUrl = param;
     }
 
     /**
@@ -612,7 +584,7 @@ public class VloConfig extends ConfigFromFile {
     }
     
     /**
-     * Get the value of the facetMappingFile parameter<br><br>
+     * Get the value of the facetConceptsFile parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
@@ -620,11 +592,11 @@ public class VloConfig extends ConfigFromFile {
      * @return the value
      */
     static public String getFacetConceptsFile() {
-        return facetMappingFile;
+        return facetConceptsFile;
     }
 
     /**
-     * Set the value of the facetMappingFile parameter<br><br>
+     * Set the value of the facetConceptsFile parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
      * documentation.
@@ -632,7 +604,7 @@ public class VloConfig extends ConfigFromFile {
      * @param param the value
      */
     public static void setFacetMappingFile(String param) {
-        facetMappingFile = param;
+        facetConceptsFile = param;
     }
 
     /**

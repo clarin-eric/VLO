@@ -8,11 +8,9 @@
     
     <solrTimeOut>300</solrTimeOut>
     
-    <useMaxFileSize>true</useMaxFileSize>
-    
     <maxFileSize>10000000</maxFileSize>
     
-    <maxDaysToLife>0</maxDaysToLife>
+    <maxDaysInSolr>0</maxDaysInSolr>
     
     <useHandleResolver>false</useHandleResolver>
     
@@ -44,13 +42,13 @@
         </DataRoot>
     </dataRoots>
     
-    <vloHomeLink>http://www.clarin.eu/vlo</vloHomeLink>
+    <homeUrl>http://www.clarin.eu/vlo</homeUrl>
     
     <helpUrl>http://www.clarin.eu/vlo</helpUrl>
     
     <solrUrl>http://localhost:8084/vlo_solr/</solrUrl>
     
-    <facetMappingFile>/facetConceptMapping.xml</facetMappingFile>
+    <facetConceptsFile>/facetConcepts.xml</facetConceptsFile>
     
     <profileSchemaUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/{PROFILE_ID}/xsd</profileSchemaUrl>
     

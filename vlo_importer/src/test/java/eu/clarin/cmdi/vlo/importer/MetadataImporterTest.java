@@ -275,7 +275,7 @@ public class MetadataImporterTest extends ImporterTestcase {
                         List<File> files = 
                                 getFilesFromDataRoot(dataRoot.getRootFile());
                         for (File file : files) {
-                            if (VloConfig.getUseMaxFileSize()
+                            if (VloConfig.getMaxFileSize () > 0
                                     && file.length() > 
                                     VloConfig.getMaxFileSize()) {
                                 LOG.info("Skipping " + file.getAbsolutePath() + 
