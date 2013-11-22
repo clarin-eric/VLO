@@ -402,7 +402,6 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(
                 "This  recording was made to generate a freely available test resource including speech and gestures. The annotations were created by Peter and Kita who is gesture researcher at the MPI for Psycholinguistics.",
                 doc.getFieldValue("description"));
-        String filename = VloConfig.getFacetConceptsFile();
         assertEquals("2002", doc.getFieldValue("year"));
         List<String> fieldValues = new ArrayList(doc.getFieldValues(FacetConstants.FIELD_FORMAT));
         assertEquals(2, fieldValues.size());
