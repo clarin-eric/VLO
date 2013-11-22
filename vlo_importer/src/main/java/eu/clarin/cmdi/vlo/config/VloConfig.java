@@ -603,7 +603,7 @@ public class VloConfig extends ConfigFromFile {
      *
      * @param param the value
      */
-    public static void setFacetMappingFile(String param) {
+    public static void setFacetConceptsFile(String param) {
         facetConceptsFile = param;
     }
 

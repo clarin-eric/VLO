@@ -261,7 +261,7 @@ public class MetadataImporterTest extends ImporterTestcase {
             void startImport() throws MalformedURLException {
                 
                 // make sure the mapping file for testing is used
-                VloConfig.setFacetMappingFile("/facetConceptsTest.xml");
+                VloConfig.setFacetConceptsFile("/facetConceptsTest.xml");
                 
                 List<DataRoot> dataRoots = checkDataRoots();
                 long start = System.currentTimeMillis();
