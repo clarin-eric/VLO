@@ -21,24 +21,30 @@
                         <a wicket:id="facetOverview" class="mark">this text will be replaced</a>
                     </div>
                 </form>
-      
+
                 <div class="tableBody">
                     <table class="matrix" align="left">
                         <tr wicket:id="facetColumns" valign="top">
-                            <td wicket:id="cols" width="50%" class="column">
-                                <p><span wicket:id="facetBox"></span>
-                                <p>
+                        <td wicket:id="cols" width="50%" class="column">
+                            <p><span wicket:id="facetBox"></span>
+                        <p>
                             </td>
-                        </tr>
+                            </tr>
                     </table>
-                    <div>
-	                    <table wicket:id="searchResults" class="resulttable" cellpadding="0" cellspacing="0">
-	                        	[searchResultTable]
-	                    </table>
-	                    <div wicket:id="contentSearch" class="federatedSearch">
-	                    	<span wicket:id="contentSearchForm"></span>
-	                   	</div>
-                   	</div>
+                    
+                    <table class="resulttable" cellpadding="0" cellspacing="0">
+                        <tbody wicket:id="searchResults" >
+                            [searchResultTable]
+                        </tbody>       
+                        <tfoot wicket:id="contentSearch">
+                            <tr>
+                            <td colspan="2"><br><br>This is some text; could be explenation about the federated content search.<br><br></td>
+                            </tr>
+                            <tr>
+                            <td colspan="2"><a href="url" wicket:id="contentSearchForm">This text will be replaced by Wicket</a> </td>
+                            </tr>
+                        </tfoot>                        
+                    </table>
                 </div>
             </div>
         </div>

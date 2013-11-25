@@ -31,6 +31,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
@@ -241,6 +242,10 @@ public class FacetedSearchPage extends BasePage {
      */
     private void addSearchServiceForm() {
         
+        BookmarkablePageLink link;
+        link = new BookmarkablePageLink ("link", FacetedSearchPage.class);
+        link.add (new Label ("naar deze pagina"));
+        
         // get values for cql endpoint substitution
         String cqlEndpointFilter = VloConfig.getCqlEndpointFilter();
         String cqlEndpointAlternative = VloConfig.getCqlEndpointAlternative();
@@ -302,6 +307,7 @@ public class FacetedSearchPage extends BasePage {
                         aggregationContextMap, labelString));
                 contentSearchLabel.setEscapeModelStrings(false);
                 contentSearchContainer.add(contentSearchLabel);
+                // contentSearchContainer.add(link);
             } catch (UnsupportedEncodingException uee) {
                 contentSearchContainer.setVisible(false);
             }
