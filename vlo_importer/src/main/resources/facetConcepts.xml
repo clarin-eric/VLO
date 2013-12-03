@@ -91,7 +91,8 @@
   <facetConcept name="language" description="Language of the content of the resource">
     <concept>http://www.isocat.org/datcat/DC-2482</concept> <!-- language code -->
     <concept>http://www.isocat.org/datcat/DC-2484</concept> <!-- language name -->
-    <concept>http://www.isocat.org/datcat/DC-5361</concept> <!-- language usage (TEI) -->
+    <!--concept>http://www.isocat.org/datcat/DC-5361</concept>  language usage (TEI) -->
+    <concept>http://www.isocat.org/datcat/DC-5358</concept> <!--language (TEI) - MENZO: added for CLARIN-DK -->
    <!-- Had to be removed due to IDSAGD_Speaker  <acceptableContext includeAny="false" includeEmpty="true"/>
     <rejectableContext includeAny="true"  includeEmpty="false">
       <concept>http://www.isocat.org/datcat/DC-4146</concept>
