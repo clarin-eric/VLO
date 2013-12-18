@@ -270,7 +270,7 @@ public class FacetedSearchPage extends BasePage {
 
                 int offset = 0;
                 int fetchSize = 1000;
-                int totalResults = dataProvider.size();
+                int totalResults = (int) dataProvider.size();
                 while (offset < totalResults) {
                     Iterator<SolrDocument> iter = dataProvider.iterator(offset, fetchSize);
                     while (iter.hasNext()) {

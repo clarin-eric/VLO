@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.pages;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.FacetField;
@@ -26,9 +27,7 @@ public class SearchPageQuery implements IClusterable {
     public SearchPageQuery(PageParameters parameters) {
         query = getDefaultQuery();
         
-        StringValue paramVal;
-        paramVal = parameters.get(CommonParams.Q);
-        String queryParam = paramVal.toString();
+        String queryParam = parameters.get(CommonParams.Q).toString();
 
         setSearchQuery(queryParam);
         if (queryParam != null) {
@@ -37,11 +36,14 @@ public class SearchPageQuery implements IClusterable {
             query.setQuery(SOLR_SEARCH_ALL);
 
         }
-        String[] filterQueries = parameters.getStringArray(CommonParams.FQ);
-        if (filterQueries != null) {
-            String[] encodedQueries = new String[filterQueries.length];
-            for (int i = 0; i < filterQueries.length; i++) {
-                String fq = filterQueries[i];
+        
+        List<StringValue> filterQueryValues = parameters.getValues(CommonParams.FQ);
+        
+        if (filterQueryValues != null) {
+            String[] encodedQueries = new String[filterQueryValues.size()];
+            
+            for (int i = 0; i < filterQueryValues.size(); i++) {
+                String fq = filterQueryValues.get(i).toString();
                 String[] keyValue = fq.split(":", 2);
                 filterQueryMap.put(keyValue[0], keyValue[1]);
                 encodedQueries[i] = keyValue[0] + ":" + ClientUtils.escapeQueryChars(keyValue[1]);

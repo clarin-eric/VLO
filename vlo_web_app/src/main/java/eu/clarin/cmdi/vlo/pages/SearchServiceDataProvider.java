@@ -16,60 +16,61 @@ import eu.clarin.cmdi.vlo.dao.DaoLocator;
 import eu.clarin.cmdi.vlo.dao.SearchResultsDao;
 
 /**
- * Data provider of all documents with SearchService entry (FCS) based on existing SolrQuery
- * 
+ * Data provider of all documents with SearchService entry (FCS) based on
+ * existing SolrQuery
+ *
  * @author Thomas Eckart
  *
  */
-public class SearchServiceDataProvider extends SortableDataProvider<SolrDocument> {
-	private final static Logger LOG = LoggerFactory.getLogger(SearchServiceDataProvider.class);
-	
-	private static final long serialVersionUID = -5355607690141772113L;
-	private final SolrQuery query;
-	private SolrDocumentList docList;
+public class SearchServiceDataProvider extends SortableDataProvider<SolrDocument, String> {
 
-	public SearchServiceDataProvider(SolrQuery query) {
-		this.query = query;
-		this.query.setFacet(false);
-		this.query.setStart(0);
-		this.query.setRows(10);
-		this.query.setFields(FacetConstants.FIELD_SEARCH_SERVICE, FacetConstants.FIELD_ID);
-		this.query.setQuery(query.getQuery());
-		this.query.addFilterQuery(FacetConstants.FIELD_SEARCH_SERVICE + ":*");
-		LOG.debug("Used query for search services: "+this.query.toString());
-	}
+    private final static Logger LOG = LoggerFactory.getLogger(SearchServiceDataProvider.class);
+    private static final long serialVersionUID = -5355607690141772113L;
+    private final SolrQuery query;
+    private SolrDocumentList docList;
 
-	private SearchResultsDao getSearchResultsDao() {
-		return DaoLocator.getSearchResultsDao();
-	}
+    public SearchServiceDataProvider(SolrQuery query) {
+        this.query = query;
+        this.query.setFacet(false);
+        this.query.setStart(0);
+        this.query.setRows(10);
+        this.query.setFields(FacetConstants.FIELD_SEARCH_SERVICE, FacetConstants.FIELD_ID);
+        this.query.setQuery(query.getQuery());
+        this.query.addFilterQuery(FacetConstants.FIELD_SEARCH_SERVICE + ":*");
+        LOG.debug("Used query for search services: " + this.query.toString());
+    }
 
-	private SolrDocumentList getDocList() {
-		if (docList == null) {
-			docList = getSearchResultsDao().getResults(query);
-		}
-		return docList;
-	}
+    private SearchResultsDao getSearchResultsDao() {
+        return DaoLocator.getSearchResultsDao();
+    }
 
-	@Override
-	public Iterator<SolrDocument> iterator(int first, int count) {
-		if (first != query.getStart().intValue() || count != query.getRows().intValue()) {
-			query.setStart(first).setRows(count);
-			docList = null;
-		}
-		return getDocList().iterator();
-	}
-	
-	public Iterator<SolrDocument> iterator() {
-		return getDocList().iterator();
-	}
+    private SolrDocumentList getDocList() {
+        if (docList == null) {
+            docList = getSearchResultsDao().getResults(query);
+        }
+        return docList;
+    }
 
-	@Override
-	public IModel<SolrDocument> model(SolrDocument solrDocument) {
-		return new Model<SolrDocument>(solrDocument);
-	}
+    @Override
+    public Iterator<SolrDocument> iterator(long first, long count) {
+        if (first != query.getStart().intValue() || count != query.getRows().intValue()) {
+            query.setStart((int) first).setRows((int) count);
+            docList = null;
+        }
+        return getDocList().iterator();
+    }
 
-	@Override
-	public int size() {
-		return (int) getDocList().getNumFound();
-	}
+    public Iterator<SolrDocument> iterator() {
+        return getDocList().iterator();
+    }
+
+    @Override
+    public IModel<SolrDocument> model(SolrDocument solrDocument) {
+        return new Model<SolrDocument>(solrDocument);
+    }
+
+    @Override
+    public long size() {
+        return getDocList().getNumFound();
+    }
 }
