@@ -15,7 +15,7 @@ import org.apache.wicket.model.Model;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 
-public class DocumentAttributesDataProvider extends SortableDataProvider<DocumentAttribute> {
+public class DocumentAttributesDataProvider extends SortableDataProvider<DocumentAttribute,String>{
     
     private static final Set<String> IGNORE_FACETS = new HashSet<String>();
     static {
@@ -49,7 +49,7 @@ public class DocumentAttributesDataProvider extends SortableDataProvider<Documen
     }
 
     @Override
-    public Iterator<? extends DocumentAttribute> iterator(int first, int count) {
+    public Iterator<? extends DocumentAttribute> iterator(long first, long count) {
         return attributeList;
     }
 
@@ -59,7 +59,7 @@ public class DocumentAttributesDataProvider extends SortableDataProvider<Documen
     }
 
     @Override
-    public int size() {
+    public long size() {
         return attributeList.size();
     }
 

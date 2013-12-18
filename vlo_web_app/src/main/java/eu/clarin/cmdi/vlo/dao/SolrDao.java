@@ -2,6 +2,9 @@ package eu.clarin.cmdi.vlo.dao;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.net.MalformedURLException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
@@ -30,10 +33,63 @@ public class SolrDao {
     protected CommonsHttpSolrServer getSolrserver() {
         return solrServer;
     }
+    
+    /**
+     * Basic sanitising of Solr queries. 
+     * 
+     * Query is based on the URL to the VLO web application. Also, explain
+     * about the URL and ?fq=language:dutch
+     * Assume filters have the form a:b 
+     * like for example language:dutch
+     * 
+     * @param query
+     * @return 
+     */
+    private SolrQuery sanitise (SolrQuery query){
+        
+        // String [] facetsFromConfig; 
+        
+        // try and get the filters facets from the query
+        String [] filtersInQuery;
+        filtersInQuery = query.getFilterQueries();
+ 
+        if (filtersInQuery == null) {
+            // the query does not contain filters
+        } else {
+            // get the facets from the configuration file
+            // facetsFromConfig = VloConfig.getFacetFields();
+
+            // present the facets from the config file as a list to a new set
+            Set<String> facetsDefined;
+            facetsDefined = new HashSet<String>(Arrays.asList(VloConfig.getFacetFields()));
+
+            // check the filters in the query by name
+            for (String filter : filtersInQuery) {
+                // split up a filter, look at the string preceeding the semicolon 
+                String facetInFilter = filter.split(":") [0];
+                
+                if (facetsDefined.contains(facetInFilter)) {
+                    // facet in the filter is in the set that is defined by the config file
+                } else {
+                    if (facetInFilter.startsWith("_")) {
+                        // this facet is hidden, do not consider it
+                    } else {
+                        // the filter name does not match a facet in the facet
+                        query.removeFilterQuery(filter);
+                    }
+                }
+            }
+        }
+
+        // finally, return the sanitised query
+        return query;
+    }
 
     protected QueryResponse fireQuery(SolrQuery query) {
+        SolrQuery sanitisedQuery;
+        sanitisedQuery = sanitise(query);
         try {
-            return solrServer.query(query);
+            return solrServer.query(sanitisedQuery);
         } catch (SolrServerException e) {
             LOG.error("Error getting data:", e);
             throw new RuntimeException(e);

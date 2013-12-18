@@ -11,14 +11,24 @@ import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.FacetConstants;
 
 public class FacetMappingFactoryTest {
+    
+    private final static String FACETCONCEPTS_FILENAME = "/facetConceptsTest.xml";
+    
+    private final static String IMDI_PROFILE_URL = 
+            "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438204/xsd";
+    private final static String OLAC_PROFILE_URL = 
+            "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026/xsd";
+    private final static String LRT_PROFILE_URL = 
+            "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1289827960126/xsd";
+    private final static String ID_PROFILE_URL = 
+            "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1290431694629/xsd";
 
     private final static Logger LOG = LoggerFactory.getLogger(FacetMappingFactoryTest.class);
 
     @Test
     public void testGetImdiMapping() {
         FacetMapping facetMapping = FacetMappingFactory
-                .getFacetMapping("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438204/xsd");// IMDI Session
-        // profile xsd
+                .getFacetMapping(FACETCONCEPTS_FILENAME, IMDI_PROFILE_URL);
         
         List<FacetConfiguration> facets = facetMapping.getFacets();
         assertEquals(20, facets.size());
@@ -158,7 +168,7 @@ public class FacetMappingFactoryTest {
     @Test
     public void testGetOlacMapping() {
         FacetMapping facetMapping = FacetMappingFactory
-                .getFacetMapping("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026/xsd");
+                .getFacetMapping(FACETCONCEPTS_FILENAME, OLAC_PROFILE_URL);
         
         List<FacetConfiguration> facets = facetMapping.getFacets();
         assertEquals(15, facets.size());
@@ -266,8 +276,8 @@ public class FacetMappingFactoryTest {
     @Test
     public void testGetLrtMapping() {
         FacetMapping facetMapping = FacetMappingFactory
-                .getFacetMapping("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1289827960126/xsd");
-        
+                .getFacetMapping(FACETCONCEPTS_FILENAME, LRT_PROFILE_URL);
+
         List<FacetConfiguration> facets = facetMapping.getFacets();
         assertEquals(16, facets.size());
         
@@ -378,9 +388,10 @@ public class FacetMappingFactoryTest {
 
     @Test
     public void testGetIdMapping() throws Exception {
+
         FacetMapping facetMapping = FacetMappingFactory
-                .getFacetMapping("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1290431694629/xsd");
-        
+                .getFacetMapping(FACETCONCEPTS_FILENAME, ID_PROFILE_URL);
+
         List<FacetConfiguration> facets = facetMapping.getFacets();
         
         FacetConfiguration facet = facets.get(0);

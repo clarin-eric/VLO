@@ -2,7 +2,7 @@ package eu.clarin.cmdi.vlo.pages;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.Resources;
-import eu.clarin.cmdi.vlo.VloWebApplication.ThemedSession;
+import eu.clarin.cmdi.vlo.VloPageParameters;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.AutoCompleteDao;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
@@ -19,21 +19,24 @@ import java.util.Map;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.PageParameters;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteTextField;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
@@ -44,13 +47,14 @@ public class FacetedSearchPage extends BasePage {
 
     private final SearchPageQuery query;
     private final static AutoCompleteDao autoCompleteDao = new AutoCompleteDao();
-    private final static Map<String, FacetConcept> facetNameMap = VLOMarshaller.getFacetConceptMapping().getFacetConceptMap();
+    private final static String facetConceptsFile = VloConfig.getFacetConceptsFile();
+    private final static Map<String, FacetConcept> facetNameMap = VLOMarshaller.getFacetConceptMapping(facetConceptsFile).getFacetConceptMap();
     
     /**
      * @param parameters Page parameters
      * @throws SolrServerException
      */
-    public FacetedSearchPage(final PageParameters parameters) {
+    public FacetedSearchPage(final VloPageParameters parameters) {
         super(parameters);
         query = new SearchPageQuery(parameters);
         addSearchBox();
@@ -139,7 +143,7 @@ public class FacetedSearchPage extends BasePage {
 
         public SearchBoxForm(String id, SearchPageQuery query) {
             super(id, new CompoundPropertyModel<SearchPageQuery>(query));
-            add(new ExternalLink("vloHomeLink", VloConfig.getVloHomeLink()));
+            add(new ExternalLink("vloHomeLink", VloConfig.getHomeUrl()));
 
             searchBox = new AutoCompleteTextField<String>("searchQuery") {
                 @Override
@@ -157,9 +161,14 @@ public class FacetedSearchPage extends BasePage {
             ExternalLink helpLink = new ExternalLink("helpLink", helpUrl, "help");
             add(helpLink);
             
-            String thisURL = RequestUtils.toAbsolutePath(RequestCycle.get().urlFor(ShowResultPage.class, query.getPageParameters()).toString());
+            VloPageParameters param; 
+            param = new VloPageParameters (query.getPageParameters());
+            
+            String thisURL;
+            thisURL = RequestUtils.toAbsolutePath(
+                    RequestCycle.get().urlFor(ShowResultPage.class, param.convert()).toString(), null);
             try {
-            	thisURL = URLEncoder.encode(thisURL,"UTF-8");
+                thisURL = URLEncoder.encode(thisURL, "UTF-8");
             } catch (UnsupportedEncodingException e) {
             }
             
@@ -173,12 +182,13 @@ public class FacetedSearchPage extends BasePage {
         @Override
         protected void onSubmit() {
             SearchPageQuery query = getModelObject();
-            PageParameters pageParameters = query.getPageParameters();
+            PageParameters param = query.getPageParameters();
 
-            // pageParameters = webApp.reflectPersistentParameters(pageParameters);
-            pageParameters = ((ThemedSession)getSession()).reflectPersistentParameters(pageParameters);
+            VloPageParameters newParam = new VloPageParameters();
+            newParam.mergeWith(param);
+            newParam.addToSession();
             
-            setResponsePage(FacetedSearchPage.class, pageParameters);
+            setResponsePage(FacetedSearchPage.class, newParam);
         }
     }
 
@@ -188,7 +198,7 @@ public class FacetedSearchPage extends BasePage {
     
     @SuppressWarnings("serial")
     private void addFacetColumns() {
-        GridView<FacetField> facetColumns = new GridView<FacetField>("facetColumns", new SolrFacetDataProvider(query.getSolrQuery()
+        GridView<FacetField> facetColumns = new GridView<FacetField>("facetColumns", (IDataProvider<FacetField>) new SolrFacetDataProvider(query.getSolrQuery()
                 .getCopy())) {
             @Override
             protected void populateItem(Item<FacetField> item) {
@@ -210,15 +220,16 @@ public class FacetedSearchPage extends BasePage {
 
     @SuppressWarnings("serial")
     private void addSearchResults() {
-        List<IColumn<SolrDocument>> columns = new ArrayList<IColumn<SolrDocument>>();
-        columns.add(new AbstractColumn<SolrDocument>(new ResourceModel(Resources.NAME)) {
+        List<IColumn<SolrDocument, String>> columns;
+        columns = new ArrayList<IColumn<SolrDocument, String>>();
+        columns.add(new AbstractColumn<SolrDocument, String>(new ResourceModel(Resources.NAME)) {
             
             @Override
             public void populateItem(Item<ICellPopulator<SolrDocument>> cellItem, String componentId, IModel<SolrDocument> rowModel) {
                 cellItem.add(new DocumentLinkPanel(componentId, rowModel, query));
             }
         });
-        columns.add(new AbstractColumn<SolrDocument>(new ResourceModel(Resources.DESCRIPTION)) {
+        columns.add(new AbstractColumn<SolrDocument, String>(new ResourceModel(Resources.DESCRIPTION)) {
 
             @Override
             public void populateItem(Item<ICellPopulator<SolrDocument>> cellItem, String componentId, IModel<SolrDocument> rowModel) {
@@ -227,8 +238,7 @@ public class FacetedSearchPage extends BasePage {
                 
             }
         });
-        AjaxFallbackDefaultDataTable<SolrDocument> searchResultList = new AjaxFallbackDefaultDataTable<SolrDocument>("searchResults", columns,
-                new SolrDocumentDataProvider(query.getSolrQuery().getCopy()), 30);
+        AjaxFallbackDefaultDataTable<SolrDocument, String> searchResultList = new AjaxFallbackDefaultDataTable<SolrDocument, String>("searchResults", columns, (ISortableDataProvider<SolrDocument, String>) new SolrDocumentDataProvider(query.getSolrQuery().getCopy()), 30);
 
         add(searchResultList);
     }
@@ -239,6 +249,10 @@ public class FacetedSearchPage extends BasePage {
      * @param solrDocument
      */
     private void addSearchServiceForm() {
+        
+        BookmarkablePageLink link;
+        link = new BookmarkablePageLink ("link", FacetedSearchPage.class);
+        link.add (new Label ("naar deze pagina"));
         
         // get values for cql endpoint substitution
         String cqlEndpointFilter = VloConfig.getCqlEndpointFilter();
@@ -301,6 +315,7 @@ public class FacetedSearchPage extends BasePage {
                         aggregationContextMap, labelString));
                 contentSearchLabel.setEscapeModelStrings(false);
                 contentSearchContainer.add(contentSearchLabel);
+                // contentSearchContainer.add(link);
             } catch (UnsupportedEncodingException uee) {
                 contentSearchContainer.setVisible(false);
             }

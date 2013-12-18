@@ -1,6 +1,7 @@
 
 package eu.clarin.cmdi.vlo.pages;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
@@ -18,7 +19,7 @@ import org.apache.wicket.resource.ContextRelativeResource;
 public class SearchPageLinkPanel extends LinkPanel {
 
     private final static ImageResource SEARCHPAGE_ICON =
-            new ImageResource(new ContextRelativeResource("Images/Crystal_Clear_action_filefind.png"),
+            new ImageResource("Images/Crystal_Clear_action_filefind.png",
             "Search page");
 
     /**
@@ -38,8 +39,8 @@ public class SearchPageLinkPanel extends LinkPanel {
         // add the image's title
         String title;
         title = imageResource.getTitle();
-        resourceImg.add(new SimpleAttributeModifier("title", title));
-        resourceImg.add(new SimpleAttributeModifier("alt", title));
+        resourceImg.add(new AttributeModifier("title", title));
+        resourceImg.add(new AttributeModifier("alt", title));
 
         // ...
         String href = getHref(resourceLink);

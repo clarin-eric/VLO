@@ -58,7 +58,12 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         if (xsd.indexOf("http") != xsd.lastIndexOf("http")){
             LOG.info("FILE WITH WEIRD HTTP THINGY! " + tolog);
         }
-        return FacetMappingFactory.getFacetMapping(xsd);
+        String facetConceptsFile = VloConfig.getFacetConceptsFile();
+        if (facetConceptsFile.length() == 0){
+            // use the packaged facet mapping file
+            facetConceptsFile = "/facetConcepts.xml";
+        }
+        return FacetMappingFactory.getFacetMapping(facetConceptsFile, xsd);
     }
 
     String extractXsd(VTDNav nav) throws VTDException {

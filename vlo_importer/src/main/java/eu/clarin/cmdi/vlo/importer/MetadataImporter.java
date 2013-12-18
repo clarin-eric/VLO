@@ -75,6 +75,7 @@ public class MetadataImporter {
         POST_PROCESSORS.put(FacetConstants.FIELD_COUNTRY, new CountryNamePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGE, new LanguageCodePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGES, new LanguageLinkPostProcessor());
+        POST_PROCESSORS.put(FacetConstants.FIELD_YEAR, new YearPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_CLARIN_PROFILE, new CMDIComponentProfileNamePostProcessor());
     }
@@ -136,7 +137,7 @@ public class MetadataImporter {
                 CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS);
                 List<File> files = getFilesFromDataRoot(dataRoot.getRootFile());
                 for (File file : files) {
-                    if (VloConfig.getUseMaxFileSize() && 
+                    if (VloConfig.getMaxFileSize() > 0 && 
                             file.length() > VloConfig.getMaxFileSize()) {
                         LOG.info("Skipping " + file.getAbsolutePath() + " because it is too large.");
                     } else {
@@ -150,10 +151,10 @@ public class MetadataImporter {
                 LOG.info("End of processing: " + dataRoot.getOriginName());
             }
             
-            // delete outdated entries (based on maxDaysToLife parameter)
-            if(VloConfig.getMaxDaysToLife() > 0 && VloConfig.deleteAllFirst() == false) {
-                LOG.info("Deleting old files that were not seen for more than "+VloConfig.getMaxDaysToLife()+" days...");
-                solrServer.deleteByQuery(FacetConstants.FIELD_LAST_SEEN+":[* TO NOW-"+VloConfig.getMaxDaysToLife()+"DAYS]");
+            // delete outdated entries (based on maxDaysInSolr parameter)
+            if(VloConfig.getMaxDaysInSolr() > 0 && VloConfig.deleteAllFirst() == false) {
+                LOG.info("Deleting old files that were not seen for more than "+VloConfig.getMaxDaysInSolr()+" days...");
+                solrServer.deleteByQuery(FacetConstants.FIELD_LAST_SEEN+":[* TO NOW-"+VloConfig.getMaxDaysInSolr()+"DAYS]");
                 LOG.info("Deleting old files done.");
             }
         } catch (SolrServerException e) {

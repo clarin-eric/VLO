@@ -10,7 +10,8 @@ import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.params.CommonParams;
 import org.apache.wicket.IClusterable;
-import org.apache.wicket.PageParameters;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 
 public class SearchPageQuery implements IClusterable {
 
@@ -24,7 +25,11 @@ public class SearchPageQuery implements IClusterable {
 
     public SearchPageQuery(PageParameters parameters) {
         query = getDefaultQuery();
-        String queryParam = parameters.getString(CommonParams.Q);
+        
+        StringValue paramVal;
+        paramVal = parameters.get(CommonParams.Q);
+        String queryParam = paramVal.toString();
+
         setSearchQuery(queryParam);
         if (queryParam != null) {
             query.setQuery(escapeSolrQuery(queryParam));

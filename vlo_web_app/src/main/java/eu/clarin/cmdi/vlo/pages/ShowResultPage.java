@@ -4,7 +4,7 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.Resources;
 import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.VloWebApplication;
-import eu.clarin.cmdi.vlo.VloWebApplication.ThemedSession;
+import eu.clarin.cmdi.vlo.VloSession;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.DaoLocator;
 import java.io.InputStreamReader;
@@ -28,7 +28,7 @@ import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
-import org.apache.wicket.PageParameters;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.behavior.AbstractBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
@@ -53,7 +53,6 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.protocol.http.WicketURLDecoder;
 import org.apache.wicket.protocol.http.WicketURLEncoder;
-import org.apache.wicket.resource.ContextRelativeResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -442,7 +441,7 @@ public class ShowResultPage extends BasePage {
         add(link);
     }
 
-    public static BookmarkablePageLink<ShowResultPage> createBookMarkableLink(String linkId, SearchPageQuery query, String docId, ThemedSession session) {
+    public static BookmarkablePageLink<ShowResultPage> createBookMarkableLink(String linkId, SearchPageQuery query, String docId, VloSession session) {
         PageParameters pageParameters = query.getPageParameters();
         pageParameters.put(ShowResultPage.PARAM_DOC_ID, WicketURLEncoder.QUERY_INSTANCE.encode(docId));
         
