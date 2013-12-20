@@ -16,7 +16,7 @@ public class DocumentLinkPanel extends Panel {
         super(id, model);
         SolrDocument doc = model.getObject();
         BookmarkablePageLink<ShowResultPage> docLink = ShowResultPage.createBookMarkableLink("docLink", query, doc.getFieldValue(
-                FacetConstants.FIELD_ID).toString(), (VloSession)getSession());
+                FacetConstants.FIELD_ID).toString());
         add(docLink);
         Object nameValue = doc.getFirstValue(FacetConstants.FIELD_NAME);
         String name = "<no name>";

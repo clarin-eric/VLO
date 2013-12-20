@@ -38,9 +38,9 @@ public class ShowAllFacetValuesPage extends BasePage {
 	 * @param parameters
 	 */
 	private void addOccurrencesFilter(PageParameters parameters) {
-		PageParameters newParameters = (PageParameters) parameters.clone();
+		PageParameters newParameters = new PageParameters (parameters);
 		newParameters.remove(FACET_MIN_OCCURS);
-		if(!parameters.containsKey(FACET_MIN_OCCURS) || parameters.getAsInteger(FACET_MIN_OCCURS) == 1) {
+		if(parameters.getPosition(FACET_MIN_OCCURS) == -1 || parameters.get(FACET_MIN_OCCURS).toInt() == 1) {
 			newParameters.add(FACET_MIN_OCCURS, FACET_MIN_OCCURS_VALUE.toString());
 			add(new BookmarkablePageLink<Void>("filter", ShowAllFacetValuesPage.class, newParameters).add(new Label("filterLabel", "Show only values that occur at least "+FACET_MIN_OCCURS_VALUE+" times")));
 		} else {

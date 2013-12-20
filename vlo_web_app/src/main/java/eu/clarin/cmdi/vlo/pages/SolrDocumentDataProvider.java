@@ -12,7 +12,7 @@ import org.apache.wicket.model.Model;
 import eu.clarin.cmdi.vlo.dao.DaoLocator;
 import eu.clarin.cmdi.vlo.dao.SearchResultsDao;
 
-public class SolrDocumentDataProvider extends SortableDataProvider<SolrDocument> {
+public class SolrDocumentDataProvider extends SortableDataProvider<SolrDocument, String> {
 
     private static final long serialVersionUID = 1L;
     private final SolrQuery query;
@@ -35,9 +35,9 @@ public class SolrDocumentDataProvider extends SortableDataProvider<SolrDocument>
     }
 
     @Override
-    public Iterator<? extends SolrDocument> iterator(int first, int count) {
+    public Iterator<? extends SolrDocument> iterator(long first, long count) {
         if (first != query.getStart().intValue() || count != query.getRows().intValue()) {
-            query.setStart(first).setRows(count);
+            query.setStart((int)first).setRows((int)count);
             docList = null;
         }
         return getDocList().iterator();
@@ -49,7 +49,7 @@ public class SolrDocumentDataProvider extends SortableDataProvider<SolrDocument>
     }
 
     @Override
-    public int size() {
+    public long size() {
         return (int) getDocList().getNumFound();
     }
 

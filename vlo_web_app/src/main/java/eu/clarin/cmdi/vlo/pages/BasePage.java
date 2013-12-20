@@ -56,7 +56,6 @@ public class BasePage extends WebPage implements IHeaderContributor{
         
         // set the applications start page link to the faceted search page
         VloPageParameters startPageParameters = new VloPageParameters ();
-        startPageParameters.addToSession();
 
         BookmarkablePageLink link = new BookmarkablePageLink("startpage",
                 FacetedSearchPage.class, startPageParameters);
@@ -70,7 +69,7 @@ public class BasePage extends WebPage implements IHeaderContributor{
         Image leftImage;
         leftImage = new Image("leftimage", leftImageRes);
  
-        // add the image to the page
+        // merge the image to the page
         link.add(leftImage);
 
         // refer to the right part of the vlo banner as a resource
@@ -81,7 +80,7 @@ public class BasePage extends WebPage implements IHeaderContributor{
         Image rightImage;
         rightImage = new Image("rightimage", rightImageRes);
         
-        // add it to the page
+        // merge it to the page
         add (rightImage);
         
         // set the partnerlinks

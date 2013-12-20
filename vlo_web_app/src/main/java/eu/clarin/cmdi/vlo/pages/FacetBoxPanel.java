@@ -15,6 +15,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class FacetBoxPanel extends BasePanel {
     private static final Set<String> IGNORABLE_VALUES = new HashSet<String>();
@@ -65,10 +66,12 @@ public class FacetBoxPanel extends BasePanel {
         };
         add(facetList);
         VloPageParameters facetParameters = new VloPageParameters ();
-                
-        facetParameters.add(ShowAllFacetValuesPage.SELECTED_FACET_PARAM, facetField.getName());
-        facetParameters.add(ShowAllFacetValuesPage.FACET_MIN_OCCURS, "1");
-        facetParameters.addToSession();
+           
+        PageParameters extraParameters = new PageParameters ();
+        extraParameters.add(ShowAllFacetValuesPage.SELECTED_FACET_PARAM, facetField.getName());
+        extraParameters.add(ShowAllFacetValuesPage.FACET_MIN_OCCURS, "1");
+        
+        facetParameters.merge(extraParameters);
 
         add(new BookmarkablePageLink("showMore", ShowAllFacetValuesPage.class, facetParameters) {
             @Override

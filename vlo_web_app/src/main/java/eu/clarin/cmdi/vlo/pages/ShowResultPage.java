@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.pages;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.Resources;
 import eu.clarin.cmdi.vlo.StringUtils;
+import eu.clarin.cmdi.vlo.VloPageParameters;
 import eu.clarin.cmdi.vlo.VloWebApplication;
 import eu.clarin.cmdi.vlo.VloSession;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -31,6 +32,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
@@ -73,19 +75,15 @@ public class ShowResultPage extends BasePage {
     public ShowResultPage(final PageParameters currentParam) {
         
         super(currentParam);
-        final String docId = WicketURLDecoder.QUERY_INSTANCE.decode(getPageParameters().getString(PARAM_DOC_ID, null));
+        final String docId;
+        docId = WicketURLDecoder.QUERY_INSTANCE.decode(getPageParameters().get(PARAM_DOC_ID).toString());
         SolrDocument solrDocument = DaoLocator.getSearchResultsDao().getSolrDocument(docId);
         if (solrDocument != null) {
             final SearchPageQuery query = new SearchPageQuery(currentParam);
             
-            // now the persistent parameters are not in the query parameters
-            PageParameters newParam = new PageParameters ();
-            // add the new query parameters to this map
-            newParam.putAll(query.getPageParameters());
-            // add the persistent parameters to this map
-            //newParam = webApp.reflectPersistentParameters(newParam);
-            
-            newParam = ((VloWebApplication.ThemedSession)getSession()).reflectPersistentParameters(newParam);
+            // create parameters from the query, and merge them with session related parameters
+            VloPageParameters newParam; 
+            newParam = new VloPageParameters (query.getPageParameters());
             
             BookmarkablePageLink<String> backLink = new BookmarkablePageLink<String>("backLink", FacetedSearchPage.class, newParam);
             add(backLink);
@@ -179,22 +177,24 @@ public class ShowResultPage extends BasePage {
      * 
      * Create one column for the attributes and one column for their values.
      * 
-     * @param
+     * @newParam
      */
-    private IColumn[] createAttributesColumns() {
-        IColumn[] columns = new IColumn[2];
+    private List<IColumn> createAttributesColumns() {
+        List<IColumn> columns = null;
 
         // create the column for the attribute names
-        columns[0] = new PropertyColumn<Object>(new ResourceModel(Resources.FIELD), "field") {
+        IColumn column = null;
+        column = new PropertyColumn<Object,Object>(new ResourceModel(Resources.FIELD), "field") {
 
             @Override
             public String getCssClass() {
                 return "attribute";
             }
         };
+        columns.add (column);
 
         // create the column for the values of the attributes
-        columns[1] = new AbstractColumn<DocumentAttribute>(new ResourceModel(Resources.VALUE)) {
+        column = new AbstractColumn<DocumentAttribute, String>(new ResourceModel(Resources.VALUE)) {
             @Override
             public void populateItem(Item<ICellPopulator<DocumentAttribute>> cellItem,
                     String componentId, IModel<DocumentAttribute> rowModel) {
@@ -213,7 +213,7 @@ public class ShowResultPage extends BasePage {
                 if (attribute.getField().equals(FacetConstants.FIELD_LANGUAGES)) {
                     cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
                         @Override
-                        protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+                        public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
                             setEscapeModelStrings(false);
                             CharSequence body = getDefaultModelObjectAsString();
                             replaceComponentTagBody(markupStream, openTag, body);
@@ -222,7 +222,7 @@ public class ShowResultPage extends BasePage {
                 } else if (attribute.getField().equals(FacetConstants.FIELD_COMPLETE_METADATA)) {
                     cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
                         @Override
-                        protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+                        public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
                             setEscapeModelStrings(false);
                             CharSequence body = getDefaultModelObjectAsString();
                             replaceComponentTagBody(markupStream, openTag, "<a href=\"" + body + "\">" + body + "</a>");
@@ -231,7 +231,7 @@ public class ShowResultPage extends BasePage {
                 } else {
                     cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
                         @Override
-                        protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+                        public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
                             CharSequence body = StringUtils.toMultiLineHtml(getDefaultModelObjectAsString());
                             replaceComponentTagBody(markupStream, openTag, getSmartLink(body));
                         }
@@ -244,6 +244,7 @@ public class ShowResultPage extends BasePage {
                 return "attributeValue";
             }
         };
+        columns.add (column);
 
         return columns;
     }
@@ -251,7 +252,7 @@ public class ShowResultPage extends BasePage {
     /**
      * Add landing page links to the result page.
      *
-     * @param solrDocument the document to get the links from
+     * @newParam solrDocument the document to get the links from
      */
     private void addLandingPageLinks(SolrDocument solrDocument) {
         
@@ -321,7 +322,7 @@ public class ShowResultPage extends BasePage {
     /**
      * Add search page links to the result page.
      *
-     * @param solrDocument the document to get the links from
+     * @newParam solrDocument the document to get the links from
      */
     private void addSearchPageLinks(SolrDocument solrDocument) {
         
@@ -392,7 +393,7 @@ public class ShowResultPage extends BasePage {
      * Add links to resources other than search or landing pages to the result
      * page.
      *
-     * @param solrDocument the document to get the links from
+     * @newParam solrDocument the document to get the links from
      */
     private void addResourceLinks(SolrDocument solrDocument) {
         RepeatingView repeatingView = new RepeatingView("resourceList");
@@ -422,7 +423,11 @@ public class ShowResultPage extends BasePage {
     }
     
     private void addFeedbackLink(final PageParameters parameters) {
-        String thisURL = RequestUtils.toAbsolutePath(RequestCycle.get().urlFor(ShowResultPage.class, parameters).toString());
+        
+        // create VloPageParameters in orde to be able to convert to old style parameters
+        VloPageParameters newParam = new VloPageParameters (parameters);
+        
+        String thisURL = RequestUtils.toAbsolutePath(RequestCycle.get().urlFor(ShowResultPage.class, newParam.convert()).toString(),null);
         try {
             thisURL = URLEncoder.encode(thisURL,"UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -441,22 +446,21 @@ public class ShowResultPage extends BasePage {
         add(link);
     }
 
-    public static BookmarkablePageLink<ShowResultPage> createBookMarkableLink(String linkId, SearchPageQuery query, String docId, VloSession session) {
-        PageParameters pageParameters = query.getPageParameters();
-        pageParameters.put(ShowResultPage.PARAM_DOC_ID, WicketURLEncoder.QUERY_INSTANCE.encode(docId));
-        
-        // webApp.reflectPersistentParameters(pageParameters);
-        // instead of this: pass page parameters back to the session
-        session.reflectPersistentParameters(pageParameters);
+    public static BookmarkablePageLink<ShowResultPage> createBookMarkableLink(String linkId, SearchPageQuery query, String docId) {
+
+        // create new page parameters from the query parameters and the session related ones
+        VloPageParameters newParam;
+        newParam = new VloPageParameters(query.getPageParameters());
+        newParam.add(ShowResultPage.PARAM_DOC_ID, WicketURLEncoder.QUERY_INSTANCE.encode(docId));
 
         BookmarkablePageLink<ShowResultPage> docLink = new BookmarkablePageLink<ShowResultPage>(linkId, ShowResultPage.class,
-                pageParameters);
+                newParam);
         return docLink;
     }
     
 	/**
 	 * Add contentSearch form (FCS)
-	 * @param solrDocument
+	 * @newParam solrDocument
 	 */
 	private void addSearchServiceForm(final SolrDocument solrDocument) {
 		final WebMarkupContainer contentSearchContainer = new WebMarkupContainer("contentSearch");
@@ -482,7 +486,7 @@ public class ShowResultPage extends BasePage {
 	
 	/**
 	 * Add complete CMDI view
-	 * @param solrDocument
+	 * @newParam solrDocument
 	 */
 	private void addCompleteCmdiView(final SolrDocument solrDocument) {
 		StringWriter strWriter = new StringWriter();
@@ -514,12 +518,11 @@ public class ShowResultPage extends BasePage {
 		add(completeCmdiLabel);
 		
 		// remove complete CMDI view on page load
-		add(new AbstractBehavior() {
+		add(new Behavior() {
 			private static final long serialVersionUID = 1865219352602175954L;
 
-			@Override
 			public void renderHead(IHeaderResponse response) {
-				super.renderHead(response);
+
 				response.renderOnLoadJavascript("toogleDiv('completeCmdi', 'toogleLink')");
 			}
 		});

@@ -17,9 +17,7 @@ public class FacetHeaderPanel extends BasePanel {
         PageParameters param = copy.getPageParameters();
         
         VloPageParameters newParam = new VloPageParameters ();
-        newParam.mergeWith(param);
-        newParam.addToSession();
-       
+ 
         add(new BookmarkablePageLink("allLink", FacetedSearchPage.class, newParam));
         add(new Label("headerLabelSelect", model.getObject().getSelectedValue()));
     }

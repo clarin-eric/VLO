@@ -137,7 +137,7 @@ public class FacetedSearchPage extends BasePage {
                 facetOverview = new MultiLineLabel("facetOverview", string);
             }
 
-            // finally, add the label to the form
+            // finally, merge the label to the form
             this.add(facetOverview);
         }
 
@@ -156,7 +156,7 @@ public class FacetedSearchPage extends BasePage {
             Button submit = new Button("searchSubmit");
             add(submit);
             
-            // add link to help menu page 
+            // merge link to help menu page 
             String helpUrl = VloConfig.getHelpUrl();            
             ExternalLink helpLink = new ExternalLink("helpLink", helpUrl, "help");
             add(helpLink);
@@ -185,8 +185,6 @@ public class FacetedSearchPage extends BasePage {
             PageParameters param = query.getPageParameters();
 
             VloPageParameters newParam = new VloPageParameters();
-            newParam.mergeWith(param);
-            newParam.addToSession();
             
             setResponsePage(FacetedSearchPage.class, newParam);
         }
@@ -303,7 +301,7 @@ public class FacetedSearchPage extends BasePage {
                     offset += fetchSize;
                 }
 
-                // add HTML form to container
+                // merge HTML form to container
                 String labelString;
                 if (totalResults == 1) {
                     labelString = "Plain text search via Federated Content Search (supported by one resource in this result set)";
@@ -315,7 +313,7 @@ public class FacetedSearchPage extends BasePage {
                         aggregationContextMap, labelString));
                 contentSearchLabel.setEscapeModelStrings(false);
                 contentSearchContainer.add(contentSearchLabel);
-                // contentSearchContainer.add(link);
+                // contentSearchContainer.merge(link);
             } catch (UnsupportedEncodingException uee) {
                 contentSearchContainer.setVisible(false);
             }

@@ -21,8 +21,6 @@ public class FacetLinkPanel extends BasePanel {
         PageParameters param = q.getPageParameters();
         
         VloPageParameters newParam = new VloPageParameters ();
-        newParam.mergeWith(param);
-        newParam.addToSession();
         
         Link<Count> facetLink = new BookmarkablePageLink("facetLink", FacetedSearchPage.class, newParam);
         facetLink.add(new Label("facetLinkLabel", model.getObject().getName()));

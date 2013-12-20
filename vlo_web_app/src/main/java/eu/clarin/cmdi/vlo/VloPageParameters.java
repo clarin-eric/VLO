@@ -20,6 +20,8 @@ public class VloPageParameters extends PageParameters {
     public VloPageParameters (){
         // needs to be here because of the other constructor
         super ();
+        // add the theme parameter
+        // ...
     }
     
     public VloPageParameters (PageParameters parameters){
@@ -32,12 +34,18 @@ public class VloPageParameters extends PageParameters {
         
         // needs to be implemented
         
+        // present the page parameters in the old style
+        
         param = null;
         
         return param;
     }
 
     /**
+     * Take in  old style parameters. 
+     * 
+     * 
+     * not being used at the moment; use code in the previous method
      * 
      * @param param
      * @return 
@@ -60,17 +68,24 @@ public class VloPageParameters extends PageParameters {
     }
 
     /**
-     * Add this, VLO page parameters, to the parameters that are already 
-     * associated with the session
      * 
+     * @param PersistentParameters parameters concerning theme and other 
+     * non query related parameters. These parameters are to kept in the URL
+     * during the session.
      */
-    public void addToSession() {        
+    public void merge(PageParameters parameters) {   
         
         // get a themed session from the current thread 
         VloSession themedSession;
         themedSession = (VloSession)Session.get();
         
-        // store the parameters in the session object
-        themedSession.addVloSessionPageParameters (this);
+        // get the parameters associated with the session
+        PageParameters persistentParameters;
+        persistentParameters = themedSession.getVloSessionPageParameters();
+        
+        // merge the parameters with the persistent ones and return the result
+        
+        // ...
+        
     }
 }
