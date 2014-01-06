@@ -31,7 +31,7 @@ public class SearchPageQueryTest {
         assertEquals(13, q.getSolrQuery().getFacetFields().length);
         assertEquals("collection", q.getSolrQuery().getFacetFields()[0]);
         assertEquals("resourceClass", q.getSolrQuery().getFacetFields()[2]);
-        assertNull(q.getSolrQuery().getFilterQueries());
+        assertEquals(0, q.getSolrQuery().getFilterQueries().length);
 
         params = new PageParameters();
         params.add(CommonParams.Q, "test");
