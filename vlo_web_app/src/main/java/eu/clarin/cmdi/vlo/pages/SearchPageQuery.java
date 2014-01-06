@@ -10,8 +10,8 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.params.CommonParams;
-import org.apache.wicket.IClusterable;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.io.IClusterable;
 import org.apache.wicket.util.string.StringValue;
 
 public class SearchPageQuery implements IClusterable {

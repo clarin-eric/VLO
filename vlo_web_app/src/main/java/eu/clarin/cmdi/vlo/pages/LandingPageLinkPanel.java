@@ -5,8 +5,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.resource.ContextRelativeResource;
 
 /**
  * Panel showing a landing page link. 

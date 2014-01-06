@@ -3,9 +3,10 @@ package eu.clarin.cmdi.vlo.pages;
 import eu.clarin.cmdi.vlo.VloWebApplication;
 import eu.clarin.cmdi.vlo.VloSession;
 import eu.clarin.cmdi.vlo.VloPageParameters;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
@@ -99,8 +100,6 @@ public class BasePage extends WebPage implements IHeaderContributor{
      * @param response
      */
     public void renderHead(IHeaderResponse response) {
-
-        response.renderCSSReference(((VloSession) getSession()).getCurrentTheme().cssFile);
-    }
-    
+        response.render(CssHeaderItem.forUrl(((VloSession) getSession()).getCurrentTheme().cssFile));
+    }    
 }

@@ -4,8 +4,6 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.Resources;
 import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.VloPageParameters;
-import eu.clarin.cmdi.vlo.VloWebApplication;
-import eu.clarin.cmdi.vlo.VloSession;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.DaoLocator;
 import java.io.InputStreamReader;
@@ -28,10 +26,9 @@ import net.sf.saxon.s9api.XsltCompiler;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.RequestCycle;
-import org.apache.wicket.behavior.AbstractBehavior;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
@@ -43,7 +40,8 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -53,8 +51,9 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.protocol.http.RequestUtils;
-import org.apache.wicket.protocol.http.WicketURLDecoder;
-import org.apache.wicket.protocol.http.WicketURLEncoder;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.util.encoding.UrlDecoder;
+import org.apache.wicket.util.encoding.UrlEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,11 +71,12 @@ public class ShowResultPage extends BasePage {
     private final URL xslFile = getClass().getResource("/cmdi2xhtml.xsl");
     
     @SuppressWarnings("serial")
-    public ShowResultPage(final PageParameters currentParam) {
-        
+    public ShowResultPage(final PageParameters currentParam) {        
         super(currentParam);
-        final String docId;
-        docId = WicketURLDecoder.QUERY_INSTANCE.decode(getPageParameters().get(PARAM_DOC_ID).toString());
+        //TODO: Is encoding/decoding of the page parameter required (or can it be automated?)
+        final String docId = UrlDecoder.QUERY_INSTANCE.decode(
+                getPageParameters().get(PARAM_DOC_ID).toString(), 
+                Application.get().getRequestCycleSettings().getResponseRequestEncoding()); // get current character set from request cycle
         SolrDocument solrDocument = DaoLocator.getSearchResultsDao().getSolrDocument(docId);
         if (solrDocument != null) {
             final SearchPageQuery query = new SearchPageQuery(currentParam);
@@ -451,7 +451,9 @@ public class ShowResultPage extends BasePage {
         // create new page parameters from the query parameters and the session related ones
         VloPageParameters newParam;
         newParam = new VloPageParameters(query.getPageParameters());
-        newParam.add(ShowResultPage.PARAM_DOC_ID, WicketURLEncoder.QUERY_INSTANCE.encode(docId));
+        newParam.add(ShowResultPage.PARAM_DOC_ID, UrlEncoder.QUERY_INSTANCE.encode(
+                docId, 
+                Application.get().getRequestCycleSettings().getResponseRequestEncoding())); // get current character set from request cycle
 
         BookmarkablePageLink<ShowResultPage> docLink = new BookmarkablePageLink<ShowResultPage>(linkId, ShowResultPage.class,
                 newParam);
@@ -522,8 +524,7 @@ public class ShowResultPage extends BasePage {
 			private static final long serialVersionUID = 1865219352602175954L;
 
 			public void renderHead(IHeaderResponse response) {
-
-				response.renderOnLoadJavascript("toogleDiv('completeCmdi', 'toogleLink')");
+                            response.render(JavaScriptHeaderItem.forScript("toogleDiv('completeCmdi', 'toogleLink')", null));
 			}
 		});
 	}

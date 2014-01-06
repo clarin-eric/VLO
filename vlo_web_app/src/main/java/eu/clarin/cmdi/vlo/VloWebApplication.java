@@ -6,16 +6,15 @@ import eu.clarin.cmdi.vlo.dao.SearchResultsDao;
 import eu.clarin.cmdi.vlo.pages.BasePage;
 import eu.clarin.cmdi.vlo.pages.BasePanel;
 import eu.clarin.cmdi.vlo.pages.FacetedSearchPage;
-import java.util.Map;
 import javax.servlet.ServletContext;
-import org.apache.wicket.Application;
-import org.apache.wicket.RequestCycle;
-import org.apache.wicket.request.RequestParameters;
-import org.apache.wicket.Response;
+import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WebRequest;
-import org.apache.wicket.protocol.http.WebRequestCycle;
-import org.apache.wicket.protocol.http.WebResponse;
+import org.apache.wicket.request.IRequestParameters;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.cycle.RequestCycleContext;
+import org.apache.wicket.util.string.StringValue;
 
 /**
  * Virtual Language Observatory web application<br><br>
@@ -36,11 +35,11 @@ public class VloWebApplication extends WebApplication {
      * parameters to the application from from client requests, and store
      * the in the application object.
      */
-    private class CustomCycle extends WebRequestCycle {        
+    private class CustomCycle extends RequestCycle {        
         
         // find out why this is necessary
-        CustomCycle (WebApplication app, WebRequest req, Response res){
-            super (app, req, res);
+        CustomCycle (RequestCycleContext context){
+            super(context);
         }   
 
         /**
@@ -51,23 +50,24 @@ public class VloWebApplication extends WebApplication {
             // first, invoke the default behavior
             super.onBeginRequest();
             // after that, get the parameters of the request itself
-            RequestParameters reqParam = this.request.getRequestParameters();
+            IRequestParameters reqParam = getRequest().getRequestParameters();
+            
             // from these, get the parameters represented in the URL
-            Map <String, String[]> map = this.getWebRequest().getParameterMap();
+            //Map <String, String[]> map = this.getWebRequest().getParameterMap();
             // check if there is a theme parameter        
-            String[] object = map.get("theme");
+            StringValue object = reqParam.getParameterValue("theme");
                         
-            if (object == null) {
+            if (object.isEmpty()) {
                 // no theme choosen, keep the current one
             } else {
                 // check if the users requests a different theme 
-                if (object[0].matches(((VloSession)getSession()).getCurrentTheme().name)) {
+                if (object.toString().matches(((VloSession)Session.get()).getCurrentTheme().name)) {
                     // current theme requested, nothing to do
                 } else {
                     // different theme requested, compose it
-                    ((VloSession)getSession()).setCurrentTheme(new Theme (object[0]));
+                    ((VloSession)Session.get()).setCurrentTheme(new Theme (object.toString()));
                     // remember the theme as a vlo session page parameter
-                    ((VloSession)getSession()).vloSessionPageParameters.add("theme", object[0]);
+                    ((VloSession)Session.get()).vloSessionPageParameters.add("theme", object);
                 }
             }
         }
@@ -111,13 +111,6 @@ public class VloWebApplication extends WebApplication {
             
             VloContextConfig.switchToExternalConfig(servletContext);
         }
-        
-        // install the custom request cycle
-        WebRequest req = (WebRequest) RequestCycle.get().getRequest();
-        WebResponse res = (WebResponse) RequestCycle.get().getResponse();
-            
-        CustomCycle cycle;
-        cycle = new CustomCycle(this, req, res);
 
         // creata an object referring to the search results
         searchResults = new SearchResultsDao();        
@@ -187,4 +180,11 @@ public class VloWebApplication extends WebApplication {
     public SearchResultsDao getSearchResultsDao() {
         return searchResults;
     }
+
+    @Override
+    public VloSession newSession(Request request, Response response) {
+        return new VloSession(request);
+    }
+    
+    
 }

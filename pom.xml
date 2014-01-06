@@ -51,4 +51,12 @@
             </plugin>
         </plugins>
     </build>
+    
+    <repositories>
+        <repository>
+            <id>MPI</id>
+            <name>MPI LAT Repository</name>
+            <url>http://lux15.mpi.nl/nexus/content/groups/public</url>
+        </repository>
+    </repositories>
 </project>
