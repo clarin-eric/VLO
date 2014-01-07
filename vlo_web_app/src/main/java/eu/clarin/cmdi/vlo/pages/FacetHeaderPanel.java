@@ -15,10 +15,8 @@ public class FacetHeaderPanel extends BasePanel {
         SearchPageQuery copy = query.getShallowCopy();
         copy.removeFilterQuery(model.getObject().getFacetField());
         PageParameters param = copy.getPageParameters();
-        
-        VloPageParameters newParam = new VloPageParameters ();
  
-        add(new BookmarkablePageLink("allLink", FacetedSearchPage.class, newParam));
+        add(new BookmarkablePageLink("allLink", FacetedSearchPage.class, param));
         add(new Label("headerLabelSelect", model.getObject().getSelectedValue()));
     }
 

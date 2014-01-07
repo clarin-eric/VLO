@@ -53,8 +53,8 @@ public class FacetedSearchPage extends BasePage {
     private final static String facetConceptsFile = VloConfig.getFacetConceptsFile();
     private final static Map<String, FacetConcept> facetNameMap = VLOMarshaller.getFacetConceptMapping(facetConceptsFile).getFacetConceptMap();
 
-    public FacetedSearchPage() {
-        this(new VloPageParameters());
+    public FacetedSearchPage(PageParameters params) {
+        this(VloPageParameters.convert(params));
     }
 
     /**

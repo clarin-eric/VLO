@@ -51,7 +51,7 @@ public class VloPageParameters extends PageParameters {
      * @param param
      * @return 
      */
-    public VloPageParameters convert (PageParameters param){
+    public static VloPageParameters convert (PageParameters param){
         List<NamedPair> entries = param.getAllNamed();
         
         // iterate over the set, and put entries in new page parameters 
