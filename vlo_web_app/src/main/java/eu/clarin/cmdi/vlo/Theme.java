@@ -1,7 +1,7 @@
-
 package eu.clarin.cmdi.vlo;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import java.io.Serializable;
 
 /**
  *
@@ -10,15 +10,15 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
  * A theme is composed from a page title, a CSS file, two image files, and a
  * partner link map relating coordinates in the right image to partner links
  */
-public class Theme {
+public class Theme implements Serializable {
 
-    public String name, pageTitle, topLeftImage, topRightImage, cssFile,
+    public final String name, pageTitle, topLeftImage, topRightImage, cssFile,
             partnerLinkMap;
 
     /**
      * Compose a theme<br><br>
      *
-     * @param name the name of the theme to be composed
+     * @param themeName the name of the theme to be composed
      */
     public Theme(String themeName) {
 
@@ -58,7 +58,7 @@ public class Theme {
     /**
      * Compose a map to be included in the HTML document, designating the
      * positions of the links to partner web sites
-     * 
+     *
      * @return the map
      */
     private String getDefaultPartnerLinkMap() {

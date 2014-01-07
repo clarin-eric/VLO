@@ -5,6 +5,7 @@
 package eu.clarin.cmdi.vlo;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.wicket.Session;
@@ -28,9 +29,9 @@ public class VloPageParameters extends PageParameters {
         // store the parameters as VloPageParameters
     }
     
-    public org.apache.wicket.PageParameters convert (){
+    public PageParameters convert (){
         
-        org.apache.wicket.PageParameters param;
+        PageParameters param;
         
         // needs to be implemented
         
@@ -50,17 +51,13 @@ public class VloPageParameters extends PageParameters {
      * @param param
      * @return 
      */
-    public VloPageParameters convert (org.apache.wicket.PageParameters param){
-        
-        // move page parameters in array of objects
-        Set <Map.Entry<String,Object>> entries;
-        entries = param.entrySet();
-        
+    public static VloPageParameters convert (PageParameters param){
+        List<NamedPair> entries = param.getAllNamed();        
         // iterate over the set, and put entries in new page parameters 
         VloPageParameters VloPageParameters;
         VloPageParameters = new VloPageParameters ();
-        for (Iterator<Map.Entry<String, Object>> it = entries.iterator(); it.hasNext();) {
-            Map.Entry<String, Object> entry = it.next();
+        for (Iterator<NamedPair> it = entries.iterator(); it.hasNext();) {
+            NamedPair entry = it.next();
             VloPageParameters.add(entry.getKey(), entry.getValue());
         }
         

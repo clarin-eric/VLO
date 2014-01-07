@@ -6,11 +6,9 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.resource.ContextRelativeResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
