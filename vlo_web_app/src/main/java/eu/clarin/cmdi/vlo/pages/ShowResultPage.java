@@ -180,7 +180,7 @@ public class ShowResultPage extends BasePage {
      * @newParam
      */
     private List<IColumn> createAttributesColumns() {
-        List<IColumn> columns = null;
+        List<IColumn> columns = new ArrayList<IColumn>();
 
         // create the column for the attribute names
         IColumn column = null;
