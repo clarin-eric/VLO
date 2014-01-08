@@ -29,11 +29,11 @@ public class ResourceLinkPanel extends LinkPanel {
     private final static String URN_NBN_RESOLVER_URL = 
             "http://www.nbn-resolving.org/redirect/";
 
-    private final static ImageResource ANNOTATION = new ImageResource("Images/text-x-log.png", "Annotation file");
-    private final static ImageResource AUDIO = new ImageResource("Images/audio-x-generic.png", "Audio file");
-    private final static ImageResource IMAGE = new ImageResource("Images/image-x-generic.png", "Image file");
-    private final static ImageResource TEXT = new  ImageResource("Images/text-x-generic.png", "Text file");
-    private final static ImageResource VIDEO = new ImageResource("Images/video-x-generic.png", "Video file");
+    private final static ImageResource ANNOTATION = new ImageResource("text-x-log.png", "Annotation file");
+    private final static ImageResource AUDIO = new ImageResource("audio-x-generic.png", "Audio file");
+    private final static ImageResource IMAGE = new ImageResource("image-x-generic.png", "Image file");
+    private final static ImageResource TEXT = new  ImageResource("text-x-generic.png", "Text file");
+    private final static ImageResource VIDEO = new ImageResource("video-x-generic.png", "Video file");
 
     private final static Map<String, ImageResource> ICON_MAP = new 
             HashMap<String, ImageResource>();

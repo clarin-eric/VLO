@@ -70,10 +70,10 @@ public class FacetBoxPanel extends BasePanel {
         PageParameters extraParameters = new PageParameters ();
         extraParameters.add(ShowAllFacetValuesPage.SELECTED_FACET_PARAM, facetField.getName());
         extraParameters.add(ShowAllFacetValuesPage.FACET_MIN_OCCURS, "1");
-        
+        //TODO: merge again once implemented
         facetParameters.merge(extraParameters);
 
-        add(new BookmarkablePageLink("showMore", ShowAllFacetValuesPage.class, facetParameters) {
+        add(new BookmarkablePageLink("showMore", ShowAllFacetValuesPage.class, extraParameters) {
             @Override
             public boolean isVisible() {
                 return !facetModel.isSelected() && showMore;

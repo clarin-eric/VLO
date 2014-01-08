@@ -79,6 +79,10 @@
                 </excludes>
             </resource>
             <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
                 <!-- Include vlo importer resources in the WEB-INF/classes 
                      directory. Including a source is not the same thing as 
                      depending on it. When you depend on a source, it only needs

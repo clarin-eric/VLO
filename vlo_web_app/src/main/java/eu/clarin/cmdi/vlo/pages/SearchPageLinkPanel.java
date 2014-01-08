@@ -17,7 +17,7 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 public class SearchPageLinkPanel extends LinkPanel {
 
     private final static ImageResource SEARCHPAGE_ICON =
-            new ImageResource("Images/Crystal_Clear_action_filefind.png",
+            new ImageResource("Crystal_Clear_action_filefind.png",
             "Search page");
 
     /**

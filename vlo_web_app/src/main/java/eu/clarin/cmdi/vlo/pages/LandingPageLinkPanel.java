@@ -18,7 +18,7 @@ public class LandingPageLinkPanel extends LinkPanel {
 
     private final static ImageResource LANDINGPAGE_ICON =
             new ImageResource(
-            "Images/Crystal_Clear_mimetype_readme.png",
+            "Crystal_Clear_mimetype_readme.png",
             "Landing page");
 
     /**
