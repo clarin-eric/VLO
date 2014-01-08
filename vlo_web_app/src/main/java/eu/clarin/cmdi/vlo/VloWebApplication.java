@@ -6,6 +6,9 @@ import eu.clarin.cmdi.vlo.dao.SearchResultsDao;
 import eu.clarin.cmdi.vlo.pages.BasePage;
 import eu.clarin.cmdi.vlo.pages.BasePanel;
 import eu.clarin.cmdi.vlo.pages.FacetedSearchPage;
+import eu.clarin.cmdi.vlo.pages.ShowAllFacetValuesPage;
+import static eu.clarin.cmdi.vlo.pages.ShowAllFacetValuesPage.SELECTED_FACET_PARAM;
+import eu.clarin.cmdi.vlo.pages.ShowResultPage;
 import javax.servlet.ServletContext;
 import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -106,7 +109,20 @@ public class VloWebApplication extends WebApplication {
         // creata an object referring to the search results
         searchResults = new SearchResultsDao();
 
+        // mount pages on URL's for bookmarkable links
+        mountPages();
+
         // hand over control to the application
+    }
+
+    private void mountPages() {
+        // Record (query result) page. E.g. /vlo/record?docId=abc123
+        // (cannot encode docId in path because it contains a slash)
+        mountPage("/record", ShowResultPage.class);
+
+        // All facet values page. E.g. /vlo/values/genre?facetMinOccurs=1
+        // (min occurs not in path because it's a filter on the facet list)
+        mountPage("/values/${" + SELECTED_FACET_PARAM + "}", ShowAllFacetValuesPage.class);
     }
 
     // remember the search results
