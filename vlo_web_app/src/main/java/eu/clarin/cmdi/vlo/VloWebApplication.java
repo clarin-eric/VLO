@@ -65,7 +65,7 @@ public class VloWebApplication extends WebApplication {
                     VloSession.get().setCurrentTheme(new Theme(themeName));
                     // remember the theme as a vlo session page parameter
                     PageParameters params = new PageParameters();
-                    params.add("theme", object);
+                    params.add("theme", VloSession.get().getCurrentTheme().name);
                     VloSession.get().addVloSessionPageParameters(params);
                 }
             }
