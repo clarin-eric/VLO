@@ -19,7 +19,7 @@ public class FacetLinkPanel extends BasePanel {
         SearchPageQuery q = query.getShallowCopy();
         q.setFilterQuery(count);
         PageParameters param = q.getPageParameters();
-        param.mergeWith(((VloSession) VloSession.get()).getVloSessionPageParameters());
+        param.mergeWith(VloSession.get().getVloSessionPageParameters());
         
         Link<Count> facetLink = new BookmarkablePageLink("facetLink", FacetedSearchPage.class, param);
         facetLink.add(new Label("facetLinkLabel", model.getObject().getName()));

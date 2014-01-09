@@ -61,11 +61,11 @@ public class VloWebApplication extends WebApplication {
                     // current theme requested, nothing to do
                 } else {
                     // different theme requested, compose it
-                    ((VloSession) Session.get()).setCurrentTheme(new Theme(object.toString()));
+                    VloSession.get().setCurrentTheme(new Theme(object.toString()));
                     // remember the theme as a vlo session page parameter
                     PageParameters params = new PageParameters();
                     params.add("theme", object);
-                    ((VloSession) Session.get()).addVloSessionPageParameters(params);
+                    VloSession.get().addVloSessionPageParameters(params);
                 }
             }
         }

@@ -51,13 +51,13 @@ public class BasePage extends WebPage implements IHeaderContributor{
         // set the page title
         
         Label pageTitle;
-        pageTitle = new Label ("pagetitle", ((VloSession)getSession()).getCurrentTheme().pageTitle);
+        pageTitle = new Label ("pagetitle", VloSession.get().getCurrentTheme().pageTitle);
         add (pageTitle);
         
         // set the applications start page link to the faceted search page
         PageParameters startPageParameters = new PageParameters ();
         // add the session persistent parameters
-        startPageParameters.mergeWith(((VloSession)this.getSession()).getVloSessionPageParameters());
+        startPageParameters.mergeWith(VloSession.get().getVloSessionPageParameters());
 
         BookmarkablePageLink link = new BookmarkablePageLink("startpage",
                 FacetedSearchPage.class, startPageParameters);
@@ -65,7 +65,7 @@ public class BasePage extends WebPage implements IHeaderContributor{
                    
         // refer to the the left part of the vlo banner as a resource
         ContextRelativeResource leftImageRes;
-        leftImageRes = new ContextRelativeResource(((VloSession)getSession()).getCurrentTheme().topLeftImage);
+        leftImageRes = new ContextRelativeResource(VloSession.get().getCurrentTheme().topLeftImage);
 
         // create the image
         Image leftImage;
@@ -76,7 +76,7 @@ public class BasePage extends WebPage implements IHeaderContributor{
 
         // refer to the right part of the vlo banner as a resource
         ContextRelativeResource rightImageRes;
-        rightImageRes = new ContextRelativeResource(((VloSession)getSession()).getCurrentTheme().topRightImage);
+        rightImageRes = new ContextRelativeResource(VloSession.get().getCurrentTheme().topRightImage);
         
         // create the image
         Image rightImage;
@@ -88,7 +88,7 @@ public class BasePage extends WebPage implements IHeaderContributor{
         // set the partnerlinks
         
         Label partnerLinkMap;
-        partnerLinkMap = new Label ("partnerlinkmap", ((VloSession)getSession()).getCurrentTheme().partnerLinkMap);
+        partnerLinkMap = new Label ("partnerlinkmap", VloSession.get().getCurrentTheme().partnerLinkMap);
         partnerLinkMap.setEscapeModelStrings(false);
         add (partnerLinkMap);
     }
@@ -101,6 +101,6 @@ public class BasePage extends WebPage implements IHeaderContributor{
      * @param response
      */
     public void renderHead(IHeaderResponse response) {
-        response.render(CssHeaderItem.forUrl(((VloSession) getSession()).getCurrentTheme().cssFile));
+        response.render(CssHeaderItem.forUrl(VloSession.get().getCurrentTheme().cssFile));
     }    
 }

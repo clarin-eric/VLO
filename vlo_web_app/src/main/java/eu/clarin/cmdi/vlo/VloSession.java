@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo;
 
+import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -66,5 +67,12 @@ public class VloSession extends WebSession {
     public void addVloSessionPageParameters(PageParameters parameters) {
 
         vloSessionPageParameters.mergeWith(parameters);
+    }
+
+    /**
+     * @return the VLO session associated to current thread
+     */
+    public static VloSession get() {
+        return (VloSession) Session.get();
     }
 }

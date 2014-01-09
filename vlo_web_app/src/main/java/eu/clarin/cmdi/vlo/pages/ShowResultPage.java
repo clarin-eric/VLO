@@ -84,7 +84,7 @@ public class ShowResultPage extends BasePage {
             // create parameters from the query, and add them with session related parameters
             PageParameters newParam = new PageParameters(query.getPageParameters());
             // add the session persistent parameters
-            newParam.mergeWith(((VloSession) this.getSession()).getVloSessionPageParameters());
+            newParam.mergeWith(VloSession.get().getVloSessionPageParameters());
 
             BookmarkablePageLink<String> backLink = new BookmarkablePageLink<String>("backLink", FacetedSearchPage.class, newParam);
             add(backLink);
@@ -427,7 +427,7 @@ public class ShowResultPage extends BasePage {
 
         PageParameters newParam = new PageParameters(parameters);
         // add the session persistent paremeters
-        newParam.mergeWith(((VloSession) this.getSession()).getVloSessionPageParameters());
+        newParam.mergeWith(VloSession.get().getVloSessionPageParameters());
 
         final RequestCycle reqCycle = getRequestCycle();
         // the following will not be necessary anymore
@@ -462,7 +462,7 @@ public class ShowResultPage extends BasePage {
                 docId,
                 Application.get().getRequestCycleSettings().getResponseRequestEncoding())); // get current character set from request cycle
         // add the session persistent parameters
-        newParam.mergeWith(((VloSession) VloSession.get()).getVloSessionPageParameters());
+        newParam.mergeWith(VloSession.get().getVloSessionPageParameters());
         BookmarkablePageLink<ShowResultPage> docLink = new BookmarkablePageLink<ShowResultPage>(linkId, ShowResultPage.class,
                 newParam);
         return docLink;
