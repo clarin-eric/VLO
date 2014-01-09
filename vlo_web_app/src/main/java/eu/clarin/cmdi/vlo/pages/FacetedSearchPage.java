@@ -189,12 +189,10 @@ public class FacetedSearchPage extends BasePage {
         protected void onSubmit() {
             SearchPageQuery query = getModelObject();
             PageParameters param = query.getPageParameters();
-
-            PageParameters newParam = new PageParameters();
             // add the session persistent parameters
-            newParam.mergeWith(((VloSession)this.getSession()).getVloSessionPageParameters());
+            param.mergeWith(((VloSession)this.getSession()).getVloSessionPageParameters());
 
-            setResponsePage(FacetedSearchPage.class, newParam);
+            setResponsePage(FacetedSearchPage.class, param);
         }
     }
 
