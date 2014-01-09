@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import eu.clarin.cmdi.vlo.VloSession;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -65,17 +66,11 @@ public class FacetBoxPanel extends BasePanel {
         };
         add(facetList);
         PageParameters facetParameters = new PageParameters ();
-           
-        PageParameters extraParameters = new PageParameters ();
-        // kj; add the new values directly
-        // extraParameters.add(ShowAllFacetValuesPage.SELECTED_FACET_PARAM, facetField.getName());
-        // extraParameters.add(ShowAllFacetValuesPage.FACET_MIN_OCCURS, "1");
         facetParameters.add(ShowAllFacetValuesPage.SELECTED_FACET_PARAM, facetField.getName());
         facetParameters.add(ShowAllFacetValuesPage.FACET_MIN_OCCURS, "1");
-        //TODO: merge again once implemented
-        // facetParameters.add(extraParameters);
+        facetParameters.mergeWith(((VloSession)VloSession.get()).getVloSessionPageParameters());
 
-        add(new BookmarkablePageLink("showMore", ShowAllFacetValuesPage.class, extraParameters) {
+        add(new BookmarkablePageLink("showMore", ShowAllFacetValuesPage.class, facetParameters) {
             @Override
             public boolean isVisible() {
                 return !facetModel.isSelected() && showMore;
