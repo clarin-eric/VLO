@@ -73,7 +73,7 @@ public class ShowResultPage extends BasePage {
     @SuppressWarnings("serial")
     public ShowResultPage(final PageParameters currentParam) {
         super(currentParam);
-        //TODO: Is encoding/decoding of the page parameter required (or can it be automated?)
+        //Document ID is assumed to have been encoded (typcially in DocumentLinkPanel) decode here
         final String docId = UrlDecoder.QUERY_INSTANCE.decode(
                 getPageParameters().get(PARAM_DOC_ID).toString(),
                 Application.get().getRequestCycleSettings().getResponseRequestEncoding()); // get current character set from request cycle
@@ -82,10 +82,9 @@ public class ShowResultPage extends BasePage {
             final SearchPageQuery query = new SearchPageQuery(currentParam);
 
             // create parameters from the query, and add them with session related parameters
-            PageParameters newParam;
-            newParam = new PageParameters(query.getPageParameters());
+            PageParameters newParam = new PageParameters(query.getPageParameters());
             // add the session persistent parameters
-            newParam.mergeWith(((VloSession)this.getSession()).getVloSessionPageParameters());
+            newParam.mergeWith(((VloSession) this.getSession()).getVloSessionPageParameters());
 
             BookmarkablePageLink<String> backLink = new BookmarkablePageLink<String>("backLink", FacetedSearchPage.class, newParam);
             add(backLink);
@@ -428,7 +427,7 @@ public class ShowResultPage extends BasePage {
 
         PageParameters newParam = new PageParameters(parameters);
         // add the session persistent paremeters
-        newParam.mergeWith(((VloSession)this.getSession()).getVloSessionPageParameters());
+        newParam.mergeWith(((VloSession) this.getSession()).getVloSessionPageParameters());
 
         final RequestCycle reqCycle = getRequestCycle();
         // the following will not be necessary anymore
@@ -459,12 +458,11 @@ public class ShowResultPage extends BasePage {
         // create new page parameters from the query parameters and the session related ones
         PageParameters newParam;
         newParam = new PageParameters(query.getPageParameters());
-        // add the session persistent parameters
-        // newParam.add(((VloSession)this.getSession()).getVloSessionPageParameters());
         newParam.add(ShowResultPage.PARAM_DOC_ID, UrlEncoder.QUERY_INSTANCE.encode(
                 docId,
                 Application.get().getRequestCycleSettings().getResponseRequestEncoding())); // get current character set from request cycle
-
+        // add the session persistent parameters
+        newParam.mergeWith(((VloSession) VloSession.get()).getVloSessionPageParameters());
         BookmarkablePageLink<ShowResultPage> docLink = new BookmarkablePageLink<ShowResultPage>(linkId, ShowResultPage.class,
                 newParam);
         return docLink;

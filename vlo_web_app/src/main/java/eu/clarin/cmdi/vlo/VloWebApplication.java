@@ -17,6 +17,7 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 
 /**
@@ -62,7 +63,9 @@ public class VloWebApplication extends WebApplication {
                     // different theme requested, compose it
                     ((VloSession) Session.get()).setCurrentTheme(new Theme(object.toString()));
                     // remember the theme as a vlo session page parameter
-                    ((VloSession) Session.get()).vloSessionPageParameters.add("theme", object);
+                    PageParameters params = new PageParameters();
+                    params.add("theme", object);
+                    ((VloSession) Session.get()).addVloSessionPageParameters(params);
                 }
             }
         }
