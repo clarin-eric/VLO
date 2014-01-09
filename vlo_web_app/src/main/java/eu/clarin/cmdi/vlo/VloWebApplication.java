@@ -48,7 +48,7 @@ public class VloWebApplication extends WebApplication {
             IRequestParameters reqParam = cycle.getRequest().getRequestParameters();
 
             // from these, get the parameters represented in the URL
-            //Map <String, String[]> map = this.getWebRequest().getParameterMap();
+            // Map <String, String[]> map = this.getWebRequest().getParameterMap();
             // check if there is a theme parameter
             StringValue object = reqParam.getParameterValue("theme");
 
@@ -189,5 +189,4 @@ public class VloWebApplication extends WebApplication {
     public VloSession newSession(Request request, Response response) {
         return new VloSession(request);
     }
-
 }

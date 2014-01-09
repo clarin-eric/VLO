@@ -3,7 +3,7 @@ package eu.clarin.cmdi.vlo.pages;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.Resources;
 import eu.clarin.cmdi.vlo.StringUtils;
-import eu.clarin.cmdi.vlo.VloPageParameters;
+import eu.clarin.cmdi.vlo.VloSession;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.DaoLocator;
 import java.io.InputStreamReader;
@@ -81,9 +81,11 @@ public class ShowResultPage extends BasePage {
         if (solrDocument != null) {
             final SearchPageQuery query = new SearchPageQuery(currentParam);
 
-            // create parameters from the query, and merge them with session related parameters
-            VloPageParameters newParam;
-            newParam = new VloPageParameters(query.getPageParameters());
+            // create parameters from the query, and add them with session related parameters
+            PageParameters newParam;
+            newParam = new PageParameters(query.getPageParameters());
+            // add the session persistent parameters
+            newParam.mergeWith(((VloSession)this.getSession()).getVloSessionPageParameters());
 
             BookmarkablePageLink<String> backLink = new BookmarkablePageLink<String>("backLink", FacetedSearchPage.class, newParam);
             add(backLink);
@@ -424,11 +426,14 @@ public class ShowResultPage extends BasePage {
 
     private void addFeedbackLink(final PageParameters parameters) {
 
-        // create VloPageParameters in orde to be able to convert to old style parameters
-        VloPageParameters newParam = new VloPageParameters(parameters);
+        PageParameters newParam = new PageParameters(parameters);
+        // add the session persistent paremeters
+        newParam.mergeWith(((VloSession)this.getSession()).getVloSessionPageParameters());
 
         final RequestCycle reqCycle = getRequestCycle();
-        final Url reqUrl = Url.parse(reqCycle.urlFor(ShowResultPage.class, newParam.convert()));
+        // the following will not be necessary anymore
+        // final Url reqUrl = Url.parse(reqCycle.urlFor(ShowResultPage.class, newParam.convert()));
+        final Url reqUrl = Url.parse(reqCycle.urlFor(ShowResultPage.class, newParam));
         String thisURL = reqCycle.getUrlRenderer().renderFullUrl(reqUrl);
 
         try {
@@ -452,8 +457,10 @@ public class ShowResultPage extends BasePage {
     public static BookmarkablePageLink<ShowResultPage> createBookMarkableLink(String linkId, SearchPageQuery query, String docId) {
 
         // create new page parameters from the query parameters and the session related ones
-        VloPageParameters newParam;
-        newParam = new VloPageParameters(query.getPageParameters());
+        PageParameters newParam;
+        newParam = new PageParameters(query.getPageParameters());
+        // add the session persistent parameters
+        // newParam.add(((VloSession)this.getSession()).getVloSessionPageParameters());
         newParam.add(ShowResultPage.PARAM_DOC_ID, UrlEncoder.QUERY_INSTANCE.encode(
                 docId,
                 Application.get().getRequestCycleSettings().getResponseRequestEncoding())); // get current character set from request cycle

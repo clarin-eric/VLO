@@ -2,7 +2,7 @@ package eu.clarin.cmdi.vlo.pages;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.Resources;
-import eu.clarin.cmdi.vlo.VloPageParameters;
+import eu.clarin.cmdi.vlo.VloSession;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.AutoCompleteDao;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
@@ -51,15 +51,11 @@ public class FacetedSearchPage extends BasePage {
     private final static String facetConceptsFile = VloConfig.getFacetConceptsFile();
     private final static Map<String, FacetConcept> facetNameMap = VLOMarshaller.getFacetConceptMapping(facetConceptsFile).getFacetConceptMap();
 
-    public FacetedSearchPage(PageParameters params) {
-        this(VloPageParameters.convert(params));
-    }
-
     /**
      * @param parameters Page parameters
      * @throws SolrServerException
      */
-    public FacetedSearchPage(final VloPageParameters parameters) {
+    public FacetedSearchPage(final PageParameters parameters) {
         super(parameters);
         query = new SearchPageQuery(parameters);
         addSearchBox();
@@ -143,7 +139,7 @@ public class FacetedSearchPage extends BasePage {
                 facetOverview = new MultiLineLabel("facetOverview", string);
             }
 
-            // finally, merge the label to the form
+            // finally, add the label to the form
             this.add(facetOverview);
         }
 
@@ -162,16 +158,19 @@ public class FacetedSearchPage extends BasePage {
             Button submit = new Button("searchSubmit");
             add(submit);
 
-            // merge link to help menu page 
+            // add link to help menu page 
             String helpUrl = VloConfig.getHelpUrl();
             ExternalLink helpLink = new ExternalLink("helpLink", helpUrl, "help");
             add(helpLink);
 
-            VloPageParameters param;
-            param = new VloPageParameters(query.getPageParameters());
+            PageParameters param;
+            param = new PageParameters(query.getPageParameters());
+            // add the session persistent parameters
+            param.mergeWith(((VloSession)this.getSession()).getVloSessionPageParameters());
 
             final RequestCycle reqCycle = getRequestCycle();
-            final Url reqUrl = Url.parse(reqCycle.urlFor(ShowResultPage.class, param.convert()));
+            // kj, the same here
+            final Url reqUrl = Url.parse(reqCycle.urlFor(ShowResultPage.class, param));
             String thisURL = reqCycle.getUrlRenderer().renderFullUrl(reqUrl);
 
             try {
@@ -191,7 +190,9 @@ public class FacetedSearchPage extends BasePage {
             SearchPageQuery query = getModelObject();
             PageParameters param = query.getPageParameters();
 
-            VloPageParameters newParam = new VloPageParameters();
+            PageParameters newParam = new PageParameters();
+            // add the session persistent parameters
+            newParam.mergeWith(((VloSession)this.getSession()).getVloSessionPageParameters());
 
             setResponsePage(FacetedSearchPage.class, newParam);
         }
@@ -308,7 +309,7 @@ public class FacetedSearchPage extends BasePage {
                     offset += fetchSize;
                 }
 
-                // merge HTML form to container
+                // add HTML form to container
                 String labelString;
                 if (totalResults == 1) {
                     labelString = "Plain text search via Federated Content Search (supported by one resource in this result set)";
@@ -320,7 +321,7 @@ public class FacetedSearchPage extends BasePage {
                         aggregationContextMap, labelString));
                 contentSearchLabel.setEscapeModelStrings(false);
                 contentSearchContainer.add(contentSearchLabel);
-                // contentSearchContainer.merge(link);
+                // contentSearchContainer.add(link);
             } catch (UnsupportedEncodingException uee) {
                 contentSearchContainer.setVisible(false);
             }

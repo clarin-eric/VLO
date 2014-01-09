@@ -1,6 +1,5 @@
 package eu.clarin.cmdi.vlo.pages;
 
-import eu.clarin.cmdi.vlo.VloPageParameters;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;

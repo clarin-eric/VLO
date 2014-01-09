@@ -2,7 +2,6 @@ package eu.clarin.cmdi.vlo.pages;
 
 import eu.clarin.cmdi.vlo.VloWebApplication;
 import eu.clarin.cmdi.vlo.VloSession;
-import eu.clarin.cmdi.vlo.VloPageParameters;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -56,7 +55,9 @@ public class BasePage extends WebPage implements IHeaderContributor{
         add (pageTitle);
         
         // set the applications start page link to the faceted search page
-        VloPageParameters startPageParameters = new VloPageParameters ();
+        PageParameters startPageParameters = new PageParameters ();
+        // add the session persistent parameters
+        startPageParameters.mergeWith(((VloSession)this.getSession()).getVloSessionPageParameters());
 
         BookmarkablePageLink link = new BookmarkablePageLink("startpage",
                 FacetedSearchPage.class, startPageParameters);
@@ -70,7 +71,7 @@ public class BasePage extends WebPage implements IHeaderContributor{
         Image leftImage;
         leftImage = new Image("leftimage", leftImageRes);
  
-        // merge the image to the page
+        // add the image to the page
         link.add(leftImage);
 
         // refer to the right part of the vlo banner as a resource
@@ -81,7 +82,7 @@ public class BasePage extends WebPage implements IHeaderContributor{
         Image rightImage;
         rightImage = new Image("rightimage", rightImageRes);
         
-        // merge it to the page
+        // add it to the page
         add (rightImage);
         
         // set the partnerlinks
