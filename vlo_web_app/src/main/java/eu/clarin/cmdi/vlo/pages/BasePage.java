@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import eu.clarin.cmdi.vlo.Theme;
 import eu.clarin.cmdi.vlo.VloWebApplication;
 import eu.clarin.cmdi.vlo.VloSession;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -14,11 +15,11 @@ import org.apache.wicket.request.resource.ContextRelativeResource;
 
 /**
  * Properties common to all VLO web application's page objects
- * 
+ *
  * @author keeloo
  */
-public class BasePage extends WebPage implements IHeaderContributor{
-    
+public class BasePage extends WebPage implements IHeaderContributor {
+
     // reference to the web application object
     static VloWebApplication webApp;
 
@@ -30,67 +31,65 @@ public class BasePage extends WebPage implements IHeaderContributor{
     public static void setWebApp(VloWebApplication vloWebApplication) {
         webApp = vloWebApplication;
     }
-    
+
     /**
      * Install a VLO theme<br><br>
-     * 
+     *
      * A VLO theme is determined by a page title, a CSS file, and a banner split
      * in a left and right image.
-     * 
+     *
      * The left part of the banner serves as a link to the faceted search page,
      * the application's start page. In the field below banner there is a link
      * to the page the web application is launched from; the applications home
      * page. This link page is defined in the VloConfig file.
-     *     
-     * @param parameters 
+     *
+     * @param parameters
      */
     public BasePage(PageParameters parameters) {
-
         super(parameters);
+        final Theme currentTheme = VloSession.get().getCurrentTheme();
         
         // set the page title
-        
         Label pageTitle;
-        pageTitle = new Label ("pagetitle", VloSession.get().getCurrentTheme().pageTitle);
-        add (pageTitle);
-        
+        pageTitle = new Label("pagetitle", currentTheme.pageTitle);
+        add(pageTitle);
+
         // set the applications start page link to the faceted search page
-        PageParameters startPageParameters = new PageParameters ();
+        PageParameters startPageParameters = new PageParameters();
         // add the session persistent parameters
         startPageParameters.mergeWith(VloSession.get().getVloSessionPageParameters());
 
         BookmarkablePageLink link = new BookmarkablePageLink("startpage",
                 FacetedSearchPage.class, startPageParameters);
         add(link);
-                   
+
         // refer to the the left part of the vlo banner as a resource
         ContextRelativeResource leftImageRes;
-        leftImageRes = new ContextRelativeResource(VloSession.get().getCurrentTheme().topLeftImage);
+        leftImageRes = new ContextRelativeResource(currentTheme.topLeftImage);
 
         // create the image
         Image leftImage;
         leftImage = new Image("leftimage", leftImageRes);
- 
+
         // add the image to the page
         link.add(leftImage);
 
         // refer to the right part of the vlo banner as a resource
         ContextRelativeResource rightImageRes;
-        rightImageRes = new ContextRelativeResource(VloSession.get().getCurrentTheme().topRightImage);
-        
+        rightImageRes = new ContextRelativeResource(currentTheme.topRightImage);
+
         // create the image
         Image rightImage;
         rightImage = new Image("rightimage", rightImageRes);
-        
+
         // add it to the page
-        add (rightImage);
-        
+        add(rightImage);
+
         // set the partnerlinks
-        
         Label partnerLinkMap;
-        partnerLinkMap = new Label ("partnerlinkmap", VloSession.get().getCurrentTheme().partnerLinkMap);
+        partnerLinkMap = new Label("partnerlinkmap", currentTheme.partnerLinkMap);
         partnerLinkMap.setEscapeModelStrings(false);
-        add (partnerLinkMap);
+        add(partnerLinkMap);
     }
 
     /**
@@ -102,5 +101,5 @@ public class BasePage extends WebPage implements IHeaderContributor{
      */
     public void renderHead(IHeaderResponse response) {
         response.render(CssHeaderItem.forUrl(VloSession.get().getCurrentTheme().cssFile));
-    }    
+    }
 }
