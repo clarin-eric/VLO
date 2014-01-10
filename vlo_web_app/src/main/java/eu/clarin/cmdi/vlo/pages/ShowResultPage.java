@@ -502,29 +502,36 @@ public class ShowResultPage extends BasePage {
         }
     }
 
+    private Label completeCmdiLabel = null;
+    
     /**
      * Add complete CMDI view
      *
      * @newParam solrDocument
      */
     private void addCompleteCmdiView(final SolrDocument solrDocument) {
-
+        // create a container for the complete CMDI view and a toggle link (this is required for proper AJAX updates)
         final MarkupContainer completeCmdiContainer = new WebMarkupContainer("completeCmdiContainer");
         completeCmdiContainer.setOutputMarkupId(true);
         add(completeCmdiContainer);
+        
+        // Add a toggle link that provides lazy execution of CMDI transformation
         Link toggleLink = new IndicatingAjaxFallbackLink("toggleCmdiView") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
                 if (completeCmdiLabel == null) {
+                    // first click: perform transformation
                     createCompleteCmdiView(solrDocument);
                     completeCmdiContainer.addOrReplace(completeCmdiLabel);
                 } else {
+                    // subsequent click: toggle visibility of transformation output
                     completeCmdiLabel.setVisible(!completeCmdiLabel.isVisible());
                 }
                 target.add(completeCmdiContainer);
             }
         };
+        // add a label to the toggle link that represents the visibility state of the transformation output
         final Label toggleLabel = new Label("toggleLabel", new AbstractReadOnlyModel<String>() {
 
             @Override
@@ -538,7 +545,11 @@ public class ShowResultPage extends BasePage {
         });
         toggleLink.add(toggleLabel);
         completeCmdiContainer.add(toggleLink);
-        completeCmdiContainer.add(new WebMarkupContainer("completeCmdi"));
+        
+        // add a placeholder for the transformation
+        final WebMarkupContainer completeCmdiPlaceholder = new WebMarkupContainer("completeCmdi");
+        completeCmdiPlaceholder.setVisible(false);
+        completeCmdiContainer.add(completeCmdiPlaceholder);
     }
 
     private void createCompleteCmdiView(final SolrDocument solrDocument) {
@@ -569,6 +580,4 @@ public class ShowResultPage extends BasePage {
         completeCmdiLabel = new Label("completeCmdi", strWriter.toString());
         completeCmdiLabel.setEscapeModelStrings(false);
     }
-
-    private Label completeCmdiLabel = null;
 }
