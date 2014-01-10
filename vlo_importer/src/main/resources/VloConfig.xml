@@ -1,4 +1,8 @@
 <VloConfig>
+    
+    <pagesInApplicationCache>128</pagesInApplicationCache>
+    
+    <sessionCacheSize>500</sessionCacheSize>
    
     <deleteAllFirst>true</deleteAllFirst>
     

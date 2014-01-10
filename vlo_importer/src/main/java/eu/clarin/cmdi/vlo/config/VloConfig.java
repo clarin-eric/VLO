@@ -104,7 +104,7 @@ public class VloConfig extends ConfigFromFile {
         logger = new VloConfigLogger();
 
         /**
-         * Initialize the ConfigFilePersister's reference to the interface 
+         * Initialise the ConfigFilePersister's reference to the interface 
          */
         ConfigFilePersister.setLogger(VloConfig.logger);
     }
@@ -147,15 +147,23 @@ public class VloConfig extends ConfigFromFile {
         read(fileName, config);
     }
 
-    /**
+    /*
      * VLO application parameter members<br><br>
      *
-     * Initialise the annotated members in a proper way. This will allow them to
-     * be linearised to corresponding elements in an XML file.
+     * Please Initialise the annotated members in a proper way. This will allow 
+     * them to be linearised to corresponding elements in an XML file.
      * 
      * Please refer to the general VLO documentation for a description of the
      * member parameters.
      */
+    
+    // page cache related parameters
+    
+    @Element 
+    private static int pagesInApplicationCache = 0;
+    
+    @Element
+    private static int sessionCacheSize = 0;
     
     // data base related parameters
     
@@ -293,7 +301,55 @@ public class VloConfig extends ConfigFromFile {
      * here without the need to make changes in different parts of the
      * application.
      */
+            
+    /**
+     * Get the value of the pagesInApplicationCache parameter<br><br>
+     *
+     * The parameter represents the number of pages that Wicket will allow
+     * to be stored in the application's cache.
+     *
+     * @return the value
+     */ 
+    public static int getPagesInApplicationCache() {
+        return pagesInApplicationCache;
+    }
+
+    /**
+     * Set the value of the pagesInApplicationCache parameter<br><br>
+     * 
+     * The parameter represents the number of pages that Wicket will allow
+     * to be stored in the application's cache.
+     *
+     * @param param the value
+     */
+    public static void setPagesInApplicationCache(int param) {
+        pagesInApplicationCache = param;
+    }
     
+    /**
+     * Get the value of the sessionCacheSize parameter<br><br>
+     *
+     * The parameter represents the size in kilobytes of the session
+     * page cache.
+     *
+     * @return the value
+     */ 
+    public static int getSessionCacheSize() {
+        return sessionCacheSize;
+    }
+
+    /**
+     * Set the value of the sessionCacheSize parameter<br><br>
+     *
+     * The parameter represents the size in megabytes of the session
+     * page cache.
+     *
+     * @param param the value
+     */
+    public static void setSessionCacheSize(int param) {
+        sessionCacheSize = param;
+    }
+
     /**
      * Get the value of the deleteAllFirst parameter<br><br>
      *
@@ -301,8 +357,7 @@ public class VloConfig extends ConfigFromFile {
      * documentation.
      *
      * @return the value
-     */
-    
+     */ 
     public static boolean deleteAllFirst() {
         return deleteAllFirst;
     }

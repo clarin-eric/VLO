@@ -19,6 +19,7 @@ import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.lang.Bytes;
 
 /**
  * Virtual Language Observatory web application<br><br>
@@ -85,7 +86,7 @@ public class VloWebApplication extends WebApplication {
     public void init() {
 
         if (inContext) {
-
+            
             /*
              * send messages to objects that need a static reference to this web
              * application object. While this, at a one point in time, was only 
@@ -109,6 +110,10 @@ public class VloWebApplication extends WebApplication {
 
             getRequestCycleListeners().add(new CustomRequestCycleListener());
         }
+        
+        // configure cache by applying the vlo configuration settings to it
+        this.getStoreSettings().setInmemoryCacheSize(VloConfig.getPagesInApplicationCache());
+        this.getStoreSettings().setMaxSizePerSession(Bytes.kilobytes((long)VloConfig.getSessionCacheSize()));
 
         // creata an object referring to the search results
         searchResults = new SearchResultsDao();
@@ -139,7 +144,7 @@ public class VloWebApplication extends WebApplication {
      * server container.
      */
     public VloWebApplication() {
-
+        
         /*
          * Read the application's packaged configuration
          * 
