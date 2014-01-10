@@ -24,25 +24,29 @@
                 <div class="tableBody">
                     <table class="matrix" align="left">
                         <tr wicket:id="facetColumns" valign="top">
-                        <td wicket:id="cols" width="50%" class="column">
-                            <p><span wicket:id="facetBox"></span>
-                        <p>
+                            <td wicket:id="cols" width="50%" class="column">
+                                <p><span wicket:id="facetBox"></span>
+                                <p>
                             </td>
-                            </tr>
+                        </tr>
                     </table>
 
-                    <table class="resulttable" cellpadding="0" cellspacing="0">
-                        <tbody wicket:id="searchResults" >
-                            [searchResultTable]
-                        </tbody>       
+                    <table class="resulttable">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <table wicket:id="searchResults">[searchResultTable]</table>
+                                </td>
+                            </tr>        
+                        </tbody>
                         <tfoot wicket:id="contentSearch">
                             <tr>
-                            <td colspan="2"><a href="url" wicket:id="contentSearchForm">This text will be replaced by Wicket</a> </td>
+                                <td><a href="url" wicket:id="contentSearchForm">This text will be replaced by Wicket</a></td>
                             </tr>
-                        </tfoot>                        
+                        </tfoot>
                     </table>
+                </div>
             </div>
-        </div>
         </div>
         <br><br><br>
     </wicket:extend>
