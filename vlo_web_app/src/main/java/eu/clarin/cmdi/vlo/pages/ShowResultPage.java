@@ -28,9 +28,13 @@ import net.sf.saxon.s9api.XsltTransformer;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
@@ -46,8 +50,10 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.Url;
@@ -108,6 +114,7 @@ public class ShowResultPage extends BasePage {
             addResourceLinks(solrDocument);
 
             addSearchServiceForm(solrDocument);
+
             addCompleteCmdiView(solrDocument);
 
             add(new AjaxLazyLoadPanel("prevNextHeader") {
@@ -501,6 +508,40 @@ public class ShowResultPage extends BasePage {
      * @newParam solrDocument
      */
     private void addCompleteCmdiView(final SolrDocument solrDocument) {
+
+        final MarkupContainer completeCmdiContainer = new WebMarkupContainer("completeCmdiContainer");
+        completeCmdiContainer.setOutputMarkupId(true);
+        add(completeCmdiContainer);
+        Link toggleLink = new IndicatingAjaxFallbackLink("toggleCmdiView") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if (completeCmdiLabel == null) {
+                    createCompleteCmdiView(solrDocument);
+                    completeCmdiContainer.addOrReplace(completeCmdiLabel);
+                } else {
+                    completeCmdiLabel.setVisible(!completeCmdiLabel.isVisible());
+                }
+                target.add(completeCmdiContainer);
+            }
+        };
+        final Label toggleLabel = new Label("toggleLabel", new AbstractReadOnlyModel<String>() {
+
+            @Override
+            public String getObject() {
+                if(completeCmdiLabel == null || !completeCmdiLabel.isVisible()){
+                    return "Show CMDI metadata";
+                } else{
+                    return "Hide CMDI metadata";
+                }
+            }
+        });
+        toggleLink.add(toggleLabel);
+        completeCmdiContainer.add(toggleLink);
+        completeCmdiContainer.add(new WebMarkupContainer("completeCmdi"));
+    }
+
+    private void createCompleteCmdiView(final SolrDocument solrDocument) {
         StringWriter strWriter = new StringWriter();
 
         final Processor proc = new Processor(false);
@@ -525,17 +566,9 @@ public class ShowResultPage extends BasePage {
             strWriter = new StringWriter().append("<b>Could not load complete CMDI metadata</b>");
         }
 
-        Label completeCmdiLabel = new Label("completeCmdi", strWriter.toString());
+        completeCmdiLabel = new Label("completeCmdi", strWriter.toString());
         completeCmdiLabel.setEscapeModelStrings(false);
-        add(completeCmdiLabel);
-
-        // remove complete CMDI view on page load
-        add(new Behavior() {
-            private static final long serialVersionUID = 1865219352602175954L;
-
-            public void renderHead(IHeaderResponse response) {
-                response.render(JavaScriptHeaderItem.forScript("toogleDiv('completeCmdi', 'toogleLink')", null));
-            }
-        });
     }
+
+    private Label completeCmdiLabel = null;
 }

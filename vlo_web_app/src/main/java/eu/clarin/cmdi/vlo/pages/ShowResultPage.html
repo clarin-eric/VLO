@@ -1,14 +1,7 @@
 <!doctype html public "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
 	<wicket:head>
-		<script language="JavaScript">
-			function toogleDiv(strID, linkElement){
-				document.getElementById(linkElement).innerHTML = (document.getElementById(strID).style.display == 'none' ) ? '<b>Hide CMDI metadata</b>' : '<b>Show CMDI metadata</b>';
-				document.getElementById(strID).style.display = (document.getElementById(strID).style.display == 'none' ) ? 'block' : 'none';
-				document.getElementById(strID + "_shown").style.display = (document.getElementById(strID + "_shown").style.display == 'none' ) ? 'block' : 'none';
-				document.getElementById(strID + "_hidden").style.display = (document.getElementById(strID + "_hidden").style.display == 'none' ) ? 'block' : 'none';
-			}
-		</script>
+
 		<script src="javascript/searchhi.js" type="text/javascript" language="JavaScript"></script>
 	</wicket:head>
 	
@@ -58,10 +51,8 @@
             </div>
             
             <br>
-            <div id="completeCmdiView">
-            	<span>
-            		<a href="javascript:/" id="toogleLink" onClick="toogleDiv('completeCmdi', 'toogleLink');"></a>
-            	</span>
+            <div wicket:id="completeCmdiContainer" id="completeCmdiView">
+                <a wicket:id="toggleCmdiView"><span style="font-weight: bold;" wicket:id="toggleLabel">[toggle cmdi view]</span></a>
             	<span id="completeCmdi" wicket:id="completeCmdi"></span>
             </div>       		
             <br>
