@@ -65,22 +65,39 @@ img{
 
 }
 /* for the table header, use the red from the banner */
-.opening .resulttable .headers{
+.opening .resulttable table .headers{
     background-color: #801418;
     text-align: center;
     opacity:0.8;
     color:#FFFFFF;
 }
 
-.resulttable tbody tr.even {
+.resulttable table tr.even {
     background-color: #e7ebf0; /* color of background in odd table position */
 }
 
-.resulttable tbody tr.odd {
+.resulttable table tr.odd {
     background-color: #ffffff; /* color of background in odd table position */
     color: #000000;
     opacity: 1.0
 }
+
+.resulttable table { 
+    margin: 0px; 
+    border-spacing: 0px; 
+} 
+
+.opening .resulttable table td { 
+    padding: 0px; 
+} 
+
+.resulttable table .navigatorLabel { 
+    float: left; 
+} 
+
+.resulttable table .navigator { 
+    text-align: right; 
+} 
 
 /* for the table header, take the red from the banner */
 .headers{
@@ -131,7 +148,7 @@ img{
 /* end search box related definitions */
 
 .federatedSearch {
-	font-weight:bold;
+    font-weight:bold;
 }
 
 /* facet box header, continue the banner and search box color */
@@ -271,18 +288,18 @@ img{
 } 
 
 .resultItem li {
-     list-style-type:none; 
+    list-style-type:none; 
 }
 
 .resultItem img {
-     display:inline; 
-     vertical-align:middle;
-     padding-right:5px;
+    display:inline; 
+    vertical-align:middle;
+    padding-right:5px;
 }
 
 div.wicket-aa {background-color:white;
-    border:1px solid #CCCCCC;
-    color:black;
+               border:1px solid #CCCCCC;
+               color:black;
 }
 
 div.wicket-aa ul {
