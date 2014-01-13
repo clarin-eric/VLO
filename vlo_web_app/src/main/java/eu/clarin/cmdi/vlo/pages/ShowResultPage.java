@@ -42,6 +42,8 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -54,6 +56,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.encoding.UrlDecoder;
 import org.apache.wicket.util.encoding.UrlEncoder;
 import org.slf4j.Logger;
@@ -70,7 +74,8 @@ public class ShowResultPage extends BasePage {
     public static final String PARAM_DOC_ID = "docId";
     public static final String feedbackfromURL = VloConfig.getFeedbackFromUrl();
 
-    private final URL xslFile = getClass().getResource("/cmdi2xhtml.xsl");
+    private final URL xslFile = getClass().getResource("/eu/clarin/cmdi/vlo/pages/cmdi2xhtml.xsl");
+    private final ResourceReference XSL_CSS_REFERENCE = new PackageResourceReference(getClass(), "cmdi.css");
 
     @SuppressWarnings("serial")
     public ShowResultPage(final PageParameters currentParam) {
@@ -572,11 +577,17 @@ public class ShowResultPage extends BasePage {
             trans.setDestination(out);
             trans.transform();
         } catch (Exception e) {
-            LOG.error("Couldn't create CMDI metadata: " + e.getMessage());
+            LOG.error("Couldn't create CMDI metadata: ", e);
             strWriter = new StringWriter().append("<b>Could not load complete CMDI metadata</b>");
         }
 
         completeCmdiLabel = new Label("completeCmdi", strWriter.toString());
         completeCmdiLabel.setEscapeModelStrings(false);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(CssHeaderItem.forReference(XSL_CSS_REFERENCE));
     }
 }
