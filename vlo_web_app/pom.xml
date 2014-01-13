@@ -88,18 +88,6 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
-            <resource>
-                <!-- Include vlo importer resources in the WEB-INF/classes 
-                     directory. Including a source is not the same thing as 
-                     depending on it. When you depend on a source, it only needs
-                     to be in the location specified, it
-                     will not be included however.
-                -->
-                <directory>../vlo_importer/src/main/resources</directory>
-                <includes>
-                    <include>cmdi2xhtml.xsl</include>
-                </includes>                    
-            </resource>
         </resources>
 
         <plugins>
