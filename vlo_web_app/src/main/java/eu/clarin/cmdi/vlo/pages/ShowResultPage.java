@@ -30,9 +30,7 @@ import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
@@ -44,8 +42,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -503,7 +499,7 @@ public class ShowResultPage extends BasePage {
     }
 
     private Label completeCmdiLabel = null;
-    
+
     /**
      * Add complete CMDI view
      *
@@ -514,7 +510,7 @@ public class ShowResultPage extends BasePage {
         final MarkupContainer completeCmdiContainer = new WebMarkupContainer("completeCmdiContainer");
         completeCmdiContainer.setOutputMarkupId(true);
         add(completeCmdiContainer);
-        
+
         // Add a toggle link that provides lazy execution of CMDI transformation
         Link toggleLink = new IndicatingAjaxFallbackLink("toggleCmdiView") {
 
@@ -528,7 +524,10 @@ public class ShowResultPage extends BasePage {
                     // subsequent click: toggle visibility of transformation output
                     completeCmdiLabel.setVisible(!completeCmdiLabel.isVisible());
                 }
-                target.add(completeCmdiContainer);
+                if (target != null) {
+                    // Ajax supported, updated only container
+                    target.add(completeCmdiContainer);
+                }
             }
         };
         // add a label to the toggle link that represents the visibility state of the transformation output
@@ -536,16 +535,16 @@ public class ShowResultPage extends BasePage {
 
             @Override
             public String getObject() {
-                if(completeCmdiLabel == null || !completeCmdiLabel.isVisible()){
+                if (completeCmdiLabel == null || !completeCmdiLabel.isVisible()) {
                     return "Show CMDI metadata";
-                } else{
+                } else {
                     return "Hide CMDI metadata";
                 }
             }
         });
         toggleLink.add(toggleLabel);
         completeCmdiContainer.add(toggleLink);
-        
+
         // add a placeholder for the transformation
         final WebMarkupContainer completeCmdiPlaceholder = new WebMarkupContainer("completeCmdi");
         completeCmdiPlaceholder.setVisible(false);
