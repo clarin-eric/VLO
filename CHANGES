@@ -1,9 +1,12 @@
 
 Bug Fixes and Features
 
-Beta release 2.18 
+Beta release 2.18  (January 2014)
 
+Upgraded to Wicket 6
 Added support for a separate facet concepts file used for testing only
+Configured mount points for pages (URLs changed as a result)
+Added configuration parameters ‘pagesInApplicationCache’ and ‘sessionCacheSize’ to control the size of the Wicket page cache
 
 Beta release 2.17 (november 2013)
 

@@ -19,17 +19,11 @@
             <outputDirectory>doc</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>vlo_web_app</directory>
+            <directory>.</directory>
             <includes>
                 <include>CHANGES</include>
                 <include>DEPLOY-README</include>
-            </includes>
-            <outputDirectory>doc</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>.</directory>
-            <includes>
-                <include>DEPLOY-README</include>
+                <include>UPGRADE</include>
             </includes>
             <outputDirectory>doc</outputDirectory>
         </fileSet>
