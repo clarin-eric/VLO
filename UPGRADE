@@ -8,10 +8,11 @@ HTTP server to achieve the following mappings:
 
 - {vlobase}/?wicket:bookmarkablePage=:eu.clarin.cmdi.vlo.pages.ShowResultPage&docId={docId}
 	-> {vlobase}/record?docId={docId}
-	(also keep any 'q' or 'fq' GET parameters - there may be multiple)
 
-- {vlobase}/?wicket:bookmarkablePage=:eu.clarin.cmdi.vlo.pages.ShowAllFacetValuesPage&selectedFacet={facet}&facetMinOccurs={x}
-	-> {vlobase}/values/{facet}?facetMinOccurs={x}
+- {vlobase}/?wicket:bookmarkablePage=:eu.clarin.cmdi.vlo.pages.ShowAllFacetValuesPage&selectedFacet={facet}
+	-> {vlobase}/values/{facet}
+
+In both case all additional GET parameters SHOULD be kept.
 
 * Two mandatory configuration parameters have been added to the VLO
 configuration. Add the following to the existing configuration as a child of
@@ -20,3 +21,8 @@ the VloConfig root node, then tweak as needed:
     <pagesInApplicationCache>128</pagesInApplicationCache>
     
     <sessionCacheSize>500</sessionCacheSize>
+    
+    <helpUrl>
+
+* Remove useMaxFileSize parameter from VloConfig
+* Rename parameter maxDaysToLife to maxDaysInSolr
