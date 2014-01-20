@@ -5,11 +5,10 @@ import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.resource.ContextRelativeResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,16 +29,11 @@ public class ResourceLinkPanel extends LinkPanel {
     private final static String URN_NBN_RESOLVER_URL = 
             "http://www.nbn-resolving.org/redirect/";
 
-    private final static ImageResource ANNOTATION = new ImageResource(new 
-            ContextRelativeResource("Images/text-x-log.png"), "Annotation file");
-    private final static ImageResource AUDIO = new ImageResource(new 
-            ContextRelativeResource("Images/audio-x-generic.png"), "Audio file");
-    private final static ImageResource IMAGE = new ImageResource(new 
-            ContextRelativeResource("Images/image-x-generic.png"), "Image file");
-    private final static ImageResource TEXT = new  ImageResource(new 
-            ContextRelativeResource("Images/text-x-generic.png"), "Text file");
-    private final static ImageResource VIDEO = new ImageResource(new 
-            ContextRelativeResource("Images/video-x-generic.png"), "Video file");
+    private final static ImageResource ANNOTATION = new ImageResource("text-x-log.png", "Annotation file");
+    private final static ImageResource AUDIO = new ImageResource("audio-x-generic.png", "Audio file");
+    private final static ImageResource IMAGE = new ImageResource("image-x-generic.png", "Image file");
+    private final static ImageResource TEXT = new  ImageResource("text-x-generic.png", "Text file");
+    private final static ImageResource VIDEO = new ImageResource("video-x-generic.png", "Video file");
 
     private final static Map<String, ImageResource> ICON_MAP = new 
             HashMap<String, ImageResource>();
@@ -63,8 +57,8 @@ public class ResourceLinkPanel extends LinkPanel {
         ImageResource imageResouce = getImage(mimeType);
         Image resourceImg = new Image("resourceImage", imageResouce.getResource());
         String title = imageResouce.getTitle() + " (" + mimeType + ")";
-        resourceImg.add(new SimpleAttributeModifier("title", title));
-        resourceImg.add(new SimpleAttributeModifier("alt", title));
+        resourceImg.add(new AttributeModifier("title", title));
+        resourceImg.add(new AttributeModifier("alt", title));
         String href = getHref(resourceLink);
         String name = getNameFromLink(resourceLink);
         ExternalLink link = new ExternalLink("resourceLink", href);

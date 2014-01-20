@@ -56,12 +56,12 @@ public class SolrFacetFieldDataProvider implements IDataProvider<Count> {
     }
 
     @Override
-    public Iterator<? extends Count> iterator(int first, int count) {
-        return getFacet().getValues().subList(first, first + count).iterator();
+    public Iterator<? extends Count> iterator(long first, long count) {
+        return getFacet().getValues().subList((int)first, (int)first + (int)count).iterator();
     }
 
     @Override
-    public int size() {
+    public long size() {
         return getFacet().getValueCount();
     }
 

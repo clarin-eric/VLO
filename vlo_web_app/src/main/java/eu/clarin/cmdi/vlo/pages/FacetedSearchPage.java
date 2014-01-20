@@ -2,7 +2,7 @@ package eu.clarin.cmdi.vlo.pages;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.Resources;
-import eu.clarin.cmdi.vlo.VloWebApplication.ThemedSession;
+import eu.clarin.cmdi.vlo.VloSession;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.AutoCompleteDao;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
@@ -19,13 +19,13 @@ import java.util.Map;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteTextField;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
@@ -35,19 +35,22 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.protocol.http.RequestUtils;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
 
 public class FacetedSearchPage extends BasePage {
+
     private static final long serialVersionUID = 1L;
 
     private final SearchPageQuery query;
     private final static AutoCompleteDao autoCompleteDao = new AutoCompleteDao();
     private final static String facetConceptsFile = VloConfig.getFacetConceptsFile();
     private final static Map<String, FacetConcept> facetNameMap = VLOMarshaller.getFacetConceptMapping(facetConceptsFile).getFacetConceptMap();
-    
+
     /**
      * @param parameters Page parameters
      * @throws SolrServerException
@@ -63,8 +66,9 @@ public class FacetedSearchPage extends BasePage {
 
     @SuppressWarnings("serial")
     private class SearchBoxForm extends Form<SearchPageQuery> {
+
         private final AutoCompleteTextField<String> searchBox;
-        
+
         /*
          * Add multiline list of selected facet values
          */
@@ -75,8 +79,8 @@ public class FacetedSearchPage extends BasePage {
             selectedFacets = query.getFilterQueryMap();
 
             // create an interator for walking over the facets
-            Iterator<Map.Entry<String, String>> entries = 
-                    selectedFacets.entrySet().iterator();
+            Iterator<Map.Entry<String, String>> entries
+                    = selectedFacets.entrySet().iterator();
 
             /*
              * Wicket label to be used to show the list of facets that have been 
@@ -87,7 +91,7 @@ public class FacetedSearchPage extends BasePage {
             // walk over the facets
             if (!entries.hasNext()) {
                 // not a single facet has been selected
-                facetOverview = new MultiLineLabel("facetOverview", 
+                facetOverview = new MultiLineLabel("facetOverview",
                         "No facets values selected");
             } else {
                 // at least one facet has been selected
@@ -142,6 +146,7 @@ public class FacetedSearchPage extends BasePage {
         public SearchBoxForm(String id, SearchPageQuery query) {
             super(id, new CompoundPropertyModel<SearchPageQuery>(query));
             add(new ExternalLink("vloHomeLink", VloConfig.getHomeUrl()));
+            add(new BookmarkablePageLink("facetedSearchLink", FacetedSearchPage.class));
 
             searchBox = new AutoCompleteTextField<String>("searchQuery") {
                 @Override
@@ -149,103 +154,111 @@ public class FacetedSearchPage extends BasePage {
                     return autoCompleteDao.getChoices(input).iterator();
                 }
             };
-            
+
             add(searchBox);
             Button submit = new Button("searchSubmit");
             add(submit);
-            
+
             // add link to help menu page 
-            String helpUrl = VloConfig.getHelpUrl();            
+            String helpUrl = VloConfig.getHelpUrl();
             ExternalLink helpLink = new ExternalLink("helpLink", helpUrl, "help");
             add(helpLink);
-            
-            String thisURL = RequestUtils.toAbsolutePath(RequestCycle.get().urlFor(ShowResultPage.class, query.getPageParameters()).toString());
+
+            PageParameters param;
+            param = new PageParameters(query.getPageParameters());
+            // add the session persistent parameters
+            param.mergeWith(VloSession.get().getVloSessionPageParameters());
+
+            final RequestCycle reqCycle = getRequestCycle();
+            // kj, the same here
+            final Url reqUrl = Url.parse(reqCycle.urlFor(ShowResultPage.class, param));
+            String thisURL = reqCycle.getUrlRenderer().renderFullUrl(reqUrl);
+
             try {
-            	thisURL = URLEncoder.encode(thisURL,"UTF-8");
+                thisURL = URLEncoder.encode(thisURL, "UTF-8");
             } catch (UnsupportedEncodingException e) {
             }
-            
+
             String feedbackFormUrl = VloConfig.getFeedbackFromUrl() + thisURL;
             ExternalLink feedbackLink = new ExternalLink("feedbackLink", feedbackFormUrl, "found an error?");
             add(feedbackLink);
-            
+
             addFacetOverview();
         }
 
         @Override
         protected void onSubmit() {
             SearchPageQuery query = getModelObject();
-            PageParameters pageParameters = query.getPageParameters();
+            PageParameters param = query.getPageParameters();
+            // add the session persistent parameters
+            param.mergeWith(VloSession.get().getVloSessionPageParameters());
 
-            // pageParameters = webApp.reflectPersistentParameters(pageParameters);
-            pageParameters = ((ThemedSession)getSession()).reflectPersistentParameters(pageParameters);
-            
-            setResponsePage(FacetedSearchPage.class, pageParameters);
+            setResponsePage(FacetedSearchPage.class, param);
         }
     }
 
     private void addSearchBox() {
         add(new SearchBoxForm("searchForm", query));
     }
-    
+
     @SuppressWarnings("serial")
     private void addFacetColumns() {
-        GridView<FacetField> facetColumns = new GridView<FacetField>("facetColumns", new SolrFacetDataProvider(query.getSolrQuery()
+        GridView<FacetField> facetColumns = new GridView<FacetField>("facetColumns", (IDataProvider<FacetField>) new SolrFacetDataProvider(query.getSolrQuery()
                 .getCopy())) {
-            @Override
-            protected void populateItem(Item<FacetField> item) {
-            	String facetName = ((FacetField)item.getDefaultModelObject()).getName();
-            	String descriptionTooltip = "";
-            	if(facetNameMap.containsKey(facetName))
-            		descriptionTooltip = facetNameMap.get(facetName).getDescription();
-            	item.add(new FacetBoxPanel("facetBox", item.getModel(), descriptionTooltip).create(query));
-            }
+                    @Override
+                    protected void populateItem(Item<FacetField> item) {
+                        String facetName = ((FacetField) item.getDefaultModelObject()).getName();
+                        String descriptionTooltip = "";
+                        if (facetNameMap.containsKey(facetName)) {
+                            descriptionTooltip = facetNameMap.get(facetName).getDescription();
+                        }
+                        item.add(new FacetBoxPanel("facetBox", item.getModel(), descriptionTooltip).create(query));
+                    }
 
-            @Override
-            protected void populateEmptyItem(Item<FacetField> item) {
-                item.add(new Label("facetBox", ""));
-            }
-        };
+                    @Override
+                    protected void populateEmptyItem(Item<FacetField> item) {
+                        item.add(new Label("facetBox", ""));
+                    }
+                };
         facetColumns.setColumns(2);
         add(facetColumns);
     }
 
     @SuppressWarnings("serial")
     private void addSearchResults() {
-        List<IColumn<SolrDocument>> columns = new ArrayList<IColumn<SolrDocument>>();
-        columns.add(new AbstractColumn<SolrDocument>(new ResourceModel(Resources.NAME)) {
-            
+        List<IColumn<SolrDocument, String>> columns;
+        columns = new ArrayList<IColumn<SolrDocument, String>>();
+        columns.add(new AbstractColumn<SolrDocument, String>(new ResourceModel(Resources.NAME)) {
+
             @Override
             public void populateItem(Item<ICellPopulator<SolrDocument>> cellItem, String componentId, IModel<SolrDocument> rowModel) {
                 cellItem.add(new DocumentLinkPanel(componentId, rowModel, query));
             }
         });
-        columns.add(new AbstractColumn<SolrDocument>(new ResourceModel(Resources.DESCRIPTION)) {
+        columns.add(new AbstractColumn<SolrDocument, String>(new ResourceModel(Resources.DESCRIPTION)) {
 
             @Override
             public void populateItem(Item<ICellPopulator<SolrDocument>> cellItem, String componentId, IModel<SolrDocument> rowModel) {
-        	String descriptionText = (String) rowModel.getObject().getFirstValue(FacetConstants.FIELD_DESCRIPTION);
+                String descriptionText = (String) rowModel.getObject().getFirstValue(FacetConstants.FIELD_DESCRIPTION);
                 cellItem.add(new TruncatedLabel(componentId, 100, descriptionText));
-                
             }
         });
-        AjaxFallbackDefaultDataTable<SolrDocument> searchResultList = new AjaxFallbackDefaultDataTable<SolrDocument>("searchResults", columns,
-                new SolrDocumentDataProvider(query.getSolrQuery().getCopy()), 30);
+        AjaxFallbackDefaultDataTable<SolrDocument, String> searchResultList = new AjaxFallbackDefaultDataTable<SolrDocument, String>("searchResults", columns, (ISortableDataProvider<SolrDocument, String>) new SolrDocumentDataProvider(query.getSolrQuery().getCopy()), 30);
 
         add(searchResultList);
     }
-    
+
     /**
      * Add contentSearch form (FCS)
      *
      * @param solrDocument
      */
     private void addSearchServiceForm() {
-        
+
         BookmarkablePageLink link;
-        link = new BookmarkablePageLink ("link", FacetedSearchPage.class);
-        link.add (new Label ("naar deze pagina"));
-        
+        link = new BookmarkablePageLink("link", FacetedSearchPage.class);
+        link.add(new Label("naar deze pagina"));
+
         // get values for cql endpoint substitution
         String cqlEndpointFilter = VloConfig.getCqlEndpointFilter();
         String cqlEndpointAlternative = VloConfig.getCqlEndpointAlternative();
@@ -262,7 +275,7 @@ public class FacetedSearchPage extends BasePage {
 
                 int offset = 0;
                 int fetchSize = 1000;
-                int totalResults = dataProvider.size();
+                int totalResults = (int) dataProvider.size();
                 while (offset < totalResults) {
                     Iterator<SolrDocument> iter = dataProvider.iterator(offset, fetchSize);
                     while (iter.hasNext()) {
@@ -274,15 +287,15 @@ public class FacetedSearchPage extends BasePage {
                         } else {
                             List<String> idArray = new ArrayList<String>();
                             idArray.add(id);
-                            
+
                             // substitute endpoint
-                            if (cqlEndpointFilter.length() == 0){
+                            if (cqlEndpointFilter.length() == 0) {
                                 // no substitution
                             } else {
                                 // check for the need to substitute
                             }
-                                
-                            if (cqlEndpointFilter.equals(cqlEndpointFilter)){
+
+                            if (cqlEndpointFilter.equals(cqlEndpointFilter)) {
                                 // no substitution, take the value from the record
                                 aggregationContextMap.put(fcsEndpoint, idArray);
                             } else {

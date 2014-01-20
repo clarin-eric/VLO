@@ -30,15 +30,33 @@ img{
     width: 66%;
 }
 
-.opening .resulttable{
+.opening .resulttable {
     width: 33%;
     margin-left: 11px;
 }
-.opening .resulttable .headers{
+
+.opening .resulttable table .headers{
     background-color: #6b824a;
 }
 
-.resulttable tbody{
+.resulttable table {
+    margin: 0px;
+    border-spacing: 0px;
+}
+
+.opening .resulttable table td {
+    padding: 0px;
+}
+
+.resulttable table .navigatorLabel {
+    float: left;
+}
+
+.resulttable table .navigator {
+    text-align: right;
+}
+
+.resulttable table tbody {
     background-color:#BCCEE8;
 }
 
@@ -206,7 +224,7 @@ img{
      padding-right:5px;
 }
 
-.resulttable tbody tr.odd {
+.resulttable table tr.odd {
     background-color: #CEDCEF;
 }
 

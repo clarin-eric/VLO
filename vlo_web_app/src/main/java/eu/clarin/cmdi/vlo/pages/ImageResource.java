@@ -1,18 +1,16 @@
 package eu.clarin.cmdi.vlo.pages;
 
-import org.apache.wicket.Resource;
-
 public class ImageResource {
 
-    private final Resource resource;
+    private final String resource;
     private final String title;
 
-    public ImageResource(Resource resource, String title) {
+    public ImageResource(String resource, String title) {
         this.resource = resource;
         this.title = title;
     }
 
-    public Resource getResource() {
+    public String getResource() {
         return resource;
     }
 

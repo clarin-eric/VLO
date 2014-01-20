@@ -3,8 +3,7 @@ package eu.clarin.cmdi.vlo.pages;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.Resources;
 import eu.clarin.cmdi.vlo.StringUtils;
-import eu.clarin.cmdi.vlo.VloWebApplication;
-import eu.clarin.cmdi.vlo.VloWebApplication.ThemedSession;
+import eu.clarin.cmdi.vlo.VloSession;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.DaoLocator;
 import java.io.InputStreamReader;
@@ -27,11 +26,13 @@ import net.sf.saxon.s9api.XsltCompiler;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.Application;
 import org.apache.wicket.Component;
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.RequestCycle;
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
@@ -41,25 +42,30 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.protocol.http.RequestUtils;
-import org.apache.wicket.protocol.http.WicketURLDecoder;
-import org.apache.wicket.protocol.http.WicketURLEncoder;
-import org.apache.wicket.resource.ContextRelativeResource;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.util.encoding.UrlDecoder;
+import org.apache.wicket.util.encoding.UrlEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Page showing VLO search results
- * 
+ *
  * @author keeloo, for the addLandingPage links method and annotations
  */
 public class ShowResultPage extends BasePage {
@@ -67,27 +73,26 @@ public class ShowResultPage extends BasePage {
     private final static Logger LOG = LoggerFactory.getLogger(ShowResultPage.class);
     public static final String PARAM_DOC_ID = "docId";
     public static final String feedbackfromURL = VloConfig.getFeedbackFromUrl();
-    
-    private final URL xslFile = getClass().getResource("/cmdi2xhtml.xsl");
-    
+
+    private final URL xslFile = getClass().getResource("/eu/clarin/cmdi/vlo/pages/cmdi2xhtml.xsl");
+    private final ResourceReference XSL_CSS_REFERENCE = new PackageResourceReference(getClass(), "cmdi.css");
+
     @SuppressWarnings("serial")
     public ShowResultPage(final PageParameters currentParam) {
-        
         super(currentParam);
-        final String docId = WicketURLDecoder.QUERY_INSTANCE.decode(getPageParameters().getString(PARAM_DOC_ID, null));
+        //Document ID is assumed to have been encoded (typcially in DocumentLinkPanel) decode here
+        final String docId = UrlDecoder.QUERY_INSTANCE.decode(
+                getPageParameters().get(PARAM_DOC_ID).toString(),
+                Application.get().getRequestCycleSettings().getResponseRequestEncoding()); // get current character set from request cycle
         SolrDocument solrDocument = DaoLocator.getSearchResultsDao().getSolrDocument(docId);
         if (solrDocument != null) {
             final SearchPageQuery query = new SearchPageQuery(currentParam);
-            
-            // now the persistent parameters are not in the query parameters
-            PageParameters newParam = new PageParameters ();
-            // add the new query parameters to this map
-            newParam.putAll(query.getPageParameters());
-            // add the persistent parameters to this map
-            //newParam = webApp.reflectPersistentParameters(newParam);
-            
-            newParam = ((VloWebApplication.ThemedSession)getSession()).reflectPersistentParameters(newParam);
-            
+
+            // create parameters from the query, and add them with session related parameters
+            PageParameters newParam = new PageParameters(query.getPageParameters());
+            // add the session persistent parameters
+            newParam.mergeWith(VloSession.get().getVloSessionPageParameters());
+
             BookmarkablePageLink<String> backLink = new BookmarkablePageLink<String>("backLink", FacetedSearchPage.class, newParam);
             add(backLink);
             String href = getHref(docId);
@@ -97,21 +102,22 @@ public class ShowResultPage extends BasePage {
                 add(new Label("openBrowserLink", new ResourceModel(Resources.ORIGINAL_CONTEXT_NOT_AVAILABLE).getObject()));
             }
             addAttributesTable(solrDocument);
-            
+
             /* If there are any, add the link or links to landing pages 
              * contained in the solr document.
              */
             addLandingPageLinks(solrDocument);
-            
+
             // also, if there are any, add the link or links to search pages 
             addSearchPageLinks(solrDocument);
 
             // add the rest of the resource links to the result page
             addResourceLinks(solrDocument);
-            
+
             addSearchServiceForm(solrDocument);
+
             addCompleteCmdiView(solrDocument);
-            
+
             add(new AjaxLazyLoadPanel("prevNextHeader") {
 
                 @Override
@@ -170,32 +176,34 @@ public class ShowResultPage extends BasePage {
         table = new DataTable("attributesTable", createAttributesColumns(), attributeProvider, 250);
         // associate css with table
         table.setTableBodyCss("attributesTbody");
-        table.addTopToolbar(new HeadersToolbar(table, null));  
+        table.addTopToolbar(new HeadersToolbar(table, null));
         // add table to page
         add(table);
     }
 
     /**
-     * Create the columns for the table. 
-     * 
+     * Create the columns for the table.
+     *
      * Create one column for the attributes and one column for their values.
-     * 
-     * @param
+     *
+     * @newParam
      */
-    private IColumn[] createAttributesColumns() {
-        IColumn[] columns = new IColumn[2];
+    private List<IColumn> createAttributesColumns() {
+        List<IColumn> columns = new ArrayList<IColumn>();
 
         // create the column for the attribute names
-        columns[0] = new PropertyColumn<Object>(new ResourceModel(Resources.FIELD), "field") {
+        IColumn column = null;
+        column = new PropertyColumn<Object, Object>(new ResourceModel(Resources.FIELD), "field") {
 
             @Override
             public String getCssClass() {
                 return "attribute";
             }
         };
+        columns.add(column);
 
         // create the column for the values of the attributes
-        columns[1] = new AbstractColumn<DocumentAttribute>(new ResourceModel(Resources.VALUE)) {
+        column = new AbstractColumn<DocumentAttribute, String>(new ResourceModel(Resources.VALUE)) {
             @Override
             public void populateItem(Item<ICellPopulator<DocumentAttribute>> cellItem,
                     String componentId, IModel<DocumentAttribute> rowModel) {
@@ -214,7 +222,7 @@ public class ShowResultPage extends BasePage {
                 if (attribute.getField().equals(FacetConstants.FIELD_LANGUAGES)) {
                     cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
                         @Override
-                        protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+                        public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
                             setEscapeModelStrings(false);
                             CharSequence body = getDefaultModelObjectAsString();
                             replaceComponentTagBody(markupStream, openTag, body);
@@ -223,7 +231,7 @@ public class ShowResultPage extends BasePage {
                 } else if (attribute.getField().equals(FacetConstants.FIELD_COMPLETE_METADATA)) {
                     cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
                         @Override
-                        protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+                        public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
                             setEscapeModelStrings(false);
                             CharSequence body = getDefaultModelObjectAsString();
                             replaceComponentTagBody(markupStream, openTag, "<a href=\"" + body + "\">" + body + "</a>");
@@ -232,7 +240,7 @@ public class ShowResultPage extends BasePage {
                 } else {
                     cellItem.add(new SmartLinkMultiLineLabel(componentId, attribute.getValue()) {
                         @Override
-                        protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+                        public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
                             CharSequence body = StringUtils.toMultiLineHtml(getDefaultModelObjectAsString());
                             replaceComponentTagBody(markupStream, openTag, getSmartLink(body));
                         }
@@ -245,17 +253,18 @@ public class ShowResultPage extends BasePage {
                 return "attributeValue";
             }
         };
+        columns.add(column);
 
         return columns;
     }
-    
+
     /**
      * Add landing page links to the result page.
      *
-     * @param solrDocument the document to get the links from
+     * @newParam solrDocument the document to get the links from
      */
     private void addLandingPageLinks(SolrDocument solrDocument) {
-        
+
         Label oneLandingPageText;
         oneLandingPageText = new Label("oneLandingPage",
                 new ResourceModel(Resources.LANDING_PAGE).getObject() + ":");
@@ -275,7 +284,7 @@ public class ShowResultPage extends BasePage {
          * made visible.
          */
         if (!solrDocument.containsKey(FacetConstants.FIELD_LANDINGPAGE)) {
-            
+
             /* Since there are no links to be shown, make both labels defined in
              * the page invisible
              */
@@ -284,10 +293,10 @@ public class ShowResultPage extends BasePage {
         } else {
             //  make one of the two labels invisible
 
-            Collection<Object> landingPages = 
-                    solrDocument.getFieldValues(FacetConstants.FIELD_LANDINGPAGE);
+            Collection<Object> landingPages
+                    = solrDocument.getFieldValues(FacetConstants.FIELD_LANDINGPAGE);
             if (landingPages.size() > 1) {
-                
+
                 // the list will contain more than one landing page link
                 oneLandingPageText.setVisible(false);
                 moreLandingPagesText.setVisible(true);
@@ -296,7 +305,7 @@ public class ShowResultPage extends BasePage {
                 oneLandingPageText.setVisible(true);
                 moreLandingPagesText.setVisible(false);
             }
-            
+
             // generate the list of links
             for (Iterator<Object> it = landingPages.iterator(); it.hasNext();) {
                 final Object landingPage;
@@ -318,14 +327,14 @@ public class ShowResultPage extends BasePage {
             }
         }
     }
-    
+
     /**
      * Add search page links to the result page.
      *
-     * @param solrDocument the document to get the links from
+     * @newParam solrDocument the document to get the links from
      */
     private void addSearchPageLinks(SolrDocument solrDocument) {
-        
+
         Label oneSearchPageText;
         oneSearchPageText = new Label("oneSearchPage",
                 new ResourceModel(Resources.SEARCH_PAGE).getObject() + ":");
@@ -345,7 +354,7 @@ public class ShowResultPage extends BasePage {
          * made visible.
          */
         if (!solrDocument.containsKey(FacetConstants.FIELD_SEARCHPAGE)) {
-            
+
             /* Since there are no links to be shown, make both labels defined in
              * the page invisible
              */
@@ -354,10 +363,10 @@ public class ShowResultPage extends BasePage {
         } else {
             //  make one of the two labels invisible
 
-            Collection<Object> searchPages = 
-                    solrDocument.getFieldValues(FacetConstants.FIELD_SEARCHPAGE);
+            Collection<Object> searchPages
+                    = solrDocument.getFieldValues(FacetConstants.FIELD_SEARCHPAGE);
             if (searchPages.size() > 1) {
-                
+
                 // the list will contain more than one landing page link
                 oneSearchPageText.setVisible(false);
                 moreSearchPagesText.setVisible(true);
@@ -366,7 +375,7 @@ public class ShowResultPage extends BasePage {
                 oneSearchPageText.setVisible(true);
                 moreSearchPagesText.setVisible(false);
             }
-            
+
             // generate the list of links
             for (Iterator<Object> it = searchPages.iterator(); it.hasNext();) {
                 final Object searchPage;
@@ -393,12 +402,12 @@ public class ShowResultPage extends BasePage {
      * Add links to resources other than search or landing pages to the result
      * page.
      *
-     * @param solrDocument the document to get the links from
+     * @newParam solrDocument the document to get the links from
      */
     private void addResourceLinks(SolrDocument solrDocument) {
         RepeatingView repeatingView = new RepeatingView("resourceList");
         add(repeatingView);
-        if (solrDocument.containsKey(FacetConstants.FIELD_RESOURCE)) {     
+        if (solrDocument.containsKey(FacetConstants.FIELD_RESOURCE)) {
             Collection<Object> resources = solrDocument.getFieldValues(FacetConstants.FIELD_RESOURCE);
             if (resources.size() > 1) {
                 repeatingView.add(new Label(repeatingView.newChildId(), new ResourceModel(Resources.RESOURCE_PL)));
@@ -421,108 +430,164 @@ public class ShowResultPage extends BasePage {
             repeatingView.add(new Label(repeatingView.newChildId(), new ResourceModel(Resources.NO_RESOURCE_FOUND)));
         }
     }
-    
+
     private void addFeedbackLink(final PageParameters parameters) {
-        String thisURL = RequestUtils.toAbsolutePath(RequestCycle.get().urlFor(ShowResultPage.class, parameters).toString());
+
+        PageParameters newParam = new PageParameters(parameters);
+        // add the session persistent paremeters
+        newParam.mergeWith(VloSession.get().getVloSessionPageParameters());
+
+        final RequestCycle reqCycle = getRequestCycle();
+        // the following will not be necessary anymore
+        // final Url reqUrl = Url.parse(reqCycle.urlFor(ShowResultPage.class, newParam.convert()));
+        final Url reqUrl = Url.parse(reqCycle.urlFor(ShowResultPage.class, newParam));
+        String thisURL = reqCycle.getUrlRenderer().renderFullUrl(reqUrl);
+
         try {
-            thisURL = URLEncoder.encode(thisURL,"UTF-8");
+            thisURL = URLEncoder.encode(thisURL, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             LOG.error(e.toString());
         }
-    	
+
         // Image resourceImg = new Image("feedbackImage", FEEDBACK_IMAGE.getResource());
         // String title = "Report an error";
         // resourceImg.add(new SimpleAttributeModifier("title", title));
         // resourceImg.add(new SimpleAttributeModifier("alt", title));
-        String href = getHref(feedbackfromURL+thisURL);
-        String name = feedbackfromURL+thisURL;
+        String href = getHref(feedbackfromURL + thisURL);
+        String name = feedbackfromURL + thisURL;
         ExternalLink link = new ExternalLink("feedbackLink", href, "found an error?");
         // link.add(resourceImg);
         // add(new Label("feedbackLabel", "Found an error?"));
         add(link);
     }
 
-    public static BookmarkablePageLink<ShowResultPage> createBookMarkableLink(String linkId, SearchPageQuery query, String docId, ThemedSession session) {
-        PageParameters pageParameters = query.getPageParameters();
-        pageParameters.put(ShowResultPage.PARAM_DOC_ID, WicketURLEncoder.QUERY_INSTANCE.encode(docId));
-        
-        // webApp.reflectPersistentParameters(pageParameters);
-        // instead of this: pass page parameters back to the session
-        session.reflectPersistentParameters(pageParameters);
+    public static BookmarkablePageLink<ShowResultPage> createBookMarkableLink(String linkId, SearchPageQuery query, String docId) {
 
+        // create new page parameters from the query parameters and the session related ones
+        PageParameters newParam;
+        newParam = new PageParameters(query.getPageParameters());
+        newParam.add(ShowResultPage.PARAM_DOC_ID, UrlEncoder.QUERY_INSTANCE.encode(
+                docId,
+                Application.get().getRequestCycleSettings().getResponseRequestEncoding())); // get current character set from request cycle
+        // add the session persistent parameters
+        newParam.mergeWith(VloSession.get().getVloSessionPageParameters());
         BookmarkablePageLink<ShowResultPage> docLink = new BookmarkablePageLink<ShowResultPage>(linkId, ShowResultPage.class,
-                pageParameters);
+                newParam);
         return docLink;
     }
-    
-	/**
-	 * Add contentSearch form (FCS)
-	 * @param solrDocument
-	 */
-	private void addSearchServiceForm(final SolrDocument solrDocument) {
-		final WebMarkupContainer contentSearchContainer = new WebMarkupContainer("contentSearch");
-		add(contentSearchContainer);
-		
-		if (solrDocument.containsKey(FacetConstants.FIELD_SEARCH_SERVICE)) {
-			try {
-				// building map (CQL endpoint -> List with resource ID)
-				HashMap<String, List<String>> aggregrationContextMap = new HashMap<String, List<String>>();
-				List<String> idList = new ArrayList<String>();
-				idList.add(solrDocument.getFirstValue(FacetConstants.FIELD_ID).toString());
-				aggregrationContextMap.put(solrDocument.getFirstValue(FacetConstants.FIELD_SEARCH_SERVICE).toString(), idList);
-				Label contentSearchLabel = new Label("contentSearchForm", HtmlFormCreator.getContentSearchForm(aggregrationContextMap, "Plain text search via Federated Content Search"));
-				contentSearchLabel.setEscapeModelStrings(false);				
-				contentSearchContainer.add(contentSearchLabel);
-			} catch (UnsupportedEncodingException uee) {
-				contentSearchContainer.setVisible(false);
-			}
-		} else {
-			contentSearchContainer.setVisible(false);
-		}
-	}
-	
-	/**
-	 * Add complete CMDI view
-	 * @param solrDocument
-	 */
-	private void addCompleteCmdiView(final SolrDocument solrDocument) {
-		StringWriter strWriter = new StringWriter();
+
+    /**
+     * Add contentSearch form (FCS)
+     *
+     * @newParam solrDocument
+     */
+    private void addSearchServiceForm(final SolrDocument solrDocument) {
+        final WebMarkupContainer contentSearchContainer = new WebMarkupContainer("contentSearch");
+        add(contentSearchContainer);
+
+        if (solrDocument.containsKey(FacetConstants.FIELD_SEARCH_SERVICE)) {
+            try {
+                // building map (CQL endpoint -> List with resource ID)
+                HashMap<String, List<String>> aggregrationContextMap = new HashMap<String, List<String>>();
+                List<String> idList = new ArrayList<String>();
+                idList.add(solrDocument.getFirstValue(FacetConstants.FIELD_ID).toString());
+                aggregrationContextMap.put(solrDocument.getFirstValue(FacetConstants.FIELD_SEARCH_SERVICE).toString(), idList);
+                Label contentSearchLabel = new Label("contentSearchForm", HtmlFormCreator.getContentSearchForm(aggregrationContextMap, "Plain text search via Federated Content Search"));
+                contentSearchLabel.setEscapeModelStrings(false);
+                contentSearchContainer.add(contentSearchLabel);
+            } catch (UnsupportedEncodingException uee) {
+                contentSearchContainer.setVisible(false);
+            }
+        } else {
+            contentSearchContainer.setVisible(false);
+        }
+    }
+
+    private Label completeCmdiLabel = null;
+
+    /**
+     * Add complete CMDI view
+     *
+     * @newParam solrDocument
+     */
+    private void addCompleteCmdiView(final SolrDocument solrDocument) {
+        // create a container for the complete CMDI view and a toggle link (this is required for proper AJAX updates)
+        final MarkupContainer completeCmdiContainer = new WebMarkupContainer("completeCmdiContainer");
+        completeCmdiContainer.setOutputMarkupId(true);
+        add(completeCmdiContainer);
+
+        // Add a toggle link that provides lazy execution of CMDI transformation
+        Link toggleLink = new IndicatingAjaxFallbackLink("toggleCmdiView") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if (completeCmdiLabel == null) {
+                    // first click: perform transformation
+                    createCompleteCmdiView(solrDocument);
+                    completeCmdiContainer.addOrReplace(completeCmdiLabel);
+                } else {
+                    // subsequent click: toggle visibility of transformation output
+                    completeCmdiLabel.setVisible(!completeCmdiLabel.isVisible());
+                }
+                if (target != null) {
+                    // Ajax supported, updated only container
+                    target.add(completeCmdiContainer);
+                }
+            }
+        };
+        // add a label to the toggle link that represents the visibility state of the transformation output
+        final Label toggleLabel = new Label("toggleLabel", new AbstractReadOnlyModel<String>() {
+
+            @Override
+            public String getObject() {
+                if (completeCmdiLabel == null || !completeCmdiLabel.isVisible()) {
+                    return "Show CMDI metadata";
+                } else {
+                    return "Hide CMDI metadata";
+                }
+            }
+        });
+        toggleLink.add(toggleLabel);
+        completeCmdiContainer.add(toggleLink);
+
+        // add a placeholder for the transformation
+        final WebMarkupContainer completeCmdiPlaceholder = new WebMarkupContainer("completeCmdi");
+        completeCmdiPlaceholder.setVisible(false);
+        completeCmdiContainer.add(completeCmdiPlaceholder);
+    }
+
+    private void createCompleteCmdiView(final SolrDocument solrDocument) {
+        StringWriter strWriter = new StringWriter();
 
         final Processor proc = new Processor(false);
         final XsltCompiler comp = proc.newXsltCompiler();
 
         try {
-                final XsltExecutable exp = comp.compile(new StreamSource(xslFile.getFile()));
-                final XdmNode source = proc.newDocumentBuilder().build(
-                                new StreamSource(new InputStreamReader(new URL(solrDocument.getFirstValue(FacetConstants.FIELD_COMPLETE_METADATA).toString()).openStream())));
-                final Serializer out = new Serializer();
-                out.setOutputProperty(Serializer.Property.METHOD, "html");
-                out.setOutputProperty(Serializer.Property.INDENT, "yes");
-                out.setOutputProperty(Serializer.Property.ENCODING, "UTF-8");
-                out.setOutputWriter(strWriter);
-                final XsltTransformer trans = exp.load();
+            final XsltExecutable exp = comp.compile(new StreamSource(xslFile.getFile()));
+            final XdmNode source = proc.newDocumentBuilder().build(
+                    new StreamSource(new InputStreamReader(new URL(solrDocument.getFirstValue(FacetConstants.FIELD_COMPLETE_METADATA).toString()).openStream())));
+            final Serializer out = new Serializer();
+            out.setOutputProperty(Serializer.Property.METHOD, "html");
+            out.setOutputProperty(Serializer.Property.INDENT, "yes");
+            out.setOutputProperty(Serializer.Property.ENCODING, "UTF-8");
+            out.setOutputWriter(strWriter);
+            final XsltTransformer trans = exp.load();
 
-                trans.setInitialContextNode(source);
-                trans.setDestination(out);
-                trans.transform();
+            trans.setInitialContextNode(source);
+            trans.setDestination(out);
+            trans.transform();
         } catch (Exception e) {
-                LOG.error("Couldn't create CMDI metadata: " + e.getMessage());
-                strWriter = new StringWriter().append("<b>Could not load complete CMDI metadata</b>");
-            }
-		
-        Label completeCmdiLabel = new Label("completeCmdi", strWriter.toString());
-		completeCmdiLabel.setEscapeModelStrings(false);
-		add(completeCmdiLabel);
-		
-		// remove complete CMDI view on page load
-		add(new AbstractBehavior() {
-			private static final long serialVersionUID = 1865219352602175954L;
+            LOG.error("Couldn't create CMDI metadata: ", e);
+            strWriter = new StringWriter().append("<b>Could not load complete CMDI metadata</b>");
+        }
 
-			@Override
-			public void renderHead(IHeaderResponse response) {
-				super.renderHead(response);
-				response.renderOnLoadJavascript("toogleDiv('completeCmdi', 'toogleLink')");
-			}
-		});
-	}
+        completeCmdiLabel = new Label("completeCmdi", strWriter.toString());
+        completeCmdiLabel.setEscapeModelStrings(false);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(CssHeaderItem.forReference(XSL_CSS_REFERENCE));
+    }
 }

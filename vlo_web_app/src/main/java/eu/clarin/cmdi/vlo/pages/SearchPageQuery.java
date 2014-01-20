@@ -3,14 +3,16 @@ package eu.clarin.cmdi.vlo.pages;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.params.CommonParams;
-import org.apache.wicket.IClusterable;
-import org.apache.wicket.PageParameters;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.io.IClusterable;
+import org.apache.wicket.util.string.StringValue;
 
 public class SearchPageQuery implements IClusterable {
 
@@ -24,7 +26,9 @@ public class SearchPageQuery implements IClusterable {
 
     public SearchPageQuery(PageParameters parameters) {
         query = getDefaultQuery();
-        String queryParam = parameters.getString(CommonParams.Q);
+        
+        String queryParam = parameters.get(CommonParams.Q).toString();
+
         setSearchQuery(queryParam);
         if (queryParam != null) {
             query.setQuery(escapeSolrQuery(queryParam));
@@ -32,11 +36,14 @@ public class SearchPageQuery implements IClusterable {
             query.setQuery(SOLR_SEARCH_ALL);
 
         }
-        String[] filterQueries = parameters.getStringArray(CommonParams.FQ);
-        if (filterQueries != null) {
-            String[] encodedQueries = new String[filterQueries.length];
-            for (int i = 0; i < filterQueries.length; i++) {
-                String fq = filterQueries[i];
+        
+        List<StringValue> filterQueryValues = parameters.getValues(CommonParams.FQ);
+        
+        if (filterQueryValues != null) {
+            String[] encodedQueries = new String[filterQueryValues.size()];
+            
+            for (int i = 0; i < filterQueryValues.size(); i++) {
+                String fq = filterQueryValues.get(i).toString();
                 String[] keyValue = fq.split(":", 2);
                 filterQueryMap.put(keyValue[0], keyValue[1]);
                 encodedQueries[i] = keyValue[0] + ":" + ClientUtils.escapeQueryChars(keyValue[1]);

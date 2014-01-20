@@ -1,10 +1,9 @@
 package eu.clarin.cmdi.vlo.pages;
 
-import eu.clarin.cmdi.vlo.VloWebApplication.ThemedSession;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class FacetHeaderPanel extends BasePanel {
 
@@ -14,12 +13,9 @@ public class FacetHeaderPanel extends BasePanel {
         super(id, model);
         SearchPageQuery copy = query.getShallowCopy();
         copy.removeFilterQuery(model.getObject().getFacetField());
-        PageParameters pageParameters = copy.getPageParameters();
-        
-        // pageParameters = webApp.reflectPersistentParameters(pageParameters);
-        pageParameters = ((ThemedSession)getSession()).reflectPersistentParameters(pageParameters);
-        
-        add(new BookmarkablePageLink("allLink", FacetedSearchPage.class, pageParameters));
+        PageParameters param = copy.getPageParameters();
+ 
+        add(new BookmarkablePageLink("allLink", FacetedSearchPage.class, param));
         add(new Label("headerLabelSelect", model.getObject().getSelectedValue()));
     }
 

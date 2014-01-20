@@ -1,15 +1,13 @@
 package eu.clarin.cmdi.vlo.pages;
 
-import eu.clarin.cmdi.vlo.VloWebApplication;
-import eu.clarin.cmdi.vlo.VloWebApplication.ThemedSession;
+import eu.clarin.cmdi.vlo.VloSession;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -17,6 +15,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class FacetBoxPanel extends BasePanel {
     private static final Set<String> IGNORABLE_VALUES = new HashSet<String>();
@@ -35,10 +34,10 @@ public class FacetBoxPanel extends BasePanel {
         super(id, model);
         setOutputMarkupId(true);
         setMaxNrOfFacetValues(MAX_NR_OF_FACET_VALUES);
-        SimpleAttributeModifier tooltip = new SimpleAttributeModifier("title", tooltipText);
-        add(tooltip);
+        add(new AttributeModifier("title", tooltipText));
+        
     }
-    
+     
     @SuppressWarnings({"serial"})
     public FacetBoxPanel create(final SearchPageQuery query) {
         final FacetField facetField = (FacetField) getDefaultModelObject();
@@ -66,21 +65,16 @@ public class FacetBoxPanel extends BasePanel {
             }
         };
         add(facetList);
-        PageParameters pageParameters = query.getPageParameters();
-        pageParameters.add(ShowAllFacetValuesPage.SELECTED_FACET_PARAM, facetField.getName());
-        pageParameters.add(ShowAllFacetValuesPage.FACET_MIN_OCCURS, "1");
+        PageParameters facetParameters = new PageParameters ();
+        facetParameters.add(ShowAllFacetValuesPage.SELECTED_FACET_PARAM, facetField.getName());
+        facetParameters.add(ShowAllFacetValuesPage.FACET_MIN_OCCURS, "1");
+        facetParameters.mergeWith(VloSession.get().getVloSessionPageParameters());
 
-        // pageParameters = webApp.reflectPersistentParameters(pageParameters);
-        pageParameters = ((ThemedSession)getSession()).reflectPersistentParameters(pageParameters);
-        
-        
-        add(new BookmarkablePageLink("showMore", ShowAllFacetValuesPage.class, pageParameters) {
-
+        add(new BookmarkablePageLink("showMore", ShowAllFacetValuesPage.class, facetParameters) {
             @Override
-			public boolean isVisible() {
+            public boolean isVisible() {
                 return !facetModel.isSelected() && showMore;
             }
-
         });
         return this;
     }

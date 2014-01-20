@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- Solr server context file
 
 path : solr server context path. If u is the url of the web server, the solr
@@ -14,12 +12,6 @@ Please refer to http://wiki.apache.org/solr for more information on how the
 solr server should be configured.  
 
 -->
-
-
-
-<Context path="/vlo_solr" debug="0" crossContext="true">
-  <Environment name="solr/home" 
-               type="java.lang.String" 
-               value="${vlo.solr.home}/${vlo.solr.conf}" 
-               override="true"/>
+<Context crossContext="true" debug="0" path="/vlo_solr">
+  <Environment name="solr/home" override="true" type="java.lang.String" value="${vlo.solr.home}/${vlo.solr.conf}"/>
 </Context>

@@ -12,7 +12,7 @@ import org.apache.wicket.model.Model;
 import eu.clarin.cmdi.vlo.dao.DaoLocator;
 import eu.clarin.cmdi.vlo.dao.SearchResultsDao;
 
-public class SolrFacetDataProvider extends SortableDataProvider<FacetField> {
+public class SolrFacetDataProvider extends SortableDataProvider<FacetField, String> {
 
     private static final long serialVersionUID = 1L;
     private final SolrQuery query;
@@ -28,7 +28,7 @@ public class SolrFacetDataProvider extends SortableDataProvider<FacetField> {
     }
 
     @Override
-    public Iterator<? extends FacetField> iterator(int first, int count) {
+    public Iterator<? extends FacetField> iterator(long first, long count) {
         return facets.iterator();
     }
 
@@ -46,7 +46,7 @@ public class SolrFacetDataProvider extends SortableDataProvider<FacetField> {
     }
 
     @Override
-    public int size() {
+    public long size() {
         return (int) getFacets().size();
     }
 

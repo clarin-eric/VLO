@@ -4,7 +4,7 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pages.SearchPageQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.common.params.CommonParams;
-import org.apache.wicket.PageParameters;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import org.junit.Before;
@@ -31,7 +31,7 @@ public class SearchPageQueryTest {
         assertEquals(13, q.getSolrQuery().getFacetFields().length);
         assertEquals("collection", q.getSolrQuery().getFacetFields()[0]);
         assertEquals("resourceClass", q.getSolrQuery().getFacetFields()[2]);
-        assertNull(q.getSolrQuery().getFilterQueries());
+        assertEquals(0, q.getSolrQuery().getFilterQueries().length);
 
         params = new PageParameters();
         params.add(CommonParams.Q, "test");

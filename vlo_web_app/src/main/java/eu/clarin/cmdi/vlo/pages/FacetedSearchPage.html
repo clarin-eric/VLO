@@ -1,4 +1,3 @@
-<!doctype html public "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
     <head></head>
     <body>
@@ -8,15 +7,16 @@
             <div border="0" class="opening" width="100%">
                 <form class="search" wicket:id="searchForm">
                     <div class="homeLink" align="left">
-                    	<a wicket:id="vloHomeLink"><wicket:message key="VLO_home"/></a> &gt;&gt; <a><wicket:message key="facetedBrowserResources"/> </a>
-                    	&nbsp;|&nbsp;<a wicket:id="feedbackLink"></a>
+                        <a wicket:id="vloHomeLink"><wicket:message key="VLO_home"/></a> &gt;&gt; 
+                        <a wicket:id="facetedSearchLink"><wicket:message key="facetedBrowserResources"/></a>
+                        &nbsp;|&nbsp;<a wicket:id="feedbackLink"></a>
                     </div>
                     <div class="searchmodule" align="right">
                         <input wicket:id="searchQuery" type="text">
                         <button wicket:id="searchSubmit"><wicket:message key="search"/></button>
-                        <a class="helpLink"wicket:id="helpLink" width ="20%>"this will be replaced by wicket"</a>
+                        <a class="helpLink" wicket:id="helpLink" width ="20%">"this will be replaced by wicket"</a>
                     </div>
-                    
+
                     <div class="facetOverview">
                         <a wicket:id="facetOverview" class="mark">this text will be replaced</a>
                     </div>
@@ -31,16 +31,20 @@
                             </td>
                             </tr>
                     </table>
-                    
-                    <table class="resulttable" cellpadding="0" cellspacing="0">
-                        <tbody wicket:id="searchResults" >
-                            [searchResultTable]
-                        </tbody>       
+
+                    <table class="resulttable">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <table wicket:id="searchResults">[searchResultTable]</table>
+                                </td>
+                            </tr>        
+                        </tbody>
                         <tfoot wicket:id="contentSearch">
                             <tr>
-                            <td colspan="2"><a href="url" wicket:id="contentSearchForm">This text will be replaced by Wicket</a> </td>
+                                <td><a href="url" wicket:id="contentSearchForm">This text will be replaced by Wicket</a></td>
                             </tr>
-                        </tfoot>                        
+                        </tfoot>
                     </table>
                 </div>
             </div>

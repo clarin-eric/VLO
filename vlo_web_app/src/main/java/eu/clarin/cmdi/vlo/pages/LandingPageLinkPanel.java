@@ -1,11 +1,10 @@
 
 package eu.clarin.cmdi.vlo.pages;
 
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.resource.ContextRelativeResource;
 
 /**
  * Panel showing a landing page link. 
@@ -18,8 +17,8 @@ import org.apache.wicket.resource.ContextRelativeResource;
 public class LandingPageLinkPanel extends LinkPanel {
 
     private final static ImageResource LANDINGPAGE_ICON =
-            new ImageResource(new ContextRelativeResource(
-            "Images/Crystal_Clear_mimetype_readme.png"),
+            new ImageResource(
+            "Crystal_Clear_mimetype_readme.png",
             "Landing page");
 
     /**
@@ -33,14 +32,14 @@ public class LandingPageLinkPanel extends LinkPanel {
         super(id);
         
         // add the icon image
-        ImageResource imageResouce = LANDINGPAGE_ICON;
-        Image resourceImg = new Image("landingPageImage", imageResouce.getResource());
+        ImageResource imageResource = LANDINGPAGE_ICON;
+        Image resourceImg = new Image("landingPageImage", imageResource.getResource());
         
         // add the image's title
         String title;
-        title = imageResouce.getTitle();
-        resourceImg.add(new SimpleAttributeModifier("title", title));
-        resourceImg.add(new SimpleAttributeModifier("alt", title));
+        title = imageResource.getTitle();
+        resourceImg.add(new AttributeModifier("title", title));
+        resourceImg.add(new AttributeModifier("alt", title));
         
         // ...
         String href = getHref(resourceLink);

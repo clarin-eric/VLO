@@ -95,16 +95,26 @@
         </plugins>
     </build>
 
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.6</version>
+            </plugin>
+        </plugins>
+    </reporting>
+    
     <repositories>
         <repository>
-            <id>55Minutes_wicket</id>
-            <name>55Minutes opensource wicket extensions</name>
-            <url>http://opensource.55minutes.com/maven/</url>
+            <id>MPI</id>
+            <name>MPI LAT Repository</name>
+            <url>http://lux15.mpi.nl/nexus/content/groups/public</url>
         </repository>
     </repositories>
 
     <dependencies>
-            <dependency>
+        <dependency>
             <groupId>net.handle</groupId>
             <artifactId>handle-client</artifactId>
             <version>7.0</version>
@@ -113,21 +123,6 @@
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-solrj</artifactId>
             <version>3.6.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket</artifactId>
-            <version>1.4.8</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-extensions</artifactId>
-            <version>1.4.8</version>
-        </dependency>
-        <dependency>
-            <groupId>com.55minutes</groupId>
-            <artifactId>fiftyfive-wicket</artifactId>
-            <version>2.0.5</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>

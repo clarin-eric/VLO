@@ -20,10 +20,26 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-extensions</artifactId>
+            <version>6.12.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.55minutes</groupId>
+            <artifactId>fiftyfive-wicket-core</artifactId>
+            <version>4.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>wicket</artifactId>
+                    <groupId>org.apache.wicket</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>org.mortbay.jetty</groupId>
             <artifactId>jetty</artifactId>
@@ -34,6 +50,12 @@
             <groupId>eu.clarin.cmdi</groupId>
             <artifactId>vlo_importer</artifactId>
             <version>2.18</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-request</artifactId>
+            <version>6.12.0</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -63,16 +85,8 @@
                 </excludes>
             </resource>
             <resource>
-                <!-- Include vlo importer resources in the WEB-INF/classes 
-                     directory. Including a source is not the same thing as 
-                     depending on it. When you depend on a source, it only needs
-                     to be in the location specified, it
-                     will not be included however.
-                -->
-                <directory>../vlo_importer/src/main/resources</directory>
-                <includes>
-                        <include>cmdi2xhtml.xsl</include>
-                </includes>                    
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
             </resource>
         </resources>
 
@@ -181,4 +195,27 @@
         </plugins>
         
     </build>
+    
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.6</version>
+            </plugin>
+        </plugins>
+    </reporting>
+    
+    <repositories>
+        <repository>
+            <id>MPI</id>
+            <name>MPI LAT Repository</name>
+            <url>http://lux15.mpi.nl/nexus/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>55Minutes_wicket</id>
+            <name>55Minutes opensource wicket extensions</name>
+            <url>http://opensource.55minutes.com/maven/</url>
+        </repository>
+    </repositories>
 </project>

@@ -1,0 +1,50 @@
+li
+{
+    margin: 20px;
+    margin-left: -1.2em;
+}
+
+.node
+{
+    background-color: rgba(188, 205, 232, 0.8);
+    border: 1px ridge;
+    font-weight: bold;
+    padding: 5px;
+    /*float: left;*/
+}                    
+
+.leaf
+{
+}                    
+
+.Component_tree_node_content
+{
+    background-color: rgba(188, 200, 232, 0.3);
+    border: 1px dotted red;                        
+    margin-top: 10px;
+    margin-left: 10px;
+    padding: 5px;
+    display: inline-block;
+    /*float: left;*/       
+    /*display: table-cell;*/
+}                    
+
+.attributes
+{                        
+    display: inline-block;
+    font-style: italic;
+    font-weight: normal;
+    /*background-color: rgba(100, 201, 234, 0.4);*/
+}
+
+footer
+{
+    border: 1px dotted;
+}                    
+
+address
+{
+    display: inline-block;
+}
+
+.searchword { background-color: yellow; }

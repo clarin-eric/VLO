@@ -19,6 +19,7 @@
    - adapt the application's context files
    and 
    - adapt the VloConfig.xml main configuration file.
+   - optionally executing upgrade steps described in the UPGRADE file
 
 2. Archive unpacking
 

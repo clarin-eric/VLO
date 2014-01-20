@@ -2,7 +2,7 @@ package eu.clarin.cmdi.vlo.pages;
 
 import java.util.Map;
 
-import org.apache.wicket.PageParameters;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -24,8 +24,10 @@ public class ShowAllFacetValuesPage extends BasePage {
 		// filter for minimal frequency of values
 		addOccurrencesFilter(parameters);
 		
-		String selectedFacet = parameters.getString(SELECTED_FACET_PARAM);
-		Integer facetMinOccurs = parameters.getAsInteger(FACET_MIN_OCCURS, 1);
+		String selectedFacet = (parameters.get(SELECTED_FACET_PARAM)).toString();
+                
+                Integer facetMinOccurs = (parameters.get(FACET_MIN_OCCURS)).toInt(1); // take care of 1 as default value
+                
 		add(new Label("category", selectedFacet));
 		SolrFacetFieldDataProvider data = new SolrFacetFieldDataProvider(selectedFacet, query);
 		add(new AlphabeticalPanel("alphaPanel", data, query, facetMinOccurs));
@@ -36,9 +38,9 @@ public class ShowAllFacetValuesPage extends BasePage {
 	 * @param parameters
 	 */
 	private void addOccurrencesFilter(PageParameters parameters) {
-		PageParameters newParameters = (PageParameters) parameters.clone();
+		PageParameters newParameters = new PageParameters (parameters);
 		newParameters.remove(FACET_MIN_OCCURS);
-		if(!parameters.containsKey(FACET_MIN_OCCURS) || parameters.getAsInteger(FACET_MIN_OCCURS) == 1) {
+		if(parameters.getPosition(FACET_MIN_OCCURS) == -1 || parameters.get(FACET_MIN_OCCURS).toInt() == 1) {
 			newParameters.add(FACET_MIN_OCCURS, FACET_MIN_OCCURS_VALUE.toString());
 			add(new BookmarkablePageLink<Void>("filter", ShowAllFacetValuesPage.class, newParameters).add(new Label("filterLabel", "Show only values that occur at least "+FACET_MIN_OCCURS_VALUE+" times")));
 		} else {

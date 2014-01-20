@@ -1,0 +1,28 @@
+Upgrading from 2.17 to 2.18
+
+* In version 2.18 of the VLO, the URL mapping has been changed. To prevent
+existing references and bookmarks from breaking, add rewrite rules to the
+HTTP server to achieve the following mappings:
+
+[TODO: Define actual mod_rewrite rules and document here]
+
+- {vlobase}/?wicket:bookmarkablePage=:eu.clarin.cmdi.vlo.pages.ShowResultPage&docId={docId}
+	-> {vlobase}/record?docId={docId}
+
+- {vlobase}/?wicket:bookmarkablePage=:eu.clarin.cmdi.vlo.pages.ShowAllFacetValuesPage&selectedFacet={facet}
+	-> {vlobase}/values/{facet}
+
+In both case all additional GET parameters SHOULD be kept.
+
+* Two mandatory configuration parameters have been added to the VLO
+configuration. Add the following to the existing configuration as a child of
+the VloConfig root node, then tweak as needed:
+
+    <pagesInApplicationCache>128</pagesInApplicationCache>
+    
+    <sessionCacheSize>500</sessionCacheSize>
+    
+    <helpUrl>
+
+* Remove useMaxFileSize parameter from VloConfig
+* Rename parameter maxDaysToLife to maxDaysInSolr
