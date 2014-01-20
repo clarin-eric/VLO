@@ -60,6 +60,7 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.encoding.UrlDecoder;
 import org.apache.wicket.util.encoding.UrlEncoder;
+import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,11 +81,17 @@ public class ShowResultPage extends BasePage {
     @SuppressWarnings("serial")
     public ShowResultPage(final PageParameters currentParam) {
         super(currentParam);
+        
+        final StringValue docIdParam = getPageParameters().get(PARAM_DOC_ID);
+        if (docIdParam == null) {
+            throw new RuntimeException("No document id was specified. Cannot construct result page.");
+        }
         //Document ID is assumed to have been encoded (typcially in DocumentLinkPanel) decode here
         final String docId = UrlDecoder.QUERY_INSTANCE.decode(
-                getPageParameters().get(PARAM_DOC_ID).toString(),
+                docIdParam.toString(),
                 Application.get().getRequestCycleSettings().getResponseRequestEncoding()); // get current character set from request cycle
         SolrDocument solrDocument = DaoLocator.getSearchResultsDao().getSolrDocument(docId);
+        
         if (solrDocument != null) {
             final SearchPageQuery query = new SearchPageQuery(currentParam);
 
