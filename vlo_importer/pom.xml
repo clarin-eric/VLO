@@ -11,7 +11,7 @@
 
     <packaging>jar</packaging>
 
-    <version>2.18</version>
+    <version>2.18-SNAPSHOT</version>
     <name>vlo_importer</name>
     <description></description>
 
