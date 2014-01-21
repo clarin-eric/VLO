@@ -33,26 +33,24 @@ public class SolrDao {
     protected CommonsHttpSolrServer getSolrserver() {
         return solrServer;
     }
-    
+
     /**
-     * Basic sanitising of Solr queries. 
-     * 
-     * Query is based on the URL to the VLO web application. Also, explain
-     * about the URL and ?fq=language:dutch
-     * Assume filters have the form a:b 
-     * like for example language:dutch
-     * 
+     * Basic sanitising of Solr queries.
+     *
+     * Query is based on the URL to the VLO web application. Also, explain about
+     * the URL and ?fq=language:dutch Assume filters have the form a:b like for
+     * example language:dutch
+     *
      * @param query
-     * @return 
+     * @return
      */
-    private SolrQuery sanitise (SolrQuery query){
-        
+    private SolrQuery sanitise(SolrQuery query) {
+
         // String [] facetsFromConfig; 
-        
         // try and get the filters facets from the query
-        String [] filtersInQuery;
+        String[] filtersInQuery;
         filtersInQuery = query.getFilterQueries();
- 
+
         if (filtersInQuery == null) {
             // the query does not contain filters
         } else {
@@ -66,8 +64,8 @@ public class SolrDao {
             // check the filters in the query by name
             for (String filter : filtersInQuery) {
                 // split up a filter, look at the string preceeding the semicolon 
-                String facetInFilter = filter.split(":") [0];
-                
+                String facetInFilter = filter.split(":")[0];
+
                 if (facetsDefined.contains(facetInFilter)) {
                     // facet in the filter is in the set that is defined by the config file
                 } else {
@@ -97,6 +95,9 @@ public class SolrDao {
     }
 
     public SolrDocument getSolrDocument(String docId) {
+        if (docId == null) {
+            throw new NullPointerException("Cannot get SOLR document for null docId");
+        }
         SolrDocument result = null;
         SolrQuery query = new SolrQuery();
         query.setQuery("id:" + ClientUtils.escapeQueryChars(docId));
