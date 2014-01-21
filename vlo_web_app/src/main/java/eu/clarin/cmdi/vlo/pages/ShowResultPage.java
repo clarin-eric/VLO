@@ -20,6 +20,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
@@ -73,62 +74,64 @@ public class ShowResultPage extends BasePage {
         super(currentParam);
 
         final StringValue docIdParam = getPageParameters().get(PARAM_DOC_ID);
-        if (docIdParam == null) {
-            throw new RuntimeException("No document id was specified. Cannot construct result page.");
-        }
-        //Document ID is assumed to have been encoded (typcially in DocumentLinkPanel) decode here
-        final String docId = UrlDecoder.QUERY_INSTANCE.decode(
-                docIdParam.toString(),
-                Application.get().getRequestCycleSettings().getResponseRequestEncoding()); // get current character set from request cycle
-        SolrDocument solrDocument = DaoLocator.getSearchResultsDao().getSolrDocument(docId);
-
-        if (solrDocument != null) {
-            final SearchPageQuery query = new SearchPageQuery(currentParam);
-
-            // create parameters from the query, and add them with session related parameters
-            PageParameters newParam = new PageParameters(query.getPageParameters());
-            // add the session persistent parameters
-            newParam.mergeWith(VloSession.get().getVloSessionPageParameters());
-
-            BookmarkablePageLink<String> backLink = new BookmarkablePageLink<String>("backLink", FacetedSearchPage.class, newParam);
-            add(backLink);
-            String href = getHref(docId);
-            if (href != null) {
-                add(new ExternalLink("openBrowserLink", href, new ResourceModel(Resources.OPEN_IN_ORIGINAL_CONTEXT).getObject()));
-            } else {
-                add(new Label("openBrowserLink", new ResourceModel(Resources.ORIGINAL_CONTEXT_NOT_AVAILABLE).getObject()));
-            }
-            addAttributesTable(solrDocument);
-
-            /* If there are any, add the link or links to landing pages 
-             * contained in the solr document.
-             */
-            addLandingPageLinks(solrDocument);
-
-            // also, if there are any, add the link or links to search pages 
-            addSearchPageLinks(solrDocument);
-
-            // add the rest of the resource links to the result page
-            addResourceLinks(solrDocument);
-
-            addSearchServiceForm(solrDocument);
-
-            addCompleteCmdiView(solrDocument);
-
-            add(new AjaxLazyLoadPanel("prevNextHeader") {
-
-                @Override
-                public Component getLazyLoadComponent(String markupId) {
-                    return new PrevNextHeaderPanel(markupId, docId, query);
-                }
-
-                @Override
-                public Component getLoadingComponent(String markupId) {
-                    return new PrevNextHeaderPanel(markupId);
-                }
-            });
+        if (docIdParam == null || docIdParam.isNull()) {
+            LOG.warn("No document id was specified. Cannot construct result page.");
+            throw new RestartResponseException(new ResultNotFoundPage(currentParam));
         } else {
-            setResponsePage(new ResultNotFoundPage(currentParam));
+            //Document ID is assumed to have been encoded (typcially in DocumentLinkPanel) decode here
+            final String docId = UrlDecoder.QUERY_INSTANCE.decode(
+                    docIdParam.toString(),
+                    Application.get().getRequestCycleSettings().getResponseRequestEncoding()); // get current character set from request cycle
+
+            final SolrDocument solrDocument = DaoLocator.getSearchResultsDao().getSolrDocument(docId);
+            if (solrDocument != null) {
+                final SearchPageQuery query = new SearchPageQuery(currentParam);
+
+                // create parameters from the query, and add them with session related parameters
+                PageParameters newParam = new PageParameters(query.getPageParameters());
+                // add the session persistent parameters
+                newParam.mergeWith(VloSession.get().getVloSessionPageParameters());
+
+                BookmarkablePageLink<String> backLink = new BookmarkablePageLink<String>("backLink", FacetedSearchPage.class, newParam);
+                add(backLink);
+                String href = getHref(docId);
+                if (href != null) {
+                    add(new ExternalLink("openBrowserLink", href, new ResourceModel(Resources.OPEN_IN_ORIGINAL_CONTEXT).getObject()));
+                } else {
+                    add(new Label("openBrowserLink", new ResourceModel(Resources.ORIGINAL_CONTEXT_NOT_AVAILABLE).getObject()));
+                }
+                addAttributesTable(solrDocument);
+
+                /* If there are any, add the link or links to landing pages 
+                 * contained in the solr document.
+                 */
+                addLandingPageLinks(solrDocument);
+
+                // also, if there are any, add the link or links to search pages 
+                addSearchPageLinks(solrDocument);
+
+                // add the rest of the resource links to the result page
+                addResourceLinks(solrDocument);
+
+                addSearchServiceForm(solrDocument);
+
+                addCompleteCmdiView(solrDocument);
+
+                add(new AjaxLazyLoadPanel("prevNextHeader") {
+
+                    @Override
+                    public Component getLazyLoadComponent(String markupId) {
+                        return new PrevNextHeaderPanel(markupId, docId, query);
+                    }
+
+                    @Override
+                    public Component getLoadingComponent(String markupId) {
+                        return new PrevNextHeaderPanel(markupId);
+                    }
+                });
+            } else {
+                setResponsePage(new ResultNotFoundPage(currentParam));
+            }
         }
 
         // add the feedback link to the result page

@@ -16,13 +16,15 @@ import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.dao.DaoLocator;
 import eu.clarin.cmdi.vlo.dao.SearchResultsDao;
+import java.io.Serializable;
 
 public class SolrFacetFieldDataProvider implements IDataProvider<Count> {
+
     private final static Logger LOG = LoggerFactory.getLogger(SolrFacetFieldDataProvider.class);
 
     private static final long serialVersionUID = 1L;
+    private final SolrQuery query;
     private FacetField facet;
-    private SolrQuery query;
 
     private final String selectedFacet;
 
@@ -57,7 +59,7 @@ public class SolrFacetFieldDataProvider implements IDataProvider<Count> {
 
     @Override
     public Iterator<? extends Count> iterator(long first, long count) {
-        return getFacet().getValues().subList((int)first, (int)first + (int)count).iterator();
+        return getFacet().getValues().subList((int) first, (int) first + (int) count).iterator();
     }
 
     @Override
@@ -74,19 +76,20 @@ public class SolrFacetFieldDataProvider implements IDataProvider<Count> {
     public void detach() {
     }
 
-    @SuppressWarnings("serial")
-    private static class EmptyFacetField extends FacetField {
+    private static class EmptyFacetField extends FacetField implements Serializable {
+
         public EmptyFacetField(String name) {
             super(name);
         }
 
+        @Override
         public List<Count> getValues() {
-            return (List<Count>) Collections.EMPTY_LIST.iterator();
+            return Collections.emptyList();
         }
 
+        @Override
         public int getValueCount() {
             return 0;
         }
-
     }
 }
