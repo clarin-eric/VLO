@@ -6,8 +6,6 @@ import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.VloSession;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.DaoLocator;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -18,13 +16,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
-import javax.xml.transform.stream.StreamSource;
-import net.sf.saxon.s9api.Processor;
-import net.sf.saxon.s9api.Serializer;
-import net.sf.saxon.s9api.XdmNode;
-import net.sf.saxon.s9api.XsltCompiler;
-import net.sf.saxon.s9api.XsltExecutable;
-import net.sf.saxon.s9api.XsltTransformer;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
@@ -75,13 +66,12 @@ public class ShowResultPage extends BasePage {
     public static final String PARAM_DOC_ID = "docId";
     public static final String feedbackfromURL = VloConfig.getFeedbackFromUrl();
 
-    private final URL xslFile = getClass().getResource("/eu/clarin/cmdi/vlo/pages/cmdi2xhtml.xsl");
     private final ResourceReference XSL_CSS_REFERENCE = new PackageResourceReference(getClass(), "cmdi.css");
 
     @SuppressWarnings("serial")
     public ShowResultPage(final PageParameters currentParam) {
         super(currentParam);
-        
+
         final StringValue docIdParam = getPageParameters().get(PARAM_DOC_ID);
         if (docIdParam == null) {
             throw new RuntimeException("No document id was specified. Cannot construct result page.");
@@ -91,7 +81,7 @@ public class ShowResultPage extends BasePage {
                 docIdParam.toString(),
                 Application.get().getRequestCycleSettings().getResponseRequestEncoding()); // get current character set from request cycle
         SolrDocument solrDocument = DaoLocator.getSearchResultsDao().getSolrDocument(docId);
-        
+
         if (solrDocument != null) {
             final SearchPageQuery query = new SearchPageQuery(currentParam);
 
@@ -564,32 +554,15 @@ public class ShowResultPage extends BasePage {
     }
 
     private void createCompleteCmdiView(final SolrDocument solrDocument) {
-        StringWriter strWriter = new StringWriter();
-
-        final Processor proc = new Processor(false);
-        final XsltCompiler comp = proc.newXsltCompiler();
-
+        final String completeMetadataField = solrDocument.getFirstValue(FacetConstants.FIELD_COMPLETE_METADATA).toString();
         try {
-            final XsltExecutable exp = comp.compile(new StreamSource(xslFile.getFile()));
-            final XdmNode source = proc.newDocumentBuilder().build(
-                    new StreamSource(new InputStreamReader(new URL(solrDocument.getFirstValue(FacetConstants.FIELD_COMPLETE_METADATA).toString()).openStream())));
-            final Serializer out = new Serializer();
-            out.setOutputProperty(Serializer.Property.METHOD, "html");
-            out.setOutputProperty(Serializer.Property.INDENT, "yes");
-            out.setOutputProperty(Serializer.Property.ENCODING, "UTF-8");
-            out.setOutputWriter(strWriter);
-            final XsltTransformer trans = exp.load();
-
-            trans.setInitialContextNode(source);
-            trans.setDestination(out);
-            trans.transform();
-        } catch (Exception e) {
-            LOG.error("Couldn't create CMDI metadata: ", e);
-            strWriter = new StringWriter().append("<b>Could not load complete CMDI metadata</b>");
+            final CmdiXsltModel cmdiXsltModel = new CmdiXsltModel(new URL(completeMetadataField));
+            completeCmdiLabel = new Label("completeCmdi", cmdiXsltModel);
+            completeCmdiLabel.setEscapeModelStrings(false);
+        } catch (MalformedURLException ex) {
+            LOG.error("Could not create CMDI view, malformed URL: {}", completeMetadataField, ex);
+            completeCmdiLabel = new Label("<b>Could not read metadata</b>");
         }
-
-        completeCmdiLabel = new Label("completeCmdi", strWriter.toString());
-        completeCmdiLabel.setEscapeModelStrings(false);
     }
 
     @Override
