@@ -14,15 +14,46 @@ HTTP server to achieve the following mappings:
 
 In both case all additional GET parameters SHOULD be kept.
 
-* Two mandatory configuration parameters have been added to the VLO
-configuration. Add the following to the existing configuration as a child of
-the VloConfig root node, then tweak as needed:
+Next to the URL mapping, the XML parameter file has undergone some changes:
 
-    <pagesInApplicationCache>128</pagesInApplicationCache>
+    <!-- Sets the maximum number of page instances which will be stored in the application scoped second level cache for faster retrieval -->
+    <pagesInApplicationCache>40</pagesInApplicationCache>
     
-    <sessionCacheSize>500</sessionCacheSize>
-    
-    <helpUrl>
+    <!-- Sets the maximum size (in KILOBYTES) of the File where page instances per session are stored. -->
+    <sessionCacheSize>10000</sessionCacheSize>
 
-* Remove useMaxFileSize parameter from VloConfig
-* Rename parameter maxDaysToLife to maxDaysInSolr
+Has been added to tune the Wicket page cache. The first parameter allows you
+to set the size of the application wide cache holding pages. The second parameter
+denotes the size of the cache (in kilobytes) associated with a session. The values
+listed above are the Wicket defaults.
+
+Other changes in the parameter file:
+- maxFileSize and use MaxFileSize have been integrated into one parameter:
+  
+  maxFileSize
+
+  If equal to 0, no upper limit to the size of metadata input files will be 
+  applied.
+
+- maxDaysToLife has been renamed into maxDaysInSolr
+
+- VloHomeLink has been renamed into homeUrl
+
+- helpUrl has been added; a link to a help page.
+
+- The facetConceptsFile parameter, referencing the facetConcepts.xml file, 
+  has been added also. This is part of the effort of making parameterised 
+  instantiation of the VLO possible.
+
+- Also, the facetOverviewLength parameter has been added. This parameter controls
+  the listing of facets on the search page.
+
+- Similar to 'useMaxFileSize' the expectReverseProxy parameter has been removed
+
+Finally, 
+
+    <cqlEndpointFilter>http://cqlservlet.mpi.nl/</cqlEndpointFilter>
+    
+    <cqlEndpointAlternative>http://cqlservlet.mpi.nl/</cqlEndpointAlternative>
+
+add the possibility of creating a filter for endpoints.
