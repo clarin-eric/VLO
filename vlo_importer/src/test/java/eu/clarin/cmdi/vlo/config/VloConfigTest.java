@@ -94,7 +94,7 @@ public class VloConfigTest {
         
         System.out.println("getPagesInApplicationCache");
         
-        int expResult = 128;
+        int expResult = 40; // as defined in vloconfig.xml
         int result = VloConfig.getPagesInApplicationCache();
         
         assertEquals(expResult, result);
@@ -108,7 +108,7 @@ public class VloConfigTest {
         
         System.out.println("setPagesInApplicationCache");
         
-        int param = 500;
+        int param = 999;
         
         VloConfig.setPagesInApplicationCache(param);
 
@@ -126,8 +126,8 @@ public class VloConfigTest {
         
         System.out.println("getPagesInApplicationCache");
         
-        int expResult = 128;
-        int result = VloConfig.getPagesInApplicationCache();
+        int expResult = 10000; // as defined in vloconfig.xml
+        int result = VloConfig.getSessionCacheSize();
         
         assertEquals(expResult, result);
     }
@@ -140,11 +140,11 @@ public class VloConfigTest {
         
         System.out.println("setPagesInApplicationCache");
         
-        int param = 128;
+        int param = 9999;
         
-        VloConfig.setMaxDocsInList(param);
+        VloConfig.setSessionCacheSize(param);
 
-        int result = VloConfig.getPagesInApplicationCache();
+        int result = VloConfig.getSessionCacheSize();
         
         assertEquals(param, result);
     }
