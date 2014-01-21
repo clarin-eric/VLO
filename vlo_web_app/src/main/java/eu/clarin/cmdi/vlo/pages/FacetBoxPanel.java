@@ -65,7 +65,7 @@ public class FacetBoxPanel extends BasePanel {
             }
         };
         add(facetList);
-        PageParameters facetParameters = new PageParameters ();
+        PageParameters facetParameters = query.getPageParameters();
         facetParameters.add(ShowAllFacetValuesPage.SELECTED_FACET_PARAM, facetField.getName());
         facetParameters.add(ShowAllFacetValuesPage.FACET_MIN_OCCURS, "1");
         facetParameters.mergeWith(VloSession.get().getVloSessionPageParameters());
