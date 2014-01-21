@@ -20,6 +20,8 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.lang.Bytes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Virtual Language Observatory web application<br><br>
@@ -31,6 +33,8 @@ import org.apache.wicket.util.lang.Bytes;
  */
 public class VloWebApplication extends WebApplication {
 
+    private final static Logger logger = LoggerFactory.getLogger(VloWebApplication.class);
+    
     /**
      * Customised client request cycle<br><br>
      *
@@ -112,8 +116,13 @@ public class VloWebApplication extends WebApplication {
         }
         
         // configure cache by applying the vlo configuration settings to it
-        this.getStoreSettings().setInmemoryCacheSize(VloConfig.getPagesInApplicationCache());
-        this.getStoreSettings().setMaxSizePerSession(Bytes.kilobytes((long)VloConfig.getSessionCacheSize()));
+        final int pagesInApplicationCache = VloConfig.getPagesInApplicationCache();
+        logger.info("Setting Wicket in-memory cache size to {}", pagesInApplicationCache);
+        this.getStoreSettings().setInmemoryCacheSize(pagesInApplicationCache);
+        
+        final Bytes sessionCacheSize = Bytes.kilobytes((long)VloConfig.getSessionCacheSize());
+        logger.info("Setting Wicket max size per session to {}", sessionCacheSize);
+        this.getStoreSettings().setMaxSizePerSession(sessionCacheSize);
 
         // creata an object referring to the search results
         searchResults = new SearchResultsDao();

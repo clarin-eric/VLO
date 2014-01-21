@@ -1,8 +1,10 @@
 <VloConfig>
     
-    <pagesInApplicationCache>128</pagesInApplicationCache>
+    <!-- Sets the maximum number of page instances which will be stored in the application scoped second level cache for faster retrieval -->
+    <pagesInApplicationCache>40</pagesInApplicationCache>
     
-    <sessionCacheSize>500</sessionCacheSize>
+    <!-- Sets the maximum size (in KILOBYTES) of the File where page instances per session are stored. -->
+    <sessionCacheSize>10000</sessionCacheSize>
    
     <deleteAllFirst>true</deleteAllFirst>
     
