@@ -1,17 +1,25 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>eu.clarin.cmdi</groupId>
+        <artifactId>vlo</artifactId>
+        <version>3.0-SNAPSHOT</version>
+    </parent>
+    
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-solr</artifactId>
+    <version>3.0-SNAPSHOT</version>
     <packaging>war</packaging>
-    <version>3.6.0</version>
+    
     <name>vlo-solr</name>
     <description>VLO Solr server configuration and installation project.</description>
+    
     <dependencies>
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-core</artifactId>
-            <version>3.6.0</version>
+            <version>${solr.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>woodstox</groupId>
@@ -23,22 +31,22 @@
             <!-- PAY ATTENTION: when changing the version of the solr ALSO ALWAYS UPDATE the parent assembly xml-->
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-dataimporthandler</artifactId>
-            <version>3.6.0</version>
+            <version>${solr.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-solrj</artifactId>
-            <version>3.6.0</version>
+            <version>${solr.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.6.6</version>
+            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.14</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
 

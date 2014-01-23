@@ -4,11 +4,11 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 
 public abstract class ImporterTestcase {
-    private static File testDir;
+    private File testDir;
 
     protected File createCmdiFile(String name, String content) throws IOException {
         File file = File.createTempFile(name, ".cmdi", testDir);
@@ -16,13 +16,13 @@ public abstract class ImporterTestcase {
         return file;
     }
 
-    @AfterClass
-    public static void cleanup() {
+    @After
+    public void cleanup() {
         FileUtils.deleteQuietly(testDir);
     }
 
-    @BeforeClass
-    public static void setup() {
+    @Before
+    public void setup() {
         final String baseTempPath = System.getProperty("java.io.tmpdir");
         testDir = new File(baseTempPath + File.separator + "testRegistry_" + System.currentTimeMillis());
         testDir.mkdir();

@@ -24,7 +24,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.StreamingUpdateSolrServer;
+import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.MapSolrParams;
@@ -62,7 +62,7 @@ public class MetadataImporter {
     /**
      * the solr server.
      */
-    private StreamingUpdateSolrServer solrServer;
+    private ConcurrentUpdateSolrServer solrServer;
     /**
      * Defines the post-processor associations. At import, for each facet value,
      * this map is checked and all postprocessors associated with the facet
@@ -235,7 +235,7 @@ public class MetadataImporter {
         /* Specify the number of documents in the queue that will trigger the
          * threads, two of them, emptying it.
          */
-        solrServer = new StreamingUpdateSolrServer(solrUrl, 
+        solrServer = new ConcurrentUpdateSolrServer(solrUrl, 
                 VloConfig.getMinDocsInSolrQueue(), 2) {
                     /*
                      * Let the super class method handle exceptions. Make the
