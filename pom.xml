@@ -15,14 +15,14 @@
     <!-- When updating the version number here, also update the version number
          in each module's pom.xml
     -->
-    <version>2.18-beta2</version>
+    <version>3.0-SNAPSHOT</version>
     
     <description>Virtual Language Observatory (VLO) parent project</description>
 
     <modules>
-        <module>vlo_solr</module>
-        <module>vlo_web_app</module>
-        <module>vlo_importer</module>
+        <module>vlo-solr</module>
+        <module>vlo-web-app</module>
+        <module>vlo-importer</module>
     </modules>
 
     <properties>

@@ -7,12 +7,12 @@
 
     <groupId>eu.clarin.cmdi</groupId>
 
-    <artifactId>vlo_importer</artifactId> 
+    <artifactId>vlo-importer</artifactId> 
 
     <packaging>jar</packaging>
 
-    <version>2.18-beta2</version>
-    <name>vlo_importer</name>
+    <version>3.0-SNAPSHOT</version>
+    <name>VLO Importer</name>
     <description></description>
 
     <properties>

@@ -2,10 +2,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
-    <artifactId>vlo_solr</artifactId>
+    <artifactId>vlo-solr</artifactId>
     <packaging>war</packaging>
     <version>3.6.0</version>
-    <name>vlo_solr</name>
+    <name>vlo-solr</name>
     <description>VLO Solr server configuration and installation project.</description>
     <dependencies>
         <dependency>
