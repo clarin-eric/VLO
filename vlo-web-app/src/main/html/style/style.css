@@ -220,6 +220,7 @@ ol li
   width: 474px; /* used to be 384px  */
   padding: 26px 9px 15px 9px;
   float: left;
+  min-height: 500px;
 }
 
 #content h1
