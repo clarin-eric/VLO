@@ -32,29 +32,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 #searchresultsheader {
-    border-bottom: 1px solid;
+    border-bottom: 1px dashed;
     height: 1em;
     padding-bottom: .5em;
-}
-
-#searchresultsheader .searchresultpagination {
-    padding: 0;
-    margin: 0;
-    float: right;
-    height: 1em;
 }
 
 #searchresultcount {
     float: left;
     height: 1em;
-    width: 30%;
+    width: 20%;
+}
+
+#searchresultsheader .searchresultpagination {
+    padding: 0;
+    margin: 0;
+    float: left;
+    width: 60%;
+    height: 1em;
+    text-align: center;
 }
 
 #searchresultpagecount{
-    float: left;
+    float: right;
     height: 1em;
-    width: 30%;
-    text-align: center;
+    width: 20%;
 }
 
 ul#searchresultitems {
@@ -87,7 +88,16 @@ li.searchresultitem .searchresultcollection{
     clear: both;
 }
 
+.truncate {
+    /* limit description to one line */
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 1em;
+}
+
 #searchresultpagination{
     clear: both;
-    text-align: right;
+    text-align: center;
 }
