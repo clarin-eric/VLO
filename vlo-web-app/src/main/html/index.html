@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (C) 2014 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!--
+    Created on : Jan 23, 2014, 5:10:53 PM
+    Author     : twagoo
+
+    Based on "business one" template: http://www.opendesigns.org/design/business_one/
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+
+    <head>
+        <title>template: home</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width"/>
+        <!-- **** layout stylesheet **** -->
+        <link rel="stylesheet" type="text/css" href="style/style.css" />
+
+        <!-- **** colour scheme stylesheet **** -->
+        <link rel="stylesheet" type="text/css" href="style/colour.css" />
+
+        <!-- **** VLO extensions stylesheet **** -->
+        <link rel="stylesheet" type="text/css" href="style/vlo.css" />
+    </head>
+
+    <body>
+        <div id="main">
+            <div id="header">
+                <div id="logo"><h1>CLARIN Virtual Language Observatory</h1></div>
+                <!--<div id="address"><p>company name<br />company address 1, company address 2, company address 3<br />tel: 0101 010 010</p></div>-->
+            </div>
+            <!--            
+            <div id="menu">
+                <ul>
+                     **** INSERT NAVIGATION ITEMS HERE (use id="selected" to identify the page you're on **** 
+                    <li><a id="selected" href="#">welcome</a></li>
+                    <li><a href="#">page 1</a></li>
+                    <li><a href="#">page 2</a></li>
+                    <li><a href="#">page 3</a></li>
+                    <li><a href="#">contact us</a></li>
+                </ul>
+                <div id="links">
+                     **** INSERT LINKS HERE **** 
+                    <a href="#"><img src="style/home.png" alt="home" /></a>&nbsp;<a href="#"><img src="style/email.png" alt="contact us" /></a>
+                </div>
+            </div>
+            -->
+            <div class="sidebar">
+                <div class="sidebaritem">
+                    <!-- rounded corners - top **** -->
+                    <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
+                    <h1>Language</h1>
+                    <div class="sbilinks">
+                        <ul>
+                            <li><a href="">Dutch (148081)</a></li>
+                            <li><a href="">English (72435) </a></li>
+                            <li><a href="">German (42365) </a></li>
+                            <li><a href="">French (9165) </a></li>
+                            <li><a href="">Spanish (8612) </a></li>
+                            <li><a href="">Danish (8427) </a></li>
+                            <li><a href="">Japanese (6757) </a></li>
+                            <li><a href="">Turkish (4968) </a></li>
+                            <li><a href="">Chinese (1971)</a></li>
+                        </ul>
+                        <a class="more-link" href="">more</a>
+                    </div>
+                    <!-- rounded corners - bottom **** -->
+                    <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
+                </div>
+                <div class="sidebaritem">
+                    <!-- rounded corners - top **** -->
+                    <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
+                    <h1>Resource class</h1>
+                    <div class="sbilinks">
+                        <ul>
+                            <li><a href="">text (70769)</a></li>
+                            <li><a href="">televisie (39307)</a></li>
+                            <li><a href="">Text (32502)</a></li>
+                            <li><a href="">Sound (10007)</a></li>
+                            <li><a href="">Data Provider (4402)</a></li>
+                            <li><a href="">bioscoop (2956)</a></li>
+                            <li><a href="">Televisie (1695)</a></li>
+                            <li><a href="">niet van toepassing (1185)</a></li>
+                        </ul>
+                    </div>
+                    <!-- rounded corners - bottom **** -->
+                    <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
+                </div>
+                <div class="sidebaritem">
+                    <!-- rounded corners - top **** -->
+                    <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
+                    <h1>other information</h1>
+                    <!-- **** INSERT OTHER INFORMATION HERE **** -->
+                    <p>
+                        This space can be used for additional information such as a contact phone number, address
+                        or maybe even a graphic.
+                    </p>
+                    <!-- rounded corners - bottom **** -->
+                    <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
+                </div>
+            </div>
+            <div id="content">
+                [SEARCH RESULTS]
+            </div>
+            <div class="sidebar">
+                <div class="sidebaritem">
+                    <!-- rounded corners - top **** -->
+                    <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
+                    <h1>Genre</h1>
+                    <div class="sbilinks">
+                        <ul>
+                            <li><a href="">Dutch (148081)</a></li>
+                            <li><a href="">English (72435) </a></li>
+                            <li><a href="">German (42365) </a></li>
+                            <li><a href="">French (9165) </a></li>
+                            <li><a href="">Spanish (8612) </a></li>
+                            <li><a href="">Danish (8427) </a></li>
+                            <li><a href="">Japanese (6757) </a></li>
+                            <li><a href="">Turkish (4968) </a></li>
+                            <li><a href="">Chinese (1971)</a></li>
+                        </ul>
+                    </div>
+                    <!-- rounded corners - bottom **** -->
+                    <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
+                </div>
+            </div>
+            <div id="footer">
+                CLARIN VLO version 3.0 | <a href="#">help</a> | <a href="#">about</a> | <a href="http://www.dcarter.co.uk">design by dcarter</a>
+            </div>
+        </div>
+    </body>
+</html>
