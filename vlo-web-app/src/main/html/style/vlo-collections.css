@@ -25,9 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 form#collections ul li {
     display: block;
     width: 28%;
-    margin: .5em 2%;
-    margin-top: .2em;
-    margin-bottom: .2em;
+    margin: 0 2%;
     float: left;
     overflow: no-content;
     height: 3em;
