@@ -27,6 +27,10 @@ form#collections {
     margin: 0;
 }
 
+form#collections ul{
+    margin-left: 0;
+}
+
 form#collections ul li {
     display: block;
     width: 28%;
