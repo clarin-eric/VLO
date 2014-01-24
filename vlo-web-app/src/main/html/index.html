@@ -23,10 +23,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Based on "business one" template: http://www.opendesigns.org/design/business_one/
 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 
     <head>
-        <title>template: home</title>
+        <title>CLARIN VLO</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width"/>
         <!-- **** layout stylesheet **** -->
@@ -40,9 +40,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
 
     <body>
-        <script src="js/jquery-1.10.2.js"></script>
-        <script>
+        <script src="js/jquery-1.10.2.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            //<![CDATA[
+
             $(document).ready(function() {
+                /* collection selection */
                 $("li.collection").hide();
                 $(".allcollections input").change(function(event) {
                     if ($(this).is(":checked")) {
@@ -60,7 +63,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         $(".allcollections input").attr("checked", false);
                     }
                 });
+
+                /* facet collapse/expand */
+                $("a.expandfacet").click(function(event) {
+                    var p = $(this).parent(".collapsedfacet");
+                    p.addClass("expandedfacet");
+                    p.removeClass("collapsedfacet");
+                });
+                $("a.collapsefacet").click(function(event) {
+                    var p = $(this).parent(".expandedfacet");
+                    p.addClass("collapsedfacet");
+                    p.removeClass("expandedfacet");
+                });
             });
+
+
+            //]]>
         </script>
 
         <div id="main">
@@ -73,20 +91,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
                 <h1>Collections</h1>
                 <p>Collections to search in:</p>
-                <form id="collections">
+                <form action="" id="collections">
                     <ul>
-                        <li class="allcollections"><input type="checkbox" checked="true">Search in all collections (604056)</input> <a href="#" id="showcollections">or select...</a></li>
-                        <li class="collection"><input type="checkbox">Meertens collection: Liederenbank (243129)</input></li>
-                        <li class="collection"><input type="checkbox">UBU Clarin Set (69311)</input></li>
-                        <li class="collection"><input type="checkbox">Nederlands Instituut voor Beeld en Geluid Academia collectie (46156)</input></li>
-                        <li class="collection"><input type="checkbox">TLA: childes (29266)</input></li>
-                        <li class="collection"><input type="checkbox">TLA: DoBeS archive (24722)</input></li>
-                        <li class="collection"><input type="checkbox">TLA: Language and Cognition (23535)</input></li>
-                        <li class="collection"><input type="checkbox">TLA: talkbank (14593)</input></li>
-                        <li class="collection"><input type="checkbox">Bavarian Archive for Speech Signals (BAS) (14416)</input></li>
-                        <li class="collection"><input type="checkbox">TLA: Acquisition (14363)</input></li>
-                        <li class="collection"><input type="checkbox">Institut für Deutsche Sprache, CLARIN-D Zentrum, Mannheim (14320)</input></li>
-                        <li class="collection"><input type="checkbox">Meertens collection: Liederenbank (243129)</input></li>
+                        <li class="allcollections"><input type="checkbox" checked="checked" />Search in all collections (604056)<a href="#" id="showcollections">or select...</a></li>
+                        <li class="collection"><input type="checkbox"/>Meertens collection: Liederenbank (243129)</li>
+                        <li class="collection"><input type="checkbox"/>UBU Clarin Set (69311)</li>
+                        <li class="collection"><input type="checkbox"/>Nederlands Instituut voor Beeld en Geluid Academia collectie (46156)</li>
+                        <li class="collection"><input type="checkbox"/>TLA: childes (29266)</li>
+                        <li class="collection"><input type="checkbox"/>TLA: DoBeS archive (24722)</li>
+                        <li class="collection"><input type="checkbox"/>TLA: Language and Cognition (23535)</li>
+                        <li class="collection"><input type="checkbox"/>TLA: talkbank (14593)</li>
+                        <li class="collection"><input type="checkbox"/>Bavarian Archive for Speech Signals (BAS) (14416)</li>
+                        <li class="collection"><input type="checkbox"/>TLA: Acquisition (14363)</li>
+                        <li class="collection"><input type="checkbox"/>Institut fÃÂ¼r Deutsche Sprache, CLARIN-D Zentrum, Mannheim (14320)</li>
+                        <li class="collection"><input type="checkbox"/>Meertens collection: Liederenbank (243129)</li>
                     </ul>
                     <div id="collections-end"></div>
                 </form>
@@ -153,21 +171,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 [SEARCH RESULTS]
             </div>
             <div class="sidebar">
-                <div class="sidebaritem">
+                <div class="sidebaritem collapsedfacet">
                     <!-- rounded corners - top **** -->
                     <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
+                    <a href="#" class="expandfacet">expand</a>
+                    <a href="#" class="collapsefacet">collapse</a>
                     <h1>Genre</h1>
                     <div class="sbilinks">
                         <ul>
-                            <li><a href="">Dutch (148081)</a></li>
-                            <li><a href="">English (72435) </a></li>
-                            <li><a href="">German (42365) </a></li>
-                            <li><a href="">French (9165) </a></li>
-                            <li><a href="">Spanish (8612) </a></li>
-                            <li><a href="">Danish (8427) </a></li>
-                            <li><a href="">Japanese (6757) </a></li>
-                            <li><a href="">Turkish (4968) </a></li>
-                            <li><a href="">Chinese (1971)</a></li>
+                            <li><a href="">discourse (81536)</a></li>
+                            <li><a href="" title="info:eu-repo/semantics/article">info:eu-repo/... (34677)</a></li>
+                            <li><a href="">kinderlied (19218)</a></li>
+                            <li><a href="">primary_text (12428)</a></li>
+                            <li><a href="">narrative (11459)</a></li>
+                            <li><a href="">language_description (11084)</a></li>
+                            <li><a href="" title="info:eu-repo/semantics/masterthesis">info:eu-repo/... (10890)</a></li>
+                            <li><a href="">liefdeslied (8381)</a></li>
+                            <li><a href="">stimuli (8103)</a></li>
+                            <li class="more-link"><a href="">more...</a></li>
                         </ul>
                     </div>
                     <!-- rounded corners - bottom **** -->

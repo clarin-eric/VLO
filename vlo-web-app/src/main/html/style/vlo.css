@@ -48,3 +48,20 @@ form#collections ul li.allcollections{
 #collections-end {
     clear: left;
 }
+
+a.expandfacet, a.collapsefacet {
+    float: right;
+    margin-right: 1em;
+}
+
+.expandedfacet a.expandfacet {
+    display:  none;
+}
+
+.collapsedfacet .sbilinks {
+    display:  none;
+}
+
+.collapsedfacet a.collapsefacet {
+    display:  none;
+}
