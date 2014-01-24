@@ -40,27 +40,60 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
 
     <body>
+        <script src="js/jquery-1.10.2.js"></script>
+        <script>
+            $(document).ready(function() {
+                $("li.collection").hide();
+                $(".allcollections input").change(function(event) {
+                    if ($(this).is(":checked")) {
+                        $("li.collection").hide();
+                        $("li.collection input").attr("checked", false);
+                    } else {
+                        $("li.collection").show();
+                    }
+                });
+                $("a#showcollections").click(function(event) {
+                    $("li.collection").toggle();
+                });
+                $("li.collection input").change(function(event) {
+                    if ($(this).is(":checked")) {
+                        $(".allcollections input").attr("checked", false);
+                    }
+                });
+            });
+        </script>
+
         <div id="main">
             <div id="header">
                 <div id="logo"><h1>CLARIN Virtual Language Observatory</h1></div>
                 <!--<div id="address"><p>company name<br />company address 1, company address 2, company address 3<br />tel: 0101 010 010</p></div>-->
             </div>
-            <!--            
-            <div id="menu">
-                <ul>
-                     **** INSERT NAVIGATION ITEMS HERE (use id="selected" to identify the page you're on **** 
-                    <li><a id="selected" href="#">welcome</a></li>
-                    <li><a href="#">page 1</a></li>
-                    <li><a href="#">page 2</a></li>
-                    <li><a href="#">page 3</a></li>
-                    <li><a href="#">contact us</a></li>
-                </ul>
-                <div id="links">
-                     **** INSERT LINKS HERE **** 
-                    <a href="#"><img src="style/home.png" alt="home" /></a>&nbsp;<a href="#"><img src="style/email.png" alt="contact us" /></a>
-                </div>
+
+            <div class="topbar">
+                <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
+                <h1>Collections</h1>
+                <p>Collections to search in:</p>
+                <form id="collections">
+                    <ul>
+                        <li class="allcollections"><input type="checkbox" checked="true">Search in all collections (604056)</input> <a href="#" id="showcollections">or select...</a></li>
+                        <li class="collection"><input type="checkbox">Meertens collection: Liederenbank (243129)</input></li>
+                        <li class="collection"><input type="checkbox">UBU Clarin Set (69311)</input></li>
+                        <li class="collection"><input type="checkbox">Nederlands Instituut voor Beeld en Geluid Academia collectie (46156)</input></li>
+                        <li class="collection"><input type="checkbox">TLA: childes (29266)</input></li>
+                        <li class="collection"><input type="checkbox">TLA: DoBeS archive (24722)</input></li>
+                        <li class="collection"><input type="checkbox">TLA: Language and Cognition (23535)</input></li>
+                        <li class="collection"><input type="checkbox">TLA: talkbank (14593)</input></li>
+                        <li class="collection"><input type="checkbox">Bavarian Archive for Speech Signals (BAS) (14416)</input></li>
+                        <li class="collection"><input type="checkbox">TLA: Acquisition (14363)</input></li>
+                        <li class="collection"><input type="checkbox">Institut für Deutsche Sprache, CLARIN-D Zentrum, Mannheim (14320)</input></li>
+                        <li class="collection"><input type="checkbox">Meertens collection: Liederenbank (243129)</input></li>
+                    </ul>
+                    <div id="collections-end"></div>
+                </form>
+                <!-- rounded corners - bottom **** -->
+                <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
             </div>
-            -->
+
             <div class="sidebar">
                 <div class="sidebaritem">
                     <!-- rounded corners - top **** -->
@@ -77,8 +110,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <li><a href="">Japanese (6757) </a></li>
                             <li><a href="">Turkish (4968) </a></li>
                             <li><a href="">Chinese (1971)</a></li>
+                            <li class="more-link"><a href="">more...</a></li>
                         </ul>
-                        <a class="more-link" href="">more</a>
                     </div>
                     <!-- rounded corners - bottom **** -->
                     <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
@@ -97,6 +130,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <li><a href="">bioscoop (2956)</a></li>
                             <li><a href="">Televisie (1695)</a></li>
                             <li><a href="">niet van toepassing (1185)</a></li>
+                            <li class="more-link"><a href="">more...</a></li>
                         </ul>
                     </div>
                     <!-- rounded corners - bottom **** -->

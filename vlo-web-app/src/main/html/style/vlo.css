@@ -19,9 +19,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : twagoo
 */
 
-a.more-link {
+li.more-link {
     width: 100%;
     text-align: right;
 }
 
- 
+li.more-link a {
+    margin-right: 1em;
+}
+
+form#collections ul li {
+    display: block;
+    width: 28%;
+    margin: .5em 2%;
+    margin-top: .2em;
+    margin-bottom: .2em;
+    float: left;
+    overflow: no-content;
+    height: 3em;
+}
+
+form#collections ul li.allcollections{
+    visibility: visible;
+    clear: both;
+    width: 100%;
+}
+
+#collections-end {
+    clear: left;
+}

@@ -44,18 +44,20 @@ body{background: #555 url(pattern.png) repeat;}
   color: #777;
 }
 
-.sidebaritem
+.sidebaritem, .topbar
 { background: #E1E5D5;
   color: #555;
 } 
 
 .sbilinks li a, .sidebaritem a
-{ background: transparent url(arrow.png) no-repeat left center;
+{ 
+    /*background: transparent url(arrow.png) no-repeat left center;*/
   color: #555;
 } 
 
 .sbilinks li a:hover, .sidebaritem a:hover
-{ background: transparent url(arrow_select.png) no-repeat left center;
+{
+    /*background: transparent url(arrow_select.png) no-repeat left center;*/
   color: #555;
 } 
 

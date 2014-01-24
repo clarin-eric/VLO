@@ -158,6 +158,13 @@ ol li
   padding: 10px 18px 0px 0px;
 }
 
+/* top bar */
+.topbar
+{ 
+  margin: 8px 15px 2px 15px;
+  padding: 0px 0px 0px 0px;
+}
+
 /* sidebars */
 .sidebar
 { float: left;
@@ -174,14 +181,14 @@ ol li
   padding: 0px 0px 0px 0px;
 }
 
-.sidebaritem h1, .sidebaritem h2, .sidebaritem p{margin: 0px 10px 0px 10px}
+.sidebaritem h1, .sidebaritem h2, .sidebaritem p, .topbar h1, .topbar p {margin: 0px 10px 0px 10px}
 
-.sidebaritem h1
+.sidebaritem h1, .topbar h1
 { font-weight: normal; padding: 8px 0px 16px 0px;
   text-transform: uppercase;
 }
 
-.sidebaritem p
+.sidebaritem p, .topbar p
 { line-height: 16px; 
   padding: 0px 0px 8px 0px;
 }
@@ -191,7 +198,7 @@ ol li
   text-decoration: none;
 }
 
-.sbilinks ul{margin: 0px 0px 18px 10px;}
+.sbilinks ul{margin: 0px;}
 
 .sbilinks li
 { list-style: none; 
