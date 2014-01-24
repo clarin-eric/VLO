@@ -20,8 +20,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : twagoo
 */
 
-/* styles for collection selection */
-@import "vlo-collections.css";
+/* collection selection */
 
-/* styles for facet panels */
-@import "vlo-facets.css";
+form#collections ul li {
+    display: block;
+    width: 28%;
+    margin: .5em 2%;
+    margin-top: .2em;
+    margin-bottom: .2em;
+    float: left;
+    overflow: no-content;
+    height: 3em;
+}
+
+form#collections ul li.allcollections{
+    visibility: visible;
+    clear: both;
+    width: 100%;
+}
+
+#collections-end {
+    clear: left;
+}

@@ -20,8 +20,48 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : twagoo
 */
 
-/* styles for collection selection */
-@import "vlo-collections.css";
+/* facet links */
 
-/* styles for facet panels */
-@import "vlo-facets.css";
+li.more-link {
+    width: 100%;
+    text-align: right;
+}
+
+li.more-link a {
+    margin-right: 1em;
+}
+
+/* facet collapse/expand */
+
+a.expandfacet, a.collapsefacet {
+    float: right;
+    margin-top: .5em;
+    margin-right: 1em;
+}
+
+a.expandfacet span, a.collapsefacet span{
+    /* don't show expand/collapse label */
+    display: none;
+}
+
+a.expandfacet:after {
+    /* show BLACK DOWN-POINTING TRIANGLE character */
+    content: "\25BC";
+}
+
+a.collapsefacet:after {
+    /* show BLACK UP-POINTING TRIANGLE  character*/
+    content: "\25B2";
+}
+
+.expandedfacet a.expandfacet {
+    display:  none;
+}
+
+.collapsedfacet .sbilinks {
+    display:  none;
+}
+
+.collapsedfacet a.collapsefacet {
+    display:  none;
+}
