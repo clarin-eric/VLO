@@ -25,3 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* styles for facet panels */
 @import "vlo-facets.css";
+
+/* styles for search bar */
+@import "vlo-search.css";

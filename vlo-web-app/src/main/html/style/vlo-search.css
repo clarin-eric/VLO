@@ -1,0 +1,77 @@
+/*
+Copyright (C) 2014 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/* 
+    Created on : Jan 24, 2014, 2:24:14 PM
+    Author     : twagoo
+*/
+
+#searchbar {
+    width: 100%;  
+}
+
+#searchbox {
+    min-width: 250px;
+}
+
+#searchresults {
+    clear: both;
+}
+
+#searchresultsheader {
+    border-bottom: 1px solid;
+    height: 1em;
+}
+
+#searchresultcount {
+    float: left;
+    height: 1em;
+}
+
+#searchresultpagecount{
+    float: right;
+    height: 1em;
+}
+
+ul#searchresultitems {
+    margin: 0;
+    padding: 0;
+    height: 500px;
+    overflow-y: auto;
+}
+
+li.searchresultitem {
+    display: block;
+    clear: both;
+    padding: 1em 0 0 0;
+    border-bottom: 1px dashed;
+}
+
+li.searchresultitem h2 {
+    text-decoration: none;
+    float: left;
+    width: 75%;
+}
+
+li.searchresultitem .searchresultcollection{
+    width: 20%;
+    float: right;
+    text-align: right;
+}
+
+.searchresultdescription{
+    clear: both;
+}
