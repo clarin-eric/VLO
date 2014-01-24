@@ -87,7 +87,9 @@ ol li
 }
 
 /* main container */
-#main{width: 850px;}
+#main{
+    width: 980px; /* used to be 850px */
+}
 
 /* header */
 #header
@@ -168,14 +170,14 @@ ol li
 /* sidebars */
 .sidebar
 { float: left;
-  width: 194px;
+  width: 214px; /*  used to be 194px */
   padding: 16px 15px 15px 15px;
 }
 
 /* sidebar items / links */
 .sidebaritem
 { text-align: left;
-  width: 194px;
+  width: 100%; /*  used to be 194px */
   float: left;
   margin: 0px 0px 11px 0px;
   padding: 0px 0px 0px 0px;
@@ -215,7 +217,7 @@ ol li
 /* page content (centre) */
 #content
 { text-align: justify;
-  width: 384px;
+  width: 474px; /* used to be 384px  */
   padding: 26px 9px 15px 9px;
   float: left;
 }
