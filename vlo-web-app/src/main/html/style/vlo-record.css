@@ -31,18 +31,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     margin-top: 1em;
 }
 
-#recordreferences div a, #recordreferences div a:hover {
-    display: block;
-    height: 24px;
+#recordreferences div div {
+    /* div that has resource link or landing page */
+    min-height: 32px;
     padding-left: 36px;
-    padding-top: 8px;
-    vertical-align: middle;
 }
 
-#recordlandingpage a, #recordlandingpage a:hover {
+/* icons for record references */
+#recordlandingpage div {
     background: url('Crystal_Clear_mimetype_readme.png') no-repeat;
 }
 
-#recordresources a, #recordresources a:hover {
+#recordresources div.writtenresource {
     background: url('text-x-generic.png') no-repeat;
+}
+
+#recordresources div.audioresource {
+    background: url('audio-x-generic.png') no-repeat;
+}
+
+#recordresources div.videoresource {
+    background: url('video-x-generic.png') no-repeat;
+}
+
+#recordresources div.annotationresource {
+    background: url('text-x-log.png') no-repeat;
 }
