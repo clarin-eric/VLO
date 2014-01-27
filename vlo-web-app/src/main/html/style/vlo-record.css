@@ -23,6 +23,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     padding: 0;
 }
 
+#recordnavigation ul{
+    margin: 0px;
+    padding: 0px;
+}
+
+#recordnavigation ul li {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+
 ul#recordcontextfacets {
     margin-top: 0px;
 }
