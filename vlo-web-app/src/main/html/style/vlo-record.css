@@ -45,6 +45,11 @@ ul#recordcontextfacets li {
     padding-left: 36px;
 }
 
+#recordreferences div div a, #recordreferences div div a:hover {
+    display: inline-block;
+    padding-top: .5em;
+}
+
 /* icons for record references */
 #recordlandingpage div {
     background: url('Crystal_Clear_mimetype_readme.png') no-repeat;
@@ -64,4 +69,14 @@ ul#recordcontextfacets li {
 
 #recordresources div.annotationresource {
     background: url('text-x-log.png') no-repeat;
+}
+
+#recordcmdi {
+    margin-top: 2em;
+}
+
+#recordcmdi article {
+    position: relative;
+    left: -80px;  /* sidebar */
+    width: 720px;
 }
