@@ -31,3 +31,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* styles for record details */
 @import "vlo-record.css";
+
+#header {
+    width: 980px;
+    height: 176px;
+    border: 0px;
+}
+
+#header #logo {
+    background: url('vloheader.png') no-repeat;
+    width: 100%;
+    height: 100%;
+}
+
+#header #logo h1 {
+    display: none;
+}
