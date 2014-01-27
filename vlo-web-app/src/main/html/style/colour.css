@@ -1,13 +1,41 @@
+/*
+Palette generated using http://www.cssdrive.com/imagepalette/index.php 
+with header image as input
+
+.color1 { color: #fff6da}
+.color2 { color: #fff9e8}
+.color3 { color: #fffdf9}
+.color4 { color: #ffffff}
+.color5 { color: #d4dff0}
+.color6 { color: #fff9e7}
+.color7 { color: #684639}
+.color8 { color: #d3def0}
+.color9 { color: #fff9e6}
+.color10 { color: #936851}
+.color11 { color: #bfc8c1}
+.color12 { color: #7f9cab}
+.color13 { color: #61230d}
+.color14 { color: #fffecb}
+.color15 { color: #d6e0f1}
+.color16 { color: #fff8e2}
+.color17 { color: #fffcf3}
+.color18 { color: #fff7e1}
+.color19 { color: #fffbf1}
+.color20 { color: #fff7df}
+.color21 { color: #fffbf0}
+.color22 { color: #fffffe}
+*/
+
 blockquote{border-color: #777;}
 
 h1
 { background: transparent;
-  color: #6EAB03;
+  color: #4c504d;
 }
 
-body{background: #555 url(pattern.png) repeat;}
+body{background: #bfced5;}
 
-#main{background: #F5F6F0;}
+#main{background: #e9eff8;}
 
 #header
 { background: #B5B9A7;
@@ -34,18 +62,18 @@ body{background: #555 url(pattern.png) repeat;}
 }
 
 #menu li a:hover, #menu li a#selected, #menu li a#selected:hover
-{ background: #898867 url(menu_hover.png);
+{ background: #c9b4a8 url(menu_hover.png);
   color: #F5F6F0;
   border-color: #989898;
 }
 
 #left_sidebar, #content, #right_sidebar, #content a:hover
-{ background: #F5F6F0;
-  color: #777;
+{ background: #e9eff8;
+  color: #291c16;
 }
 
 .sidebaritem, .topbar
-{ background: #E1E5D5;
+{ background: #dfe4e0;
   color: #555;
 } 
 
@@ -58,19 +86,19 @@ body{background: #555 url(pattern.png) repeat;}
 .sbilinks li a:hover, .sidebaritem a:hover
 {
     /*background: transparent url(arrow_select.png) no-repeat left center;*/
-  color: #363;
+  color: #936851;
   text-decoration: underline;
 } 
 
 #content a
 { background: transparent;
-  color: #6EAB03;
+  color: #666257;
 }
 
 #footer
-{ background: #B5B9A7 url(footer.png) repeat-x;
+{ background: #bfc8c1 url(footer.png) repeat-x;
   color: #414141;
-  border-color: #6D913D;
+  border-color: #4c504d;
 }
 
 #address, #footer a, #footer a:hover
@@ -81,6 +109,6 @@ body{background: #555 url(pattern.png) repeat;}
 /* Based on Nifty Corners: rounded corners without images */
 /* By Alessandro Fulciniti */
 /* http://www.html.it/articoli/nifty/index.html */
-.rtop, .rbottom{background: #F5F6F0;}
+.rtop, .rbottom{background: #e9eff8;}
 .rtop .r1, .rtop .r2, .rtop .r3, .rtop .r4,
-.rbottom .r1, .rbottom .r2, .rbottom .r3, .rbottom .r4{background: #E1E5D5;}
+.rbottom .r1, .rbottom .r2, .rbottom .r3, .rbottom .r4{background: #dfe4e0;}
