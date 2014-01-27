@@ -64,4 +64,16 @@ $(document).ready(function() {
     };
     
     $(".filterform input").on('input', filterHandler);
+    
+    /* Facet values popup */
+    
+    $(".more-link").click(function(event){
+        event.preventDefault();
+        $("#facetvalues").toggle();
+    });
+    
+    $("#facetvalues a").click(function(event){
+        event.preventDefault();
+        $("#facetvalues").toggle();
+    });
 });

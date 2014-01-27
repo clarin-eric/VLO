@@ -94,3 +94,36 @@ a.filtertoggle span{
 .filterform input {
     width: 90%;
 }
+
+#facetvalues {
+    display: none;
+    position: absolute;
+    left: 15%;
+    width: 70%;
+    height: 400px;
+    overflow: auto;
+    top: 150px;
+    padding: 1em;
+    background: #fff;
+    opacity: .95;
+    border: 1px dashed;
+}
+
+#facetvalues input {
+    width: 300px;
+}
+
+a#facetvaluescancel {
+    display: block;
+    float: right;
+}
+
+.alphaNavigation ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+.alphaNavigation li {
+    display: inline-block;
+    padding: 0px 2px;
+}
