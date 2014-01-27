@@ -65,3 +65,32 @@ a.collapsefacet:after {
 .collapsedfacet a.collapsefacet {
     display:  none;
 }
+
+
+.filterfacet h1 {
+    float: left;
+    margin-right: 20px;
+}
+
+.filterfacet .filtertoggle {
+    float: right;
+    clear: right;
+    display: block;
+    margin-top: 8px;
+    width: 16px;
+    height: 16px;
+    background: url('search_icon.png') no-repeat;
+    background-size: 16px;
+}
+
+a.filtertoggle span{
+    display: none;
+}
+
+.filterform {
+    clear: both;
+    margin-left: 12px;
+}
+.filterform input {
+    width: 90%;
+}

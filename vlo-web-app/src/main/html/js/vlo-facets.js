@@ -30,4 +30,37 @@ $(document).ready(function() {
         p.addClass("collapsedfacet");
         p.removeClass("expandedfacet");
     });
+
+    /* facet filter */
+    $(".filterform").toggle();
+
+    $("a.filtertoggle").click(function(event) {
+        // toggle link clicked, show or hide filter box and focus on input
+        var form = $(this).parent(".sidebaritem").find(".filterform");
+        form.siblings(".sbilinks").find("li").show();
+        form.toggle(function(event) {
+            var input = form.children("input");
+            input.val('');
+            input.focus();
+        });
+    });
+
+    var filterHandler = function(event) {
+        // filter text entered, update result list
+        var links = $(this).parent(".filterform").siblings(".sbilinks").find("li");
+        var match = $(this).val().toUpperCase();
+        if (match.length === 0) {
+            links.show();
+        } else {
+            // hide all results
+            links.hide();
+            // show all matching results
+            links.filter(function(index) {
+                // case insensitive match
+                return links[index].textContent.toUpperCase().indexOf(match) >= 0;
+            }).show();
+        }
+    };
+    
+    $(".filterform input").on('input', filterHandler);
 });

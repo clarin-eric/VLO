@@ -200,6 +200,8 @@ ol li
   text-decoration: none;
 }
 
+.sbilinks {clear: both;}
+
 .sbilinks ul{margin: 0px;}
 
 .sbilinks li
