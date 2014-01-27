@@ -14,20 +14,35 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 /* 
-    Created on : Jan 24, 2014, 10:06:50 AM
+    Created on : Jan 27, 2014, 11:42:13 AM
     Author     : twagoo
 */
 
-/* styles for collection selection */
-@import "vlo-collections.css";
+#recordnavigation p a {
+    padding: 0;
+}
 
-/* styles for facet panels */
-@import "vlo-facets.css";
+#recordreferences {
+    margin-top: 1em;
+}
 
-/* styles for search bar */
-@import "vlo-search.css";
+#recordreferences div {
+    margin-top: 1em;
+}
 
-/* styles for record details */
-@import "vlo-record.css";
+#recordreferences div a, #recordreferences div a:hover {
+    display: block;
+    height: 24px;
+    padding-left: 36px;
+    padding-top: 8px;
+    vertical-align: middle;
+}
+
+#recordlandingpage a, #recordlandingpage a:hover {
+    background: url('Crystal_Clear_mimetype_readme.png') no-repeat;
+}
+
+#recordresources a, #recordresources a:hover {
+    background: url('text-x-generic.png') no-repeat;
+}
