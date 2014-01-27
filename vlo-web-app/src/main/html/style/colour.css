@@ -35,7 +35,7 @@ h1
 
 body{background: #bfced5;}
 
-#main{background: #e9eff8;}
+#main{background: #d3def0;}
 
 #header
 { background: #B5B9A7;
@@ -68,12 +68,12 @@ body{background: #bfced5;}
 }
 
 #left_sidebar, #content, #right_sidebar, #content a:hover
-{ background: #e9eff8;
+{ background: #d3def0;
   color: #291c16;
 }
 
 .sidebaritem, .topbar
-{ background: #dfe4e0;
+{ background: #e9eff8;
   color: #555;
 } 
 
@@ -109,6 +109,6 @@ body{background: #bfced5;}
 /* Based on Nifty Corners: rounded corners without images */
 /* By Alessandro Fulciniti */
 /* http://www.html.it/articoli/nifty/index.html */
-.rtop, .rbottom{background: #e9eff8;}
+.rtop, .rbottom{background: #d3def0;}
 .rtop .r1, .rtop .r2, .rtop .r3, .rtop .r4,
-.rbottom .r1, .rbottom .r2, .rbottom .r3, .rbottom .r4{background: #dfe4e0;}
+.rbottom .r1, .rbottom .r2, .rbottom .r3, .rbottom .r4{background: #e9eff8;}
