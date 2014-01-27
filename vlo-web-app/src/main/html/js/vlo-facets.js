@@ -36,6 +36,7 @@ $(document).ready(function() {
 
     $("a.filtertoggle").click(function(event) {
         // toggle link clicked, show or hide filter box and focus on input
+        event.preventDefault();
         var form = $(this).parent(".sidebaritem").find(".filterform");
         form.siblings(".sbilinks").find("li").show();
         form.toggle(function(event) {

@@ -58,7 +58,8 @@ body{background: #555 url(pattern.png) repeat;}
 .sbilinks li a:hover, .sidebaritem a:hover
 {
     /*background: transparent url(arrow_select.png) no-repeat left center;*/
-  color: #555;
+  color: #363;
+  text-decoration: underline;
 } 
 
 #content a
