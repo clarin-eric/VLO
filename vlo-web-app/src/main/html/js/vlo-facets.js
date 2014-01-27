@@ -21,12 +21,14 @@ $(document).ready(function() {
     $("a.expandfacet").click(function(event) {
         event.preventDefault();
         var p = $(this).parent(".collapsedfacet");
+        p.find(".sbilinks").show(200);
         p.addClass("expandedfacet");
         p.removeClass("collapsedfacet");
     });
     $("a.collapsefacet").click(function(event) {
         event.preventDefault();
         var p = $(this).parent(".expandedfacet");
+        p.find(".sbilinks").hide(200);
         p.addClass("collapsedfacet");
         p.removeClass("expandedfacet");
     });
@@ -39,7 +41,7 @@ $(document).ready(function() {
         event.preventDefault();
         var form = $(this).parent(".sidebaritem").find(".filterform");
         form.siblings(".sbilinks").find("li").show();
-        form.toggle(function(event) {
+        form.toggle(100, function(event) {
             var input = form.children("input");
             input.val('');
             input.focus();
@@ -62,17 +64,17 @@ $(document).ready(function() {
             }).show();
         }
     };
-    
+
     $(".filterform input").on('input', filterHandler);
-    
+
     /* Facet values popup */
-    
-    $(".more-link").click(function(event){
+
+    $(".more-link").click(function(event) {
         event.preventDefault();
         $("#facetvalues").toggle();
     });
-    
-    $("#facetvalues a").click(function(event){
+
+    $("#facetvalues a").click(function(event) {
         event.preventDefault();
         $("#facetvalues").toggle();
     });
