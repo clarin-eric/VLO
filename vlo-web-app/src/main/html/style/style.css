@@ -165,6 +165,7 @@ ol li
 { 
   margin: 8px 15px 2px 15px;
   padding: 0px 0px 0px 0px;
+  clear: both;
 }
 
 /* sidebars */

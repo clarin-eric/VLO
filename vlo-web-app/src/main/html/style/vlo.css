@@ -33,3 +33,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* styles for record details */
 @import "vlo-record.css";
+
+#topnavigation {
+    margin: 8px 15px 2px 15px;
+    padding: 0px 4px 0px 8px;
+    /*min-height: 1.5em;*/
+}
+
+#topnavigation #breadcrumbs {
+    float: left;
+    clear: left;
+    width: 75%;
+    padding-bottom: .5em;
+}
+
+#topnavigation #topnavigationlinks {
+    float: right;
+    clear: right;
+    text-align: right;
+    width: 20%;
+    padding-bottom: .5em;
+}
