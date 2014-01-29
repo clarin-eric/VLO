@@ -44,10 +44,11 @@ li.more-link a {
 }
 
 /* facet collapse/expand */
-a.expandfacet, a.collapsefacet {
-    float: right;
-    margin-top: .5em;
-    margin-right: 1em;
+a.expandfacet, a.collapsefacet, a.expandfacet:hover, a.collapsefacet:hover {
+    float: left;
+    width: 1em;
+    margin: .7em 0em 0em 0em;
+    padding: 0em 0em 0em .5em;
 }
 
 a.expandfacet:hover, a.collapsefacet:hover {   
@@ -61,28 +62,28 @@ a.expandfacet span, a.collapsefacet span{
 
 a.expandfacet:after {
     /* show BLACK DOWN-POINTING TRIANGLE character */
-    content: "\25BC";
+    content: "+";
 }
 
 a.collapsefacet:after {
     /* show BLACK UP-POINTING TRIANGLE  character*/
-    content: "\25B2";
+    content: "-";
 }
 
 .expandedfacet a.expandfacet {
     display:  none;
 }
 
-.collapsedfacet .sbilinks {
+.sidebaritem.collapsedfacet .sbilinks {
     display:  none;
 }
 
-.collapsedfacet a.collapsefacet {
+.sidebaritem.collapsedfacet a.collapsefacet {
     display:  none;
 }
 
 
-.filterfacet h1 {
+.sidebaritem.expandedfacet h1 {
     float: left;
     margin-right: 20px;
 }
