@@ -78,7 +78,7 @@ a.collapsefacet:after {
     content: "-";
 }
 
-.facet.expandedfacet a.expandfacet {
+.facet.expandedfacet a.expandfacet,  .facet.expandedfacet a#showvalues{
     display:  none;
 }
 

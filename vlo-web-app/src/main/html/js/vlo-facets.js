@@ -32,12 +32,12 @@ $(document).ready(function() {
     /* facet collapse/expand */
     $("a.expandfacet, a#showvalues").click(function(event) {
         event.preventDefault();
-        var p = $(this).parent(".collapsedfacet");
+        var p = $(this).parents(".collapsedfacet");
         expandFacet(p);
     });
     $("a.collapsefacet").click(function(event) {
         event.preventDefault();
-        var p = $(this).parent(".expandedfacet");
+        var p = $(this).parents(".expandedfacet");
         collapseFacet(p);
     });
 
