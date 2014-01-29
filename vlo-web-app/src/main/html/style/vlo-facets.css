@@ -58,11 +58,8 @@ li.more-link a {
 a.expandfacet, a.collapsefacet, a.expandfacet:hover, a.collapsefacet:hover {
     float: left;
     width: .5em;
-    margin: .7em 0em 0em 0em;
-    padding: 0em 0em 0em .5em;
-}
-
-a.expandfacet:hover, a.collapsefacet:hover {   
+    margin: .7em 0em 0em .5em;
+    padding: 0em 0em 0em 0em;
     text-decoration: none;
 }
 
@@ -96,7 +93,11 @@ a.collapsefacet:after {
 
 .facet h1 {
     float: left;
-    margin-right: 20px;
+    max-width: 80%;
+}
+
+.expandedfacet h1 .selectedvaluelabel {
+    display: none;
 }
 
 .facet.collapsedfacet .filtertoggle {

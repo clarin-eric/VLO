@@ -20,18 +20,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : twagoo
 */
 
-/* collection selection */
-
 form#collections {
     padding: 0;
     margin: 0;
 }
 
-form#collections ul{
-    margin-left: 0;
+#collections > p {
+    clear: both;
 }
 
-form#collections ul li {
+#collections ul li {
     display: block;
     width: 28%;
     margin: 0 2%;
@@ -40,13 +38,7 @@ form#collections ul li {
     padding-bottom: .2em;
 }
 
-form#collections ul li.allcollections{
-    visibility: visible;
+#collections ul li.more-link {
     clear: both;
-    width: 100%;
-    
-}
-
-#collections-end {
-    clear: left;
+    float: right;
 }

@@ -30,7 +30,7 @@ function collapseFacet(p) {
 
 $(document).ready(function() {
     /* facet collapse/expand */
-    $("a.expandfacet").click(function(event) {
+    $("a.expandfacet, a#showvalues").click(function(event) {
         event.preventDefault();
         var p = $(this).parent(".collapsedfacet");
         expandFacet(p);

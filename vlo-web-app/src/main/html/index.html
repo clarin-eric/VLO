@@ -39,7 +39,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <body>
         <script src="js/jquery-1.10.2.js" type="text/javascript"></script>
-        <script src="js/vlo-collections.js" type="text/javascript"></script>
         <script src="js/vlo-facets.js" type="text/javascript"></script>
         <script src="js/vlo-search.js" type="text/javascript"></script>
 
@@ -63,26 +62,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
 
-            <div class="topbar">
+            <div class="topbar facet collapsedfacet" id="collections">
                 <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
+                <a href="#" class="expandfacet"><span>expand</span></a>
+                <a href="#" class="collapsefacet"><span>collapse</span></a>
                 <h1>Collections</h1>
-                <form action="" id="collections">
-                    <ul>
-                        <li class="allcollections"><input type="checkbox" checked="checked" />Search in all collections (604056) <a href="#" id="showcollections">or select...</a></li>
-                        <li class="collection"><input type="checkbox"/>Meertens collection: Liederenbank (243129)</li>
-                        <li class="collection"><input type="checkbox"/>UBU Clarin Set (69311)</li>
-                        <li class="collection"><input type="checkbox"/>Nederlands Instituut voor Beeld en Geluid Academia collectie (46156)</li>
-                        <li class="collection"><input type="checkbox"/>TLA: childes (29266)</li>
-                        <li class="collection"><input type="checkbox"/>TLA: DoBeS archive (24722)</li>
-                        <li class="collection"><input type="checkbox"/>TLA: Language and Cognition (23535)</li>
-                        <li class="collection"><input type="checkbox"/>TLA: talkbank (14593)</li>
-                        <li class="collection"><input type="checkbox"/>Bavarian Archive for Speech Signals (BAS) (14416)</li>
-                        <li class="collection"><input type="checkbox"/>TLA: Acquisition (14363)</li>
-                        <li class="collection"><input type="checkbox"/>Institut f&uuml;r Deutsche Sprache, CLARIN-D Zentrum, Mannheim (14320)</li>
-                        <li class="collection"><input type="checkbox"/>Meertens collection: Liederenbank (243129)</li>
-                    </ul>
-                    <div id="collections-end"></div>
+                <a class="filtertoggle" title="Filter values" href="#"><span>filter</span></a>
+                <form class="filterform">
+                    <input type="text" />
                 </form>
+                <p>
+                    Searching in all collections (604056 records). Expand to select an individual collection.
+                </p>
+                <div class="sbilinks">
+                    <ul>
+                        <li class="collection"><a href="">Meertens collection: Liederenbank (243129)</a></li>
+                        <li class="collection"><a href="">UBU Clarin Set (69311)</a></li>
+                        <li class="collection"><a href="">Nederlands Instituut voor Beeld en Geluid Academia collectie (46156)</a></li>
+                        <li class="collection"><a href="">TLA: childes (29266)</a></li>
+                        <li class="collection"><a href="">TLA: DoBeS archive (24722)</a></li>
+                        <li class="collection"><a href="">TLA: Language and Cognition (23535)</a></li>
+                        <li class="collection"><a href="">TLA: talkbank (14593)</a></li>
+                        <li class="collection"><a href="">Bavarian Archive for Speech Signals (BAS) (14416)</a></li>
+                        <li class="collection"><a href="">TLA: Acquisition (14363)</a></li>
+                        <li class="collection"><a href="">Institut f&uuml;r Deutsche Sprache, CLARIN-D Zentrum, Mannheim (14320)</a></li>
+                        <li class="collection"><a href="">Meertens collection: Liederenbank (243129)</a></li>
+                        <li class="more-link"><a href="#">more...</a></li>
+                    </ul>
+                </div>
                 <!-- rounded corners - bottom **** -->
                 <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
             </div>
@@ -93,7 +100,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
                     <a href="#" class="expandfacet"><span>expand</span></a>
                     <a href="#" class="collapsefacet"><span>collapse</span></a>
-                    <h1>Language</h1>
+                    <h1>Language <span class="selectedvaluelabel">[Dutch]</span></h1>
                     <div class="filtertoggle"><span>filter</span></div>
                     <form class="filterform">
                         <input type="text" />
@@ -379,7 +386,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
                     <a href="#" class="expandfacet"><span>expand</span></a>
                     <a href="#" class="collapsefacet"><span>collapse</span></a>
-                    <h1>National project</h1>
+                    <h1>National project <span class="selectedvaluelabel">[CLARIN-NL]</a></h1>
                     <a class="filtertoggle" title="Filter values" href="#"><span>filter</span></a>
                     <form class="filterform">
                         <input type="text" />
