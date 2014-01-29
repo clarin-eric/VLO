@@ -47,7 +47,7 @@ $(document).ready(function() {
     $("a.filtertoggle").click(function(event) {
         // toggle link clicked, show or hide filter box and focus on input
         event.preventDefault();
-        var form = $(this).parent(".sidebaritem").find(".filterform");
+        var form = $(this).parent(".facet").find(".filterform");
         form.siblings(".sbilinks").find("li").show();
         expandFacet($(this).parent(".collapsedfacet"));
         form.toggle(100, function(event) {

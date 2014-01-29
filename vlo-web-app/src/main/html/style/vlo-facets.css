@@ -81,29 +81,29 @@ a.collapsefacet:after {
     content: "-";
 }
 
-.expandedfacet a.expandfacet {
+.facet.expandedfacet a.expandfacet {
     display:  none;
 }
 
-.sidebaritem.collapsedfacet .sbilinks, .sidebaritem.collapsedfacet .filterform {
+.facet.collapsedfacet .sbilinks, .facet.collapsedfacet .filterform {
     display:  none;
 }
 
-.sidebaritem.collapsedfacet a.collapsefacet {
+.facet.collapsedfacet a.collapsefacet {
     display:  none;
 }
 
 
-.sidebaritem.expandedfacet h1, .sidebaritem.collapsedfacet h1 {
+.facet h1 {
     float: left;
     margin-right: 20px;
 }
 
-.collapsedfacet .filtertoggle {
+.facet.collapsedfacet .filtertoggle {
     display: none;
 }
 
-.expandedfacet .filtertoggle, .sidebaritem .filtertoggle:hover {
+.facet .filtertoggle, .facet .filtertoggle:hover {
     float: right;
     clear: right;
     display: block;
@@ -115,17 +115,17 @@ a.collapsefacet:after {
     background-size: 16px;
     background-repeat: no-repeat;
 }
-.expandedfacet a.filtertoggle {
+.facet.expandedfacet a.filtertoggle {
     /* link means enabled */
     background-image: url('filled-filter-128.png'); /* icon from icons8.com */
 }
 
-.expandedfacet div.filtertoggle {
+.facet.expandedfacet div.filtertoggle {
     /* div means disabled */
     background-image: url('empty-filter-128-disabled.png'); /* icon from icons8.com */
 }
 
-.expandedfacet .filtertoggle span {
+.facet.expandedfacet .filtertoggle span {
     display: none;
 }
 
