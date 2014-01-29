@@ -16,9 +16,9 @@
  */
 
 $(document).ready(function() {
-    $("#recordcmdi article").hide();
-    $("a#recordcmditoggle").click(function(event) {
+    $("#recordtechnicaldetails").hide();
+    $("#recordtechnicaldetailstoggle a").click(function(event){
         event.preventDefault();
-        $("#recordcmdi article").toggle();
+        $("#recordtechnicaldetails").toggle();
     });
 });

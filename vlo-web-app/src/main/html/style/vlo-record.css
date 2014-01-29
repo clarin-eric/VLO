@@ -78,6 +78,25 @@ h1#recordtitle {
     clear: right;
 }
 
+#recorddetails, #recordtechnicalattributes {
+    padding-right: 2em;
+    margin-top: 1em;
+}
+
+table.recorddetailstable {
+    border-collapse: collapse;
+    border-top: 1px solid #999;
+}
+
+table.recorddetailstable td, table.recorddetailstable th {
+    border-bottom: 1px solid #999;
+}
+
+table.recorddetailstable td.attribute {
+    width: 25%;
+    vertical-align: top;
+}
+
 /* icons for record references */
 #recordlandingpage div {
     background: url('Crystal_Clear_mimetype_readme.png') no-repeat;
@@ -99,12 +118,23 @@ h1#recordtitle {
     background: url('text-x-log.png') no-repeat;
 }
 
+#recordtechnicaldetailstoggle{
+    margin-top: 2em;
+    padding-bottom: 0px;
+}
+
+#recordtechnicaldetails {
+    border-top: 1px dashed;
+    padding-top: 1em;
+}
+
 #recordcmdi {
     margin-top: 2em;
 }
 
 #recordcmdi article {
     position: relative;
-    left: -80px;  /* sidebar */
-    width: 720px;
+    max-height: 400px;
+    overflow: auto;
+    margin-top: 1em;
 }
