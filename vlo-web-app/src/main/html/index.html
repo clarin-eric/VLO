@@ -148,15 +148,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- rounded corners - bottom **** -->
                     <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
                 </div>
-                <div class="sidebaritem">
+                
+                <div class="sidebaritem facet collapsedfacet">
                     <!-- rounded corners - top **** -->
                     <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
-                    <h1>other information</h1>
-                    <!-- **** INSERT OTHER INFORMATION HERE **** -->
-                    <p>
-                        This space can be used for additional information such as a contact phone number, address
-                        or maybe even a graphic.
-                    </p>
+                    <a href="#" class="expandfacet"><span>expand</span></a>
+                    <a href="#" class="collapsefacet"><span>collapse</span></a>
+                    <h1>Advanced options</h1>
+                    <div class="sbilinks facetvalues">
+                        <form id="advancedoptions" action="">
+                            <ul>
+                                <li>
+                                    <input type="checkbox" id="onlyfcs"/>
+                                    <label for="onlyfcs">Only include resources that support content search</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="onlymdformat"/>
+                                    <label for="onlyfcs">Only include resources described with</label>
+                                    <select>
+                                        <option>CMDI</option>
+                                        <option>OLAC</option>
+                                    </select>
+                                </li>
+                            </ul>
+                            <input type="submit" value="Apply" />
+                        </form>
+                    </div>
                     <!-- rounded corners - bottom **** -->
                     <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
                 </div>

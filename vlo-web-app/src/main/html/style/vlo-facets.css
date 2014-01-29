@@ -183,3 +183,8 @@ a#facetvaluescancel {
     display: inline-block;
     padding: 0px 2px;
 }
+
+/* advanced options */
+form#advancedoptions {
+    margin: 0em 1em;
+}
