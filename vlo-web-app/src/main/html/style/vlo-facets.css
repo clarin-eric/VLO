@@ -98,11 +98,12 @@ a.collapsefacet:after {
     float: left;
     margin-right: 20px;
 }
-/*.collapsedfacet .filtertoggle {
-    display: none;
-}*/
 
-.sidebaritem .filtertoggle, .sidebaritem .filtertoggle:hover {
+.collapsedfacet .filtertoggle {
+    display: none;
+}
+
+.expandedfacet .filtertoggle, .sidebaritem .filtertoggle:hover {
     float: right;
     clear: right;
     display: block;
@@ -114,17 +115,17 @@ a.collapsefacet:after {
     background-size: 16px;
     background-repeat: no-repeat;
 }
-.sidebaritem a.filtertoggle {
+.expandedfacet a.filtertoggle {
     /* link means enabled */
-    background-image: url('search_icon.png');
+    background-image: url('filled-filter-128.png'); /* icon from icons8.com */
 }
 
-.sidebaritem div.filtertoggle {
+.expandedfacet div.filtertoggle {
     /* div means disabled */
-    background-image: url('search_icon_disabled.png');
+    background-image: url('empty-filter-128-disabled.png'); /* icon from icons8.com */
 }
 
-.sidebaritem .filtertoggle span {
+.expandedfacet .filtertoggle span {
     display: none;
 }
 
