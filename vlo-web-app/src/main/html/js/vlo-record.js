@@ -17,8 +17,10 @@
 
 $(document).ready(function() {
     $("#recordtechnicaldetails").hide();
+    $("#hiderecordtechnicaldetails").hide();
     $("#recordtechnicaldetailstoggle a").click(function(event){
         event.preventDefault();
         $("#recordtechnicaldetails").toggle();
+        $("#recordtechnicaldetailstoggle a").toggle();
     });
 });
