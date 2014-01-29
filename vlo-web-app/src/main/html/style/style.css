@@ -265,7 +265,7 @@ ol li
 /* Based on Nifty Corners: rounded corners without images */
 /* By Alessandro Fulciniti */
 /* http://www.html.it/articoli/nifty/index.html */
-.rtop, .rbottom{display: block;}
+.rtop, .rbottom{display: block; clear: both;}
 
 .rtop .r1, .rtop .r2, .rtop .r3, .rtop .r4,
 .rbottom .r1, .rbottom .r2, .rbottom .r3, .rbottom .r4

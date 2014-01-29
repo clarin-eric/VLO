@@ -46,7 +46,7 @@ li.more-link a {
 /* facet collapse/expand */
 a.expandfacet, a.collapsefacet, a.expandfacet:hover, a.collapsefacet:hover {
     float: left;
-    width: 1em;
+    width: .5em;
     margin: .7em 0em 0em 0em;
     padding: 0em 0em 0em .5em;
 }
@@ -83,10 +83,13 @@ a.collapsefacet:after {
 }
 
 
-.sidebaritem.expandedfacet h1 {
+.sidebaritem.expandedfacet h1, .sidebaritem.collapsedfacet h1 {
     float: left;
     margin-right: 20px;
 }
+/*.collapsedfacet .filtertoggle {
+    display: none;
+}*/
 
 .sidebaritem .filtertoggle, .sidebaritem .filtertoggle:hover {
     float: right;
