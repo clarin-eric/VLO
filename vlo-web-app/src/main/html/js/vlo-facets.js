@@ -16,13 +16,13 @@
  */
 
 function expandFacet(p) {
-    p.find(".sbilinks").show(200);
+    p.find(".facetvalues").show(200);
     p.addClass("expandedfacet");
     p.removeClass("collapsedfacet");
 }
 
 function collapseFacet(p) {
-    p.find(".sbilinks").hide(200);
+    p.find(".facetvalues").hide(200);
     p.find(".filterform").hide(200);
     p.addClass("collapsedfacet");
     p.removeClass("expandedfacet");
@@ -48,7 +48,7 @@ $(document).ready(function() {
         // toggle link clicked, show or hide filter box and focus on input
         event.preventDefault();
         var form = $(this).parent(".facet").find(".filterform");
-        form.siblings(".sbilinks").find("li").show();
+        form.siblings(".facetvalues").find("li").show();
         expandFacet($(this).parent(".collapsedfacet"));
         form.toggle(100, function(event) {
             var input = form.children("input");
@@ -59,7 +59,7 @@ $(document).ready(function() {
 
     var filterHandler = function(event) {
         // filter text entered, update result list
-        var links = $(this).parent(".filterform").siblings(".sbilinks").find("li");
+        var links = $(this).parent(".filterform").siblings(".facetvalues").find("li");
         var match = $(this).val().toUpperCase();
         if (match.length === 0) {
             links.show();

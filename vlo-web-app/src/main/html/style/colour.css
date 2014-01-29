@@ -77,13 +77,13 @@ body{background: #bfced5;}
   color: #555;
 } 
 
-.sbilinks li a, .sidebaritem a
+.sbilinks li a, .sidebaritem a, .facetvalues a
 { 
     /*background: transparent url(arrow.png) no-repeat left center;*/
   color: #555;
 } 
 
-.sbilinks li a:hover, .sidebaritem a:hover
+.sbilinks li a:hover, .sidebaritem a:hover,  .facetvalues a:hover
 {
     /*background: transparent url(arrow_select.png) no-repeat left center;*/
   color: #936851;

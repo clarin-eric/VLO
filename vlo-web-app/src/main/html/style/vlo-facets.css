@@ -22,6 +22,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* facet links */
 
+
+.facetvalues li
+{ list-style: none; 
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 5px 0px;
+}
+
+.facetvalues li a, .facetvalues li a:hover
+{ height: 16px;
+  text-decoration: none; 
+  width: 149px;
+} 
+
 .facetvalue {
     color: #ccc;
 }
@@ -32,7 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* unselect facet */
 
-.sbilinks li a.unselectfacetvalue, .sbilinks li a.unselectfacetvalue:hover {
+.facetvalues li a.unselectfacetvalue, .facetvalues li a.unselectfacetvalue:hover {
     text-decoration: none;
 }
 
@@ -82,7 +95,7 @@ a.collapsefacet:after {
     display:  none;
 }
 
-.facet.collapsedfacet .sbilinks, .facet.collapsedfacet .filterform {
+.facet.collapsedfacet .facetvalues, .facet.collapsedfacet .filterform {
     display:  none;
 }
 
