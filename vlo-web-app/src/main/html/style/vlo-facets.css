@@ -30,8 +30,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     padding: 0px 0px 2px 14px;
 }
 
-.sbilinks li a.removefacetvalue, .sbilinks li a.removefacetvalue:hover {
+/* unselect facet */
+
+.sbilinks li a.unselectfacetvalue, .sbilinks li a.unselectfacetvalue:hover {
     text-decoration: none;
+}
+
+a.unselectfacetvalue span {
+    display: none;
+}
+
+a.unselectfacetvalue:after {
+    /* show delete cross */
+    content: "✕";
 }
 
 li.more-link {
@@ -74,7 +85,7 @@ a.collapsefacet:after {
     display:  none;
 }
 
-.sidebaritem.collapsedfacet .sbilinks {
+.sidebaritem.collapsedfacet .sbilinks, .sidebaritem.collapsedfacet .filterform {
     display:  none;
 }
 

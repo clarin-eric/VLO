@@ -15,32 +15,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$(document).ready(function() {
+function expandFacet(p) {
+    p.find(".sbilinks").show(200);
+    p.addClass("expandedfacet");
+    p.removeClass("collapsedfacet");
+}
 
+function collapseFacet(p) {
+    p.find(".sbilinks").hide(200);
+    p.find(".filterform").hide(200);
+    p.addClass("collapsedfacet");
+    p.removeClass("expandedfacet");
+}
+
+$(document).ready(function() {
     /* facet collapse/expand */
     $("a.expandfacet").click(function(event) {
         event.preventDefault();
         var p = $(this).parent(".collapsedfacet");
-        p.find(".sbilinks").show(200);
-        p.addClass("expandedfacet");
-        p.removeClass("collapsedfacet");
+        expandFacet(p);
     });
     $("a.collapsefacet").click(function(event) {
         event.preventDefault();
         var p = $(this).parent(".expandedfacet");
-        p.find(".sbilinks").hide(200);
-        p.addClass("collapsedfacet");
-        p.removeClass("expandedfacet");
+        collapseFacet(p);
     });
 
     /* facet filter */
-    $(".filterform").toggle();
+    $(".filterform").hide();
 
     $("a.filtertoggle").click(function(event) {
         // toggle link clicked, show or hide filter box and focus on input
         event.preventDefault();
         var form = $(this).parent(".sidebaritem").find(".filterform");
         form.siblings(".sbilinks").find("li").show();
+        expandFacet($(this).parent(".collapsedfacet"));
         form.toggle(100, function(event) {
             var input = form.children("input");
             input.val('');
