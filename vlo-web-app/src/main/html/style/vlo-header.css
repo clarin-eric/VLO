@@ -41,8 +41,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #header #logo a {
     display: block;
     position: relative;
-    top: 70px;
-    height: 30px;
+    top: 65px;
+    height: 40px;
 }
 
 #header #logo a span {

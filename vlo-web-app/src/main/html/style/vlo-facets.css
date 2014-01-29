@@ -22,6 +22,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* facet links */
 
+.facetvalue {
+    color: #ccc;
+}
+
+.facetvalue, .selectedfacetvalue {
+    padding: 0px 0px 2px 14px;
+}
+
+.sbilinks li a.removefacetvalue, .sbilinks li a.removefacetvalue:hover {
+    text-decoration: none;
+}
+
 li.more-link {
     width: 100%;
     text-align: right;
@@ -75,18 +87,29 @@ a.collapsefacet:after {
     margin-right: 20px;
 }
 
-.filterfacet .filtertoggle {
+.sidebaritem .filtertoggle, .sidebaritem .filtertoggle:hover {
     float: right;
     clear: right;
     display: block;
     margin-top: 8px;
+    margin-right: 8px;
+    padding: 0px;
     width: 16px;
     height: 16px;
-    background: url('search_icon.png') no-repeat;
     background-size: 16px;
+    background-repeat: no-repeat;
+}
+.sidebaritem a.filtertoggle {
+    /* link means enabled */
+    background-image: url('search_icon.png');
 }
 
-a.filtertoggle span{
+.sidebaritem div.filtertoggle {
+    /* div means disabled */
+    background-image: url('search_icon_disabled.png');
+}
+
+.sidebaritem .filtertoggle span {
     display: none;
 }
 
