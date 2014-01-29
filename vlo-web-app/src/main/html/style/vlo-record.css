@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : twagoo
 */
 
-#recordnavigation p a {
+#recordnavigation p a, #recordcontext p a {
     padding: 0;
 }
 
@@ -59,6 +59,23 @@ ul#recordcontextfacets li {
 #recordreferences div div a, #recordreferences div div a:hover {
     display: inline-block;
     padding-top: .5em;
+}
+
+#content.record {
+    width: 697px;
+}
+
+/* record title with prev/next links */
+
+h1#recordtitle {
+    max-width: 80%;
+    clear: left;
+}
+
+#recordprevnext {
+    width: 15%;
+    float: right;
+    clear: right;
 }
 
 /* icons for record references */
