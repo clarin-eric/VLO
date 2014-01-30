@@ -95,16 +95,34 @@ li.searchresultitem .searchresultcollection{
     clear: both;
 }
 
-.truncate {
-    /* limit description to one line */
-    white-space: nowrap;
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-height: 1em;
+p.searchresultresources, p.searchresultfullrecord {
+    width: 70%;
+    float: left;
+    clear: left;
+    padding: 0px;
+}
+
+p.searchresultattributes {
+    padding: 0px 0px 8px 0px;
+}
+
+p.searchresultmoreless {
+    width: 20%;
+    float: right;
+    text-align: right;
+    padding: 0px;
 }
 
 #searchresultpagination{
     clear: both;
     text-align: center;
+}
+
+
+div.searchresultitemend {
+    clear: both;
+    height: 0px;
+    margin: 0px;
+    padding: 0px;
+    width: 0px;
 }

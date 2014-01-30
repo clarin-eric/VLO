@@ -17,17 +17,12 @@
 
 
 $(document).ready(function() {
-    $(".searchresultdescription").addClass("truncate");
-    // extend on hover? not so nice this way, disabled for now
-//    $(".searchresultdescription").hover(
-//            function() {
-//                /* in */
-//                $(this).removeClass("truncate");
-//                $(this).addClass("extended");
-//            },
-//            function() {
-//                /* out */
-//                $(this).addClass("truncate");
-//                $(this).removeClass("extended");
-//            });
+    $(".searchresultitemextended").hide();
+    
+    $("a.searchresultdetailstoggle").click(function(event) {
+        event.preventDefault();
+        var item = $(this).parents(".searchresultitem");
+        item.find(".searchresultitembrief").toggle();
+        item.find(".searchresultitemextended").toggle();
+    });
 });
