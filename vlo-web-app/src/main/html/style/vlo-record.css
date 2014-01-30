@@ -97,6 +97,18 @@ table.recorddetailstable td.attribute {
     vertical-align: top;
 }
 
+a.recordfacetselect span, a.recordattributeinfo span {
+    display: none;
+}
+
+a.recordfacetselect:after {
+    content: "→";
+}
+
+a.recordattributeinfo:after {
+    content: "ℹ";
+}
+
 /* icons for record references */
 #recordlandingpage div {
     background: url('Crystal_Clear_mimetype_readme.png') no-repeat;
