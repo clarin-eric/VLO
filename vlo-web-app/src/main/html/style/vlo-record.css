@@ -62,10 +62,6 @@ ul#recordcontextfacets li {
     padding-top: .5em;
 }
 
-#content.record {
-    width: 697px;
-}
-
 /* record title with prev/next links */
 
 h1#recordtitle {

@@ -24,10 +24,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 #searchbox {
-    min-width: 250px;
+    width: 85%;
+}
+
+#searchbutton {
+    width: 10%;
 }
 
 #searchresults {
+    width: 100%;
     clear: both;
 }
 
@@ -54,6 +59,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #searchresultpagecount{
     float: right;
+    text-align: right;
     height: 1em;
     width: 20%;
 }

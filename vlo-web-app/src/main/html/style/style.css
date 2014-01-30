@@ -220,7 +220,7 @@ ol li
 /* page content (centre) */
 #content
 { text-align: justify;
-  width: 483px; /* used to be 384px  */
+  width: 697px; /* used to be 384px  */
   padding: 26px 0px 15px 9px;
   float: left;
   min-height: 500px;
