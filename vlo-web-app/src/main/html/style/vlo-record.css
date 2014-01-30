@@ -44,15 +44,16 @@ ul#recordcontextfacets li {
 
 #recordreferences {
     margin-top: 1em;
+    text-align: left;
 }
 
-#recordreferences div {
+#recordreferences > div {
     margin-top: 1em;
 }
 
 #recordreferences div div {
     /* div that has resource link or landing page */
-    min-height: 32px;
+    min-height: 36px;
     padding-left: 36px;
 }
 
