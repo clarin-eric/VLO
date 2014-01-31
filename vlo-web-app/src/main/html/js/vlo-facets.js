@@ -19,11 +19,11 @@ function expandFacet(p) {
     p.find(".facetvalues").show(200);
     p.addClass("expandedfacet");
     p.removeClass("collapsedfacet");
+    p.find(".filterform input").focus();
 }
 
 function collapseFacet(p) {
     p.find(".facetvalues").hide(200);
-    p.find(".filterform").hide(200);
     p.addClass("collapsedfacet");
     p.removeClass("expandedfacet");
 }
@@ -40,11 +40,11 @@ $(document).ready(function() {
         var p = $(this).parents(".expandedfacet");
         collapseFacet(p);
     });
-    
-    $(".facet h1 a").click(function(event){
+
+    $(".facet h1 a").click(function(event) {
         event.preventDefault();
-        if($(this).parents(".expandedfacet").length === 1){
-             var p = $(this).parents(".expandedfacet");
+        if ($(this).parents(".expandedfacet").length === 1) {
+            var p = $(this).parents(".expandedfacet");
             collapseFacet(p);
         } else {
             var p = $(this).parents(".collapsedfacet");
@@ -53,24 +53,24 @@ $(document).ready(function() {
     });
 
     /* facet filter */
-    $(".filterform").hide();
-
-    $("a.filtertoggle").click(function(event) {
-        // toggle link clicked, show or hide filter box and focus on input
-        event.preventDefault();
-        var form = $(this).parent(".facet").find(".filterform");
-        form.siblings(".facetvalues").find("li").show();
-        expandFacet($(this).parent(".collapsedfacet"));
-        form.toggle(100, function(event) {
-            var input = form.children("input");
-            input.val('');
-            input.focus();
-        });
-    });
+//    $(".filterform").hide();
+//
+//    $("a.filtertoggle").click(function(event) {
+//        // toggle link clicked, show or hide filter box and focus on input
+//        event.preventDefault();
+//        var form = $(this).parent(".facet").find(".filterform");
+//        form.siblings(".facetvalues").find("li").show();
+//        expandFacet($(this).parent(".collapsedfacet"));
+//        form.toggle(100, function(event) {
+//            var input = form.children("input");
+//            input.val('');
+//            input.focus();
+//        });
+//    });
 
     var filterHandler = function(event) {
         // filter text entered, update result list
-        var links = $(this).parent(".filterform").siblings(".facetvalues").find("li");
+        var links = $(this).parents(".filterform").siblings(".facetvalues").find("li");
         var match = $(this).val().toUpperCase();
         if (match.length === 0) {
             links.show();

@@ -129,22 +129,10 @@ a.collapsefacet:after {
     display: none;
 }
 
-.facet.collapsedfacet .filtertoggle {
+.filtertoggle {
     display: none;
 }
 
-.facet .filtertoggle, .facet .filtertoggle:hover {
-    float: right;
-    clear: right;
-    display: block;
-    margin-top: 8px;
-    margin-right: 8px;
-    padding: 0px;
-    width: 16px;
-    height: 16px;
-    background-size: 16px;
-    background-repeat: no-repeat;
-}
 .facet.expandedfacet a.filtertoggle {
     /* link means enabled */
     background-image: url('filled-filter-128.png'); /* icon from icons8.com */
