@@ -39,8 +39,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <body>
         <script src="js/jquery-1.10.2.js" type="text/javascript"></script>
+        <script src="js/vlo-front.js" type="text/javascript"></script>
         <script src="js/vlo-facets.js" type="text/javascript"></script>
-        <script src="js/vlo-search.js" type="text/javascript"></script>
 
         <div id="main">
             <div id="header">
@@ -136,16 +136,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <p>
                     Enter one or more search terms, or
                     <a id="browseallrecords" href="index2.html">browse all 604056 records</a><br />
-                    Filter by: <a href="index2.html">Language</a>
-                    | <a href="index2.html">Type</a> 
-                    | <a href="index2.html">Genre</a> 
-                    | <a href="index2.html">Keyword</a> 
-                    | <a href="index2.html">Format</a> 
-                    | <a href="index2.html">Organisation</a> 
-                    | <a href="index2.html">National project</a> 
+                    Filter by: <a id="filterlanguage" href="">Language</a>
+                    | <a href="">Type</a> 
+                    | <a href="">Genre</a>
+                    | <a href="">National project</a> 
+                    | <a href="index2.html">Other</a>
                 </p>
-            </div>
 
+                <div id="frontfacets">
+                    <div class="facet" id="facetlanguage">
+                        <a href class="filtertoggle"><span>filter</span></a>
+                        <form class="filterform">
+                            <p>
+                                Select a language to filter by or type to search for more:
+                                <input type="text" />
+                            </p>
+                        </form>
+                        <div class="sbilinks facetvalues">
+                            <ul>
+                                <li><a href="index3.html">Dutch (148167)</a></li>
+                                <li><a href="index3.html">English (72547)</a></li>
+                                <li><a href="index3.html">German (39042)</a></li>
+                                <li><a href="index3.html">French (9227)</a></li>
+                                <li><a href="index3.html">Spanish; Castilian (8684)</a></li>
+                                <li><a href="index3.html">Danish (8447)</a></li>
+                                <li><a href="index3.html">Japanese (6761)</a></li>
+                                <li><a href="index3.html">Turkish (4988)</a></li>
+                                <li><a href="index3.html">Chinese (1980)</a></li>
+                                <li class="more-link"><a href="#">more...</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
 
             <div id="footer">
                 CLARIN VLO version 3.0 | <a href="#">help</a> | <a href="#">about</a> | <a href="http://www.dcarter.co.uk">design by dcarter</a>
