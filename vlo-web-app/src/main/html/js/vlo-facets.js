@@ -81,6 +81,9 @@ $(document).ready(function() {
     $(".more-link").click(function(event) {
         event.preventDefault();
         $("#facetvalues").toggle();
+        var name = $(this).parents(".facet").find("h1").text();
+        $("#facetvalues h2").text(name);
+        $(window).scrollTop($('#facetvalues').position().top);
     });
 
     $("#facetvalues a").click(function(event) {
