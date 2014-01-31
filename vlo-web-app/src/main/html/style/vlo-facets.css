@@ -22,6 +22,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* facet links */
 
+.facet {
+    clear: both;
+}
+
 .facet h1 a, .facet h1 a:hover {
     text-decoration: none;
     color: inherit;
