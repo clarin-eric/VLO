@@ -29,6 +29,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     border: 1px dashed;
 }
 
+#frontfacets .facet .filterform {
+    clear: both;
+    margin-left: 0px;
+}
+
 .facet {
     clear: both;
 }
@@ -154,10 +159,11 @@ a.collapsefacet:after {
     display: none;
 }
 
-facet.filterform {
+.filterform {
     clear: both;
     margin-left: 12px;
 }
+
 .filterform p {
     padding: 0px;
     margin: 0px;
