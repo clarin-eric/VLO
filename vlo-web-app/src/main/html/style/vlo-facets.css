@@ -22,6 +22,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* facet links */
 
+.facet h1 a, .facet h1 a:hover {
+    text-decoration: none;
+    color: inherit;
+    padding: 0px;
+}
 
 .facetvalues li
 { list-style: none; 
@@ -74,6 +79,7 @@ a.expandfacet, a.collapsefacet, a.expandfacet:hover, a.collapsefacet:hover {
     margin: .7em 0em 0em .5em;
     padding: 0em 0em 0em 0em;
     text-decoration: none;
+    color: inherit;
 }
 
 a.expandfacet span, a.collapsefacet span{
@@ -147,6 +153,11 @@ a.collapsefacet:after {
     clear: both;
     margin-left: 12px;
 }
+.filterform p {
+    padding: 0px;
+    margin: 0px;
+}
+
 .filterform input {
     width: 90%;
 }

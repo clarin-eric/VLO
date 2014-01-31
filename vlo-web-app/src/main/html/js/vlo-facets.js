@@ -40,6 +40,17 @@ $(document).ready(function() {
         var p = $(this).parents(".expandedfacet");
         collapseFacet(p);
     });
+    
+    $(".facet h1 a").click(function(event){
+        event.preventDefault();
+        if($(this).parents(".expandedfacet").length === 1){
+             var p = $(this).parents(".expandedfacet");
+            collapseFacet(p);
+        } else {
+            var p = $(this).parents(".collapsedfacet");
+            expandFacet(p);
+        }
+    });
 
     /* facet filter */
     $(".filterform").hide();
