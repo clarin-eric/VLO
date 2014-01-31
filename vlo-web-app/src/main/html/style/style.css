@@ -170,7 +170,8 @@ ol li
 
 /* sidebars */
 .sidebar
-{ float: left;
+{clear: left;
+  float: left;
   width: 214px; /*  used to be 194px */
   padding: 16px 15px 15px 15px;
 }
