@@ -95,18 +95,20 @@ li.searchresultitem .searchresultcollection{
     clear: both;
 }
 
-p.searchresultresources, p.searchresultfullrecord {
+p.searchresultresources {
     width: 70%;
     float: left;
     clear: left;
     padding: 0px;
 }
 
-p.searchresultattributes {
-    padding: 0px 0px 8px 0px;
+div.searchresultattributes {
+    padding: 0px 0px 8px 12px;
+    margin-left: 24px;
+    clear: both;
 }
 
-p.searchresultmoreless {
+p.searchresultmoreless, p.searchresultfullrecord {
     width: 20%;
     float: right;
     text-align: right;
