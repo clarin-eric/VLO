@@ -128,3 +128,8 @@ div.searchresultitemend {
     padding: 0px;
     width: 0px;
 }
+
+a#browseallrecords {
+    font-size: 110%;
+    font-weight: bold;
+}
