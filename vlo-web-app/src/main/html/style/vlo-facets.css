@@ -119,7 +119,13 @@ a.collapsefacet:after {
     max-width: 80%;
 }
 
-.expandedfacet h1 .selectedvaluelabel {
+.selectedvaluelabel {
+    clear: both;
+    font-weight: bold;
+    padding-left: 24px;
+}
+
+.expandedfacet .selectedvaluelabel {
     display: none;
 }
 
