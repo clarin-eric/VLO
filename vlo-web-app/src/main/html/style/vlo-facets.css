@@ -157,16 +157,6 @@ a.collapsefacet:after {
     display: none;
 }
 
-.facet.expandedfacet a.filtertoggle {
-    /* link means enabled */
-    background-image: url('filled-filter-128.png'); /* icon from icons8.com */
-}
-
-.facet.expandedfacet div.filtertoggle {
-    /* div means disabled */
-    background-image: url('empty-filter-128-disabled.png'); /* icon from icons8.com */
-}
-
 .facet.expandedfacet .filtertoggle span {
     display: none;
 }
