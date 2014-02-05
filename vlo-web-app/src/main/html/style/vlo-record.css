@@ -147,32 +147,31 @@ a.recordattributeinfo:after {
 
 /* Technical details */
 
-#recordtechnicaldetailstoggle {
+.recordtogglelinks {
     clear: both;
-    padding: 4em 0 0 0;
+    padding: 0 0 1em 0;
 }
 
-#showrecordtechnicaldetails:before {
+#recordcmditoggle {
+    padding-top: 4em;
+}
+
+a.recordshowlink:before {
     content: '+ ';
 }
 
-
-#hiderecordtechnicaldetails:before {
+a.recordhidelink:before {
     content: '- ';
 }
 
-#recordtechnicaldetails {
+#recordtechnicaldetails, #recordcmdi {
     border-top: 1px dashed;
     padding: 1em 0;
 }
 
-#recordcmdi {
-    margin-top: 2em;
-}
-
 #recordcmdi article {
-    /*  max-height: 400px;
-        overflow: auto;*/
+    max-height: 400px;
+    overflow: auto;
     margin-top: 1em;
     padding: 1em;
 }

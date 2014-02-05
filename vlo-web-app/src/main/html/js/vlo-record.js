@@ -15,9 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$(document).ready(function() {
-    $("#recordtechnicaldetails").hide();
-    $("#hiderecordtechnicaldetails").hide();
+$(document).ready(function() {    
+    $("#recordtechnicaldetails, #recordcmdi").hide();
+    $("#hiderecordtechnicaldetails, #hiderecordcmdi").hide();
+    $("#recordcmditoggle a").click(function(event){
+        event.preventDefault();
+        $("#recordcmdi").toggle();
+        $("#recordcmditoggle a").toggle();
+    });
     $("#recordtechnicaldetailstoggle a").click(function(event){
         event.preventDefault();
         $("#recordtechnicaldetails").toggle();
