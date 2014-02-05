@@ -81,7 +81,7 @@ ol li
 }
 
 /* margin lefts / margin rights - to centre content */
-#main, #links, #footer, #logo, #menu, #content
+#main, #links, #footer, #logo, #menu, div.content
 { margin-left: auto; 
   margin-right: auto;
 }
@@ -219,16 +219,15 @@ ol li
 } 
 
 /* page content (centre) */
-#content
+div.content
 {
-    width: 697px; /* used to be 384px  */
+    width: 697px;
     margin: 8px 15px 2px 20px;
-    /*padding: 26px 0px 15px 9px;*/
     float: left;
     min-height: 500px;
 }
 
-#content h1
+div.content h1
 { font-family: arial, sans-serif;
   margin: 2px 0px 12px 0px; 
   font-size: 128%;  
@@ -236,7 +235,7 @@ ol li
   text-transform: uppercase;
 }
 
-#content a, #content a:hover
+div.content a, div.content a:hover
 { padding: 0px 0px 2px 0px;
   text-decoration: none;
 }
