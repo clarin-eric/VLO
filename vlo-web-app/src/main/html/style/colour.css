@@ -77,7 +77,7 @@ body{background: #bfced5;}
   color: #555;
 } 
 
-.sbilinks li a, .sidebaritem a, .facetvalues a
+.sbilinks li a, .sidebaritem a, .topbar a, .facetvalues a
 { 
     /*background: transparent url(arrow.png) no-repeat left center;*/
   color: #555;

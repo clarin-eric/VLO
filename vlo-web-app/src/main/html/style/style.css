@@ -163,17 +163,17 @@ ol li
 /* top bar */
 .topbar
 { 
-  margin: 8px 15px 2px 15px;
-  padding: 0px 0px 0px 0px;
-  clear: both;
+    margin: 8px 15px 2px 15px;
+    padding: 0px 0px 0px 0px;
+    clear: both;
 }
 
 /* sidebars */
 .sidebar
-{clear: left;
-  float: left;
-  width: 214px; /*  used to be 194px */
-  padding: 16px 15px 15px 15px;
+{
+    float: left;
+    width: 214px; /*  used to be 194px */
+    padding: 16px 15px 15px 15px;
 }
 
 /* sidebar items / links */
@@ -221,10 +221,11 @@ ol li
 /* page content (centre) */
 #content
 {
-  width: 697px; /* used to be 384px  */
-  padding: 26px 0px 15px 9px;
-  float: left;
-  min-height: 500px;
+    width: 697px; /* used to be 384px  */
+    margin: 8px 15px 2px 20px;
+    /*padding: 26px 0px 15px 9px;*/
+    float: left;
+    min-height: 500px;
 }
 
 #content h1
