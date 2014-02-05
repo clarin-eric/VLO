@@ -102,6 +102,7 @@ a.recordattributeinfo:after {
     content: "ℹ";
 }
 
+/* Resource links with icons */
 
 #recordresources {
     clear: both;
@@ -124,7 +125,6 @@ a.recordattributeinfo:after {
     background-color: #ccc;
 }
 
-
 #recordresources a.writtenresource {
     background-image: url('document-256.png'); /* icon from icons8.com */
 }
@@ -140,6 +140,12 @@ a.recordattributeinfo:after {
 #recordresources a.imageresource {
     background-image: url('image-file-256.png'); /* icon from icons8.com */
 }
+
+#recordresources a.annotationresource {
+    background-image: url('document-256.png'); /* icon from icons8.com */
+}
+
+/* Technical details */
 
 #recordtechnicaldetailstoggle {
     clear: both;
@@ -165,8 +171,8 @@ a.recordattributeinfo:after {
 }
 
 #recordcmdi article {
-/*  max-height: 400px;
-    overflow: auto;*/
+    /*  max-height: 400px;
+        overflow: auto;*/
     margin-top: 1em;
     padding: 1em;
 }
