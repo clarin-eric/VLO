@@ -38,10 +38,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     clear: both;
 }
 
-.facet h1 a, .facet h1 a:hover {
-    text-decoration: none;
-    color: inherit;
+.facet h1 {
+    width: 100%;
     padding: 0px;
+}
+
+.facet h1 a, .facet h1 a:hover {
+    display: inline-block;
+    text-decoration: none;
+    padding: 4px 2px;
+    width: 100%;
+    margin: 4px;
+}
+
+.facet h1 a:hover {    
+    margin: 3px;
+    border: 1px dashed #999;
 }
 
 .facetvalues li
