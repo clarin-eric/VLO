@@ -67,7 +67,7 @@ body{background: #bfced5;}
   border-color: #989898;
 }
 
-#left_sidebar, #content, #right_sidebar, #content a:hover
+#left_sidebar, #content, #right_sidebar
 { background: #d3def0;
   color: #291c16;
 }
@@ -104,6 +104,10 @@ body{background: #bfced5;}
 #address, #footer a, #footer a:hover
 { background: transparent;
   color: #414141;
+}
+
+li.searchresultitem:nth-child(even) {
+    background: #ccd6e8;
 }
 
 /* Based on Nifty Corners: rounded corners without images */
