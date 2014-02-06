@@ -15,7 +15,7 @@
     <!-- When updating the version number here, also update the version number
          in each module's pom.xml
     -->
-    <version>2.18-beta2</version>
+    <version>2.18</version>
     
     <description>Virtual Language Observatory (VLO) parent project</description>
 
