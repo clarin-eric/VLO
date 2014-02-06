@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 div#record {
-    width: 90%;
+    width: 942px; /* no sidebar, so width of #content + .sidebar */
 }
 
 #recordnavigation p a, #recordcontext p a {
@@ -55,19 +55,26 @@ ul#recordcontextfacets li {
     margin: 0px 0px 4px 16px;
 }
 
-/* record title with prev/next links */
+/* record index with prev/next links */
 
-h1#recordtitle {
-    max-width: 70%;
-    clear: left;
+#recordindex {
+    float: left;
+    max-width: 50%;
+    padding-bottom: 1em;
 }
 
 #recordprevnext {
-    width: 25%;
+    max-width: 45%;
     float: right;
     clear: right;
     text-align: right;
 }
+
+h1#recordtitle {
+    clear: both;
+}
+
+/* record attributes table */
 
 #recorddetails, #recordtechnicalattributes {
     padding-right: 2em;
