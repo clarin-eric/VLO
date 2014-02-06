@@ -109,7 +109,7 @@ a.recordattributeinfo:after {
     margin: 2em 0;
 }
 
-#recordresources a {
+#recordresources > a {
     display: inline-block;
     float: left;
     width: 128px;
@@ -119,9 +119,10 @@ a.recordattributeinfo:after {
     background-size: 64px;
     word-break: break-all;
     text-align: center;
+    margin-bottom: 1em;
 }
 
-#recordresources a:hover {
+#recordresources > a:hover {
     background-color: #ccc;
 }
 
@@ -145,6 +146,19 @@ a.recordattributeinfo:after {
     background-image: url('document-256.png'); /* icon from icons8.com */
 }
 
+.recordresourcedetails {
+    clear: both;
+    border: 1px dashed;
+    margin-left: 2em;
+    padding: 1em;
+}
+
+.recordresourcedetails a.resourcedownloadlink, .recordresourcedetails a.resourcedownloadlink:hover {
+    padding-left: 16px;
+    background: url('downloading-updates-128.png') no-repeat; /* icon from icons8.com */
+    background-size: 12px;
+}
+
 /* Technical details */
 
 .recordtogglelinks {
@@ -153,7 +167,7 @@ a.recordattributeinfo:after {
 }
 
 #recordcmditoggle {
-    padding-top: 4em;
+    padding-top: 2em;
 }
 
 a.recordshowlink:before {

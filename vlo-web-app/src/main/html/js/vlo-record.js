@@ -28,4 +28,10 @@ $(document).ready(function() {
         $("#recordtechnicaldetails").toggle();
         $("#recordtechnicaldetailstoggle a").toggle();
     });
+    
+    $(".recordresourcedetails").hide();
+    $("#recordresources > a").click(function(event){
+        event.preventDefault();
+        $(".recordresourcedetails").slideToggle('fast');
+    });
 });
