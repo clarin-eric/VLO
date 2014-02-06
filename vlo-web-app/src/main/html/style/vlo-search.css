@@ -117,6 +117,11 @@ p.searchresultmoreless, p.searchresultfullrecord {
 #searchresultpagination{
     clear: both;
     text-align: center;
+    padding: 1em 0;
+}
+
+#resultpagesizeform {
+    padding-top: .5em;
 }
 
 
