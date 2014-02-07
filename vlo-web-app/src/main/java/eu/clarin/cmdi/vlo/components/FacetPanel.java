@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.components;
 
-import eu.clarin.cmdi.vlo.pojo.FacetValue;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -28,9 +28,9 @@ import org.apache.wicket.model.IModel;
  */
 public class FacetPanel extends Panel {
 
-    public FacetPanel(String id, IModel<FacetValue> model) {
+    public FacetPanel(String id, IModel<FacetSelection> model) {
         super(id, model);
-        setDefaultModel(new CompoundPropertyModel<FacetValue>(model));
+        setDefaultModel(new CompoundPropertyModel<FacetSelection>(model));
         
         add(new Label("facet.name"));
     }

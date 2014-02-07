@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.components;
 
-import eu.clarin.cmdi.vlo.pojo.FacetValue;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -28,12 +28,12 @@ import org.apache.wicket.model.util.ListModel;
  */
 public class FacetsPanel extends Panel {
 
-    public FacetsPanel(String id, ListModel<FacetValue> model) {
+    public FacetsPanel(String id, ListModel<FacetSelection> model) {
         super(id, model);
-        add(new ListView<FacetValue>("facets", model) {
+        add(new ListView<FacetSelection>("facets", model) {
 
             @Override
-            protected void populateItem(ListItem<FacetValue> item) {
+            protected void populateItem(ListItem<FacetSelection> item) {
                 //TODO: Check whether a value has been selected or not
                 item.add(new FacetPanel("facet", item.getModel()));
             }

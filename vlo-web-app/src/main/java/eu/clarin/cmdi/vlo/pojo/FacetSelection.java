@@ -17,28 +17,29 @@
 package eu.clarin.cmdi.vlo.pojo;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
  *
  * @author twagoo
  */
-public class FacetValue implements Serializable {
+public class FacetSelection implements Serializable {
 
     private final Facet facet;
 
-    private final String value;
+    private final Collection<String> values;
 
-    public FacetValue(Facet facet, String value) {
+    public FacetSelection(Facet facet, Collection<String> values) {
         this.facet = facet;
-        this.value = value;
+        this.values = values;
     }
 
     public Facet getFacet() {
         return facet;
     }
 
-    public String getValue() {
-        return value;
+    public Collection getValue() {
+        return values;
     }
 
 }
