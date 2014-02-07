@@ -44,6 +44,17 @@
             <version>${jetty.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj</artifactId>
+            <version>${solr.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>vlo-commons</artifactId>
+            <version>3.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <resources>

@@ -28,7 +28,7 @@
             <outputDirectory>doc</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>vlo_solr</directory>
+            <directory>vlo-solr</directory>
             <includes>
                 <include>README.TXT</include>
             </includes>
@@ -38,7 +38,7 @@
         <!-- importer related files to be packaged -->
         <!-- jar file -->
         <fileSet>
-            <directory>vlo_importer/target</directory>
+            <directory>vlo-importer/target</directory>
             <includes>
                 <include>*.jar</include>
             </includes>
@@ -46,7 +46,7 @@
         </fileSet>
         <!-- run script -->
         <fileSet>
-            <directory>vlo_importer/src/main/bin</directory>
+            <directory>vlo-importer/src/main/bin</directory>
             <includes>
                 <include>*.sh</include>
             </includes>
@@ -55,7 +55,7 @@
         </fileSet>
         <!-- config files -->
         <fileSet>
-            <directory>vlo_importer/src/main/resources</directory>
+            <directory>vlo-commons/src/main/resources</directory>
             <includes>
                 <include>*.properties</include>
                 <include>*.xml</include>
@@ -67,7 +67,7 @@
         <!-- the web application files to be packaged -->
         <!-- war file -->
         <fileSet>
-            <directory>vlo_web_app/target</directory>
+            <directory>vlo-web-app/target</directory>
             <includes>
                 <include>*.war</include>
             </includes>
@@ -75,7 +75,7 @@
         </fileSet>
         <!-- config -->
         <fileSet>
-            <directory>vlo_importer/src/main/resources</directory>
+            <directory>vlo-commons/src/main/resources</directory>
             <includes>
                 <include>VloConfig.xml</include>
             </includes>
@@ -85,7 +85,7 @@
         <!-- solr server files to be packaged -->
         <!-- war file -->
         <fileSet>
-            <directory>vlo_solr/target</directory>
+            <directory>vlo-solr/target</directory>
             <includes>
                 <include>*.war</include>
             </includes>
@@ -94,14 +94,16 @@
 
         <!-- solr configuration files -->
         <fileSet>
-            <directory>vlo_solr/target/vlo_solr-3.6.0-vlo_solr_conf</directory>
+            <!-- TODO: Get this dynamically from version property -->
+            <directory>vlo-solr/target/vlo-solr-3.0-SNAPSHOT</directory>
             <includes>
                 <include>**/*</include>
             </includes>
             <outputDirectory>config/</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>vlo_solr/target/vlo_solr-3.6.0-vlo_solr_conf</directory>
+            <!-- TODO: Get this dynamically from version property -->
+            <directory>vlo-solr/target/vlo-solr-3.0-SNAPSHOT</directory>
             <includes>
                 <include>vlo_solr.xml</include>
             </includes>
