@@ -1,4 +1,4 @@
-package eu.clarin.cmdi;
+package eu.clarin.cmdi.vlo;
 
 import org.apache.wicket.util.time.Duration;
 import org.eclipse.jetty.server.Server;

@@ -1,5 +1,6 @@
-package eu.clarin.cmdi;
+package eu.clarin.cmdi.vlo;
 
+import eu.clarin.cmdi.vlo.pages.FacetedSearchPage;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 
@@ -9,7 +10,7 @@ import org.apache.wicket.protocol.http.WebApplication;
  * 
  * @see eu.clarin.cmdi.Start#main(String[])
  */
-public class WicketApplication extends WebApplication
+public class VloWicketApplication extends WebApplication
 {
 	/**
 	 * @see org.apache.wicket.Application#getHomePage()
