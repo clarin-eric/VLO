@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.components;
 
-import eu.clarin.cmdi.vlo.pojo.FacetStatus;
+import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -28,11 +28,11 @@ import org.apache.wicket.model.IModel;
  */
 public class FacetPanel extends Panel {
 
-    public FacetPanel(String id, IModel<FacetStatus> model) {
+    public FacetPanel(String id, IModel<FacetField> model) {
         super(id, model);
-        setDefaultModel(new CompoundPropertyModel<FacetStatus>(model));
+        setDefaultModel(new CompoundPropertyModel<FacetField>(model));
         
-        add(new Label("selection.facet.name"));
+        add(new Label("name"));
     }
 
 }

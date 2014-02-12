@@ -14,12 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.service;
+
+package eu.clarin.cmdi.vlo.service.impl;
 
 import eu.clarin.cmdi.vlo.pojo.Facet;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetValue;
-import eu.clarin.cmdi.vlo.service.impl.FacetValuesProvider;
+import eu.clarin.cmdi.vlo.service.FacetValuesService;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,9 +28,18 @@ import java.util.List;
  *
  * @author twagoo
  */
-public interface FacetValuesService {
+public class SolrFacetValuesService implements FacetValuesService {
 
-    public List<FacetValue> getValues(Facet facet, Collection<FacetSelection> context, String startsWith, FacetValuesProvider.FacetValuesSortProperty sort);
+    @Override
+    public List<FacetValue> getValues(Facet facet, Collection<FacetSelection> context, String startsWith, FacetValuesProvider.FacetValuesSortProperty sort) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
-    public long getValueCount(Facet facet, Collection<FacetSelection> context, String startsWith);
+    @Override
+    public long getValueCount(Facet facet, Collection<FacetSelection> context, String startsWith) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+
+    
 }

@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.service.impl;
 
 import eu.clarin.cmdi.vlo.service.FacetValuesService;
 import eu.clarin.cmdi.vlo.pojo.Facet;
+import eu.clarin.cmdi.vlo.pojo.FacetStatus;
 import eu.clarin.cmdi.vlo.pojo.FacetValue;
 import eu.clarin.cmdi.vlo.service.impl.FacetValuesProvider.FacetValuesSortProperty;
 import java.util.Iterator;
@@ -37,23 +38,30 @@ public class FacetValuesProvider extends SortableDataProvider<FacetValue, FacetV
         COUNT
     }
     private final FacetValuesService fvService;
-    private final Facet facet;
+    private final IModel<FacetStatus> status;
     private final String filter;
 
-    public FacetValuesProvider(FacetValuesService fvService, Facet facet, String filter) {
+    public FacetValuesProvider(FacetValuesService fvService, IModel<FacetStatus> status, String filter) {
         this.fvService = fvService;
-        this.facet = facet;
+        this.status = status;
         this.filter = filter;
     }
 
     @Override
     public Iterator<? extends FacetValue> iterator(long first, long count) {
-        return fvService.getValues(facet, filter, FacetValuesSortProperty.NAME).listIterator((int) first);
+        return fvService.getValues(
+                status.getObject().getSelection().getFacet(),
+                status.getObject().getContext(),
+                filter,
+                FacetValuesSortProperty.NAME).listIterator((int) first);
     }
 
     @Override
     public long size() {
-        return fvService.getValueCount(facet, filter);
+        return fvService.getValueCount(
+                status.getObject().getSelection().getFacet(),
+                status.getObject().getContext(),
+                filter);
     }
 
     @Override
