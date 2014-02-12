@@ -14,25 +14,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.components;
+package eu.clarin.cmdi.vlo.pojo;
 
-import eu.clarin.cmdi.vlo.pojo.FacetStatus;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
+import java.util.Collection;
 
 /**
  *
  * @author twagoo
  */
-public class FacetPanel extends Panel {
+public class FacetStatus {
 
-    public FacetPanel(String id, IModel<FacetStatus> model) {
-        super(id, model);
-        setDefaultModel(new CompoundPropertyModel<FacetStatus>(model));
-        
-        add(new Label("selection.facet.name"));
+    private final FacetSelection selection;
+    private final Collection<FacetSelection> context;
+
+    public FacetStatus(FacetSelection selection, Collection<FacetSelection> context) {
+        this.selection = selection;
+        this.context = context;
+    }
+
+    /**
+     * 
+     * @return selections of other facets
+     */
+    public Collection<FacetSelection> getContext() {
+        return context;
+    }
+
+    /**
+     * 
+     * @return facet and value for the current facet
+     */
+    public FacetSelection getSelection() {
+        return selection;
     }
 
 }

@@ -18,7 +18,7 @@ public class Start {
         // Set some timeout options to make debugging easier.
         connector.setMaxIdleTime(timeout);
         connector.setSoLingerTime(-1);
-        connector.setPort(8080);
+        connector.setPort(8090);
         server.addConnector(connector);
 
         Resource keystore = Resource.newClassPathResource("/keystore");
