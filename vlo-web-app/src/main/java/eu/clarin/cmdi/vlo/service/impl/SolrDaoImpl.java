@@ -1,13 +1,12 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
@@ -16,15 +15,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SolrDaoImpl {
-
+    
     private final static Logger LOG = LoggerFactory.getLogger(SolrDaoImpl.class);
-    private final HttpSolrServer solrServer;
+    private final SolrServer solrServer;
 
-    public SolrDaoImpl(String solrUrl) {
-        solrServer = new HttpSolrServer(solrUrl);
+    public SolrDaoImpl(SolrServer solrServer) {
+        this.solrServer = solrServer;
     }
 
-    protected HttpSolrServer getSolrserver() {
+    protected SolrServer getSolrserver() {
         return solrServer;
     }
 

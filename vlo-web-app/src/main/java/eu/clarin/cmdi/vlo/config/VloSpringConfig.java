@@ -23,7 +23,8 @@ import eu.clarin.cmdi.vlo.service.SolrQueryFactory;
 import eu.clarin.cmdi.vlo.service.impl.SearchResultsDaoImpl;
 import eu.clarin.cmdi.vlo.service.impl.SolrFacetFieldsService;
 import eu.clarin.cmdi.vlo.service.impl.SolrQueryFactoryImpl;
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -62,10 +63,16 @@ public class VloSpringConfig {
 
     @Bean
     public SearchResultsDao searchResultsDao() {
-        return new SearchResultsDaoImpl(vloConfig().getSolrUrl());
+        return new SearchResultsDaoImpl(solrServer());
     }
 
+    @Bean
     public SolrQueryFactory queryFactory() {
         return new SolrQueryFactoryImpl();
+    }
+    
+    @Bean
+    public SolrServer solrServer() {
+        return new HttpSolrServer(vloConfig().getSolrUrl());
     }
 }

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Suggestion;
 
@@ -16,8 +17,8 @@ import org.apache.solr.client.solrj.response.SpellCheckResponse.Suggestion;
  */
 public class AutoCompleteDao extends SolrDaoImpl {
 
-    public AutoCompleteDao(String solrUrl) {
-        super(solrUrl);
+    public AutoCompleteDao(SolrServer solrServer) {
+        super(solrServer);
     }
     
     /**

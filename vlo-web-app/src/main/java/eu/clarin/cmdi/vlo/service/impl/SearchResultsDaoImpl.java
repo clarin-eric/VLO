@@ -4,14 +4,15 @@ import eu.clarin.cmdi.vlo.service.SearchResultsDao;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 
 public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDao {
 
-    public SearchResultsDaoImpl(String solrUrl) {
-        super(solrUrl);
+    public SearchResultsDaoImpl(SolrServer solrServer) {
+        super(solrServer);
     }
 
     @Override
