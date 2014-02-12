@@ -15,14 +15,12 @@ import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SolrDao {
+public class SolrDaoImpl {
 
-    private final static Logger LOG = LoggerFactory.getLogger(SolrDao.class);
+    private final static Logger LOG = LoggerFactory.getLogger(SolrDaoImpl.class);
     private final HttpSolrServer solrServer;
 
-    public SolrDao() {
-        String solrUrl;
-        solrUrl = VloConfig.getSolrUrl();
+    public SolrDaoImpl(String solrUrl) {
         solrServer = new HttpSolrServer(solrUrl);
     }
 

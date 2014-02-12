@@ -14,22 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.service;
+package eu.clarin.cmdi.vlo.service.impl;
 
-import eu.clarin.cmdi.vlo.pojo.Facet;
+import eu.clarin.cmdi.vlo.service.SolrQueryFactory;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
-import eu.clarin.cmdi.vlo.pojo.FacetValue;
-import eu.clarin.cmdi.vlo.service.impl.FacetValuesProvider;
-import java.util.Collection;
 import java.util.List;
+import org.apache.solr.client.solrj.SolrQuery;
 
 /**
  *
  * @author twagoo
  */
-public interface FacetValuesService {
+public class SolrQueryFactoryImpl implements SolrQueryFactory {
 
-    public List<FacetValue> getValues(Facet facet, Collection<FacetSelection> context, String startsWith, FacetValuesProvider.FacetValuesSortProperty sort);
+    @Override
+    public SolrQuery createQuery(List<FacetSelection> selection) {
+        throw new UnsupportedOperationException();
+    }
 
-    public long getValueCount(Facet facet, Collection<FacetSelection> context, String startsWith);
 }

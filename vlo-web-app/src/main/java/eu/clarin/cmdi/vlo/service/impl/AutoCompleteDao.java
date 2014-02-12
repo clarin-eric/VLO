@@ -14,8 +14,12 @@ import org.apache.solr.client.solrj.response.SpellCheckResponse.Suggestion;
  * @author Thomas Eckart
  *
  */
-public class AutoCompleteDao extends SolrDao {
+public class AutoCompleteDao extends SolrDaoImpl {
 
+    public AutoCompleteDao(String solrUrl) {
+        super(solrUrl);
+    }
+    
     /**
      * Returns list of suggestions for incomplete input (used for autocomplete
      * function)

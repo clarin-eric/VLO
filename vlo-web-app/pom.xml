@@ -49,7 +49,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
-            <type>jar</type>
             <exclusions>
                 <!-- 
                     We want Spring to use SLF4J instead (using
@@ -65,7 +64,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
             <version>${spring.version}</version>
-            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
         </dependency>
         
         <!-- LOGGING DEPENDENCIES - LOG4J -->
@@ -93,6 +97,19 @@
             <artifactId>solr-solrj</artifactId>
             <version>${solr.version}</version>
             <type>jar</type>
+        </dependency>
+        <!-- JMOCK for mocking -->
+        <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-junit4</artifactId>
+            <version>2.6.0</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>junit-dep</artifactId>
+                    <groupId>junit</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
     

@@ -17,15 +17,23 @@
 package eu.clarin.cmdi.vlo.config;
 
 import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.service.FacetFieldsService;
+import eu.clarin.cmdi.vlo.service.SearchResultsDao;
+import eu.clarin.cmdi.vlo.service.SolrQueryFactory;
+import eu.clarin.cmdi.vlo.service.impl.SearchResultsDaoImpl;
+import eu.clarin.cmdi.vlo.service.impl.SolrFacetFieldsService;
+import eu.clarin.cmdi.vlo.service.impl.SolrQueryFactoryImpl;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * Annotation based Spring configuration for the VLO web application.
  *
- * Note: this works because {@link org.apache.wicket.spring.SpringWebApplicationFactory}
- * is used in place of the standard Wicket application factory and annotation 
- * driven configuration is enabled in WEB-INF/applicationContext.xml
+ * Note: this works because
+ * {@link org.apache.wicket.spring.SpringWebApplicationFactory} is used in place
+ * of the standard Wicket application factory and annotation driven
+ * configuration is enabled in WEB-INF/applicationContext.xml
  *
  * @author twagoo
  */
@@ -37,7 +45,27 @@ public class VloSpringConfig {
      * @return the web application object that represents the Wicket application
      */
     @Bean
-    VloWicketApplication webApplication() {
+    public VloWicketApplication webApplication() {
         return new VloWicketApplication();
+    }
+
+    @Bean
+    public VloConfig vloConfig() {
+        VloConfig.readPackagedConfig();
+        return VloConfig.config;
+    }
+
+    @Bean
+    public FacetFieldsService facetFieldsService() {
+        return new SolrFacetFieldsService(searchResultsDao(), queryFactory());
+    }
+
+    @Bean
+    public SearchResultsDao searchResultsDao() {
+        return new SearchResultsDaoImpl(vloConfig().getSolrUrl());
+    }
+
+    public SolrQueryFactory queryFactory() {
+        return new SolrQueryFactoryImpl();
     }
 }

@@ -16,11 +16,16 @@
  */
 package eu.clarin.cmdi.vlo.components;
 
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.service.FacetFieldsService;
+import eu.clarin.cmdi.vlo.service.impl.FacetFieldsDataProvider;
 import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  *
@@ -28,16 +33,19 @@ import org.apache.wicket.model.util.ListModel;
  */
 public class FacetsPanel extends Panel {
 
-    public FacetsPanel(String id, ListModel<FacetField> model) {
+    @SpringBean
+    private FacetFieldsService facetFieldsService;
+    
+    public FacetsPanel(String id, ListModel<FacetSelection> model) {
         super(id, model);
-        add(new ListView<FacetField>("facets", model) {
+
+        final IDataProvider<FacetField> provider = new FacetFieldsDataProvider(facetFieldsService, model);
+        add(new DataView<FacetField>("facets", provider) {
 
             @Override
-            protected void populateItem(ListItem<FacetField> item) {
-                //TODO: Check whether a value has been selected or not
+            protected void populateItem(Item<FacetField> item) {
                 item.add(new FacetPanel("facet", item.getModel()));
             }
         });
     }
-
 }
