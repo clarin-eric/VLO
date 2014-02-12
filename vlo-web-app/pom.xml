@@ -98,7 +98,22 @@
             <version>${solr.version}</version>
             <type>jar</type>
         </dependency>
-        <!-- JMOCK for mocking -->
+        <!-- SOLR TESTING -->
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-test-framework</artifactId>
+            <version>${solr.version}</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-core</artifactId>
+            <version>${solr.version}</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <!-- JMOCK FOR MOCKING -->
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-junit4</artifactId>
