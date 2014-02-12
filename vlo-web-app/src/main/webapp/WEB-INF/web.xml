@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
 
-	<display-name>vlo-web-app</display-name>
+  <display-name>vlo-web-app</display-name>
 
 	<!--
 		There are three means to configure Wickets configuration mode and they 
@@ -13,20 +13,35 @@
 		2) servlet specific <init-param> 
 		3) context specific <context-param>
 
-		The value might be either "development" (reloading when templates change) or 
-		"deployment". If no configuration is found, "development" is the default. -->
+    The value might be either "development" (reloading when templates change) or 
+    "deployment". If no configuration is found, "development" is the default. -->
 
-	<filter>
-		<filter-name>wicket.vlo-web-app</filter-name>
-		<filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
-		<init-param>
-			<param-name>applicationClassName</param-name>
-			<param-value>eu.clarin.cmdi.vlo.VloWicketApplication</param-value>
-		</init-param>
-	</filter>
+    <filter>
+        <filter-name>wicket.vlo-web-app</filter-name>
+        <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
+        <init-param>
+            <param-name>applicationFactoryClassName</param-name>
+            <param-value>org.apache.wicket.spring.SpringWebApplicationFactory</param-value>
+        </init-param>
+    </filter>
 
-	<filter-mapping>
-		<filter-name>wicket.vlo-web-app</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+    <filter-mapping>
+        <filter-name>wicket.vlo-web-app</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+        
+    <!-- Wake up Spring when the web app starts -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>  
+    </listener>
+
+    <!-- 
+      Context parameter below specifies the location of the spring application 
+      context. Used to bootstrap annotation based configuration, see:
+          eu.clarin.vmdi.vlo.config.VloSpringConfig
+    -->
+    <context-param>  
+        <param-name>contextConfigLocation</param-name>  
+        <param-value>WEB-INF/applicationContext.xml</param-value>  
+    </context-param>  
 </web-app>

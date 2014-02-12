@@ -20,20 +20,64 @@
 
     <properties>
         <wicket.version>6.12.0</wicket.version>
+        <spring.version>3.2.5.RELEASE</spring.version>
         <jetty.version>7.6.13.v20130916</jetty.version>
     </properties>
     <dependencies>
+        <!-- Intra-project dependencies -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>vlo-commons</artifactId>
+            <version>3.0-SNAPSHOT</version>
+        </dependency>
+        
         <!--  WICKET DEPENDENCIES -->
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-extensions</artifactId>
             <version>${wicket.version}</version>
         </dependency>
-
+        <!-- This gives us dependency injection and other Spring niceness -->
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-spring</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
+        
+        <!-- SPRING FRAMEWORK -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+            <type>jar</type>
+            <exclusions>
+                <!-- 
+                    We want Spring to use SLF4J instead (using
+                    jcl-over-slf4j, see below) 
+                -->
+                <exclusion>
+                    <groupId>commons-logging</groupId> <!-- aka JCL -->
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+            <type>jar</type>
+        </dependency>
+        
         <!-- LOGGING DEPENDENCIES - LOG4J -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <!-- Make Spring log to SLF4J, too (drop-in replacement for JCL) -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
 
@@ -50,12 +94,8 @@
             <version>${solr.version}</version>
             <type>jar</type>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>vlo-commons</artifactId>
-            <version>3.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
+    
     <build>
         <resources>
             <resource>
