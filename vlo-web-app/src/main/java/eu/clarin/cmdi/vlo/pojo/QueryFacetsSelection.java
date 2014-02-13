@@ -14,20 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package eu.clarin.cmdi.vlo.pojo;
 
-package eu.clarin.cmdi.vlo.service;
-
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import java.io.Serializable;
 import java.util.List;
-import org.apache.solr.client.solrj.response.FacetField;
 
 /**
  *
  * @author twagoo
  */
-public interface FacetFieldsService {
+public class QueryFacetsSelection implements Serializable {
+
+    private final String queryString;
+    private final List<FacetSelection> selection;
+
+    public QueryFacetsSelection(List<FacetSelection> selection) {
+        this(null, selection);
+    }
     
-    List<FacetField> getFacetFields(List<FacetSelection> selection, String query);
-    
-    long getFacetFieldCount();
+    public QueryFacetsSelection(String query, List<FacetSelection> selection) {
+        this.queryString = query;
+        this.selection = selection;
+    }
+
+    public List<FacetSelection> getSelection() {
+        return selection;
+    }
+
+    public String getQuery() {
+        return queryString;
+    }
+
 }

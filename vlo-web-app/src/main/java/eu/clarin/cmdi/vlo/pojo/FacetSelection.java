@@ -38,7 +38,7 @@ public class FacetSelection implements Serializable {
         return facet;
     }
 
-    public Collection getValue() {
+    public Collection<String> getValue() {
         return values;
     }
 

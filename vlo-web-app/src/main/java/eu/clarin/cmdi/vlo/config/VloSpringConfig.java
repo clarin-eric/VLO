@@ -72,7 +72,7 @@ public class VloSpringConfig {
 
     @Bean
     public SolrQueryFactory queryFactory() {
-        return new SolrQueryFactoryImpl();
+        return new SolrQueryFactoryImpl(vloConfig());
     }
     
     @Bean

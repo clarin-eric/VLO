@@ -17,14 +17,17 @@
 package eu.clarin.cmdi.vlo.components;
 
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.impl.FacetFieldsDataProvider;
+import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -35,11 +38,13 @@ public class FacetsPanel extends Panel {
 
     @SpringBean
     private FacetFieldsService facetFieldsService;
-    
-    public FacetsPanel(String id, ListModel<FacetSelection> model) {
+
+    public FacetsPanel(String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
 
-        final IDataProvider<FacetField> provider = new FacetFieldsDataProvider(facetFieldsService, model);
+        final IDataProvider<FacetField> provider = new FacetFieldsDataProvider(facetFieldsService, 
+                new PropertyModel<List<FacetSelection>>(model, "selection"),
+                new PropertyModel<String>(model, "query"));
         add(new DataView<FacetField>("facets", provider) {
 
             @Override

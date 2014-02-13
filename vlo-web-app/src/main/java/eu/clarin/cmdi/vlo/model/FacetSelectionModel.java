@@ -15,19 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.clarin.cmdi.vlo.service;
+package eu.clarin.cmdi.vlo.model;
 
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
-import java.util.List;
-import org.apache.solr.client.solrj.response.FacetField;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import org.apache.wicket.model.util.ListModel;
 
 /**
  *
  * @author twagoo
  */
-public interface FacetFieldsService {
+public class FacetSelectionModel extends ListModel<FacetSelection> {
     
-    List<FacetField> getFacetFields(List<FacetSelection> selection, String query);
-    
-    long getFacetFieldCount();
+    public FacetSelectionModel(QueryFacetsSelection queryFacetSelection){
+        super(queryFacetSelection.getSelection());
+    }
 }

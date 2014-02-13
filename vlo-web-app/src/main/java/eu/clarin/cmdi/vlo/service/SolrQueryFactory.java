@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package eu.clarin.cmdi.vlo.service;
 
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
@@ -27,6 +26,6 @@ import org.apache.solr.client.solrj.SolrQuery;
  */
 public interface SolrQueryFactory {
 
-    SolrQuery createQuery(List<FacetSelection> selection);
-    
+    SolrQuery createFacetQuery(List<FacetSelection> selection, String query);
+
 }

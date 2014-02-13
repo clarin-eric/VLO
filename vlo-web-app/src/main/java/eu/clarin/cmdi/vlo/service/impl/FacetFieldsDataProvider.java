@@ -24,7 +24,6 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.util.ListModel;
 
 /**
  *
@@ -33,16 +32,18 @@ import org.apache.wicket.model.util.ListModel;
 public class FacetFieldsDataProvider implements IDataProvider<FacetField> {
 
     private final FacetFieldsService facetFieldService;
-    private final ListModel<FacetSelection> selectionModel;
+    private final IModel<List<FacetSelection>> selectionModel;
+    private final IModel<String> searchQuery;
 
-    public FacetFieldsDataProvider(FacetFieldsService facetFieldService, ListModel<FacetSelection> selectionModel) {
+    public FacetFieldsDataProvider(FacetFieldsService facetFieldService, IModel<List<FacetSelection>> selectionModel, IModel<String> searchQuery) {
         this.facetFieldService = facetFieldService;
         this.selectionModel = selectionModel;
+        this.searchQuery = searchQuery;
     }
 
     @Override
     public Iterator<? extends FacetField> iterator(long first, long count) {
-        List<FacetField> facets = facetFieldService.getFacetFields(selectionModel.getObject());
+        List<FacetField> facets = facetFieldService.getFacetFields(selectionModel.getObject(), searchQuery.getObject());
         return facets.listIterator((int) first);
     }
 

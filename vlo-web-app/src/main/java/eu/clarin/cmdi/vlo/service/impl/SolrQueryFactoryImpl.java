@@ -16,10 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.service.SolrQueryFactory;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.util.ClientUtils;
 
 /**
  *
@@ -27,9 +31,44 @@ import org.apache.solr.client.solrj.SolrQuery;
  */
 public class SolrQueryFactoryImpl implements SolrQueryFactory {
 
-    @Override
-    public SolrQuery createQuery(List<FacetSelection> selection) {
-        throw new UnsupportedOperationException();
+    private static final String SOLR_SEARCH_ALL = "*:*";
+    private final VloConfig config;
+
+    public SolrQueryFactoryImpl(VloConfig config) {
+        this.config = config;
     }
 
+    @Override
+    public SolrQuery createFacetQuery(List<FacetSelection> selections, String queryString) {
+        SolrQuery query = getDefaultFacetQuery();
+
+        if (queryString == null) {
+            query.setQuery(SOLR_SEARCH_ALL);
+        } else {
+            query.setQuery(ClientUtils.escapeQueryChars(queryString));
+        }
+
+        if (selections != null) {
+            final List<String> encodedQueries = new ArrayList(selections.size());
+            for (FacetSelection selection : selections) {
+                String facet = selection.getFacet().getName();
+                for (String value : selection.getValue()) {
+                    encodedQueries.add(String.format("%s:%s", facet, ClientUtils.escapeQueryChars(value)));
+                }
+            }
+            query.setFilterQueries(encodedQueries.toArray(new String[encodedQueries.size()]));
+        }
+        return query;
+    }
+
+    private SolrQuery getDefaultFacetQuery() {
+        SolrQuery result = new SolrQuery();
+        result.setRows(10);
+        result.setStart(0);
+        result.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID, FacetConstants.FIELD_DESCRIPTION);
+        result.setFacet(true);
+        result.setFacetMinCount(1);
+        result.addFacetField(config.getFacetFields());
+        return result;
+    }
 }

@@ -39,8 +39,8 @@ public class SolrFacetFieldsService implements FacetFieldsService {
     }
 
     @Override
-    public List<FacetField> getFacetFields(List<FacetSelection> selection) {
-        return searchResultsDao.getFacets(queryFatory.createQuery(selection));
+    public List<FacetField> getFacetFields(List<FacetSelection> selection, String query) {
+        return searchResultsDao.getFacets(queryFatory.createFacetQuery(selection, query));
     }
 
     @Override

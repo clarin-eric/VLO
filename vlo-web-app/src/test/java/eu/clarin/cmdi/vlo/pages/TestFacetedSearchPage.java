@@ -21,6 +21,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+import static org.hamcrest.core.AnyOf.*;
+
 /**
  * Abstract base class for tests that require dependency injection of (mock)
  * objects and services. Based on blog post by Petri Kainulainen found at
@@ -65,9 +67,9 @@ public class TestFacetedSearchPage {
         // mock behaviour of facet fields service
         mockery.checking(new Expectations() {
             {
-                oneOf(facetFieldsService).getFacetFieldCount();
+                atLeast(1).of(facetFieldsService).getFacetFieldCount();
                 will(returnValue(2L));
-                oneOf(facetFieldsService).getFacetFields(with(any(List.class)));
+                oneOf(facetFieldsService).getFacetFields(with(any(List.class)), with(anyOf(aNull(String.class), any(String.class))));
                 will(returnValue(Arrays.asList(new FacetField("language"), new FacetField("resource class"))));
             }
         });
