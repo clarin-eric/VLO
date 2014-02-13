@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.config;
 
+import java.io.IOException;
 import java.io.InputStream;
 import javax.xml.bind.JAXBException;
 import javax.xml.transform.stream.StreamSource;
@@ -38,11 +39,17 @@ public class DefaultVloConfigFactory implements VloConfigFactory {
     }
 
     public VloConfig newConfig() {
-        InputStream configResourceStream = getClass().getResourceAsStream(DEFAULT_CONFIG_RESOURCE);
         try {
-            return marshaller.unmarshal(new StreamSource(configResourceStream));
-        } catch (JAXBException ex) {
-            throw new RuntimeException("Could not read default configuration due to deserialization error", ex);
+            InputStream configResourceStream = getClass().getResourceAsStream(DEFAULT_CONFIG_RESOURCE);
+            try {
+                return marshaller.unmarshal(new StreamSource(configResourceStream));
+            } catch (JAXBException ex) {
+                throw new RuntimeException("Could not read default configuration due to deserialization error", ex);
+            } finally {
+                configResourceStream.close();
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException("Could not close stream to default configuration", ex);
         }
     }
 }
