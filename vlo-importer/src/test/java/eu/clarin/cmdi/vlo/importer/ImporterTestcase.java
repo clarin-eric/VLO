@@ -13,7 +13,6 @@ public abstract class ImporterTestcase {
 
     private final VloConfigFactory configFactory = new DefaultVloConfigFactory();
     protected VloConfig config;
-
     private File testDir;
 
     protected File createCmdiFile(String name, String content) throws IOException {
@@ -35,10 +34,11 @@ public abstract class ImporterTestcase {
         testDir.deleteOnExit();
 
         // read the configuration defined in the packaged configuration file
-        config = configFactory.newConfig();
+        MetadataImporter.config = configFactory.newConfig();
 
         // optionally, modify the configuration here
-        config.setComponentRegistryRESTURL("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/");
+        MetadataImporter.config.setComponentRegistryRESTURL("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/");
+        config = MetadataImporter.config;        
     }
 
 }

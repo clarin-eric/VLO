@@ -7,7 +7,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.*;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -19,10 +19,10 @@ public class DefaultVloConfigFactoryTest {
     public DefaultVloConfigFactoryTest() {
     }
     
-    private static VloConfig config;
+    private VloConfig config;
     
-    @BeforeClass
-    public static void setUp() {        
+    @Before
+    public void setUp() {        
         config = new DefaultVloConfigFactory().newConfig();
     }
 
@@ -53,9 +53,8 @@ public class DefaultVloConfigFactoryTest {
         
         System.out.println("getDataRoots");
         
-        List rootsReturned = config.getDataRoots();
-        
-        assertEquals(dataRoots, rootsReturned);
+        List<DataRoot> rootsReturned = config.getDataRoots();
+        assertArrayEquals(dataRoots.toArray(), rootsReturned.toArray());
     }
 
     /**
@@ -284,7 +283,7 @@ public class DefaultVloConfigFactoryTest {
         System.out.println("deleteAllFirst");
         
         boolean expResult = true;
-        boolean result = config.deleteAllFirst();
+        boolean result = config.getDeleteAllFirst();
         
         assertEquals(expResult, result);
     }
@@ -301,7 +300,7 @@ public class DefaultVloConfigFactoryTest {
         
         config.setDeleteAllFirst(param);
 
-        boolean result = config.deleteAllFirst();
+        boolean result = config.getDeleteAllFirst();
         
         assertEquals(param, result);
     }
@@ -406,7 +405,7 @@ public class DefaultVloConfigFactoryTest {
         
         System.out.println("getSolrUrl");
         
-        String expResult = "http://localhost:8084/vlo_solr/";
+        String expResult = "http://localhost:8080/vlo_solr/";
         String result = config.getSolrUrl();
         
         assertEquals(expResult, result);
@@ -519,7 +518,7 @@ public class DefaultVloConfigFactoryTest {
         } catch (UnsupportedEncodingException ex) {
             expResult = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=" + "handle";
         }
-        String result = config.getIMDIBrowserUrl("handle");
+        String result = config.getImdiBrowserUrl("handle");
 
         assertEquals(expResult, result);
     }
@@ -534,7 +533,7 @@ public class DefaultVloConfigFactoryTest {
         
         String param = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=";
         
-        config.setIMDIBrowserUrl(param);
+        config.setImdiBrowserUrl(param);
 
         String expResult;
         try {
@@ -543,7 +542,7 @@ public class DefaultVloConfigFactoryTest {
             expResult = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=" + "handle";
         }
         
-        String result = config.getIMDIBrowserUrl("handle");
+        String result = config.getImdiBrowserUrl("handle");
 
         assertEquals(expResult, result);
     }

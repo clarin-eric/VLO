@@ -14,8 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package eu.clarin.cmdi.vlo.config;
+
+import java.io.InputStream;
+import javax.xml.bind.JAXBException;
+import javax.xml.transform.stream.StreamSource;
 
 /**
  *
@@ -23,8 +26,23 @@ package eu.clarin.cmdi.vlo.config;
  */
 public class DefaultVloConfigFactory implements VloConfigFactory {
 
-    public VloConfig newConfig() {
-        return new VloConfig();
+    public static final String DEFAULT_CONFIG_RESOURCE = "/VloConfig.xml";
+    private final VloConfigMarshaller marshaller;
+
+    public DefaultVloConfigFactory() {
+        try {
+            this.marshaller = new VloConfigMarshaller();
+        } catch (JAXBException ex) {
+            throw new RuntimeException("Could not instantiate configuration marshaller while constructing configuration factory", ex);
+        }
     }
-    
+
+    public VloConfig newConfig() {
+        InputStream configResourceStream = getClass().getResourceAsStream(DEFAULT_CONFIG_RESOURCE);
+        try {
+            return marshaller.unmarshal(new StreamSource(configResourceStream));
+        } catch (JAXBException ex) {
+            throw new RuntimeException("Could not read default configuration due to deserialization error", ex);
+        }
+    }
 }

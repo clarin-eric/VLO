@@ -3,14 +3,16 @@ package eu.clarin.cmdi.vlo.config;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
-import org.simpleframework.xml.Root;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * VLO configuration
  *
  * @author keeloo, twagoo
  */
-@Root
+@XmlRootElement(name = "VloConfig")
 public class VloConfig {
 
     /*
@@ -40,7 +42,9 @@ public class VloConfig {
     //(required = false)
     private int solrTimeOut = 0;
 
-    private List<DataRoot> dataRoots;
+    @XmlElementWrapper(name="dataRoots")
+    @XmlElement(name="DataRoot")
+    private List<DataRoot> dataRoot;
 
     private int maxFileSize = 0;
 
@@ -66,16 +70,18 @@ public class VloConfig {
     private String silToISO639CodesUrl = "";
 
     // services
-    private String FederatedContentSearchUrl = "";
+    private String federatedContentSearchUrl = "";
 
     private boolean useHandleResolver = false;
 
+    @XmlElement
     private String profileSchemaUrl = "";
 
     private String componentRegistryRESTURL = "";
 
     private String handleServerUrl = "";
 
+    @XmlElement
     private String imdiBrowserUrl = "";
 
     private String languageLinkPrefix = "";
@@ -92,23 +98,12 @@ public class VloConfig {
     /**
      * An array of facetFields<br><br>
      *
-     * In case of an array of elements, the number of elements in the array
-     * needs to be communicated to the Simple framework. The following would be
-     * a correct description of an array of three facet fields<br><br>
-     *
-     * {@literal <facetFields length="3">}<br> {@literal    <facetField>}<br>
-     * {@literal       fieldOne}<br> {@literal    </facetField>}<br>
-     * {@literal    <facetField>}<br> {@literal       fieldTwo}<br>
-     * {@literal    </facetField>}<br> {@literal    <facetField>}<br>
-     * {@literal       fieldThree}<br> {@literal    </facetField>}<br>
-     * {@literal </facetFields>}<br><br>
-     *
-     * To let Simple now it has to interpret the facetFields element as an
-     * array, use the ElementArray directive. Use the directive to let Simple
-     * know that the elements inside 'facetFields' are named 'facetField'.
+     * To let JAXB know it has to interpret the facetFields element as an array,
+     * use the XmlElementWrapper directive. Use the directive to let JAXB know
+     * that the elements inside 'facetFields' are named 'facetField'.
      */
-    //Array(entry = "facetField")
-    private String[] facetFields = {"", "", ""};
+    @XmlElementWrapper(name = "facetFields")
+    private String[] facetField = {"", "", ""};
 
     // test related parameters
     //(required = false)
@@ -181,7 +176,7 @@ public class VloConfig {
      *
      * @return the value
      */
-    public boolean deleteAllFirst() {
+    public boolean getDeleteAllFirst() {
         return deleteAllFirst;
     }
 
@@ -350,7 +345,7 @@ public class VloConfig {
      * @return the value
      */
     public List<DataRoot> getDataRoots() {
-        return dataRoots;
+        return dataRoot;
     }
 
     /**
@@ -362,7 +357,7 @@ public class VloConfig {
      * @param param the value
      */
     public void setDataRoots(List<DataRoot> param) {
-        dataRoots = param;
+        dataRoot = param;
     }
 
     /**
@@ -505,7 +500,7 @@ public class VloConfig {
      *
      * @param param the value
      */
-    public void setProfileSchemaUrl(String param) {
+    public void setComponentRegistryProfileSchema(String param) {
         profileSchemaUrl = param;
     }
 
@@ -566,7 +561,7 @@ public class VloConfig {
      * @param handle the handle the URL is based on
      * @return the value
      */
-    public String getIMDIBrowserUrl(String handle) {
+    public String getImdiBrowserUrl(String handle) {
         String result;
         try {
             result = imdiBrowserUrl + URLEncoder.encode(handle, "UTF-8");
@@ -584,7 +579,7 @@ public class VloConfig {
      *
      * @param param the value
      */
-    public void setIMDIBrowserUrl(String param) {
+    public void setImdiBrowserUrl(String param) {
         imdiBrowserUrl = param;
     }
 
@@ -644,8 +639,9 @@ public class VloConfig {
      *
      * @return the value
      */
+    @XmlElement(name = "FederatedContentSearchUrl")
     public String getFederatedContentSearchUrl() {
-        return FederatedContentSearchUrl;
+        return federatedContentSearchUrl;
     }
 
     /**
@@ -657,7 +653,7 @@ public class VloConfig {
      * @param param the value
      */
     public void setFederatedContentSearchUrl(String param) {
-        FederatedContentSearchUrl = param;
+        federatedContentSearchUrl = param;
     }
 
     /**
@@ -693,7 +689,7 @@ public class VloConfig {
      * @return the value
      */
     public String[] getFacetFields() {
-        return facetFields;
+        return facetField;
     }
 
     /**
@@ -705,7 +701,7 @@ public class VloConfig {
      * @param param the value, a list of facet fields
      */
     public void setFacetFields(String[] param) {
-        facetFields = param;
+        facetField = param;
     }
 
     /**

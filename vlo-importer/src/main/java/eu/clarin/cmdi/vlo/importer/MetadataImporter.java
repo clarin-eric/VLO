@@ -121,7 +121,7 @@ public class MetadataImporter {
         long start = System.currentTimeMillis();
         try {
             // Delete the whole Solr db
-            if (config.deleteAllFirst()) {
+            if (config.getDeleteAllFirst()) {
                 LOG.info("Deleting original data...");
                 solrServer.deleteByQuery("*:*");
                 solrServer.commit();
@@ -154,7 +154,7 @@ public class MetadataImporter {
             }
             
             // delete outdated entries (based on maxDaysInSolr parameter)
-            if(config.getMaxDaysInSolr() > 0 && config.deleteAllFirst() == false) {
+            if(config.getMaxDaysInSolr() > 0 && config.getDeleteAllFirst() == false) {
                 LOG.info("Deleting old files that were not seen for more than "+config.getMaxDaysInSolr()+" days...");
                 solrServer.deleteByQuery(FacetConstants.FIELD_LAST_SEEN+":[* TO NOW-"+config.getMaxDaysInSolr()+"DAYS]");
                 LOG.info("Deleting old files done.");
