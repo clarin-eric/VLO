@@ -13,7 +13,7 @@
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-web-app</artifactId>
     <packaging>war</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>3.0-SNAPSHOT</version>
     <!-- TODO project name  -->
     <name>VLO Web Application</name>
     <description></description>
@@ -28,7 +28,14 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>vlo-commons</artifactId>
-            <version>3.0-SNAPSHOT</version>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- Importer only used in web app for testing -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>vlo-importer</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
         
         <!--  WICKET DEPENDENCIES -->

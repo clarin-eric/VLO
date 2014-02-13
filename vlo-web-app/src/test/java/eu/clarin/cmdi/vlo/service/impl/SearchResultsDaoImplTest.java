@@ -16,16 +16,20 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.importer.CMDIData;
 import java.io.File;
+import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
-import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.util.AbstractSolrTestCase;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Example taken from
@@ -36,6 +40,7 @@ import org.junit.Test;
 public class SearchResultsDaoImplTest extends AbstractSolrTestCase {
 
     private EmbeddedSolrServer server;
+    private SearchResultsDaoImpl instance;
 
     @Before
     @Override
@@ -43,6 +48,7 @@ public class SearchResultsDaoImplTest extends AbstractSolrTestCase {
         super.setUp();
         initCore(getResourcePath(getConfigString()), getResourcePath(getSchemaString()));
         server = new EmbeddedSolrServer(h.getCoreContainer(), h.getCore().getName());
+        instance = new SearchResultsDaoImpl(server);
     }
 
     @After
@@ -59,17 +65,46 @@ public class SearchResultsDaoImplTest extends AbstractSolrTestCase {
      */
     @Test
     public void testGetFacets() throws Exception {
-        SolrInputDocument document = new SolrInputDocument();
-        document.addField("id", "1");
-        document.addField("text", "test");
-
+        int id = 1;
+        CMDIData cmdiData = new CMDIData();
+        cmdiData.addDocField(FacetConstants.FIELD_COLLECTION, "Collection1", false);
+        cmdiData.addDocField(FacetConstants.FIELD_COUNTRY, "Country1", false);
+        SolrInputDocument document = cmdiData.getSolrDocument();
+        document.addField("id", Integer.toString(id++));
         server.add(document);
         server.commit();
-        
-        SolrParams params = new SolrQuery("text");
-        QueryResponse response = server.query(params);
-        assertEquals(1L, response.getResults().getNumFound());
-        assertEquals("1", response.getResults().get(0).get("id"));
+
+        cmdiData = new CMDIData();
+        cmdiData.addDocField(FacetConstants.FIELD_COLLECTION, "Collection1", false);
+        cmdiData.addDocField(FacetConstants.FIELD_COUNTRY, "Country2", false);
+        document = cmdiData.getSolrDocument();
+        document.addField("id", Integer.toString(id++));
+        server.add(document);
+        server.commit();
+
+        SolrQuery query = new SolrQuery();
+        query.setRows(10);
+        query.setStart(0);
+        query.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID, FacetConstants.FIELD_DESCRIPTION);
+        query.setQuery("*:*");
+
+        query.setFacet(true);
+        query.setFacetMinCount(1);
+        query.addFacetField(FacetConstants.FIELD_COLLECTION, FacetConstants.FIELD_COUNTRY);
+
+        List<FacetField> facetFields = instance.getFacets(query);
+        assertNotNull(facetFields);
+        assertEquals(2, facetFields.size());
+
+        // 1 collection
+        assertThat(facetFields, Matchers.<FacetField>hasItem(Matchers.allOf(
+                Matchers.<FacetField>hasProperty("name", equalTo(FacetConstants.FIELD_COLLECTION)),
+                Matchers.<FacetField>hasProperty("valueCount", equalTo(1)))));
+
+        // 2 countries
+        assertThat(facetFields, Matchers.<FacetField>hasItem(Matchers.allOf(
+                Matchers.<FacetField>hasProperty("name", equalTo(FacetConstants.FIELD_COUNTRY)),
+                Matchers.<FacetField>hasProperty("valueCount", equalTo(2)))));
     }
 
     public static String getSchemaString() {
