@@ -27,5 +27,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 public interface SolrQueryFactory {
 
     SolrQuery createFacetQuery(List<FacetSelection> selection, String query);
+    
+    SolrQuery createCountFacetsQuery();
 
 }

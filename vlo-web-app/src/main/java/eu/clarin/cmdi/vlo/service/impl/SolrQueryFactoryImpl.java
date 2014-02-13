@@ -32,12 +32,17 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 public class SolrQueryFactoryImpl implements SolrQueryFactory {
 
     private static final String SOLR_SEARCH_ALL = "*:*";
+    private final SolrQuery countQuery;
     private final VloConfig config;
 
     public SolrQueryFactoryImpl(VloConfig config) {
         this.config = config;
+        
+        // create the query used to count facets (will never change)
+        countQuery = getDefaultFacetQuery();
+        countQuery.setRows(0);
     }
-
+    
     @Override
     public SolrQuery createFacetQuery(List<FacetSelection> selections, String queryString) {
         SolrQuery query = getDefaultFacetQuery();
@@ -71,4 +76,10 @@ public class SolrQueryFactoryImpl implements SolrQueryFactory {
         result.addFacetField(config.getFacetFields());
         return result;
     }
+
+    @Override
+    public synchronized SolrQuery createCountFacetsQuery() {
+        return countQuery;
+    }
+
 }

@@ -21,7 +21,6 @@ import eu.clarin.cmdi.vlo.service.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.SearchResultsDao;
 import eu.clarin.cmdi.vlo.service.SolrQueryFactory;
 import java.util.List;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 
 /**
@@ -45,8 +44,7 @@ public class SolrFacetFieldsService implements FacetFieldsService {
 
     @Override
     public long getFacetFieldCount() {
-        return (long) searchResultsDao.getFacets(COUNT_FACETS_QUERY).size(); //TODO: count facets
+        return (long) searchResultsDao.getFacets(queryFatory.createCountFacetsQuery()).size();
     }
-    public static final SolrQuery COUNT_FACETS_QUERY = new SolrQuery("");
 
 }
