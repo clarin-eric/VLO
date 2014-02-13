@@ -16,18 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.components;
 
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.impl.FacetFieldsDataProvider;
-import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -41,16 +37,18 @@ public class FacetsPanel extends Panel {
 
     public FacetsPanel(String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
+        add(new FacetsDataView("facets", model));
+    }
 
-        final IDataProvider<FacetField> provider = new FacetFieldsDataProvider(facetFieldsService, 
-                new PropertyModel<List<FacetSelection>>(model, "selection"),
-                new PropertyModel<String>(model, "query"));
-        add(new DataView<FacetField>("facets", provider) {
+    private class FacetsDataView extends DataView<FacetField> {
 
-            @Override
-            protected void populateItem(Item<FacetField> item) {
-                item.add(new FacetPanel("facet", item.getModel()));
-            }
-        });
+        public FacetsDataView(String id, IModel<QueryFacetsSelection> model) {
+            super(id, new FacetFieldsDataProvider(facetFieldsService, model));
+        }
+
+        @Override
+        protected void populateItem(Item<FacetField> item) {
+            item.add(new FacetPanel("facet", item.getModel()));
+        }
     }
 }
