@@ -1,6 +1,8 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.config.VloConfigFactory;
 import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
@@ -8,6 +10,10 @@ import org.junit.After;
 import org.junit.Before;
 
 public abstract class ImporterTestcase {
+
+    private final VloConfigFactory configFactory = new DefaultVloConfigFactory();
+    protected VloConfig config;
+
     private File testDir;
 
     protected File createCmdiFile(String name, String content) throws IOException {
@@ -27,13 +33,12 @@ public abstract class ImporterTestcase {
         testDir = new File(baseTempPath + File.separator + "testRegistry_" + System.currentTimeMillis());
         testDir.mkdir();
         testDir.deleteOnExit();
-        
+
         // read the configuration defined in the packaged configuration file
-        VloConfig.readPackagedConfig();
+        config = configFactory.newConfig();
 
         // optionally, modify the configuration here
-        
-        VloConfig.setComponentRegistryRESTURL("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/");
+        config.setComponentRegistryRESTURL("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/");
     }
 
 }

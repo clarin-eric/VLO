@@ -52,7 +52,7 @@
     
     <helpUrl>http://www.clarin.eu/vlo</helpUrl>
     
-    <solrUrl>http://localhost:8084/vlo_solr/</solrUrl>
+    <solrUrl>http://localhost:8080/vlo_solr/</solrUrl>
     
     <facetConceptsFile>/facetConcepts.xml</facetConceptsFile>
     

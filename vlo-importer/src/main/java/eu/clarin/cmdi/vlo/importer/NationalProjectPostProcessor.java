@@ -1,6 +1,5 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,7 +49,7 @@ public class NationalProjectPostProcessor extends LanguageCodePostProcessor {
     }
 
     private Map<String, String> getNationalProjectMapping() {
-        String projectsMappingFile = VloConfig.getNationalProjectMapping();
+        String projectsMappingFile = MetadataImporter.config.getNationalProjectMapping();
 
         if (projectsMappingFile.length() == 0) {
             // use the packaged project mapping file

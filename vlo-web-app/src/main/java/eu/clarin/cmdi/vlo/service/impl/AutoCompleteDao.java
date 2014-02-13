@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,8 +18,8 @@ import org.apache.solr.client.solrj.response.SpellCheckResponse.Suggestion;
  */
 public class AutoCompleteDao extends SolrDaoImpl {
 
-    public AutoCompleteDao(SolrServer solrServer) {
-        super(solrServer);
+    public AutoCompleteDao(SolrServer solrServer, VloConfig config) {
+        super(solrServer, config);
     }
     
     /**

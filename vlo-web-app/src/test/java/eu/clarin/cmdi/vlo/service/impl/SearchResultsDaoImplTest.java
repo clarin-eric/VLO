@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
 import java.io.File;
 import java.util.List;
@@ -48,7 +49,7 @@ public class SearchResultsDaoImplTest extends AbstractSolrTestCase {
         super.setUp();
         initCore(getResourcePath(getConfigString()), getResourcePath(getSchemaString()));
         server = new EmbeddedSolrServer(h.getCoreContainer(), h.getCore().getName());
-        instance = new SearchResultsDaoImpl(server);
+        instance = new SearchResultsDaoImpl(server, new VloConfig());
     }
 
     @After

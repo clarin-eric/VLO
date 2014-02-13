@@ -1,7 +1,6 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,7 +11,6 @@ import org.apache.solr.common.SolrInputDocument;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import org.junit.Test;
 
 public class CMDIDataProcessorTest extends ImporterTestcase {
@@ -25,7 +23,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testCreateCMDIDataFromCorpus() throws Exception {
         
         // make sure the mapping file for testing is used
-        VloConfig.setFacetConceptsFile("/facetConceptsTest.xml");
+        config.setFacetConceptsFile("/facetConceptsTest.xml");
 
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -89,7 +87,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testCreateCMDIDataFromSession() throws Exception {
         
         // make sure the mapping file for testing is used
-        VloConfig.setFacetConceptsFile("/facetConceptsTest.xml");
+        config.setFacetConceptsFile("/facetConceptsTest.xml");
 
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -414,7 +412,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testCreateCMDISessionSmall() throws Exception {
         
         // make sure the mapping file for testing is used
-        VloConfig.setFacetConceptsFile("/facetConceptsTest.xml");
+        config.setFacetConceptsFile("/facetConceptsTest.xml");
 
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -443,7 +441,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testEmptyFieldsShouldBeNull() throws Exception {
         
         // make sure the mapping file for testing is used
-        VloConfig.setFacetConceptsFile("/facetConceptsTest.xml");
+        config.setFacetConceptsFile("/facetConceptsTest.xml");
 
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -535,7 +533,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testOlac() throws Exception {
 
         // make sure the mapping file for testing is used
-        VloConfig.setFacetConceptsFile("/facetConceptsTest.xml");
+        config.setFacetConceptsFile("/facetConceptsTest.xml");
 
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -621,7 +619,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testOlacMultiFacets() throws Exception {
         
         // make sure the mapping file for testing is used
-        VloConfig.setFacetConceptsFile("/facetConceptsTest.xml");
+        config.setFacetConceptsFile("/facetConceptsTest.xml");
 
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -716,7 +714,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testIgnoreWhiteSpaceFacets() throws Exception {
        
         // make sure the mapping file for testing is used
-        VloConfig.setFacetConceptsFile("/facetConceptsTest.xml");
+        config.setFacetConceptsFile("/facetConceptsTest.xml");
 
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -742,7 +740,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testCountryCodesPostProcessing() throws Exception {
         
         // make sure the mapping file for testing is used
-        VloConfig.setFacetConceptsFile("/facetConceptsTest.xml");
+        config.setFacetConceptsFile("/facetConceptsTest.xml");
 
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -768,7 +766,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testLanguageCodesPostProcessing() throws Exception {
         
         // make sure the mapping file for testing is used
-        VloConfig.setFacetConceptsFile("/facetConceptsTest.xml");
+        config.setFacetConceptsFile("/facetConceptsTest.xml");
 
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -799,7 +797,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testOlacCollection() throws Exception {
         
         // make sure the mapping file for testing is used
-        VloConfig.setFacetConceptsFile("/facetConceptsTest.xml");
+        config.setFacetConceptsFile("/facetConceptsTest.xml");
 
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -851,7 +849,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     public void testLrtCollection() throws Exception {
        
         // make sure the mapping file for testing is used
-        VloConfig.setFacetConceptsFile("/facetConceptsTest.xml");
+        config.setFacetConceptsFile("/facetConceptsTest.xml");
 
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";

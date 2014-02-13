@@ -2,7 +2,6 @@ package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.DataRoot;
-import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -261,7 +260,7 @@ public class MetadataImporterTest extends ImporterTestcase {
             void startImport() throws MalformedURLException {
                 
                 // make sure the mapping file for testing is used
-                VloConfig.setFacetConceptsFile("/facetConceptsTest.xml");
+                config.setFacetConceptsFile("/facetConceptsTest.xml");
                 
                 List<DataRoot> dataRoots = checkDataRoots();
                 long start = System.currentTimeMillis();
@@ -275,9 +274,9 @@ public class MetadataImporterTest extends ImporterTestcase {
                         List<File> files = 
                                 getFilesFromDataRoot(dataRoot.getRootFile());
                         for (File file : files) {
-                            if (VloConfig.getMaxFileSize () > 0
+                            if (config.getMaxFileSize () > 0
                                     && file.length() > 
-                                    VloConfig.getMaxFileSize()) {
+                                    config.getMaxFileSize()) {
                                 LOG.info("Skipping " + file.getAbsolutePath() + 
                                         " because it is too large.");
                             } else {
@@ -339,7 +338,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         dataRoot.setRootFile(rootFile);
         dataRoot.setTostrip("");
         dataRoot.setPrefix("http://example.com");
-        VloConfig.setDataRoots(Collections.singletonList(dataRoot));
+        config.setDataRoots(Collections.singletonList(dataRoot));
     }
 
 }

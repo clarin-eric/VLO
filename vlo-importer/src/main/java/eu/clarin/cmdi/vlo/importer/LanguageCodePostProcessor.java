@@ -17,7 +17,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import eu.clarin.cmdi.vlo.CommonUtils;
-import eu.clarin.cmdi.vlo.config.VloConfig;
 
 public class LanguageCodePostProcessor implements PostProcessor{
 
@@ -97,28 +96,28 @@ public class LanguageCodePostProcessor implements PostProcessor{
 
     private Map<String, String> getTwoLetterCountryCodeMap() {
         if (twoLetterCodesMap == null) {
-            twoLetterCodesMap = createCodeMap(VloConfig.getLanguage2LetterCodeComponentUrl());
+            twoLetterCodesMap = createCodeMap(MetadataImporter.config.getLanguage2LetterCodeComponentUrl());
         }
         return twoLetterCodesMap;
     }
 
     private Map<String, String> getThreeLetterCountryCodeMap() {
         if (threeLetterCodesMap == null) {
-            threeLetterCodesMap = createCodeMap(VloConfig.getLanguage3LetterCodeComponentUrl());
+            threeLetterCodesMap = createCodeMap(MetadataImporter.config.getLanguage3LetterCodeComponentUrl());
         }
         return threeLetterCodesMap;
     }
 
     protected Map<String, String> getLanguageNameToIso639Map() {
     	if (languageNameToIso639Map == null) {
-    			languageNameToIso639Map = createReverseCodeMap(VloConfig.getLanguage3LetterCodeComponentUrl());
+    			languageNameToIso639Map = createReverseCodeMap(MetadataImporter.config.getLanguage3LetterCodeComponentUrl());
     	}
     	return languageNameToIso639Map;
     }
 
     private Map<String, String> getIso639ToLanguageNameMap() {
     	if (iso639ToLanguageNameMap == null) {
-    		iso639ToLanguageNameMap = createCodeMap(VloConfig.getLanguage3LetterCodeComponentUrl());
+    		iso639ToLanguageNameMap = createCodeMap(MetadataImporter.config.getLanguage3LetterCodeComponentUrl());
     	}
 
     	return iso639ToLanguageNameMap;
@@ -150,7 +149,7 @@ public class LanguageCodePostProcessor implements PostProcessor{
             Map<String, String> result = new HashMap<String, String>();
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             domFactory.setNamespaceAware(true);
-            URL url = new URL(VloConfig.getSilToISO639CodesUrl());
+            URL url = new URL(MetadataImporter.config.getSilToISO639CodesUrl());
             DocumentBuilder builder = domFactory.newDocumentBuilder();
             Document doc = builder.parse(url.openStream());
             XPath xpath = XPathFactory.newInstance().newXPath();

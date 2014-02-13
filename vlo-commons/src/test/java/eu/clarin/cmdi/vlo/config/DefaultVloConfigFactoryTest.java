@@ -7,21 +7,23 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.*;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  *
  * @author keeloo
  */
-public class VloConfigTest {
+public class DefaultVloConfigFactoryTest {
     
-    public VloConfigTest() {
+    public DefaultVloConfigFactoryTest() {
     }
     
-    @Before
-    public void setUp() {        
-        VloConfig.readPackagedConfig();
+    private static VloConfig config;
+    
+    @BeforeClass
+    public static void setUp() {        
+        config = new DefaultVloConfigFactory().newConfig();
     }
 
     /**
@@ -51,7 +53,7 @@ public class VloConfigTest {
         
         System.out.println("getDataRoots");
         
-        List rootsReturned = VloConfig.getDataRoots();
+        List rootsReturned = config.getDataRoots();
         
         assertEquals(dataRoots, rootsReturned);
     }
@@ -79,9 +81,9 @@ public class VloConfigTest {
         
         System.out.println("setDataRoots");
 
-        VloConfig.setDataRoots(dataRoots);
+        config.setDataRoots(dataRoots);
         
-        List rootsReturned = VloConfig.getDataRoots(); 
+        List rootsReturned = config.getDataRoots(); 
         
         assertEquals (dataRoots, rootsReturned);
     }
@@ -95,7 +97,7 @@ public class VloConfigTest {
         System.out.println("getPagesInApplicationCache");
         
         int expResult = 40; // as defined in vloconfig.xml
-        int result = VloConfig.getPagesInApplicationCache();
+        int result = config.getPagesInApplicationCache();
         
         assertEquals(expResult, result);
     }
@@ -110,9 +112,9 @@ public class VloConfigTest {
         
         int param = 999;
         
-        VloConfig.setPagesInApplicationCache(param);
+        config.setPagesInApplicationCache(param);
 
-        int result = VloConfig.getPagesInApplicationCache();
+        int result = config.getPagesInApplicationCache();
         
         assertEquals(param, result);
     }
@@ -127,7 +129,7 @@ public class VloConfigTest {
         System.out.println("getPagesInApplicationCache");
         
         int expResult = 10000; // as defined in vloconfig.xml
-        int result = VloConfig.getSessionCacheSize();
+        int result = config.getSessionCacheSize();
         
         assertEquals(expResult, result);
     }
@@ -142,9 +144,9 @@ public class VloConfigTest {
         
         int param = 9999;
         
-        VloConfig.setSessionCacheSize(param);
+        config.setSessionCacheSize(param);
 
-        int result = VloConfig.getSessionCacheSize();
+        int result = config.getSessionCacheSize();
         
         assertEquals(param, result);
     }
@@ -158,7 +160,7 @@ public class VloConfigTest {
         System.out.println("getMaxDocsInList");
         
         int expResult = 128;
-        int result = VloConfig.getMaxDocsInList();
+        int result = config.getMaxDocsInList();
         
         assertEquals(expResult, result);
     }
@@ -173,9 +175,9 @@ public class VloConfigTest {
         
         int param = 1000;
         
-        VloConfig.setMaxDocsInList(param);
+        config.setMaxDocsInList(param);
 
-        int result = VloConfig.getMaxDocsInList();
+        int result = config.getMaxDocsInList();
         
         assertEquals(param, result);
     }
@@ -189,7 +191,7 @@ public class VloConfigTest {
         System.out.println("getMaxDocsInSolrQueue");
         
         int expResult = 128;
-        int result = VloConfig.getMaxDocsInList();
+        int result = config.getMaxDocsInList();
         
         assertEquals(expResult, result);
     }
@@ -204,9 +206,9 @@ public class VloConfigTest {
         
         int param = 1000;
         
-        VloConfig.setMaxDocsInList(param);
+        config.setMaxDocsInList(param);
 
-        int result = VloConfig.getMaxDocsInList();
+        int result = config.getMaxDocsInList();
         
         assertEquals(param, result);
     }
@@ -220,7 +222,7 @@ public class VloConfigTest {
         System.out.println("getMaxFileSize");
         
         int expResult = 10000000;
-        int result = VloConfig.getMaxFileSize();
+        int result = config.getMaxFileSize();
         
         assertEquals(expResult, result);
     }
@@ -235,9 +237,9 @@ public class VloConfigTest {
         
         int param = 10000000;
         
-        VloConfig.setMaxFileSize(param);
+        config.setMaxFileSize(param);
 
-        int result = VloConfig.getMaxFileSize();
+        int result = config.getMaxFileSize();
         
         assertEquals(param, result);
     }
@@ -251,7 +253,7 @@ public class VloConfigTest {
         System.out.println("getUseHandleResolver");
         
         boolean expResult = false;
-        boolean result = VloConfig.getUseHandleResolver();
+        boolean result = config.getUseHandleResolver();
         
         assertEquals(expResult, result);
     }
@@ -266,9 +268,9 @@ public class VloConfigTest {
         
         boolean param = true;
         
-        VloConfig.setUseHandleResolver(param);
+        config.setUseHandleResolver(param);
 
-        boolean result = VloConfig.getUseHandleResolver();
+        boolean result = config.getUseHandleResolver();
         
         assertEquals(param, result);
     }
@@ -282,7 +284,7 @@ public class VloConfigTest {
         System.out.println("deleteAllFirst");
         
         boolean expResult = true;
-        boolean result = VloConfig.deleteAllFirst();
+        boolean result = config.deleteAllFirst();
         
         assertEquals(expResult, result);
     }
@@ -297,9 +299,9 @@ public class VloConfigTest {
         
         boolean param = true;
         
-        VloConfig.setDeleteAllFirst(param);
+        config.setDeleteAllFirst(param);
 
-        boolean result = VloConfig.deleteAllFirst();
+        boolean result = config.deleteAllFirst();
         
         assertEquals(param, result);
     }
@@ -313,7 +315,7 @@ public class VloConfigTest {
         System.out.println("printMapping");
         
         boolean expResult = false;
-        boolean result = VloConfig.printMapping();
+        boolean result = config.printMapping();
         
         assertEquals(expResult, result);
     }
@@ -327,9 +329,9 @@ public class VloConfigTest {
         
         boolean param = false;
         
-        VloConfig.setPrintMapping(param);
+        config.setPrintMapping(param);
 
-        boolean result = VloConfig.printMapping();
+        boolean result = config.printMapping();
         
         assertEquals(param, result);
     }
@@ -343,7 +345,7 @@ public class VloConfigTest {
         System.out.println("getVloHomeLink");
         
         String expResult = "http://www.clarin.eu/vlo";
-        String result = VloConfig.getHomeUrl();
+        String result = config.getHomeUrl();
         
         assertEquals(expResult, result);
     }
@@ -358,9 +360,9 @@ public class VloConfigTest {
         
         String param = "http://www.clarin.eu/vlo";
         
-        VloConfig.setHomeUrl(param);
+        config.setHomeUrl(param);
 
-        String result = VloConfig.getHomeUrl();
+        String result = config.getHomeUrl();
         
         assertEquals(param, result);
     }
@@ -374,7 +376,7 @@ public class VloConfigTest {
         System.out.println("getHelpUrl");
         
         String expResult = "http://www.clarin.eu/vlo";
-        String result = VloConfig.getHelpUrl();
+        String result = config.getHelpUrl();
         
         assertEquals(expResult, result);
     }
@@ -389,9 +391,9 @@ public class VloConfigTest {
         
         String param = "http://www.clarin.eu/vlo";
         
-        VloConfig.setHelpUrl(param);
+        config.setHelpUrl(param);
 
-        String result = VloConfig.getHelpUrl();
+        String result = config.getHelpUrl();
         
         assertEquals(param, result);
     }
@@ -405,7 +407,7 @@ public class VloConfigTest {
         System.out.println("getSolrUrl");
         
         String expResult = "http://localhost:8084/vlo_solr/";
-        String result = VloConfig.getSolrUrl();
+        String result = config.getSolrUrl();
         
         assertEquals(expResult, result);
     }
@@ -420,9 +422,9 @@ public class VloConfigTest {
         
         String param = "http://localhost:8084/vlo_solr/";
         
-        VloConfig.setSolrUrl(param);
+        config.setSolrUrl(param);
 
-        String result = VloConfig.getSolrUrl();
+        String result = config.getSolrUrl();
         
         assertEquals(param, result);
     }
@@ -436,7 +438,7 @@ public class VloConfigTest {
         System.out.println("getComponentRegistryProfileSchema");
         
         String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/someId/xsd";
-        String result = VloConfig.getComponentRegistryProfileSchema("someId");
+        String result = config.getComponentRegistryProfileSchema("someId");
         
         assertEquals(expResult, result);
     }
@@ -450,7 +452,7 @@ public class VloConfigTest {
         System.out.println("getComponentRegistryRESTURL");
         
         String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/";
-        String result = VloConfig.getComponentRegistryRESTURL();
+        String result = config.getComponentRegistryRESTURL();
         
         assertEquals(expResult, result);
     }
@@ -465,9 +467,9 @@ public class VloConfigTest {
         
         String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/";
         
-        VloConfig.setComponentRegistryRESTURL(param);
+        config.setComponentRegistryRESTURL(param);
 
-        String result = VloConfig.getComponentRegistryRESTURL();
+        String result = config.getComponentRegistryRESTURL();
         
         assertEquals(param, result);
     }
@@ -481,7 +483,7 @@ public class VloConfigTest {
         System.out.println("getHandleServerUrl");
         
         String expResult = "http://hdl.handle.net/";
-        String result = VloConfig.getHandleServerUrl();
+        String result = config.getHandleServerUrl();
         
         assertEquals(expResult, result);
     }
@@ -496,9 +498,9 @@ public class VloConfigTest {
         
         String param = "http://hdl.handle.net/";
         
-        VloConfig.setHandleServerUrl(param);
+        config.setHandleServerUrl(param);
 
-        String result = VloConfig.getHandleServerUrl();
+        String result = config.getHandleServerUrl();
         
         assertEquals(param, result);
     }
@@ -517,7 +519,7 @@ public class VloConfigTest {
         } catch (UnsupportedEncodingException ex) {
             expResult = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=" + "handle";
         }
-        String result = VloConfig.getIMDIBrowserUrl("handle");
+        String result = config.getIMDIBrowserUrl("handle");
 
         assertEquals(expResult, result);
     }
@@ -532,7 +534,7 @@ public class VloConfigTest {
         
         String param = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=";
         
-        VloConfig.setIMDIBrowserUrl(param);
+        config.setIMDIBrowserUrl(param);
 
         String expResult;
         try {
@@ -541,7 +543,7 @@ public class VloConfigTest {
             expResult = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=" + "handle";
         }
         
-        String result = VloConfig.getIMDIBrowserUrl("handle");
+        String result = config.getIMDIBrowserUrl("handle");
 
         assertEquals(expResult, result);
     }
@@ -555,7 +557,7 @@ public class VloConfigTest {
         System.out.println("getLanguageLinkPrefix");
         
         String expResult = "http://infra.clarin.eu/service/language/info.php?code=";
-        String result = VloConfig.getLanguageLinkPrefix();
+        String result = config.getLanguageLinkPrefix();
         
         assertEquals(expResult, result);
     }
@@ -570,9 +572,9 @@ public class VloConfigTest {
         
         String param = "http://infra.clarin.eu/service/language/info.php?code=";
         
-        VloConfig.setLanguageLinkPrefix(param);
+        config.setLanguageLinkPrefix(param);
 
-        String result = VloConfig.getLanguageLinkPrefix();
+        String result = config.getLanguageLinkPrefix();
         
         assertEquals(param, result);
     }
@@ -586,7 +588,7 @@ public class VloConfigTest {
         System.out.println("getFeedBackFromUrl");
         
         String expResult = "http://www.clarin.eu/node/3759?url=";
-        String result = VloConfig.getFeedbackFromUrl();
+        String result = config.getFeedbackFromUrl();
         
         assertEquals(expResult, result);
     }
@@ -601,9 +603,9 @@ public class VloConfigTest {
         
         String param = "http://www.clarin.eu/node/3759?url=";
         
-        VloConfig.setFeedbackFromUrl(param);
+        config.setFeedbackFromUrl(param);
 
-        String result = VloConfig.getFeedbackFromUrl();
+        String result = config.getFeedbackFromUrl();
         
         assertEquals(param, result);
     }
@@ -617,7 +619,7 @@ public class VloConfigTest {
         System.out.println("getFederatedContentSearchUrl");
         
         String expResult = "http://weblicht.sfs.uni-tuebingen.de/Aggregator/";
-        String result = VloConfig.getFederatedContentSearchUrl();
+        String result = config.getFederatedContentSearchUrl();
         
         assertEquals(expResult, result);
     }
@@ -632,9 +634,9 @@ public class VloConfigTest {
         
         String param = "http://weblicht.sfs.uni-tuebingen.de/Aggregator/";
         
-        VloConfig.setFederatedContentSearchUrl(param);
+        config.setFederatedContentSearchUrl(param);
 
-        String result = VloConfig.getFederatedContentSearchUrl();
+        String result = config.getFederatedContentSearchUrl();
         
         assertEquals(param, result);
     }
@@ -648,7 +650,7 @@ public class VloConfigTest {
         System.out.println("getNationalProjectMapping");
         
         String expResult = "/nationalProjectsMapping.xml";
-        String result = VloConfig.getNationalProjectMapping();
+        String result = config.getNationalProjectMapping();
         
         assertEquals(expResult, result);
     }
@@ -663,9 +665,9 @@ public class VloConfigTest {
         
         String param = "nationalProjectsMapping.xml";
         
-        VloConfig.setNationalProjectMapping(param);
+        config.setNationalProjectMapping(param);
 
-        String result = VloConfig.getNationalProjectMapping();
+        String result = config.getNationalProjectMapping();
         
         assertEquals(param, result);
     }    
@@ -693,7 +695,7 @@ public class VloConfigTest {
         "nationalProject",
         "keywords"};
     
-        String[] result = VloConfig.getFacetFields();
+        String[] result = config.getFacetFields();
     
         assertArrayEquals(expResult, result);
     }
@@ -721,9 +723,9 @@ public class VloConfigTest {
         "nationalProject",
         "keywords"};
         
-        VloConfig.setFacetFields(expResult);
+        config.setFacetFields(expResult);
         
-        String result[] = VloConfig.getFacetFields();
+        String result[] = config.getFacetFields();
 
         assertArrayEquals(expResult, result);
     }
@@ -737,7 +739,7 @@ public class VloConfigTest {
         System.out.println("getCountryComponentUrl");
         
         String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml";
-        String result = VloConfig.getCountryComponentUrl();
+        String result = config.getCountryComponentUrl();
         
         assertEquals(expResult, result);
     }
@@ -752,9 +754,9 @@ public class VloConfigTest {
         
         String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml";
         
-        VloConfig.setCountryComponentUrl(param);
+        config.setCountryComponentUrl(param);
 
-        String result = VloConfig.getCountryComponentUrl();
+        String result = config.getCountryComponentUrl();
         
         assertEquals(param, result);
     }  
@@ -768,7 +770,7 @@ public class VloConfigTest {
         System.out.println("getLanguage2LetterCodeComponentUrl");
         
         String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438109/xml";
-        String result = VloConfig.getLanguage2LetterCodeComponentUrl();
+        String result = config.getLanguage2LetterCodeComponentUrl();
         
         assertEquals(expResult, result);
     }
@@ -783,9 +785,9 @@ public class VloConfigTest {
         
         String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438109/xml";
         
-        VloConfig.setLanguage2LetterCodeComponentUrl(param);
+        config.setLanguage2LetterCodeComponentUrl(param);
 
-        String result = VloConfig.getLanguage2LetterCodeComponentUrl();
+        String result = config.getLanguage2LetterCodeComponentUrl();
         
         assertEquals(param, result);
     }
@@ -799,7 +801,7 @@ public class VloConfigTest {
         System.out.println("getLanguage3LetterCodeComponentUrl");
         
         String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438110/xml";
-        String result = VloConfig.getLanguage3LetterCodeComponentUrl();
+        String result = config.getLanguage3LetterCodeComponentUrl();
         
         assertEquals(expResult, result);
     }
@@ -814,9 +816,9 @@ public class VloConfigTest {
         
         String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438110/xml";
         
-        VloConfig.setLanguage3LetterCodeComponentUrl(param);
+        config.setLanguage3LetterCodeComponentUrl(param);
 
-        String result = VloConfig.getLanguage3LetterCodeComponentUrl();
+        String result = config.getLanguage3LetterCodeComponentUrl();
         
         assertEquals(param, result);
     }
@@ -830,7 +832,7 @@ public class VloConfigTest {
         System.out.println("getSilToISO639CodesUrl");
         
         String expResult = "http://www.clarin.eu/cmd/xslt/sil_to_iso6393.xml";
-        String result = VloConfig.getSilToISO639CodesUrl();
+        String result = config.getSilToISO639CodesUrl();
         
         assertEquals(expResult, result);
     }
@@ -845,9 +847,9 @@ public class VloConfigTest {
         
         String param = "http://www.clarin.eu/cmd/xslt/sil_to_iso6393.xml";
         
-        VloConfig.setSilToISO639CodesUrl(param);
+        config.setSilToISO639CodesUrl(param);
 
-        String result = VloConfig.getSilToISO639CodesUrl();
+        String result = config.getSilToISO639CodesUrl();
         
         assertEquals(param, result);
     }
@@ -861,7 +863,7 @@ public class VloConfigTest {
         System.out.println("getReverseProxyPrefix");
         
         String expResult = "";
-        String result = VloConfig.getReverseProxyPrefix();
+        String result = config.getReverseProxyPrefix();
         
         assertEquals(expResult, result);
     }
@@ -876,9 +878,9 @@ public class VloConfigTest {
         
         String param = "vlodev/";
         
-        VloConfig.setReverseProxyPrefix(param);
+        config.setReverseProxyPrefix(param);
 
-        String result = VloConfig.getReverseProxyPrefix();
+        String result = config.getReverseProxyPrefix();
         
         assertEquals(param, result);
     }
@@ -892,7 +894,7 @@ public class VloConfigTest {
         System.out.println("getCqlEndpointFilter");
         
         String expResult = "http://cqlservlet.mpi.nl/";
-        String result = VloConfig.getCqlEndpointFilter();
+        String result = config.getCqlEndpointFilter();
         
         assertEquals(expResult, result);
     }
@@ -907,9 +909,9 @@ public class VloConfigTest {
         
         String param = "http://cqlservlet.mpi.nl/";
         
-        VloConfig.setCqlEndpointFilter(param);
+        config.setCqlEndpointFilter(param);
 
-        String result = VloConfig.getCqlEndpointFilter();
+        String result = config.getCqlEndpointFilter();
         
         assertEquals(param, result);
     }
@@ -923,7 +925,7 @@ public class VloConfigTest {
         System.out.println("getCqlEndpointAlternative");
         
         String expResult = "http://cqlservlet.mpi.nl/";
-        String result = VloConfig.getCqlEndpointAlternative();
+        String result = config.getCqlEndpointAlternative();
         
         assertEquals(expResult, result);
     }
@@ -938,9 +940,9 @@ public class VloConfigTest {
         
         String param = "http://cqlservlet.mpi.nl/";
         
-        VloConfig.setCqlEndpointAlternative(param);
+        config.setCqlEndpointAlternative(param);
 
-        String result = VloConfig.getCqlEndpointAlternative();
+        String result = config.getCqlEndpointAlternative();
         
         assertEquals(param, result);
     }

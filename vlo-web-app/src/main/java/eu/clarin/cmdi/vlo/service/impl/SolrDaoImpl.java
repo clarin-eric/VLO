@@ -18,9 +18,11 @@ public class SolrDaoImpl {
     
     private final static Logger LOG = LoggerFactory.getLogger(SolrDaoImpl.class);
     private final SolrServer solrServer;
+    private final VloConfig config;
 
-    public SolrDaoImpl(SolrServer solrServer) {
+    public SolrDaoImpl(SolrServer solrServer, VloConfig config) {
         this.solrServer = solrServer;
+        this.config = config;
     }
 
     protected SolrServer getSolrserver() {
@@ -52,7 +54,7 @@ public class SolrDaoImpl {
 
             // present the facets from the config file as a list to a new set
             Set<String> facetsDefined;
-            facetsDefined = new HashSet<String>(Arrays.asList(VloConfig.getFacetFields()));
+            facetsDefined = new HashSet<String>(Arrays.asList(config.getFacetFields()));
 
             // check the filters in the query by name
             for (String filter : filtersInQuery) {

@@ -2,7 +2,6 @@ package eu.clarin.cmdi.vlo.importer;
 
 import java.util.Map;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
 
 public class LanguageLinkPostProcessor extends LanguageCodePostProcessor {
 	private static LanguageCodePostProcessor languageCodePostProcessor = new LanguageCodePostProcessor();
@@ -17,7 +16,7 @@ public class LanguageLinkPostProcessor extends LanguageCodePostProcessor {
         if (value != null) {
             String langCode = extractISO639LanguageCode(value);
             if(langCode.length() == 3)
-            	result = "<a href=\""+FacetConstants.LANGUAGE_LINK_PREFIX + langCode+"\">"+getLanguageNameForLanguageCode(langCode.toUpperCase())+"</a>";
+            	result = "<a href=\""+ MetadataImporter.config.getLanguageLinkPrefix() + langCode+"\">"+getLanguageNameForLanguageCode(langCode.toUpperCase())+"</a>";
         }
         return result;
     }

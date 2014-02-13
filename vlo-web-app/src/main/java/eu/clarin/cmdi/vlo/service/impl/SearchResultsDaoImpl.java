@@ -2,6 +2,7 @@ package eu.clarin.cmdi.vlo.service.impl;
 
 import eu.clarin.cmdi.vlo.service.SearchResultsDao;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
@@ -11,8 +12,8 @@ import org.apache.solr.common.SolrDocumentList;
 
 public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDao {
 
-    public SearchResultsDaoImpl(SolrServer solrServer) {
-        super(solrServer);
+    public SearchResultsDaoImpl(SolrServer solrServer, VloConfig config) {
+        super(solrServer, config);
     }
 
     @Override

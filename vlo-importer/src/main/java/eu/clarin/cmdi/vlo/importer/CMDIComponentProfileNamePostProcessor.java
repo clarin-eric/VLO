@@ -69,6 +69,6 @@ public class CMDIComponentProfileNamePostProcessor implements PostProcessor{
             ap = null;
         }
         vg = new VTDGen();
-        BASE_URL = VloConfig.getComponentRegistryRESTURL();
+        BASE_URL = MetadataImporter.config.getComponentRegistryRESTURL();
     }
 }

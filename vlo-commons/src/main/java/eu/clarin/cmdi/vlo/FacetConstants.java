@@ -40,9 +40,6 @@ public class FacetConstants {
     /** Facet constant associated with the search page type. */
     public static final String FIELD_SEARCHPAGE = "_searchPageRef";
     
-    // PREFIX URL for the language-link    
-    public static final String LANGUAGE_LINK_PREFIX = VloConfig.getLanguageLinkPrefix();
-
     //Normalized mimeTypes
     public static final String RESOURCE_TYPE_AUDIO = "audio";
     public static final String RESOURCE_TYPE_VIDEO = "video";

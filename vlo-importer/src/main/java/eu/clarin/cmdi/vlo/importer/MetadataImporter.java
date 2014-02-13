@@ -4,10 +4,12 @@ import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -119,7 +121,7 @@ public class MetadataImporter {
         long start = System.currentTimeMillis();
         try {
             // Delete the whole Solr db
-            if (VloConfig.deleteAllFirst()) {
+            if (config.deleteAllFirst()) {
                 LOG.info("Deleting original data...");
                 solrServer.deleteByQuery("*:*");
                 solrServer.commit();
@@ -137,8 +139,8 @@ public class MetadataImporter {
                 CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS);
                 List<File> files = getFilesFromDataRoot(dataRoot.getRootFile());
                 for (File file : files) {
-                    if (VloConfig.getMaxFileSize() > 0 && 
-                            file.length() > VloConfig.getMaxFileSize()) {
+                    if (config.getMaxFileSize() > 0 && 
+                            file.length() > config.getMaxFileSize()) {
                         LOG.info("Skipping " + file.getAbsolutePath() + " because it is too large.");
                     } else {
                         LOG.debug("PROCESSING FILE: " + file.getAbsolutePath());
@@ -152,9 +154,9 @@ public class MetadataImporter {
             }
             
             // delete outdated entries (based on maxDaysInSolr parameter)
-            if(VloConfig.getMaxDaysInSolr() > 0 && VloConfig.deleteAllFirst() == false) {
-                LOG.info("Deleting old files that were not seen for more than "+VloConfig.getMaxDaysInSolr()+" days...");
-                solrServer.deleteByQuery(FacetConstants.FIELD_LAST_SEEN+":[* TO NOW-"+VloConfig.getMaxDaysInSolr()+"DAYS]");
+            if(config.getMaxDaysInSolr() > 0 && config.deleteAllFirst() == false) {
+                LOG.info("Deleting old files that were not seen for more than "+config.getMaxDaysInSolr()+" days...");
+                solrServer.deleteByQuery(FacetConstants.FIELD_LAST_SEEN+":[* TO NOW-"+config.getMaxDaysInSolr()+"DAYS]");
                 LOG.info("Deleting old files done.");
             }
         } catch (SolrServerException e) {
@@ -189,7 +191,7 @@ public class MetadataImporter {
      * @return
      */
     protected List<DataRoot> checkDataRoots() {
-        List<DataRoot> dataRoots = VloConfig.getDataRoots();
+        List<DataRoot> dataRoots = config.getDataRoots();
         for (DataRoot dataRoot : dataRoots) {
             if (!dataRoot.getRootFile().exists()) {
                 LOG.error("Root file " + dataRoot.getRootFile() + " does not exist. Probable configuration error so stopping import.");
@@ -229,14 +231,14 @@ public class MetadataImporter {
      * @throws MalformedURLException
      */
     protected void initSolrServer() throws MalformedURLException {
-        String solrUrl = VloConfig.getSolrUrl();
+        String solrUrl = config.getSolrUrl();
         LOG.info("Initializing Solr Server on " + solrUrl);
         
         /* Specify the number of documents in the queue that will trigger the
          * threads, two of them, emptying it.
          */
         solrServer = new ConcurrentUpdateSolrServer(solrUrl, 
-                VloConfig.getMinDocsInSolrQueue(), 2) {
+                config.getMinDocsInSolrQueue(), 2) {
                     /*
                      * Let the super class method handle exceptions. Make the
                      * exception available to the importer in the form of the
@@ -353,7 +355,7 @@ public class MetadataImporter {
         // add resource proxys      
         addResourceData(solrDocument, cmdiData);
         docs.add(solrDocument);
-        if (docs.size() == VloConfig.getMaxDocsInList()) {
+        if (docs.size() == config.getMaxDocsInList()) {
             sendDocs();
         }
     }
@@ -427,14 +429,14 @@ public class MetadataImporter {
     	solrServer.query(params);
     }
 
+    public static VloConfig config;
+    
     /**
      * @param args
      * @throws IOException
      */
     public static void main(String[] args) throws MalformedURLException, IOException { 
 
-        // application configuration
-        VloConfig config;
         
         // path to the configuration file
         String configFile = null;
@@ -493,7 +495,8 @@ public class MetadataImporter {
             LOG.error(message);
         } else {
             // read the configuration from the externally supplied file
-            VloConfig.readConfig(configFile);
+            XmlVloConfigFactory configFactory = new XmlVloConfigFactory(new URL(configFile));
+            MetadataImporter.config = configFactory.newConfig();
 
             // optionally, modify the configuration here
 
@@ -503,7 +506,7 @@ public class MetadataImporter {
 
             // finished importing
 
-            if (VloConfig.printMapping()) {
+            if (MetadataImporter.config.printMapping()) {
                 File file = new File("xsdMapping.txt");
                 FacetMappingFactory.printMapping(file);
                 LOG.info("Printed facetMapping in " + file);

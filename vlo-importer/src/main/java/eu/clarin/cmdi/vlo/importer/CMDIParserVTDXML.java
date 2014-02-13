@@ -7,7 +7,6 @@ import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
-import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -58,7 +57,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         if (xsd.indexOf("http") != xsd.lastIndexOf("http")){
             LOG.info("FILE WITH WEIRD HTTP THINGY! " + tolog);
         }
-        String facetConceptsFile = VloConfig.getFacetConceptsFile();
+        String facetConceptsFile = MetadataImporter.config.getFacetConceptsFile();
         if (facetConceptsFile.length() == 0){
             // use the packaged facet mapping file
             facetConceptsFile = "/facetConcepts.xml";
@@ -82,7 +81,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         int index = ap.evalXPath();
         if (index != -1) {
             String profileId = nav.toString(index).trim();
-            result = VloConfig.getComponentRegistryProfileSchema(profileId);
+            result = MetadataImporter.config.getComponentRegistryProfileSchema(profileId);
         }
         return result;
     }

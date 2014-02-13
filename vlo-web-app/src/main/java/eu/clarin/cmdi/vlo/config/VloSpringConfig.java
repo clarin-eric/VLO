@@ -52,8 +52,12 @@ public class VloSpringConfig {
 
     @Bean
     public VloConfig vloConfig() {
-        VloConfig.readPackagedConfig();
-        return VloConfig.config;
+        return vloConfigFactory().newConfig();
+    }
+    
+    @Bean
+    public VloConfigFactory vloConfigFactory(){
+        return new DefaultVloConfigFactory();
     }
 
     @Bean
@@ -63,7 +67,7 @@ public class VloSpringConfig {
 
     @Bean
     public SearchResultsDao searchResultsDao() {
-        return new SearchResultsDaoImpl(solrServer());
+        return new SearchResultsDaoImpl(solrServer(), vloConfig());
     }
 
     @Bean
