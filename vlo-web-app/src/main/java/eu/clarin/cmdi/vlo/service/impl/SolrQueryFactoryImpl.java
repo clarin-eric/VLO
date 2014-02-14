@@ -57,7 +57,7 @@ public class SolrQueryFactoryImpl implements SolrQueryFactory {
         if (selections != null) {
             final List<String> encodedQueries = new ArrayList(selections.size());
             for (FacetSelection selection : selections) {
-                final String facetName = selection.getFacet().getName();
+                final String facetName = selection.getFacetName();
                 final Collection<String> values = selection.getValue();
                 if (values != null) {
                     for (String value : values) {

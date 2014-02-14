@@ -1,7 +1,6 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.wicket.components.FacetsPanel;
-import eu.clarin.cmdi.vlo.pojo.Facet;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.Arrays;
@@ -17,7 +16,7 @@ public class FacetedSearchPage extends WebPage {
     public FacetedSearchPage(final PageParameters parameters) {
         super(parameters);
 
-        final FacetSelection languageSelection = new FacetSelection(new Facet("language"), Collections.singleton("Dutch"));
+        final FacetSelection languageSelection = new FacetSelection("language", Collections.singleton("Dutch"));
 
         final QueryFacetsSelection selection = new QueryFacetsSelection(Arrays.asList(languageSelection));
 

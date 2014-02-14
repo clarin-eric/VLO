@@ -17,7 +17,6 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.pojo.Facet;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import java.util.Arrays;
 import java.util.Collections;
@@ -76,10 +75,10 @@ public class SolrQueryFactoryImplTest {
         // Facets are present but no values are selected
         List<FacetSelection> selection = Arrays.asList(
                 new FacetSelection(
-                        new Facet("facet1"),
+                        "facet1",
                         Collections.<String>emptyList()),
                 new FacetSelection(
-                        new Facet("facet2"),
+                        "facet2",
                         Collections.<String>emptyList()));
         SolrQuery query = instance.createFacetQuery(selection, null);
 
@@ -98,13 +97,13 @@ public class SolrQueryFactoryImplTest {
         // Some facets have one or more values selected
         List<FacetSelection> selection = Arrays.asList(
                 new FacetSelection(
-                        new Facet("facet1"),
+                        "facet1",
                         Arrays.asList("valueA")),
                 new FacetSelection(
-                        new Facet("facet2"),
+                        "facet2",
                         Arrays.asList("valueB", "valueC")),
                 new FacetSelection(
-                        new Facet("facet3"),
+                        "facet3",
                         Collections.<String>emptyList()));
         SolrQuery query = instance.createFacetQuery(selection, null);
 
@@ -126,7 +125,7 @@ public class SolrQueryFactoryImplTest {
     public void testCreateFacetQuerySelectionAndQuery() {
         List<FacetSelection> selection = Arrays.asList(
                 new FacetSelection(
-                        new Facet("facet1"),
+                        "facet1",
                         Arrays.asList("valueA")));
         SolrQuery query = instance.createFacetQuery(selection, "query string");
 

@@ -25,17 +25,17 @@ import java.util.Collection;
  */
 public class FacetSelection implements Serializable {
 
-    private final Facet facet;
+    private final String facetName;
 
     private final Collection<String> values;
 
-    public FacetSelection(Facet facet, Collection<String> values) {
-        this.facet = facet;
+    public FacetSelection(String facet, Collection<String> values) {
+        this.facetName = facet;
         this.values = values;
     }
 
-    public Facet getFacet() {
-        return facet;
+    public String getFacetName() {
+        return facetName;
     }
 
     public Collection<String> getValue() {
