@@ -1,6 +1,6 @@
 package eu.clarin.cmdi.vlo;
 
-import eu.clarin.cmdi.vlo.pages.FacetedSearchPage;
+import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;

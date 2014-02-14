@@ -14,32 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.pojo;
 
-import java.io.Serializable;
+package eu.clarin.cmdi.vlo.wicket.model;
+
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import org.apache.wicket.model.util.ListModel;
 
 /**
  *
  * @author twagoo
  */
-public class FacetValue implements Serializable {
-
-    private final String value;
-    private final int count;
-
-    public FacetValue(String value, int count) {
-        this.value = value;
-        this.count = count;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public int getCount() {
-        return count;
-    }
+public class FacetSelectionModel extends ListModel<FacetSelection> {
     
-    
-
+    public FacetSelectionModel(QueryFacetsSelection queryFacetSelection){
+        super(queryFacetSelection.getSelection());
+    }
 }
