@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.SearchResultsDao;
 import eu.clarin.cmdi.vlo.service.SolrQueryFactory;
@@ -38,8 +38,8 @@ public class SolrFacetFieldsService implements FacetFieldsService {
     }
 
     @Override
-    public List<FacetField> getFacetFields(List<FacetSelection> selection, String query) {
-        return searchResultsDao.getFacets(queryFatory.createFacetQuery(selection, query));
+    public List<FacetField> getFacetFields(QueryFacetsSelection selection) {
+        return searchResultsDao.getFacets(queryFatory.createFacetQuery(selection));
     }
 
     @Override

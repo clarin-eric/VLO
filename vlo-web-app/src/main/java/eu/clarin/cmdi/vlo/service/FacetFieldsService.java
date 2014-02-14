@@ -17,7 +17,7 @@
 
 package eu.clarin.cmdi.vlo.service;
 
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 
@@ -27,7 +27,7 @@ import org.apache.solr.client.solrj.response.FacetField;
  */
 public interface FacetFieldsService {
     
-    List<FacetField> getFacetFields(List<FacetSelection> selection, String query);
+    List<FacetField> getFacetFields(QueryFacetsSelection selection);
     
     long getFacetFieldCount();
 }

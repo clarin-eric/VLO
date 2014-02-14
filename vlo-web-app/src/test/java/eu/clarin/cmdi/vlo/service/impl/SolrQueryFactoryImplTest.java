@@ -17,10 +17,13 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
@@ -57,8 +60,9 @@ public class SolrQueryFactoryImplTest {
      */
     @Test
     public void testCreateFacetQueryNoFacets() {
-        List<FacetSelection> selection = Collections.emptyList();
-        SolrQuery query = instance.createFacetQuery(selection, null);
+        // default constructor -> empty
+        QueryFacetsSelection selection = new QueryFacetsSelection();
+        SolrQuery query = instance.createFacetQuery(selection);
 
         // default: query selects all values 
         assertEquals("*:*", query.getQuery());
@@ -73,14 +77,14 @@ public class SolrQueryFactoryImplTest {
     @Test
     public void testCreateFacetQueryNoSelection() {
         // Facets are present but no values are selected
-        List<FacetSelection> selection = Arrays.asList(
-                new FacetSelection(
-                        "facet1",
-                        Collections.<String>emptyList()),
-                new FacetSelection(
-                        "facet2",
-                        Collections.<String>emptyList()));
-        SolrQuery query = instance.createFacetQuery(selection, null);
+        Map<String, Collection<String>> selection = new HashMap<String, Collection<String>>() {
+            {
+                put("facet1", Collections.<String>emptySet());
+                put("facet2", Collections.<String>emptyList());
+            }
+        };
+
+        SolrQuery query = instance.createFacetQuery(new QueryFacetsSelection(selection));
 
         // default: query selects all values 
         assertEquals("*:*", query.getQuery());
@@ -95,17 +99,14 @@ public class SolrQueryFactoryImplTest {
     @Test
     public void testCreateFacetQuerySelection() {
         // Some facets have one or more values selected
-        List<FacetSelection> selection = Arrays.asList(
-                new FacetSelection(
-                        "facet1",
-                        Arrays.asList("valueA")),
-                new FacetSelection(
-                        "facet2",
-                        Arrays.asList("valueB", "valueC")),
-                new FacetSelection(
-                        "facet3",
-                        Collections.<String>emptyList()));
-        SolrQuery query = instance.createFacetQuery(selection, null);
+        Map<String, Collection<String>> selection = new HashMap<String, Collection<String>>() {
+            {
+                put("facet1", Arrays.asList("valueA"));
+                put("facet2", Arrays.asList("valueB", "valueC"));
+                put("facet3", Collections.<String>emptyList());
+            }
+        };
+        SolrQuery query = instance.createFacetQuery(new QueryFacetsSelection(selection));
 
         // default: query selects all values 
         assertEquals("*:*", query.getQuery());
@@ -123,11 +124,12 @@ public class SolrQueryFactoryImplTest {
      */
     @Test
     public void testCreateFacetQuerySelectionAndQuery() {
-        List<FacetSelection> selection = Arrays.asList(
-                new FacetSelection(
-                        "facet1",
-                        Arrays.asList("valueA")));
-        SolrQuery query = instance.createFacetQuery(selection, "query string");
+        Map<String, Collection<String>> selection = new HashMap<String, Collection<String>>() {
+            {
+                put("facet1", Arrays.asList("valueA"));
+            }
+        };
+        SolrQuery query = instance.createFacetQuery(new QueryFacetsSelection("query string", selection));
 
         assertEquals(1, query.getFilterQueries().length);
         assertEquals("query\\ string", query.getQuery()); //space should be escaped!

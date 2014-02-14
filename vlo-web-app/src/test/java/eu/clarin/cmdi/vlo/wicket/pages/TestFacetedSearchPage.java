@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.VloSpringConfig;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
 import java.util.Arrays;
 import java.util.List;
@@ -70,7 +71,7 @@ public class TestFacetedSearchPage {
             {
                 atLeast(1).of(facetFieldsService).getFacetFieldCount();
                 will(returnValue(2L));
-                oneOf(facetFieldsService).getFacetFields(with(any(List.class)), with(anyOf(aNull(String.class), any(String.class))));
+                oneOf(facetFieldsService).getFacetFields(with(any(QueryFacetsSelection.class)));
                 will(returnValue(Arrays.asList(new FacetField("language"), new FacetField("resource class"))));
             }
         });

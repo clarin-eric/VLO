@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
 import java.util.Iterator;
@@ -25,7 +24,6 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 
 /**
  *
@@ -34,24 +32,16 @@ import org.apache.wicket.model.PropertyModel;
 public class FacetFieldsDataProvider implements IDataProvider<FacetField> {
 
     private final FacetFieldsService facetFieldService;
-    private final IModel<List<FacetSelection>> selectionModel;
-    private final IModel<String> searchQuery;
+    private final IModel<QueryFacetsSelection> selectionModel;
 
-    public FacetFieldsDataProvider(FacetFieldsService facetFieldService, IModel<QueryFacetsSelection> model) {
-        this(facetFieldService,
-                new PropertyModel<List<FacetSelection>>(model, "selection"),
-                new PropertyModel<String>(model, "query"));
-    }
-
-    public FacetFieldsDataProvider(FacetFieldsService facetFieldService, IModel<List<FacetSelection>> selectionModel, IModel<String> searchQuery) {
+    public FacetFieldsDataProvider(FacetFieldsService facetFieldService, IModel<QueryFacetsSelection> selectionModel) {
         this.facetFieldService = facetFieldService;
         this.selectionModel = selectionModel;
-        this.searchQuery = searchQuery;
     }
 
     @Override
     public Iterator<? extends FacetField> iterator(long first, long count) {
-        List<FacetField> facets = facetFieldService.getFacetFields(selectionModel.getObject(), searchQuery.getObject());
+        List<FacetField> facets = facetFieldService.getFacetFields(selectionModel.getObject());
         return facets.listIterator((int) first);
     }
 

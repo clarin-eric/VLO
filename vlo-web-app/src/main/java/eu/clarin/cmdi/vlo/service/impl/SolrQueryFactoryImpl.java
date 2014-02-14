@@ -19,10 +19,11 @@ package eu.clarin.cmdi.vlo.service.impl;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.service.SolrQueryFactory;
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
@@ -45,8 +46,9 @@ public class SolrQueryFactoryImpl implements SolrQueryFactory {
     }
 
     @Override
-    public SolrQuery createFacetQuery(List<FacetSelection> selections, String queryString) {
-        SolrQuery query = getDefaultFacetQuery();
+    public SolrQuery createFacetQuery(QueryFacetsSelection queryFacetsSelections) {
+        final SolrQuery query = getDefaultFacetQuery();
+        final String queryString = queryFacetsSelections.getQuery();
 
         if (queryString == null) {
             query.setQuery(SOLR_SEARCH_ALL);
@@ -54,19 +56,19 @@ public class SolrQueryFactoryImpl implements SolrQueryFactory {
             query.setQuery(ClientUtils.escapeQueryChars(queryString));
         }
 
-        if (selections != null) {
-            final List<String> encodedQueries = new ArrayList(selections.size());
-            for (FacetSelection selection : selections) {
-                final String facetName = selection.getFacetName();
-                final Collection<String> values = selection.getValue();
-                if (values != null) {
-                    for (String value : values) {
-                        encodedQueries.add(String.format("%s:%s", facetName, ClientUtils.escapeQueryChars(value)));
-                    }
+        Map<String, Collection<String>> selections = queryFacetsSelections.getSelection();
+
+        final List<String> encodedQueries = new ArrayList(selections.size()); // assuming every facet has one selection, most common scenario
+        for (Map.Entry<String, Collection<String>> selection : selections.entrySet()) {
+            final String facetName = selection.getKey();
+            final Collection<String> values = selection.getValue();
+            if (values != null) {
+                for (String value : values) {
+                    encodedQueries.add(String.format("%s:%s", facetName, ClientUtils.escapeQueryChars(value)));
                 }
             }
-            query.setFilterQueries(encodedQueries.toArray(new String[encodedQueries.size()]));
         }
+        query.setFilterQueries(encodedQueries.toArray(new String[encodedQueries.size()]));
         return query;
     }
 

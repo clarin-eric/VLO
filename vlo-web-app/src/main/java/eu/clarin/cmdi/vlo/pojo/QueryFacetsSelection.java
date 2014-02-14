@@ -17,7 +17,9 @@
 package eu.clarin.cmdi.vlo.pojo;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  *
@@ -26,21 +28,64 @@ import java.util.List;
 public class QueryFacetsSelection implements Serializable {
 
     private final String queryString;
-    private final List<FacetSelection> selection;
+    private final Map<String, Collection<String>> selection;
 
-    public QueryFacetsSelection(List<FacetSelection> selection) {
+    /**
+     * creates an empty selection (no string, no facet values)
+     */
+    public QueryFacetsSelection() {
+        this(null, Collections.<String, Collection<String>>emptyMap());
+    }
+
+    /**
+     * creates a selection without a query
+     *
+     * @param selection facet values selection map
+     */
+    public QueryFacetsSelection(Map<String, Collection<String>> selection) {
         this(null, selection);
     }
-    
-    public QueryFacetsSelection(String query, List<FacetSelection> selection) {
+
+    /**
+     * creates a selection with a textual query and facet value selection
+     *
+     * @param query textual query
+     * @param selection facet values selection map
+     */
+    public QueryFacetsSelection(String query, Map<String, Collection<String>> selection) {
         this.queryString = query;
         this.selection = selection;
     }
 
-    public List<FacetSelection> getSelection() {
+    /**
+     *
+     * @return a facet -> values map representing the current selection
+     */
+    public Map<String, Collection<String>> getSelection() {
         return selection;
     }
 
+    /**
+     *
+     * @return the facets present in the current selection
+     */
+    public Collection<String> getFacets() {
+        return selection.keySet();
+    }
+
+    /**
+     *
+     * @param facet facet to get values for
+     * @return the selected values for the specified facet
+     */
+    public Collection<String> getSelectionValues(String facet) {
+        return selection.get(facet);
+    }
+
+    /**
+     *
+     * @return the current textual query, may be null in case of no query
+     */
     public String getQuery() {
         return queryString;
     }

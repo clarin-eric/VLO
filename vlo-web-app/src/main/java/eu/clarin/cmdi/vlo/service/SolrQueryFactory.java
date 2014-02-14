@@ -16,8 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service;
 
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
-import java.util.List;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import org.apache.solr.client.solrj.SolrQuery;
 
 /**
@@ -26,7 +25,7 @@ import org.apache.solr.client.solrj.SolrQuery;
  */
 public interface SolrQueryFactory {
 
-    SolrQuery createFacetQuery(List<FacetSelection> selection, String query);
+    SolrQuery createFacetQuery(QueryFacetsSelection selection);
     
     SolrQuery createCountFacetsQuery();
 
