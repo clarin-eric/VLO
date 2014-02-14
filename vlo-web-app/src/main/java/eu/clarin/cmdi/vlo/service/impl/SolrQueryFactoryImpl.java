@@ -21,6 +21,7 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.service.SolrQueryFactory;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.util.ClientUtils;
@@ -37,12 +38,12 @@ public class SolrQueryFactoryImpl implements SolrQueryFactory {
 
     public SolrQueryFactoryImpl(VloConfig config) {
         this.config = config;
-        
+
         // create the query used to count facets (will never change)
         countQuery = getDefaultFacetQuery();
         countQuery.setRows(0);
     }
-    
+
     @Override
     public SolrQuery createFacetQuery(List<FacetSelection> selections, String queryString) {
         SolrQuery query = getDefaultFacetQuery();
@@ -56,9 +57,12 @@ public class SolrQueryFactoryImpl implements SolrQueryFactory {
         if (selections != null) {
             final List<String> encodedQueries = new ArrayList(selections.size());
             for (FacetSelection selection : selections) {
-                String facet = selection.getFacet().getName();
-                for (String value : selection.getValue()) {
-                    encodedQueries.add(String.format("%s:%s", facet, ClientUtils.escapeQueryChars(value)));
+                final String facetName = selection.getFacet().getName();
+                final Collection<String> values = selection.getValue();
+                if (values != null) {
+                    for (String value : values) {
+                        encodedQueries.add(String.format("%s:%s", facetName, ClientUtils.escapeQueryChars(value)));
+                    }
                 }
             }
             query.setFilterQueries(encodedQueries.toArray(new String[encodedQueries.size()]));
