@@ -28,6 +28,8 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
 /**
+ * Implements a SOLR query factory, to be used by SOLR service implementation
+ * for the VLO
  *
  * @author twagoo
  */

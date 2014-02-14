@@ -26,6 +26,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 /**
+ * Provides FacetField objects given a selection
  *
  * @author twagoo
  */

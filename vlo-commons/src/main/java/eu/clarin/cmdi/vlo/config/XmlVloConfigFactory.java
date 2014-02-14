@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 /**
+ * Factory that reads a VLO configuration from a URL (typically a local file)
  *
  * @author twagoo
  */
@@ -28,6 +29,10 @@ public class XmlVloConfigFactory extends AbstractXmlVloConfigFactory implements 
 
     private final URL configLocation;
 
+    /**
+     * 
+     * @param configLocation URL from which the configuration should be read
+     */
     public XmlVloConfigFactory(URL configLocation) {
         this.configLocation = configLocation;
     }

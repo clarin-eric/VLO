@@ -23,6 +23,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
 /**
+ * A panel representing a single facet
  *
  * @author twagoo
  */
@@ -31,7 +32,7 @@ public class FacetPanel extends Panel {
     public FacetPanel(String id, IModel<FacetField> model) {
         super(id, model);
         setDefaultModel(new CompoundPropertyModel<FacetField>(model));
-        
+
         add(new Label("name"));
     }
 

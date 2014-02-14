@@ -20,13 +20,15 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import org.apache.solr.client.solrj.SolrQuery;
 
 /**
+ * A factory that constructs SOLR queries to be used in various services for
+ * data providers etc.
  *
  * @author twagoo
  */
 public interface SolrQueryFactory {
 
     SolrQuery createFacetQuery(QueryFacetsSelection selection);
-    
+
     SolrQuery createCountFacetsQuery();
 
 }

@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
+ * Represents a query and any number of selected values for zero or more facets
  *
  * @author twagoo
  */
@@ -31,14 +32,14 @@ public class QueryFacetsSelection implements Serializable {
     private final Map<String, Collection<String>> selection;
 
     /**
-     * creates an empty selection (no string, no facet values)
+     * Creates an empty selection (no string, no facet values)
      */
     public QueryFacetsSelection() {
         this(null, Collections.<String, Collection<String>>emptyMap());
     }
 
     /**
-     * creates a selection without a query
+     * Creates a selection without a query
      *
      * @param selection facet values selection map
      */
@@ -47,7 +48,7 @@ public class QueryFacetsSelection implements Serializable {
     }
 
     /**
-     * creates a selection with a textual query and facet value selection
+     * Creates a selection with a textual query and facet value selection
      *
      * @param query textual query
      * @param selection facet values selection map

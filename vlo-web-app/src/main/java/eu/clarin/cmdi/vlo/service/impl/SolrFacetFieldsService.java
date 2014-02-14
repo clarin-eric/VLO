@@ -24,6 +24,8 @@ import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 
 /**
+ * Gets FacetFields from SOLR based on a selection and the queries constructed
+ * by the provided query factory
  *
  * @author twagoo
  */
@@ -32,6 +34,11 @@ public class SolrFacetFieldsService implements FacetFieldsService {
     private final SearchResultsDao searchResultsDao;
     private final SolrQueryFactory queryFatory;
 
+    /**
+     * 
+     * @param searchResultsDao DAO to use to retrieve facets
+     * @param queryFatory factory to use to construct facet queries
+     */
     public SolrFacetFieldsService(SearchResultsDao searchResultsDao, SolrQueryFactory queryFatory) {
         this.searchResultsDao = searchResultsDao;
         this.queryFatory = queryFatory;

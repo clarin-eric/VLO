@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package eu.clarin.cmdi.vlo.service;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
@@ -22,12 +21,22 @@ import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 
 /**
+ * A service that retrieves facet fields based on pre-formulated SOLR query
  *
  * @author twagoo
  */
 public interface FacetFieldsService {
-    
+
+    /**
+     * 
+     * @param selection query and selected facet values
+     * @return facet field objects representing the state of all present facets
+     */
     List<FacetField> getFacetFields(QueryFacetsSelection selection);
-    
+
+    /**
+     * 
+     * @return the total number of facets
+     */
     long getFacetFieldCount();
 }
