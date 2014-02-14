@@ -19,39 +19,20 @@ package eu.clarin.cmdi.vlo.config;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import javax.xml.bind.JAXBException;
-import javax.xml.transform.stream.StreamSource;
 
 /**
  *
  * @author twagoo
  */
-public class XmlVloConfigFactory implements VloConfigFactory {
+public class XmlVloConfigFactory extends AbstractXmlVloConfigFactory implements VloConfigFactory {
 
-    private final VloConfigMarshaller marshaller;
     private final URL configLocation;
 
     public XmlVloConfigFactory(URL configLocation) {
         this.configLocation = configLocation;
-        try {
-            this.marshaller = new VloConfigMarshaller();
-        } catch (JAXBException ex) {
-            throw new RuntimeException("Could not instantiate configuration marshaller while constructing configuration factory", ex);
-        }
     }
 
-    public VloConfig newConfig() {
-        try {
-            final InputStream fileStream = configLocation.openStream();
-            try {
-                return marshaller.unmarshal(new StreamSource(fileStream));
-            } catch (JAXBException ex) {
-                throw new RuntimeException("Could not deserialize configuration file", ex);
-            } finally {
-                fileStream.close();
-            }
-        } catch (IOException ex) {
-            throw new RuntimeException("Could not read configuration file", ex);
-        }
+    protected InputStream getXmlConfigurationInputStream() throws IOException {
+        return configLocation.openStream();
     }
 }

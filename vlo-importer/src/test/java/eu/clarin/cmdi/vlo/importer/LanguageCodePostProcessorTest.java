@@ -8,8 +8,8 @@ import org.junit.Test;
 public class LanguageCodePostProcessorTest {
 
     @Before
-    public void setUp() {
-        
+    public void setUp() throws Exception {
+
         // read the configuration from the packaged configuration file
         new DefaultVloConfigFactory().newConfig();
 

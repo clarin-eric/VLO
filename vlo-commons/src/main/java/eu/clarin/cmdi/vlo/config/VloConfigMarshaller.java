@@ -22,8 +22,11 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamResult;
 
 /**
+ * Serializes and deserializes {@link VloConfig} objects to/from XML files using
+ * the Java Architecture for XML Binding (JAXB)
  *
  * @author twagoo
  */
@@ -31,20 +34,31 @@ public class VloConfigMarshaller {
 
     private final JAXBContext jc;
 
-    public VloConfigMarshaller(JAXBContext jc) {
-        this.jc = jc;
-    }
-    
     public VloConfigMarshaller() throws JAXBException {
         this.jc = JAXBContext.newInstance(VloConfig.class);
     }
 
-    public void marshal(VloConfig config, Result result) throws JAXBException {
+    /**
+     * Marshals (serializes) an existing configuration to some output location
+     *
+     * @param config configuration to marshal
+     * @param result output result for the marshalling, e.g. a
+     * {@link StreamResult} for usage with Files, Streams or Writers
+     * @throws JAXBException
+     */
+    public final void marshal(VloConfig config, Result result) throws JAXBException {
         final Marshaller marshaller = jc.createMarshaller();
         marshaller.marshal(config, result);
     }
 
-    public VloConfig unmarshal(Source source) throws JAXBException {
+    /**
+     * Unmarshals (deserializes) a configuration file from some source location
+     *
+     * @param source the source representing the VLO configuration to unmarshal
+     * @return the VLO configuration as described by the source
+     * @throws JAXBException if an error occurs while unmarshalling
+     */
+    public final VloConfig unmarshal(Source source) throws JAXBException {
         Unmarshaller unmarshaller = jc.createUnmarshaller();
         return (VloConfig) unmarshaller.unmarshal(source);
     }

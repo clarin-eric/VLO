@@ -1,4 +1,3 @@
-
 package eu.clarin.cmdi.vlo.config;
 
 import java.io.File;
@@ -15,44 +14,44 @@ import org.junit.Test;
  * @author keeloo
  */
 public class DefaultVloConfigFactoryTest {
-    
+
     public DefaultVloConfigFactoryTest() {
     }
-    
+
     private VloConfig config;
-    
+
     @Before
-    public void setUp() {        
+    public void setUp() throws Exception {
         config = new DefaultVloConfigFactory().newConfig();
     }
 
     /**
      * Test the getDataRoots method.<br><br>
-     * 
-     * Use the values defined in the packaged {@literal VloConfig.xml} 
+     *
+     * Use the values defined in the packaged {@literal VloConfig.xml}
      * configuration file.
      */
     @Test
     public void testGetDataRoots() {
-        
+
         ArrayList<DataRoot> dataRoots;
-        dataRoots = new ArrayList<DataRoot> ();
-        
-        dataRoots.add(new DataRoot("MPI IMDI Archive", 
-                                    new File("/lat/apache/htdocs/oai-harvester/mpi-self-harvest/harvested/results/cmdi/"),
-                                   "http://catalog.clarin.eu/",
-                                   "/lat/apache/htdocs/", false));
-        dataRoots.add(new DataRoot("CMDI Providers"  , 
-                                    new File("/lat/apache/htdocs/oai-harvester/cmdi-providers/harvested/results/cmdi/"),
-                                   "http://catalog.clarin.eu/",
-                                   "/lat/apache/htdocs/", false));
-        dataRoots.add(new DataRoot("OLAC Metadata Providers", 
-                                    new File("/lat/apache/htdocs/oai-harvester/olac-and-dc-providers/harvested/results/cmdi/"),
-                                   "http://catalog.clarin.eu/",
-                                   "/lat/apache/htdocs/", false));
-        
+        dataRoots = new ArrayList<DataRoot>();
+
+        dataRoots.add(new DataRoot("MPI IMDI Archive",
+                new File("/lat/apache/htdocs/oai-harvester/mpi-self-harvest/harvested/results/cmdi/"),
+                "http://catalog.clarin.eu/",
+                "/lat/apache/htdocs/", false));
+        dataRoots.add(new DataRoot("CMDI Providers",
+                new File("/lat/apache/htdocs/oai-harvester/cmdi-providers/harvested/results/cmdi/"),
+                "http://catalog.clarin.eu/",
+                "/lat/apache/htdocs/", false));
+        dataRoots.add(new DataRoot("OLAC Metadata Providers",
+                new File("/lat/apache/htdocs/oai-harvester/olac-and-dc-providers/harvested/results/cmdi/"),
+                "http://catalog.clarin.eu/",
+                "/lat/apache/htdocs/", false));
+
         System.out.println("getDataRoots");
-        
+
         List<DataRoot> rootsReturned = config.getDataRoots();
         assertArrayEquals(dataRoots.toArray(), rootsReturned.toArray());
     }
@@ -62,29 +61,29 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetDataRoots() {
-        
-        ArrayList<DataRoot> dataRoots = new ArrayList<DataRoot> ();
-        
-        dataRoots.add(new DataRoot("MPI IMDI Archive", 
-                                    new File("/lat/apache/htdocs/oai-harvester/mpi-self-harvest/harvested/results/cmdi/"),
-                                   "http://catalog.clarin.eu/",
-                                   "/lat/apache/htdocs/", false)); 
-        dataRoots.add(new DataRoot("CMDI Providers"  , 
-                                    new File("/lat/apache/htdocs/oai-harvester/cmdi-providers/harvested/results/cmdi/"),
-                                   "http://catalog.clarin.eu/",
-                                   "/lat/apache/htdocs/", false));
-        dataRoots.add(new DataRoot("OLAC Metadata Providers", 
-                                    new File("/lat/apache/htdocs/oai-harvester/olac-and-dc-providers/harvested/results/cmdi/"),
-                                   "http://catalog.clarin.eu/",
-                                   "/lat/apache/htdocs/", false));
-        
+
+        ArrayList<DataRoot> dataRoots = new ArrayList<DataRoot>();
+
+        dataRoots.add(new DataRoot("MPI IMDI Archive",
+                new File("/lat/apache/htdocs/oai-harvester/mpi-self-harvest/harvested/results/cmdi/"),
+                "http://catalog.clarin.eu/",
+                "/lat/apache/htdocs/", false));
+        dataRoots.add(new DataRoot("CMDI Providers",
+                new File("/lat/apache/htdocs/oai-harvester/cmdi-providers/harvested/results/cmdi/"),
+                "http://catalog.clarin.eu/",
+                "/lat/apache/htdocs/", false));
+        dataRoots.add(new DataRoot("OLAC Metadata Providers",
+                new File("/lat/apache/htdocs/oai-harvester/olac-and-dc-providers/harvested/results/cmdi/"),
+                "http://catalog.clarin.eu/",
+                "/lat/apache/htdocs/", false));
+
         System.out.println("setDataRoots");
 
         config.setDataRoots(dataRoots);
-        
-        List rootsReturned = config.getDataRoots(); 
-        
-        assertEquals (dataRoots, rootsReturned);
+
+        List rootsReturned = config.getDataRoots();
+
+        assertEquals(dataRoots, rootsReturned);
     }
 
     /**
@@ -92,12 +91,12 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testGetPagesInApplicationCache() {
-        
+
         System.out.println("getPagesInApplicationCache");
-        
+
         int expResult = 40; // as defined in vloconfig.xml
         int result = config.getPagesInApplicationCache();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -106,30 +105,29 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetPagesInApplicationCache() {
-        
+
         System.out.println("setPagesInApplicationCache");
-        
+
         int param = 999;
-        
+
         config.setPagesInApplicationCache(param);
 
         int result = config.getPagesInApplicationCache();
-        
+
         assertEquals(param, result);
     }
-    
-    
+
     /**
      * Test the getSessionCacheSize method
      */
     @Test
     public void testGetSessionCacheSize() {
-        
+
         System.out.println("getPagesInApplicationCache");
-        
+
         int expResult = 10000; // as defined in vloconfig.xml
         int result = config.getSessionCacheSize();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -138,29 +136,29 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetSessionCacheSize() {
-        
+
         System.out.println("setPagesInApplicationCache");
-        
+
         int param = 9999;
-        
+
         config.setSessionCacheSize(param);
 
         int result = config.getSessionCacheSize();
-        
+
         assertEquals(param, result);
     }
-    
+
     /**
      * Test the getMaxDocsInList method
      */
     @Test
     public void testGetMaxDocsInList() {
-        
+
         System.out.println("getMaxDocsInList");
-        
+
         int expResult = 128;
         int result = config.getMaxDocsInList();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -169,29 +167,29 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetMaxDocsInList() {
-        
+
         System.out.println("setMaxDocsInList");
-        
+
         int param = 1000;
-        
+
         config.setMaxDocsInList(param);
 
         int result = config.getMaxDocsInList();
-        
+
         assertEquals(param, result);
     }
-    
+
     /**
      * Test the getMaxDocsInSolrQueue method
      */
     @Test
     public void testGetMaxDocsInSolrQueue() {
-        
+
         System.out.println("getMaxDocsInSolrQueue");
-        
+
         int expResult = 128;
         int result = config.getMaxDocsInList();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -200,29 +198,29 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetMaxDocsInSolrQueue() {
-        
+
         System.out.println("setMaxDocsInSolrQueue");
-        
+
         int param = 1000;
-        
+
         config.setMaxDocsInList(param);
 
         int result = config.getMaxDocsInList();
-        
+
         assertEquals(param, result);
     }
-    
+
     /**
      * Test the getMaxFileSize method
      */
     @Test
     public void testGetMaxFileSize() {
-        
+
         System.out.println("getMaxFileSize");
-        
+
         int expResult = 10000000;
         int result = config.getMaxFileSize();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -231,46 +229,46 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetMaxFileSize() {
-        
+
         System.out.println("setMaxFileSize");
-        
+
         int param = 10000000;
-        
+
         config.setMaxFileSize(param);
 
         int result = config.getMaxFileSize();
-        
+
         assertEquals(param, result);
     }
-    
+
     /**
      * Test the getHandleResolver method
      */
     @Test
     public void testGetUseHandleResolver() {
-        
+
         System.out.println("getUseHandleResolver");
-        
+
         boolean expResult = false;
         boolean result = config.getUseHandleResolver();
-        
+
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test the setUseHandleResolver method
      */
     @Test
     public void testSetUseHandleResolver() {
-        
+
         System.out.println("setUseHandleResolver");
-        
+
         boolean param = true;
-        
+
         config.setUseHandleResolver(param);
 
         boolean result = config.getUseHandleResolver();
-        
+
         assertEquals(param, result);
     }
 
@@ -279,12 +277,12 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testDeleteAllFirst() {
-        
+
         System.out.println("deleteAllFirst");
-        
+
         boolean expResult = true;
         boolean result = config.getDeleteAllFirst();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -293,15 +291,15 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetDeleteAllFirst() {
-        
+
         System.out.println("setDeleteAllFirst");
-        
+
         boolean param = true;
-        
+
         config.setDeleteAllFirst(param);
 
         boolean result = config.getDeleteAllFirst();
-        
+
         assertEquals(param, result);
     }
 
@@ -310,12 +308,12 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testPrintMapping() {
-        
+
         System.out.println("printMapping");
-        
+
         boolean expResult = false;
         boolean result = config.printMapping();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -325,13 +323,13 @@ public class DefaultVloConfigFactoryTest {
     @Test
     public void testSetPrintMapping() {
         System.out.println("setPrintMapping");
-        
+
         boolean param = false;
-        
+
         config.setPrintMapping(param);
 
         boolean result = config.printMapping();
-        
+
         assertEquals(param, result);
     }
 
@@ -340,12 +338,12 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testGetVloHomeLink() {
-        
+
         System.out.println("getVloHomeLink");
-        
+
         String expResult = "http://www.clarin.eu/vlo";
         String result = config.getHomeUrl();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -354,15 +352,15 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetVloHomeLink() {
-        
+
         System.out.println("setVloHomeLink");
-        
+
         String param = "http://www.clarin.eu/vlo";
-        
+
         config.setHomeUrl(param);
 
         String result = config.getHomeUrl();
-        
+
         assertEquals(param, result);
     }
 
@@ -371,12 +369,12 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testGetHelpUrl() {
-        
+
         System.out.println("getHelpUrl");
-        
+
         String expResult = "http://www.clarin.eu/vlo";
         String result = config.getHelpUrl();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -385,15 +383,15 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetHelpUrl() {
-        
+
         System.out.println("setHelpUrl");
-        
+
         String param = "http://www.clarin.eu/vlo";
-        
+
         config.setHelpUrl(param);
 
         String result = config.getHelpUrl();
-        
+
         assertEquals(param, result);
     }
 
@@ -402,12 +400,12 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testGetSolrUrl() {
-        
+
         System.out.println("getSolrUrl");
-        
+
         String expResult = "http://localhost:8080/vlo_solr/";
         String result = config.getSolrUrl();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -416,43 +414,43 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetSolrUrl() {
-        
+
         System.out.println("setSolrUrl");
-        
+
         String param = "http://localhost:8084/vlo_solr/";
-        
+
         config.setSolrUrl(param);
 
         String result = config.getSolrUrl();
-        
+
         assertEquals(param, result);
     }
-    
+
     /**
      * Test the getGetComponentRegistryProfileSchema method
      */
     @Test
     public void testGetComponentRegistryProfileSchema() {
-        
+
         System.out.println("getComponentRegistryProfileSchema");
-        
+
         String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/someId/xsd";
         String result = config.getComponentRegistryProfileSchema("someId");
-        
+
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test the getComponentRegistryRESTURL method
      */
     @Test
     public void testGetComponentRegistryRESTURL() {
-        
+
         System.out.println("getComponentRegistryRESTURL");
-        
+
         String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/";
         String result = config.getComponentRegistryRESTURL();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -461,29 +459,29 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testComponentRegistryRESTURL() {
-        
+
         System.out.println("setComponentRegistryRESTURL");
-        
+
         String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/";
-        
+
         config.setComponentRegistryRESTURL(param);
 
         String result = config.getComponentRegistryRESTURL();
-        
+
         assertEquals(param, result);
     }
-    
+
     /**
      * Test the getHandleServerUrl method
      */
     @Test
     public void testGetHandleServerUrl() {
-        
+
         System.out.println("getHandleServerUrl");
-        
+
         String expResult = "http://hdl.handle.net/";
         String result = config.getHandleServerUrl();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -492,26 +490,26 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetHandleServerUrl() {
-        
+
         System.out.println("setHandleServerUrl");
-        
+
         String param = "http://hdl.handle.net/";
-        
+
         config.setHandleServerUrl(param);
 
         String result = config.getHandleServerUrl();
-        
+
         assertEquals(param, result);
     }
-    
+
     /**
      * Test the getIMDIBrowserUrl method
      */
     @Test
     public void testGetIMDIBrowserUrl() {
-        
+
         System.out.println("getIMDIBrowserUrl");
-        
+
         String expResult;
         try {
             expResult = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=" + URLEncoder.encode("handle", "UTF-8");
@@ -528,11 +526,11 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetIMDIBrowserUrl() {
-        
+
         System.out.println("setIMDIBrowserUrl");
-        
+
         String param = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=";
-        
+
         config.setImdiBrowserUrl(param);
 
         String expResult;
@@ -541,23 +539,23 @@ public class DefaultVloConfigFactoryTest {
         } catch (UnsupportedEncodingException ex) {
             expResult = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=" + "handle";
         }
-        
+
         String result = config.getImdiBrowserUrl("handle");
 
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test the getLanguageLinkPrefix method
      */
     @Test
     public void testGetLanguageLinkPrefix() {
-        
+
         System.out.println("getLanguageLinkPrefix");
-        
+
         String expResult = "http://infra.clarin.eu/service/language/info.php?code=";
         String result = config.getLanguageLinkPrefix();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -566,29 +564,29 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetLanguageLinkPrefix() {
-        
+
         System.out.println("setLanguageLinkPrefix");
-        
+
         String param = "http://infra.clarin.eu/service/language/info.php?code=";
-        
+
         config.setLanguageLinkPrefix(param);
 
         String result = config.getLanguageLinkPrefix();
-        
+
         assertEquals(param, result);
     }
-    
+
     /**
      * Test the getFeedbackFromUrl method
      */
     @Test
     public void testGetFeedbackFromUrl() {
-        
+
         System.out.println("getFeedBackFromUrl");
-        
+
         String expResult = "http://www.clarin.eu/node/3759?url=";
         String result = config.getFeedbackFromUrl();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -597,29 +595,29 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetFeedbackFromUrl() {
-        
+
         System.out.println("setFeedbackFromUrl");
-        
+
         String param = "http://www.clarin.eu/node/3759?url=";
-        
+
         config.setFeedbackFromUrl(param);
 
         String result = config.getFeedbackFromUrl();
-        
+
         assertEquals(param, result);
     }
-    
+
     /**
      * Test the getFederatedContentSearchUrl method
      */
     @Test
     public void testGetFederatedContentSearchUrl() {
-        
+
         System.out.println("getFederatedContentSearchUrl");
-        
+
         String expResult = "http://weblicht.sfs.uni-tuebingen.de/Aggregator/";
         String result = config.getFederatedContentSearchUrl();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -628,15 +626,15 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetFederatedContentSearchUrl() {
-        
+
         System.out.println("setFederatedContentSearchUrl");
-        
+
         String param = "http://weblicht.sfs.uni-tuebingen.de/Aggregator/";
-        
+
         config.setFederatedContentSearchUrl(param);
 
         String result = config.getFederatedContentSearchUrl();
-        
+
         assertEquals(param, result);
     }
 
@@ -645,12 +643,12 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testGetNationalProjectMapping() {
-        
+
         System.out.println("getNationalProjectMapping");
-        
+
         String expResult = "/nationalProjectsMapping.xml";
         String result = config.getNationalProjectMapping();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -659,43 +657,43 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetNationalProjectMapping() {
-        
+
         System.out.println("setFNationalProjectMapping");
-        
+
         String param = "nationalProjectsMapping.xml";
-        
+
         config.setNationalProjectMapping(param);
 
         String result = config.getNationalProjectMapping();
-        
+
         assertEquals(param, result);
-    }    
+    }
 
     /**
      * Test of getFacetFields method
      */
     @Test
     public void testGetFacetFields() {
-        
+
         System.out.println("getFacetFields");
-        
+
         String[] expResult = {
-        "collection",
-        "language",
-        "resourceClass",
-        "modality",
-        "continent",
-        "genre",
-        "country",
-        "subject",
-        "organisation",
-        "format",
-        "dataProvider",
-        "nationalProject",
-        "keywords"};
-    
+            "collection",
+            "language",
+            "resourceClass",
+            "modality",
+            "continent",
+            "genre",
+            "country",
+            "subject",
+            "organisation",
+            "format",
+            "dataProvider",
+            "nationalProject",
+            "keywords"};
+
         String[] result = config.getFacetFields();
-    
+
         assertArrayEquals(expResult, result);
     }
 
@@ -704,42 +702,42 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetFacetFields() {
-        
+
         System.out.println("setFacetFields");
-        
+
         String[] expResult = {
-        "collection",
-        "language",
-        "resourceClass",
-        "modality",
-        "continent",
-        "genre",
-        "country",
-        "subject",
-        "organisation",
-        "format",
-        "dataProvider",
-        "nationalProject",
-        "keywords"};
-        
+            "collection",
+            "language",
+            "resourceClass",
+            "modality",
+            "continent",
+            "genre",
+            "country",
+            "subject",
+            "organisation",
+            "format",
+            "dataProvider",
+            "nationalProject",
+            "keywords"};
+
         config.setFacetFields(expResult);
-        
+
         String result[] = config.getFacetFields();
 
         assertArrayEquals(expResult, result);
     }
-    
+
     /**
      * Test the getCountryComponentUrl method.
      */
     @Test
     public void testCountryComponentUrl() {
-        
+
         System.out.println("getCountryComponentUrl");
-        
+
         String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml";
         String result = config.getCountryComponentUrl();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -748,29 +746,29 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetCountryComponentUrl() {
-        
+
         System.out.println("setCountryComponentUrl");
-        
+
         String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml";
-        
+
         config.setCountryComponentUrl(param);
 
         String result = config.getCountryComponentUrl();
-        
+
         assertEquals(param, result);
-    }  
-    
+    }
+
     /**
      * Test the getLanguage2LetterCodeComponentUrl method.
      */
     @Test
     public void testGetLanguage2LetterCodeComponentUrl() {
-        
+
         System.out.println("getLanguage2LetterCodeComponentUrl");
-        
+
         String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438109/xml";
         String result = config.getLanguage2LetterCodeComponentUrl();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -779,29 +777,29 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetLanguage2LetterCodeComponentUrl() {
-        
+
         System.out.println("setLanguage2LetterCodeComponentUrl");
-        
+
         String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438109/xml";
-        
+
         config.setLanguage2LetterCodeComponentUrl(param);
 
         String result = config.getLanguage2LetterCodeComponentUrl();
-        
+
         assertEquals(param, result);
     }
-    
+
     /**
      * Test the getLanguage3LetterCodeComponentUrl.
      */
     @Test
     public void testGetLanguage3LetterCodeComponentUrl() {
-        
+
         System.out.println("getLanguage3LetterCodeComponentUrl");
-        
+
         String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438110/xml";
         String result = config.getLanguage3LetterCodeComponentUrl();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -810,29 +808,29 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetLanguage3LetterCodeComponentUrl() {
-        
+
         System.out.println("setLanguage3LetterCodeComponentUrl");
-        
+
         String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438110/xml";
-        
+
         config.setLanguage3LetterCodeComponentUrl(param);
 
         String result = config.getLanguage3LetterCodeComponentUrl();
-        
+
         assertEquals(param, result);
     }
-    
+
     /**
      * Test the getSilToISO639CodesUrl method.
      */
     @Test
     public void testGetSilToISO639CodesUrl() {
-        
+
         System.out.println("getSilToISO639CodesUrl");
-        
+
         String expResult = "http://www.clarin.eu/cmd/xslt/sil_to_iso6393.xml";
         String result = config.getSilToISO639CodesUrl();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -841,29 +839,29 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetSilToISO639CodesUrl() {
-        
+
         System.out.println("setSilToISO639CodesUrl");
-        
+
         String param = "http://www.clarin.eu/cmd/xslt/sil_to_iso6393.xml";
-        
+
         config.setSilToISO639CodesUrl(param);
 
         String result = config.getSilToISO639CodesUrl();
-        
+
         assertEquals(param, result);
     }
-    
+
     /**
      * Test the getReverseProxyPrefix method
      */
     @Test
     public void testReverseProxyPrefix() {
-        
+
         System.out.println("getReverseProxyPrefix");
-        
+
         String expResult = "";
         String result = config.getReverseProxyPrefix();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -872,15 +870,15 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetReverseProxyPrefix() {
-        
+
         System.out.println("setReverseProxyPrefix");
-        
+
         String param = "vlodev/";
-        
+
         config.setReverseProxyPrefix(param);
 
         String result = config.getReverseProxyPrefix();
-        
+
         assertEquals(param, result);
     }
 
@@ -889,12 +887,12 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testGetCqlEndpointFilter() {
-        
+
         System.out.println("getCqlEndpointFilter");
-        
+
         String expResult = "http://cqlservlet.mpi.nl/";
         String result = config.getCqlEndpointFilter();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -903,15 +901,15 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetCqlEndpointFilter() {
-        
+
         System.out.println("setCqlEndpointFilter");
-        
+
         String param = "http://cqlservlet.mpi.nl/";
-        
+
         config.setCqlEndpointFilter(param);
 
         String result = config.getCqlEndpointFilter();
-        
+
         assertEquals(param, result);
     }
 
@@ -920,12 +918,12 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testGetCqlEndpointAlternative() {
-        
+
         System.out.println("getCqlEndpointAlternative");
-        
+
         String expResult = "http://cqlservlet.mpi.nl/";
         String result = config.getCqlEndpointAlternative();
-        
+
         assertEquals(expResult, result);
     }
 
@@ -934,15 +932,15 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetCqlEndpointAlternative() {
-        
+
         System.out.println("setCqlEndpointAlternative");
-        
+
         String param = "http://cqlservlet.mpi.nl/";
-        
+
         config.setCqlEndpointAlternative(param);
 
         String result = config.getCqlEndpointAlternative();
-        
+
         assertEquals(param, result);
     }
 }

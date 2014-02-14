@@ -11,14 +11,9 @@ import org.junit.Test;
 public class CMDIParserVTDXMLTest {
     
     @Before
-    public void setUp() {
-
-        // read the configuration from the packaged configuration file
+    public void setUp() throws Exception {
+        // read the configuration from the default configuration file
         new DefaultVloConfigFactory().newConfig();
-
-        // optionally, modify the configuration here
-
-        // apparantly, this does not make the configuration available
     }
 
     @Test

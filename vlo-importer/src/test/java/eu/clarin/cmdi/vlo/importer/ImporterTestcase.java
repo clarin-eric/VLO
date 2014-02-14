@@ -27,7 +27,7 @@ public abstract class ImporterTestcase {
     }
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         final String baseTempPath = System.getProperty("java.io.tmpdir");
         testDir = new File(baseTempPath + File.separator + "testRegistry_" + System.currentTimeMillis());
         testDir.mkdir();

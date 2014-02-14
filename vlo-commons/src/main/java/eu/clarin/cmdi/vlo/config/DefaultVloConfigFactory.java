@@ -16,40 +16,24 @@
  */
 package eu.clarin.cmdi.vlo.config;
 
-import java.io.IOException;
 import java.io.InputStream;
-import javax.xml.bind.JAXBException;
-import javax.xml.transform.stream.StreamSource;
 
 /**
+ * Creates an instance of the default configuration packed with the VLO commons
  *
  * @author twagoo
  */
-public class DefaultVloConfigFactory implements VloConfigFactory {
+public class DefaultVloConfigFactory extends AbstractXmlVloConfigFactory {
 
     public static final String DEFAULT_CONFIG_RESOURCE = "/VloConfig.xml";
-    private final VloConfigMarshaller marshaller;
 
-    public DefaultVloConfigFactory() {
-        try {
-            this.marshaller = new VloConfigMarshaller();
-        } catch (JAXBException ex) {
-            throw new RuntimeException("Could not instantiate configuration marshaller while constructing configuration factory", ex);
-        }
-    }
-
-    public VloConfig newConfig() {
-        try {
-            InputStream configResourceStream = getClass().getResourceAsStream(DEFAULT_CONFIG_RESOURCE);
-            try {
-                return marshaller.unmarshal(new StreamSource(configResourceStream));
-            } catch (JAXBException ex) {
-                throw new RuntimeException("Could not read default configuration due to deserialization error", ex);
-            } finally {
-                configResourceStream.close();
-            }
-        } catch (IOException ex) {
-            throw new RuntimeException("Could not close stream to default configuration", ex);
-        }
+    /**
+     *
+     * @return an input stream for the XML file describing the default VLO
+     * configuration
+     */
+    @Override
+    protected InputStream getXmlConfigurationInputStream() {
+        return getClass().getResourceAsStream(DEFAULT_CONFIG_RESOURCE);
     }
 }

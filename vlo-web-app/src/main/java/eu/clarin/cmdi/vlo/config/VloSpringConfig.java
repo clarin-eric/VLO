@@ -23,6 +23,7 @@ import eu.clarin.cmdi.vlo.service.SolrQueryFactory;
 import eu.clarin.cmdi.vlo.service.impl.SearchResultsDaoImpl;
 import eu.clarin.cmdi.vlo.service.impl.SolrFacetFieldsService;
 import eu.clarin.cmdi.vlo.service.impl.SolrQueryFactoryImpl;
+import java.io.IOException;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.springframework.context.annotation.Bean;
@@ -52,11 +53,15 @@ public class VloSpringConfig {
 
     @Bean
     public VloConfig vloConfig() {
-        return vloConfigFactory().newConfig();
+        try {
+            return vloConfigFactory().newConfig();
+        } catch (IOException ex) {
+            throw new RuntimeException("Could not read VLO configuration", ex);
+        }
     }
-    
+
     @Bean
-    public VloConfigFactory vloConfigFactory(){
+    public VloConfigFactory vloConfigFactory() {
         return new DefaultVloConfigFactory();
     }
 
@@ -74,7 +79,7 @@ public class VloSpringConfig {
     public SolrQueryFactory queryFactory() {
         return new SolrQueryFactoryImpl(vloConfig());
     }
-    
+
     @Bean
     public SolrServer solrServer() {
         return new HttpSolrServer(vloConfig().getSolrUrl());

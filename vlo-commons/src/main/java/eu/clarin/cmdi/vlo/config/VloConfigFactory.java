@@ -16,11 +16,20 @@
  */
 package eu.clarin.cmdi.vlo.config;
 
+import java.io.IOException;
+
 /**
+ * Interface for objects capable of instantiating a {@link VloConfig} object
  *
  * @author twagoo
  */
 public interface VloConfigFactory {
 
-    VloConfig newConfig();
+    /**
+     *
+     * @return a new VLO configuration object
+     * @throws IOException if configuration could be opened, read or closed from
+     * source
+     */
+    VloConfig newConfig() throws IOException;
 }
