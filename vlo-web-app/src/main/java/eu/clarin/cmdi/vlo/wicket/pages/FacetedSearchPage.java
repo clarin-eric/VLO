@@ -24,7 +24,7 @@ public class FacetedSearchPage extends WebPage {
         final QueryFacetsSelection selection = new QueryFacetsSelection(
                 new HashMap<String, Collection<String>>() {
                     {
-                        put("language", Collections.singleton("Dutch"));
+//                        put("language", Collections.singleton("Dutch"));
                         put("continent", Collections.<String>emptyList());
                     }
                 });

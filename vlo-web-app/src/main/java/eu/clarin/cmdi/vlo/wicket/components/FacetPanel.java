@@ -16,9 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
+import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
@@ -29,11 +34,37 @@ import org.apache.wicket.model.IModel;
  */
 public class FacetPanel extends Panel {
 
+    private final int maxNumberOfFacetsToShow = 10; //TODO: get from config
+    
     public FacetPanel(String id, IModel<FacetField> model) {
         super(id, model);
         setDefaultModel(new CompoundPropertyModel<FacetField>(model));
 
+        // 'name' field from FacetField
         add(new Label("name"));
+        
+        // provider that extracts values and counts from FacetField
+        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(model, maxNumberOfFacetsToShow);
+        add(new DataView<Count>("facetValues", valuesProvider) {
+
+            @Override
+            protected void populateItem(Item<Count> item) {
+                item.setDefaultModel(new CompoundPropertyModel<Count>(item.getModel()));
+                final Link selectLink = new Link("facetSelect") {
+                    
+                    @Override
+                    public void onClick() {
+                        //TODO: select facet
+                        throw new UnsupportedOperationException("Not supported yet.");
+                    }
+                };
+                item.add(selectLink);
+                // 'name' field from Count (name of value)
+                selectLink.add(new Label("name"));
+                // 'count' field from Count (document count for value)
+                selectLink.add(new Label("count"));
+            }
+        });
     }
 
 }

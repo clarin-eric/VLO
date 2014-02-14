@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
-import eu.clarin.cmdi.vlo.service.impl.FacetFieldsDataProvider;
+import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldsDataProvider;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
