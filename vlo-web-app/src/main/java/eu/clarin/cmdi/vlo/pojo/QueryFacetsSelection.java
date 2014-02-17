@@ -28,7 +28,7 @@ import java.util.Map;
  */
 public class QueryFacetsSelection implements Serializable {
 
-    private final String queryString;
+    private String queryString;
     private final Map<String, Collection<String>> selection;
 
     /**
@@ -89,6 +89,10 @@ public class QueryFacetsSelection implements Serializable {
      */
     public String getQuery() {
         return queryString;
+    }
+
+    public void setQuery(String queryString) {
+        this.queryString = queryString;
     }
     
     public void selectValues(String facet, Collection<String> values){

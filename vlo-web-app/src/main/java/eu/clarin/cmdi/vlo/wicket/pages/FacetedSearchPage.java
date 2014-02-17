@@ -2,6 +2,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.wicket.components.FacetsPanel;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.components.SearchForm;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,7 +29,10 @@ public class FacetedSearchPage extends WebPage {
                         put("continent", Collections.<String>emptyList());
                     }
                 });
+        final Model<QueryFacetsSelection> queryModel = new Model<QueryFacetsSelection>(selection);
 
-        add(new FacetsPanel("facets", new Model<QueryFacetsSelection>(selection)));
+        add(new FacetsPanel("facets", queryModel));
+        
+        add(new SearchForm("search", queryModel));
     }
 }
