@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 public class SolrDaoImpl {
     
-    private final static Logger LOG = LoggerFactory.getLogger(SolrDaoImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(SolrDaoImpl.class);
     private final SolrServer solrServer;
     private final VloConfig config;
 
@@ -82,9 +82,12 @@ public class SolrDaoImpl {
         SolrQuery sanitisedQuery;
         sanitisedQuery = sanitise(query);
         try {
-            return solrServer.query(sanitisedQuery);
+            logger.debug("Executing query: {}", query);
+            final QueryResponse response = solrServer.query(sanitisedQuery);
+            logger.debug("Response: {}", response);
+            return response;
         } catch (SolrServerException e) {
-            LOG.error("Error getting data:", e);
+            logger.error("Error getting data:", e);
             throw new RuntimeException(e);
         }
     }
@@ -99,7 +102,7 @@ public class SolrDaoImpl {
         query.setFields("*");
         SolrDocumentList docs = fireQuery(query).getResults();
         if (docs.getNumFound() > 1) {
-            LOG.error("Error: found multiple documents for id (will return first one): " + docId + " \nDocuments found: " + docs);
+            logger.error("Error: found multiple documents for id (will return first one): " + docId + " \nDocuments found: " + docs);
             result = docs.get(0);
         } else if (docs.getNumFound() == 1) {
             result = docs.get(0);

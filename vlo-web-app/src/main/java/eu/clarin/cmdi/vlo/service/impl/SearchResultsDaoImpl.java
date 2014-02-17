@@ -9,8 +9,12 @@ import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDao {
+
+    private final static Logger logger = LoggerFactory.getLogger(SearchResultsDaoImpl.class);
 
     public SearchResultsDaoImpl(SolrServer solrServer, VloConfig config) {
         super(solrServer, config);
@@ -26,8 +30,10 @@ public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDa
 
     @Override
     public List<FacetField> getFacets(SolrQuery query) {
-        QueryResponse response = fireQuery(query);
-        return response.getFacetFields();
+        final QueryResponse response = fireQuery(query);
+        final List<FacetField> facetFields = response.getFacetFields();
+        logger.debug("Found {} facet fields", facetFields.size());
+        return facetFields;
     }
 
     @Override
