@@ -17,8 +17,12 @@
 package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
+import java.util.Collection;
+import java.util.Collections;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -32,30 +36,32 @@ import org.apache.wicket.model.IModel;
  *
  * @author twagoo
  */
-public class FacetPanel extends Panel {
+public abstract class FacetPanel extends Panel {
 
     private final int maxNumberOfFacetsToShow = 10; //TODO: get from config
-    
+
     public FacetPanel(String id, IModel<FacetField> model) {
         super(id, model);
         setDefaultModel(new CompoundPropertyModel<FacetField>(model));
 
         // 'name' field from FacetField
         add(new Label("name"));
-        
+
         // provider that extracts values and counts from FacetField
         final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(model, maxNumberOfFacetsToShow);
         add(new DataView<Count>("facetValues", valuesProvider) {
 
             @Override
-            protected void populateItem(Item<Count> item) {
+            protected void populateItem(final Item<Count> item) {
                 item.setDefaultModel(new CompoundPropertyModel<Count>(item.getModel()));
-                final Link selectLink = new Link("facetSelect") {
-                    
+                final Link selectLink = new AjaxFallbackLink("facetSelect") {
+
                     @Override
-                    public void onClick() {
-                        //TODO: select facet
-                        throw new UnsupportedOperationException("Not supported yet.");
+                    public void onClick(AjaxRequestTarget target) {
+                        FacetPanel.this.onValuesSelected(
+                                item.getModelObject().getFacetField().getName(),
+                                Collections.singleton(item.getModelObject().getName()),
+                                target);
                     }
                 };
                 item.add(selectLink);
@@ -66,5 +72,15 @@ public class FacetPanel extends Panel {
             }
         });
     }
+
+    /**
+     * Callback triggered when values have been selected on this facet
+     *
+     * @param facet name of the facet this panel represents
+     * @param values selected values
+     * @param target Ajax target allowing for a partial update. May be null
+     * (fallback)!
+     */
+    public abstract void onValuesSelected(String facet, Collection<String> values, AjaxRequestTarget target);
 
 }

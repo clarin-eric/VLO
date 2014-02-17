@@ -19,7 +19,9 @@ package eu.clarin.cmdi.vlo.wicket.components;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldsDataProvider;
+import java.util.Collection;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -36,20 +38,32 @@ public class FacetsPanel extends Panel {
     @SpringBean
     private FacetFieldsService facetFieldsService;
 
-    public FacetsPanel(String id, IModel<QueryFacetsSelection> model) {
+    public FacetsPanel(final String id, final IModel<QueryFacetsSelection> model) {
         super(id, model);
-        add(new FacetsDataView("facets", model));
+
+        add(new DataView<FacetField>("facets", new FacetFieldsDataProvider(facetFieldsService, model)) {
+
+            @Override
+            protected void populateItem(Item<FacetField> item) {
+                item.add(new FacetPanel("facet", item.getModel()) {
+
+                    @Override
+                    public void onValuesSelected(String facet, Collection<String> value, AjaxRequestTarget target) {
+                        // A value has been selected on this facet's panel,
+                        // update the model! 
+                        model.getObject().selectValues(facet, value);
+
+                        // Trigger updates to reflect new model state
+                        modelChanged();
+
+                        if (target != null) {
+                            // reload entire page for now
+                            target.add(getPage());
+                        }
+                    }
+                });
+            }
+        });
     }
 
-    private class FacetsDataView extends DataView<FacetField> {
-
-        public FacetsDataView(String id, IModel<QueryFacetsSelection> model) {
-            super(id, new FacetFieldsDataProvider(facetFieldsService, model));
-        }
-
-        @Override
-        protected void populateItem(Item<FacetField> item) {
-            item.add(new FacetPanel("facet", item.getModel()));
-        }
-    }
 }

@@ -90,5 +90,9 @@ public class QueryFacetsSelection implements Serializable {
     public String getQuery() {
         return queryString;
     }
+    
+    public void selectValues(String facet, Collection<String> values){
+        selection.put(facet, values);
+    }
 
 }
