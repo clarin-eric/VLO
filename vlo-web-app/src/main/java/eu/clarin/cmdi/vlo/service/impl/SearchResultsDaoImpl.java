@@ -37,15 +37,11 @@ public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDa
     }
 
     @Override
-    public SolrDocumentList getDocIdList(SolrQuery query) {
-        query = query.getCopy();
-        setDefaultSortField(query);
-        query.setFields(FacetConstants.FIELD_ID);
-        query.setFacet(false);
-        query.setStart(0);
-        query.setRows(Integer.MAX_VALUE);
+    public SolrDocumentList getDocuments(SolrQuery query) {
         QueryResponse queryResponse = fireQuery(query);
-        return queryResponse.getResults();
+        final SolrDocumentList documents = queryResponse.getResults();
+        logger.debug("Found {} documents", documents.getNumFound());
+        return documents;
     }
 
     private void setDefaultSortField(SolrQuery query) {

@@ -19,8 +19,10 @@ package eu.clarin.cmdi.vlo.config;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.SearchResultsDao;
+import eu.clarin.cmdi.vlo.service.SolrDocumentService;
 import eu.clarin.cmdi.vlo.service.SolrQueryFactory;
 import eu.clarin.cmdi.vlo.service.impl.SearchResultsDaoImpl;
+import eu.clarin.cmdi.vlo.service.impl.SolrDocumentServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.SolrFacetFieldsService;
 import eu.clarin.cmdi.vlo.service.impl.SolrQueryFactoryImpl;
 import java.io.IOException;
@@ -68,6 +70,11 @@ public class VloSpringConfig {
     @Bean
     public FacetFieldsService facetFieldsService() {
         return new SolrFacetFieldsService(searchResultsDao(), queryFactory());
+    }
+    
+    @Bean
+    public SolrDocumentService documentService() {
+        return new SolrDocumentServiceImpl(searchResultsDao(), queryFactory());
     }
 
     @Bean

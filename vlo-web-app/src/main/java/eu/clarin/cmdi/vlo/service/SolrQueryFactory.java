@@ -30,5 +30,7 @@ public interface SolrQueryFactory {
     SolrQuery createFacetQuery(QueryFacetsSelection selection);
 
     SolrQuery createCountFacetsQuery();
+    
+    SolrQuery createDocumentQuery(QueryFacetsSelection selection, int first, int count);
 
 }

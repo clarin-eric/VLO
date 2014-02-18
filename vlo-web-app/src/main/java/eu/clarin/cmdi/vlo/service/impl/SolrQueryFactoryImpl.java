@@ -50,6 +50,20 @@ public class SolrQueryFactoryImpl implements SolrQueryFactory {
     @Override
     public SolrQuery createFacetQuery(QueryFacetsSelection queryFacetsSelections) {
         final SolrQuery query = getDefaultFacetQuery();
+        addQueryFacetParameters(query, queryFacetsSelections);
+        return query;
+    }
+
+    @Override
+    public SolrQuery createDocumentQuery(QueryFacetsSelection selection, int first, int count) {
+        final SolrQuery query = getDefaultDocumentQuery();
+        addQueryFacetParameters(query, selection);
+        query.setStart(first);
+        query.setRows(count);
+        return query;
+    }
+
+    protected void addQueryFacetParameters(final SolrQuery query, QueryFacetsSelection queryFacetsSelections) {
         final String queryString = queryFacetsSelections.getQuery();
 
         if (queryString == null) {
@@ -71,7 +85,6 @@ public class SolrQueryFactoryImpl implements SolrQueryFactory {
             }
         }
         query.setFilterQueries(encodedQueries.toArray(new String[encodedQueries.size()]));
-        return query;
     }
 
     private SolrQuery getDefaultFacetQuery() {
@@ -82,6 +95,12 @@ public class SolrQueryFactoryImpl implements SolrQueryFactory {
         result.setFacet(true);
         result.setFacetMinCount(1);
         result.addFacetField(config.getFacetFields());
+        return result;
+    }
+
+    private SolrQuery getDefaultDocumentQuery() {
+        SolrQuery result = new SolrQuery();
+        result.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID, FacetConstants.FIELD_DESCRIPTION, FacetConstants.FIELD_COLLECTION, FacetConstants.FIELD_RESOURCE);
         return result;
     }
 

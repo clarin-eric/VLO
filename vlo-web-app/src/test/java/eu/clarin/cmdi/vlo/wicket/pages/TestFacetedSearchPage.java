@@ -5,9 +5,11 @@ import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.VloSpringConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
+import eu.clarin.cmdi.vlo.service.SolrDocumentService;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.util.tester.WicketTester;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -49,6 +51,10 @@ public class TestFacetedSearchPage {
             return mockery().mock(FacetFieldsService.class);
         }
 
+        @Override
+        public SolrDocumentService documentService() {
+            return mockery().mock(SolrDocumentService.class);
+        }
     }
 
     private WicketTester tester;
@@ -58,6 +64,8 @@ public class TestFacetedSearchPage {
     private Mockery mockery;
     @Autowired
     private FacetFieldsService facetFieldsService;
+    @Autowired
+    private SolrDocumentService documentService;
 
     @Before
     public void setUp() {
@@ -69,10 +77,17 @@ public class TestFacetedSearchPage {
         // mock behaviour of facet fields service
         mockery.checking(new Expectations() {
             {
+                // mock facets
                 atLeast(1).of(facetFieldsService).getFacetFieldCount();
                 will(returnValue(2L));
                 oneOf(facetFieldsService).getFacetFields(with(any(QueryFacetsSelection.class)));
                 will(returnValue(Arrays.asList(new FacetField("language"), new FacetField("resource class"))));
+                
+                // mock search results
+                atLeast(1).of(documentService).getDocumentCount(with(any(QueryFacetsSelection.class)));
+                will(returnValue(1000L));
+                oneOf(documentService).getDocuments(with(any(QueryFacetsSelection.class)), with(equal(0)), with(equal(10)));
+                will(returnValue(Arrays.asList(new SolrDocument(), new SolrDocument())));
             }
         });
 

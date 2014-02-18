@@ -14,24 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package eu.clarin.cmdi.vlo.service;
 
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.List;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrDocument;
 
 /**
  *
  * @author twagoo
  */
-public interface SearchResultsDao {
+public interface SolrDocumentService {
 
-    SolrDocumentList getDocuments(SolrQuery query);
-
-    List<FacetField> getFacets(SolrQuery query);
-
-    SolrDocumentList getResults(SolrQuery query);
+    List<SolrDocument> getDocuments(QueryFacetsSelection selection, int first, int count);
     
+    long getDocumentCount(QueryFacetsSelection selection);
+
 }

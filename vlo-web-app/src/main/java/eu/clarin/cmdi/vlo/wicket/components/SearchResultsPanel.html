@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!--
+Copyright (C) 2014 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+    <head>
+        <title>facet panel</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <wicket:panel>
+            <h1>Search results</h1>
+            <div id="searchresultsheader">
+                <span wicket:id="resultCount" id="searchresultcount">604056 results</span>
+                <span id="searchresultpagecount">Showing 1 to 25</span>
+
+                <div class="searchresultpagination">
+                    &lt;&lt;
+                    &lt;
+                    1
+                    <a href="">2</a>
+                    <a href="">3</a>
+                    <a href="">4</a>
+                    <a href="">5</a>
+                    <a href="">6</a>
+                    <a href="">7</a>
+                    <a href="">8</a>
+                    <a href="">9</a>
+                    <a href="">10</a>
+                    <a href="">&gt;</a>
+                    <a href="">&gt;&gt;</a>
+                </div>
+
+            </div> 
+
+            <ul id="searchresultitems">
+                <li wicket:id="resultItem" class="searchresultitem">
+                    <h2>
+                        <a wicket:id="title" href="record1.html">[TITLE]</a>
+                    </h2>
+                    <div class="searchresultitembrief">
+                        <p class="searchresultmoreless">
+                            <a href="#" class="searchresultdetailstoggle">expand</a>
+                        </p>
+                        <p class="searchresultdescription" wicket:id="description">
+                            [DESCRIPTION]
+                        </p>
+                        <p class="searchresultresources">
+                            Resources: <a href="record1.html">1 text file</a>, <a href="record1.html">1 audio file</a>, <a href="record1.html">1 annotation file</a>
+                        </p>
+                    </div>
+
+                    <div class="searchresultitemextended">
+                        <p class="searchresultmoreless">
+                            <a href="#" class="searchresultdetailstoggle">collapse</a>
+                        </p>
+                        <p class="searchresultdescription">
+                            In China (and specifically in Beijing) of the late seventies, the call for a democracy movement was growing ever stronger, before finally being silenced by the new regime under Deng Xiaoping. This paper exmaines both the historical sources and the eventual outcome of this movement during the anxious years of '78-'79.
+                        </p>
+                        <div class="searchresultattributes">
+                            <table class="recorddetailstable">
+                                <tbody class="attributesTbody">
+                                    <tr>
+                                        <td class="attribute">
+                                            <div>Collection</div>
+                                        </td><td class="attributeValue">
+                                            <div>UBU Clarin Set<a class="recordfacetselect" title="Search for similar" href="index2.html"><span>[search for similar]</span></a></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="attribute">
+                                            <div>Genre</div>
+                                        </td><td class="attributeValue">
+                                            <div>info:eu-repo/semantics/bachelorthesis <a class="recordfacetselect" title="Search for similar" href="index2.html"><span>[search for similar]</span></a></div>
+                                        </td>
+                                    </tr><tr>
+                                        <td class="attribute">
+                                            <div>Languages</div>
+                                        </td><td class="attributeValue">
+                                            <div>Dutch <a class="recordattributeinfo" href="http://infra.clarin.eu/service/language/info.php?code=nld"><span>[info]</span></a> <a class="recordfacetselect" title="Search for similar" href="index2.html"><span>[search for similar]</span></a></div>
+                                        </td>
+                                    </tr><tr>
+                                        <td class="attribute">
+                                            <div>National project</div>
+                                        </td><td class="attributeValue">
+                                            <div>CLARIN-NL <a class="recordfacetselect" title="Search for similar" href="index2.html"><span>[search for similar]</span></a></div>
+                                        </td>
+                                    </tr><tr>
+                                        <td class="attribute">
+                                            <div>Resource type</div>
+                                        </td><td class="attributeValue">
+                                            <div>text <a class="recordfacetselect" title="Search for similar" href="index2.html"><span>[search for similar]</span></a></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h3>Resources</h3>
+                            <ul>
+                                <li class="writtenresource"><a href="">http://dspace.library.uu.nl/bitstream/1874/235456/1/Bachelorscriptie+Rene+Witteveen+3375005.docx</a></li>
+                                <li class="audioresource"><a href="">http://corpus1.mpi.nl/qfs1/media-archive/dobes_data/Ache/Documentaci_n_-_Documentation/Comunidades_-_Communities/Cerro_Moroti/Media/002-djawu_klluu-2011-09-01.wav</a></li>
+                                <li class="annotationresource"><a href="">http://corpus1.mpi.nl/qfs1/media-archive/dobes_data/Ache/Documentaci_n_-_Documentation/Comunidades_-_Communities/Cerro_Moroti/Annotations/002-djawu_klluu-2011-09-01.eaf</a></li>
+                            </ul>
+                        </div>
+
+                        <p class="searchresultfullrecord">
+                            <a href="record1.html">View full record</a>
+                        </p>
+                    </div>
+                    <div class="searchresultitemend"></div>
+                </li>
+            </ul>
+            <div id="searchresultpagination">
+                &lt;&lt;
+                &lt;
+                1
+                <a href="">2</a>
+                <a href="">3</a>
+                <a href="">4</a>
+                <a href="">5</a>
+                <a href="">6</a>
+                <a href="">7</a>
+                <a href="">8</a>
+                <a href="">9</a>
+                <a href="">10</a>
+                <a href="">&gt;</a>
+                <a href="">&gt;&gt;</a>
+
+                <form id="resultpagesizeform">
+                    <label for="resultpagesize">Results per page:</label>
+                    <select id="resultpagesize">
+                        <option>5</option>
+                        <option>10</option>
+                        <option selected="selected">25</option>
+                        <option>50</option>
+                        <option>100</option>
+                    </select>
+                </form>
+            </div>
+        </wicket:panel>
+    </body>
+</html>
