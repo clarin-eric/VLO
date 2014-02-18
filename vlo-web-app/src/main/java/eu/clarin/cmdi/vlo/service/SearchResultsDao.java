@@ -31,7 +31,5 @@ public interface SearchResultsDao {
     SolrDocumentList getDocuments(SolrQuery query);
 
     List<FacetField> getFacets(SolrQuery query);
-
-    SolrDocumentList getResults(SolrQuery query);
     
 }

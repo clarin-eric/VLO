@@ -21,14 +21,6 @@ public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDa
     }
 
     @Override
-    public SolrDocumentList getResults(SolrQuery query) {
-        setDefaultSortField(query);
-        QueryResponse response = fireQuery(query);
-        SolrDocumentList results = response.getResults();
-        return results;
-    }
-
-    @Override
     public List<FacetField> getFacets(SolrQuery query) {
         final QueryResponse response = fireQuery(query);
         final List<FacetField> facetFields = response.getFacetFields();
@@ -42,12 +34,6 @@ public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDa
         final SolrDocumentList documents = queryResponse.getResults();
         logger.debug("Found {} documents", documents.getNumFound());
         return documents;
-    }
-
-    private void setDefaultSortField(SolrQuery query) {
-        if (query.getSortField() == null) {
-            query.setSort(SolrQuery.SortClause.asc(FacetConstants.FIELD_NAME));
-        }
     }
 
 }

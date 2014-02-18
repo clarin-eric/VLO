@@ -88,20 +88,19 @@ public class SolrQueryFactoryImpl implements SolrQueryFactory {
     }
 
     private SolrQuery getDefaultFacetQuery() {
-        SolrQuery result = new SolrQuery();
-        result.setRows(10);
-        result.setStart(0);
-        result.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID, FacetConstants.FIELD_DESCRIPTION);
-        result.setFacet(true);
-        result.setFacetMinCount(1);
-        result.addFacetField(config.getFacetFields());
-        return result;
+        SolrQuery query = new SolrQuery();
+        query.setRows(0);
+        query.setFacet(true);
+        query.setFacetMinCount(1);
+        query.addFacetField(config.getFacetFields());
+        return query;
     }
 
     private SolrQuery getDefaultDocumentQuery() {
-        SolrQuery result = new SolrQuery();
-        result.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID, FacetConstants.FIELD_DESCRIPTION, FacetConstants.FIELD_COLLECTION, FacetConstants.FIELD_RESOURCE);
-        return result;
+        SolrQuery query = new SolrQuery();
+        query.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID, FacetConstants.FIELD_DESCRIPTION, FacetConstants.FIELD_COLLECTION, FacetConstants.FIELD_RESOURCE);
+        query.setSort(SolrQuery.SortClause.asc(FacetConstants.FIELD_NAME));
+        return query;
     }
 
     @Override
