@@ -19,10 +19,10 @@ package eu.clarin.cmdi.vlo.wicket.components;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.SolrDocumentService;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -32,6 +32,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
+ * Panel that has a data view on the current search results
  *
  * @author twagoo
  */
@@ -51,17 +52,19 @@ public class SearchResultsPanel extends Panel {
                 return solrDocumentProvider.size();
             }
         }));
-        
+
         add(new DataView<SolrDocument>("resultItem", solrDocumentProvider, 10) {
 
             @Override
             protected void populateItem(Item<SolrDocument> item) {
-                //TODO: get all values, show name
-                //TODO: create IModel impl that reads field values from a solr document
-                item.add(new Label("title", (String)item.getModelObject().getFieldValue(FacetConstants.FIELD_NAME)));
-                item.add(new Label("description", (String)item.getModelObject().getFieldValue(FacetConstants.FIELD_DESCRIPTION)));
+                //TODO: Wrap in model to deal with null values
+                item.add(new Label("title", new SolrFieldModel(item.getModel(), FacetConstants.FIELD_NAME)));
+                item.add(new Label("description", new SolrFieldModel(item.getModel(), FacetConstants.FIELD_DESCRIPTION)));
+                //TODO: get resource information
             }
         });
+
+        //TODO: Add pagination
     }
 
 }
