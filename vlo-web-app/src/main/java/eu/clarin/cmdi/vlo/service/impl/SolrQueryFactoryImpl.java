@@ -74,17 +74,19 @@ public class SolrQueryFactoryImpl implements SolrQueryFactory {
 
         Map<String, Collection<String>> selections = queryFacetsSelections.getSelection();
 
-        final List<String> encodedQueries = new ArrayList(selections.size()); // assuming every facet has one selection, most common scenario
-        for (Map.Entry<String, Collection<String>> selection : selections.entrySet()) {
-            final String facetName = selection.getKey();
-            final Collection<String> values = selection.getValue();
-            if (values != null) {
-                for (String value : values) {
-                    encodedQueries.add(String.format("%s:%s", facetName, ClientUtils.escapeQueryChars(value)));
+        if (selections != null) {
+            final List<String> encodedQueries = new ArrayList(selections.size()); // assuming every facet has one selection, most common scenario
+            for (Map.Entry<String, Collection<String>> selection : selections.entrySet()) {
+                final String facetName = selection.getKey();
+                final Collection<String> values = selection.getValue();
+                if (values != null) {
+                    for (String value : values) {
+                        encodedQueries.add(String.format("%s:%s", facetName, ClientUtils.escapeQueryChars(value)));
+                    }
                 }
             }
+            query.setFilterQueries(encodedQueries.toArray(new String[encodedQueries.size()]));
         }
-        query.setFilterQueries(encodedQueries.toArray(new String[encodedQueries.size()]));
     }
 
     private SolrQuery getDefaultFacetQuery() {

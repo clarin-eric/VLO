@@ -5,8 +5,7 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.components.SearchForm;
 import eu.clarin.cmdi.vlo.wicket.components.SearchResultsPanel;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.Map;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.Model;
@@ -23,19 +22,22 @@ public class FacetedSearchPage extends WebPage {
     public FacetedSearchPage(final PageParameters parameters) {
         super(parameters);
 
-        final QueryFacetsSelection selection = new QueryFacetsSelection(
-                new HashMap<String, Collection<String>>() {
-                    {
-//                        put("language", Collections.singleton("Dutch"));
-                        put("continent", Collections.<String>emptyList());
-                    }
-                });
+        final QueryFacetsSelection selection = paramsToQueryFacetSelection(parameters);
         final Model<QueryFacetsSelection> queryModel = new Model<QueryFacetsSelection>(selection);
 
         add(new FacetsPanel("facets", queryModel));
-        
+
         add(new SearchForm("search", queryModel));
-        
+
         add(new SearchResultsPanel("searchResults", queryModel));
+    }
+
+    private QueryFacetsSelection paramsToQueryFacetSelection(final PageParameters parameters) {
+        final String query = parameters.get("q").toOptionalString();
+        
+        //TODO: Map parameters to facet selection
+        final Map<String, Collection<String>> selection = null;
+        
+        return new QueryFacetsSelection(query, selection);
     }
 }

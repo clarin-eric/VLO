@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.pojo;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -50,12 +51,16 @@ public class QueryFacetsSelection implements Serializable {
     /**
      * Creates a selection with a textual query and facet value selection
      *
-     * @param query textual query
-     * @param selection facet values selection map
+     * @param query textual query (can be null)
+     * @param selection facet values selection map (can be null)
      */
     public QueryFacetsSelection(String query, Map<String, Collection<String>> selection) {
         this.queryString = query;
-        this.selection = selection;
+        if (selection == null) {
+            this.selection = new HashMap<String, Collection<String>>();
+        } else {
+            this.selection = selection;
+        }
     }
 
     /**
@@ -94,8 +99,8 @@ public class QueryFacetsSelection implements Serializable {
     public void setQuery(String queryString) {
         this.queryString = queryString;
     }
-    
-    public void selectValues(String facet, Collection<String> values){
+
+    public void selectValues(String facet, Collection<String> values) {
         selection.put(facet, values);
     }
 
