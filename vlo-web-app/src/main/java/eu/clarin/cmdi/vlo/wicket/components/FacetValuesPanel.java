@@ -36,11 +36,11 @@ import org.apache.wicket.model.IModel;
  *
  * @author twagoo
  */
-public abstract class FacetPanel extends Panel {
+public abstract class FacetValuesPanel extends Panel {
 
     private final int maxNumberOfFacetsToShow = 10; //TODO: get from config
 
-    public FacetPanel(String id, IModel<FacetField> model) {
+    public FacetValuesPanel(String id, IModel<FacetField> model) {
         super(id, model);
         setDefaultModel(new CompoundPropertyModel<FacetField>(model));
 
@@ -58,7 +58,7 @@ public abstract class FacetPanel extends Panel {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        FacetPanel.this.onValuesSelected(
+                        FacetValuesPanel.this.onValuesSelected(
                                 item.getModelObject().getFacetField().getName(),
                                 Collections.singleton(item.getModelObject().getName()),
                                 target);

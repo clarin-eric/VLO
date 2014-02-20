@@ -45,7 +45,7 @@ public class FacetsPanel extends Panel {
 
             @Override
             protected void populateItem(Item<FacetField> item) {
-                item.add(new FacetPanel("facet", item.getModel()) {
+                item.add(new FacetValuesPanel("facet", item.getModel()) {
 
                     @Override
                     public void onValuesSelected(String facet, Collection<String> value, AjaxRequestTarget target) {
