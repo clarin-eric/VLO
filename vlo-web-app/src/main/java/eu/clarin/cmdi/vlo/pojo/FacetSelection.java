@@ -14,37 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package eu.clarin.cmdi.vlo.pojo;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import org.apache.wicket.model.IModel;
 
 /**
  *
  * @author twagoo
  */
-public class FacetSelection implements Serializable {
+public interface FacetSelection {
 
-    private final String facet;
-    private final IModel<QueryFacetsSelection> selectionModel;
+    String getFacet();
 
-    public FacetSelection(String facet, IModel<QueryFacetsSelection> selectionModel) {
-        this.facet = facet;
-        this.selectionModel = selectionModel;
-    }
+    List<String> getFacetValues();
 
-    public String getFacet() {
-        return facet;
-    }
-
-    public QueryFacetsSelection getSelection() {
-        return selectionModel.getObject();
-    }
-
-    public List<String> getFacetValues() {
-        return new CopyOnWriteArrayList<String>(getSelection().getSelectionValues(facet));
-    }
-
+    QueryFacetsSelection getSelection();
+    
 }
