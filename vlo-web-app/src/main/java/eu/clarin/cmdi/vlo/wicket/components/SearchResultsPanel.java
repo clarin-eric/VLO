@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.components;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.SolrDocumentService;
+import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
 import org.apache.solr.common.SolrDocument;
@@ -57,14 +58,28 @@ public class SearchResultsPanel extends Panel {
 
             @Override
             protected void populateItem(Item<SolrDocument> item) {
-                //TODO: Wrap in model to deal with null values
-                item.add(new Label("title", new SolrFieldModel(item.getModel(), FacetConstants.FIELD_NAME)));
-                item.add(new Label("description", new SolrFieldModel(item.getModel(), FacetConstants.FIELD_DESCRIPTION)));
+                final IModel<SolrDocument> documentModel = item.getModel();
+                item.add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME));
+                item.add(new SolrFieldLabel("description", documentModel, FacetConstants.FIELD_DESCRIPTION, "<no description>"));
                 //TODO: get resource information
             }
         });
 
         //TODO: Add pagination
+    }
+
+    public static class SolrFieldLabel extends Label {
+
+        public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName) {
+            super(id, new SolrFieldModel(documentModel, fieldName));
+        }
+
+        public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, String nullFallback) {
+            super(id,
+                    new NullFallbackModel(
+                            new SolrFieldModel(documentModel, fieldName), nullFallback));
+        }
+
     }
 
 }
