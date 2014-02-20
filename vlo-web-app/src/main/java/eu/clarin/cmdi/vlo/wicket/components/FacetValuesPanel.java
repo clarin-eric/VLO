@@ -32,7 +32,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
 /**
- * A panel representing a single facet
+ * A panel representing a single facet and its selectable values
  *
  * @author twagoo
  */
@@ -53,24 +53,33 @@ public abstract class FacetValuesPanel extends Panel {
 
             @Override
             protected void populateItem(final Item<Count> item) {
-                item.setDefaultModel(new CompoundPropertyModel<Count>(item.getModel()));
-                final Link selectLink = new AjaxFallbackLink("facetSelect") {
-
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        FacetValuesPanel.this.onValuesSelected(
-                                item.getModelObject().getFacetField().getName(),
-                                Collections.singleton(item.getModelObject().getName()),
-                                target);
-                    }
-                };
-                item.add(selectLink);
-                // 'name' field from Count (name of value)
-                selectLink.add(new Label("name"));
-                // 'count' field from Count (document count for value)
-                selectLink.add(new Label("count"));
+                addFacetValue(item);
             }
         });
+    }
+
+    private void addFacetValue(final Item<Count> item) {
+        item.setDefaultModel(new CompoundPropertyModel<Count>(item.getModel()));
+
+        // link to select an individual facet value
+        final Link selectLink = new AjaxFallbackLink("facetSelect") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                // call callback
+                onValuesSelected(
+                        item.getModelObject().getFacetField().getName(),
+                        // for now only single values can be selected
+                        Collections.singleton(item.getModelObject().getName()),
+                        target);
+            }
+        };
+        item.add(selectLink);
+
+        // 'name' field from Count (name of value)
+        selectLink.add(new Label("name"));
+        // 'count' field from Count (document count for value)
+        selectLink.add(new Label("count"));
     }
 
     /**
@@ -81,6 +90,6 @@ public abstract class FacetValuesPanel extends Panel {
      * @param target Ajax target allowing for a partial update. May be null
      * (fallback)!
      */
-    public abstract void onValuesSelected(String facet, Collection<String> values, AjaxRequestTarget target);
+    protected abstract void onValuesSelected(String facet, Collection<String> values, AjaxRequestTarget target);
 
 }
