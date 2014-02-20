@@ -40,14 +40,12 @@ public class SolrDocumentServiceImpl implements SolrDocumentService {
 
     @Override
     public List<SolrDocument> getDocuments(QueryFacetsSelection selection, int first, int count) {
-        //TODO: Use document query
         SolrQuery query = queryFatory.createDocumentQuery(selection,first, count);
         return searchResultsDao.getDocuments(query);
     }
 
     @Override
     public long getDocumentCount(QueryFacetsSelection selection) {
-        //TODO: Use document query/count query?
         SolrQuery query = queryFatory.createDocumentQuery(selection,0,0);
         return searchResultsDao.getDocuments(query).getNumFound();
     }
