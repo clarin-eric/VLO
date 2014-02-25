@@ -25,6 +25,7 @@ import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.navigation.paging.IPageableItems;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -47,16 +48,28 @@ public class SearchResultsPanel extends Panel {
     public SearchResultsPanel(String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
         solrDocumentProvider = new SolrDocumentProvider(documentService, model);
-        add(new Label("resultCount", new AbstractReadOnlyModel<Long>() {
 
-            @Override
-            public Long getObject() {
-                return solrDocumentProvider.size();
-            }
-        }));
-        
-        final DataView<SolrDocument> resultsView = new DataView<SolrDocument>("resultItem", solrDocumentProvider, 10) {
-            
+        // dynamic results view
+        final DataView<SolrDocument> resultsView = createResultsView("resultItem");
+        add(resultsView);
+
+        // pagination navigators
+        add(new AjaxPagingNavigator("pagingTop", resultsView));
+        add(new AjaxPagingNavigator("pagingBottom", resultsView));
+
+        // total result counter
+        add(createResultCount("resultCount"));
+
+        // page result indicater
+        add(createResultPageIndicator("resultPageIndicator", resultsView));
+
+        //For Ajax updating of search results
+        setOutputMarkupId(true);
+    }
+
+    private DataView<SolrDocument> createResultsView(String id) {
+        final DataView<SolrDocument> resultsView = new DataView<SolrDocument>(id, solrDocumentProvider, 10) {
+
             @Override
             protected void populateItem(Item<SolrDocument> item) {
                 final IModel<SolrDocument> documentModel = item.getModel();
@@ -65,13 +78,31 @@ public class SearchResultsPanel extends Panel {
                 //TODO: get resource information
             }
         };
-        add(resultsView);
+        return resultsView;
+    }
 
-        add(new AjaxPagingNavigator("pagingTop", resultsView));
-        add(new AjaxPagingNavigator("pagingBottom", resultsView));
-        
-        //For Ajax updating of search results
-        setOutputMarkupId(true);
+    private Label createResultCount(String id) {
+        final IModel<String> resultCountModel = new AbstractReadOnlyModel<String>() {
+            
+            @Override
+            public String getObject() {
+                return String.format("%d results", solrDocumentProvider.size());
+            }
+        };
+        return new Label(id, resultCountModel);
+    }
+
+    private Label createResultPageIndicator(String id, final IPageableItems resultsView) {
+        IModel<String> indicatorModel = new AbstractReadOnlyModel<String>() {
+
+            @Override
+            public String getObject() {
+                final long firstShown = 1 + resultsView.getCurrentPage() * resultsView.getItemsPerPage();
+                final long lastShown = Math.min(resultsView.getItemCount(), firstShown + resultsView.getItemsPerPage() - 1);
+                return String.format("Showing %d to %d", firstShown, lastShown);
+            }
+        };
+        return new Label(id, indicatorModel);
     }
 
     public static class SolrFieldLabel extends Label {
