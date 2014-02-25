@@ -84,7 +84,7 @@ public class SolrDaoImpl {
         try {
             logger.debug("Executing query: {}", query);
             final QueryResponse response = solrServer.query(sanitisedQuery);
-            logger.debug("Response: {}", response);
+            logger.trace("Response: {}", response);
             return response;
         } catch (SolrServerException e) {
             logger.error("Error getting data:", e);

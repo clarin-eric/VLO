@@ -55,12 +55,12 @@ public class FacetsPanel extends Panel {
 
             @Override
             protected void populateItem(Item<FacetField> item) {
-                createFacetPanel(item);
+                createFacetPanel("facet", item);
             }
         });
     }
 
-    private void createFacetPanel(Item<FacetField> item) {
+    private void createFacetPanel(String id, Item<FacetField> item) {
         // Is there a selection for this facet?
         final IModel<FacetField> facetFieldModel = item.getModel();
         final String facetName = facetFieldModel.getObject().getName();
@@ -69,15 +69,15 @@ public class FacetsPanel extends Panel {
         // Show different panel, depending on selected values
         if (selectionValues == null || selectionValues.isEmpty()) {
             // No values selected, show value selection panel
-            item.add(createFacetValuesPanel(facetFieldModel));
+            item.add(createFacetValuesPanel(id, facetFieldModel));
         } else {
             // Values selected, show selected values panel (with option to remove)
-            item.add(createSelectedFacetPanel(facetName));
+            item.add(createSelectedFacetPanel(id, facetName));
         }
     }
 
-    private FacetValuesPanel createFacetValuesPanel(final IModel<FacetField> facetFieldModel) {
-        return new FacetValuesPanel("facet", facetFieldModel) {
+    private FacetValuesPanel createFacetValuesPanel(String id, final IModel<FacetField> facetFieldModel) {
+        return new FacetValuesPanel(id, facetFieldModel) {
 
             @Override
             public void onValuesSelected(String facet, Collection<String> value, AjaxRequestTarget target) {
@@ -93,8 +93,8 @@ public class FacetsPanel extends Panel {
         };
     }
 
-    private SelectedFacetPanel createSelectedFacetPanel(String facetName) {
-        return new SelectedFacetPanel("facet", new FacetSelectionModel(facetName, model)) {
+    private SelectedFacetPanel createSelectedFacetPanel(String id, String facetName) {
+        return new SelectedFacetPanel(id, new FacetSelectionModel(facetName, model)) {
 
             @Override
             public void onValuesUnselected(String facet, Collection<String> valuesRemoved, AjaxRequestTarget target) {
