@@ -23,6 +23,7 @@ import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
@@ -53,9 +54,9 @@ public class SearchResultsPanel extends Panel {
                 return solrDocumentProvider.size();
             }
         }));
-
-        add(new DataView<SolrDocument>("resultItem", solrDocumentProvider, 10) {
-
+        
+        final DataView<SolrDocument> resultsView = new DataView<SolrDocument>("resultItem", solrDocumentProvider, 10) {
+            
             @Override
             protected void populateItem(Item<SolrDocument> item) {
                 final IModel<SolrDocument> documentModel = item.getModel();
@@ -63,9 +64,14 @@ public class SearchResultsPanel extends Panel {
                 item.add(new SolrFieldLabel("description", documentModel, FacetConstants.FIELD_DESCRIPTION, "<no description>"));
                 //TODO: get resource information
             }
-        });
+        };
+        add(resultsView);
 
-        //TODO: Add pagination
+        add(new AjaxPagingNavigator("pagingTop", resultsView));
+        add(new AjaxPagingNavigator("pagingBottom", resultsView));
+        
+        //For Ajax updating of search results
+        setOutputMarkupId(true);
     }
 
     public static class SolrFieldLabel extends Label {
