@@ -2,6 +2,7 @@ package eu.clarin.cmdi.vlo.config;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -103,7 +104,7 @@ public class VloConfig {
      * that the elements inside 'facetFields' are named 'facetField'.
      */
     @XmlElementWrapper(name = "facetFields")
-    private String[] facetField = {"", "", ""};
+    private List<String> facetField = new ArrayList<String>();
 
     // test related parameters
     //(required = false)
@@ -688,7 +689,7 @@ public class VloConfig {
      *
      * @return the value
      */
-    public String[] getFacetFields() {
+    public List<String> getFacetFields() {
         return facetField;
     }
 
@@ -700,7 +701,7 @@ public class VloConfig {
      *
      * @param param the value, a list of facet fields
      */
-    public void setFacetFields(String[] param) {
+    public void setFacetFields(List<String> param) {
         facetField = param;
     }
 

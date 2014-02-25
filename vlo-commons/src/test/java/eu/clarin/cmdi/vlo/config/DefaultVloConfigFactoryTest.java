@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -677,7 +678,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("getFacetFields");
 
-        String[] expResult = {
+        List<String> expResult = Arrays.asList(
             "collection",
             "language",
             "resourceClass",
@@ -690,11 +691,11 @@ public class DefaultVloConfigFactoryTest {
             "format",
             "dataProvider",
             "nationalProject",
-            "keywords"};
+            "keywords");
 
-        String[] result = config.getFacetFields();
+        List<String> result = config.getFacetFields();
 
-        assertArrayEquals(expResult, result);
+        assertEquals(expResult, result);
     }
 
     /**
@@ -705,7 +706,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("setFacetFields");
 
-        String[] expResult = {
+        List<String> expResult = Arrays.asList(
             "collection",
             "language",
             "resourceClass",
@@ -718,13 +719,13 @@ public class DefaultVloConfigFactoryTest {
             "format",
             "dataProvider",
             "nationalProject",
-            "keywords"};
+            "keywords");
 
         config.setFacetFields(expResult);
 
-        String result[] = config.getFacetFields();
+        List<String> result = config.getFacetFields();
 
-        assertArrayEquals(expResult, result);
+        assertEquals(expResult, result);
     }
 
     /**

@@ -54,7 +54,7 @@ public class SolrDaoImpl {
 
             // present the facets from the config file as a list to a new set
             Set<String> facetsDefined;
-            facetsDefined = new HashSet<String>(Arrays.asList(config.getFacetFields()));
+            facetsDefined = new HashSet<String>(config.getFacetFields());
 
             // check the filters in the query by name
             for (String filter : filtersInQuery) {

@@ -20,11 +20,11 @@ import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.SearchResultsDao;
 import eu.clarin.cmdi.vlo.service.SolrDocumentService;
-import eu.clarin.cmdi.vlo.service.SolrQueryFactory;
+import eu.clarin.cmdi.vlo.service.SolrFacetQueryFactory;
 import eu.clarin.cmdi.vlo.service.impl.SearchResultsDaoImpl;
 import eu.clarin.cmdi.vlo.service.impl.SolrDocumentServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.SolrFacetFieldsService;
-import eu.clarin.cmdi.vlo.service.impl.SolrQueryFactoryImpl;
+import eu.clarin.cmdi.vlo.service.impl.SolrFacetQueryFactoryImpl;
 import java.io.IOException;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
@@ -83,8 +83,8 @@ public class VloSpringConfig {
     }
 
     @Bean
-    public SolrQueryFactory queryFactory() {
-        return new SolrQueryFactoryImpl(vloConfig());
+    public SolrFacetQueryFactory queryFactory() {
+        return new SolrFacetQueryFactoryImpl(vloConfig().getFacetFields());
     }
 
     @Bean

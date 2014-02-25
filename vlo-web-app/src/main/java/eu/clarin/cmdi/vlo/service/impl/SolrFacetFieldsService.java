@@ -19,7 +19,7 @@ package eu.clarin.cmdi.vlo.service.impl;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.SearchResultsDao;
-import eu.clarin.cmdi.vlo.service.SolrQueryFactory;
+import eu.clarin.cmdi.vlo.service.SolrFacetQueryFactory;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 
@@ -32,14 +32,14 @@ import org.apache.solr.client.solrj.response.FacetField;
 public class SolrFacetFieldsService implements FacetFieldsService {
 
     private final SearchResultsDao searchResultsDao;
-    private final SolrQueryFactory queryFatory;
+    private final SolrFacetQueryFactory queryFatory;
 
     /**
      * 
      * @param searchResultsDao DAO to use to retrieve facets
      * @param queryFatory factory to use to construct facet queries
      */
-    public SolrFacetFieldsService(SearchResultsDao searchResultsDao, SolrQueryFactory queryFatory) {
+    public SolrFacetFieldsService(SearchResultsDao searchResultsDao, SolrFacetQueryFactory queryFatory) {
         this.searchResultsDao = searchResultsDao;
         this.queryFatory = queryFatory;
     }

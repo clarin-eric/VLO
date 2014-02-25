@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
-import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.Arrays;
 import java.util.Collection;
@@ -34,25 +33,18 @@ import static org.junit.Assert.*;
  *
  * @author twagoo
  */
-public class SolrQueryFactoryImplTest {
+public class SolrFacetQueryFactoryImplTest {
 
-    public static final String[] FACET_FIELDS = new String[]{"facet1", "facet2", "facet3"};
+    public static final List<String> FACET_FIELDS = Arrays.asList("facet1", "facet2", "facet3");
 
     /**
      * static because it doesn't carry state
      */
-    private static SolrQueryFactoryImpl instance;
+    private static SolrFacetQueryFactoryImpl instance;
 
     @BeforeClass
     public static void setUpClass() {
-        instance = new SolrQueryFactoryImpl(new VloConfig() {
-
-            @Override
-            public String[] getFacetFields() {
-                return FACET_FIELDS;
-            }
-
-        });
+        instance = new SolrFacetQueryFactoryImpl(FACET_FIELDS);
     }
 
     /**
@@ -145,7 +137,7 @@ public class SolrQueryFactoryImplTest {
     @Test
     public void testCreateCountFacetsQuery() {
         SolrQuery query = instance.createCountFacetsQuery();
-        assertArrayEquals(FACET_FIELDS, query.getFacetFields());
+        assertArrayEquals(FACET_FIELDS.toArray(), query.getFacetFields());
     }
 
 }

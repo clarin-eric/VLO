@@ -55,7 +55,7 @@ public class VloConfigMarshallerTest {
         assertNotNull(config);
         assertEquals("http://localhost:8080/vlo_solr/", config.getSolrUrl());
         assertEquals(3, config.getDataRoots().size());
-        assertEquals(13, config.getFacetFields().length);
+        assertEquals(13, config.getFacetFields().size());
     }
 
     /**
@@ -66,7 +66,7 @@ public class VloConfigMarshallerTest {
         final VloConfig config = new VloConfig();
         config.setSolrUrl("http://server/solr");
         config.setDataRoots(Arrays.asList(new DataRoot("originName", new File("rootFile"), "prefix", "toStrip", Boolean.FALSE)));
-        config.setFacetFields(new String[]{"collection", "country", "continent"});
+        config.setFacetFields(Arrays.asList("collection", "country", "continent"));
         final StringWriter sw = new StringWriter();
         instance.marshal(config, new StreamResult(sw));
         logger.debug(sw.toString());

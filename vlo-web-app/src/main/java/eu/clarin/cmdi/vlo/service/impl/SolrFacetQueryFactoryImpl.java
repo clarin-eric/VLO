@@ -17,8 +17,7 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.service.SolrQueryFactory;
+import eu.clarin.cmdi.vlo.service.SolrFacetQueryFactory;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,27 +32,31 @@ import org.apache.solr.client.solrj.util.ClientUtils;
  *
  * @author twagoo
  */
-public class SolrQueryFactoryImpl implements SolrQueryFactory {
-
+public class SolrFacetQueryFactoryImpl implements SolrFacetQueryFactory {
+    
     private static final String SOLR_SEARCH_ALL = "*:*";
-    private final SolrQuery countQuery;
-    private final VloConfig config;
-
-    public SolrQueryFactoryImpl(VloConfig config) {
-        this.config = config;
+    private final SolrQuery facetCountQuery;
+    private final String[] facets;
+    
+    /**
+     * 
+     * @param facets names of facets to include in query
+     */
+    public SolrFacetQueryFactoryImpl(List<String> facets) {
+        this.facets = facets.toArray(new String[facets.size()]);
 
         // create the query used to count facets (will never change)
-        countQuery = getDefaultFacetQuery();
-        countQuery.setRows(0);
+        facetCountQuery = getDefaultFacetQuery();
+        facetCountQuery.setRows(0);
     }
-
+    
     @Override
     public SolrQuery createFacetQuery(QueryFacetsSelection queryFacetsSelections) {
         final SolrQuery query = getDefaultFacetQuery();
         addQueryFacetParameters(query, queryFacetsSelections);
         return query;
     }
-
+    
     @Override
     public SolrQuery createDocumentQuery(QueryFacetsSelection selection, int first, int count) {
         final SolrQuery query = getDefaultDocumentQuery();
@@ -62,18 +65,17 @@ public class SolrQueryFactoryImpl implements SolrQueryFactory {
         query.setRows(count);
         return query;
     }
-
+    
     protected void addQueryFacetParameters(final SolrQuery query, QueryFacetsSelection queryFacetsSelections) {
         final String queryString = queryFacetsSelections.getQuery();
-
+        
         if (queryString == null) {
             query.setQuery(SOLR_SEARCH_ALL);
         } else {
             query.setQuery(ClientUtils.escapeQueryChars(queryString));
         }
-
-        Map<String, Collection<String>> selections = queryFacetsSelections.getSelection();
-
+        
+        final Map<String, Collection<String>> selections = queryFacetsSelections.getSelection();
         if (selections != null) {
             final List<String> encodedQueries = new ArrayList(selections.size()); // assuming every facet has one selection, most common scenario
             for (Map.Entry<String, Collection<String>> selection : selections.entrySet()) {
@@ -88,26 +90,26 @@ public class SolrQueryFactoryImpl implements SolrQueryFactory {
             query.setFilterQueries(encodedQueries.toArray(new String[encodedQueries.size()]));
         }
     }
-
+    
     private SolrQuery getDefaultFacetQuery() {
         SolrQuery query = new SolrQuery();
         query.setRows(0);
         query.setFacet(true);
         query.setFacetMinCount(1);
-        query.addFacetField(config.getFacetFields());
+        query.addFacetField(facets);
         return query;
     }
-
+    
     private SolrQuery getDefaultDocumentQuery() {
         SolrQuery query = new SolrQuery();
         query.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID, FacetConstants.FIELD_DESCRIPTION, FacetConstants.FIELD_COLLECTION, FacetConstants.FIELD_RESOURCE);
         query.setSort(SolrQuery.SortClause.asc(FacetConstants.FIELD_NAME));
         return query;
     }
-
+    
     @Override
     public synchronized SolrQuery createCountFacetsQuery() {
-        return countQuery;
+        return facetCountQuery;
     }
-
+    
 }

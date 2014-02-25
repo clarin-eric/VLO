@@ -25,7 +25,7 @@ import org.apache.solr.client.solrj.SolrQuery;
  *
  * @author twagoo
  */
-public interface SolrQueryFactory {
+public interface SolrFacetQueryFactory {
 
     SolrQuery createFacetQuery(QueryFacetsSelection selection);
 
