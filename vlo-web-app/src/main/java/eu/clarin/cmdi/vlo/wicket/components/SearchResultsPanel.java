@@ -53,14 +53,13 @@ public class SearchResultsPanel extends Panel {
     @SpringBean
     private SolrDocumentService documentService;
     private final IDataProvider<SolrDocument> solrDocumentProvider;
-
+    private final DataView<SolrDocument> resultsView;
+    
     public SearchResultsPanel(String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
         solrDocumentProvider = new SolrDocumentProvider(documentService, model);
-
-        // dynamic results view
-        final DataView<SolrDocument> resultsView = createResultsView("resultItem");
-        add(resultsView);
+        
+        add(resultsView = createResultsView("resultItem"));
 
         // pagination navigators
         add(new AjaxPagingNavigator("pagingTop", resultsView));
@@ -79,8 +78,16 @@ public class SearchResultsPanel extends Panel {
         setOutputMarkupId(true);
     }
 
+    @Override
+    protected void onConfigure() {
+        // only show pagination navigators if there's more than one page
+        final boolean showPaging = resultsView.getPageCount() > 1;
+        this.get("pagingTop").setVisible(showPaging);
+        this.get("pagingBottom").setVisible(showPaging);
+    }
+
     private DataView<SolrDocument> createResultsView(String id) {
-        final DataView<SolrDocument> resultsView = new DataView<SolrDocument>(id, solrDocumentProvider, 10) {
+        return new DataView<SolrDocument>(id, solrDocumentProvider, 10) {
 
             @Override
             protected void populateItem(Item<SolrDocument> item) {
@@ -90,7 +97,6 @@ public class SearchResultsPanel extends Panel {
                 //TODO: get resource information
             }
         };
-        return resultsView;
     }
 
     private Label createResultCount(String id) {
