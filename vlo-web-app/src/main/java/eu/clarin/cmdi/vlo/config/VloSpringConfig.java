@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.service.SearchResultsDao;
 import eu.clarin.cmdi.vlo.service.SolrDocumentService;
 import eu.clarin.cmdi.vlo.service.SolrFacetQueryFactory;
 import eu.clarin.cmdi.vlo.service.impl.SearchResultsDaoImpl;
+import eu.clarin.cmdi.vlo.service.impl.SolrDocumentQueryFactoryImpl;
 import eu.clarin.cmdi.vlo.service.impl.SolrDocumentServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.SolrFacetFieldsService;
 import eu.clarin.cmdi.vlo.service.impl.SolrFacetQueryFactoryImpl;
@@ -69,12 +70,12 @@ public class VloSpringConfig {
 
     @Bean
     public FacetFieldsService facetFieldsService() {
-        return new SolrFacetFieldsService(searchResultsDao(), queryFactory());
+        return new SolrFacetFieldsService(searchResultsDao(), facetQueryFactory());
     }
     
     @Bean
     public SolrDocumentService documentService() {
-        return new SolrDocumentServiceImpl(searchResultsDao(), queryFactory());
+        return new SolrDocumentServiceImpl(searchResultsDao(), documentQueryFactory());
     }
 
     @Bean
@@ -83,8 +84,13 @@ public class VloSpringConfig {
     }
 
     @Bean
-    public SolrFacetQueryFactory queryFactory() {
+    public SolrFacetQueryFactory facetQueryFactory() {
         return new SolrFacetQueryFactoryImpl(vloConfig().getFacetFields());
+    }
+    
+    @Bean
+    public SolrDocumentQueryFactoryImpl documentQueryFactory() {
+        return new SolrDocumentQueryFactoryImpl();
     }
 
     @Bean

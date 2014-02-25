@@ -16,15 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.service.SolrFacetQueryFactory;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.util.ClientUtils;
 
 /**
  * Implements a SOLR query factory, to be used by SOLR service implementation
@@ -32,9 +27,8 @@ import org.apache.solr.client.solrj.util.ClientUtils;
  *
  * @author twagoo
  */
-public class SolrFacetQueryFactoryImpl implements SolrFacetQueryFactory {
+public class SolrFacetQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrFacetQueryFactory {
     
-    private static final String SOLR_SEARCH_ALL = "*:*";
     private final SolrQuery facetCountQuery;
     private final String[] facets;
     
@@ -57,53 +51,12 @@ public class SolrFacetQueryFactoryImpl implements SolrFacetQueryFactory {
         return query;
     }
     
-    @Override
-    public SolrQuery createDocumentQuery(QueryFacetsSelection selection, int first, int count) {
-        final SolrQuery query = getDefaultDocumentQuery();
-        addQueryFacetParameters(query, selection);
-        query.setStart(first);
-        query.setRows(count);
-        return query;
-    }
-    
-    protected void addQueryFacetParameters(final SolrQuery query, QueryFacetsSelection queryFacetsSelections) {
-        final String queryString = queryFacetsSelections.getQuery();
-        
-        if (queryString == null) {
-            query.setQuery(SOLR_SEARCH_ALL);
-        } else {
-            query.setQuery(ClientUtils.escapeQueryChars(queryString));
-        }
-        
-        final Map<String, Collection<String>> selections = queryFacetsSelections.getSelection();
-        if (selections != null) {
-            final List<String> encodedQueries = new ArrayList(selections.size()); // assuming every facet has one selection, most common scenario
-            for (Map.Entry<String, Collection<String>> selection : selections.entrySet()) {
-                final String facetName = selection.getKey();
-                final Collection<String> values = selection.getValue();
-                if (values != null) {
-                    for (String value : values) {
-                        encodedQueries.add(String.format("%s:%s", facetName, ClientUtils.escapeQueryChars(value)));
-                    }
-                }
-            }
-            query.setFilterQueries(encodedQueries.toArray(new String[encodedQueries.size()]));
-        }
-    }
-    
     private SolrQuery getDefaultFacetQuery() {
         SolrQuery query = new SolrQuery();
         query.setRows(0);
         query.setFacet(true);
         query.setFacetMinCount(1);
         query.addFacetField(facets);
-        return query;
-    }
-    
-    private SolrQuery getDefaultDocumentQuery() {
-        SolrQuery query = new SolrQuery();
-        query.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID, FacetConstants.FIELD_DESCRIPTION, FacetConstants.FIELD_COLLECTION, FacetConstants.FIELD_RESOURCE);
-        query.setSort(SolrQuery.SortClause.asc(FacetConstants.FIELD_NAME));
         return query;
     }
     
