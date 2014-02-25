@@ -29,6 +29,7 @@ public class LanguageCodePostProcessorTest {
         assertEquals("French", processor.process("ISO639-3:fra"));
         assertEquals("German", processor.process("RFC1766:x-sil-GER"));
         assertEquals("RFC1766:sgn-NL", processor.process("RFC1766:sgn-NL"));
+        assertEquals("Basque", processor.process("baq"));
     }
 
 }

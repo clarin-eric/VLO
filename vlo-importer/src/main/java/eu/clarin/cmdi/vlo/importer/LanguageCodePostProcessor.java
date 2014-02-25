@@ -31,6 +31,7 @@ public class LanguageCodePostProcessor implements PostProcessor{
     private Map<String, String> silToIso639Map;
     private Map<String, String> languageNameToIso639Map;
     private Map<String, String> iso639ToLanguageNameMap;
+    private Map<String, String> iso639_2TToISO639_3Map;
 
     /**
      * Returns the language name based on the mapping defined in the CMDI components: See http://trac.clarin.eu/ticket/40 for the mapping.
@@ -72,6 +73,12 @@ public class LanguageCodePostProcessor implements PostProcessor{
                 }
             }
         }
+        
+        // convert ISO 639-2/T codes to ISO 639-3
+        if (getIso6392TToISO6393Map().containsKey(value.toUpperCase())) {
+            result = getIso6392TToISO6393Map().get(value.toUpperCase());
+        }
+        
         // Convert to lowercase to capture erroneously capitalized language codes in the CMDI files.
         // NOTE: In the mappings themselves we do not capitalize.
         result = result.toLowerCase();
@@ -121,6 +128,41 @@ public class LanguageCodePostProcessor implements PostProcessor{
     	}
 
     	return iso639ToLanguageNameMap;
+    }
+    
+    /**
+     * Returns map of ISO 639-2/B codes to ISO 639-3
+     * 
+     *  It is strongly advised to use ISO 639-3 codes, the support for ISO 639-2 may be discontinued in the future
+     * 
+     * @return map of ISO 639-2/B codes to ISO 639-3
+     */
+    private Map<String, String> getIso6392TToISO6393Map() {
+        if (iso639_2TToISO639_3Map == null) {
+            iso639_2TToISO639_3Map = new HashMap<String, String>();
+            iso639_2TToISO639_3Map.put("ALB", "SQI");
+            iso639_2TToISO639_3Map.put("ARM", "HYE");
+            iso639_2TToISO639_3Map.put("BAQ", "EUS");
+            iso639_2TToISO639_3Map.put("BUR", "MYA");
+            iso639_2TToISO639_3Map.put("CZE", "CES");
+            iso639_2TToISO639_3Map.put("CHI", "ZHO");
+            iso639_2TToISO639_3Map.put("DUT", "NLD");
+            iso639_2TToISO639_3Map.put("FRE", "FRA");
+            iso639_2TToISO639_3Map.put("GEO", "KAT");
+            iso639_2TToISO639_3Map.put("GER", "DEU");
+            iso639_2TToISO639_3Map.put("GRE", "ELL");
+            iso639_2TToISO639_3Map.put("ICE", "ISL");
+            iso639_2TToISO639_3Map.put("MAC", "MKD");
+            iso639_2TToISO639_3Map.put("MAO", "MRI");
+            iso639_2TToISO639_3Map.put("MAY", "MSA");
+            iso639_2TToISO639_3Map.put("PER", "FAS");
+            iso639_2TToISO639_3Map.put("RUM", "RON");
+            iso639_2TToISO639_3Map.put("SLO", "SLK");
+            iso639_2TToISO639_3Map.put("TIB", "BOD");
+            iso639_2TToISO639_3Map.put("WEL", "CYM");
+        }
+        
+        return iso639_2TToISO639_3Map;
     }
 
     private Map<String, String> createCodeMap(String url) {
