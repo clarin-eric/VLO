@@ -16,11 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.SolrDocumentService;
-import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
 import java.util.Arrays;
 import java.util.List;
@@ -92,6 +89,8 @@ public class SearchResultsPanel extends Panel {
      */
     @Override
     protected void onConfigure() {
+        super.onConfigure();
+        
         // only show pagination navigators if there's more than one page
         final boolean showPaging = resultsView.getPageCount() > 1;
         this.get("pagingTop").setVisible(showPaging);

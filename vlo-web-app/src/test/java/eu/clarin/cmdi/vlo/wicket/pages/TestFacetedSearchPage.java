@@ -2,6 +2,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloSpringConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
@@ -26,6 +27,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import static org.hamcrest.core.AnyOf.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * Abstract base class for tests that require dependency injection of (mock)
@@ -47,8 +49,15 @@ public class TestFacetedSearchPage {
         }
 
         @Override
+        @Bean(name = VloSpringConfig.FACETS_PANEL_SERVICE)
         public FacetFieldsService facetFieldsService() {
-            return mockery().mock(FacetFieldsService.class);
+            return mockery().mock(FacetFieldsService.class, "facetFieldsService");
+        }
+
+        @Override
+        @Bean(name = COLLECTION_FACET_SERVICE)
+        public FacetFieldsService collectionFacetFieldsService() {
+            return mockery().mock(FacetFieldsService.class, "collectionFacetFieldsService");
         }
 
         @Override
@@ -58,13 +67,20 @@ public class TestFacetedSearchPage {
     }
 
     private WicketTester tester;
-    @Autowired
+    @Autowired(required = true)
     private VloWicketApplication application;
-    @Autowired
+    @Autowired(required = true)
     private Mockery mockery;
-    @Autowired
+
+    @Autowired(required = true)
+    @Qualifier(VloSpringConfig.FACETS_PANEL_SERVICE)
     private FacetFieldsService facetFieldsService;
-    @Autowired
+
+    @Autowired(required = true)
+    @Qualifier(VloSpringConfig.COLLECTION_FACET_SERVICE)
+    private FacetFieldsService collectionsFacetFieldsService; //TODO: Make sure this gets injected separately (like qualifier should ensure)
+
+    @Autowired(required = true)
     private SolrDocumentService documentService;
 
     @Before
@@ -80,9 +96,15 @@ public class TestFacetedSearchPage {
                 // mock facets
                 atLeast(1).of(facetFieldsService).getFacetFieldCount();
                 will(returnValue(2L));
-                oneOf(facetFieldsService).getFacetFields(with(any(QueryFacetsSelection.class)));
+                atLeast(1).of(facetFieldsService).getFacetFields(with(any(QueryFacetsSelection.class)));
                 will(returnValue(Arrays.asList(new FacetField("language"), new FacetField("resource class"))));
-                
+//
+//                // mock collection facet
+//                atLeast(1).of(collectionsFacetFieldsService).getFacetFieldCount();
+//                will(returnValue(1L));
+//                oneOf(collectionsFacetFieldsService).getFacetFields(with(any(QueryFacetsSelection.class)));
+//                will(returnValue(Arrays.asList(new FacetField("collection"))));
+
                 // mock search results
                 atLeast(1).of(documentService).getDocumentCount(with(any(QueryFacetsSelection.class)));
                 will(returnValue(1000L));

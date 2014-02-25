@@ -2,6 +2,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.wicket.components.FacetsPanel;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.components.SingleFacetPanel;
 import eu.clarin.cmdi.vlo.wicket.components.SearchForm;
 import eu.clarin.cmdi.vlo.wicket.components.SearchResultsPanel;
 import java.util.Collection;
@@ -25,6 +26,8 @@ public class FacetedSearchPage extends WebPage {
         final QueryFacetsSelection selection = paramsToQueryFacetSelection(parameters);
         final Model<QueryFacetsSelection> queryModel = new Model<QueryFacetsSelection>(selection);
 
+        add(new SingleFacetPanel("collectionsFacet", queryModel));
+        
         add(new FacetsPanel("facets", queryModel));
 
         add(new SearchForm("search", queryModel));

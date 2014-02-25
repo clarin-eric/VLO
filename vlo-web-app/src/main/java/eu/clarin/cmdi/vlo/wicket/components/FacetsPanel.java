@@ -16,14 +16,12 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
-import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
+import eu.clarin.cmdi.vlo.config.VloSpringConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldsDataProvider;
 import java.util.Collection;
-import java.util.HashSet;
 import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -41,76 +39,34 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  *
  * @author twagoo
  */
-public class FacetsPanel extends Panel {
+public class FacetsPanel extends AbstractFacetsPanel {
 
-    @SpringBean
+    @SpringBean(name = VloSpringConfig.FACETS_PANEL_SERVICE)
     private FacetFieldsService facetFieldsService;
-    private final IModel<QueryFacetsSelection> model;
 
     public FacetsPanel(final String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
-        this.model = model;
 
         add(new DataView<FacetField>("facets", new FacetFieldsDataProvider(facetFieldsService, model)) {
 
             @Override
             protected void populateItem(Item<FacetField> item) {
-                createFacetPanel("facet", item);
+                item.add(createFacetPanel("facet", item.getModel()));
             }
         });
     }
 
-    private void createFacetPanel(String id, Item<FacetField> item) {
+    private Panel createFacetPanel(String id, IModel<FacetField> facetFieldModel) {
         // Is there a selection for this facet?
-        final IModel<FacetField> facetFieldModel = item.getModel();
         final String facetName = facetFieldModel.getObject().getName();
         final Collection<String> selectionValues = model.getObject().getSelectionValues(facetName);
-
         // Show different panel, depending on selected values
         if (selectionValues == null || selectionValues.isEmpty()) {
             // No values selected, show value selection panel
-            item.add(createFacetValuesPanel(id, facetFieldModel));
+            return createFacetValuesPanel(id, facetFieldModel);
         } else {
             // Values selected, show selected values panel (with option to remove)
-            item.add(createSelectedFacetPanel(id, facetName));
+            return createSelectedFacetPanel(id, facetName);
         }
-    }
-
-    private FacetValuesPanel createFacetValuesPanel(String id, final IModel<FacetField> facetFieldModel) {
-        return new FacetValuesPanel(id, facetFieldModel) {
-
-            @Override
-            public void onValuesSelected(String facet, Collection<String> value, AjaxRequestTarget target) {
-                // A value has been selected on this facet's panel,
-                // update the model!
-                model.getObject().selectValues(facet, value);
-
-                if (target != null) {
-                    // reload entire page for now
-                    target.add(getPage());
-                }
-            }
-        };
-    }
-
-    private SelectedFacetPanel createSelectedFacetPanel(String id, String facetName) {
-        return new SelectedFacetPanel(id, new FacetSelectionModel(facetName, model)) {
-
-            @Override
-            public void onValuesUnselected(String facet, Collection<String> valuesRemoved, AjaxRequestTarget target) {
-                // Values have been removed, calculate remainder
-                final Collection<String> currentSelection = model.getObject().getSelectionValues(facet);
-                final Collection<String> newSelection = new HashSet<String>(currentSelection);
-                newSelection.removeAll(valuesRemoved);
-
-                // Update model
-                model.getObject().selectValues(facet, newSelection);
-
-                if (target != null) {
-                    // reload entire page for now
-                    target.add(getPage());
-                }
-            }
-        };
     }
 }

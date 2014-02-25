@@ -27,6 +27,7 @@ import eu.clarin.cmdi.vlo.service.impl.SolrDocumentServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.SolrFacetFieldsService;
 import eu.clarin.cmdi.vlo.service.impl.SolrFacetQueryFactoryImpl;
 import java.io.IOException;
+import java.util.Collections;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.springframework.context.annotation.Bean;
@@ -45,6 +46,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class VloSpringConfig {
 
+    public final static String FACETS_PANEL_SERVICE = "factsPanelService";
+    public final static String COLLECTION_FACET_SERVICE = "factsPanelService";
+    
     /**
      *
      * @return the web application object that represents the Wicket application
@@ -68,9 +72,24 @@ public class VloSpringConfig {
         return new DefaultVloConfigFactory();
     }
 
-    @Bean
+    @Bean(name = FACETS_PANEL_SERVICE)
     public FacetFieldsService facetFieldsService() {
         return new SolrFacetFieldsService(searchResultsDao(), facetQueryFactory());
+    }
+
+    @Bean
+    public SolrFacetQueryFactory facetQueryFactory() {
+        return new SolrFacetQueryFactoryImpl(vloConfig().getFacetFields());
+    }
+
+    @Bean(name = COLLECTION_FACET_SERVICE)
+    public FacetFieldsService collectionFacetFieldsService() {
+        return new SolrFacetFieldsService(searchResultsDao(), collectionFacetQueryFactory());
+    }
+    
+    @Bean
+    public SolrFacetQueryFactory collectionFacetQueryFactory() {
+        return new SolrFacetQueryFactoryImpl(Collections.singletonList("collection"));
     }
     
     @Bean
@@ -81,11 +100,6 @@ public class VloSpringConfig {
     @Bean
     public SearchResultsDao searchResultsDao() {
         return new SearchResultsDaoImpl(solrServer(), vloConfig());
-    }
-
-    @Bean
-    public SolrFacetQueryFactory facetQueryFactory() {
-        return new SolrFacetQueryFactoryImpl(vloConfig().getFacetFields());
     }
     
     @Bean
