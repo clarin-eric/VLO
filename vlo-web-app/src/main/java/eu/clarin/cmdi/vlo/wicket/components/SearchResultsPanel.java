@@ -54,12 +54,21 @@ public class SearchResultsPanel extends Panel {
     private SolrDocumentService documentService;
     private final IDataProvider<SolrDocument> solrDocumentProvider;
     private final DataView<SolrDocument> resultsView;
-    
+
     public SearchResultsPanel(String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
         solrDocumentProvider = new SolrDocumentProvider(documentService, model);
-        
-        add(resultsView = createResultsView("resultItem"));
+
+        // data view for search results
+        resultsView = new DataView<SolrDocument>("resultItem", solrDocumentProvider, 10) {
+
+            @Override
+            protected void populateItem(Item<SolrDocument> item) {
+                // single result item
+                item.add(new SearchResultItemPanel("resultItemDetails", item.getModel()));
+            }
+        };
+        add(resultsView);
 
         // pagination navigators
         add(new AjaxPagingNavigator("pagingTop", resultsView));
@@ -78,25 +87,15 @@ public class SearchResultsPanel extends Panel {
         setOutputMarkupId(true);
     }
 
+    /**
+     * Gets called on each request before render
+     */
     @Override
     protected void onConfigure() {
         // only show pagination navigators if there's more than one page
         final boolean showPaging = resultsView.getPageCount() > 1;
         this.get("pagingTop").setVisible(showPaging);
         this.get("pagingBottom").setVisible(showPaging);
-    }
-
-    private DataView<SolrDocument> createResultsView(String id) {
-        return new DataView<SolrDocument>(id, solrDocumentProvider, 10) {
-
-            @Override
-            protected void populateItem(Item<SolrDocument> item) {
-                final IModel<SolrDocument> documentModel = item.getModel();
-                item.add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME));
-                item.add(new SolrFieldLabel("description", documentModel, FacetConstants.FIELD_DESCRIPTION, "<no description>"));
-                //TODO: get resource information
-            }
-        };
     }
 
     private Label createResultCount(String id) {
@@ -141,20 +140,6 @@ public class SearchResultsPanel extends Panel {
         resultPageSizeForm.add(pageSizeDropDown);
 
         return resultPageSizeForm;
-    }
-
-    public static class SolrFieldLabel extends Label {
-
-        public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName) {
-            super(id, new SolrFieldModel(documentModel, fieldName));
-        }
-
-        public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, String nullFallback) {
-            super(id,
-                    new NullFallbackModel(
-                            new SolrFieldModel(documentModel, fieldName), nullFallback));
-        }
-
     }
 
 }

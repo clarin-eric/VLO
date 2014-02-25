@@ -17,12 +17,12 @@
 
 
 $(document).ready(function() {
-    $(".searchresultitemextended").hide();
+//    $(".searchresultitemextended").hide();
     
     $("a.searchresultdetailstoggle").click(function(event) {
         event.preventDefault();
-        var item = $(this).parents(".searchresultitem");
-        item.find(".searchresultitembrief").toggle();
-        item.find(".searchresultitemextended").toggle();
+//        var item = $(this).parents(".searchresultitem");
+//        item.find(".searchresultitembrief").toggle();
+//        item.find(".searchresultitemextended").toggle();
     });
 });
