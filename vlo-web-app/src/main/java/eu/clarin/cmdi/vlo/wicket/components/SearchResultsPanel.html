@@ -114,9 +114,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <div id="searchresultpagination">
                 <wicket:container wicket:id="pagingBottom">[PAGING]</wicket:container>
 
-                <form id="resultpagesizeform">
+                <form wicket:id="resultPageSizeForm" id="resultpagesizeform">
                     <label for="resultpagesize">Results per page:</label>
-                    <select id="resultpagesize">
+                    <select wicket:id="resultPageSize" id="resultpagesize">
                         <option>5</option>
                         <option>10</option>
                         <option selected="selected">25</option>

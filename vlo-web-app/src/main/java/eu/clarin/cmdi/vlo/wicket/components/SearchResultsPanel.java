@@ -22,9 +22,15 @@ import eu.clarin.cmdi.vlo.service.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
+import java.util.Arrays;
+import java.util.List;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.navigation.paging.IPageableItems;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
@@ -32,6 +38,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -40,6 +47,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  * @author twagoo
  */
 public class SearchResultsPanel extends Panel {
+
+    public static final List<Long> ITEMS_PER_PAGE_OPTIONS = Arrays.asList(5L, 10L, 25L, 50L, 100L);
 
     @SpringBean
     private SolrDocumentService documentService;
@@ -63,6 +72,9 @@ public class SearchResultsPanel extends Panel {
         // page result indicater
         add(createResultPageIndicator("resultPageIndicator", resultsView));
 
+        // form to select number of results per page
+        add(createResultPageSizeForm("resultPageSizeForm", resultsView));
+
         //For Ajax updating of search results
         setOutputMarkupId(true);
     }
@@ -83,7 +95,7 @@ public class SearchResultsPanel extends Panel {
 
     private Label createResultCount(String id) {
         final IModel<String> resultCountModel = new AbstractReadOnlyModel<String>() {
-            
+
             @Override
             public String getObject() {
                 return String.format("%d results", solrDocumentProvider.size());
@@ -103,6 +115,26 @@ public class SearchResultsPanel extends Panel {
             }
         };
         return new Label(id, indicatorModel);
+    }
+
+    private Form createResultPageSizeForm(String id, final IPageableItems resultsView) {
+        final Form resultPageSizeForm = new Form(id);
+
+        final DropDownChoice<Long> pageSizeDropDown
+                = new DropDownChoice<Long>("resultPageSize",
+                        // bind to items per page property of pageable
+                        new PropertyModel<Long>(resultsView, "itemsPerPage"),
+                        ITEMS_PER_PAGE_OPTIONS);
+        pageSizeDropDown.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                target.add(SearchResultsPanel.this);
+            }
+        });
+        resultPageSizeForm.add(pageSizeDropDown);
+
+        return resultPageSizeForm;
     }
 
     public static class SolrFieldLabel extends Label {
