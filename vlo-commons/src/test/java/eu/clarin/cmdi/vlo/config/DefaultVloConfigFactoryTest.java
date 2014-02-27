@@ -679,19 +679,18 @@ public class DefaultVloConfigFactoryTest {
         System.out.println("getFacetFields");
 
         List<String> expResult = Arrays.asList(
-            "collection",
-            "language",
-            "resourceClass",
-            "modality",
-            "continent",
-            "genre",
-            "country",
-            "subject",
-            "organisation",
-            "format",
-            "dataProvider",
-            "nationalProject",
-            "keywords");
+                "language",
+                "resourceClass",
+                "modality",
+                "continent",
+                "genre",
+                "country",
+                "subject",
+                "organisation",
+                "format",
+                "dataProvider",
+                "nationalProject",
+                "keywords");
 
         List<String> result = config.getFacetFields();
 
@@ -707,19 +706,15 @@ public class DefaultVloConfigFactoryTest {
         System.out.println("setFacetFields");
 
         List<String> expResult = Arrays.asList(
-            "collection",
-            "language",
-            "resourceClass",
-            "modality",
-            "continent",
-            "genre",
-            "country",
-            "subject",
-            "organisation",
-            "format",
-            "dataProvider",
-            "nationalProject",
-            "keywords");
+                "language",
+                "resourceClass",
+                "modality",
+                "continent",
+                "genre",
+                "country",
+                "dataProvider",
+                "nationalProject",
+                "keywords");
 
         config.setFacetFields(expResult);
 
@@ -943,5 +938,11 @@ public class DefaultVloConfigFactoryTest {
         String result = config.getCqlEndpointAlternative();
 
         assertEquals(param, result);
+    }
+
+    @Test
+    public void testGetCollectionFacet() {
+        final String result = config.getCollectionFacet();
+        assertEquals("collection", result);
     }
 }

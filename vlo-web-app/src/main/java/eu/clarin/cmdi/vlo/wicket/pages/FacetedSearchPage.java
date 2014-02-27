@@ -40,7 +40,7 @@ public class FacetedSearchPage extends WebPage {
         final QueryFacetsSelection selection = paramsToQueryFacetSelection(parameters);
         final Model<QueryFacetsSelection> queryModel = new Model<QueryFacetsSelection>(selection);
 
-        final FacetFieldModel collectionFacetFieldModel = new FacetFieldModel(facetFieldsService, "collection", queryModel);
+        final FacetFieldModel collectionFacetFieldModel = new FacetFieldModel(facetFieldsService, vloConfig.getCollectionFacet(), queryModel);
         final FacetSelectionModel collectionSelectionModel = new FacetSelectionModel(collectionFacetFieldModel, queryModel);
         add(new FacetPanel("collectionsFacet", collectionSelectionModel));
 

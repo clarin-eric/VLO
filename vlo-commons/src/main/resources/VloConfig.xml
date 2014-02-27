@@ -22,7 +22,7 @@
     
     <printMapping>false</printMapping>
     
-    <dataRoots length="3">
+    <dataRoots>
         <DataRoot>
             <originName>MPI IMDI Archive</originName>
             <rootFile>/lat/apache/htdocs/oai-harvester/mpi-self-harvest/harvested/results/cmdi/</rootFile>            
@@ -66,8 +66,9 @@
     
     <nationalProjectMapping>/nationalProjectsMapping.xml</nationalProjectMapping>
     
-    <facetFields length="13">
-        <facetField>collection</facetField>
+    <collectionFacet>collection</collectionFacet>
+    
+    <facetFields>
         <facetField>language</facetField>
         <facetField>resourceClass</facetField>
         <facetField>modality</facetField>
@@ -82,7 +83,9 @@
         <facetField>keywords</facetField>
     </facetFields>
     
-    <languageFilters length="3">
+    <collectionFacet>collection</collectionFacet>
+    
+    <languageFilters>
         <languageFilter>filterOne</languageFilter>
         <languageFilter>filterTwo</languageFilter>
         <languageFilter>filterThree</languageFilter>

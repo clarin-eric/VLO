@@ -43,8 +43,8 @@ public class VloConfig {
     //(required = false)
     private int solrTimeOut = 0;
 
-    @XmlElementWrapper(name="dataRoots")
-    @XmlElement(name="DataRoot")
+    @XmlElementWrapper(name = "dataRoots")
+    @XmlElement(name = "DataRoot")
     private List<DataRoot> dataRoot;
 
     private int maxFileSize = 0;
@@ -105,6 +105,8 @@ public class VloConfig {
      */
     @XmlElementWrapper(name = "facetFields")
     private List<String> facetField = new ArrayList<String>();
+
+    private String collectionFacet;
 
     // test related parameters
     //(required = false)
@@ -703,6 +705,24 @@ public class VloConfig {
      */
     public void setFacetFields(List<String> param) {
         facetField = param;
+    }
+
+    /**
+     *
+     * @return the name of the facet that represents the collection a resource
+     * belongs to
+     */
+    public String getCollectionFacet() {
+        return collectionFacet;
+    }
+
+    /**
+     *
+     * @param collectionFacet the name of the facet that represents the
+     * collection a resource belongs to
+     */
+    public void setCollectionFacet(String collectionFacet) {
+        this.collectionFacet = collectionFacet;
     }
 
     /**
