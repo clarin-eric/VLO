@@ -1,6 +1,8 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
+import eu.clarin.cmdi.vlo.config.VloConfigFactory;
 import eu.clarin.cmdi.vlo.config.VloSpringConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
@@ -22,7 +24,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
 
 /**
  * Abstract base class for tests that require dependency injection of (mock)
@@ -52,6 +53,13 @@ public class TestFacetedSearchPage {
         public SolrDocumentService documentService() {
             return mockery().mock(SolrDocumentService.class);
         }
+
+        @Override
+        public VloConfigFactory vloConfigFactory() {
+            //TODO: Separate test config? -> override vloConfig() instead
+            return new DefaultVloConfigFactory();
+        }
+
     }
 
     private WicketTester tester;

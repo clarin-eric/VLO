@@ -67,7 +67,7 @@ public class VloSpringConfig {
 
     @Bean
     public VloConfigFactory vloConfigFactory() {
-        return new DefaultVloConfigFactory();
+        return new ServletVloConfigFactory();
     }
 
     @Bean
