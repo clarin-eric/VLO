@@ -16,35 +16,56 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import java.util.Collection;
 import java.util.HashSet;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 
 /**
  *
  * @author twagoo
  */
-public abstract class AbstractFacetsPanel extends Panel {
+public class FacetPanel extends Panel {
 
-    protected final IModel<QueryFacetsSelection> model;
+    private final IModel<FacetSelection> model;
 
-    public AbstractFacetsPanel(String id, IModel<QueryFacetsSelection> model) {
+    private final SelectedFacetPanel selectedFacetPanel;
+    private final FacetValuesPanel facetValuesPanel;
+
+    public FacetPanel(String id, IModel<FacetSelection> model) {
         super(id, model);
         this.model = model;
+
+        // panel showing values for selection
+        facetValuesPanel = createFacetValuesPanel("facetValues");
+        add(facetValuesPanel);
+
+        // panel showing current selection, allowing for deselection
+        selectedFacetPanel = createSelectedFacetPanel("facetSelection");
+        add(selectedFacetPanel);
     }
 
-    protected FacetValuesPanel createFacetValuesPanel(String id, final IModel<FacetField> facetFieldModel) {
-        return new FacetValuesPanel(id, facetFieldModel) {
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+
+        final boolean valuesSelected = !model.getObject().getFacetValues().isEmpty();
+        facetValuesPanel.setVisible(!valuesSelected);
+        selectedFacetPanel.setVisible(valuesSelected);
+    }
+
+    private FacetValuesPanel createFacetValuesPanel(String id) {
+        return new FacetValuesPanel(id,new PropertyModel<FacetField>(model, "facetField")) {
             @Override
             public void onValuesSelected(String facet, Collection<String> value, AjaxRequestTarget target) {
                 // A value has been selected on this facet's panel,
                 // update the model!
-                model.getObject().selectValues(facet, value);
+                model.getObject().getSelection().selectValues(facet, value);
                 if (target != null) {
                     // reload entire page for now
                     target.add(getPage());
@@ -53,16 +74,17 @@ public abstract class AbstractFacetsPanel extends Panel {
         };
     }
 
-    protected SelectedFacetPanel createSelectedFacetPanel(String id, String facetName) {
-        return new SelectedFacetPanel(id, new FacetSelectionModel(facetName, model)) {
+    private SelectedFacetPanel createSelectedFacetPanel(String id) {
+        return new SelectedFacetPanel(id, model) {
             @Override
             public void onValuesUnselected(String facet, Collection<String> valuesRemoved, AjaxRequestTarget target) {
+                final QueryFacetsSelection selection = model.getObject().getSelection();
                 // Values have been removed, calculate remainder
-                final Collection<String> currentSelection = model.getObject().getSelectionValues(facet);
+                final Collection<String> currentSelection = selection.getSelectionValues(facet);
                 final Collection<String> newSelection = new HashSet<String>(currentSelection);
                 newSelection.removeAll(valuesRemoved);
                 // Update model
-                model.getObject().selectValues(facet, newSelection);
+                selection.selectValues(facet, newSelection);
                 if (target != null) {
                     // reload entire page for now
                     target.add(getPage());

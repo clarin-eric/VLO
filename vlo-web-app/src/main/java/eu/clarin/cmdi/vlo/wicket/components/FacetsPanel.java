@@ -16,17 +16,15 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
-import eu.clarin.cmdi.vlo.config.VloSpringConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
-import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldsDataProvider;
-import java.util.Collection;
+import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
+import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  * A panel representing a group of facets.
@@ -39,34 +37,19 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  *
  * @author twagoo
  */
-public class FacetsPanel extends AbstractFacetsPanel {
+public class FacetsPanel extends Panel {
 
-    @SpringBean(name = VloSpringConfig.FACETS_PANEL_SERVICE)
-    private FacetFieldsService facetFieldsService;
+    public FacetsPanel(final String id, final IModel<List<FacetField>> facetsModel, final IModel<QueryFacetsSelection> selectionModel) {
+        super(id, selectionModel);
 
-    public FacetsPanel(final String id, IModel<QueryFacetsSelection> model) {
-        super(id, model);
-
-        add(new DataView<FacetField>("facets", new FacetFieldsDataProvider(facetFieldsService, model)) {
+        add(new ListView<FacetField>("facets", facetsModel) {
 
             @Override
-            protected void populateItem(Item<FacetField> item) {
-                item.add(createFacetPanel("facet", item.getModel()));
+            protected void populateItem(ListItem<FacetField> item) {
+                item.add(
+                        new FacetPanel("facet", new FacetSelectionModel(item.getModel(), selectionModel))
+                );
             }
         });
-    }
-
-    private Panel createFacetPanel(String id, IModel<FacetField> facetFieldModel) {
-        // Is there a selection for this facet?
-        final String facetName = facetFieldModel.getObject().getName();
-        final Collection<String> selectionValues = model.getObject().getSelectionValues(facetName);
-        // Show different panel, depending on selected values
-        if (selectionValues == null || selectionValues.isEmpty()) {
-            // No values selected, show value selection panel
-            return createFacetValuesPanel(id, facetFieldModel);
-        } else {
-            // Values selected, show selected values panel (with option to remove)
-            return createSelectedFacetPanel(id, facetName);
-        }
     }
 }

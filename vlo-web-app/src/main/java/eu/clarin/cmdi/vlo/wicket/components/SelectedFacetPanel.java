@@ -43,10 +43,9 @@ public abstract class SelectedFacetPanel extends Panel {
     public SelectedFacetPanel(String id, final IModel<FacetSelection> model) {
         super(id, model);
         this.model = model;
-        setDefaultModel(new CompoundPropertyModel<FacetSelection>(model));
 
         // Facet name becomes title
-        add(new Label("facet"));
+        add(new Label("facet", new PropertyModel(model, "facetField.name")));
         // Add removers for all selected values
         add(createSelectionRemovers("facetValueRemover"));
     }
@@ -78,7 +77,7 @@ public abstract class SelectedFacetPanel extends Panel {
                     public void onClick(AjaxRequestTarget target) {
                         // Call callback
                         onValuesUnselected(
-                                model.getObject().getFacet(),
+                                model.getObject().getFacetField().getName(),
                                 // Remove a single value
                                 Collections.singleton(item.getModel().getObject()), target);
                     }

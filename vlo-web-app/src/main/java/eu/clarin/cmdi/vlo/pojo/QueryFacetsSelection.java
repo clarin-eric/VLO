@@ -82,7 +82,7 @@ public class QueryFacetsSelection implements Serializable {
     /**
      *
      * @param facet facet to get values for
-     * @return the selected values for the specified facet
+     * @return the selected values for the specified facet. Can be null.
      */
     public Collection<String> getSelectionValues(String facet) {
         return selection.get(facet);

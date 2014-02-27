@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.config;
 
+import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.SearchResultsDao;
@@ -27,7 +28,7 @@ import eu.clarin.cmdi.vlo.service.impl.SolrDocumentServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.SolrFacetFieldsService;
 import eu.clarin.cmdi.vlo.service.impl.SolrFacetQueryFactoryImpl;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.springframework.context.annotation.Bean;
@@ -46,9 +47,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class VloSpringConfig {
 
-    public final static String FACETS_PANEL_SERVICE = "factsPanelService";
-    public final static String COLLECTION_FACET_SERVICE = "factsPanelService";
-    
     /**
      *
      * @return the web application object that represents the Wicket application
@@ -72,26 +70,20 @@ public class VloSpringConfig {
         return new DefaultVloConfigFactory();
     }
 
-    @Bean(name = FACETS_PANEL_SERVICE)
+    @Bean
     public FacetFieldsService facetFieldsService() {
         return new SolrFacetFieldsService(searchResultsDao(), facetQueryFactory());
     }
 
     @Bean
     public SolrFacetQueryFactory facetQueryFactory() {
-        return new SolrFacetQueryFactoryImpl(vloConfig().getFacetFields());
+        final ArrayList<String> facets = Lists.newArrayList(vloConfig().getFacetFields());
+        //TODO: get collections facet from config
+        facets.add("collection");
+
+        return new SolrFacetQueryFactoryImpl(facets);
     }
 
-    @Bean(name = COLLECTION_FACET_SERVICE)
-    public FacetFieldsService collectionFacetFieldsService() {
-        return new SolrFacetFieldsService(searchResultsDao(), collectionFacetQueryFactory());
-    }
-    
-    @Bean
-    public SolrFacetQueryFactory collectionFacetQueryFactory() {
-        return new SolrFacetQueryFactoryImpl(Collections.singletonList("collection"));
-    }
-    
     @Bean
     public SolrDocumentService documentService() {
         return new SolrDocumentServiceImpl(searchResultsDao(), documentQueryFactory());
@@ -101,7 +93,7 @@ public class VloSpringConfig {
     public SearchResultsDao searchResultsDao() {
         return new SearchResultsDaoImpl(solrServer(), vloConfig());
     }
-    
+
     @Bean
     public SolrDocumentQueryFactoryImpl documentQueryFactory() {
         return new SolrDocumentQueryFactoryImpl();

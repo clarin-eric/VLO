@@ -18,6 +18,7 @@
 package eu.clarin.cmdi.vlo.pojo;
 
 import java.util.List;
+import org.apache.solr.client.solrj.response.FacetField;
 
 /**
  *
@@ -25,7 +26,7 @@ import java.util.List;
  */
 public interface FacetSelection {
 
-    String getFacet();
+    FacetField getFacetField();
 
     List<String> getFacetValues();
 

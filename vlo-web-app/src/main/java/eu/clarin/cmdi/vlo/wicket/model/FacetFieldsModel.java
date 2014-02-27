@@ -14,50 +14,46 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.wicket.provider;
+package eu.clarin.cmdi.vlo.wicket.model;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
-import java.util.Iterator;
+import java.util.Collection;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
- * Provides FacetField objects given a selection
  *
  * @author twagoo
  */
-public class FacetFieldsDataProvider implements IDataProvider<FacetField> {
+public class FacetFieldsModel extends LoadableDetachableModel<List<FacetField>> {
 
-    private final FacetFieldsService facetFieldService;
+    private final FacetFieldsService service;
+    private final List<String> facets;
     private final IModel<QueryFacetsSelection> selectionModel;
 
-    public FacetFieldsDataProvider(FacetFieldsService facetFieldService, IModel<QueryFacetsSelection> selectionModel) {
-        this.facetFieldService = facetFieldService;
+    public FacetFieldsModel(FacetFieldsService service, List<String> facets, IModel<QueryFacetsSelection> selectionModel) {
+        this.service = service;
+        this.facets = facets;
         this.selectionModel = selectionModel;
     }
 
     @Override
-    public Iterator<? extends FacetField> iterator(long first, long count) {
-        List<FacetField> facets = facetFieldService.getFacetFields(selectionModel.getObject());
-        return facets.listIterator((int) first);
-    }
+    protected List<FacetField> load() {
+        final List<FacetField> allFacetFields = service.getFacetFields(selectionModel.getObject());
+        final Collection<FacetField> filtered = Collections2.filter(allFacetFields, new Predicate<FacetField>() {
 
-    @Override
-    public long size() {
-        return facetFieldService.getFacetFieldCount();
-    }
-
-    @Override
-    public IModel<FacetField> model(FacetField object) {
-        return Model.of(object);
-    }
-
-    @Override
-    public void detach() {
+            @Override
+            public boolean apply(FacetField t) {
+                return facets.contains(t.getName());
+            }
+        });
+        return ImmutableList.copyOf(filtered);
     }
 
 }

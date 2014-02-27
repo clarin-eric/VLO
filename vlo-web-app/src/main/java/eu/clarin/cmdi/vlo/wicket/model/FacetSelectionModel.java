@@ -18,8 +18,11 @@ package eu.clarin.cmdi.vlo.wicket.model;
 
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
@@ -31,27 +34,33 @@ import org.apache.wicket.model.IModel;
  */
 public class FacetSelectionModel extends AbstractReadOnlyModel<FacetSelection> implements FacetSelection {
 
-    private final String facet;
     private final IModel<QueryFacetsSelection> selectionModel;
+    private final IModel<FacetField> facetFieldModel;
 
     /**
-     * 
-     * @param facet facet to represent selection for
+     *
+     * @param facetFieldModel
      * @param selectionModel broad (multi-facet) selection model
      */
-    public FacetSelectionModel(String facet, IModel<QueryFacetsSelection> selectionModel) {
-        this.facet = facet;
+    public FacetSelectionModel(IModel<FacetField> facetFieldModel, IModel<QueryFacetsSelection> selectionModel) {
+        this.facetFieldModel = facetFieldModel;
         this.selectionModel = selectionModel;
     }
 
     @Override
-    public String getFacet() {
-        return facet;
+    public FacetField getFacetField() {
+        return facetFieldModel.getObject();
     }
 
     @Override
     public List<String> getFacetValues() {
-        return new CopyOnWriteArrayList<String>(getSelection().getSelectionValues(facet));
+        final String facetName = getFacetField().getName();
+        final Collection<String> selectionValues = getSelection().getSelectionValues(facetName);
+        if (selectionValues == null) {
+            return Collections.emptyList();
+        } else {
+            return new CopyOnWriteArrayList<String>(selectionValues);
+        }
     }
 
     @Override
