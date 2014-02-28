@@ -48,7 +48,7 @@ public class FacetFieldsModelTest {
         final FacetFieldsService service = context.mock(FacetFieldsService.class);
         final QueryFacetsSelection selection = new QueryFacetsSelection();
         final IModel<QueryFacetsSelection> selectionModel = new Model(selection);
-        final List<String> facets = Arrays.asList("facet1", "facet2");
+        final List<String> facets = Arrays.asList("facet1", "facet2", "facetX");
         final FacetFieldsModel instance = new FacetFieldsModel(service, facets, selectionModel);
 
         context.checking(new Expectations() {
@@ -70,6 +70,7 @@ public class FacetFieldsModelTest {
         // excluded facets
         assertThat(result, not(hasFacetField("facet3"))); // not in selection
         assertThat(result, not(hasFacetField("facet4"))); // not in selection
+        assertThat(result, not(hasFacetField("facetX"))); // not in result
 
         // make another call, should not trigger a call to service because model is loadabledetachable
         final List<FacetField> result2 = instance.getObject();
