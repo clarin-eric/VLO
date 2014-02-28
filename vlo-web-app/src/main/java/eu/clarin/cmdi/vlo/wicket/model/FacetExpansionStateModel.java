@@ -56,11 +56,13 @@ public class FacetExpansionStateModel implements IModel<ExpansionState> {
     @Override
     public void setObject(ExpansionState object) {
         final String facet = facetModel.getObject().getName();
-        final ExpansionState state = expansionStateMapModel.getObject().put(facet, object);
+        expansionStateMapModel.getObject().put(facet, object);
     }
 
     @Override
     public void detach() {
+        facetModel.detach();
+        expansionStateMapModel.detach();
     }
 
 }

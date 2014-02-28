@@ -76,6 +76,7 @@ public class FacetFieldValuesProvider implements IDataProvider<FacetField.Count>
 
     @Override
     public void detach() {
+        model.detach();
     }
 
 }

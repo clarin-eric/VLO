@@ -24,6 +24,7 @@ import eu.clarin.cmdi.vlo.service.FacetFieldsService;
 import java.util.Collection;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.wicket.model.IChainingModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
@@ -67,6 +68,12 @@ public class FacetFieldsModel extends LoadableDetachableModel<List<FacetField>> 
             }
         });
         return ImmutableList.copyOf(filtered);
+    }
+
+    @Override
+    public void detach() {
+        super.detach();
+        selectionModel.detach();
     }
 
 }

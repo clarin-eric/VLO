@@ -25,7 +25,6 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.util.convert.converter.BigDecimalConverter;
 
 /**
  *
@@ -34,16 +33,16 @@ import org.apache.wicket.util.convert.converter.BigDecimalConverter;
 public class SolrDocumentProvider implements IDataProvider<SolrDocument> {
 
     private final SolrDocumentService documentService;
-    private final IModel<QueryFacetsSelection> selection;
+    private final IModel<QueryFacetsSelection> selectionModel;
 
     public SolrDocumentProvider(SolrDocumentService documentService, IModel<QueryFacetsSelection> selection) {
         this.documentService = documentService;
-        this.selection = selection;
+        this.selectionModel = selection;
     }
 
     @Override
     public Iterator<? extends SolrDocument> iterator(long first, long count) {
-        final List<SolrDocument> documents = documentService.getDocuments(selection.getObject(),
+        final List<SolrDocument> documents = documentService.getDocuments(selectionModel.getObject(),
                 BigDecimal.valueOf(first).intValueExact(), // safe long->int conversion
                 BigDecimal.valueOf(count).intValueExact()); // safe long->int conversion
         return documents.iterator();
@@ -51,7 +50,7 @@ public class SolrDocumentProvider implements IDataProvider<SolrDocument> {
 
     @Override
     public long size() {
-        return documentService.getDocumentCount(selection.getObject());
+        return documentService.getDocumentCount(selectionModel.getObject());
     }
 
     @Override
@@ -61,6 +60,7 @@ public class SolrDocumentProvider implements IDataProvider<SolrDocument> {
 
     @Override
     public void detach() {
+        selectionModel.detach();
     }
 
 }

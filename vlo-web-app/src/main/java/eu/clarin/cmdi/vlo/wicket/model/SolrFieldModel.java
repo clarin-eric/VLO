@@ -77,4 +77,12 @@ public class SolrFieldModel extends AbstractReadOnlyModel<String> {
         }
         return valuesBuilder.toString();
     }
+
+    @Override
+    public void detach() {
+        super.detach();
+        documentModel.detach();
+    }
+    
+    
 }

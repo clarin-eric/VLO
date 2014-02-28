@@ -36,7 +36,7 @@ import org.apache.wicket.model.IModel;
  */
 public class FacetFieldModel extends AbstractReadOnlyModel<FacetField> {
 
-    //todo: can be made more efficient/elegant than wrapping fields model
+    //todo: can probably be made more efficient/elegant than wrapping fields model
     private final FacetFieldsModel fieldsModel;
 
     /**
@@ -59,4 +59,9 @@ public class FacetFieldModel extends AbstractReadOnlyModel<FacetField> {
         }
     }
 
+    @Override
+    public void detach() {
+        super.detach();
+        fieldsModel.detach();
+    }
 }

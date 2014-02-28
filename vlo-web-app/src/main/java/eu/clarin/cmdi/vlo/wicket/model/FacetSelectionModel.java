@@ -76,6 +76,7 @@ public class FacetSelectionModel extends AbstractReadOnlyModel<FacetSelection> i
     @Override
     public void detach() {
         selectionModel.detach();
+        facetFieldModel.detach();
     }
 
 }
