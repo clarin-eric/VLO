@@ -50,25 +50,25 @@ public abstract class FacetsPanel extends Panel {
      * selection state
      */
     public FacetsPanel(final String id, final IModel<List<FacetField>> facetsModel, final IModel<QueryFacetsSelection> selectionModel) {
-        super(id, selectionModel);
-        
+        super(id);
+
         final Map<String, ExpansionState> expansionStateMap = new HashMap<String, ExpansionState>();
         final MapModel<String, ExpansionState> expansionModel = new MapModel<String, ExpansionState>(expansionStateMap);
-        
+
         final ListView<FacetField> facetsView = new ListView<FacetField>("facets", facetsModel) {
-            
+
             @Override
             protected void populateItem(ListItem<FacetField> item) {
                 item.add(
                         new FacetPanel("facet",
                                 new FacetSelectionModel(item.getModel(), selectionModel),
                                 new FacetExpansionStateModel(item.getModel(), expansionModel)) {
-                                    
-                                    @Override
-                                    protected void selectionChanged(AjaxRequestTarget target) {
-                                        FacetsPanel.this.selectionChanged(target);
-                                    }
-                                }
+
+                            @Override
+                            protected void selectionChanged(AjaxRequestTarget target) {
+                                FacetsPanel.this.selectionChanged(target);
+                            }
+                        }
                 );
             }
         };
@@ -76,6 +76,6 @@ public abstract class FacetsPanel extends Panel {
         facetsView.setReuseItems(true);
         add(facetsView);
     }
-    
+
     protected abstract void selectionChanged(AjaxRequestTarget target);
 }

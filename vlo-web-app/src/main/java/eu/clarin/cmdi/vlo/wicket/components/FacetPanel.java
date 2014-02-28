@@ -40,15 +40,15 @@ import org.apache.wicket.model.PropertyModel;
  */
 public abstract class FacetPanel extends Panel {
 
-    private final IModel<FacetSelection> model;
+    private final IModel<FacetSelection> selectionModel;
+    private final IModel<ExpansionState> expansionStateModel;
 
     private final SelectedFacetPanel selectedFacetPanel;
     private final FacetValuesPanel facetValuesPanel;
-    private final IModel<ExpansionState> expansionStateModel;
 
-    public FacetPanel(String id, IModel<FacetSelection> model, IModel<ExpansionState> expansionState) {
-        super(id, model);
-        this.model = model;
+    public FacetPanel(String id, IModel<FacetSelection> selectionModel, IModel<ExpansionState> expansionState) {
+        super(id, selectionModel);
+        this.selectionModel = selectionModel;
         this.expansionStateModel = expansionState;
 
         // panel showing values for selection
@@ -66,17 +66,17 @@ public abstract class FacetPanel extends Panel {
     protected void onConfigure() {
         super.onConfigure();
 
-        final boolean valuesSelected = !model.getObject().getFacetValues().isEmpty();
+        final boolean valuesSelected = !selectionModel.getObject().getFacetValues().isEmpty();
         facetValuesPanel.setVisible(!valuesSelected);
         selectedFacetPanel.setVisible(valuesSelected);
     }
 
     private FacetValuesPanel createFacetValuesPanel(String id) {
-        return new FacetValuesPanel(id, new PropertyModel<FacetField>(model, "facetField")) {
+        return new FacetValuesPanel(id, new PropertyModel<FacetField>(selectionModel, "facetField")) {
             @Override
             public void onValuesSelected(String facet, Collection<String> value, AjaxRequestTarget target) {
                 // A value has been selected on this facet's panel, update the model!
-                model.getObject().getSelection().selectValues(facet, value);
+                selectionModel.getObject().getSelection().selectValues(facet, value);
                 // collapse after selection
                 expansionStateModel.setObject(ExpansionState.COLLAPSED);
                 if (target != null) {
@@ -88,10 +88,10 @@ public abstract class FacetPanel extends Panel {
     }
 
     private SelectedFacetPanel createSelectedFacetPanel(String id) {
-        return new SelectedFacetPanel(id, model) {
+        return new SelectedFacetPanel(id, selectionModel) {
             @Override
             public void onValuesUnselected(String facet, Collection<String> valuesRemoved, AjaxRequestTarget target) {
-                final QueryFacetsSelection selection = model.getObject().getSelection();
+                final QueryFacetsSelection selection = selectionModel.getObject().getSelection();
                 // Values have been removed, calculate remainder
                 final Collection<String> currentSelection = selection.getSelectionValues(facet);
                 final Collection<String> newSelection = new HashSet<String>(currentSelection);
@@ -150,6 +150,14 @@ public abstract class FacetPanel extends Panel {
             }
         });
         setOutputMarkupId(true);
+    }
+
+    @Override
+    public void detachModels() {
+        // this will detach selection model (passed to super through constructor)
+        super.detachModels();
+        // additional model not known by supertype
+        expansionStateModel.detach();
     }
 
     protected abstract void selectionChanged(AjaxRequestTarget target);

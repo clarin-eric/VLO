@@ -60,7 +60,7 @@ public class FacetedSearchPage extends WebPage {
         add(searchResultsPanel);
     }
 
-    private Panel createCollectionsPanel(final String id, final Model<QueryFacetsSelection> queryModel) {
+    private Panel createCollectionsPanel(final String id, final IModel<QueryFacetsSelection> queryModel) {
         final FacetFieldModel collectionFacetFieldModel = new FacetFieldModel(facetFieldsService, vloConfig.getCollectionFacet(), queryModel);
         final FacetSelectionModel collectionSelectionModel = new FacetSelectionModel(collectionFacetFieldModel, queryModel);
         final FacetPanel panel = new FacetPanel(id, collectionSelectionModel, new Model<ExpansionState>(ExpansionState.COLLAPSED)) {
@@ -74,7 +74,7 @@ public class FacetedSearchPage extends WebPage {
         return panel;
     }
 
-    private Panel createFacetsPanel(final String id, final Model<QueryFacetsSelection> queryModel) {
+    private Panel createFacetsPanel(final String id, final IModel<QueryFacetsSelection> queryModel) {
         final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(facetFieldsService, vloConfig.getFacetFields(), queryModel);
         final FacetsPanel panel = new FacetsPanel(id, facetFieldsModel, queryModel) {
 
@@ -94,7 +94,7 @@ public class FacetedSearchPage extends WebPage {
         target.add(collectionsPanel);
     }
 
-    private QueryFacetsSelection paramsToQueryFacetSelection(final PageParameters parameters) {
+    private static QueryFacetsSelection paramsToQueryFacetSelection(final PageParameters parameters) {
         final String query = parameters.get("q").toOptionalString();
 
         //TODO: Map parameters to facet selection
