@@ -24,16 +24,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <body>
         <wicket:panel>
             <h1><a href="#"><wicket:container wicket:id="name">[TITLE]</wicket:container></a></h1>
-            <a href class="filtertoggle"><span>filter</span></a>
-            <form class="filterform">
-                <input type="text" />
-            </form>
             <div class="sbilinks facetvalues">
                 <ul>
                     <li wicket:id="facetValues"><a wicket:id="facetSelect" href="index3.html"><span wicket:id="name">Dutch</span> (<span wicket:id="count">148167</span>)</a></li>
                     <!--<li class="more-link"><a wicket:id="allFacetValuesLink" href="#">more...</a></li>-->
                 </ul>
             </div>
+            <form class="filterform">
+                <input type="text" />
+            </form>
         </wicket:panel>
     </body>
 </html>
