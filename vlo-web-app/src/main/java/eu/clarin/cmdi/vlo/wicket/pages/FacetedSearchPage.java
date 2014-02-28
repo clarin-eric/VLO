@@ -16,6 +16,7 @@ import java.util.Map;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -40,16 +41,24 @@ public class FacetedSearchPage extends WebPage {
         final QueryFacetsSelection selection = paramsToQueryFacetSelection(parameters);
         final Model<QueryFacetsSelection> queryModel = new Model<QueryFacetsSelection>(selection);
 
+        add(createCollectionsPanel("collectionsFacet", queryModel));
+        add(createFacetsPanel("facets", queryModel));
+        
+        add(new SearchForm("search", queryModel));
+        add(new SearchResultsPanel("searchResults", queryModel));
+    }
+
+    private Panel createFacetsPanel(final String id, final Model<QueryFacetsSelection> queryModel) {
+        final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(facetFieldsService, vloConfig.getFacetFields(), queryModel);
+        final FacetsPanel facetsPanel = new FacetsPanel(id, facetFieldsModel, queryModel);
+        return facetsPanel;
+    }
+
+    private Panel createCollectionsPanel(final String id, final Model<QueryFacetsSelection> queryModel) {
         final FacetFieldModel collectionFacetFieldModel = new FacetFieldModel(facetFieldsService, vloConfig.getCollectionFacet(), queryModel);
         final FacetSelectionModel collectionSelectionModel = new FacetSelectionModel(collectionFacetFieldModel, queryModel);
-        add(new FacetPanel("collectionsFacet", collectionSelectionModel));
-
-        final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(facetFieldsService, vloConfig.getFacetFields(), queryModel);
-        add(new FacetsPanel("facets", facetFieldsModel, queryModel));
-
-        add(new SearchForm("search", queryModel));
-
-        add(new SearchResultsPanel("searchResults", queryModel));
+        final FacetPanel facetPanel = new FacetPanel(id, collectionSelectionModel);
+        return facetPanel;
     }
 
     private QueryFacetsSelection paramsToQueryFacetSelection(final PageParameters parameters) {
