@@ -16,15 +16,20 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
+import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.model.FacetExpansionStateModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.util.MapModel;
 
 /**
  * A panel representing a group of facets.
@@ -46,14 +51,19 @@ public abstract class FacetsPanel extends Panel {
      */
     public FacetsPanel(final String id, final IModel<List<FacetField>> facetsModel, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, selectionModel);
-
+        
+        final Map<String, ExpansionState> expansionStateMap = new HashMap<String, ExpansionState>();
+        final MapModel<String, ExpansionState> expansionModel = new MapModel<String, ExpansionState>(expansionStateMap);
+        
         add(new ListView<FacetField>("facets", facetsModel) {
-
+            
             @Override
             protected void populateItem(ListItem<FacetField> item) {
                 item.add(
-                        new FacetPanel("facet", new FacetSelectionModel(item.getModel(), selectionModel)) {
-
+                        new FacetPanel("facet",
+                                new FacetSelectionModel(item.getModel(), selectionModel),
+                                new FacetExpansionStateModel(item.getModel(), expansionModel)) {
+                            
                             @Override
                             protected void selectionChanged(AjaxRequestTarget target) {
                                 FacetsPanel.this.selectionChanged(target);

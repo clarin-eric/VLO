@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.wicket.components.FacetsPanel;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
@@ -62,7 +63,7 @@ public class FacetedSearchPage extends WebPage {
     private Panel createCollectionsPanel(final String id, final Model<QueryFacetsSelection> queryModel) {
         final FacetFieldModel collectionFacetFieldModel = new FacetFieldModel(facetFieldsService, vloConfig.getCollectionFacet(), queryModel);
         final FacetSelectionModel collectionSelectionModel = new FacetSelectionModel(collectionFacetFieldModel, queryModel);
-        final FacetPanel panel = new FacetPanel(id, collectionSelectionModel) {
+        final FacetPanel panel = new FacetPanel(id, collectionSelectionModel, new Model<ExpansionState>(ExpansionState.COLLAPSED)) {
 
             @Override
             protected void selectionChanged(AjaxRequestTarget target) {
