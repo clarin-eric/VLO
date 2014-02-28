@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
@@ -65,23 +64,8 @@ public abstract class SelectedFacetPanel extends Panel {
             protected void populateItem(final ListItem<String> item) {
                 // A label showing the name of the facet
                 item.add(new Label("facetValue", item.getModel()));
-
                 // A link to remove the value selection from this facet
-                item.add(createRemoveLink(item));
-            }
-
-            private AjaxFallbackLink createRemoveLink(final ListItem<String> item) {
-                return new AjaxFallbackLink("unselectValue") {
-
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        // Call callback
-                        onValuesUnselected(
-                                model.getObject().getFacetField().getName(),
-                                // Remove a single value
-                                Collections.singleton(item.getModel().getObject()), target);
-                    }
-                };
+                item.add(new RemoveLink("unselectValue", item.getModel()));
             }
 
         };
@@ -98,4 +82,23 @@ public abstract class SelectedFacetPanel extends Panel {
      */
     protected abstract void onValuesUnselected(String facet, Collection<String> valuesRemoved, AjaxRequestTarget target);
 
+    public class RemoveLink extends AjaxFallbackLink {
+
+        private final IModel<String> valueModel;
+
+        public RemoveLink(String id, IModel<String> valueModel) {
+            super(id);
+            this.valueModel = valueModel;
+        }
+
+        @Override
+        public void onClick(AjaxRequestTarget target) {
+            // Remove a single value
+            // Call callback
+            onValuesUnselected(
+                    model.getObject().getFacetField().getName(),
+                    Collections.singleton(valueModel.getObject()), target);
+        }
+
+    }
 }
