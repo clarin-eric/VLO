@@ -25,11 +25,9 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 /**
@@ -62,50 +60,6 @@ public abstract class FacetPanel extends Panel {
         add(selectedFacetPanel);
 
         addExpansionComponents();
-    }
-
-    private void addExpansionComponents() {
-
-        // class modifier to apply correct class depending on state
-        add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
-
-            @Override
-            public String getObject() {
-                switch (expansionStateModel.getObject()) {
-                    case COLLAPSED:
-                        return "facet collapsedfacet";
-                    case EXPANDED:
-                        return "facet expandedfacet";
-                    default:
-                        return "facet";
-                }
-            }
-        }));
-
-        // add expansion link
-        add(new AjaxFallbackLink("expand") {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                expansionStateModel.setObject(ExpansionState.EXPANDED);
-                if (target != null) {
-                    target.add(FacetPanel.this);
-                }
-            }
-        });
-
-        // add collapse link
-        add(new AjaxFallbackLink("collapse") {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                expansionStateModel.setObject(ExpansionState.COLLAPSED);
-                if (target != null) {
-                    target.add(FacetPanel.this);
-                }
-            }
-        });
-        setOutputMarkupId(true);
     }
 
     @Override
@@ -152,6 +106,50 @@ public abstract class FacetPanel extends Panel {
                 }
             }
         };
+    }
+
+    private void addExpansionComponents() {
+
+        // class modifier to apply correct class depending on state
+        add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
+
+            @Override
+            public String getObject() {
+                switch (expansionStateModel.getObject()) {
+                    case COLLAPSED:
+                        return "facet collapsedfacet";
+                    case EXPANDED:
+                        return "facet expandedfacet";
+                    default:
+                        return "facet";
+                }
+            }
+        }));
+
+        // add expansion link
+        add(new AjaxFallbackLink("expand") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                expansionStateModel.setObject(ExpansionState.EXPANDED);
+                if (target != null) {
+                    target.add(FacetPanel.this);
+                }
+            }
+        });
+
+        // add collapse link
+        add(new AjaxFallbackLink("collapse") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                expansionStateModel.setObject(ExpansionState.COLLAPSED);
+                if (target != null) {
+                    target.add(FacetPanel.this);
+                }
+            }
+        });
+        setOutputMarkupId(true);
     }
 
     protected abstract void selectionChanged(AjaxRequestTarget target);
