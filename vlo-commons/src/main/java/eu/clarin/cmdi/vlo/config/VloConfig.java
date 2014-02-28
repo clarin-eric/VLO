@@ -696,6 +696,18 @@ public class VloConfig {
     }
 
     /**
+     *
+     * @return all facet fields, including collection facet (arbitrary order unspecified)
+     * @see #getFacetFields()
+     * @see #getCollectionFacet()
+     */
+    public List<String> getAllFacetFields() {
+        final ArrayList<String> allFacets = new ArrayList<String>(facetField);
+        allFacets.add(getCollectionFacet());
+        return allFacets;
+    }
+
+    /**
      * Set the value of the FacetFields parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO

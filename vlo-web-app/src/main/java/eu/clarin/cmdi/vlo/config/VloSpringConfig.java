@@ -77,11 +77,7 @@ public class VloSpringConfig {
 
     @Bean
     public SolrFacetQueryFactory facetQueryFactory() {
-        final ArrayList<String> facets = Lists.newArrayList(vloConfig().getFacetFields());
-        //TODO: get collections facet from config
-        facets.add(vloConfig().getCollectionFacet());
-
-        return new SolrFacetQueryFactoryImpl(facets);
+        return new SolrFacetQueryFactoryImpl(vloConfig().getAllFacetFields());
     }
 
     @Bean

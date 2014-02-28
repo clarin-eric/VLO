@@ -5,7 +5,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -695,6 +698,28 @@ public class DefaultVloConfigFactoryTest {
         List<String> result = config.getFacetFields();
 
         assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testGetAllFacetsField() {
+        final String[] expItems = new String[]{
+            "language",
+            "resourceClass",
+            "modality",
+            "continent",
+            "genre",
+            "country",
+            "subject",
+            "organisation",
+            "format",
+            "dataProvider",
+            "nationalProject",
+            "keywords",
+            "collection"};
+        List<String> result = config.getAllFacetFields();
+        
+        //order is not important in this case
+        assertThat(result, hasItems(expItems));
     }
 
     /**
