@@ -27,6 +27,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 /**
+ * Panel that displays a single facet based on the current query/value
+ * selection. Two children will be generated: a {@link FacetValuesPanel} and a
+ * {@link SelectedFacetPanel}. One of them is set visible (at {@link
+ * #onConfigure()}), depending on whether this facet has selected values.
  *
  * @author twagoo
  */
@@ -60,7 +64,7 @@ public class FacetPanel extends Panel {
     }
 
     private FacetValuesPanel createFacetValuesPanel(String id) {
-        return new FacetValuesPanel(id,new PropertyModel<FacetField>(model, "facetField")) {
+        return new FacetValuesPanel(id, new PropertyModel<FacetField>(model, "facetField")) {
             @Override
             public void onValuesSelected(String facet, Collection<String> value, AjaxRequestTarget target) {
                 // A value has been selected on this facet's panel,

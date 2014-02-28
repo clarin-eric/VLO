@@ -28,6 +28,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
+ * Model that provides a list of {@link FacetField}s based on the current query
+ * and values selection, filtered through a selection of facet names.
+ *
+ * Notice that the actual retrieval is carried out by the provided
+ * {@link FacetFieldsService}, which therefore should be configured to actually
+ * retrieve the specified facets (in the list in the constructor), otherwise
+ * some of these may not be present.
  *
  * @author twagoo
  */
@@ -37,6 +44,12 @@ public class FacetFieldsModel extends LoadableDetachableModel<List<FacetField>> 
     private final List<String> facets;
     private final IModel<QueryFacetsSelection> selectionModel;
 
+    /**
+     *
+     * @param service service to use for facet field retrieval
+     * @param facets facets to include
+     * @param selectionModel model that provides current query/selection
+     */
     public FacetFieldsModel(FacetFieldsService service, List<String> facets, IModel<QueryFacetsSelection> selectionModel) {
         this.service = service;
         this.facets = facets;

@@ -17,7 +17,6 @@
 package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
@@ -29,16 +28,21 @@ import org.apache.wicket.model.IModel;
 /**
  * A panel representing a group of facets.
  *
- * For each facet present (retrieved from the injected
- * {@link FacetFieldsService}, a panel is added. This is either a
- * {@link FacetValuesPanel}, allowing for selection of facet values, or a
- * {@link SelectedFacetPanel} representing a facet with selected values,
- * allowing for deselection of these values.
+ * For each facet present in the provided list model, a {@link FacetPanel} is
+ * added to the a list view.
  *
  * @author twagoo
  */
 public class FacetsPanel extends Panel {
 
+    /**
+     *
+     * @param id component id
+     * @param facetsModel model that provides the list of facets to show in this
+     * panel
+     * @param selectionModel model representing the current query/value
+     * selection state
+     */
     public FacetsPanel(final String id, final IModel<List<FacetField>> facetsModel, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, selectionModel);
 

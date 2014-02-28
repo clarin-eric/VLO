@@ -25,6 +25,12 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
 /**
+ * Decorator for {@link FacetFieldsModel} for a selection of a single facet.
+ *
+ * Notice that the actual retrieval is carried out by the provided
+ * {@link FacetFieldsService}, which therefore should be configured to actually
+ * retrieve the specified facet (through the constructor), otherwise it may not
+ * be presented.
  *
  * @author twagoo
  */
@@ -33,6 +39,12 @@ public class FacetFieldModel extends AbstractReadOnlyModel<FacetField> {
     //todo: can be made more efficient/elegant than wrapping fields model
     private final FacetFieldsModel fieldsModel;
 
+    /**
+     *
+     * @param service service to use for facet field retrieval
+     * @param facet facet to provide
+     * @param selectionModel model that provides current query/selection
+     */
     public FacetFieldModel(FacetFieldsService service, String facet, IModel<QueryFacetsSelection> selectionModel) {
         fieldsModel = new FacetFieldsModel(service, Collections.singletonList(facet), selectionModel);
     }
