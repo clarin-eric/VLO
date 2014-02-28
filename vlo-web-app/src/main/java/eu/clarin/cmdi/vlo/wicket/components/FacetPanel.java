@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -35,7 +34,7 @@ import org.apache.wicket.model.PropertyModel;
  *
  * @author twagoo
  */
-public class FacetPanel extends Panel {
+public abstract class FacetPanel extends Panel {
 
     private final IModel<FacetSelection> model;
 
@@ -73,7 +72,7 @@ public class FacetPanel extends Panel {
                 model.getObject().getSelection().selectValues(facet, value);
                 if (target != null) {
                     // reload entire page for now
-                    target.add(getPage());
+                    selectionChanged(target);
                 }
             }
         };
@@ -92,10 +91,12 @@ public class FacetPanel extends Panel {
                 selection.selectValues(facet, newSelection);
                 if (target != null) {
                     // reload entire page for now
-                    target.add(getPage());
+                    selectionChanged(target);
                 }
             }
         };
     }
+
+    protected abstract void selectionChanged(AjaxRequestTarget target);
 
 }

@@ -20,6 +20,7 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -33,7 +34,7 @@ import org.apache.wicket.model.IModel;
  *
  * @author twagoo
  */
-public class FacetsPanel extends Panel {
+public abstract class FacetsPanel extends Panel {
 
     /**
      *
@@ -51,9 +52,17 @@ public class FacetsPanel extends Panel {
             @Override
             protected void populateItem(ListItem<FacetField> item) {
                 item.add(
-                        new FacetPanel("facet", new FacetSelectionModel(item.getModel(), selectionModel))
+                        new FacetPanel("facet", new FacetSelectionModel(item.getModel(), selectionModel)) {
+
+                            @Override
+                            protected void selectionChanged(AjaxRequestTarget target) {
+                                FacetsPanel.this.selectionChanged(target);
+                            }
+                        }
                 );
             }
         });
     }
+    
+    protected abstract void selectionChanged(AjaxRequestTarget target);
 }

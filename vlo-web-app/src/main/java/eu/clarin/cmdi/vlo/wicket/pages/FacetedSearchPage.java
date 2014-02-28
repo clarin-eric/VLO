@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -36,30 +36,61 @@ public class FacetedSearchPage extends WebPage {
     @SpringBean
     private VloConfig vloConfig;
 
+    private final Panel searchResultsPanel;
+    private final Panel facetsPanel;
+    private final Panel collectionsPanel;
+
     public FacetedSearchPage(final PageParameters parameters) {
         super(parameters);
 
         final QueryFacetsSelection selection = paramsToQueryFacetSelection(parameters);
         final Model<QueryFacetsSelection> queryModel = new Model<QueryFacetsSelection>(selection);
 
-        add(createCollectionsPanel("collectionsFacet", queryModel));
-        add(createFacetsPanel("facets", queryModel));
-        
-        add(new SearchForm("search", queryModel));
-        add(new SearchResultsPanel("searchResults", queryModel));
+        final SearchForm searchForm = new SearchForm("search", queryModel);
+        add(searchForm);
+
+        collectionsPanel = createCollectionsPanel("collectionsFacet", queryModel);
+        add(collectionsPanel);
+
+        facetsPanel = createFacetsPanel("facets", queryModel);
+        add(facetsPanel);
+
+        searchResultsPanel = new SearchResultsPanel("searchResults", queryModel);
+        add(searchResultsPanel);
     }
 
     private Panel createCollectionsPanel(final String id, final Model<QueryFacetsSelection> queryModel) {
         final FacetFieldModel collectionFacetFieldModel = new FacetFieldModel(facetFieldsService, vloConfig.getCollectionFacet(), queryModel);
         final FacetSelectionModel collectionSelectionModel = new FacetSelectionModel(collectionFacetFieldModel, queryModel);
-        final FacetPanel panel = new FacetPanel(id, collectionSelectionModel);
+        final FacetPanel panel = new FacetPanel(id, collectionSelectionModel) {
+
+            @Override
+            protected void selectionChanged(AjaxRequestTarget target) {
+                updateSelection(target);
+            }
+        };
+        panel.setOutputMarkupId(true);
         return panel;
     }
 
     private Panel createFacetsPanel(final String id, final Model<QueryFacetsSelection> queryModel) {
         final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(facetFieldsService, vloConfig.getFacetFields(), queryModel);
-        final FacetsPanel facetsPanel = new FacetsPanel(id, facetFieldsModel, queryModel);
-        return facetsPanel;
+        final FacetsPanel panel = new FacetsPanel(id, facetFieldsModel, queryModel) {
+
+            @Override
+            protected void selectionChanged(AjaxRequestTarget target) {
+                updateSelection(target);
+            }
+        };
+        panel.setOutputMarkupId(true);
+        return panel;
+    }
+
+    private void updateSelection(AjaxRequestTarget target) {
+        // selection changed, update facets and search results
+        target.add(searchResultsPanel);
+        target.add(facetsPanel);
+        target.add(collectionsPanel);
     }
 
     private QueryFacetsSelection paramsToQueryFacetSelection(final PageParameters parameters) {
