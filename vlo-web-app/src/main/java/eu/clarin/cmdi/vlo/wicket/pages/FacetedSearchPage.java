@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -48,17 +49,17 @@ public class FacetedSearchPage extends WebPage {
         add(new SearchResultsPanel("searchResults", queryModel));
     }
 
+    private Panel createCollectionsPanel(final String id, final Model<QueryFacetsSelection> queryModel) {
+        final FacetFieldModel collectionFacetFieldModel = new FacetFieldModel(facetFieldsService, vloConfig.getCollectionFacet(), queryModel);
+        final FacetSelectionModel collectionSelectionModel = new FacetSelectionModel(collectionFacetFieldModel, queryModel);
+        final FacetPanel panel = new FacetPanel(id, collectionSelectionModel);
+        return panel;
+    }
+
     private Panel createFacetsPanel(final String id, final Model<QueryFacetsSelection> queryModel) {
         final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(facetFieldsService, vloConfig.getFacetFields(), queryModel);
         final FacetsPanel facetsPanel = new FacetsPanel(id, facetFieldsModel, queryModel);
         return facetsPanel;
-    }
-
-    private Panel createCollectionsPanel(final String id, final Model<QueryFacetsSelection> queryModel) {
-        final FacetFieldModel collectionFacetFieldModel = new FacetFieldModel(facetFieldsService, vloConfig.getCollectionFacet(), queryModel);
-        final FacetSelectionModel collectionSelectionModel = new FacetSelectionModel(collectionFacetFieldModel, queryModel);
-        final FacetPanel facetPanel = new FacetPanel(id, collectionSelectionModel);
-        return facetPanel;
     }
 
     private QueryFacetsSelection paramsToQueryFacetSelection(final PageParameters parameters) {

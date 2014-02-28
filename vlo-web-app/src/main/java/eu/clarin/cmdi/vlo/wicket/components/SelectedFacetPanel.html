@@ -23,30 +23,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <div class="facet collapsedfacet">
-                <a href="#" class="expandfacet"><span>expand</span></a>
-                <a href="#" class="collapsefacet"><span>collapse</span></a>
-                <h1><a href="#"><wicket:container wicket:id="facet">[TITLE]</wicket:container></a></h1>
-                <div wicket:id="facetValueRemover" class="selectedvaluelabel">
-                    <wicket:container wicket:id="facetValue">value</wicket:container>
-                    <a wicket:id="unselectValue" class="unselectfacetvalue" title="unselect value">
-                        <span>[unselect]</span>
-                    </a>
-                </div>
-                <div class="sbilinks facetvalues">
-                    <ul>
-                        <li><span class="selectedfacetvalue">Dutch</span><a class="unselectfacetvalue" title="unselect value" href="index2.html"><span>[unselect]</span></a></li>
-                        <li><span class="facetvalue">English</span></li>
-                        <li><span class="facetvalue">German</span></li>
-                        <li><span class="facetvalue">French</span></li>
-                        <li><span class="facetvalue">Spanish</span></li>
-                        <li><span class="facetvalue">Danish</span></li>
-                        <li><span class="facetvalue">Japanese</span></li>
-                        <li><span class="facetvalue">Turkish</span></li>
-                        <li><span class="facetvalue">Chinese</span></li>
-                        <!--<li class="more-link"><a href="#">more...</a></li>-->
-                    </ul>
-                </div>
+            <a href="#" class="expandfacet"><span>expand</span></a>
+            <a href="#" class="collapsefacet"><span>collapse</span></a>
+            <h1><a href="#"><wicket:container wicket:id="facet">[TITLE]</wicket:container></a></h1>
+            <div wicket:id="facetValueRemover" class="selectedvaluelabel">
+                <wicket:container wicket:id="facetValue">value</wicket:container>
+                <a wicket:id="unselectValue" class="unselectfacetvalue" title="unselect value">
+                    <span>[unselect]</span>
+                </a>
+            </div>
+            <div class="sbilinks facetvalues">
+                <ul>
+                    <li><span class="selectedfacetvalue">Dutch</span><a class="unselectfacetvalue" title="unselect value" href="index2.html"><span>[unselect]</span></a></li>
+                    <li><span class="facetvalue">English</span></li>
+                    <li><span class="facetvalue">German</span></li>
+                    <li><span class="facetvalue">French</span></li>
+                    <li><span class="facetvalue">Spanish</span></li>
+                    <li><span class="facetvalue">Danish</span></li>
+                    <li><span class="facetvalue">Japanese</span></li>
+                    <li><span class="facetvalue">Turkish</span></li>
+                    <li><span class="facetvalue">Chinese</span></li>
+                    <!--<li class="more-link"><a href="#">more...</a></li>-->
+                </ul>
             </div>
         </wicket:panel>
     </body>
