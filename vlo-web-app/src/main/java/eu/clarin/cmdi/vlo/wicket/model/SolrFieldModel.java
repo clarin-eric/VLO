@@ -16,26 +16,28 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import java.util.Collection;
-import java.util.Iterator;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
 /**
- * Model that provides field values as String values for a given Solr document
- * and a field name, both for singular values and multiple values (imploding the
- * latter into a single string)
+ * Model that provides field values as for a given Solr document
  *
  * @author twagoo
+ * @param <T> type of elements in the value collection in the field. Values will
+ * be cast on the fly, so specifying a non-matching type here might result in
+ * runtime errors!
  */
-public class SolrFieldModel extends AbstractReadOnlyModel<String> {
+public class SolrFieldModel<T> extends AbstractReadOnlyModel<Collection<T>> {
 
     private final IModel<SolrDocument> documentModel;
     private final String fieldName;
 
     /**
-     * 
+     *
      * @param documentModel model of document that holds the field values
      * @param fieldName name of the field to take value from
      */
@@ -45,37 +47,30 @@ public class SolrFieldModel extends AbstractReadOnlyModel<String> {
     }
 
     @Override
-    public String getObject() {
+    public Collection<T> getObject() {
         final Collection<Object> fieldValues = documentModel.getObject().getFieldValues(fieldName);
-        if (fieldValues != null) {
-            return getValueString(fieldValues);
-        }
-        return null;
-    }
-
-    private String getValueString(final Collection<Object> fieldValues) {
-        final Iterator<Object> iterator = fieldValues.iterator();
-        if (iterator.hasNext()) {
-            final String firstValue = iterator.next().toString();
-            if (iterator.hasNext()) {
-                return getMultipleValuesString(firstValue, iterator);
-            } else {
-                return firstValue;
-            }
-        } else {
+        if (fieldValues == null) {
             return null;
+        } else {
+            return transformCollectionType(fieldValues);
         }
     }
 
-    protected String getMultipleValuesString(final String firstValue, final Iterator<Object> iterator) {
-        final StringBuilder valuesBuilder = new StringBuilder(firstValue);
-        while (iterator.hasNext()) {
-            valuesBuilder.append(iterator.next().toString());
-            if (iterator.hasNext()) {
-                valuesBuilder.append("; ");
+    /**
+     * Transforms object collection to a typed collection by means of an
+     * on-the-fly cast
+     *
+     * @param fieldValues
+     * @return
+     */
+    private Collection<T> transformCollectionType(final Collection<Object> fieldValues) {
+        return Collections2.transform(fieldValues, new Function<Object, T>() {
+
+            @Override
+            public T apply(Object input) {
+                return (T) input;
             }
-        }
-        return valuesBuilder.toString();
+        });
     }
 
     @Override
@@ -83,6 +78,5 @@ public class SolrFieldModel extends AbstractReadOnlyModel<String> {
         super.detach();
         documentModel.detach();
     }
-    
-    
+
 }

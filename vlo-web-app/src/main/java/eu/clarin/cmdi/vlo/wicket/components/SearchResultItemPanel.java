@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -40,13 +40,13 @@ public class SearchResultItemPanel extends Panel {
     public static class SolrFieldLabel extends Label {
 
         public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName) {
-            super(id, new SolrFieldModel(documentModel, fieldName));
+            super(id, new SolrFieldStringModel(documentModel, fieldName));
         }
 
         public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, String nullFallback) {
             super(id,
                     new NullFallbackModel(
-                            new SolrFieldModel(documentModel, fieldName), nullFallback));
+                            new SolrFieldStringModel(documentModel, fieldName), nullFallback));
         }
 
     }
