@@ -275,6 +275,7 @@
   </facetConcept>
   <facetConcept name="format" description="Format of the resource based on MIME types">
     <concept>http://www.isocat.org/datcat/DC-2571</concept>
+    <concept>http://purl.org/dc/terms/format</concept>
   </facetConcept>  
   <facetConcept name="nationalProject" description="The national project in which this resource is provided">
     <pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
