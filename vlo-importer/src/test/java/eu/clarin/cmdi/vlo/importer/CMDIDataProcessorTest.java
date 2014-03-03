@@ -70,7 +70,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         File cmdiFile = createCmdiFile("testCorpus", content);
         CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
-        assertEquals("test-hdl:1839/00-0000-0000-0000-0001-D", data.getId());
+        assertEquals("test-hdl_58_1839_47_00-0000-0000-0000-0001-D", data.getId());
         List<Resource> resources = data.getMetadataResources();
         assertEquals(3, resources.size());
         Resource res = resources.get(0);
@@ -376,7 +376,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         File cmdiFile = createCmdiFile("testSession", content);
         CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
-        assertEquals("test-hdl:1839/00-0000-0000-0009-294C-9", data.getId());
+        assertEquals("test-hdl_58_1839_47_00-0000-0000-0009-294C-9", data.getId());
         List<Resource> resources = data.getMetadataResources();
         assertEquals(0, resources.size());
         List<Resource> dataResources = data.getDataResources();
@@ -512,7 +512,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         File cmdiFile = createCmdiFile("testSession", content);
         CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
-        assertEquals("test-hdl:1839/00-0000-0000-0009-294C-9", data.getId());
+        assertEquals("test-hdl_58_1839_47_00-0000-0000-0009-294C-9", data.getId());
         List<Resource> resources = data.getMetadataResources();
         assertEquals(0, resources.size());
         SolrInputDocument doc = data.getSolrDocument();
@@ -583,7 +583,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         File cmdiFile = createCmdiFile("testOlac", content);
         CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
-        assertEquals("oai:ailla.utexas.edu:1", data.getId());
+        assertEquals("oai_58_ailla.utexas.edu_58_1", data.getId());
         List<Resource> resources = data.getMetadataResources();
         assertEquals(0, resources.size());
         List<Resource> dataResources = data.getDataResources();
@@ -889,7 +889,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         File cmdiFile = createCmdiFile("testOlac", content);
         CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
-        assertEquals("clarin.eu:lrt:433", data.getId());
+        assertEquals("clarin.eu_58_lrt_58_433", data.getId());
         List<Resource> resources = data.getMetadataResources();
         assertEquals(0, resources.size());
         List<Resource> dataResources = data.getDataResources();
