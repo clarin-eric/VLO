@@ -390,6 +390,9 @@ public class MetadataImporter {
                 format = CommonUtils.normalizeMimeType(mimeType);
             }
             
+            FormatPostProcessor processor = new FormatPostProcessor();
+            mimeType = processor.process(mimeType);
+            
             // TODO check should probably be moved into Solr (by using some minimum length filter)
             if(!mimeType.equals(""))
             	solrDocument.addField(FacetConstants.FIELD_FORMAT, mimeType);
