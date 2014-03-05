@@ -21,10 +21,6 @@ import eu.clarin.cmdi.vlo.pojo.ResourceType;
 import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
 import java.util.Arrays;
 import java.util.Collection;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
@@ -34,25 +30,6 @@ import static org.hamcrest.Matchers.*;
  * @author twagoo
  */
 public class ResourceTypeCountingServiceImplTest {
-
-    public ResourceTypeCountingServiceImplTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
 
     /**
      * Test of countResourceTypes method, of class
@@ -75,7 +52,7 @@ public class ResourceTypeCountingServiceImplTest {
         );
         ResourceTypeCountingServiceImpl instance = new ResourceTypeCountingServiceImpl();
         Collection<ResourceTypeCount> result = instance.countResourceTypes(resources);
-        assertThat(result, hasItem(equalTo(new ResourceTypeCount(ResourceType.VIDEO, 2))));
+        assertThat(result, hasItem(new ResourceTypeCount(ResourceType.VIDEO, 2)));
         assertThat(result, hasItem(new ResourceTypeCount(ResourceType.AUDIO, 4)));
         assertThat(result, hasItem(new ResourceTypeCount(ResourceType.TEXT, 2)));
         assertThat(result, hasItem(new ResourceTypeCount(ResourceType.ANNOTATION, 1)));
