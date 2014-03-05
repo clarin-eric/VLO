@@ -63,6 +63,8 @@ public class ResourceTypeCountingServiceImpl implements ResourceTypeCountingServ
                 countBag.add(ResourceType.TEXT);
             } else if (normalizeMimeType.equals(FacetConstants.RESOURCE_TYPE_VIDEO)) {
                 countBag.add(ResourceType.VIDEO);
+            } else{
+                countBag.add(ResourceType.OTHER);
             }
         }
 

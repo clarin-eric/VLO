@@ -46,4 +46,30 @@ public class ResourceTypeCount implements Serializable {
         return String.format("%d %s", getCount(), getResourceType());
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + (this.resourceType != null ? this.resourceType.hashCode() : 0);
+        hash = 89 * hash + (this.count != null ? this.count.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ResourceTypeCount other = (ResourceTypeCount) obj;
+        if (this.resourceType != other.resourceType) {
+            return false;
+        }
+        if (this.count != other.count && (this.count == null || !this.count.equals(other.count))) {
+            return false;
+        }
+        return true;
+    }
+
 }
