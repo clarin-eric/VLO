@@ -52,10 +52,17 @@ public class SearchResultItemPanel extends Panel {
 
         // get model for resources
         final SolrFieldModel<String> resourcesModel = new SolrFieldModel<String>(model, FacetConstants.FIELD_RESOURCE);
+        // wrap with a count provider
         final ResouceTypeCountDataProvider countProvider = new ResouceTypeCountDataProvider(resourcesModel, countingService);
+        // view that shows provided counts 
+        // TODO: hide if no resources
         add(new ResourceCountDataView("resourceCount", countProvider));
     }
 
+    /**
+     * Label that shows the content of a Solr field by its string value (using
+     * {@link SolrFieldStringModel})
+     */
     private static class SolrFieldLabel extends Label {
 
         public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName) {
@@ -70,6 +77,10 @@ public class SearchResultItemPanel extends Panel {
 
     }
 
+    /**
+     * Data view for resource type counts coming from a data provider for
+     * {@link ResourceTypeCount}
+     */
     private static class ResourceCountDataView extends DataView<ResourceTypeCount> {
 
         private final static ResourceTypeCountConverter resourceTypeCountConverter
@@ -106,6 +117,11 @@ public class SearchResultItemPanel extends Panel {
         }
     }
 
+    /**
+     * One-way converter for resource type counts that generates string
+     * representations like "1 video file", "2 video files" or "3 text
+     * documents"
+     */
     private static class ResourceTypeCountConverter implements IConverter<ResourceTypeCount> {
 
         @Override
@@ -133,6 +149,8 @@ public class SearchResultItemPanel extends Panel {
                     return "audio file";
                 case VIDEO:
                     return "video file";
+                case IMAGE:
+                    return "image";
                 case TEXT:
                     return "text document";
                 case OTHER:
@@ -151,6 +169,8 @@ public class SearchResultItemPanel extends Panel {
                     return "audio files";
                 case VIDEO:
                     return "video files";
+                case IMAGE:
+                    return "images";
                 case TEXT:
                     return "text documents";
                 case OTHER:

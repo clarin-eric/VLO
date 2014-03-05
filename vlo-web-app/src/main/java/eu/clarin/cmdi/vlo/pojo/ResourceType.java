@@ -22,6 +22,6 @@ package eu.clarin.cmdi.vlo.pojo;
  * @author twagoo
  */
 public enum ResourceType {
-    VIDEO, AUDIO, TEXT, ANNOTATION, OTHER
+    VIDEO, AUDIO, IMAGE, TEXT, ANNOTATION, OTHER
     
 }
