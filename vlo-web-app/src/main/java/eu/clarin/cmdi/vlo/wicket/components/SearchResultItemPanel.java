@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
@@ -42,21 +43,38 @@ import org.apache.wicket.util.convert.IConverter;
  */
 public class SearchResultItemPanel extends Panel {
 
+    private final static ResourceTypeCountConverter resourceTypeCountConverter = new ResourceTypeCountConverter();
+
     @SpringBean
     private ResourceTypeCountingService countingService;
+    private final IModel<QueryFacetsSelection> selectionModel;
+    private final IModel<SolrDocument> documentModel;
 
-    public SearchResultItemPanel(String id, IModel<SolrDocument> model) {
-        super(id, model);
-        add(new SolrFieldLabel("title", model, FacetConstants.FIELD_NAME));
-        add(new SolrFieldLabel("description", model, FacetConstants.FIELD_DESCRIPTION, "<no description>"));
+    public SearchResultItemPanel(String id, IModel<SolrDocument> documentModel, IModel<QueryFacetsSelection> selectionModel) {
+        super(id, documentModel);
+        this.documentModel = documentModel;
+        this.selectionModel = selectionModel;
+
+        final Link recordLink = new RecordPageLink("recordLink", documentModel, selectionModel);
+        recordLink.add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME));
+        add(recordLink);
+
+        add(new SolrFieldLabel("description", documentModel, FacetConstants.FIELD_DESCRIPTION, "<no description>"));
 
         // get model for resources
-        final SolrFieldModel<String> resourcesModel = new SolrFieldModel<String>(model, FacetConstants.FIELD_RESOURCE);
+        final SolrFieldModel<String> resourcesModel = new SolrFieldModel<String>(documentModel, FacetConstants.FIELD_RESOURCE);
         // wrap with a count provider
         final ResouceTypeCountDataProvider countProvider = new ResouceTypeCountDataProvider(resourcesModel, countingService);
         // view that shows provided counts 
         // TODO: hide if no resources
         add(new ResourceCountDataView("resourceCount", countProvider));
+    }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        // not passed to super
+        selectionModel.detach();
     }
 
     /**
@@ -81,10 +99,7 @@ public class SearchResultItemPanel extends Panel {
      * Data view for resource type counts coming from a data provider for
      * {@link ResourceTypeCount}
      */
-    private static class ResourceCountDataView extends DataView<ResourceTypeCount> {
-
-        private final static ResourceTypeCountConverter resourceTypeCountConverter
-                = new ResourceTypeCountConverter();
+    private class ResourceCountDataView extends DataView<ResourceTypeCount> {
 
         public ResourceCountDataView(String id, IDataProvider<ResourceTypeCount> dataProvider) {
             super(id, dataProvider);
@@ -92,13 +107,7 @@ public class SearchResultItemPanel extends Panel {
 
         @Override
         protected void populateItem(Item<ResourceTypeCount> item) {
-            final Link resourceLink = new Link("recordLink") {
-
-                @Override
-                public void onClick() {
-                    throw new UnsupportedOperationException("Not supported yet.");
-                }
-            };
+            final Link resourceLink = new RecordPageLink("recordLink", documentModel, selectionModel);
             final Label label = new Label("resourceCountLabel", item.getModel()) {
 
                 @Override

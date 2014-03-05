@@ -52,9 +52,9 @@ public class SearchResultsPanel extends Panel {
     private final IDataProvider<SolrDocument> solrDocumentProvider;
     private final DataView<SolrDocument> resultsView;
 
-    public SearchResultsPanel(String id, IModel<QueryFacetsSelection> model) {
-        super(id, model);
-        solrDocumentProvider = new SolrDocumentProvider(documentService, model);
+    public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel) {
+        super(id, selectionModel);
+        solrDocumentProvider = new SolrDocumentProvider(documentService, selectionModel);
 
         // data view for search results
         resultsView = new DataView<SolrDocument>("resultItem", solrDocumentProvider, 10) {
@@ -62,7 +62,7 @@ public class SearchResultsPanel extends Panel {
             @Override
             protected void populateItem(Item<SolrDocument> item) {
                 // single result item
-                item.add(new SearchResultItemPanel("resultItemDetails", item.getModel()));
+                item.add(new SearchResultItemPanel("resultItemDetails", item.getModel(), selectionModel));
             }
         };
         add(resultsView);
