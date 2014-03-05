@@ -94,12 +94,28 @@ li.searchresultitem .searchresultcollection{
     clear: both;
 }
 
-p.searchresultresources {
+.searchresultresources {
     width: 70%;
     float: left;
     clear: left;
     padding: 0px;
 }
+
+.searchresultresources ul {
+    display: inline;
+    padding: 0em 0em 0em .5em;
+    margin: 0px;
+    border-right: 1px solid;
+}
+
+.searchresultresources ul li {
+    display: inline;
+    list-style: none;
+    padding: 0em 0em 0em .5em;
+    margin: 0em .5em 0em 0em;
+    border-left: 1px solid;
+}
+
 
 div.searchresultattributes {
     padding: 0px 0px 8px 12px;

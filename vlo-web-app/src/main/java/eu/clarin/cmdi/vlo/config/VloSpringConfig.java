@@ -19,9 +19,11 @@ package eu.clarin.cmdi.vlo.config;
 import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
+import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.service.SearchResultsDao;
 import eu.clarin.cmdi.vlo.service.SolrDocumentService;
 import eu.clarin.cmdi.vlo.service.SolrFacetQueryFactory;
+import eu.clarin.cmdi.vlo.service.impl.ResourceTypeCountingServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.SearchResultsDaoImpl;
 import eu.clarin.cmdi.vlo.service.impl.SolrDocumentQueryFactoryImpl;
 import eu.clarin.cmdi.vlo.service.impl.SolrDocumentServiceImpl;
@@ -93,6 +95,11 @@ public class VloSpringConfig {
     @Bean
     public SolrDocumentQueryFactoryImpl documentQueryFactory() {
         return new SolrDocumentQueryFactoryImpl();
+    }
+
+    @Bean
+    public ResourceTypeCountingService resourceTypeCountingService() {
+        return new ResourceTypeCountingServiceImpl();
     }
 
     @Bean

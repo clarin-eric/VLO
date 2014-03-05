@@ -33,9 +33,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <p class="searchresultdescription" wicket:id="description">
                     [DESCRIPTION]
                 </p>
-                <p class="searchresultresources">
-                    Resources: <a href="record1.html">1 text file</a>, <a href="record1.html">1 audio file</a>, <a href="record1.html">1 annotation file</a>
-                </p>
+                <div class="searchresultresources">
+                    Resources: 
+                    <ul>
+                        <li wicket:id="resourceCount">
+                            <a wicket:id="recordLink" href="record1.html">
+                                <wicket:container wicket:id="resourceCountLabel">1 text file</wicket:container>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
 <!--
             <div class="searchresultitemextended">
