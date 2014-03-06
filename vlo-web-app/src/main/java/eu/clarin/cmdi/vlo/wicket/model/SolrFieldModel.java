@@ -22,6 +22,7 @@ import java.util.Collection;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 /**
  * Model that provides field values as for a given Solr document
@@ -34,7 +35,7 @@ import org.apache.wicket.model.IModel;
 public class SolrFieldModel<T> extends AbstractReadOnlyModel<Collection<T>> {
 
     private final IModel<SolrDocument> documentModel;
-    private final String fieldName;
+    private final IModel<String> fieldNameModel;
 
     /**
      *
@@ -42,13 +43,22 @@ public class SolrFieldModel<T> extends AbstractReadOnlyModel<Collection<T>> {
      * @param fieldName name of the field to take value from
      */
     public SolrFieldModel(IModel<SolrDocument> documentModel, String fieldName) {
+        this(documentModel, Model.of(fieldName));
+    }
+    
+    /**
+     *
+     * @param documentModel model of document that holds the field values
+     * @param fieldNameModel model that provides the field name
+     */
+    public SolrFieldModel(IModel<SolrDocument> documentModel, IModel<String> fieldNameModel) {
         this.documentModel = documentModel;
-        this.fieldName = fieldName;
+        this.fieldNameModel = fieldNameModel;
     }
 
     @Override
     public Collection<T> getObject() {
-        final Collection<Object> fieldValues = documentModel.getObject().getFieldValues(fieldName);
+        final Collection<Object> fieldValues = documentModel.getObject().getFieldValues(fieldNameModel.getObject());
         if (fieldValues == null) {
             return null;
         } else {

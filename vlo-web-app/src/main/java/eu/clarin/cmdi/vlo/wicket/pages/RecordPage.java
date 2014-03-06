@@ -18,8 +18,12 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.FieldFilter;
+import eu.clarin.cmdi.vlo.wicket.components.FieldsTablePanel;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
+import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
+import java.io.Serializable;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -31,16 +35,15 @@ import org.apache.wicket.model.IModel;
  */
 public class RecordPage extends WebPage {
 
-//    private final IModel<SolrDocument> documentModel;
     private final IModel<QueryFacetsSelection> contextModel;
 
     public RecordPage(IModel<SolrDocument> documentModel, IModel<QueryFacetsSelection> contextModel) {
         super(documentModel);
-//        this.documentModel = documentModel;
         this.contextModel = contextModel;
 
         add(new SolrFieldLabel("name", documentModel, FacetConstants.FIELD_NAME, "Unnamed record"));
         add(createLandingPageLink("landingPageLink", documentModel));
+        add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(documentModel, new BasicPropertiesFieldFilter())));
     }
 
     private ExternalLink createLandingPageLink(String id, IModel<SolrDocument> documentModel) {
@@ -63,6 +66,15 @@ public class RecordPage extends WebPage {
         super.detachModels();
         // not passed to parent
         contextModel.detach();
+    }
+
+    private class BasicPropertiesFieldFilter implements FieldFilter, Serializable {
+
+        @Override
+        public boolean allowField(String fieldName) {
+            return !fieldName.startsWith("_");
+            //TODO: Exclude excluded fields and technical fields
+        }
     }
 
 }

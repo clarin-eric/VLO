@@ -97,6 +97,17 @@ table.recorddetailstable td.attribute {
     vertical-align: top;
 }
 
+ul.attributeValues {
+    margin: 0px;
+}
+
+ul.attributeValues li {
+    display: block;
+    list-style-type: none;
+    margin: 0px;
+}
+
+
 a.recordfacetselect span, a.recordattributeinfo span {
     display: none;
 }
