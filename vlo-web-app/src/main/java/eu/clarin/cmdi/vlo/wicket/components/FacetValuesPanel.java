@@ -30,6 +30,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 
 /**
  * A panel representing a single facet and its selectable values
@@ -42,10 +43,9 @@ public abstract class FacetValuesPanel extends Panel {
 
     public FacetValuesPanel(String id, IModel<FacetField> model) {
         super(id, model);
-        setDefaultModel(new CompoundPropertyModel<FacetField>(model));
 
-        // 'name' field from FacetField
-        add(new Label("name"));
+        // add title
+        add(new SolrFieldNameLabel("title", new PropertyModel<String>(model, "name")));
 
         // provider that extracts values and counts from FacetField
         final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(model, maxNumberOfFacetsToShow);

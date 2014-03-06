@@ -40,7 +40,7 @@ public class FieldsTablePanel extends Panel {
             @Override
             protected void populateItem(Item<DocumentField> item) {
                 final IModel<DocumentField> fieldModel = item.getModel();
-                item.add(new Label("fieldName", new PropertyModel(fieldModel, "fieldName")));
+                item.add(new SolrFieldNameLabel("fieldName", new PropertyModel(fieldModel, "fieldName")));
                 item.add(new ListView("values", new PropertyModel(fieldModel, "values")) {
 
                     @Override

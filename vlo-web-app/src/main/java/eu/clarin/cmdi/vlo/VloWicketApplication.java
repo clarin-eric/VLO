@@ -5,6 +5,7 @@ import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.resource.loader.BundleStringResourceLoader;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
 
     @Autowired
     private SolrDocumentService documentService;
-    
-    
+
     private ApplicationContext applicationContext;
 
     /**
@@ -42,10 +42,12 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         super.init();
         // this listener will inject any spring beans that need to be autowired
         getComponentInstantiationListeners().add(new SpringComponentInjector(this, applicationContext));
+        // register the resource of field names (used by eu.clarin.cmdi.vlo.wicket.componentsSolrFieldNameLabel)
+        getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("fieldNames"));
     }
-    
+
     /**
-     * 
+     *
      * @return the active VLO wicket application
      */
     public static VloWicketApplication get() {
@@ -67,6 +69,5 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     public SolrDocumentService getDocumentService() {
         return documentService;
     }
-    
-    
+
 }
