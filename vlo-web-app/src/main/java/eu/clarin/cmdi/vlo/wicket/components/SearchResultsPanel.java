@@ -47,14 +47,12 @@ public class SearchResultsPanel extends Panel {
 
     public static final List<Long> ITEMS_PER_PAGE_OPTIONS = Arrays.asList(5L, 10L, 25L, 50L, 100L);
 
-    @SpringBean
-    private SolrDocumentService documentService;
     private final IDataProvider<SolrDocument> solrDocumentProvider;
     private final DataView<SolrDocument> resultsView;
 
     public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, selectionModel);
-        solrDocumentProvider = new SolrDocumentProvider(documentService, selectionModel);
+        solrDocumentProvider = new SolrDocumentProvider(selectionModel);
 
         // data view for search results
         resultsView = new DataView<SolrDocument>("resultItem", solrDocumentProvider, 10) {

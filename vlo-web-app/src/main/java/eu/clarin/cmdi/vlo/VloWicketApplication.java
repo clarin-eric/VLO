@@ -1,10 +1,13 @@
 package eu.clarin.cmdi.vlo;
 
+import eu.clarin.cmdi.vlo.service.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
+import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -16,6 +19,10 @@ import org.springframework.context.ApplicationContextAware;
  */
 public class VloWicketApplication extends WebApplication implements ApplicationContextAware {
 
+    @Autowired
+    private SolrDocumentService documentService;
+    
+    
     private ApplicationContext applicationContext;
 
     /**
@@ -36,6 +43,14 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         // this listener will inject any spring beans that need to be autowired
         getComponentInstantiationListeners().add(new SpringComponentInjector(this, applicationContext));
     }
+    
+    /**
+     * 
+     * @return the active VLO wicket application
+     */
+    public static VloWicketApplication get() {
+        return (VloWicketApplication) Application.get();
+    }
 
     /**
      * Method needed for dynamic injection of application context (as happens in
@@ -48,4 +63,10 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
+
+    public SolrDocumentService getDocumentService() {
+        return documentService;
+    }
+    
+    
 }

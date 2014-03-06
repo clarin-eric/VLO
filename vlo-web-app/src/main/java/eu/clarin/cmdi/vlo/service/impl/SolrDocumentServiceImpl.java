@@ -39,6 +39,11 @@ public class SolrDocumentServiceImpl implements SolrDocumentService {
     }
 
     @Override
+    public SolrDocument getDocument(String docId) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public List<SolrDocument> getDocuments(QueryFacetsSelection selection, int first, int count) {
         SolrQuery query = queryFatory.createDocumentQuery(selection,first, count);
         return searchResultsDao.getDocuments(query);

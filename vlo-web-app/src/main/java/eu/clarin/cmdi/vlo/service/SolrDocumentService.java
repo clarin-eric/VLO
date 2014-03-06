@@ -25,6 +25,8 @@ import org.apache.solr.common.SolrDocument;
  * @author twagoo
  */
 public interface SolrDocumentService {
+    
+    SolrDocument getDocument(String docId);
 
     List<SolrDocument> getDocuments(QueryFacetsSelection selection, int first, int count);
     
