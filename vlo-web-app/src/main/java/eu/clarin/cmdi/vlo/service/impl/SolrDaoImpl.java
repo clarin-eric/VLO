@@ -1,7 +1,6 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -32,6 +31,8 @@ public class SolrDaoImpl {
     /**
      * Basic sanitising of Solr queries.
      *
+     * TODO: Move this to QueryFacetSelection level??
+     * 
      * Query is based on the URL to the VLO web application. Also, explain about
      * the URL and ?fq=language:dutch Assume filters have the form a:b like for
      * example language:dutch
@@ -39,7 +40,7 @@ public class SolrDaoImpl {
      * @param query
      * @return
      */
-    private SolrQuery sanitise(SolrQuery query) {
+    protected SolrQuery sanitise(SolrQuery query) {
 
         // String [] facetsFromConfig; 
         // try and get the filters facets from the query
@@ -79,11 +80,9 @@ public class SolrDaoImpl {
     }
 
     protected QueryResponse fireQuery(SolrQuery query) {
-        SolrQuery sanitisedQuery;
-        sanitisedQuery = sanitise(query);
         try {
             logger.debug("Executing query: {}", query);
-            final QueryResponse response = solrServer.query(sanitisedQuery);
+            final QueryResponse response = solrServer.query(query);
             logger.trace("Response: {}", response);
             return response;
         } catch (SolrServerException e) {

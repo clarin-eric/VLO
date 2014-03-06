@@ -29,8 +29,11 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
     
     @Override
     public SolrQuery createDocumentQuery(QueryFacetsSelection selection, int first, int count) {
+        // make a query to get all documents that match the selection criteria
         final SolrQuery query = getDefaultDocumentQuery();
+        // apply selection
         addQueryFacetParameters(query, selection);
+        // set offset and limit
         query.setStart(first);
         query.setRows(count);
         return query;
@@ -38,9 +41,13 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
     
     @Override
     public SolrQuery createDocumentQuery(String docId) {
+        // make a query to look up a specific document by its ID
         final SolrQuery query = getDefaultDocumentQuery();
+        // consider all documents
         query.setQuery(SOLR_SEARCH_ALL);
+        // filter by ID
         query.addFilterQuery(createFilterQuery(FacetConstants.FIELD_ID, docId));
+        // one result max
         query.setRows(1);
         return query;
         
@@ -48,7 +55,12 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
     
     private SolrQuery getDefaultDocumentQuery() {
         SolrQuery query = new SolrQuery();
-        query.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID, FacetConstants.FIELD_DESCRIPTION, FacetConstants.FIELD_COLLECTION, FacetConstants.FIELD_RESOURCE);
+        query.setFields(FacetConstants.FIELD_NAME, 
+                FacetConstants.FIELD_ID, 
+                FacetConstants.FIELD_DESCRIPTION, 
+                FacetConstants.FIELD_COLLECTION,
+                FacetConstants.FIELD_RESOURCE,
+                FacetConstants.FIELD_LANDINGPAGE);
         query.setSort(SolrQuery.SortClause.asc(FacetConstants.FIELD_NAME));
         return query;
     }

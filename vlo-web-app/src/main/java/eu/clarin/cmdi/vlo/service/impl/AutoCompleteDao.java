@@ -36,7 +36,7 @@ public class AutoCompleteDao extends SolrDaoImpl {
             SolrQuery query = new SolrQuery();
             query.setQuery(input.toLowerCase());
             query.setQueryType("/suggest");
-            QueryResponse response = fireQuery(query);
+            QueryResponse response = fireQuery(sanitise(query));
             if (response.getSpellCheckResponse() != null) {
                 List<Suggestion> suggestions = response.getSpellCheckResponse().getSuggestions();
                 if (suggestions.size() > 0) {

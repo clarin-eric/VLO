@@ -1,7 +1,6 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import eu.clarin.cmdi.vlo.service.SearchResultsDao;
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -22,7 +21,7 @@ public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDa
 
     @Override
     public List<FacetField> getFacets(SolrQuery query) {
-        final QueryResponse response = fireQuery(query);
+        final QueryResponse response = fireQuery(sanitise(query));
         final List<FacetField> facetFields = response.getFacetFields();
         logger.debug("Found {} facet fields", facetFields.size());
         return facetFields;
