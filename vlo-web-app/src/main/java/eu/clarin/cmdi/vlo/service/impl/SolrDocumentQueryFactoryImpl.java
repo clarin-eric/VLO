@@ -26,7 +26,7 @@ import org.apache.solr.client.solrj.SolrQuery;
  * @author twagoo
  */
 public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrDocumentQueryFactory {
-    
+
     @Override
     public SolrQuery createDocumentQuery(QueryFacetsSelection selection, int first, int count) {
         // make a query to get all documents that match the selection criteria
@@ -38,7 +38,7 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
         query.setRows(count);
         return query;
     }
-    
+
     @Override
     public SolrQuery createDocumentQuery(String docId) {
         // make a query to look up a specific document by its ID
@@ -50,17 +50,22 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
         // one result max
         query.setRows(1);
         return query;
-        
+
     }
-    
+
     private SolrQuery getDefaultDocumentQuery() {
         SolrQuery query = new SolrQuery();
-        query.setFields(FacetConstants.FIELD_NAME, 
-                FacetConstants.FIELD_ID, 
-                FacetConstants.FIELD_DESCRIPTION, 
+        query.setFields(FacetConstants.FIELD_NAME,
+                FacetConstants.FIELD_DESCRIPTION,
                 FacetConstants.FIELD_COLLECTION,
+                FacetConstants.FIELD_GENRE,
+                FacetConstants.FIELD_LANGUAGE,
+                FacetConstants.FIELD_NATIONAL_PROJECT,
+                FacetConstants.FIELD_RESOURCE_CLASS,
                 FacetConstants.FIELD_RESOURCE,
-                FacetConstants.FIELD_LANDINGPAGE);
+                FacetConstants.FIELD_LANDINGPAGE,
+                FacetConstants.FIELD_ID
+        );
         query.setSort(SolrQuery.SortClause.asc(FacetConstants.FIELD_NAME));
         return query;
     }
