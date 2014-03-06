@@ -23,6 +23,9 @@ import eu.clarin.cmdi.vlo.service.SolrDocumentService;
 import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -30,6 +33,7 @@ import org.apache.solr.common.SolrDocument;
  */
 public class SolrDocumentServiceImpl implements SolrDocumentService {
 
+    private final static Logger logger = LoggerFactory.getLogger(SolrDocumentServiceImpl.class);
     private final SearchResultsDao searchResultsDao;
     private final SolrDocumentQueryFactory queryFatory;
 
@@ -40,18 +44,25 @@ public class SolrDocumentServiceImpl implements SolrDocumentService {
 
     @Override
     public SolrDocument getDocument(String docId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        final SolrQuery query = queryFatory.createDocumentQuery(docId);
+        final SolrDocumentList result = searchResultsDao.getDocuments(query);
+        if (result.size() < 1) {
+            return null;
+        } else {
+            logger.debug("Document with docId {} retrieved:", result);
+            return result.get(0);
+        }
     }
 
     @Override
     public List<SolrDocument> getDocuments(QueryFacetsSelection selection, int first, int count) {
-        SolrQuery query = queryFatory.createDocumentQuery(selection,first, count);
+        final SolrQuery query = queryFatory.createDocumentQuery(selection, first, count);
         return searchResultsDao.getDocuments(query);
     }
 
     @Override
     public long getDocumentCount(QueryFacetsSelection selection) {
-        SolrQuery query = queryFatory.createDocumentQuery(selection,0,0);
+        final SolrQuery query = queryFatory.createDocumentQuery(selection, 0, 0);
         return searchResultsDao.getDocuments(query).getNumFound();
     }
 

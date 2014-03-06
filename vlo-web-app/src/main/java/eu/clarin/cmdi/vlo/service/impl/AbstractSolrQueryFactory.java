@@ -30,9 +30,9 @@ import org.apache.solr.client.solrj.util.ClientUtils;
  */
 public abstract class AbstractSolrQueryFactory {
 
-    private static final String SOLR_SEARCH_ALL = "*:*";
+    protected static final String SOLR_SEARCH_ALL = "*:*";
 
-    protected void addQueryFacetParameters(final SolrQuery query, QueryFacetsSelection queryFacetsSelections) {
+    protected final void addQueryFacetParameters(final SolrQuery query, QueryFacetsSelection queryFacetsSelections) {
         final String queryString = queryFacetsSelections.getQuery();
         if (queryString == null) {
             query.setQuery(SOLR_SEARCH_ALL);
@@ -47,12 +47,16 @@ public abstract class AbstractSolrQueryFactory {
                 final Collection<String> values = selection.getValue();
                 if (values != null) {
                     for (String value : values) {
-                        encodedQueries.add(String.format("%s:%s", facetName, ClientUtils.escapeQueryChars(value)));
+                        encodedQueries.add(createFilterQuery(facetName, value));
                     }
                 }
             }
             query.setFilterQueries(encodedQueries.toArray(new String[encodedQueries.size()]));
         }
+    }
+
+    protected final String createFilterQuery(String facetName, String value) {
+        return String.format("%s:%s", facetName, ClientUtils.escapeQueryChars(value));
     }
 
 }

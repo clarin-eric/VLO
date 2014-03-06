@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package eu.clarin.cmdi.vlo.service;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import org.apache.solr.client.solrj.SolrQuery;
 
@@ -26,6 +26,26 @@ import org.apache.solr.client.solrj.SolrQuery;
  */
 public interface SolrDocumentQueryFactory {
 
+    /**
+     * Creates a query to retrieve all document that match a query/facet
+     * selection with an offset and limit
+     *
+     * @param selection selection criteria
+     * @param first search result offset
+     * @param count limits the number of results
+     * @return a query set up to retrieve the matching documents, starting with
+     * the specified starting index and limited to the specified count
+     */
     SolrQuery createDocumentQuery(QueryFacetsSelection selection, int first, int count);
-    
+
+    /**
+     * Creates a query to retrieve a single document by id
+     *
+     * @param docId identifier of document to retrieve
+     * @return a query set up to retrieve one row at most with the document that
+     * has the specified identifier
+     * @see FacetConstants#FIELD_ID
+     */
+    SolrQuery createDocumentQuery(String docId);
+
 }

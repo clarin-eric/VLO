@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package eu.clarin.cmdi.vlo.service.impl;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
@@ -26,7 +25,7 @@ import org.apache.solr.client.solrj.SolrQuery;
  *
  * @author twagoo
  */
-public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrDocumentQueryFactory{
+public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrDocumentQueryFactory {
     
     @Override
     public SolrQuery createDocumentQuery(QueryFacetsSelection selection, int first, int count) {
@@ -35,6 +34,16 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
         query.setStart(first);
         query.setRows(count);
         return query;
+    }
+    
+    @Override
+    public SolrQuery createDocumentQuery(String docId) {
+        final SolrQuery query = getDefaultDocumentQuery();
+        query.setQuery(SOLR_SEARCH_ALL);
+        query.addFilterQuery(createFilterQuery(FacetConstants.FIELD_ID, docId));
+        query.setRows(1);
+        return query;
+        
     }
     
     private SolrQuery getDefaultDocumentQuery() {
