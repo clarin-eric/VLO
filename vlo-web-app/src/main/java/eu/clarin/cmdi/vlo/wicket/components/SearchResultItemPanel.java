@@ -21,9 +21,7 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
-import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import java.util.Locale;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.basic.Label;
@@ -75,24 +73,6 @@ public class SearchResultItemPanel extends Panel {
         super.detachModels();
         // not passed to super
         selectionModel.detach();
-    }
-
-    /**
-     * Label that shows the content of a Solr field by its string value (using
-     * {@link SolrFieldStringModel})
-     */
-    private static class SolrFieldLabel extends Label {
-
-        public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName) {
-            super(id, new SolrFieldStringModel(documentModel, fieldName));
-        }
-
-        public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, String nullFallback) {
-            super(id,
-                    new NullFallbackModel(
-                            new SolrFieldStringModel(documentModel, fieldName), nullFallback));
-        }
-
     }
 
     /**

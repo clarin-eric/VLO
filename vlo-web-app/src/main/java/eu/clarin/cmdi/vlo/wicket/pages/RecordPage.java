@@ -16,9 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.IModel;
 
 /**
@@ -27,13 +31,31 @@ import org.apache.wicket.model.IModel;
  */
 public class RecordPage extends WebPage {
 
-    private final IModel<SolrDocument> documentModel;
+//    private final IModel<SolrDocument> documentModel;
     private final IModel<QueryFacetsSelection> contextModel;
 
     public RecordPage(IModel<SolrDocument> documentModel, IModel<QueryFacetsSelection> contextModel) {
         super(documentModel);
-        this.documentModel = documentModel;
+//        this.documentModel = documentModel;
         this.contextModel = contextModel;
+
+        add(new SolrFieldLabel("name", documentModel, FacetConstants.FIELD_NAME, "Unnamed record"));
+        add(createLandingPageLink("landingPageLink", documentModel));
+    }
+
+    private ExternalLink createLandingPageLink(String id, IModel<SolrDocument> documentModel) {
+        final SolrFieldStringModel landingPageHrefModel = new SolrFieldStringModel(documentModel, FacetConstants.FIELD_LANDINGPAGE);
+        // add landing page link
+        final ExternalLink landingPageLink = new ExternalLink(id, landingPageHrefModel) {
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(landingPageHrefModel.getObject() != null);
+            }
+
+        };
+        return landingPageLink;
     }
 
     @Override
