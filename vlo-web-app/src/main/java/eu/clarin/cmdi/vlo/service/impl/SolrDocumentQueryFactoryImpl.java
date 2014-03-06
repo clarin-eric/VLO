@@ -36,8 +36,14 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
         FacetConstants.FIELD_NATIONAL_PROJECT,
         FacetConstants.FIELD_RESOURCE_CLASS,
         FacetConstants.FIELD_RESOURCE,
+        FacetConstants.FIELD_ID,
+        FacetConstants.FIELD_DATA_PROVIDER,
+        FacetConstants.FIELD_FILENAME,
+        FacetConstants.FIELD_FORMAT,
         FacetConstants.FIELD_LANDINGPAGE,
-        FacetConstants.FIELD_ID
+        FacetConstants.FIELD_SEARCHPAGE,
+        FacetConstants.FIELD_SEARCH_SERVICE,
+        FacetConstants.FIELD_LAST_SEEN
     };
 
     @Override
