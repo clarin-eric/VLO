@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
@@ -27,7 +26,6 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 public class TestRecordPage {
 
     @Configuration
-    @ComponentScan
     static class ContextConfiguration extends VloSpringConfig {
 
         @Override
