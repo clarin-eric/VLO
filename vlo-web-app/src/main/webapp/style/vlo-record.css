@@ -127,7 +127,7 @@ a.recordattributeinfo:after {
     margin: 2em 0;
 }
 
-#recordresources > a {
+#recordresources a {
     display: inline-block;
     float: left;
     width: 128px;
@@ -140,7 +140,7 @@ a.recordattributeinfo:after {
     margin-bottom: 1em;
 }
 
-#recordresources > a:hover {
+#recordresources a:hover {
     background-color: #ccc;
 }
 

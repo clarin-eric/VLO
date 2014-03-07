@@ -21,7 +21,9 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.wicket.components.FieldsTablePanel;
+import eu.clarin.cmdi.vlo.wicket.components.ResourceLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import java.io.Serializable;
@@ -64,6 +66,7 @@ public class RecordPage extends WebPage {
         add(new SolrFieldLabel("name", documentModel, FacetConstants.FIELD_NAME, "Unnamed record"));
         add(createLandingPageLink("landingPageLink", documentModel));
         add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(documentModel, new BasicPropertiesFieldFilter())));
+        add(new ResourceLinksPanel("resources", new SolrFieldModel<String>(documentModel, FacetConstants.FIELD_RESOURCE)));
         add(new FieldsTablePanel("technicalProperties", new DocumentFieldsProvider(documentModel, new TechnicalPropertiesFieldFilter())));
     }
 

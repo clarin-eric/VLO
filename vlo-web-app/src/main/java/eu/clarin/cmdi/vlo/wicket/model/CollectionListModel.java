@@ -41,8 +41,11 @@ public class CollectionListModel<T> implements IModel<List<T>> {
         final Collection object = collectionModel.getObject();
         if (object instanceof List) {
             return (List<T>) object;
+        } else if (object == null) {
+            return null;
+        } else {
+            return Lists.newArrayList(object);
         }
-        return Lists.newArrayList(object);
     }
 
     @Override

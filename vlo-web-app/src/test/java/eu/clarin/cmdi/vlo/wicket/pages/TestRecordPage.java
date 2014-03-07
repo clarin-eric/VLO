@@ -71,4 +71,6 @@ public class TestRecordPage {
         // document has a landing page, assert link is invisible
         tester.assertVisible("landingPageLink");
     }
+    
+    //TODO: Add test for display of resources
 }
