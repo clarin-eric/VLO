@@ -85,6 +85,20 @@
     
     <collectionFacet>collection</collectionFacet>
     
+    <ignoredFields>
+        <ignoredField>format</ignoredField>
+    </ignoredFields>
+    
+    <technicalFields>
+        <technicalField>id</technicalField>
+        <technicalField>dataProvider</technicalField>
+        <technicalField>_landingPageRef</technicalField>
+        <technicalField>_searchPageRef</technicalField>
+        <technicalField>_contentSearchRef</technicalField>
+        <technicalField>_lastSeen</technicalField>
+        <technicalField>_componentProfile</technicalField>
+    </technicalFields>
+    
     <languageFilters>
         <languageFilter>filterOne</languageFilter>
         <languageFilter>filterTwo</languageFilter>

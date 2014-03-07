@@ -28,7 +28,6 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.markup.html.GenericWebPage;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;

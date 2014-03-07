@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -95,6 +96,25 @@ public class VloConfig {
     private String helpUrl = "";
 
     private String feedbackFromUrl = "";
+    /**
+     * A set of fields to be excluded from display<br><br>
+     *
+     * To let JAXB know it has to interpret the element as an array, use the
+     * XmlElementWrapper directive. Use the directive to let JAXB know that the
+     * elements inside 'facetFields' are named 'facetField'.
+     */
+    @XmlElementWrapper(name = "ignoredFields")
+    private Set<String> ignoredField;
+    /**
+     * An array of fields to be included as technical properties<br><br>
+     *
+     * To let JAXB know it has to interpret the element as an array, use the
+     * XmlElementWrapper directive. Use the directive to let JAXB know that the
+     * elements inside 'facetFields' are named 'facetField'.
+     */
+    
+    @XmlElementWrapper(name = "technicalFields")
+    private Set<String> technicalField;
 
     /**
      * An array of facetFields<br><br>
@@ -697,7 +717,8 @@ public class VloConfig {
 
     /**
      *
-     * @return all facet fields, including collection facet (arbitrary order unspecified)
+     * @return all facet fields, including collection facet (arbitrary order
+     * unspecified)
      * @see #getFacetFields()
      * @see #getCollectionFacet()
      */
@@ -735,6 +756,22 @@ public class VloConfig {
      */
     public void setCollectionFacet(String collectionFacet) {
         this.collectionFacet = collectionFacet;
+    }
+
+    public Set<String> getIgnoredFields() {
+        return ignoredField;
+    }
+
+    public void setIgnoredFields(Set<String> ignoredFields) {
+        this.ignoredField = ignoredFields;
+    }
+
+    public Set<String> getTechnicalFields() {
+        return technicalField;
+    }
+
+    public void setTechnicalFields(Set<String> technicalFields) {
+        this.technicalField = technicalFields;
     }
 
     /**
