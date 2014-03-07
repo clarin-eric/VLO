@@ -45,7 +45,9 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         getComponentInstantiationListeners().add(new SpringComponentInjector(this, applicationContext));
         // register the resource of field names (used by eu.clarin.cmdi.vlo.wicket.componentsSolrFieldNameLabel)
         getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("fieldNames"));
-        
+        // register the resource of application properties (version information filtered at build time)
+        getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("application"));
+
         // Record (query result) page. E.g. /vlo/record?docId=abc123
         // (cannot encode docId in path because it contains a slash)
         mountPage("/record", RecordPage.class);

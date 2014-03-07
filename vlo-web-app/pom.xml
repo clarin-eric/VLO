@@ -142,7 +142,7 @@
     <build>
         <resources>
             <resource>
-                <filtering>false</filtering>
+                <filtering>true</filtering>
                 <directory>src/main/resources</directory>
             </resource>
             <resource>
@@ -223,6 +223,30 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-svn-revision-number-plugin</groupId>
+                <artifactId>svn-revision-number-maven-plugin</artifactId>
+                <version>1.13</version> <!-- please use the latest version -->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <entries>
+                        <entry>
+                            <path>${project.basedir}</path>
+                            <prefix>vlo</prefix>
+                            <depth>infinity</depth>
+                            <reportUnversioned>true</reportUnversioned>
+                            <reportIgnored>false</reportIgnored>
+                            <reportOutOfDate>false</reportOutOfDate>
+                        </entry>
+                    </entries>
+                </configuration>
             </plugin>
         </plugins>
     </build>
