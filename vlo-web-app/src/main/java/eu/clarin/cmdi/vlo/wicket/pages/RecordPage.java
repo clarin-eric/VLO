@@ -19,35 +19,54 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
+import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.components.FieldsTablePanel;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.GenericWebPage;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  *
  * @author twagoo
  */
-public class RecordPage extends WebPage {
+public class RecordPage extends GenericWebPage<SolrDocument> {
 
+    @SpringBean
+    private PageParametersConverter<QueryFacetsSelection> selectionParametersConverter;
     @SpringBean(name = "basicPropertiesFilter")
     private FieldFilter basicPropertiesFilter;
     @SpringBean(name = "technicalPropertiesFilter")
     private FieldFilter technicalPropertiesFilter;
-    
+
     private final IModel<QueryFacetsSelection> contextModel;
+
+    public RecordPage(PageParameters params) {
+        super(new SolrDocumentModel(params.get("docId").toString()));
+        final QueryFacetsSelection selection = selectionParametersConverter.fromParameters(params);
+        this.contextModel = Model.of(selection);
+        addComponents(getModel());
+    }
 
     public RecordPage(IModel<SolrDocument> documentModel, IModel<QueryFacetsSelection> contextModel) {
         super(documentModel);
         this.contextModel = contextModel;
+        addComponents(documentModel);
+    }
 
+    private void addComponents(IModel<SolrDocument> documentModel) {
+        if (documentModel.getObject() == null) {
+            throw new RuntimeException("Document not found in model " + documentModel.toString());
+        }
         add(new SolrFieldLabel("name", documentModel, FacetConstants.FIELD_NAME, "Unnamed record"));
         add(createLandingPageLink("landingPageLink", documentModel));
         add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(documentModel, basicPropertiesFilter)));

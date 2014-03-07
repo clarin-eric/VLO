@@ -104,4 +104,9 @@ public class QueryFacetsSelection implements Serializable {
         selection.put(facet, values);
     }
 
+    @Override
+    public String toString() {
+        return String.format("[QueryFacetSelection queryString = %s, selection = %s]", queryString, selection);
+    }
+
 }
