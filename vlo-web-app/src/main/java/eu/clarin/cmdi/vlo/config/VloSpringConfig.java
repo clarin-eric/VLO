@@ -16,13 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.config;
 
-import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
+import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.service.SearchResultsDao;
 import eu.clarin.cmdi.vlo.service.SolrDocumentService;
 import eu.clarin.cmdi.vlo.service.SolrFacetQueryFactory;
+import eu.clarin.cmdi.vlo.service.impl.ResourceStringConverterImpl;
 import eu.clarin.cmdi.vlo.service.impl.ResourceTypeCountingServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.SearchResultsDaoImpl;
 import eu.clarin.cmdi.vlo.service.impl.SolrDocumentQueryFactoryImpl;
@@ -30,7 +31,6 @@ import eu.clarin.cmdi.vlo.service.impl.SolrDocumentServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.SolrFacetFieldsService;
 import eu.clarin.cmdi.vlo.service.impl.SolrFacetQueryFactoryImpl;
 import java.io.IOException;
-import java.util.ArrayList;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.springframework.context.annotation.Bean;
@@ -99,7 +99,12 @@ public class VloSpringConfig {
 
     @Bean
     public ResourceTypeCountingService resourceTypeCountingService() {
-        return new ResourceTypeCountingServiceImpl();
+        return new ResourceTypeCountingServiceImpl(resourceStringConverter());
+    }
+
+    @Bean
+    public ResourceStringConverter resourceStringConverter() {
+        return new ResourceStringConverterImpl();
     }
 
     @Bean

@@ -18,15 +18,14 @@ package eu.clarin.cmdi.vlo.service.impl;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
-import eu.clarin.cmdi.vlo.CommonUtils;
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.pojo.ResourceType;
 import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
+import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.regex.Pattern;
 
 /**
  * Counts resource types in a resource string collection
@@ -35,39 +34,32 @@ import java.util.regex.Pattern;
  */
 public class ResourceTypeCountingServiceImpl implements ResourceTypeCountingService {
 
-    private final static String SPLIT_PATTERN = Pattern.quote(FacetConstants.FIELD_RESOURCE_SPLIT_CHAR);
+    private final ResourceStringConverter resourceStringConverter;
+
+    public ResourceTypeCountingServiceImpl(ResourceStringConverter resourceStringConverter) {
+        this.resourceStringConverter = resourceStringConverter;
+    }
 
     @Override
     public Collection<ResourceTypeCount> countResourceTypes(Collection<String> resources) {
         if (resources == null || resources.isEmpty()) {
             return Collections.emptySet();
+        } else {
+            return aggregateCounts(countTypes(resources));
         }
+    }
 
+    private Multiset<ResourceType> countTypes(Collection<String> resources) {
         final Multiset<ResourceType> countBag = HashMultiset.<ResourceType>create(ResourceType.values().length);
-
         // loop over resources and count types
         for (String resourceString : resources) {
-            // split resource string to find mime type
-            final String[] tokens = resourceString.split(SPLIT_PATTERN, 2);
-            final String mimeType = tokens[0];
-            // normalise
-            final String normalizeMimeType = CommonUtils.normalizeMimeType(mimeType);
-            // map to ResourceType and add to bag (TODO: normalize to ResourceType directly?)
-            if (normalizeMimeType.equals(FacetConstants.RESOURCE_TYPE_ANNOTATION)) {
-                countBag.add(ResourceType.ANNOTATION);
-            } else if (normalizeMimeType.equals(FacetConstants.RESOURCE_TYPE_AUDIO)) {
-                countBag.add(ResourceType.AUDIO);
-            } else if (normalizeMimeType.equals(FacetConstants.RESOURCE_TYPE_IMAGE)) {
-                countBag.add(ResourceType.IMAGE);
-            } else if (normalizeMimeType.equals(FacetConstants.RESOURCE_TYPE_TEXT)) {
-                countBag.add(ResourceType.TEXT);
-            } else if (normalizeMimeType.equals(FacetConstants.RESOURCE_TYPE_VIDEO)) {
-                countBag.add(ResourceType.VIDEO);
-            } else{
-                countBag.add(ResourceType.OTHER);
-            }
+            final ResourceInfo resourceInfo = resourceStringConverter.getResourceInfo(resourceString);
+            countBag.add(resourceInfo.getResourceType());
         }
+        return countBag;
+    }
 
+    private Collection<ResourceTypeCount> aggregateCounts(Multiset<ResourceType> countBag) {
         // count items in bag for each resource type
         final Collection<ResourceTypeCount> counts = new ArrayList<ResourceTypeCount>(countBag.elementSet().size());
         for (ResourceType type : ResourceType.values()) {

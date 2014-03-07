@@ -16,20 +16,26 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.pojo.ResourceType;
 import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
+import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
 
 /**
  *
  * @author twagoo
  */
 public class ResourceTypeCountingServiceImplTest {
+
+    private final Mockery context = new JUnit4Mockery();
 
     /**
      * Test of countResourceTypes method, of class
@@ -39,24 +45,43 @@ public class ResourceTypeCountingServiceImplTest {
     public void testCountResourceTypes() {
         System.out.println("countResourceTypes");
         Collection<String> resources = Arrays.asList(
-                "video/mpeg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myvideo",
-                "video/mpeg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myvideo",
-                "audio/ogg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myaudio",
-                "audio/ogg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myaudio",
-                "audio/ogg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myaudio",
-                "audio/ogg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myaudio",
-                "text/plain" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "mytext",
-                "application/pdf" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "mypdf", // pdf = text
-                "text/x-chat" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "mytext", // annotation
-                "application/zip" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myzip"
+                "video resource string1",
+                "video resource string2",
+                "audio resource string",
+                "text resource string",
+                "annotation resource string",
+                "other resource string"
+//                "video/mpeg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myvideo",
+//                "audio/ogg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myaudio",
+//                "audio/ogg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myaudio"
+        //                "audio/ogg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myaudio",
+        //                "audio/ogg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myaudio",
+        //                "text/plain" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "mytext",
+        //                "application/pdf" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "mypdf", // pdf = text
+        //                "text/x-chat" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "mytext", // annotation
+        //                "application/zip" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myzip"
         );
-        ResourceTypeCountingServiceImpl instance = new ResourceTypeCountingServiceImpl();
+        final ResourceStringConverter converter = context.mock(ResourceStringConverter.class);
+        context.checking(new Expectations() {
+            {
+                exactly(6).of(converter).getResourceInfo(with(any(String.class)));
+                will(onConsecutiveCalls(
+                        returnValue(new ResourceInfo("href1", "video/mpeg", ResourceType.VIDEO)),
+                        returnValue(new ResourceInfo("href2", "video/mpeg", ResourceType.VIDEO)),
+                        returnValue(new ResourceInfo("href3", "audio/ogg", ResourceType.AUDIO)),
+                        returnValue(new ResourceInfo("href4", "audio/ogg", ResourceType.TEXT)),
+                        returnValue(new ResourceInfo("href5", "audio/ogg", ResourceType.ANNOTATION)),
+                        returnValue(new ResourceInfo("href6", "audio/ogg", ResourceType.OTHER))
+                ));
+            }
+        });
+        ResourceTypeCountingServiceImpl instance = new ResourceTypeCountingServiceImpl(converter);
         Collection<ResourceTypeCount> result = instance.countResourceTypes(resources);
         assertThat(result, hasItem(new ResourceTypeCount(ResourceType.VIDEO, 2)));
-        assertThat(result, hasItem(new ResourceTypeCount(ResourceType.AUDIO, 4)));
-        assertThat(result, hasItem(new ResourceTypeCount(ResourceType.TEXT, 2)));
+        assertThat(result, hasItem(new ResourceTypeCount(ResourceType.AUDIO, 1)));
+        assertThat(result, hasItem(new ResourceTypeCount(ResourceType.TEXT, 1)));
         assertThat(result, hasItem(new ResourceTypeCount(ResourceType.ANNOTATION, 1)));
-        assertThat(result, hasItem(new ResourceTypeCount(ResourceType.OTHER, 1))); // the zip
+        assertThat(result, hasItem(new ResourceTypeCount(ResourceType.OTHER, 1))); 
     }
 
 }
