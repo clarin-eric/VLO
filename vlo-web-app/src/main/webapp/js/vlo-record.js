@@ -15,23 +15,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$(document).ready(function() {    
+$(document).ready(function() {
     $("#recordtechnicaldetails, #recordcmdi").hide();
     $("#hiderecordtechnicaldetails, #hiderecordcmdi").hide();
-    $("#recordcmditoggle a").click(function(event){
+    $("#recordcmditoggle a").click(function(event) {
         event.preventDefault();
         $("#recordcmdi").toggle();
         $("#recordcmditoggle a").toggle();
     });
-    $("#recordtechnicaldetailstoggle a").click(function(event){
+    $("#recordtechnicaldetailstoggle a").click(function(event) {
         event.preventDefault();
         $("#recordtechnicaldetails").toggle();
         $("#recordtechnicaldetailstoggle a").toggle();
     });
-    
-    $(".recordresourcedetails").hide();
-    $("#recordresources > a").click(function(event){
-        event.preventDefault();
-        $(".recordresourcedetails").slideToggle('fast');
-    });
 });
+
+function hideResourceDetails() {
+    $(".recordresourcedetails").slideUp('fast');
+}
+
+function showResourceDetails() {
+    $(window).scrollTop($('#recordresourcedetailsContainer').position().top);
+    $(".recordresourcedetails").hide();
+    $(".recordresourcedetails").slideDown('fast');
+}

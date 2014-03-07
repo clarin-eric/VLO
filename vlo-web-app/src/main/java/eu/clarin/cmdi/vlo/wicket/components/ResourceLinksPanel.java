@@ -20,7 +20,12 @@ import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import java.util.Collection;
+import java.util.List;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -33,6 +38,8 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
+ * Panel that shows all resources represented by a collection of resource
+ * strings as links that trigger a details panel for the selected resource
  *
  * @author twagoo
  */
@@ -40,6 +47,7 @@ public class ResourceLinksPanel extends Panel {
 
     @SpringBean
     private ResourceStringConverter resourceStringConverter;
+    private final WebMarkupContainer detailsContainer;
 
     /**
      *
@@ -48,32 +56,67 @@ public class ResourceLinksPanel extends Panel {
      */
     public ResourceLinksPanel(String id, IModel<Collection<String>> model) {
         super(id, model);
-        final ListView<String> resourcesView = new ListView<String>("resource", new CollectionListModel<String>(model)) {
+        // list view that shows all resources as links that show a resource details panel when clicked
+        add(new ResourcesListView("resource", new CollectionListModel<String>(model)));
 
-            @Override
-            protected void populateItem(ListItem<String> item) {
-                final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(item.getModel());
-                final Link link = new Link("showResource") {
+        // container for resource details (to enable AJAX updates)
+        detailsContainer = new WebMarkupContainer("detailsContainer");
+        detailsContainer.setOutputMarkupId(true);
+        add(detailsContainer);
 
-                    @Override
-                    public void onClick() {
-                        throw new UnsupportedOperationException("Not supported yet.");
-                    }
-                };
-                item.add(link);
-                // set the file name as the link's text content
-                link.add(new Label("filename", new PropertyModel(resourceInfoModel, "href")));
-                // set the class attribute on the link from the value associated
-                // with the resource type as defined in the properties file
-                link.add(new AttributeModifier("class",
-                        new StringResourceModel("class.${resourceType}", ResourceLinksPanel.this, resourceInfoModel, "")));
-            }
-        };
-        resourcesView.setReuseItems(true);
-        add(resourcesView);
-
+        // insert a place holder until one of the resource links is clicked
+        final WebMarkupContainer detailsPlaceholder = new WebMarkupContainer("details");
+        detailsPlaceholder.setVisible(false);
+        detailsContainer.add(detailsPlaceholder);
     }
 
+    private class ResourcesListView extends ListView<String> {
+
+        public ResourcesListView(String id, IModel<? extends List<? extends String>> model) {
+            super(id, model);
+            setReuseItems(true);
+        }
+
+        @Override
+        protected void populateItem(ListItem<String> item) {
+            final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(item.getModel());
+            // add a link that will show the resource details panel when clicked
+            item.add(createLink(resourceInfoModel));
+        }
+
+        private Link createLink(final ResourceInfoModel resourceInfoModel) {
+            final Link link = new AjaxFallbackLink("showResource") {
+
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    // replace any existing details panel or placeholder with
+                    // a details panel for the current resource
+                    detailsContainer.addOrReplace(new ResourceLinkDetailsPanel("details", resourceInfoModel));
+                    if (target != null) {
+                        target.add(detailsContainer);
+                        target.prependJavaScript("hideResourceDetails();");
+                        target.appendJavaScript("showResourceDetails();");
+                    }
+                }
+            };
+            link.setAnchor(detailsContainer);
+            // set the file name as the link's text content
+            link.add(new Label("filename", new PropertyModel(resourceInfoModel, "fileName")));
+
+            // set the class attribute on the link from the value associated
+            // with the resource type as defined in the properties file
+            final StringResourceModel linkClass = new StringResourceModel("class.${resourceType}", ResourceLinksPanel.this, resourceInfoModel, "");
+            link.add(new AttributeAppender("class", linkClass).setSeparator(" "));
+
+            return link;
+        }
+    }
+
+    /**
+     * Model for {@link ResourceInfo} that dynamically instantiates its objects
+     * from a resource string (as retrieved from the Solr index) using the
+     * {@link ResourceStringConverter}
+     */
     private class ResourceInfoModel extends LoadableDetachableModel<ResourceInfo> {
 
         private final IModel<String> resourceStringModel;

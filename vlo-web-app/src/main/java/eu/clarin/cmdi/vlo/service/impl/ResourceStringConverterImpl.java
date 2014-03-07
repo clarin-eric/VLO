@@ -21,7 +21,10 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.pojo.ResourceType;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.regex.Pattern;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  *
@@ -37,9 +40,28 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
         final String[] tokens = resourceString.split(SPLIT_PATTERN, 2);
         final String mimeType = tokens[0];
         final String href = tokens[1];
+
+        final String fileName = getFileName(href);
         // determine resource type based on mime type
         final ResourceType resourceType = determineResourceType(mimeType);
-        return new ResourceInfo(href, mimeType, resourceType);
+        return new ResourceInfo(href, fileName, mimeType, resourceType);
+    }
+
+    private String getFileName(final String href) {
+        try {
+            //analyse URI
+            final URI uri = new URI(href);
+            final String scheme = uri.getScheme();
+            final String path = uri.getPath();
+            // in case of path information or handle, return original href
+            if (path == null || path.isEmpty() || (scheme != null && scheme.equals("hdl"))) {
+                return href;
+            } else {
+                return FilenameUtils.getName(path);
+            }
+        } catch (URISyntaxException ex) {
+            return href;
+        }
     }
 
     private ResourceType determineResourceType(final String mimeType) {

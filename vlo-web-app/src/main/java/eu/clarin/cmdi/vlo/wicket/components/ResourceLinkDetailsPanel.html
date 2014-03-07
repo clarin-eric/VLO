@@ -23,15 +23,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <wicket:container wicket:id="resource">
-                <a class="resourceLink" wicket:id="showResource">
-                    <wicket:container wicket:id="filename">resource.txt</wicket:container>
-                </a>
-            </wicket:container>
-
-            <div wicket:id="detailsContainer" id="recordresourcedetailsContainer">
-                <div wicket:id="details" class="recordresourcedetails"></div>
-            </div>
+            <h2 wicket:id="fileName">Bachelorscriptie+Rene+Witteveen+3375005.docx</h2>
+            <ul>
+                <li>File type: <span wicket:id="resourceType">text file</span></li>
+                <li>Mime type: <span wicket:id="mimeType">application/msword</span></li>
+                <li>Location: 
+                    <a wicket:id="link" class="resourcedownloadlink">
+                        <wicket:container wicket:id="href"></wicket:container>
+                    </a>
+                </li>
+            </ul>
         </wicket:panel>
     </body>
 </html>

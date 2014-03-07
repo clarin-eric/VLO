@@ -23,17 +23,23 @@ package eu.clarin.cmdi.vlo.pojo;
 public class ResourceInfo {
 
     private final String href;
+    private final String fileName;
     private final String mimeType;
     private final ResourceType resourceType;
 
-    public ResourceInfo(String href, String mimeType, ResourceType resourceType) {
+    public ResourceInfo(String href, String fileName, String mimeType, ResourceType resourceType) {
         this.href = href;
+        this.fileName = fileName;
         this.mimeType = mimeType;
         this.resourceType = resourceType;
     }
 
     public String getHref() {
         return href;
+    }
+
+    public String getFileName() {
+        return fileName;
     }
 
     public String getMimeType() {

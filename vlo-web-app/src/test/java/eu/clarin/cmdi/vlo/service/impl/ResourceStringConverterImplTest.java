@@ -95,5 +95,19 @@ public class ResourceStringConverterImplTest {
         assertEquals("application/zip", result.getMimeType());
         assertEquals(ResourceType.OTHER, result.getResourceType());
     }
+    
+    @Test 
+    public void testGetResourceInfoFilename() {
+        assertFileNameResult("file.txt", "http://myserver.com/file.txt");
+        assertFileNameResult("file.txt", "file:/somehwere/on/my/fs/this/file.txt");
+        assertFileNameResult("http://myserver.com", "http://myserver.com");
+        assertFileNameResult("hdl:12345", "hdl:12345");
+    }
+    
+    private void assertFileNameResult(String expected, String href){
+        String resourceString = "application/test" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + href;
+        ResourceInfo result = instance.getResourceInfo(resourceString);
+        assertEquals(expected, result.getFileName());
+    }
 
 }

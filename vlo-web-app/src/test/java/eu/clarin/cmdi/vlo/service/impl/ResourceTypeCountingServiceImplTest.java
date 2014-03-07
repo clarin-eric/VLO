@@ -51,9 +51,9 @@ public class ResourceTypeCountingServiceImplTest {
                 "text resource string",
                 "annotation resource string",
                 "other resource string"
-//                "video/mpeg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myvideo",
-//                "audio/ogg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myaudio",
-//                "audio/ogg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myaudio"
+        //                "video/mpeg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myvideo",
+        //                "audio/ogg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myaudio",
+        //                "audio/ogg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myaudio"
         //                "audio/ogg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myaudio",
         //                "audio/ogg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "myaudio",
         //                "text/plain" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "mytext",
@@ -66,12 +66,12 @@ public class ResourceTypeCountingServiceImplTest {
             {
                 exactly(6).of(converter).getResourceInfo(with(any(String.class)));
                 will(onConsecutiveCalls(
-                        returnValue(new ResourceInfo("href1", "video/mpeg", ResourceType.VIDEO)),
-                        returnValue(new ResourceInfo("href2", "video/mpeg", ResourceType.VIDEO)),
-                        returnValue(new ResourceInfo("href3", "audio/ogg", ResourceType.AUDIO)),
-                        returnValue(new ResourceInfo("href4", "audio/ogg", ResourceType.TEXT)),
-                        returnValue(new ResourceInfo("href5", "audio/ogg", ResourceType.ANNOTATION)),
-                        returnValue(new ResourceInfo("href6", "audio/ogg", ResourceType.OTHER))
+                        returnValue(new ResourceInfo("href1", "fileName1", "video/mpeg", ResourceType.VIDEO)),
+                        returnValue(new ResourceInfo("href2", "fileName2", "video/mpeg", ResourceType.VIDEO)),
+                        returnValue(new ResourceInfo("href3", "fileName3", "audio/ogg", ResourceType.AUDIO)),
+                        returnValue(new ResourceInfo("href4", "fileName4", "audio/ogg", ResourceType.TEXT)),
+                        returnValue(new ResourceInfo("href5", "fileName5", "audio/ogg", ResourceType.ANNOTATION)),
+                        returnValue(new ResourceInfo("href6", "fileName6", "audio/ogg", ResourceType.OTHER))
                 ));
             }
         });
@@ -81,7 +81,7 @@ public class ResourceTypeCountingServiceImplTest {
         assertThat(result, hasItem(new ResourceTypeCount(ResourceType.AUDIO, 1)));
         assertThat(result, hasItem(new ResourceTypeCount(ResourceType.TEXT, 1)));
         assertThat(result, hasItem(new ResourceTypeCount(ResourceType.ANNOTATION, 1)));
-        assertThat(result, hasItem(new ResourceTypeCount(ResourceType.OTHER, 1))); 
+        assertThat(result, hasItem(new ResourceTypeCount(ResourceType.OTHER, 1)));
     }
 
 }
