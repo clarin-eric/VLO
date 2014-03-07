@@ -21,13 +21,16 @@ import eu.clarin.cmdi.vlo.service.impl.InclusiveFieldFilter;
 import com.google.common.collect.Sets;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
+import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.service.SearchResultsDao;
 import eu.clarin.cmdi.vlo.service.SolrDocumentService;
 import eu.clarin.cmdi.vlo.service.SolrFacetQueryFactory;
+import eu.clarin.cmdi.vlo.service.impl.QueryFacetsSelectionParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ResourceStringConverterImpl;
 import eu.clarin.cmdi.vlo.service.impl.ResourceTypeCountingServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.SearchResultsDaoImpl;
@@ -39,7 +42,6 @@ import java.io.IOException;
 import java.util.Set;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -115,6 +117,11 @@ public class VloSpringConfig {
     }
 
     @Bean
+    public PageParametersConverter<QueryFacetsSelection> queryParametersConverter() {
+        return new QueryFacetsSelectionParametersConverter();
+    }
+
+    @Bean
     public SolrServer solrServer() {
         return new HttpSolrServer(vloConfig().getSolrUrl());
     }
@@ -124,7 +131,7 @@ public class VloSpringConfig {
         return new ExclusiveFieldFilter(Sets.union(IGNORE_FIELDS, TECHNICAL_FIELDS));
     }
 
-    @Bean(name="technicalPropertiesFilter")
+    @Bean(name = "technicalPropertiesFilter")
     public FieldFilter technicalPropertiesFieldFilter() {
         return new InclusiveFieldFilter(TECHNICAL_FIELDS);
     }

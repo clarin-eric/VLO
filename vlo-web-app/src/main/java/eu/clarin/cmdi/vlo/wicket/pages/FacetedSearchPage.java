@@ -5,15 +5,14 @@ import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.wicket.components.FacetsPanel;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
+import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.components.FacetPanel;
 import eu.clarin.cmdi.vlo.wicket.components.SearchForm;
 import eu.clarin.cmdi.vlo.wicket.components.SearchResultsPanel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -36,6 +35,8 @@ public class FacetedSearchPage extends WebPage {
     private FacetFieldsService facetFieldsService;
     @SpringBean
     private VloConfig vloConfig;
+    @SpringBean
+    private PageParametersConverter<QueryFacetsSelection> paramsConverter;
 
     private final Panel searchResultsPanel;
     private final Panel facetsPanel;
@@ -44,7 +45,7 @@ public class FacetedSearchPage extends WebPage {
     public FacetedSearchPage(final PageParameters parameters) {
         super(parameters);
 
-        final QueryFacetsSelection selection = paramsToQueryFacetSelection(parameters);
+        final QueryFacetsSelection selection = paramsConverter.fromParameters(parameters);
         final Model<QueryFacetsSelection> queryModel = new Model<QueryFacetsSelection>(selection);
 
         final SearchForm searchForm = new SearchForm("search", queryModel);
@@ -92,14 +93,5 @@ public class FacetedSearchPage extends WebPage {
         target.add(searchResultsPanel);
         target.add(facetsPanel);
         target.add(collectionsPanel);
-    }
-
-    private static QueryFacetsSelection paramsToQueryFacetSelection(final PageParameters parameters) {
-        final String query = parameters.get("q").toOptionalString();
-
-        //TODO: Map parameters to facet selection
-        final Map<String, Collection<String>> selection = null;
-
-        return new QueryFacetsSelection(query, selection);
     }
 }
