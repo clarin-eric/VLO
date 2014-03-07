@@ -2,6 +2,7 @@ package eu.clarin.cmdi.vlo;
 
 import eu.clarin.cmdi.vlo.service.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
+import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -44,6 +45,10 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         getComponentInstantiationListeners().add(new SpringComponentInjector(this, applicationContext));
         // register the resource of field names (used by eu.clarin.cmdi.vlo.wicket.componentsSolrFieldNameLabel)
         getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("fieldNames"));
+        
+        // Record (query result) page. E.g. /vlo/record?docId=abc123
+        // (cannot encode docId in path because it contains a slash)
+        mountPage("/record", RecordPage.class);
     }
 
     /**
