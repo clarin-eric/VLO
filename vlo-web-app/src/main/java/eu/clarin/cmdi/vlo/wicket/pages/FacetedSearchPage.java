@@ -16,7 +16,6 @@ import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -27,7 +26,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  *
  * @author twagoo
  */
-public class FacetedSearchPage extends WebPage {
+public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,22 +45,24 @@ public class FacetedSearchPage extends WebPage {
         super(parameters);
 
         final QueryFacetsSelection selection = paramsConverter.fromParameters(parameters);
-        final Model<QueryFacetsSelection> queryModel = new Model<QueryFacetsSelection>(selection);
+        final IModel<QueryFacetsSelection> queryModel = new Model<QueryFacetsSelection>(selection);
+        setModel(queryModel);
 
         final SearchForm searchForm = new SearchForm("search", queryModel);
         add(searchForm);
 
-        collectionsPanel = createCollectionsPanel("collectionsFacet", queryModel);
+        collectionsPanel = createCollectionsPanel("collectionsFacet");
         add(collectionsPanel);
 
-        facetsPanel = createFacetsPanel("facets", queryModel);
+        facetsPanel = createFacetsPanel("facets");
         add(facetsPanel);
 
         searchResultsPanel = new SearchResultsPanel("searchResults", queryModel);
         add(searchResultsPanel);
     }
 
-    private Panel createCollectionsPanel(final String id, final IModel<QueryFacetsSelection> queryModel) {
+    private Panel createCollectionsPanel(final String id) {
+        final IModel<QueryFacetsSelection> queryModel = getModel();
         final FacetFieldModel collectionFacetFieldModel = new FacetFieldModel(facetFieldsService, vloConfig.getCollectionFacet(), queryModel);
         final FacetSelectionModel collectionSelectionModel = new FacetSelectionModel(collectionFacetFieldModel, queryModel);
         final FacetPanel panel = new FacetPanel(id, collectionSelectionModel, new Model<ExpansionState>(ExpansionState.COLLAPSED)) {
@@ -75,7 +76,8 @@ public class FacetedSearchPage extends WebPage {
         return panel;
     }
 
-    private Panel createFacetsPanel(final String id, final IModel<QueryFacetsSelection> queryModel) {
+    private Panel createFacetsPanel(final String id) {
+        final IModel<QueryFacetsSelection> queryModel = getModel();
         final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(facetFieldsService, vloConfig.getFacetFields(), queryModel);
         final FacetsPanel panel = new FacetsPanel(id, facetFieldsModel, queryModel) {
 

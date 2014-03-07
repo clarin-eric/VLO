@@ -27,28 +27,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <head>
         <title>CLARIN VLO</title>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="viewport" content="width=device-width"/>
-        <!-- **** layout stylesheet **** -->
-        <link rel="stylesheet" type="text/css" href="style/style.css" />
-        <!-- **** colour scheme stylesheet **** -->
-        <link rel="stylesheet" type="text/css" href="style/colour.css" />
-        <!-- **** VLO extensions stylesheet **** -->
-        <link rel="stylesheet" type="text/css" href="style/vlo.css" />
-        <!-- **** VLO extensions stylesheet **** -->
-        <link rel="stylesheet" type="text/css" href="style/cmdi.css" />
     </head>
 
     <body>
-        <script src="js/jquery-1.10.2.js" type="text/javascript"></script>
-        <script src="js/vlo-record.js" type="text/javascript"></script>
 
-        <div id="main">
-            <div id="header">
-                <div id="logo"><h1>CLARIN Virtual Language Observatory</h1></div>
-                <!--<div id="address"><p>company name<br />company address 1, company address 2, company address 3<br />tel: 0101 010 010</p></div>-->
-            </div>
-
+        <wicket:extend>
             <div id="topnavigation">
                 <div id="breadcrumbs">
                     <wicket:link>
@@ -256,12 +239,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div id="recordtechnicalattributes">
                         <wicket:container wicket:id="technicalProperties">[PROPERTIES TABLE]</wicket:container>
                     </div>
-                </div> <!-- content -->
-            </div> <!-- recordtechnicaldetails -->
-
-            <div id="footer">
-                CLARIN VLO version 3.0 | <a href="#">help</a> | <a href="#">about</a> | <a href="http://www.dcarter.co.uk">design by dcarter</a>
+                </div> <!-- recordtechnicaldetails -->
             </div>
-        </div>
+        </wicket:extend>
     </body>
 </html>

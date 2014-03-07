@@ -39,7 +39,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  *
  * @author twagoo
  */
-public class RecordPage extends GenericWebPage<SolrDocument> {
+public class RecordPage extends VloBasePage<SolrDocument> {
 
     @SpringBean
     private PageParametersConverter<QueryFacetsSelection> selectionParametersConverter;
