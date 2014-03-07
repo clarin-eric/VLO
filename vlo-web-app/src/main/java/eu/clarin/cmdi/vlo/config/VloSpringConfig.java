@@ -16,8 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.config;
 
+import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
+import eu.clarin.cmdi.vlo.service.impl.InclusiveFieldFilter;
+import com.google.common.collect.Sets;
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.service.FacetFieldsService;
+import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.service.SearchResultsDao;
@@ -31,8 +36,10 @@ import eu.clarin.cmdi.vlo.service.impl.SolrDocumentServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.SolrFacetFieldsService;
 import eu.clarin.cmdi.vlo.service.impl.SolrFacetQueryFactoryImpl;
 import java.io.IOException;
+import java.util.Set;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -111,4 +118,34 @@ public class VloSpringConfig {
     public SolrServer solrServer() {
         return new HttpSolrServer(vloConfig().getSolrUrl());
     }
+
+    @Bean(name = "basicPropertiesFilter")
+    public FieldFilter basicPropertiesFieldFilter() {
+        return new ExclusiveFieldFilter(Sets.union(IGNORE_FIELDS, TECHNICAL_FIELDS));
+    }
+
+    @Bean(name="technicalPropertiesFilter")
+    public FieldFilter technicalPropertiesFieldFilter() {
+        return new InclusiveFieldFilter(TECHNICAL_FIELDS);
+    }
+
+    /**
+     * Fields to be ignored. TODO: read this from config
+     */
+    public static final Set<String> IGNORE_FIELDS
+            = Sets.newHashSet(
+                    FacetConstants.FIELD_FORMAT);
+
+    /**
+     * Fields to be included in technical details. TODO: read this from config
+     */
+    public static final Set<String> TECHNICAL_FIELDS
+            = Sets.newHashSet(
+                    FacetConstants.FIELD_ID,
+                    FacetConstants.FIELD_DATA_PROVIDER,
+                    FacetConstants.FIELD_FORMAT,
+                    FacetConstants.FIELD_LANDINGPAGE,
+                    FacetConstants.FIELD_SEARCHPAGE,
+                    FacetConstants.FIELD_SEARCH_SERVICE,
+                    FacetConstants.FIELD_LAST_SEEN);
 }
