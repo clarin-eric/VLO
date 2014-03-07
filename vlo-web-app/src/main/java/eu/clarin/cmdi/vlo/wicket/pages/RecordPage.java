@@ -51,10 +51,15 @@ public class RecordPage extends GenericWebPage<SolrDocument> {
     private final IModel<QueryFacetsSelection> contextModel;
 
     public RecordPage(PageParameters params) {
-        super(new SolrDocumentModel(params.get("docId").toString()));
+        super(params);
+        
+        final SolrDocumentModel documentModel = new SolrDocumentModel(params.get("docId").toString());
+        setModel(documentModel);
+        
         final QueryFacetsSelection selection = selectionParametersConverter.fromParameters(params);
         this.contextModel = Model.of(selection);
-        addComponents(getModel());
+        
+        addComponents(documentModel);
     }
 
     public RecordPage(IModel<SolrDocument> documentModel, IModel<QueryFacetsSelection> contextModel) {
@@ -64,9 +69,6 @@ public class RecordPage extends GenericWebPage<SolrDocument> {
     }
 
     private void addComponents(IModel<SolrDocument> documentModel) {
-        if (documentModel.getObject() == null) {
-            throw new RuntimeException("Document not found in model " + documentModel.toString());
-        }
         add(new SolrFieldLabel("name", documentModel, FacetConstants.FIELD_NAME, "Unnamed record"));
         add(createLandingPageLink("landingPageLink", documentModel));
         add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(documentModel, basicPropertiesFilter)));
