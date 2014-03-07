@@ -44,7 +44,16 @@ public class SolrDocumentModel extends LoadableDetachableModel<SolrDocument> {
 
     @Override
     protected SolrDocument load() {
-        return VloWicketApplication.get().getDocumentService().getDocument(docId);
+        if (docId == null) {
+            return null;
+        } else {
+            return VloWicketApplication.get().getDocumentService().getDocument(docId);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s docId=%s attached=%b", super.toString(), docId, isAttached());
     }
 
 }
