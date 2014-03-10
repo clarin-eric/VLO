@@ -16,32 +16,57 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import eu.clarin.cmdi.vlo.wicket.components.FieldValueOrderSelector;
+import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import java.util.Collection;
 import java.util.Collections;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 
 /**
+ * A panel that shows all available values for a selected facet. Supports two
+ * ordering modes (by name or result count) and dynamic filtering.
  *
  * @author twagoo
  */
 public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
+    private final FacetFieldValuesProvider valuesProvider;
+    private final WebMarkupContainer valuesContainer;
+
     public AllFacetValuesPanel(String id, IModel<FacetField> model) {
         super(id, model);
+        valuesProvider = new FacetFieldValuesProvider(model);
 
-        // provider that extracts values and counts from FacetField
-        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(model);
-        add(new DataView<FacetField.Count>("facetValue", valuesProvider) {
+        valuesContainer = new WebMarkupContainer("facetValuesContainer");
+        valuesContainer.setOutputMarkupId(true);
+        add(valuesContainer);
+
+        final DataView<FacetField.Count> valuesView = createValuesView("facetValue");
+        valuesContainer.add(valuesView);
+
+        final Form optionsForm = createOptionsForm("options");
+        optionsForm.setOutputMarkupId(true);
+        add(optionsForm);
+    }
+
+    private DataView<FacetField.Count> createValuesView(String id) {
+        return new DataView<FacetField.Count>(id, valuesProvider) {
 
             @Override
             protected void populateItem(final Item<FacetField.Count> item) {
@@ -68,7 +93,23 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
                 // 'count' field from Count (document count for value)
                 item.add(new Label("count"));
             }
+        };
+    }
+
+    private Form createOptionsForm(String id) {
+        final Form options = new Form(id);
+        final DropDownChoice<SortParam<FieldValuesOrder>> sortSelect
+                = new FieldValueOrderSelector("sort", new PropertyModel<SortParam<FieldValuesOrder>>(valuesProvider, "sort"));
+        sortSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                target.add(options);
+                target.add(valuesContainer);
+            }
         });
+        options.add(sortSelect);
+        return options;
     }
 
     /**
@@ -80,5 +121,4 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
      * (fallback)!
      */
     protected abstract void onValuesSelected(String facet, Collection<String> values, AjaxRequestTarget target);
-
 }

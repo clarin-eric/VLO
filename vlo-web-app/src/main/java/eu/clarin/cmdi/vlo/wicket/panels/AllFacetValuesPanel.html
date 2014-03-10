@@ -24,12 +24,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <body>
         <wicket:panel>
             <p>All values in this facet</p>
-            <p>Sort by <select><option>name</option><option>count</option></select></p>
-            <div>Search: <input type="text" /></div>
-            <div class="sortedFacet">
-<!--                <div>
-                    <div class="anchorpanel"><a href=""></a><span>A</span></div>
-                </div>-->
+            <form wicket:id="options">
+                <p>Sort by <select wicket:id="sort"><option>name</option><option>count</option></select></p>
+                <div>Search: <input type="text" /></div>
+            </form>
+            <div wicket:id="facetValuesContainer" class="sortedFacet">
+                <!--                
+                    <div>
+                        <div class="anchorpanel"><a href=""></a><span>A</span></div>
+                    </div>
+                -->
                 <div wicket:id="facetValue">
                     <div class="facetLinkPanel"><a wicket:id="facetSelect" href=""><span wicket:id="name">A Corpus</span></a> (<span wicket:id="count">1</span>)</div>
                 </div>
