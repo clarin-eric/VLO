@@ -14,21 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.service;
+package eu.clarin.cmdi.vlo.service.solr;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import org.apache.solr.client.solrj.SolrQuery;
+import java.util.List;
+import org.apache.solr.client.solrj.response.FacetField;
 
 /**
- * A factory that constructs SOLR queries to be used in various services for
- * data providers etc.
+ * A service that retrieves facet fields based on pre-formulated SOLR query
  *
  * @author twagoo
  */
-public interface SolrFacetQueryFactory {
+public interface FacetFieldsService {
 
-    SolrQuery createFacetQuery(QueryFacetsSelection selection);
+    /**
+     * 
+     * @param selection query and selected facet values
+     * @return facet field objects representing the state of all present facets
+     */
+    List<FacetField> getFacetFields(QueryFacetsSelection selection);
 
-    SolrQuery createCountFacetsQuery();
-
+    /**
+     * 
+     * @return the total number of facets
+     */
+    long getFacetFieldCount();
 }

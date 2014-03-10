@@ -5,7 +5,7 @@ import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
 import eu.clarin.cmdi.vlo.config.VloConfigFactory;
 import eu.clarin.cmdi.vlo.config.VloSpringConfig;
-import eu.clarin.cmdi.vlo.service.SolrDocumentService;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;

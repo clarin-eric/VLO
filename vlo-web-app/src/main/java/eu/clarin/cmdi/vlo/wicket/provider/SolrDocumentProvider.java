@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.provider;
 
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.SolrDocumentService;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import java.math.BigDecimal;
 import java.util.Iterator;

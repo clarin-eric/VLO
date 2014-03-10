@@ -14,22 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.service;
+package eu.clarin.cmdi.vlo.service.solr;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import java.util.List;
-import org.apache.solr.common.SolrDocument;
+import org.apache.solr.client.solrj.SolrQuery;
 
 /**
+ * A factory that constructs SOLR queries to be used in various services for
+ * data providers etc.
  *
  * @author twagoo
  */
-public interface SolrDocumentService {
-    
-    SolrDocument getDocument(String docId);
+public interface SolrFacetQueryFactory {
 
-    List<SolrDocument> getDocuments(QueryFacetsSelection selection, int first, int count);
-    
-    long getDocumentCount(QueryFacetsSelection selection);
+    SolrQuery createFacetQuery(QueryFacetsSelection selection);
+
+    SolrQuery createCountFacetsQuery();
 
 }

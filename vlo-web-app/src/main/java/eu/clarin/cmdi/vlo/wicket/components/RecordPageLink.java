@@ -26,7 +26,7 @@ import org.apache.wicket.model.IModel;
  *
  * @author twagoo
  */
-class RecordPageLink extends Link {
+public class RecordPageLink extends Link {
 
     private final IModel<SolrDocument> documentModel;
     private final IModel<QueryFacetsSelection> selectionModel;

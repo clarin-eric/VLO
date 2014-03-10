@@ -2,13 +2,13 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
-import eu.clarin.cmdi.vlo.wicket.components.FacetsPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.FacetsPanel;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.FacetFieldsService;
+import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
-import eu.clarin.cmdi.vlo.wicket.components.FacetPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.FacetPanel;
 import eu.clarin.cmdi.vlo.wicket.components.SearchForm;
-import eu.clarin.cmdi.vlo.wicket.components.SearchResultsPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.SearchResultsPanel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;

@@ -14,12 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.service.impl;
+package eu.clarin.cmdi.vlo.service.solr.impl;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.SearchResultsDao;
-import eu.clarin.cmdi.vlo.service.SolrDocumentQueryFactory;
-import eu.clarin.cmdi.vlo.service.SolrDocumentService;
+import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentQueryFactory;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocument;

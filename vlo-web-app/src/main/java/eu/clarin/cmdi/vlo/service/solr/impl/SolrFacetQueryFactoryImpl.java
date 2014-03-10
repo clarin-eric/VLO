@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.service.impl;
+package eu.clarin.cmdi.vlo.service.solr.impl;
 
-import eu.clarin.cmdi.vlo.service.SolrFacetQueryFactory;
+import eu.clarin.cmdi.vlo.service.solr.SolrFacetQueryFactory;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;

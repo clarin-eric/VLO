@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.service.impl;
+package eu.clarin.cmdi.vlo.service.solr.impl;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.ArrayList;

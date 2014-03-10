@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.wicket.components;
+package eu.clarin.cmdi.vlo.wicket.panels;
 
+import eu.clarin.cmdi.vlo.wicket.components.SolrFieldNameLabel;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import java.util.Collection;
 import java.util.Collections;

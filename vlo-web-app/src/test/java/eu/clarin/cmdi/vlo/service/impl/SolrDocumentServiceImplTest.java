@@ -16,9 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
+import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentServiceImpl;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.SearchResultsDao;
-import eu.clarin.cmdi.vlo.service.SolrDocumentQueryFactory;
+import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentQueryFactory;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;

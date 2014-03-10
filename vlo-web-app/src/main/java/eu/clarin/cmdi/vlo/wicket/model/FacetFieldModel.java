@@ -17,7 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.model;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.FacetFieldsService;
+import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import java.util.Collections;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;

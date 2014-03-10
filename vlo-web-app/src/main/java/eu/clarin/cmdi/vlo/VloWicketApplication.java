@@ -1,6 +1,6 @@
 package eu.clarin.cmdi.vlo;
 
-import eu.clarin.cmdi.vlo.service.SolrDocumentService;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import org.apache.wicket.Application;

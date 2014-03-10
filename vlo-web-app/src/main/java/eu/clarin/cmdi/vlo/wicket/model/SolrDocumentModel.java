@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.model;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
-import eu.clarin.cmdi.vlo.service.SolrDocumentService;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.LoadableDetachableModel;
 
