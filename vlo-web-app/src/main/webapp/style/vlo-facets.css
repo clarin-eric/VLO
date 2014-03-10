@@ -175,8 +175,7 @@ a.collapsefacet:after {
     width: 90%;
 }
 
-#facetvalues {
-    display: none;
+.allFacetValues {
     position: absolute;
     left: 15%;
     width: 70%;
@@ -189,21 +188,21 @@ a.collapsefacet:after {
     border: 1px dashed;
 }
 
-#facetvalues input {
+.allFacetValues input {
     width: 300px;
 }
 
-a#facetvaluescancel {
+.allFacetValues a#facetvaluescancel {
     display: block;
     float: right;
 }
 
-.alphaNavigation ul {
+.allFacetValues .alphaNavigation ul {
     margin: 0px;
     padding: 0px;
 }
 
-.alphaNavigation li {
+.allFacetValues .alphaNavigation li {
     display: inline-block;
     padding: 0px 2px;
 }

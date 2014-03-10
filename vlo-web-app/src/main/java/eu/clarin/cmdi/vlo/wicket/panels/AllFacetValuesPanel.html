@@ -23,20 +23,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <h1><a href="#"><wicket:container wicket:id="title">[TITLE]</wicket:container></a></h1>
-            <div class="sbilinks facetvalues">
-                <ul>
-                    <li wicket:id="facetValues"><a wicket:id="facetSelect" href="index3.html"><span wicket:id="name">Dutch</span> (<span wicket:id="count">148167</span>)</a></li>
-                    <li class="more-link"><a wicket:id="allFacetValuesLink" href="#">more...</a></li>
-                </ul>
-            </div>
-            <!--            
-                <form class="filterform">
-                    <input type="text" />
-                </form>
-            -->
-            <div wicket:id="allValuesContainer">
-                <div wicket:id="allValues" class="allFacetValues">[ALL VALUES]</div>
+
+            <div><a wicket:id="cancel" href="" id="facetvaluescancel">Cancel</a></div>
+            <h2 wicket:id="title">Resource type</h2>
+            <p>All values in this facet</p>
+            <p>Sort by <select><option>name</option><option>count</option></select></p>
+            <div>Search: <input type="text" /></div>
+            <div class="sortedFacet">
+<!--                <div>
+                    <div class="anchorpanel"><a href=""></a><span>A</span></div>
+                </div>-->
+                <div wicket:id="facetValue">
+                    <div class="facetLinkPanel"><a wicket:id="facetSelect" href=""><span wicket:id="name">A Corpus</span></a> (<span wicket:id="count">1</span>)</div>
+                </div>
             </div>
         </wicket:panel>
     </body>
