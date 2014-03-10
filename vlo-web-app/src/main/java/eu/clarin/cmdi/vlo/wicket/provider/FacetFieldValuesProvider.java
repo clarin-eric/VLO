@@ -16,6 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.wicket.provider;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import java.util.Iterator;
@@ -66,18 +69,39 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
         setSort(sort);
     }
 
+    /**
+     * override to achieve filtering
+     *
+     * @return model of string items should begin with
+     */
+    protected IModel<String> getFilterModel() {
+        return null;
+    }
+
     @Override
     public Iterator<? extends FacetField.Count> iterator(long first, long count) {
-        // TODO: From old VLO:
-        // IGNORABLE_VALUES (like "unknown") are move to the back of the list and should only be shown when you click "more...", unless the list is too small then whe can just show them.
+        // get all the values
         final List<FacetField.Count> values = model.getObject().getValues();
-        return getOrdering().sortedCopy(values).listIterator((int) first);
+        // filter results
+        final Iterable<Count> filtered = filter(values);
+        // sort what remains
+        final ImmutableList sorted = getOrdering().immutableSortedCopy(filtered);
+        // return iterator starting at specified offset
+        return sorted.listIterator((int) first);
     }
 
     @Override
     public long size() {
-        // Actual value count might be higher than what we want to show
-        return Math.min(maxNumberOfItems, model.getObject().getValueCount());
+        if (hasFilter()) {
+            final List<FacetField.Count> values = model.getObject().getValues();
+            return Iterables.size(filter(values));
+        } else {
+            // Use value count from Solr, faster.
+            //
+            // Actual value count might be higher than what we want to show
+            // so get minimum.
+            return Math.min(maxNumberOfItems, model.getObject().getValueCount());
+        }
     }
 
     @Override
@@ -88,6 +112,24 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
     @Override
     public void detach() {
         model.detach();
+    }
+
+    private Iterable<FacetField.Count> filter(List<FacetField.Count> list) {
+        if (hasFilter()) {
+            final String filterValue = getFilterModel().getObject().toLowerCase();
+            return Iterables.filter(list, new Predicate<FacetField.Count>() {
+                @Override
+                public boolean apply(Count input) {
+                    return input.getName().toLowerCase().startsWith(filterValue);
+                }
+            });
+        } else {
+            return list;
+        }
+    }
+
+    private boolean hasFilter() {
+        return !(getFilterModel() == null || getFilterModel().getObject() == null || getFilterModel().getObject().isEmpty());
     }
 
     private Ordering getOrdering() {
@@ -111,6 +153,8 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
 
         @Override
         public int compare(Count arg0, Count arg1) {
+            // TODO: From old VLO:
+            // IGNORABLE_VALUES (like "unknown") are move to the back of the list and should only be shown when you click "more...", unless the list is too small then whe can just show them.
             return Long.compare(arg0.getCount(), arg1.getCount());
         }
     };
@@ -119,6 +163,8 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
 
         @Override
         public int compare(Count arg0, Count arg1) {
+            // TODO: From old VLO:
+            // IGNORABLE_VALUES (like "unknown") are move to the back of the list and should only be shown when you click "more...", unless the list is too small then whe can just show them.
             return arg0.getName().compareTo(arg1.getName());
         }
     };

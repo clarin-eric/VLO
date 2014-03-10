@@ -24,18 +24,21 @@ import java.util.Collections;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 /**
@@ -48,18 +51,31 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
     private final FacetFieldValuesProvider valuesProvider;
     private final WebMarkupContainer valuesContainer;
+    private IModel<String> filterModel = new Model<String>();
 
     public AllFacetValuesPanel(String id, IModel<FacetField> model) {
         super(id, model);
-        valuesProvider = new FacetFieldValuesProvider(model);
+        // create a provider that shows all values and is sorted by name by default
+        valuesProvider = new FacetFieldValuesProvider(model, Integer.MAX_VALUE, FieldValueOrderSelector.NAME_SORT) {
 
+            @Override
+            protected IModel<String> getFilterModel() {
+                // filters the values
+                return filterModel;
+            }
+
+        };
+
+        // create a container for the values to allow for AJAX updates
         valuesContainer = new WebMarkupContainer("facetValuesContainer");
         valuesContainer.setOutputMarkupId(true);
         add(valuesContainer);
 
+        // create the view of the actual values
         final DataView<FacetField.Count> valuesView = createValuesView("facetValue");
         valuesContainer.add(valuesView);
 
+        // create the form for selection sort option and entering filter string
         final Form optionsForm = createOptionsForm("options");
         optionsForm.setOutputMarkupId(true);
         add(optionsForm);
@@ -100,7 +116,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         final Form options = new Form(id);
         final DropDownChoice<SortParam<FieldValuesOrder>> sortSelect
                 = new FieldValueOrderSelector("sort", new PropertyModel<SortParam<FieldValuesOrder>>(valuesProvider, "sort"));
-        sortSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        sortSelect.add(new OnChangeAjaxBehavior() {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
@@ -109,6 +125,16 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
             }
         });
         options.add(sortSelect);
+
+        final TextField filterField = new TextField("filter", filterModel);
+        filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
+
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                target.add(valuesContainer);
+            }
+        });
+        options.add(filterField);
         return options;
     }
 
