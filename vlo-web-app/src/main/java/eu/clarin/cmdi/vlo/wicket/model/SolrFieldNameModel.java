@@ -14,32 +14,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.wicket.components;
+package eu.clarin.cmdi.vlo.wicket.model;
 
+import eu.clarin.cmdi.vlo.pojo.DocumentField;
+import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.Application;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.settings.def.ResourceSettings;
 
 /**
- * Label that uses a {@link StringResourceModel} to display a human friendly
+ * Model that uses a {@link StringResourceModel} to produce a human friendly
  * and/or localised name instead of the internal field name. This depends on the
  * presence of a globally registered resource bundle that contains a property
  * "field.{fieldname}".
  *
  * @author twagoo
- * @see Application#getResourceSettings() 
- * @see ResourceSettings#getStringResourceLoaders() 
+ * @see Application#getResourceSettings()
+ * @see ResourceSettings#getStringResourceLoaders()
  */
-public class SolrFieldNameLabel extends Label {
-
-    public SolrFieldNameLabel(String id, IModel<String> model) {
-        super(id,
-                new StringResourceModel(
-                        "field.${}", // property to get name fram
-                        model, // model holds field name
-                        model.getObject())); // default to internal field name
+public class SolrFieldNameModel extends StringResourceModel {
+    
+    public SolrFieldNameModel(IModel<FacetField> fieldModel, String fieldName){
+        this(new PropertyModel<String>(fieldModel, fieldName));
+    }
+    
+    public SolrFieldNameModel(IModel<String> model) {
+        super("field.${}",
+                model,
+                model.getObject()); // default to internal field name)
     }
 
 }

@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
-import eu.clarin.cmdi.vlo.wicket.components.SolrFieldNameLabel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,7 +24,7 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -32,7 +32,6 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 
 /**
  * A panel representing a single facet and its selectable values
@@ -43,13 +42,13 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
     private final int maxNumberOfFacetsToShow = 10; //TODO: get from config
 
-    private final WebMarkupContainer allValuesContainer;
+    private final ModalWindow valuesWindow;
 
     public FacetValuesPanel(String id, final IModel<FacetField> model) {
         super(id, model);
 
         // add title
-        add(new SolrFieldNameLabel("title", new PropertyModel<String>(model, "name")));
+        add(new Label("title", new SolrFieldNameModel(model, "name")));
 
         // provider that extracts values and counts from FacetField
         final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(model, maxNumberOfFacetsToShow);
@@ -61,8 +60,8 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             }
         });
 
-        allValuesContainer = createAllValuesPanel("allValuesContainer");
-        add(allValuesContainer);
+        valuesWindow = createAllValuesWindow("allValues");
+        add(valuesWindow);
         add(createAllValuesLink("allFacetValuesLink"));
     }
 
@@ -90,12 +89,26 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         selectLink.add(new Label("count"));
     }
 
-    private WebMarkupContainer createAllValuesPanel(final String id) {
-        final WebMarkupContainer container = new WebMarkupContainer(id);
-        container.setOutputMarkupId(true);
-        WebMarkupContainer allValuesPlaceholder = createPlaceHolder("allValues");
-        container.add(allValuesPlaceholder);
-        return container;
+    private ModalWindow createAllValuesWindow(String id) {
+        final ModalWindow window = new ModalWindow(id) {
+
+            @Override
+            public IModel<String> getTitle() {
+                return new SolrFieldNameModel(getModel(), "name");
+            }
+
+        };
+
+        final AllFacetValuesPanel allValuesPanel = new AllFacetValuesPanel(window.getContentId(), getModel()) {
+
+            @Override
+            protected void onValuesSelected(String facet, Collection<String> values, AjaxRequestTarget target) {
+                window.close(target);
+                FacetValuesPanel.this.onValuesSelected(facet, values, target);
+            }
+        };
+        window.addOrReplace(allValuesPanel);
+        return window;
     }
 
     private AjaxFallbackLink createAllValuesLink(String id) {
@@ -103,40 +116,11 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                final IModel<FacetField> model = FacetValuesPanel.this.getModel();
-                final AllFacetValuesPanel allValuesPanel = new AllFacetValuesPanel("allValues", model) {
-
-                    @Override
-                    protected void onCanceled(AjaxRequestTarget target) {
-                        hideAllValuesPanel();
-                        if (target != null) {
-                            target.add(allValuesContainer);
-                        }
-                    }
-
-                    @Override
-                    protected void onValuesSelected(String facet, Collection<String> values, AjaxRequestTarget target) {
-                        hideAllValuesPanel();
-                        onValuesSelected(facet, values, target);
-                    }
-                };
-                allValuesContainer.addOrReplace(allValuesPanel);
-                if (target != null) {
-                    target.add(allValuesContainer);
-                }
-            }
-
-            private void hideAllValuesPanel() {
-                allValuesContainer.addOrReplace(createPlaceHolder("allValues"));
+                //TODO: No-javascript alternative (i.e. when target==null)
+                valuesWindow.show(target);
             }
         };
         return link;
-    }
-
-    private WebMarkupContainer createPlaceHolder(final String id) {
-        final WebMarkupContainer placeholder = new WebMarkupContainer(id);
-        placeholder.setVisible(false);
-        return placeholder;
     }
 
     /**

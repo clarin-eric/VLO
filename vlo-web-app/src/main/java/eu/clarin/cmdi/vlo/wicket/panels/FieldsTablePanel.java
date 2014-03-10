@@ -17,7 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.pojo.DocumentField;
-import eu.clarin.cmdi.vlo.wicket.components.SolrFieldNameLabel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -41,7 +41,7 @@ public class FieldsTablePanel extends Panel {
             @Override
             protected void populateItem(Item<DocumentField> item) {
                 final IModel<DocumentField> fieldModel = item.getModel();
-                item.add(new SolrFieldNameLabel("fieldName", new PropertyModel(fieldModel, "fieldName")));
+                item.add(new Label("fieldName", new SolrFieldNameModel(new PropertyModel(fieldModel, "fieldName"))));
                 item.add(new ListView("values", new PropertyModel(fieldModel, "values")) {
 
                     @Override

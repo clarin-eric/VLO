@@ -16,14 +16,12 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
-import eu.clarin.cmdi.vlo.wicket.components.SolrFieldNameLabel;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import java.util.Collection;
 import java.util.Collections;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -31,7 +29,6 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 
 /**
  *
@@ -41,17 +38,6 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
     public AllFacetValuesPanel(String id, IModel<FacetField> model) {
         super(id, model);
-
-        add(new AjaxFallbackLink("cancel") {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                onCanceled(target);
-            }
-        });
-
-        // add title
-        add(new SolrFieldNameLabel("title", new PropertyModel<String>(model, "name")));
 
         // provider that extracts values and counts from FacetField
         final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(model);
@@ -84,8 +70,6 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
             }
         });
     }
-
-    protected abstract void onCanceled(AjaxRequestTarget target);
 
     /**
      * Callback triggered when values have been selected on this facet
