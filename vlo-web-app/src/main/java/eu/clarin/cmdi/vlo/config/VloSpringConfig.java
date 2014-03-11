@@ -26,18 +26,25 @@ import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
+import eu.clarin.cmdi.vlo.service.XmlTransformationService;
 import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.service.solr.SolrFacetQueryFactory;
 import eu.clarin.cmdi.vlo.service.solr.impl.QueryFacetsSelectionParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ResourceStringConverterImpl;
 import eu.clarin.cmdi.vlo.service.impl.ResourceTypeCountingServiceImpl;
+import eu.clarin.cmdi.vlo.service.impl.XmlTransformationServiceImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SearchResultsDaoImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentQueryFactoryImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentServiceImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrFacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrFacetQueryFactoryImpl;
 import java.io.IOException;
+import java.util.Properties;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.stream.StreamSource;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.springframework.context.annotation.Bean;
@@ -122,6 +129,17 @@ public class VloSpringConfig {
     @Bean
     public SolrServer solrServer() {
         return new HttpSolrServer(vloConfig().getSolrUrl());
+    }
+
+    @Bean
+    public XmlTransformationService cmdiTransformationService() throws TransformerConfigurationException {
+        final Source xsltSource = new StreamSource(getClass().getResourceAsStream("/cmdi2xhtml.xsl"));
+        //TODO: Read properties from file??
+        final Properties transformationProperties = new Properties();
+        transformationProperties.setProperty(OutputKeys.METHOD, "html");
+        transformationProperties.setProperty(OutputKeys.INDENT, "yes");
+        transformationProperties.setProperty(OutputKeys.ENCODING, "UTF-8");
+        return new XmlTransformationServiceImpl(xsltSource, transformationProperties);
     }
 
     @Bean(name = "basicPropertiesFilter")

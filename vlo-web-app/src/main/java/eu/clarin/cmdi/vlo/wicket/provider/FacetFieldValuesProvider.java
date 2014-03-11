@@ -34,6 +34,8 @@ import org.apache.wicket.model.Model;
  * Provides facet values and counts (both through the {@link Count} object of
  * SOLR) present on a {@link FacetField}, sortable by either count or name
  *
+ * TODO: Add option to hide values with only 1 record (as in VLO 2.x)
+ * 
  * @see FieldValuesOrder
  * @author twagoo
  */

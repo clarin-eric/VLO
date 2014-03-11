@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo;
 
+import eu.clarin.cmdi.vlo.service.XmlTransformationService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
@@ -23,6 +24,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
 
     @Autowired
     private SolrDocumentService documentService;
+    @Autowired
+    private XmlTransformationService cmdiTransformationService;
 
     private ApplicationContext applicationContext;
 
@@ -73,8 +76,20 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         this.applicationContext = applicationContext;
     }
 
+    /**
+     *
+     * @return a service that retrieves SolrDocuments from the attached index
+     */
     public SolrDocumentService getDocumentService() {
         return documentService;
+    }
+
+    /**
+     *
+     * @return a service that transforms CMDI documents to HTML representations
+     */
+    public XmlTransformationService getCmdiTransformationService() {
+        return cmdiTransformationService;
     }
 
 }

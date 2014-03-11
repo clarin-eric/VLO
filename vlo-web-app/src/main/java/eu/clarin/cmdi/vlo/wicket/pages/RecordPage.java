@@ -26,8 +26,11 @@ import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
+import eu.clarin.cmdi.vlo.wicket.model.UrlFromStringModel;
+import eu.clarin.cmdi.vlo.wicket.model.XsltModel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -51,32 +54,38 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
     public RecordPage(PageParameters params) {
         super(params);
-        
+
         final SolrDocumentModel documentModel = new SolrDocumentModel(params.get("docId").toString());
         setModel(documentModel);
-        
+
         final QueryFacetsSelection selection = selectionParametersConverter.fromParameters(params);
         this.contextModel = Model.of(selection);
-        
-        addComponents(documentModel);
+
+        addComponents();
     }
 
     public RecordPage(IModel<SolrDocument> documentModel, IModel<QueryFacetsSelection> contextModel) {
         super(documentModel);
         this.contextModel = contextModel;
-        addComponents(documentModel);
+        addComponents();
     }
 
-    private void addComponents(IModel<SolrDocument> documentModel) {
-        add(new SolrFieldLabel("name", documentModel, FacetConstants.FIELD_NAME, "Unnamed record"));
-        add(createLandingPageLink("landingPageLink", documentModel));
-        add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(documentModel, basicPropertiesFilter)));
-        add(new ResourceLinksPanel("resources", new SolrFieldModel<String>(documentModel, FacetConstants.FIELD_RESOURCE)));
-        add(new FieldsTablePanel("technicalProperties", new DocumentFieldsProvider(documentModel, technicalPropertiesFilter)));
+    private void addComponents() {
+        // General information section
+        add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, "Unnamed record"));
+        add(createLandingPageLink("landingPageLink"));
+        add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(getModel(), basicPropertiesFilter)));
+        
+        // Resources section
+        add(new ResourceLinksPanel("resources", new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_RESOURCE)));
+        
+        // Technical section
+        add(createCmdiContent("cmdi"));
+        add(new FieldsTablePanel("technicalProperties", new DocumentFieldsProvider(getModel(), technicalPropertiesFilter)));
     }
 
-    private ExternalLink createLandingPageLink(String id, IModel<SolrDocument> documentModel) {
-        final SolrFieldStringModel landingPageHrefModel = new SolrFieldStringModel(documentModel, FacetConstants.FIELD_LANDINGPAGE);
+    private ExternalLink createLandingPageLink(String id) {
+        final SolrFieldStringModel landingPageHrefModel = new SolrFieldStringModel(getModel(), FacetConstants.FIELD_LANDINGPAGE);
         // add landing page link
         final ExternalLink landingPageLink = new ExternalLink(id, landingPageHrefModel) {
 
@@ -88,6 +97,14 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
         };
         return landingPageLink;
+    }
+
+    private Label createCmdiContent(String id) {
+        final IModel<String> locationModel = new SolrFieldStringModel(getModel(), FacetConstants.FIELD_FILENAME);
+        final UrlFromStringModel locationUrlModel = new UrlFromStringModel(locationModel);
+        final Label cmdiContentLabel = new Label(id, new XsltModel(locationUrlModel));
+        cmdiContentLabel.setEscapeModelStrings(false);
+        return cmdiContentLabel;
     }
 
     @Override
