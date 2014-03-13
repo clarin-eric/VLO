@@ -20,6 +20,7 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 /**
  *
@@ -35,6 +36,10 @@ public class SearchContextModel extends AbstractReadOnlyModel<SearchContext> imp
         this.index = index;
         this.resultCount = resultCount;
         this.selectionModel = selectionModel;
+    }
+
+    public IModel<QueryFacetsSelection> getSelectionModel() {
+        return selectionModel;
     }
 
     @Override
@@ -60,6 +65,36 @@ public class SearchContextModel extends AbstractReadOnlyModel<SearchContext> imp
     @Override
     public void detach() {
         selectionModel.detach();
+    }
+
+    public static SearchContextModel next(SearchContext current) {
+        final long count = current.getResultCount();
+        final long nextIndex = current.getIndex() + 1;
+        if (nextIndex < count) {
+            return createNew(current, nextIndex, count);
+        } else {
+            // last index reached
+            return null;
+        }
+    }
+
+    public static SearchContextModel previous(SearchContext current) {
+        final long count = current.getResultCount();
+        final long prevIndex = current.getIndex() - 1;
+        if (prevIndex >= 0) {
+            return createNew(current, prevIndex, count);
+        } else {
+            // last index reached
+            return null;
+        }
+    }
+
+    private static SearchContextModel createNew(SearchContext current, long nextIndex, long count) {
+        if (current instanceof SearchContextModel) {
+            return new SearchContextModel(nextIndex, count, ((SearchContextModel) current).getSelectionModel());
+        } else {
+            return new SearchContextModel(nextIndex, count, Model.of(current.getSelection()));
+        }
     }
 
 }

@@ -17,8 +17,11 @@
 package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
+import eu.clarin.cmdi.vlo.wicket.components.NextRecordLink;
+import eu.clarin.cmdi.vlo.wicket.components.PreviousRecordLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.GenericPanel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
@@ -31,14 +34,50 @@ import org.apache.wicket.model.StringResourceModel;
  */
 public class RecordNavigationPanel extends GenericPanel<SearchContext> {
 
-    public RecordNavigationPanel(String id, IModel<SearchContext> model) {
+    public RecordNavigationPanel(String id, final IModel<SearchContext> model) {
         super(id, model);
+
+        // Add a label 'record X of Y'
         add(new Label("recordIndex", new StringResourceModel("record.navigation.index", this, model,
                 new Object[]{
-                    new PropertyModel<String>(model, "index"),
-                    new PropertyModel<String>(model, "resultCount")
+                    // These values get inserted into the string
+                    // First: index shifted with +1 (because count starts at 0)
+                    new ShiftedIndexModel(new PropertyModel<Long>(model, "index"), +1),
+                    // Second: total result count, unmodified
+                    new PropertyModel<Integer>(model, "resultCount")
                 }
         )));
+
+        // Add a link to go to the previous record
+        add(new PreviousRecordLink("previous", model));
+        // Add a link to go to the next record
+        add(new NextRecordLink("next", model));
+    }
+
+    /**
+     * Model that shifts the value provided by the wrapped model with a fixed
+     * amount
+     */
+    public static class ShiftedIndexModel extends AbstractReadOnlyModel<Long> {
+
+        private final IModel<Long> wrappedModel;
+        private final long shift;
+
+        public ShiftedIndexModel(IModel<Long> wrappedModel, long shift) {
+            this.wrappedModel = wrappedModel;
+            this.shift = shift;
+        }
+
+        @Override
+        public Long getObject() {
+            return wrappedModel.getObject() + shift;
+        }
+
+        @Override
+        public void detach() {
+            wrappedModel.detach();
+        }
+
     }
 
 }
