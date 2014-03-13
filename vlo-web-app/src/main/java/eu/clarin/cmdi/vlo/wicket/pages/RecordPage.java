@@ -18,6 +18,8 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.pojo.SearchContext;
+import eu.clarin.cmdi.vlo.pojo.StaticSearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.panels.FieldsTablePanel;
@@ -30,10 +32,14 @@ import eu.clarin.cmdi.vlo.wicket.model.UrlFromStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.XsltModel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -50,7 +56,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     @SpringBean(name = "technicalPropertiesFilter")
     private FieldFilter technicalPropertiesFilter;
 
-    private final IModel<QueryFacetsSelection> contextModel;
+    private final IModel<? extends SearchContext> contextModel;
 
     public RecordPage(PageParameters params) {
         super(params);
@@ -59,26 +65,29 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         setModel(documentModel);
 
         final QueryFacetsSelection selection = selectionParametersConverter.fromParameters(params);
-        this.contextModel = Model.of(selection);
+        //TODO: get index
+        this.contextModel = Model.of(new StaticSearchContext(0, 1, selection));
 
         addComponents();
     }
 
-    public RecordPage(IModel<SolrDocument> documentModel, IModel<QueryFacetsSelection> contextModel) {
+    public RecordPage(IModel<SolrDocument> documentModel, IModel<SearchContext> contextModel) {
         super(documentModel);
         this.contextModel = contextModel;
         addComponents();
     }
 
     private void addComponents() {
+        add(createNavigation("navigation"));
+
         // General information section
         add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, "Unnamed record"));
         add(createLandingPageLink("landingPageLink"));
         add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(getModel(), basicPropertiesFilter)));
-        
+
         // Resources section
         add(new ResourceLinksPanel("resources", new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_RESOURCE)));
-        
+
         // Technical section
         add(createCmdiContent("cmdi"));
         add(new FieldsTablePanel("technicalProperties", new DocumentFieldsProvider(getModel(), technicalPropertiesFilter)));
@@ -112,6 +121,17 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         super.detachModels();
         // not passed to parent
         contextModel.detach();
+    }
+
+    private Component createNavigation(String id) {
+        final WebMarkupContainer navigation = new WebMarkupContainer(id);
+        navigation.add(new Label("recordIndex", new StringResourceModel("record.index", this, contextModel,
+                new Object[]{
+                    new PropertyModel<String>(contextModel, "index"),
+                    new PropertyModel<String>(contextModel, "resultCount")
+                }
+        )));
+        return navigation;
     }
 
 }

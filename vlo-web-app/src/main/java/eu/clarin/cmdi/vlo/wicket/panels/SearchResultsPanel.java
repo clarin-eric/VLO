@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
 import java.util.Arrays;
 import java.util.List;
@@ -57,8 +58,11 @@ public class SearchResultsPanel extends Panel {
 
             @Override
             protected void populateItem(Item<SolrDocument> item) {
+                final long index = (getCurrentPage() * getItemsPerPage()) + item.getIndex();
+                final long size = internalGetDataProvider().size();
+                final SearchContextModel contextModel = new SearchContextModel(index, size, selectionModel);
                 // single result item
-                item.add(new SearchResultItemPanel("resultItemDetails", item.getModel(), selectionModel));
+                item.add(new SearchResultItemPanel("resultItemDetails", item.getModel(), contextModel));
             }
         };
         add(resultsView);
@@ -86,7 +90,7 @@ public class SearchResultsPanel extends Panel {
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        
+
         // only show pagination navigators if there's more than one page
         final boolean showPaging = resultsView.getPageCount() > 1;
         this.get("pagingTop").setVisible(showPaging);

@@ -51,13 +51,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             <div class="content" id="record">
 
-                <div id="recordindex">
-                    Result 1 of 604056 &nbsp;&nbsp;
-                </div>
-                <div id="recordprevnext">
-                    &lt; previous
-                    | <a href="">next &gt;</a><br />
-                </div>
+                <wicket:container wicket:id="navigation">
+                    <div id="recordindex" wicket:id="recordIndex">[INDEX]</div>
+                    <div id="recordprevnext">
+                        &lt; previous
+                        | <a href="">next &gt;</a><br />
+                    </div>
+                </wicket:container>
                 <h1 wicket:id="name" id="recordtitle">[TITLE]</h1>
                 <div id="recorddetails">
                     <a wicket:id="landingPageLink" id="recordlandingpage">Show this record in its original context</a>

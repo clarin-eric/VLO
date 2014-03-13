@@ -14,41 +14,52 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.wicket.components;
+package eu.clarin.cmdi.vlo.wicket.model;
 
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
-import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
-import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
 /**
  *
  * @author twagoo
  */
-public class RecordPageLink extends Link {
+public class SearchContextModel extends AbstractReadOnlyModel<SearchContext> implements SearchContext {
 
-    private final IModel<SolrDocument> documentModel;
-    private final IModel<SearchContext> selectionModel;
+    private final long index;
+    private final long resultCount;
+    private final IModel<QueryFacetsSelection> selectionModel;
 
-    public RecordPageLink(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel) {
-        super(id);
-        this.documentModel = documentModel;
+    public SearchContextModel(long index, long resultCount, IModel<QueryFacetsSelection> selectionModel) {
+        this.index = index;
+        this.resultCount = resultCount;
         this.selectionModel = selectionModel;
     }
 
     @Override
-    public void onClick() {
-        setResponsePage(new RecordPage(documentModel, selectionModel));
+    public QueryFacetsSelection getSelection() {
+        return selectionModel.getObject();
     }
 
     @Override
-    public void detachModels() {
-        super.detachModels();
-        documentModel.detach();
+    public long getResultCount() {
+        return resultCount;
+    }
+
+    @Override
+    public long getIndex() {
+        return index;
+    }
+
+    @Override
+    public SearchContext getObject() {
+        return this;
+    }
+
+    @Override
+    public void detach() {
         selectionModel.detach();
     }
-    
-    
 
 }

@@ -20,6 +20,7 @@ import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
+import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
@@ -47,10 +48,10 @@ public class SearchResultItemPanel extends Panel {
 
     @SpringBean
     private ResourceTypeCountingService countingService;
-    private final IModel<QueryFacetsSelection> selectionModel;
+    private final IModel<SearchContext> selectionModel;
     private final IModel<SolrDocument> documentModel;
 
-    public SearchResultItemPanel(String id, IModel<SolrDocument> documentModel, IModel<QueryFacetsSelection> selectionModel) {
+    public SearchResultItemPanel(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel) {
         super(id, documentModel);
         this.documentModel = documentModel;
         this.selectionModel = selectionModel;
