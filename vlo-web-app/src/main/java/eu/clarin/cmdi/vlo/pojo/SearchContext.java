@@ -17,11 +17,13 @@
 
 package eu.clarin.cmdi.vlo.pojo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author twagoo
  */
-public interface SearchContext {
+public interface SearchContext extends Serializable{
     
     QueryFacetsSelection getSelection();
     

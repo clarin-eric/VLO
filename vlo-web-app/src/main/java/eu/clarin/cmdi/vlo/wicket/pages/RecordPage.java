@@ -30,16 +30,13 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.UrlFromStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.XsltModel;
+import eu.clarin.cmdi.vlo.wicket.panels.RecordNavigationPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -56,7 +53,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     @SpringBean(name = "technicalPropertiesFilter")
     private FieldFilter technicalPropertiesFilter;
 
-    private final IModel<? extends SearchContext> contextModel;
+    private final IModel<SearchContext> contextModel;
 
     public RecordPage(PageParameters params) {
         super(params);
@@ -66,7 +63,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
         final QueryFacetsSelection selection = selectionParametersConverter.fromParameters(params);
         //TODO: get index
-        this.contextModel = Model.of(new StaticSearchContext(0, 1, selection));
+        this.contextModel = Model.of((SearchContext) new StaticSearchContext(0, 1, selection));
 
         addComponents();
     }
@@ -78,7 +75,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     }
 
     private void addComponents() {
-        add(createNavigation("navigation"));
+        add(new RecordNavigationPanel("navigation", contextModel));
 
         // General information section
         add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, "Unnamed record"));
@@ -121,17 +118,6 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         super.detachModels();
         // not passed to parent
         contextModel.detach();
-    }
-
-    private Component createNavigation(String id) {
-        final WebMarkupContainer navigation = new WebMarkupContainer(id);
-        navigation.add(new Label("recordIndex", new StringResourceModel("record.index", this, contextModel,
-                new Object[]{
-                    new PropertyModel<String>(contextModel, "index"),
-                    new PropertyModel<String>(contextModel, "resultCount")
-                }
-        )));
-        return navigation;
     }
 
 }
