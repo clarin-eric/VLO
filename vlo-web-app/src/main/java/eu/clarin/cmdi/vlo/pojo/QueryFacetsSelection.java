@@ -101,7 +101,11 @@ public class QueryFacetsSelection implements Serializable {
     }
 
     public void selectValues(String facet, Collection<String> values) {
-        selection.put(facet, values);
+        if (values == null || values.isEmpty()) {
+            selection.remove(facet);
+        } else {
+            selection.put(facet, values);
+        }
     }
 
     @Override

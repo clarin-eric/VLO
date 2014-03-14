@@ -58,4 +58,8 @@ public class CollectionListModel<T> implements IModel<List<T>> {
         collectionModel.detach();
     }
 
+    public static <C> CollectionListModel<C> of(IModel<Collection<C>> collectionModel) {
+        return new CollectionListModel<C>(collectionModel);
+    }
+
 }
