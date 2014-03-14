@@ -16,11 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.pojo;
 
+import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Represents a query and any number of selected values for zero or more facets
@@ -111,6 +113,14 @@ public class QueryFacetsSelection implements Serializable {
     @Override
     public String toString() {
         return String.format("[QueryFacetSelection queryString = %s, selection = %s]", queryString, selection);
+    }
+
+    public QueryFacetsSelection getCopy() {
+        final Map<String, Collection<String>> selectionClone = new HashMap<String, Collection<String>>(selection.size());
+        for (Entry<String, Collection<String>> entry : selection.entrySet()) {
+            selectionClone.put(entry.getKey(), Lists.newArrayList(entry.getValue()));
+        }
+        return new QueryFacetsSelection(queryString, selectionClone);
     }
 
 }

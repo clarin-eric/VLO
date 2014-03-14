@@ -51,7 +51,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         final IModel<QueryFacetsSelection> queryModel = new Model<QueryFacetsSelection>(selection);
         setModel(queryModel);
         
-        breadCrumbPanel = createBreadCrumbPanel("breadcrumbs", queryModel);
+        breadCrumbPanel = new BreadCrumbPanel("breadcrumbs", queryModel);
         breadCrumbPanel.setOutputMarkupId(true);
         add(breadCrumbPanel);
         
@@ -66,16 +66,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
         searchResultsPanel = new SearchResultsPanel("searchResults", queryModel);
         add(searchResultsPanel);
-    }
-
-    private BreadCrumbPanel createBreadCrumbPanel(String id, final IModel<QueryFacetsSelection> queryModel) {
-        return new BreadCrumbPanel(id, queryModel) {
-            
-            @Override
-            protected void onValuesUnselected(String facet, Collection<String> valuesRemoved, AjaxRequestTarget target) {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        };
     }
 
     private Panel createCollectionsPanel(final String id) {

@@ -23,7 +23,6 @@ import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import java.util.Collection;
 import java.util.Map;
 import org.apache.wicket.Application;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -39,7 +38,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  *
  * @author twagoo
  */
-public abstract class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
+public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
 
     @SpringBean
     private PageParametersConverter<QueryFacetsSelection> paramsConverter;
@@ -52,6 +51,7 @@ public abstract class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection>
         add(new BookmarkablePageLink("mainpage", Application.get().getHomePage()));
         add(query = createQuery(model, "query"));
         add(facets = createFacets(model, "facets"));
+        //TODO: Add document from model if present
 
     }
 
@@ -71,8 +71,15 @@ public abstract class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection>
         return queryContainer;
     }
 
-    private WebMarkupContainer createFacets(IModel<QueryFacetsSelection> model, String id) {
+    private WebMarkupContainer createFacets(final IModel<QueryFacetsSelection> model, String id) {
         final WebMarkupContainer facetsContainer = new WebMarkupContainer(id);
+        facetsContainer.add(new Link("leaveselection") {
+
+            @Override
+            public void onClick() {
+                setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(model.getObject()));
+            }
+        });
 
         facetsContainer.add(new DataView<Map.Entry<String, Collection<String>>>("facet", new FacetSelectionProvider(model)) {
 
@@ -85,8 +92,11 @@ public abstract class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection>
 
                     @Override
                     public void onClick() {
-                        final Map.Entry<String, Collection<String>> selection = selectionModel.getObject();
-                        onValuesUnselected(selection.getKey(), selection.getValue(), null);
+                        final QueryFacetsSelection newSelection = model.getObject().getCopy();
+                        final String facet = selectionModel.getObject().getKey();
+                        // unselect this facet
+                        newSelection.selectValues(facet, null);
+                        setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(newSelection));
                     }
                 });
             }
@@ -105,14 +115,4 @@ public abstract class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection>
         query.setVisible(queryString != null && !queryString.isEmpty());
         facets.setVisible(selection != null && !selection.isEmpty());
     }
-
-    /**
-     * Callback triggered when values have been removed from this facet
-     *
-     * @param facet name of the facet this panel represents
-     * @param valuesRemoved removed values
-     * @param target Ajax target allowing for a partial update. May be null
-     * (fallback)!
-     */
-    protected abstract void onValuesUnselected(String facet, Collection<String> valuesRemoved, AjaxRequestTarget target);
 }

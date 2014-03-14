@@ -19,7 +19,6 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
-import eu.clarin.cmdi.vlo.pojo.StaticSearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.panels.FieldsTablePanel;
@@ -30,6 +29,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.UrlFromStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.XsltModel;
+import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.RecordNavigationPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import org.apache.solr.common.SolrDocument;
@@ -39,6 +39,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -56,6 +57,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     private FieldFilter technicalPropertiesFilter;
 
     private final IModel<SearchContext> navigationModel;
+    private final IModel<QueryFacetsSelection> selectionModel;
 
     public RecordPage(PageParameters params) {
         super(params);
@@ -66,6 +68,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         setModel(documentModel);
 
         final QueryFacetsSelection selection = selectionParametersConverter.fromParameters(params);
+        selectionModel = Model.of(selection);
 
         addComponents();
     }
@@ -73,12 +76,14 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     public RecordPage(IModel<SolrDocument> documentModel, IModel<SearchContext> contextModel) {
         super(documentModel);
         this.navigationModel = contextModel;
+        this.selectionModel = new PropertyModel(contextModel, "selection");
         addComponents();
     }
 
     private void addComponents() {
         // Navigation
         add(createNavigation("navigation"));
+        add(new BreadCrumbPanel("breadcrumbs", selectionModel));
 
         // General information section
         add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, "Unnamed record"));
