@@ -33,6 +33,8 @@ import eu.clarin.cmdi.vlo.wicket.model.XsltModel;
 import eu.clarin.cmdi.vlo.wicket.panels.RecordNavigationPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.IModel;
@@ -53,29 +55,30 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     @SpringBean(name = "technicalPropertiesFilter")
     private FieldFilter technicalPropertiesFilter;
 
-    private final IModel<SearchContext> contextModel;
+    private final IModel<SearchContext> navigationModel;
 
     public RecordPage(PageParameters params) {
         super(params);
+        // Coming from bookmark or external link, so no navigation context
+        this.navigationModel = null;
 
         final SolrDocumentModel documentModel = new SolrDocumentModel(params.get("docId").toString());
         setModel(documentModel);
 
         final QueryFacetsSelection selection = selectionParametersConverter.fromParameters(params);
-        //TODO: get index
-        this.contextModel = Model.of((SearchContext) new StaticSearchContext(0, 1, selection));
 
         addComponents();
     }
 
     public RecordPage(IModel<SolrDocument> documentModel, IModel<SearchContext> contextModel) {
         super(documentModel);
-        this.contextModel = contextModel;
+        this.navigationModel = contextModel;
         addComponents();
     }
 
     private void addComponents() {
-        add(new RecordNavigationPanel("navigation", contextModel));
+        // Navigation
+        add(createNavigation("navigation"));
 
         // General information section
         add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, "Unnamed record"));
@@ -88,6 +91,20 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         // Technical section
         add(createCmdiContent("cmdi"));
         add(new FieldsTablePanel("technicalProperties", new DocumentFieldsProvider(getModel(), technicalPropertiesFilter)));
+    }
+
+    private Component createNavigation(final String id) {
+        if (navigationModel != null) {
+            // Add a panel that shows the index of the current record in the
+            // resultset and allows for forward/backward navigation
+            return new RecordNavigationPanel(id, navigationModel);
+        } else {
+            // If no context model is available (i.e. when coming from a bookmark
+            // or external link, do not show the navigation panel
+            final WebMarkupContainer navigationDummy = new WebMarkupContainer(id);
+            navigationDummy.setVisible(false);
+            return navigationDummy;
+        }
     }
 
     private ExternalLink createLandingPageLink(String id) {
@@ -117,7 +134,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     public void detachModels() {
         super.detachModels();
         // not passed to parent
-        contextModel.detach();
+        navigationModel.detach();
     }
 
 }
