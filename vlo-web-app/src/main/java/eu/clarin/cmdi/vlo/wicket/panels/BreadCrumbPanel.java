@@ -19,10 +19,14 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetSelectionProvider;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import org.apache.wicket.Application;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -33,8 +37,13 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.convert.ConversionException;
+import org.apache.wicket.util.convert.IConverter;
 
 /**
+ * A panel representing the action trail that has lead to the current page in
+ * its current state with links to revert to a previous state (not completely
+ * linear given the nature of faceted browsing)
  *
  * @author twagoo
  */
@@ -81,17 +90,34 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
             }
         });
 
-        facetsContainer.add(new DataView<Map.Entry<String, Collection<String>>>("facet", new FacetSelectionProvider(model)) {
+        // create a provider that lists the facet name -> values entries
+        final FacetSelectionProvider facetSelectionProvider = new FacetSelectionProvider(model);
+        facetsContainer.add(new DataView<Map.Entry<String, Collection<String>>>("facet", facetSelectionProvider) {
 
             @Override
             protected void populateItem(Item<Map.Entry<String, Collection<String>>> item) {
                 final IModel<Map.Entry<String, Collection<String>>> selectionModel = item.getModel();
-                item.add(new Label("name", new PropertyModel(selectionModel, "key")));
-                item.add(new Label("value", new PropertyModel(selectionModel, "value")));
+                // add a label for the selected facet value(s)
+                final Label valueLabel = new Label("value", new PropertyModel(selectionModel, "value")) {
+
+                    @Override
+                    public <C> IConverter<C> getConverter(Class<C> type) {
+                        // converter to render the value(s) nicely
+                        return (IConverter<C>) selectionConverter;
+                    }
+
+                };
+                // add facet name as title attribute so that it becomes available through a tooltip
+                valueLabel.add(new AttributeModifier("title",
+                        new SolrFieldNameModel(new PropertyModel(selectionModel, "key"))));
+                item.add(valueLabel);
+
+                // add a link for removal of the facet value selection
                 item.add(new Link("removal") {
 
                     @Override
                     public void onClick() {
+                        // get a copy of the current selection
                         final QueryFacetsSelection newSelection = model.getObject().getCopy();
                         final String facet = selectionModel.getObject().getKey();
                         // unselect this facet
@@ -115,4 +141,33 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
         query.setVisible(queryString != null && !queryString.isEmpty());
         facets.setVisible(selection != null && !selection.isEmpty());
     }
+
+    /**
+     * Converter for string collections, rendering depends on items in
+     * collection (if singleton, show its value; if multiple, comma separated)
+     */
+    private final static IConverter<Collection<String>> selectionConverter = new IConverter<Collection<String>>() {
+
+        @Override
+        public Collection<String> convertToObject(String value, Locale locale) throws ConversionException {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public String convertToString(Collection<String> value, Locale locale) {
+            if (value.isEmpty()) {
+                return "";
+            } else if (value.size() == 1) {
+                return value.iterator().next();
+            } else {
+                final Iterator<String> iterator = value.iterator();
+                final StringBuilder sb = new StringBuilder(iterator.next());
+                while (iterator.hasNext()) {
+                    sb.append(", ").append(iterator.next());
+                }
+                return sb.toString();
+            }
+        }
+
+    };
 }

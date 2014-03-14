@@ -95,9 +95,30 @@ a#headerlink_clarin {
 }
 
 #topnavigation #topnavigationlinks #help:after {
-   content: 'Help'
+    content: 'Help'
 }
 
 #topnavigation #topnavigationlinks #permalink {
     background-image: url('link-128.png'); /* icon from icons8.com */
+}
+
+a.breadcrumbunselect, a.breadcrumbunselect:hover {
+    text-decoration: none;
+}
+
+a.breadcrumbunselect {
+    color: #000;
+}
+
+a.breadcrumbunselect:hover {
+    color: #f00;
+}
+
+a.breadcrumbunselect span {
+    display: none;
+}
+
+a.breadcrumbunselect:after {
+    /* show delete cross */
+    content: "✕";
 }
