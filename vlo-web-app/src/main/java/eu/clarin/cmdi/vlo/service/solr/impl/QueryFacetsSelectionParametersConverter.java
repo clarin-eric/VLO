@@ -16,11 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -54,11 +57,11 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
             }
         }
 
-        // Facet selection expects a mutable map, so first convert back to
-        // ordinary map, then make a mutable copy
-        final HashMap<String, Collection<String>> selection = Maps.newHashMap(selectionMap.asMap());
+        // Facet selection expects a mutable and serializable map, so first convert
+        // back to ordinary map, then insert serializable values
+        final HashMap<String, Collection<String>> selection = multimapToSerializableCollectionMap(selectionMap);
 
-        // Put it all together
+        // Facet selection expects a mutable and serializable map, so first convert 
         return new QueryFacetsSelection(query, selection);
     }
 
@@ -82,4 +85,23 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
         return params;
     }
 
+    /**
+     *
+     * @param selectionMap multimap holding the selection
+     * @return a fully serializable map with collection values
+     */
+    private HashMap<String, Collection<String>> multimapToSerializableCollectionMap(final Multimap<String, String> selectionMap) {
+        final HashMap<String, Collection<String>> selection = Maps.newHashMapWithExpectedSize(selectionMap.size());
+        for (Entry<String, Collection<String>> entry : selectionMap.asMap().entrySet()) {
+            final Collection<String> value = entry.getValue();
+            if (value instanceof Serializable) {
+                // keep serializable collection value
+                selection.put(entry.getKey(), value);
+            } else {
+                // copy to a serializable collection
+                selection.put(entry.getKey(), Lists.newArrayList(value));
+            }
+        }
+        return selection;
+    }
 }

@@ -20,6 +20,7 @@ import eu.clarin.cmdi.vlo.service.solr.impl.QueryFacetsSelectionParametersConver
 import com.google.common.collect.HashMultimap;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.List;
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import static org.hamcrest.Matchers.equalTo;
@@ -64,6 +65,24 @@ public class QueryFacetsSelectionParametersConverterTest {
         assertThat(result.getSelectionValues("facet1"), hasItem("valueA"));
         assertThat(result.getSelectionValues("facet1"), hasItem("valueB"));
         assertThat(result.getSelectionValues("facet2"), hasItem("valueC"));
+    }
+
+    /**
+     * Test of fromParameters method, of class
+     * QueryFacetsSelectionParametersConverter.
+     */
+    @Test
+    public void testFromParametersSerializable() {
+        final PageParameters params = new PageParameters();
+        params.add("q", "query");
+        params.add("q", "ignored"); // only one query param is selected
+        params.add("fq", "facet1:valueA");
+        params.add("fq", "facet1:valueB");
+        params.add("fq", "facet2:valueC");
+        params.add("fq", ""); // not a valid facet selection
+        params.add("fq", "invalid"); // not a valid facet selection
+
+        SerializationUtils.roundtrip(instance.fromParameters(params));
     }
 
     /**
