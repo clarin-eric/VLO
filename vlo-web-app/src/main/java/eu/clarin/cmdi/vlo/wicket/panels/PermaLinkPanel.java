@@ -24,6 +24,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.GenericPanel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.Url;
@@ -32,6 +33,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
+ * A panel with a link to toggle a text input which shows a bookmarkable link to
+ * the current page with parameters representing the current model
  *
  * @author twagoo
  */
@@ -41,7 +44,7 @@ public class PermaLinkPanel extends GenericPanel<QueryFacetsSelection> {
     private PageParametersConverter<QueryFacetsSelection> paramsConverter;
 
     private final IModel<SolrDocument> documentModel;
-    private final Model<String> linkModel;
+    private final Model<Boolean> linkVisibilityModel;
 
     public PermaLinkPanel(String id, final IModel<QueryFacetsSelection> selectionmodel) {
         this(id, selectionmodel, null);
@@ -50,37 +53,35 @@ public class PermaLinkPanel extends GenericPanel<QueryFacetsSelection> {
     public PermaLinkPanel(String id, final IModel<QueryFacetsSelection> selectionmodel, final IModel<SolrDocument> documentModel) {
         super(id, selectionmodel);
         this.documentModel = documentModel;
-        this.linkModel = new Model<String>();
-        add(new AjaxFallbackLink("linkrequest") {
+        this.linkVisibilityModel = new Model<Boolean>(false);
+
+        // create a model that provides a link to the current page
+        final IModel<String> linkModel = new PermaLinkModel(selectionmodel, documentModel);
+
+        // action to link to request the permalink
+        add(new AjaxFallbackLink<String>("linkrequest", linkModel) {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                final String link = linkModel.getObject();
-                if (link == null) {
-                    // create link and set
-                    final PageParameters params = paramsConverter.toParameters(selectionmodel.getObject());
-                    if (documentModel != null) {
-                        params.add("docId", documentModel.getObject().getFirstValue(FacetConstants.FIELD_ID));
-                    }
-                    final CharSequence url = urlFor(getPage().getClass(), params);
-                    final String absoluteUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(url));
-                    linkModel.setObject(absoluteUrl);
-                } else {
-                    linkModel.setObject(null);
-                }
-
+                // toggle
+                linkVisibilityModel.setObject(!linkVisibilityModel.getObject());
+                // callback to react to change
                 onChange(target);
             }
         });
-        add(new TextField<String>("linkfield", linkModel) {
 
+        // field that holds the actual link
+        final TextField<String> linkField = new TextField<String>("linkfield", linkModel) {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-                setVisible(linkModel.getObject() != null);
+                setVisible(linkVisibilityModel.getObject());
             }
 
-        });
+        };
+        linkField.setEnabled(false);
+
+        add(linkField);
     }
 
     @Override
@@ -94,6 +95,28 @@ public class PermaLinkPanel extends GenericPanel<QueryFacetsSelection> {
     protected void onChange(AjaxRequestTarget target) {
         if (target != null) {
             target.add(getPage());
+        }
+    }
+
+    private class PermaLinkModel extends AbstractReadOnlyModel<String> {
+
+        private final IModel<QueryFacetsSelection> selectionmodel;
+        private final IModel<SolrDocument> documentModel;
+
+        public PermaLinkModel(IModel<QueryFacetsSelection> selectionmodel, IModel<SolrDocument> documentModel) {
+            this.selectionmodel = selectionmodel;
+            this.documentModel = documentModel;
+        }
+
+        @Override
+        public String getObject() {
+            final PageParameters params = paramsConverter.toParameters(selectionmodel.getObject());
+            if (documentModel != null) {
+                params.add("docId", documentModel.getObject().getFirstValue(FacetConstants.FIELD_ID));
+            }
+            final CharSequence url = urlFor(getPage().getClass(), params);
+            final String absoluteUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(url));
+            return absoluteUrl;
         }
     }
 

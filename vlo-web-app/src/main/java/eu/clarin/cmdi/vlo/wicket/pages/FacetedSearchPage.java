@@ -14,7 +14,6 @@ import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.PermaLinkPanel;
-import java.util.Collection;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
