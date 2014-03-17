@@ -16,35 +16,36 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
+import com.google.common.collect.Maps;
+import java.io.Serializable;
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
+ * Model that stores a map entry with a serialisable key and value. The returned
+ * map should be assumed immutable.
  *
  * @author twagoo
  * @param <K> key type
  * @param <V> value type
  */
-public class MapEntryModel<K, V> implements IModel<Entry<K, V>> {
+public class MapEntryModel<K extends Serializable, V extends Serializable> extends LoadableDetachableModel<Entry<K, V>> {
 
-    private Entry<K, V> entry;
+    private final K key;
+    private final V value;
 
     public MapEntryModel(Entry<K, V> entry) {
-        this.entry = entry;
+        super(entry);
+        key = entry.getKey();
+        value = entry.getValue();
     }
 
     @Override
-    public Entry<K, V> getObject() {
-        return entry;
-    }
-
-    @Override
-    public void setObject(Entry<K, V> object) {
-        entry = object;
-    }
-
-    @Override
-    public void detach() {
+    protected Entry<K, V> load() {
+        return Maps.immutableEntry(key, value);
     }
 
 }
