@@ -122,3 +122,13 @@ a.breadcrumbunselect:after {
     /* show delete cross */
     content: "✕";
 }
+
+#permalinkfield
+{
+    float: right;
+    position: relative;
+    top: 1em;
+    width: 30em;
+    margin-bottom: 1em;
+    text-align: right;
+}

@@ -20,6 +20,7 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.form.TextField;
@@ -65,6 +66,11 @@ public class PermaLinkPanel extends GenericPanel<QueryFacetsSelection> {
             public void onClick(AjaxRequestTarget target) {
                 // toggle
                 linkVisibilityModel.setObject(!linkVisibilityModel.getObject());
+
+                if (target != null && linkVisibilityModel.getObject()) {
+                    target.appendJavaScript("permalinkShown();");
+                }
+
                 // callback to react to change
                 onChange(target);
             }
@@ -79,7 +85,6 @@ public class PermaLinkPanel extends GenericPanel<QueryFacetsSelection> {
             }
 
         };
-        linkField.setEnabled(false);
 
         add(linkField);
     }
