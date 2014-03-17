@@ -30,6 +30,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.UrlFromStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.XsltModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.PermaLinkPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.RecordNavigationPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import org.apache.solr.common.SolrDocument;
@@ -58,7 +59,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
     private final IModel<SearchContext> navigationModel;
     private final IModel<QueryFacetsSelection> selectionModel;
-
+    
     public RecordPage(PageParameters params) {
         super(params);
         // Coming from bookmark or external link, so no navigation context
@@ -84,6 +85,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         // Navigation
         add(createNavigation("navigation"));
         add(new BreadCrumbPanel("breadcrumbs", selectionModel));
+        add(new PermaLinkPanel("permalink", selectionModel, getModel()));
 
         // General information section
         add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, "Unnamed record"));

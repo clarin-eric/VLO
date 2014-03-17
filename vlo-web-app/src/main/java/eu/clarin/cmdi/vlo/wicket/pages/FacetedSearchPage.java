@@ -13,10 +13,12 @@ import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.PermaLinkPanel;
 import java.util.Collection;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -42,19 +44,29 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     private final Panel searchResultsPanel;
     private final Panel facetsPanel;
     private final Panel collectionsPanel;
-    private final BreadCrumbPanel breadCrumbPanel;
-    
+    private final WebMarkupContainer navigation;
+
     public FacetedSearchPage(final PageParameters parameters) {
         super(parameters);
 
         final QueryFacetsSelection selection = paramsConverter.fromParameters(parameters);
         final IModel<QueryFacetsSelection> queryModel = new Model<QueryFacetsSelection>(selection);
         setModel(queryModel);
-        
-        breadCrumbPanel = new BreadCrumbPanel("breadcrumbs", queryModel);
-        breadCrumbPanel.setOutputMarkupId(true);
-        add(breadCrumbPanel);
-        
+
+        navigation = new WebMarkupContainer("navigation");
+        navigation.setOutputMarkupId(true);
+        add(navigation);
+
+        navigation.add(new BreadCrumbPanel("breadcrumbs", queryModel));
+        navigation.add(new PermaLinkPanel("permalink", queryModel) {
+
+            @Override
+            protected void onChange(AjaxRequestTarget target) {
+                target.add(navigation);
+            }
+
+        });
+
         final SearchForm searchForm = new SearchForm("search", queryModel);
         add(searchForm);
 
@@ -99,7 +111,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private void updateSelection(AjaxRequestTarget target) {
         // selection changed, update facets and search results
-        target.add(breadCrumbPanel);
+        target.add(navigation);
         target.add(searchResultsPanel);
         target.add(facetsPanel);
         target.add(collectionsPanel);

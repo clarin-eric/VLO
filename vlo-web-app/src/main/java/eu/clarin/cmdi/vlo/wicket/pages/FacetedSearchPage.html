@@ -33,10 +33,10 @@
 
         <wicket:extend>
 
-            <div id="topnavigation">
+            <div wicket:id="navigation" id="topnavigation">
                 <div wicket:id="breadcrumbs" id="breadcrumbs">[BREADCRUMBS]</div>
                 <div id="topnavigationlinks">
-                    <a id="permalink" href="" title="Link to this page"><span>[Link to this page]</span></a>
+                    <wicket:container wicket:id="permalink">[permalink]</wicket:container>
                     <!--<a id="help" href="" title="Help"><span>[Help]</span></a>-->
                 </div>
             </div>
