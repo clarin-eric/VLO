@@ -16,11 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.io.Serializable;
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collection;
 import java.util.Map.Entry;
 import org.apache.wicket.model.LoadableDetachableModel;
 
@@ -32,19 +31,26 @@ import org.apache.wicket.model.LoadableDetachableModel;
  * @param <K> key type
  * @param <V> value type
  */
-public class MapEntryModel<K extends Serializable, V extends Serializable> extends LoadableDetachableModel<Entry<K, V>> {
+public class CollectionMapEntryModel<K extends Serializable, V extends Serializable> extends LoadableDetachableModel<Entry<K, Collection<V>>> {
 
     private final K key;
-    private final V value;
+    private final Collection<V> value;
 
-    public MapEntryModel(Entry<K, V> entry) {
+    public CollectionMapEntryModel(Entry<K, Collection<V>> entry) {
         super(entry);
         key = entry.getKey();
-        value = entry.getValue();
+
+        final Collection<V> entryValue = entry.getValue();
+        if (entryValue instanceof Serializable) {
+            value = entryValue;
+        } else {
+            // copy to a serialisable collection
+            value = Lists.newArrayList(entryValue);
+        }
     }
 
     @Override
-    protected Entry<K, V> load() {
+    protected Entry<K, Collection<V>> load() {
         return Maps.immutableEntry(key, value);
     }
 

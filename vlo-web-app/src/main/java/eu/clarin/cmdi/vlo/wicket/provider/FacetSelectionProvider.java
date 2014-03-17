@@ -18,7 +18,7 @@
 package eu.clarin.cmdi.vlo.wicket.provider;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.wicket.model.MapEntryModel;
+import eu.clarin.cmdi.vlo.wicket.model.CollectionMapEntryModel;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -48,7 +48,7 @@ public class FacetSelectionProvider implements IDataProvider<Map.Entry<String, C
 
     @Override
     public IModel<Map.Entry<String, Collection<String>>> model(Map.Entry<String, Collection<String>> object) {
-        return new MapEntryModel<String, Collection<String>>(object);
+        return new CollectionMapEntryModel<String, String>(object);
     }
 
     @Override
