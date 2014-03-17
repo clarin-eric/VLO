@@ -35,6 +35,7 @@ import eu.clarin.cmdi.vlo.wicket.panels.RecordNavigationPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -59,7 +60,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
     private final IModel<SearchContext> navigationModel;
     private final IModel<QueryFacetsSelection> selectionModel;
-    
+
     public RecordPage(PageParameters params) {
         super(params);
         // Coming from bookmark or external link, so no navigation context
@@ -84,8 +85,13 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     private void addComponents() {
         // Navigation
         add(createNavigation("navigation"));
-        add(new BreadCrumbPanel("breadcrumbs", selectionModel));
-        add(new PermaLinkPanel("permalink", selectionModel, getModel()));
+
+        final WebMarkupContainer topNavigation = new WebMarkupContainer("topnavigation");
+        topNavigation.setOutputMarkupId(true);
+        add(topNavigation);
+
+        topNavigation.add(new BreadCrumbPanel("breadcrumbs", selectionModel));
+        topNavigation.add(createPermalink("permalink", topNavigation));
 
         // General information section
         add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, "Unnamed record"));
@@ -114,6 +120,19 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         }
     }
 
+    private PermaLinkPanel createPermalink(String id, final WebMarkupContainer topNavigation) {
+        return new PermaLinkPanel(id, selectionModel, getModel()) {
+
+            @Override
+            protected void onChange(AjaxRequestTarget target) {
+                if (target != null) {
+                    target.add(topNavigation);
+                }
+            }
+
+        };
+    }
+
     private ExternalLink createLandingPageLink(String id) {
         final SolrFieldStringModel landingPageHrefModel = new SolrFieldStringModel(getModel(), FacetConstants.FIELD_LANDINGPAGE);
         // add landing page link
@@ -140,8 +159,10 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     @Override
     public void detachModels() {
         super.detachModels();
-        // not passed to parent
-        navigationModel.detach();
+        if (navigationModel != null) {
+            // not passed to parent
+            navigationModel.detach();
+        }
     }
 
 }
