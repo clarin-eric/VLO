@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
@@ -9,6 +10,9 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.resource.loader.BundleStringResourceLoader;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.apache.wicket.util.lang.Bytes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -22,10 +26,14 @@ import org.springframework.context.ApplicationContextAware;
  */
 public class VloWicketApplication extends WebApplication implements ApplicationContextAware {
 
+    private final static Logger logger = LoggerFactory.getLogger(VloWicketApplication.class);
+
     @Autowired
     private SolrDocumentService documentService;
     @Autowired
     private XmlTransformationService cmdiTransformationService;
+    @Autowired
+    private VloConfig vloConfig;
 
     private ApplicationContext applicationContext;
 
@@ -54,6 +62,15 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         // Record (query result) page. E.g. /vlo/record?docId=abc123
         // (cannot encode docId in path because it contains a slash)
         mountPage("/record", RecordPage.class);
+
+        // configure cache by applying the vlo configuration settings to it
+        final int pagesInApplicationCache = vloConfig.getPagesInApplicationCache();
+        logger.info("Setting Wicket in-memory cache size to {}", pagesInApplicationCache);
+        this.getStoreSettings().setInmemoryCacheSize(pagesInApplicationCache);
+
+        final Bytes sessionCacheSize = Bytes.kilobytes((long) vloConfig.getSessionCacheSize());
+        logger.info("Setting Wicket max size per session to {}", sessionCacheSize);
+        this.getStoreSettings().setMaxSizePerSession(sessionCacheSize);
     }
 
     /**
