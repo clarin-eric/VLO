@@ -21,6 +21,9 @@
         <wicket.version>6.12.0</wicket.version>
         <spring.version>3.2.5.RELEASE</spring.version>
         <jetty.version>7.6.13.v20130916</jetty.version>
+        <!-- selects the appender for the log4j root logger -->
+        <log4j.appender>File</log4j.appender>
+        <vlo.logging.level>INFO</vlo.logging.level>
     </properties>
     <dependencies>
         <!-- Intra-project dependencies -->
@@ -263,6 +266,17 @@
             </plugin>
         </plugins>
     </build>
+    
+    <profiles>
+        <profile>
+            <id>development</id>
+            <properties>
+                <!-- selects the appender for the log4j root logger -->
+                <log4j.appender>Console</log4j.appender>
+                <vlo.logging.level>DEBUG</vlo.logging.level>
+            </properties>
+        </profile>
+    </profiles>
     
     <reporting>
         <plugins>
