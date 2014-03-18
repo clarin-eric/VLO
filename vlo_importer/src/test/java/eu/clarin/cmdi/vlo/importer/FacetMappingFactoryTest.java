@@ -124,8 +124,8 @@ public class FacetMappingFactoryTest {
         mapping = facets.get(index++);
         
         assertEquals(FacetConstants.FIELD_SUBJECT, mapping.getName());
-        assertEquals(1, mapping.getPatterns().size());
-        assertEquals("/c:CMD/c:Components/c:Session/c:MDGroup/c:Content/c:Subject/text()", 
+        assertEquals(3, mapping.getPatterns().size());
+        assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-linguistic-field", 
                 mapping.getPatterns().get(0));
         mapping = facets.get(index++);
         
