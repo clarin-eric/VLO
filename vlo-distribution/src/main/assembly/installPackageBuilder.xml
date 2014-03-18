@@ -12,14 +12,14 @@
 
         <!-- documentation to be packaged -->
         <fileSet>
-            <directory>docs</directory>
+            <directory>${project.parent.basedir}/docs</directory>
             <includes>
                 <include>*.*</include>
             </includes>
             <outputDirectory>doc</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>.</directory>
+            <directory>${project.parent.basedir}</directory>
             <includes>
                 <include>CHANGES</include>
                 <include>DEPLOY-README</include>
@@ -28,7 +28,7 @@
             <outputDirectory>doc</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>vlo-solr</directory>
+            <directory>${project.parent.basedir}/vlo-solr</directory>
             <includes>
                 <include>README.TXT</include>
             </includes>
@@ -38,7 +38,7 @@
         <!-- importer related files to be packaged -->
         <!-- jar file -->
         <fileSet>
-            <directory>vlo-importer/target</directory>
+            <directory>${project.parent.basedir}/vlo-importer/target</directory>
             <includes>
                 <include>*.jar</include>
             </includes>
@@ -46,7 +46,7 @@
         </fileSet>
         <!-- run script -->
         <fileSet>
-            <directory>vlo-importer/src/main/bin</directory>
+            <directory>${project.parent.basedir}/vlo-importer/src/main/bin</directory>
             <includes>
                 <include>*.sh</include>
             </includes>
@@ -56,7 +56,7 @@
         </fileSet>
         <!-- config files -->
         <fileSet>
-            <directory>vlo-commons/src/main/resources</directory>
+            <directory>${project.parent.basedir}/vlo-commons/src/main/resources</directory>
             <includes>
                 <include>*.properties</include>
                 <include>*.xml</include>
@@ -68,7 +68,7 @@
         <!-- the web application files to be packaged -->
         <!-- war file -->
         <fileSet>
-            <directory>vlo-web-app/target</directory>
+            <directory>${project.parent.basedir}/vlo-web-app/target</directory>
             <includes>
                 <include>*.war</include>
             </includes>
@@ -76,7 +76,7 @@
         </fileSet>
         <!-- config -->
         <fileSet>
-            <directory>vlo-commons/src/main/resources</directory>
+            <directory>${project.parent.basedir}/vlo-commons/src/main/resources</directory>
             <includes>
                 <include>VloConfig.xml</include>
             </includes>
@@ -86,7 +86,7 @@
         <!-- solr server files to be packaged -->
         <!-- war file -->
         <fileSet>
-            <directory>vlo-solr/target</directory>
+            <directory>${project.parent.basedir}/vlo-solr/target</directory>
             <includes>
                 <include>*.war</include>
             </includes>
@@ -96,7 +96,7 @@
         <!-- solr configuration files -->
         <fileSet>
             <!-- TODO: Get this dynamically from version property -->
-            <directory>vlo-solr/target/vlo-solr-3.0-SNAPSHOT</directory>
+            <directory>${project.parent.basedir}/vlo-solr/target/vlo-solr-${project.version}-vlo_solr_conf</directory>
             <includes>
                 <include>**/*</include>
             </includes>
@@ -104,7 +104,7 @@
         </fileSet>
         <fileSet>
             <!-- TODO: Get this dynamically from version property -->
-            <directory>vlo-solr/target/vlo-solr-3.0-SNAPSHOT</directory>
+            <directory>${project.parent.basedir}/vlo-solr/target/vlo-solr-3.0-SNAPSHOT</directory>
             <includes>
                 <include>vlo_solr.xml</include>
             </includes>

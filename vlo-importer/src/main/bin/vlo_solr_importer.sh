@@ -23,4 +23,5 @@ fi
 # to the JAVA command. Please note the a specification on the command line will
 # take preference over a specification as a property.
 
-$JAVA -Xmx1024M -cp .:vlo-importer-${project.version}.jar eu.clarin.cmdi.vlo.importer.MetadataImporter 
+$JAVA -Xmx1024M -cp .:vlo-importer-${project.version}-importer.jar eu.clarin.cmdi.vlo.importer.MetadataImporter $@
+
