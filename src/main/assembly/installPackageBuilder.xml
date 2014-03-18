@@ -52,6 +52,7 @@
             </includes>
             <fileMode>0755</fileMode>
             <outputDirectory>bin</outputDirectory>
+            <filtered>true</filtered>
         </fileSet>
         <!-- config files -->
         <fileSet>
