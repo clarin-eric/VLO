@@ -34,7 +34,6 @@ import org.apache.solr.common.params.SolrParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * The main metadataImporter class. Also contains the main function.
  *
@@ -43,15 +42,14 @@ import org.slf4j.LoggerFactory;
  * defined in the configuration. The startImport function starts the importing
  * and so on.
  */
-
 @SuppressWarnings({"serial"})
 public class MetadataImporter {
 
     /**
-     * Defines which files to try and parse.
-     * In this case all files ending in "xml" or "cmdi".
+     * Defines which files to try and parse. In this case all files ending in
+     * "xml" or "cmdi".
      */
-    private static final String[] VALID_CMDI_EXTENSIONS = new String[] { "xml", "cmdi" };
+    private static final String[] VALID_CMDI_EXTENSIONS = new String[]{"xml", "cmdi"};
 
     /**
      * Log log log log
@@ -72,9 +70,10 @@ public class MetadataImporter {
      * document.
      */
     final static Map<String, PostProcessor> POST_PROCESSORS = new HashMap<String, PostProcessor>();
+
     static {
         POST_PROCESSORS.put(FacetConstants.FIELD_ID, new IdPostProcessor());
-		POST_PROCESSORS.put(FacetConstants.FIELD_CONTINENT, new ContinentNamePostProcessor());
+        POST_PROCESSORS.put(FacetConstants.FIELD_CONTINENT, new ContinentNamePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_COUNTRY, new CountryNamePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGE, new LanguageCodePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGES, new LanguageLinkPostProcessor());
@@ -82,18 +81,17 @@ public class MetadataImporter {
         POST_PROCESSORS.put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_CLARIN_PROFILE, new CMDIComponentProfileNamePostProcessor());
     }
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param
      */
-    public MetadataImporter (){
+    public MetadataImporter() {
     }
 
     /**
-     * Contains MDSelflinks (usually).
-     * Just to know what we have already done.
+     * Contains MDSelflinks (usually). Just to know what we have already done.
      */
     protected final Set<String> processedIds = new HashSet<String>();
     /**
@@ -128,7 +126,7 @@ public class MetadataImporter {
                 solrServer.commit();
                 LOG.info("Deleting original data done.");
             }
-            
+
             // Import the specified data roots
             for (DataRoot dataRoot : dataRoots) {
                 LOG.info("Start of processing: " + dataRoot.getOriginName());
@@ -140,8 +138,8 @@ public class MetadataImporter {
                 CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS);
                 List<File> files = getFilesFromDataRoot(dataRoot.getRootFile());
                 for (File file : files) {
-                    if (config.getMaxFileSize() > 0 && 
-                            file.length() > config.getMaxFileSize()) {
+                    if (config.getMaxFileSize() > 0
+                            && file.length() > config.getMaxFileSize()) {
                         LOG.info("Skipping " + file.getAbsolutePath() + " because it is too large.");
                     } else {
                         LOG.debug("PROCESSING FILE: " + file.getAbsolutePath());
@@ -153,11 +151,11 @@ public class MetadataImporter {
                 }
                 LOG.info("End of processing: " + dataRoot.getOriginName());
             }
-            
+
             // delete outdated entries (based on maxDaysInSolr parameter)
-            if(config.getMaxDaysInSolr() > 0 && config.getDeleteAllFirst() == false) {
-                LOG.info("Deleting old files that were not seen for more than "+config.getMaxDaysInSolr()+" days...");
-                solrServer.deleteByQuery(FacetConstants.FIELD_LAST_SEEN+":[* TO NOW-"+config.getMaxDaysInSolr()+"DAYS]");
+            if (config.getMaxDaysInSolr() > 0 && config.getDeleteAllFirst() == false) {
+                LOG.info("Deleting old files that were not seen for more than " + config.getMaxDaysInSolr() + " days...");
+                solrServer.deleteByQuery(FacetConstants.FIELD_LAST_SEEN + ":[* TO NOW-" + config.getMaxDaysInSolr() + "DAYS]");
                 LOG.info("Deleting old files done.");
             }
         } catch (SolrServerException e) {
@@ -170,7 +168,7 @@ public class MetadataImporter {
                 if (solrServer != null) {
                     solrServer.commit();
                     buildSuggesterIndex();
-                }                
+                }
             } catch (SolrServerException e) {
                 LOG.error("cannot commit:\n", e);
             } catch (IOException e) {
@@ -222,8 +220,8 @@ public class MetadataImporter {
     }
 
     /**
-     * Create an interface to the SOLR server. 
-     * 
+     * Create an interface to the SOLR server.
+     *
      * After the interface has been created the importer can send documents to
      * the server. Sending documents involves a queue. The importer adds
      * documents to a queue, and dedicated threads will empty it, and
@@ -234,23 +232,23 @@ public class MetadataImporter {
     protected void initSolrServer() throws MalformedURLException {
         String solrUrl = config.getSolrUrl();
         LOG.info("Initializing Solr Server on " + solrUrl);
-        
+
         /* Specify the number of documents in the queue that will trigger the
          * threads, two of them, emptying it.
          */
-        solrServer = new ConcurrentUpdateSolrServer(solrUrl, 
+        solrServer = new ConcurrentUpdateSolrServer(solrUrl,
                 config.getMinDocsInSolrQueue(), 2) {
                     /*
                      * Let the super class method handle exceptions. Make the
                      * exception available to the importer in the form of the
                      * serverError variable.
                      */
-            @Override
-            public void handleError(Throwable exception) {
-                super.handleError(exception);
-                serverError = exception;
-            }
-        };
+                    @Override
+                    public void handleError(Throwable exception) {
+                        super.handleError(exception);
+                        serverError = exception;
+                    }
+                };
     }
 
     /**
@@ -279,13 +277,13 @@ public class MetadataImporter {
             SolrInputDocument solrDocument = cmdiData.getSolrDocument();
             if (solrDocument != null) {
                 if (!cmdiData.getDataResources().isEmpty() || !cmdiData.getLandingPageResources().isEmpty()
-                		|| !cmdiData.getSearchResources().isEmpty() || !cmdiData.getSearchPageResources().isEmpty()
-                		|| cmdiData.getMetadataResources().isEmpty() ) {
+                        || !cmdiData.getSearchResources().isEmpty() || !cmdiData.getSearchPageResources().isEmpty()
+                        || cmdiData.getMetadataResources().isEmpty()) {
                     // We only add metadata files that have
                     //  1) data resources or
-                	//	2) a landing page or
-                	//	3) a search service (like SRU/CQL) or
-                	//	4) a search page or 
+                    //	2) a landing page or
+                    //	3) a search service (like SRU/CQL) or
+                    //	4) a search page or 
                     //  5) that have none of the above but also lack any metadata links (e.g. olac files describing a corpus with a link to the original archive).
                     // Other files will have only metadata resources and are considered 'collection' metadata files they
                     // are usually not very interesting (think imdi corpus files) and will not be included.
@@ -342,17 +340,17 @@ public class MetadataImporter {
         for (Resource resource : cmdiData.getLandingPageResources()) {
             solrDocument.addField(FacetConstants.FIELD_LANDINGPAGE, resource.getResourceName());
         }
-        
+
         // add search page resource
         for (Resource resource : cmdiData.getSearchPageResources()) {
             solrDocument.addField(FacetConstants.FIELD_SEARCHPAGE, resource.getResourceName());
         }
-        
+
         // add timestamp
         Date dt = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         solrDocument.addField(FacetConstants.FIELD_LAST_SEEN, df.format(dt));
-        
+
         // add resource proxys      
         addResourceData(solrDocument, cmdiData);
         docs.add(solrDocument);
@@ -366,8 +364,9 @@ public class MetadataImporter {
      * specified in the "ResourceType" element of an imdi file or possibly
      * overwritten by some more specific xpath (as in the LRT cmdi files). So if
      * a type is overwritten and already in the solrDocument we take that type.
-     * 
-     * TODO evaluate odd connection between FIELD_FORMAT and ResourceProxy-Mimetypes
+     *
+     * TODO evaluate odd connection between FIELD_FORMAT and
+     * ResourceProxy-Mimetypes
      */
     protected void addResourceData(SolrInputDocument solrDocument, CMDIData cmdiData) {
         List<Object> fieldValues = solrDocument.containsKey(FacetConstants.FIELD_FORMAT) ? new ArrayList<Object>(solrDocument
@@ -389,18 +388,19 @@ public class MetadataImporter {
             } else {
                 format = CommonUtils.normalizeMimeType(mimeType);
             }
-            
+
             FormatPostProcessor processor = new FormatPostProcessor();
             mimeType = processor.process(mimeType);
-            
+
             // TODO check should probably be moved into Solr (by using some minimum length filter)
-            if(!mimeType.equals(""))
-            	solrDocument.addField(FacetConstants.FIELD_FORMAT, mimeType);
+            if (!mimeType.equals("")) {
+                solrDocument.addField(FacetConstants.FIELD_FORMAT, mimeType);
+            }
             solrDocument.addField(FacetConstants.FIELD_RESOURCE, mimeType + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR
                     + resource.getResourceName());
         }
     }
-    
+
     /**
      * Send current list of SolrImputDocuments to SolrServer and clears list
      * afterwards
@@ -417,7 +417,7 @@ public class MetadataImporter {
         }
         docs = new ArrayList<SolrInputDocument>();
     }
-    
+
     /**
      * Builds suggester index for autocompletion
      *
@@ -425,26 +425,25 @@ public class MetadataImporter {
      * @throws MalformedURLException
      */
     private void buildSuggesterIndex() throws SolrServerException, MalformedURLException {
-    	LOG.info("Building index for autocompletion.");
-    	HashMap<String,String> paramMap = new HashMap<String, String>();
-    	paramMap.put("qt", "/suggest");
-    	paramMap.put("spellcheck.build", "true");
-    	SolrParams params = new MapSolrParams(paramMap);
-    	solrServer.query(params);
+        LOG.info("Building index for autocompletion.");
+        HashMap<String, String> paramMap = new HashMap<String, String>();
+        paramMap.put("qt", "/suggest");
+        paramMap.put("spellcheck.build", "true");
+        SolrParams params = new MapSolrParams(paramMap);
+        solrServer.query(params);
     }
 
     public static VloConfig config;
-    
+
     /**
      * @param args
      * @throws IOException
      */
-    public static void main(String[] args) throws MalformedURLException, IOException { 
+    public static void main(String[] args) throws MalformedURLException, IOException {
 
-        
         // path to the configuration file
         String configFile = null;
-        
+
         // use the Apache cli framework for getting command line parameters
         Options options = new Options();
 
@@ -460,31 +459,30 @@ public class MetadataImporter {
             // parse the command line arguments
             CommandLine cmd = parser.parse(options, args);
             if (cmd.hasOption("c")) {
-                
+
                 // the "c" option was specified, now get its value
                 configFile = cmd.getOptionValue("c");
             }
 
         } catch (org.apache.commons.cli.ParseException ex) {
-            
+
             /**
              * Caught an exception caused by command line parsing. Try to get
              * the name of the configuration file by querying the system
              * property.
              */
-
             String message = "Command line parsing failed. " + ex.getMessage();
             LOG.error(message);
             System.err.println(message);
         }
-        
-        if (configFile == null){
+
+        if (configFile == null) {
 
             String message;
 
             message = "Could not get config file name via the command line, trying the system properties.";
             LOG.info(message);
-            
+
             String key;
 
             key = "configFile";
@@ -492,24 +490,29 @@ public class MetadataImporter {
         }
 
         if (configFile == null) {
-            
+
             String message;
-            
+
             message = "Could not get filename as system property either - stopping.";
             LOG.error(message);
         } else {
             // read the configuration from the externally supplied file
-            XmlVloConfigFactory configFactory = new XmlVloConfigFactory(new URL(configFile));
+            final URL configUrl;
+            if (configFile.startsWith("file:")) {
+                configUrl = new URL(configFile);
+            } else {
+                configUrl = new File(configFile).toURI().toURL();
+            }
+            System.out.println("Reading configuration from " + configUrl.toString());
+            final XmlVloConfigFactory configFactory = new XmlVloConfigFactory(configUrl);
             MetadataImporter.config = configFactory.newConfig();
 
             // optionally, modify the configuration here
-
             // create and start the importer
             MetadataImporter importer = new MetadataImporter();
             importer.startImport();
 
             // finished importing
-
             if (MetadataImporter.config.printMapping()) {
                 File file = new File("xsdMapping.txt");
                 FacetMappingFactory.printMapping(file);
