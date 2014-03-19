@@ -69,6 +69,9 @@ public abstract class FacetPanel extends Panel {
         final boolean valuesSelected = !selectionModel.getObject().getFacetValues().isEmpty();
         facetValuesPanel.setVisible(!valuesSelected);
         selectedFacetPanel.setVisible(valuesSelected);
+
+        // hide this entire panel is no values are selectable
+        setVisible(valuesSelected || selectionModel.getObject().getFacetField().getValueCount() > 0);
     }
 
     private FacetValuesPanel createFacetValuesPanel(String id) {

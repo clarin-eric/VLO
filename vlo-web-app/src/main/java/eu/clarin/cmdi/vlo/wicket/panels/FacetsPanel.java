@@ -18,7 +18,9 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetExpansionStateModel;
+import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +32,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.MapModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  * A panel representing a group of facets.
@@ -40,6 +43,9 @@ import org.apache.wicket.model.util.MapModel;
  * @author twagoo
  */
 public abstract class FacetsPanel extends Panel {
+
+    @SpringBean
+    private FacetFieldsService facetFieldsService;
 
     /**
      *
@@ -59,10 +65,14 @@ public abstract class FacetsPanel extends Panel {
 
             @Override
             protected void populateItem(ListItem<FacetField> item) {
+                // Create a facet field model which does a lookup by name,
+                // making it dynamic in case the selection and therefore
+                // set of available values changes
+                final FacetFieldModel facetFieldModel = new FacetFieldModel(facetFieldsService, item.getModelObject().getName(), selectionModel);
                 item.add(
                         new FacetPanel("facet",
-                                new FacetSelectionModel(item.getModel(), selectionModel),
-                                new FacetExpansionStateModel(item.getModel(), expansionModel)) {
+                                new FacetSelectionModel(facetFieldModel, selectionModel),
+                                new FacetExpansionStateModel(facetFieldModel, expansionModel)) {
 
                             @Override
                             protected void selectionChanged(AjaxRequestTarget target) {
