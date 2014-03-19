@@ -72,19 +72,21 @@ public abstract class FacetPanel extends Panel {
     }
 
     private FacetValuesPanel createFacetValuesPanel(String id) {
-        return new FacetValuesPanel(id, new PropertyModel<FacetField>(selectionModel, "facetField")) {
-            @Override
-            public void onValuesSelected(String facet, Collection<String> value, AjaxRequestTarget target) {
-                // A value has been selected on this facet's panel, update the model!
-                selectionModel.getObject().getSelection().selectValues(facet, value);
-                // collapse after selection
-                expansionStateModel.setObject(ExpansionState.COLLAPSED);
-                if (target != null) {
-                    // reload entire page for now
-                    selectionChanged(target);
-                }
-            }
-        };
+        return new FacetValuesPanel(id,
+                new PropertyModel<FacetField>(selectionModel, "facetField"),
+                new PropertyModel<QueryFacetsSelection>(selectionModel, "selection")) {
+                    @Override
+                    public void onValuesSelected(String facet, Collection<String> value, AjaxRequestTarget target) {
+                        // A value has been selected on this facet's panel, update the model!
+                        selectionModel.getObject().getSelection().selectValues(facet, value);
+                        // collapse after selection
+                        expansionStateModel.setObject(ExpansionState.COLLAPSED);
+                        if (target != null) {
+                            // reload entire page for now
+                            selectionChanged(target);
+                        }
+                    }
+                };
     }
 
     private SelectedFacetPanel createSelectedFacetPanel(String id) {

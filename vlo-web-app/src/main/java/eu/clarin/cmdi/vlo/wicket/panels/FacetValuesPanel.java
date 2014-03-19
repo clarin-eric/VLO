@@ -16,7 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
+import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import java.util.Collection;
 import java.util.Collections;
@@ -43,9 +45,11 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     private final int maxNumberOfFacetsToShow = 10; //TODO: get from config
 
     private final ModalWindow valuesWindow;
+    private final IModel<QueryFacetsSelection> selectionModel;
 
-    public FacetValuesPanel(String id, final IModel<FacetField> model) {
+    public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, model);
+        this.selectionModel = selectionModel;
 
         // add title
         add(new Label("title", new SolrFieldNameModel(model, "name")));
@@ -112,15 +116,26 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     }
 
     private AjaxFallbackLink createAllValuesLink(String id) {
-        final AjaxFallbackLink link = new AjaxFallbackLink(id) {
+        final AjaxFallbackLink link = new AjaxFallbackLink<FacetField>(id, getModel()) {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                //TODO: No-javascript alternative (i.e. when target==null)
-                valuesWindow.show(target);
+                if (target == null) {
+                    // open a new page with values
+                    setResponsePage(new AllFacetValuesPage(getModel(), selectionModel));
+                } else {
+                    // show values in a popup (requires JavaScript)
+                    valuesWindow.show(target);
+                }
             }
         };
         return link;
+    }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        selectionModel.detach();
     }
 
     /**
