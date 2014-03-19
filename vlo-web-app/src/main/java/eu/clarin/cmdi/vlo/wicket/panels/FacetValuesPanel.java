@@ -42,7 +42,7 @@ import org.apache.wicket.model.IModel;
  */
 public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
-    private final int maxNumberOfFacetsToShow = 10; //TODO: get from config
+    private final static int maxNumberOfFacetsToShow = 10; //TODO: get from config
 
     private final ModalWindow valuesWindow;
     private final IModel<QueryFacetsSelection> selectionModel;
@@ -64,8 +64,11 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             }
         });
 
+        // create a popup window for all facet values
         valuesWindow = createAllValuesWindow("allValues");
         add(valuesWindow);
+        
+        // create a link for showing all values        
         add(createAllValuesLink("allFacetValuesLink"));
     }
 
@@ -128,6 +131,14 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
                     valuesWindow.show(target);
                 }
             }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                // only show if there actually are more values!
+                setVisible(getModel().getObject().getValueCount() > maxNumberOfFacetsToShow);
+            }
+
         };
         return link;
     }
