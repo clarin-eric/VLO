@@ -40,24 +40,32 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     @SpringBean
     private PageParametersConverter<QueryFacetsSelection> paramsConverter;
 
-    private final Panel searchResultsPanel;
-    private final Panel facetsPanel;
-    private final Panel collectionsPanel;
-    private final WebMarkupContainer navigation;
+    private Panel searchResultsPanel;
+    private Panel facetsPanel;
+    private Panel collectionsPanel;
+    private WebMarkupContainer navigation;
 
-    public FacetedSearchPage(final PageParameters parameters) {
+    public FacetedSearchPage(IModel<QueryFacetsSelection> queryModel) {
+        super(queryModel);
+        addComponents();
+    }
+
+    public FacetedSearchPage(PageParameters parameters) {
         super(parameters);
 
         final QueryFacetsSelection selection = paramsConverter.fromParameters(parameters);
         final IModel<QueryFacetsSelection> queryModel = new Model<QueryFacetsSelection>(selection);
         setModel(queryModel);
+        addComponents();
+    }
 
+    private void addComponents() {
         navigation = new WebMarkupContainer("navigation");
         navigation.setOutputMarkupId(true);
         add(navigation);
 
-        navigation.add(new BreadCrumbPanel("breadcrumbs", queryModel));
-        navigation.add(new PermaLinkPanel("permalink", queryModel) {
+        navigation.add(new BreadCrumbPanel("breadcrumbs", getModel()));
+        navigation.add(new PermaLinkPanel("permalink", getModel()) {
 
             @Override
             protected void onChange(AjaxRequestTarget target) {
@@ -68,7 +76,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
         });
 
-        final SearchForm searchForm = new SearchForm("search", queryModel);
+        final SearchForm searchForm = new SearchForm("search", getModel());
         add(searchForm);
 
         collectionsPanel = createCollectionsPanel("collectionsFacet");
@@ -77,7 +85,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         facetsPanel = createFacetsPanel("facets");
         add(facetsPanel);
 
-        searchResultsPanel = new SearchResultsPanel("searchResults", queryModel);
+        searchResultsPanel = new SearchResultsPanel("searchResults", getModel());
         add(searchResultsPanel);
     }
 
