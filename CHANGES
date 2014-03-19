@@ -1,6 +1,9 @@
 
 Bug Fixes and Features
 
+VLO 2.18.1 (February 2014)
+* Updated national projects mapping for LINDAT/CLARIN (by including r4343)
+
 Beta release 2.18  (January 2014)
 
 * Upgraded to Wicket 6
