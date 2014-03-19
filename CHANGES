@@ -1,5 +1,16 @@
-
 Bug Fixes and Features
+
+VLO 3.0-alpha1 (March 2014)
+* Reimplemented Wicket front-end, see <https://trac.clarin.eu/milestone/VLO-3.0>
+* Upgraded to Solr 4.6.0
+* Added/replaced context params
+   * eu.clarin.cmdi.vlo.*
+   * (externalConfig has been removed)
+* VloConfig changes
+   * Removed list length attribute (e.g. <facetFields length="3">)
+   * Added collectionFacet
+   * Added config of ignored and technical fields
+
 
 VLO 2.18.1 (February 2014)
 * Updated national projects mapping for LINDAT/CLARIN (by including r4343)
