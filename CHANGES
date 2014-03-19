@@ -3,6 +3,7 @@ Bug Fixes and Features
 VLO 3.0-alpha1 (March 2014)
 * Reimplemented Wicket front-end, see <https://trac.clarin.eu/milestone/VLO-3.0>
 * Upgraded to Solr 4.6.0
+* Added application monitoring via JavaMelody at /monitoring
 * Added/replaced context params
    * eu.clarin.cmdi.vlo.*
    * (externalConfig has been removed)
