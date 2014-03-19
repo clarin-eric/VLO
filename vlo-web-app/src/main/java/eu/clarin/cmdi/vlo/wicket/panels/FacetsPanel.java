@@ -68,7 +68,7 @@ public abstract class FacetsPanel extends Panel {
                 // Create a facet field model which does a lookup by name,
                 // making it dynamic in case the selection and therefore
                 // set of available values changes
-                final FacetFieldModel facetFieldModel = new FacetFieldModel(facetFieldsService, item.getModelObject().getName(), selectionModel);
+                final FacetFieldModel facetFieldModel = new FacetFieldModel(facetFieldsService, item.getModelObject(), selectionModel);
                 item.add(
                         new FacetPanel("facet",
                                 new FacetSelectionModel(facetFieldModel, selectionModel),
