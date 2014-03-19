@@ -61,7 +61,9 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
             @Override
             protected void onChange(AjaxRequestTarget target) {
-                target.add(navigation);
+                if (target != null) {
+                    target.add(navigation);
+                }
             }
 
         });
