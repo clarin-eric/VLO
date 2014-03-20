@@ -222,3 +222,24 @@ div#expandcollapseall a {
     font-size: smaller;
     padding-right: 1em;
 }
+
+div#expandcollapseall a span {
+    display: inline-block;
+    width: 1em;
+    text-align: center;
+}
+
+a#expandall span:after {
+    /* show expand sign */
+    content: " +";
+}
+
+a#collapseall span:after {
+    /* show collapse sign */
+    content: " -";
+}
+
+a#deselectall span:after {
+    /* show delete cross */
+    content: " ✕";
+}

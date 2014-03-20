@@ -42,6 +42,15 @@ public class QueryFacetsSelection implements Serializable {
     }
 
     /**
+     * Creates a selection with an empty facet selection
+     *
+     * @param query query string
+     */
+    public QueryFacetsSelection(String query) {
+        this(query, Maps.<String, Collection<String>>newHashMap());
+    }
+
+    /**
      * Creates a selection without a query
      *
      * @param selection facet values selection map
