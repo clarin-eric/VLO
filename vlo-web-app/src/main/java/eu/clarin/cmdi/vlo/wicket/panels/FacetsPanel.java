@@ -27,9 +27,10 @@ import java.util.List;
 import java.util.Map;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.MapModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -42,10 +43,12 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  *
  * @author twagoo
  */
-public abstract class FacetsPanel extends Panel {
+public abstract class FacetsPanel extends GenericPanel<List<FacetField>> {
 
     @SpringBean
     private FacetFieldsService facetFieldsService;
+
+    private MapModel<String, ExpansionState> expansionModel;
 
     /**
      *
@@ -56,10 +59,10 @@ public abstract class FacetsPanel extends Panel {
      * selection state
      */
     public FacetsPanel(final String id, final IModel<List<FacetField>> facetsModel, final IModel<QueryFacetsSelection> selectionModel) {
-        super(id);
+        super(id, facetsModel);
 
         final Map<String, ExpansionState> expansionStateMap = new HashMap<String, ExpansionState>();
-        final MapModel<String, ExpansionState> expansionModel = new MapModel<String, ExpansionState>(expansionStateMap);
+        expansionModel = new MapModel<String, ExpansionState>(expansionStateMap);
 
         final ListView<FacetField> facetsView = new ListView<FacetField>("facets", facetsModel) {
 
@@ -85,6 +88,36 @@ public abstract class FacetsPanel extends Panel {
         // facet list is not dynamic, so reuse items
         facetsView.setReuseItems(true);
         add(facetsView);
+
+        add(new AjaxFallbackLink("expandAll") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                setAllFacetsExpansionState(ExpansionState.EXPANDED);
+                selectionChanged(target);
+            }
+        });
+        add(new AjaxFallbackLink("collapseAll") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                setAllFacetsExpansionState(ExpansionState.COLLAPSED);
+                selectionChanged(target);
+            }
+        });
+    }
+
+    private void setAllFacetsExpansionState(final ExpansionState state) {
+        final Map<String, ExpansionState> expansionMap = expansionModel.getObject();
+        for (FacetField facet : getModelObject()) {
+            expansionMap.put(facet.getName(), state);
+        }
+    }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        expansionModel.detach();
     }
 
     protected abstract void selectionChanged(AjaxRequestTarget target);

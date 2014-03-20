@@ -212,3 +212,13 @@ a.collapsefacet:after {
 form#advancedoptions {
     margin: 0em 1em;
 }
+
+div#expandcollapseall {
+    text-align: right;
+}
+
+div#expandcollapseall a {
+    display: block;
+    font-size: smaller;
+    padding-right: 1em;
+}
