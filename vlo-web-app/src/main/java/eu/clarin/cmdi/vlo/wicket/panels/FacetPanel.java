@@ -82,8 +82,6 @@ public abstract class FacetPanel extends Panel {
                     public void onValuesSelected(String facet, Collection<String> value, AjaxRequestTarget target) {
                         // A value has been selected on this facet's panel, update the model!
                         selectionModel.getObject().getSelection().selectValues(facet, value);
-                        // collapse after selection
-                        expansionStateModel.setObject(ExpansionState.COLLAPSED);
                         if (target != null) {
                             // reload entire page for now
                             selectionChanged(target);
@@ -97,14 +95,20 @@ public abstract class FacetPanel extends Panel {
             @Override
             public void onValuesUnselected(String facet, Collection<String> valuesRemoved, AjaxRequestTarget target) {
                 final QueryFacetsSelection selection = selectionModel.getObject().getSelection();
+                
                 // Values have been removed, calculate remainder
                 final Collection<String> currentSelection = selection.getSelectionValues(facet);
                 final Collection<String> newSelection = new HashSet<String>(currentSelection);
                 newSelection.removeAll(valuesRemoved);
+                
                 // Update model
                 selection.selectValues(facet, newSelection);
+                
                 // collapse after removal
+                // TODO: should be removed, but then list of values
+                // does not seem to update correctly
                 expansionStateModel.setObject(ExpansionState.COLLAPSED);
+                
                 if (target != null) {
                     // reload entire page for now
                     selectionChanged(target);
