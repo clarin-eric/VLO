@@ -25,6 +25,7 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -48,8 +49,12 @@ public abstract class FacetPanel extends Panel {
 
     public FacetPanel(String id, IModel<FacetSelection> selectionModel, IModel<ExpansionState> expansionState) {
         super(id, selectionModel);
+
         this.selectionModel = selectionModel;
         this.expansionStateModel = expansionState;
+
+        // facet title annex expansion toggler
+        add(createTitleToggler("titleToggle"));
 
         // panel showing values for selection
         facetValuesPanel = createFacetValuesPanel("facetValues");
@@ -60,6 +65,29 @@ public abstract class FacetPanel extends Panel {
         add(selectedFacetPanel);
 
         addExpansionComponents();
+    }
+
+    private AjaxFallbackLink createTitleToggler(String id) {
+        // facet title is also a link that toggles expansion state
+        final AjaxFallbackLink titleLink = new AjaxFallbackLink(id) {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                final ExpansionState expansionState = expansionStateModel.getObject();
+                if (expansionState == ExpansionState.COLLAPSED) {
+                    expansionStateModel.setObject(ExpansionState.EXPANDED);
+                } else {
+                    expansionStateModel.setObject(ExpansionState.COLLAPSED);
+                }
+                if (target != null) {
+                    target.add(FacetPanel.this);
+                }
+            }
+        };
+        
+        // Facet name becomes title
+        titleLink.add(new Label("title", new PropertyModel(selectionModel, "facetField.name")));
+        return titleLink;
     }
 
     @Override
@@ -95,20 +123,20 @@ public abstract class FacetPanel extends Panel {
             @Override
             public void onValuesUnselected(String facet, Collection<String> valuesRemoved, AjaxRequestTarget target) {
                 final QueryFacetsSelection selection = selectionModel.getObject().getSelection();
-                
+
                 // Values have been removed, calculate remainder
                 final Collection<String> currentSelection = selection.getSelectionValues(facet);
                 final Collection<String> newSelection = new HashSet<String>(currentSelection);
                 newSelection.removeAll(valuesRemoved);
-                
+
                 // Update model
                 selection.selectValues(facet, newSelection);
-                
+
                 // collapse after removal
                 // TODO: should be removed, but then list of values
                 // does not seem to update correctly
                 expansionStateModel.setObject(ExpansionState.COLLAPSED);
-                
+
                 if (target != null) {
                     // reload entire page for now
                     selectionChanged(target);

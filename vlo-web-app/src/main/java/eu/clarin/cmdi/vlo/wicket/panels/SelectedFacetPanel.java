@@ -43,8 +43,6 @@ public abstract class SelectedFacetPanel extends Panel {
         super(id, model);
         this.model = model;
 
-        // Facet name becomes title
-        add(new Label("facet", new PropertyModel(model, "facetField.name")));
         // Add removers for all selected values for collapsed state
         add(createSelectionRemovers("facetValueRemover"));
         // Add selected items to expanded state

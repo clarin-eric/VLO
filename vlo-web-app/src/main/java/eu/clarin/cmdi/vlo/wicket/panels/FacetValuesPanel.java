@@ -51,9 +51,6 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         super(id, model);
         this.selectionModel = selectionModel;
 
-        // add title
-        add(new Label("title", new SolrFieldNameModel(model, "name")));
-
         // provider that extracts values and counts from FacetField
         final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(model, maxNumberOfFacetsToShow);
         add(new DataView<Count>("facetValues", valuesProvider) {
