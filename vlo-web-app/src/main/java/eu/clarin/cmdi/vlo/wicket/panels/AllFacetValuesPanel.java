@@ -135,6 +135,8 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
             }
         });
         options.add(filterField);
+        
+        //TODO: Add non-JS submit option
         return options;
     }
 

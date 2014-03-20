@@ -1,3 +1,12 @@
+Upgrading from 2.18 to 3.0
+
+TODO: EXTEND!!
+* Web app context params changed, for an overview see META-INF/context.xml
+* Config changes
+   * Removed list length attribute
+   * Added collectionFacet
+   * Added config of ignored and technical fields
+
 Upgrading from 2.17 to 2.18
 
 * In version 2.18 of the VLO, the URL mapping has been changed. To prevent
