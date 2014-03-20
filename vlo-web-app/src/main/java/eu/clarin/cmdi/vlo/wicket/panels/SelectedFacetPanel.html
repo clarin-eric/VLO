@@ -32,7 +32,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </div>
             <div class="sbilinks facetvalues">
                 <ul>
-                    <li><span class="selectedfacetvalue">ITEM</span><a class="unselectfacetvalue" title="unselect value" href="index2.html"><span>[unselect]</span></a></li>
+                    <li wicket:id="selectedItem">
+                        <span wicket:id="facetValue" class="selectedfacetvalue">ITEM</span>
+                        <a wicket:id="unselectValue" class="unselectfacetvalue" title="unselect value">
+                            <span>[unselect]</span>
+                        </a>
+                    </li>
 <!--                    <li><span class="facetvalue">English</span></li>
                     <li><span class="facetvalue">German</span></li>
                     <li><span class="facetvalue">French</span></li>

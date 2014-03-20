@@ -74,6 +74,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 .facetvalue, .selectedfacetvalue {
     padding: 0px 0px 2px 14px;
+    font-weight: bold;
 }
 
 /* unselect facet */
