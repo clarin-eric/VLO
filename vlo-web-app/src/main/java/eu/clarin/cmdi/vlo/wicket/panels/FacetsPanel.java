@@ -30,6 +30,7 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -98,7 +99,7 @@ public abstract class FacetsPanel extends GenericPanel<List<FacetField>> {
 
     private Component createBatchLinks(String id,final IModel<QueryFacetsSelection> selectionModel) {
         final WebMarkupContainer links = new WebMarkupContainer(id);
-        links.add(new AjaxFallbackLink("expandAll") {
+        links.add(new IndicatingAjaxFallbackLink("expandAll") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -106,7 +107,7 @@ public abstract class FacetsPanel extends GenericPanel<List<FacetField>> {
                 selectionChanged(target);
             }
         });
-        links.add(new AjaxFallbackLink("collapseAll") {
+        links.add(new IndicatingAjaxFallbackLink("collapseAll") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -114,7 +115,7 @@ public abstract class FacetsPanel extends GenericPanel<List<FacetField>> {
                 selectionChanged(target);
             }
         });
-        links.add(new AjaxFallbackLink("deselectAll") {
+        links.add(new IndicatingAjaxFallbackLink("deselectAll") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {

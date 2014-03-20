@@ -26,6 +26,7 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -73,7 +74,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         item.setDefaultModel(new CompoundPropertyModel<Count>(item.getModel()));
 
         // link to select an individual facet value
-        final Link selectLink = new AjaxFallbackLink("facetSelect") {
+        final Link selectLink = new IndicatingAjaxFallbackLink("facetSelect") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -115,8 +116,8 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         return window;
     }
 
-    private AjaxFallbackLink createAllValuesLink(String id) {
-        final AjaxFallbackLink link = new AjaxFallbackLink<FacetField>(id, getModel()) {
+    private Link createAllValuesLink(String id) {
+        final Link link = new AjaxFallbackLink<FacetField>(id, getModel()) {
 
             @Override
             public void onClick(AjaxRequestTarget target) {

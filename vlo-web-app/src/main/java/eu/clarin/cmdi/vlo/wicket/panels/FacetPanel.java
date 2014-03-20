@@ -25,6 +25,7 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -69,7 +70,7 @@ public abstract class FacetPanel extends Panel {
 
     private AjaxFallbackLink createTitleToggler(String id) {
         // facet title is also a link that toggles expansion state
-        final AjaxFallbackLink titleLink = new AjaxFallbackLink(id) {
+        final AjaxFallbackLink titleLink = new IndicatingAjaxFallbackLink(id) {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -164,7 +165,7 @@ public abstract class FacetPanel extends Panel {
         }));
 
         // add expansion link
-        add(new AjaxFallbackLink("expand") {
+        add(new IndicatingAjaxFallbackLink("expand") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -176,7 +177,7 @@ public abstract class FacetPanel extends Panel {
         });
 
         // add collapse link
-        add(new AjaxFallbackLink("collapse") {
+        add(new IndicatingAjaxFallbackLink("collapse") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
