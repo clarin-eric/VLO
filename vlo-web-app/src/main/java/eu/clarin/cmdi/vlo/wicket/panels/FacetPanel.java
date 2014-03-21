@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import java.util.Collection;
 import java.util.HashSet;
 import org.apache.solr.client.solrj.response.FacetField;
@@ -85,9 +86,9 @@ public abstract class FacetPanel extends Panel {
                 }
             }
         };
-        
+
         // Facet name becomes title
-        titleLink.add(new Label("title", new PropertyModel(selectionModel, "facetField.name")));
+        titleLink.add(new Label("title", new SolrFieldNameModel(new PropertyModel(selectionModel, "facetField.name"))));
         return titleLink;
     }
 
