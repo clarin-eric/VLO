@@ -1,7 +1,5 @@
 package eu.clarin.cmdi.vlo;
 
-import eu.clarin.cmdi.vlo.config.VloConfig;
-
 /**
  * Definition of facet, resource type and URL constants.
  */
