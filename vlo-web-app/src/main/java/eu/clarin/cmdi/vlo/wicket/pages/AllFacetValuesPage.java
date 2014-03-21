@@ -35,50 +35,55 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.string.StringValue;
 
 /**
  *
  * @author twagoo
  */
 public class AllFacetValuesPage extends VloBasePage<FacetField> {
-    
+
     public final static String SELECTED_FACET_PARAM = "selectedFacet";
-    
+
     @SpringBean
     private PageParametersConverter<QueryFacetsSelection> parametersConverter;
     @SpringBean
     private FacetFieldsService facetFieldsService;
-    
+
     private final IModel<QueryFacetsSelection> selectionModel;
-    
+
     public AllFacetValuesPage(PageParameters params) {
         super(params);
-        
+
         this.selectionModel = Model.of(parametersConverter.fromParameters(params));
-        
-        final String facet = params.get(SELECTED_FACET_PARAM).toString();
-        if (facet == null || facet.isEmpty()) {
+        final StringValue facet = params.get(SELECTED_FACET_PARAM);
+        if (facet.isEmpty()) {
             Session.get().error("No facet provided for all values page");
             throw new RestartResponseException(new FacetedSearchPage(selectionModel));
         }
-        setModel(new FacetFieldModel(facetFieldsService, facet, selectionModel));
-        
+
+        setModel(new FacetFieldModel(facetFieldsService, facet.toString(), selectionModel));
+        if (getModelObject() == null) {
+            Session.get().error(String.format("Facet '%s' could not be found", facet));
+            throw new RestartResponseException(new FacetedSearchPage(selectionModel));
+        }
+
         addComponents();
     }
-    
+
     public AllFacetValuesPage(IModel<FacetField> fieldModel, final IModel<QueryFacetsSelection> selectionModel) {
         super(fieldModel);
         this.selectionModel = selectionModel;
         addComponents();
     }
-    
+
     private void addComponents() {
         add(new BreadCrumbPanel("breadcrumbs", selectionModel));
-        
+
         add(new Label("name", new SolrFieldNameModel(new PropertyModel<String>(getModel(), "name"))));
-        
+
         add(new AllFacetValuesPanel("values", getModel()) {
-            
+
             @Override
             protected void onValuesSelected(String facet, Collection<String> values, AjaxRequestTarget target) {
                 // Create updated selection state
@@ -96,11 +101,11 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
             }
         });
     }
-    
+
     @Override
     public void detachModels() {
         super.detachModels();
         selectionModel.detach();
     }
-    
+
 }

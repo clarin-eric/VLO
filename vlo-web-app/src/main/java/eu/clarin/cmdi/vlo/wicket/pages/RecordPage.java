@@ -35,6 +35,8 @@ import eu.clarin.cmdi.vlo.wicket.panels.RecordNavigationPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
+import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -44,6 +46,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.string.StringValue;
 
 /**
  *
@@ -61,20 +64,41 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     private final IModel<SearchContext> navigationModel;
     private final IModel<QueryFacetsSelection> selectionModel;
 
+    /**
+     * Constructor that derives document and selection models from page
+     * parameters (external request or through the framework)
+     *
+     * @param params
+     */
     public RecordPage(PageParameters params) {
         super(params);
         // Coming from bookmark or external link, so no navigation context
         this.navigationModel = null;
 
-        final SolrDocumentModel documentModel = new SolrDocumentModel(params.get("docId").toString());
-        setModel(documentModel);
-
         final QueryFacetsSelection selection = selectionParametersConverter.fromParameters(params);
         selectionModel = Model.of(selection);
+
+        final StringValue docId = params.get("docId");
+        if (docId.isEmpty()) {
+            Session.get().error("No document ID provided");
+            throw new RestartResponseException(new FacetedSearchPage(selectionModel));
+        }
+        final SolrDocumentModel documentModel = new SolrDocumentModel(docId.toString());
+        if (null == documentModel.getObject()) {
+            Session.get().error(String.format("Document with ID %s could not be found", docId));
+            throw new RestartResponseException(new FacetedSearchPage(selectionModel));
+        }
+        setModel(documentModel);
 
         addComponents();
     }
 
+    /**
+     * Constructor using existing models (when constructed explicitly in code)
+     *
+     * @param documentModel
+     * @param contextModel
+     */
     public RecordPage(IModel<SolrDocument> documentModel, IModel<SearchContext> contextModel) {
         super(documentModel);
         this.navigationModel = contextModel;
