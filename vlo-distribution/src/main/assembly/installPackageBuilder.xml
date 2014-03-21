@@ -95,7 +95,6 @@
 
         <!-- solr configuration files -->
         <fileSet>
-            <!-- TODO: Get this dynamically from version property -->
             <directory>${project.parent.basedir}/vlo-solr/target/vlo-solr-${project.version}-vlo_solr_conf</directory>
             <includes>
                 <include>**/*</include>
@@ -103,7 +102,6 @@
             <outputDirectory>config/</outputDirectory>
         </fileSet>
         <fileSet>
-            <!-- TODO: Get this dynamically from version property -->
             <directory>${project.parent.basedir}/vlo-solr/target/vlo-solr-${project.version}</directory>
             <includes>
                 <include>vlo_solr.xml</include>
