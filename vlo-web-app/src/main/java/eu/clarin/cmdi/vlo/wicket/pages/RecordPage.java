@@ -24,6 +24,7 @@ import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.panels.FieldsTablePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.ResourceLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
+import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
@@ -158,7 +159,11 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     }
 
     private ExternalLink createLandingPageLink(String id) {
-        final SolrFieldStringModel landingPageHrefModel = new SolrFieldStringModel(getModel(), FacetConstants.FIELD_LANDINGPAGE);
+        final IModel<String> landingPageHrefModel
+                // wrap in model that transforms handle links
+                = new HandleLinkModel(
+                        // get landing page from document
+                        new SolrFieldStringModel(getModel(), FacetConstants.FIELD_LANDINGPAGE));
         // add landing page link
         final ExternalLink landingPageLink = new ExternalLink(id, landingPageHrefModel) {
 
