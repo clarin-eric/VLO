@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -43,10 +43,10 @@ public abstract class SelectedFacetPanel extends Panel {
         super(id, model);
         this.model = model;
 
-        // Facet name becomes title
-        add(new Label("facet", new PropertyModel(model, "facetField.name")));
-        // Add removers for all selected values
+        // Add removers for all selected values for collapsed state
         add(createSelectionRemovers("facetValueRemover"));
+        // Add selected items to expanded state
+        add(createSelectionRemovers("selectedItem"));
     }
 
     private ListView<String> createSelectionRemovers(String id) {
@@ -82,7 +82,7 @@ public abstract class SelectedFacetPanel extends Panel {
      */
     protected abstract void onValuesUnselected(String facet, Collection<String> valuesRemoved, AjaxRequestTarget target);
 
-    public class RemoveLink extends AjaxFallbackLink {
+    public class RemoveLink extends IndicatingAjaxFallbackLink {
 
         private final IModel<String> valueModel;
 

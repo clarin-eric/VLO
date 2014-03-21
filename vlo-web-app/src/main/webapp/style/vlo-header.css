@@ -132,3 +132,21 @@ a.breadcrumbunselect:after {
     margin-bottom: 1em;
     text-align: right;
 }
+
+/* Feedback panel */
+
+div#feedback ul {
+    margin-right: 2em;
+    list-style-type: none;
+}
+
+div#feedback li {
+    list-style-type: none;
+    padding: .2em;
+}
+
+div#feedback li.feedbackPanelERROR {
+    border: 3px solid red;
+    color: red;
+    font-weight: bold;
+}

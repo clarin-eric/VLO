@@ -16,7 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
+import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,6 +26,7 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -40,15 +43,14 @@ import org.apache.wicket.model.IModel;
  */
 public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
-    private final int maxNumberOfFacetsToShow = 10; //TODO: get from config
+    private final static int maxNumberOfFacetsToShow = 10; //TODO: get from config
 
     private final ModalWindow valuesWindow;
+    private final IModel<QueryFacetsSelection> selectionModel;
 
-    public FacetValuesPanel(String id, final IModel<FacetField> model) {
+    public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, model);
-
-        // add title
-        add(new Label("title", new SolrFieldNameModel(model, "name")));
+        this.selectionModel = selectionModel;
 
         // provider that extracts values and counts from FacetField
         final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(model, maxNumberOfFacetsToShow);
@@ -60,8 +62,11 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             }
         });
 
+        // create a popup window for all facet values
         valuesWindow = createAllValuesWindow("allValues");
         add(valuesWindow);
+        
+        // create a link for showing all values        
         add(createAllValuesLink("allFacetValuesLink"));
     }
 
@@ -69,7 +74,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         item.setDefaultModel(new CompoundPropertyModel<Count>(item.getModel()));
 
         // link to select an individual facet value
-        final Link selectLink = new AjaxFallbackLink("facetSelect") {
+        final Link selectLink = new IndicatingAjaxFallbackLink("facetSelect") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -111,16 +116,35 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         return window;
     }
 
-    private AjaxFallbackLink createAllValuesLink(String id) {
-        final AjaxFallbackLink link = new AjaxFallbackLink(id) {
+    private Link createAllValuesLink(String id) {
+        final Link link = new AjaxFallbackLink<FacetField>(id, getModel()) {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                //TODO: No-javascript alternative (i.e. when target==null)
-                valuesWindow.show(target);
+                if (target == null) {
+                    // open a new page with values
+                    setResponsePage(new AllFacetValuesPage(getModel(), selectionModel));
+                } else {
+                    // show values in a popup (requires JavaScript)
+                    valuesWindow.show(target);
+                }
             }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                // only show if there actually are more values!
+                setVisible(getModel().getObject().getValueCount() > maxNumberOfFacetsToShow);
+            }
+
         };
         return link;
+    }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        selectionModel.detach();
     }
 
     /**

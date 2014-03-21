@@ -21,8 +21,8 @@ import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import java.util.Collections;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
  * Decorator for {@link FacetFieldsModel} for a selection of a single facet.
@@ -32,12 +32,26 @@ import org.apache.wicket.model.IModel;
  * retrieve the specified facet (through the constructor), otherwise it may not
  * be presented.
  *
+ * TODO: Provide some kind of batch retrieval and look up to prevent a call for
+ * each instance of this
+ *
  * @author twagoo
  */
-public class FacetFieldModel extends AbstractReadOnlyModel<FacetField> {
+public class FacetFieldModel extends LoadableDetachableModel<FacetField> {
 
     //todo: can probably be made more efficient/elegant than wrapping fields model
     private final FacetFieldsModel fieldsModel;
+
+    /**
+     *
+     * @param service service to use for facet field retrieval
+     * @param facetField facet field to provide
+     * @param selectionModel model that provides current query/selection
+     */
+    public FacetFieldModel(FacetFieldsService service, FacetField facetField, IModel<QueryFacetsSelection> selectionModel) {
+        super(facetField);
+        fieldsModel = new FacetFieldsModel(service, Collections.singletonList(facetField.getName()), selectionModel);
+    }
 
     /**
      *
@@ -50,7 +64,7 @@ public class FacetFieldModel extends AbstractReadOnlyModel<FacetField> {
     }
 
     @Override
-    public FacetField getObject() {
+    protected FacetField load() {
         final List<FacetField> fieldsList = fieldsModel.getObject();
         if (fieldsList == null || fieldsList.isEmpty()) {
             return null;

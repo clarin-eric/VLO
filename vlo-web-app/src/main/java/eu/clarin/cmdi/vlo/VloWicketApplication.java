@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import org.apache.wicket.Application;
@@ -62,7 +63,11 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         // Record (query result) page. E.g. /vlo/record?docId=abc123
         // (cannot encode docId in path because it contains a slash)
         mountPage("/record", RecordPage.class);
-
+        // All facet values page (kept for compatibility with old bookmarks)
+        // E.g. /vlo/values/genre?facetMinOccurs=1 (min occurs not in path 
+        // because it's a filter on the facet list)
+        mountPage("/values/${" + AllFacetValuesPage.SELECTED_FACET_PARAM + "}", AllFacetValuesPage.class);
+        
         // configure cache by applying the vlo configuration settings to it
         final int pagesInApplicationCache = vloConfig.getPagesInApplicationCache();
         logger.info("Setting Wicket in-memory cache size to {}", pagesInApplicationCache);

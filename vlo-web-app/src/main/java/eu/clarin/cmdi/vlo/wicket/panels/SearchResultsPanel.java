@@ -51,6 +51,8 @@ public class SearchResultsPanel extends Panel {
 
     public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, selectionModel);
+        add(new Label("title", new SearchResultsTitleModel(selectionModel)));
+
         solrDocumentProvider = new SolrDocumentProvider(selectionModel);
 
         // data view for search results
@@ -139,6 +141,26 @@ public class SearchResultsPanel extends Panel {
         resultPageSizeForm.add(pageSizeDropDown);
 
         return resultPageSizeForm;
+    }
+
+    private static class SearchResultsTitleModel extends AbstractReadOnlyModel<String> {
+
+        private final IModel<QueryFacetsSelection> selectionModel;
+
+        public SearchResultsTitleModel(IModel<QueryFacetsSelection> selectionModel) {
+            this.selectionModel = selectionModel;
+        }
+
+        @Override
+        public String getObject() {
+            final QueryFacetsSelection selection = selectionModel.getObject();
+            if ((selection.getQuery() == null || selection.getQuery().isEmpty())
+                    && (selection.getSelection() == null || selection.getSelection().isEmpty())) {
+                return "All records";
+            } else {
+                return "Search results";
+            }
+        }
     }
 
 }

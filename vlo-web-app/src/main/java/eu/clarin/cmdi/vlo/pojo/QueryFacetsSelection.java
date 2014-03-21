@@ -17,9 +17,9 @@
 package eu.clarin.cmdi.vlo.pojo;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -38,7 +38,16 @@ public class QueryFacetsSelection implements Serializable {
      * Creates an empty selection (no string, no facet values)
      */
     public QueryFacetsSelection() {
-        this(null, Collections.<String, Collection<String>>emptyMap());
+        this(null, Maps.<String, Collection<String>>newHashMap());
+    }
+
+    /**
+     * Creates a selection with an empty facet selection
+     *
+     * @param query query string
+     */
+    public QueryFacetsSelection(String query) {
+        this(query, Maps.<String, Collection<String>>newHashMap());
     }
 
     /**

@@ -20,9 +20,8 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -60,7 +59,7 @@ public class PermaLinkPanel extends GenericPanel<QueryFacetsSelection> {
         final IModel<String> linkModel = new PermaLinkModel(selectionmodel, documentModel);
 
         // action to link to request the permalink
-        add(new AjaxFallbackLink<String>("linkrequest", linkModel) {
+        add(new IndicatingAjaxFallbackLink<String>("linkrequest", linkModel) {
 
             @Override
             public void onClick(AjaxRequestTarget target) {

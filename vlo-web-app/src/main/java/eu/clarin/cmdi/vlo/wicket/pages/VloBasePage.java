@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import org.apache.wicket.markup.html.GenericWebPage;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -28,16 +28,21 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 public class VloBasePage<T> extends GenericWebPage<T> {
 
     public VloBasePage() {
+        addComponents();
     }
 
     public VloBasePage(IModel<T> model) {
         super(model);
+        addComponents();
     }
 
     public VloBasePage(PageParameters parameters) {
         super(parameters);
+        addComponents();
     }
-    
-    
-    
+
+    private void addComponents() {
+        add(new FeedbackPanel("feedback"));
+    }
+
 }

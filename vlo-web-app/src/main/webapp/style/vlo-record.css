@@ -164,8 +164,11 @@ a.recordattributeinfo:after {
     background-image: url('document-256.png'); /* icon from icons8.com */
 }
 
-.recordresourcedetails {
+#recordresourcedetailsContainer {
     clear: both;
+}
+
+.recordresourcedetails {
     border: 1px dashed;
     margin-left: 2em;
     padding: 1em;
