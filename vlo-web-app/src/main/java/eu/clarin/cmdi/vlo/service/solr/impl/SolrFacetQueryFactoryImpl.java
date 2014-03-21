@@ -57,6 +57,8 @@ public class SolrFacetQueryFactoryImpl extends AbstractSolrQueryFactory implemen
         query.setFacet(true);
         query.setFacetMinCount(1);
         query.addFacetField(facets);
+        // get *all* facet values
+        query.setFacetLimit(-1); //TODO: limit this when possible (i.e. in faceted search page can be way limited) 
         return query;
     }
     
