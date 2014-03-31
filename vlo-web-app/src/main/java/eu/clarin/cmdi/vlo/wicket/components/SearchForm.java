@@ -29,7 +29,7 @@ import org.apache.wicket.model.PropertyModel;
  *
  * @author twagoo
  */
-public class SearchForm extends Form<QueryFacetsSelection> {
+public abstract class SearchForm extends Form<QueryFacetsSelection> {
 
     public SearchForm(String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
@@ -42,14 +42,12 @@ public class SearchForm extends Form<QueryFacetsSelection> {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                if (target != null) {
-                    // For now refresh whole page
-                    // TODO: partial update
-                    target.add(getPage());
-                }
+                SearchForm.this.onSubmit(target);
             }
         }
         );
     }
+
+    protected abstract void onSubmit(AjaxRequestTarget target);
 
 }

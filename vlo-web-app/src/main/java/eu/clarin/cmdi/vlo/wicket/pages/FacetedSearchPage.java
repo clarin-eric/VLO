@@ -76,8 +76,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
         });
 
-        final SearchForm searchForm = new SearchForm("search", getModel());
-        add(searchForm);
+        add(createSearchForm("search"));
 
         collectionsPanel = createCollectionsPanel("collectionsFacet");
         add(collectionsPanel);
@@ -87,6 +86,18 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
         searchResultsPanel = new SearchResultsPanel("searchResults", getModel());
         add(searchResultsPanel);
+    }
+
+    private SearchForm createSearchForm(String id) {
+        final SearchForm searchForm = new SearchForm(id, getModel()) {
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                updateSelection(target);
+            }
+
+        };
+        return searchForm;
     }
 
     private Panel createCollectionsPanel(final String id) {
@@ -120,9 +131,11 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private void updateSelection(AjaxRequestTarget target) {
         // selection changed, update facets and search results
-        target.add(navigation);
-        target.add(searchResultsPanel);
-        target.add(facetsPanel);
-        target.add(collectionsPanel);
+        if (target != null) { // null if JavaScript disabled
+            target.add(navigation);
+            target.add(searchResultsPanel);
+            target.add(facetsPanel);
+            target.add(collectionsPanel);
+        }
     }
 }
