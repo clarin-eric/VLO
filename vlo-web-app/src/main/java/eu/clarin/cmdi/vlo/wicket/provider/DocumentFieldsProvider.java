@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.wicket.model.DocumentFieldModel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
@@ -36,7 +37,7 @@ public class DocumentFieldsProvider implements IDataProvider<DocumentField> {
 
     private final IModel<SolrDocument> documentModel;
     private final FieldFilter fieldFilter;
-    private Collection<DocumentFieldModel> fields;
+    private List<DocumentFieldModel> fields;
 
     /**
      *
@@ -48,7 +49,7 @@ public class DocumentFieldsProvider implements IDataProvider<DocumentField> {
         this.fieldFilter = fieldFilter;
     }
 
-    private Collection<DocumentFieldModel> getFields() {
+    private List<DocumentFieldModel> getFields() {
         if (fields == null) {
             // lazy loading/caching of included field models
             final Collection<String> allFields = documentModel.getObject().getFieldNames();
@@ -62,9 +63,15 @@ public class DocumentFieldsProvider implements IDataProvider<DocumentField> {
         return fields;
     }
 
+    /**
+     *
+     * @param first index of the first item in the list returned by the iterator
+     * @param count is ignored
+     * @return
+     */
     @Override
     public Iterator<? extends DocumentField> iterator(long first, long count) {
-        return getFields().iterator();
+        return getFields().listIterator((int) first);
     }
 
     @Override
