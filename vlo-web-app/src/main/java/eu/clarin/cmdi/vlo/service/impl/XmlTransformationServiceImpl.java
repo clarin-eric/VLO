@@ -53,8 +53,7 @@ public class XmlTransformationServiceImpl implements XmlTransformationService {
      *
      * @param xsltSource source of the stylesheet to use in {@link #transformXml(java.net.URL)
      * }
-     * @
-     * param properties transformation properties to be passed to the
+     * @param properties transformation properties to be passed to the
      * transformer object before transformation
      * @throws TransformerConfigurationException if the transformer could not be
      * configured correctly
