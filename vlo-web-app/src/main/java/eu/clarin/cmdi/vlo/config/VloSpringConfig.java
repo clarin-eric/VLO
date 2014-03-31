@@ -34,6 +34,8 @@ import eu.clarin.cmdi.vlo.service.solr.impl.QueryFacetsSelectionParametersConver
 import eu.clarin.cmdi.vlo.service.impl.ResourceStringConverterImpl;
 import eu.clarin.cmdi.vlo.service.impl.ResourceTypeCountingServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.XmlTransformationServiceImpl;
+import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
+import eu.clarin.cmdi.vlo.service.solr.impl.AutoCompleteServiceImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SearchResultsDaoImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentQueryFactoryImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentServiceImpl;
@@ -109,6 +111,11 @@ public class VloSpringConfig {
     @Bean
     public SolrDocumentQueryFactoryImpl documentQueryFactory() {
         return new SolrDocumentQueryFactoryImpl();
+    }
+
+    @Bean
+    public AutoCompleteService autoCompleteService() {
+        return new AutoCompleteServiceImpl(solrServer(), vloConfig());
     }
 
     @Bean

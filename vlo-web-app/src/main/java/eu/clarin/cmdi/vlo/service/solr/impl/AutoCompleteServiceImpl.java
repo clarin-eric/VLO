@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
+import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,9 +17,9 @@ import org.apache.solr.client.solrj.response.SpellCheckResponse.Suggestion;
  * @author Thomas Eckart
  *
  */
-public class AutoCompleteDao extends SolrDaoImpl {
+public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoCompleteService {
 
-    public AutoCompleteDao(SolrServer solrServer, VloConfig config) {
+    public AutoCompleteServiceImpl(SolrServer solrServer, VloConfig config) {
         super(solrServer, config);
     }
     
@@ -29,6 +30,7 @@ public class AutoCompleteDao extends SolrDaoImpl {
      * @param input user input
      * @return list of suggestions
      */
+    @Override
     public List<String> getChoices(String input) {
         List<String> choices = new ArrayList<String>();
 
