@@ -1,8 +1,8 @@
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
+import com.google.common.collect.Iterators;
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -15,6 +15,7 @@ import org.apache.solr.client.solrj.response.SpellCheckResponse.Suggestion;
  * DAO that delivers suggestions for incomplete terms (autocomplete function)
  *
  * @author Thomas Eckart
+ * @author Twan Goosen
  *
  */
 public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoCompleteService {
@@ -28,28 +29,26 @@ public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoComplete
      * function)
      *
      * @param input user input
-     * @return list of suggestions
+     * @return iterator over suggestions
      */
     @Override
-    public List<String> getChoices(String input) {
-        List<String> choices = new ArrayList<String>();
-
+    public Iterator<String> getChoices(String input) {
         if (input != null) {
-            SolrQuery query = new SolrQuery();
+            
+            final SolrQuery query = new SolrQuery();
             query.setQuery(input.toLowerCase());
-            query.setQueryType("/suggest");
-            QueryResponse response = fireQuery(sanitise(query));
+            query.setRequestHandler("/suggest");
+            
+            final QueryResponse response = fireQuery(sanitise(query));
+            
             if (response.getSpellCheckResponse() != null) {
-                List<Suggestion> suggestions = response.getSpellCheckResponse().getSuggestions();
+                final List<Suggestion> suggestions = response.getSpellCheckResponse().getSuggestions();
                 if (suggestions.size() > 0) {
-                    Iterator<String> iter = suggestions.get(0).getAlternatives().iterator();
-                    while (iter.hasNext()) {
-                        choices.add(iter.next());
-                    }
+                    return suggestions.get(0).getAlternatives().iterator();
                 }
             }
         }
 
-        return choices;
+        return Iterators.emptyIterator();
     }
 }

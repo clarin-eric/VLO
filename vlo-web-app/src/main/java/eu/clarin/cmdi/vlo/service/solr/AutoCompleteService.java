@@ -17,7 +17,7 @@
 
 package eu.clarin.cmdi.vlo.service.solr;
 
-import java.util.List;
+import java.util.Iterator;
 
 /**
  *
@@ -30,8 +30,8 @@ public interface AutoCompleteService {
      * function)
      *
      * @param input user input
-     * @return list of suggestions
+     * @return iterator over suggestions
      */
-    List<String> getChoices(String input);
+    Iterator<String> getChoices(String input);
     
 }

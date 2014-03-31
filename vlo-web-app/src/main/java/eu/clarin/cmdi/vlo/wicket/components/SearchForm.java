@@ -45,7 +45,7 @@ public abstract class SearchForm extends Form<QueryFacetsSelection> {
 
             @Override
             protected Iterator<String> getChoices(String input) {
-                return autoCompleteDao.getChoices(input).iterator();
+                return autoCompleteDao.getChoices(input);
             }
         });
 
