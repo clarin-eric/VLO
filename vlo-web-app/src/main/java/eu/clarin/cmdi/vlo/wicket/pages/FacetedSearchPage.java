@@ -110,6 +110,14 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
             protected void selectionChanged(AjaxRequestTarget target) {
                 updateSelection(target);
             }
+
+            @Override
+            protected boolean isHideIfNoValues() {
+                // collections facets should always be visible, even if no
+                // values are present (due to no search results)
+                return false;
+            }
+
         };
         panel.setOutputMarkupId(true);
         return panel;

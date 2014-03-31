@@ -101,7 +101,16 @@ public abstract class FacetPanel extends Panel {
         selectedFacetPanel.setVisible(valuesSelected);
 
         // hide this entire panel is no values are selectable
-        setVisible(valuesSelected || selectionModel.getObject().getFacetField().getValueCount() > 0);
+        setVisible(!isHideIfNoValues() || valuesSelected || selectionModel.getObject().getFacetField().getValueCount() > 0);
+    }
+
+    /**
+     *
+     * @return whether the panel should be hidden if no values are present given
+     * the current selection and query
+     */
+    protected boolean isHideIfNoValues() {
+        return true;
     }
 
     private FacetValuesPanel createFacetValuesPanel(String id) {

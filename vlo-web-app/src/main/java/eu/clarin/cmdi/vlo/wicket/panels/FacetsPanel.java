@@ -29,7 +29,6 @@ import java.util.Map;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -92,12 +91,12 @@ public abstract class FacetsPanel extends GenericPanel<List<FacetField>> {
         // facet list is not dynamic, so reuse items
         facetsView.setReuseItems(true);
         add(facetsView);
-        
+
         // links to expand, collapse or deselect all facets
         add(createBatchLinks("batchLinks", selectionModel));
     }
 
-    private Component createBatchLinks(String id,final IModel<QueryFacetsSelection> selectionModel) {
+    private Component createBatchLinks(String id, final IModel<QueryFacetsSelection> selectionModel) {
         final WebMarkupContainer links = new WebMarkupContainer(id);
         links.add(new IndicatingAjaxFallbackLink("expandAll") {
 
