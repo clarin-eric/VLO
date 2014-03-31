@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.service.solr.impl;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentQueryFactory;
+import java.util.Collection;
 import org.apache.solr.client.solrj.SolrQuery;
 
 /**
@@ -27,31 +28,20 @@ import org.apache.solr.client.solrj.SolrQuery;
  */
 public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrDocumentQueryFactory {
 
-    public static final String[] DOCUMENT_FIELDS = {
-        FacetConstants.FIELD_NAME,
-        FacetConstants.FIELD_DESCRIPTION,
-        FacetConstants.FIELD_COLLECTION,
-        FacetConstants.FIELD_LANGUAGE,
-        FacetConstants.FIELD_MODALITY,
-        FacetConstants.FIELD_CONTINENT,
-        FacetConstants.FIELD_COUNTRY,
-        FacetConstants.FIELD_GENRE,
-        FacetConstants.FIELD_SUBJECT,
-        FacetConstants.FIELD_ORGANISATION,
-        FacetConstants.FIELD_KEYWORDS,
-        FacetConstants.FIELD_NATIONAL_PROJECT,
-        FacetConstants.FIELD_RESOURCE_CLASS,
-        FacetConstants.FIELD_RESOURCE,
-        FacetConstants.FIELD_ID,
-        FacetConstants.FIELD_DATA_PROVIDER,
-        FacetConstants.FIELD_FILENAME,
-        FacetConstants.FIELD_FORMAT,
-        FacetConstants.FIELD_LANDINGPAGE,
-        FacetConstants.FIELD_SEARCHPAGE,
-        FacetConstants.FIELD_SEARCH_SERVICE,
-        FacetConstants.FIELD_LAST_SEEN,
-        FacetConstants.FIELD_CLARIN_PROFILE
-    };
+    /**
+     * Template query for new document queries
+     */
+    private final SolrQuery defaultQueryTemplate;
+
+    /**
+     * 
+     * @param documentFields fields that should be included in document queries
+     */
+    public SolrDocumentQueryFactoryImpl(Collection<String> documentFields) {
+        defaultQueryTemplate = new SolrQuery();
+        defaultQueryTemplate.setFields(documentFields.toArray(new String[]{}));
+        defaultQueryTemplate.setSort(SolrQuery.SortClause.asc(FacetConstants.FIELD_NAME));
+    }
 
     @Override
     public SolrQuery createDocumentQuery(QueryFacetsSelection selection, int first, int count) {
@@ -80,9 +70,6 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
     }
 
     private SolrQuery getDefaultDocumentQuery() {
-        SolrQuery query = new SolrQuery();
-        query.setFields(DOCUMENT_FIELDS);
-        query.setSort(SolrQuery.SortClause.asc(FacetConstants.FIELD_NAME));
-        return query;
+        return defaultQueryTemplate.getCopy();
     }
 }

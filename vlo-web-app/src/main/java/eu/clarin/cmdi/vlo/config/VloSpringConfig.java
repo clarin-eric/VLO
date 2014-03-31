@@ -16,9 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.config;
 
+import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
 import eu.clarin.cmdi.vlo.service.impl.InclusiveFieldFilter;
 import com.google.common.collect.Sets;
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
@@ -42,6 +44,8 @@ import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentServiceImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrFacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrFacetQueryFactoryImpl;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Properties;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
@@ -110,7 +114,7 @@ public class VloSpringConfig {
 
     @Bean
     public SolrDocumentQueryFactoryImpl documentQueryFactory() {
-        return new SolrDocumentQueryFactoryImpl();
+        return new SolrDocumentQueryFactoryImpl(DOCUMENT_FIELDS);
     }
 
     @Bean
@@ -161,4 +165,33 @@ public class VloSpringConfig {
         return new InclusiveFieldFilter(
                 vloConfig().getTechnicalFields());
     }
+
+    /**
+     * Fields to request for documents. TODO: Make configurable?
+     */
+    public static final Collection<String> DOCUMENT_FIELDS = ImmutableList.of(
+            FacetConstants.FIELD_NAME,
+            FacetConstants.FIELD_DESCRIPTION,
+            FacetConstants.FIELD_COLLECTION,
+            FacetConstants.FIELD_LANGUAGE,
+            FacetConstants.FIELD_MODALITY,
+            FacetConstants.FIELD_CONTINENT,
+            FacetConstants.FIELD_COUNTRY,
+            FacetConstants.FIELD_GENRE,
+            FacetConstants.FIELD_SUBJECT,
+            FacetConstants.FIELD_ORGANISATION,
+            FacetConstants.FIELD_KEYWORDS,
+            FacetConstants.FIELD_NATIONAL_PROJECT,
+            FacetConstants.FIELD_RESOURCE_CLASS,
+            FacetConstants.FIELD_RESOURCE,
+            FacetConstants.FIELD_ID,
+            FacetConstants.FIELD_DATA_PROVIDER,
+            FacetConstants.FIELD_FILENAME,
+            FacetConstants.FIELD_FORMAT,
+            FacetConstants.FIELD_LANDINGPAGE,
+            FacetConstants.FIELD_SEARCHPAGE,
+            FacetConstants.FIELD_SEARCH_SERVICE,
+            FacetConstants.FIELD_LAST_SEEN,
+            FacetConstants.FIELD_CLARIN_PROFILE
+    );
 }
