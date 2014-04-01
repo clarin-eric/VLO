@@ -18,7 +18,6 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
@@ -45,6 +44,8 @@ import org.apache.wicket.util.convert.IConverter;
 public class SearchResultItemPanel extends Panel {
 
     private final static ResourceTypeCountConverter resourceTypeCountConverter = new ResourceTypeCountConverter();
+    private static final int MAX_DESCRIPTION_LENGTH = 350;
+    private static final int LONG_DESCRIPTION_TRUNCATE_POINT = 320;
 
     @SpringBean
     private ResourceTypeCountingService countingService;
@@ -60,7 +61,7 @@ public class SearchResultItemPanel extends Panel {
         recordLink.add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME));
         add(recordLink);
 
-        add(new SolrFieldLabel("description", documentModel, FacetConstants.FIELD_DESCRIPTION, "<no description>"));
+        add(new SolrFieldLabel("description", documentModel, FacetConstants.FIELD_DESCRIPTION, "<no description>", MAX_DESCRIPTION_LENGTH, LONG_DESCRIPTION_TRUNCATE_POINT));
 
         // get model for resources
         final SolrFieldModel<String> resourcesModel = new SolrFieldModel<String>(documentModel, FacetConstants.FIELD_RESOURCE);

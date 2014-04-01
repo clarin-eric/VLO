@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
+import eu.clarin.cmdi.vlo.wicket.model.TruncatingStringModel;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
@@ -28,12 +29,54 @@ import org.apache.wicket.model.IModel;
  */
 public class SolrFieldLabel extends Label {
 
+    /**
+     *
+     * @param id id of label
+     * @param documentModel model that holds document to show field of
+     * @param fieldName name of field to show value of
+     */
     public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName) {
         super(id, new SolrFieldStringModel(documentModel, fieldName));
     }
 
+    /**
+     *
+     * @param id id of label
+     * @param documentModel model that holds document to show field of
+     * @param fieldName name of field to show value of
+     * @param maxLength maximum length to allow
+     * @param truncatePoint point to truncate if string is too long
+     */
+    public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, int maxLength, int truncatePoint) {
+        super(id,
+                new TruncatingStringModel(
+                        new SolrFieldStringModel(documentModel, fieldName), maxLength, truncatePoint));
+    }
+
+    /**
+     *
+     * @param id id of label
+     * @param documentModel model that holds document to show field of
+     * @param fieldName name of field to show value of
+     * @param nullFallback string to show if actual value is null
+     */
     public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, String nullFallback) {
         super(id, new NullFallbackModel(new SolrFieldStringModel(documentModel, fieldName), nullFallback));
+    }
+
+    /**
+     *
+     * @param id id of label
+     * @param documentModel model that holds document to show field of
+     * @param fieldName name of field to show value of
+     * @param nullFallback string to show if actual value is null
+     * @param maxLength maximum length to allow
+     * @param truncatePoint point to truncate if string is too long
+     */
+    public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, String nullFallback, int maxLength, int truncatePoint) {
+        super(id, new NullFallbackModel(
+                new TruncatingStringModel(
+                        new SolrFieldStringModel(documentModel, fieldName), maxLength, truncatePoint), nullFallback));
     }
 
 }
