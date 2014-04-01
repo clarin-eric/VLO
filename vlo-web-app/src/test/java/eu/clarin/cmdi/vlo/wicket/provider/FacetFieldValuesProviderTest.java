@@ -146,7 +146,7 @@ public class FacetFieldValuesProviderTest {
      */
     @Test
     public void testFiltered() {
-        final Model filterModel = Model.of("f");
+        final Model filterModel = Model.of("th");
         final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, true)) {
 
             @Override
@@ -160,14 +160,14 @@ public class FacetFieldValuesProviderTest {
         final long count = 100;
         final Iterator<? extends FacetField.Count> result = instance.iterator(first, count);
 
-        //sorted by name, filtered on first character 'f'
+        //sorted by name, filtered on presence of 'th'
         assertTrue(result.hasNext());
         FacetField.Count valueCount = result.next();
-        assertEquals("first value", valueCount.getName());
+        assertEquals("fourth value", valueCount.getName());
 
         assertTrue(result.hasNext());
         valueCount = result.next();
-        assertEquals("fourth value", valueCount.getName());
+        assertEquals("third value", valueCount.getName());
 
         assertFalse(result.hasNext());
     }

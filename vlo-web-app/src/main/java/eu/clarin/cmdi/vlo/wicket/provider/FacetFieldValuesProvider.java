@@ -122,7 +122,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
             return Iterables.filter(list, new Predicate<FacetField.Count>() {
                 @Override
                 public boolean apply(Count input) {
-                    return input.getName().toLowerCase().startsWith(filterValue);
+                    return input.getName().toLowerCase().contains(filterValue);
                 }
             });
         } else {
