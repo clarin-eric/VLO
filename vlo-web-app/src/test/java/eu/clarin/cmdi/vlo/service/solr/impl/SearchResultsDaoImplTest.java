@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.util.AbstractSolrTestCase;
 import org.hamcrest.Matchers;
@@ -47,10 +48,29 @@ public class SearchResultsDaoImplTest extends AbstractSolrTestCase {
     @Before
     @Override
     public void setUp() throws Exception {
+        // set up an embedded solr server
         super.setUp();
         initCore(getResourcePath(getConfigString()), getResourcePath(getSchemaString()));
         server = new EmbeddedSolrServer(h.getCoreContainer(), h.getCore().getName());
         instance = new SearchResultsDaoImpl(server, new VloConfig());
+
+        // add some documents
+        int id = 1;
+        CMDIData cmdiData = new CMDIData();
+        cmdiData.addDocField(FacetConstants.FIELD_COLLECTION, "Collection1", false);
+        cmdiData.addDocField(FacetConstants.FIELD_COUNTRY, "Country1", false);
+        SolrInputDocument document = cmdiData.getSolrDocument();
+        document.addField("id", Integer.toString(id++));
+        server.add(document);
+
+        cmdiData = new CMDIData();
+        cmdiData.addDocField(FacetConstants.FIELD_COLLECTION, "Collection1", false);
+        cmdiData.addDocField(FacetConstants.FIELD_COUNTRY, "Country2", false);
+        document = cmdiData.getSolrDocument();
+        document.addField("id", Integer.toString(id++));
+        server.add(document);
+
+        server.commit();
     }
 
     @After
@@ -64,27 +84,12 @@ public class SearchResultsDaoImplTest extends AbstractSolrTestCase {
 
     /**
      * Test of getFacets method, of class SearchResultsDaoImpl.
+     *
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetFacets() throws Exception {
-        int id = 1;
-        CMDIData cmdiData = new CMDIData();
-        cmdiData.addDocField(FacetConstants.FIELD_COLLECTION, "Collection1", false);
-        cmdiData.addDocField(FacetConstants.FIELD_COUNTRY, "Country1", false);
-        SolrInputDocument document = cmdiData.getSolrDocument();
-        document.addField("id", Integer.toString(id++));
-        server.add(document);
-        server.commit();
-
-        cmdiData = new CMDIData();
-        cmdiData.addDocField(FacetConstants.FIELD_COLLECTION, "Collection1", false);
-        cmdiData.addDocField(FacetConstants.FIELD_COUNTRY, "Country2", false);
-        document = cmdiData.getSolrDocument();
-        document.addField("id", Integer.toString(id++));
-        server.add(document);
-        server.commit();
-
-        SolrQuery query = new SolrQuery();
+        final SolrQuery query = new SolrQuery();
         query.setRows(10);
         query.setStart(0);
         query.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID, FacetConstants.FIELD_DESCRIPTION);
@@ -107,6 +112,30 @@ public class SearchResultsDaoImplTest extends AbstractSolrTestCase {
         assertThat(facetFields, Matchers.<FacetField>hasItem(Matchers.allOf(
                 Matchers.<FacetField>hasProperty("name", equalTo(FacetConstants.FIELD_COUNTRY)),
                 Matchers.<FacetField>hasProperty("valueCount", equalTo(2)))));
+    }
+
+    @Test
+    public void testGetDocuments() {
+        // get all documents
+        SolrQuery query = new SolrQuery();
+        query.setRows(10);
+        query.setStart(0);
+        query.setFields(FacetConstants.FIELD_NAME, FacetConstants.FIELD_ID, FacetConstants.FIELD_DESCRIPTION);
+        query.setQuery("*:*");
+        {
+            // all documents should match this
+            SolrDocumentList documents = instance.getDocuments(query);
+            assertEquals(2, documents.getNumFound());
+        }
+
+        // get document with specific field value
+        query.setQuery(FacetConstants.FIELD_COUNTRY + ":Country1");
+        {
+            // only document with id "1" should match this
+            SolrDocumentList documents = instance.getDocuments(query);
+            assertEquals(1, documents.getNumFound());
+            assertEquals("1", documents.get(0).getFieldValue(FacetConstants.FIELD_ID));
+        }
     }
 
     public static String getSchemaString() {
