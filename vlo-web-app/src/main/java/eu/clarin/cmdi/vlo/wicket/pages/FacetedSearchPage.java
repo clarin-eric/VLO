@@ -5,6 +5,7 @@ import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.wicket.panels.FacetsPanel;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.panels.FacetPanel;
 import eu.clarin.cmdi.vlo.wicket.components.SearchForm;
 import eu.clarin.cmdi.vlo.wicket.panels.SearchResultsPanel;
@@ -32,7 +33,9 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private static final long serialVersionUID = 1L;
-
+    
+    @SpringBean
+    private FacetFieldsService facetFieldsService;
     @SpringBean
     private VloConfig vloConfig;
     @SpringBean
@@ -100,7 +103,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private Panel createCollectionsPanel(final String id) {
         final IModel<QueryFacetsSelection> queryModel = getModel();
-        final FacetFieldModel collectionFacetFieldModel = new FacetFieldModel(vloConfig.getCollectionFacet(), queryModel, FacetValuesPanel.MAX_NUMBER_OF_FACETS_TO_SHOW);
+        final FacetFieldModel collectionFacetFieldModel = new FacetFieldModel(facetFieldsService, vloConfig.getCollectionFacet(), queryModel, FacetValuesPanel.MAX_NUMBER_OF_FACETS_TO_SHOW);
         final FacetSelectionModel collectionSelectionModel = new FacetSelectionModel(collectionFacetFieldModel, queryModel);
         final FacetPanel panel = new FacetPanel(id, collectionSelectionModel, new Model<ExpansionState>(ExpansionState.COLLAPSED)) {
 
@@ -123,7 +126,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private Panel createFacetsPanel(final String id) {
         final IModel<QueryFacetsSelection> queryModel = getModel();
-        final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(vloConfig.getFacetFields(), queryModel, FacetValuesPanel.MAX_NUMBER_OF_FACETS_TO_SHOW);
+        final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(facetFieldsService, vloConfig.getFacetFields(), queryModel, FacetValuesPanel.MAX_NUMBER_OF_FACETS_TO_SHOW);
         final FacetsPanel panel = new FacetsPanel(id, facetFieldsModel, queryModel) {
 
             @Override

@@ -47,9 +47,9 @@ public class FacetFieldModel extends LoadableDetachableModel<FacetField> {
      * @param facetField facet field to provide
      * @param selectionModel model that provides current query/selection
      */
-    public FacetFieldModel(FacetField facetField, IModel<QueryFacetsSelection> selectionModel) {
+    public FacetFieldModel(FacetFieldsService service, FacetField facetField, IModel<QueryFacetsSelection> selectionModel) {
         super(facetField);
-        fieldsModel = new FacetFieldsModel(Collections.singletonList(facetField.getName()), selectionModel, -1);
+        fieldsModel = new FacetFieldsModel(service, Collections.singletonList(facetField.getName()), selectionModel, -1);
     }
 
     /**
@@ -58,17 +58,8 @@ public class FacetFieldModel extends LoadableDetachableModel<FacetField> {
      * @param facet facet to provide
      * @param selectionModel model that provides current query/selection
      */
-    protected FacetFieldModel(FacetFieldsService service, String facet, IModel<QueryFacetsSelection> selectionModel, int valueLimit) {
+    public FacetFieldModel(FacetFieldsService service, String facet, IModel<QueryFacetsSelection> selectionModel, int valueLimit) {
         fieldsModel = new FacetFieldsModel(service, Collections.singletonList(facet), selectionModel, valueLimit);
-    }    
-    
-    /**
-     *
-     * @param facet facet to provide
-     * @param selectionModel model that provides current query/selection
-     */
-    public FacetFieldModel(String facet, IModel<QueryFacetsSelection> selectionModel, int valueLimit) {
-        fieldsModel = new FacetFieldsModel(Collections.singletonList(facet), selectionModel, valueLimit);
     }
 
     @Override

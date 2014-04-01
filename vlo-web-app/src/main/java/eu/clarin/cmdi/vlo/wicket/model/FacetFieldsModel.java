@@ -48,24 +48,13 @@ public class FacetFieldsModel extends LoadableDetachableModel<List<FacetField>> 
 
     /**
      *
-     * @param facets facets to include
-     * @param selectionModel model that provides current query/selection
-     * @param valueLimit maximum number of values to retrieve per facet.
-     * Negative for unlimited
-     */
-    public FacetFieldsModel(List<String> facets, IModel<QueryFacetsSelection> selectionModel, int valueLimit) {
-        this(VloWicketApplication.get().getFacetFieldsService(), facets, selectionModel, valueLimit);
-    }
-
-    /**
-     *
      * @param service service to use for facet field retrieval
      * @param facets facets to include
      * @param selectionModel model that provides current query/selection
      * @param valueLimit maximum number of values to retrieve per facet.
      * Negative for unlimited
      */
-    protected FacetFieldsModel(FacetFieldsService service, List<String> facets, IModel<QueryFacetsSelection> selectionModel, int valueLimit) {
+    public FacetFieldsModel(FacetFieldsService service, List<String> facets, IModel<QueryFacetsSelection> selectionModel, int valueLimit) {
         this.service = service;
         this.facets = facets;
         this.selectionModel = selectionModel;

@@ -116,9 +116,5 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     public XmlTransformationService getCmdiTransformationService() {
         return cmdiTransformationService;
     }
-    
-    public FacetFieldsService getFacetFieldsService() {
-        return facetFieldsService;
-    }
 
 }

@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.panels.AllFacetValuesPanel;
@@ -44,6 +45,8 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
     public final static String SELECTED_FACET_PARAM = "selectedFacet";
 
     @SpringBean
+    private FacetFieldsService facetFieldsService;
+    @SpringBean
     private PageParametersConverter<QueryFacetsSelection> parametersConverter;
 
     private final IModel<QueryFacetsSelection> selectionModel;
@@ -59,7 +62,7 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
         }
 
         // create a new model so that all values will be retrieved
-        setModel(new FacetFieldModel(facet.toString(), selectionModel, -1)); // gets all facet values
+        setModel(new FacetFieldModel(facetFieldsService, facet.toString(), selectionModel, -1)); // gets all facet values
         if (getModelObject() == null) {
             Session.get().error(String.format("Facet '%s' could not be found", facet));
             throw new RestartResponseException(new FacetedSearchPage(selectionModel));
