@@ -21,7 +21,7 @@ import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
-import eu.clarin.cmdi.vlo.wicket.panels.AllFacetValuesPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.search.AllFacetValuesPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import java.util.Collection;
 import org.apache.solr.client.solrj.response.FacetField;

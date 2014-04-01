@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.components;
 
 import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
-import eu.clarin.cmdi.vlo.wicket.panels.AllFacetValuesPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.search.AllFacetValuesPanel;
 import java.util.List;
 import java.util.Locale;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
