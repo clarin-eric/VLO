@@ -39,8 +39,8 @@ public class FacetFieldValuesProviderTest {
         facetField = new FacetField("field");
         facetField.add("first value", 101);
         facetField.add("second value", 102);
-        facetField.add("third value", 103);
-        facetField.add("fourth value", 104);
+        facetField.add("third value", 103);  
+        facetField.add("FOURTH value", 104); //intentional upper case, sort and filter should be case insensitive
     }
 
     /**
@@ -96,7 +96,7 @@ public class FacetFieldValuesProviderTest {
 
         assertTrue(result.hasNext());
         valueCount = result.next();
-        assertEquals("fourth value", valueCount.getName());
+        assertEquals("FOURTH value", valueCount.getName()); // case insensitive sorting
 
         assertTrue(result.hasNext());
         valueCount = result.next();
@@ -163,7 +163,7 @@ public class FacetFieldValuesProviderTest {
         //sorted by name, filtered on presence of 'th'
         assertTrue(result.hasNext());
         FacetField.Count valueCount = result.next();
-        assertEquals("fourth value", valueCount.getName());
+        assertEquals("FOURTH value", valueCount.getName());
 
         assertTrue(result.hasNext());
         valueCount = result.next();

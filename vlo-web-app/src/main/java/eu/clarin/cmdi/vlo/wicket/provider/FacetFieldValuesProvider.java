@@ -167,7 +167,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
         public int compare(Count arg0, Count arg1) {
             // TODO: From old VLO:
             // IGNORABLE_VALUES (like "unknown") are move to the back of the list and should only be shown when you click "more...", unless the list is too small then whe can just show them.
-            return arg0.getName().compareTo(arg1.getName());
+            return arg0.getName().compareToIgnoreCase(arg1.getName());
         }
     };
 
