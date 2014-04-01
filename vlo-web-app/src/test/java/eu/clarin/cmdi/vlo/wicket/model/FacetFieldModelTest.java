@@ -19,7 +19,6 @@ package eu.clarin.cmdi.vlo.wicket.model;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import java.util.Arrays;
-import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -55,11 +54,11 @@ public class FacetFieldModelTest {
      */
     @Test
     public void testGetObject() {
-        final FacetFieldModel instance = new FacetFieldModel(service, "facet4", selectionModel);
+        final FacetFieldModel instance = new FacetFieldModel(service, "facet4", selectionModel, 20);
 
         context.checking(new Expectations() {
             {
-                oneOf(service).getFacetFields(selection);
+                oneOf(service).getFacetFields(selection, 20);
                 will(returnValue(Arrays.asList(
                         new FacetField("facet1"),
                         new FacetField("facet2"),
@@ -83,11 +82,11 @@ public class FacetFieldModelTest {
      */
     @Test
     public void testGetObjectNotIncluded() {
-        final FacetFieldModel instance = new FacetFieldModel(service, "facet4", selectionModel);
+        final FacetFieldModel instance = new FacetFieldModel(service, "facet4", selectionModel, 20);
 
         context.checking(new Expectations() {
             {
-                oneOf(service).getFacetFields(selection);
+                oneOf(service).getFacetFields(selection, 20);
                 will(returnValue(Arrays.asList(
                         new FacetField("facet1"),
                         new FacetField("facet2")

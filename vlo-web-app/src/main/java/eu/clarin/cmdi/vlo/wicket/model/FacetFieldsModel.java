@@ -44,9 +44,17 @@ public class FacetFieldsModel extends LoadableDetachableModel<List<FacetField>> 
     private final FacetFieldsService service;
     private final List<String> facets;
     private final IModel<QueryFacetsSelection> selectionModel;
+    private final int valueLimit;
 
-    public FacetFieldsModel(List<String> facets, IModel<QueryFacetsSelection> selectionModel) {
-        this(VloWicketApplication.get().getFacetFieldsService(), facets, selectionModel);
+    /**
+     *
+     * @param facets facets to include
+     * @param selectionModel model that provides current query/selection
+     * @param valueLimit maximum number of values to retrieve per facet.
+     * Negative for unlimited
+     */
+    public FacetFieldsModel(List<String> facets, IModel<QueryFacetsSelection> selectionModel, int valueLimit) {
+        this(VloWicketApplication.get().getFacetFieldsService(), facets, selectionModel, valueLimit);
     }
 
     /**
@@ -54,16 +62,19 @@ public class FacetFieldsModel extends LoadableDetachableModel<List<FacetField>> 
      * @param service service to use for facet field retrieval
      * @param facets facets to include
      * @param selectionModel model that provides current query/selection
+     * @param valueLimit maximum number of values to retrieve per facet.
+     * Negative for unlimited
      */
-    protected FacetFieldsModel(FacetFieldsService service, List<String> facets, IModel<QueryFacetsSelection> selectionModel) {
+    protected FacetFieldsModel(FacetFieldsService service, List<String> facets, IModel<QueryFacetsSelection> selectionModel, int valueLimit) {
         this.service = service;
         this.facets = facets;
         this.selectionModel = selectionModel;
+        this.valueLimit = valueLimit;
     }
 
     @Override
     protected List<FacetField> load() {
-        final List<FacetField> allFacetFields = service.getFacetFields(selectionModel.getObject());
+        final List<FacetField> allFacetFields = service.getFacetFields(selectionModel.getObject(), valueLimit);
         final Collection<FacetField> filtered = Collections2.filter(allFacetFields, new Predicate<FacetField>() {
 
             @Override

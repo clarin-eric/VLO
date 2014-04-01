@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.service.solr;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.List;
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 
 /**
@@ -28,14 +29,16 @@ import org.apache.solr.client.solrj.response.FacetField;
 public interface FacetFieldsService {
 
     /**
-     * 
+     *
      * @param selection query and selected facet values
+     * @param valueLimit limits the number of values to retrieve per facet,
+     * negative for unlimited (see {@link SolrQuery#getFacetLimit() })
      * @return facet field objects representing the state of all present facets
      */
-    List<FacetField> getFacetFields(QueryFacetsSelection selection);
+    List<FacetField> getFacetFields(QueryFacetsSelection selection, int valueLimit);
 
     /**
-     * 
+     *
      * @return the total number of facets
      */
     long getFacetFieldCount();

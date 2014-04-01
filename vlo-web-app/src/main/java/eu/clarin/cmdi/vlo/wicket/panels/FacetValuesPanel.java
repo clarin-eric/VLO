@@ -43,7 +43,7 @@ import org.apache.wicket.model.IModel;
  */
 public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
-    private final static int maxNumberOfFacetsToShow = 10; //TODO: get from config
+    public final static int MAX_NUMBER_OF_FACETS_TO_SHOW = 10; //TODO: get from config
 
     private final ModalWindow valuesWindow;
     private final IModel<QueryFacetsSelection> selectionModel;
@@ -53,7 +53,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         this.selectionModel = selectionModel;
 
         // provider that extracts values and counts from FacetField
-        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(model, maxNumberOfFacetsToShow);
+        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(model, MAX_NUMBER_OF_FACETS_TO_SHOW);
         add(new DataView<Count>("facetValues", valuesProvider) {
 
             @Override
@@ -134,7 +134,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             protected void onConfigure() {
                 super.onConfigure();
                 // only show if there actually are more values!
-                setVisible(getModel().getObject().getValueCount() > maxNumberOfFacetsToShow);
+                setVisible(getModel().getObject().getValueCount() > MAX_NUMBER_OF_FACETS_TO_SHOW);
             }
 
         };

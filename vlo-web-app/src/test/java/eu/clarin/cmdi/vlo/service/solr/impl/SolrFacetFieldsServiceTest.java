@@ -64,14 +64,14 @@ public class SolrFacetFieldsServiceTest {
 
         context.checking(new Expectations() {
             {
-                oneOf(queryFactory).createFacetQuery(selection);
+                oneOf(queryFactory).createFacetQuery(selection, 20);
                 will(returnValue(query));
                 oneOf(dao).getFacets(query);
                 will(returnValue(fields));
             }
         });
 
-        final List<FacetField> result = instance.getFacetFields(selection);
+        final List<FacetField> result = instance.getFacetFields(selection, 20);
         assertEquals(fields, result);
     }
 

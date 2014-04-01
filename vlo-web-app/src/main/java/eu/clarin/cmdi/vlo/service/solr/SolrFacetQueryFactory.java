@@ -27,7 +27,14 @@ import org.apache.solr.client.solrj.SolrQuery;
  */
 public interface SolrFacetQueryFactory {
 
-    SolrQuery createFacetQuery(QueryFacetsSelection selection);
+    /**
+     *
+     * @param selection selection to get facets and value counts for
+     * @param valueLimit limits the number of values to retrieve per facet,
+     * negative for unlimited (see {@link SolrQuery#getFacetLimit() })
+     * @return query for retrieving the facets
+     */
+    SolrQuery createFacetQuery(QueryFacetsSelection selection, int valueLimit);
 
     SolrQuery createCountFacetsQuery();
 

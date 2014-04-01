@@ -12,6 +12,7 @@ import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.FacetValuesPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.PermaLinkPanel;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
@@ -99,7 +100,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private Panel createCollectionsPanel(final String id) {
         final IModel<QueryFacetsSelection> queryModel = getModel();
-        final FacetFieldModel collectionFacetFieldModel = new FacetFieldModel(vloConfig.getCollectionFacet(), queryModel);
+        final FacetFieldModel collectionFacetFieldModel = new FacetFieldModel(vloConfig.getCollectionFacet(), queryModel, FacetValuesPanel.MAX_NUMBER_OF_FACETS_TO_SHOW);
         final FacetSelectionModel collectionSelectionModel = new FacetSelectionModel(collectionFacetFieldModel, queryModel);
         final FacetPanel panel = new FacetPanel(id, collectionSelectionModel, new Model<ExpansionState>(ExpansionState.COLLAPSED)) {
 
@@ -122,7 +123,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private Panel createFacetsPanel(final String id) {
         final IModel<QueryFacetsSelection> queryModel = getModel();
-        final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(vloConfig.getFacetFields(), queryModel);
+        final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(vloConfig.getFacetFields(), queryModel, FacetValuesPanel.MAX_NUMBER_OF_FACETS_TO_SHOW);
         final FacetsPanel panel = new FacetsPanel(id, facetFieldsModel, queryModel) {
 
             @Override
