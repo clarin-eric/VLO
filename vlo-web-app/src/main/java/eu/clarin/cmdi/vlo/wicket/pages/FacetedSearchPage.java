@@ -4,7 +4,6 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.wicket.panels.FacetsPanel;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.panels.FacetPanel;
 import eu.clarin.cmdi.vlo.wicket.components.SearchForm;
@@ -33,8 +32,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private static final long serialVersionUID = 1L;
 
-    @SpringBean
-    private FacetFieldsService facetFieldsService;
     @SpringBean
     private VloConfig vloConfig;
     @SpringBean
@@ -102,7 +99,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private Panel createCollectionsPanel(final String id) {
         final IModel<QueryFacetsSelection> queryModel = getModel();
-        final FacetFieldModel collectionFacetFieldModel = new FacetFieldModel(facetFieldsService, vloConfig.getCollectionFacet(), queryModel);
+        final FacetFieldModel collectionFacetFieldModel = new FacetFieldModel(vloConfig.getCollectionFacet(), queryModel);
         final FacetSelectionModel collectionSelectionModel = new FacetSelectionModel(collectionFacetFieldModel, queryModel);
         final FacetPanel panel = new FacetPanel(id, collectionSelectionModel, new Model<ExpansionState>(ExpansionState.COLLAPSED)) {
 
@@ -125,7 +122,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private Panel createFacetsPanel(final String id) {
         final IModel<QueryFacetsSelection> queryModel = getModel();
-        final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(facetFieldsService, vloConfig.getFacetFields(), queryModel);
+        final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(vloConfig.getFacetFields(), queryModel);
         final FacetsPanel panel = new FacetsPanel(id, facetFieldsModel, queryModel) {
 
             @Override

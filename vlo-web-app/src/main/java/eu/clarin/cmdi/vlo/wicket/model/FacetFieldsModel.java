@@ -19,12 +19,12 @@ package eu.clarin.cmdi.vlo.wicket.model;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
+import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import java.util.Collection;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.wicket.model.IChainingModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
@@ -45,13 +45,17 @@ public class FacetFieldsModel extends LoadableDetachableModel<List<FacetField>> 
     private final List<String> facets;
     private final IModel<QueryFacetsSelection> selectionModel;
 
+    public FacetFieldsModel(List<String> facets, IModel<QueryFacetsSelection> selectionModel) {
+        this(VloWicketApplication.get().getFacetFieldsService(), facets, selectionModel);
+    }
+
     /**
      *
      * @param service service to use for facet field retrieval
      * @param facets facets to include
      * @param selectionModel model that provides current query/selection
      */
-    public FacetFieldsModel(FacetFieldsService service, List<String> facets, IModel<QueryFacetsSelection> selectionModel) {
+    protected FacetFieldsModel(FacetFieldsService service, List<String> facets, IModel<QueryFacetsSelection> selectionModel) {
         this.service = service;
         this.facets = facets;
         this.selectionModel = selectionModel;

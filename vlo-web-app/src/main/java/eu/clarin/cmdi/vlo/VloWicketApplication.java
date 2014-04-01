@@ -2,6 +2,7 @@ package eu.clarin.cmdi.vlo;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
+import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
@@ -33,6 +34,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     private SolrDocumentService documentService;
     @Autowired
     private XmlTransformationService cmdiTransformationService;
+    @Autowired
+    private FacetFieldsService facetFieldsService;
     @Autowired
     private VloConfig vloConfig;
 
@@ -112,6 +115,10 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
      */
     public XmlTransformationService getCmdiTransformationService() {
         return cmdiTransformationService;
+    }
+    
+    public FacetFieldsService getFacetFieldsService() {
+        return facetFieldsService;
     }
 
 }

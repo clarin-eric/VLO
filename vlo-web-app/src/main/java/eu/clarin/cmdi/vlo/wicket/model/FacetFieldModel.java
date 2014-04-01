@@ -41,16 +41,15 @@ public class FacetFieldModel extends LoadableDetachableModel<FacetField> {
 
     //todo: can probably be made more efficient/elegant than wrapping fields model
     private final FacetFieldsModel fieldsModel;
-
+    
     /**
      *
-     * @param service service to use for facet field retrieval
      * @param facetField facet field to provide
      * @param selectionModel model that provides current query/selection
      */
-    public FacetFieldModel(FacetFieldsService service, FacetField facetField, IModel<QueryFacetsSelection> selectionModel) {
+    public FacetFieldModel(FacetField facetField, IModel<QueryFacetsSelection> selectionModel) {
         super(facetField);
-        fieldsModel = new FacetFieldsModel(service, Collections.singletonList(facetField.getName()), selectionModel);
+        fieldsModel = new FacetFieldsModel(Collections.singletonList(facetField.getName()), selectionModel);
     }
 
     /**
@@ -59,8 +58,17 @@ public class FacetFieldModel extends LoadableDetachableModel<FacetField> {
      * @param facet facet to provide
      * @param selectionModel model that provides current query/selection
      */
-    public FacetFieldModel(FacetFieldsService service, String facet, IModel<QueryFacetsSelection> selectionModel) {
+    protected FacetFieldModel(FacetFieldsService service, String facet, IModel<QueryFacetsSelection> selectionModel) {
         fieldsModel = new FacetFieldsModel(service, Collections.singletonList(facet), selectionModel);
+    }    
+    
+    /**
+     *
+     * @param facet facet to provide
+     * @param selectionModel model that provides current query/selection
+     */
+    public FacetFieldModel(String facet, IModel<QueryFacetsSelection> selectionModel) {
+        fieldsModel = new FacetFieldsModel(Collections.singletonList(facet), selectionModel);
     }
 
     @Override

@@ -18,7 +18,6 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetExpansionStateModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
@@ -36,7 +35,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.MapModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  * A panel representing a group of facets.
@@ -47,9 +45,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  * @author twagoo
  */
 public abstract class FacetsPanel extends GenericPanel<List<FacetField>> {
-
-    @SpringBean
-    private FacetFieldsService facetFieldsService;
 
     private MapModel<String, ExpansionState> expansionModel;
 
@@ -74,7 +69,7 @@ public abstract class FacetsPanel extends GenericPanel<List<FacetField>> {
                 // Create a facet field model which does a lookup by name,
                 // making it dynamic in case the selection and therefore
                 // set of available values changes
-                final FacetFieldModel facetFieldModel = new FacetFieldModel(facetFieldsService, item.getModelObject(), selectionModel);
+                final FacetFieldModel facetFieldModel = new FacetFieldModel(item.getModelObject(), selectionModel);
                 item.add(
                         new FacetPanel("facet",
                                 new FacetSelectionModel(facetFieldModel, selectionModel),
