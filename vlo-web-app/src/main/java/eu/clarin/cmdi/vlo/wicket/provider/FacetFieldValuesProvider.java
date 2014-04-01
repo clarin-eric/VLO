@@ -74,7 +74,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
     /**
      * override to achieve filtering
      *
-     * @return model of string items should begin with
+     * @return model of string value that item values should contain
      */
     protected IModel<String> getFilterModel() {
         return null;
