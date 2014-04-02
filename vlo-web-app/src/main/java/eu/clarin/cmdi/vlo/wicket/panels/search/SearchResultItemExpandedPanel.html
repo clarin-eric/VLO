@@ -30,10 +30,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <wicket:container wicket:id="documentProperties">[PROPERTIES TABLE]</wicket:container>
                 <p class="moredocumentproperties"><a wicket:id="recordLink">More</a></p>
                 <h3>Resources</h3>
-                <ul>
-                    <li class="writtenresource"><a href="">http://dspace.library.uu.nl/bitstream/1874/235456/1/Bachelorscriptie+Rene+Witteveen+3375005.docx</a></li>
-                    <li class="audioresource"><a href="">http://corpus1.mpi.nl/qfs1/media-archive/dobes_data/Ache/Documentaci_n_-_Documentation/Comunidades_-_Communities/Cerro_Moroti/Media/002-djawu_klluu-2011-09-01.wav</a></li>
-                    <li class="annotationresource"><a href="">http://corpus1.mpi.nl/qfs1/media-archive/dobes_data/Ache/Documentaci_n_-_Documentation/Comunidades_-_Communities/Cerro_Moroti/Annotations/002-djawu_klluu-2011-09-01.eaf</a></li>
+                <ul class="searchresultresources">
+                    <li wicket:id="resource">
+                        <a wicket:id="resourceLink" href="">
+                            <wicket:container wicket:id="resourceName"></wicket:container>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </wicket:panel>

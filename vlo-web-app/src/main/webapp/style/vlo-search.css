@@ -153,3 +153,30 @@ a#browseallrecords {
     font-size: 110%;
     font-weight: bold;
 }
+
+.searchresultresources li {
+    list-style: none;
+    background-repeat: no-repeat;
+    background-size: 1em;
+    padding-left: 1.5em;
+}
+
+.searchresultresources li.writtenresource {
+    background-image: url('document-256.png'); /* icon from icons8.com */
+}
+
+.searchresultresources li.audioresource {
+    background-image: url('audio-file-3-256.png'); /* icon from icons8.com */
+}
+
+.searchresultresources li.videoresource {
+    background-image: url('video-file-3-256.png'); /* icon from icons8.com */
+}
+
+.searchresultresources li.imageresource {
+    background-image: url('image-file-256.png'); /* icon from icons8.com */
+}
+
+.searchresultresources li.annotationresource {
+    background-image: url('document-256.png'); /* icon from icons8.com */
+}
