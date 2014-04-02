@@ -16,14 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
-import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
+import eu.clarin.cmdi.vlo.wicket.ResourceTypeCssBehaviour;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
+import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import java.util.Collection;
 import java.util.List;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -32,7 +32,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -100,11 +99,9 @@ public class ResourceLinksPanel extends Panel {
             link.setAnchor(detailsContainer);
             // set the file name as the link's text content
             link.add(new Label("filename", new PropertyModel(resourceInfoModel, "fileName")));
-
-            // set the class attribute on the link from the value associated
-            // with the resource type as defined in the properties file
-            final StringResourceModel linkClass = new StringResourceModel("class.${resourceType}", ResourceLinksPanel.this, resourceInfoModel, "");
-            link.add(new AttributeAppender("class", linkClass).setSeparator(" "));
+            
+            // apply the css class matching the resource type
+            link.add(new ResourceTypeCssBehaviour(resourceInfoModel));
 
             return link;
         }
