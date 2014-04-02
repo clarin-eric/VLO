@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
-import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
+import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import java.util.Collection;
@@ -31,7 +31,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -78,7 +77,7 @@ public class ResourceLinksPanel extends Panel {
 
         @Override
         protected void populateItem(ListItem<String> item) {
-            final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(item.getModel());
+            final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(resourceStringConverter, item.getModel());
             // add a link that will show the resource details panel when clicked
             item.add(createLink(resourceInfoModel));
         }
@@ -109,32 +108,6 @@ public class ResourceLinksPanel extends Panel {
 
             return link;
         }
-    }
-
-    /**
-     * Model for {@link ResourceInfo} that dynamically instantiates its objects
-     * from a resource string (as retrieved from the Solr index) using the
-     * {@link ResourceStringConverter}
-     */
-    private class ResourceInfoModel extends LoadableDetachableModel<ResourceInfo> {
-
-        private final IModel<String> resourceStringModel;
-
-        public ResourceInfoModel(IModel<String> resourceStringModel) {
-            this.resourceStringModel = resourceStringModel;
-        }
-
-        @Override
-        protected ResourceInfo load() {
-            return resourceStringConverter.getResourceInfo(resourceStringModel.getObject());
-        }
-
-        @Override
-        public void detach() {
-            super.detach();
-            resourceStringModel.detach();
-        }
-
     }
 
 }
