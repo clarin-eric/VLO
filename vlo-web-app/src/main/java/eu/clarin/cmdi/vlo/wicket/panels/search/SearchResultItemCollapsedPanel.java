@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
-import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
@@ -24,6 +23,7 @@ import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
+import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import java.util.Locale;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -34,6 +34,8 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
@@ -44,7 +46,7 @@ import org.apache.wicket.util.convert.IConverter;
  */
 public class SearchResultItemCollapsedPanel extends Panel {
 
-    private final static ResourceTypeCountConverter resourceTypeCountConverter = new ResourceTypeCountConverter();
+    private final ResourceTypeCountConverter resourceTypeCountConverter = new ResourceTypeCountConverter();
     private static final int MAX_DESCRIPTION_LENGTH = 350;
     private static final int LONG_DESCRIPTION_TRUNCATE_POINT = 320;
 
@@ -132,53 +134,14 @@ public class SearchResultItemCollapsedPanel extends Panel {
 
         @Override
         public String convertToString(ResourceTypeCount value, Locale locale) {
-            final String resourceTypeString;
-            if (value.getCount() == 1) {
-                resourceTypeString = getSingularResourceTypeString(value);
-            } else {
-                resourceTypeString = getPluralResourceTypeString(value);
-            }
+            final String resourceTypeString = getResourceTypeString(value);
             return String.format("%d %s", value.getCount(), resourceTypeString);
         }
 
-        private String getSingularResourceTypeString(ResourceTypeCount value) {
-            //TODO: read from resource bundle
-            switch (value.getResourceType()) {
-                case ANNOTATION:
-                    return "annotation file";
-                case AUDIO:
-                    return "audio file";
-                case VIDEO:
-                    return "video file";
-                case IMAGE:
-                    return "image";
-                case TEXT:
-                    return "text document";
-                case OTHER:
-                    return "other";
-                default:
-                    return "unknown";
-            }
-        }
-
-        private String getPluralResourceTypeString(ResourceTypeCount value) {
-            //TODO: read from resource bundle
-            switch (value.getResourceType()) {
-                case ANNOTATION:
-                    return "annotation files";
-                case AUDIO:
-                    return "audio files";
-                case VIDEO:
-                    return "video files";
-                case IMAGE:
-                    return "images";
-                case TEXT:
-                    return "text documents";
-                case OTHER:
-                    return "other";
-                default:
-                    return "unknown";
-            }
+        private String getResourceTypeString(ResourceTypeCount value) {
+            final String count = value.getCount() == 1 ? "singular" : "plural";
+            final StringResourceModel resourceModel = new StringResourceModel("resourcetype.${resourceType}." + count, Model.of(value), "?");
+            return resourceModel.getObject();
         }
 
     }

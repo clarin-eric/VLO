@@ -34,7 +34,7 @@ public class ResourceTypeCssBehaviour extends AttributeAppender {
                 // Matches the 'resourceType' property of the resource info model
                 // to one of the properties in resourceTypeClass.properties file
                 // (defaults to "")
-                new StringResourceModel("class.${resourceType}", resourceInfoModel, "", new Object[0]));
+                new StringResourceModel("resourcetype.${resourceType}.class", resourceInfoModel, "", new Object[0]));
         // separate CSS classes with a space
         setSeparator(" ");
     }

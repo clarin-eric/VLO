@@ -101,7 +101,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
                 final StringResourceModel tooltipModel
                         = new StringResourceModel("resource.tooltip", SearchResultItemExpandedPanel.this, null,
                                 new Object[]{
-                                    new PropertyModel(resourceInfoModel, "resourceType"),
+                                    new StringResourceModel("resourcetype.${resourceType}.singular", resourceInfoModel, "?"),
                                     new PropertyModel(resourceInfoModel, "mimeType")});
                 resourceLink.add(new AttributeAppender("title", tooltipModel));
 
