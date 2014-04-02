@@ -25,6 +25,29 @@ import java.io.Serializable;
  */
 public class ResourceTypeCount implements Serializable {
 
+    /**
+     * Enumeration for singular/plural distinction. {@link #toString() }
+     * returns "singular" or "plural" respectively to make the resource bundle
+     * files look clean (no screaming)
+     */
+    public enum Number {
+
+        SINGULAR("singular"),
+        PLURAL("plural");
+
+        private final String numberString;
+
+        Number(String numberString) {
+            this.numberString = numberString;
+        }
+
+        @Override
+        public String toString() {
+            return numberString;
+        }
+
+    }
+
     private final ResourceType resourceType;
     private final Integer count;
 
@@ -39,6 +62,15 @@ public class ResourceTypeCount implements Serializable {
 
     public ResourceType getResourceType() {
         return resourceType;
+    }
+
+    /**
+     *
+     * @return {@link Number#SINGULAR } or {@link Number#PLURAL } depending on
+     * value of {@link #getCount() }
+     */
+    public Number getNumber() {
+        return getCount() == 1 ? Number.SINGULAR : Number.PLURAL;
     }
 
     @Override

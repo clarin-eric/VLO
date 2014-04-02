@@ -24,7 +24,6 @@ import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
-import java.util.Locale;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -34,11 +33,8 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.convert.ConversionException;
-import org.apache.wicket.util.convert.IConverter;
 
 /**
  *
@@ -46,7 +42,6 @@ import org.apache.wicket.util.convert.IConverter;
  */
 public class SearchResultItemCollapsedPanel extends Panel {
 
-    private final ResourceTypeCountConverter resourceTypeCountConverter = new ResourceTypeCountConverter();
     private static final int MAX_DESCRIPTION_LENGTH = 350;
     private static final int LONG_DESCRIPTION_TRUNCATE_POINT = 320;
 
@@ -102,47 +97,24 @@ public class SearchResultItemCollapsedPanel extends Panel {
         @Override
         protected void populateItem(Item<ResourceTypeCount> item) {
             final Link resourceLink = new RecordPageLink("recordLink", documentModel, selectionModel);
-            final Label label = new Label("resourceCountLabel", item.getModel()) {
-
-                @Override
-                public <C> IConverter<C> getConverter(Class<C> type) {
-                    if (type == ResourceTypeCount.class) {
-                        return (IConverter<C>) resourceTypeCountConverter;
-                    } else {
-                        return super.getConverter(type);
-                    }
-                }
-
-            };
-
+            final Label label = new Label("resourceCountLabel", getResourceCountModel(item.getModel()));
             resourceLink.add(label);
             item.add(resourceLink);
         }
+
+        /**
+         *
+         * @param resourceTypeCountModel
+         * @return a string model that conveys the type of resource and number
+         * of instances
+         */
+        private IModel<String> getResourceCountModel(final IModel<ResourceTypeCount> resourceTypeCountModel) {
+            // first create a string model that provides the type of resources 
+            // in the right number (plural or singular, conveniently supplied by ResourceTypeCount)
+            final StringResourceModel resourceTypeModel = new StringResourceModel("resourcetype.${resourceType}.${number}", resourceTypeCountModel, "?");
+            // inject this into the resource string that combines it with count
+            return new StringResourceModel("resources.typecount", this, resourceTypeCountModel, resourceTypeModel);
+        }
     }
 
-    /**
-     * One-way converter for resource type counts that generates string
-     * representations like "1 video file", "2 video files" or "3 text
-     * documents"
-     */
-    private static class ResourceTypeCountConverter implements IConverter<ResourceTypeCount> {
-
-        @Override
-        public ResourceTypeCount convertToObject(String value, Locale locale) throws ConversionException {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
-        public String convertToString(ResourceTypeCount value, Locale locale) {
-            final String resourceTypeString = getResourceTypeString(value);
-            return String.format("%d %s", value.getCount(), resourceTypeString);
-        }
-
-        private String getResourceTypeString(ResourceTypeCount value) {
-            final String count = value.getCount() == 1 ? "singular" : "plural";
-            final StringResourceModel resourceModel = new StringResourceModel("resourcetype.${resourceType}." + count, Model.of(value), "?");
-            return resourceModel.getObject();
-        }
-
-    }
 }
