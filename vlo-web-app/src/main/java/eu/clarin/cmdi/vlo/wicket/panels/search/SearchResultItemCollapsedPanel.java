@@ -26,6 +26,7 @@ import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import java.util.Locale;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -63,9 +64,20 @@ public class SearchResultItemCollapsedPanel extends Panel {
         final SolrFieldModel<String> resourcesModel = new SolrFieldModel<String>(documentModel, FacetConstants.FIELD_RESOURCE);
         // wrap with a count provider
         final ResouceTypeCountDataProvider countProvider = new ResouceTypeCountDataProvider(resourcesModel, countingService);
-        // view that shows provided counts 
-        // TODO: hide if no resources
-        add(new ResourceCountDataView("resourceCount", countProvider));
+
+        // add a container for the resource type counts (only visible if there are actual resources)
+        add(new WebMarkupContainer("resources") {
+            {
+                // view that shows provided counts
+                add(new ResourceCountDataView("resourceCount", countProvider));
+            }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(countProvider.size() > 0);
+            }
+        });
     }
 
     @Override

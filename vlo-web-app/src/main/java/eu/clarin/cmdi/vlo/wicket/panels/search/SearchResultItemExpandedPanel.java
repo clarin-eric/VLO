@@ -30,12 +30,15 @@ import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
@@ -62,15 +65,28 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
         // table with some basic properties
         add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(documentModel, basicPropertiesFilter)));
 
-        createResourcesList("resource");
+        final SolrFieldModel<String> resourceModel = new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_RESOURCE);
+
+        // add a container for the resources (only visible if there are actual resources)
+        add(new WebMarkupContainer("resources") {
+            {
+                add(createResourcesList("resource", resourceModel));
+            }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(resourceModel.getObject() != null);
+            }
+
+        });
     }
 
-    private void createResourcesList(String id) {
+    private Component createResourcesList(String id, SolrFieldModel<String> resourceModel) {
         // list of resources in this record
         // TODO: limit number of resources shown here?
-        final SolrFieldModel<String> resourceModel = new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_RESOURCE);
         final IModel<List<String>> resourceListModel = new CollectionListModel<String>(resourceModel);
-        add(new ListView<String>(id, resourceListModel) {
+        return new ListView<String>(id, resourceListModel) {
 
             @Override
             protected void populateItem(ListItem<String> item) {
@@ -83,7 +99,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
 
                 // add a tooltip showing resource type and mime type
                 final StringResourceModel tooltipModel
-                        = new StringResourceModel("resource.tooltip", SearchResultItemExpandedPanel.this, resourceModel,
+                        = new StringResourceModel("resource.tooltip", SearchResultItemExpandedPanel.this, null,
                                 new Object[]{
                                     new PropertyModel(resourceInfoModel, "resourceType"),
                                     new PropertyModel(resourceInfoModel, "mimeType")});
@@ -95,7 +111,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
                 // add to list
                 item.add(resourceLink);
             }
-        });
+        };
     }
 
     @Override
