@@ -41,7 +41,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     @SpringBean
     private PageParametersConverter<QueryFacetsSelection> paramsConverter;
 
-    private Panel searchResultsPanel;
+    private SearchResultsPanel searchResultsPanel;
     private Panel facetsPanel;
     private Panel collectionsPanel;
     private WebMarkupContainer navigation;
@@ -94,6 +94,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
+                // reset expansion state of search results
+                searchResultsPanel.resetExpansion();
                 updateSelection(target);
             }
 

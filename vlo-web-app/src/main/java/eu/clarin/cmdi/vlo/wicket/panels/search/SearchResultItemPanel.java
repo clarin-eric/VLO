@@ -29,7 +29,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
 /**
  *
@@ -41,14 +40,22 @@ public class SearchResultItemPanel extends Panel {
     private final Panel expandedDetails;
     private final IModel<ExpansionState> expansionStateModel;
 
-    public SearchResultItemPanel(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel) {
+    /**
+     *
+     * @param id markup id of the panel
+     * @param documentModel model of document that this search item represents
+     * @param selectionModel model of current selection (will be passed on to
+     * record page when link is clicked)
+     * @param expansionStateModel model for the expansion state of this search
+     * item
+     */
+    public SearchResultItemPanel(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel, IModel<ExpansionState> expansionStateModel) {
         super(id, documentModel);
+        this.expansionStateModel = expansionStateModel;
 
         final Link recordLink = new RecordPageLink("recordLink", documentModel, selectionModel);
         recordLink.add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME));
         add(recordLink);
-
-        expansionStateModel = Model.of(ExpansionState.COLLAPSED);
 
         // add a link to toggle the expansion state
         add(createExpansionStateToggle("expansionStateToggle"));
@@ -105,4 +112,9 @@ public class SearchResultItemPanel extends Panel {
         expandedDetails.setVisible(expansionStateModel.getObject() == ExpansionState.EXPANDED);
     }
 
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        expansionStateModel.detach();
+    }
 }

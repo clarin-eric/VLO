@@ -18,9 +18,12 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
+import eu.clarin.cmdi.vlo.wicket.model.SearchResultExpansionStateModel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -35,6 +38,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 /**
@@ -48,13 +52,15 @@ public class SearchResultsPanel extends Panel {
 
     private final IDataProvider<SolrDocument> solrDocumentProvider;
     private final DataView<SolrDocument> resultsView;
-
+    private final IModel<Set<Object>> expansionsModel;
+    
     public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, selectionModel);
         add(new Label("title", new SearchResultsTitleModel(selectionModel)));
 
         solrDocumentProvider = new SolrDocumentProvider(selectionModel);
 
+        expansionsModel = new Model(new HashSet<Object>());
         // data view for search results
         resultsView = new DataView<SolrDocument>("resultItem", solrDocumentProvider, 10) {
 
@@ -64,7 +70,9 @@ public class SearchResultsPanel extends Panel {
                 final long size = internalGetDataProvider().size();
                 final SearchContextModel contextModel = new SearchContextModel(index, size, selectionModel);
                 // single result item
-                item.add(new SearchResultItemPanel("resultItemDetails", item.getModel(), contextModel));
+                item.add(new SearchResultItemPanel("resultItemDetails", item.getModel(), contextModel,
+                        new SearchResultExpansionStateModel(expansionsModel, item.getModel())
+                ));
             }
         };
         add(resultsView);
@@ -84,6 +92,10 @@ public class SearchResultsPanel extends Panel {
 
         //For Ajax updating of search results
         setOutputMarkupId(true);
+    }
+    
+    public void resetExpansion() {
+        expansionsModel.getObject().clear();
     }
 
     /**
