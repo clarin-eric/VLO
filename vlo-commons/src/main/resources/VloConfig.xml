@@ -83,6 +83,18 @@
         <facetField>keywords</facetField>
     </facetFields>
     
+    <searchResultFields>
+        <searchResultField>name</searchResultField>
+        <searchResultField>country</searchResultField>
+        <searchResultField>language</searchResultField>
+        <searchResultField>modality</searchResultField>
+        <searchResultField>subject</searchResultField>
+        <searchResultField>genre</searchResultField>
+        <searchResultField>organisation</searchResultField>
+        <searchResultField>collection</searchResultField>
+        <searchResultField>nationalProject</searchResultField>
+    </searchResultFields>
+    
     <collectionFacet>collection</collectionFacet>
     
     <ignoredFields>

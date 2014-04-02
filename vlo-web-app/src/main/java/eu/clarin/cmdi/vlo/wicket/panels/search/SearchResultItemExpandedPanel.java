@@ -38,7 +38,6 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
@@ -50,8 +49,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
 
-    @SpringBean(name = "basicPropertiesFilter") //TODO: make separate filter for properties in search result items
-    private FieldFilter basicPropertiesFilter;
+    @SpringBean(name = "searchResultPropertiesFilter") 
+    private FieldFilter propertiesFilter;
     @SpringBean
     ResourceStringConverter resourceStringConverter;
 
@@ -63,7 +62,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
         add(new RecordPageLink("recordLink", documentModel, selectionModel));
 
         // table with some basic properties
-        add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(documentModel, basicPropertiesFilter)));
+        add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(documentModel, propertiesFilter)));
 
         final SolrFieldModel<String> resourceModel = new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_RESOURCE);
 

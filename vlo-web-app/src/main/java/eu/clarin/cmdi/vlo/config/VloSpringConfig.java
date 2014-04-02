@@ -44,7 +44,6 @@ import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentServiceImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrFacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrFacetQueryFactoryImpl;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Properties;
 import javax.xml.transform.OutputKeys;
@@ -158,6 +157,11 @@ public class VloSpringConfig {
         return new ExclusiveFieldFilter(Sets.union(
                 vloConfig().getIgnoredFields(),
                 vloConfig().getTechnicalFields()));
+    }
+    
+    @Bean(name="searchResultPropertiesFilter")
+    public FieldFilter searchResultPropertiesFilter() {
+        return new InclusiveFieldFilter(vloConfig().getSearchResultFields());
     }
 
     @Bean(name = "technicalPropertiesFilter")

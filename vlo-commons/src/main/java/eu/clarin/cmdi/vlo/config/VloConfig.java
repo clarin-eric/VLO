@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.config;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlElement;
@@ -112,9 +113,12 @@ public class VloConfig {
      * XmlElementWrapper directive. Use the directive to let JAXB know that the
      * elements inside 'facetFields' are named 'facetField'.
      */
-    
+
     @XmlElementWrapper(name = "technicalFields")
     private Set<String> technicalField;
+
+    @XmlElementWrapper(name = "searchResultFields")
+    private Set<String> searchResultField;
 
     /**
      * An array of facetFields<br><br>
@@ -738,6 +742,14 @@ public class VloConfig {
      */
     public void setFacetFields(List<String> param) {
         facetField = param;
+    }
+
+    public Collection<String> getSearchResultFields() {
+        return searchResultField;
+    }
+
+    public void setSearchResultFields(Set<String> searchResultField) {
+        this.searchResultField = searchResultField;
     }
 
     /**
