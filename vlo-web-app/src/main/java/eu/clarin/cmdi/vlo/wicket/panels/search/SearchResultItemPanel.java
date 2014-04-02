@@ -17,13 +17,20 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 /**
  *
@@ -31,19 +38,68 @@ import org.apache.wicket.model.IModel;
  */
 public class SearchResultItemPanel extends Panel {
 
-    private final SearchResultItemCollapsedPanel collapsedDetails;
+    private final Panel collapsedDetails;
+    private final Panel expandedDetails;
+    private final IModel<ExpansionState> expansionStateModel;
 
     public SearchResultItemPanel(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel) {
         super(id, documentModel);
+
+        expansionStateModel = Model.of(ExpansionState.COLLAPSED);
 
         final Link recordLink = new RecordPageLink("recordLink", documentModel, selectionModel);
         recordLink.add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME));
         add(recordLink);
 
-        //TODO: Add expand/collapse toggle
+        add(createExpansionStateToggle("expansionStateToggle"));
+
         collapsedDetails = new SearchResultItemCollapsedPanel("collapsedDetials", documentModel, selectionModel);
         add(collapsedDetails);
 
         //TODO: Add expanded details panel
+        expandedDetails = new SearchResultItemCollapsedPanel("expandedDetails", documentModel, selectionModel);
+        add(expandedDetails);
+
+        setOutputMarkupId(true);
     }
+
+    private Link createExpansionStateToggle(String id) {
+        final Link expansionStateToggle = new IndicatingAjaxFallbackLink(id) {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if (expansionStateModel.getObject() == ExpansionState.COLLAPSED) {
+                    expansionStateModel.setObject(ExpansionState.EXPANDED);
+                } else {
+                    expansionStateModel.setObject(ExpansionState.COLLAPSED);
+                }
+
+                if (target != null) {
+                    target.add(this);
+                }
+            }
+        };
+        expansionStateToggle.add(new Label("state", new AbstractReadOnlyModel<String>() {
+
+            @Override
+            public String getObject() {
+                if (expansionStateModel.getObject() == ExpansionState.COLLAPSED) {
+                    return "Expand";
+                } else {
+                    return "Collapse";
+                }
+            }
+        }));
+        return expansionStateToggle;
+    }
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        // this is called once per request; set visibility state for detail panels
+        // according to expansion state
+        collapsedDetails.setVisible(expansionStateModel.getObject() == ExpansionState.COLLAPSED);
+        expandedDetails.setVisible(expansionStateModel.getObject() == ExpansionState.EXPANDED);
+    }
+
 }
