@@ -23,7 +23,6 @@ import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -45,19 +44,21 @@ public class SearchResultItemPanel extends Panel {
     public SearchResultItemPanel(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel) {
         super(id, documentModel);
 
-        expansionStateModel = Model.of(ExpansionState.COLLAPSED);
-
         final Link recordLink = new RecordPageLink("recordLink", documentModel, selectionModel);
         recordLink.add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME));
         add(recordLink);
 
+        expansionStateModel = Model.of(ExpansionState.COLLAPSED);
+
+        // add a link to toggle the expansion state
         add(createExpansionStateToggle("expansionStateToggle"));
 
+        // add a collapsed details panel; only shown when expansion state is collapsed (through onConfigure)
         collapsedDetails = new SearchResultItemCollapsedPanel("collapsedDetials", documentModel, selectionModel);
         add(collapsedDetails);
 
-        //TODO: Add expanded details panel
-        expandedDetails = new SearchResultItemCollapsedPanel("expandedDetails", documentModel, selectionModel);
+        // add a collapsed details panel; only shown when expansion state is expanded (through onConfigure)
+        expandedDetails = new SearchResultItemExpandedPanel("expandedDetails", documentModel, selectionModel);
         add(expandedDetails);
 
         setOutputMarkupId(true);
@@ -68,6 +69,7 @@ public class SearchResultItemPanel extends Panel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
+                // toggle the expansion state
                 if (expansionStateModel.getObject() == ExpansionState.COLLAPSED) {
                     expansionStateModel.setObject(ExpansionState.EXPANDED);
                 } else {
@@ -75,7 +77,8 @@ public class SearchResultItemPanel extends Panel {
                 }
 
                 if (target != null) {
-                    target.add(this);
+                    // parial update (just this search result item)
+                    target.add(SearchResultItemPanel.this);
                 }
             }
         };
