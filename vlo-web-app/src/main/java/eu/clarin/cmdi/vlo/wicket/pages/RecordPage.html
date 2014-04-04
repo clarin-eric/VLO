@@ -45,10 +45,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <div class="content" id="record">
 
                 <wicket:container wicket:id="navigation"></wicket:container>
+
                 <h1 wicket:id="name" id="recordtitle">[TITLE]</h1>
+
                 <div id="recorddetails">
                     <a wicket:id="landingPageLink" id="recordlandingpage">Show this record in its original context</a>
                     <wicket:container wicket:id="documentProperties">[PROPERTIES TABLE]</wicket:container>
+                </div>
+
+                <div wicket:id="searchlinks" id="recordsearchpage">
+                    <h2>Search</h2>
+                    <ul>
+                        <li wicket:id="searchPage"><a wicket:id="searchLink">Go to the search page for this record</a></li>
+                        <!--<li><a href="">Perform a content search in this record</a></li>-->
+                    </ul>
                 </div>
 
                 <div wicket:id="resources" id="recordresources">[RESOURCES]</div>

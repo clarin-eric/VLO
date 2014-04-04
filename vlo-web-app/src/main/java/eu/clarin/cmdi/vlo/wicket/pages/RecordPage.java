@@ -24,6 +24,7 @@ import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.ResourceLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
+import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
@@ -42,6 +43,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -129,6 +132,8 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         // Technical section
         add(createCmdiContent("cmdi"));
         add(new FieldsTablePanel("technicalProperties", new DocumentFieldsProvider(getModel(), technicalPropertiesFilter)));
+
+        createSearchLinks("searchlinks");
     }
 
     private Component createNavigation(final String id) {
@@ -175,6 +180,30 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
         };
         return landingPageLink;
+    }
+
+    private void createSearchLinks(String id) {
+        final SolrFieldModel<String> searchPageModel = new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_SEARCHPAGE);
+        final SolrFieldModel<String> searchServiceModel = new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_SEARCH_SERVICE);
+        add(new WebMarkupContainer(id) {
+            {
+                //add links
+                add(new ListView<String>("searchPage", new CollectionListModel<String>(searchPageModel)) {
+
+                    @Override
+                    protected void populateItem(ListItem item) {
+                        item.add(new ExternalLink("searchLink", item.getModel()));
+                    }
+                });
+            }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(searchPageModel.getObject() != null || searchServiceModel.getObject() != null);
+            }
+
+        });
     }
 
     private Label createCmdiContent(String id) {
