@@ -19,6 +19,8 @@ package eu.clarin.cmdi.vlo.config;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
@@ -28,9 +30,11 @@ import org.springframework.beans.factory.annotation.Value;
  * or falls back to the internal default configuration via
  * {@link DefaultVloConfigFactory}
  *
- * <p>It also supports the following overrides:
+ * <p>
+ * It also supports the following overrides:
  * <ul>
- * <li><em>eu.carlin.cmdi.vlo.solr.serverUrl</em> - SOLR server URL to connect to</li>
+ * <li><em>eu.carlin.cmdi.vlo.solr.serverUrl</em> - SOLR server URL to connect
+ * to</li>
  * </ul>
  * </p>
  *
@@ -38,6 +42,8 @@ import org.springframework.beans.factory.annotation.Value;
  * @see VloConfig
  */
 public class ServletVloConfigFactory implements VloConfigFactory {
+
+    private final static Logger logger = LoggerFactory.getLogger(ServletVloConfigFactory.class);
 
     @Value("${eu.carlin.cmdi.vlo.config.location:}")
     private String configLocation;
@@ -54,17 +60,18 @@ public class ServletVloConfigFactory implements VloConfigFactory {
     }
 
     private VloConfigFactory getFactory() throws MalformedURLException {
-        final VloConfigFactory factory;
         if (configLocation == null || configLocation.isEmpty()) {
-            factory = new DefaultVloConfigFactory();
+            logger.info("Using default VLO configuration");
+            return new DefaultVloConfigFactory();
         } else {
-            factory = new XmlVloConfigFactory(new File(configLocation).toURI().toURL());
+            logger.info("Reading VLO configuration from {}", configLocation);
+            return new XmlVloConfigFactory(new File(configLocation).toURI().toURL());
         }
-        return factory;
     }
 
     private void applyProperties(VloConfig configuration) {
         if (!(solrServerUrl == null || solrServerUrl.isEmpty())) {
+            logger.info("Overriding SOLR server URL with location from context parameter: {}", solrServerUrl);
             configuration.setSolrUrl(solrServerUrl);
         }
     }
