@@ -60,15 +60,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <a wicket:id="searchLink">Search page for this record</a>
                         </li>
                         <li wicket:id="contentSearch">
-                            <form id="contentSearchForm" wicket:id="fcsForm" method="post" name="fcsForm" target="_blank" action="[Aggregator endpoint]"> 
-                                <fieldset style="border:0px;"> 
-                                    <input type="hidden" name="query" id="query" value="" /> 
-                                    <input wicket:id="aggregationContent" type="hidden" name="x-aggregation-context" value='[Endpoint/ID JSON]' /> 
-                                    <input type="hidden" name="operation" value="searchRetrieve" /> 
-                                    <input type="hidden" name="version" value="1.2" /> 
-                                </fieldset> 
-                            </form> 
-                            <a href="#" onclick="document.fcsForm.submit();">Plain text search via Federated Content Search</a>
+                            <wicket:container wicket:id="fcsForm">[FCS form]</wicket:container>
                         </li>
                     </ul>
                 </div>
