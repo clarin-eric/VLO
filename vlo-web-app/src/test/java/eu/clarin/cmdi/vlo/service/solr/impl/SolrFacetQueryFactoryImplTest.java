@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
-import eu.clarin.cmdi.vlo.service.solr.impl.SolrFacetQueryFactoryImpl;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.Arrays;
 import java.util.Collection;
@@ -111,9 +110,9 @@ public class SolrFacetQueryFactoryImplTest {
 
         // Expecting three filter queries as three values have been selected in total
         assertEquals(3, query.getFilterQueries().length);
-        assertThat(Arrays.asList(query.getFilterQueries()), Matchers.<String>hasItem("facet1:valueA"));
-        assertThat(Arrays.asList(query.getFilterQueries()), Matchers.<String>hasItem("facet2:valueB"));
-        assertThat(Arrays.asList(query.getFilterQueries()), Matchers.<String>hasItem("facet2:valueC"));
+        assertThat(Arrays.asList(query.getFilterQueries()), Matchers.<String>hasItem("facet1:\"valueA\""));
+        assertThat(Arrays.asList(query.getFilterQueries()), Matchers.<String>hasItem("facet2:\"valueB\""));
+        assertThat(Arrays.asList(query.getFilterQueries()), Matchers.<String>hasItem("facet2:\"valueC\""));
         // facet 3 does not occur as there is not selected value!
         
         // Facet limit should be adopted
@@ -127,17 +126,17 @@ public class SolrFacetQueryFactoryImplTest {
     public void testCreateFacetQuerySelectionAndQuery() {
         Map<String, Collection<String>> selection = new HashMap<String, Collection<String>>() {
             {
-                put("facet1", Arrays.asList("valueA"));
+                put("facet1", Arrays.asList("value A"));
             }
         };
         SolrQuery query = instance.createFacetQuery(new QueryFacetsSelection("query string", selection), 20);
 
         assertEquals(1, query.getFilterQueries().length);
-        assertEquals("query\\ string", query.getQuery()); //space should be escaped!
+        assertEquals("\"query\\ string\"", query.getQuery()); //space should be escaped, and query wrapped!
 
         // Expecting three filter queries as three values have been selected in total
         assertEquals(1, query.getFilterQueries().length);
-        assertThat(Arrays.asList(query.getFilterQueries()), Matchers.<String>hasItem("facet1:valueA"));
+        assertThat(Arrays.asList(query.getFilterQueries()), Matchers.<String>hasItem("facet1:\"value\\ A\""));
 
         // Facet limit should be adopted
         assertEquals(20, query.getFacetLimit());

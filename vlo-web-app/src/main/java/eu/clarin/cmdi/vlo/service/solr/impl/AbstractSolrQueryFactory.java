@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
+import com.google.common.base.Joiner;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,7 +38,8 @@ public abstract class AbstractSolrQueryFactory {
         if (queryString == null) {
             query.setQuery(SOLR_SEARCH_ALL);
         } else {
-            query.setQuery(ClientUtils.escapeQueryChars(queryString));
+            // escape query content and wrap in quotes to make literal query
+            query.setQuery("\"" + ClientUtils.escapeQueryChars(queryString) + "\"");
         }
         final Map<String, Collection<String>> selections = queryFacetsSelections.getSelection();
         if (selections != null) {
@@ -56,7 +58,8 @@ public abstract class AbstractSolrQueryFactory {
     }
 
     protected final String createFilterQuery(String facetName, String value) {
-        return String.format("%s:%s", facetName, ClientUtils.escapeQueryChars(value));
+        // escape value and wrap in quotes to make literal query
+        return String.format("%s:\"%s\"", facetName, ClientUtils.escapeQueryChars(value));
     }
 
 }
