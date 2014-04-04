@@ -145,6 +145,11 @@ a.recordattributeinfo:after {
     padding-top: 10px;
 }
 
+/* FCS content search form must be hidden */
+#contentSearchForm {
+    display: none;
+}
+
 /* Resource links with icons */
 
 #recordresources {

@@ -17,12 +17,11 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
-import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
-import eu.clarin.cmdi.vlo.wicket.panels.record.ResourceLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
@@ -33,13 +32,19 @@ import eu.clarin.cmdi.vlo.wicket.model.UrlFromStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.XsltModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.PermaLinkPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordNavigationPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.record.ResourceLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.json.JSONArray;
+import org.apache.wicket.ajax.json.JSONException;
+import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -58,6 +63,8 @@ import org.apache.wicket.util.string.StringValue;
  */
 public class RecordPage extends VloBasePage<SolrDocument> {
 
+    @SpringBean
+    private VloConfig vloConfig;
     @SpringBean
     private PageParametersConverter<QueryFacetsSelection> selectionParametersConverter;
     @SpringBean(name = "basicPropertiesFilter")
@@ -187,7 +194,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         final SolrFieldModel<String> searchServiceModel = new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_SEARCH_SERVICE);
         add(new WebMarkupContainer(id) {
             {
-                //add links
+                //Add search page links (can be multiple)
                 add(new ListView<String>("searchPage", new CollectionListModel<String>(searchPageModel)) {
 
                     @Override
@@ -195,9 +202,44 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                         item.add(new ExternalLink("searchLink", item.getModel()));
                     }
                 });
+
+                // We assume there can be multiple content search endpoints too
+                add(new ListView<String>("contentSearch", new CollectionListModel<String>(searchServiceModel)) {
+
+                    @Override
+                    protected void populateItem(ListItem<String> item) {
+                        try {
+                            item.add(createContentSearchForm("fcsForm", item.getModel()));
+                        } catch (JSONException ex) {
+                            //TODO: handle gracefully?
+                            throw new RuntimeException(ex);
+                        }
+                    }
+
+                    private WebMarkupContainer createContentSearchForm(String id, IModel<String> endpointModel) throws JSONException {
+                        // Prepare a JSON object that holds the CQL endpoint and the document ID
+                        final JSONObject json = new JSONObject();
+                        final String endPoint = endpointModel.getObject();
+                        final Object docId = RecordPage.this.getModel().getObject().getFirstValue(FacetConstants.FIELD_ID);
+                        json.put(endPoint, new JSONArray(new Object[]{docId}));
+
+                        // Populate attributes in submit form...
+                        final WebMarkupContainer fcsForm = new WebMarkupContainer(id);
+                        // The action of the form should be the aggregator endpoint
+                        fcsForm.add(new AttributeModifier("action", vloConfig.getFederatedContentSearchUrl()));
+
+                        final WebMarkupContainer aggregationContext = new WebMarkupContainer("aggregationContent");
+                        // The value of the aggregation context hidden form field should be the JSON object
+                        aggregationContext.add(new AttributeModifier("value", json.toString(2)));
+                        fcsForm.add(aggregationContext);
+
+                        return fcsForm;
+                    }
+                });
             }
 
             @Override
+
             protected void onConfigure() {
                 super.onConfigure();
                 setVisible(searchPageModel.getObject() != null || searchServiceModel.getObject() != null);
