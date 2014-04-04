@@ -66,8 +66,10 @@
     
     <nationalProjectMapping>/nationalProjectsMapping.xml</nationalProjectMapping>
     
+    <!-- Facet field used to populate collection selector on search page -->
     <collectionFacet>collection</collectionFacet>
     
+    <!-- Fields shown as facets on the search page -->
     <facetFields>
         <facetField>language</facetField>
         <facetField>resourceClass</facetField>
@@ -83,6 +85,7 @@
         <facetField>keywords</facetField>
     </facetFields>
     
+    <!-- Fields shown in expanded search results on the search page -->
     <searchResultFields>
         <searchResultField>name</searchResultField>
         <searchResultField>country</searchResultField>
@@ -95,12 +98,12 @@
         <searchResultField>nationalProject</searchResultField>
     </searchResultFields>
     
-    <collectionFacet>collection</collectionFacet>
-    
+    <!-- Fields ignored in the record page -->
     <ignoredFields>
         <ignoredField>format</ignoredField>
     </ignoredFields>
     
+    <!-- Fields shown as technical fields in the record page -->
     <technicalFields>
         <technicalField>id</technicalField>
         <technicalField>dataProvider</technicalField>
