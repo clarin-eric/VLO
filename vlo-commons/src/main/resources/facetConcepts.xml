@@ -188,6 +188,7 @@
     <concept>http://purl.org/dc/elements/1.1/subject</concept>
     <concept>http://www.isocat.org/datcat/DC-6147</concept>
     <concept>http://www.isocat.org/datcat/DC-5316</concept>
+    <concept>http://www.isocat.org/datcat/DC-6543</concept>
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-linguistic-field</pattern>
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject[@dcterms-type="LCSH"]/text()</pattern>   
     <pattern>/c:CMD/c:Components/c:mods/c:subject/c:Topic/text()</pattern> 
