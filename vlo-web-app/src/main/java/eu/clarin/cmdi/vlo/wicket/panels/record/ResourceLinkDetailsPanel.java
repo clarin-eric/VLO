@@ -17,13 +17,10 @@
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
-import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 
 /**
  * Panel that shows details for a selected resource (file name, mime type,
@@ -40,13 +37,7 @@ public class ResourceLinkDetailsPanel extends Panel {
         add(new Label("fileName"));
         add(new Label("mimeType"));
         add(new Label("resourceType"));
-
-        final ExternalLink link = new ExternalLink("link",
-                // wrap href in model that transforms handle links
-                new HandleLinkModel(new PropertyModel<String>(model, "href")));
-        // the label gets the original link
-        link.add(new Label("href"));
-        add(link);
+        add(new Label("href"));
     }
 
 }

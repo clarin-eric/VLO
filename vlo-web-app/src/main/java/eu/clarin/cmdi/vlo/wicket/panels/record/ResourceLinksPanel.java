@@ -19,14 +19,13 @@ package eu.clarin.cmdi.vlo.wicket.panels.record;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.ResourceTypeCssBehaviour;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
+import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import java.util.Collection;
 import java.util.List;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -44,7 +43,6 @@ public class ResourceLinksPanel extends Panel {
 
     @SpringBean
     private ResourceStringConverter resourceStringConverter;
-    private final WebMarkupContainer detailsContainer;
 
     /**
      *
@@ -55,16 +53,6 @@ public class ResourceLinksPanel extends Panel {
         super(id, model);
         // list view that shows all resources as links that show a resource details panel when clicked
         add(new ResourcesListView("resource", new CollectionListModel<String>(model)));
-
-        // container for resource details (to enable AJAX updates)
-        detailsContainer = new WebMarkupContainer("detailsContainer");
-        detailsContainer.setOutputMarkupId(true);
-        add(detailsContainer);
-
-        // insert a place holder until one of the resource links is clicked
-        final WebMarkupContainer detailsPlaceholder = new WebMarkupContainer("details");
-        detailsPlaceholder.setVisible(false);
-        detailsContainer.add(detailsPlaceholder);
     }
 
     private class ResourcesListView extends ListView<String> {
@@ -81,25 +69,16 @@ public class ResourceLinksPanel extends Panel {
             item.add(createLink(resourceInfoModel));
         }
 
-        private Link createLink(final ResourceInfoModel resourceInfoModel) {
-            final Link link = new AjaxFallbackLink("showResource") {
-
-                @Override
-                public void onClick(AjaxRequestTarget target) {
-                    // replace any existing details panel or placeholder with
-                    // a details panel for the current resource
-                    detailsContainer.addOrReplace(new ResourceLinkDetailsPanel("details", resourceInfoModel));
-                    if (target != null) {
-                        target.add(detailsContainer);
-                        target.prependJavaScript("hideResourceDetails();");
-                        target.appendJavaScript("showResourceDetails();");
-                    }
-                }
-            };
-            link.setAnchor(detailsContainer);
+        private Component createLink(final ResourceInfoModel resourceInfoModel) {
+            // wrap href in model that transforms handle links
+            final IModel<String> linkModel = new HandleLinkModel(new PropertyModel(resourceInfoModel, "href"));
+            final ExternalLink link = new ExternalLink("showResource", linkModel);
+            
             // set the file name as the link's text content
             link.add(new Label("filename", new PropertyModel(resourceInfoModel, "fileName")));
-            
+            // add details panel shown on hover
+            link.add(new ResourceLinkDetailsPanel("details", resourceInfoModel));
+
             // apply the css class matching the resource type
             link.add(new ResourceTypeCssBehaviour(resourceInfoModel));
 

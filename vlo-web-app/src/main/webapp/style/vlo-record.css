@@ -194,21 +194,36 @@ a.recordattributeinfo:after {
     background-image: url('document-256.png'); /* icon from icons8.com */
 }
 
-#recordresourcedetailsContainer {
-    clear: both;
+.resourceLink {
+    position: relative;
 }
 
-.recordresourcedetails {
-    border: 1px dashed;
-    margin-left: 2em;
-    padding: 1em;
+.resourceLink .recordresourcedetails {
+    display: none;
 }
 
-.recordresourcedetails a.resourcedownloadlink, .recordresourcedetails a.resourcedownloadlink:hover {
-    padding-left: 16px;
-    background: url('downloading-updates-128.png') no-repeat; /* icon from icons8.com */
-    background-size: 12px;
+.resourceLink:hover .recordresourcedetails {
+    display: block;
+    position: absolute;
+    left: 2em;
+    top: 80px;
+    z-index: 99;
+    margin-left: 0;
+    width: 400px;
+    padding: 2px;
+    background: #fff;
+    text-align: left;
 }
+
+span.recordresourcedetailsitem {
+    display: block;
+    font-weight: bold;
+}
+
+span.recordresourcedetailsitem span {
+    font-weight: normal;
+}
+
 
 /* Technical details */
 
