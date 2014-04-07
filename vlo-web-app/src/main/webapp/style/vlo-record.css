@@ -212,7 +212,15 @@ a.recordattributeinfo:after {
     width: 400px;
     padding: 2px;
     background: #fff;
+    opacity: .98;
     text-align: left;
+}
+
+span.recordresourcedetailstitle {
+    display: block;
+    font-weight: bold;
+    text-decoration: underline;
+    text-transform: capitalize;
 }
 
 span.recordresourcedetailsitem {
