@@ -22,11 +22,19 @@ h1
 
 h2
 { margin: 0px;
-  padding: 0px 0px 4px 0px;
+  padding: 8px 0px 6px 0px;
   font-size: 100%;
   letter-spacing: .1em;
-  font-weight: normal;
+  font-weight: bold;
   text-decoration: underline;
+}
+
+h3
+{ margin: 0px;
+  padding: 4px 0px 4px 0px;
+  font-size: 100%;
+  letter-spacing: .1em;
+  font-weight: bold;
 }
 
 img{border: 0px;}
