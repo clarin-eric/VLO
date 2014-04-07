@@ -29,13 +29,3 @@ $(document).ready(function() {
         $("#recordtechnicaldetailstoggle a").toggle();
     });
 });
-
-function hideResourceDetails() {
-    $(".recordresourcedetails").slideUp('fast');
-}
-
-function showResourceDetails() {
-    $(window).scrollTop($('#recordresourcedetailsContainer').position().top);
-    $(".recordresourcedetails").hide();
-    $(".recordresourcedetails").slideDown('fast');
-}
