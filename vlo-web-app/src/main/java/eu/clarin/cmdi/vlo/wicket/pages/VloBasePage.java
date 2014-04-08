@@ -16,16 +16,22 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import org.apache.wicket.markup.html.GenericWebPage;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  *
  * @author twagoo
  */
 public class VloBasePage<T> extends GenericWebPage<T> {
+
+    @SpringBean
+    private VloConfig vloConfig;
 
     public VloBasePage() {
         addComponents();
@@ -43,6 +49,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
     private void addComponents() {
         add(new FeedbackPanel("feedback"));
+        add(new ExternalLink("help", vloConfig.getHelpUrl()));
     }
 
 }
