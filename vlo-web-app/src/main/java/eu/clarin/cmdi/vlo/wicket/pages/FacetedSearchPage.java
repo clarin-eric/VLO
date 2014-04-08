@@ -1,7 +1,7 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.wicket.panels.SingleFacetPanel;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.wicket.panels.search.FacetsPanel;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
@@ -9,9 +9,7 @@ import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.panels.search.FacetPanel;
 import eu.clarin.cmdi.vlo.wicket.components.SearchForm;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel;
-import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
-import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.FacetValuesPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
@@ -33,7 +31,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private static final long serialVersionUID = 1L;
-    
+
     @SpringBean
     private FacetFieldsService facetFieldsService;
     @SpringBean
@@ -104,21 +102,11 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private Panel createCollectionsPanel(final String id) {
-        final IModel<QueryFacetsSelection> queryModel = getModel();
-        final FacetFieldModel collectionFacetFieldModel = new FacetFieldModel(facetFieldsService, vloConfig.getCollectionFacet(), queryModel, FacetValuesPanel.MAX_NUMBER_OF_FACETS_TO_SHOW);
-        final FacetSelectionModel collectionSelectionModel = new FacetSelectionModel(collectionFacetFieldModel, queryModel);
-        final FacetPanel panel = new FacetPanel(id, collectionSelectionModel, new Model<ExpansionState>(ExpansionState.COLLAPSED)) {
+        final FacetPanel panel = new SingleFacetPanel(id, getModel(), vloConfig.getCollectionFacet(), facetFieldsService) {
 
             @Override
             protected void selectionChanged(AjaxRequestTarget target) {
                 updateSelection(target);
-            }
-
-            @Override
-            protected boolean isHideIfNoValues() {
-                // collections facets should always be visible, even if no
-                // values are present (due to no search results)
-                return false;
             }
 
         };

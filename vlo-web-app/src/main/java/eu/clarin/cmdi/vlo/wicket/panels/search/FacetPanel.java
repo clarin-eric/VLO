@@ -28,7 +28,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -41,9 +41,8 @@ import org.apache.wicket.model.PropertyModel;
  *
  * @author twagoo
  */
-public abstract class FacetPanel extends Panel {
+public abstract class FacetPanel extends GenericPanel<FacetSelection> {
 
-    private final IModel<FacetSelection> selectionModel;
     private final IModel<ExpansionState> expansionStateModel;
 
     private final SelectedFacetPanel selectedFacetPanel;
@@ -52,7 +51,6 @@ public abstract class FacetPanel extends Panel {
     public FacetPanel(String id, IModel<FacetSelection> selectionModel, IModel<ExpansionState> expansionState) {
         super(id, selectionModel);
 
-        this.selectionModel = selectionModel;
         this.expansionStateModel = expansionState;
 
         // facet title annex expansion toggler
@@ -88,7 +86,7 @@ public abstract class FacetPanel extends Panel {
         };
 
         // Facet name becomes title
-        titleLink.add(new Label("title", new SolrFieldNameModel(new PropertyModel(selectionModel, "facetField.name"))));
+        titleLink.add(new Label("title", new SolrFieldNameModel(new PropertyModel(getModel(), "facetField.name"))));
         return titleLink;
     }
 
@@ -96,12 +94,12 @@ public abstract class FacetPanel extends Panel {
     protected void onConfigure() {
         super.onConfigure();
 
-        final boolean valuesSelected = !selectionModel.getObject().getFacetValues().isEmpty();
+        final boolean valuesSelected = !getModelObject().getFacetValues().isEmpty();
         facetValuesPanel.setVisible(!valuesSelected);
         selectedFacetPanel.setVisible(valuesSelected);
 
         // hide this entire panel is no values are selectable
-        setVisible(!isHideIfNoValues() || valuesSelected || selectionModel.getObject().getFacetField().getValueCount() > 0);
+        setVisible(!isHideIfNoValues() || valuesSelected || getModelObject().getFacetField().getValueCount() > 0);
     }
 
     /**
@@ -115,12 +113,12 @@ public abstract class FacetPanel extends Panel {
 
     private FacetValuesPanel createFacetValuesPanel(String id) {
         return new FacetValuesPanel(id,
-                new PropertyModel<FacetField>(selectionModel, "facetField"),
-                new PropertyModel<QueryFacetsSelection>(selectionModel, "selection")) {
+                new PropertyModel<FacetField>(getModel(), "facetField"),
+                new PropertyModel<QueryFacetsSelection>(getModel(), "selection")) {
                     @Override
                     public void onValuesSelected(String facet, Collection<String> value, AjaxRequestTarget target) {
                         // A value has been selected on this facet's panel, update the model!
-                        selectionModel.getObject().getSelection().selectValues(facet, value);
+                        FacetPanel.this.getModelObject().getSelection().selectValues(facet, value);
                         if (target != null) {
                             // reload entire page for now
                             selectionChanged(target);
@@ -130,10 +128,10 @@ public abstract class FacetPanel extends Panel {
     }
 
     private SelectedFacetPanel createSelectedFacetPanel(String id) {
-        return new SelectedFacetPanel(id, selectionModel) {
+        return new SelectedFacetPanel(id, getModel()) {
             @Override
             public void onValuesUnselected(String facet, Collection<String> valuesRemoved, AjaxRequestTarget target) {
-                final QueryFacetsSelection selection = selectionModel.getObject().getSelection();
+                final QueryFacetsSelection selection = getModelObject().getSelection();
 
                 // Values have been removed, calculate remainder
                 final Collection<String> currentSelection = selection.getSelectionValues(facet);
