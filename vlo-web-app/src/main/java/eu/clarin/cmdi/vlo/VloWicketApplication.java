@@ -6,11 +6,9 @@ import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
-import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.resource.loader.BundleStringResourceLoader;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.lang.Bytes;
@@ -80,17 +78,6 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         final Bytes sessionCacheSize = Bytes.kilobytes((long) vloConfig.getSessionCacheSize());
         logger.info("Setting Wicket max size per session to {}", sessionCacheSize);
         this.getStoreSettings().setMaxSizePerSession(sessionCacheSize);
-
-        getResourceBundles().addCssBundle(VloBasePage.class, "vlo.css",
-                new CssResourceReference(VloBasePage.class, "style.css"),
-                new CssResourceReference(VloBasePage.class, "colour.css"),
-                new CssResourceReference(VloBasePage.class, "vlo.css"),
-                new CssResourceReference(VloBasePage.class, "vlo-header.css"),
-                new CssResourceReference(VloBasePage.class, "vlo-collections.css"),
-                new CssResourceReference(VloBasePage.class, "vlo-facets.css"),
-                new CssResourceReference(VloBasePage.class, "vlo-search.css"),
-                new CssResourceReference(VloBasePage.class, "vlo-record.css")
-        );
     }
 
     /**

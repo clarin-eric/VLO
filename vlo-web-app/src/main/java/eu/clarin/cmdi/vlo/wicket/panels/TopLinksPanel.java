@@ -17,10 +17,12 @@
 package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.form.TextField;
@@ -149,9 +151,16 @@ public class TopLinksPanel extends GenericPanel<QueryFacetsSelection> {
         @Override
         public String getObject() {
             final PageParameters params = paramsConverter.toParameters(selectionmodel.getObject());
+
             if (documentModel != null) {
                 params.add("docId", documentModel.getObject().getFirstValue(FacetConstants.FIELD_ID));
             }
+
+            final String style = Session.get().getStyle();
+            if (style != null) {
+                params.add(VloWebAppParameters.THEME, style);
+            }
+
             final CharSequence url = urlFor(getPage().getClass(), params);
             final String absoluteUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(url));
             return absoluteUrl;

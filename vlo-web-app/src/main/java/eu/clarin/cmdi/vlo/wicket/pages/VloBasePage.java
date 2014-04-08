@@ -16,7 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.GenericWebPage;
@@ -25,8 +27,8 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.string.StringValue;
 
 /**
  *
@@ -48,13 +50,26 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
     public VloBasePage(PageParameters parameters) {
         super(parameters);
+        processTheme(parameters);
         addComponents();
+    }
+
+    private void processTheme(PageParameters parameters) {
+        final StringValue theme = parameters.get(VloWebAppParameters.THEME);
+        if (!theme.isNull()) {
+            if (theme.isEmpty()) {
+                Session.get().setStyle(null);
+            } else {
+                Session.get().setStyle(theme.toString().toLowerCase());
+            }
+        }
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.render(
-                CssHeaderItem.forReference(new CssResourceReference(VloBasePage.class, "vlo.css")));
+        // Include CSS. Exact file will be chosen on basis of current locale and
+        // style (theme).
+        response.render(CssHeaderItem.forReference(new CssResourceReference(VloBasePage.class, "vlo.css", getLocale(), getStyle(), getVariation())));
     }
 
     private void addComponents() {

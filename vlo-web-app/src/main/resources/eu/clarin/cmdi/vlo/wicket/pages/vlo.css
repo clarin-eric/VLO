@@ -19,3 +19,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Created on : Jan 24, 2014, 10:06:50 AM
     Author     : twagoo
 */
+
+@import "style.css";
+@import "colour.css";
+
+/* styles for header and static topic section */
+@import "vlo-header.css";
+
+/* styles for collection selection */
+@import "vlo-collections.css";
+
+/* styles for facet panels */
+@import "vlo-facets.css";
+
+/* styles for search bar */
+@import "vlo-search.css";
+
+/* styles for record details */
+@import "vlo-record.css";
