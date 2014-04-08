@@ -17,11 +17,15 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.GenericWebPage;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -45,6 +49,12 @@ public class VloBasePage<T> extends GenericWebPage<T> {
     public VloBasePage(PageParameters parameters) {
         super(parameters);
         addComponents();
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.render(
+                CssHeaderItem.forReference(new CssResourceReference(VloBasePage.class, "vlo.css")));
     }
 
     private void addComponents() {

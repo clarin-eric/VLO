@@ -1,0 +1,160 @@
+/*
+Copyright (C) 2014 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/* 
+    Created on : Jan 28, 2014, 2:37:38 PM
+    Author     : twagoo
+*/
+
+/* Header image and icons */
+
+#header {
+    width: 980px;
+    height: 176px;
+    border: 0px;
+}
+
+#header #logo {
+    background: url('vloheader.png') no-repeat;
+    width: 100%;
+    height: 100%;
+}
+
+#header #logo h1 {
+    display: none;
+}
+
+/* positioning of logo links */
+
+#header #logo a {
+    display: block;
+    position: relative;
+    top: 65px;
+    height: 40px;
+}
+
+#header #logo a span {
+    display: none;
+}
+
+a#headerlink_clarin {
+    left: 600px;
+    width: 50px;
+}
+
+/* Navigation bar */
+
+#topnavigation {
+    margin: 8px 15px 2px 15px;
+    padding: 0px 4px 0px 8px;
+    /*min-height: 1.5em;*/
+}
+
+#topnavigation #breadcrumbs {
+    float: left;
+    clear: left;
+    width: 75%;
+    padding-bottom: .5em;
+}
+
+#topnavigation #topnavigationlinks {
+    float: right;
+    clear: right;
+    text-align: right;
+    width: 20%;
+    padding-bottom: .5em;
+}
+
+#topnavigation #topnavigationlinks a {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+}
+
+#topnavigation #topnavigationlinks a {
+    background-size: 12px;
+    background-repeat: no-repeat;
+    text-decoration: none;
+}
+
+#topnavigation #topnavigationlinks a span {
+    display: none;
+}
+
+/*#topnavigation #topnavigationlinks #help:after {
+    content: 'Help'
+}*/
+
+#topnavigation #topnavigationlinks #permalink {
+    background-image: url('link-128.png'); /* icon from icons8.com */
+}
+
+#topnavigation #topnavigationlinks #helplink {
+    background-image: url('info-256.png'); /* icon from icons8.com */
+}
+
+#topnavigation #topnavigationlinks #feedbacklink {
+    background-image: url('error-256.png'); /* icon from icons8.com */
+}
+
+a.breadcrumbunselect, a.breadcrumbunselect:hover {
+    text-decoration: none;
+}
+
+a.breadcrumbunselect {
+    color: #000;
+}
+
+a.breadcrumbunselect:hover {
+    color: #f00;
+}
+
+a.breadcrumbunselect span {
+    display: none;
+}
+
+a.breadcrumbunselect:after {
+    /* show delete cross */
+    content: "✕";
+}
+
+#permalinkfield
+{
+    float: right;
+    position: relative;
+    top: 1em;
+    width: 30em;
+    margin-bottom: 1em;
+    text-align: right;
+}
+
+/* Feedback panel */
+
+div#feedback ul {
+    margin-right: 2em;
+    list-style-type: none;
+}
+
+div#feedback li {
+    list-style-type: none;
+    padding: .2em;
+}
+
+div#feedback li.feedbackPanelERROR {
+    border: 3px solid red;
+    color: red;
+    font-weight: bold;
+}
