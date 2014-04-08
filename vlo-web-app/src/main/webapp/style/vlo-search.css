@@ -81,6 +81,7 @@ li.searchresultitem h2 {
     text-decoration: none;
     float: left;
     width: 75%;
+    font-weight: normal;
 }
 
 li.searchresultitem .searchresultcollection{

@@ -30,7 +30,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.UrlFromStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.XsltModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.PermaLinkPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.ContentSearchFormPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordNavigationPanel;
@@ -151,8 +151,8 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         }
     }
 
-    private PermaLinkPanel createPermalink(String id, final WebMarkupContainer topNavigation) {
-        return new PermaLinkPanel(id, selectionModel, getModel()) {
+    private TopLinksPanel createPermalink(String id, final WebMarkupContainer topNavigation) {
+        return new TopLinksPanel(id, selectionModel, getModel()) {
 
             @Override
             protected void onChange(AjaxRequestTarget target) {

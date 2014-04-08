@@ -14,7 +14,7 @@ import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.FacetValuesPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.PermaLinkPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -66,7 +66,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         add(navigation);
 
         navigation.add(new BreadCrumbPanel("breadcrumbs", getModel()));
-        navigation.add(new PermaLinkPanel("permalink", getModel()) {
+        navigation.add(new TopLinksPanel("permalink", getModel()) {
 
             @Override
             protected void onChange(AjaxRequestTarget target) {
