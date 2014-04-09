@@ -61,41 +61,22 @@
                     </p>
                 </form>
                 <h1>Browse</h1>
-                <p wicket:id="browse">
+                <div wicket:id="browse" id="frontfacets">
                     <a wicket:id="browseAll" href="FacetedSearch.html">
                         <wicket:container wicket:id="recordCount">All 604056 records</wicket:container>
                     </a>
-                    | filter by: <a id="filterlanguage" href="">Language</a>
-                    | <a href="">Type</a> 
-                    | <a href="">Genre</a>
-                    | <a href="">National project</a> 
-                    | <wicket:link><a href="FacetedSearchPage.html">Other</a></wicket:link>
-                </p>
-
-                <div id="frontfacets">
-                    <div class="facet" id="facetlanguage">
-                        <a href class="filtertoggle"><span>filter</span></a>
-                        <form class="filterform">
+                    | filter by: 
+                    <wicket:container wicket:id="facet">
+                        <a wicket:id="select" href=""><wicket:container wicket:id="name">Language</wicket:container></a>
+                        <div wicket:id="valuesContainer" class="facet" id="facetlanguage">
                             <p>
-                                Select a <em>language</em> to filter by or type to search for more:
-                                <input type="text" />
+                                Select a value to filter by or type to search for more:
                             </p>
-                        </form>
-                        <div class="sbilinks facetvalues">
-                            <ul>
-                                <li><a href="index3.html">Dutch (148167)</a></li>
-                                <li><a href="index3.html">English (72547)</a></li>
-                                <li><a href="index3.html">German (39042)</a></li>
-                                <li><a href="index3.html">French (9227)</a></li>
-                                <li><a href="index3.html">Spanish; Castilian (8684)</a></li>
-                                <li><a href="index3.html">Danish (8447)</a></li>
-                                <li><a href="index3.html">Japanese (6761)</a></li>
-                                <li><a href="index3.html">Turkish (4988)</a></li>
-                                <li><a href="index3.html">Chinese (1980)</a></li>
-                                <li class="more-link"><a href="#">more...</a></li>
-                            </ul>
+                            <wicket:container wicket:id="values">[VALUES]</wicket:container>
                         </div>
-                    </div>
+                        <wicket:container wicket:id="separator">|</wicket:container>
+                    </wicket:container>
+                    | <wicket:link><a href="FacetedSearchPage.html">Other &#xbb;</a></wicket:link>
                 </div>
             </div>
 

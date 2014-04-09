@@ -63,6 +63,7 @@ public class FacetFieldsModel extends LoadableDetachableModel<List<FacetField>> 
 
     @Override
     protected List<FacetField> load() {
+        //TODO: Try to query only for selected facets!
         final List<FacetField> allFacetFields = service.getFacetFields(selectionModel.getObject(), valueLimit);
         final Collection<FacetField> filtered = Collections2.filter(allFacetFields, new Predicate<FacetField>() {
 

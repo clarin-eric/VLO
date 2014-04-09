@@ -22,7 +22,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* facet links */
 
+#frontfacets {
+    position: relative;
+}
+
 #frontfacets .facet {
+    display: inline-block;
+    position: absolute;
+    top: 3em;
+    left: 10px;
     margin-left: 6px;
     width: 350px;
     padding: 6px;
