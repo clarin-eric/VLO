@@ -20,10 +20,11 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.components.SearchForm;
-import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.SingleFacetPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -40,31 +41,37 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
     private FacetFieldsService facetFieldsService;
 
     private final SingleFacetPanel collectionsPanel;
-    private final TopLinksPanel topLinksPanel;
-    
+    private final WebMarkupContainer navigation;
+
     public SimpleSearchPage(PageParameters parameters) {
         super(parameters);
 
+        // if a query selection is passed in, redirect to search page
+        if (!parameters.isEmpty()) {
+            throw new RestartResponseException(FacetedSearchPage.class, parameters);
+        }
+
         final Model<QueryFacetsSelection> model = Model.of(new QueryFacetsSelection());
         setModel(model);
-                
-        topLinksPanel = new TopLinksPanel("topLinks", model);
-        topLinksPanel.setOutputMarkupId(true);
-        add(topLinksPanel);
-        
+
+        navigation = new WebMarkupContainer("navigation");
+        navigation.setOutputMarkupId(true);
+        navigation.add(new TopLinksPanel("topLinks"));
+        add(navigation);
+
         collectionsPanel = new SingleFacetPanel("collectionsFacet", model, vloConfig.getCollectionFacet(), facetFieldsService) {
-            
+
             @Override
             protected void selectionChanged(AjaxRequestTarget target) {
-                if(target != null){
-                    target.add(topLinksPanel);
+                if (target != null) {
+                    target.add(navigation);
                     target.add(collectionsPanel);
                 }
             }
         };
         collectionsPanel.setOutputMarkupId(true);
         add(collectionsPanel);
-        
+
         add(new SearchForm("search", model) {
 
             @Override

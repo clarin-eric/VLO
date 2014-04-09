@@ -63,6 +63,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         // register the resource of application properties (version information filtered at build time)
         getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("application"));
 
+        // Faceted search page (simple search is on root)
+        mountPage("/search", FacetedSearchPage.class);
         // Record (query result) page. E.g. /vlo/record?docId=abc123
         // (cannot encode docId in path because it contains a slash)
         mountPage("/record", RecordPage.class);

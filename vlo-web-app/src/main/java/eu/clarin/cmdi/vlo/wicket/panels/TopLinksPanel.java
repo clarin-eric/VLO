@@ -62,6 +62,10 @@ public class TopLinksPanel extends GenericPanel<QueryFacetsSelection> {
     private final IModel<SolrDocument> documentModel;
     private final Model<Boolean> linkVisibilityModel;
 
+    public TopLinksPanel(String id) {
+        this(id, null, null);
+    }
+
     public TopLinksPanel(String id, final IModel<QueryFacetsSelection> selectionmodel) {
         this(id, selectionmodel, null);
     }
@@ -72,7 +76,12 @@ public class TopLinksPanel extends GenericPanel<QueryFacetsSelection> {
         this.linkVisibilityModel = new Model<Boolean>(false);
 
         // create a model that provides a link to the current page
-        final IModel<String> linkModel = new PermaLinkModel(selectionmodel, documentModel);
+        final IModel<String> linkModel;
+        if (selectionmodel == null) {
+            linkModel = null;
+        } else {
+            linkModel = new PermaLinkModel(selectionmodel, documentModel);
+        }
 
         // action to link to request the permalink
         add(createPermaLink("linkrequest", linkModel));
@@ -109,6 +118,13 @@ public class TopLinksPanel extends GenericPanel<QueryFacetsSelection> {
                 // callback to react to change
                 onChange(target);
             }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(linkModel != null);
+            }
+
         };
     }
 
