@@ -76,12 +76,7 @@ public class TopLinksPanel extends GenericPanel<QueryFacetsSelection> {
         this.linkVisibilityModel = new Model<Boolean>(false);
 
         // create a model that provides a link to the current page
-        final IModel<String> linkModel;
-        if (selectionmodel == null) {
-            linkModel = null;
-        } else {
-            linkModel = new PermaLinkModel(selectionmodel, documentModel);
-        }
+        final IModel<String> linkModel = new PermaLinkModel(selectionmodel, documentModel);
 
         // action to link to request the permalink
         add(createPermaLink("linkrequest", linkModel));
@@ -122,7 +117,7 @@ public class TopLinksPanel extends GenericPanel<QueryFacetsSelection> {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-                setVisible(linkModel != null);
+                setVisible(TopLinksPanel.this.getModel() != null);
             }
 
         };
@@ -166,7 +161,10 @@ public class TopLinksPanel extends GenericPanel<QueryFacetsSelection> {
 
         @Override
         public String getObject() {
-            final PageParameters params = paramsConverter.toParameters(selectionmodel.getObject());
+            final PageParameters params = new PageParameters();
+            if (selectionmodel != null) {
+                params.mergeWith(paramsConverter.toParameters(selectionmodel.getObject()));
+            }
 
             if (documentModel != null) {
                 params.add("docId", documentModel.getObject().getFirstValue(FacetConstants.FIELD_ID));

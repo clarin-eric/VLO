@@ -33,10 +33,9 @@
 
         <wicket:extend>
 
-            <div id="topnavigation">
-                <!--<div wicket:id="breadcrumbs" id="breadcrumbs">[BREADCRUMBS]</div>-->
-                <div id="breadcrumbs"><wicket:link><a href="SimpleSearchPage.html">VLO</a></wicket:link></div>
-                <div wicket:id="navigation" id="topnavigationlinks">
+            <div wicket:id="navigation" id="topnavigation">
+                <div id="breadcrumbs"><a wicket:id="breadcrumb" href="SimpleSearchPage.html">VLO</a></div>
+                <div id="topnavigationlinks">
                     <wicket:container wicket:id="topLinks">[permalink]</wicket:container>
                     <!--<a id="help" href="" title="Help"><span>[Help]</span></a>-->
                 </div>
@@ -62,12 +61,15 @@
                     </p>
                 </form>
                 <h1>Browse</h1>
-                <p>
-                    <a href="index2.html">All 604056 records</a> | filter by: <a id="filterlanguage" href="">Language</a>
+                <p wicket:id="browse">
+                    <a wicket:id="browseAll" href="FacetedSearch.html">
+                        <wicket:container wicket:id="recordCount">All 604056 records</wicket:container>
+                    </a>
+                    | filter by: <a id="filterlanguage" href="">Language</a>
                     | <a href="">Type</a> 
                     | <a href="">Genre</a>
                     | <a href="">National project</a> 
-                    | <a href="index2.html">Other</a>
+                    | <wicket:link><a href="FacetedSearchPage.html">Other</a></wicket:link>
                 </p>
 
                 <div id="frontfacets">
