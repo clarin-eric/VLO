@@ -6,6 +6,7 @@ import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
+import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -44,7 +45,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
      */
     @Override
     public Class<? extends WebPage> getHomePage() {
-        return FacetedSearchPage.class;
+        return SimpleSearchPage.class;
     }
 
     /**
