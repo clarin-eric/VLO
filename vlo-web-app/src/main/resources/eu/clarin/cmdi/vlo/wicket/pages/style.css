@@ -21,12 +21,16 @@ h1
 }
 
 h2
-{ margin: 0px;
-  padding: 8px 0px 6px 0px;
-  font-size: 100%;
-  letter-spacing: .1em;
-  font-weight: bold;
-  text-decoration: underline;
+{
+    width: 100%;
+    margin: 0px 0px 1em 0px;
+    padding: 8px 0px 0px 0px;
+    font-size: 100%;
+    letter-spacing: .1em;
+    font-weight: bold;
+    text-decoration: none;
+    border-bottom: 1px solid #666;
+    text-transform: uppercase;
 }
 
 h3

@@ -36,6 +36,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     clear: both;
 }
 
+#searchresults h2 {
+    border-bottom: none;
+}
+
 #searchresultsheader {
     border-bottom: 1px solid #999;
     height: 1em;
@@ -77,11 +81,19 @@ li.searchresultitem {
     margin: 0px;
 }
 
-li.searchresultitem h2 {
+li.searchresultitem a {
+    color: #000;
+}
+
+li.searchresultitem h3 {
     text-decoration: none;
     float: left;
     width: 75%;
     font-weight: normal;
+}
+
+li.searchresultitem h3 a {
+    color: #000A83;
 }
 
 li.searchresultitem .searchresultcollection{
