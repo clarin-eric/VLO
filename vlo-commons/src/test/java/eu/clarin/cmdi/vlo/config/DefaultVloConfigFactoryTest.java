@@ -717,7 +717,7 @@ public class DefaultVloConfigFactoryTest {
             "keywords",
             "collection"};
         List<String> result = config.getAllFacetFields();
-        
+
         //order is not important in this case
         assertThat(result, hasItems(expItems));
     }
@@ -970,18 +970,22 @@ public class DefaultVloConfigFactoryTest {
         final String result = config.getCollectionFacet();
         assertEquals("collection", result);
     }
-    
+
     @Test
     public void testGetIgnoredFields() {
         Set<String> result = config.getIgnoredFields();
         assertEquals(1, result.size());
     }
-    
-    
+
     @Test
     public void testGetTechnicalFields() {
         Set<String> result = config.getTechnicalFields();
         assertEquals(7, result.size());
     }
-}
 
+    @Test
+    public void testGetSimpleSearchFacetFields() {
+        List<String> result = config.getSimpleSearchFacetFields();
+        assertEquals(4, result.size());
+    }
+}

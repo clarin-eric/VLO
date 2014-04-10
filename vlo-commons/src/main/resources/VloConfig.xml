@@ -84,6 +84,13 @@
         <facetField>nationalProject</facetField>
         <facetField>keywords</facetField>
     </facetFields>
+        
+    <simpleSearchFacetFields>
+        <simpleSearchFacetField>language</simpleSearchFacetField>
+        <simpleSearchFacetField>resourceClass</simpleSearchFacetField>
+        <simpleSearchFacetField>genre</simpleSearchFacetField>
+        <simpleSearchFacetField>nationalProject</simpleSearchFacetField>
+    </simpleSearchFacetFields>
     
     <!-- Fields shown in expanded search results on the search page -->
     <searchResultFields>

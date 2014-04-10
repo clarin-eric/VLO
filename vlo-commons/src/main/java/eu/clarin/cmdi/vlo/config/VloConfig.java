@@ -130,6 +130,9 @@ public class VloConfig {
     @XmlElementWrapper(name = "facetFields")
     private List<String> facetField = new ArrayList<String>();
 
+    @XmlElementWrapper(name = "simpleSearchFacetFields")
+    private List<String> simpleSearchFacetField;
+
     private String collectionFacet;
 
     // test related parameters
@@ -717,6 +720,14 @@ public class VloConfig {
      */
     public List<String> getFacetFields() {
         return facetField;
+    }
+
+    public List<String> getSimpleSearchFacetFields() {
+        return simpleSearchFacetField;
+    }
+
+    public void setSimpleSearchFacetFields(List<String> simpleSearchFacetField) {
+        this.simpleSearchFacetField = simpleSearchFacetField;
     }
 
     /**

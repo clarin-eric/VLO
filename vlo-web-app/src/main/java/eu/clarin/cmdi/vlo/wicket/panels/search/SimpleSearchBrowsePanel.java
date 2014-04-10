@@ -16,14 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
-import com.google.common.collect.ImmutableList;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
-import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
 import java.util.Collection;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
@@ -53,9 +52,8 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
     private FacetFieldsService facetFieldsService;
     @SpringBean
     private SolrDocumentService documentService;
-
-    //TODO: read from config
-    private final List<String> FACETS = ImmutableList.of("language", "resourceClass", "genre", "nationalProject");
+    @SpringBean
+    private VloConfig vloConfig;
 
     public SimpleSearchBrowsePanel(String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
@@ -79,11 +77,8 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
     }
 
     private Component addFacets(final String id) {
-        //TODO: Turn into panel
-        //TODO: Find out why 'more' links do not appear (seems to be because of limited facet fields model)
         //TODO: Filter text box
-
-        final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(facetFieldsService, FACETS, getModel(), -1);
+        final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(facetFieldsService, vloConfig.getSimpleSearchFacetFields(), getModel(), -1);
         final IModel<String> selectedFacetModel = new Model<String>(null);
         return new ListView<FacetField>(id, facetFieldsModel) {
 
