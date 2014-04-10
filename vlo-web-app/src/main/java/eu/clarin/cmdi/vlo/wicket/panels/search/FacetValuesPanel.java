@@ -25,16 +25,21 @@ import java.util.Collections;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 /**
  * A panel representing a single facet and its selectable values
@@ -46,28 +51,67 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     public final static int MAX_NUMBER_OF_FACETS_TO_SHOW = 10; //TODO: get from config
 
     private final ModalWindow valuesWindow;
+    private final FacetFieldValuesProvider valuesProvider;
     private final IModel<QueryFacetsSelection> selectionModel;
+    private final WebMarkupContainer valuesContainer;
+    private final IModel<String> filterModel;
 
     public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, model);
         this.selectionModel = selectionModel;
 
-        // provider that extracts values and counts from FacetField
-        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(model, MAX_NUMBER_OF_FACETS_TO_SHOW);
-        add(new DataView<Count>("facetValues", valuesProvider) {
+        // shared model that holds the string for filtering the values (quick search)
+        filterModel = new Model<String>(null);
+        // create a form with an input bound to the filter model
+        add(createFilterForm("filter"));
+
+        valuesProvider = new FacetFieldValuesProvider(model, MAX_NUMBER_OF_FACETS_TO_SHOW) {
+
+            @Override
+            protected IModel<String> getFilterModel() {
+                return filterModel;
+            }
+
+        };
+
+        // create a container for values to allow for AJAX updates when filtering
+        valuesContainer = new WebMarkupContainer("valuesContainer");
+        valuesContainer.setOutputMarkupId(true);
+        add(valuesContainer);
+
+        // create a view for the actual values
+        final DataView<Count> valuesView = new DataView<Count>("facetValues", valuesProvider) {
 
             @Override
             protected void populateItem(final Item<Count> item) {
                 addFacetValue(item);
             }
-        });
+        };
+        valuesView.setOutputMarkupId(true);
+        valuesContainer.add(valuesView);
+
+        // create a link for showing all values        
+        valuesContainer.add(createAllValuesLink("allFacetValuesLink"));
 
         // create a popup window for all facet values
         valuesWindow = createAllValuesWindow("allValues");
         add(valuesWindow);
-        
-        // create a link for showing all values        
-        add(createAllValuesLink("allFacetValuesLink"));
+    }
+
+    private Form createFilterForm(String id) {
+        final Form filterForm = new Form(id);
+        final TextField<String> filterField = new TextField<String>("filterText", filterModel);
+        // make field update 
+        filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
+            
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                //update values
+                target.add(valuesContainer);
+            }
+        });
+        filterForm.add(filterField);
+        return filterForm;
     }
 
     private void addFacetValue(final Item<Count> item) {
@@ -78,6 +122,9 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
+                // reset filter
+                filterModel.setObject(null);
+
                 // call callback
                 onValuesSelected(
                         item.getModelObject().getFacetField().getName(),
@@ -104,7 +151,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
         };
 
-        final AllFacetValuesPanel allValuesPanel = new AllFacetValuesPanel(window.getContentId(), getModel()) {
+        final AllFacetValuesPanel allValuesPanel = new AllFacetValuesPanel(window.getContentId(), getModel(), filterModel) {
 
             @Override
             protected void onValuesSelected(String facet, Collection<String> values, AjaxRequestTarget target) {
@@ -145,6 +192,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     public void detachModels() {
         super.detachModels();
         selectionModel.detach();
+        filterModel.detach();
     }
 
     /**

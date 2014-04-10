@@ -44,9 +44,8 @@ import org.apache.wicket.model.PropertyModel;
 /**
  * A panel that shows all available values for a selected facet. Supports two
  * ordering modes (by name or result count) and dynamic filtering.
- * 
- * TODO: sort ignoring case
- * TODO: filter with contains instead of startsWith
+ *
+ * TODO: sort ignoring case TODO: filter with contains instead of startsWith
  * TODO: group by first letter when sorted by name
  *
  * @author twagoo
@@ -55,17 +54,39 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
     private final FacetFieldValuesProvider valuesProvider;
     private final WebMarkupContainer valuesContainer;
-    private IModel<String> filterModel = new Model<String>();
+    private final IModel<String> filterModel;
 
+    /**
+     *
+     * @param id component id
+     * @param model model for the facet field to show values for
+     */
     public AllFacetValuesPanel(String id, IModel<FacetField> model) {
+        this(id, model, null);
+    }
+
+    /**
+     *
+     * @param id component id
+     * @param model model for the facet field to show values for
+     * @param filterModel model that holds a string to filter in (can be null)
+     */
+    public AllFacetValuesPanel(String id, IModel<FacetField> model, IModel<String> filterModel) {
         super(id, model);
+
+        if (filterModel != null) {
+            this.filterModel = filterModel;
+        } else {
+            this.filterModel = new Model<String>();
+        }
+
         // create a provider that shows all values and is sorted by name by default
         valuesProvider = new FacetFieldValuesProvider(model, Integer.MAX_VALUE, FieldValueOrderSelector.NAME_SORT) {
 
             @Override
             protected IModel<String> getFilterModel() {
                 // filters the values
-                return filterModel;
+                return AllFacetValuesPanel.this.filterModel;
             }
 
         };
@@ -139,9 +160,15 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
             }
         });
         options.add(filterField);
-        
+
         //TODO: Add non-JS submit option
         return options;
+    }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        filterModel.detach();
     }
 
     /**

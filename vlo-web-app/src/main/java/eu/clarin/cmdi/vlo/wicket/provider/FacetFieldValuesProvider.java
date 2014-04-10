@@ -35,7 +35,7 @@ import org.apache.wicket.model.Model;
  * SOLR) present on a {@link FacetField}, sortable by either count or name
  *
  * TODO: Add option to hide values with only 1 record (as in VLO 2.x)
- * 
+ *
  * @see FieldValuesOrder
  * @author twagoo
  */
@@ -88,15 +88,19 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
         final Iterable<Count> filtered = filter(values);
         // sort what remains
         final ImmutableList sorted = getOrdering().immutableSortedCopy(filtered);
-        // return iterator starting at specified offset
-        return sorted.listIterator((int) first);
+        if (sorted.size() > maxNumberOfItems) {
+            return sorted.subList(0, maxNumberOfItems).listIterator((int) first);
+        } else {
+            // return iterator starting at specified offset
+            return sorted.listIterator((int) first);
+        }
     }
 
     @Override
     public long size() {
         if (hasFilter()) {
             final List<FacetField.Count> values = model.getObject().getValues();
-            return Iterables.size(filter(values));
+            return Math.min(maxNumberOfItems, Iterables.size(filter(values)));
         } else {
             // Use value count from Solr, faster.
             //
