@@ -60,8 +60,6 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
         add(new BookmarkablePageLink("mainpage", FacetedSearchPage.class));
         add(query = createQuery(model, "query"));
         add(facets = createFacets(model, "facets"));
-        //TODO: Add document from model if present
-
     }
 
     private WebMarkupContainer createQuery(final IModel<QueryFacetsSelection> selectionModel, String id) {

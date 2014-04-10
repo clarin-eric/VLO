@@ -58,7 +58,6 @@ public class FacetFieldsModel extends LoadableDetachableModel<List<FacetField>> 
 
     @Override
     protected List<FacetField> load() {
-        //TODO: Try to query only for selected facets!
         return service.getFacetFields(selectionModel.getObject(), facets, valueLimit);
     }
 

@@ -66,7 +66,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
 
     private ResourceType determineResourceType(final String mimeType) {
         final String normalizeMimeType = CommonUtils.normalizeMimeType(mimeType);
-        // map to ResourceType and add to bag (TODO: normalize to ResourceType directly?)
+        // map to ResourceType and add to bag
         if (normalizeMimeType.equals(FacetConstants.RESOURCE_TYPE_ANNOTATION)) {
             return ResourceType.ANNOTATION;
         } else if (normalizeMimeType.equals(FacetConstants.RESOURCE_TYPE_AUDIO)) {

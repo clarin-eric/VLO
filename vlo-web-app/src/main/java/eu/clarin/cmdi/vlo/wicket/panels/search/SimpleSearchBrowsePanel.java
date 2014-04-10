@@ -78,7 +78,6 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
     }
 
     private Component addFacets(final String id) {
-        //TODO: Filter text box
         final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(facetFieldsService, vloConfig.getSimpleSearchFacetFields(), getModel(), -1);
         final IModel<String> selectedFacetModel = new Model<String>(null);
         return new ListView<FacetField>(id, facetFieldsModel) {
