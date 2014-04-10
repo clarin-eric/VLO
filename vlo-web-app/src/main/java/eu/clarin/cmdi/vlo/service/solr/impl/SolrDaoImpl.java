@@ -1,8 +1,8 @@
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
+import com.google.common.collect.ImmutableSet;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -14,14 +14,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SolrDaoImpl {
-    
+
     private final static Logger logger = LoggerFactory.getLogger(SolrDaoImpl.class);
     private final SolrServer solrServer;
-    private final VloConfig config;
+    private final Collection<String> facetsDefined;
 
     public SolrDaoImpl(SolrServer solrServer, VloConfig config) {
         this.solrServer = solrServer;
-        this.config = config;
+        //put facet names in a hashset for quick lookup
+        facetsDefined = ImmutableSet.copyOf(config.getAllFacetFields());
     }
 
     protected SolrServer getSolrserver() {
@@ -32,7 +33,7 @@ public class SolrDaoImpl {
      * Basic sanitising of Solr queries.
      *
      * TODO: Move this to QueryFacetSelection level??
-     * 
+     *
      * Query is based on the URL to the VLO web application. Also, explain about
      * the URL and ?fq=language:dutch Assume filters have the form a:b like for
      * example language:dutch
@@ -52,10 +53,6 @@ public class SolrDaoImpl {
         } else {
             // get the facets from the configuration file
             // facetsFromConfig = VloConfig.getFacetFields();
-
-            // present the facets from the config file as a list to a new set
-            Set<String> facetsDefined;
-            facetsDefined = new HashSet<String>(config.getAllFacetFields());
 
             // check the filters in the query by name
             for (String filter : filtersInQuery) {
