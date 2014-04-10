@@ -28,42 +28,39 @@ import org.apache.solr.client.solrj.SolrQuery;
  * @author twagoo
  */
 public class SolrFacetQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrFacetQueryFactory {
-    
-    private final SolrQuery facetCountQuery;
-    private final String[] facets;
-    
-    /**
-     * 
-     * @param facets names of facets to include in query
-     */
-    public SolrFacetQueryFactoryImpl(List<String> facets) {
-        this.facets = facets.toArray(new String[facets.size()]);
 
-        // create the query used to count facets (will never change)
-        facetCountQuery = getDefaultFacetQuery();
-        facetCountQuery.setRows(0);
+    private final SolrQuery baseQuery;
+
+    /**
+     *
+     */
+    public SolrFacetQueryFactoryImpl() {
+        // create the base query (copied on each request to create new queries)
+        baseQuery = new SolrQuery();
+        baseQuery.setRows(0);
+        baseQuery.setFacet(true);
+        baseQuery.setFacetMinCount(1);
     }
-    
+
     @Override
-    public SolrQuery createFacetQuery(QueryFacetsSelection queryFacetsSelections, int facetValueLimit) {
-        final SolrQuery query = getDefaultFacetQuery();
+    public SolrQuery createFacetQuery(QueryFacetsSelection queryFacetsSelections, List<String> facets, int facetValueLimit) {
+        final SolrQuery query = getBaseQuery(facets);
         addQueryFacetParameters(query, queryFacetsSelections);
-        query.setFacetLimit(facetValueLimit); 
+        query.setFacetLimit(facetValueLimit);
         return query;
     }
-    
-    private SolrQuery getDefaultFacetQuery() {
-        SolrQuery query = new SolrQuery();
-        query.setRows(0);
-        query.setFacet(true);
-        query.setFacetMinCount(1);
-        query.addFacetField(facets);
-        return query;
-    }
-    
+
     @Override
-    public synchronized SolrQuery createCountFacetsQuery() {
-        return facetCountQuery;
+    public synchronized SolrQuery createCountFacetsQuery(List<String> facets) {
+        final SolrQuery query = getBaseQuery(facets);
+        query.setFacetLimit(0);
+        return query;
     }
-    
+
+    private SolrQuery getBaseQuery(List<String> facets) {
+        SolrQuery query = baseQuery.getCopy();
+        query.addFacetField(facets.toArray(new String[facets.size()]));
+        return query;
+    }
+
 }

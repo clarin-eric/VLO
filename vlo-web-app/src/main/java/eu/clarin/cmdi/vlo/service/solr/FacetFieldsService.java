@@ -31,15 +31,17 @@ public interface FacetFieldsService {
     /**
      *
      * @param selection query and selected facet values
+     * @param facets facets to include
      * @param valueLimit limits the number of values to retrieve per facet,
      * negative for unlimited (see {@link SolrQuery#getFacetLimit() })
      * @return facet field objects representing the state of all present facets
      */
-    List<FacetField> getFacetFields(QueryFacetsSelection selection, int valueLimit);
+    List<FacetField> getFacetFields(QueryFacetsSelection selection, List<String> facets, int valueLimit);
 
     /**
      *
+     * @param facets facets to include
      * @return the total number of facets
      */
-    long getFacetFieldCount();
+    long getFacetFieldCount(List<String> facets);
 }

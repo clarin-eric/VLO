@@ -98,7 +98,7 @@ public class VloSpringConfig {
 
     @Bean
     public SolrFacetQueryFactory facetQueryFactory() {
-        return new SolrFacetQueryFactoryImpl(vloConfig().getAllFacetFields());
+        return new SolrFacetQueryFactoryImpl();
     }
 
     @Bean

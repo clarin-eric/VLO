@@ -16,9 +16,12 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
+import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -26,9 +29,9 @@ import org.jmock.Expectations;
 import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
+import org.junit.Test;
 
 /**
  *
@@ -55,14 +58,11 @@ public class FacetFieldModelTest {
     @Test
     public void testGetObject() {
         final FacetFieldModel instance = new FacetFieldModel(service, "facet4", selectionModel, 20);
-
+        
         context.checking(new Expectations() {
             {
-                oneOf(service).getFacetFields(selection, 20);
+                oneOf(service).getFacetFields(selection, ImmutableList.of("facet4"), 20);
                 will(returnValue(Arrays.asList(
-                        new FacetField("facet1"),
-                        new FacetField("facet2"),
-                        new FacetField("facet3"),
                         new FacetField("facet4")
                 )));
             }
@@ -86,11 +86,8 @@ public class FacetFieldModelTest {
 
         context.checking(new Expectations() {
             {
-                oneOf(service).getFacetFields(selection, 20);
-                will(returnValue(Arrays.asList(
-                        new FacetField("facet1"),
-                        new FacetField("facet2")
-                )));
+                oneOf(service).getFacetFields(selection, ImmutableList.of("facet4"), 20);
+                will(returnValue(Collections.emptyList()));
             }
         });
 

@@ -61,17 +61,18 @@ public class SolrFacetFieldsServiceTest {
         final SolrQuery query = new SolrQuery("query");
         // fields returned by dao for query
         final List<FacetField> fields = ImmutableList.of(new FacetField("field1"), new FacetField("field2"));
+        final List<String> facets = ImmutableList.of("facet1", "facet2");
 
         context.checking(new Expectations() {
             {
-                oneOf(queryFactory).createFacetQuery(selection, 20);
+                oneOf(queryFactory).createFacetQuery(selection, facets, 20);
                 will(returnValue(query));
                 oneOf(dao).getFacets(query);
                 will(returnValue(fields));
             }
         });
 
-        final List<FacetField> result = instance.getFacetFields(selection, 20);
+        final List<FacetField> result = instance.getFacetFields(selection, facets, 20);
         assertEquals(fields, result);
     }
 
@@ -84,17 +85,18 @@ public class SolrFacetFieldsServiceTest {
         final SolrQuery query = new SolrQuery("query");
         // fields returned by dao for query
         final List<FacetField> fields = ImmutableList.of(new FacetField("field1"), new FacetField("field2"));
+        final List<String> facets = ImmutableList.of("facet1", "facet2");
 
         context.checking(new Expectations() {
             {
-                oneOf(queryFactory).createCountFacetsQuery();
+                oneOf(queryFactory).createCountFacetsQuery(facets);
                 will(returnValue(query));
                 oneOf(dao).getFacets(query);
                 will(returnValue(fields));
             }
         });
 
-        final long result = instance.getFacetFieldCount();
+        final long result = instance.getFacetFieldCount(facets);
         assertEquals(2, result);
     }
 

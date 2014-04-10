@@ -8,6 +8,7 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import java.util.Arrays;
+import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.util.tester.WicketTester;
@@ -81,9 +82,9 @@ public class TestFacetedSearchPage {
         mockery.checking(new Expectations() {
             {
                 // mock facets
-                atLeast(1).of(facetFieldsService).getFacetFieldCount();
+                atLeast(1).of(facetFieldsService).getFacetFieldCount(with(any(List.class)));
                 will(returnValue(2L));
-                atLeast(1).of(facetFieldsService).getFacetFields(with(any(QueryFacetsSelection.class)), with(any(Integer.class)));
+                atLeast(1).of(facetFieldsService).getFacetFields(with(any(QueryFacetsSelection.class)), with(any(List.class)), with(any(Integer.class)));
                 will(returnValue(Arrays.asList(new FacetField("collection"), new FacetField("language"), new FacetField("resource class"))));
 
                 // mock search results

@@ -21,7 +21,6 @@ import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
 import eu.clarin.cmdi.vlo.service.solr.SolrFacetQueryFactory;
 import java.util.List;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 
 /**
@@ -46,13 +45,13 @@ public class SolrFacetFieldsService implements FacetFieldsService {
     }
 
     @Override
-    public List<FacetField> getFacetFields(QueryFacetsSelection selection, int valueLimit) {
-        return searchResultsDao.getFacets(queryFatory.createFacetQuery(selection, valueLimit));
+    public List<FacetField> getFacetFields(QueryFacetsSelection selection, List<String> facets, int valueLimit) {
+        return searchResultsDao.getFacets(queryFatory.createFacetQuery(selection, facets, valueLimit));
     }
 
     @Override
-    public long getFacetFieldCount() {
-        return (long) searchResultsDao.getFacets(queryFatory.createCountFacetsQuery()).size();
+    public long getFacetFieldCount(List<String> facets) {
+        return (long) searchResultsDao.getFacets(queryFatory.createCountFacetsQuery(facets)).size();
     }
 
 }

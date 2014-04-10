@@ -44,7 +44,7 @@ public class SolrFacetQueryFactoryImplTest {
 
     @BeforeClass
     public static void setUpClass() {
-        instance = new SolrFacetQueryFactoryImpl(FACET_FIELDS);
+        instance = new SolrFacetQueryFactoryImpl();
     }
 
     /**
@@ -54,7 +54,7 @@ public class SolrFacetQueryFactoryImplTest {
     public void testCreateFacetQueryNoFacets() {
         // default constructor -> empty
         QueryFacetsSelection selection = new QueryFacetsSelection();
-        SolrQuery query = instance.createFacetQuery(selection, 20);
+        SolrQuery query = instance.createFacetQuery(selection, FACET_FIELDS, 20);
 
         // default: query selects all values 
         assertEquals("*:*", query.getQuery());
@@ -78,14 +78,14 @@ public class SolrFacetQueryFactoryImplTest {
             }
         };
 
-        SolrQuery query = instance.createFacetQuery(new QueryFacetsSelection(selection), 20);
+        SolrQuery query = instance.createFacetQuery(new QueryFacetsSelection(selection), FACET_FIELDS, 20);
 
         // default: query selects all values 
         assertEquals("*:*", query.getQuery());
 
         // Only empty selections -> no filter queries
         assertEquals(0, query.getFilterQueries().length);
-        
+
         // Facet limit should be adopted
         assertEquals(20, query.getFacetLimit());
     }
@@ -103,7 +103,7 @@ public class SolrFacetQueryFactoryImplTest {
                 put("facet3", Collections.<String>emptyList());
             }
         };
-        SolrQuery query = instance.createFacetQuery(new QueryFacetsSelection(selection), 20);
+        SolrQuery query = instance.createFacetQuery(new QueryFacetsSelection(selection), FACET_FIELDS, 20);
 
         // default: query selects all values 
         assertEquals("*:*", query.getQuery());
@@ -114,7 +114,7 @@ public class SolrFacetQueryFactoryImplTest {
         assertThat(Arrays.asList(query.getFilterQueries()), Matchers.<String>hasItem("facet2:\"valueB\""));
         assertThat(Arrays.asList(query.getFilterQueries()), Matchers.<String>hasItem("facet2:\"valueC\""));
         // facet 3 does not occur as there is not selected value!
-        
+
         // Facet limit should be adopted
         assertEquals(20, query.getFacetLimit());
     }
@@ -129,7 +129,7 @@ public class SolrFacetQueryFactoryImplTest {
                 put("facet1", Arrays.asList("value A"));
             }
         };
-        SolrQuery query = instance.createFacetQuery(new QueryFacetsSelection("query string", selection), 20);
+        SolrQuery query = instance.createFacetQuery(new QueryFacetsSelection("query string", selection), FACET_FIELDS, 20);
 
         assertEquals(1, query.getFilterQueries().length);
         assertEquals("\"query\\ string\"", query.getQuery()); //space should be escaped, and query wrapped!
@@ -147,7 +147,7 @@ public class SolrFacetQueryFactoryImplTest {
      */
     @Test
     public void testCreateCountFacetsQuery() {
-        SolrQuery query = instance.createCountFacetsQuery();
+        SolrQuery query = instance.createCountFacetsQuery(FACET_FIELDS);
         assertArrayEquals(FACET_FIELDS.toArray(), query.getFacetFields());
     }
 

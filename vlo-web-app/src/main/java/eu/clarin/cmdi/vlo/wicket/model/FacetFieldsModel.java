@@ -16,13 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.ImmutableList;
-import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
-import java.util.Collection;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.model.IModel;
@@ -64,15 +59,7 @@ public class FacetFieldsModel extends LoadableDetachableModel<List<FacetField>> 
     @Override
     protected List<FacetField> load() {
         //TODO: Try to query only for selected facets!
-        final List<FacetField> allFacetFields = service.getFacetFields(selectionModel.getObject(), valueLimit);
-        final Collection<FacetField> filtered = Collections2.filter(allFacetFields, new Predicate<FacetField>() {
-
-            @Override
-            public boolean apply(FacetField t) {
-                return facets.contains(t.getName());
-            }
-        });
-        return ImmutableList.copyOf(filtered);
+        return service.getFacetFields(selectionModel.getObject(), facets, valueLimit);
     }
 
     @Override
