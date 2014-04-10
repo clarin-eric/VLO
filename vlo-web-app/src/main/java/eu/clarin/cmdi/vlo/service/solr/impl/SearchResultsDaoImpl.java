@@ -23,7 +23,14 @@ public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDa
     public List<FacetField> getFacets(SolrQuery query) {
         final QueryResponse response = fireQuery(sanitise(query));
         final List<FacetField> facetFields = response.getFacetFields();
-        logger.debug("Found {} facet fields", facetFields.size());
+        if (logger.isDebugEnabled()) {
+            if (facetFields.size() == 1) {
+                final FacetField field = facetFields.get(0);
+                logger.debug("Found facet field '{}' with {} values", field.getName(), field.getValueCount());
+            } else {
+                logger.debug("Found {} facet fields", facetFields.size());
+            }
+        }
         return facetFields;
     }
 

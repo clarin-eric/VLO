@@ -138,7 +138,7 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
         //TODO: Find out why 'more' links do not appear (seems to be because of limited facet fields model)
         //TODO: Filter text box
 
-        final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(facetFieldsService, FACETS, getModel(), FacetValuesPanel.MAX_NUMBER_OF_FACETS_TO_SHOW);
+        final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(facetFieldsService, FACETS, getModel(), -1);
         final IModel<String> selectedFacetModel = new Model<String>(null);
         return new ListView<FacetField>(id, facetFieldsModel) {
 
