@@ -67,6 +67,7 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
         };
 
         final BookmarkablePageLink browseAllLink = new BookmarkablePageLink("browseAll", FacetedSearchPage.class);
+        // set label on basis of string defined in resource bundle that takes the count model as a parameter
         browseAllLink.add(new Label("recordCount", new StringResourceModel("simplesearch.allrecords", documentCountModel, new Object[]{})));
         add(browseAllLink);
 
