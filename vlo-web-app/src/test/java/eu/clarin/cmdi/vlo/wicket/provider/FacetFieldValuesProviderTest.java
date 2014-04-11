@@ -16,7 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.wicket.provider;
 
+import com.google.common.collect.ImmutableSet;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
+import java.util.Collection;
 import java.util.Iterator;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
@@ -32,6 +34,8 @@ import org.junit.Test;
  */
 public class FacetFieldValuesProviderTest {
 
+    public final static Collection<String> LOW_PRIORITY_VALUES = ImmutableSet.of("Xlow priority");
+
     private FacetField facetField;
 
     @Before
@@ -39,7 +43,8 @@ public class FacetFieldValuesProviderTest {
         facetField = new FacetField("field");
         facetField.add("first value", 101);
         facetField.add("second value", 102);
-        facetField.add("third value", 103);  
+        facetField.add("Xlow priority", 500);
+        facetField.add("third value", 103);
         facetField.add("FOURTH value", 104); //intentional upper case, sort and filter should be case insensitive
     }
 
@@ -48,7 +53,7 @@ public class FacetFieldValuesProviderTest {
      */
     @Test
     public void testIteratorCountOrder() {
-        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, true));
+        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, true));
 
         long first = 0;
         long count = 100;
@@ -71,6 +76,82 @@ public class FacetFieldValuesProviderTest {
         valueCount = result.next();
         assertEquals(104, valueCount.getCount());
 
+        // low priority last
+        assertTrue(result.hasNext());
+        valueCount = result.next();
+        assertEquals(500, valueCount.getCount());
+
+        assertFalse(result.hasNext());
+    }
+
+    /**
+     * Test of iterator method, of class FacetFieldValuesProvider.
+     */
+    @Test
+    public void testIteratorCountOrderDescending() {
+        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, false));
+
+        long first = 0;
+        long count = 100;
+        final Iterator<? extends FacetField.Count> result = instance.iterator(first, count);
+
+        //sorted by count (descending)
+        assertTrue(result.hasNext());
+        FacetField.Count valueCount = result.next();
+        assertEquals(104, valueCount.getCount());
+
+        assertTrue(result.hasNext());
+        valueCount = result.next();
+        assertEquals(103, valueCount.getCount());
+
+        assertTrue(result.hasNext());
+        valueCount = result.next();
+        assertEquals(102, valueCount.getCount());
+
+        assertTrue(result.hasNext());
+        valueCount = result.next();
+        assertEquals(101, valueCount.getCount());
+
+        // low priority last
+        assertTrue(result.hasNext());
+        valueCount = result.next();
+        assertEquals(500, valueCount.getCount());
+
+        assertFalse(result.hasNext());
+    }
+
+    /**
+     * Test of iterator method, of class FacetFieldValuesProvider.
+     */
+    @Test
+    public void testIteratorCountOrderDefaultPriority() {
+        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, false));
+
+        long first = 0;
+        long count = 100;
+        final Iterator<? extends FacetField.Count> result = instance.iterator(first, count);
+
+        //sorted by count (descending), no low priority defined
+        assertTrue(result.hasNext());
+        FacetField.Count valueCount = result.next();
+        assertEquals(500, valueCount.getCount());
+
+        assertTrue(result.hasNext());
+        valueCount = result.next();
+        assertEquals(104, valueCount.getCount());
+
+        assertTrue(result.hasNext());
+        valueCount = result.next();
+        assertEquals(103, valueCount.getCount());
+
+        assertTrue(result.hasNext());
+        valueCount = result.next();
+        assertEquals(102, valueCount.getCount());
+
+        assertTrue(result.hasNext());
+        valueCount = result.next();
+        assertEquals(101, valueCount.getCount());
+
         assertFalse(result.hasNext());
     }
 
@@ -79,7 +160,7 @@ public class FacetFieldValuesProviderTest {
      */
     @Test
     public void testIteratorNameOrderDescending() {
-        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, false));
+        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, false));
 
         final long first = 0;
         final long count = 100;
@@ -88,6 +169,10 @@ public class FacetFieldValuesProviderTest {
         //sorted by name (descending)
         assertTrue(result.hasNext());
         FacetField.Count valueCount = result.next();
+        assertEquals("Xlow priority", valueCount.getName()); // priority only affects sort by count
+
+        assertTrue(result.hasNext());
+        valueCount = result.next();
         assertEquals("third value", valueCount.getName());
 
         assertTrue(result.hasNext());
@@ -110,7 +195,7 @@ public class FacetFieldValuesProviderTest {
      */
     @Test
     public void testIteratorOffset() {
-        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, true));
+        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, true));
 
         final long first = 2;
         final long count = 100;
@@ -129,13 +214,13 @@ public class FacetFieldValuesProviderTest {
     public void testSize() {
         // potential is lower than limit
         {
-            final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, false));
+            final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, false));
             // actual number is returned
-            assertEquals(4, instance.size());
+            assertEquals(5, instance.size());
         }
         // potential is higher than limit
         {
-            final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 2, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, false));
+            final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 2, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, false));
             // maximum number is returned (result is capped)
             assertEquals(2, instance.size());
         }
@@ -147,7 +232,7 @@ public class FacetFieldValuesProviderTest {
     @Test
     public void testFiltered() {
         final Model filterModel = Model.of("th");
-        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, true)) {
+        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, true)) {
 
             @Override
             protected IModel<String> getFilterModel() {

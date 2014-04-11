@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import com.google.common.collect.ImmutableSet;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
@@ -49,6 +50,7 @@ import org.apache.wicket.model.Model;
 public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
     public final static int MAX_NUMBER_OF_FACETS_TO_SHOW = 10; //TODO: get from config
+    public final static Collection<String> LOW_PRIORITY_VALUES = ImmutableSet.of("unknown", "unspecified", "");
 
     private final ModalWindow valuesWindow;
     private final FacetFieldValuesProvider valuesProvider;
@@ -65,7 +67,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         // create a form with an input bound to the filter model
         add(createFilterForm("filter"));
 
-        valuesProvider = new FacetFieldValuesProvider(model, MAX_NUMBER_OF_FACETS_TO_SHOW) {
+        valuesProvider = new FacetFieldValuesProvider(model, MAX_NUMBER_OF_FACETS_TO_SHOW, LOW_PRIORITY_VALUES) {
 
             @Override
             protected IModel<String> getFilterModel() {
@@ -103,7 +105,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         final TextField<String> filterField = new TextField<String>("filterText", filterModel);
         // make field update 
         filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
-            
+
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 //update values

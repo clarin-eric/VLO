@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
@@ -43,19 +44,32 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
 
     private final IModel<FacetField> model;
     private final int maxNumberOfItems;
+    private final Collection<String> lowPriorityValues;
 
     /**
      * Creates a provider without a maximum number of values. Bound to
      * {@link Integer#MAX_VALUE}.
      *
      * @param model FacetField model to get values and counts for
+     * @param lowPriorityValues values that should with low priority (e.g.
+     * unknown, unspecified)
      */
-    public FacetFieldValuesProvider(IModel<FacetField> model) {
-        this(model, Integer.MAX_VALUE);
+    public FacetFieldValuesProvider(IModel<FacetField> model, Collection<String> lowPriorityValues) {
+        this(model, Integer.MAX_VALUE, lowPriorityValues);
     }
 
-    public FacetFieldValuesProvider(IModel<FacetField> model, int max) {
-        this(model, max, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, false));
+    /**
+     *
+     * @param model FacetField model to get values and counts for
+     * @param max maximum number of values to show
+     * @param lowPriorityValues (e.g. unknown, unspecified)
+     */
+    public FacetFieldValuesProvider(IModel<FacetField> model, int max, Collection<String> lowPriorityValues) {
+        this(model, max, lowPriorityValues, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, false));
+    }
+
+    public FacetFieldValuesProvider(IModel<FacetField> model, int max, SortParam<FieldValuesOrder> sort) {
+        this(model, max, null, sort);
     }
 
     /**
@@ -63,11 +77,13 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
      *
      * @param model FacetField model to get values and counts for
      * @param max maximum number of values to show
+     * @param lowPriorityValues (e.g. unknown, unspecified)
      * @param sort initial sort property and order
      */
-    public FacetFieldValuesProvider(IModel<FacetField> model, int max, SortParam<FieldValuesOrder> sort) {
+    public FacetFieldValuesProvider(IModel<FacetField> model, int max, Collection<String> lowPriorityValues, SortParam<FieldValuesOrder> sort) {
         this.model = model;
         this.maxNumberOfItems = max;
+        this.lowPriorityValues = lowPriorityValues;
         setSort(sort);
     }
 
@@ -139,6 +155,17 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
     }
 
     private Ordering getOrdering() {
+        if (lowPriorityValues != null && getSort().getProperty() == FieldValuesOrder.COUNT) {
+            // in case of count, low priority fields should always be moved to the back
+            // rest should be sorted as requested
+            return new PriorityOrdering(lowPriorityValues).compound(getBaseOrdering());
+        } else {
+            // in other case (name), priorty should not be take into account
+            return getBaseOrdering();
+        }
+    }
+
+    private Ordering getBaseOrdering() {
         final Ordering ordering;
         if (getSort().getProperty() == FieldValuesOrder.COUNT) {
             ordering = COUNT_ORDERING;
@@ -159,8 +186,6 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
 
         @Override
         public int compare(Count arg0, Count arg1) {
-            // TODO: From old VLO:
-            // IGNORABLE_VALUES (like "unknown") are move to the back of the list and should only be shown when you click "more...", unless the list is too small then whe can just show them.
             return Long.compare(arg0.getCount(), arg1.getCount());
         }
     };
@@ -170,9 +195,38 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
         @Override
         public int compare(Count arg0, Count arg1) {
             // TODO: From old VLO:
-            // IGNORABLE_VALUES (like "unknown") are move to the back of the list and should only be shown when you click "more...", unless the list is too small then whe can just show them.
             return arg0.getName().compareToIgnoreCase(arg1.getName());
         }
     };
 
+    /**
+     * An ordering that pushes all values identified in a provided collection to
+     * the back of the list
+     */
+    private static class PriorityOrdering extends Ordering<FacetField.Count> {
+
+        private final Collection<String> lowPriorityValues;
+
+        public PriorityOrdering(Collection<String> lowPriorityValues) {
+            this.lowPriorityValues = lowPriorityValues;
+        }
+
+        @Override
+        public int compare(Count arg0, Count arg1) {
+
+            if (lowPriorityValues.contains(arg0.getName())) {
+                if (!lowPriorityValues.contains(arg1.getName())) {
+                    //arg0 is low priority, arg1 is not -> move arg0 to back
+                    return 1;
+                }
+            } else if (lowPriorityValues.contains(arg1.getName())) {
+                //arg0 is not low priority but arg1 is -> move arg1 to back
+                return -1;
+            }
+            // arg0 and arg1 are either both low priority or neither of them are, 
+            // so fall back to secondary comparator (assuming a compound)
+            return 0;
+        }
+
+    };
 }
