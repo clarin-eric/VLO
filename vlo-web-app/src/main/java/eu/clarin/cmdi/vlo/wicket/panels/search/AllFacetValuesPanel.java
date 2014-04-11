@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import eu.clarin.cmdi.vlo.wicket.model.BinaryOptionModel;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueOrderSelector;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
@@ -165,7 +166,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         options.add(filterField);
 
         final IModel<Integer> minOccurenceModel = new PropertyModel<Integer>(filterModel, "minimalOccurence");
-        final IModel<Boolean> minOccurenceToggleModel = new BinaryOptionModel<Integer>(minOccurenceModel, 0, 2);
+        final IModel<Boolean> minOccurenceToggleModel = new BinaryOptionModel<Integer>(minOccurenceModel, Model.of(0), Model.of(2));
         final CheckBox minOccurence = new AjaxCheckBox("minOccurrences", minOccurenceToggleModel) {
 
             @Override
@@ -195,34 +196,4 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
      */
     protected abstract void onValuesSelected(String facet, Collection<String> values, AjaxRequestTarget target);
 
-    private class BinaryOptionModel<T> implements IModel<Boolean> {
-
-        private final IModel<T> wrappedModel;
-        private final T falseValue;
-        private final T trueValue;
-
-        public BinaryOptionModel(IModel<T> wrappedModel, T falseValue, T trueValue) {
-            this.wrappedModel = wrappedModel;
-            this.falseValue = falseValue;
-            this.trueValue = trueValue;
-        }
-
-        @Override
-        public Boolean getObject() {
-            return wrappedModel.getObject().equals(trueValue);
-        }
-
-        @Override
-        public void setObject(Boolean object) {
-            if (object) {
-                wrappedModel.setObject(trueValue);
-            } else {
-                wrappedModel.setObject(falseValue);
-            }
-        }
-
-        @Override
-        public void detach() {
-        }
-    }
 }
