@@ -50,7 +50,6 @@ import org.apache.wicket.model.PropertyModel;
  * A panel that shows all available values for a selected facet. Supports two
  * ordering modes (by name or result count) and dynamic filtering.
  *
- * TODO: sort ignoring case TODO: filter with contains instead of startsWith
  * TODO: group by first letter when sorted by name
  *
  * @author twagoo
@@ -162,7 +161,6 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
         addOccurenceOptions(options);
 
-        //TODO: Add non-JS submit option
         return options;
     }
 

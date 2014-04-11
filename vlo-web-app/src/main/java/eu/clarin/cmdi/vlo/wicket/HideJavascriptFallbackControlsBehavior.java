@@ -22,19 +22,23 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 
 /**
- * A behavior that hides all DOM elements with class <em>nonjsfallback</em> through a
- * JavaScript call when the dom is ready. Obviously, this has no effect when
- * JavaScript is not enabled, leaving these fallback controls available.
+ * A behavior that hides all DOM elements with class <em>nonjsfallback</em>
+ * through a JavaScript call when the dom is ready. Obviously, this has no
+ * effect when JavaScript is not enabled, leaving these fallback controls
+ * available.
  *
  * @author twagoo
  * @see OnDomReadyHeaderItem
  */
 public class HideJavascriptFallbackControlsBehavior extends Behavior {
 
+    public static final String HIDE_JAVASCRIPT_FALLBACK_SCRIPT = "var sheet = document.createElement('style')\n"
+            + "sheet.innerHTML = \".nonjsfallback {display: none;}\";\n"
+            + "document.body.appendChild(sheet);";
+
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
-        //hide non-javascript fallback submit buttons
-        response.render(OnDomReadyHeaderItem.forScript("jQuery('.nonjsfallback').hide()"));
+        // execute javascript that adds a CSS rule to hide all .nonjsfallback elements
+        response.render(OnDomReadyHeaderItem.forScript(HIDE_JAVASCRIPT_FALLBACK_SCRIPT));
     }
-
 }
