@@ -43,7 +43,7 @@ public class FacetFieldValuesProviderTest {
     public void setUp() {
         facetField = new FacetField("field");
         facetField.add("first value", 101);
-        facetField.add("second value", 102);
+        facetField.add("second value*", 102);
         facetField.add("Xlow priority", 500);
         facetField.add("third value", 103);
         facetField.add("FOURTH value", 104); //intentional upper case, sort and filter should be case insensitive
@@ -178,7 +178,7 @@ public class FacetFieldValuesProviderTest {
 
         assertTrue(result.hasNext());
         valueCount = result.next();
-        assertEquals("second value", valueCount.getName());
+        assertEquals("second value*", valueCount.getName());
 
         assertTrue(result.hasNext());
         valueCount = result.next();
@@ -261,9 +261,14 @@ public class FacetFieldValuesProviderTest {
 
         // add minimal occurences condition to filter
         filterModel.getObject().setMinimalOccurence(104);
+        filterModel.getObject().setName(null);
+        // re-evaluate - only 'FOURTH' and 'low priority' value should match
+        assertEquals(2, instance.size());
 
-        // re-evaluate - only FOURTH value should match
+        // test literal matching
+        filterModel.getObject().setMinimalOccurence(0);
+        filterModel.getObject().setName("*");
+        // re-evaluate - only "second value*" value should match
         assertEquals(1, instance.size());
-
     }
 }

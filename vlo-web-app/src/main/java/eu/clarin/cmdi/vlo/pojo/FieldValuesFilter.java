@@ -16,42 +16,70 @@
  */
 package eu.clarin.cmdi.vlo.pojo;
 
+import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import java.io.Serializable;
-import org.apache.commons.lang3.StringUtils;
+import java.util.regex.Pattern;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 
 /**
+ * Defines a filter for field values (designed to be used by
+ * {@link FacetFieldValuesProvider})
  *
  * @author twagoo
  */
 public class FieldValuesFilter implements Serializable {
 
     private String name;
+    private Pattern namePattern;
     private int minimalOccurence;
 
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param name string that matches should <em>contain</em>
+     */
     public void setName(String name) {
         this.name = name;
+        this.namePattern = createNamePattern(name);
     }
 
     public int getMinimalOccurence() {
         return minimalOccurence;
     }
 
+    /**
+     *
+     * @param minimalOccurence minimal number of occurrences matches should have
+     */
     public void setMinimalOccurence(int minimalOccurence) {
         this.minimalOccurence = minimalOccurence;
     }
 
+    /**
+     *
+     * @param count count (name + count) to check
+     * @return true IFF the {@link Count#getCount() } is more than {@link #getMinimalOccurence()
+     * } {@link Count#getName() } contains {@link #getName() } (case
+     * insensitive)
+     */
     public boolean matches(Count count) {
         return count.getCount() >= minimalOccurence
-                && StringUtils.containsIgnoreCase(count.getName(), name);
+                && (namePattern == null || namePattern.matcher(count.getName()).find());
     }
-    
+
     public boolean isEmpty() {
         return minimalOccurence == 0 && (name == null || name.isEmpty());
     }
 
+    private Pattern createNamePattern(String name) {
+        if (name == null) {
+            return null;
+        } else {
+            // make a matching pattern for the name (case insensitive, not parsing RegEx syntax and supporting unicode)
+            return Pattern.compile(name, Pattern.LITERAL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
+        }
+    }
 }
