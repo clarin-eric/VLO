@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueOrderSelector;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
@@ -54,7 +55,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
     private final FacetFieldValuesProvider valuesProvider;
     private final WebMarkupContainer valuesContainer;
-    private final IModel<String> filterModel;
+    private final IModel<FieldValuesFilter> filterModel;
 
     /**
      *
@@ -71,20 +72,20 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
      * @param model model for the facet field to show values for
      * @param filterModel model that holds a string to filter in (can be null)
      */
-    public AllFacetValuesPanel(String id, IModel<FacetField> model, IModel<String> filterModel) {
+    public AllFacetValuesPanel(String id, IModel<FacetField> model, IModel<FieldValuesFilter> filterModel) {
         super(id, model);
 
         if (filterModel != null) {
             this.filterModel = filterModel;
         } else {
-            this.filterModel = new Model<String>();
+            this.filterModel = Model.of(new FieldValuesFilter());
         }
 
         // create a provider that shows all values and is sorted by name by default
         valuesProvider = new FacetFieldValuesProvider(model, Integer.MAX_VALUE, FieldValueOrderSelector.NAME_SORT) {
 
             @Override
-            protected IModel<String> getFilterModel() {
+            protected IModel<FieldValuesFilter> getFilterModel() {
                 // filters the values
                 return AllFacetValuesPanel.this.filterModel;
             }
@@ -151,7 +152,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         });
         options.add(sortSelect);
 
-        final TextField filterField = new TextField("filter", filterModel);
+        final TextField filterField = new TextField<String>("filter", new PropertyModel(filterModel, "name"));
         filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
 
             @Override

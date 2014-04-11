@@ -20,6 +20,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
+import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import java.util.Collection;
 import java.util.Iterator;
@@ -92,7 +93,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
      *
      * @return model of string value that item values should contain
      */
-    protected IModel<String> getFilterModel() {
+    protected IModel<FieldValuesFilter> getFilterModel() {
         return null;
     }
 
@@ -138,11 +139,10 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
 
     private Iterable<FacetField.Count> filter(List<FacetField.Count> list) {
         if (hasFilter()) {
-            final String filterValue = getFilterModel().getObject().toLowerCase();
             return Iterables.filter(list, new Predicate<FacetField.Count>() {
                 @Override
                 public boolean apply(Count input) {
-                    return input.getName().toLowerCase().contains(filterValue);
+                    return getFilterModel().getObject().matches(input);
                 }
             });
         } else {
@@ -151,7 +151,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
     }
 
     private boolean hasFilter() {
-        return !(getFilterModel() == null || getFilterModel().getObject() == null || getFilterModel().getObject().isEmpty());
+        return getFilterModel() != null && getFilterModel().getObject() != null && !getFilterModel().getObject().isEmpty();
     }
 
     private Ordering getOrdering() {

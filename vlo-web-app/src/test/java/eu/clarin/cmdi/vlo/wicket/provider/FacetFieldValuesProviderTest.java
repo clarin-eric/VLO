@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.provider;
 
 import com.google.common.collect.ImmutableSet;
+import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import java.util.Collection;
 import java.util.Iterator;
@@ -231,11 +232,13 @@ public class FacetFieldValuesProviderTest {
      */
     @Test
     public void testFiltered() {
-        final Model filterModel = Model.of("th");
+        final Model<FieldValuesFilter> filterModel = Model.of(new FieldValuesFilter());
+        filterModel.getObject().setName("th");
+
         final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, true)) {
 
             @Override
-            protected IModel<String> getFilterModel() {
+            protected IModel<FieldValuesFilter> getFilterModel() {
                 return filterModel;
             }
 
@@ -255,5 +258,12 @@ public class FacetFieldValuesProviderTest {
         assertEquals("third value", valueCount.getName());
 
         assertFalse(result.hasNext());
+
+        // add minimal occurences condition to filter
+        filterModel.getObject().setMinimalOccurence(104);
+
+        // re-evaluate - only FOURTH value should match
+        assertEquals(1, instance.size());
+
     }
 }

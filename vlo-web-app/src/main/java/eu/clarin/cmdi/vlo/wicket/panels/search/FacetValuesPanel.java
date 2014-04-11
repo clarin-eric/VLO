@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableSet;
+import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
@@ -30,7 +31,6 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -42,6 +42,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 
 /**
@@ -58,21 +59,21 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     private final FacetFieldValuesProvider valuesProvider;
     private final IModel<QueryFacetsSelection> selectionModel;
     private final WebMarkupContainer valuesContainer;
-    private final IModel<String> filterModel;
+    private final IModel<FieldValuesFilter> filterModel;
 
     public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, model);
         this.selectionModel = selectionModel;
 
         // shared model that holds the string for filtering the values (quick search)
-        filterModel = new Model<String>(null);
+        filterModel = Model.of(new FieldValuesFilter());
         // create a form with an input bound to the filter model
         add(createFilterForm("filter"));
 
         valuesProvider = new FacetFieldValuesProvider(model, MAX_NUMBER_OF_FACETS_TO_SHOW, LOW_PRIORITY_VALUES) {
 
             @Override
-            protected IModel<String> getFilterModel() {
+            protected IModel<FieldValuesFilter> getFilterModel() {
                 return filterModel;
             }
 
@@ -104,7 +105,8 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
     private Form createFilterForm(String id) {
         final Form filterForm = new Form(id);
-        final TextField<String> filterField = new TextField<String>("filterText", filterModel);
+        final TextField<String> filterField = new TextField<String>("filterText",
+                new PropertyModel<String>(filterModel, "name"));
         // make field update 
         filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
 

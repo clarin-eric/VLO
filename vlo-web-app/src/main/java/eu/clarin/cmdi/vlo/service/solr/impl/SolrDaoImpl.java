@@ -47,7 +47,7 @@ public class SolrDaoImpl {
         // try and get the filters facets from the query
         String[] filtersInQuery;
         filtersInQuery = query.getFilterQueries();
-
+        
         if (filtersInQuery == null) {
             // the query does not contain filters
         } else {
