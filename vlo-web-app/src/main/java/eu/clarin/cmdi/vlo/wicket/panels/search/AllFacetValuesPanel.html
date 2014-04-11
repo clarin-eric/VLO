@@ -25,9 +25,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <wicket:panel>
             <p>All values in this facet</p>
             <form wicket:id="options">
-                <p>Sort by <select wicket:id="sort"><option>name</option><option>count</option></select></p>
-                <div>Search: <input wicket:id="filter" type="text" /></div>
+                <div>
+                    Search: <input wicket:id="filter" type="text" size="60"/>
+                </div>
+                <hr />
+                <div>
+                    Sort by <select wicket:id="sort"><option>name</option><option>count</option></select>
+                    <input wicket:id="minOccurrences" type="checkbox">Only show values that occur at least 2 times</input>
+                </div>
             </form>
+            <hr />
             <div wicket:id="facetValuesContainer" class="sortedFacet">
                 <!--                
                     <div>

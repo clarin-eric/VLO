@@ -27,9 +27,11 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -162,6 +164,17 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         });
         options.add(filterField);
 
+        final IModel<Integer> minOccurenceModel = new PropertyModel<Integer>(filterModel, "minimalOccurence");
+        final IModel<Boolean> minOccurenceToggleModel = new BinaryOptionModel<Integer>(minOccurenceModel, 0, 2);
+        final CheckBox minOccurence = new AjaxCheckBox("minOccurrences", minOccurenceToggleModel) {
+
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                target.add(valuesContainer);
+            }
+        };
+        options.add(minOccurence);
+
         //TODO: Add non-JS submit option
         return options;
     }
@@ -181,4 +194,35 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
      * (fallback)!
      */
     protected abstract void onValuesSelected(String facet, Collection<String> values, AjaxRequestTarget target);
+
+    private class BinaryOptionModel<T> implements IModel<Boolean> {
+
+        private final IModel<T> wrappedModel;
+        private final T falseValue;
+        private final T trueValue;
+
+        public BinaryOptionModel(IModel<T> wrappedModel, T falseValue, T trueValue) {
+            this.wrappedModel = wrappedModel;
+            this.falseValue = falseValue;
+            this.trueValue = trueValue;
+        }
+
+        @Override
+        public Boolean getObject() {
+            return wrappedModel.getObject().equals(trueValue);
+        }
+
+        @Override
+        public void setObject(Boolean object) {
+            if (object) {
+                wrappedModel.setObject(trueValue);
+            } else {
+                wrappedModel.setObject(falseValue);
+            }
+        }
+
+        @Override
+        public void detach() {
+        }
+    }
 }
