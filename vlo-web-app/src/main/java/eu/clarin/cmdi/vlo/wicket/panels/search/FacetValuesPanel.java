@@ -30,6 +30,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -41,6 +42,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.cycle.RequestCycle;
 
 /**
  * A panel representing a single facet and its selectable values
@@ -207,4 +209,14 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      */
     protected abstract void onValuesSelected(String facet, Collection<String> values, AjaxRequestTarget target);
 
+    @Override
+    protected void onBeforeRender() {
+        super.onBeforeRender();
+        // if an ajax update, set the watermark on the input field
+        final AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
+        if (target != null) {
+            target.appendJavaScript(String.format("jQuery('#%1$s input').watermark('Type to search for more');", getMarkupId()));
+            // focus? better only when expanded. jQuery('#%1$s input').focus()
+        }
+    }
 }
