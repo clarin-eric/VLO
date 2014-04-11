@@ -16,11 +16,15 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import org.apache.wicket.Component;
 import org.apache.wicket.Session;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.GenericWebPage;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -75,6 +79,9 @@ public class VloBasePage<T> extends GenericWebPage<T> {
     private void addComponents() {
         add(new FeedbackPanel("feedback"));
         add(new ExternalLink("help", vloConfig.getHelpUrl()));
+
+        add(new HideJavascriptFallbackControlsBehavior());
     }
+
 
 }
