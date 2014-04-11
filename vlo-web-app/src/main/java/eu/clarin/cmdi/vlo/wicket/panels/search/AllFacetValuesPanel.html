@@ -31,7 +31,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <hr />
                 <div>
                     Sort by <select wicket:id="sort"><option>name</option><option>count</option></select>
-                    <input wicket:id="minOccurrences" type="checkbox">Only show values that occur at least 2 times</input>
+                    <input wicket:id="minOccurrencesToggle" type="checkbox" /> 
+                    Only show values that occur at least 
+                    <select wicket:id="minOccurences">
+                        <option>2</option>
+                        <option>5</option>
+                        <option>10</option>
+                        <option>100</option>
+                        <option>1000</option>
+                    </select>
+                    times
                 </div>
             </form>
             <hr />

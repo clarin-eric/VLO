@@ -16,10 +16,12 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
-import eu.clarin.cmdi.vlo.wicket.model.BinaryOptionModel;
+import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
-import eu.clarin.cmdi.vlo.wicket.components.FieldValueOrderSelector;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
+import eu.clarin.cmdi.vlo.wicket.components.FieldValueOrderSelector;
+import eu.clarin.cmdi.vlo.wicket.model.BridgeModel;
+import eu.clarin.cmdi.vlo.wicket.model.BridgeOuterModel;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,7 +30,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -143,16 +144,10 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
     private Form createOptionsForm(String id) {
         final Form options = new Form(id);
+
         final DropDownChoice<SortParam<FieldValuesOrder>> sortSelect
                 = new FieldValueOrderSelector("sort", new PropertyModel<SortParam<FieldValuesOrder>>(valuesProvider, "sort"));
-        sortSelect.add(new OnChangeAjaxBehavior() {
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                target.add(options);
-                target.add(valuesContainer);
-            }
-        });
+        sortSelect.add(new UpdateOptionsFormBehavior(options));
         options.add(sortSelect);
 
         final TextField filterField = new TextField<String>("filter", new PropertyModel(filterModel, "name"));
@@ -165,19 +160,62 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         });
         options.add(filterField);
 
-        final IModel<Integer> minOccurenceModel = new PropertyModel<Integer>(filterModel, "minimalOccurence");
-        final IModel<Boolean> minOccurenceToggleModel = new BinaryOptionModel<Integer>(minOccurenceModel, Model.of(0), Model.of(2));
-        final CheckBox minOccurence = new AjaxCheckBox("minOccurrences", minOccurenceToggleModel) {
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                target.add(valuesContainer);
-            }
-        };
-        options.add(minOccurence);
+        addOccurenceOptions(options);
 
         //TODO: Add non-JS submit option
         return options;
+    }
+
+    /**
+     * Creates form controls for minimal occurrences options.
+     *
+     * This requires a 'bridge' construct to combine a checkbox to
+     * enable/disable filtering by occurence altogether (which actually sets the
+     * min occurence to 0) and a dropdown for the minimal number of occurences,
+     * which only gets applied if the checkbox is ticket.
+     *
+     * The checkbox opens/closes a bridge between the minimal occurences in the
+     * filter model and the model that holds the selected option (modulated via
+     * the dropdown).
+     *
+     * @param options options form
+     */
+    private void addOccurenceOptions(final Form options) {
+
+        // Model that holds the actual number of occurences filtered on
+        final IModel<Integer> minOccurenceModel = new PropertyModel<Integer>(filterModel, "minimalOccurence");
+        // Model that represents the filter state ('bridge' between filter and selection)
+        final IModel<Boolean> bridgeStateModel = Model.of(false);
+        // Model that represents the *selected* number of minimal occurences (passes it on if not decoupled)
+        final IModel<Integer> minOccurenceSelectModel = new BridgeOuterModel<Integer>(minOccurenceModel, bridgeStateModel, 2);
+        // Model that links the actual filter, selection and bridge (object opens and closes it)
+        final IModel<Boolean> minOccurenceCheckBoxModel = new BridgeModel<Integer>(minOccurenceModel, minOccurenceSelectModel, bridgeStateModel, 0);
+
+        // checkbox to open and close the 'bridge'
+        final CheckBox minOccurenceToggle = new CheckBox("minOccurrencesToggle", minOccurenceCheckBoxModel);
+        minOccurenceToggle.add(new UpdateOptionsFormBehavior(options));
+        options.add(minOccurenceToggle);
+
+        // Dropdown to select a value (which is applied to the filter if the 'bridge' is open)
+        final DropDownChoice<Integer> minOccurence = new DropDownChoice<Integer>("minOccurences", minOccurenceSelectModel, ImmutableList.of(2, 5, 10, 100, 1000));
+        minOccurence.add(new UpdateOptionsFormBehavior(options));
+        options.add(minOccurence);
+    }
+
+    private class UpdateOptionsFormBehavior extends OnChangeAjaxBehavior {
+
+        private final Form options;
+
+        public UpdateOptionsFormBehavior(Form options) {
+            this.options = options;
+        }
+
+        @Override
+        protected void onUpdate(AjaxRequestTarget target) {
+            target.add(options);
+            target.add(valuesContainer);
+        }
+
     }
 
     @Override

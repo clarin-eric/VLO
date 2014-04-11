@@ -27,57 +27,50 @@ import static org.junit.Assert.*;
  *
  * @author twagoo
  */
-public class BinaryOptionModelTest {
-
-    public BinaryOptionModelTest() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
+public class BridgeModelTest {
 
     /**
-     * Test of getObject method, of class BinaryOptionModel.
+     * Test of getObject method, of class BridgeModel.
      */
     @Test
     public void testGetObject() {
-        IModel<String> wrapped = Model.of("");
-        IModel<String> trueModel = Model.of("true");
-        IModel<String> falseModel = Model.of("false");
-        BinaryOptionModel instance = new BinaryOptionModel(wrapped, falseModel, trueModel);
+        IModel<String> inner = Model.of("inner value");
+        IModel<String> outer = Model.of("outer value");
+        IModel<Boolean> state = Model.of(false);
+        String falseValue = "false";
+
+        BridgeModel instance = new BridgeModel(inner, outer, state, falseValue);
 
         assertFalse(instance.getObject());
-        wrapped.setObject("true");
+        instance.setObject(true);
         assertTrue(instance.getObject());
-
-        trueModel.setObject("newTrue");
-        assertFalse(instance.getObject());
-        wrapped.setObject("newTrue");
-        assertTrue(instance.getObject());
-
-        wrapped.setObject("false");
-        assertFalse(instance.getObject());
     }
 
     /**
-     * Test of setObject method, of class BinaryOptionModel.
+     * Test of setObject method, of class BridgeModel.
      */
     @Test
     public void testSetObject() {
-        IModel<String> wrapped = Model.of("");
-        IModel<String> trueModel = Model.of("true");
-        IModel<String> falseModel = Model.of("false");
-        BinaryOptionModel instance = new BinaryOptionModel(wrapped, falseModel, trueModel);
+        IModel<String> inner = Model.of("inner value");
+        IModel<String> outer = Model.of("outer value");
+        IModel<Boolean> state = Model.of(false);
+        String falseValue = "bridge closed";
 
-        assertEquals("", wrapped.getObject());
+        BridgeModel instance = new BridgeModel(inner, outer, state, falseValue);
+
+        // initial values
+        assertEquals("inner value", inner.getObject());
+        assertFalse(state.getObject());
+
+        //open the bridge
         instance.setObject(true);
-        assertEquals("true", wrapped.getObject());
+        assertTrue(state.getObject());
+        assertEquals("outer value", inner.getObject());
+        
+        // close bridge
         instance.setObject(false);
-        assertEquals("false", wrapped.getObject());
+        assertFalse(state.getObject());
+        assertEquals("bridge closed", inner.getObject());
     }
 
 }
