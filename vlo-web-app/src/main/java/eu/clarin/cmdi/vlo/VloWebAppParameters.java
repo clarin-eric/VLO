@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package eu.clarin.cmdi.vlo;
 
 /**
@@ -22,8 +21,10 @@ package eu.clarin.cmdi.vlo;
  * @author twagoo
  */
 public class VloWebAppParameters {
+
     public final static String THEME = "theme";
     public final static String DOCUMENT_ID = "docId";
     public static final String QUERY = "q";
     public static final String FILTER_QUERY = "fq";
+    public static final String FILTER_QUERY_TYPE = "fqType";
 }

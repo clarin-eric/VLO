@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.service.impl;
 import eu.clarin.cmdi.vlo.service.solr.impl.QueryFacetsSelectionParametersConverter;
 import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.Arrays;
 import java.util.Collections;
@@ -58,17 +59,28 @@ public class QueryFacetsSelectionParametersConverterTest {
         params.add("fq", "facet1:valueA");
         params.add("fq", "facet1:valueB");
         params.add("fq", "facet2:valueC");
+        params.add("fq", "illegal-no-colon"); //should get ignored
         params.add("fq", ""); // not a valid facet selection
         params.add("fq", "invalid"); // not a valid facet selection
+        params.add("fqType", "facet1:or");
+        params.add("fqType", "facet3:not_empty");
+        params.add("fqType", "facet4:illegaltype"); //should get ignored
+        params.add("fqType", "illegal-no-colon"); //should get ignored
 
         final QueryFacetsSelection result = instance.fromParameters(params);
         assertEquals("query", result.getQuery());
-        assertEquals(2, result.getFacets().size());
+        assertEquals(3, result.getFacets().size());
         assertThat(result.getFacets(), hasItem("facet1"));
         assertThat(result.getFacets(), hasItem("facet2"));
         assertThat(result.getSelectionValues("facet1").getValues(), hasItem("valueA"));
         assertThat(result.getSelectionValues("facet1").getValues(), hasItem("valueB"));
         assertThat(result.getSelectionValues("facet2").getValues(), hasItem("valueC"));
+        // OR explicitly set
+        assertEquals(FacetSelectionType.OR, result.getSelectionValues("facet1").getSelectionType());
+        // AND is default
+        assertEquals(FacetSelectionType.AND, result.getSelectionValues("facet2").getSelectionType());
+        // NOT_EMPTY explicitly set
+        assertEquals(FacetSelectionType.NOT_EMPTY, result.getSelectionValues("facet3").getSelectionType());
     }
 
     /**

@@ -34,6 +34,10 @@ public class FacetSelection implements Serializable {
         this(FacetSelectionType.AND, values);
     }
 
+    public FacetSelection(FacetSelectionType type) {
+        this(type, Lists.<String>newArrayList());
+    }
+
     public FacetSelection(FacetSelectionType selectionType, Collection<String> values) {
         this.selectionType = selectionType;
         // always store as array list, which is modifiable and serialisable
