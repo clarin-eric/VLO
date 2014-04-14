@@ -17,9 +17,13 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import eu.clarin.cmdi.vlo.service.solr.impl.QueryFacetsSelectionParametersConverter;
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Maps;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
@@ -62,9 +66,9 @@ public class QueryFacetsSelectionParametersConverterTest {
         assertEquals(2, result.getFacets().size());
         assertThat(result.getFacets(), hasItem("facet1"));
         assertThat(result.getFacets(), hasItem("facet2"));
-        assertThat(result.getSelectionValues("facet1"), hasItem("valueA"));
-        assertThat(result.getSelectionValues("facet1"), hasItem("valueB"));
-        assertThat(result.getSelectionValues("facet2"), hasItem("valueC"));
+        assertThat(result.getSelectionValues("facet1").getValues(), hasItem("valueA"));
+        assertThat(result.getSelectionValues("facet1").getValues(), hasItem("valueB"));
+        assertThat(result.getSelectionValues("facet2").getValues(), hasItem("valueC"));
     }
 
     /**
@@ -92,18 +96,17 @@ public class QueryFacetsSelectionParametersConverterTest {
     @Test
     public void testToParameters() {
         final String query = "query";
-        final HashMultimap<String, String> map = HashMultimap.<String, String>create();
-        map.put("facet1", "valueA");
-        map.put("facet1", "valueB");
-        map.put("facet2", "valueC");
+        final Map<String, FacetSelection> map = Maps.newHashMapWithExpectedSize(3);
+        map.put("facet1", new FacetSelection(Arrays.asList("valueA", "valueB")));
+        map.put("facet2", new FacetSelection(Collections.singleton("valueC")));
 
-        QueryFacetsSelection selection = new QueryFacetsSelection(query, map.asMap());
+        QueryFacetsSelection selection = new QueryFacetsSelection(query, map);
         PageParameters result = instance.toParameters(selection);
 
         assertThat(result.get("q"), equalTo(StringValue.valueOf("query")));
 
         final List<StringValue> fq = result.getValues("fq");
-        assertEquals(3, fq.size());
+        assertNotNull(fq);
         assertThat(fq, hasItem(StringValue.valueOf("facet1:valueA")));
         assertThat(fq, hasItem(StringValue.valueOf("facet1:valueB")));
         assertThat(fq, hasItem(StringValue.valueOf("facet2:valueC")));

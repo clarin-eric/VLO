@@ -16,9 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -71,10 +71,10 @@ public class SolrFacetQueryFactoryImplTest {
     @Test
     public void testCreateFacetQueryNoSelection() {
         // Facets are present but no values are selected
-        Map<String, Collection<String>> selection = new HashMap<String, Collection<String>>() {
+        Map<String, FacetSelection> selection = new HashMap<String, FacetSelection>() {
             {
-                put("facet1", Collections.<String>emptySet());
-                put("facet2", Collections.<String>emptyList());
+                put("facet1", new FacetSelection(Collections.<String>emptySet()));
+                put("facet2", new FacetSelection(Collections.<String>emptyList()));
             }
         };
 
@@ -96,11 +96,11 @@ public class SolrFacetQueryFactoryImplTest {
     @Test
     public void testCreateFacetQuerySelection() {
         // Some facets have one or more values selected
-        Map<String, Collection<String>> selection = new HashMap<String, Collection<String>>() {
+        Map<String, FacetSelection> selection = new HashMap<String, FacetSelection>() {
             {
-                put("facet1", Arrays.asList("valueA"));
-                put("facet2", Arrays.asList("valueB", "valueC"));
-                put("facet3", Collections.<String>emptyList());
+                put("facet1", new FacetSelection(Arrays.asList("valueA")));
+                put("facet2", new FacetSelection(Arrays.asList("valueB", "valueC")));
+                put("facet3", new FacetSelection(Collections.<String>emptyList()));
             }
         };
         SolrQuery query = instance.createFacetQuery(new QueryFacetsSelection(selection), FACET_FIELDS, 20);
@@ -124,9 +124,9 @@ public class SolrFacetQueryFactoryImplTest {
      */
     @Test
     public void testCreateFacetQuerySelectionAndQuery() {
-        Map<String, Collection<String>> selection = new HashMap<String, Collection<String>>() {
+        Map<String, FacetSelection> selection = new HashMap<String, FacetSelection>() {
             {
-                put("facet1", Arrays.asList("value A"));
+                put("facet1", new FacetSelection(Arrays.asList("value A")));
             }
         };
         SolrQuery query = instance.createFacetQuery(new QueryFacetsSelection("query string", selection), FACET_FIELDS, 20);

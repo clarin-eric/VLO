@@ -14,12 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package eu.clarin.cmdi.vlo.wicket.provider;
 
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.wicket.model.CollectionMapEntryModel;
-import java.util.Collection;
+import eu.clarin.cmdi.vlo.wicket.model.MapEntryModel;
 import java.util.Iterator;
 import java.util.Map;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
@@ -29,7 +28,8 @@ import org.apache.wicket.model.IModel;
  *
  * @author twagoo
  */
-public class FacetSelectionProvider implements IDataProvider<Map.Entry<String, Collection<String>>> {
+public class FacetSelectionProvider implements IDataProvider<Map.Entry<String, FacetSelection>> {
+
     private final IModel<QueryFacetsSelection> selectionModel;
 
     public FacetSelectionProvider(IModel<QueryFacetsSelection> selectionModel) {
@@ -37,7 +37,7 @@ public class FacetSelectionProvider implements IDataProvider<Map.Entry<String, C
     }
 
     @Override
-    public Iterator<? extends Map.Entry<String, Collection<String>>> iterator(long first, long count) {
+    public Iterator<? extends Map.Entry<String, FacetSelection>> iterator(long first, long count) {
         return selectionModel.getObject().getSelection().entrySet().iterator();
     }
 
@@ -47,13 +47,13 @@ public class FacetSelectionProvider implements IDataProvider<Map.Entry<String, C
     }
 
     @Override
-    public IModel<Map.Entry<String, Collection<String>>> model(Map.Entry<String, Collection<String>> object) {
-        return new CollectionMapEntryModel<String, String>(object);
+    public IModel<Map.Entry<String, FacetSelection>> model(Map.Entry<String, FacetSelection> object) {
+        return new MapEntryModel<String, FacetSelection>(object);
     }
 
     @Override
     public void detach() {
         selectionModel.detach();
     }
-    
+
 }

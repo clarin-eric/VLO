@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.FacetFieldSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import java.util.Collection;
@@ -116,7 +117,7 @@ public abstract class FacetPanel extends GenericPanel<FacetFieldSelection> {
                 new PropertyModel<FacetField>(getModel(), "facetField"),
                 new PropertyModel<QueryFacetsSelection>(getModel(), "selection")) {
                     @Override
-                    public void onValuesSelected(String facet, Collection<String> value, AjaxRequestTarget target) {
+                    public void onValuesSelected(String facet, FacetSelection value, AjaxRequestTarget target) {
                         // A value has been selected on this facet's panel, update the model!
                         FacetPanel.this.getModelObject().getSelection().selectValues(facet, value);
                         if (target != null) {
@@ -134,12 +135,13 @@ public abstract class FacetPanel extends GenericPanel<FacetFieldSelection> {
                 final QueryFacetsSelection selection = getModelObject().getSelection();
 
                 // Values have been removed, calculate remainder
-                final Collection<String> currentSelection = selection.getSelectionValues(facet);
+                final FacetSelection facetSelection = selection.getSelectionValues(facet);
+                final Collection<String> currentSelection = facetSelection.getValues();
                 final Collection<String> newSelection = new HashSet<String>(currentSelection);
                 newSelection.removeAll(valuesRemoved);
 
-                // Update model
-                selection.selectValues(facet, newSelection);
+                // Update model (keep selection type)
+                selection.selectValues(facet, new FacetSelection(facetSelection.getSelectionType(), newSelection));
 
                 // collapse after removal
                 // TODO: should be removed, but then list of values

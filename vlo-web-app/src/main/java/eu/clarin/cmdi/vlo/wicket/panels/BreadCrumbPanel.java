@@ -16,16 +16,16 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
-import eu.clarin.cmdi.vlo.wicket.provider.FacetSelectionProvider;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
+import eu.clarin.cmdi.vlo.wicket.provider.FacetSelectionProvider;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -90,11 +90,11 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
 
         // create a provider that lists the facet name -> values entries
         final FacetSelectionProvider facetSelectionProvider = new FacetSelectionProvider(model);
-        facetsContainer.add(new DataView<Map.Entry<String, Collection<String>>>("facet", facetSelectionProvider) {
+        facetsContainer.add(new DataView<Map.Entry<String, FacetSelection>>("facet", facetSelectionProvider) {
 
             @Override
-            protected void populateItem(Item<Map.Entry<String, Collection<String>>> item) {
-                final IModel<Map.Entry<String, Collection<String>>> selectionModel = item.getModel();
+            protected void populateItem(Item<Map.Entry<String, FacetSelection>> item) {
+                final IModel<Map.Entry<String, FacetSelection>> selectionModel = item.getModel();
                 // add a label for the selected facet value(s)
                 final Label valueLabel = new Label("value", new PropertyModel(selectionModel, "value")) {
 
@@ -134,7 +134,7 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
         super.onConfigure();
 
         final String queryString = getModelObject().getQuery();
-        final Map<String, Collection<String>> selection = getModelObject().getSelection();
+        final Map<String, FacetSelection> selection = getModelObject().getSelection();
 
         query.setVisible(queryString != null && !queryString.isEmpty());
         facets.setVisible(selection != null && !selection.isEmpty());
@@ -144,15 +144,17 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
      * Converter for string collections, rendering depends on items in
      * collection (if singleton, show its value; if multiple, comma separated)
      */
-    private final static IConverter<Collection<String>> selectionConverter = new IConverter<Collection<String>>() {
+    private final static IConverter<FacetSelection> selectionConverter = new IConverter<FacetSelection>() {
 
         @Override
-        public Collection<String> convertToObject(String value, Locale locale) throws ConversionException {
+        public FacetSelection convertToObject(String value, Locale locale) throws ConversionException {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public String convertToString(Collection<String> value, Locale locale) {
+        public String convertToString(FacetSelection selection, Locale locale) {
+            final Collection<String> value = selection.getValues();
+            //TODO: include selection type
             if (value.isEmpty()) {
                 return "";
             } else if (value.size() == 1) {

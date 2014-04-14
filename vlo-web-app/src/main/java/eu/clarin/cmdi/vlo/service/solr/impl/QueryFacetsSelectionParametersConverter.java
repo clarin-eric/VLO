@@ -16,17 +16,18 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
@@ -40,6 +41,7 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
 
     @Override
     public QueryFacetsSelection fromParameters(PageParameters params) {
+        // Assuming AND. TODO: decode NOT,OR,not empty. Abandon multimap stategy?
         // Get query string from params
         final String query = params.get("q").toOptionalString();
 
@@ -59,7 +61,7 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
 
         // Facet selection expects a mutable and serializable map, so first convert
         // back to ordinary map, then insert serializable values
-        final HashMap<String, Collection<String>> selection = multimapToSerializableCollectionMap(selectionMap);
+        final HashMap<String, FacetSelection> selection = multimapToSerializableCollectionMap(selectionMap);
 
         // Facet selection expects a mutable and serializable map, so first convert 
         return new QueryFacetsSelection(query, selection);
@@ -76,8 +78,10 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
         }
 
         // put all selections in 'fq' parameters
-        for (Entry<String, Collection<String>> facetSelection : selection.getSelection().entrySet()) {
-            for (String value : facetSelection.getValue()) {
+        for (Entry<String, FacetSelection> facetSelection : selection.getSelection().entrySet()) {
+            //Assuming AND            
+            //TODO: encode NOT,OR
+            for (String value : facetSelection.getValue().getValues()) {
                 params.add("fq", String.format("%s:%s", facetSelection.getKey(), value));
             }
         }
@@ -90,16 +94,17 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
      * @param selectionMap multimap holding the selection
      * @return a fully serializable map with collection values
      */
-    private HashMap<String, Collection<String>> multimapToSerializableCollectionMap(final Multimap<String, String> selectionMap) {
-        final HashMap<String, Collection<String>> selection = Maps.newHashMapWithExpectedSize(selectionMap.size());
+    private HashMap<String, FacetSelection> multimapToSerializableCollectionMap(final Multimap<String, String> selectionMap) {
+
+        final HashMap<String, FacetSelection> selection = Maps.newHashMapWithExpectedSize(selectionMap.size());
         for (Entry<String, Collection<String>> entry : selectionMap.asMap().entrySet()) {
-            final Collection<String> value = entry.getValue();
+            final FacetSelection value = new FacetSelection(entry.getValue());
             if (value instanceof Serializable) {
                 // keep serializable collection value
                 selection.put(entry.getKey(), value);
             } else {
                 // copy to a serializable collection
-                selection.put(entry.getKey(), Lists.newArrayList(value));
+                selection.put(entry.getKey(), value);
             }
         }
         return selection;

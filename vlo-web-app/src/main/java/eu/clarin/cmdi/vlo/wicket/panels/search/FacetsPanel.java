@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetExpansionStateModel;
@@ -127,7 +128,7 @@ public abstract class FacetsPanel extends GenericPanel<List<FacetField>> {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-                final Map<String, Collection<String>> selection = selectionModel.getObject().getSelection();
+                final Map selection = selectionModel.getObject().getSelection();
                 setVisible(selection != null && !selection.isEmpty());
             }
         });

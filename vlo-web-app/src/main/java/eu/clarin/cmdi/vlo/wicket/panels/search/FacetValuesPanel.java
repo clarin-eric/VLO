@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableSet;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
@@ -135,7 +136,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
                 onValuesSelected(
                         item.getModelObject().getFacetField().getName(),
                         // for now only single values can be selected
-                        Collections.singleton(item.getModelObject().getName()),
+                        new FacetSelection(Collections.singleton(item.getModelObject().getName())),
                         target);
             }
         };
@@ -160,7 +161,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         final AllFacetValuesPanel allValuesPanel = new AllFacetValuesPanel(window.getContentId(), getModel(), filterModel) {
 
             @Override
-            protected void onValuesSelected(String facet, Collection<String> values, AjaxRequestTarget target) {
+            protected void onValuesSelected(String facet, FacetSelection values, AjaxRequestTarget target) {
                 window.close(target);
                 FacetValuesPanel.this.onValuesSelected(facet, values, target);
             }
@@ -209,7 +210,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param target Ajax target allowing for a partial update. May be null
      * (fallback)!
      */
-    protected abstract void onValuesSelected(String facet, Collection<String> values, AjaxRequestTarget target);
+    protected abstract void onValuesSelected(String facet, FacetSelection values, AjaxRequestTarget target);
 
     @Override
     protected void onBeforeRender() {

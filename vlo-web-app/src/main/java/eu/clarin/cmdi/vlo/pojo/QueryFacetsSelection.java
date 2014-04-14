@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.pojo;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.io.Serializable;
 import java.util.Collection;
@@ -32,13 +31,13 @@ import java.util.Map.Entry;
 public class QueryFacetsSelection implements Serializable {
 
     private String queryString;
-    private final Map<String, Collection<String>> selection;
+    private final Map<String, FacetSelection> selection;
 
     /**
      * Creates an empty selection (no string, no facet values)
      */
     public QueryFacetsSelection() {
-        this(null, Maps.<String, Collection<String>>newHashMap());
+        this(null, Maps.<String, FacetSelection>newHashMap());
     }
 
     /**
@@ -47,7 +46,7 @@ public class QueryFacetsSelection implements Serializable {
      * @param query query string
      */
     public QueryFacetsSelection(String query) {
-        this(query, Maps.<String, Collection<String>>newHashMap());
+        this(query, Maps.<String, FacetSelection>newHashMap());
     }
 
     /**
@@ -55,7 +54,7 @@ public class QueryFacetsSelection implements Serializable {
      *
      * @param selection facet values selection map
      */
-    public QueryFacetsSelection(Map<String, Collection<String>> selection) {
+    public QueryFacetsSelection(Map<String, FacetSelection> selection) {
         this(null, selection);
     }
 
@@ -65,10 +64,10 @@ public class QueryFacetsSelection implements Serializable {
      * @param query textual query (can be null)
      * @param selection facet values selection map (can be null)
      */
-    public QueryFacetsSelection(String query, Map<String, Collection<String>> selection) {
+    public QueryFacetsSelection(String query, Map<String, FacetSelection> selection) {
         this.queryString = query;
         if (selection == null) {
-            this.selection = new HashMap<String, Collection<String>>();
+            this.selection = new HashMap<String, FacetSelection>();
         } else {
             this.selection = selection;
         }
@@ -78,7 +77,7 @@ public class QueryFacetsSelection implements Serializable {
      *
      * @return a facet -> values map representing the current selection
      */
-    public Map<String, Collection<String>> getSelection() {
+    public Map<String, FacetSelection> getSelection() {
         return selection;
     }
 
@@ -95,7 +94,7 @@ public class QueryFacetsSelection implements Serializable {
      * @param facet facet to get values for
      * @return the selected values for the specified facet. Can be null.
      */
-    public Collection<String> getSelectionValues(String facet) {
+    public FacetSelection getSelectionValues(String facet) {
         return selection.get(facet);
     }
 
@@ -111,14 +110,14 @@ public class QueryFacetsSelection implements Serializable {
         this.queryString = queryString;
     }
 
-    public void selectValues(String facet, Collection<String> values) {
-        if (values == null || values.isEmpty()) {
+    public void selectValues(String facet, FacetSelection values) {
+        if (values == null) {
             selection.remove(facet);
         } else {
             if (values instanceof Serializable) {
                 selection.put(facet, values);
             } else {
-                selection.put(facet, Lists.newArrayList(values));
+                selection.put(facet, values);
             }
         }
     }
@@ -129,9 +128,9 @@ public class QueryFacetsSelection implements Serializable {
     }
 
     public QueryFacetsSelection getCopy() {
-        final Map<String, Collection<String>> selectionClone = new HashMap<String, Collection<String>>(selection.size());
-        for (Entry<String, Collection<String>> entry : selection.entrySet()) {
-            selectionClone.put(entry.getKey(), Lists.newArrayList(entry.getValue()));
+        final Map<String, FacetSelection> selectionClone = new HashMap<String, FacetSelection>(selection.size());
+        for (Entry<String, FacetSelection> entry : selection.entrySet()) {
+            selectionClone.put(entry.getKey(), entry.getValue().getCopy());
         }
         return new QueryFacetsSelection(queryString, selectionClone);
     }

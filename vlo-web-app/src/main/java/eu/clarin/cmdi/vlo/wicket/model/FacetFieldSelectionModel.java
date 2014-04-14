@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.model;
 
 import eu.clarin.cmdi.vlo.pojo.FacetFieldSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,8 +28,8 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
 /**
- * Model for FacetFieldSelection that simply wraps a QueryFacetsSelection model and
- * 'filters' for the specified facet
+ * Model for FacetFieldSelection that simply wraps a QueryFacetsSelection model
+ * and 'filters' for the specified facet
  *
  * @author twagoo
  */
@@ -55,11 +56,16 @@ public class FacetFieldSelectionModel extends AbstractReadOnlyModel<FacetFieldSe
     @Override
     public List<String> getFacetValues() {
         final String facetName = getFacetField().getName();
-        final Collection<String> selectionValues = getSelection().getSelectionValues(facetName);
-        if (selectionValues == null) {
+        final FacetSelection selection = getSelection().getSelectionValues(facetName);
+        if (selection == null) {
             return Collections.emptyList();
         } else {
-            return new CopyOnWriteArrayList<String>(selectionValues);
+            final Collection<String> selectionValues = selection.getValues();
+            if (selectionValues == null) {
+                return Collections.emptyList();
+            } else {
+                return new CopyOnWriteArrayList<String>(selectionValues);
+            }
         }
     }
 

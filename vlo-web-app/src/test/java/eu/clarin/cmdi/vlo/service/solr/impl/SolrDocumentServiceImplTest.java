@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentServiceImpl;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
@@ -81,7 +82,7 @@ public class SolrDocumentServiceImplTest {
      */
     @Test
     public void testGetDocuments() {
-        final QueryFacetsSelection selection = new QueryFacetsSelection("query", Collections.<String, Collection<String>>emptyMap());
+        final QueryFacetsSelection selection = new QueryFacetsSelection("query", Collections.<String, FacetSelection>emptyMap());
         final int first = 100;
         final int count = 15;
 
@@ -108,7 +109,7 @@ public class SolrDocumentServiceImplTest {
      */
     @Test
     public void testGetDocumentCount() {
-        final QueryFacetsSelection selection = new QueryFacetsSelection("query", Collections.<String, Collection<String>>emptyMap());
+        final QueryFacetsSelection selection = new QueryFacetsSelection("query", Collections.<String, FacetSelection>emptyMap());
 
         final SolrQuery solrQuery = new SolrQuery("query");
         final SolrDocumentList resultList = new SolrDocumentList();

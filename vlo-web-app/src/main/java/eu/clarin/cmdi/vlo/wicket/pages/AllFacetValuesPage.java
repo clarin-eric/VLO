@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
@@ -85,7 +86,7 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
         add(new AllFacetValuesPanel("values", getModel()) {
 
             @Override
-            protected void onValuesSelected(String facet, Collection<String> values, AjaxRequestTarget target) {
+            protected void onValuesSelected(String facet, FacetSelection values, AjaxRequestTarget target) {
                 // Create updated selection state
                 final QueryFacetsSelection newSelection;
                 if (selectionModel != null) {

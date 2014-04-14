@@ -17,13 +17,13 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
-import java.util.Collection;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.Component;
@@ -88,7 +88,7 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
                 final FacetValuesPanel values = new FacetValuesPanel("values", item.getModel(), SimpleSearchBrowsePanel.this.getModel()) {
 
                     @Override
-                    protected void onValuesSelected(String facet, Collection<String> values, AjaxRequestTarget target) {
+                    protected void onValuesSelected(String facet, FacetSelection values, AjaxRequestTarget target) {
                         // value selected, add to selection model then submit to search page
                         final IModel<QueryFacetsSelection> selectionModel = SimpleSearchBrowsePanel.this.getModel();
                         selectionModel.getObject().selectValues(facet, values);

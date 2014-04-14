@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.pojo.FacetFieldSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;

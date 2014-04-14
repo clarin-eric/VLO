@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
-import com.google.common.base.Joiner;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,15 +41,26 @@ public abstract class AbstractSolrQueryFactory {
             // escape query content and wrap in quotes to make literal query
             query.setQuery("\"" + ClientUtils.escapeQueryChars(queryString) + "\"");
         }
-        final Map<String, Collection<String>> selections = queryFacetsSelections.getSelection();
+        final Map<String, FacetSelection> selections = queryFacetsSelections.getSelection();
         if (selections != null) {
             final List<String> encodedQueries = new ArrayList(selections.size()); // assuming every facet has one selection, most common scenario
-            for (Map.Entry<String, Collection<String>> selection : selections.entrySet()) {
-                final String facetName = selection.getKey();
-                final Collection<String> values = selection.getValue();
-                if (values != null) {
-                    for (String value : values) {
-                        encodedQueries.add(createFilterQuery(facetName, value));
+            for (Map.Entry<String, FacetSelection> selectionEntry : selections.entrySet()) {
+                final String facetName = selectionEntry.getKey();
+                final FacetSelection selection = selectionEntry.getValue();
+                if (selection != null) {
+                    switch (selection.getSelectionType()) {
+                        case NOT_EMPTY:
+                            //TODO: test
+                            encodedQueries.add(String.format("%s:['' TO *]", facetName));
+                            break;
+                        case AND:
+                            for (String value : selection.getValues()) {
+                                encodedQueries.add(createFilterQuery(facetName, value));
+                            }
+                            break;
+                        default:
+                            //TODO: support OR,NOT
+                            throw new UnsupportedOperationException("Unsupported selection type: " + selection.getSelectionType());
                     }
                 }
             }
@@ -59,6 +70,7 @@ public abstract class AbstractSolrQueryFactory {
 
     protected final String createFilterQuery(String facetName, String value) {
         // escape value and wrap in quotes to make literal query
+        //TODO: encode value
         return String.format("%s:\"%s\"", facetName, ClientUtils.escapeQueryChars(value));
     }
 
