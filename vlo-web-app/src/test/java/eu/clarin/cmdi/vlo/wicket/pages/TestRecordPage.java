@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
 import eu.clarin.cmdi.vlo.config.VloConfigFactory;
@@ -71,14 +72,14 @@ public class TestRecordPage {
         tester = new WicketTester(application);
         document = new SolrDocument();
         params = new PageParameters();
-        params.set("docId", "docId");
+        params.set(VloWebAppParameters.DOCUMENT_ID, "documentId");
     }
 
     @Test
     public void testRendersSuccessfully() {
         mockery.checking(new Expectations() {
             {
-                oneOf(documentService).getDocument("docId");
+                oneOf(documentService).getDocument("documentId");
                 will(returnValue(document));
             }
         });
@@ -91,7 +92,7 @@ public class TestRecordPage {
     public void testLandingPageLinkInvisible() {
         mockery.checking(new Expectations() {
             {
-                oneOf(documentService).getDocument("docId");
+                oneOf(documentService).getDocument("documentId");
                 will(returnValue(document));
             }
         });
@@ -106,7 +107,7 @@ public class TestRecordPage {
 
         mockery.checking(new Expectations() {
             {
-                oneOf(documentService).getDocument("docId");
+                oneOf(documentService).getDocument("documentId");
                 will(returnValue(document));
             }
         });

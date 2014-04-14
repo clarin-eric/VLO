@@ -60,21 +60,21 @@ public class SolrDocumentServiceImplTest {
     public void testGetDocument() {
         final SolrQuery solrQuery = new SolrQuery("query");
         final SolrDocument resultDocument = new SolrDocument();
-        resultDocument.setField("id", "docId");
+        resultDocument.setField("id", "documentId");
         final SolrDocumentList resultList = new SolrDocumentList();
         resultList.add(resultDocument);
         context.checking(new Expectations() {
             {
-                oneOf(queryFactory).createDocumentQuery("docId");
+                oneOf(queryFactory).createDocumentQuery("documentId");
                 will(returnValue(solrQuery));
                 oneOf(dao).getDocuments(solrQuery);
                 will(returnValue(resultList));
             }
         });
 
-        final SolrDocument result = instance.getDocument("docId");
+        final SolrDocument result = instance.getDocument("documentId");
         assertEquals(resultDocument, result);
-        assertEquals("docId", result.getFieldValue("id"));
+        assertEquals("documentId", result.getFieldValue("id"));
     }
 
     /**

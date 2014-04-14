@@ -74,11 +74,11 @@ public class SolrDocumentQueryFactoryImplTest {
      */
     @Test
     public void testCreateDocumentQueryForDocId() {
-        final SolrQuery query = instance.createDocumentQuery("docId");
+        final SolrQuery query = instance.createDocumentQuery("documentId");
 
         final String[] filterQueries = query.getFilterQueries();
         assertEquals(1, filterQueries.length);
-        assertEquals("id:\"docId\"", filterQueries[0]);
+        assertEquals("id:\"documentId\"", filterQueries[0]);
 
         final String fields = query.getFields();
         assertTrue(fields.contains("field1"));

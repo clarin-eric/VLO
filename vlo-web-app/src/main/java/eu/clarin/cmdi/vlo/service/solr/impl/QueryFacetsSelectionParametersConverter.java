@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
+import static eu.clarin.cmdi.vlo.VloWebAppParameters.*;
 
 /**
  * Page parameter conversion service for {@link QueryFacetsSelection}
@@ -38,10 +39,10 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
     public QueryFacetsSelection fromParameters(PageParameters params) {
         // Assuming AND. TODO: decode NOT,OR,not empty. Abandon multimap stategy?
         // Get query string from params
-        final String query = params.get("q").toOptionalString();
+        final String query = params.get(QUERY).toOptionalString();
 
         // Get facet selections from params
-        final List<StringValue> facetValues = params.getValues("fq");
+        final List<StringValue> facetValues = params.getValues(FILTER_QUERY);
 
         final HashMap<String, FacetSelection> selection = Maps.newHashMapWithExpectedSize(facetValues.size());
         for (StringValue facetValue : facetValues) {
@@ -70,7 +71,7 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
         // put the query in the 'q' parameter
         final String query = selection.getQuery();
         if (query != null) {
-            params.add("q", query);
+            params.add(QUERY, query);
         }
 
         // put all selections in 'fq' parameters
@@ -78,7 +79,7 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
             //Assuming AND            
             //TODO: encode NOT,OR
             for (String value : facetSelection.getValue().getValues()) {
-                params.add("fq", String.format("%s:%s", facetSelection.getKey(), value));
+                params.add(FILTER_QUERY, String.format("%s:%s", facetSelection.getKey(), value));
             }
         }
 

@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
@@ -83,7 +84,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         final QueryFacetsSelection selection = selectionParametersConverter.fromParameters(params);
         selectionModel = Model.of(selection);
 
-        final StringValue docId = params.get("docId");
+        final StringValue docId = params.get(VloWebAppParameters.DOCUMENT_ID);
         if (docId.isEmpty()) {
             Session.get().error("No document ID provided");
             throw new RestartResponseException(new FacetedSearchPage(selectionModel));

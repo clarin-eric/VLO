@@ -23,4 +23,7 @@ package eu.clarin.cmdi.vlo;
  */
 public class VloWebAppParameters {
     public final static String THEME = "theme";
+    public final static String DOCUMENT_ID = "docId";
+    public static final String QUERY = "q";
+    public static final String FILTER_QUERY = "fq";
 }

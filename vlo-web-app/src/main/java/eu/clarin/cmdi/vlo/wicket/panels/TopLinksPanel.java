@@ -167,7 +167,7 @@ public class TopLinksPanel extends GenericPanel<QueryFacetsSelection> {
             }
 
             if (documentModel != null) {
-                params.add("docId", documentModel.getObject().getFirstValue(FacetConstants.FIELD_ID));
+                params.add(VloWebAppParameters.DOCUMENT_ID, documentModel.getObject().getFirstValue(FacetConstants.FIELD_ID));
             }
 
             final String style = Session.get().getStyle();
