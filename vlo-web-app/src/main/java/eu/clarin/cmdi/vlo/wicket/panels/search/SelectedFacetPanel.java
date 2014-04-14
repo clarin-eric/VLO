@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetFieldSelection;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -37,9 +37,9 @@ import org.apache.wicket.model.PropertyModel;
  */
 public abstract class SelectedFacetPanel extends Panel {
 
-    private final IModel<FacetSelection> model;
+    private final IModel<FacetFieldSelection> model;
 
-    public SelectedFacetPanel(String id, final IModel<FacetSelection> model) {
+    public SelectedFacetPanel(String id, final IModel<FacetFieldSelection> model) {
         super(id, model);
         this.model = model;
 

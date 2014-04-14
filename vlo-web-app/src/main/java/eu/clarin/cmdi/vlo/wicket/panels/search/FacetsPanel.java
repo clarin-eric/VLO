@@ -21,7 +21,7 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetExpansionStateModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
-import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
+import eu.clarin.cmdi.vlo.wicket.model.FacetFieldSelectionModel;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -77,7 +77,7 @@ public abstract class FacetsPanel extends GenericPanel<List<FacetField>> {
                 final FacetFieldModel facetFieldModel = new FacetFieldModel(facetFieldsService, item.getModelObject(), selectionModel);
                 item.add(
                         new FacetPanel("facet",
-                                new FacetSelectionModel(facetFieldModel, selectionModel),
+                                new FacetFieldSelectionModel(facetFieldModel, selectionModel),
                                 new FacetExpansionStateModel(facetFieldModel, expansionModel)) {
 
                             @Override

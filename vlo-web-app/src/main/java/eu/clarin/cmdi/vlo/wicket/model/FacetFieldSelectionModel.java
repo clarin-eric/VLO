@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetFieldSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,12 +27,12 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
 /**
- * Model for FacetSelection that simply wraps a QueryFacetsSelection model and
+ * Model for FacetFieldSelection that simply wraps a QueryFacetsSelection model and
  * 'filters' for the specified facet
  *
  * @author twagoo
  */
-public class FacetSelectionModel extends AbstractReadOnlyModel<FacetSelection> implements FacetSelection {
+public class FacetFieldSelectionModel extends AbstractReadOnlyModel<FacetFieldSelection> implements FacetFieldSelection {
 
     private final IModel<QueryFacetsSelection> selectionModel;
     private final IModel<FacetField> facetFieldModel;
@@ -42,7 +42,7 @@ public class FacetSelectionModel extends AbstractReadOnlyModel<FacetSelection> i
      * @param facetFieldModel
      * @param selectionModel broad (multi-facet) selection model
      */
-    public FacetSelectionModel(IModel<FacetField> facetFieldModel, IModel<QueryFacetsSelection> selectionModel) {
+    public FacetFieldSelectionModel(IModel<FacetField> facetFieldModel, IModel<QueryFacetsSelection> selectionModel) {
         this.facetFieldModel = facetFieldModel;
         this.selectionModel = selectionModel;
     }
@@ -69,7 +69,7 @@ public class FacetSelectionModel extends AbstractReadOnlyModel<FacetSelection> i
     }
 
     @Override
-    public FacetSelection getObject() {
+    public FacetFieldSelection getObject() {
         return this;
     }
 

@@ -24,7 +24,7 @@ import org.apache.solr.client.solrj.response.FacetField;
  *
  * @author twagoo
  */
-public interface FacetSelection {
+public interface FacetFieldSelection {
 
     FacetField getFacetField();
 

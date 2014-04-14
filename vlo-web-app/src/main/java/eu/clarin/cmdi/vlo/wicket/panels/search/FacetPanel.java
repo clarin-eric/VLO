@@ -17,7 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetFieldSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import java.util.Collection;
@@ -41,14 +41,14 @@ import org.apache.wicket.model.PropertyModel;
  *
  * @author twagoo
  */
-public abstract class FacetPanel extends GenericPanel<FacetSelection> {
+public abstract class FacetPanel extends GenericPanel<FacetFieldSelection> {
 
     private final IModel<ExpansionState> expansionStateModel;
 
     private final SelectedFacetPanel selectedFacetPanel;
     private final FacetValuesPanel facetValuesPanel;
 
-    public FacetPanel(String id, IModel<FacetSelection> selectionModel, IModel<ExpansionState> expansionState) {
+    public FacetPanel(String id, IModel<FacetFieldSelection> selectionModel, IModel<ExpansionState> expansionState) {
         super(id, selectionModel);
 
         this.expansionStateModel = expansionState;
