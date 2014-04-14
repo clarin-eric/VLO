@@ -55,7 +55,7 @@ import org.apache.wicket.model.PropertyModel;
  * @author twagoo
  */
 public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
-
+    
     private final FacetFieldValuesProvider valuesProvider;
     private final WebMarkupContainer valuesContainer;
     private final IModel<FieldValuesFilter> filterModel;
@@ -77,7 +77,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
      */
     public AllFacetValuesPanel(String id, IModel<FacetField> model, IModel<FieldValuesFilter> filterModel) {
         super(id, model);
-
+        
         if (filterModel != null) {
             this.filterModel = filterModel;
         } else {
@@ -86,13 +86,13 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
         // create a provider that shows all values and is sorted by name by default
         valuesProvider = new FacetFieldValuesProvider(model, Integer.MAX_VALUE, FieldValueOrderSelector.NAME_SORT) {
-
+            
             @Override
             protected IModel<FieldValuesFilter> getFilterModel() {
                 // filters the values
                 return AllFacetValuesPanel.this.filterModel;
             }
-
+            
         };
 
         // create a container for the values to allow for AJAX updates
@@ -109,17 +109,17 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         optionsForm.setOutputMarkupId(true);
         add(optionsForm);
     }
-
+    
     private DataView<FacetField.Count> createValuesView(String id) {
         return new DataView<FacetField.Count>(id, valuesProvider) {
-
+            
             @Override
             protected void populateItem(final Item<FacetField.Count> item) {
                 item.setDefaultModel(new CompoundPropertyModel<FacetField.Count>(item.getModel()));
 
                 // link to select an individual facet value
                 final Link selectLink = new AjaxFallbackLink("facetSelect") {
-
+                    
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         // call callback
@@ -140,27 +140,27 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
             }
         };
     }
-
+    
     private Form createOptionsForm(String id) {
         final Form options = new Form(id);
-
+        
         final DropDownChoice<SortParam<FieldValuesOrder>> sortSelect
                 = new FieldValueOrderSelector("sort", new PropertyModel<SortParam<FieldValuesOrder>>(valuesProvider, "sort"));
         sortSelect.add(new UpdateOptionsFormBehavior(options));
         options.add(sortSelect);
-
+        
         final TextField filterField = new TextField<String>("filter", new PropertyModel(filterModel, "name"));
         filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
-
+            
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 target.add(valuesContainer);
             }
         });
         options.add(filterField);
-
+        
         addOccurenceOptions(options);
-
+        
         return options;
     }
 
@@ -196,26 +196,37 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
         // Dropdown to select a value (which is applied to the filter if the 'bridge' is open)
         final DropDownChoice<Integer> minOccurence = new DropDownChoice<Integer>("minOccurences", minOccurenceSelectModel, ImmutableList.of(2, 5, 10, 100, 1000));
-        minOccurence.add(new UpdateOptionsFormBehavior(options));
+        minOccurence.add(new UpdateOptionsFormBehavior(options) {
+            
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                super.onUpdate(target);
+                // on change, apply to inner model ('open bridge')
+                if (!minOccurenceCheckBoxModel.getObject()) {
+                    minOccurenceCheckBoxModel.setObject(true);
+                }
+            }
+            
+        });
         options.add(minOccurence);
     }
-
+    
     private class UpdateOptionsFormBehavior extends OnChangeAjaxBehavior {
-
+        
         private final Form options;
-
+        
         public UpdateOptionsFormBehavior(Form options) {
             this.options = options;
         }
-
+        
         @Override
         protected void onUpdate(AjaxRequestTarget target) {
             target.add(options);
             target.add(valuesContainer);
         }
-
+        
     }
-
+    
     @Override
     public void detachModels() {
         super.detachModels();
@@ -231,5 +242,5 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
      * (fallback)!
      */
     protected abstract void onValuesSelected(String facet, Collection<String> values, AjaxRequestTarget target);
-
+    
 }
