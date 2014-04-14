@@ -148,15 +148,6 @@ public class SearchResultsDaoImplTest extends AbstractSolrTestCase {
             assertEquals("1", documents.get(0).getFieldValue(FIELD_ID));
         }
 
-        query.setFilterQueries("dummyField:test");
-        {
-            // should not affect result due to sanitisation
-            // only document with id "1" should match this
-            SolrDocumentList documents = instance.getDocuments(query);
-            assertEquals(1, documents.getNumFound());
-            assertEquals("1", documents.get(0).getFieldValue(FIELD_ID));
-        }
-
         query.setFilterQueries(FIELD_COLLECTION + ":Collection2");
         {
             // no matches

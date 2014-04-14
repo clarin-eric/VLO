@@ -19,7 +19,6 @@ package eu.clarin.cmdi.vlo.service.solr.impl;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -70,7 +69,6 @@ public abstract class AbstractSolrQueryFactory {
 
     protected final String createFilterQuery(String facetName, String value) {
         // escape value and wrap in quotes to make literal query
-        //TODO: encode value
         return String.format("%s:\"%s\"", facetName, ClientUtils.escapeQueryChars(value));
     }
 
