@@ -107,4 +107,13 @@ public class FacetSelection implements Serializable {
         return true;
     }
 
+    /**
+     *
+     * @return whether this instance represents an actual selection
+     */
+    public boolean isEmpty() {
+        return selectionType != FacetSelectionType.NOT_EMPTY // 'not empty' does not require any value, other types do
+                && (values == null || values.isEmpty());
+    }
+
 }
