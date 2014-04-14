@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
@@ -93,7 +94,7 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
         facetsContainer.add(new DataView<Map.Entry<String, FacetSelection>>("facet", facetSelectionProvider) {
 
             @Override
-            protected void populateItem(Item<Map.Entry<String, FacetSelection>> item) {
+            protected void populateItem(final Item<Map.Entry<String, FacetSelection>> item) {
                 final IModel<Map.Entry<String, FacetSelection>> selectionModel = item.getModel();
                 // add a label for the selected facet value(s)
                 final Label valueLabel = new Label("value", new PropertyModel(selectionModel, "value")) {
@@ -101,7 +102,7 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
                     @Override
                     public <C> IConverter<C> getConverter(Class<C> type) {
                         // converter to render the value(s) nicely
-                        return (IConverter<C>) selectionConverter;
+                        return (IConverter<C>) new SelectionConverter(item.getModelObject().getKey());
                     }
 
                 };
@@ -144,7 +145,13 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
      * Converter for string collections, rendering depends on items in
      * collection (if singleton, show its value; if multiple, comma separated)
      */
-    private final static IConverter<FacetSelection> selectionConverter = new IConverter<FacetSelection>() {
+    private class SelectionConverter implements IConverter<FacetSelection> {
+
+        private final String facet;
+
+        public SelectionConverter(String facet) {
+            this.facet = facet;
+        }
 
         @Override
         public FacetSelection convertToObject(String value, Locale locale) throws ConversionException {
@@ -153,6 +160,29 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
 
         @Override
         public String convertToString(FacetSelection selection, Locale locale) {
+            switch (selection.getSelectionType()) {
+                case AND:
+                    return getCollectionString(selection, " and ");
+                case OR:
+                    return getCollectionString(selection, " or ");
+                case NOT:
+                    return "not [" + getCollectionString(selection, " or ") + "]";
+                case NOT_EMPTY:
+                    return getAnyValueString();
+                default:
+                    return facet;
+            }
+
+        }
+
+        private String getAnyValueString() {
+            if (FacetConstants.FIELD_SEARCH_SERVICE.equals(facet)) {
+                return "Content searchable";
+            }
+            return "any " + facet;
+        }
+
+        public String getCollectionString(FacetSelection selection, String valueSeparator) {
             final Collection<String> value = selection.getValues();
             //TODO: include selection type
             if (value.isEmpty()) {
@@ -163,7 +193,7 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
                 final Iterator<String> iterator = value.iterator();
                 final StringBuilder sb = new StringBuilder(iterator.next());
                 while (iterator.hasNext()) {
-                    sb.append(", ").append(iterator.next());
+                    sb.append(valueSeparator).append(iterator.next());
                 }
                 return sb.toString();
             }
