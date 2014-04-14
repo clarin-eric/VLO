@@ -22,9 +22,25 @@ package eu.clarin.cmdi.vlo.pojo;
  */
 public enum FacetSelectionType {
 
+    /**
+     * Specifies a selection of all documents with a non-empty value for this
+     * facet; values supplied in the selection should be ignored
+     */
     NOT_EMPTY,
+    /**
+     * Specifies a selection of all documents that match all values supplied in
+     * the selection
+     */
     AND,
+    /**
+     * Specifies a selection of all documents that match at least one of the
+     * values supplied in the selection
+     */
     OR,
+    /**
+     * Specifies a selection of all documents that match none of the values
+     * supplied in the selection
+     */
     NOT
 
 }

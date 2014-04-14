@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
+ * Represents the selection for a single facet
  *
  * @author twagoo
  */
@@ -30,10 +31,21 @@ public class FacetSelection implements Serializable {
     private final FacetSelectionType selectionType;
     private final Collection<String> values;
 
+    /**
+     * Creates an {@link FacetSelectionType#AND} selection for the specified
+     * values
+     *
+     * @param values
+     */
     public FacetSelection(Collection<String> values) {
         this(FacetSelectionType.AND, values);
     }
 
+    /**
+     * Creates an empty selection with the specified type
+     *
+     * @param type
+     */
     public FacetSelection(FacetSelectionType type) {
         this(type, Lists.<String>newArrayList());
     }
@@ -49,16 +61,50 @@ public class FacetSelection implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return type of selection
+     */
     public FacetSelectionType getSelectionType() {
         return selectionType;
     }
 
+    /**
+     *
+     * @return values subject to selection type
+     */
     public Collection<String> getValues() {
         return values;
     }
 
     public FacetSelection getCopy() {
         return new FacetSelection(selectionType, values);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 79 * hash + (this.selectionType != null ? this.selectionType.hashCode() : 0);
+        hash = 79 * hash + (this.values != null ? this.values.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final FacetSelection other = (FacetSelection) obj;
+        if (this.selectionType != other.selectionType) {
+            return false;
+        }
+        if (this.values != other.values && (this.values == null || !this.values.equals(other.values))) {
+            return false;
+        }
+        return true;
     }
 
 }

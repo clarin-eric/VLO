@@ -23,14 +23,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <div class="sidebaritem facet collapsedfacet">
+            <div class="sidebaritem facet expandedfacet">
                 <!--rounded corners - top ****--> 
                 <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
                 <a href="#" class="expandfacet"><span>expand</span></a>
                 <a href="#" class="collapsefacet"><span>collapse</span></a>
                 <h1><a href="#">Search options</a></h1>
                 <div class="sbilinks facetvalues">
-                    <form id="advancedoptions" action="">
+                    <form wicket:id="options" id="advancedoptions" action="">
                         <ul>
                             <li>
                                 <input wicket:id="fcs" type="checkbox" id="onlyfcs"/>
@@ -45,7 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 </select>
                             </li>
                         </ul>
-                        <input type="submit" value="Apply" />
+                        <input type="submit" value="Apply" class="nonjsfallback" />
                     </form>
                 </div>
                 <!--rounded corners - bottom ****--> 

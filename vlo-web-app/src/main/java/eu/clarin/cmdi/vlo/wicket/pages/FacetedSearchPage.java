@@ -13,6 +13,7 @@ import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.FacetValuesPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -83,8 +84,22 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         facetsPanel = createFacetsPanel("facets");
         add(facetsPanel);
 
+        Panel optionsPanel = createOptionsPanel("options");
+        add(optionsPanel);
+
         searchResultsPanel = new SearchResultsPanel("searchResults", getModel());
         add(searchResultsPanel);
+    }
+
+    public Panel createOptionsPanel(String id) {
+        final Panel optionsPanel = new AdvancedSearchOptionsPanel(id, getModel()) {
+
+            @Override
+            protected void selectionChanged(AjaxRequestTarget target) {
+                updateSelection(target);
+            }
+        };
+        return optionsPanel;
     }
 
     private SearchForm createSearchForm(String id) {
