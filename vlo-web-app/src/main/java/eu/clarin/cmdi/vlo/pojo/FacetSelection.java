@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.pojo;
 
 import com.google.common.collect.Lists;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -35,10 +36,11 @@ public class FacetSelection implements Serializable {
 
     public FacetSelection(FacetSelectionType selectionType, Collection<String> values) {
         this.selectionType = selectionType;
-        if (values instanceof Serializable) {
+        // always store as array list, which is modifiable and serialisable
+        if (values instanceof ArrayList) {
             this.values = values;
         } else {
-            // make serializable
+            // copy to new list
             this.values = Lists.newArrayList(values);
         }
     }

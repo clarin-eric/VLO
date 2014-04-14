@@ -16,18 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
-import java.io.Serializable;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
@@ -47,23 +42,24 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
 
         // Get facet selections from params
         final List<StringValue> facetValues = params.getValues("fq");
-        // Store in a multimap to allow for multiple selections per facet
-        final Multimap<String, String> selectionMap = HashMultimap.<String, String>create(facetValues.size(), 1);
+
+        final HashMap<String, FacetSelection> selection = Maps.newHashMapWithExpectedSize(facetValues.size());
         for (StringValue facetValue : facetValues) {
             if (!facetValue.isEmpty()) {
                 String[] fq = facetValue.toString().split(":");
                 if (fq.length == 2) {
                     // we have a facet - value pair
-                    selectionMap.put(fq[0], fq[1]);
+                    final String facet = fq[0];
+                    final String value = fq[1];
+                    if (selection.containsKey(facet)) {
+                        selection.get(facet).getValues().add(value);
+                    } else {
+                        selection.put(facet, new FacetSelection(Arrays.asList(value)));
+                    }
                 }
             }
         }
 
-        // Facet selection expects a mutable and serializable map, so first convert
-        // back to ordinary map, then insert serializable values
-        final HashMap<String, FacetSelection> selection = multimapToSerializableCollectionMap(selectionMap);
-
-        // Facet selection expects a mutable and serializable map, so first convert 
         return new QueryFacetsSelection(query, selection);
     }
 
@@ -87,26 +83,5 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
         }
 
         return params;
-    }
-
-    /**
-     *
-     * @param selectionMap multimap holding the selection
-     * @return a fully serializable map with collection values
-     */
-    private HashMap<String, FacetSelection> multimapToSerializableCollectionMap(final Multimap<String, String> selectionMap) {
-
-        final HashMap<String, FacetSelection> selection = Maps.newHashMapWithExpectedSize(selectionMap.size());
-        for (Entry<String, Collection<String>> entry : selectionMap.asMap().entrySet()) {
-            final FacetSelection value = new FacetSelection(entry.getValue());
-            if (value instanceof Serializable) {
-                // keep serializable collection value
-                selection.put(entry.getKey(), value);
-            } else {
-                // copy to a serializable collection
-                selection.put(entry.getKey(), value);
-            }
-        }
-        return selection;
     }
 }
