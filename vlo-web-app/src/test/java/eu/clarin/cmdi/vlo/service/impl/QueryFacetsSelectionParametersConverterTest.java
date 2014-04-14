@@ -109,8 +109,9 @@ public class QueryFacetsSelectionParametersConverterTest {
     public void testToParameters() {
         final String query = "query";
         final Map<String, FacetSelection> map = Maps.newHashMapWithExpectedSize(3);
-        map.put("facet1", new FacetSelection(Arrays.asList("valueA", "valueB")));
-        map.put("facet2", new FacetSelection(Collections.singleton("valueC")));
+        map.put("facet1", new FacetSelection(FacetSelectionType.OR, Arrays.asList("valueA", "valueB")));
+        map.put("facet2", new FacetSelection(FacetSelectionType.AND, Collections.singleton("valueC")));
+        map.put("facet3", new FacetSelection(FacetSelectionType.NOT_EMPTY));
 
         QueryFacetsSelection selection = new QueryFacetsSelection(query, map);
         PageParameters result = instance.toParameters(selection);
@@ -122,6 +123,12 @@ public class QueryFacetsSelectionParametersConverterTest {
         assertThat(fq, hasItem(StringValue.valueOf("facet1:valueA")));
         assertThat(fq, hasItem(StringValue.valueOf("facet1:valueB")));
         assertThat(fq, hasItem(StringValue.valueOf("facet2:valueC")));
+
+        final List<StringValue> fqType = result.getValues("fqType");
+        assertNotNull(fqType);
+        assertThat(fqType, hasItem(StringValue.valueOf("facet1:or")));
+        //facet 2 is AND, which is default and should not be encoded
+        assertThat(fqType, hasItem(StringValue.valueOf("facet3:not_empty")));
     }
 
 }

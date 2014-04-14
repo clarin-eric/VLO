@@ -101,11 +101,16 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
         }
 
         // put all selections in 'fq' parameters
-        for (Entry<String, FacetSelection> facetSelection : selection.getSelection().entrySet()) {
-            //Assuming AND            
-            //TODO: encode NOT,OR
-            for (String value : facetSelection.getValue().getValues()) {
-                params.add(FILTER_QUERY, String.format("%s:%s", facetSelection.getKey(), value));
+        for (Entry<String, FacetSelection> facetSelectionEntry : selection.getSelection().entrySet()) {
+            final String facet = facetSelectionEntry.getKey();
+            final FacetSelection facetSelection = facetSelectionEntry.getValue();
+            // put a parameter for the selection type (unless it is AND which is default)
+            if (facetSelection.getSelectionType() != FacetSelectionType.AND) {
+                params.add(FILTER_QUERY_TYPE, String.format("%s:%s", facet, facetSelection.getSelectionType().toString().toLowerCase()));
+            }
+            for (String value : facetSelection.getValues()) {
+                //TODO: Encode?
+                params.add(FILTER_QUERY, String.format("%s:%s", facet, value));
             }
         }
 
