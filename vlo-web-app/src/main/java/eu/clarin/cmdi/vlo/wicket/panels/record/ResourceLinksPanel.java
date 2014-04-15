@@ -41,7 +41,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public class ResourceLinksPanel extends Panel {
 
-    @SpringBean
+    @SpringBean(name = "resourceStringConverter")
     private ResourceStringConverter resourceStringConverter;
 
     /**
@@ -73,7 +73,7 @@ public class ResourceLinksPanel extends Panel {
             // wrap href in model that transforms handle links
             final IModel<String> linkModel = new HandleLinkModel(new PropertyModel(resourceInfoModel, "href"));
             final ExternalLink link = new ExternalLink("showResource", linkModel);
-            
+
             // set the file name as the link's text content
             link.add(new Label("filename", new PropertyModel(resourceInfoModel, "fileName")));
             // add details panel shown on hover

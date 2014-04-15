@@ -18,9 +18,11 @@ package eu.clarin.cmdi.vlo.service.impl;
 
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PREFIX;
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.pojo.ResourceType;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
+import eu.clarin.cmdi.vlo.service.UriResolver;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.regex.Pattern;
@@ -33,13 +35,34 @@ import org.apache.commons.io.FilenameUtils;
 public class ResourceStringConverterImpl implements ResourceStringConverter {
 
     private final static String SPLIT_PATTERN = Pattern.quote(FacetConstants.FIELD_RESOURCE_SPLIT_CHAR);
+    private final UriResolver resolver;
+
+    /**
+     * creates a converter that does not attempt to resolve
+     */
+    public ResourceStringConverterImpl() {
+        this(null);
+    }
+
+    /**
+     *
+     * @param resolver resolver to apply to resource URI to get final href
+     */
+    public ResourceStringConverterImpl(UriResolver resolver) {
+        this.resolver = resolver;
+    }
 
     @Override
     public ResourceInfo getResourceInfo(String resourceString) {
         // split resource string to find href and mime type
         final String[] tokens = resourceString.split(SPLIT_PATTERN, 2);
         final String mimeType = tokens[0];
-        final String href = tokens[1];
+        final String href;
+        if (resolver == null) {
+            href = tokens[1];
+        } else {
+            href = resolver.resolve(tokens[1]);
+        }
 
         final String fileName = getFileName(href);
         // determine resource type based on mime type
@@ -54,7 +77,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             final String scheme = uri.getScheme();
             final String path = uri.getPath();
             // in case of path information or handle, return original href
-            if (path == null || path.isEmpty() || (scheme != null && scheme.equals("hdl"))) {
+            if (path == null || path.isEmpty() || (scheme != null && scheme.equals(HANDLE_PREFIX))) {
                 return href;
             } else {
                 return FilenameUtils.getName(path);

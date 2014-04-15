@@ -31,6 +31,8 @@ import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -42,6 +44,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.time.Duration;
 
 /**
  *
@@ -49,10 +52,12 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
 
-    @SpringBean(name = "searchResultPropertiesFilter") 
+    @SpringBean(name = "searchResultPropertiesFilter")
     private FieldFilter propertiesFilter;
-    @SpringBean
+    @SpringBean(name = "resourceStringConverter")
     ResourceStringConverter resourceStringConverter;
+    @SpringBean(name = "resolvingResourceStringConverter")
+    ResourceStringConverter resolvingResourceStringConverter;
 
     public SearchResultItemExpandedPanel(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel) {
         super(id, documentModel);
@@ -88,13 +93,28 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
         return new ListView<String>(id, resourceListModel) {
 
             @Override
-            protected void populateItem(ListItem<String> item) {
+            protected void populateItem(final ListItem<String> item) {
                 // get resource string converted into a ResourceInfo model
                 final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(resourceStringConverter, item.getModel());
 
                 // add a link to the resource with the file name as its label
                 final ExternalLink resourceLink = new ExternalLink("resourceLink", new PropertyModel(resourceInfoModel, "href"));
                 resourceLink.add(new Label("resourceName", new PropertyModel(resourceInfoModel, "fileName")));
+                resourceLink.setOutputMarkupId(true);
+
+                // once loaded, make Ajax request to resolve handles and update
+                // resource link
+                resourceLink.add(new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
+
+                    @Override
+                    protected void onTimer(AjaxRequestTarget target) {
+                        this.stop(target);
+                        resourceInfoModel.setObject(
+                                resolvingResourceStringConverter.getResourceInfo(item.getModelObject()));
+                        target.add(resourceLink);
+                    }
+
+                });
 
                 // add a tooltip showing resource type and mime type
                 final StringResourceModel tooltipModel

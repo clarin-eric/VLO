@@ -28,7 +28,9 @@ import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
+import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
+import eu.clarin.cmdi.vlo.service.impl.HandleResolver;
 import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.service.solr.SolrFacetQueryFactory;
@@ -126,9 +128,19 @@ public class VloSpringConfig {
         return new ResourceTypeCountingServiceImpl(resourceStringConverter());
     }
 
-    @Bean
+    @Bean(name = "resourceStringConverter")
     public ResourceStringConverter resourceStringConverter() {
         return new ResourceStringConverterImpl();
+    }
+
+    @Bean(name = "resolvingResourceStringConverter")
+    public ResourceStringConverter resolvingResourceStringConverter() {
+        return new ResourceStringConverterImpl(handleResolver());
+    }
+
+    @Bean
+    public UriResolver handleResolver() {
+        return new HandleResolver();
     }
 
     @Bean
@@ -158,8 +170,8 @@ public class VloSpringConfig {
                 vloConfig().getIgnoredFields(),
                 vloConfig().getTechnicalFields()));
     }
-    
-    @Bean(name="searchResultPropertiesFilter")
+
+    @Bean(name = "searchResultPropertiesFilter")
     public FieldFilter searchResultPropertiesFilter() {
         return new InclusiveFieldFilter(vloConfig().getSearchResultFields());
     }
