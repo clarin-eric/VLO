@@ -20,6 +20,8 @@ import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PREFIX;
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY;
 import eu.clarin.cmdi.vlo.service.HandleClient;
 import eu.clarin.cmdi.vlo.service.UriResolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Resolves a URI as follows: if the URI starts with the handle scheme or the
@@ -30,6 +32,8 @@ import eu.clarin.cmdi.vlo.service.UriResolver;
  * @author twagoo
  */
 public class UriResolverImpl implements UriResolver {
+
+    private final static Logger logger = LoggerFactory.getLogger(HandleClientImpl.class);
 
     private final HandleClient handleClient;
 
@@ -44,7 +48,13 @@ public class UriResolverImpl implements UriResolver {
         if (handle == null) {
             return uri;
         } else {
-            return handleClient.getUrl(handle);
+            logger.debug("Calling handle client to resolve handle [{}]", uri);
+            final String resolved = handleClient.getUrl(handle);
+            if (resolved == null) {
+                return uri;
+            } else {
+                return resolved;
+            }
         }
 
     }

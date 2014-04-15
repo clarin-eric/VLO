@@ -16,18 +16,110 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
 import eu.clarin.cmdi.vlo.service.HandleClient;
+import javax.ws.rs.core.MediaType;
+import org.apache.wicket.ajax.json.JSONArray;
+import org.apache.wicket.ajax.json.JSONException;
+import org.apache.wicket.ajax.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
+ * Service that connects to the handle.net REST API and retrieves the URL for a
+ * given handle
  *
  * @author twagoo
  */
 public class HandleClientImpl implements HandleClient {
 
-    @Override
-    public String getUrl(String handle) {
-        //TODO: Implement using jersey client
-        return "http://www.resolve.com/file.txt";
+    private final static Logger logger = LoggerFactory.getLogger(HandleClientImpl.class);
+
+    private final String handleApiBaseUrl;
+
+    /**
+     * constructs a client with the default handle REST API base URL
+     */
+    public HandleClientImpl() {
+        //TODO: get from config
+        this("http://hdl.handle.net/api/handles/");
     }
 
+    /**
+     *
+     * @param handleApiBaseUrl base URL of the handle REST API (handle will be
+     * directly appended to this)
+     */
+    public HandleClientImpl(String handleApiBaseUrl) {
+        this.handleApiBaseUrl = handleApiBaseUrl;
+    }
+
+    /**
+     *
+     * @param handle handle to resolve
+     * @return the ULR provided by the handle server or null if it could not be
+     * retrieved or is not available
+     */
+    @Override
+    public String getUrl(String handle) {
+        final String requestUrl = handleApiBaseUrl + handle;
+        logger.debug("Making request to {}", requestUrl);
+
+        final Client client = Client.create();
+        final WebResource resource = client.resource(requestUrl);
+        final ClientResponse response = resource.accept(MediaType.APPLICATION_JSON_TYPE).get(ClientResponse.class);
+
+        if (response.getClientResponseStatus() != ClientResponse.Status.OK) {
+            logger.error("Unexpected response status {} for {}", response.getClientResponseStatus(), requestUrl);
+            return null;
+        } else {
+            final String responseString = response.getEntity(String.class);
+            try {
+                return getUrlFromJson(responseString);
+            } catch (JSONException ex) {
+                logger.error("Could not parse Handle API response", ex);
+                return null;
+            }
+        }
+
+    }
+
+    public String getUrlFromJson(final String jsonString) throws JSONException {
+        // The handle API returns a JSON structure with a number of handle
+        // record fields. We are only interested in the value at
+        // values[x].data where values[x].type == 'URL'
+
+        final JSONObject jsonResponse = new JSONObject(jsonString);
+        final JSONArray valuesArray = jsonResponse.getJSONArray("values");
+        for (int i = 0; i < valuesArray.length(); i++) {
+            final JSONObject object = valuesArray.getJSONObject(i);
+            final String type = object.getString("type");
+            if ("URL".equals(type)) {
+                // the field we were looking for
+                return object.getString("data");
+            }
+        }
+        // no URL field??
+        logger.error("Handle API response did not incude a URL field");
+        return null;
+    }
+
+    /**
+     * {
+     * "responseCode":1, "handle":"1839/00-0000-0000-0000-0000-4", "values": [{
+     * "index":6, "type":"FILETIME", "data":"2014-03-25 08:35:11.0",
+     * "ttl":86400, "timestamp":"1970-01-01T00:00:00Z" }, { "index":5,
+     * "type":"CHECKSUM", "data":"696d818e19744f9f0290125e6385fa77",
+     * "ttl":86400, "timestamp":"1970-01-01T00:00:00Z" }, { "index":4,
+     * "type":"ONSITE", "data":"true", "ttl":86400,
+     * "timestamp":"1970-01-01T00:00:00Z" }, { "index":3, "type":"FILESIZE",
+     * "data":"6550", "ttl":86400, "timestamp":"1970-01-01T00:00:00Z"},
+     * {"index":2,"type":"CRAWLTIME","data":"2014-03-25
+     * 08:35:11.39","ttl":86400,"timestamp":"1970-01-01T00:00:00Z"},
+     * {"index":1,"type":"URL","data":"http://corpus1.mpi.nl/IMDI/metadata/IMDI.imdi","ttl":86400,"timestamp":"1970-01-01T00:00:00Z"},
+     * {"index":100,"type":"HS_ADMIN","data":{"format":"admin","value":{"handle":"0.NA/1839","index":200,"permissions":"010001110000"}},"ttl":86400,"timestamp":"1970-01-01T00:00:00Z"}
+     * ] }
+     */
 }
