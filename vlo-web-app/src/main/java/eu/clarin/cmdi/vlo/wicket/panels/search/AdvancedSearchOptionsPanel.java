@@ -17,17 +17,19 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.model.ToggleModel;
+import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 /**
  * A panel showing advanced search options:
@@ -38,10 +40,10 @@ import org.apache.wicket.model.IModel;
  *
  * @author twagoo
  */
-public abstract class AdvancedSearchOptionsPanel extends GenericPanel<QueryFacetsSelection> {
+public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFacetsSelection> {
 
     public AdvancedSearchOptionsPanel(String id, IModel<QueryFacetsSelection> model) {
-        super(id, model);
+        super(id, model, Model.of(ExpansionState.COLLAPSED));
 
         // create a model for the selection state for the FCS facet
         final IModel<FacetSelection> fcsFacetModel = new FacetSelectionModel(model, FacetConstants.FIELD_SEARCH_SERVICE);

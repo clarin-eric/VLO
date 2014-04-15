@@ -22,35 +22,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <meta charset="UTF-8">
     </head>
     <body>
-        <wicket:panel>
-            <div class="sidebaritem facet expandedfacet">
-                <!--rounded corners - top ****--> 
-                <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
-                <a href="#" class="expandfacet"><span>expand</span></a>
-                <a href="#" class="collapsefacet"><span>collapse</span></a>
-                <h1><a href="#">Search options</a></h1>
-                <div class="sbilinks facetvalues">
-                    <form wicket:id="options" id="advancedoptions" action="">
-                        <ul>
-                            <li>
-                                <input wicket:id="fcs" type="checkbox" id="onlyfcs"/>
-                                <label for="onlyfcs">Only include resources that support content search</label>
-                            </li>
-                            <li>
-                                <input type="checkbox" id="onlymdformat"/>
-                                <label for="onlyfcs">Only include resources described with</label>
-                                <select>
-                                    <option>CMDI</option>
-                                    <option>OLAC</option>
-                                </select>
-                            </li>
-                        </ul>
-                        <input type="submit" value="Apply" class="nonjsfallback" />
-                    </form>
-                </div>
-                <!--rounded corners - bottom ****--> 
-                <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
+        <wicket:extend>
+            <h1><a href="#">Search options</a></h1>
+            <div class="sbilinks facetvalues">
+                <form wicket:id="options" id="advancedoptions">
+                    <ul>
+                        <li>
+                            <input wicket:id="fcs" type="checkbox" id="onlyfcs"/>
+                            <label for="onlyfcs">Only include resources that support content search</label>
+                        </li>
+                        <!--                            
+                        <li>
+                            <input type="checkbox" id="onlymdformat"/>
+                            <label for="onlyfcs">Only include resources described with</label>
+                            <select>
+                                <option>CMDI</option>
+                                <option>OLAC</option>
+                            </select>
+                        </li>
+                        -->
+                    </ul>
+                    <input type="submit" value="Apply" class="nonjsfallback" />
+                </form>
             </div>
-        </wicket:panel>
+        </wicket:extend>
     </body>
 </html>

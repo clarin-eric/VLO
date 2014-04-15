@@ -21,16 +21,14 @@ import eu.clarin.cmdi.vlo.pojo.FacetFieldSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
+import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import java.util.Collection;
 import java.util.HashSet;
 import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
@@ -42,7 +40,7 @@ import org.apache.wicket.model.PropertyModel;
  *
  * @author twagoo
  */
-public abstract class FacetPanel extends GenericPanel<FacetFieldSelection> {
+public abstract class FacetPanel extends ExpandablePanel<FacetFieldSelection> {
 
     private final IModel<ExpansionState> expansionStateModel;
 
@@ -50,8 +48,7 @@ public abstract class FacetPanel extends GenericPanel<FacetFieldSelection> {
     private final FacetValuesPanel facetValuesPanel;
 
     public FacetPanel(String id, IModel<FacetFieldSelection> selectionModel, IModel<ExpansionState> expansionState) {
-        super(id, selectionModel);
-
+        super(id, selectionModel, expansionState);
         this.expansionStateModel = expansionState;
 
         // facet title annex expansion toggler
@@ -64,8 +61,6 @@ public abstract class FacetPanel extends GenericPanel<FacetFieldSelection> {
         // panel showing current selection, allowing for deselection
         selectedFacetPanel = createSelectedFacetPanel("facetSelection");
         add(selectedFacetPanel);
-
-        addExpansionComponents();
     }
 
     private AjaxFallbackLink createTitleToggler(String id) {
@@ -154,58 +149,6 @@ public abstract class FacetPanel extends GenericPanel<FacetFieldSelection> {
                 }
             }
         };
-    }
-
-    private void addExpansionComponents() {
-
-        // class modifier to apply correct class depending on state
-        add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
-
-            @Override
-            public String getObject() {
-                switch (expansionStateModel.getObject()) {
-                    case COLLAPSED:
-                        return "facet collapsedfacet";
-                    case EXPANDED:
-                        return "facet expandedfacet";
-                    default:
-                        return "facet";
-                }
-            }
-        }));
-
-        // add expansion link
-        add(new IndicatingAjaxFallbackLink("expand") {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                expansionStateModel.setObject(ExpansionState.EXPANDED);
-                if (target != null) {
-                    target.add(FacetPanel.this);
-                }
-            }
-        });
-
-        // add collapse link
-        add(new IndicatingAjaxFallbackLink("collapse") {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                expansionStateModel.setObject(ExpansionState.COLLAPSED);
-                if (target != null) {
-                    target.add(FacetPanel.this);
-                }
-            }
-        });
-        setOutputMarkupId(true);
-    }
-
-    @Override
-    public void detachModels() {
-        // this will detach selection model (passed to super through constructor)
-        super.detachModels();
-        // additional model not known by supertype
-        expansionStateModel.detach();
     }
 
     protected abstract void selectionChanged(AjaxRequestTarget target);
