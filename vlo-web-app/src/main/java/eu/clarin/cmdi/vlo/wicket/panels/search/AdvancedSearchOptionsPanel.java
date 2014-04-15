@@ -26,6 +26,7 @@ import eu.clarin.cmdi.vlo.wicket.model.ToggleModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
@@ -61,6 +62,11 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         });
         options.add(fcsCheck);
         add(options);
+    }
+
+    @Override
+    protected Label createTitleLabel(String id) {
+        return new Label(id, "Search options");
     }
 
     protected abstract void selectionChanged(AjaxRequestTarget target);

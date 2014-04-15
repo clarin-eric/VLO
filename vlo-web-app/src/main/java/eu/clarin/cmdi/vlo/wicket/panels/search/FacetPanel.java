@@ -26,8 +26,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -51,9 +49,6 @@ public abstract class FacetPanel extends ExpandablePanel<FacetFieldSelection> {
         super(id, selectionModel, expansionState);
         this.expansionStateModel = expansionState;
 
-        // facet title annex expansion toggler
-        add(createTitleToggler("titleToggle"));
-
         // panel showing values for selection
         facetValuesPanel = createFacetValuesPanel("facetValues");
         add(facetValuesPanel);
@@ -63,27 +58,9 @@ public abstract class FacetPanel extends ExpandablePanel<FacetFieldSelection> {
         add(selectedFacetPanel);
     }
 
-    private AjaxFallbackLink createTitleToggler(String id) {
-        // facet title is also a link that toggles expansion state
-        final AjaxFallbackLink titleLink = new IndicatingAjaxFallbackLink(id) {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                final ExpansionState expansionState = expansionStateModel.getObject();
-                if (expansionState == ExpansionState.COLLAPSED) {
-                    expansionStateModel.setObject(ExpansionState.EXPANDED);
-                } else {
-                    expansionStateModel.setObject(ExpansionState.COLLAPSED);
-                }
-                if (target != null) {
-                    target.add(FacetPanel.this);
-                }
-            }
-        };
-
-        // Facet name becomes title
-        titleLink.add(new Label("title", new SolrFieldNameModel(new PropertyModel(getModel(), "facetField.name"))));
-        return titleLink;
+    @Override
+    protected Label createTitleLabel(String id) {
+        return new Label(id, new SolrFieldNameModel(new PropertyModel(getModel(), "facetField.name")));
     }
 
     @Override

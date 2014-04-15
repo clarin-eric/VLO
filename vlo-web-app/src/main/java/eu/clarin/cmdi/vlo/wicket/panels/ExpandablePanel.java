@@ -19,7 +19,9 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -36,6 +38,14 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
         super(id, model);
         this.expansionModel = expansionStateModel;
 
+        // facet title annex expansion toggler
+        createTitleToggler();
+        addExpandCollapse();
+
+        setOutputMarkupId(true);
+    }
+
+    private void addExpandCollapse() {
         // class modifier to apply correct class depending on state
         add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
 
@@ -75,9 +85,32 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
                 }
             }
         });
-        setOutputMarkupId(true);
-
     }
+
+    private void createTitleToggler() {
+        // title is also a link that toggles expansion state
+        final AjaxFallbackLink titleLink = new IndicatingAjaxFallbackLink("titleToggle") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                final ExpansionState expansionState = expansionModel.getObject();
+                if (expansionState == ExpansionState.COLLAPSED) {
+                    expansionModel.setObject(ExpansionState.EXPANDED);
+                } else {
+                    expansionModel.setObject(ExpansionState.COLLAPSED);
+                }
+                if (target != null) {
+                    target.add(ExpandablePanel.this);
+                }
+            }
+        };
+
+        // Facet name becomes title
+        titleLink.add(createTitleLabel("title"));
+        add(titleLink);
+    }
+    
+    protected abstract Label createTitleLabel(String id);
 
     @Override
     public void detachModels() {
