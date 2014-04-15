@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -22,6 +23,8 @@ public class FacetMappingFactoryTest {
             "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1289827960126/xsd";
     private final static String ID_PROFILE_URL = 
             "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1290431694629/xsd";
+    private final static String TEXTCORPUSPROFILE_PROFILE_URL = 
+            "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1290431694580/xsd";
 
     private final static Logger LOG = LoggerFactory.getLogger(FacetMappingFactoryTest.class);
 
@@ -124,8 +127,8 @@ public class FacetMappingFactoryTest {
         mapping = facets.get(index++);
         
         assertEquals(FacetConstants.FIELD_SUBJECT, mapping.getName());
-        assertEquals(3, mapping.getPatterns().size());
-        assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-linguistic-field", 
+        assertEquals(1, mapping.getPatterns().size());
+        assertEquals("/c:CMD/c:Components/c:Session/c:MDGroup/c:Content/c:Subject/text()", 
                 mapping.getPatterns().get(0));
         mapping = facets.get(index++);
         
@@ -158,9 +161,10 @@ public class FacetMappingFactoryTest {
         mapping = facets.get(index++);
 
         // test keywords facet mapping
+        assertEquals(FacetConstants.FIELD_KEYWORDS, mapping.getName());
         assertEquals("/c:CMD/c:Components/c:mods/c:classification/text()", 
                 mapping.getPatterns().get(0));
-        assertEquals(1, mapping.getPatterns().size());
+        assertEquals(3, mapping.getPatterns().size());
 
         assertEquals("check to see we tested them all", facets.size(), index);
     }
@@ -171,7 +175,7 @@ public class FacetMappingFactoryTest {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, OLAC_PROFILE_URL);
         
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(15, facets.size());
+        assertEquals(18, facets.size());
        
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
@@ -188,9 +192,21 @@ public class FacetMappingFactoryTest {
                 mapping.getPatterns().get(0));
         mapping = facets.get(index++);
         
+        assertEquals(FacetConstants.FIELD_PROJECT_NAME, mapping.getName());
+        assertEquals(3, mapping.getPatterns().size());
+        assertEquals("/c:CMD/c:Components/c:teiHeader/c:fileDesc/c:publicationStmt/c:publisher/c:orgName/c:orgName[@role=\"project\"]/text()", 
+                mapping.getPatterns().get(0));
+        mapping = facets.get(index++);
+        
         assertEquals(FacetConstants.FIELD_NAME, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:title/text()", 
+                mapping.getPatterns().get(0));
+        mapping = facets.get(index++);
+        
+        assertEquals(FacetConstants.FIELD_YEAR, mapping.getName());
+        assertEquals(3, mapping.getPatterns().size());
+        assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:created/text()", 
                 mapping.getPatterns().get(0));
         mapping = facets.get(index++);
         
@@ -205,15 +221,9 @@ public class FacetMappingFactoryTest {
         mapping = facets.get(index++);
         
         assertEquals(FacetConstants.FIELD_LANGUAGE, mapping.getName());
-        assertEquals(4, mapping.getPatterns().size());
-        assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:language/@olac-language",
+        assertEquals(1, mapping.getPatterns().size());
+        assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:language/text()",
                 mapping.getPatterns().get(0));
-        assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-language",
-                mapping.getPatterns().get(1));
-        assertEquals("/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()",
-                mapping.getPatterns().get(2));
-        assertEquals("/c:CMD/c:Components/c:mods/c:language/c:languageTerm/text()",
-                mapping.getPatterns().get(3));
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_LANGUAGES, mapping.getName());
@@ -226,7 +236,7 @@ public class FacetMappingFactoryTest {
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_GENRE, mapping.getName());
-        assertEquals(2, mapping.getPatterns().size());
+        assertEquals(4, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/@olac-linguistic-type", 
                 mapping.getPatterns().get(0));
         assertEquals("/c:CMD/c:Components/c:mods/c:genre/text()", 
@@ -250,11 +260,17 @@ public class FacetMappingFactoryTest {
         assertEquals(1, mapping.getPatterns().size());        
         mapping = facets.get(index++);
         
-        assertEquals("/c:CMD/c:Header/c:MdCollectionDisplayName/text()", 
+        assertEquals(FacetConstants.FIELD_FORMAT, mapping.getName());
+        assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:format/text()", 
                 mapping.getPatterns().get(0));
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
         
+        assertEquals(FacetConstants.FIELD_NATIONAL_PROJECT, mapping.getName());
+        assertEquals(1, mapping.getPatterns().size());
+        mapping = facets.get(index++);
+        
+
         assertEquals("/c:CMD/c:Header//text()", mapping.getPatterns().get(0));
         assertEquals("/c:CMD/c:Components//text()", mapping.getPatterns().get(1));
         assertEquals(2, mapping.getPatterns().size());
@@ -265,10 +281,10 @@ public class FacetMappingFactoryTest {
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
 
-        // test keywords facet mapping
+        assertEquals(FacetConstants.FIELD_KEYWORDS, mapping.getName());
         assertEquals("/c:CMD/c:Components/c:mods/c:classification/text()", 
                 mapping.getPatterns().get(0));
-        assertEquals(1, mapping.getPatterns().size());
+        assertEquals(3, mapping.getPatterns().size());
 
         assertEquals("check to see we tested them all", facets.size(), index);
     }
@@ -279,7 +295,7 @@ public class FacetMappingFactoryTest {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, LRT_PROFILE_URL);
 
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(16, facets.size());
+        assertEquals(17, facets.size());
         
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
@@ -295,8 +311,13 @@ public class FacetMappingFactoryTest {
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
         
+        assertEquals(FacetConstants.FIELD_PROJECT_NAME, mapping.getName());
+        assertEquals(3, mapping.getPatterns().size());
+        assertEquals("/c:CMD/c:Components/c:media-session-profile/c:media-session/c:Corpus", mapping.getPatterns().get(1));
+        mapping = facets.get(index++);
+        
         assertEquals(FacetConstants.FIELD_NAME, mapping.getName());
-        assertEquals(2, mapping.getPatterns().size());
+        assertEquals(6, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceName/text()", 
                 mapping.getPatterns().get(0));
         assertEquals("/c:CMD/c:Components/c:mods/c:titleInfo/title/text()", 
@@ -344,11 +365,11 @@ public class FacetMappingFactoryTest {
         mapping = facets.get(index++);
         
         assertEquals(FacetConstants.FIELD_GENRE, mapping.getName());
-        assertEquals(2, mapping.getPatterns().size());
+        assertEquals(4, mapping.getPatterns().size());
         mapping = facets.get(index++);
         
         assertEquals(FacetConstants.FIELD_SUBJECT, mapping.getName());
-        assertEquals(3, mapping.getPatterns().size());
+        assertEquals(8, mapping.getPatterns().size());
         mapping = facets.get(index++);
         
         assertEquals(FacetConstants.FIELD_DESCRIPTION, mapping.getName());
@@ -401,5 +422,37 @@ public class FacetMappingFactoryTest {
         assertEquals("/c:CMD/c:Header/c:MdSelfLink/text()", facet.getPatterns().get(0));
         assertEquals("/c:CMD/c:Components/c:EastRepublican/c:GeneralInformation/c:Identifier/text()", 
                 facet.getPatterns().get(1));
+    }
+    
+    /**
+     * Tests black/white listing approach based on acceptableContext/rejectableContext information in facetconcepts.xml
+     * 
+     * Not in use right now, therefore contains just a dummy test.
+     */
+    @Test
+    public void testConceptBasedBlacklisting() {
+       assertTrue(true);
+    }
+    
+    /**
+     * Tests black/white listing approach based on acceptableContext/rejectableContext information in configuration
+     */
+    @Test
+    public void testStringBasedBlacklisting() {
+        FacetMapping facetMapping = FacetMappingFactory
+                .getFacetMapping(FACETCONCEPTS_FILENAME, TEXTCORPUSPROFILE_PROFILE_URL);
+        List<FacetConfiguration> facets = facetMapping.getFacets();
+        
+        FacetConfiguration facet = facets.get(4);
+        assertEquals(FacetConstants.FIELD_YEAR, facet.getName());
+        assertEquals(2, facet.getPatterns().size());
+        assertEquals("/c:CMD/c:Components/c:TextCorpusProfile/c:GeneralInfo/c:CompletionYear/text()", facet.getPatterns().get(0));
+        assertEquals("/c:CMD/c:Components/c:TextCorpusProfile/c:GeneralInfo/c:PublicationDate/text()", facet.getPatterns().get(1));
+        
+        
+        facet = facets.get(13);
+        assertEquals(FacetConstants.FIELD_DESCRIPTION, facet.getName());
+        assertEquals(1, facet.getPatterns().size());
+        assertEquals("/c:CMD/c:Components/c:TextCorpusProfile/c:GeneralInfo/c:Descriptions/c:Description/text()" ,facet.getPatterns().get(0));
     }
 }
