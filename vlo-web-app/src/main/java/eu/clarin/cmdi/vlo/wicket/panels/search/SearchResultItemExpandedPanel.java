@@ -17,7 +17,6 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
@@ -33,7 +32,6 @@ import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -46,7 +44,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.time.Duration;
 
 /**
  *
@@ -106,19 +103,13 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
 
                 // once loaded, make Ajax request to resolve handles and update
                 // resource link
-                resourceLink.add(new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
+                resourceLink.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, item.getModel(), resourceInfoModel) {
 
                     @Override
-                    protected void onTimer(AjaxRequestTarget target) {
-                        this.stop(target);
-                        // this time get resource info from the resolving converter
-                        // which will take the file name from the resolved location
-                        final ResourceInfo newResourceInfo = resolvingResourceStringConverter.getResourceInfo(item.getModelObject());
-                        resourceInfoModel.setObject(newResourceInfo);
+                    protected void onUpdate(AjaxRequestTarget target) {
                         // update resource link
                         target.add(resourceLink);
                     }
-
                 });
 
                 // add a tooltip showing resource type and mime type

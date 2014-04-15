@@ -21,9 +21,10 @@ import eu.clarin.cmdi.vlo.wicket.ResourceTypeCssBehaviour;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
+import eu.clarin.cmdi.vlo.wicket.panels.search.LazyResourceInfoUpdateBehavior;
 import java.util.Collection;
 import java.util.List;
-import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -43,6 +44,8 @@ public class ResourceLinksPanel extends Panel {
 
     @SpringBean(name = "resourceStringConverter")
     private ResourceStringConverter resourceStringConverter;
+    @SpringBean(name = "resolvingResourceStringConverter")
+    private ResourceStringConverter resolvingResourceStringConverter;
 
     /**
      *
@@ -65,11 +68,9 @@ public class ResourceLinksPanel extends Panel {
         @Override
         protected void populateItem(ListItem<String> item) {
             final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(resourceStringConverter, item.getModel());
+            
             // add a link that will show the resource details panel when clicked
-            item.add(createLink(resourceInfoModel));
-        }
-
-        private Component createLink(final ResourceInfoModel resourceInfoModel) {
+            
             // wrap href in model that transforms handle links
             final IModel<String> linkModel = new HandleLinkModel(new PropertyModel(resourceInfoModel, "href"));
             final ExternalLink link = new ExternalLink("showResource", linkModel);
@@ -82,7 +83,17 @@ public class ResourceLinksPanel extends Panel {
             // apply the css class matching the resource type
             link.add(new ResourceTypeCssBehaviour(resourceInfoModel));
 
-            return link;
+            // make the link update via AJAX with resolved location (in case of handle)
+            link.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, item.getModel(), resourceInfoModel) {
+
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    target.add(link);
+                }
+            });
+
+            link.setOutputMarkupId(true);
+            item.add(link);
         }
     }
 

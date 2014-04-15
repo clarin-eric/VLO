@@ -32,7 +32,7 @@ public class HandleClientRunner {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        final HandleClient client = new HandleClientImpl("http://hdl.handle.net/api/handle/");
+        final HandleClient client = new HandleClientImpl();
 
         System.out.println("Requesting handle...");
         final String result = client.getUrl(HANDLE);
