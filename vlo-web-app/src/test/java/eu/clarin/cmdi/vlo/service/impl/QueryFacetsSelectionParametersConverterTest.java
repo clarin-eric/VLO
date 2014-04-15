@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
-import eu.clarin.cmdi.vlo.service.solr.impl.QueryFacetsSelectionParametersConverter;
 import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;

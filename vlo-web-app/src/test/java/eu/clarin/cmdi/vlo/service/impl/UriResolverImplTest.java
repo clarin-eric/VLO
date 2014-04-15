@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
-import eu.clarin.cmdi.vlo.service.HandleClient;
+import eu.clarin.cmdi.vlo.service.handle.HandleClient;
 import org.jmock.Expectations;
 import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;

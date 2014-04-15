@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.service.impl;
+package eu.clarin.cmdi.vlo.service.handle.impl;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
-import eu.clarin.cmdi.vlo.service.HandleClient;
+import eu.clarin.cmdi.vlo.service.handle.HandleClient;
 import javax.ws.rs.core.MediaType;
 import org.apache.wicket.ajax.json.JSONArray;
 import org.apache.wicket.ajax.json.JSONException;
@@ -37,16 +37,16 @@ import org.slf4j.LoggerFactory;
  *
  * @author twagoo
  */
-public class HandleClientImpl implements HandleClient {
+public class HandleRestApiClient implements HandleClient {
 
-    private final static Logger logger = LoggerFactory.getLogger(HandleClientImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(HandleRestApiClient.class);
 
     private final String handleApiBaseUrl;
 
     /**
      * constructs a client with the default handle REST API base URL
      */
-    public HandleClientImpl() {
+    public HandleRestApiClient() {
         //TODO: get from config
         this("http://hdl.handle.net/api/handles/");
     }
@@ -56,7 +56,7 @@ public class HandleClientImpl implements HandleClient {
      * @param handleApiBaseUrl base URL of the handle REST API (handle will be
      * directly appended to this)
      */
-    public HandleClientImpl(String handleApiBaseUrl) {
+    public HandleRestApiClient(String handleApiBaseUrl) {
         this.handleApiBaseUrl = handleApiBaseUrl;
     }
 

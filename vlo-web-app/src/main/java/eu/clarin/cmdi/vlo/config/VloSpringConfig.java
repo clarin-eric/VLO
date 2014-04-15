@@ -22,14 +22,14 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
-import eu.clarin.cmdi.vlo.service.HandleClient;
+import eu.clarin.cmdi.vlo.service.handle.HandleClient;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
 import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
-import eu.clarin.cmdi.vlo.service.impl.HandleClientImpl;
+import eu.clarin.cmdi.vlo.service.handle.impl.HandleRestApiClient;
 import eu.clarin.cmdi.vlo.service.impl.UriResolverImpl;
 import eu.clarin.cmdi.vlo.service.impl.InclusiveFieldFilter;
 import eu.clarin.cmdi.vlo.service.impl.ResourceStringConverterImpl;
@@ -41,7 +41,7 @@ import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.service.solr.SolrFacetQueryFactory;
 import eu.clarin.cmdi.vlo.service.solr.impl.AutoCompleteServiceImpl;
-import eu.clarin.cmdi.vlo.service.solr.impl.QueryFacetsSelectionParametersConverter;
+import eu.clarin.cmdi.vlo.service.impl.QueryFacetsSelectionParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.impl.SearchResultsDaoImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentQueryFactoryImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentServiceImpl;
@@ -146,7 +146,7 @@ public class VloSpringConfig {
     }
 
     public HandleClient handleClient() {
-        return new HandleClientImpl();
+        return new HandleRestApiClient();
     }
 
     @Bean

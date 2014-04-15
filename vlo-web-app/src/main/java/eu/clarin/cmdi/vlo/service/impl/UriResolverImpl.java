@@ -16,9 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
+import eu.clarin.cmdi.vlo.service.handle.impl.HandleRestApiClient;
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PREFIX;
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY;
-import eu.clarin.cmdi.vlo.service.HandleClient;
+import eu.clarin.cmdi.vlo.service.handle.HandleClient;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 public class UriResolverImpl implements UriResolver {
 
-    private final static Logger logger = LoggerFactory.getLogger(HandleClientImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(HandleRestApiClient.class);
 
     private final HandleClient handleClient;
 

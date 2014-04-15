@@ -14,16 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.service.impl;
+package eu.clarin.cmdi.vlo.service.handle.impl;
 
-import eu.clarin.cmdi.vlo.service.HandleClient;
+import eu.clarin.cmdi.vlo.service.handle.impl.HandleRestApiClient;
+import eu.clarin.cmdi.vlo.service.handle.HandleClient;
 
 /**
  * Test runner for the HandleClient implementation
  *
  * @author twagoo
  */
-public class HandleClientRunner {
+public class HandleRestApiClientRunner {
 
     public final static String HANDLE = "1839/00-0000-0000-0000-0000-4";
     public final static String EXPECTED_URL = "http://corpus1.mpi.nl/IMDI/metadata/IMDI.imdi";
@@ -32,7 +33,7 @@ public class HandleClientRunner {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        final HandleClient client = new HandleClientImpl();
+        final HandleClient client = new HandleRestApiClient();
 
         System.out.println("Requesting handle...");
         final String result = client.getUrl(HANDLE);
