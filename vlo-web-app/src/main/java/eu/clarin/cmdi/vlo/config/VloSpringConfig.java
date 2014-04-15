@@ -17,29 +17,31 @@
 package eu.clarin.cmdi.vlo.config;
 
 import com.google.common.collect.ImmutableList;
-import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
-import eu.clarin.cmdi.vlo.service.impl.InclusiveFieldFilter;
 import com.google.common.collect.Sets;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
+import eu.clarin.cmdi.vlo.service.HandleClient;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
-import eu.clarin.cmdi.vlo.service.impl.HandleResolver;
-import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
-import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
-import eu.clarin.cmdi.vlo.service.solr.SolrFacetQueryFactory;
-import eu.clarin.cmdi.vlo.service.solr.impl.QueryFacetsSelectionParametersConverter;
+import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
+import eu.clarin.cmdi.vlo.service.impl.HandleClientImpl;
+import eu.clarin.cmdi.vlo.service.impl.UriResolverImpl;
+import eu.clarin.cmdi.vlo.service.impl.InclusiveFieldFilter;
 import eu.clarin.cmdi.vlo.service.impl.ResourceStringConverterImpl;
 import eu.clarin.cmdi.vlo.service.impl.ResourceTypeCountingServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.XmlTransformationServiceImpl;
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
+import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
+import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import eu.clarin.cmdi.vlo.service.solr.SolrFacetQueryFactory;
 import eu.clarin.cmdi.vlo.service.solr.impl.AutoCompleteServiceImpl;
+import eu.clarin.cmdi.vlo.service.solr.impl.QueryFacetsSelectionParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.impl.SearchResultsDaoImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentQueryFactoryImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentServiceImpl;
@@ -135,12 +137,16 @@ public class VloSpringConfig {
 
     @Bean(name = "resolvingResourceStringConverter")
     public ResourceStringConverter resolvingResourceStringConverter() {
-        return new ResourceStringConverterImpl(handleResolver());
+        return new ResourceStringConverterImpl(uriResolver());
     }
 
     @Bean
-    public UriResolver handleResolver() {
-        return new HandleResolver();
+    public UriResolver uriResolver() {
+        return new UriResolverImpl(handleClient());
+    }
+
+    public HandleClient handleClient() {
+        return new HandleClientImpl();
     }
 
     @Bean

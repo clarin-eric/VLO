@@ -14,20 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.service.impl;
 
-import eu.clarin.cmdi.vlo.service.UriResolver;
+package eu.clarin.cmdi.vlo.service;
 
 /**
  *
  * @author twagoo
  */
-public class HandleResolver implements UriResolver {
-
-    @Override
-    public String resolve(String URI) {
-        //TODO: Implement (using handle API?)
-        return "http://resolved.com/file.txt";
-    }
-
+public interface HandleClient {
+    
+    String getUrl(String handle);
+    
 }
