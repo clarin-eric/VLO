@@ -57,14 +57,16 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
         // split resource string to find href and mime type
         final String[] tokens = resourceString.split(SPLIT_PATTERN, 2);
         final String mimeType = tokens[0];
-        final String href;
+        final String href = tokens[1];
+
+        // if there is a resolver, get file name from resolved URL
+        final String fileName;
         if (resolver == null) {
-            href = tokens[1];
+            fileName = getFileName(href);
         } else {
-            href = resolver.resolve(tokens[1]);
+            fileName = getFileName(resolver.resolve(href));
         }
 
-        final String fileName = getFileName(href);
         // determine resource type based on mime type
         final ResourceType resourceType = determineResourceType(mimeType);
         return new ResourceInfo(href, fileName, mimeType, resourceType);

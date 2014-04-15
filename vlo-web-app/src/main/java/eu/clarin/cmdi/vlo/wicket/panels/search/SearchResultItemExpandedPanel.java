@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
@@ -24,6 +25,7 @@ import eu.clarin.cmdi.vlo.wicket.ResourceTypeCssBehaviour;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
+import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
@@ -98,7 +100,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
                 final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(resourceStringConverter, item.getModel());
 
                 // add a link to the resource with the file name as its label
-                final ExternalLink resourceLink = new ExternalLink("resourceLink", new PropertyModel(resourceInfoModel, "href"));
+                final ExternalLink resourceLink = new ExternalLink("resourceLink", new HandleLinkModel(new PropertyModel(resourceInfoModel, "href")));
                 resourceLink.add(new Label("resourceName", new PropertyModel(resourceInfoModel, "fileName")));
                 resourceLink.setOutputMarkupId(true);
 
@@ -109,8 +111,11 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
                     @Override
                     protected void onTimer(AjaxRequestTarget target) {
                         this.stop(target);
-                        resourceInfoModel.setObject(
-                                resolvingResourceStringConverter.getResourceInfo(item.getModelObject()));
+                        // this time get resource info from the resolving converter
+                        // which will take the file name from the resolved location
+                        final ResourceInfo newResourceInfo = resolvingResourceStringConverter.getResourceInfo(item.getModelObject());
+                        resourceInfoModel.setObject(newResourceInfo);
+                        // update resource link
                         target.add(resourceLink);
                     }
 

@@ -17,7 +17,9 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import eu.clarin.cmdi.vlo.service.HandleClient;
 import javax.ws.rs.core.MediaType;
@@ -29,7 +31,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Service that connects to the handle.net REST API and retrieves the URL for a
- * given handle
+ * given handle.
+ * 
+ * Consider re-implementing using the handle API
  *
  * @author twagoo
  */
@@ -69,21 +73,26 @@ public class HandleClientImpl implements HandleClient {
 
         final Client client = Client.create();
         final WebResource resource = client.resource(requestUrl);
-        final ClientResponse response = resource.accept(MediaType.APPLICATION_JSON_TYPE).get(ClientResponse.class);
 
-        if (response.getClientResponseStatus() != ClientResponse.Status.OK) {
-            logger.error("Unexpected response status {} for {}", response.getClientResponseStatus(), requestUrl);
-            return null;
-        } else {
-            final String responseString = response.getEntity(String.class);
-            try {
+        try {
+            final ClientResponse response = resource
+                    .accept(MediaType.APPLICATION_JSON_TYPE)
+                    .get(ClientResponse.class);
+
+            if (response.getClientResponseStatus() != ClientResponse.Status.OK) {
+                logger.error("Unexpected response status {} for {}", response.getClientResponseStatus(), requestUrl);
+            } else {
+                final String responseString = response.getEntity(String.class);
                 return getUrlFromJson(responseString);
-            } catch (JSONException ex) {
-                logger.error("Could not parse Handle API response", ex);
-                return null;
             }
+        } catch (UniformInterfaceException ex) {
+            logger.error("Could not communicate with Handle API", ex);
+        } catch (ClientHandlerException ex) {
+            logger.error("Could not communicate with Handle API", ex);
+        } catch (JSONException ex) {
+            logger.error("Could not parse Handle API response", ex);
         }
-
+        return null;
     }
 
     public String getUrlFromJson(final String jsonString) throws JSONException {
