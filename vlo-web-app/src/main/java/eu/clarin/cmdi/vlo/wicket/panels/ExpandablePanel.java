@@ -25,21 +25,45 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 /**
+ * Panel with expand/collapse controls which control the css class of the
+ * component's markup element (as defined in {@link #getExpandedClass() }, {@link #getCollapsedClass()
+ * } and {@link #getFallbackClass() }). It also adds a title that doubles as an
+ * expansion state toggler.
  *
  * @author twagoo
+ * @param <T> the type of the panel's model object
  */
 public abstract class ExpandablePanel<T> extends GenericPanel<T> {
 
     private final IModel<ExpansionState> expansionModel;
 
+    /**
+     * Creates the panel with its own expansion state model which is closed
+     * initially
+     *
+     * @param id component id
+     * @param model core model of this panel
+     */
+    public ExpandablePanel(String id, IModel<T> model) {
+        this(id, model, Model.of(ExpansionState.COLLAPSED));
+    }
+
+    /**
+     *
+     * @param id component id
+     * @param model core model of this panel
+     * @param expansionStateModel model that holds the expansion state
+     */
     public ExpandablePanel(String id, IModel<T> model, IModel<ExpansionState> expansionStateModel) {
         super(id, model);
         this.expansionModel = expansionStateModel;
 
-        // facet title annex expansion toggler
+        // title annex expansion toggler
         createTitleToggler();
+        // expand/collapse controls
         addExpandCollapse();
 
         setOutputMarkupId(true);
@@ -53,11 +77,11 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
             public String getObject() {
                 switch (expansionModel.getObject()) {
                     case COLLAPSED:
-                        return "facet collapsedfacet";
+                        return getCollapsedClass();
                     case EXPANDED:
-                        return "facet expandedfacet";
+                        return getExpandedClass();
                     default:
-                        return "facet";
+                        return getFallbackClass();
                 }
             }
         }));
@@ -109,13 +133,38 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
         titleLink.add(createTitleLabel("title"));
         add(titleLink);
     }
-    
+
     protected abstract Label createTitleLabel(String id);
 
     @Override
     public void detachModels() {
         super.detachModels();
         expansionModel.detach();
+    }
+
+    /**
+     *
+     * @return css class for panel if the expansion state is neither collapsed
+     * or expanded
+     */
+    protected String getFallbackClass() {
+        return "facet";
+    }
+
+    /**
+     *
+     * @return css class for panel if the expansion state expanded
+     */
+    protected String getExpandedClass() {
+        return "facet expandedfacet";
+    }
+
+    /**
+     *
+     * @return css class for panel if the expansion state is collapsed
+     */
+    protected String getCollapsedClass() {
+        return "facet collapsedfacet";
     }
 
 }
