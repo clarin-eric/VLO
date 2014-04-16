@@ -18,6 +18,8 @@ package eu.clarin.cmdi.vlo.wicket.panels.record;
 
 import eu.clarin.cmdi.vlo.pojo.DocumentField;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
+import java.util.List;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -25,6 +27,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
@@ -42,13 +45,27 @@ public class FieldsTablePanel extends Panel {
             protected void populateItem(Item<DocumentField> item) {
                 final IModel<DocumentField> fieldModel = item.getModel();
                 item.add(new Label("fieldName", new SolrFieldNameModel(new PropertyModel(fieldModel, "fieldName"))));
-                item.add(new ListView("values", new PropertyModel(fieldModel, "values")) {
+                final PropertyModel<List> valuesModel = new PropertyModel<List>(fieldModel, "values");
+                item.add(new ListView("values", valuesModel) {
 
                     @Override
                     protected void populateItem(ListItem item) {
                         item.add(new Label("value", item.getModel()));
                     }
                 });
+                
+                // if field has multiple values, set 'multiple' class on markup element
+                item.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
+
+                    @Override
+                    public String getObject() {
+                        if (valuesModel.getObject().size() > 1) {
+                            return "multiplevalues";
+                        } else {
+                            return null;
+                        }
+                    }
+                }));
             }
         });
     }

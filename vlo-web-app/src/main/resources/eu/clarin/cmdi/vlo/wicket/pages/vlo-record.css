@@ -107,6 +107,15 @@ ul.attributeValues li {
     margin: 0px;
 }
 
+.multiplevalues ul.attributeValues li {
+    padding-bottom: .3em;
+    padding-top: .3em;
+    border-top: 1px solid #999;
+}
+
+.multiplevalues ul.attributeValues li:nth-child(1) {
+    border-top: none;
+}
 
 a.recordfacetselect span, a.recordattributeinfo span {
     display: none;

@@ -80,14 +80,14 @@ body{background: #bfced5;}
 .sbilinks li a, .sidebaritem a, .topbar a, .facetvalues a
 { 
     /*background: transparent url(arrow.png) no-repeat left center;*/
-  color: #555;
+    color: #555;
 } 
 
 .sbilinks li a:hover, .sidebaritem a:hover,  .facetvalues a:hover
 {
     /*background: transparent url(arrow_select.png) no-repeat left center;*/
-  color: #936851;
-  text-decoration: underline;
+    color: #936851;
+    text-decoration: underline;
 } 
 
 div.content a
@@ -106,7 +106,7 @@ div.content a
   color: #414141;
 }
 
-li.searchresultitem:nth-child(even) {
+li.searchresultitem:nth-child(even), .recorddetailstable tr:nth-child(even) {
     background: #ccd6e8;
 }
 
