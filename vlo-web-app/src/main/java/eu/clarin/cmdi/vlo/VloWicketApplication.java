@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import eu.clarin.cmdi.vlo.wicket.pages.AboutPage;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
@@ -54,6 +55,18 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     @Override
     public void init() {
         super.init();
+
+        // register global resource bundles (from .properties files)
+        registerResourceBundles();
+
+        // mount pages on URL paths
+        mountPages();
+
+        // configure Wicket cache according to parameters set in VloConfig 
+        setupCache();
+    }
+
+    private void registerResourceBundles() {
         // this listener will inject any spring beans that need to be autowired
         getComponentInstantiationListeners().add(new SpringComponentInjector(this, applicationContext));
         // register the resource of field names (used by eu.clarin.cmdi.vlo.wicket.componentsSolrFieldNameLabel)
@@ -62,7 +75,9 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("resourceTypes"));
         // register the resource of application properties (version information filtered at build time)
         getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("application"));
+    }
 
+    private void mountPages() {
         // Faceted search page (simple search is on root)
         mountPage("/search", FacetedSearchPage.class);
         // Record (query result) page. E.g. /vlo/record?docId=abc123
@@ -72,7 +87,11 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         // E.g. /vlo/values/genre?facetMinOccurs=1 (min occurs not in path 
         // because it's a filter on the facet list)
         mountPage("/values/${" + AllFacetValuesPage.SELECTED_FACET_PARAM + "}", AllFacetValuesPage.class);
+        // About page
+        mountPage("/about", AboutPage.class);
+    }
 
+    private void setupCache() {
         // configure cache by applying the vlo configuration settings to it
         final int pagesInApplicationCache = vloConfig.getPagesInApplicationCache();
         logger.info("Setting Wicket in-memory cache size to {}", pagesInApplicationCache);
