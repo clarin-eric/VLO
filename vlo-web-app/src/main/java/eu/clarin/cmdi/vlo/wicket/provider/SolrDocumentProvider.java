@@ -35,6 +35,8 @@ public class SolrDocumentProvider implements IDataProvider<SolrDocument> {
 
     private final IModel<QueryFacetsSelection> selectionModel;
 
+    private Long size;
+
     public SolrDocumentProvider(IModel<QueryFacetsSelection> selection) {
         this.selectionModel = selection;
     }
@@ -49,7 +51,10 @@ public class SolrDocumentProvider implements IDataProvider<SolrDocument> {
 
     @Override
     public long size() {
-        return getDocumentService().getDocumentCount(selectionModel.getObject());
+        if (size == null) {
+            size = getDocumentService().getDocumentCount(selectionModel.getObject());
+        }
+        return size;
     }
 
     @Override
@@ -60,6 +65,7 @@ public class SolrDocumentProvider implements IDataProvider<SolrDocument> {
     @Override
     public void detach() {
         selectionModel.detach();
+        size = null;
     }
 
     private SolrDocumentService getDocumentService() {
