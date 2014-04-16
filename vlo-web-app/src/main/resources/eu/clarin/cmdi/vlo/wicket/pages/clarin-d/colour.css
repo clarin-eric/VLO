@@ -2,31 +2,6 @@
 Palette generated using http://www.cssdrive.com/imagepalette/index.php 
 with header image as input
 
-.color1 { color: #fff6da}
-.color2 { color: #fff9e8}
-.color3 { color: #fffdf9}
-.color4 { color: #ffffff}
-.color5 { color: #d4dff0}
-.color6 { color: #fff9e7}
-.color7 { color: #684639}
-.color8 { color: #eff2f6}
-.color9 { color: #fff9e6}
-.color10 { color: #936851}
-.color11 { color: #bfc8c1}
-.color12 { color: #7f9cab}
-.color13 { color: #61230d}
-.color14 { color: #fffecb}
-.color15 { color: #d6e0f1}
-.color16 { color: #fff8e2}
-.color17 { color: #fffcf3}
-.color18 { color: #fff7e1}
-.color19 { color: #fffbf1}
-.color20 { color: #fff7df}
-.color21 { color: #fffbf0}
-.color22 { color: #fffffe}
-*/
-
-/*
 .color1 { color: #b4c4d3}
 .color2 { color: #d1dae4}
 .color3 { color: #ecf0f4}
@@ -139,7 +114,7 @@ div.content a
   color: #414141;
 }
 
-li.searchresultitem:nth-child(even), .recorddetailstable tr:nth-child(even) {
+li.searchresultitem:nth-child(even), #record .recorddetailstable tr:nth-child(even) {
     background: #f1f3f6;
 }
 

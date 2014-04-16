@@ -76,7 +76,7 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
     }
 
     protected String getMultipleValuesString(final String firstValue, final Iterator<Object> iterator) {
-        final StringBuilder valuesBuilder = new StringBuilder(firstValue);
+        final StringBuilder valuesBuilder = new StringBuilder(firstValue).append("; ");
         while (iterator.hasNext()) {
             valuesBuilder.append(iterator.next().toString());
             if (iterator.hasNext()) {
