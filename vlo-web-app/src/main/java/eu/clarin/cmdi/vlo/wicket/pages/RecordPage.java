@@ -25,6 +25,7 @@ import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
@@ -53,7 +54,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.string.StringValue;
 
 /**
  *
@@ -61,8 +61,12 @@ import org.apache.wicket.util.string.StringValue;
  */
 public class RecordPage extends VloBasePage<SolrDocument> {
 
-    @SpringBean
+    @SpringBean(name="documentParamsConverter")
+    private PageParametersConverter<SolrDocument> documentParamConverter;
+    @SpringBean(name="queryParametersConverter")
     private PageParametersConverter<QueryFacetsSelection> selectionParametersConverter;
+    @SpringBean(name="searchContextParamsConverter")
+    private PageParametersConverter<SearchContext> contextParamConverter;
     @SpringBean(name = "basicPropertiesFilter")
     private FieldFilter basicPropertiesFilter;
     @SpringBean(name = "technicalPropertiesFilter")
@@ -79,37 +83,34 @@ public class RecordPage extends VloBasePage<SolrDocument> {
      */
     public RecordPage(PageParameters params) {
         super(params);
-        // Coming from bookmark or external link, so no navigation context
-        this.navigationModel = null;
 
-        final QueryFacetsSelection selection = selectionParametersConverter.fromParameters(params);
-        selectionModel = Model.of(selection);
-
-        final StringValue docId = params.get(VloWebAppParameters.DOCUMENT_ID);
-        if (docId.isEmpty()) {
-            Session.get().error("No document ID provided");
-            throw new RestartResponseException(new FacetedSearchPage(selectionModel));
+        // get search context from params if available
+        final SearchContext searchContext = contextParamConverter.fromParameters(params);
+        if (searchContext instanceof SearchContextModel) {
+            this.navigationModel = (SearchContextModel) (searchContext);
+        } else if (searchContext != null) {
+            this.navigationModel = Model.of(searchContext);
+        } else {
+            this.navigationModel = null;
         }
-        final SolrDocumentModel documentModel = new SolrDocumentModel(docId.toString());
-        if (null == documentModel.getObject()) {
-            Session.get().error(String.format("Document with ID %s could not be found", docId));
-            throw new RestartResponseException(new FacetedSearchPage(selectionModel));
+
+        // get selection from context or parameters
+        if (navigationModel == null) {
+            final QueryFacetsSelection selection = selectionParametersConverter.fromParameters(params);
+            selectionModel = Model.of(selection);
+        } else {
+            selectionModel = new PropertyModel(navigationModel, "selection");
         }
-        setModel(documentModel);
 
-        addComponents();
-    }
+        // get document from parameters
+        final SolrDocument document = documentParamConverter.fromParameters(params);
+        if (null == document) {
+            Session.get().error(String.format("Document with ID %s could not be found", params.get(VloWebAppParameters.DOCUMENT_ID)));
+            throw new RestartResponseException(new FacetedSearchPage(selectionModel));
+        } else {
+            setModel(new SolrDocumentModel(document));
+        }
 
-    /**
-     * Constructor using existing models (when constructed explicitly in code)
-     *
-     * @param documentModel
-     * @param contextModel
-     */
-    public RecordPage(IModel<SolrDocument> documentModel, IModel<SearchContext> contextModel) {
-        super(documentModel);
-        this.navigationModel = contextModel;
-        this.selectionModel = new PropertyModel(contextModel, "selection");
         addComponents();
     }
 

@@ -37,7 +37,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     private FacetFieldsService facetFieldsService;
     @SpringBean
     private VloConfig vloConfig;
-    @SpringBean
+    @SpringBean(name="queryParametersConverter")
     private PageParametersConverter<QueryFacetsSelection> paramsConverter;
 
     private SearchResultsPanel searchResultsPanel;

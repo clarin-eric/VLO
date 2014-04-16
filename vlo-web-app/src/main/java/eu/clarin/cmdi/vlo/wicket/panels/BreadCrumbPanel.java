@@ -50,7 +50,7 @@ import org.apache.wicket.util.convert.IConverter;
  */
 public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
 
-    @SpringBean
+    @SpringBean(name="queryParametersConverter")
     private PageParametersConverter<QueryFacetsSelection> paramsConverter;
 
     private final WebMarkupContainer query;

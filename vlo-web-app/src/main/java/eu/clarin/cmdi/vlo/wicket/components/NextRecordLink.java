@@ -17,14 +17,15 @@
 package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
+import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -38,6 +39,10 @@ public class NextRecordLink extends Link<SearchContext> {
 
     @SpringBean
     private SolrDocumentService documentService;
+    @SpringBean(name="documentParamsConverter")
+    private PageParametersConverter<SolrDocument> documentParamConverter;
+    @SpringBean(name="searchContextParamsConverter")
+    private PageParametersConverter<SearchContext> contextParamConverter;
     private final IModel<SearchContext> model;
 
     public NextRecordLink(String id, IModel<SearchContext> model) {
@@ -53,7 +58,9 @@ public class NextRecordLink extends Link<SearchContext> {
         final List<SolrDocument> documents = documentService.getDocuments(context.getSelection(), index, 1);
         if (documents.size() > 0) {
             // found it, go there
-            setResponsePage(new RecordPage(new SolrDocumentModel(documents.get(0)), SearchContextModel.next(context)));
+            final PageParameters params = documentParamConverter.toParameters(documents.get(0));
+            params.mergeWith(contextParamConverter.toParameters(SearchContextModel.next(context)));
+            setResponsePage(RecordPage.class, params);
         }
     }
 

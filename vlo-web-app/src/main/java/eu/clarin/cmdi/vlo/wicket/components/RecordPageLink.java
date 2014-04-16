@@ -17,16 +17,24 @@
 package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
+import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  *
  * @author twagoo
  */
 public class RecordPageLink extends Link {
+
+    @SpringBean(name="documentParamsConverter")
+    private PageParametersConverter<SolrDocument> documentParamConverter;
+    @SpringBean(name="searchContextParamsConverter")
+    private PageParametersConverter<SearchContext> contextParamConverter;
 
     private final IModel<SolrDocument> documentModel;
     private final IModel<SearchContext> selectionModel;
@@ -39,7 +47,9 @@ public class RecordPageLink extends Link {
 
     @Override
     public void onClick() {
-        setResponsePage(new RecordPage(documentModel, selectionModel));
+        final PageParameters params = documentParamConverter.toParameters(documentModel.getObject());
+        params.mergeWith(contextParamConverter.toParameters(selectionModel.getObject()));
+        setResponsePage(RecordPage.class, params);
     }
 
     @Override
@@ -48,7 +58,5 @@ public class RecordPageLink extends Link {
         documentModel.detach();
         selectionModel.detach();
     }
-    
-    
 
 }

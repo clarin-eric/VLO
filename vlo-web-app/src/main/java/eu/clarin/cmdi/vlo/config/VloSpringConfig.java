@@ -21,6 +21,7 @@ import com.google.common.collect.Sets;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.handle.HandleClient;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
@@ -30,6 +31,7 @@ import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
 import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
 import eu.clarin.cmdi.vlo.service.handle.impl.HandleRestApiClient;
+import eu.clarin.cmdi.vlo.service.impl.DocumentParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.UriResolverImpl;
 import eu.clarin.cmdi.vlo.service.impl.InclusiveFieldFilter;
 import eu.clarin.cmdi.vlo.service.impl.ResourceStringConverterImpl;
@@ -42,6 +44,7 @@ import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.service.solr.SolrFacetQueryFactory;
 import eu.clarin.cmdi.vlo.service.solr.impl.AutoCompleteServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.QueryFacetsSelectionParametersConverter;
+import eu.clarin.cmdi.vlo.service.impl.SearchContextParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.impl.SearchResultsDaoImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentQueryFactoryImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentServiceImpl;
@@ -56,6 +59,7 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.common.SolrDocument;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -149,9 +153,19 @@ public class VloSpringConfig {
         return new HandleRestApiClient();
     }
 
-    @Bean
+    @Bean(name="queryParametersConverter")
     public PageParametersConverter<QueryFacetsSelection> queryParametersConverter() {
         return new QueryFacetsSelectionParametersConverter();
+    }
+    
+    @Bean(name="documentParamsConverter")
+    public PageParametersConverter<SolrDocument> documentParamsConverter() {
+        return new DocumentParametersConverter();
+    }
+    
+    @Bean(name="searchContextParamsConverter")
+    public PageParametersConverter<SearchContext> searchContextParamsConverter(){
+        return new SearchContextParametersConverter(queryParametersConverter());
     }
 
     @Bean

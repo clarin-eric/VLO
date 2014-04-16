@@ -24,7 +24,6 @@ import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.AllFacetValuesPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
-import java.util.Collection;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
@@ -47,7 +46,7 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
 
     @SpringBean
     private FacetFieldsService facetFieldsService;
-    @SpringBean
+    @SpringBean(name="queryParametersConverter")
     private PageParametersConverter<QueryFacetsSelection> parametersConverter;
 
     private final IModel<QueryFacetsSelection> selectionModel;

@@ -54,7 +54,7 @@ import org.apache.wicket.util.encoding.UrlEncoder;
  */
 public class TopLinksPanel extends GenericPanel<QueryFacetsSelection> {
 
-    @SpringBean
+    @SpringBean(name="queryParametersConverter")
     private PageParametersConverter<QueryFacetsSelection> paramsConverter;
     @SpringBean
     private VloConfig vloConfig;

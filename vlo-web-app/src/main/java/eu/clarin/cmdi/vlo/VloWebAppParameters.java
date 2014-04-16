@@ -27,4 +27,6 @@ public class VloWebAppParameters {
     public static final String QUERY = "q";
     public static final String FILTER_QUERY = "fq";
     public static final String FILTER_QUERY_TYPE = "fqType";
+    public static final String SEARCH_INDEX = "index";
+    public static final String SEARCH_COUNT = "count";
 }
