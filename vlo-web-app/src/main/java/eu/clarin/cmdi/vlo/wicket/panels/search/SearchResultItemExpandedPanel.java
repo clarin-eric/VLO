@@ -31,15 +31,15 @@ import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
@@ -51,6 +51,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
 
+    private static final int MAX_RESOURCES_TO_SHOW = 10;
+    
     @SpringBean(name = "searchResultPropertiesFilter")
     private FieldFilter propertiesFilter;
     @SpringBean(name = "resourceStringConverter")
@@ -58,7 +60,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
     @SpringBean(name = "resolvingResourceStringConverter")
     ResourceStringConverter resolvingResourceStringConverter;
 
-    public SearchResultItemExpandedPanel(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel) {
+    public SearchResultItemExpandedPanel(String id, final IModel<SolrDocument> documentModel, final IModel<SearchContext> selectionModel) {
         super(id, documentModel);
 
         // add untruncated description
@@ -68,28 +70,54 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
         // table with some basic properties
         add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(documentModel, propertiesFilter)));
 
-        final SolrFieldModel<String> resourceModel = new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_RESOURCE);
-
         // add a container for the resources (only visible if there are actual resources)
-        add(new WebMarkupContainer("resources") {
-            {
-                add(createResourcesList("resource", resourceModel));
-            }
+        add(createResourcesView("resources", documentModel, selectionModel));
+    }
 
+    private WebMarkupContainer createResourcesView(String id, final IModel<SolrDocument> documentModel, final IModel<SearchContext> selectionModel) {
+        final SolrFieldModel<String> resourceModel = new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_RESOURCE);
+        // create a container for the list view that is only visible if there actually are resources
+        final WebMarkupContainer container = new WebMarkupContainer(id) {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
                 setVisible(resourceModel.getObject() != null);
             }
 
-        });
+        };
+
+        final PageableListView resourcesView = createResourcesList("resource", resourceModel);
+        container.add(resourcesView);
+
+        // create a link to the record page that is only visible when there are more resources than shown
+        final RecordPageLink moreLink = new RecordPageLink("more", documentModel, selectionModel) {
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(resourcesView.getPageCount() > 1);
+            }
+
+        };
+        // add a record page link that shows the number of resources not shown
+        moreLink.add(new Label("moreLabel", new StringResourceModel("resources.more", new AbstractReadOnlyModel<Integer>() {
+
+            @Override
+            public Integer getObject() {
+                return resourceModel.getObject().size() - MAX_RESOURCES_TO_SHOW;
+            }
+
+        }, "more...")));
+        container.add(moreLink);
+        
+        return container;
     }
 
-    private Component createResourcesList(String id, SolrFieldModel<String> resourceModel) {
+    private PageableListView createResourcesList(String id, SolrFieldModel<String> resourceModel) {
         // list of resources in this record
-        // TODO: limit number of resources shown here?
         final IModel<List<String>> resourceListModel = new CollectionListModel<String>(resourceModel);
-        return new ListView<String>(id, resourceListModel) {
+        // use a a pageable view so that the number of resources actually shown is limited
+        return new PageableListView<String>(id, resourceListModel, MAX_RESOURCES_TO_SHOW) {
 
             @Override
             protected void populateItem(final ListItem<String> item) {
