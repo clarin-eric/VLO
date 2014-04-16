@@ -226,24 +226,24 @@ span.recordresourcedetailsitem span {
 
 /* Technical details */
 
-.recordtogglelinks {
-    clear: both;
-    padding: 0 0 1em 0;
+#record .collapsed a.contenttoggle:before {
+    content: '+ ';
+}
+
+#record .expanded a.contenttoggle:before {
+    content: '- ';
+}
+
+#recordcmdi {
+    clear: both; /* first div after records, clear */
+    padding: 1em 0 1em 0;
 }
 
 #recordcmditoggle {
     padding-top: 2em;
 }
 
-a.recordshowlink:before {
-    content: '+ ';
-}
-
-a.recordhidelink:before {
-    content: '- ';
-}
-
-#recordtechnicaldetails, #recordcmdi {
+#recordtechnicaldetails .togglecontent, #recordcmdi .togglecontent {
     border-top: 1px dashed;
     padding: 1em 0;
 }

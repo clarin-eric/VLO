@@ -31,6 +31,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.UrlFromStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.XsltModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.TogglePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.ContentSearchFormPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
@@ -133,7 +134,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
         // Technical section
         add(createCmdiContent("cmdi"));
-        add(new FieldsTablePanel("technicalProperties", new DocumentFieldsProvider(getModel(), technicalPropertiesFilter)));
+        add(createTechnicalDetailsPanel("technicalProperties"));
 
         createSearchLinks("searchlinks");
     }
@@ -218,12 +219,29 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         });
     }
 
-    private Label createCmdiContent(String id) {
+    private Component createCmdiContent(String id) {
+
         final IModel<String> locationModel = new SolrFieldStringModel(getModel(), FacetConstants.FIELD_FILENAME);
         final UrlFromStringModel locationUrlModel = new UrlFromStringModel(locationModel);
-        final Label cmdiContentLabel = new Label(id, new XsltModel(locationUrlModel));
-        cmdiContentLabel.setEscapeModelStrings(false);
-        return cmdiContentLabel;
+        return new TogglePanel(id, Model.of("Show all metadata fields"), Model.of("Hide all metadata fields")) {
+
+            @Override
+            protected Component createContent(String id) {
+                final Label cmdiContentLabel = new Label(id, new XsltModel(locationUrlModel));
+                cmdiContentLabel.setEscapeModelStrings(false);
+                return cmdiContentLabel;
+            }
+        };
+    }
+
+    private TogglePanel createTechnicalDetailsPanel(String id) {
+        return new TogglePanel(id, Model.of("Show technical details"), Model.of("Hide technical details")) {
+
+            @Override
+            protected Component createContent(String id) {
+                return new FieldsTablePanel(id, new DocumentFieldsProvider(getModel(), technicalPropertiesFilter));
+            }
+        };
     }
 
     @Override

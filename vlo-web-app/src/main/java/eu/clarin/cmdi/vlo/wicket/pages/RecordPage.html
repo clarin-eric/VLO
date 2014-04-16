@@ -67,23 +67,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                 <div wicket:id="resources" id="recordresources">[RESOURCES]</div>
 
-                <p id="recordcmditoggle" class="recordtogglelinks">
-                    <a href="#" id="showrecordcmdi" class="recordshowlink">Show all metadata fields</a>
-                    <a href="#" id="hiderecordcmdi" class="recordhidelink">Hide all metadata fields</a>
-                </p>
                 <div wicket:id="cmdi" id="recordcmdi">[CMDI metadata]</div>
 
-                <p id="recordtechnicaldetailstoggle" class="recordtogglelinks">
-                    <a href="#" id="showrecordtechnicaldetails" class="recordshowlink">Show technical details</a>
-                    <a href="#" id="hiderecordtechnicaldetails" class="recordhidelink">Hide technical details</a>
-                </p>
-                <div id="recordtechnicaldetails">
-                    <h2>Technical details</h2>
-
-                    <div id="recordtechnicalattributes">
-                        <wicket:container wicket:id="technicalProperties">[PROPERTIES TABLE]</wicket:container>
-                    </div>
-                </div> <!-- recordtechnicaldetails -->
+                <div wicket:id="technicalProperties" id="recordtechnicaldetails">[TECHNICAL PROPERTIES TABLE]</div>
+                
             </div>
         </wicket:extend>
     </body>

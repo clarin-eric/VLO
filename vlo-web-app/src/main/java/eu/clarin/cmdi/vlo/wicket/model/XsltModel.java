@@ -17,19 +17,8 @@
 package eu.clarin.cmdi.vlo.wicket.model;
 
 import eu.clarin.cmdi.vlo.VloWicketApplication;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.net.URL;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.stream.StreamSource;
-import net.sf.saxon.s9api.Processor;
-import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.s9api.Serializer;
-import net.sf.saxon.s9api.XdmNode;
-import net.sf.saxon.s9api.XsltCompiler;
-import net.sf.saxon.s9api.XsltExecutable;
-import net.sf.saxon.s9api.XsltTransformer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.slf4j.Logger;
