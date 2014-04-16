@@ -139,7 +139,7 @@ div.content a
   color: #414141;
 }
 
-li.searchresultitem:nth-child(even) {
+li.searchresultitem:nth-child(even), .recorddetailstable tr:nth-child(even) {
     background: #f1f3f6;
 }
 
