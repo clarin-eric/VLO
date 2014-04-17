@@ -64,7 +64,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
         super(id, documentModel);
 
         // add untruncated description
-        add(new SolrFieldLabel("description", documentModel, FacetConstants.FIELD_DESCRIPTION, "<no description>"));
+        add(new SolrFieldLabel("description", documentModel, FacetConstants.FIELD_DESCRIPTION, ""));
         add(new RecordPageLink("recordLink", documentModel, selectionModel));
 
         // table with some basic properties

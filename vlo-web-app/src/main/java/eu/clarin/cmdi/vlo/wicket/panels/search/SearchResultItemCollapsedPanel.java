@@ -55,7 +55,7 @@ public class SearchResultItemCollapsedPanel extends Panel {
         this.documentModel = documentModel;
         this.selectionModel = selectionModel;
 
-        add(new SolrFieldLabel("description", documentModel, FacetConstants.FIELD_DESCRIPTION, "<no description>", MAX_DESCRIPTION_LENGTH, LONG_DESCRIPTION_TRUNCATE_POINT));
+        add(new SolrFieldLabel("description", documentModel, FacetConstants.FIELD_DESCRIPTION, "", MAX_DESCRIPTION_LENGTH, LONG_DESCRIPTION_TRUNCATE_POINT));
 
         // get model for resources
         final SolrFieldModel<String> resourcesModel = new SolrFieldModel<String>(documentModel, FacetConstants.FIELD_RESOURCE);

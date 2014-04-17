@@ -54,7 +54,7 @@ public class SearchResultItemPanel extends Panel {
         this.expansionStateModel = expansionStateModel;
 
         final Link recordLink = new RecordPageLink("recordLink", documentModel, selectionModel);
-        recordLink.add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME));
+        recordLink.add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME, "Unnamed record"));
         add(recordLink);
 
         // add a link to toggle the expansion state
