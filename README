@@ -4,7 +4,7 @@ Some general development notes. For more info, see:
 
 	https://trac.clarin.eu/wiki/CmdiVirtualLanguageObservatory
 
-== Preparing for realease ==
+== Preparing for release ==
 
 These instructions apply to any kind of release, whether it's a stable
 version, or for beta or alpha deployment. Always increase the version number
@@ -48,3 +48,9 @@ can always be traced back to its sources!
 	svn commit -m "Bumped trunk version to 3.y-SNAPSHOT"
 
 * Done!
+
+After building the entire project, a deployment package will be present in the
+'target' directory of vlo-distribution. This includes WARs for both the Solr
+and the web app front end as well as the importer script and default configuration
+files.
+
