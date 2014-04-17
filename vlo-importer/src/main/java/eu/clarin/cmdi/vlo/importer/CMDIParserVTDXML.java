@@ -28,8 +28,11 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
 	public CMDIData process(File file) throws VTDException, IOException {
         CMDIData result = new CMDIData();
         VTDGen vg = new VTDGen();
-        vg.setDoc(IOUtils.toByteArray(new FileInputStream(file)));
+        FileInputStream fileInputStream = new FileInputStream(file); 
+        vg.setDoc(IOUtils.toByteArray(fileInputStream));
         vg.parse(true);
+        fileInputStream.close();;
+        
         VTDNav nav = vg.getNav();
         setNameSpace(nav);//setting namespace once, all other instance of AutoPilot keep the setting (a bit tricky).
         FacetMapping facetMapping = getFacetMapping(nav.cloneNav(), file.getAbsolutePath());
