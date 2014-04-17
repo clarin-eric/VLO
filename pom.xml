@@ -48,6 +48,7 @@
         </dependency>
     </dependencies>
     
+    <!-- TODO: get rid of dependency on MPI repository -->
     <repositories>
         <repository>
             <id>MPI</id>
