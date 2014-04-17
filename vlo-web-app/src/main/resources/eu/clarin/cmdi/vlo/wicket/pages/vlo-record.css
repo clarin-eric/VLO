@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 div#record {
     width: 942px; /* no sidebar, so width of #content + .sidebar */
+    padding-bottom: 2em;
 }
 
 #recordnavigation p a, #recordcontext p a {
