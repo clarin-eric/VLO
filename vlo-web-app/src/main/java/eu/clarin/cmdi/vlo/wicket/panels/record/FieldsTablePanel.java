@@ -100,10 +100,15 @@ public class FieldsTablePanel extends Panel {
             protected void onConfigure() {
                 super.onConfigure();
                 // only show for facet fields
-                setVisible(vloConfig.getFacetFields().contains(facetNameModel.getObject()));
+                setVisible(isShowFacetSelectLinks()
+                        && vloConfig.getFacetFields().contains(facetNameModel.getObject()));
             }
 
         };
+    }
+
+    protected boolean isShowFacetSelectLinks() {
+        return true;
     }
 
 }

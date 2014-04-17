@@ -52,7 +52,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
 
     private static final int MAX_RESOURCES_TO_SHOW = 10;
-    
+
     @SpringBean(name = "searchResultPropertiesFilter")
     private FieldFilter propertiesFilter;
     @SpringBean(name = "resourceStringConverter")
@@ -68,7 +68,15 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
         add(new RecordPageLink("recordLink", documentModel, selectionModel));
 
         // table with some basic properties
-        add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(documentModel, propertiesFilter)));
+        add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(documentModel, propertiesFilter)) {
+
+            @Override
+            protected boolean isShowFacetSelectLinks() {
+                // do not show the value selection links
+                return false;
+            }
+
+        });
 
         // add a container for the resources (only visible if there are actual resources)
         add(createResourcesView("resources", documentModel, selectionModel));
@@ -109,7 +117,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
 
         }, "more...")));
         container.add(moreLink);
-        
+
         return container;
     }
 
