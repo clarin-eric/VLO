@@ -57,7 +57,7 @@ public class QueryFacetsSelectionParametersConverterTest {
         params.add("q", "ignored"); // only one query param is selected
         params.add("fq", "facet1:valueA");
         params.add("fq", "facet1:valueB");
-        params.add("fq", "facet2:valueC");
+        params.add("fq", "facet2:value:C"); // has a colon in value
         params.add("fq", "illegal-no-colon"); //should get ignored
         params.add("fq", ""); // not a valid facet selection
         params.add("fq", "invalid"); // not a valid facet selection
@@ -73,7 +73,7 @@ public class QueryFacetsSelectionParametersConverterTest {
         assertThat(result.getFacets(), hasItem("facet2"));
         assertThat(result.getSelectionValues("facet1").getValues(), hasItem("valueA"));
         assertThat(result.getSelectionValues("facet1").getValues(), hasItem("valueB"));
-        assertThat(result.getSelectionValues("facet2").getValues(), hasItem("valueC"));
+        assertThat(result.getSelectionValues("facet2").getValues(), hasItem("value:C"));
         // OR explicitly set
         assertEquals(FacetSelectionType.OR, result.getSelectionValues("facet1").getSelectionType());
         // AND is default
@@ -109,7 +109,7 @@ public class QueryFacetsSelectionParametersConverterTest {
         final String query = "query";
         final Map<String, FacetSelection> map = Maps.newHashMapWithExpectedSize(3);
         map.put("facet1", new FacetSelection(FacetSelectionType.OR, Arrays.asList("valueA", "valueB")));
-        map.put("facet2", new FacetSelection(FacetSelectionType.AND, Collections.singleton("valueC")));
+        map.put("facet2", new FacetSelection(FacetSelectionType.AND, Collections.singleton("value:C")));
         map.put("facet3", new FacetSelection(FacetSelectionType.NOT_EMPTY));
 
         QueryFacetsSelection selection = new QueryFacetsSelection(query, map);
@@ -121,7 +121,7 @@ public class QueryFacetsSelectionParametersConverterTest {
         assertNotNull(fq);
         assertThat(fq, hasItem(StringValue.valueOf("facet1:valueA")));
         assertThat(fq, hasItem(StringValue.valueOf("facet1:valueB")));
-        assertThat(fq, hasItem(StringValue.valueOf("facet2:valueC")));
+        assertThat(fq, hasItem(StringValue.valueOf("facet2:value:C")));
 
         final List<StringValue> fqType = result.getValues("fqType");
         assertNotNull(fqType);

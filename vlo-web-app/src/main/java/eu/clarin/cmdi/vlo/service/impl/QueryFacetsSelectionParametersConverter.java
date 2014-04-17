@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
 import static eu.clarin.cmdi.vlo.VloWebAppParameters.*;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
@@ -39,6 +40,12 @@ import org.slf4j.LoggerFactory;
 public class QueryFacetsSelectionParametersConverter implements PageParametersConverter<QueryFacetsSelection> {
 
     public final static Logger logger = LoggerFactory.getLogger(QueryFacetsSelectionParametersConverter.class);
+    /**
+     * Splitter for facet query strings like "language:Dutch". Because it is
+     * limited to two tokens, will also work for strings with a colon in their
+     * value such as "collection:TLA: DoBeS archive".
+     */
+    public final static Splitter FILTER_SPLITTER = Splitter.on(":").limit(2);
 
     @Override
     public QueryFacetsSelection fromParameters(PageParameters params) {
@@ -51,10 +58,10 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
 
         for (StringValue selectionType : facetSelectionTypes) {
             if (!selectionType.isEmpty()) {
-                final String[] fqType = selectionType.toString().split(":");
-                if (fqType.length == 2) {
-                    final String facet = fqType[0];
-                    final String type = fqType[1].toUpperCase();
+                final List<String> fqType = FILTER_SPLITTER.splitToList(selectionType.toString());
+                if (fqType.size() == 2) {
+                    final String facet = fqType.get(0);
+                    final String type = fqType.get(1).toUpperCase();
 
                     try {
                         final FacetSelectionType facetSelectionType = FacetSelectionType.valueOf(type);
@@ -71,11 +78,11 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
         // Get facet selections from params
         for (StringValue facetValue : facetValues) {
             if (!facetValue.isEmpty()) {
-                final String[] fq = facetValue.toString().split(":");
-                if (fq.length == 2) {
+                final List<String> fq = FILTER_SPLITTER.splitToList(facetValue.toString());
+                if (fq.size() == 2) {
                     // we have a facet - value pair
-                    final String facet = fq[0];
-                    final String value = fq[1];
+                    final String facet = fq.get(0);
+                    final String value = fq.get(1);
                     if (selection.containsKey(facet)) {
                         selection.get(facet).getValues().add(value);
                     } else {
