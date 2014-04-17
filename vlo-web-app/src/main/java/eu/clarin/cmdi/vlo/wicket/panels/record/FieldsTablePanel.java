@@ -16,11 +16,18 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.DocumentField;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
+import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
+import java.util.Collections;
 import java.util.List;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -30,6 +37,7 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  *
@@ -37,23 +45,31 @@ import org.apache.wicket.model.PropertyModel;
  */
 public class FieldsTablePanel extends Panel {
 
+    @SpringBean
+    private VloConfig vloConfig;
+    @SpringBean(name = "queryParametersConverter")
+    private PageParametersConverter<QueryFacetsSelection> paramsConverter;
+
     public FieldsTablePanel(String id, IDataProvider<DocumentField> fieldProvider) {
         super(id);
         add(new DataView<DocumentField>("documentField", fieldProvider) {
 
             @Override
-            protected void populateItem(Item<DocumentField> item) {
+            protected void populateItem(final Item<DocumentField> item) {
                 final IModel<DocumentField> fieldModel = item.getModel();
-                item.add(new Label("fieldName", new SolrFieldNameModel(new PropertyModel(fieldModel, "fieldName"))));
+                final PropertyModel<String> fieldNameModel = new PropertyModel<String>(fieldModel, "fieldName");
+                final SolrFieldNameModel friendlyFieldNameModel = new SolrFieldNameModel(fieldNameModel);
+                item.add(new Label("fieldName", friendlyFieldNameModel));
                 final PropertyModel<List> valuesModel = new PropertyModel<List>(fieldModel, "values");
                 item.add(new ListView("values", valuesModel) {
 
                     @Override
-                    protected void populateItem(ListItem item) {
-                        item.add(new Label("value", item.getModel()));
+                    protected void populateItem(final ListItem fieldValueItem) {
+                        fieldValueItem.add(new Label("value", fieldValueItem.getModel()));
+                        fieldValueItem.add(createFacetSelectLink("facetSelect", fieldNameModel, fieldValueItem.getModel()));
                     }
                 });
-                
+
                 // if field has multiple values, set 'multiple' class on markup element
                 item.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
 
@@ -68,6 +84,26 @@ public class FieldsTablePanel extends Panel {
                 }));
             }
         });
+    }
+
+    private Link createFacetSelectLink(String id, final IModel<String> facetNameModel, final IModel valueModel) {
+        return new Link(id) {
+
+            @Override
+            public void onClick() {
+                final FacetSelection facetSelection = new FacetSelection(Collections.singleton(valueModel.getObject().toString()));
+                final QueryFacetsSelection selection = new QueryFacetsSelection(Collections.singletonMap(facetNameModel.getObject(), facetSelection));
+                setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(selection));
+            }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                // only show for facet fields
+                setVisible(vloConfig.getFacetFields().contains(facetNameModel.getObject()));
+            }
+
+        };
     }
 
 }
