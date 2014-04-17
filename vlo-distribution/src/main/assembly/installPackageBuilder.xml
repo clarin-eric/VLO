@@ -23,6 +23,8 @@
             <includes>
                 <include>CHANGES</include>
                 <include>DEPLOY-README</include>
+                <include>LICENSE</include>
+                <include>README</include>
                 <include>UPGRADE</include>
             </includes>
             <outputDirectory>doc</outputDirectory>
