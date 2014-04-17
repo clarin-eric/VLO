@@ -1,0 +1,50 @@
+= Development information =
+
+Some general development notes. For more info, see:
+
+	https://trac.clarin.eu/wiki/CmdiVirtualLanguageObservatory
+
+== Preparing for realease ==
+
+These instructions apply to any kind of release, whether it's a stable
+version, or for beta or alpha deployment. Always increase the version number
+and keep the trunk in -SNAPSHOT but not the tags so that a deployed version
+can always be traced back to its sources!
+
+* Make a tag of the version to release:
+
+	svn cp . ../tags/vlo-3.x	#executed from trunk
+
+* Change the version number in the poms to match the release
+  (should match the directory name and be non-snapshot!!):
+
+	cd ../tags/vlo-3.x
+	mvn versions:set -DnewVersion=3.x
+
+  This will update the version numbers of the parent pom and all VLO
+  modules in one go!
+
+* Build the tag and inspect the output of vlo-distribution
+
+	mvn clean install 		#do not skip unit tests ;)
+
+  Unpack the tarball in vlo-distribution/target somehwere and check its
+  contents on version numbers, config files etc.
+
+  You may also want to do a 'svn diff' to check the change of the version
+  numbers.
+
+* Clean up and commit
+
+	mvn versions:commit 		#cleans up POM backups
+	mvn clean			#cleans up build outpit
+	svn commit -m "Created tag for VLO version 3.x"
+
+* Update the version number of the trunk if the release was a stable
+
+	cd ../../trunk
+	mvn version:set -DnewVersion 3.y-SNAPSHOT
+	mvn versions:commit
+	svn commit -m "Bumped trunk version to 3.y-SNAPSHOT"
+
+* Done!
