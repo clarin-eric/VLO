@@ -209,11 +209,6 @@ ol li
   padding: 0px 0px 8px 0px;
 }
 
-.sidebaritem a, .sidebaritem a:hover
-{ padding: 0px 0px 2px 14px;
-  text-decoration: none;
-}
-
 .sbilinks {clear: both;}
 
 .sbilinks ul{margin: 0px;}
@@ -225,9 +220,11 @@ ol li
 }
 
 .sbilinks li a, .sbilinks li a:hover
-{ height: 16px;
-  text-decoration: none; 
-  width: 149px;
+{ 
+    padding: 0px 0px 2px 14px;
+    height: 16px;
+    text-decoration: none; 
+    width: 149px;
 } 
 
 /* page content (centre) */

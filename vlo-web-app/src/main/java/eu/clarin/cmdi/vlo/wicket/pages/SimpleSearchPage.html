@@ -44,9 +44,6 @@
             <div class="topbar" id="collections">
                 <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
                 <div wicket:id="collectionsFacet">[COLLECTIONS]</div>
-                <!--                <p>
-                                    Searching in all collections (604056 records).
-                                </p>-->
                 <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
             </div>
 
@@ -63,6 +60,23 @@
                 <h1>Browse</h1>
                 <div wicket:id="browse" id="frontfacets">
                     [BROWSE]
+                </div>
+            </div>
+
+            <div class="sidebar">
+
+                <div class="sidebaritem" id="browseall">
+                    <!--rounded corners - top ****--> 
+                    <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
+                    <h1>Browse all</h1>
+                    <p>
+                        <wicket:link>
+                            <a href="FacetedSearchPage.html">Click here if you would like to browse all records</a>
+                            or enter a query or make a selection on the left.
+                        </wicket:link>
+                    </p>
+                    <!--rounded corners - bottom ****--> 
+                    <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
                 </div>
             </div>
 
