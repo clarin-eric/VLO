@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.components.SearchForm;
 import eu.clarin.cmdi.vlo.wicket.panels.SingleFacetPanel;
@@ -41,6 +42,8 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
     private VloConfig vloConfig;
     @SpringBean
     private FacetFieldsService facetFieldsService;
+    @SpringBean(name = "queryParametersConverter")
+    private PageParametersConverter<QueryFacetsSelection> paramsConverter;
 
     private final SingleFacetPanel collectionsPanel;
     private final WebMarkupContainer navigation;
@@ -57,6 +60,7 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
         final Model<QueryFacetsSelection> model = Model.of(new QueryFacetsSelection());
         setModel(model);
 
+        // add an updatable container for breadcrumbs and top links
         navigation = new WebMarkupContainer("navigation");
         navigation.setOutputMarkupId(true);
         add(navigation);
@@ -64,6 +68,7 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
         navigation.add(new BookmarkablePageLink("breadcrumb", getApplication().getHomePage()));
         navigation.add(new TopLinksPanel("topLinks"));
 
+        // add a persistenet panel for selection of a value for the collection facet
         collectionsPanel = new SingleFacetPanel("collectionsFacet", model, vloConfig.getCollectionFacet(), facetFieldsService) {
 
             @Override
@@ -78,14 +83,16 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
         collectionsPanel.setOutputMarkupId(true);
         add(collectionsPanel);
 
+        // add a search form (on submit will go to faceted search page)
         add(new SearchForm("search", model) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                setResponsePage(new FacetedSearchPage(model));
+                setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(model.getObject()));
             }
         });
 
+        // add a panel with browsing options
         browse = new SimpleSearchBrowsePanel("browse", getModel());
         add(browse);
     }

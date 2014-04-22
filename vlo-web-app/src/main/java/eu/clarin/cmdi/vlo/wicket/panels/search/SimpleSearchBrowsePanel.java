@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
@@ -52,6 +53,8 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
     private FacetFieldsService facetFieldsService;
     @SpringBean
     private SolrDocumentService documentService;
+    @SpringBean(name = "queryParametersConverter")
+    private PageParametersConverter<QueryFacetsSelection> paramsConverter;
     @SpringBean
     private VloConfig vloConfig;
 
@@ -92,7 +95,7 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
                         // value selected, add to selection model then submit to search page
                         final IModel<QueryFacetsSelection> selectionModel = SimpleSearchBrowsePanel.this.getModel();
                         selectionModel.getObject().selectValues(facet, values);
-                        setResponsePage(new FacetedSearchPage(selectionModel));
+                        setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(selectionModel.getObject()));
                     }
 
                 };
