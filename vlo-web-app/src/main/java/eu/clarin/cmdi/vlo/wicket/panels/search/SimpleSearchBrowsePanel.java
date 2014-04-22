@@ -25,9 +25,8 @@ import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
-import java.util.List;
+import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
 import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -44,20 +43,22 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
+ * Panel to be shown on {@link SimpleSearchPage} that has a number of links for
+ * browsing the records; either all records or by making a value selection in
+ * one of a number of predefined facets
  *
  * @author twagoo
  */
 public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> {
 
     @SpringBean
-    private FacetFieldsService facetFieldsService;
-    @SpringBean
     private SolrDocumentService documentService;
-    @SpringBean(name = "queryParametersConverter")
-    private PageParametersConverter<QueryFacetsSelection> paramsConverter;
-    @SpringBean
-    private VloConfig vloConfig;
 
+    /**
+     *
+     * @param id component id
+     * @param model model of current selection
+     */
     public SimpleSearchBrowsePanel(String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
 
@@ -69,84 +70,108 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
             }
         };
 
+        // add a link to browse all records
         final BookmarkablePageLink browseAllLink = new BookmarkablePageLink("browseAll", FacetedSearchPage.class);
         // set label on basis of string defined in resource bundle that takes the count model as a parameter
         browseAllLink.add(new Label("recordCount", new StringResourceModel("simplesearch.allrecords", documentCountModel, new Object[]{})));
         add(browseAllLink);
 
-        add(addFacets("facet"));
+        // add selectors for some facets
+        add(new FacetSelectorsView("facet", getModel()));
 
+        // make this panel AJAX-updatable
         setOutputMarkupId(true);
-
     }
 
-    private Component addFacets(final String id) {
-        final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(facetFieldsService, vloConfig.getSimpleSearchFacetFields(), getModel(), -1);
-        final IModel<String> selectedFacetModel = new Model<String>(null);
-        return new ListView<FacetField>(id, facetFieldsModel) {
+    /**
+     * List model of links that open up {@link FacetValuesPanel}s for a number
+     * of facets. Which facets are included is based on the value returned by
+     * {@link VloConfig#getSimpleSearchFacetFields() } in the {@link VloConfig}
+     * instance injected into this instance.
+     */
+    private class FacetSelectorsView extends ListView<FacetField> {
 
-            @Override
-            protected void populateItem(final ListItem<FacetField> item) {
-                // add a panel showing the values for selection (constrained by the current model)
-                final FacetValuesPanel values = new FacetValuesPanel("values", item.getModel(), SimpleSearchBrowsePanel.this.getModel()) {
+        @SpringBean
+        private FacetFieldsService facetFieldsService;
+        @SpringBean(name = "queryParametersConverter")
+        private PageParametersConverter<QueryFacetsSelection> paramsConverter;
+        @SpringBean
+        private VloConfig vloConfig;
 
-                    @Override
-                    protected void onValuesSelected(String facet, FacetSelection values, AjaxRequestTarget target) {
-                        // value selected, add to selection model then submit to search page
-                        final IModel<QueryFacetsSelection> selectionModel = SimpleSearchBrowsePanel.this.getModel();
-                        selectionModel.getObject().selectValues(facet, values);
-                        setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(selectionModel.getObject()));
+        /**
+         * Model that holds the currently selected facet
+         */
+        private final IModel<String> selectedFacetModel = new Model<String>(null);
+        private final IModel<QueryFacetsSelection> selectionModel;
+
+        public FacetSelectorsView(String id, IModel<QueryFacetsSelection> selectionModel) {
+            super(id);
+            this.selectionModel = selectionModel;
+            setModel(new FacetFieldsModel(facetFieldsService, vloConfig.getSimpleSearchFacetFields(), selectionModel, -1));
+        }
+
+        @Override
+        protected void populateItem(final ListItem<FacetField> item) {
+            // add a panel showing the values for selection (constrained by the current model)
+            final FacetValuesPanel values = new FacetValuesPanel("values", item.getModel(), selectionModel) {
+
+                @Override
+                protected void onValuesSelected(String facet, FacetSelection values, AjaxRequestTarget target) {
+                    // value selected, make a new selection (in this panel we do not want to change the existing selection)...
+                    final QueryFacetsSelection newSelection = selectionModel.getObject().getCopy();
+                    newSelection.selectValues(facet, values);
+                    // ...then submit to search page
+                    setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(newSelection));
+                }
+
+            };
+            // wrap in a container that is only visible if this is the selected facet
+            final WebMarkupContainer valuesContainer = new WebMarkupContainer("valuesContainer") {
+
+                @Override
+                protected void onConfigure() {
+                    super.onConfigure();
+                    setVisible(item.getModelObject().getName().equals(selectedFacetModel.getObject()));
+                }
+            };
+            valuesContainer.add(values);
+            item.add(valuesContainer);
+
+            // add a link for selecting this facet
+            final AjaxFallbackLink select = new AjaxFallbackLink("select") {
+
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    final String facetName = item.getModelObject().getName();
+                    if (facetName.equals(selectedFacetModel.getObject())) {
+                        // already selected, hide
+                        selectedFacetModel.setObject(null);
+                    } else {
+                        // set this facet as the selected one
+                        selectedFacetModel.setObject(facetName);
                     }
 
-                };
-                // wrap in a container that is only visible if this is the selected facet
-                final WebMarkupContainer valuesContainer = new WebMarkupContainer("valuesContainer") {
-
-                    @Override
-                    protected void onConfigure() {
-                        super.onConfigure();
-                        setVisible(item.getModelObject().getName().equals(selectedFacetModel.getObject()));
+                    if (target != null) {
+                        // AJAX update
+                        target.add(SimpleSearchBrowsePanel.this);
                     }
-                };
-                valuesContainer.add(values);
-                item.add(valuesContainer);
+                }
+            };
+            select.add(new Label("name",
+                    // friendly facet name based on name in FacetField
+                    new SolrFieldNameModel(new PropertyModel(item.getModel(), "name"))));
+            item.add(select);
 
-                // add a link for selecting this facet
-                final AjaxFallbackLink select = new AjaxFallbackLink("select") {
+            // show a separator except for the last item
+            item.add(new WebMarkupContainer("separator") {
 
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        final String facetName = item.getModelObject().getName();
-                        if (facetName.equals(selectedFacetModel.getObject())) {
-                            // already selected, hide
-                            selectedFacetModel.setObject(null);
-                        } else {
-                            // set this facet as the selected one
-                            selectedFacetModel.setObject(facetName);
-                        }
-
-                        if (target != null) {
-                            // AJAX update
-                            target.add(SimpleSearchBrowsePanel.this);
-                        }
-                    }
-                };
-                select.add(new Label("name",
-                        // friendly facet name based on name in FacetField
-                        new SolrFieldNameModel(new PropertyModel(item.getModel(), "name"))));
-                item.add(select);
-
-                // show a separator except for the last item
-                item.add(new WebMarkupContainer("separator") {
-
-                    @Override
-                    protected void onConfigure() {
-                        super.onConfigure();
-                        setVisible(item.getIndex() + 1 < getList().size());
-                    }
-                });
-            }
-        };
+                @Override
+                protected void onConfigure() {
+                    super.onConfigure();
+                    setVisible(item.getIndex() + 1 < getList().size());
+                }
+            });
+        }
     }
 
 }
