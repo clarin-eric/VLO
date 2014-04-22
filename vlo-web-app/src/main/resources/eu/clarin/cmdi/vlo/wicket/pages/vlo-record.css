@@ -207,7 +207,6 @@ a.recordattributeinfo:after {
     display: block;
     position: absolute;
     left: 2em;
-    top: 80px;
     z-index: 99;
     margin-left: 0;
     width: 400px;
@@ -215,6 +214,18 @@ a.recordattributeinfo:after {
     background: #fff;
     opacity: .98;
     text-align: left;
+}
+
+div#record .resourceLink:hover .recordresourcedetails
+{
+    left: 2em;
+    top: 80px;
+}
+
+.searchresultresources .resourceLink:hover .recordresourcedetails
+{
+    left: 6em;
+    top: 1.5em;
 }
 
 span.recordresourcedetailstitle {

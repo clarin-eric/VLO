@@ -28,6 +28,7 @@ import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
+import eu.clarin.cmdi.vlo.wicket.panels.record.ResourceLinkDetailsPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
@@ -148,13 +149,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
                     }
                 });
 
-                // add a tooltip showing resource type and mime type
-                final StringResourceModel tooltipModel
-                        = new StringResourceModel("resource.tooltip", SearchResultItemExpandedPanel.this, null,
-                                new Object[]{
-                                    new StringResourceModel("resourcetype.${resourceType}.singular", resourceInfoModel, "?"),
-                                    new PropertyModel(resourceInfoModel, "mimeType")});
-                resourceLink.add(new AttributeAppender("title", tooltipModel));
+                resourceLink.add(new ResourceLinkDetailsPanel("details", resourceInfoModel));
 
                 // sets the css class depending on the resource type
                 item.add(new ResourceTypeCssBehaviour(resourceInfoModel));
