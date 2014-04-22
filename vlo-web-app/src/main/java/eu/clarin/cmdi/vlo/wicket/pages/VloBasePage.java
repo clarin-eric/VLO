@@ -30,12 +30,27 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
+ * Base page for all VLO pages; has common header and footer markup and takes
+ * care of the following:
+ *
+ * <ul>
+ * <li>setting the theme if provided in query parameters;</li>
+ * <li>including CSS</li>
+ * <li>adding a {@link FeedbackPanel} for info/warning/error messages</li>
+ * <li>hiding all JavaScript fallback controls (see
+ * {@link HideJavascriptFallbackControlsBehavior});</li>
+ * </ul>
  *
  * @author twagoo
+ * @param <T> the type of the page's model object (see {@link GenericWebPage})
  */
 public class VloBasePage<T> extends GenericWebPage<T> {
+
+    private final static Logger logger = LoggerFactory.getLogger(VloBasePage.class);
 
     @SpringBean
     private VloConfig vloConfig;
@@ -55,13 +70,26 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         addComponents();
     }
 
+    /**
+     * Sets the theme from the page parameters if applicable. An present but
+     * empty theme value will reset the theme (by unsetting the style).
+     *
+     * @param parameters page parameters to process
+     * @see VloWebAppParameters#THEME
+     * @see Session#setStyle(java.lang.String)
+     */
     private void processTheme(PageParameters parameters) {
-        final StringValue theme = parameters.get(VloWebAppParameters.THEME);
-        if (!theme.isNull()) {
-            if (theme.isEmpty()) {
+        final StringValue themeValue = parameters.get(VloWebAppParameters.THEME);
+        if (!themeValue.isNull()) {
+            if (themeValue.isEmpty()) {
+                // empty string resets theme
+                logger.debug("Resetting theme");
                 Session.get().setStyle(null);
             } else {
-                Session.get().setStyle(theme.toString().toLowerCase());
+                // theme found, set it as style in the session
+                final String theme = themeValue.toString().toLowerCase();
+                logger.debug("Setting theme to {}", theme);
+                Session.get().setStyle(theme);
             }
         }
     }
@@ -79,6 +107,5 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
         add(new HideJavascriptFallbackControlsBehavior());
     }
-
 
 }
