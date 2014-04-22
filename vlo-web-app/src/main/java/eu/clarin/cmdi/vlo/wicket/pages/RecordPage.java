@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
@@ -61,11 +62,11 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public class RecordPage extends VloBasePage<SolrDocument> {
 
-    @SpringBean(name="documentParamsConverter")
+    @SpringBean(name = "documentParamsConverter")
     private PageParametersConverter<SolrDocument> documentParamConverter;
-    @SpringBean(name="queryParametersConverter")
+    @SpringBean(name = "queryParametersConverter")
     private PageParametersConverter<QueryFacetsSelection> selectionParametersConverter;
-    @SpringBean(name="searchContextParamsConverter")
+    @SpringBean(name = "searchContextParamsConverter")
     private PageParametersConverter<SearchContext> contextParamConverter;
     @SpringBean(name = "basicPropertiesFilter")
     private FieldFilter basicPropertiesFilter;
@@ -112,6 +113,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         }
 
         addComponents();
+        add(new HighlightSearchTermBehavior());
     }
 
     private void addComponents() {
@@ -224,7 +226,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
         final IModel<String> locationModel = new SolrFieldStringModel(getModel(), FacetConstants.FIELD_FILENAME);
         final UrlFromStringModel locationUrlModel = new UrlFromStringModel(locationModel);
-        return new TogglePanel(id, Model.of("Show all metadata fields"), Model.of("Hide all metadata fields")) {
+        final TogglePanel togglePanel = new TogglePanel(id, Model.of("Show all metadata fields"), Model.of("Hide all metadata fields")) {
 
             @Override
             protected Component createContent(String id) {
@@ -233,6 +235,9 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 return cmdiContentLabel;
             }
         };
+        // highlight search terms when panel becomes visible
+        togglePanel.add(new HighlightSearchTermBehavior());
+        return togglePanel;
     }
 
     private TogglePanel createTechnicalDetailsPanel(String id) {

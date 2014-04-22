@@ -114,6 +114,10 @@ div.content a
   color: #414141;
 }
 
+#record .attributeValues .searchword, #recordcmdi .searchword {
+    background: yellow;
+}
+
 li.searchresultitem:nth-child(even), #record .recorddetailstable tr:nth-child(odd) {
     background: #f1f3f6;
 }
