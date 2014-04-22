@@ -96,7 +96,7 @@
     <searchResultFields>
         <searchResultField>name</searchResultField>
         <searchResultField>country</searchResultField>
-        <searchResultField>language</searchResultField>
+        <searchResultField>languages</searchResultField>
         <searchResultField>modality</searchResultField>
         <searchResultField>subject</searchResultField>
         <searchResultField>genre</searchResultField>

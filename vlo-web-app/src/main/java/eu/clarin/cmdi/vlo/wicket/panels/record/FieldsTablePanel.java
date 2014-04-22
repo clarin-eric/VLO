@@ -16,6 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
+import com.google.common.collect.ImmutableSet;
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.DocumentField;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
@@ -23,6 +25,7 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.apache.wicket.AttributeModifier;
@@ -45,6 +48,12 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public class FieldsTablePanel extends Panel {
 
+    /**
+     * List of fields that should be rendered unescaped, {@literal i.e.} HTML
+     * contained in the field should be preserved
+     */
+    private final static Collection<String> UNESCAPED_VALUE_FIELDS = ImmutableSet.of(FacetConstants.FIELD_LANGUAGES);
+
     @SpringBean
     private VloConfig vloConfig;
     @SpringBean(name = "queryParametersConverter")
@@ -65,7 +74,13 @@ public class FieldsTablePanel extends Panel {
 
                     @Override
                     protected void populateItem(final ListItem fieldValueItem) {
-                        fieldValueItem.add(new Label("value", fieldValueItem.getModel()));
+                        // add a label for the facet value
+                        final Label fieldLabel = new Label("value", fieldValueItem.getModel());
+                        // some selected fields may have HTML that needs to be preserved...
+                        fieldLabel.setEscapeModelStrings(!UNESCAPED_VALUE_FIELDS.contains(fieldNameModel.getObject()));
+                        fieldValueItem.add(fieldLabel);
+
+                        // add a link for selecting the value in the search
                         fieldValueItem.add(createFacetSelectLink("facetSelect", fieldNameModel, fieldValueItem.getModel()));
                     }
                 });
