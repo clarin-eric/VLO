@@ -30,6 +30,8 @@ import org.slf4j.LoggerFactory;
  * {@link HandleClient} and the result of {@link HandleClient#getUrl(java.lang.String)
  * } is returned; otherwise the original URI is returned.
  *
+ * TODO: add support for resolving URN:NBN <https://trac.clarin.eu/ticket/535>
+ * 
  * @author twagoo
  */
 public class UriResolverImpl implements UriResolver {
