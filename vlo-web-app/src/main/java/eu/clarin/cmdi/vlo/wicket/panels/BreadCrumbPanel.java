@@ -28,6 +28,8 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -50,7 +52,7 @@ import org.apache.wicket.util.convert.IConverter;
  */
 public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
 
-    @SpringBean(name="queryParametersConverter")
+    @SpringBean(name = "queryParametersConverter")
     private PageParametersConverter<QueryFacetsSelection> paramsConverter;
 
     private final WebMarkupContainer query;
@@ -65,13 +67,13 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
 
     private WebMarkupContainer createQuery(final IModel<QueryFacetsSelection> selectionModel, String id) {
         final WebMarkupContainer queryContainer = new WebMarkupContainer(id);
-        final Link link = new Link("leavequery") {
+        final Link link = new AjaxFallbackLink("leavequery") {
 
             @Override
-            public void onClick() {
+            public void onClick(AjaxRequestTarget target) {
                 // make query object without selection
                 final QueryFacetsSelection newSelection = new QueryFacetsSelection(selectionModel.getObject().getQuery(), null);
-                setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(newSelection));
+                onSelectionChanged(newSelection, target);
             }
         };
         link.add(new Label("content", new PropertyModel(selectionModel, "query")));
@@ -81,11 +83,11 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
 
     private WebMarkupContainer createFacets(final IModel<QueryFacetsSelection> model, String id) {
         final WebMarkupContainer facetsContainer = new WebMarkupContainer(id);
-        facetsContainer.add(new Link("leaveselection") {
+        facetsContainer.add(new AjaxFallbackLink("leaveselection") {
 
             @Override
-            public void onClick() {
-                setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(model.getObject()));
+            public void onClick(AjaxRequestTarget target) {
+                onSelectionChanged(model.getObject(), target);
             }
         });
 
@@ -112,22 +114,34 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
                 item.add(valueLabel);
 
                 // add a link for removal of the facet value selection
-                item.add(new Link("removal") {
+                item.add(new AjaxFallbackLink("removal") {
 
                     @Override
-                    public void onClick() {
+                    public void onClick(AjaxRequestTarget target) {
                         // get a copy of the current selection
                         final QueryFacetsSelection newSelection = model.getObject().getCopy();
                         final String facet = selectionModel.getObject().getKey();
                         // unselect this facet
                         newSelection.selectValues(facet, null);
-                        setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(newSelection));
+                        onSelectionChanged(newSelection, target);
                     }
                 });
             }
         });
 
         return facetsContainer;
+    }
+
+    /**
+     * Gets called if one of the links is clicked and the selection is changed.
+     * This implementation sets the response page to {@link FacetedSearchPage}
+     * with the new selection as its parameters
+     *
+     * @param selection new selection
+     * @param target AJAX target, may be null
+     */
+    protected void onSelectionChanged(QueryFacetsSelection selection, AjaxRequestTarget target) {
+        setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(selection));
     }
 
     @Override

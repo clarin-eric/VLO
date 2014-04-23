@@ -60,21 +60,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private void addComponents() {
-        navigation = new WebMarkupContainer("navigation");
-        navigation.setOutputMarkupId(true);
+        navigation = createNavigation("navigation");
         add(navigation);
-
-        navigation.add(new BreadCrumbPanel("breadcrumbs", getModel()));
-        navigation.add(new TopLinksPanel("permalink", getModel()) {
-
-            @Override
-            protected void onChange(AjaxRequestTarget target) {
-                if (target != null) {
-                    target.add(navigation);
-                }
-            }
-
-        });
 
         add(createSearchForm("search"));
 
@@ -91,7 +78,32 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         add(searchResultsPanel);
     }
 
-    public Panel createOptionsPanel(String id) {
+    private WebMarkupContainer createNavigation(String id) {
+        final WebMarkupContainer container = new WebMarkupContainer(id);
+        container.setOutputMarkupId(true);
+        container.add(new BreadCrumbPanel("breadcrumbs", getModel()){
+
+            @Override
+            protected void onSelectionChanged(QueryFacetsSelection selection, AjaxRequestTarget target) {
+                setModelObject(selection);
+                updateSelection(target);
+            }
+            
+        });
+        container.add(new TopLinksPanel("permalink", getModel()) {
+
+            @Override
+            protected void onChange(AjaxRequestTarget target) {
+                if (target != null) {
+                    target.add(container);
+                }
+            }
+
+        });
+        return container;
+    }
+
+    private Panel createOptionsPanel(String id) {
         final Panel optionsPanel = new AdvancedSearchOptionsPanel(id, getModel()) {
 
             @Override
