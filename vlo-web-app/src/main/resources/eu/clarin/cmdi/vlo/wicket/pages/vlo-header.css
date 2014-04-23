@@ -110,25 +110,27 @@ a#headerlink_clarin {
     background-image: url('error-256.png'); /* icon from icons8.com */
 }
 
+span.breadcrumbfacet {
+    padding: 4px;
+}
+
 a.breadcrumbunselect, a.breadcrumbunselect:hover {
     text-decoration: none;
 }
 
 a.breadcrumbunselect {
-    color: #000;
-}
-
-a.breadcrumbunselect:hover {
-    color: #f00;
+    display: inline-block;
+    width: 16px;
+    height: 20px;
+    background-image: url('x-mark-128.png');
+    background-repeat: no-repeat;
+    background-size: 12px;
+    background-position: 2px 3px;
+    vertical-align: middle;
 }
 
 a.breadcrumbunselect span {
     display: none;
-}
-
-a.breadcrumbunselect:after {
-    /* show delete cross */
-    content: "✕";
 }
 
 #permalinkfield

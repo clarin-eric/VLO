@@ -23,14 +23,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-                <a wicket:id="mainpage">VLO</a>
+            <a wicket:id="mainpage">VLO</a>
             <wicket:container wicket:id="query">
                 &gt; <a wicket:id="leavequery">Search: &quot;<span wicket:id="content"></span>&quot;</a>
             </wicket:container>
             <wicket:container wicket:id="facets">
                 &gt; <a wicket:id="leaveselection">Selections</a>: 
                 <wicket:container wicket:id="facet">
-                    <span wicket:id="value">[VALUE]</span> <a wicket:id="removal" title="Remove selection" class="breadcrumbunselect"><span>[Remove]</span></a>
+                    <span class="breadcrumbfacet"><wicket:container wicket:id="value">[VALUE]</wicket:container> <a wicket:id="removal" title="Remove selection" class="breadcrumbunselect"><span>[Remove]</span></a></span>
                 </wicket:container>
             </wicket:container>
         </wicket:panel>

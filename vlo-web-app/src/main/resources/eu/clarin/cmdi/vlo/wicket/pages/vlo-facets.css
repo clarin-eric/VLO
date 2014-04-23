@@ -87,17 +87,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* unselect facet */
 
-.facetvalues li a.unselectfacetvalue, .facetvalues li a.unselectfacetvalue:hover {
-    text-decoration: none;
+.facetvalues a.unselectfacetvalue, 
+.facetvalues a.unselectfacetvalue:hover,
+.selectedvaluelabel a.unselectfacetvalue, 
+.selectedvaluelabel a.unselectfacetvalue:hover
+{
+    display: inline-block;
+    width: 16px;
+    height: 20px;
+    background-image: url('x-mark-128.png');
+    background-repeat: no-repeat;
+    background-position: 2px 3px;
+    background-size: 12px;
+    vertical-align: middle;
 }
 
 a.unselectfacetvalue span {
     display: none;
-}
-
-a.unselectfacetvalue:after {
-    /* show delete cross */
-    content: "✕";
 }
 
 li.more-link {
@@ -155,7 +161,7 @@ a.collapsefacet:after {
 .selectedvaluelabel {
     clear: both;
     font-weight: bold;
-    padding-left: 24px;
+    padding-left: 14px;
 }
 
 .expandedfacet .selectedvaluelabel {

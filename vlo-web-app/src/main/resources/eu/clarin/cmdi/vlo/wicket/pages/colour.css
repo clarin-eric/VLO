@@ -114,6 +114,10 @@ li.searchresultitem:nth-child(even), #record .recorddetailstable tr:nth-child(od
     background: #ccd6e8;
 }
 
+span.breadcrumbfacet:hover {
+    background: #e9eff8;
+}
+
 /* Based on Nifty Corners: rounded corners without images */
 /* By Alessandro Fulciniti */
 /* http://www.html.it/articoli/nifty/index.html */
