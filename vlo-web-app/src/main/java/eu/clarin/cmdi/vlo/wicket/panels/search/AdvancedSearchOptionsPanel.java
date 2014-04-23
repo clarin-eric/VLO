@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
@@ -60,6 +61,11 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         });
         options.add(fcsCheck);
         add(options);
+
+        // should initially be epxanded if one of the options was selected
+        if (toggleModel.getObject()) {
+            getExpansionModel().setObject(ExpansionState.EXPANDED);
+        }
     }
 
     @Override

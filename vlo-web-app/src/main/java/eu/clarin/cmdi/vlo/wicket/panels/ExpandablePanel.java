@@ -134,13 +134,17 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
         add(titleLink);
     }
 
-    protected abstract Label createTitleLabel(String id);
-
     @Override
     public void detachModels() {
         super.detachModels();
         expansionModel.detach();
     }
+
+    public final IModel<ExpansionState> getExpansionModel() {
+        return expansionModel;
+    }
+
+    protected abstract Label createTitleLabel(String id);
 
     /**
      *
