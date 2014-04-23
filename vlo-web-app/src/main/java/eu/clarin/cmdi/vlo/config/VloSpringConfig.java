@@ -228,6 +228,7 @@ public class VloSpringConfig {
             FacetConstants.FIELD_SEARCHPAGE,
             FacetConstants.FIELD_SEARCH_SERVICE,
             FacetConstants.FIELD_LAST_SEEN,
-            FacetConstants.FIELD_CLARIN_PROFILE
+            FacetConstants.FIELD_CLARIN_PROFILE,
+            FacetConstants.FIELD_COMPLETE_METADATA
     );
 }

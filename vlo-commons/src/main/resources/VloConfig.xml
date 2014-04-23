@@ -114,6 +114,7 @@
     <technicalFields>
         <technicalField>id</technicalField>
         <technicalField>dataProvider</technicalField>
+        <technicalField>metadataSource</technicalField>
         <technicalField>_landingPageRef</technicalField>
         <technicalField>_searchPageRef</technicalField>
         <technicalField>_contentSearchRef</technicalField>
