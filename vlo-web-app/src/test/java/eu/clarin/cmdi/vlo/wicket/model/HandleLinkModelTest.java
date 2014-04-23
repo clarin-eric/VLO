@@ -81,6 +81,23 @@ public class HandleLinkModelTest {
     }
 
     @Test
+    public void testGetObjectWithUrnNbn() {
+        final IModel<String> inner = context.mock(IModel.class, "String");
+        final HandleLinkModel instance = new HandleLinkModel(inner);
+        // model holds a handle
+        context.checking(new Expectations() {
+            {
+                oneOf(inner).getObject();
+                will(returnValue("urn:nbn:de:kobv:b4-200905193201"));
+            }
+        });
+
+        final String result = instance.getObject();
+        // handle proxy should be prepended
+        assertEquals("http://www.nbn-resolving.org/redirect/urn:nbn:de:kobv:b4-200905193201", result);
+    }
+
+    @Test
     public void testGetObjectWithNull() {
         final IModel<String> inner = context.mock(IModel.class, "String");
         final HandleLinkModel instance = new HandleLinkModel(inner);
