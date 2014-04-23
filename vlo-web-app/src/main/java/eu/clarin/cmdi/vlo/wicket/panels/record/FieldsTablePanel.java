@@ -29,6 +29,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
+import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -52,7 +54,21 @@ public class FieldsTablePanel extends Panel {
      * List of fields that should be rendered unescaped, {@literal i.e.} HTML
      * contained in the field should be preserved
      */
-    private final static Collection<String> UNESCAPED_VALUE_FIELDS = ImmutableSet.of(FacetConstants.FIELD_LANGUAGES);
+    private final static Collection<String> UNESCAPED_VALUE_FIELDS
+            = ImmutableSet.of(
+                    FacetConstants.FIELD_LANGUAGES
+            );
+
+    /**
+     * List of fields that should be rendered in a
+     * {@link SmartLinkMultiLineLabel}, which detects URLs and turns them into
+     * links
+     */
+    private final static Collection<String> SMART_LINK_FIELDS
+            = ImmutableSet.of(
+                    FacetConstants.FIELD_DESCRIPTION,
+                    FacetConstants.FIELD_LANDINGPAGE
+            );
 
     @SpringBean
     private VloConfig vloConfig;
@@ -74,12 +90,8 @@ public class FieldsTablePanel extends Panel {
 
                     @Override
                     protected void populateItem(final ListItem fieldValueItem) {
-                        // add a label for the facet value
-                        final Label fieldLabel = new Label("value", fieldValueItem.getModel());
-                        // some selected fields may have HTML that needs to be preserved...
-                        fieldLabel.setEscapeModelStrings(!UNESCAPED_VALUE_FIELDS.contains(fieldNameModel.getObject()));
-                        fieldValueItem.add(fieldLabel);
-
+                        // add a label that holds the field value
+                        fieldValueItem.add(createValueLabel("value", fieldNameModel, fieldValueItem.getModel()));
                         // add a link for selecting the value in the search
                         fieldValueItem.add(createFacetSelectLink("facetSelect", fieldNameModel, fieldValueItem.getModel()));
                     }
@@ -99,6 +111,20 @@ public class FieldsTablePanel extends Panel {
                 }));
             }
         });
+    }
+
+    private Label createValueLabel(String id, final IModel<String> facetNameModel, final IModel valueModel) {
+        final String fieldName = facetNameModel.getObject();
+        if (SMART_LINK_FIELDS.contains(fieldName)) {
+            // create label that generates links
+            return new SmartLinkLabel(id, valueModel);
+        } else {
+            // add a label for the facet value
+            final Label fieldLabel = new Label(id, valueModel);
+            // some selected fields may have HTML that needs to be preserved...
+            fieldLabel.setEscapeModelStrings(!UNESCAPED_VALUE_FIELDS.contains(fieldName));
+            return fieldLabel;
+        }
     }
 
     private Link createFacetSelectLink(String id, final IModel<String> facetNameModel, final IModel valueModel) {

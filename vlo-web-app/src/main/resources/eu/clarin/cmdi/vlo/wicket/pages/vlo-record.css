@@ -108,6 +108,10 @@ ul.attributeValues li {
     margin: 0px;
 }
 
+ul.attributeValues li a {
+    text-decoration: underline;
+}
+
 .multiplevalues ul.attributeValues li {
     padding-bottom: .3em;
     padding-top: .3em;

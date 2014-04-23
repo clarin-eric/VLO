@@ -22,18 +22,19 @@ import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.ResourceTypeCssBehaviour;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
-import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.ResourceLinkDetailsPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -65,7 +66,10 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
         super(id, documentModel);
 
         // add untruncated description
-        add(new SolrFieldLabel("description", documentModel, FacetConstants.FIELD_DESCRIPTION, ""));
+        final NullFallbackModel descriptionModel = new NullFallbackModel(new SolrFieldStringModel(documentModel, FacetConstants.FIELD_DESCRIPTION), "");
+        add(new SmartLinkLabel("description", descriptionModel));
+        
+        // add link to record
         add(new RecordPageLink("recordLink", documentModel, selectionModel));
 
         // table with some basic properties

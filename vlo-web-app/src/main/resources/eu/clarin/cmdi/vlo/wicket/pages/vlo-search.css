@@ -111,6 +111,10 @@ li.searchresultitem .searchresultcollection{
     clear: both;
 }
 
+#searchresultitems .searchresultdescription a {
+    text-decoration: underline;
+}
+
 .searchresultresources {
     width: 70%;
     float: left;
