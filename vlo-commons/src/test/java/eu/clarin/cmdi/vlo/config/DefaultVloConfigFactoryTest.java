@@ -980,7 +980,7 @@ public class DefaultVloConfigFactoryTest {
     @Test
     public void testGetTechnicalFields() {
         Set<String> result = config.getTechnicalFields();
-        assertEquals(7, result.size());
+        assertEquals(8, result.size());
     }
 
     @Test
