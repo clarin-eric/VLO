@@ -46,7 +46,11 @@ public class DocumentFieldsProvider implements IDataProvider<DocumentField> {
      *
      * @param documentModel model that has the document containing the fields
      * @param fieldFilter filter that decides which fields are included
-     * @param fieldOrder list of field names that determine the order
+     * @param fieldOrder list of field names that determine the order.
+     * <strong>Notice:</strong> this has to be a <em>superset</em> of the fields
+     * that may be present in the {@link SolrDocument}. If it is not, runtime
+     * exceptions may occur when requesting the size or iterator; see {@link Ordering#explicit(java.util.List)
+     * }. It may also be null, in which case no ordering is applied.
      */
     public DocumentFieldsProvider(IModel<SolrDocument> documentModel, FieldFilter fieldFilter, List<String> fieldOrder) {
         this.documentModel = documentModel;
@@ -66,10 +70,11 @@ public class DocumentFieldsProvider implements IDataProvider<DocumentField> {
             }
         }
 
-        if (fieldOrder == null) {
+        final Ordering<DocumentField> fieldOrdering = getFieldOrdering();
+        if (fieldOrdering == null) {
             return fields;
         } else {
-            return getFieldOrdering().sortedCopy(fields);
+            return fieldOrdering.sortedCopy(fields);
         }
     }
 
@@ -78,17 +83,22 @@ public class DocumentFieldsProvider implements IDataProvider<DocumentField> {
      * Note: this is not stored in the instance because the resulting Ordering
      * is not serializable
      *
-     * @return ordering for document fields
+     * @return ordering for document fields, or null if no ordering has been
+     * specified
      */
     private Ordering<DocumentField> getFieldOrdering() {
-        final Ordering<DocumentField> fieldOrdering = Ordering.explicit(fieldOrder).onResultOf(new Function<DocumentField, String>() {
+        if (fieldOrder == null) {
+            return null;
+        } else {
+            final Ordering<DocumentField> fieldOrdering = Ordering.explicit(fieldOrder).onResultOf(new Function<DocumentField, String>() {
 
-            @Override
-            public String apply(DocumentField input) {
-                return input.getFieldName();
-            }
-        });
-        return fieldOrdering;
+                @Override
+                public String apply(DocumentField input) {
+                    return input.getFieldName();
+                }
+            });
+            return fieldOrdering;
+        }
     }
 
     /**
