@@ -18,7 +18,6 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.components.SearchForm;
 import eu.clarin.cmdi.vlo.wicket.panels.SingleFacetPanel;
@@ -42,8 +41,6 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
     private VloConfig vloConfig;
     @SpringBean
     private FacetFieldsService facetFieldsService;
-    @SpringBean(name = "queryParametersConverter")
-    private PageParametersConverter<QueryFacetsSelection> paramsConverter;
 
     private final SingleFacetPanel collectionsPanel;
     private final WebMarkupContainer navigation;
@@ -88,7 +85,7 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(model.getObject()));
+                setResponsePage(new FacetedSearchPage(model));
             }
         });
 

@@ -31,7 +31,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -71,7 +71,13 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
         };
 
         // add a link to browse all records
-        final BookmarkablePageLink browseAllLink = new BookmarkablePageLink("browseAll", FacetedSearchPage.class);
+        final Link browseAllLink = new Link("browseAll") {
+
+            @Override
+            public void onClick() {
+                setResponsePage(new FacetedSearchPage(SimpleSearchBrowsePanel.this.getModel()));
+            }
+        };
         // set label on basis of string defined in resource bundle that takes the count model as a parameter
         browseAllLink.add(new Label("recordCount", new StringResourceModel("simplesearch.allrecords", documentCountModel, new Object[]{})));
         add(browseAllLink);
