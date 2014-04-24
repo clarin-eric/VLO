@@ -61,6 +61,8 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
     ResourceStringConverter resourceStringConverter;
     @SpringBean(name = "resolvingResourceStringConverter")
     ResourceStringConverter resolvingResourceStringConverter;
+    @SpringBean(name = "documentFieldOrder")
+    private List<String> fieldOrder;
 
     public SearchResultItemExpandedPanel(String id, final IModel<SolrDocument> documentModel, final IModel<SearchContext> selectionModel) {
         super(id, documentModel);
@@ -73,7 +75,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
         add(new RecordPageLink("recordLink", documentModel, selectionModel));
 
         // table with some basic properties
-        add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(documentModel, propertiesFilter)) {
+        add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(documentModel, propertiesFilter, fieldOrder)) {
 
             @Override
             protected boolean isShowFacetSelectLinks() {

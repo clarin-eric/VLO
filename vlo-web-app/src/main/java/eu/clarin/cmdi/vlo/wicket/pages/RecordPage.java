@@ -40,6 +40,7 @@ import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordNavigationPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.ResourceLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
+import java.util.List;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
@@ -72,6 +73,8 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     private FieldFilter basicPropertiesFilter;
     @SpringBean(name = "technicalPropertiesFilter")
     private FieldFilter technicalPropertiesFilter;
+    @SpringBean(name = "documentFieldOrder")
+    private List<String> fieldOrder;
 
     private final IModel<SearchContext> navigationModel;
     private final IModel<QueryFacetsSelection> selectionModel;
@@ -130,7 +133,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         // General information section
         add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, "Unnamed record"));
         add(createLandingPageLink("landingPageLink"));
-        add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(getModel(), basicPropertiesFilter)));
+        add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(getModel(), basicPropertiesFilter, fieldOrder)));
 
         // Resources section
         add(new ResourceLinksPanel("resources", new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_RESOURCE)));
@@ -245,7 +248,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
             @Override
             protected Component createContent(String id) {
-                return new FieldsTablePanel(id, new DocumentFieldsProvider(getModel(), technicalPropertiesFilter));
+                return new FieldsTablePanel(id, new DocumentFieldsProvider(getModel(), technicalPropertiesFilter, fieldOrder));
             }
         };
     }

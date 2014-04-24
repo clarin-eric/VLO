@@ -16,9 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.wicket.provider;
 
+import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.pojo.DocumentField;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import java.util.Iterator;
+import java.util.List;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.Model;
 import org.jmock.Expectations;
@@ -50,7 +52,7 @@ public class DocumentFieldsProviderTest {
         document.addField("field3", "value3");
         document.addField("field4", "value4");
 
-        instance = new DocumentFieldsProvider(Model.of(document), filter);
+        instance = new DocumentFieldsProvider(Model.of(document), filter, null);
     }
 
     /**
@@ -69,13 +71,42 @@ public class DocumentFieldsProviderTest {
 
                 oneOf(filter).allowField("field3");
                 will(returnValue(true));
-                
+
                 oneOf(filter).allowField("field4");
                 will(returnValue(true));
             }
         });
         // two items as field2 is excluded by the filter
         assertEquals(3, instance.size());
+    }
+
+    @Test
+    public void testOrder() {
+        // pass in a filter that allows all fields
+        final FieldFilter allowAllFilter = new FieldFilter() {
+
+            @Override
+            public boolean allowField(String fieldName) {
+                return true;
+            }
+        };
+
+        // pass in an explicit field order
+        final List<String> order = ImmutableList.of("field4", "field2", "field1", "field3");
+        instance = new DocumentFieldsProvider(Model.of(document), allowAllFilter, order);
+
+        final long first = 0L;
+        final long count = 100L;
+        final Iterator<? extends DocumentField> result = instance.iterator(first, count);
+        assertTrue(result.hasNext());
+        assertEquals("field4", result.next().getFieldName());
+        assertTrue(result.hasNext());
+        assertEquals("field2", result.next().getFieldName());
+        assertTrue(result.hasNext());
+        assertEquals("field1", result.next().getFieldName());
+        assertTrue(result.hasNext());
+        assertEquals("field3", result.next().getFieldName());
+        assertFalse(result.hasNext());
     }
 
     /**
@@ -94,7 +125,7 @@ public class DocumentFieldsProviderTest {
 
                 oneOf(filter).allowField("field3");
                 will(returnValue(true));
-                
+
                 oneOf(filter).allowField("field4");
                 will(returnValue(false));
             }

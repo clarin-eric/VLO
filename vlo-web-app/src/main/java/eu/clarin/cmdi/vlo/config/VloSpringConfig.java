@@ -51,7 +51,7 @@ import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentServiceImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrFacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrFacetQueryFactoryImpl;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.List;
 import java.util.Properties;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
@@ -153,18 +153,18 @@ public class VloSpringConfig {
         return new HandleRestApiClient();
     }
 
-    @Bean(name="queryParametersConverter")
+    @Bean(name = "queryParametersConverter")
     public PageParametersConverter<QueryFacetsSelection> queryParametersConverter() {
         return new QueryFacetsSelectionParametersConverter();
     }
-    
-    @Bean(name="documentParamsConverter")
+
+    @Bean(name = "documentParamsConverter")
     public PageParametersConverter<SolrDocument> documentParamsConverter() {
         return new DocumentParametersConverter();
     }
-    
-    @Bean(name="searchContextParamsConverter")
-    public PageParametersConverter<SearchContext> searchContextParamsConverter(){
+
+    @Bean(name = "searchContextParamsConverter")
+    public PageParametersConverter<SearchContext> searchContextParamsConverter() {
         return new SearchContextParametersConverter(queryParametersConverter());
     }
 
@@ -202,10 +202,16 @@ public class VloSpringConfig {
                 vloConfig().getTechnicalFields());
     }
 
+    @Bean(name = "documentFieldOrder")
+    public List<String> documentFieldOrder() {
+        return DOCUMENT_FIELDS;
+    }
+
     /**
      * Fields to request for documents. TODO: Make configurable?
+     * 
      */
-    public static final Collection<String> DOCUMENT_FIELDS = ImmutableList.of(
+    public static final List<String> DOCUMENT_FIELDS = ImmutableList.of(
             FacetConstants.FIELD_NAME,
             FacetConstants.FIELD_DESCRIPTION,
             FacetConstants.FIELD_COLLECTION,

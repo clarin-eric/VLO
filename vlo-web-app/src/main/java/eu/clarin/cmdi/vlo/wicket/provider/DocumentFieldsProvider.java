@@ -16,6 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.wicket.provider;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.pojo.DocumentField;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.wicket.model.DocumentFieldModel;
@@ -38,15 +40,18 @@ public class DocumentFieldsProvider implements IDataProvider<DocumentField> {
     private final IModel<SolrDocument> documentModel;
     private final FieldFilter fieldFilter;
     private List<DocumentFieldModel> fields;
+    private final List<String> fieldOrder;
 
     /**
      *
      * @param documentModel model that has the document containing the fields
      * @param fieldFilter filter that decides which fields are included
+     * @param fieldOrder list of field names that determine the order
      */
-    public DocumentFieldsProvider(IModel<SolrDocument> documentModel, FieldFilter fieldFilter) {
+    public DocumentFieldsProvider(IModel<SolrDocument> documentModel, FieldFilter fieldFilter, List<String> fieldOrder) {
         this.documentModel = documentModel;
         this.fieldFilter = fieldFilter;
+        this.fieldOrder = fieldOrder;
     }
 
     private List<DocumentFieldModel> getFields() {
@@ -60,7 +65,30 @@ public class DocumentFieldsProvider implements IDataProvider<DocumentField> {
                 }
             }
         }
-        return fields;
+
+        if (fieldOrder == null) {
+            return fields;
+        } else {
+            return getFieldOrdering().sortedCopy(fields);
+        }
+    }
+
+    /**
+     * Makes an explicit ordering based on the field name of the document field.
+     * Note: this is not stored in the instance because the resulting Ordering
+     * is not serializable
+     *
+     * @return ordering for document fields
+     */
+    private Ordering<DocumentField> getFieldOrdering() {
+        final Ordering<DocumentField> fieldOrdering = Ordering.explicit(fieldOrder).onResultOf(new Function<DocumentField, String>() {
+
+            @Override
+            public String apply(DocumentField input) {
+                return input.getFieldName();
+            }
+        });
+        return fieldOrdering;
     }
 
     /**
