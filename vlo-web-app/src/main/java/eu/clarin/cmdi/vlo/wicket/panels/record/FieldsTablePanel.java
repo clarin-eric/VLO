@@ -67,7 +67,8 @@ public class FieldsTablePanel extends Panel {
     private final static Collection<String> SMART_LINK_FIELDS
             = ImmutableSet.of(
                     FacetConstants.FIELD_DESCRIPTION,
-                    FacetConstants.FIELD_LANDINGPAGE
+                    FacetConstants.FIELD_LANDINGPAGE,
+                    FacetConstants.FIELD_COMPLETE_METADATA
             );
 
     @SpringBean
@@ -142,7 +143,7 @@ public class FieldsTablePanel extends Panel {
                 super.onConfigure();
                 // only show for facet fields
                 setVisible(isShowFacetSelectLinks()
-                        && vloConfig.getFacetFields().contains(facetNameModel.getObject()));
+                        && vloConfig.getAllFacetFields().contains(facetNameModel.getObject()));
             }
 
         };
