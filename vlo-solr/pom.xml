@@ -3,13 +3,13 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>3.0-alpha5</version>
     </parent>
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-solr</artifactId>
-    <version>3.0-SNAPSHOT</version>
+    <version>3.0-alpha5</version>
     <packaging>war</packaging>
     
     <name>vlo-solr</name>
