@@ -130,7 +130,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 // reset filter
-                filterModel.setObject(null);
+                filterModel.getObject().setName(null);
 
                 // call callback
                 onValuesSelected(
@@ -139,7 +139,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
                         new FacetSelection(Collections.singleton(item.getModelObject().getName())),
                         target);
             }
-        };
+        };  
         item.add(selectLink);
 
         // 'name' field from Count (name of value)
