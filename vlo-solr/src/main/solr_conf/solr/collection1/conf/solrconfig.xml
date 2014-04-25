@@ -69,8 +69,13 @@
   
   <!-- Used to specify an alternate directory to hold all index data
        other than the default ./data under the Solr home.
-       If replication is in use, this should match the replication configuration. -->
-<!--   <dataDir></dataDir>-->
+       If replication is in use, this should match the replication configuration.
+       
+       Property must be set as a java system property. In the case of
+       Tomcat, add a line to ${catalin.home}/bin/setenv.sh, e.g.:
+      	 export JAVA_OPTS="$JAVA_OPTS -Dsolr.data.dir=/var/vlo/solr/data"
+  -->
+   <dataDir>${solr.data.dir}</dataDir>
 
   <!--	Enables JMX if and only if an existing MBeanServer is found, use this
     if you want to configure JMX through JVM parameters. Remove this to disable
