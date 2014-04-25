@@ -91,6 +91,13 @@ public class VloBasePage<T> extends GenericWebPage<T> {
                 logger.debug("Setting theme to {}", theme);
                 Session.get().setStyle(theme);
             }
+            
+            /*
+             * Remove theme parameter to prevent it from interfering with 
+             * further processing, specifically the parameters check in 
+             * the simple page search
+             */
+            parameters.remove(VloWebAppParameters.THEME, themeValue.toString());
         }
     }
 
