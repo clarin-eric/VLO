@@ -1,3 +1,25 @@
+----------------------------
+General upgrade instructions
+----------------------------
+
+Quick overview of the upgrade steps (for details see DEPLOY-README)
+
+- Unpack the VLO distribution tarball
+
+- Go to the 'war' directory
+- Unzip the vlo-solr-#.##.war in a new 'solr' directory
+- Unzip the vlo-web-app-#.##.war in a new 'vlo' directory
+
+- In the 'config' directory, adjust VloConfig.xml as needed (make a backup first)
+- Make any further version specific adjustments as described in this document
+
+- Stop the Tomcat or at least the VLO web app and Solr applications
+- Replace the 'current' symlink with a link to location of the new VLO directory
+
+- If needed, flush the Solr index (by removing the data directory)
+- In 'bin', run the importer using the updated configuration file:
+    ./vlo_solr_importer.sh -c ../config/VloConfig.xml
+
 ---------------------------
 Upgrading from 2.18 to 3.0
 ---------------------------
