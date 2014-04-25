@@ -57,7 +57,6 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     public final static Collection<String> LOW_PRIORITY_VALUES = ImmutableSet.of("unknown", "unspecified", "");
 
     private final ModalWindow valuesWindow;
-    private final FacetFieldValuesProvider valuesProvider;
     private final IModel<QueryFacetsSelection> selectionModel;
     private final WebMarkupContainer valuesContainer;
     private final IModel<FieldValuesFilter> filterModel;
@@ -71,30 +70,13 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         // create a form with an input bound to the filter model
         add(createFilterForm("filter"));
 
-        valuesProvider = new FacetFieldValuesProvider(model, MAX_NUMBER_OF_FACETS_TO_SHOW, LOW_PRIORITY_VALUES) {
-
-            @Override
-            protected IModel<FieldValuesFilter> getFilterModel() {
-                return filterModel;
-            }
-
-        };
-
         // create a container for values to allow for AJAX updates when filtering
         valuesContainer = new WebMarkupContainer("valuesContainer");
         valuesContainer.setOutputMarkupId(true);
         add(valuesContainer);
 
         // create a view for the actual values
-        final DataView<Count> valuesView = new DataView<Count>("facetValues", valuesProvider) {
-
-            @Override
-            protected void populateItem(final Item<Count> item) {
-                addFacetValue(item);
-            }
-        };
-        valuesView.setOutputMarkupId(true);
-        valuesContainer.add(valuesView);
+        valuesContainer.add(createValuesView("facetValues"));
 
         // create a link for showing all values        
         valuesContainer.add(createAllValuesLink("allFacetValuesLink"));
@@ -102,6 +84,26 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         // create a popup window for all facet values
         valuesWindow = createAllValuesWindow("allValues");
         add(valuesWindow);
+    }
+
+    private DataView<Count> createValuesView(String id) {
+        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(getModel(), MAX_NUMBER_OF_FACETS_TO_SHOW, LOW_PRIORITY_VALUES) {
+
+            @Override
+            protected IModel<FieldValuesFilter> getFilterModel() {
+                return filterModel;
+            }
+
+        };
+        final DataView<Count> valuesView = new DataView<Count>(id, valuesProvider) {
+
+            @Override
+            protected void populateItem(final Item<Count> item) {
+                addFacetValue(item);
+            }
+        };
+        valuesView.setOutputMarkupId(true);
+        return valuesView;
     }
 
     private Form createFilterForm(String id) {
@@ -139,7 +141,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
                         new FacetSelection(Collections.singleton(item.getModelObject().getName())),
                         target);
             }
-        };  
+        };
         item.add(selectLink);
 
         // 'name' field from Count (name of value)
