@@ -48,11 +48,11 @@
         </DataRoot>
     </dataRoots>
     
+    <solrUrl>http://localhost:8080/vlo-solr/core0/</solrUrl>
+    
     <homeUrl>http://www.clarin.eu/vlo</homeUrl>
     
     <helpUrl>http://www.clarin.eu/vlo</helpUrl>
-    
-    <solrUrl>http://localhost:8080/vlo_solr/</solrUrl>
     
     <facetConceptsFile>/facetConcepts.xml</facetConceptsFile>
     
@@ -70,20 +70,20 @@
     <collectionFacet>collection</collectionFacet>
     
     <!-- Fields shown as facets on the search page -->
-    <facetFields>
-        <facetField>language</facetField>
-        <facetField>resourceClass</facetField>
-        <facetField>modality</facetField>
-        <facetField>continent</facetField>
-        <facetField>genre</facetField>
-        <facetField>country</facetField>
-        <facetField>subject</facetField>
-        <facetField>organisation</facetField>
-        <facetField>format</facetField>
-        <facetField>dataProvider</facetField>
-        <facetField>nationalProject</facetField>
-        <facetField>keywords</facetField>
-    </facetFields>
+	<facetFields>
+		<facetField>language</facetField>
+		<facetField>resourceClass</facetField>
+		<facetField>continent</facetField>
+		<facetField>country</facetField>
+		<facetField>modality</facetField>
+		<facetField>genre</facetField>
+		<facetField>subject</facetField>
+		<facetField>organisation</facetField>
+		<facetField>nationalProject</facetField>
+		<facetField>format</facetField>
+		<facetField>keywords</facetField>
+		<facetField>dataProvider</facetField>
+	</facetFields>
         
     <simpleSearchFacetFields>
         <simpleSearchFacetField>language</simpleSearchFacetField>
