@@ -407,7 +407,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("getSolrUrl");
 
-        String expResult = "http://localhost:8080/vlo_solr/";
+        String expResult = "http://localhost:8080/vlo-solr/core0/";
         String result = config.getSolrUrl();
 
         assertEquals(expResult, result);
@@ -684,16 +684,16 @@ public class DefaultVloConfigFactoryTest {
         List<String> expResult = Arrays.asList(
                 "language",
                 "resourceClass",
-                "modality",
                 "continent",
-                "genre",
                 "country",
+                "modality",
+                "genre",
                 "subject",
-                "organisation",
                 "format",
-                "dataProvider",
+                "organisation",
                 "nationalProject",
-                "keywords");
+                "keywords",
+                "dataProvider");
 
         List<String> result = config.getFacetFields();
 

@@ -53,7 +53,7 @@ public class VloConfigMarshallerTest {
         configFile.close();
         
         assertNotNull(config);
-        assertEquals("http://localhost:8080/vlo_solr/", config.getSolrUrl());
+        assertEquals("http://localhost:8080/vlo-solr/core0/", config.getSolrUrl());
         assertEquals(3, config.getDataRoots().size());
         assertEquals(12, config.getFacetFields().size());
     }

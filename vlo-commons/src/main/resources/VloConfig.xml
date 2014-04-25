@@ -70,20 +70,20 @@
     <collectionFacet>collection</collectionFacet>
     
     <!-- Fields shown as facets on the search page -->
-	<facetFields>
-		<facetField>language</facetField>
-		<facetField>resourceClass</facetField>
-		<facetField>continent</facetField>
-		<facetField>country</facetField>
-		<facetField>modality</facetField>
-		<facetField>genre</facetField>
-		<facetField>subject</facetField>
-		<facetField>organisation</facetField>
-		<facetField>nationalProject</facetField>
-		<facetField>format</facetField>
-		<facetField>keywords</facetField>
-		<facetField>dataProvider</facetField>
-	</facetFields>
+    <facetFields>
+        <facetField>language</facetField>
+        <facetField>resourceClass</facetField>
+        <facetField>continent</facetField>
+        <facetField>country</facetField>
+        <facetField>modality</facetField>
+        <facetField>genre</facetField>
+        <facetField>subject</facetField>
+        <facetField>format</facetField>
+        <facetField>organisation</facetField>
+        <facetField>nationalProject</facetField>
+        <facetField>keywords</facetField>
+        <facetField>dataProvider</facetField>
+    </facetFields>
         
     <simpleSearchFacetFields>
         <simpleSearchFacetField>language</simpleSearchFacetField>
