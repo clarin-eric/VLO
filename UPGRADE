@@ -41,6 +41,16 @@ processed:
 
 - The 'length' attributes in list elements can be removed
 
+- The Solr endpoint has changed because it is now multicore. Change for example:
+
+	<solrUrl>http://localhost:8084/vlo_solr/</solrUrl>
+    
+into
+
+	<solrUrl>http://localhost:8084/vlo_solr/core0/</solrUrl>
+
+This also applies to the eu.carlin.cmdi.vlo.solr.serverUrl context parameter (see above).
+
 - The following elements should be added:
 
 	<!-- begin added in 3.0 -->
