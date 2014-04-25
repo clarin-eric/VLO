@@ -35,6 +35,8 @@ processed:
 
 - eu.carlin.cmdi.vlo.solr.serverUrl
 	Optional. Configures the base URL of the SOLR instance to connect to.
+	Usage is not recommended, instead configure the Solr URL via VloConfig.xml (see 
+	below).
 
 * New options have been added to the shared VLO configuration file VloConfig.xml 
 (in vlo-3.0/config):
