@@ -108,9 +108,9 @@ This also applies to the eu.carlin.cmdi.vlo.solr.serverUrl context parameter (se
 		<facetField>modality</facetField>
 		<facetField>genre</facetField>
 		<facetField>subject</facetField>
+		<facetField>format</facetField>
 		<facetField>organisation</facetField>
 		<facetField>nationalProject</facetField>
-		<facetField>format</facetField>
 		<facetField>keywords</facetField>
 		<facetField>dataProvider</facetField>
 	</facetFields>

@@ -1,10 +1,6 @@
-
-0. What the VLO is about 
-
-   Using the VLO application, you can browse meta data by facet. The 
-   instructions below describe the installation of the applications necessary
-   for browsing: the VLO web application, the Solr server, and the meta data
-   importer.
+The instructions below describe the installation of the applications necessary
+for browsing: the VLO web application, the Solr server, and the meta data
+importer.
 
 1. The archive
 

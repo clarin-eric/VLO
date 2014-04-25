@@ -1,10 +1,31 @@
-= Development information =
+= What is the VLO? =
 
-Some general development notes. For more info, see:
+Using the VLO faceted browser, you can browse metadata by facet. It consists of three
+software components: a Solr server with VLO specific configuration, an importer and a
+web application front end.
+
+For more information, see the wiki page:
 
 	https://trac.clarin.eu/wiki/CmdiVirtualLanguageObservatory
 
-= Setting up =
+= What should I read? =
+
+- README
+	This file; a general introduction and development information
+- DEPLOY-README
+	Instructions on how to deploy a fresh VLO installation
+- UPGRADE
+	Instructions on how to upgrade an existing VLO installation
+- CHANGES
+	A list of changes per release
+- COPYING
+	Licensing information
+
+= Development information =
+
+Some general development notes.
+
+== Setting up ==
 
 Follow the instructions in DEPLOY-README to set up a development environment.
 You may deploy the Solr instance and the web app from your IDE. Make sure to
