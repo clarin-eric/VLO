@@ -72,6 +72,16 @@
 
    	vlo/config/solr 
 
+   Solr needs a location to store its index data. This needs to be configured
+   through a Java system property 'solr.data.dir'. Configure this in your
+   Tomcat instance, for example by adding the following to 
+   ${catalina.home}/bin/setenv.sh:
+   
+    export JAVA_OPTS="$JAVA_OPTS -Dsolr.data.dir=/var/vlo/solr/data"
+
+   The directory does not have to exist, but its parent does and the Tomcat
+   user needs write access in that location.
+   
    Copy the new context.xml file to the Tomcat configuration:
 
    	cp apps/META-INF/context.xml \ 
@@ -81,7 +91,7 @@
    logging packaged, please modify 
 
    	apps/WEB-INF/classes/log4j.properties
-
+   
    If necessary, change the ownership of the files in the tree starting in 
 
    	vlo/config/solr

@@ -4,6 +4,12 @@ Some general development notes. For more info, see:
 
 	https://trac.clarin.eu/wiki/CmdiVirtualLanguageObservatory
 
+= Setting up =
+
+Follow the instructions in DEPLOY-README to set up a development environment.
+You may deploy the Solr instance and the web app from your IDE. Make sure to
+set the required Java system property for the Solr data location (solr.data.dir)!
+
 == Preparing for release ==
 
 These instructions apply to any kind of release, whether it's a stable
