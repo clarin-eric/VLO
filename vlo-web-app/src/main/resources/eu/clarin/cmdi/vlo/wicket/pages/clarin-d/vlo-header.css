@@ -78,38 +78,6 @@ a#headerlink_clarin {
     padding-bottom: .5em;
 }
 
-#topnavigation #topnavigationlinks a {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-}
-
-#topnavigation #topnavigationlinks a {
-    background-size: 12px;
-    background-repeat: no-repeat;
-    text-decoration: none;
-}
-
-#topnavigation #topnavigationlinks a span {
-    display: none;
-}
-
-/*#topnavigation #topnavigationlinks #help:after {
-    content: 'Help'
-}*/
-
-#topnavigation #topnavigationlinks #permalink {
-    background-image: url('../link-128.png'); /* icon from icons8.com */
-}
-
-#topnavigation #topnavigationlinks #helplink {
-    background-image: url('../info-256.png'); /* icon from icons8.com */
-}
-
-#topnavigation #topnavigationlinks #feedbacklink {
-    background-image: url('../error-256.png'); /* icon from icons8.com */
-}
-
 span.breadcrumbfacet {
     padding: 4px;
 }
