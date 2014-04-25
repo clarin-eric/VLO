@@ -61,6 +61,13 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     private final WebMarkupContainer valuesContainer;
     private final IModel<FieldValuesFilter> filterModel;
 
+    /**
+     * Creates a new panel with selectable values for a single facet
+     *
+     * @param id component id
+     * @param model facet field model for this panel
+     * @param selectionModel model holding the global query/facet selection
+     */
     public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, model);
         this.selectionModel = selectionModel;
@@ -86,26 +93,12 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         add(valuesWindow);
     }
 
-    private DataView<Count> createValuesView(String id) {
-        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(getModel(), MAX_NUMBER_OF_FACETS_TO_SHOW, LOW_PRIORITY_VALUES) {
-
-            @Override
-            protected IModel<FieldValuesFilter> getFilterModel() {
-                return filterModel;
-            }
-
-        };
-        final DataView<Count> valuesView = new DataView<Count>(id, valuesProvider) {
-
-            @Override
-            protected void populateItem(final Item<Count> item) {
-                addFacetValue(item);
-            }
-        };
-        valuesView.setOutputMarkupId(true);
-        return valuesView;
-    }
-
+    /**
+     * Creates a form with an input bound to the filter model
+     *
+     * @param id component id
+     * @return filter form
+     */
     private Form createFilterForm(String id) {
         final Form filterForm = new Form(id);
         final TextField<String> filterField = new TextField<String>("filterText",
@@ -123,11 +116,42 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         return filterForm;
     }
 
-    private void addFacetValue(final Item<Count> item) {
+    /**
+     * Creates a view for the actual values (as links) for selection
+     *
+     * @param id component id
+     * @return data view with value links
+     */
+    private DataView<Count> createValuesView(String id) {
+        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(getModel(), MAX_NUMBER_OF_FACETS_TO_SHOW, LOW_PRIORITY_VALUES) {
+
+            @Override
+            protected IModel<FieldValuesFilter> getFilterModel() {
+                return filterModel;
+            }
+
+        };
+        final DataView<Count> valuesView = new DataView<Count>(id, valuesProvider) {
+
+            @Override
+            protected void populateItem(final Item<Count> item) {
+                addFacetValue("facetSelect", item);
+            }
+        };
+        valuesView.setOutputMarkupId(true);
+        return valuesView;
+    }
+
+    /**
+     * Adds an individual facet value selection link to a dataview item
+     *
+     * @param item item to add link to
+     */
+    private void addFacetValue(String id, final Item<Count> item) {
         item.setDefaultModel(new CompoundPropertyModel<Count>(item.getModel()));
 
         // link to select an individual facet value
-        final Link selectLink = new IndicatingAjaxFallbackLink("facetSelect") {
+        final Link selectLink = new IndicatingAjaxFallbackLink(id) {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -150,6 +174,46 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         selectLink.add(new Label("count"));
     }
 
+    /**
+     * Creates a link that leads to the 'all facet values' view, either as a
+     * modal window (if JavaScript is enabled, see {@link #createAllValuesWindow(java.lang.String)
+     * }) or by redirecting to {@link AllFacetValuesPage}
+     *
+     * @param id component id
+     * @return 'show all values' link
+     */
+    private Link createAllValuesLink(String id) {
+        final Link link = new AjaxFallbackLink<FacetField>(id, getModel()) {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if (target == null) {
+                    // no JavaScript, open a new page with values
+                    setResponsePage(new AllFacetValuesPage(getModel(), selectionModel));
+                } else {
+                    // JavaScript enabled, show values in a modal popup
+                    valuesWindow.show(target);
+                }
+            }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                // only show if there actually are more values!
+                setVisible(getModel().getObject().getValueCount() > MAX_NUMBER_OF_FACETS_TO_SHOW);
+            }
+
+        };
+        return link;
+    }
+
+    /**
+     * Creates a modal window showing a {@link AllFacetValuesPanel} for this
+     * facet
+     *
+     * @param id component id
+     * @return 'all facet values' modal window component
+     */
     private ModalWindow createAllValuesWindow(String id) {
         final ModalWindow window = new ModalWindow(id) {
 
@@ -170,31 +234,6 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         };
         window.addOrReplace(allValuesPanel);
         return window;
-    }
-
-    private Link createAllValuesLink(String id) {
-        final Link link = new AjaxFallbackLink<FacetField>(id, getModel()) {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                if (target == null) {
-                    // open a new page with values
-                    setResponsePage(new AllFacetValuesPage(getModel(), selectionModel));
-                } else {
-                    // show values in a popup (requires JavaScript)
-                    valuesWindow.show(target);
-                }
-            }
-
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                // only show if there actually are more values!
-                setVisible(getModel().getObject().getValueCount() > MAX_NUMBER_OF_FACETS_TO_SHOW);
-            }
-
-        };
-        return link;
     }
 
     @Override
