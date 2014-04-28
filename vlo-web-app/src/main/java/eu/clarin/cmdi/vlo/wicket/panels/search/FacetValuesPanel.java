@@ -29,7 +29,6 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -183,7 +182,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @return 'show all values' link
      */
     private Link createAllValuesLink(String id) {
-        final Link link = new AjaxFallbackLink<FacetField>(id, getModel()) {
+        final Link link = new IndicatingAjaxFallbackLink<FacetField>(id, getModel()) {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
