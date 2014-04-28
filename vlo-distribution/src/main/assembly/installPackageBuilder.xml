@@ -64,6 +64,9 @@
                 <include>*.xml</include>
                 <include>*.xsl</include>
             </includes>
+            <excludes>
+            	<exclude>VloConfig.xml</exclude>
+            </excludes>
             <outputDirectory>bin</outputDirectory>
         </fileSet>
 
