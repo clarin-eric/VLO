@@ -147,6 +147,11 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>1.17.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.3</version>
@@ -157,7 +162,7 @@
         <dependency>
                 <groupId>net.bull.javamelody</groupId>
                 <artifactId>javamelody-core</artifactId>
-                <version>1.49.0</version>
+                <version>1.50.0</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.springframework</groupId>
@@ -168,11 +173,6 @@
                         <artifactId>spring-context</artifactId>
                     </exclusion>
                 </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>1.17.1</version>
         </dependency>
     </dependencies>
     
