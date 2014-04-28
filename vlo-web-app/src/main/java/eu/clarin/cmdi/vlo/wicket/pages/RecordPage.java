@@ -54,6 +54,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -260,6 +261,14 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             // not passed to parent
             navigationModel.detach();
         }
+    }
+
+    @Override
+    public IModel<String> getTitleModel() {
+        // Put the name of the record in the page title
+        return new StringResourceModel("recordpage.title", 
+                new SolrFieldStringModel(getModel(), FacetConstants.FIELD_NAME),
+                DEFAULT_PAGE_TITLE);
     }
 
 }

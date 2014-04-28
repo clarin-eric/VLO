@@ -16,16 +16,18 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
-import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.GenericWebPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -51,6 +53,7 @@ import org.slf4j.LoggerFactory;
 public class VloBasePage<T> extends GenericWebPage<T> {
 
     private final static Logger logger = LoggerFactory.getLogger(VloBasePage.class);
+    public final static String DEFAULT_PAGE_TITLE = "CLARIN VLO";
 
     @SpringBean
     private VloConfig vloConfig;
@@ -91,7 +94,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
                 logger.debug("Setting theme to {}", theme);
                 Session.get().setStyle(theme);
             }
-            
+
             /*
              * Remove theme parameter to prevent it from interfering with 
              * further processing, specifically the parameters check in 
@@ -99,6 +102,22 @@ public class VloBasePage<T> extends GenericWebPage<T> {
              */
             parameters.remove(VloWebAppParameters.THEME, themeValue.toString());
         }
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        // page title label is added here because it uses an overridable method
+        add(new Label("title", getTitleModel()));
+    }
+
+    /**
+     * Override to give the page a custom or dynamic page title
+     *
+     * @return string model that provides the page title
+     */
+    public IModel<String> getTitleModel() {
+        return Model.of(DEFAULT_PAGE_TITLE);
     }
 
     @Override
