@@ -222,6 +222,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             }
 
         };
+        window.showUnloadConfirmation(false);
 
         final AllFacetValuesPanel allValuesPanel = new AllFacetValuesPanel(window.getContentId(), getModel(), filterModel) {
 
