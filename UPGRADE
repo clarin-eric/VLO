@@ -10,7 +10,8 @@ Quick overview of the upgrade steps (for details see DEPLOY-README)
 - Unzip the vlo-solr-#.##.war in a new 'solr' directory
 - Unzip the vlo-web-app-#.##.war in a new 'vlo' directory
 
-- In the 'config' directory, adjust VloConfig.xml as needed (make a backup first)
+- In the 'config' directory, adjust VloConfig.xml as needed (make a backup first);
+ 	make sure that the data roots are up-to-date
 - Make any further version specific adjustments as described in this document
 
 - Stop the Tomcat or at least the VLO web app and Solr applications
