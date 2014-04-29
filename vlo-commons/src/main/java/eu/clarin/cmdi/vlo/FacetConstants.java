@@ -27,6 +27,7 @@ public class FacetConstants {
     public static final String FIELD_KEYWORDS = "keywords";
 
     //The _ facets are not meant to be shown to users.
+    public static final String FIELD_SELF_LINK = "_selfLink";
     public static final String FIELD_FILENAME = "_fileName";
     public static final String FIELD_RESOURCE = "_resourceRef";
     public static final String FIELD_CLARIN_PROFILE = "_componentProfile";

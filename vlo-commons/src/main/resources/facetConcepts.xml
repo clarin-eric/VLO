@@ -4,6 +4,9 @@
     <concept>http://www.isocat.org/datcat/DC-2573</concept>
     <pattern>/c:CMD/c:Header/c:MdSelfLink/text()</pattern>
   </facetConcept>
+  <facetConcept name="_selfLink" allowMultipleValues="false">
+    <pattern>/c:CMD/c:Header/c:MdSelfLink/text()</pattern>
+  </facetConcept>
   <facetConcept name="collection" description="The collection to which the resource belongs">
     <pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
   </facetConcept>

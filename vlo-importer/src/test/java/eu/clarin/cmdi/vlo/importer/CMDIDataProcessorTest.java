@@ -5,11 +5,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import org.apache.solr.common.SolrInputDocument;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -389,7 +389,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("audio/mpeg", res.getMimeType());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(14, doc.getFieldNames().size());
+        assertEquals(15, doc.getFieldNames().size());
+        assertEquals("test-hdl:1839/00-0000-0000-0009-294C-9", doc.getFieldValue("_selfLink"));
         assertEquals("kleve-route", doc.getFieldValue("name"));
         assertEquals("Peter Wittenburg", doc.getFieldValue(FacetConstants.FIELD_PROJECT_NAME));
         assertEquals("Europe", doc.getFieldValue("continent"));
@@ -512,12 +513,13 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         File cmdiFile = createCmdiFile("testSession", content);
         CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
-        assertEquals("test-hdl_58_1839_47_00-0000-0000-0009-294C-9", data.getId());
+        assertEquals("test-hdl_58_1839_47_00-0000-0000-0009-294C-9", data.getId()); //modified handle -> 'clean' id
         List<Resource> resources = data.getMetadataResources();
         assertEquals(0, resources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(8, doc.getFieldNames().size());
+        assertEquals(9, doc.getFieldNames().size());
+        assertEquals("test-hdl:1839/00-0000-0000-0009-294C-9", doc.getFieldValue("_selfLink")); //unmodified handle
         assertEquals("kleve-route", doc.getFieldValue("name"));
         assertEquals("Europe", doc.getFieldValue("continent"));
         assertEquals("Netherlands", doc.getFieldValue("country"));
@@ -590,7 +592,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(0, dataResources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(9, doc.getFieldNames().size());
+        assertEquals(10, doc.getFieldNames().size());
+        assertEquals("oai:ailla.utexas.edu:1", doc.getFieldValue("_selfLink"));
         assertEquals(null, doc.getFieldValue("name"));
         assertEquals(null, doc.getFieldValue("continent"));
         assertEquals(1, doc.getFieldValues("language").size());
@@ -644,6 +647,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
         SolrInputDocument doc = data.getSolrDocument();
+        assertNull(doc.getFieldValue("_selfLink"));
         assertEquals(3, doc.getFieldValues(FacetConstants.FIELD_SUBJECT).size());
         assertTrue(doc.getFieldValues(FacetConstants.FIELD_SUBJECT).contains("kuna"));
         assertEquals(2, doc.getFieldValues(FacetConstants.FIELD_COUNTRY).size());
@@ -833,6 +837,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
         assertEquals("collection_ATILF_Resources.cmdi", data.getId());
+        assertEquals("collection_ATILF_Resources.cmdi", data.getSolrDocument().getFieldValue("_selfLink"));
         List<Resource> resources = data.getMetadataResources();
         assertEquals(9, resources.size());
         Resource res = resources.get(0);
@@ -896,7 +901,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(0, dataResources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(9, doc.getFieldNames().size());
+        assertEquals(10, doc.getFieldNames().size());
+        assertEquals("clarin.eu:lrt:433", doc.getFieldValue("_selfLink"));
         assertEquals("Corpus of Present-day Written Estonian", doc.getFieldValue("name"));
         assertEquals(null, doc.getFieldValue("continent"));
         assertEquals(1, doc.getFieldValues("language").size());
