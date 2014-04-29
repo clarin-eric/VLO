@@ -1,5 +1,8 @@
 Bug Fixes and Features
 
+VLO 3.0 (?)
+* Added the "_selfLink" field to fix FCS aggregator connection
+
 VLO 3.0-beta (April 2014)
 * Added a 'simple search' front page
 * Added expansion of search results items to see more details
