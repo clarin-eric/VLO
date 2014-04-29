@@ -10,7 +10,7 @@
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-commons</artifactId>
     <version>3.1-SNAPSHOT</version>
-    <name>vlo-commons</name>
+    <name>VLO Commons</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
