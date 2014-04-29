@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context antiJARLocking="true" path="/vlo-web-app">
+    <!-- 
+        If set, configuration will get read from this external location 
+
+
+    <Parameter 
+        name="eu.carlin.cmdi.vlo.config.location" 
+        value="/Users/twagoo/vlo/vlo3/VloConfig.xml"/>
+    -->
+    
+    <!-- 
+        If set, web app will connect to this SOLR server instead of the one 
+        specified in the configuration file 
+
+
+    <Parameter 
+        name="eu.carlin.cmdi.vlo.solr.serverUrl" 
+        value="http://localhost:8080/vlo_solr/core0/"/>
+    -->
+</Context>

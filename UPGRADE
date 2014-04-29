@@ -1,4 +1,136 @@
+----------------------------
+General upgrade instructions
+----------------------------
+
+Quick overview of the upgrade steps (for details see DEPLOY-README)
+
+- Unpack the VLO distribution tarball
+
+- Go to the 'war' directory
+- Unzip the vlo-solr-#.##.war in a new 'solr' directory
+- Unzip the vlo-web-app-#.##.war in a new 'vlo' directory
+
+- In the 'config' directory, adjust VloConfig.xml as needed (make a backup first);
+ 	make sure that the data roots are up-to-date
+- Make any further version specific adjustments as described in this document
+
+- Stop the Tomcat or at least the VLO web app and Solr applications
+- Replace the 'current' symlink with a link to location of the new VLO directory
+
+- If needed, flush the Solr index (by removing the data directory)
+- In 'bin', run the importer using the updated configuration file:
+    ./vlo_solr_importer.sh -c ../config/VloConfig.xml
+
+---------------------------
+Upgrading from 2.18 to 3.0
+---------------------------
+
+* In version 3.0, the context parameters for the VLO web application have changed, see
+the file META-INF/context.xml for examples. The following parameters are now being
+processed:	
+
+- eu.carlin.cmdi.vlo.config.location
+	Optional but recommended. Should point to the location of VloConfig.xml that
+	should be used. Replaces The previously available parameter 'externalConfig', which is
+	no longer supported.
+
+- eu.carlin.cmdi.vlo.solr.serverUrl
+	Optional. Configures the base URL of the SOLR instance to connect to.
+	Usage is not recommended, instead configure the Solr URL via VloConfig.xml (see 
+	below).
+
+* New options have been added to the shared VLO configuration file VloConfig.xml 
+(in vlo-3.0/config):
+
+- The 'length' attributes in list elements can be removed
+
+- The Solr endpoint has changed because it is now multicore. Change for example:
+
+	<solrUrl>http://localhost:8084/vlo_solr/</solrUrl>
+    
+into
+
+	<solrUrl>http://localhost:8084/vlo_solr/core0/</solrUrl>
+
+This also applies to the eu.carlin.cmdi.vlo.solr.serverUrl context parameter (see above).
+
+- The following elements should be added:
+
+	<!-- begin added in 3.0 -->
+
+	<collectionFacet>collection</collectionFacet> 
+
+	<simpleSearchFacetFields>
+		<simpleSearchFacetField>language</simpleSearchFacetField>
+		<simpleSearchFacetField>resourceClass</simpleSearchFacetField>
+		<simpleSearchFacetField>genre</simpleSearchFacetField>
+		<simpleSearchFacetField>nationalProject</simpleSearchFacetField>
+	</simpleSearchFacetFields>
+
+	<!-- Fields shown in expanded search results on the search page -->
+	<searchResultFields>
+		<searchResultField>name</searchResultField>
+		<searchResultField>country</searchResultField>
+		<searchResultField>languages</searchResultField>
+		<searchResultField>modality</searchResultField>
+		<searchResultField>subject</searchResultField>
+		<searchResultField>genre</searchResultField>
+		<searchResultField>organisation</searchResultField>
+		<searchResultField>collection</searchResultField>
+		<searchResultField>nationalProject</searchResultField>
+	</searchResultFields>
+
+	<!-- Fields ignored in the record page -->
+	<ignoredFields>
+		<ignoredField>format</ignoredField>
+	</ignoredFields>
+
+	<!-- Fields shown as technical fields in the record page -->
+	<technicalFields>
+		<technicalField>id</technicalField>
+		<technicalField>dataProvider</technicalField>
+		<technicalField>metadataSource</technicalField>
+		<technicalField>_landingPageRef</technicalField>
+		<technicalField>_searchPageRef</technicalField>
+		<technicalField>_contentSearchRef</technicalField>
+		<technicalField>_lastSeen</technicalField>
+		<technicalField>_componentProfile</technicalField>
+	</technicalFields>
+
+	<!-- end added in 3.0 -->
+
+- The element 'facetfield' should be replaced with new values:
+
+	<!-- begin changed in 3.0 -->
+
+	<facetFields>
+		<facetField>language</facetField>
+		<facetField>resourceClass</facetField>
+		<facetField>continent</facetField>
+		<facetField>country</facetField>
+		<facetField>modality</facetField>
+		<facetField>genre</facetField>
+		<facetField>subject</facetField>
+		<facetField>format</facetField>
+		<facetField>organisation</facetField>
+		<facetField>nationalProject</facetField>
+		<facetField>keywords</facetField>
+		<facetField>dataProvider</facetField>
+	</facetFields>
+
+	<!-- end changed in 3.0 -->
+
+* The location of the Solr index data directory is now governed through a java system
+property 'solr.data.dir'. Add the following to ${catalina.home}/bin/setenv.sh:
+
+	export JAVA_OPTS="$JAVA_OPTS -Dsolr.data.dir=/lat/webapps/vlo/solr/data-beta"
+
+Substitute the directory with the actual desired location of the index data. The
+parent directory has to exist and should be writable by the Tomcat user.
+
+---------------------------
 Upgrading from 2.17 to 2.18
+---------------------------
 
 * In version 2.18 of the VLO, the URL mapping has been changed. To prevent
 existing references and bookmarks from breaking, add rewrite rules to the

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!--
+Copyright (C) 2014 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+    <head>
+        <title>facet panel</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <wicket:panel>
+            <p wicket:id="description" class="searchresultdescription">
+                [DESCRIPTION]
+            </p>
+            <div class="searchresultattributes">
+                <wicket:container wicket:id="documentProperties">[PROPERTIES TABLE]</wicket:container>
+                <p class="moredocumentproperties"><a wicket:id="recordLink">More</a></p>
+                <wicket:container wicket:id="resources">
+                    <h3>Resources</h3>
+                    <ul class="searchresultresources">
+                        <li wicket:id="resource">
+                            <a wicket:id="resourceLink" class="resourceLink">
+                                <wicket:container wicket:id="resourceName"></wicket:container>
+                                <span wicket:id="details" class="recordresourcedetails"></span>
+                            </a>
+                        </li>
+                        <wicket:enclosure child="more">
+                            <li class="moreresources">
+                                <a wicket:id="more"><wicket:container wicket:id="moreLabel">99 more resources...</wicket:container></a>
+                            </li>
+                        </wicket:enclosure>
+                    </ul>
+                </wicket:container>
+            </div>
+        </wicket:panel>
+    </body>
+</html>

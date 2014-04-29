@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (C) 2014 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!--
+    Created on : Jan 27, 2014, 5:10:53 PM
+    Author     : twagoo
+
+    Based on "business one" template: http://www.opendesigns.org/design/business_one/
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+
+    <head>
+        <title>CLARIN VLO</title>
+    </head>
+
+    <body>
+
+        <wicket:extend>
+            <div id="topnavigation">
+                <div wicket:id="breadcrumbs" id="breadcrumbs">
+                    [BREADCRUMBS]
+                </div>
+            </div>
+
+            <div class="content" id="record">
+
+                <h1 wicket:id="name">[NAME]</h1>
+
+                <div wicket:id="values">
+                    [VALUES]
+                </div>
+            </div>
+        </wicket:extend>
+    </body>
+</html>

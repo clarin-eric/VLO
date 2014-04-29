@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+    <!--
+    Copyright (C) 2014 CLARIN
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for expands.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    -->
+
+    <!--
+        Created on : Jan 23, 2014, 5:10:53 PM
+        Author     : twagoo
+    
+        Based on "business one" template: http://www.opendesigns.org/design/business_one/
+    -->
+
+    <head>
+        <title>CLARIN VLO</title>
+    </head>
+
+    <body>
+
+        <wicket:extend>
+
+            <div wicket:id="navigation" id="topnavigation">
+                <div wicket:id="breadcrumbs" id="breadcrumbs">[BREADCRUMBS]</div>
+                <div id="topnavigationlinks">
+                    <wicket:container wicket:id="permalink">[permalink]</wicket:container>
+                    <!--<a id="help" href="" title="Help"><span>[Help]</span></a>-->
+                </div>
+            </div>
+
+            <div class="topbar" id="collections">
+                <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
+                <div wicket:id="collectionsFacet">[COLLECTIONS]</div>
+                <!--                <p>
+                                    Searching in all collections (604056 records).
+                                </p>-->
+                <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
+            </div>
+
+            <div class="content">
+                <h1>Search</h1>
+                <form wicket:id="search" action="" id="search">
+                    <p>
+                        <span id="searchcontrols">
+                            <input wicket:id="query" id="searchbox" type="text" value="democratie" />
+                            <input wicket:id="searchSubmit" id="searchbutton" type="submit" value="Search"/>
+                        </span>
+                    </p>
+                </form>
+                <div wicket:id="searchResults" id="searchresults">[SEARCH RESULTS]</div>
+            </div>
+
+            <div class="sidebar">
+
+                <div wicket:id="facets">[facets]</div>
+
+                <div class="sidebaritem">
+                    <!--rounded corners - top ****--> 
+                    <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
+                    <div wicket:id="options">[options]</div>
+                    <!--rounded corners - bottom ****--> 
+                    <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
+                </div>
+            </div>
+        </wicket:extend>
+    </body>
+</html>

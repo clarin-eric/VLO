@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+    <!--
+    Copyright (C) 2014 CLARIN
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for expands.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    -->
+
+    <!--
+        Created on : Jan 23, 2014, 5:10:53 PM
+        Author     : twagoo
+    
+        Based on "business one" template: http://www.opendesigns.org/design/business_one/
+    -->
+
+    <head>
+        <title wicket:id="title">CLARIN VLO</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width"/>
+    </head>
+
+    <body>
+        <!-- TODO: Include in header per page? -->
+        <script src="js/jquery.watermark-3.1.4/jquery.watermark.min.js" type="text/javascript"></script>
+        <script src="js/vlo-header.js" type="text/javascript"></script>
+        <script src="js/vlo-front.js" type="text/javascript"></script>
+        <script src="js/vlo-facets.js" type="text/javascript"></script>
+        <script src="js/vlo-record.js" type="text/javascript"></script>
+        <script src="js/vlo-search.js" type="text/javascript"></script>
+
+        <div id="main">
+            <div id="header">
+                <div id="logo">
+                    <h1>CLARIN Virtual Language Observatory</h1>
+                    <a id="headerlink_clarin" href="http://www.clarin.eu/"><span>CLARIN</span></a>
+                </div>
+            </div>
+
+            <div wicket:id="feedback" id="feedback">[feedback]</div>
+
+            <wicket:child />
+
+            <div id="footer">
+                CLARIN VLO version <wicket:message key="vlo.version" /> 
+                | <a wicket:id="help" href="#">help</a> 
+                | <wicket:link><a href="AboutPage.html">about</a></wicket:link>
+                | <a href="http://www.dcarter.co.uk">design by dcarter</a>
+            </div>
+        </div>
+
+    </body>
+</html>

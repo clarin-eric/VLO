@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+    <!--
+    Copyright (C) 2014 CLARIN
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for expands.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    -->
+
+    <!--
+        Created on : Jan 23, 2014, 5:10:53 PM
+        Author     : twagoo
+    
+        Based on "business one" template: http://www.opendesigns.org/design/business_one/
+    -->
+
+    <head>
+        <title>CLARIN VLO</title>
+    </head>
+
+    <body>
+
+        <wicket:extend>
+
+            <div id="topnavigation">
+                <div id="breadcrumbs">
+                    <a href="javascript: history.go(-1)">Back</a>
+                </div>
+                <div id="topnavigationlinks">
+<!--                    <wicket:container wicket:id="permalink">[permalink]</wicket:container>-->
+                </div>
+            </div>
+
+            <div class="content" id="about">
+
+                <h1>About the CLARIN Virtual Language Observatory</h1>
+                <p>
+                    The Virtual Language Observatory (VLO) faceted browser was 
+                    developed within <a href="http://www.clarin.eu">CLARIN</a>
+                    as a means to explore linguistic resources, services and
+                    tools available within CLARIN and related communities.
+                </p>
+
+                <p>
+                    All information in the VLO faceted browser is based on the
+                    <em>metadata descriptions</em> of resources as provided by
+                    the parties (CLARIN centres) that host the original data.
+                    It gets refreshed regularly but may not be completely 
+                    up-to-date with the current state of the original data and
+                    metadata depending on the date, time and state of the
+                    metadata providing/retrieval process 
+                    (<a href="http://www.openarchives.org/pmh/">OAI-PMH</a> 
+                    is employed).
+                </p>
+
+                <h2>References</h2>
+                <h3>Documentation</h3>
+                <ul>
+                    <li><a href="http://www.clarin.eu/file/1601">Short guide</a></li>
+                    <li><a href="http://clarin.eu/content/component-metadata">Component Metadata</a></li>
+                    <li><a href="http://www.clarin.eu/faq-page/275">Frequently Asked Questions</a></li>
+                </ul>
+
+                <h3>Publications</h3>
+                <ul>
+                    <li><a href="http://hdl.handle.net/11858/00-001M-0000-000F-85F4-5">Van Uytvanck, D., Stehouwer, H., & Lampen, L. (2012). Semantic metadata mapping in practice: The Virtual Language Observatory. In N. Calzolari (Ed.), Proceedings of the Eighth International Conference on Language Resources and Evaluation (LREC 2012), Istanbul, May 23rd-25th, 2012 (pp. 1029-1034). European Language Resources Association (ELRA).</a></li>
+                </ul>
+
+                <h2>Credits</h2>
+                <p>
+                    The following people have contributed to the VLO faceted
+                    browser:
+                </p>
+                <ul>
+                    <li>....</li> <!-- TODO! -->
+                    <li>Patrick Duin</li>
+                    <li>Herman Stehouwer</li>
+                    <li>Thomas Eckart</li>
+                    <li>Kees Jan van de Looij</li>
+                    <li>Twan Goosen</li>
+                    <li>Dieter van Uytvanck</li>
+                    <li>Sander Maijers</li>
+                </ul>
+
+                <h2>Version information</h2>
+                <table>
+                    <tr>
+                        <td>Application version number:</td>
+                        <td><wicket:message key="vlo.version" /></td>
+                    </tr>
+                    <tr>
+                        <td>SVN revision number:</td>
+                        <td><wicket:message key="vlo.revision" /></td>
+                    </tr>
+                    <tr>
+                        <td>Date and time of change in the code base:</td>
+                        <td><wicket:message key="vlo.changeDate" /></td>
+                    </tr>
+                </table>
+                
+                <h2>Technology used</h2>
+                <ul>
+                    <li><a href="http://www.java.com">Java SE</a></li>
+                    <li><a href="http://tomcat.apache.org/">Apache Tomcat</a></li>
+                    <li><a href="http://lucene.apache.org/solr/">Apache Solr</a> (version <wicket:message key="solr.version" />)</li>
+                    <li><a href="http://wicket.apache.org/">Apache Wicket</a> (version <wicket:message key="wicket.version" />)</li>
+                    <li><a href="http://spring.io/">Spring Framework</a> (version <wicket:message key="spring.version" />)</li>
+                    <li><a href="http://vtd-xml.sourceforge.net/">VTD-XML</a></li>
+                </ul>
+            </div>
+
+            <!--            <div class="sidebar">
+                        </div>-->
+        </wicket:extend>
+    </body>
+</html>

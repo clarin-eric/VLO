@@ -1,0 +1,281 @@
+/*
+Copyright (C) 2014 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/* 
+    Created on : Jan 27, 2014, 11:42:13 AM
+    Author     : twagoo
+*/
+
+div#record {
+    width: 942px; /* no sidebar, so width of #content + .sidebar */
+    padding-bottom: 2em;
+}
+
+#recordnavigation p a, #recordcontext p a {
+    padding: 0;
+}
+
+#recordnavigation ul{
+    margin: 0px;
+    padding: 0px;
+}
+
+#recordnavigation ul li {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+a#recordlandingpage {
+    display: inline-block;
+    padding-left: 20px;
+    background-image: url('external-link-128.png');
+    background-size: 12px;
+    background-repeat: no-repeat;
+    background-position: initial;
+}
+
+ul#recordcontextfacets {
+    margin-top: 0px;
+}
+
+ul#recordcontextfacets li {
+    margin: 0px 0px 4px 16px;
+}
+
+/* record index with prev/next links */
+
+#recordindex {
+    float: left;
+    max-width: 50%;
+    padding-bottom: 1em;
+}
+
+#recordprevnext {
+    max-width: 45%;
+    float: right;
+    clear: right;
+    text-align: right;
+}
+
+h1#recordtitle {
+    clear: both;
+}
+
+/* record attributes table */
+
+#recorddetails, #recordtechnicalattributes {
+    padding-right: 2em;
+    margin-top: 1em;
+}
+
+table.recorddetailstable {
+    margin-top: 1em;
+    border-collapse: collapse;
+    border-top: 1px solid #999;
+    width: 100%;
+}
+
+table.recorddetailstable td, table.recorddetailstable th {
+    border-bottom: 1px solid #999;
+}
+
+table.recorddetailstable td.attribute {
+    width: 25%;
+    vertical-align: top;
+}
+
+ul.attributeValues {
+    margin: 0px;
+}
+
+ul.attributeValues li {
+    display: block;
+    list-style-type: none;
+    margin: 0px;
+}
+
+ul.attributeValues li a {
+    text-decoration: underline;
+}
+
+.multiplevalues ul.attributeValues li {
+    padding-bottom: .3em;
+    padding-top: .3em;
+    border-top: 1px solid #999;
+}
+
+.multiplevalues ul.attributeValues li:nth-child(1) {
+    border-top: none;
+}
+
+a.recordfacetselect span, a.recordattributeinfo span {
+    display: none;
+}
+
+a.recordfacetselect:after {
+    content: "→";
+}
+
+a.recordattributeinfo:after {
+    content: "ℹ";
+}
+
+/* Search links */
+
+#recordsearchpage {
+    margin-top: 1em;
+}
+
+#recordsearchpage li {
+    display: block;
+    background: url('search-256.png') no-repeat;
+    background-size: 32px;
+    background-position: top left;
+    height: 40px;
+    padding-left: 40px;
+    padding-top: 10px;
+}
+
+/* FCS content search form must be hidden */
+#contentSearchForm {
+    display: none;
+}
+
+/* Resource links with icons */
+
+#recordresources {
+    clear: both;
+    margin: 2em 0;
+}
+
+#recordresources a.resourceLink {
+    display: inline-block;
+    float: left;
+    width: 128px;
+    padding: 74px 10px 0px 10px;
+    background-repeat: no-repeat;
+    background-position: center 5px;
+    background-size: 64px;
+    word-break: break-all;
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+#recordresources a.resourceLink:hover {
+    background-color: #ccc;
+}
+
+#recordresources a.writtenresource {
+    background-image: url('document-256.png'); /* icon from icons8.com */
+}
+
+#recordresources a.audioresource {
+    background-image: url('audio-file-3-256.png'); /* icon from icons8.com */
+}
+
+#recordresources a.videoresource {
+    background-image: url('video-file-3-256.png'); /* icon from icons8.com */
+}
+
+#recordresources a.imageresource {
+    background-image: url('image-file-256.png'); /* icon from icons8.com */
+}
+
+#recordresources a.annotationresource {
+    background-image: url('document-256.png'); /* icon from icons8.com */
+}
+
+.resourceLink {
+    position: relative;
+}
+
+.resourceLink .recordresourcedetails {
+    display: none;
+}
+
+.resourceLink:hover .recordresourcedetails {
+    display: block;
+    position: absolute;
+    left: 2em;
+    z-index: 99;
+    margin-left: 0;
+    width: 400px;
+    padding: 2px;
+    background: #fff;
+    opacity: .98;
+    text-align: left;
+}
+
+div#record .resourceLink:hover .recordresourcedetails
+{
+    left: 2em;
+    top: 80px;
+}
+
+.searchresultresources .resourceLink:hover .recordresourcedetails
+{
+    left: 6em;
+    top: 1.5em;
+}
+
+span.recordresourcedetailstitle {
+    display: block;
+    font-weight: bold;
+    text-decoration: underline;
+    text-transform: capitalize;
+}
+
+span.recordresourcedetailsitem {
+    display: block;
+    font-weight: bold;
+}
+
+span.recordresourcedetailsitem span {
+    font-weight: normal;
+}
+
+
+/* Technical details */
+
+#record .collapsed a.contenttoggle:before {
+    content: '+ ';
+}
+
+#record .expanded a.contenttoggle:before {
+    content: '- ';
+}
+
+#recordcmdi {
+    clear: both; /* first div after records, clear */
+    padding: 1em 0 1em 0;
+}
+
+#recordcmditoggle {
+    padding-top: 2em;
+}
+
+#recordtechnicaldetails .togglecontent, #recordcmdi .togglecontent {
+    border-top: 1px dashed;
+    padding: 1em 0;
+}
+
+#recordcmdi article {
+    max-height: 400px;
+    overflow: auto;
+    margin-top: 1em;
+    padding: 1em;
+}

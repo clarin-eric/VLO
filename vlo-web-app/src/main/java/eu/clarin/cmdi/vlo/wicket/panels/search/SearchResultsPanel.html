@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!--
+Copyright (C) 2014 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+    <head>
+        <title>facet panel</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <wicket:panel>
+            <h2 wicket:id="title">Search results</h2>
+            
+            <div id="searchresultsheader">
+                <span wicket:id="resultCount" id="searchresultcount">604056 results</span>
+                <span wicket:id="resultPageIndicator" id="searchresultpagecount">Showing 1 to 25</span>
+                <div class="searchresultpagination">
+                    <div wicket:id="pagingTop">[PAGING]</div>
+                </div>
+            </div> 
+
+            <ul id="searchresultitems">
+                <li wicket:id="resultItem" class="searchresultitem">
+                    <div wicket:id="resultItemDetails">details</div>
+                </li>
+            </ul>
+            
+            <div id="searchresultpagination">
+                <div wicket:id="pagingBottom">[PAGING]</div>
+
+                <form wicket:id="resultPageSizeForm" id="resultpagesizeform">
+                    <label for="resultpagesize">Results per page:</label>
+                    <select wicket:id="resultPageSize" id="resultpagesize">
+                        <option>5</option>
+                        <option>10</option>
+                        <option selected="selected">25</option>
+                        <option>50</option>
+                        <option>100</option>
+                    </select>
+                    <input type="submit" value="Apply" class="nonjsfallback" />
+                </form>
+            </div>
+        </wicket:panel>
+    </body>
+</html>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!--
+Copyright (C) 2014 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+    <head>
+        <title>facet panel</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <wicket:panel>
+            <div wicket:id="facetValueRemover" class="selectedvaluelabel">
+                <wicket:container wicket:id="facetValue">value</wicket:container>
+                <a wicket:id="unselectValue" class="unselectfacetvalue" title="unselect value">
+                    <span>[unselect]</span>
+                </a>
+            </div>
+            <div class="sbilinks facetvalues">
+                <ul>
+                    <li wicket:id="selectedItem">
+                        <span wicket:id="facetValue" class="selectedfacetvalue">ITEM</span>
+                        <a wicket:id="unselectValue" class="unselectfacetvalue" title="unselect value">
+                            <span>[unselect]</span>
+                        </a>
+                    </li>
+<!--                    <li><span class="facetvalue">English</span></li>
+                    <li><span class="facetvalue">German</span></li>
+                    <li><span class="facetvalue">French</span></li>
+                    <li><span class="facetvalue">Spanish</span></li>
+                    <li><span class="facetvalue">Danish</span></li>
+                    <li><span class="facetvalue">Japanese</span></li>
+                    <li><span class="facetvalue">Turkish</span></li>
+                    <li><span class="facetvalue">Chinese</span></li>-->
+                    <!--<li class="more-link"><a href="#">more...</a></li>-->
+                </ul>
+            </div>
+        </wicket:panel>
+    </body>
+</html>

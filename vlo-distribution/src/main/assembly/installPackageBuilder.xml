@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- vlo package definition -->
+
+<assembly>
+    <id>Distribution</id>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+    <includeBaseDirectory>true</includeBaseDirectory>
+    <fileSets>
+
+        <!-- documentation to be packaged -->
+        <fileSet>
+            <directory>${project.parent.basedir}/docs</directory>
+            <includes>
+                <include>*.*</include>
+            </includes>
+            <outputDirectory>doc</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${project.parent.basedir}</directory>
+            <includes>
+                <include>CHANGES</include>
+                <include>DEPLOY-README</include>
+                <include>LICENSE</include>
+                <include>README</include>
+                <include>UPGRADE</include>
+            </includes>
+            <outputDirectory>doc</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${project.parent.basedir}/vlo-solr</directory>
+            <includes>
+                <include>README.TXT</include>
+            </includes>
+            <outputDirectory>doc/vlosolr</outputDirectory>
+        </fileSet>
+
+        <!-- importer related files to be packaged -->
+        <!-- jar file -->
+        <fileSet>
+            <directory>${project.parent.basedir}/vlo-importer/target</directory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+            <outputDirectory>bin</outputDirectory>
+        </fileSet>
+        <!-- run script -->
+        <fileSet>
+            <directory>${project.parent.basedir}/vlo-importer/src/main/bin</directory>
+            <includes>
+                <include>*.sh</include>
+            </includes>
+            <fileMode>0755</fileMode>
+            <outputDirectory>bin</outputDirectory>
+            <filtered>true</filtered>
+        </fileSet>
+        <!-- config files -->
+        <fileSet>
+            <directory>${project.parent.basedir}/vlo-commons/src/main/resources</directory>
+            <includes>
+                <include>*.properties</include>
+                <include>*.xml</include>
+                <include>*.xsl</include>
+            </includes>
+            <excludes>
+            	<exclude>VloConfig.xml</exclude>
+            </excludes>
+            <outputDirectory>bin</outputDirectory>
+        </fileSet>
+
+        <!-- the web application files to be packaged -->
+        <!-- war file -->
+        <fileSet>
+            <directory>${project.parent.basedir}/vlo-web-app/target</directory>
+            <includes>
+                <include>*.war</include>
+            </includes>
+            <outputDirectory>war</outputDirectory>
+        </fileSet>
+        <!-- config -->
+        <fileSet>
+            <directory>${project.parent.basedir}/vlo-commons/src/main/resources</directory>
+            <includes>
+                <include>VloConfig.xml</include>
+            </includes>
+            <outputDirectory>config</outputDirectory>
+        </fileSet> 
+
+        <!-- solr server files to be packaged -->
+        <!-- war file -->
+        <fileSet>
+            <directory>${project.parent.basedir}/vlo-solr/target</directory>
+            <includes>
+                <include>*.war</include>
+            </includes>
+            <outputDirectory>war</outputDirectory>
+        </fileSet>
+
+        <!-- solr configuration files -->
+        <fileSet>
+            <directory>${project.parent.basedir}/vlo-solr/target/vlo-solr-${project.version}-vlo_solr_conf</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+            <outputDirectory>config/</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${project.parent.basedir}/vlo-solr/target/vlo-solr-${project.version}</directory>
+            <includes>
+                <include>vlo_solr.xml</include>
+            </includes>
+            <outputDirectory>config</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>
