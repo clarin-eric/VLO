@@ -34,12 +34,18 @@ public class FacetMappingFactoryTest {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, IMDI_PROFILE_URL);
         
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(20, facets.size());
+        assertEquals(21, facets.size());
         
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
         
         assertEquals(FacetConstants.FIELD_ID, mapping.getName());
+        assertEquals(1, mapping.getPatterns().size());
+        assertEquals("/c:CMD/c:Header/c:MdSelfLink/text()", 
+                mapping.getPatterns().get(0));
+        mapping = facets.get(index++);
+        
+        assertEquals(FacetConstants.FIELD_SELF_LINK, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Header/c:MdSelfLink/text()", 
                 mapping.getPatterns().get(0));
@@ -175,12 +181,18 @@ public class FacetMappingFactoryTest {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, OLAC_PROFILE_URL);
         
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(18, facets.size());
+        assertEquals(19, facets.size());
        
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
         
         assertEquals(FacetConstants.FIELD_ID, mapping.getName());
+        assertEquals(1, mapping.getPatterns().size());
+        assertEquals("/c:CMD/c:Header/c:MdSelfLink/text()", 
+                mapping.getPatterns().get(0));
+        mapping = facets.get(index++);
+        
+        assertEquals(FacetConstants.FIELD_SELF_LINK, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Header/c:MdSelfLink/text()", 
                 mapping.getPatterns().get(0));
@@ -295,7 +307,7 @@ public class FacetMappingFactoryTest {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, LRT_PROFILE_URL);
 
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(17, facets.size());
+        assertEquals(18, facets.size());
         
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
@@ -303,6 +315,12 @@ public class FacetMappingFactoryTest {
         assertEquals(FacetConstants.FIELD_ID, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         
+        assertEquals("/c:CMD/c:Header/c:MdSelfLink/text()", 
+                mapping.getPatterns().get(0));
+        mapping = facets.get(index++);
+        
+        assertEquals(FacetConstants.FIELD_SELF_LINK, mapping.getName());
+        assertEquals(1, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Header/c:MdSelfLink/text()", 
                 mapping.getPatterns().get(0));
         mapping = facets.get(index++);
@@ -443,14 +461,14 @@ public class FacetMappingFactoryTest {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, TEXTCORPUSPROFILE_PROFILE_URL);
         List<FacetConfiguration> facets = facetMapping.getFacets();
         
-        FacetConfiguration facet = facets.get(4);
+        FacetConfiguration facet = facets.get(5);
         assertEquals(FacetConstants.FIELD_YEAR, facet.getName());
         assertEquals(2, facet.getPatterns().size());
         assertEquals("/c:CMD/c:Components/c:TextCorpusProfile/c:GeneralInfo/c:CompletionYear/text()", facet.getPatterns().get(0));
         assertEquals("/c:CMD/c:Components/c:TextCorpusProfile/c:GeneralInfo/c:PublicationDate/text()", facet.getPatterns().get(1));
         
         
-        facet = facets.get(13);
+        facet = facets.get(14);
         assertEquals(FacetConstants.FIELD_DESCRIPTION, facet.getName());
         assertEquals(1, facet.getPatterns().size());
         assertEquals("/c:CMD/c:Components/c:TextCorpusProfile/c:GeneralInfo/c:Descriptions/c:Description/text()" ,facet.getPatterns().get(0));

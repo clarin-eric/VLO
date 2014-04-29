@@ -113,6 +113,7 @@
     <!-- Fields shown as technical fields in the record page -->
     <technicalFields>
         <technicalField>id</technicalField>
+        <technicalField>_selfLink</technicalField>
         <technicalField>dataProvider</technicalField>
         <technicalField>metadataSource</technicalField>
         <technicalField>_landingPageRef</technicalField>

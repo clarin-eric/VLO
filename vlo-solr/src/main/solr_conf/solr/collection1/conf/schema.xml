@@ -431,7 +431,7 @@
    <field name="keywords" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
 
-   
+   <field name="_selfLink" type="string" indexed="true" stored="true" multiValued="false"/>
    <field name="_fileName" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="_resourceRef" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="_componentProfile" type="string" indexed="true" stored="true" multiValued="false" />

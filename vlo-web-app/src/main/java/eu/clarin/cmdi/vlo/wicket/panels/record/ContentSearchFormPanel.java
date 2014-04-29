@@ -68,18 +68,18 @@ public class ContentSearchFormPanel extends GenericPanel<String> {
     }
 
     private IModel<String> createJsonModel(final IModel<SolrDocument> model, final IModel<String> endpointModel) {
-        // Prepare a JSON object that holds the CQL endpoint and the document ID
+        // Prepare a JSON object that holds the CQL endpoint and the document self link
         return new AbstractReadOnlyModel<String>() {
             @Override
             public String getObject() {
                 final String endPoint = endpointModel.getObject();
-                final Object docId = model.getObject().getFirstValue(FacetConstants.FIELD_ID);
+                final Object selfLink = model.getObject().getFirstValue(FacetConstants.FIELD_SELF_LINK);
                 try {
                     final JSONObject json = new JSONObject();
-                    json.put(endPoint, new JSONArray(new Object[]{docId}));
+                    json.put(endPoint, new JSONArray(new Object[]{selfLink}));
                     return json.toString(2);
                 } catch (JSONException ex) {
-                    logger.warn("Could not create JSON for aggregation context with endpoint '{}' and docId '{}'", endPoint, docId, ex);
+                    logger.warn("Could not create JSON for aggregation context with endpoint '{}' and docId '{}'", endPoint, selfLink, ex);
                     return null;
                 }
             }
