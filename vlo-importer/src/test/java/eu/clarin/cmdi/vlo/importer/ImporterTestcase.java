@@ -17,11 +17,10 @@ public abstract class ImporterTestcase {
     protected VloConfig config;
 
     @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
-    private File testDir;
+    public TemporaryFolder tempFolder = new TemporaryFolder();
 
     protected File createCmdiFile(String name, String content) throws IOException {
-        File file = File.createTempFile(name, ".cmdi", testDir);
+        File file = tempFolder.newFile(name + System.currentTimeMillis() + ".cmdi");
         FileUtils.writeStringToFile(file, content, "UTF-8");
         return file;
     }
@@ -33,8 +32,6 @@ public abstract class ImporterTestcase {
 
     @Before
     public void setup() throws Exception {
-        testDir = folder.newFolder(String.format("vlo_%s_%d", getClass().getCanonicalName(), System.currentTimeMillis()));
-
         // read the configuration defined in the packaged configuration file
         MetadataImporter.config = configFactory.newConfig();
 
