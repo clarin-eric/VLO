@@ -8,11 +8,16 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TemporaryFolder;
 
 public abstract class ImporterTestcase {
 
     private final VloConfigFactory configFactory = new DefaultVloConfigFactory();
     protected VloConfig config;
+
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
     private File testDir;
 
     protected File createCmdiFile(String name, String content) throws IOException {
@@ -23,23 +28,19 @@ public abstract class ImporterTestcase {
 
     @After
     public void cleanup() {
-        FileUtils.deleteQuietly(testDir);
         MetadataImporter.config = null;
     }
 
     @Before
     public void setup() throws Exception {
-        final String baseTempPath = System.getProperty("java.io.tmpdir");
-        testDir = new File(baseTempPath + File.separator + "testRegistry_" + System.currentTimeMillis());
-        testDir.mkdir();
-        testDir.deleteOnExit();
+        testDir = folder.newFolder(String.format("vlo_%s_%d", getClass().getCanonicalName(), System.currentTimeMillis()));
 
         // read the configuration defined in the packaged configuration file
         MetadataImporter.config = configFactory.newConfig();
 
         // optionally, modify the configuration here
         MetadataImporter.config.setComponentRegistryRESTURL("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/");
-        config = MetadataImporter.config;        
+        config = MetadataImporter.config;
     }
 
 }
