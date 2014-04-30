@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-public class LanguageCodePostProcessorTest {
+public class LanguageCodePostProcessorTest extends ImporterTestcase {
 
     @Before
     public void setUp() throws Exception {

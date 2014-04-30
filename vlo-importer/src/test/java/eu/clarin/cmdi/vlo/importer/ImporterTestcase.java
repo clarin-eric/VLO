@@ -24,6 +24,7 @@ public abstract class ImporterTestcase {
     @After
     public void cleanup() {
         FileUtils.deleteQuietly(testDir);
+        MetadataImporter.config = null;
     }
 
     @Before

@@ -2,19 +2,11 @@ package eu.clarin.cmdi.vlo.importer;
 
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
-import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import org.junit.Before;
 import org.junit.Test;
 
-public class CMDIParserVTDXMLTest {
-    
-    @Before
-    public void setUp() throws Exception {
-        // read the configuration from the default configuration file
-        new DefaultVloConfigFactory().newConfig();
-    }
+public class CMDIParserVTDXMLTest extends ImporterTestcase {
 
     @Test
     public void testExtractXsdFromHeader() throws Exception {

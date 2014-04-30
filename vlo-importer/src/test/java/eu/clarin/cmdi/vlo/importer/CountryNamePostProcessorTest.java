@@ -5,17 +5,17 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-public class CountryNamePostProcessorTest {
+public class CountryNamePostProcessorTest extends ImporterTestcase {
 
     @Before
     public void setUp() throws Exception {
-        
+
         // read the configuration from the packaged configuration file
         new DefaultVloConfigFactory().newConfig();
 
         // optionally, modify the configuration here
     }
-    
+
     @Test
     public void testCountryCode() {
         CountryNamePostProcessor processor = new CountryNamePostProcessor();
