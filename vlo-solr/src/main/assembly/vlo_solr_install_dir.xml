@@ -9,6 +9,7 @@
     <fileSets>
         <fileSet>
             <directory>src/main/solr_conf</directory>
+            <filtered>true</filtered>
  		    <outputDirectory></outputDirectory>
         </fileSet>
         <fileSet>

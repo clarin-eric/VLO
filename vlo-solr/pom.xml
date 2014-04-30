@@ -57,6 +57,24 @@
         <vlo.war.name>war/solr/</vlo.war.name>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
     </properties>
+    
+    <profiles>
+        <profile>
+            <!-- 
+                Profile that configures a fixed Solr data directory
+                
+                By default, the data dir property is not set so that it can be
+                configured run time (via the solr.data.dir system property),
+                however this profile hardwires a location in the project's
+                build output.
+            -->
+            <id>local-solr-data</id>
+            <properties>
+                <!-- this ends up in solrconfig.xml and tells Solr where to store its data -->
+                <solr.data.dir>${project.build.directory}/${vlo.solr.conf}/collection1/data</solr.data.dir>
+            </properties>
+        </profile>
+    </profiles>
 
     <build>
         <resources>
