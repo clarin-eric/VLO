@@ -64,7 +64,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
     @SpringBean(name = "documentFieldOrder")
     private List<String> fieldOrder;
 
-    public SearchResultItemExpandedPanel(String id, final IModel<SolrDocument> documentModel, final IModel<SearchContext> selectionModel) {
+    public SearchResultItemExpandedPanel(String id, final IModel<SolrDocument> documentModel, final IModel<SearchContext> searchContextModel) {
         super(id, documentModel);
 
         // add untruncated description
@@ -72,7 +72,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
         add(new SmartLinkLabel("description", descriptionModel));
         
         // add link to record
-        add(new RecordPageLink("recordLink", documentModel, selectionModel));
+        add(new RecordPageLink("recordLink", documentModel, searchContextModel));
 
         // table with some basic properties
         add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(documentModel, propertiesFilter, fieldOrder)) {
@@ -86,10 +86,10 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
         });
 
         // add a container for the resources (only visible if there are actual resources)
-        add(createResourcesView("resources", documentModel, selectionModel));
+        add(createResourcesView("resources", searchContextModel));
     }
 
-    private WebMarkupContainer createResourcesView(String id, final IModel<SolrDocument> documentModel, final IModel<SearchContext> selectionModel) {
+    private WebMarkupContainer createResourcesView(String id, final IModel<SearchContext> selectionModel) {
         final SolrFieldModel<String> resourceModel = new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_RESOURCE);
         // create a container for the list view that is only visible if there actually are resources
         final WebMarkupContainer container = new WebMarkupContainer(id) {
@@ -105,7 +105,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
         container.add(resourcesView);
 
         // create a link to the record page that is only visible when there are more resources than shown
-        final RecordPageLink moreLink = new RecordPageLink("more", documentModel, selectionModel) {
+        final RecordPageLink moreLink = new RecordPageLink("more", getModel(), selectionModel) {
 
             @Override
             protected void onConfigure() {
