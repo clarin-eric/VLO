@@ -97,6 +97,23 @@
             </includes>
             <outputDirectory>war</outputDirectory>
         </fileSet>
+        <!-- make an empty 'solr' child directory -->
+        <fileSet>
+            <directory>src/main/assembly</directory>
+            <excludes>
+            	<exclude>*</exclude>
+            </excludes>
+            <outputDirectory>war/solr</outputDirectory>
+        </fileSet>
+
+        <!-- make an empty 'vlo' child directory -->
+        <fileSet>
+            <directory>src/main/assembly</directory>
+            <excludes>
+            	<exclude>*</exclude>
+            </excludes>
+            <outputDirectory>war/vlo</outputDirectory>
+        </fileSet>
 
         <!-- solr configuration files -->
         <fileSet>
