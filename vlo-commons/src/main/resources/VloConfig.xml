@@ -24,24 +24,16 @@
     
     <dataRoots>
         <DataRoot>
-            <originName>MPI IMDI Archive</originName>
-            <rootFile>/lat/apache/htdocs/oai-harvester/mpi-self-harvest/harvested/results/cmdi/</rootFile>            
+            <originName>CLARIN Centres</originName>
+            <rootFile>/lat/apache/htdocs/oai-harvester/clarin/results/cmdi/</rootFile>            
             <prefix>http://catalog.clarin.eu/</prefix>
             <tostrip>/lat/apache/htdocs/</tostrip>
             <deleteFirst>false</deleteFirst>
         </DataRoot>
 
         <DataRoot>
-            <originName>CMDI Providers</originName>
-            <rootFile>/lat/apache/htdocs/oai-harvester/cmdi-providers/harvested/results/cmdi/</rootFile>            
-            <prefix>http://catalog.clarin.eu/</prefix>
-            <tostrip>/lat/apache/htdocs/</tostrip>
-            <deleteFirst>false</deleteFirst>
-        </DataRoot>
-
-        <DataRoot>
-            <originName>OLAC Metadata Providers</originName>
-            <rootFile>/lat/apache/htdocs/oai-harvester/olac-and-dc-providers/harvested/results/cmdi/</rootFile>            
+            <originName>Other</originName>
+            <rootFile>/lat/apache/htdocs/oai-harvester/others/results/cmdi</rootFile>            
             <prefix>http://catalog.clarin.eu/</prefix>
             <tostrip>/lat/apache/htdocs/</tostrip>
             <deleteFirst>false</deleteFirst>
