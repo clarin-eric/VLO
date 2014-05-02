@@ -38,23 +38,15 @@ public class DefaultVloConfigFactoryTest {
     @Test
     public void testGetDataRoots() {
 
-        ArrayList<DataRoot> dataRoots;
-        dataRoots = new ArrayList<DataRoot>();
-
-        dataRoots.add(new DataRoot("MPI IMDI Archive",
-                new File("/lat/apache/htdocs/oai-harvester/mpi-self-harvest/harvested/results/cmdi/"),
-                "http://catalog.clarin.eu/",
-                "/lat/apache/htdocs/", false));
-        dataRoots.add(new DataRoot("CMDI Providers",
-                new File("/lat/apache/htdocs/oai-harvester/cmdi-providers/harvested/results/cmdi/"),
-                "http://catalog.clarin.eu/",
-                "/lat/apache/htdocs/", false));
-        dataRoots.add(new DataRoot("OLAC Metadata Providers",
-                new File("/lat/apache/htdocs/oai-harvester/olac-and-dc-providers/harvested/results/cmdi/"),
-                "http://catalog.clarin.eu/",
-                "/lat/apache/htdocs/", false));
-
-        System.out.println("getDataRoots");
+        List<DataRoot> dataRoots = Arrays.asList(
+                new DataRoot("CLARIN Centres",
+                        new File("/lat/apache/htdocs/oai-harvester/clarin/results/cmdi/"),
+                        "http://catalog.clarin.eu/",
+                        "/lat/apache/htdocs/", false),
+                new DataRoot("Other",
+                        new File("/lat/apache/htdocs/oai-harvester/others/results/cmdi"),
+                        "http://catalog.clarin.eu/",
+                        "/lat/apache/htdocs/", false));
 
         List<DataRoot> rootsReturned = config.getDataRoots();
         assertArrayEquals(dataRoots.toArray(), rootsReturned.toArray());
@@ -66,20 +58,19 @@ public class DefaultVloConfigFactoryTest {
     @Test
     public void testSetDataRoots() {
 
-        ArrayList<DataRoot> dataRoots = new ArrayList<DataRoot>();
-
-        dataRoots.add(new DataRoot("MPI IMDI Archive",
-                new File("/lat/apache/htdocs/oai-harvester/mpi-self-harvest/harvested/results/cmdi/"),
-                "http://catalog.clarin.eu/",
-                "/lat/apache/htdocs/", false));
-        dataRoots.add(new DataRoot("CMDI Providers",
-                new File("/lat/apache/htdocs/oai-harvester/cmdi-providers/harvested/results/cmdi/"),
-                "http://catalog.clarin.eu/",
-                "/lat/apache/htdocs/", false));
-        dataRoots.add(new DataRoot("OLAC Metadata Providers",
-                new File("/lat/apache/htdocs/oai-harvester/olac-and-dc-providers/harvested/results/cmdi/"),
-                "http://catalog.clarin.eu/",
-                "/lat/apache/htdocs/", false));
+        List<DataRoot> dataRoots = Arrays.asList(
+                new DataRoot("MPI IMDI Archive",
+                        new File("/lat/apache/htdocs/oai-harvester/mpi-self-harvest/harvested/results/cmdi/"),
+                        "http://catalog.clarin.eu/",
+                        "/lat/apache/htdocs/", false),
+                new DataRoot("CMDI Providers",
+                        new File("/lat/apache/htdocs/oai-harvester/cmdi-providers/harvested/results/cmdi/"),
+                        "http://catalog.clarin.eu/",
+                        "/lat/apache/htdocs/", false),
+                new DataRoot("OLAC Metadata Providers",
+                        new File("/lat/apache/htdocs/oai-harvester/olac-and-dc-providers/harvested/results/cmdi/"),
+                        "http://catalog.clarin.eu/",
+                        "/lat/apache/htdocs/", false));
 
         System.out.println("setDataRoots");
 
