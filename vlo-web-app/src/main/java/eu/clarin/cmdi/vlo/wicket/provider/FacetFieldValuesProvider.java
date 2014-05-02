@@ -22,6 +22,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
+import java.io.Serializable;
 import java.text.Collator;
 import java.util.Collection;
 import java.util.Iterator;
@@ -42,7 +43,7 @@ import org.slf4j.LoggerFactory;
  * Provides facet values and counts (both through the {@link Count} object of
  * SOLR) present on a {@link FacetField}, sortable by either count or name
  *
- * TODO: Add option to hide values with only 1 record (as in VLO 2.x)
+ * TODO: cache values list/size
  *
  * @see FieldValuesOrder
  * @author twagoo
@@ -175,9 +176,9 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
     private Ordering getBaseOrdering() {
         final Ordering ordering;
         if (getSort().getProperty() == FieldValuesOrder.COUNT) {
-            ordering = countOrdering;
+            ordering = new CountOrdering();
         } else if (getSort().getProperty() == FieldValuesOrder.NAME) {
-            ordering = nameOrdering;
+            ordering = new NameOrdering(getLocale());
         } else {
             ordering = Ordering.natural();
         }
@@ -188,28 +189,6 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
             return ordering.reverse();
         }
     }
-
-    private final Ordering<FacetField.Count> countOrdering = new Ordering<FacetField.Count>() {
-
-        @Override
-        public int compare(Count arg0, Count arg1) {
-            return Long.compare(arg0.getCount(), arg1.getCount());
-        }
-    };
-
-    private final Ordering<FacetField.Count> nameOrdering = new Ordering<FacetField.Count>() {
-        private final Collator collator;
-
-        {
-            collator = Collator.getInstance(getLocale());
-            collator.setStrength(Collator.PRIMARY);
-        }
-
-        @Override
-        public int compare(Count arg0, Count arg1) {
-            return collator.compare(arg0.getName(), arg1.getName());
-        }
-    };
 
     protected Locale getLocale() {
         try {
@@ -222,6 +201,29 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
         }
         return Locale.getDefault();
     }
+
+    private final static class CountOrdering extends Ordering<FacetField.Count> {
+
+        @Override
+        public int compare(Count arg0, Count arg1) {
+            return Long.compare(arg0.getCount(), arg1.getCount());
+        }
+    };
+
+    private final static class NameOrdering extends Ordering<FacetField.Count> implements Serializable {
+
+        private final Collator collator;
+
+        public NameOrdering(Locale locale) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.PRIMARY);
+        }
+
+        @Override
+        public int compare(Count arg0, Count arg1) {
+            return collator.compare(arg0.getName(), arg1.getName());
+        }
+    };
 
     /**
      * An ordering that pushes all values identified in a provided collection to
