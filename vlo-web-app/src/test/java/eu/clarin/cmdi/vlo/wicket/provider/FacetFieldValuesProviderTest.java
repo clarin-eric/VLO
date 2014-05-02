@@ -21,6 +21,8 @@ import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Locale;
+import java.util.Locale;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.model.IModel;
@@ -187,6 +189,53 @@ public class FacetFieldValuesProviderTest {
         assertTrue(result.hasNext());
         valueCount = result.next();
         assertEquals("first value", valueCount.getName());
+
+        assertFalse(result.hasNext());
+    }
+
+    /**
+     * Test of iterator method, of class FacetFieldValuesProvider.
+     */
+    @Test
+    public void testIteratorNameOrderCollation() {
+        facetField = new FacetField("field");
+        facetField.add("a value", 1);
+        facetField.add("some other value", 1);
+        facetField.add("जात", 1);
+        facetField.add("Etwas anderes", 1);
+        facetField.add("één nederlandse waarde", 1);
+
+        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, true)) {
+
+            @Override
+            protected Locale getLocale() {
+                return Locale.ENGLISH;
+            }
+
+        };
+
+        final long first = 0;
+        final long count = 100;
+        final Iterator<? extends FacetField.Count> result = instance.iterator(first, count);
+
+        //sorted by name (ascending)
+        assertTrue(result.hasNext());
+        assertEquals("a value", result.next().getName());
+
+        // diacritics
+        assertTrue(result.hasNext());
+        assertEquals("één nederlandse waarde", result.next().getName());
+
+        // capitalisation
+        assertTrue(result.hasNext());
+        assertEquals("Etwas anderes", result.next().getName());
+
+        assertTrue(result.hasNext());
+        assertEquals("some other value", result.next().getName());
+
+        // other scripts
+        assertTrue(result.hasNext());
+        assertEquals("जात", result.next().getName());
 
         assertFalse(result.hasNext());
     }
