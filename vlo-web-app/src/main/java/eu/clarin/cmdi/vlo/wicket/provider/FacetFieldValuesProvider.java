@@ -22,15 +22,21 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
+import java.text.Collator;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
+import org.apache.wicket.Session;
+import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Provides facet values and counts (both through the {@link Count} object of
@@ -43,6 +49,7 @@ import org.apache.wicket.model.Model;
  */
 public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Count, FieldValuesOrder> {
 
+    private final static Logger logger = LoggerFactory.getLogger(FacetFieldValuesProvider.class);
     private final IModel<FacetField> model;
     private final int maxNumberOfItems;
     private final Collection<String> lowPriorityValues;
@@ -168,9 +175,9 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
     private Ordering getBaseOrdering() {
         final Ordering ordering;
         if (getSort().getProperty() == FieldValuesOrder.COUNT) {
-            ordering = COUNT_ORDERING;
+            ordering = countOrdering;
         } else if (getSort().getProperty() == FieldValuesOrder.NAME) {
-            ordering = NAME_ORDERING;
+            ordering = nameOrdering;
         } else {
             ordering = Ordering.natural();
         }
@@ -182,7 +189,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
         }
     }
 
-    private static Ordering<FacetField.Count> COUNT_ORDERING = new Ordering<FacetField.Count>() {
+    private final Ordering<FacetField.Count> countOrdering = new Ordering<FacetField.Count>() {
 
         @Override
         public int compare(Count arg0, Count arg1) {
@@ -190,14 +197,31 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
         }
     };
 
-    private static Ordering<FacetField.Count> NAME_ORDERING = new Ordering<FacetField.Count>() {
+    private final Ordering<FacetField.Count> nameOrdering = new Ordering<FacetField.Count>() {
+        private final Collator collator;
+
+        {
+            collator = Collator.getInstance(getLocale());
+            collator.setStrength(Collator.PRIMARY);
+        }
 
         @Override
         public int compare(Count arg0, Count arg1) {
-            // TODO: From old VLO:
-            return arg0.getName().compareToIgnoreCase(arg1.getName());
+            return collator.compare(arg0.getName(), arg1.getName());
         }
     };
+
+    protected Locale getLocale() {
+        try {
+            final Session session = Session.get();
+            if (session != null) {
+                return session.getLocale();
+            }
+        } catch (WicketRuntimeException ex) {
+            logger.info("No session available, falling back to JVM default locale");
+        }
+        return Locale.getDefault();
+    }
 
     /**
      * An ordering that pushes all values identified in a provided collection to
