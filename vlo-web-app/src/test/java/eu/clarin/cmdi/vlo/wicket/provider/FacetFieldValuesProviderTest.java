@@ -307,13 +307,15 @@ public class FacetFieldValuesProviderTest {
         assertEquals("third value", valueCount.getName());
 
         assertFalse(result.hasNext());
-
+        
+        instance.detach();
         // add minimal occurences condition to filter
         filterModel.getObject().setMinimalOccurence(104);
         filterModel.getObject().setName(null);
         // re-evaluate - only 'FOURTH' and 'low priority' value should match
         assertEquals(2, instance.size());
 
+        instance.detach();
         // test literal matching
         filterModel.getObject().setMinimalOccurence(0);
         filterModel.getObject().setName("*");
