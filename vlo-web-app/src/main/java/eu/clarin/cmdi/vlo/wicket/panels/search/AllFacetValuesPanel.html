@@ -41,11 +41,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <option>1000</option>
                     </select>
                     times
-                <input type="submit" class="nonjsfallback" />
+                    <input type="submit" class="nonjsfallback" />
                 </div>
             </form>
             <hr />
             <div wicket:id="facetValuesContainer" class="sortedFacet">
+                <wicket:enclosure>
+                    <div class="allfacetvaluespaging" wicket:id="navigator">[paging]</div>
+                    <hr />
+                </wicket:enclosure>
                 <!--                
                     <div>
                         <div class="anchorpanel"><a href=""></a><span>A</span></div>

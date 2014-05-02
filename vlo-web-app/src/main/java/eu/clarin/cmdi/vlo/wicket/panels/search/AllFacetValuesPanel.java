@@ -30,6 +30,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -102,6 +103,15 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
         // create the view of the actual values
         final DataView<FacetField.Count> valuesView = createValuesView("facetValue");
+        valuesContainer.add(new AjaxPagingNavigator("navigator", valuesView) {
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(valuesView.getPageCount() > 1);
+            }
+
+        });
         valuesContainer.add(valuesView);
 
         // create the form for selection sort option and entering filter string
@@ -111,7 +121,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
     }
 
     private DataView<FacetField.Count> createValuesView(String id) {
-        return new DataView<FacetField.Count>(id, valuesProvider) {
+        return new DataView<FacetField.Count>(id, valuesProvider, ITEMS_PER_PAGE) {
 
             @Override
             protected void populateItem(final Item<FacetField.Count> item) {
@@ -140,6 +150,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
             }
         };
     }
+    private static final int ITEMS_PER_PAGE = 250;
 
     private Form createOptionsForm(String id) {
         final Form options = new Form(id);
