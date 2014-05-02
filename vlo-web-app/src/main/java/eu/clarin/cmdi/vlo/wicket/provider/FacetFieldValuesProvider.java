@@ -43,8 +43,6 @@ import org.slf4j.LoggerFactory;
  * Provides facet values and counts (both through the {@link Count} object of
  * SOLR) present on a {@link FacetField}, sortable by either count or name
  *
- * TODO: cache values list/size
- *
  * @see FieldValuesOrder
  * @author twagoo
  */
@@ -54,6 +52,15 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
     private final IModel<FacetField> model;
     private final int maxNumberOfItems;
     private final Collection<String> lowPriorityValues;
+
+    /**
+     * cached result size
+     */
+    private Long size;
+    /**
+     * cached filtered values
+     */
+    private Iterable<Count> filtered;
 
     /**
      * Creates a provider without a maximum number of values. Bound to
@@ -107,10 +114,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
 
     @Override
     public Iterator<? extends FacetField.Count> iterator(long first, long count) {
-        // get all the values
-        final List<FacetField.Count> values = model.getObject().getValues();
-        // filter results
-        final Iterable<Count> filtered = filter(values);
+        final Iterable<Count> filtered = getFilteredValues();
         // sort what remains
         final ImmutableList sorted = getOrdering().immutableSortedCopy(filtered);
         if (sorted.size() > maxNumberOfItems) {
@@ -123,16 +127,10 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
 
     @Override
     public long size() {
-        if (hasFilter()) {
-            final List<FacetField.Count> values = model.getObject().getValues();
-            return Math.min(maxNumberOfItems, Iterables.size(filter(values)));
-        } else {
-            // Use value count from Solr, faster.
-            //
-            // Actual value count might be higher than what we want to show
-            // so get minimum.
-            return Math.min(maxNumberOfItems, model.getObject().getValueCount());
+        if (size == null) {
+            size = getSize();
         }
+        return size;
     }
 
     @Override
@@ -140,11 +138,9 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
         return new Model(object);
     }
 
-    @Override
-    public void detach() {
-        model.detach();
-    }
-
+    /* 
+     * CACHING AND FILTERING
+     */
     private Iterable<FacetField.Count> filter(List<FacetField.Count> list) {
         if (hasFilter()) {
             return Iterables.filter(list, new Predicate<FacetField.Count>() {
@@ -158,10 +154,34 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
         }
     }
 
+    private Iterable<Count> getFilteredValues() {
+        if (filtered == null) {
+            // get all the values
+            final List<FacetField.Count> values = model.getObject().getValues();
+            filtered = filter(values);
+        }
+        return filtered;
+    }
+
+    private long getSize() {
+        if (hasFilter()) {
+            return Math.min(maxNumberOfItems, Iterables.size(getFilteredValues()));
+        } else {
+            // Use value count from Solr, faster.
+            //
+            // Actual value count might be higher than what we want to show
+            // so get minimum.
+            return Math.min(maxNumberOfItems, model.getObject().getValueCount());
+        }
+    }
+
     private boolean hasFilter() {
         return getFilterModel() != null && getFilterModel().getObject() != null && !getFilterModel().getObject().isEmpty();
     }
 
+    /* 
+     * ORDERING
+     */
     private Ordering getOrdering() {
         if (lowPriorityValues != null && getSort().getProperty() == FieldValuesOrder.COUNT) {
             // in case of count, low priority fields should always be moved to the back
@@ -255,4 +275,12 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
         }
 
     };
+
+    @Override
+    public void detach() {
+        model.detach();
+        // invalidate cache variables
+        size = null;
+        filtered = null;
+    }
 }
