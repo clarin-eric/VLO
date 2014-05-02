@@ -187,7 +187,12 @@ a.collapsefacet:after {
 }
 
 .filterform input {
-    width: 90%;
+    width: 85%;
+    background-image: url('search-3-128.png');
+    background-size: 12px;
+    background-position: 2px;
+    background-repeat: no-repeat;
+    padding-left: 16px;
 }
 
 .allFacetValues {
