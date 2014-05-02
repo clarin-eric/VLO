@@ -18,8 +18,8 @@
     <description></description>
 
     <properties>
-        <wicket.version>6.14.0</wicket.version>
-        <spring.version>3.2.5.RELEASE</spring.version>
+        <wicket.version>6.15.0</wicket.version>
+        <spring.version>3.2.8.RELEASE</spring.version>
         <jetty.version>7.6.13.v20130916</jetty.version>
         <!-- selects the appender for the log4j root logger -->
         <log4j.appender>File</log4j.appender>
@@ -143,18 +143,18 @@
         <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>
-            <version>9.5.1-4</version>
+            <version>${saxon.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>1.17.1</version>
+            <version>1.18.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.3</version>
+            <version>3.3.2</version>
             <scope>test</scope>
             <type>jar</type>
         </dependency>
