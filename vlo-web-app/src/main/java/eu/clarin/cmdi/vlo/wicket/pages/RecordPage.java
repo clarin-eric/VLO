@@ -150,7 +150,15 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         if (navigationModel != null) {
             // Add a panel that shows the index of the current record in the
             // resultset and allows for forward/backward navigation
-            return new RecordNavigationPanel(id, navigationModel);
+            return new RecordNavigationPanel(id, navigationModel) {
+
+                @Override
+                protected void onConfigure() {
+                    final SearchContext context = navigationModel.getObject();
+                    setVisible(context != null && context.getResultCount() > 1);
+                }
+
+            };
         } else {
             // If no context model is available (i.e. when coming from a bookmark
             // or external link, do not show the navigation panel
@@ -266,7 +274,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     @Override
     public IModel<String> getTitleModel() {
         // Put the name of the record in the page title
-        return new StringResourceModel("recordpage.title", 
+        return new StringResourceModel("recordpage.title",
                 new SolrFieldStringModel(getModel(), FacetConstants.FIELD_NAME),
                 DEFAULT_PAGE_TITLE);
     }
