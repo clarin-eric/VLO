@@ -18,8 +18,8 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -51,7 +51,7 @@ public abstract class TogglePanel extends Panel {
         super(id);
 
         // add the actual toggle link
-        final Link toggler = new AjaxFallbackLink("toggler") {
+        final Link toggler = new IndicatingAjaxFallbackLink("toggler") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
