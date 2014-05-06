@@ -118,6 +118,10 @@ form#permalink input {
     cursor: pointer;
 }
 
+form#permalink input:hover {
+    color: #000;
+}
+
 #permalinkfield
 {
     float: right;

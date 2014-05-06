@@ -60,8 +60,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 .facet h1 a:hover {    
-    margin: 3px;
-    border: 1px dashed #999;
+    background: #ccc;
 }
 
 .facetvalues li

@@ -101,6 +101,27 @@ a.breadcrumbunselect span {
     display: none;
 }
 
+form#permalink {
+    display: inline;
+}
+
+form#permalink input {
+    /* permalink submit button should look like link to fit in with other links */
+    display: inline;
+    border: none;
+    background: none;
+    text-decoration: underline;
+    color: #00f;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 0;
+    cursor: pointer;
+}
+
+form#permalink input:hover {
+    color: #000;
+}
+
 #permalinkfield
 {
     float: right;

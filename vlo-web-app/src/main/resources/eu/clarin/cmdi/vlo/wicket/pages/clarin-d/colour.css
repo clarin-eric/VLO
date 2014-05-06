@@ -36,6 +36,10 @@ with header image as input
 
 blockquote{border-color: #777;}
 
+a:hover, div.content a:hover, .facetvalues li a:hover {
+    color: #000;
+}
+
 h1
 { background: transparent;
   color: #4c504d;
