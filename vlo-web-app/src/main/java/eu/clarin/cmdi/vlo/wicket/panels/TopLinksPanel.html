@@ -23,8 +23,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <wicket:enclosure child="linkrequest">
-                <a wicket:id="linkrequest" id="permalink" href="" title="Get a permanent link to this page"><span>Permalink</span></a>
+            <wicket:enclosure child="linkRequest">
+                <form id="permalink" wicket:id="linkRequest">
+                    <input wicket:id="linkRequestButton" type="submit" title="Get a permanent link to this page" value="Permalink" />
+                </form>
                 <input wicket:id="linkfield" type="text" id="permalinkfield"></input>
                 |
             </wicket:enclosure>
