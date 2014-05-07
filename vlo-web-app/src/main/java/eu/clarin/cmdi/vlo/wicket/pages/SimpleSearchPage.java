@@ -66,7 +66,7 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
         navigation.add(new TopLinksPanel("topLinks"));
 
         // add a persistenet panel for selection of a value for the collection facet
-        collectionsPanel = new SingleFacetPanel("collectionsFacet", model, vloConfig.getCollectionFacet(), facetFieldsService) {
+        collectionsPanel = new SingleFacetPanel("collectionsFacet", model, vloConfig.getCollectionFacet(), facetFieldsService, 3) {
 
             @Override
             protected void selectionChanged(AjaxRequestTarget target) {

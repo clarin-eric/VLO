@@ -30,12 +30,16 @@ form#collections {
 }
 
 #collections ul li {
-    display: block;
+    display: inline-block;
     width: 28%;
     margin: 0 2%;
-    float: left;
-    overflow: no-content;
-    padding-bottom: .2em;
+    overflow: hidden;
+    padding: .2em 0 .2em 0;
+    vertical-align: top;
+}
+
+#collections .facetvalues li a, #collections .selectedfacetvalue {
+    padding-left: 0px;
 }
 
 #collections ul li.more-link {
