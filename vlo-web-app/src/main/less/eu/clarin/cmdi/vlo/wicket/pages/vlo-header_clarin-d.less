@@ -14,23 +14,43 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 /* 
-    Created on : Jan 24, 2014, 10:06:50 AM
+    Created on : Jan 28, 2014, 2:37:38 PM
     Author     : twagoo
 */
 
-/* styles for header and static topic section */
-@import "vlo-header.css";
+/* Header image and icons */
 
-/* styles for collection selection */
-@import "vlo-collections.css";
+#header {
+    width: 980px;
+    height: 168px;
+    border: 0px;
+}
 
-/* styles for facet panels */
-@import "vlo-facets.css";
+#header #logo {
+    background: url('vloheader_clarin-d.png') no-repeat;
+    width: 100%;
+    height: 100%;
+}
 
-/* styles for search bar */
-@import "vlo-search.css";
+#header #logo h1 {
+    display: none;
+}
 
-/* styles for record details */
-@import "vlo-record.css";
+/* positioning of logo links */
+
+#header #logo a {
+    display: block;
+    position: relative;
+    top: 10px;
+    height: 140px;
+}
+
+#header #logo a span {
+    display: none;
+}
+
+a#headerlink_clarin {
+    left: 700px;
+    width: 260px;
+}
