@@ -34,54 +34,50 @@ public class LanguageCodePostProcessor implements PostProcessor{
     private Map<String, String> iso639_2TToISO639_3Map;
 
     /**
-     * Returns the language name based on the mapping defined in the CMDI components: See http://trac.clarin.eu/ticket/40 for the mapping.
+     * Returns the language code based on the mapping defined in the CMDI components: See http://trac.clarin.eu/ticket/40 for the mapping.
      * If no mapping is found the original value is returned.
+     * @param value extracted language value (language code or language name) from CMDI file
+     * @return ISO 639-3 code
      */
     @Override
     public String process(String value) {
-        String result = value;
-        if (value != null) {
-            String langCode = extractLanguageCode(value);
-            if (langCode.length() == 2) {
-                Map<String, String> twoLetterCodesMap = getTwoLetterCountryCodeMap();
-                String name = twoLetterCodesMap.get(langCode.toUpperCase());
-                if (name != null) {
-                    result = name;
-                }
-            } else if (langCode.length() == 3) {
-                Map<String, String> threeLetterCodesMap = getThreeLetterCountryCodeMap();
-                String name = threeLetterCodesMap.get(langCode.toUpperCase());
-                if (name != null) {
-                    result = name;
-                }
-            }
-        }
-        return result;
+        if (value != null)
+            return extractLanguageCode(value);
+        else
+            return null;
     }
 
     protected String extractLanguageCode(String value) {
         String result = value;
+        
+        // deal with prefixes or language names
         if (value.length() != 2 && value.length() != 3) {
             if (value.startsWith(ISO639_3_PREFIX)) {
-                result = value.substring(ISO639_3_PREFIX.length());
+                return value.substring(ISO639_3_PREFIX.length()).toLowerCase();
             } else if (value.startsWith(SIL_CODE_PREFIX) || value.startsWith(SIL_CODE_PREFIX_alt)) {
                 result = value.substring(value.lastIndexOf("-")+1);
-                Map<String, String> silToISOMap = getSilToIso639Map();
-                String isoCode = silToISOMap.get(result.toUpperCase());
+                silToIso639Map = getSilToIso639Map();
+                String isoCode = silToIso639Map.get(result.toLowerCase());
                 if (isoCode != null) {
                     result = isoCode;
                 }
+            } else if(getLanguageNameToIso639Map().containsKey(value)) { // (english) language name?
+                return getLanguageNameToIso639Map().get(value);
             }
         }
         
-        // convert ISO 639-2/T codes to ISO 639-3
-        if (getIso6392TToISO6393Map().containsKey(value.toUpperCase())) {
-            result = getIso6392TToISO6393Map().get(value.toUpperCase());
+        // map 2-letter codes to ISO 639-3
+        if(result.length() == 2) {
+            if(silToIso639Map == null)
+                silToIso639Map = getSilToIso639Map();
+            result = silToIso639Map.get(result.toLowerCase());
         }
         
-        // Convert to lowercase to capture erroneously capitalized language codes in the CMDI files.
-        // NOTE: In the mappings themselves we do not capitalize.
-        result = result.toLowerCase();
+        // convert ISO 639-2/T codes to ISO 639-3
+        if (getIso6392TToISO6393Map().containsKey(value.toLowerCase())) {
+            result = getIso6392TToISO6393Map().get(value.toLowerCase());
+        }
+        
         return result;
     }
 
@@ -93,7 +89,7 @@ public class LanguageCodePostProcessor implements PostProcessor{
 
     	return result;
     }
-
+    
     protected Map<String, String> getSilToIso639Map() {
         if (silToIso639Map == null) {
             silToIso639Map = createSilToIsoCodeMap();
@@ -101,14 +97,14 @@ public class LanguageCodePostProcessor implements PostProcessor{
         return silToIso639Map;
     }
 
-    private Map<String, String> getTwoLetterCountryCodeMap() {
+    protected Map<String, String> getTwoLetterCountryCodeMap() {
         if (twoLetterCodesMap == null) {
             twoLetterCodesMap = createCodeMap(MetadataImporter.config.getLanguage2LetterCodeComponentUrl());
         }
         return twoLetterCodesMap;
     }
 
-    private Map<String, String> getThreeLetterCountryCodeMap() {
+    protected Map<String, String> getThreeLetterCountryCodeMap() {
         if (threeLetterCodesMap == null) {
             threeLetterCodesMap = createCodeMap(MetadataImporter.config.getLanguage3LetterCodeComponentUrl());
         }
@@ -117,7 +113,7 @@ public class LanguageCodePostProcessor implements PostProcessor{
 
     protected Map<String, String> getLanguageNameToIso639Map() {
     	if (languageNameToIso639Map == null) {
-    			languageNameToIso639Map = createReverseCodeMap(MetadataImporter.config.getLanguage3LetterCodeComponentUrl());
+    		languageNameToIso639Map = createReverseCodeMap(MetadataImporter.config.getLanguage3LetterCodeComponentUrl());
     	}
     	return languageNameToIso639Map;
     }
@@ -129,7 +125,7 @@ public class LanguageCodePostProcessor implements PostProcessor{
 
     	return iso639ToLanguageNameMap;
     }
-    
+   
     /**
      * Returns map of ISO 639-2/B codes to ISO 639-3
      * 
@@ -140,26 +136,26 @@ public class LanguageCodePostProcessor implements PostProcessor{
     private Map<String, String> getIso6392TToISO6393Map() {
         if (iso639_2TToISO639_3Map == null) {
             iso639_2TToISO639_3Map = new HashMap<String, String>();
-            iso639_2TToISO639_3Map.put("ALB", "SQI");
-            iso639_2TToISO639_3Map.put("ARM", "HYE");
-            iso639_2TToISO639_3Map.put("BAQ", "EUS");
-            iso639_2TToISO639_3Map.put("BUR", "MYA");
-            iso639_2TToISO639_3Map.put("CZE", "CES");
-            iso639_2TToISO639_3Map.put("CHI", "ZHO");
-            iso639_2TToISO639_3Map.put("DUT", "NLD");
-            iso639_2TToISO639_3Map.put("FRE", "FRA");
-            iso639_2TToISO639_3Map.put("GEO", "KAT");
-            iso639_2TToISO639_3Map.put("GER", "DEU");
-            iso639_2TToISO639_3Map.put("GRE", "ELL");
-            iso639_2TToISO639_3Map.put("ICE", "ISL");
-            iso639_2TToISO639_3Map.put("MAC", "MKD");
-            iso639_2TToISO639_3Map.put("MAO", "MRI");
-            iso639_2TToISO639_3Map.put("MAY", "MSA");
-            iso639_2TToISO639_3Map.put("PER", "FAS");
-            iso639_2TToISO639_3Map.put("RUM", "RON");
-            iso639_2TToISO639_3Map.put("SLO", "SLK");
-            iso639_2TToISO639_3Map.put("TIB", "BOD");
-            iso639_2TToISO639_3Map.put("WEL", "CYM");
+            iso639_2TToISO639_3Map.put("alb", "sqi");
+            iso639_2TToISO639_3Map.put("arm", "hye");
+            iso639_2TToISO639_3Map.put("baq", "eus");
+            iso639_2TToISO639_3Map.put("bur", "mya");
+            iso639_2TToISO639_3Map.put("cze", "ces");
+            iso639_2TToISO639_3Map.put("chi", "zho");
+            iso639_2TToISO639_3Map.put("dut", "nld");
+            iso639_2TToISO639_3Map.put("fre", "fra");
+            iso639_2TToISO639_3Map.put("geo", "kat");
+            iso639_2TToISO639_3Map.put("ger", "deu");
+            iso639_2TToISO639_3Map.put("gre", "ell");
+            iso639_2TToISO639_3Map.put("ice", "isl");
+            iso639_2TToISO639_3Map.put("max", "mkd");
+            iso639_2TToISO639_3Map.put("mao", "mri");
+            iso639_2TToISO639_3Map.put("may", "msa");
+            iso639_2TToISO639_3Map.put("per", "fas");
+            iso639_2TToISO639_3Map.put("rum", "ron");
+            iso639_2TToISO639_3Map.put("slo", "slk");
+            iso639_2TToISO639_3Map.put("tib", "bod");
+            iso639_2TToISO639_3Map.put("wel", "cym");
         }
         
         return iso639_2TToISO639_3Map;
@@ -200,7 +196,7 @@ public class LanguageCodePostProcessor implements PostProcessor{
                 Node node = nodeList.item(i);
                 String silCode = node.getFirstChild().getTextContent();
                 String isoCode = node.getLastChild().getTextContent();
-                result.put(silCode.toUpperCase(), isoCode);
+                result.put(silCode, isoCode);
             }
             return result;
         } catch (Exception e) {

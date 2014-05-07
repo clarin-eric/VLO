@@ -125,6 +125,40 @@
     <blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:DocumentationLanguages</blacklistPattern> <!-- IMS c:LexicalResourceProfile -->
     <blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:DocumentationLanguages</blacklistPattern> <!-- IMS c:MultimodalCorpus -->
   </facetConcept>
+  <facetConcept name="languageCode" description="Language of the content of the resource">
+    <concept>http://www.isocat.org/datcat/DC-2482</concept> <!-- language code -->
+    <concept>http://www.isocat.org/datcat/DC-2484</concept> <!-- language name -->
+    <concept>http://www.isocat.org/datcat/DC-5361</concept> <!-- language usage (TEI) -->
+    <concept>http://www.isocat.org/datcat/DC-5358</concept> <!--language (TEI) - MENZO: added for CLARIN-DK -->
+    
+    <concept>http://purl.org/dc/terms/language</concept>
+   <!-- Had to be removed due to IDSAGD_Speaker  <acceptableContext includeAny="false" includeEmpty="true"/>
+    <rejectableContext includeAny="true"  includeEmpty="false">
+      <concept>http://www.isocat.org/datcat/DC-4146</concept>
+    </rejectableContext> -->
+    <pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms/c:language/@olac-language</pattern>
+    <pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms/c:subject/@olac-language</pattern>
+    <pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()</pattern>
+    <pattern>/c:CMD/c:Components/c:mods/c:language/c:languageTerm/text()</pattern>
+    
+    
+    <!--  <concept>http://www.isocat.org/datcat/DC-2468</concept> --> <!-- BAS REMOVED because of component SubjectLanguages -->
+            
+    <pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms-ref/c:language/@olac-language</pattern> <!-- IDS OLAC-DcmiTerms-ref -->
+    <pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms-ref-DWR/c:language/@olac-language</pattern> <!-- IDS OLAC-DcmiTerms-ref-DWR -->
+    <!-- <pattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Operations/c:Operation/c:Input/c:ParameterGroup/c:Parameters/c:Parameter/c:Values/c:ParameterValue/c:Value/text()</pattern>--> <!--  WeblichtWebservices, breaks Tübingen Resources (oai_sfs_uni_tuebingen_de_FID_15.xml)-->
+    <blacklistPattern>/c:Actor_Languages/c:Actor_Language/</blacklistPattern> <!-- MPI (JK) -->
+    <blacklistPattern>/c:ActorLanguage/c:Language/c:ISO639/c:iso-639-3-code</blacklistPattern>
+    <blacklistPattern>/c:LanguageName</blacklistPattern> <!-- general -->
+    <blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground</blacklistPattern> <!-- IDS IDSAGD_Speaker -->
+    <blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Collection/c:DocumentationLanguages</blacklistPattern> <!-- IDS IDSAGD_Corpus -->
+    <blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Documentations</blacklistPattern> <!-- IMS TextCorpusProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:DocumentationLanguages</blacklistPattern> <!-- IMS TextCorpusProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Documentations</blacklistPattern> <!-- IMS ToolProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:ToolContext/c:DocumentationLanguages</blacklistPattern> <!-- IMS ToolProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:DocumentationLanguages</blacklistPattern> <!-- IMS c:LexicalResourceProfile -->
+    <blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:DocumentationLanguages</blacklistPattern> <!-- IMS c:MultimodalCorpus -->
+  </facetConcept>
   <facetConcept name="languages" description="Language of the content of the resource">
     <concept>http://www.isocat.org/datcat/DC-2482</concept> <!-- language code -->
     <concept>http://www.isocat.org/datcat/DC-2484</concept> <!-- language name -->

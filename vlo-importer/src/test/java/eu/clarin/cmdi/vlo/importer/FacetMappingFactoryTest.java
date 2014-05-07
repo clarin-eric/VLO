@@ -34,7 +34,7 @@ public class FacetMappingFactoryTest {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, IMDI_PROFILE_URL);
         
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(21, facets.size());
+        assertEquals(22, facets.size());
         
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
@@ -100,6 +100,9 @@ public class FacetMappingFactoryTest {
         // mapping.getPatterns().get(1));
         assertEquals("/c:CMD/c:Components/c:Session/c:Resources/c:WrittenResource/c:LanguageId/text()", 
                 mapping.getPatterns().get(1));
+        mapping = facets.get(index++);
+        
+        assertEquals(FacetConstants.FIELD_LANGUAGE_CODE, mapping.getName());
         mapping = facets.get(index++);
         
         assertEquals(FacetConstants.FIELD_LANGUAGES, mapping.getName());
@@ -181,7 +184,7 @@ public class FacetMappingFactoryTest {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, OLAC_PROFILE_URL);
         
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(19, facets.size());
+        assertEquals(20, facets.size());
        
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
@@ -236,6 +239,9 @@ public class FacetMappingFactoryTest {
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:language/text()",
                 mapping.getPatterns().get(0));
+        mapping = facets.get(index++);
+        
+        assertEquals(FacetConstants.FIELD_LANGUAGE_CODE, mapping.getName());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_LANGUAGES, mapping.getName());
@@ -307,7 +313,7 @@ public class FacetMappingFactoryTest {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, LRT_PROFILE_URL);
 
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(18, facets.size());
+        assertEquals(19, facets.size());
         
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
@@ -370,6 +376,9 @@ public class FacetMappingFactoryTest {
         assertEquals(
                 "/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()",
                 mapping.getPatterns().get(0));
+        mapping = facets.get(index++);
+        
+        assertEquals(FacetConstants.FIELD_LANGUAGE_CODE, mapping.getName());
         mapping = facets.get(index++);
         
         assertEquals(FacetConstants.FIELD_LANGUAGES, mapping.getName());
@@ -468,7 +477,7 @@ public class FacetMappingFactoryTest {
         assertEquals("/c:CMD/c:Components/c:TextCorpusProfile/c:GeneralInfo/c:PublicationDate/text()", facet.getPatterns().get(1));
         
         
-        facet = facets.get(14);
+        facet = facets.get(15);
         assertEquals(FacetConstants.FIELD_DESCRIPTION, facet.getName());
         assertEquals(1, facet.getPatterns().size());
         assertEquals("/c:CMD/c:Components/c:TextCorpusProfile/c:GeneralInfo/c:Descriptions/c:Description/text()" ,facet.getPatterns().get(0));
