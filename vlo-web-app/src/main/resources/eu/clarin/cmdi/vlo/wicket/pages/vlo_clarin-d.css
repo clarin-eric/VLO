@@ -28,6 +28,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* styles for header and static topic section */
 @import "clarin-d/vlo-header.css";
 
+/* styles for static topic section */
+@import "vlo-top.css";
+
 /* styles for collection selection */
 @import "vlo-collections.css";
 
