@@ -233,9 +233,9 @@
                     <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
                     <compress>true</compress>
                     <force>true</force>
-                    <includes>
-                        <include>**/*</include>
-                    </includes>
+                    <excludes>
+                        <exclude>**/inc/**/*</exclude>
+                    </excludes>
                 </configuration>
                 <executions>
                     <execution>
