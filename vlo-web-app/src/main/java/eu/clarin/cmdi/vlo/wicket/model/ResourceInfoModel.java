@@ -19,32 +19,51 @@ package eu.clarin.cmdi.vlo.wicket.model;
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 
 /**
  * Model for {@link ResourceInfo} that dynamically instantiates its objects from
  * a resource string (as retrieved from the Solr index) using the
  * {@link ResourceStringConverter}
  */
-public class ResourceInfoModel extends LoadableDetachableModel<ResourceInfo> {
+public class ResourceInfoModel extends Model<ResourceInfo> {
 
-    private final ResourceStringConverter resourceStringConverter;
+    private ResourceStringConverter resourceStringConverter;
     private final IModel<String> resourceStringModel;
 
+    /**
+     *
+     * @param resourceStringConverter converter to use to derive resource info
+     * from the resource string
+     * @param resourceStringModel
+     */
     public ResourceInfoModel(ResourceStringConverter resourceStringConverter, IModel<String> resourceStringModel) {
         this.resourceStringConverter = resourceStringConverter;
         this.resourceStringModel = resourceStringModel;
     }
 
     @Override
-    protected ResourceInfo load() {
-        return resourceStringConverter.getResourceInfo(resourceStringModel.getObject());
+    public ResourceInfo getObject() {
+        final ResourceInfo cached = super.getObject();
+        if (cached == null) {
+            final ResourceInfo object = resourceStringConverter.getResourceInfo(resourceStringModel.getObject());
+            setObject(object);
+            return object;
+        } else {
+            return cached;
+        }
     }
 
-    @Override
-    public void detach() {
-        super.detach();
-        resourceStringModel.detach();
+    /**
+     * Replaces the converter used by this model to get a resource info object.
+     * This also invalidates the cached resource info object.
+     *
+     * @param resourceStringConverter
+     */
+    public void setResourceStringConverter(ResourceStringConverter resourceStringConverter) {
+        this.resourceStringConverter = resourceStringConverter;
+        // invalidate object
+        setObject(null);
     }
 
 }

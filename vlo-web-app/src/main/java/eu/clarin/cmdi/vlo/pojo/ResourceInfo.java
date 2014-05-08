@@ -16,11 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.pojo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author twagoo
  */
-public class ResourceInfo {
+public class ResourceInfo implements Serializable {
 
     private final String href;
     private final String fileName;
