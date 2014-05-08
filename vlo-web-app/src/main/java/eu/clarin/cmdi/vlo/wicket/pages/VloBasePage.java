@@ -16,12 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.GenericWebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -30,6 +32,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
@@ -122,9 +125,10 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        // Include CSS. Exact file will be chosen on basis of current locale and
-        // style (theme).
+        // Include CSS. Exact file will be chosen on basis of current locale and style (theme)
         response.render(CssHeaderItem.forReference(new CssResourceReference(VloBasePage.class, "vlo.css", getLocale(), getStyle(), getVariation())));
+        // Include JavaScript for header (e.g. permalink animation)
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloHeaderJS()));
     }
 
     private void addComponents() {

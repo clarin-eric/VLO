@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
@@ -25,6 +26,8 @@ import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SimpleSearchBrowsePanel;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
@@ -92,5 +95,11 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
         // add a panel with browsing options
         browse = new SimpleSearchBrowsePanel("browse", getModel());
         add(browse);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloFrontJS()));
     }
 }

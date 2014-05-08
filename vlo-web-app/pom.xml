@@ -184,6 +184,10 @@
             </resource>
             <resource>
                 <filtering>false</filtering>
+                <directory>src/main/js</directory>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
                 <directory>src/main/java</directory>
                 <includes>
                     <include>**</include>
