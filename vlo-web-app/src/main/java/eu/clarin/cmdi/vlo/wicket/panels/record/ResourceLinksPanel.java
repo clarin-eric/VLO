@@ -17,11 +17,11 @@
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
+import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
 import eu.clarin.cmdi.vlo.wicket.ResourceTypeCssBehaviour;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
-import eu.clarin.cmdi.vlo.wicket.panels.search.LazyResourceInfoUpdateBehavior;
 import java.util.Collection;
 import java.util.List;
 import org.apache.wicket.ajax.AjaxRequestTarget;
