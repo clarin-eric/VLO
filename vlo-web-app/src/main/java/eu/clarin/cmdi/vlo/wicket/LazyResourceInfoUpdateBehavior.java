@@ -18,9 +18,9 @@ package eu.clarin.cmdi.vlo.wicket;
 
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
+import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.time.Duration;
 
 /**
@@ -34,19 +34,16 @@ import org.apache.wicket.util.time.Duration;
 public abstract class LazyResourceInfoUpdateBehavior extends AbstractAjaxTimerBehavior {
 
     private final ResourceStringConverter converter;
-    private final IModel<String> resourceStringModel;
-    private final IModel<ResourceInfo> resourceInfoModel;
+    private final ResourceInfoModel resourceInfoModel;
 
     /**
      *
      * @param converter converter to get resource info object from
-     * @param resourceStringModel model that provides the raw resource string
      * @param resourceInfoModel model that should be updated
      */
-    public LazyResourceInfoUpdateBehavior(ResourceStringConverter converter, IModel<String> resourceStringModel, IModel<ResourceInfo> resourceInfoModel) {
+    public LazyResourceInfoUpdateBehavior(ResourceStringConverter converter, ResourceInfoModel resourceInfoModel) {
         super(Duration.ONE_SECOND);
         this.converter = converter;
-        this.resourceStringModel = resourceStringModel;
         this.resourceInfoModel = resourceInfoModel;
     }
 
@@ -55,10 +52,8 @@ public abstract class LazyResourceInfoUpdateBehavior extends AbstractAjaxTimerBe
         // stop timer so that it gets called only once
         this.stop(target);
         
-        // get a fresh resource info object...
-        final ResourceInfo resourceInfo = converter.getResourceInfo(resourceStringModel.getObject());
-        // .,.and update the model with it
-        resourceInfoModel.setObject(resourceInfo);
+        // inject the advanced converter into the model
+        resourceInfoModel.setResourceStringConverter(converter);
         
         // AJAX update of components
         onUpdate(target);

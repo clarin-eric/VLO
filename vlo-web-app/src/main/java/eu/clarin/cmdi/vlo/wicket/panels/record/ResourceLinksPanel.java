@@ -84,7 +84,7 @@ public class ResourceLinksPanel extends Panel {
             link.add(new ResourceTypeCssBehaviour(resourceInfoModel));
 
             // make the link update via AJAX with resolved location (in case of handle)
-            link.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, item.getModel(), resourceInfoModel) {
+            link.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
 
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {

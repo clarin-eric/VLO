@@ -145,9 +145,8 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
                 resourceLink.add(new Label("resourceName", new PropertyModel(resourceInfoModel, "fileName")));
                 resourceLink.setOutputMarkupId(true);
 
-                // once loaded, make Ajax request to resolve handles and update
-                // resource link
-                resourceLink.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, item.getModel(), resourceInfoModel) {
+                // once loaded, make Ajax request to resolve handles and update resource link
+                resourceLink.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
 
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
