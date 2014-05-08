@@ -8,6 +8,7 @@ import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
+import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -75,6 +76,12 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("resourceTypes"));
         // register the resource of application properties (version information filtered at build time)
         getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("application"));
+        // register JavaScript bundle (combines  JavaScript source in a single resource to decrease number of client requests)
+        getResourceBundles().addJavaScriptBundle(VloBasePage.class, "vlo-js",
+                JavaScriptResources.getVloFrontJS(),
+                JavaScriptResources.getVloHeaderJS(),
+                JavaScriptResources.getJQueryWatermarkJS()
+        );
     }
 
     private void mountPages() {

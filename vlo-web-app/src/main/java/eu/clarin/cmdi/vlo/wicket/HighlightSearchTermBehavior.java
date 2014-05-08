@@ -16,13 +16,12 @@
  */
 package eu.clarin.cmdi.vlo.wicket;
 
-import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
+import eu.clarin.cmdi.vlo.JavaScriptResources;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
-import org.apache.wicket.request.resource.PackageResourceReference;
 
 /**
  * A behavior that adds JavaScript, executed on DOM ready, to highlight
@@ -33,13 +32,12 @@ import org.apache.wicket.request.resource.PackageResourceReference;
  */
 public class HighlightSearchTermBehavior extends Behavior {
 
-    private static final PackageResourceReference HIGHLIGHT_SCRIPT_REFERENCE = new PackageResourceReference(RecordPage.class, "searchhi.js");
     private static final String HIGHLIGHT_FUNCTION = "searchhi.init()";
 
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
         // include highlight script
-        response.render(JavaScriptHeaderItem.forReference(HIGHLIGHT_SCRIPT_REFERENCE));
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getHighlightJS()));
         // after load, highlight 
         response.render(OnDomReadyHeaderItem.forScript(HIGHLIGHT_FUNCTION));
     }

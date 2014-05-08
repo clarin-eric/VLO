@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableSet;
+import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
@@ -34,6 +35,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -294,4 +297,11 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             // focus? better only when expanded. jQuery('#%1$s input').focus()
         }
     }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        // include watermark JQuery extension sources
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getJQueryWatermarkJS()));
+    }
+
 }
