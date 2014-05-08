@@ -126,7 +126,7 @@ public final class CommonUtils {
             Node node = nodeList.item(i);
             String shortName = node.getTextContent();
             String longName = node.getAttributes().getNamedItem("AppInfo").getNodeValue().replaceAll(" \\([a-zA-Z]+\\)$", "");
-            result.put(longName, shortName.toUpperCase());
+            result.put(longName, shortName);
         }
         return result;
     }
