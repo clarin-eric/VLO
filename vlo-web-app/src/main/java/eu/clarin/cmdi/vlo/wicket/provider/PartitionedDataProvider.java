@@ -26,8 +26,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 /**
- * Wrapper for a sortable data provider that partitions the returned data in sublist of a
- * predefined maximum size
+ * Wrapper for a sortable data provider that partitions the returned data in
+ * sublist of a predefined maximum size
  *
  * @author twagoo
  * @param <T> the type of provided data
@@ -91,7 +91,9 @@ public class PartitionedDataProvider<T, S> implements ISortableDataProvider<List
 
     @Override
     public IModel<List<? extends T>> model(List<? extends T> object) {
-        return Model.ofList(object);
+        // Iterators.partition sometimes returns lists that are not deeply serializable, 
+        // so we need to copy this into a serializable list here :(
+        return Model.ofList(ImmutableList.copyOf(object));
     }
 
     @Override

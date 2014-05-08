@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.provider;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
@@ -124,7 +125,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
         // sort what remains
         final ImmutableList sorted = getOrdering().immutableSortedCopy(filteredValues);
         if (sorted.size() > maxNumberOfItems) {
-            return sorted.subList(0, maxNumberOfItems);
+            return Lists.newArrayList(sorted.subList(0, maxNumberOfItems));
         } else {
             // return iterator starting at specified offset
             return sorted;

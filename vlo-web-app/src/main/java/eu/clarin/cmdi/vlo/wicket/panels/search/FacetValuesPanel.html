@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <input wicket:id="filterText" type="text" />
                     <input type="submit" value="Search" class="nonjsfallback" />
                 </form>
-                <wicket:container wicket:id="valuesContainer">
+                <div wicket:id="valuesContainer">
                     <ul wicket:id="valuesList">
                         <li wicket:id="facetValues"><a wicket:id="facetSelect" href="index3.html"><span wicket:id="name">Dutch</span> (<span wicket:id="count">148167</span>)</a></li>
                     </ul>
@@ -38,7 +38,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <li class="more-link"><a wicket:id="allFacetValuesLink" href="#">more...</a></li>
                         </ul>
                     </wicket:enclosure>
-                </wicket:container>
+                </div>
             </div>               
         </wicket:panel>
     </body>
