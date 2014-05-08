@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
@@ -32,9 +31,9 @@ import org.apache.wicket.model.Model;
  */
 public abstract class SingleFacetPanel extends FacetPanel {
 
-    public SingleFacetPanel(String id, IModel<QueryFacetsSelection> queryModel, String facetName, FacetFieldsService facetFieldsService) {
+    public SingleFacetPanel(String id, IModel<QueryFacetsSelection> queryModel, String facetName, FacetFieldsService facetFieldsService, int subListSize) {
         //TODO: Limit to number of items shown while keeping 'more' function?
-        super(id, new FacetFieldSelectionModel(new FacetFieldModel(facetFieldsService, facetName, queryModel, -1), queryModel), Model.of(ExpansionState.COLLAPSED));
+        super(id, new FacetFieldSelectionModel(new FacetFieldModel(facetFieldsService, facetName, queryModel, -1), queryModel), Model.of(ExpansionState.COLLAPSED), subListSize);
     }
 
     @Override
@@ -43,5 +42,5 @@ public abstract class SingleFacetPanel extends FacetPanel {
         // values are present (due to no search results)
         return false;
     }
-    
+
 }

@@ -19,12 +19,15 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 import com.google.common.collect.ImmutableSet;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
+import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.provider.PartitionedDataProvider;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -36,6 +39,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -59,6 +64,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     private final IModel<QueryFacetsSelection> selectionModel;
     private final WebMarkupContainer valuesContainer;
     private final IModel<FieldValuesFilter> filterModel;
+    private final int subListSize;
 
     /**
      * Creates a new panel with selectable values for a single facet
@@ -68,8 +74,22 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param selectionModel model holding the global query/facet selection
      */
     public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel) {
+        this(id, model, selectionModel, 0);
+    }
+
+    /**
+     * Creates a new panel with selectable values for a single facet
+     *
+     * @param id component id
+     * @param model facet field model for this panel
+     * @param selectionModel model holding the global query/facet selection
+     * @param subListSize if large than 0, multiple lists will be generated each
+     * with a maximum size of this value
+     */
+    public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel, int subListSize) {
         super(id, model);
         this.selectionModel = selectionModel;
+        this.subListSize = subListSize;
 
         // shared model that holds the string for filtering the values (quick search)
         filterModel = Model.of(new FieldValuesFilter());
@@ -82,7 +102,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         add(valuesContainer);
 
         // create a view for the actual values
-        valuesContainer.add(createValuesView("facetValues"));
+        valuesContainer.add(createValuesView("valuesList"));
 
         // create a link for showing all values        
         valuesContainer.add(createAllValuesLink("allFacetValuesLink"));
@@ -121,7 +141,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param id component id
      * @return data view with value links
      */
-    private DataView<Count> createValuesView(String id) {
+    private DataView createValuesView(String id) {
         final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(getModel(), MAX_NUMBER_OF_FACETS_TO_SHOW, LOW_PRIORITY_VALUES) {
 
             @Override
@@ -130,11 +150,22 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             }
 
         };
-        final DataView<Count> valuesView = new DataView<Count>(id, valuesProvider) {
+        // partition the values according to the specified partition size
+        final PartitionedDataProvider<Count, FieldValuesOrder> partitionedValuesProvider = new PartitionedDataProvider<FacetField.Count, FieldValuesOrder>(valuesProvider, subListSize);
+
+        // create the view for the partitions
+        final DataView<List<? extends Count>> valuesView = new DataView<List<? extends Count>>(id, partitionedValuesProvider) {
 
             @Override
-            protected void populateItem(final Item<Count> item) {
-                addFacetValue("facetSelect", item);
+            protected void populateItem(Item<List<? extends Count>> item) {
+                // create a list view for the values in this partition
+                item.add(new ListView<Count>("facetValues", item.getModel()) {
+
+                    @Override
+                    protected void populateItem(ListItem<Count> item) {
+                        addFacetValue("facetSelect", item);
+                    }
+                });
             }
         };
         valuesView.setOutputMarkupId(true);
@@ -146,7 +177,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      *
      * @param item item to add link to
      */
-    private void addFacetValue(String id, final Item<Count> item) {
+    private void addFacetValue(String id, final ListItem<Count> item) {
         item.setDefaultModel(new CompoundPropertyModel<Count>(item.getModel()));
 
         // link to select an individual facet value

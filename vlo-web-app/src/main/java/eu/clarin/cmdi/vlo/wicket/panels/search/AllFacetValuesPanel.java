@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
+import eu.clarin.cmdi.vlo.wicket.components.AjaxIndicatingForm;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueOrderSelector;
 import eu.clarin.cmdi.vlo.wicket.model.BridgeModel;
 import eu.clarin.cmdi.vlo.wicket.model.BridgeOuterModel;
@@ -153,7 +154,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
     private static final int ITEMS_PER_PAGE = 250;
 
     private Form createOptionsForm(String id) {
-        final Form options = new Form(id);
+        final Form options = new AjaxIndicatingForm(id);
 
         final DropDownChoice<SortParam<FieldValuesOrder>> sortSelect
                 = new FieldValueOrderSelector("sort", new PropertyModel<SortParam<FieldValuesOrder>>(valuesProvider, "sort"));
@@ -221,6 +222,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         });
         options.add(minOccurence);
     }
+
 
     private class UpdateOptionsFormBehavior extends OnChangeAjaxBehavior {
 

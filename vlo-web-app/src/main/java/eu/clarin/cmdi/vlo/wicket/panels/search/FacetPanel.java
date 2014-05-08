@@ -46,11 +46,15 @@ public abstract class FacetPanel extends ExpandablePanel<FacetFieldSelection> {
     private final FacetValuesPanel facetValuesPanel;
 
     public FacetPanel(String id, IModel<FacetFieldSelection> selectionModel, IModel<ExpansionState> expansionState) {
+        this(id, selectionModel, expansionState, 0);
+    }
+
+    public FacetPanel(String id, IModel<FacetFieldSelection> selectionModel, IModel<ExpansionState> expansionState, int subListSize) {
         super(id, selectionModel, expansionState);
         this.expansionStateModel = expansionState;
 
         // panel showing values for selection
-        facetValuesPanel = createFacetValuesPanel("facetValues");
+        facetValuesPanel = createFacetValuesPanel("facetValues", subListSize);
         add(facetValuesPanel);
 
         // panel showing current selection, allowing for deselection
@@ -84,10 +88,10 @@ public abstract class FacetPanel extends ExpandablePanel<FacetFieldSelection> {
         return true;
     }
 
-    private FacetValuesPanel createFacetValuesPanel(String id) {
+    private FacetValuesPanel createFacetValuesPanel(String id, int subListSize) {
         return new FacetValuesPanel(id,
                 new PropertyModel<FacetField>(getModel(), "facetField"),
-                new PropertyModel<QueryFacetsSelection>(getModel(), "selection")) {
+                new PropertyModel<QueryFacetsSelection>(getModel(), "selection"), subListSize) {
                     @Override
                     public void onValuesSelected(String facet, FacetSelection value, AjaxRequestTarget target) {
                         // A value has been selected on this facet's panel, update the model!

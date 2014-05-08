@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
  * @see FieldValuesOrder
  * @author twagoo
  */
-public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Count, FieldValuesOrder> {
+public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Count, FieldValuesOrder> implements ListProvider<FacetField.Count> {
 
     private final static Logger logger = LoggerFactory.getLogger(FacetFieldValuesProvider.class);
     private final IModel<FacetField> model;
@@ -114,14 +114,20 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
 
     @Override
     public Iterator<? extends FacetField.Count> iterator(long first, long count) {
-        final Iterable<Count> filtered = getFilteredValues();
+        // return iterator starting at specified offset
+        return getList().listIterator((int) first);
+    }
+
+    @Override
+    public List<? extends FacetField.Count> getList() {
+        final Iterable<Count> filteredValues = getFilteredValues();
         // sort what remains
-        final ImmutableList sorted = getOrdering().immutableSortedCopy(filtered);
+        final ImmutableList sorted = getOrdering().immutableSortedCopy(filteredValues);
         if (sorted.size() > maxNumberOfItems) {
-            return sorted.subList(0, maxNumberOfItems).listIterator((int) first);
+            return sorted.subList(0, maxNumberOfItems);
         } else {
             // return iterator starting at specified offset
-            return sorted.listIterator((int) first);
+            return sorted;
         }
     }
 

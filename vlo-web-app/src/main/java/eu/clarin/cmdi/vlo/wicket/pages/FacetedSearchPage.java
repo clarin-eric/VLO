@@ -129,7 +129,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private Panel createCollectionsPanel(final String id) {
-        final FacetPanel panel = new SingleFacetPanel(id, getModel(), vloConfig.getCollectionFacet(), facetFieldsService) {
+        final FacetPanel panel = new SingleFacetPanel(id, getModel(), vloConfig.getCollectionFacet(), facetFieldsService, 3) {
 
             @Override
             protected void selectionChanged(AjaxRequestTarget target) {
