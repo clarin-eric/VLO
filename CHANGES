@@ -1,7 +1,18 @@
 Bug Fixes and Features
 
-VLO 3.0 (?)
+VLO 3.0-beta3 (May 2014)
+* Removed duplicate VloConfig.xml in distribution
+* Add 'busy' indicators to a number of AJAX action links
+* Hidden previous/next links on record page if result set has only one record
+* Added a search icon to the facet filter box
+* Fixed sometimes chaotic layout of collection facet items
+* Permalink link is now a button (to prevent right click/copy url)
+* Migrated from CSS to LESS (converted to compressed CSS compile time)
+
+VLO 3.0-beta2 (May 2014)
 * Added the "_selfLink" field to fix FCS aggregator connection
+* Removed simple search selection ‘leave this page’ dialogue
+* Included record name in page title for record pages
 
 VLO 3.0-beta (April 2014)
 * Added a 'simple search' front page
@@ -26,7 +37,7 @@ VLO 3.0-beta (April 2014)
 * Solr configuration: data directory is configured through java system property 
 	'solr.data.dir', which needs to be configured in the Tomcat instance
 
-VLO 3.0-alpha1 (March 2014)
+VLO 3.0-alpha (March 2014)
 * Reimplemented Wicket front-end, see <https://trac.clarin.eu/milestone/VLO-3.0>
 * Upgraded to Solr 4.6.0
 * Added application monitoring via JavaMelody at /monitoring
