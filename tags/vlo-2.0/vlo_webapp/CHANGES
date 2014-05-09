@@ -1,5 +1,0 @@
-Bug Fixes and Features
-
-Release VLO-2.0 (2 December 2010):
-New implementation of the original vlo facetted browser using SOLR as a backend and the Wicket framework for the java frontend. We now support CMDI metadata only.
-- Initial version working and performing very nicely.
