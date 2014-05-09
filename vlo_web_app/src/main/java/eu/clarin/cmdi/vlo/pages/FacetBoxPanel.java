@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.pages;
 
 import eu.clarin.cmdi.vlo.VloWebApplication;
+import eu.clarin.cmdi.vlo.VloWebApplication.ThemedSession;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -66,7 +67,9 @@ public class FacetBoxPanel extends BasePanel {
         pageParameters.add(ShowAllFacetValuesPage.SELECTED_FACET_PARAM, facetField.getName());
         pageParameters.add(ShowAllFacetValuesPage.FACET_MIN_OCCURS, "1");
 
-        pageParameters = webApp.reflectPersistentParameters(pageParameters);
+        // pageParameters = webApp.reflectPersistentParameters(pageParameters);
+        pageParameters = ((ThemedSession)getSession()).reflectPersistentParameters(pageParameters);
+        
         
         add(new BookmarkablePageLink("showMore", ShowAllFacetValuesPage.class, pageParameters) {
 

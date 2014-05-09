@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.pages;
 
+import eu.clarin.cmdi.vlo.VloWebApplication.ThemedSession;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
@@ -19,7 +20,8 @@ public class FacetLinkPanel extends BasePanel {
         q.setFilterQuery(count);
         PageParameters params = q.getPageParameters();
 
-        params = webApp.reflectPersistentParameters(params);
+//      params = webApp.reflectPersistentParameters(params);
+        params = ((ThemedSession)getSession()).reflectPersistentParameters(params);
         
         Link<Count> facetLink = new BookmarkablePageLink("facetLink", FacetedSearchPage.class, params);
         facetLink.add(new Label("facetLinkLabel", model.getObject().getName()));

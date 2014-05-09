@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.pages;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.Resources;
 import eu.clarin.cmdi.vlo.VloWebApplication;
+import eu.clarin.cmdi.vlo.VloWebApplication.ThemedSession;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.AutoCompleteDao;
 import fiftyfive.wicket.basic.TruncatedLabel;
@@ -73,7 +74,8 @@ public class FacetedSearchPage extends BasePage {
             SearchPageQuery query = getModelObject();
             PageParameters pageParameters = query.getPageParameters();
 
-            pageParameters = webApp.reflectPersistentParameters(pageParameters);
+            // pageParameters = webApp.reflectPersistentParameters(pageParameters);
+            pageParameters = ((ThemedSession)getSession()).reflectPersistentParameters(pageParameters);
             
             setResponsePage(FacetedSearchPage.class, pageParameters);
         }

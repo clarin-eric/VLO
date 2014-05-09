@@ -4,6 +4,7 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.Resources;
 import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.VloWebApplication;
+import eu.clarin.cmdi.vlo.VloWebApplication.ThemedSession;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.dao.DaoLocator;
 import java.io.InputStreamReader;
@@ -85,7 +86,9 @@ public class ShowResultPage extends BasePage {
             // add the new query parameters to this map
             newParam.putAll(query.getPageParameters());
             // add the persistent parameters to this map
-            newParam = webApp.reflectPersistentParameters(newParam);
+            //newParam = webApp.reflectPersistentParameters(newParam);
+            
+            newParam = ((VloWebApplication.ThemedSession)getSession()).reflectPersistentParameters(newParam);
             
             BookmarkablePageLink<String> backLink = new BookmarkablePageLink<String>("backLink", FacetedSearchPage.class, newParam);
             add(backLink);
@@ -406,12 +409,14 @@ public class ShowResultPage extends BasePage {
         add(link);
     }
 
-    public static BookmarkablePageLink<ShowResultPage> createBookMarkableLink(String linkId, SearchPageQuery query, String docId) {
+    public static BookmarkablePageLink<ShowResultPage> createBookMarkableLink(String linkId, SearchPageQuery query, String docId, ThemedSession session) {
         PageParameters pageParameters = query.getPageParameters();
         pageParameters.put(ShowResultPage.PARAM_DOC_ID, WicketURLEncoder.QUERY_INSTANCE.encode(docId));
         
-        webApp.reflectPersistentParameters(pageParameters);
-        
+        // webApp.reflectPersistentParameters(pageParameters);
+        // instead of this: pass page parameters back to the session
+        session.reflectPersistentParameters(pageParameters);
+
         BookmarkablePageLink<ShowResultPage> docLink = new BookmarkablePageLink<ShowResultPage>(linkId, ShowResultPage.class,
                 pageParameters);
         return docLink;
