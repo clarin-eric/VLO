@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.model;
 
 import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.service.XmlTransformationService;
 import java.net.URL;
 import javax.xml.transform.TransformerException;
 import org.apache.wicket.model.IModel;
@@ -56,12 +57,16 @@ public class XsltModel extends LoadableDetachableModel<String> {
             return "";
         }
         try {
-            return VloWicketApplication.get().getCmdiTransformationService().transformXml(object);
+            return getTransformationService().transformXml(object);
         } catch (TransformerException ex) {
             logger.error("Could not transform {}", object, ex);
             return ("<b>Could not load complete CMDI metadata</b>");
         }
 
+    }
+
+    protected XmlTransformationService getTransformationService() {
+        return VloWicketApplication.get().getCmdiTransformationService();
     }
 
 }
