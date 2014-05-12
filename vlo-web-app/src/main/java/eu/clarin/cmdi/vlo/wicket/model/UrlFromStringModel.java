@@ -18,10 +18,13 @@ package eu.clarin.cmdi.vlo.wicket.model;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import org.apache.wicket.model.IModel;
 
 /**
+ * Model that wraps a model providing a file location and returns a URL for this
+ * location via {@link #getObject() }
  *
  * @author twagoo
  */
@@ -29,6 +32,10 @@ public class UrlFromStringModel implements IModel<URL> {
 
     private final IModel<String> model;
 
+    /**
+     *
+     * @param model model that provides a file location
+     */
     public UrlFromStringModel(IModel<String> model) {
         this.model = model;
     }
@@ -51,7 +58,11 @@ public class UrlFromStringModel implements IModel<URL> {
         if (object == null) {
             model.setObject(null);
         } else {
-            model.setObject(object.toString());
+            try {
+                model.setObject(new File(object.toURI()).getAbsolutePath());
+            } catch (URISyntaxException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
