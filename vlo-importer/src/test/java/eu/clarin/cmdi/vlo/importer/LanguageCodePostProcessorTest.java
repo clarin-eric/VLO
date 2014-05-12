@@ -19,21 +19,21 @@ public class LanguageCodePostProcessorTest extends ImporterTestcase {
     @Test
     public void testLanguageCode() {
         PostProcessor processor = new LanguageCodePostProcessor();
-        assertEquals("nld", processor.process("NL"));
-        assertEquals("eng", processor.process("en"));
-        assertEquals("nld", processor.process("nl"));
-        assertEquals("fry", processor.process("fry"));
-        assertEquals("test", processor.process("test"));
+        assertEquals("code:nld", processor.process("NL"));
+        assertEquals("code:eng", processor.process("en"));
+        assertEquals("code:nld", processor.process("nl"));
+        assertEquals("code:fry", processor.process("fry"));
+        assertEquals("name:test", processor.process("test"));
         assertEquals("", processor.process(""));
         assertEquals(null, processor.process(null));
-        assertEquals("fra", processor.process("ISO639-3:fra"));
-        assertEquals("deu", processor.process("RFC1766:x-sil-GER"));
-        assertEquals("RFC1766:sgn-NL", processor.process("RFC1766:sgn-NL"));
-        assertEquals("eus", processor.process("baq"));
-        assertEquals("eng", processor.process("eng"));
-        assertEquals("eng", processor.process("English"));
-        assertEquals("deu", processor.process("German"));
-        assertEquals("esn", processor.process("Salvadoran Sign Language"));
+        assertEquals("code:fra", processor.process("ISO639-3:fra"));
+        assertEquals("code:deu", processor.process("RFC1766:x-sil-GER"));
+        assertEquals("name:RFC1766:sgn-NL", processor.process("RFC1766:sgn-NL"));
+        assertEquals("code:eus", processor.process("baq"));
+        assertEquals("code:eng", processor.process("eng"));
+        assertEquals("code:eng", processor.process("English"));
+        assertEquals("code:deu", processor.process("German"));
+        assertEquals("code:esn", processor.process("Salvadoran Sign Language"));
     }
 
 }

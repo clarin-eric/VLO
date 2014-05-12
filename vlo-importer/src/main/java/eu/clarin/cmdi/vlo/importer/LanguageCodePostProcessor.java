@@ -22,6 +22,8 @@ public class LanguageCodePostProcessor implements PostProcessor{
 
     private final static Logger LOG = LoggerFactory.getLogger(LanguageCodePostProcessor.class);
 
+    protected static final String CODE_PREFIX = "code:";
+    protected static final String LANG_NAME_PREFIX = "name:";
     protected static final String ISO639_3_PREFIX = "ISO639-3:";
     protected static final String SIL_CODE_PREFIX = "RFC1766:x-sil-";
     protected static final String SIL_CODE_PREFIX_alt = "RFC-1766:x-sil-";
@@ -50,19 +52,23 @@ public class LanguageCodePostProcessor implements PostProcessor{
     protected String extractLanguageCode(String value) {
         String result = value;
         
+        // input is already ISO 639-3?
+        if(getIso639ToLanguageNameMap().keySet().contains(value.toUpperCase()))
+            return CODE_PREFIX + value.toLowerCase();
+        
         // deal with prefixes or language names
         if (value.length() != 2 && value.length() != 3) {
             if (value.startsWith(ISO639_3_PREFIX)) {
-                return value.substring(ISO639_3_PREFIX.length()).toLowerCase();
+                return CODE_PREFIX + value.substring(ISO639_3_PREFIX.length()).toLowerCase();
             } else if (value.startsWith(SIL_CODE_PREFIX) || value.startsWith(SIL_CODE_PREFIX_alt)) {
                 result = value.substring(value.lastIndexOf("-")+1);
                 silToIso639Map = getSilToIso639Map();
                 String isoCode = silToIso639Map.get(result.toLowerCase());
                 if (isoCode != null) {
-                    result = isoCode;
+                    result = CODE_PREFIX + isoCode;
                 }
             } else if(getLanguageNameToIso639Map().containsKey(value)) { // (english) language name?
-                return getLanguageNameToIso639Map().get(value);
+                return CODE_PREFIX + getLanguageNameToIso639Map().get(value);
             }
         }
         
@@ -70,14 +76,17 @@ public class LanguageCodePostProcessor implements PostProcessor{
         if(result.length() == 2) {
             if(silToIso639Map == null)
                 silToIso639Map = getSilToIso639Map();
-            result = silToIso639Map.get(result.toLowerCase());
+            result = CODE_PREFIX + silToIso639Map.get(result.toLowerCase());
         }
         
         // convert ISO 639-2/T codes to ISO 639-3
         if (getIso6392TToISO6393Map().containsKey(value.toLowerCase())) {
-            result = getIso6392TToISO6393Map().get(value.toLowerCase());
+            result = CODE_PREFIX + getIso6392TToISO6393Map().get(value.toLowerCase());
         }
         
+        // language code not identified? -> language name
+        if(!result.startsWith(CODE_PREFIX) && !result.equals(""))
+            result = LANG_NAME_PREFIX + result;
         return result;
     }
 

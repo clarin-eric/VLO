@@ -21,6 +21,9 @@ public class LanguageNamePostProcessor extends LanguageCodePostProcessor {
         String result = value;
         if (value != null) {
             String langCode = extractLanguageCode(value);
+            if(langCode.startsWith(CODE_PREFIX))
+                langCode = langCode.substring(CODE_PREFIX.length());
+            
             if (langCode.length() == 2) {
                 twoLetterCodesMap = getTwoLetterCountryCodeMap();
                 String name = twoLetterCodesMap.get(langCode.toUpperCase());
