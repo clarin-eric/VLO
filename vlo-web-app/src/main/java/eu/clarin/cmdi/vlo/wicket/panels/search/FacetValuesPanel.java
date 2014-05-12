@@ -262,7 +262,10 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
             @Override
             protected void onValuesSelected(String facet, FacetSelection values, AjaxRequestTarget target) {
-                window.close(target);
+                if (target != null) {
+                    // target can be null if selection link was opened in a new tab
+                    window.close(target);
+                }
                 FacetValuesPanel.this.onValuesSelected(facet, values, target);
             }
         };
