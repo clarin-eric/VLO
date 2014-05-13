@@ -46,6 +46,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -56,6 +58,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -64,6 +68,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public class RecordPage extends VloBasePage<SolrDocument> {
 
+    private final static ResourceReference CMDI_HTML_CSS = new CssResourceReference(RecordPage.class, "cmdi.css");
+    
     @SpringBean(name = "documentParamsConverter")
     private PageParametersConverter<SolrDocument> documentParamConverter;
     @SpringBean(name = "queryParametersConverter")
@@ -277,6 +283,13 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         return new StringResourceModel("recordpage.title",
                 new SolrFieldStringModel(getModel(), FacetConstants.FIELD_NAME),
                 DEFAULT_PAGE_TITLE);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        // add styling for CMDI to HTML transformation output
+        response.render(CssHeaderItem.forReference(CMDI_HTML_CSS));
     }
 
 }
