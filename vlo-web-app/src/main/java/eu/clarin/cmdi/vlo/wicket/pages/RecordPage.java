@@ -26,6 +26,7 @@ import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
@@ -69,7 +70,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 public class RecordPage extends VloBasePage<SolrDocument> {
 
     private final static ResourceReference CMDI_HTML_CSS = new CssResourceReference(RecordPage.class, "cmdi.css");
-    
+
     @SpringBean(name = "documentParamsConverter")
     private PageParametersConverter<SolrDocument> documentParamConverter;
     @SpringBean(name = "queryParametersConverter")
@@ -138,7 +139,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         topNavigation.add(createPermalink("permalink", topNavigation));
 
         // General information section
-        add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, "Unnamed record"));
+        add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, getString("recordpage.unnamedrecord")));
         add(createLandingPageLink("landingPageLink"));
         add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(getModel(), basicPropertiesFilter, fieldOrder)));
 
@@ -281,7 +282,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     public IModel<String> getTitleModel() {
         // Put the name of the record in the page title
         return new StringResourceModel("recordpage.title",
-                new SolrFieldStringModel(getModel(), FacetConstants.FIELD_NAME),
+                new NullFallbackModel(new SolrFieldStringModel(getModel(), FacetConstants.FIELD_NAME), getString("recordpage.unnamedrecord")),
                 DEFAULT_PAGE_TITLE);
     }
 
