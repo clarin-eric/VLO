@@ -70,7 +70,7 @@ public class MetadataImporter {
      * document.
      */
     final static Map<String, PostProcessor> POST_PROCESSORS = new HashMap<String, PostProcessor>();
-
+    
     static {
         POST_PROCESSORS.put(FacetConstants.FIELD_ID, new IdPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_CONTINENT, new ContinentNamePostProcessor());
@@ -115,7 +115,7 @@ public class MetadataImporter {
      * @throws MalformedURLException
      */
     void startImport() throws MalformedURLException {
-
+        
         initSolrServer();
         List<DataRoot> dataRoots = checkDataRoots();
         long start = System.currentTimeMillis();
@@ -143,7 +143,7 @@ public class MetadataImporter {
                             && file.length() > config.getMaxFileSize()) {
                         LOG.info("Skipping " + file.getAbsolutePath() + " because it is too large.");
                     } else {
-                        LOG.debug("PROCESSING FILE: " + file.getAbsolutePath());
+                        LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
                         processCmdi(file, dataRoot, processor);
                     }
                 }
@@ -272,27 +272,31 @@ public class MetadataImporter {
                 nrOfFilesWithoutId++;
             }
         } catch (Exception e) {
-            LOG.error("error in file: " + file + " Exception", e);
+            LOG.error("error in file: {}", file, e);
             nrOfFilesWithError++;
         }
-        if (cmdiData != null && processedIds.add(cmdiData.getId())) {
-            SolrInputDocument solrDocument = cmdiData.getSolrDocument();
-            if (solrDocument != null) {
-                if (!cmdiData.getDataResources().isEmpty() || !cmdiData.getLandingPageResources().isEmpty()
-                        || !cmdiData.getSearchResources().isEmpty() || !cmdiData.getSearchPageResources().isEmpty()
-                        || cmdiData.getMetadataResources().isEmpty()) {
-                    // We only add metadata files that have
-                    //  1) data resources or
-                    //	2) a landing page or
-                    //	3) a search service (like SRU/CQL) or
-                    //	4) a search page or 
-                    //  5) that have none of the above but also lack any metadata links (e.g. olac files describing a corpus with a link to the original archive).
-                    // Other files will have only metadata resources and are considered 'collection' metadata files they
-                    // are usually not very interesting (think imdi corpus files) and will not be included.
-                    updateDocument(solrDocument, cmdiData, file, dataOrigin);
-                } else {
-                    nrOfIgnoredFiles++;
+        if (cmdiData != null) {
+            if (processedIds.add(cmdiData.getId())) {
+                SolrInputDocument solrDocument = cmdiData.getSolrDocument();
+                if (solrDocument != null) {
+                    if (!cmdiData.getDataResources().isEmpty() || !cmdiData.getLandingPageResources().isEmpty()
+                            || !cmdiData.getSearchResources().isEmpty() || !cmdiData.getSearchPageResources().isEmpty()
+                            || cmdiData.getMetadataResources().isEmpty()) {
+                        // We only add metadata files that have
+                        //  1) data resources or
+                        //	2) a landing page or
+                        //	3) a search service (like SRU/CQL) or
+                        //	4) a search page or 
+                        //  5) that have none of the above but also lack any metadata links (e.g. olac files describing a corpus with a link to the original archive).
+                        // Other files will have only metadata resources and are considered 'collection' metadata files they
+                        // are usually not very interesting (think imdi corpus files) and will not be included.
+                        updateDocument(solrDocument, cmdiData, file, dataOrigin);
+                    } else {
+                        nrOfIgnoredFiles++;
+                    }
                 }
+            } else {
+                LOG.warn("Skipping {}, already processed id: {}", file, cmdiData.getId());
             }
         }
     }
@@ -327,10 +331,10 @@ public class MetadataImporter {
         solrDocument.addField(FacetConstants.FIELD_DATA_PROVIDER, dataOrigin.getOriginName());
         solrDocument.addField(FacetConstants.FIELD_ID, cmdiData.getId());
         solrDocument.addField(FacetConstants.FIELD_FILENAME, file.getAbsolutePath());
-
+        
         String metadataSourceUrl = dataOrigin.getPrefix();
         metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getToStrip().length());
-
+        
         solrDocument.addField(FacetConstants.FIELD_COMPLETE_METADATA, metadataSourceUrl);
 
         // add SearchServices (should be CQL endpoint)
@@ -355,6 +359,8 @@ public class MetadataImporter {
 
         // add resource proxys      
         addResourceData(solrDocument, cmdiData);
+        
+        LOG.debug("Adding document for submission to SOLR: {}", file);
         docs.add(solrDocument);
         if (docs.size() == config.getMaxDocsInList()) {
             sendDocs();
@@ -390,7 +396,7 @@ public class MetadataImporter {
             } else {
                 format = CommonUtils.normalizeMimeType(mimeType);
             }
-
+            
             FormatPostProcessor processor = new FormatPostProcessor();
             mimeType = processor.process(mimeType);
 
@@ -434,7 +440,7 @@ public class MetadataImporter {
         SolrParams params = new MapSolrParams(paramMap);
         solrServer.query(params);
     }
-
+    
     public static VloConfig config;
 
     /**
@@ -454,9 +460,9 @@ public class MetadataImporter {
          * configuration file
          */
         options.addOption("c", true, "-c <file> : use parameters specified in <file>");
-
+        
         CommandLineParser parser = new PosixParser();
-
+        
         try {
             // parse the command line arguments
             CommandLine cmd = parser.parse(options, args);
@@ -465,7 +471,7 @@ public class MetadataImporter {
                 // the "c" option was specified, now get its value
                 configFile = cmd.getOptionValue("c");
             }
-
+            
         } catch (org.apache.commons.cli.ParseException ex) {
 
             /**
@@ -477,24 +483,24 @@ public class MetadataImporter {
             LOG.error(message);
             System.err.println(message);
         }
-
+        
         if (configFile == null) {
-
+            
             String message;
-
+            
             message = "Could not get config file name via the command line, trying the system properties.";
             LOG.info(message);
-
+            
             String key;
-
+            
             key = "configFile";
             configFile = System.getProperty(key);
         }
-
+        
         if (configFile == null) {
-
+            
             String message;
-
+            
             message = "Could not get filename as system property either - stopping.";
             LOG.error(message);
         } else {

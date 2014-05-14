@@ -280,8 +280,7 @@ public class MetadataImporterTest extends ImporterTestcase {
                                 LOG.info("Skipping " + file.getAbsolutePath() + 
                                         " because it is too large.");
                             } else {
-                                LOG.debug("PROCESSING FILE: " + 
-                                        file.getAbsolutePath());                
+                                LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());                
                                 /*
                                  * Anticipate on the solr exception that will
                                  * never by raised because sendDocs is overriden

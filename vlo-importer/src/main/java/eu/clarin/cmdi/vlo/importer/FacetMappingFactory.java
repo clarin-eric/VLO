@@ -18,9 +18,8 @@ import java.text.DateFormat;
 import java.util.*;
 
 /**
- * Creates facet-mappings (xpaths) from a configuration.
- * As they say "this is where the magic happens".
- * Also does some caching.
+ * Creates facet-mappings (xpaths) from a configuration. As they say "this is
+ * where the magic happens". Also does some caching.
  */
 public class FacetMappingFactory {
 
@@ -41,14 +40,14 @@ public class FacetMappingFactory {
     }
 
     /**
-     * Get facet concept mapping. 
-     * 
-     * Get facet mapping used to map meta data based on a facet concepts
-     * file and url to cmdi meta data profile.
-
+     * Get facet concept mapping.
+     *
+     * Get facet mapping used to map meta data based on a facet concepts file
+     * and url to cmdi meta data profile.
+     *
      * @param facetConcepts name of the facet concepts file
      * @param xsd url of xml schema of cmdi profile
-     * 
+     *
      * @return facet concept mapping
      */
     private FacetMapping getOrCreateMapping(String facetConcepts, String xsd) {
@@ -63,13 +62,13 @@ public class FacetMappingFactory {
 
     /**
      * Create facet concept mapping.
-     * 
+     *
      * Create facet mapping used to map meta data based on a facet concept
      * mapping file and url to cmdi meta data profile.
-     * 
+     *
      * @param facetConcepts name of the facet concepts file
      * @param xsd url of xml schema of cmdi profile
-     * 
+     *
      * @return the facet mapping used to map meta data to facets
      */
     private FacetMapping createMapping(String facetConcepts, String xsd) {
@@ -95,8 +94,9 @@ public class FacetMappingFactory {
                                 if (pathConceptLinkMapping == null) {
                                     pathConceptLinkMapping = new HashMap<String, String>();
                                     for (String c : conceptLinkPathMapping.keySet()) {
-                                        for (String p : conceptLinkPathMapping.get(c))
-                                            pathConceptLinkMapping.put(p,c);
+                                        for (String p : conceptLinkPathMapping.get(c)) {
+                                            pathConceptLinkMapping.put(p, c);
+                                        }
                                     }
                                 }
                                 String context = getContext(path, pathConceptLinkMapping);
@@ -106,12 +106,12 @@ public class FacetMappingFactory {
                                     AcceptableContext acceptableContext = facetConcept.getAcceptableContext();
                                     if (context == null && acceptableContext.includeEmpty()) {
                                         // no context is accepted
-                                        LOG.debug("facet["+facetConcept.getName()+"] path["+path+"] context["+context+"](empty) is accepted");
+                                        LOG.debug("facet[{}] path[{}] context[{}](empty) is accepted", facetConcept.getName(), path, context);
                                         xpaths.add(path);
                                         handled = true;
                                     } else if (acceptableContext.getConcepts().contains(context)) {
                                         // a specific context is accepted
-                                        LOG.debug("facet["+facetConcept.getName()+"] path["+path+"] context["+context+"] is accepted");
+                                        LOG.debug("facet[{}] path[{}] context[{}] is accepted", facetConcept.getName(), path, context);
                                         xpaths.add(path);
                                         handled = true;
                                     }
@@ -121,48 +121,49 @@ public class FacetMappingFactory {
                                     RejectableContext rejectableContext = facetConcept.getRejectableContext();
                                     if (context == null && rejectableContext.includeEmpty()) {
                                         // no context is rejected
-                                        LOG.debug("facet["+facetConcept.getName()+"] path["+path+"] context["+context+"](empty) is rejected");
+                                        LOG.debug("facet[{}] path[{}] context[{}](empty) is rejected", facetConcept.getName(), path, context);
                                         handled = true;
                                     } else if (rejectableContext.getConcepts().contains(context)) {
                                         // a specific context is rejected
-                                        LOG.debug("facet["+facetConcept.getName()+"] path["+path+"] context["+context+"] is rejected");
+                                        LOG.debug("facet[{}] path[{}] context[{}] is rejected", facetConcept.getName(), path, context);
                                         handled = true;
                                     } else if (rejectableContext.includeAny()) {
                                         // any context is rejected
-                                        LOG.debug("facet["+facetConcept.getName()+"] path["+path+"] context["+context+"](any) is rejected");
+                                        LOG.debug("facet[{}] path[{}] context[{}](any) is rejected", facetConcept.getName(), path, context);
                                         handled = true;
                                     }
                                 }
-                                if (!handled && context!=null && facetConcept.hasAcceptableContext() && facetConcept.getAcceptableContext().includeAny()) {
+                                if (!handled && context != null && facetConcept.hasAcceptableContext() && facetConcept.getAcceptableContext().includeAny()) {
                                     // any, not rejected context, is accepted
-                                    LOG.debug("facet["+facetConcept.getName()+"] path["+path+"] context["+context+"](any) is accepted");
+                                    LOG.debug("facet[{}] path[{}] context[{}](any) is accepted", facetConcept.getName(), path, context);
                                     xpaths.add(path);
                                 }
                             }
-                        } else
+                        } else {
                             xpaths.addAll(paths);
+                        }
                     }
                 }
-                
+
                 //add hardcoded patterns only when there is no xpath generated from conceptlink
                 if (xpaths.isEmpty()) {
                     xpaths.addAll(facetConcept.getPatterns());
                 }
-                
+
                 // pattern-based blacklisting: remove all XPath expressions that contain a blacklisted substring;
                 // this is basically a hack to enhance the quality of the visualised information in the VLO;
                 // should be replaced by a more intelligent approach in the future
-                for(String blacklistPattern : facetConcept.getBlacklistPatterns()) {
-                	Iterator<String> xpathIterator = xpaths.iterator();
-                	while(xpathIterator.hasNext()) {
-                		String xpath = xpathIterator.next();
-                		if(xpath.contains(blacklistPattern)) {
-                			LOG.debug("Rejecting "+xpath+" because of blacklisted substring "+blacklistPattern);
-                			xpathIterator.remove();
-                		}
-                	}
-                }                
-                
+                for (String blacklistPattern : facetConcept.getBlacklistPatterns()) {
+                    Iterator<String> xpathIterator = xpaths.iterator();
+                    while (xpathIterator.hasNext()) {
+                        String xpath = xpathIterator.next();
+                        if (xpath.contains(blacklistPattern)) {
+                            LOG.debug("Rejecting {} because of blacklisted substring {}", xpath, blacklistPattern);
+                            xpathIterator.remove();
+                        }
+                    }
+                }
+
                 config.setCaseInsensitive(facetConcept.isCaseInsensitive());
                 config.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
                 config.setPatterns(xpaths);
@@ -172,28 +173,31 @@ public class FacetMappingFactory {
                 }
             }
         } catch (NavException e) {
-            LOG.error("Error creating facetMapping from xsd: " + xsd + " ", e);
+            LOG.error("Error creating facetMapping from xsd: {}", xsd, e);
         }
         return result;
     }
-    
+
     /**
-     * Look if there is a contextual (container) data category associated with an ancestor by walking back.
+     * Look if there is a contextual (container) data category associated with
+     * an ancestor by walking back.
      */
-    private String getContext(String path, Map<String,String> pathConceptLinkMapping) {
+    private String getContext(String path, Map<String, String> pathConceptLinkMapping) {
         String context = null;
         String cpath = path;
-        while(context==null && !cpath.equals("/text()")) {
-            cpath = cpath.replaceAll("/[^/]*/text\\(\\)","/text()");
+        while (context == null && !cpath.equals("/text()")) {
+            cpath = cpath.replaceAll("/[^/]*/text\\(\\)", "/text()");
             context = pathConceptLinkMapping.get(cpath);
         }
         return context;
     }
 
     /**
-     * The id facet is special case and patterns must be added first.
-     * The standard pattern to get the id out of the header is the most reliable and it should fall back on concept matching if nothing matches.
-     * (Note this is the exact opposite of other facets where the concept match is probably better then the 'hardcoded' pattern).
+     * The id facet is special case and patterns must be added first. The
+     * standard pattern to get the id out of the header is the most reliable and
+     * it should fall back on concept matching if nothing matches. (Note this is
+     * the exact opposite of other facets where the concept match is probably
+     * better then the 'hardcoded' pattern).
      */
     private void handleId(List<String> xpaths, FacetConcept facetConcept) {
         if (FacetConstants.FIELD_ID.equals(facetConcept.getName())) {
@@ -202,10 +206,12 @@ public class FacetMappingFactory {
     }
 
     /**
-     * "this is where the magic happens".
-     * Finds paths in the xsd to all concepts (isocat data catagories).
+     * "this is where the magic happens". Finds paths in the xsd to all concepts
+     * (isocat data catagories).
+     *
      * @param xsd URL of XML Schema of some CMDI profile
-     * @return Map (Data Category -> List of XPath expressions linked to the key data category which can be found in CMDI files with this schema)
+     * @return Map (Data Category -> List of XPath expressions linked to the key
+     * data category which can be found in CMDI files with this schema)
      * @throws NavException
      */
     private Map<String, List<String>> createConceptLinkPathMapping(String xsd) throws NavException {
@@ -213,7 +219,7 @@ public class FacetMappingFactory {
         VTDGen vg = new VTDGen();
         boolean parseSuccess = vg.parseHttpUrl(xsd, true);
         if (!parseSuccess) {
-            LOG.error("Cannot create ConceptLink Map from xsd (xsd is probably not reachable): "+xsd+". All metadata instances that use this xsd will not be imported correctly.");
+            LOG.error("Cannot create ConceptLink Map from xsd (xsd is probably not reachable): " + xsd + ". All metadata instances that use this xsd will not be imported correctly.");
             return result; //return empty map, so the incorrect xsd is not tried for all metadata instances that specify it.
         }
         VTDNav vn = vg.getNav();
@@ -242,7 +248,9 @@ public class FacetMappingFactory {
     }
 
     /**
-     * Goal is to get the "datcat" attribute. Tries a number of different favors that were found in the xsd's.
+     * Goal is to get the "datcat" attribute. Tries a number of different favors
+     * that were found in the xsd's.
+     *
      * @return -1 if index is not found.
      */
     private int getDatcatIndex(VTDNav vn) throws NavException {
@@ -259,6 +267,7 @@ public class FacetMappingFactory {
 
     /**
      * Given an xml-token path thingy create an xpath.
+     *
      * @param elementPath
      * @return
      */
@@ -272,6 +281,7 @@ public class FacetMappingFactory {
 
     /**
      * does some updating after a step. To keep the path proper and path-y.
+     *
      * @param vn
      * @param elementPath
      * @param elementName
@@ -291,6 +301,7 @@ public class FacetMappingFactory {
     }
 
     class Token {
+
         final String name;
         final int depth;
 
