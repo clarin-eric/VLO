@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.service.solr.impl;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -70,6 +71,27 @@ public abstract class AbstractSolrQueryFactory {
     protected final String createFilterQuery(String facetName, String value) {
         // escape value and wrap in quotes to make literal query
         return String.format("%s:\"%s\"", facetName, ClientUtils.escapeQueryChars(value));
+    }
+
+    /**
+     * Creates an OR filter query over the provided facet/value pairs (a query
+     * that requests all records matching ANY of the facet/value pairs)
+     *
+     * @param facetValues map with facet/value pairs that should be matched
+     * @return
+     */
+    protected final String createFilterOrQuery(Map<String, String> facetValues) {
+        // escape value and wrap in quotes to make literal query
+        final StringBuilder queryBuilder = new StringBuilder();
+        final Iterator<Map.Entry<String, String>> iterator = facetValues.entrySet().iterator();
+        while (iterator.hasNext()) {
+            final Map.Entry<String, String> facetValue = iterator.next();
+            queryBuilder.append(createFilterQuery(facetValue.getKey(), facetValue.getValue()));
+            if (iterator.hasNext()) {
+                queryBuilder.append(" OR ");
+            }
+        }
+        return queryBuilder.toString();
     }
 
 }

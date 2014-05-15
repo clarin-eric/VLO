@@ -74,11 +74,12 @@ public class SolrDocumentQueryFactoryImplTest {
      */
     @Test
     public void testCreateDocumentQueryForDocId() {
-        final SolrQuery query = instance.createDocumentQuery("documentId");
+        final SolrQuery query = instance.createDocumentQuery("document\"Id");
 
         final String[] filterQueries = query.getFilterQueries();
         assertEquals(1, filterQueries.length);
-        assertEquals("id:\"documentId\"", filterQueries[0]);
+        // expecting query that looks in both id and selflink fields with properly escaped values
+        assertEquals("id:\"document\\\"Id\" OR _selfLink:\"document\\\"Id\"", filterQueries[0]);
 
         final String fields = query.getFields();
         assertTrue(fields.contains("field1"));
