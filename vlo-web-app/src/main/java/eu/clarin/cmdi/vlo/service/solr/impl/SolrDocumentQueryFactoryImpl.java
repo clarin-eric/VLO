@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
+import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentQueryFactory;
@@ -34,7 +35,7 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
     private final SolrQuery defaultQueryTemplate;
 
     /**
-     * 
+     *
      * @param documentFields fields that should be included in document queries
      */
     public SolrDocumentQueryFactoryImpl(Collection<String> documentFields) {
@@ -62,7 +63,15 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
         // consider all documents
         query.setQuery(SOLR_SEARCH_ALL);
         // filter by ID
-        query.addFilterQuery(createFilterQuery(FacetConstants.FIELD_ID, docId));
+        // check for ID value in both 'id' and 'self link' fields, both ought to
+        // be unique and self link use to be ID in old VLO, so this should keep old
+        // URL's valid with a minimal likelihood of clashes
+        final ImmutableMap<String, String> idOrQueryMap = ImmutableMap.<String, String>builder()
+                .put(FacetConstants.FIELD_ID, docId)
+                .put(FacetConstants.FIELD_SELF_LINK, docId)
+                .build();
+        query.addFilterQuery(createFilterOrQuery(idOrQueryMap));
+        
         // one result max
         query.setRows(1);
         return query;
