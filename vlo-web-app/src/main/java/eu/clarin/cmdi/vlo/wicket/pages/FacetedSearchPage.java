@@ -16,6 +16,7 @@ import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -37,13 +38,13 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     private FacetFieldsService facetFieldsService;
     @SpringBean
     private VloConfig vloConfig;
-    @SpringBean(name="queryParametersConverter")
+    @SpringBean(name = "queryParametersConverter")
     private PageParametersConverter<QueryFacetsSelection> paramsConverter;
 
     private SearchResultsPanel searchResultsPanel;
-    private Panel facetsPanel;
-    private Panel collectionsPanel;
-    private WebMarkupContainer navigation;
+    private Component facetsPanel;
+    private Component collectionsPanel;
+    private Component navigation;
 
     public FacetedSearchPage(IModel<QueryFacetsSelection> queryModel) {
         super(queryModel);
@@ -65,7 +66,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
         add(createSearchForm("search"));
 
-        collectionsPanel = createCollectionsPanel("collectionsFacet");
+        collectionsPanel = createCollectionsPanel("collections");
         add(collectionsPanel);
 
         facetsPanel = createFacetsPanel("facets");
@@ -81,14 +82,14 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     private WebMarkupContainer createNavigation(String id) {
         final WebMarkupContainer container = new WebMarkupContainer(id);
         container.setOutputMarkupId(true);
-        container.add(new BreadCrumbPanel("breadcrumbs", getModel()){
+        container.add(new BreadCrumbPanel("breadcrumbs", getModel()) {
 
             @Override
             protected void onSelectionChanged(QueryFacetsSelection selection, AjaxRequestTarget target) {
                 setModelObject(selection);
                 updateSelection(target);
             }
-            
+
         });
         container.add(new TopLinksPanel("permalink", getModel()) {
 
@@ -128,17 +129,27 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         return searchForm;
     }
 
-    private Panel createCollectionsPanel(final String id) {
-        final FacetPanel panel = new SingleFacetPanel(id, getModel(), vloConfig.getCollectionFacet(), facetFieldsService, 3) {
+    private Component createCollectionsPanel(final String id) {
+        // collection facet is optional...
+        final WebMarkupContainer enclosure = new WebMarkupContainer(id);
+        enclosure.setOutputMarkupId(true);
+        if (vloConfig.getCollectionFacet() != null) {
+            final FacetPanel panel = new SingleFacetPanel("collectionsFacet", getModel(), vloConfig.getCollectionFacet(), facetFieldsService, 3) {
 
-            @Override
-            protected void selectionChanged(AjaxRequestTarget target) {
-                updateSelection(target);
-            }
+                @Override
+                protected void selectionChanged(AjaxRequestTarget target) {
+                    updateSelection(target);
+                }
 
-        };
-        panel.setOutputMarkupId(true);
-        return panel;
+            };
+            enclosure.add(panel);
+        } else {
+            // no collection facet, do not add the panel
+            final WebMarkupContainer placeholder = new WebMarkupContainer("collectionsFacet");
+            placeholder.setVisible(false);
+            enclosure.add(placeholder);
+        }
+        return enclosure;
     }
 
     private Panel createFacetsPanel(final String id) {

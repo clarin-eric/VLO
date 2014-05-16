@@ -24,6 +24,8 @@ import eu.clarin.cmdi.vlo.wicket.components.SearchForm;
 import eu.clarin.cmdi.vlo.wicket.panels.SingleFacetPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SimpleSearchBrowsePanel;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -45,9 +47,9 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
     @SpringBean
     private FacetFieldsService facetFieldsService;
 
-    private final SingleFacetPanel collectionsPanel;
-    private final WebMarkupContainer navigation;
-    private final WebMarkupContainer browse;
+    private final Component collectionsPanel;
+    private final MarkupContainer navigation;
+    private final MarkupContainer browse;
 
     public SimpleSearchPage(PageParameters parameters) {
         super(parameters);
@@ -69,17 +71,7 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
         navigation.add(new TopLinksPanel("topLinks"));
 
         // add a persistenet panel for selection of a value for the collection facet
-        collectionsPanel = new SingleFacetPanel("collectionsFacet", model, vloConfig.getCollectionFacet(), facetFieldsService, 3) {
-
-            @Override
-            protected void selectionChanged(AjaxRequestTarget target) {
-                if (target != null) {
-                    target.add(navigation);
-                    target.add(collectionsPanel);
-                    target.add(browse);
-                }
-            }
-        };
+        collectionsPanel = createCollectionsPanel("collectionsFacet");
         collectionsPanel.setOutputMarkupId(true);
         add(collectionsPanel);
 
@@ -95,6 +87,28 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
         // add a panel with browsing options
         browse = new SimpleSearchBrowsePanel("browse", getModel());
         add(browse);
+    }
+
+    private Component createCollectionsPanel(String id) {
+        // collection facet is optional...
+        if (vloConfig.getCollectionFacet() != null) {
+            return new SingleFacetPanel(id, getModel(), vloConfig.getCollectionFacet(), facetFieldsService, 3) {
+
+                @Override
+                protected void selectionChanged(AjaxRequestTarget target) {
+                    if (target != null) {
+                        target.add(navigation);
+                        target.add(collectionsPanel);
+                        target.add(browse);
+                    }
+                }
+            };
+        } else {
+            // no collection facet, do not add the panel
+            final WebMarkupContainer placeholder = new WebMarkupContainer(id);
+            placeholder.setVisible(false);
+            return placeholder;
+        }
     }
 
     @Override
