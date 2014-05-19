@@ -25,26 +25,26 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     }
 
     @Override
-	public CMDIData process(File file) throws VTDException, IOException {
-        CMDIData result = new CMDIData();
+    public CMDIData process(File file) throws VTDException, IOException {
+        CMDIData cmdiData = new CMDIData();
         VTDGen vg = new VTDGen();
         FileInputStream fileInputStream = new FileInputStream(file); 
         vg.setDoc(IOUtils.toByteArray(fileInputStream));
         vg.parse(true);
-        fileInputStream.close();;
+        fileInputStream.close();
         
         VTDNav nav = vg.getNav();
-        setNameSpace(nav);//setting namespace once, all other instance of AutoPilot keep the setting (a bit tricky).
+        setNameSpace(nav); //setting namespace once, all other instance of AutoPilot keep the setting (a bit tricky).
         FacetMapping facetMapping = getFacetMapping(nav.cloneNav(), file.getAbsolutePath());
-        /** New nice error log to find erroneous files */
-        if(facetMapping.getFacets().size() == 0){
-            LOG.error("Problems mapping facets for file: " + file.getAbsolutePath());
+
+        if(facetMapping.getFacets().isEmpty()){
+            LOG.error("Problems mapping facets for file: {}", file.getAbsolutePath());
         }
 
         nav.toElement(VTDNav.ROOT);
-        processResources(result, nav);
-        processFacets(result, nav, facetMapping);
-        return result;
+        processResources(cmdiData, nav);
+        processFacets(cmdiData, nav, facetMapping);
+        return cmdiData;
     }
 
     static void setNameSpace(VTDNav nav) {
@@ -52,13 +52,20 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         ap.declareXPathNameSpace("c", "http://www.clarin.eu/cmd/");
     }
 
-    private FacetMapping getFacetMapping(VTDNav nav, String tolog) throws VTDException {
+    /**
+     * Extracts valid XML patterns for all facet definitions
+     * @param nav VTD Navigator
+     * @param cmdiFilePath Absolute path of the XML file for which nav was created
+     * @return the facet mapping used to map meta data to facets
+     * @throws VTDException 
+     */
+    private FacetMapping getFacetMapping(VTDNav nav, String cmdiFilePath) throws VTDException {
         String xsd = extractXsd(nav);
         if (xsd == null) {
             throw new RuntimeException("Cannot get xsd schema so cannot get a proper mapping. Parse failed!");
         }
         if (xsd.indexOf("http") != xsd.lastIndexOf("http")){
-            LOG.info("FILE WITH WEIRD HTTP THINGY! " + tolog);
+            LOG.info("No valid CMDI schema URL was extracted. This is an indication of a broken CMDI file (like false content in //MdProfile element). {}", cmdiFilePath);
         }
         String facetConceptsFile = MetadataImporter.config.getFacetConceptsFile();
         if (facetConceptsFile.length() == 0){
@@ -68,6 +75,12 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         return FacetMappingFactory.getFacetMapping(facetConceptsFile, xsd);
     }
 
+    /**
+     * Try two approaches to extract the XSD schema information from the CMDI file
+     * @param nav VTD Navigator
+     * @return URL of CMDI schema, or null if neither the CMDI header nor the XMLSchema-instance's attributes contained the information
+     * @throws VTDException 
+     */
     String extractXsd(VTDNav nav) throws VTDException {
         String xsd = getXsdFromHeader(nav);
         if (xsd == null) {
@@ -76,6 +89,14 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         return xsd;
     }
 
+    /**
+     * Extract XSD schema information from CMDI header (using element //Header/MdProfile)
+     * @param nav VTD Navigator
+     * @return URL to CMDI schema, or null if content of //Header/MdProfile element could not be read
+     * @throws XPathParseException
+     * @throws XPathEvalException
+     * @throws NavException 
+     */
     private String getXsdFromHeader(VTDNav nav) throws XPathParseException, XPathEvalException, NavException {
         String result = null;
         nav.toElement(VTDNav.ROOT);
@@ -89,6 +110,12 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         return result;
     }
 
+    /**
+     * Extract XSD schema information from schemaLocation or noNamespaceSchemaLocation attributes
+     * @param nav VTD Navigator
+     * @return URL to CMDI schema, or null if attributes don't exist
+     * @throws NavException 
+     */
     private String getXsdFromSchemaLocation(VTDNav nav) throws NavException {
         String result = null;
         nav.toElement(VTDNav.ROOT);
@@ -105,7 +132,13 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         return result;
     }
     
-    private void processResources(CMDIData result, VTDNav nav) throws VTDException {
+    /**
+     * Extract ResourceProxies from ResourceProxyList
+     * @param cmdiData representation of the CMDI document
+     * @param nav VTD Navigator
+     * @throws VTDException 
+     */
+    private void processResources(CMDIData cmdiData, VTDNav nav) throws VTDException {
         
         AutoPilot resourceProxy = new AutoPilot(nav);
         resourceProxy.selectXPath("/c:CMD/c:Resources/c:ResourceProxyList/c:ResourceProxy");
@@ -124,17 +157,24 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             
             if (!ref.equals("") && !type.equals("")) {
                 // note that the mime type could be empty
-                result.addResource(ref, type, mimeType);
+                cmdiData.addResource(ref, type, mimeType);
             }
         }
     }
 
-    private void processFacets(CMDIData result, VTDNav nav, FacetMapping facetMapping) throws VTDException {
+    /**
+     * Extracts facet values according to the facetMapping
+     * @param cmdiData representation of the CMDI document
+     * @param nav VTD Navigator
+     * @param facetMapping the facet mapping used to map meta data to facets
+     * @throws VTDException 
+     */
+    private void processFacets(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException {
         List<FacetConfiguration> facetList = facetMapping.getFacets();
         for (FacetConfiguration config : facetList) {
             List<String> patterns = config.getPatterns();
             for (String pattern : patterns) {
-                boolean matchedPattern = matchPattern(result, nav, config, pattern, config.getAllowMultipleValues());
+                boolean matchedPattern = matchPattern(cmdiData, nav, config, pattern, config.getAllowMultipleValues());
                 if (matchedPattern && !config.getAllowMultipleValues()) {
                     break;
                 }
@@ -142,7 +182,17 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         }
     }
 
-    private boolean matchPattern(CMDIData result, VTDNav nav, FacetConfiguration config, String pattern, Boolean allowMultipleValues) throws VTDException {
+    /**
+     * Extracts content from CMDI file for a specific facet based on a single XPath expression
+     * @param cmdiData representation of the CMDI document
+     * @param nav VTD Navigator
+     * @param config facet configuration
+     * @param pattern XPath expression
+     * @param allowMultipleValues information if multiple values are allowed in this facet
+     * @return pattern matched a node in the CMDI file?
+     * @throws VTDException 
+     */
+    private boolean matchPattern(CMDIData cmdiData, VTDNav nav, FacetConfiguration config, String pattern, Boolean allowMultipleValues) throws VTDException {
         boolean matchedPattern = false;
         AutoPilot ap = new AutoPilot(nav);
         ap.selectXPath(pattern);
@@ -155,7 +205,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             }
             String value = nav.toString(index);
             value = postProcess(config.getName(), value);
-            result.addDocField(config.getName(), value, config.isCaseInsensitive());
+            cmdiData.addDocField(config.getName(), value, config.isCaseInsensitive());
             index = ap.evalXPath();
             
             if(!allowMultipleValues)
@@ -164,13 +214,18 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         return matchedPattern;
     }
 
-    private String postProcess(String name, String value) {
-        String result = value;
-        if (postProcessors.containsKey(name)) {
-            PostProcessor processor = postProcessors.get(name);
-            result = processor.process(value);
+    /**
+     * Applies registered PostProcessor to extracted values
+     * @param facetName name of the facet for which value was extracted
+     * @param extractedValue extracted value from CMDI file
+     * @return value after applying matching PostProcessor or the original value if no PostProcessor was registered for the facet 
+     */
+    private String postProcess(String facetName, String extractedValue) {
+        String result = extractedValue;
+        if (postProcessors.containsKey(facetName)) {
+            PostProcessor processor = postProcessors.get(facetName);
+            result = processor.process(extractedValue);
         }
         return result.trim();
     }
-
 }
