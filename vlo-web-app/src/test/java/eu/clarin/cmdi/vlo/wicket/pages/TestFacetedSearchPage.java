@@ -1,9 +1,9 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.VloApplicationTestConfig;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
-import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
-import eu.clarin.cmdi.vlo.config.VloConfigFactory;
-import eu.clarin.cmdi.vlo.config.VloSpringConfig;
+import eu.clarin.cmdi.vlo.config.VloServicesSpringConfig;
+import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -33,43 +34,16 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class TestFacetedSearchPage {
 
-    @Configuration
-    static class ContextConfiguration extends VloSpringConfig {
-
-        @Bean
-        public Mockery mockery() {
-            return new JUnit4Mockery();
-        }
-
-        @Override
-        public FacetFieldsService facetFieldsService() {
-            return mockery().mock(FacetFieldsService.class, "facetFieldsService");
-        }
-
-        @Override
-        public SolrDocumentService documentService() {
-            return mockery().mock(SolrDocumentService.class);
-        }
-
-        @Override
-        public VloConfigFactory vloConfigFactory() {
-            //TODO: Separate test config? -> override vloConfig() instead
-            return new DefaultVloConfigFactory();
-        }
-
-    }
-
-    private WicketTester tester;
     @Inject
     private VloWicketApplication application;
     @Inject
     private Mockery mockery;
-
     @Inject
     private FacetFieldsService facetFieldsService;
-
     @Inject
     private SolrDocumentService documentService;
+
+    private WicketTester tester;
 
     @Before
     public void setUp() {
@@ -100,5 +74,42 @@ public class TestFacetedSearchPage {
 
         //assert rendered page class
         tester.assertRenderedPage(FacetedSearchPage.class);
+    }
+
+    /**
+     * Custom configuration injected into web app for testing
+     */
+    @Configuration
+    @Import({
+        VloSolrTestConfig.class,
+        VloApplicationTestConfig.class,
+        VloServicesSpringConfig.class})
+    static class ContextConfiguration {
+
+        @Bean
+        public Mockery mockery() {
+            // shared mockery context
+            return new JUnit4Mockery();
+        }
+    }
+
+    /**
+     * Provides some mock Solr services
+     */
+    @Configuration
+    static class VloSolrTestConfig extends VloSolrSpringConfig {
+
+        @Inject
+        private Mockery mockery;
+
+        @Override
+        public SolrDocumentService documentService() {
+            return mockery.mock(SolrDocumentService.class);
+        }
+
+        @Override
+        public FacetFieldsService facetFieldsService() {
+            return mockery.mock(FacetFieldsService.class, "facetFieldsService");
+        }
     }
 }

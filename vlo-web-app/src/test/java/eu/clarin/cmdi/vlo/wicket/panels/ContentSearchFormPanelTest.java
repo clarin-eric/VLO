@@ -19,8 +19,10 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
+import eu.clarin.cmdi.vlo.config.VloApplicationSpringConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.config.VloSpringConfig;
+import eu.clarin.cmdi.vlo.config.VloServicesSpringConfig;
+import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
 import java.io.IOException;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
@@ -31,6 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -44,26 +47,6 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class ContentSearchFormPanelTest {
-
-    /**
-     * custom configuration injected into web app for testing
-     */
-    @Configuration
-    static class ContextConfiguration extends VloSpringConfig {
-
-        @Override
-        public VloConfig vloConfig() {
-            try {
-                final VloConfig config = new DefaultVloConfigFactory().newConfig();
-                // this globally configured URL should be the action target of the form
-                config.setFederatedContentSearchUrl("http://fcs.org/aggregator");
-                return config;
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        }
-
-    }
 
     @Inject
     private VloWicketApplication application;
@@ -81,12 +64,43 @@ public class ContentSearchFormPanelTest {
 
         final ContentSearchFormPanel panel = new ContentSearchFormPanel("panel", Model.of(document), Model.of("http://cqlEndPoint/"));
         tester.startComponentInPage(panel);
-        
+
         // form action should be aggregator search page
         tester.assertContains("action=\"http://fcs.org/aggregator\"");
 
         // json hidden input should have the CQL endpoint and document handle, and should be encoded into entities
         tester.assertContains(Pattern.quote("name=\"x-aggregation-context\" value=\"{&quot;http://cqlEndPoint/&quot;: [&quot;hdl:1234/selflink&quot;]}\""));
+    }
+
+    /**
+     * Custom configuration injected into web app for testing
+     */
+    @Configuration
+    @Import({
+        VloApplicationTestConfig.class,
+        VloSolrSpringConfig.class,
+        VloServicesSpringConfig.class})
+    static class ContextConfiguration {
+    }
+
+    /**
+     * Overrides returned application configuration
+     */
+    @Configuration
+    static class VloApplicationTestConfig extends VloApplicationSpringConfig {
+
+        @Override
+        public VloConfig vloConfig() {
+            try {
+                // override default config
+                final VloConfig config = new DefaultVloConfigFactory().newConfig();
+                // this globally configured URL should be the action target of the form
+                config.setFederatedContentSearchUrl("http://fcs.org/aggregator");
+                return config;
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
 }

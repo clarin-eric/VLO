@@ -1,11 +1,11 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.VloApplicationTestConfig;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
-import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
-import eu.clarin.cmdi.vlo.config.VloConfigFactory;
-import eu.clarin.cmdi.vlo.config.VloSpringConfig;
+import eu.clarin.cmdi.vlo.config.VloServicesSpringConfig;
+import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import javax.inject.Inject;
 import org.apache.solr.common.SolrDocument;
@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
@@ -35,28 +36,6 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD) // gives us a fresh context for each test
 public class TestRecordPage {
 
-    @Configuration
-    static class ContextConfiguration extends VloSpringConfig {
-
-        @Bean
-        public Mockery mockery() {
-            return new JUnit4Mockery();
-        }
-
-        @Override
-        public SolrDocumentService documentService() {
-            return mockery().mock(SolrDocumentService.class);
-        }
-
-        @Override
-        public VloConfigFactory vloConfigFactory() {
-            //TODO: Separate test config? -> override vloConfig() instead
-            return new DefaultVloConfigFactory();
-        }
-
-    }
-
-    private WicketTester tester;
     @Inject
     private VloWicketApplication application;
     @Inject
@@ -64,6 +43,7 @@ public class TestRecordPage {
     @Inject
     private SolrDocumentService documentService;
 
+    private WicketTester tester;
     private SolrDocument document;
     private PageParameters params;
 
@@ -117,4 +97,35 @@ public class TestRecordPage {
     }
 
     //TODO: Add test for display of resources
+    /**
+     * Custom configuration injected into web app for testing
+     */
+    @Configuration
+    @Import({
+        VloSolrSpringTestConfig.class,
+        VloApplicationTestConfig.class,
+        VloServicesSpringConfig.class})
+    static class ContextConfiguration {
+
+        @Bean
+        public Mockery mockery() {
+            return new JUnit4Mockery();
+        }
+    }
+
+    /**
+     * Provides some mock Solr services
+     */
+    @Configuration
+    static class VloSolrSpringTestConfig extends VloSolrSpringConfig {
+
+        @Inject
+        private Mockery mockery;
+
+        @Override
+        public SolrDocumentService documentService() {
+            return mockery.mock(SolrDocumentService.class);
+        }
+    }
+
 }

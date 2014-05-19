@@ -14,23 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.config;
+package eu.clarin.cmdi.vlo;
 
+import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
+import eu.clarin.cmdi.vlo.config.VloApplicationSpringConfig;
+import eu.clarin.cmdi.vlo.config.VloConfigFactory;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
- * Annotation based Spring configuration for the VLO web application. Note: this
- * class imports a number of configuration modules.
- *
- * Note: All of this works because
- * {@link org.apache.wicket.spring.SpringWebApplicationFactory} is used in place
- * of the standard Wicket application factory and annotation driven
- * configuration is enabled in WEB-INF/applicationContext.xml
+ * Extension of {@link VloApplicationSpringConfig} that returns the
+ * {@link DefaultVloConfigFactory} from {@link #vloConfigFactory() }
  *
  * @author twagoo
  */
 @Configuration
-@Import({VloApplicationSpringConfig.class, VloServicesSpringConfig.class, VloSolrSpringConfig.class})
-public class VloSpringConfig {
+public class VloApplicationTestConfig extends VloApplicationSpringConfig {
+
+    @Override
+    public VloConfigFactory vloConfigFactory() {
+        return new DefaultVloConfigFactory();
+    }
 }

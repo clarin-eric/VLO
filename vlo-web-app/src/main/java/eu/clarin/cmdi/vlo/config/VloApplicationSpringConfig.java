@@ -16,21 +16,40 @@
  */
 package eu.clarin.cmdi.vlo.config;
 
+import eu.clarin.cmdi.vlo.VloWicketApplication;
+import java.io.IOException;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
- * Annotation based Spring configuration for the VLO web application. Note: this
- * class imports a number of configuration modules.
- *
- * Note: All of this works because
- * {@link org.apache.wicket.spring.SpringWebApplicationFactory} is used in place
- * of the standard Wicket application factory and annotation driven
- * configuration is enabled in WEB-INF/applicationContext.xml
+ * Main VLO web application beans
  *
  * @author twagoo
  */
 @Configuration
-@Import({VloApplicationSpringConfig.class, VloServicesSpringConfig.class, VloSolrSpringConfig.class})
-public class VloSpringConfig {
+public class VloApplicationSpringConfig {
+
+    /**
+     *
+     * @return the web application object that represents the Wicket application
+     */
+    @Bean
+    public VloWicketApplication webApplication() {
+        return new VloWicketApplication();
+    }
+
+    @Bean
+    public VloConfig vloConfig() {
+        try {
+            return vloConfigFactory().newConfig();
+        } catch (IOException ex) {
+            throw new RuntimeException("Could not read VLO configuration", ex);
+        }
+    }
+
+    @Bean
+    public VloConfigFactory vloConfigFactory() {
+        return new ServletVloConfigFactory();
+    }
+
 }
