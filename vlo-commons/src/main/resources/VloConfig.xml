@@ -63,11 +63,12 @@
         If removed, the collection facet will not be shown (can be used to
         move the collection facet in with the other facets).
     -->
-    <collectionFacet>collection</collectionFacet>
+    <!--<collectionFacet>collection</collectionFacet>-->
     
     <!-- Fields shown as facets on the search page -->
-    <facetFields>
+    <facetFields>        
         <facetField>language</facetField>
+        <facetField>collection</facetField>
         <facetField>resourceClass</facetField>
         <facetField>continent</facetField>
         <facetField>country</facetField>
@@ -83,9 +84,10 @@
         
     <simpleSearchFacetFields>
         <simpleSearchFacetField>language</simpleSearchFacetField>
+        <simpleSearchFacetField>collection</simpleSearchFacetField>
         <simpleSearchFacetField>resourceClass</simpleSearchFacetField>
+        <simpleSearchFacetField>modality</simpleSearchFacetField>
         <simpleSearchFacetField>genre</simpleSearchFacetField>
-        <simpleSearchFacetField>nationalProject</simpleSearchFacetField>
     </simpleSearchFacetFields>
     
     <!-- Fields shown in expanded search results on the search page -->

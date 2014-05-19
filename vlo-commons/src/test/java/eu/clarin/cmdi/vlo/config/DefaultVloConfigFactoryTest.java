@@ -674,6 +674,7 @@ public class DefaultVloConfigFactoryTest {
 
         List<String> expResult = Arrays.asList(
                 "language",
+                "collection",
                 "resourceClass",
                 "continent",
                 "country",
@@ -695,6 +696,7 @@ public class DefaultVloConfigFactoryTest {
     public void testGetAllFacetsField() {
         final String[] expItems = new String[]{
             "language",
+            "collection",
             "resourceClass",
             "modality",
             "continent",
@@ -959,7 +961,7 @@ public class DefaultVloConfigFactoryTest {
     @Test
     public void testGetCollectionFacet() {
         final String result = config.getCollectionFacet();
-        assertEquals("collection", result);
+        assertNull(result);
     }
 
     @Test
@@ -977,6 +979,6 @@ public class DefaultVloConfigFactoryTest {
     @Test
     public void testGetSimpleSearchFacetFields() {
         List<String> result = config.getSimpleSearchFacetFields();
-        assertEquals(4, result.size());
+        assertEquals(5, result.size());
     }
 }
