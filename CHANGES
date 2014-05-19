@@ -10,6 +10,7 @@ VLO 3.0 (May 2014)
 * Removed mapping for http://purl.org/dc/terms/language datacategory
 	see <https://trac.clarin.eu/ticket/554>
 * Styling of CMDI to HTML transormation output
+* Added simple search page to breadcrumbs
 
 VLO 3.0-beta3 (May 2014)
 * Added paging to the 'all facet values' list
