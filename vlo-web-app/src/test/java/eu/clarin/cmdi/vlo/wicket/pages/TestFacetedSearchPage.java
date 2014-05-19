@@ -9,6 +9,7 @@ import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import java.util.Arrays;
 import java.util.List;
+import javax.inject.Inject;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.util.tester.WicketTester;
@@ -18,7 +19,6 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
@@ -60,15 +60,15 @@ public class TestFacetedSearchPage {
     }
 
     private WicketTester tester;
-    @Autowired(required = true)
+    @Inject
     private VloWicketApplication application;
-    @Autowired(required = true)
+    @Inject
     private Mockery mockery;
 
-    @Autowired(required = true)
+    @Inject
     private FacetFieldsService facetFieldsService;
 
-    @Autowired(required = true)
+    @Inject
     private SolrDocumentService documentService;
 
     @Before

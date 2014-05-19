@@ -23,13 +23,13 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloSpringConfig;
 import java.io.IOException;
 import java.util.regex.Pattern;
+import javax.inject.Inject;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -65,7 +65,7 @@ public class ContentSearchFormPanelTest {
 
     }
 
-    @Autowired(required = true)
+    @Inject
     private VloWicketApplication application;
     private WicketTester tester;
 

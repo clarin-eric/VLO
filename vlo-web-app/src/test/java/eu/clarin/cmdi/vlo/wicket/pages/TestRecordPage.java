@@ -7,6 +7,7 @@ import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
 import eu.clarin.cmdi.vlo.config.VloConfigFactory;
 import eu.clarin.cmdi.vlo.config.VloSpringConfig;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import javax.inject.Inject;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
@@ -17,7 +18,6 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
@@ -57,11 +57,11 @@ public class TestRecordPage {
     }
 
     private WicketTester tester;
-    @Autowired(required = true)
+    @Inject
     private VloWicketApplication application;
-    @Autowired(required = true)
+    @Inject
     private Mockery mockery;
-    @Autowired(required = true)
+    @Inject
     private SolrDocumentService documentService;
 
     private SolrDocument document;

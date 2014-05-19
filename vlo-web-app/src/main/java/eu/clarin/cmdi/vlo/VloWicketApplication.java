@@ -9,6 +9,7 @@ import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
+import javax.inject.Inject;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -18,7 +19,6 @@ import org.apache.wicket.util.lang.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -32,11 +32,11 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
 
     private final static Logger logger = LoggerFactory.getLogger(VloWicketApplication.class);
 
-    @Autowired
+    @Inject
     private SolrDocumentService documentService;
-    @Autowired
+    @Inject
     private XmlTransformationService cmdiTransformationService;
-    @Autowired
+    @Inject
     private VloConfig vloConfig;
 
     private ApplicationContext applicationContext;
