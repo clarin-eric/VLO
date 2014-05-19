@@ -60,7 +60,7 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
 
     public BreadCrumbPanel(String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
-        add(new BookmarkablePageLink("mainpage", FacetedSearchPage.class));
+        add(new BookmarkablePageLink("searchPage", FacetedSearchPage.class));
         add(query = createQuery(model, "query"));
         add(facets = createFacets(model, "facets"));
     }
