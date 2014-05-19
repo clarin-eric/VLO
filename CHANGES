@@ -2,17 +2,18 @@ Bug Fixes and Features
 
 VLO 3.0 (May 2014)
 * Made separate collection feature optional
-	https://trac.clarin.eu/ticket/558
+	<https://trac.clarin.eu/ticket/558>
 * Fixed empty record page title issue
-	https://trac.clarin.eu/ticket/556
+	<https://trac.clarin.eu/ticket/556>
 * Improved compatibility with old bookmarks
-	https://trac.clarin.eu/ticket/557
+	<https://trac.clarin.eu/ticket/557>
 * Removed mapping for http://purl.org/dc/terms/language datacategory
+	see <https://trac.clarin.eu/ticket/554>
 * Styling of CMDI to HTML transormation output
 
 VLO 3.0-beta3 (May 2014)
 * Added paging to the 'all facet values' list
-	https://trac.clarin.eu/ticket/543
+	<https://trac.clarin.eu/ticket/543>
 * Removed duplicate VloConfig.xml in distribution
 * Add 'busy' indicators to a number of AJAX action links
 * Hidden previous/next links on record page if result set has only one record
@@ -23,7 +24,7 @@ VLO 3.0-beta3 (May 2014)
 
 VLO 3.0-beta2 (May 2014)
 * Added the "_selfLink" field to fix FCS aggregator connection
-	https://trac.clarin.eu/ticket/542
+	<https://trac.clarin.eu/ticket/542>
 * Removed simple search selection ‘leave this page’ dialogue
 * Included record name in page title for record pages
 
@@ -51,7 +52,7 @@ VLO 3.0-beta (April 2014)
 	'solr.data.dir', which needs to be configured in the Tomcat instance
 
 VLO 3.0-alpha (March 2014)
-* Reimplemented Wicket front-end, see <https://trac.clarin.eu/milestone/VLO-3.0>
+* Reimplemented Wicket front-end see <https://trac.clarin.eu/milestone/VLO-3.0>
 * Upgraded to Solr 4.6.0
 * Added application monitoring via JavaMelody at /monitoring
 * Added/replaced context params
