@@ -81,6 +81,7 @@ public class MetadataImporter {
         POST_PROCESSORS.put(FacetConstants.FIELD_YEAR, new YearPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_CLARIN_PROFILE, new CMDIComponentProfileNamePostProcessor());
+        POST_PROCESSORS.put(FacetConstants.FIELD_RESOURCE_CLASS, new ResourceClassPostProcessor());
     }
 
     /**
