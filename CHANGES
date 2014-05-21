@@ -7,6 +7,9 @@ VLO 3.1 (???)
 	<https://trac.clarin.eu/ticket/547>
 * Removed the obsolete 'imdiBrowserUrl' configuration option
 
+VLO 3.0.1 (???)
+* ...
+
 VLO 3.0 (May 2014)
 * Made separate collection feature optional
 	<https://trac.clarin.eu/ticket/558>
