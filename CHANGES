@@ -1,7 +1,8 @@
 Bug Fixes and Features
 
 VLO 3.0.1 (???)
-* ...
+* DC-3786 (application type) was added to facet 'resourceClass'
+	<https://trac.clarin.eu/ticket/195>
 
 VLO 3.0 (May 2014)
 * Made separate collection feature optional
