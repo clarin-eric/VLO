@@ -304,6 +304,7 @@
     <concept>http://www.isocat.org/datcat/DC-3806</concept>
     <concept>http://www.isocat.org/rest/dc/3806</concept> <!-- not an official ISOcat PID - added to support cmdi-collectiontype, should be removed in the future -->
     <concept>http://www.isocat.org/datcat/DC-5424</concept>
+    <concept>http://www.isocat.org/datcat/DC-3786</concept>
     <pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceType/text()</pattern>
     <pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/text()</pattern>    
     <pattern>/c:CMD/c:Components/c:mods/c:typeOfResource/text()</pattern>   
