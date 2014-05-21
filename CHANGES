@@ -1,5 +1,12 @@
 Bug Fixes and Features
 
+VLO 3.1 (???)
+* Upgraded a number of dependencies including Solr, Wicket and Spring to a more recent version
+	<https://trac.clarin.eu/ticket/541>
+* A facet containing the language code was added
+	<https://trac.clarin.eu/ticket/547>
+* Removed the obsolete 'imdiBrowserUrl' configuration option
+
 VLO 3.0 (May 2014)
 * Made separate collection feature optional
 	<https://trac.clarin.eu/ticket/558>
