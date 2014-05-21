@@ -498,49 +498,6 @@ public class DefaultVloConfigFactoryTest {
     }
 
     /**
-     * Test the getIMDIBrowserUrl method
-     */
-    @Test
-    public void testGetIMDIBrowserUrl() {
-
-        System.out.println("getIMDIBrowserUrl");
-
-        String expResult;
-        try {
-            expResult = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=" + URLEncoder.encode("handle", "UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            expResult = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=" + "handle";
-        }
-        String result = config.getImdiBrowserUrl("handle");
-
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test the setIMDIBrowserUrl method
-     */
-    @Test
-    public void testSetIMDIBrowserUrl() {
-
-        System.out.println("setIMDIBrowserUrl");
-
-        String param = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=";
-
-        config.setImdiBrowserUrl(param);
-
-        String expResult;
-        try {
-            expResult = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=" + URLEncoder.encode("handle", "UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            expResult = "http://corpus1.mpi.nl/ds/imdi_browser?openpath=" + "handle";
-        }
-
-        String result = config.getImdiBrowserUrl("handle");
-
-        assertEquals(expResult, result);
-    }
-
-    /**
      * Test the getLanguageLinkPrefix method
      */
     @Test

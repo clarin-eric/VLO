@@ -583,37 +583,6 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the ProfileSchemaUrl parameter combined with a
-     * handle<br><br>
-     *
-     * For a description of the schema, refer to the general VLO documentation.
-     *
-     * @param handle the handle the URL is based on
-     * @return the value
-     */
-    public String getImdiBrowserUrl(String handle) {
-        String result;
-        try {
-            result = imdiBrowserUrl + URLEncoder.encode(handle, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            result = imdiBrowserUrl + handle;
-        }
-        return result;
-    }
-
-    /**
-     * Set the value of the IMDIBrowserUrl parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @param param the value
-     */
-    public void setImdiBrowserUrl(String param) {
-        imdiBrowserUrl = param;
-    }
-
-    /**
      * Get the value of the languageLinkPrefix parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO

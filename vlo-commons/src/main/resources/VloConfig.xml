@@ -54,14 +54,14 @@
     
     <handleServerUrl>http://hdl.handle.net/</handleServerUrl>
     
-    <imdiBrowserUrl>http://corpus1.mpi.nl/ds/imdi_browser?openpath=</imdiBrowserUrl>
-    
     <nationalProjectMapping>/nationalProjectsMapping.xml</nationalProjectMapping>
     
     <!-- 
         Facet field used to populate collection selector on search page 
-        If removed, the collection facet will not be shown (can be used to
+        If disabled, the collection facet will not be shown (can be used to
         move the collection facet in with the other facets).
+        
+        Uncomment to activate the separate collection facet display item.
     -->
     <!--<collectionFacet>collection</collectionFacet>-->
     
