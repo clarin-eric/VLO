@@ -3,6 +3,9 @@ Bug Fixes and Features
 VLO 3.0.1 (???)
 * DC-3786 (application type) was added to facet 'resourceClass'
 	<https://trac.clarin.eu/ticket/195>
+* Fixed highlighting of search terms that contain unicode characters
+	<https://trac.clarin.eu/ticket/561>
+* Renamed 'permalink' to 'link' 
 
 VLO 3.0 (May 2014)
 * Made separate collection feature optional

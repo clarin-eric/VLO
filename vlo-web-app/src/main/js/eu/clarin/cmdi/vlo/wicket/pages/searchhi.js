@@ -5,6 +5,7 @@
 /* Modified 20081218 to scroll to first hit like 
  http://www.woolyss.free.fr/js/searchhi_Woolyss.js and say when not found */
 /* Modified 20120112 to use the URL instead of referrer */
+/* Modified 20140522 <twan@clarin.eu> replaced unescape() with decodeURIComponent() */
 
 searchhi = {
     highlightWord: function(node, word) {
@@ -65,7 +66,7 @@ searchhi = {
             if (qsip.length == 1)
                 continue;
             if (qsip[0] == 'q' || qsip[0] == 'p') { // q= for Google, p= for Yahoo
-                var wordstring = unescape(qsip[1].replace(/\+/g, ' '));
+                var wordstring = decodeURIComponent(qsip[1].replace(/\+/g, ' '));
                 searchhi.process(wordstring);
             }
         }
