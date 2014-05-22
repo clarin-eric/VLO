@@ -23,6 +23,7 @@ import eu.clarin.cmdi.vlo.pojo.DocumentField;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import java.util.Collection;
@@ -114,11 +115,11 @@ public class FieldsTablePanel extends Panel {
         });
     }
 
-    private Label createValueLabel(String id, final IModel<String> facetNameModel, final IModel valueModel) {
+    private Label createValueLabel(String id, final IModel<String> facetNameModel, final IModel<String> valueModel) {
         final String fieldName = facetNameModel.getObject();
         if (SMART_LINK_FIELDS.contains(fieldName)) {
             // create label that generates links
-            return new SmartLinkLabel(id, valueModel);
+            return new SmartLinkLabel(id, new HandleLinkModel(valueModel));
         } else {
             // add a label for the facet value
             final Label fieldLabel = new Label(id, valueModel);
