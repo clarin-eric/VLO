@@ -5,6 +5,8 @@ VLO 3.1 (???)
 	<https://trac.clarin.eu/ticket/541>
 * A facet containing the language code was added
 	<https://trac.clarin.eu/ticket/547>
+* Fixed incorrect display of value count for values written in right-to-left script
+	<https://trac.clarin.eu/ticket/548>
 * Removed the obsolete 'imdiBrowserUrl' configuration option
 
 VLO 3.0.1 (???)
