@@ -16,27 +16,31 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import com.google.common.base.Strings;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
 import org.apache.wicket.Session;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.GenericWebPage;
+import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 /**
  * Base page for all VLO pages; has common header and footer markup and takes
@@ -112,6 +116,13 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         super.onInitialize();
         // page title label is added here because it uses an overridable method
         add(new Label("title", getTitleModel()));
+
+        // same for page description (this populates the <meta name="description" /> element)
+        add(new WebComponent("pageDescription") {
+            {
+                add(new AttributeAppender("content", getPageDescriptionModel()));
+            }
+        });
     }
 
     /**
@@ -121,6 +132,17 @@ public class VloBasePage<T> extends GenericWebPage<T> {
      */
     public IModel<String> getTitleModel() {
         return Model.of(DEFAULT_PAGE_TITLE);
+    }
+
+    /**
+     * Override to give a custom or dynamic description for the page via the
+     * description "meta" tag in the page's header
+     *
+     * @return string model that provides a description for the page, null for
+     * no description
+     */
+    public IModel<String> getPageDescriptionModel() {
+        return new StringResourceModel("vloDescription", null, (Object[]) null);
     }
 
     @Override

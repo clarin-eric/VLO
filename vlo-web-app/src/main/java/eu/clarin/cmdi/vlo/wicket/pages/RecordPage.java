@@ -287,6 +287,11 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     }
 
     @Override
+    public IModel<String> getPageDescriptionModel() {
+        return new SolrFieldStringModel(getModel(), FacetConstants.FIELD_DESCRIPTION);
+    }
+
+    @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         // add styling for CMDI to HTML transformation output
