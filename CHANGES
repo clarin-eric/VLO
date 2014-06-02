@@ -14,6 +14,8 @@ VLO 3.0.1 (???)
 	<https://trac.clarin.eu/ticket/561>
 * Fixed incorrect display of value count for values written in right-to-left script
 	<https://trac.clarin.eu/ticket/548>
+* Added a 'description' metadata element to the page header
+	<https://trac.clarin.eu/ticket/567>
 * Renamed 'permalink' to 'link' 
 
 VLO 3.0 (May 2014)
