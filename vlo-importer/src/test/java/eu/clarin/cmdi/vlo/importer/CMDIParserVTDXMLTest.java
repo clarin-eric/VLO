@@ -58,7 +58,6 @@ public class CMDIParserVTDXMLTest extends ImporterTestcase {
         vg.setDoc(content.getBytes());
         vg.parse(true);
         VTDNav nav = vg.getNav();
-        CMDIParserVTDXML.setNameSpace(nav);
         CMDIParserVTDXML parser = new CMDIParserVTDXML(null);
         String xsd = parser.extractXsd(nav);
         return xsd;

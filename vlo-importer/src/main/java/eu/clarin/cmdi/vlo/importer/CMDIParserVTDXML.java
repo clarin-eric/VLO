@@ -35,7 +35,6 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         fileInputStream.close();
         
         VTDNav nav = vg.getNav();
-        setNameSpace(nav); //setting namespace once, all other instance of AutoPilot keep the setting (a bit tricky).
         FacetMapping facetMapping = getFacetMapping(nav.cloneNav(), file.getAbsolutePath());
 
         if(facetMapping.getFacets().isEmpty()){
@@ -48,8 +47,11 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         return cmdiData;
     }
 
-    static void setNameSpace(VTDNav nav) {
-        AutoPilot ap = new AutoPilot(nav);
+    /**
+     * Setting namespace for Autopilot ap
+     * @param ap 
+     */
+    private void setNameSpace(AutoPilot ap) {
         ap.declareXPathNameSpace("c", "http://www.clarin.eu/cmd/");
     }
 
@@ -102,6 +104,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         String result = null;
         nav.toElement(VTDNav.ROOT);
         AutoPilot ap = new AutoPilot(nav);
+        setNameSpace(ap);
         ap.selectXPath("/c:CMD/c:Header/c:MdProfile/text()");
         int index = ap.evalXPath();
         if (index != -1) {
@@ -142,13 +145,19 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private void processResources(CMDIData cmdiData, VTDNav nav) throws VTDException {
         
         AutoPilot resourceProxy = new AutoPilot(nav);
+        setNameSpace(resourceProxy);
         resourceProxy.selectXPath("/c:CMD/c:Resources/c:ResourceProxyList/c:ResourceProxy");
         
         AutoPilot resourceRef = new AutoPilot(nav);
+        setNameSpace(resourceRef);
         resourceRef.selectXPath("c:ResourceRef");
+        
         AutoPilot resourceType = new AutoPilot(nav);
+        setNameSpace(resourceType);
         resourceType.selectXPath("c:ResourceType");
+        
         AutoPilot resourceMimeType = new AutoPilot(nav);
+        setNameSpace(resourceMimeType);
         resourceMimeType.selectXPath("c:ResourceType/@mimetype");
         
         while (resourceProxy.evalXPath() != -1) {
@@ -196,6 +205,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private boolean matchPattern(CMDIData cmdiData, VTDNav nav, FacetConfiguration config, String pattern, Boolean allowMultipleValues) throws VTDException {
         boolean matchedPattern = false;
         AutoPilot ap = new AutoPilot(nav);
+        setNameSpace(ap);
         ap.selectXPath(pattern);
         int index = ap.evalXPath();
         while (index != -1) {
