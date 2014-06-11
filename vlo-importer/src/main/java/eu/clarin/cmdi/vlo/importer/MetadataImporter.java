@@ -87,11 +87,8 @@ public class MetadataImporter {
 
     /**
      * Constructor
-     *
-     * @param
      */
-    public MetadataImporter() {
-    }
+    public MetadataImporter() {}
 
     /**
      * Contains MDSelflinks (usually). Just to know what we have already done.
@@ -374,9 +371,9 @@ public class MetadataImporter {
      * specified in the "ResourceType" element of an imdi file or possibly
      * overwritten by some more specific xpath (as in the LRT cmdi files). So if
      * a type is overwritten and already in the solrDocument we take that type.
-     *
-     * TODO evaluate odd connection between FIELD_FORMAT and
-     * ResourceProxy-Mimetypes
+     * 
+     * @param solrDocument
+     * @param cmdiData
      */
     protected void addResourceData(SolrInputDocument solrDocument, CMDIData cmdiData) {
         List<Object> fieldValues = solrDocument.containsKey(FacetConstants.FIELD_FORMAT) ? new ArrayList<Object>(solrDocument
@@ -386,17 +383,12 @@ public class MetadataImporter {
         for (int i = 0; i < resources.size(); i++) {
             Resource resource = resources.get(i);
             String mimeType = resource.getMimeType();
-            String format = mimeType;
             if (mimeType == null) {
                 if (fieldValues != null && i < fieldValues.size()) {
-                    format = fieldValues.get(i).toString(); //assuming there will be as many formats overwritten as there are specified
-                    mimeType = CommonUtils.normalizeMimeType(format);
+                    mimeType = CommonUtils.normalizeMimeType(fieldValues.get(i).toString());
                 } else {
                     mimeType = CommonUtils.normalizeMimeType("");
-                    format = mimeType;
                 }
-            } else {
-                format = CommonUtils.normalizeMimeType(mimeType);
             }
             
             FormatPostProcessor processor = new FormatPostProcessor();
@@ -447,6 +439,7 @@ public class MetadataImporter {
 
     /**
      * @param args
+     * @throws MalformedURLException
      * @throws IOException
      */
     public static void main(String[] args) throws MalformedURLException, IOException {
