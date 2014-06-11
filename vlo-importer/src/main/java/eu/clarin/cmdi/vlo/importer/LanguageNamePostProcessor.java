@@ -1,5 +1,7 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +19,7 @@ public class LanguageNamePostProcessor extends LanguageCodePostProcessor {
      * If no mapping is found the original value is returned.
      */
     @Override
-    public String process(String value) {
+    public List<String> process(String value) {
         String result = value;
         if (value != null) {
             String langCode = extractLanguageCode(value);
@@ -38,6 +40,8 @@ public class LanguageNamePostProcessor extends LanguageCodePostProcessor {
                 }
             }
         }
-        return result;
+        List<String> resultList = new ArrayList<String>();
+        resultList.add(result);
+        return resultList;
     }
 }

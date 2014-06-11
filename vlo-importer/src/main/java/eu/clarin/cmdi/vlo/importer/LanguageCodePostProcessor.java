@@ -17,6 +17,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import eu.clarin.cmdi.vlo.CommonUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LanguageCodePostProcessor implements PostProcessor{
 
@@ -42,11 +44,14 @@ public class LanguageCodePostProcessor implements PostProcessor{
      * @return ISO 639-3 code
      */
     @Override
-    public String process(String value) {
+    public List<String> process(String value) {
+        List<String> resultList = new ArrayList<String>();
+        
         if (value != null)
-            return extractLanguageCode(value);
+            resultList.add(extractLanguageCode(value));
         else
-            return null;
+            resultList.add(null);
+        return resultList;
     }
 
     protected String extractLanguageCode(String value) {

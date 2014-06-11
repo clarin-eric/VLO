@@ -19,6 +19,6 @@ public class LanguageLinkPostProcessorTest extends ImporterTestcase {
     @Test
     public void testLanguageLink() {
         PostProcessor processor = new LanguageLinkPostProcessor();
-        assertEquals("<a href=\"http://infra.clarin.eu/service/language/info.php?code=nld\">Dutch</a>", processor.process("nld"));
+        assertEquals("<a href=\"http://infra.clarin.eu/service/language/info.php?code=nld\">Dutch</a>", processor.process("nld").get(0));
     }
 }

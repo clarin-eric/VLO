@@ -3,7 +3,9 @@ package eu.clarin.cmdi.vlo.importer;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -32,14 +34,16 @@ public class NationalProjectPostProcessor extends LanguageCodePostProcessor {
 	 * @return
 	 */
 	@Override
-    public String process(String value) {
+    public List<String> process(String value) {
         String result = value.trim();
         if (result != null && getMapping().containsKey(result)) {
             result = getMapping().get(result);
         } else {
         	result = "";
         }
-        return result;
+        List<String> resultList = new ArrayList<String>();
+        resultList.add(result);
+        return resultList;
     }
 
 	private Map<String, String> getMapping() {

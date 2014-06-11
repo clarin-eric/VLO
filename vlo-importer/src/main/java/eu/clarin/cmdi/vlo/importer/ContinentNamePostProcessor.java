@@ -1,6 +1,8 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ContinentNamePostProcessor implements PostProcessor {
@@ -21,10 +23,13 @@ public class ContinentNamePostProcessor implements PostProcessor {
 	 * Replaces two-letter continent codes with continent names
 	 */
 	@Override
-	public String process(final String value) {
-		if (value != null && continentCodeMap.keySet().contains(value)) {
-			return continentCodeMap.get(value);
-		}
-		return value;
+	public List<String> process(final String value) {
+            List<String> resultList = new ArrayList<String>();
+            if(value != null && continentCodeMap.keySet().contains(value)) {
+                resultList.add(continentCodeMap.get(value));
+            } else {
+                resultList.add(value);
+            }
+            return resultList;
 	}
 }

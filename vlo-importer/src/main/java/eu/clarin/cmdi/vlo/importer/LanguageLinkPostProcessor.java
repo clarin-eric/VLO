@@ -1,5 +1,8 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LanguageLinkPostProcessor extends LanguageCodePostProcessor {
     /**
      * Returns the link to language information
@@ -8,8 +11,8 @@ public class LanguageLinkPostProcessor extends LanguageCodePostProcessor {
      * @return HTML link to the CLARIN language information page
      */
     @Override
-    public String process(String value) {
-	String langCode = super.process(value);
+    public List<String> process(String value) {
+	String langCode = super.process(value).get(0);
         String result = langCode;
         if (langCode != null) {
             if(langCode.startsWith(CODE_PREFIX)) {
@@ -19,6 +22,8 @@ public class LanguageLinkPostProcessor extends LanguageCodePostProcessor {
                 result = langCode.substring(LANG_NAME_PREFIX.length());
             }
         }
-        return result;
+        List<String> resultList = new ArrayList<String>();
+        resultList.add(result);
+        return resultList;
     }
 }

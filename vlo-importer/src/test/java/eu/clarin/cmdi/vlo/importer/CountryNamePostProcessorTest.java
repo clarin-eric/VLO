@@ -19,11 +19,11 @@ public class CountryNamePostProcessorTest extends ImporterTestcase {
     @Test
     public void testCountryCode() {
         CountryNamePostProcessor processor = new CountryNamePostProcessor();
-        assertEquals("Netherlands", processor.process("NL"));
-        assertEquals("United Kingdom", processor.process("GB"));
-        assertEquals("Netherlands", processor.process("nl"));
-        assertEquals("test", processor.process("test"));
-        assertEquals("", processor.process(""));
-        assertEquals(null, processor.process(null));
+        assertEquals("Netherlands", processor.process("NL").get(0));
+        assertEquals("United Kingdom", processor.process("GB").get(0));
+        assertEquals("Netherlands", processor.process("nl").get(0));
+        assertEquals("test", processor.process("test").get(0));
+        assertEquals("", processor.process("").get(0));
+        assertEquals(null, processor.process(null).get(0));
     }
 }

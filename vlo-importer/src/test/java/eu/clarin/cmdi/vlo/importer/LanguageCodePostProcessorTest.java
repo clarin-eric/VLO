@@ -19,21 +19,21 @@ public class LanguageCodePostProcessorTest extends ImporterTestcase {
     @Test
     public void testLanguageCode() {
         PostProcessor processor = new LanguageCodePostProcessor();
-        assertEquals("code:nld", processor.process("NL"));
-        assertEquals("code:eng", processor.process("en"));
-        assertEquals("code:nld", processor.process("nl"));
-        assertEquals("code:fry", processor.process("fry"));
-        assertEquals("name:test", processor.process("test"));
-        assertEquals("", processor.process(""));
-        assertEquals(null, processor.process(null));
-        assertEquals("code:fra", processor.process("ISO639-3:fra"));
-        assertEquals("code:deu", processor.process("RFC1766:x-sil-GER"));
-        assertEquals("name:RFC1766:sgn-NL", processor.process("RFC1766:sgn-NL"));
-        assertEquals("code:eus", processor.process("baq"));
-        assertEquals("code:eng", processor.process("eng"));
-        assertEquals("code:eng", processor.process("English"));
-        assertEquals("code:deu", processor.process("German"));
-        assertEquals("code:esn", processor.process("Salvadoran Sign Language"));
+        assertEquals("code:nld", processor.process("NL").get(0));
+        assertEquals("code:eng", processor.process("en").get(0));
+        assertEquals("code:nld", processor.process("nl").get(0));
+        assertEquals("code:fry", processor.process("fry").get(0));
+        assertEquals("name:test", processor.process("test").get(0));
+        assertEquals("", processor.process("").get(0));
+        assertEquals(null, processor.process(null).get(0));
+        assertEquals("code:fra", processor.process("ISO639-3:fra").get(0));
+        assertEquals("code:deu", processor.process("RFC1766:x-sil-GER").get(0));
+        assertEquals("name:RFC1766:sgn-NL", processor.process("RFC1766:sgn-NL").get(0));
+        assertEquals("code:eus", processor.process("baq").get(0));
+        assertEquals("code:eng", processor.process("eng").get(0));
+        assertEquals("code:eng", processor.process("English").get(0));
+        assertEquals("code:deu", processor.process("German").get(0));
+        assertEquals("code:esn", processor.process("Salvadoran Sign Language").get(0));
     }
 
 }

@@ -1,5 +1,7 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import java.util.List;
+
 /**
  * Defines the interface for a postprocessor.
  *
@@ -10,6 +12,6 @@ package eu.clarin.cmdi.vlo.importer;
 
 public interface PostProcessor {
 
-    public String process(String value);
+    public List<String> process(String value);
 
 }

@@ -10,6 +10,7 @@ import com.ximpleware.XPathParseException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.IOUtils;
@@ -204,8 +205,12 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                 index++;
             }
             String value = nav.toString(index);
-            value = postProcess(config.getName(), value);
-            cmdiData.addDocField(config.getName(), value, config.isCaseInsensitive());
+            List<String> valueList = postProcess(config.getName(), value);
+            for(int i=0; i<valueList.size(); i++) {
+                if(!allowMultipleValues && i>0)
+                    break;
+                cmdiData.addDocField(config.getName(), valueList.get(i).trim(), config.isCaseInsensitive());
+            }
             index = ap.evalXPath();
             
             if(!allowMultipleValues)
@@ -220,12 +225,14 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @param extractedValue extracted value from CMDI file
      * @return value after applying matching PostProcessor or the original value if no PostProcessor was registered for the facet 
      */
-    private String postProcess(String facetName, String extractedValue) {
-        String result = extractedValue;
+    private List<String> postProcess(String facetName, String extractedValue) {
+        List<String> resultList = new ArrayList<String>();
         if (postProcessors.containsKey(facetName)) {
             PostProcessor processor = postProcessors.get(facetName);
-            result = processor.process(extractedValue);
+            resultList = processor.process(extractedValue);
+        } else {
+            resultList.add(extractedValue);
         }
-        return result.trim();
+        return resultList;
     }
 }

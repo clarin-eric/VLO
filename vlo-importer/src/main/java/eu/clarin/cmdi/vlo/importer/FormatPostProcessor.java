@@ -1,5 +1,7 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -13,13 +15,15 @@ public class FormatPostProcessor implements PostProcessor {
      * @return value if it is a valid MIMEtype or UNKNOWN_STRING otherwise
      */
     @Override
-    public String process(String value) {
+    public List<String> process(String value) {
         Matcher mimeTypeMatcher = MIMETYPE_PATTERN.matcher(value);
-
+        List<String> resultList = new ArrayList<String>();
+        
         if (mimeTypeMatcher.matches()) {
-            return value;
+            resultList.add(value);
         } else {
-            return UNKNOWN_STRING;
+            resultList.add(UNKNOWN_STRING);
         }
+        return resultList;
     }
 }

@@ -6,7 +6,9 @@ import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +27,7 @@ public class CMDIComponentProfileNamePostProcessor implements PostProcessor {
     private final HashMap<String, String> cache = new HashMap<String, String>();
 
     @Override
-    public String process(String profileId) {
+    public List<String> process(String profileId) {
         String result = _EMPTY_STRING;
         if(profileId != null){
             if(cache.containsKey(profileId)){
@@ -43,16 +45,22 @@ public class CMDIComponentProfileNamePostProcessor implements PostProcessor {
                         idx = ap.evalXPath();
                         LOG.debug("EVALUATED XPATH: "+XPATH+ " found idx: "+idx);
                         if(idx == -1){ // idx represent the nodeId in the xml file, if -1 the xpath evaluates to nothing.
-                            return result;
+                            List<String> resultList = new ArrayList<String>();
+                            resultList.add(result);
+                            return resultList;
                         }
                         result = vn.toString(idx);
                         cache.put(profileId, result);
                     } catch (NavException e) {
                         LOG.error(e.getLocalizedMessage());
-                        return result;
+                        List<String> resultList = new ArrayList<String>();
+                        resultList.add(result);
+                        return resultList;
                     } catch (XPathEvalException e) {
                         LOG.error(e.getLocalizedMessage());
-                        return result;
+                        List<String> resultList = new ArrayList<String>();
+                        resultList.add(result);
+                        return resultList;
                     }
                 }
                 else {
@@ -60,7 +68,9 @@ public class CMDIComponentProfileNamePostProcessor implements PostProcessor {
                 }
             }
         }
-        return result;
+        List<String> resultList = new ArrayList<String>();
+        resultList.add(result);
+        return resultList;
     }
 
     private void setup() {

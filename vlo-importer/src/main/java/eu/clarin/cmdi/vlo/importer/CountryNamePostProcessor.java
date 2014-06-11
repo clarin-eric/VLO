@@ -1,6 +1,8 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.CommonUtils;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +19,7 @@ public class CountryNamePostProcessor implements PostProcessor {
      * returned.
      */
     @Override
-    public String process(String value) {
+    public List<String> process(String value) {
         String result = value;
         if (result != null) {
             Map<String, String> countryCodeMap = getCountryCodeMap();
@@ -26,7 +28,9 @@ public class CountryNamePostProcessor implements PostProcessor {
                 result = name;
             }
         }
-        return result;
+        List<String> resultList = new ArrayList<String>();
+        resultList.add(result);
+        return resultList;
     }
 
     private Map<String, String> getCountryCodeMap() {
