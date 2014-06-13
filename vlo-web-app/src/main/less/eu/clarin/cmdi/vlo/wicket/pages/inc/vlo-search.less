@@ -19,6 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : twagoo
 */
 
+/* style for autocomplete */
+@import "vlo-search-autocomplete";
+
 #simplesearch.content {
     min-height: 500px;
 }
@@ -63,6 +66,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     width: 60%;
     height: 1em;
     text-align: center;
+}
+
+#bottompagination {
+    clear: both;
+    text-align: center;
+    padding: 1em 0;
+}
+
+.searchresultpagination span 
+{
+    padding-left: 1px; 
+    padding-right: 1px
+}
+
+.searchresultpagination span.goto em {
+    font-weight: bold;
+    text-decoration: underline;
+    font-style: normal;
 }
 
 #searchresultpagecount{
@@ -149,12 +170,6 @@ p.searchresultmoreless, p.searchresultfullrecord {
     float: right;
     text-align: right;
     padding: 0px;
-}
-
-#searchresultpagination{
-    clear: both;
-    text-align: center;
-    padding: 1em 0;
 }
 
 #resultpagesizeform {

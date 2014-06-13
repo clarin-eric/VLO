@@ -40,6 +40,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 
 /**
  * Panel that has a data view on the current search results
@@ -132,7 +133,15 @@ public class SearchResultsPanel extends Panel {
                 return String.format("Showing %d to %d", firstShown, lastShown);
             }
         };
-        return new Label(id, indicatorModel);
+        return new Label(id, indicatorModel) {
+
+            @Override
+            protected void onConfigure() {
+                // hide if no results
+                setVisible(resultsView.getItemCount() > 0);
+            }
+            
+        };
     }
 
     private Form createResultPageSizeForm(String id, final IPageableItems resultsView) {
