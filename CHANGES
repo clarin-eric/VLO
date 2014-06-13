@@ -9,6 +9,10 @@ VLO 3.0.1 (???)
 	<https://trac.clarin.eu/ticket/548>
 * Added a 'description' metadata element to the page header
 	<https://trac.clarin.eu/ticket/567>
+* Small cosmetic fixes
+	<https://trac.clarin.eu/ticket/576>
+	<https://trac.clarin.eu/ticket/577>
+	<https://trac.clarin.eu/ticket/578>
 * Renamed 'permalink' to 'link' 
 
 VLO 3.0 (May 2014)
