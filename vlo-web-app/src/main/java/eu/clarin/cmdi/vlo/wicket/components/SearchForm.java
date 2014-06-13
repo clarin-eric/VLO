@@ -21,7 +21,7 @@ import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
 import java.util.Iterator;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
-import org.apache.wicket.extensions.ajax.markup.html.autocomplete.DefaultCssAutoCompleteTextField;
+import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteTextField;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -41,7 +41,7 @@ public abstract class SearchForm extends Form<QueryFacetsSelection> {
         super(id, model);
 
         // Bind search field to 'query' property of model
-        add(new DefaultCssAutoCompleteTextField<String>("query", new PropertyModel<String>(model, "query")) {
+        add(new AutoCompleteTextField("query", new PropertyModel<String>(model, "query")) {
 
             @Override
             protected Iterator<String> getChoices(String input) {
@@ -61,5 +61,4 @@ public abstract class SearchForm extends Form<QueryFacetsSelection> {
     }
 
     protected abstract void onSubmit(AjaxRequestTarget target);
-
 }
