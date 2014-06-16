@@ -7,7 +7,7 @@ VLO 3.1 (???)
 	<https://trac.clarin.eu/ticket/547>
 * Removed the obsolete 'imdiBrowserUrl' configuration option
 
-VLO 3.0.1 (???)
+VLO 3.0.1 (June 2014)
 * DC-3786 (application type) was added to facet 'resourceClass'
 	<https://trac.clarin.eu/ticket/195>
 * Fixed highlighting of search terms that contain unicode characters
