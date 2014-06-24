@@ -154,10 +154,11 @@ importer.
 
    	$VLO_CONFIG/VloConfig.xml, use 
 
-   	./vlo_solr_importer.sh -c $VLO_CONFIG/VloConfig.xml
+   	./vlo_solr_importer.sh $VLO_CONFIG/VloConfig.xml
 
    to run the importer in 'bin'. A default configuration file is supplied as
-   'config/VloConfig.xml'.
+   'config/VloConfig.xml'. The importer script will default to this location
+   if no location is specified on the command line.
 
    Most likely, in the configuration file, the dataRoot values need to be 
    changed. This is what a dataRoot definition could look like:
