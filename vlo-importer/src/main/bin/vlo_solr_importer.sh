@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# This means it the script only works started from the bin directory, adjust the
-# workdir if you installed this somewhere and want to run it from anywhere.
+# Get the script's source directory
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Filter of the Error stream from which to prevent the admins from getting daily
 #  "can't find java" emails
@@ -9,6 +9,15 @@ JAVA=`which java 2>/dev/null`
 if [  -z $JAVA ]; then
 #set java for mpi servers
 JAVA=/lat/java/bin/java
+fi
+
+# try to get the configuration file name from the command line options
+if [ 1 -eq $# ]; then
+CONFIG=$1
+else
+# fall back to default location
+echo No configuration location specified, using default
+CONFIG=${DIR}/"../config/VloConfig.xml"
 fi
 
 # Please specify the configuration to the importer via a system property or via
@@ -23,5 +32,5 @@ fi
 # to the JAVA command. Please note the a specification on the command line will
 # take preference over a specification as a property.
 
-$JAVA -Xmx1024M -cp .:vlo-importer-${project.version}-importer.jar eu.clarin.cmdi.vlo.importer.MetadataImporter $@
+$JAVA -Xmx1024M -cp "${DIR}:${DIR}/vlo-importer-${project.version}-importer.jar" eu.clarin.cmdi.vlo.importer.MetadataImporter -c "$CONFIG"
 
