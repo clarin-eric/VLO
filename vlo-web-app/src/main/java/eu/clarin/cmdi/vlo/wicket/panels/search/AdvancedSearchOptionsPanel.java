@@ -24,6 +24,7 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.model.ToggleModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
+import eu.clarin.cmdi.vlo.wicket.panels.VirtualCollectionFormPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.basic.Label;
@@ -61,6 +62,10 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         });
         options.add(fcsCheck);
         add(options);
+        
+        //TODO: lazy rendering of form, it can be large. I.e. provide a link
+        //that makes form 'visible', and then tries to auto submit
+        add(new VirtualCollectionFormPanel("vcrForm", model));
 
         // should initially be epxanded if one of the options was selected
         if (toggleModel.getObject()) {
