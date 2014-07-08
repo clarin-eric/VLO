@@ -27,6 +27,8 @@ import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.VirtualCollectionFormPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
@@ -42,7 +44,7 @@ import org.apache.wicket.model.IModel;
  * @author twagoo
  */
 public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFacetsSelection> {
-
+    
     public AdvancedSearchOptionsPanel(String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
 
@@ -50,11 +52,11 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         final IModel<FacetSelection> fcsFacetModel = new FacetSelectionModel(model, FacetConstants.FIELD_SEARCH_SERVICE);
         // wrap in a toggle model that allows switching between a null selection and a 'not empty' selection
         final ToggleModel<FacetSelection> toggleModel = new ToggleModel<FacetSelection>(fcsFacetModel, null, new FacetSelection(FacetSelectionType.NOT_EMPTY));
-
+        
         final Form options = new Form("options");
         final CheckBox fcsCheck = new CheckBox("fcs", toggleModel);
         fcsCheck.add(new OnChangeAjaxBehavior() {
-
+            
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 selectionChanged(target);
@@ -63,21 +65,38 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         options.add(fcsCheck);
         add(options);
         
-        //TODO: lazy rendering of form, it can be large. I.e. provide a link
-        //that makes form 'visible', and then tries to auto submit
-        add(new VirtualCollectionFormPanel("vcrForm", model));
+        final WebMarkupContainer vcrSubmit = new WebMarkupContainer("vcrSubmit");
+        vcrSubmit.setOutputMarkupId(true);
+        add(vcrSubmit);
+        
+        final VirtualCollectionFormPanel vcrSubmitForm = new VirtualCollectionFormPanel("vcrForm", model);
+        vcrSubmitForm.setVisible(false);
+        vcrSubmit.add(vcrSubmitForm);
+        
+        vcrSubmit.add(new AjaxFallbackLink("vcrSubmitTrigger") {
+            
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                vcrSubmitForm.setVisible(true);
+                if (target != null) {
+                    target.add(vcrSubmit);
+                    // after update, submit the form to the VCR
+                    target.appendJavaScript("document.vcrForm.submit();");
+                }
+            }
+        });
 
         // should initially be epxanded if one of the options was selected
         if (toggleModel.getObject()) {
             getExpansionModel().setObject(ExpansionState.EXPANDED);
         }
     }
-
+    
     @Override
     protected Label createTitleLabel(String id) {
         return new Label(id, "Search options");
     }
-
+    
     protected abstract void selectionChanged(AjaxRequestTarget target);
-
+    
 }

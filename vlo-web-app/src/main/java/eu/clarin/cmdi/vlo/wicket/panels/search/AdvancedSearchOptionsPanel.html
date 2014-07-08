@@ -33,8 +33,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </ul>
                     <input type="submit" value="Apply" class="nonjsfallback" />
                 </form>
-                <div wicket:id="vcrForm" id="vcrsubmit">
-                    [VCR submit form]
+                <div wicket:id="vcrSubmit" id="vcrsubmit">
+                    <a wicket:id="vcrSubmitTrigger">Create virtual collection from search results</a>
+                    <div wicket:id="vcrForm">
+                        [VCR submit form]
+                    </div>
                 </div>
             </div>
         </wicket:extend>

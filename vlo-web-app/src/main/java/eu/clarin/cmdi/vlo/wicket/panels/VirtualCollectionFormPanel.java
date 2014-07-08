@@ -18,7 +18,6 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
 import org.apache.solr.common.SolrDocument;
@@ -34,24 +33,38 @@ import org.apache.wicket.model.Model;
 
 /**
  * Panel that renders an HTML form with hidden fields to submits the results of
- * a query selection to the Virtual Collection Registry in order to create a
- * new collection
+ * a query selection to the Virtual Collection Registry in order to create a new
+ * collection
  *
  * @author twagoo
  */
 public class VirtualCollectionFormPanel extends GenericPanel<QueryFacetsSelection> {
 
     //TODO: make configurable
-    private final int RESULTSET_SIZE_LIMIT = 10;
-    //TODO: make configurable
-    private final String vcrSubmitEndpoint = "http://localhost:8080/VirtualCollectionRegistry/service/submit";
-    private final IDataProvider<SolrDocument> documentProvider;
+    private final String vcrSubmitEndpoint = "http://catalog-clarin.esc.rzg.mpg.de/vcr/service/submit";
 
+    /**
+     * Construct the panel with a new document provider based on the provided
+     * model
+     *
+     * @param id component id
+     * @param model model to use for form content and document provider
+     */
     public VirtualCollectionFormPanel(String id, IModel<QueryFacetsSelection> model) {
-        super(id, model);
+        this(id, model, new SolrDocumentProvider(model));
+    }
 
-        //TOOD: optionally get provider through constructor (so that it can be shared)
-        documentProvider = new SolrDocumentProvider(model);
+    /**
+     * Constructs the panel with a shared document provider
+     *
+     * @param id component id
+     * @param model model to use for form content (collection title)
+     * @param documentProvider provider to use for gathering document ID's
+     * (assumed to be based on the same model as the one provided to this
+     * constructor)
+     */
+    public VirtualCollectionFormPanel(String id, IModel<QueryFacetsSelection> model, IDataProvider<SolrDocument> documentProvider) {
+        super(id, model);
 
         final WebMarkupContainer form = new WebMarkupContainer("vcrForm");
         form.add(new AttributeModifier("action", Model.of(vcrSubmitEndpoint)));
@@ -88,12 +101,6 @@ public class VirtualCollectionFormPanel extends GenericPanel<QueryFacetsSelectio
                 item.add(mdUri);
             }
         });
-    }
-
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-        setVisible(documentProvider.size() < RESULTSET_SIZE_LIMIT);
     }
 
 }
