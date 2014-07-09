@@ -147,6 +147,8 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
     @Override
     public void renderHead(IHeaderResponse response) {
+        // Always include JQuery first
+        response.render(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference()));
         // Include CSS. Exact file will be chosen on basis of current locale and style (theme)
         response.render(CssHeaderItem.forReference(new CssResourceReference(VloBasePage.class, "vlo.css", getLocale(), getStyle(), getVariation())));
         // Include JavaScript for header (e.g. permalink animation)

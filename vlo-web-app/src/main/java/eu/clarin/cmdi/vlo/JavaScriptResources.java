@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo;
 
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
+import eu.clarin.cmdi.vlo.wicket.pages.VirtualCollectionSubmissionPage;
 import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
@@ -30,6 +31,7 @@ public final class JavaScriptResources {
     private final static JavaScriptResourceReference VLO_HEADER = new JavaScriptResourceReference(VloBasePage.class, "vlo-header.js");
     private final static JavaScriptResourceReference JQUERY_WATERMARK = new JavaScriptResourceReference(VloBasePage.class, "jquery.watermark-3.1.4/jquery.watermark.min.js");
     private final static JavaScriptResourceReference HIGHLIGHT = new JavaScriptResourceReference(RecordPage.class, "searchhi.js");
+    private final static JavaScriptResourceReference VCR = new JavaScriptResourceReference(VirtualCollectionSubmissionPage.class, "vlo-vcr-submission.js");
 
     public static JavaScriptResourceReference getVloFrontJS() {
         return VLO_FRONT;
@@ -46,5 +48,11 @@ public final class JavaScriptResources {
     public static JavaScriptResourceReference getHighlightJS() {
         return HIGHLIGHT;
     }
+
+    public static JavaScriptResourceReference getVloVcrSubmissonJS() {
+        return VCR;
+    }
+    
+    
 
 }
