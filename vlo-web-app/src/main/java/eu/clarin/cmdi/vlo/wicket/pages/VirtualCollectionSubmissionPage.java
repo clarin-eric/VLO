@@ -17,7 +17,6 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
@@ -26,8 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -46,7 +45,7 @@ import org.apache.wicket.model.util.ListModel;
  */
 public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSelection> {
 
-    private final String vcrSubmitEndpoint = "http://catalog-clarin.esc.rzg.mpg.de/vcr/service/submit";
+    private final String vcrSubmitEndpoint = "http://localhost:8080/VirtualCollectionRegistry/service/submit";
 
     public VirtualCollectionSubmissionPage(IModel<QueryFacetsSelection> model) {
         super(model);
@@ -90,8 +89,11 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
         final WebMarkupContainer keywords = new WebMarkupContainer("keywords");
         keywords.setOutputMarkupId(true);
         form.add(keywords);
-        
+
         final ArrayList<String> keywordsList = new ArrayList<String>();
+        if (model.getObject().getQuery() != null) {
+            keywordsList.add(model.getObject().getQuery());
+        }
         for (FacetSelection selection : model.getObject().getSelection().values()) {
             for (String value : selection.getValues()) {
                 keywordsList.add(value);
@@ -103,38 +105,27 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
 
             @Override
             protected void populateItem(final ListItem<String> item) {
+                // add hidden field for keyword
                 final WebMarkupContainer keywordField = new WebMarkupContainer("keywordField");
                 keywordField.add(new AttributeModifier("value", item.getModel()));
                 item.add(keywordField);
 
-//                item.add(new AjaxLink("remove") {
-//
-//                    @Override
-//                    public void onClick(AjaxRequestTarget target) {
-//                        keywordsModel.getObject().remove(item.getModelObject());
-//                        target.add(keywords);
-//                    }
-//                });
+                // add label for keyword
+                item.add(new Label("keywordValue", item.getModel()));
+
+                // add remove link for keyword
+                item.add(new AjaxLink("remove") {
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        keywordsModel.getObject().remove(item.getModelObject());
+                        target.add(keywords);
+                    }
+                });
             }
         });
-//        keywords.add(new AjaxLink("add") {
-//            
-//            @Override
-//            public void onClick(AjaxRequestTarget target) {
-//                keywordsModel.getObject().add("");
-//                target.add(keywords);
-//            }
-//        });
 
         add(new Label("itemCount", new PropertyModel<Long>(provider, "size")));
     }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloVcrSubmissonJS()));
-    }
-    
-    
 
 }

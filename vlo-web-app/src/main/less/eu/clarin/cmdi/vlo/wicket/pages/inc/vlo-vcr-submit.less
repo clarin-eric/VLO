@@ -14,31 +14,22 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 /* 
-    Created on : Jan 24, 2014, 10:06:50 AM
+    Created on : Jul 9, 2014, 4:54:53 PM
     Author     : twagoo
 */
 
-/* COMMON STYLES FOR VLO THEMES */
+a.removekeyword span {
+    display: none;
+}
 
-/* base style */
-@import "style";
-
-/* styles for static topic section */
-@import "vlo-top";
-
-/* styles for collection selection */
-@import "vlo-collections";
-
-/* styles for facet panels */
-@import "vlo-facets";
-
-/* styles for search bar */
-@import "vlo-search";
-
-/* styles for record details */
-@import "vlo-record";
-
-/* styles for VCR submission form */
-@import "vlo-vcr-submit";
+a.removekeyword, a.removekeyword:hover {
+    display: inline-block;
+    width: 16px;
+    height: 20px;
+    background-image: url('x-mark-128.png');
+    background-repeat: no-repeat;
+    background-position: 2px 3px;
+    background-size: 12px;
+    vertical-align: middle;
+}

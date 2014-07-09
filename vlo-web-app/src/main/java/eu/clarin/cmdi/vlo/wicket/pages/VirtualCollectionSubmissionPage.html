@@ -39,7 +39,7 @@
                     newly created collection. You may be prompted to login
                     to the Virtual Collection Registry first.
                 </p>
-                
+
                 <hr />
 
                 <form id="virtualCollectionForm" wicket:id="vcrForm" method="post" name="vcrForm" action="[VCR endpoint]"> 
@@ -54,17 +54,13 @@
 
                     <div>
                         <label for="keywords">Keywords</label>
-                        <fieldset wicket:id="keywords" id="keywords">
-                            <div id="keywordswrapper">
-                                <p class="keywordwrapper" wicket:id="keyword">
-                                    <input wicket:id="keywordField" type="text" name="keyword" value="keyword" />
-                                    <a href="#" class="removekeyword">Remove</a>
-                                </p>
-                            </div>
-                            <p>
-                                <a href="#" id="addkeyword">Add a keyword</a>
-                            </p>
-                        </fieldset>
+                        <ul wicket:id="keywords" id="keywords">
+                            <li class="keywordwrapper" wicket:id="keyword">
+                                <input wicket:id="keywordField" type="hidden" name="keyword" value="keyword" />
+                                <span wicket:id="keywordValue">[keyword]</span>
+                                <a wicket:id="remove" class="removekeyword"><span>[Remove]</span></a>
+                            </li>
+                        </ul>
                     </div>
 
                     <wicket:container wicket:id="metadataUris">
