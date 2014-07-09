@@ -84,9 +84,6 @@ public class VloConfig {
 
     private String handleServerUrl = "";
 
-    @XmlElement
-    private String imdiBrowserUrl = "";
-
     private String languageLinkPrefix = "";
 
     // web application user interface 
@@ -97,6 +94,8 @@ public class VloConfig {
     private String helpUrl = "";
 
     private String feedbackFromUrl = "";
+
+    private String vcrSubmitEndpoint;
     /**
      * A set of fields to be excluded from display<br><br>
      *
@@ -628,6 +627,14 @@ public class VloConfig {
      */
     public void setFeedbackFromUrl(String param) {
         feedbackFromUrl = param;
+    }
+
+    public String getVcrSubmitEndpoint() {
+        return vcrSubmitEndpoint;
+    }
+
+    public void setVcrSubmitEndpoint(String vcrSubmitEndpoint) {
+        this.vcrSubmitEndpoint = vcrSubmitEndpoint;
     }
 
     /**

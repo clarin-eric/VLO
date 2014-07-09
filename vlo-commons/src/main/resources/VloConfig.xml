@@ -148,4 +148,6 @@
     <cqlEndpointFilter>http://cqlservlet.mpi.nl/</cqlEndpointFilter>
     
     <cqlEndpointAlternative>http://cqlservlet.mpi.nl/</cqlEndpointAlternative>
+    
+    <vcrSubmitEndpoint>http://catalog-clarin.esc.rzg.mpg.de/vcr/service/submit</vcrSubmitEndpoint>
 </VloConfig>

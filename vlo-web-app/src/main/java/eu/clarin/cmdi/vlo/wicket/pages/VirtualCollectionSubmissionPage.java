@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
@@ -38,6 +39,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  *
@@ -45,12 +47,14 @@ import org.apache.wicket.model.util.ListModel;
  */
 public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSelection> {
 
-    private final String vcrSubmitEndpoint = "http://localhost:8080/VirtualCollectionRegistry/service/submit";
+    @SpringBean
+    private VloConfig vloConfig;
 
     public VirtualCollectionSubmissionPage(IModel<QueryFacetsSelection> model) {
         super(model);
+
         final WebMarkupContainer form = new WebMarkupContainer("vcrForm");
-        form.add(new AttributeModifier("action", Model.of(vcrSubmitEndpoint)));
+        form.add(new AttributeModifier("action", Model.of(vloConfig.getVcrSubmitEndpoint())));
         add(form);
 
         final IModel<String> nameModel = new AbstractReadOnlyModel<String>() {

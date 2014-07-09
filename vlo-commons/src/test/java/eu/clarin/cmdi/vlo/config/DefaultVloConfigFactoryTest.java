@@ -938,4 +938,9 @@ public class DefaultVloConfigFactoryTest {
         List<String> result = config.getSimpleSearchFacetFields();
         assertEquals(5, result.size());
     }
+    
+    @Test
+    public void testGetVcrSubmitEndpoint(){
+        assertEquals("http://catalog-clarin.esc.rzg.mpg.de/vcr/service/submit", config.getVcrSubmitEndpoint());
+    }
 }
