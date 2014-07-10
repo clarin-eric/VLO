@@ -52,16 +52,18 @@
                         </label>
                     </p>
 
-                    <div>
-                        <label for="keywords">Keywords</label>
-                        <ul wicket:id="keywords" id="keywords">
-                            <li class="keywordwrapper" wicket:id="keyword">
-                                <input wicket:id="keywordField" type="hidden" name="keyword" value="keyword" />
-                                <span wicket:id="keywordValue">[keyword]</span>
-                                <a wicket:id="remove" class="removekeyword"><span>[Remove]</span></a>
-                            </li>
-                        </ul>
-                    </div>
+                    <wicket:enclosure child="keywords">
+                        <div>
+                            <label for="keywords">Keywords:</label>
+                            <ul wicket:id="keywords" id="keywords">
+                                <li class="keywordwrapper" wicket:id="keyword">
+                                    <input wicket:id="keywordField" type="hidden" name="keyword" value="keyword" />
+                                    <span wicket:id="keywordValue">[keyword]</span>
+                                    <a wicket:id="remove" class="removekeyword"><span>[Remove]</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </wicket:enclosure>
 
                     <wicket:container wicket:id="metadataUris">
                         <input wicket:id="metadataUri" type="hidden" name="metadataUri" value="http://md1" />

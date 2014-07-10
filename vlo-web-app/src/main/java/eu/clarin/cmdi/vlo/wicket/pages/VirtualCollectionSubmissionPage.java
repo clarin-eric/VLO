@@ -49,14 +49,31 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
 
     @SpringBean
     private VloConfig vloConfig;
+    private final SolrDocumentProvider documentProvider;
 
     public VirtualCollectionSubmissionPage(IModel<QueryFacetsSelection> model) {
         super(model);
+        this.documentProvider = new SolrDocumentProvider(getModel());
 
+        // add a label with the number of URI's for the description
+        add(new Label("itemCount", new PropertyModel<Long>(documentProvider, "size")));
+
+        // the form is a container, not a wicket Form because it submits to an
+        // external service
         final WebMarkupContainer form = new WebMarkupContainer("vcrForm");
+        // <form action="...">
         form.add(new AttributeModifier("action", Model.of(vloConfig.getVcrSubmitEndpoint())));
-        add(form);
+        // collection name input
+        form.add(createCollectionNameField("collectionName"));
+        // hidden URI fields 
+        form.add(createURIs("metadataUris"));
+        // keyword list with remove options
+        form.add(addKeywords(model, "keywords"));
 
+        add(form);
+    }
+
+    private WebMarkupContainer createCollectionNameField(String id) {
         final IModel<String> nameModel = new AbstractReadOnlyModel<String>() {
 
             @Override
@@ -69,13 +86,13 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
                 }
             }
         };
-
-        final WebMarkupContainer collectionName = new WebMarkupContainer("collectionName");
+        final WebMarkupContainer collectionName = new WebMarkupContainer(id);
         collectionName.add(new AttributeModifier("value", nameModel));
-        form.add(collectionName);
+        return collectionName;
+    }
 
-        final SolrDocumentProvider provider = new SolrDocumentProvider(getModel());
-        form.add(new DataView<SolrDocument>("metadataUris", provider) {
+    private DataView<SolrDocument> createURIs(String id) {
+        return new DataView<SolrDocument>(id, documentProvider) {
 
             @Override
             protected void populateItem(Item<SolrDocument> item) {
@@ -88,12 +105,11 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
                 }
                 item.add(mdUri);
             }
-        });
+        };
+    }
 
-        final WebMarkupContainer keywords = new WebMarkupContainer("keywords");
-        keywords.setOutputMarkupId(true);
-        form.add(keywords);
-
+    private WebMarkupContainer addKeywords(IModel<QueryFacetsSelection> model, String id) {
+        //create initial keywords list
         final ArrayList<String> keywordsList = new ArrayList<String>();
         if (model.getObject().getQuery() != null) {
             keywordsList.add(model.getObject().getQuery());
@@ -104,6 +120,19 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
             }
         }
 
+        // create updatable keywords container
+        final WebMarkupContainer keywords = new WebMarkupContainer(id) {
+
+            @Override
+            protected void onConfigure() {
+                // hide keywords section if none are set
+                setVisible(!keywordsList.isEmpty());
+            }
+
+        };
+        keywords.setOutputMarkupId(true);
+
+        // create keywords list
         final IModel<List<String>> keywordsModel = new ListModel<String>(keywordsList);
         keywords.add(new ListView<String>("keyword", keywordsModel) {
 
@@ -129,7 +158,7 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
             }
         });
 
-        add(new Label("itemCount", new PropertyModel<Long>(provider, "size")));
+        return keywords;
     }
 
 }
