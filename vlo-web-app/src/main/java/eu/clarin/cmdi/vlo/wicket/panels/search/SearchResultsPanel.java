@@ -19,7 +19,6 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchResultExpansionStateModel;
-import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -40,7 +39,6 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.StringResourceModel;
 
 /**
  * Panel that has a data view on the current search results
@@ -55,11 +53,11 @@ public class SearchResultsPanel extends Panel {
     private final DataView<SolrDocument> resultsView;
     private final IModel<Set<Object>> expansionsModel;
     
-    public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel) {
+    public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel, IDataProvider<SolrDocument> solrDocumentProvider) {
         super(id, selectionModel);
+        this.solrDocumentProvider = solrDocumentProvider;
+        
         add(new Label("title", new SearchResultsTitleModel(selectionModel)));
-
-        solrDocumentProvider = new SolrDocumentProvider(selectionModel);
 
         expansionsModel = new Model(new HashSet<Object>());
         // data view for search results
@@ -163,6 +161,12 @@ public class SearchResultsPanel extends Panel {
 
         return resultPageSizeForm;
     }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        solrDocumentProvider.detach();
+    }  
 
     private static class SearchResultsTitleModel extends AbstractReadOnlyModel<String> {
 

@@ -1,7 +1,5 @@
 package eu.clarin.cmdi.vlo.config;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -96,6 +94,9 @@ public class VloConfig {
     private String feedbackFromUrl = "";
 
     private String vcrSubmitEndpoint;
+    
+    private Long vcrMaximumItemsCount = 0L;
+    
     /**
      * A set of fields to be excluded from display<br><br>
      *
@@ -635,6 +636,14 @@ public class VloConfig {
 
     public void setVcrSubmitEndpoint(String vcrSubmitEndpoint) {
         this.vcrSubmitEndpoint = vcrSubmitEndpoint;
+    }
+
+    public Long getVcrMaximumItemsCount() {
+        return vcrMaximumItemsCount;
+    }
+
+    public void setVcrMaximumItemsCount(Long vcrMaximumItemsCount) {
+        this.vcrMaximumItemsCount = vcrMaximumItemsCount;
     }
 
     /**

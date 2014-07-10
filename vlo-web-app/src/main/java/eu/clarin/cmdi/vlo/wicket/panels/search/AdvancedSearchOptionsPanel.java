@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
@@ -25,13 +26,16 @@ import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.model.ToggleModel;
 import eu.clarin.cmdi.vlo.wicket.pages.VirtualCollectionSubmissionPage;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
+import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  * A panel showing advanced search options:
@@ -44,8 +48,20 @@ import org.apache.wicket.model.IModel;
  */
 public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFacetsSelection> {
 
-    public AdvancedSearchOptionsPanel(String id, final IModel<QueryFacetsSelection> model) {
+    @SpringBean
+    private VloConfig vloConfig;
+
+    private final IDataProvider<SolrDocument> documentProvider;
+
+    /**
+     *
+     * @param id component id
+     * @param model model of current search query
+     * @param documentProvider provider for looking up number of search results
+     */
+    public AdvancedSearchOptionsPanel(String id, final IModel<QueryFacetsSelection> model, final IDataProvider<SolrDocument> documentProvider) {
         super(id, model);
+        this.documentProvider = documentProvider;
 
         // create a model for the selection state for the FCS facet
         final IModel<FacetSelection> fcsFacetModel = new FacetSelectionModel(model, FacetConstants.FIELD_SEARCH_SERVICE);
@@ -67,8 +83,16 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         add(new Link("vcrSubmitTrigger") {
 
             @Override
+            protected void onConfigure() {
+                // hide if there are no documents to create collection from
+                // or number of items is too high (according to configuration)
+                final long documentCount = documentProvider.size();
+                setVisible(documentCount > 0 && documentCount <= vloConfig.getVcrMaximumItemsCount());
+            }
+
+            @Override
             public void onClick() {
-                setResponsePage(new VirtualCollectionSubmissionPage(model));
+                setResponsePage(new VirtualCollectionSubmissionPage(model, documentProvider));
             }
         });
 
@@ -81,6 +105,12 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
     @Override
     protected Label createTitleLabel(String id) {
         return new Label(id, "Search options");
+    }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        documentProvider.detach();
     }
 
     protected abstract void selectionChanged(AjaxRequestTarget target);

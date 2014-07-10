@@ -14,13 +14,16 @@ import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.FacetValuesPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel;
+import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -41,10 +44,12 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     @SpringBean(name = "queryParametersConverter")
     private PageParametersConverter<QueryFacetsSelection> paramsConverter;
 
+    private IDataProvider<SolrDocument> documentsProvider;
     private SearchResultsPanel searchResultsPanel;
     private Component facetsPanel;
     private Component collectionsPanel;
     private Component navigation;
+    private Component optionsPanel;
 
     public FacetedSearchPage(IModel<QueryFacetsSelection> queryModel) {
         super(queryModel);
@@ -61,6 +66,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private void addComponents() {
+        documentsProvider = new SolrDocumentProvider(getModel());
+
         navigation = createNavigation("navigation");
         add(navigation);
 
@@ -72,10 +79,10 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         facetsPanel = createFacetsPanel("facets");
         add(facetsPanel);
 
-        Panel optionsPanel = createOptionsPanel("options");
+        optionsPanel = createOptionsPanel("options");
         add(optionsPanel);
 
-        searchResultsPanel = new SearchResultsPanel("searchResults", getModel());
+        searchResultsPanel = new SearchResultsPanel("searchResults", getModel(), documentsProvider);
         add(searchResultsPanel);
     }
 
@@ -104,15 +111,15 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         return container;
     }
 
-    private Panel createOptionsPanel(String id) {
-        final Panel optionsPanel = new AdvancedSearchOptionsPanel(id, getModel()) {
+    private Component createOptionsPanel(String id) {
+        final Panel panel = new AdvancedSearchOptionsPanel(id, getModel(), documentsProvider) {
 
             @Override
             protected void selectionChanged(AjaxRequestTarget target) {
                 updateSelection(target);
             }
         };
-        return optionsPanel;
+        return panel.setOutputMarkupId(true);
     }
 
     private SearchForm createSearchForm(String id) {
@@ -173,6 +180,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
             target.add(searchResultsPanel);
             target.add(facetsPanel);
             target.add(collectionsPanel);
+            target.add(optionsPanel);
         }
     }
 }

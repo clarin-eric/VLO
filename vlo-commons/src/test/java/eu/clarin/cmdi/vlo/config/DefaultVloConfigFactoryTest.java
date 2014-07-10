@@ -1,11 +1,7 @@
 package eu.clarin.cmdi.vlo.config;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import static org.hamcrest.CoreMatchers.hasItems;
@@ -938,9 +934,14 @@ public class DefaultVloConfigFactoryTest {
         List<String> result = config.getSimpleSearchFacetFields();
         assertEquals(5, result.size());
     }
-    
+
     @Test
-    public void testGetVcrSubmitEndpoint(){
+    public void testGetVcrSubmitEndpoint() {
         assertEquals("http://catalog-clarin.esc.rzg.mpg.de/vcr/service/submit", config.getVcrSubmitEndpoint());
+    }
+
+    @Test
+    public void testGetVcrMaximumItemsCount() {
+        assertEquals(Long.valueOf(1000), config.getVcrMaximumItemsCount());
     }
 }

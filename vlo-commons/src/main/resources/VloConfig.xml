@@ -149,5 +149,9 @@
     
     <cqlEndpointAlternative>http://cqlservlet.mpi.nl/</cqlEndpointAlternative>
     
+    <!-- Set to -1 to disable virtual collection creation from VLO -->
+    <vcrMaximumItemsCount>1000</vcrMaximumItemsCount>
+
     <vcrSubmitEndpoint>http://catalog-clarin.esc.rzg.mpg.de/vcr/service/submit</vcrSubmitEndpoint>
+
 </VloConfig>

@@ -34,6 +34,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -49,11 +50,11 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
 
     @SpringBean
     private VloConfig vloConfig;
-    private final SolrDocumentProvider documentProvider;
+    private final IDataProvider<SolrDocument> documentProvider;
 
-    public VirtualCollectionSubmissionPage(IModel<QueryFacetsSelection> model) {
+    public VirtualCollectionSubmissionPage(IModel<QueryFacetsSelection> model, IDataProvider<SolrDocument> documentProvider) {
         super(model);
-        this.documentProvider = new SolrDocumentProvider(getModel());
+        this.documentProvider = documentProvider;
 
         // add a label with the number of URI's for the description
         add(new Label("itemCount", new PropertyModel<Long>(documentProvider, "size")));
