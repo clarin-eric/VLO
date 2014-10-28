@@ -7,10 +7,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -19,40 +22,63 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 /**
- * Adds information about the affiliation of a metadata file to a national project (like CLARIN-X etc.) into facet nationalProject
+ * Adds information about the affiliation of a metadata file to a national
+ * project (like CLARIN-X etc.) into facet nationalProject
+ *
  * @author Thomas Eckart
  *
  */
 public class NationalProjectPostProcessor extends LanguageCodePostProcessor {
-	private final static Logger LOG = LoggerFactory.getLogger(NationalProjectPostProcessor.class);
 
-	private static Map<String, String> nationalProjectMap = null;
+    private final static Logger LOG = LoggerFactory.getLogger(NationalProjectPostProcessor.class);
 
-	/**
-	 * Returns the national project based on the mapping in Configuration.getNationalProjectMapUrl()
-	 * If no mapping was found empty String is returned
-	 * @return
-	 */
-	@Override
+    private static Map<String, String> nationalProjectMap = null;
+    private static Map<Pattern, String> nationalProjectRegExpMap = null;
+
+    /**
+     * Returns the national project based on the mapping in
+     * Configuration.getNationalProjectMapUrl() If no mapping was found empty
+     * String is returned
+     *
+     * @return
+     */
+    @Override
     public List<String> process(String value) {
-        String result = value.trim();
-        if (result != null && getMapping().containsKey(result)) {
-            result = getMapping().get(result);
-        } else {
-        	result = "";
-        }
+        String input = value.trim();
         List<String> resultList = new ArrayList<String>();
-        resultList.add(result);
+
+        if (input != null && getMapping().containsKey(input)) {
+            resultList.add(getMapping().get(input));
+            return resultList;
+        }
+
+        for (Pattern pattern : getRegExpMapping().keySet()) {
+            Matcher matcher = pattern.matcher(input);
+            if (matcher.find()) {
+                resultList.add(getRegExpMapping().get(pattern));
+                return resultList;
+            }
+        }
+
+        resultList.add("");
         return resultList;
     }
 
-	private Map<String, String> getMapping() {
-		if(nationalProjectMap == null)
-			nationalProjectMap = getNationalProjectMapping();
+    private Map<String, String> getMapping() {
+        if (nationalProjectMap == null) {
+            getNationalProjectMapping();
+        }
         return nationalProjectMap;
     }
 
-    private Map<String, String> getNationalProjectMapping() {
+    private Map<Pattern, String> getRegExpMapping() {
+        if (nationalProjectRegExpMap == null) {
+            getNationalProjectMapping();
+        }
+        return nationalProjectRegExpMap;
+    }
+
+    private void getNationalProjectMapping() {
         String projectsMappingFile = MetadataImporter.config.getNationalProjectMapping();
 
         if (projectsMappingFile.length() == 0) {
@@ -61,7 +87,8 @@ public class NationalProjectPostProcessor extends LanguageCodePostProcessor {
         }
 
         try {
-            Map<String, String> result = new HashMap<String, String>();
+            nationalProjectMap = new HashMap<String, String>();
+            nationalProjectRegExpMap = new HashMap<Pattern, String>();
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             domFactory.setNamespaceAware(true);
 
@@ -75,13 +102,12 @@ public class NationalProjectPostProcessor extends LanguageCodePostProcessor {
             if (mappingFileAsStream != null) {
                 doc = builder.parse(mappingFileAsStream);
             } else {
-
                 // the resource cannot be found inside the package, try outside
                 File mappingAsFile;
 
                 mappingAsFile = new File(projectsMappingFile);
 
-                if (mappingAsFile == null) {
+                if (!mappingAsFile.exists()) {
                     LOG.info("National project mapping file does not exist - using minimal test file.");
                     mappingAsFile = createMinimalMappingFile();
                 }
@@ -93,9 +119,18 @@ public class NationalProjectPostProcessor extends LanguageCodePostProcessor {
             for (int i = 1; i <= nodeList.getLength(); i++) {
                 String mdCollectionDisplayName = xpath.evaluate("//nationalProjectMapping[" + i + "]/MdCollectionDisplayName", doc).trim();
                 String nationalProject = xpath.evaluate("//nationalProjectMapping[" + i + "]/NationalProject", doc).trim();
-                result.put(mdCollectionDisplayName, nationalProject);
+                Boolean isRegExp;
+                try {
+                    isRegExp = Boolean.parseBoolean(xpath.evaluate("//nationalProjectMapping[" + i + "]/MdCollectionDisplayName/@isRegExp", doc));
+                } catch (XPathExpressionException xee) {
+                    isRegExp = false;
+                }
+                if (isRegExp == true) {
+                    nationalProjectRegExpMap.put(Pattern.compile(mdCollectionDisplayName), nationalProject);
+                } else {
+                    nationalProjectMap.put(mdCollectionDisplayName, nationalProject);
+                }
             }
-            return result;
         } catch (Exception e) {
             throw new RuntimeException("Cannot instantiate postProcessor:", e);
         }
@@ -105,14 +140,15 @@ public class NationalProjectPostProcessor extends LanguageCodePostProcessor {
      * Create temporary and minimal mapping file for testing purposes and as
      * backup solution
      *
-     * @return minimal file for national projects mapping (e.g. ANDES ->
+     * @return minimal file for national projects mapping (e.g. TLA: ANDES ->
      * CLARIN-EU)
      */
     private File createMinimalMappingFile() {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
         content += "<nationalProjects>\n";
-        content += "   <nationalProjectMapping><MdCollectionDisplayName>ANDES</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>\n";
+        content += "   <nationalProjectMapping><MdCollectionDisplayName>TLA: ANDES</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>\n";
+        content += "   <nationalProjectMapping><MdCollectionDisplayName isRegExp=\"true\">Meertens.*</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>\n";
         content += "</nationalProjects>\n";
 
         File file = null;
@@ -120,7 +156,6 @@ public class NationalProjectPostProcessor extends LanguageCodePostProcessor {
             file = File.createTempFile("vlo.nationalTestMapping", ".map");
             FileUtils.writeStringToFile(file, content, "UTF-8");
         } catch (IOException ioe) {
-            ioe.printStackTrace();
             LOG.error("Could not create temporary national project mapping file");
         }
 

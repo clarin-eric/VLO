@@ -35,20 +35,9 @@
 	<nationalProjectMapping><MdCollectionDisplayName>TLA: Sign Language Typology</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>TLA: talkbank</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>CLARIN-NL webservices</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
-	<nationalProjectMapping><MdCollectionDisplayName>Meertens Collection: Soundbites</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
-	<nationalProjectMapping><MdCollectionDisplayName>Meertens Collection: Dynamische Fonologische en Morfologische Atlas van de Nederlandse Dialecten (GTRP)</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
-	<nationalProjectMapping><MdCollectionDisplayName>Meertens Collection</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
-	<nationalProjectMapping><MdCollectionDisplayName>Meertens Collection: Diversity in Dutch DP Design (DiDDD)</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
-	<nationalProjectMapping><MdCollectionDisplayName>Meertens Collection: Dynamische Syntactische Atlas van de Nederlandse Dialecten (DynaSAND)</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
-	<nationalProjectMapping><MdCollectionDisplayName>Meertens collection: Liederenbank</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
-	<nationalProjectMapping><MdCollectionDisplayName>Meertens Collection: Heiloo toponiemen</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>Nederlands Instituut voor Beeld en Geluid Academia collectie</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>INL Taalbank Nederlands</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
-	<nationalProjectMapping><MdCollectionDisplayName>Universität des Saarlandes CLARIN-D-Zentrum</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping> 
-	<nationalProjectMapping><MdCollectionDisplayName>Universität des Saarlandes CLARIN-D-Zentrum, Saarbrücken</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>CLARIN-DK-UCPH Repository</MdCollectionDisplayName><NationalProject>CLARIN-DK-UCPH</NationalProject></nationalProjectMapping>
-	<nationalProjectMapping><MdCollectionDisplayName>LINDAT / CLARIN Data &amp; Tools</MdCollectionDisplayName><NationalProject>LINDAT (CLARIN-CZ)</NationalProject></nationalProjectMapping>
-	<nationalProjectMapping><MdCollectionDisplayName>LINDAT / CLARIN Web Services</MdCollectionDisplayName><NationalProject>LINDAT (CLARIN-CZ)</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>LRT + Open Submissions Data &amp; Tools</MdCollectionDisplayName><NationalProject>LINDAT (CLARIN-CZ)</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>Leipzig Corpora Collection</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
 	<nationalProjectMapping><MdCollectionDisplayName>Hamburger Zentrum für Sprachkorpora (HZSK)</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
@@ -108,33 +97,8 @@
 		<MdCollectionDisplayName>Dictionary of the Limburgian dialects - subcollection with core data</MdCollectionDisplayName>
 		<NationalProject>CLARIN-NL</NationalProject>
 	</nationalProjectMapping>
-	
-	<nationalProjectMapping>
-		<MdCollectionDisplayName>Meertens Collection: GBA-derived</MdCollectionDisplayName>
-		<NationalProject>CLARIN-NL</NationalProject>
-	</nationalProjectMapping>
-	
-	<nationalProjectMapping>
-		<MdCollectionDisplayName>Meertens Collection: GBA-derived - sub COROP area</MdCollectionDisplayName>
-		<NationalProject>CLARIN-NL</NationalProject>
-	</nationalProjectMapping>
-	
-	<nationalProjectMapping>
-		<MdCollectionDisplayName>Meertens Collection: GBA-derived - sub dialectarea</MdCollectionDisplayName>
-		<NationalProject>CLARIN-NL</NationalProject>
-	</nationalProjectMapping>
-	
-	<nationalProjectMapping>
-		<MdCollectionDisplayName>Meertens Collection: GBA-derived - sub municipality</MdCollectionDisplayName>
-		<NationalProject>CLARIN-NL</NationalProject>
-	</nationalProjectMapping>
-	
-	<nationalProjectMapping>
-		<MdCollectionDisplayName>Meertens Collection: GBA-derived - sub province</MdCollectionDisplayName>
-		<NationalProject>CLARIN-NL</NationalProject>
-	</nationalProjectMapping>
-	
-	<nationalProjectMapping>
+
+        <nationalProjectMapping>
 		<MdCollectionDisplayName>TLA: NEHOL</MdCollectionDisplayName>
 		<NationalProject>CLARIN-NL</NationalProject>
 	</nationalProjectMapping>
@@ -149,9 +113,8 @@
 		<NationalProject>CLARIN-NL</NationalProject>
 	</nationalProjectMapping>
 
-	<nationalProjectMapping>
-                <MdCollectionDisplayName>CLARIN-DK-UCPH Repository</MdCollectionDisplayName>
-                <NationalProject>CLARIN-DK-UCPH</NationalProject>
-        </nationalProjectMapping>	
-	
+	<nationalProjectMapping><MdCollectionDisplayName isRegExp="true">CLARIN-DK-UCPH.*</MdCollectionDisplayName><NationalProject>CLARIN-DK-UCPH</NationalProject></nationalProjectMapping>        
+       	<nationalProjectMapping><MdCollectionDisplayName isRegExp="true">LINDAT / CLARIN.*</MdCollectionDisplayName><NationalProject>LINDAT (CLARIN-CZ)</NationalProject></nationalProjectMapping>
+        <nationalProjectMapping><MdCollectionDisplayName isRegExp="true">Meertens.*</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+        <nationalProjectMapping><MdCollectionDisplayName isRegExp="true">Universität des Saarlandes.*</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
 </nationalProjects>
