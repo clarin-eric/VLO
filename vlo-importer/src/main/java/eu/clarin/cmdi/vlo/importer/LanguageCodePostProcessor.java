@@ -32,7 +32,7 @@ public class LanguageCodePostProcessor implements PostProcessor{
     protected static final String SIL_CODE_PREFIX = "RFC1766:x-sil-";
     protected static final String SIL_CODE_PREFIX_alt = "RFC-1766:x-sil-";
     
-    private static Pattern RFC1766_Pattern = Pattern.compile("^([a-z]{2,3})[-_][a-zA-Z]{2}$");
+    private static final Pattern RFC1766_Pattern = Pattern.compile("^([a-z]{2,3})[-_][a-zA-Z]{2}$");
 
     private Map<String, String> twoLetterCodesMap;
     private Map<String, String> threeLetterCodesMap;
