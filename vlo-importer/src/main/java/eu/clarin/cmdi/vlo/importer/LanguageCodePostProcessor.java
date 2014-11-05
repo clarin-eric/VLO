@@ -19,6 +19,8 @@ import org.w3c.dom.NodeList;
 import eu.clarin.cmdi.vlo.CommonUtils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LanguageCodePostProcessor implements PostProcessor{
 
@@ -29,6 +31,8 @@ public class LanguageCodePostProcessor implements PostProcessor{
     protected static final String ISO639_3_PREFIX = "ISO639-3:";
     protected static final String SIL_CODE_PREFIX = "RFC1766:x-sil-";
     protected static final String SIL_CODE_PREFIX_alt = "RFC-1766:x-sil-";
+    
+    private static Pattern RFC1766_Pattern = Pattern.compile("^([a-z]{2,3})[-_][a-zA-Z]{2}$");
 
     private Map<String, String> twoLetterCodesMap;
     private Map<String, String> threeLetterCodesMap;
@@ -57,44 +61,37 @@ public class LanguageCodePostProcessor implements PostProcessor{
     protected String extractLanguageCode(String value) {
         String result = value;
         
+        result = result.replaceFirst(ISO639_3_PREFIX, "").replaceFirst(SIL_CODE_PREFIX, "").replaceFirst(SIL_CODE_PREFIX_alt, "");
+        
         // input is already ISO 639-3?
-        if(getIso639ToLanguageNameMap().keySet().contains(value.toUpperCase()))
-            return CODE_PREFIX + value.toLowerCase();
+        if(getIso639ToLanguageNameMap().keySet().contains(result.toUpperCase()))
+            return CODE_PREFIX + result.toLowerCase();
         
-        // deal with prefixes or language names
-        if (value.length() != 2 && value.length() != 3) {
-            if (value.startsWith(ISO639_3_PREFIX)) {
-                return CODE_PREFIX + value.substring(ISO639_3_PREFIX.length()).toLowerCase();
-            } else if (value.startsWith(SIL_CODE_PREFIX) || value.startsWith(SIL_CODE_PREFIX_alt)) {
-                result = value.substring(value.lastIndexOf("-")+1);
-                silToIso639Map = getSilToIso639Map();
-                String isoCode = silToIso639Map.get(result.toLowerCase());
-                if (isoCode != null) {
-                    result = CODE_PREFIX + isoCode;
-                }
-            } else if(getLanguageNameToIso639Map().containsKey(value)) { // (english) language name?
-                return CODE_PREFIX + getLanguageNameToIso639Map().get(value);
-            }
+        // input is 2-letter code -> map to ISO 639-3
+        if(getSilToIso639Map().containsKey(result.toLowerCase())) {
+            return CODE_PREFIX + silToIso639Map.get(result.toLowerCase());
         }
-        
-        // map 2-letter codes to ISO 639-3
-        if(result.length() == 2) {
-            if(silToIso639Map == null)
-                silToIso639Map = getSilToIso639Map();
-            result = CODE_PREFIX + silToIso639Map.get(result.toLowerCase());
+
+        if(getLanguageNameToIso639Map().containsKey(result)) { // (english) language name?
+            return CODE_PREFIX + getLanguageNameToIso639Map().get(result);
         }
-        
+
         // convert ISO 639-2/T codes to ISO 639-3
-        if (getIso6392TToISO6393Map().containsKey(value.toLowerCase())) {
-            result = CODE_PREFIX + getIso6392TToISO6393Map().get(value.toLowerCase());
+        if (getIso6392TToISO6393Map().containsKey(result.toLowerCase())) {
+            return CODE_PREFIX + getIso6392TToISO6393Map().get(result.toLowerCase());
         }
         
+        Matcher matcher = RFC1766_Pattern.matcher(result);
+        if(matcher.find()) {
+            return extractLanguageCode(matcher.group(1));
+        }
+            
         // language code not identified? -> language name
-        if(!result.startsWith(CODE_PREFIX) && !result.equals(""))
+        if(!result.equals(""))
             result = LANG_NAME_PREFIX + result;
         return result;
     }
-
+  
     public String getLanguageNameForLanguageCode(String langCode) {
     	String result = getIso639ToLanguageNameMap().get(langCode);
 
