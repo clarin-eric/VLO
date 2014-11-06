@@ -28,6 +28,7 @@ public class LanguageCodePostProcessor implements PostProcessor{
 
     protected static final String CODE_PREFIX = "code:";
     protected static final String LANG_NAME_PREFIX = "name:";
+    protected static final String ISO639_2_PREFIX = "ISO639-2:";
     protected static final String ISO639_3_PREFIX = "ISO639-3:";
     protected static final String SIL_CODE_PREFIX = "RFC1766:x-sil-";
     protected static final String SIL_CODE_PREFIX_alt = "RFC-1766:x-sil-";
@@ -61,7 +62,7 @@ public class LanguageCodePostProcessor implements PostProcessor{
     protected String extractLanguageCode(String value) {
         String result = value;
         
-        result = result.replaceFirst(ISO639_3_PREFIX, "").replaceFirst(SIL_CODE_PREFIX, "").replaceFirst(SIL_CODE_PREFIX_alt, "");
+        result = result.replaceFirst(ISO639_2_PREFIX, "").replaceFirst(ISO639_3_PREFIX, "").replaceFirst(SIL_CODE_PREFIX, "").replaceFirst(SIL_CODE_PREFIX_alt, "");
         
         // input is already ISO 639-3?
         if(getIso639ToLanguageNameMap().keySet().contains(result.toUpperCase()))

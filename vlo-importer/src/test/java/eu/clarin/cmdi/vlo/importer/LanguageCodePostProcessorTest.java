@@ -34,6 +34,7 @@ public class LanguageCodePostProcessorTest extends ImporterTestcase {
         assertEquals("code:eng", processor.process("English").get(0));
         assertEquals("code:deu", processor.process("German").get(0));
         assertEquals("code:esn", processor.process("Salvadoran Sign Language").get(0));
+        assertEquals("code:eng", processor.process("en_US").get(0));
+        assertEquals("code:nld", processor.process("nl-NL").get(0));
     }
-
 }
