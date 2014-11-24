@@ -7,6 +7,7 @@ import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
+import eu.clarin.cmdi.vlo.FacetConstants;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,6 +21,8 @@ import org.slf4j.LoggerFactory;
 public class CMDIParserVTDXML implements CMDIDataProcessor {
     private final Map<String, PostProcessor> postProcessors;
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
+    
+    private static final String DEFAULT_LANGUAGE = "und";
 
     public CMDIParserVTDXML(Map<String, PostProcessor> postProcessors) {
         this.postProcessors = postProcessors;
@@ -215,11 +218,24 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                 index++;
             }
             String value = nav.toString(index);
+            
+            // extract language code in xml:lang if available
+            Integer langAttrIndex = nav.getAttrVal("xml:lang");
+            String languageCode = DEFAULT_LANGUAGE;
+            if(langAttrIndex != -1)
+                languageCode = nav.toString(langAttrIndex).trim();
+            // replace 2-letter with 3-letter codes
+            if(LanguageCodeUtils.getSilToIso639Map().containsKey(languageCode))
+                languageCode = LanguageCodeUtils.getSilToIso639Map().get(languageCode);
+            
             List<String> valueList = postProcess(config.getName(), value);
             for(int i=0; i<valueList.size(); i++) {
                 if(!allowMultipleValues && i>0)
                     break;
-                cmdiData.addDocField(config.getName(), valueList.get(i).trim(), config.isCaseInsensitive());
+                String fieldValue = valueList.get(i).trim();
+                if(config.getName().equals(FacetConstants.FIELD_DESCRIPTION))
+                    fieldValue = "{lang='"+languageCode+"'}"+fieldValue;
+                cmdiData.addDocField(config.getName(), fieldValue, config.isCaseInsensitive());
             }
             index = ap.evalXPath();
             

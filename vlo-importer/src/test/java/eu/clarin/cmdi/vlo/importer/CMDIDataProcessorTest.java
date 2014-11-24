@@ -118,7 +118,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "         <Title>route description to Kleve</Title>\n";
         content += "         <Date>2002-10-30</Date>\n";
         content += "         <descriptions>\n";
-        content += "            <Description LanguageId=\"ISO639-2:eng\">This  recording was made to generate a freely available test resource including speech and gestures. The annotations were created by Peter and Kita who is gesture researcher at the MPI for Psycholinguistics.</Description>\n";
+        content += "            <Description xml:lang='eng' LanguageId=\"ISO639-2:eng\">This  recording was made to generate a freely available test resource including speech and gestures. The annotations were created by Peter and Kita who is gesture researcher at the MPI for Psycholinguistics.</Description>\n";
         content += "            <Description LanguageId=\"ISO639-2:ger\">Diese Aufnahme wurde erzeugt, um eine frei verf\\u00fcgbare Test Resource zur Verf\\u00fcgung stellen zu k\\u00f6nnen, die Sprache und Gestik umfasst. Die Annotationen wurden von Peter und Kita, dem Gestik Researcher am MPI erzeugt.</Description>\n";
         content += "         </descriptions>\n";
         content += "         <MDGroup>\n";
@@ -399,7 +399,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("Max Planck Institute for Psycholinguistics", doc.getFieldValue("organisation"));
         assertEquals("demo", doc.getFieldValue("genre"));
         assertEquals(
-                "This  recording was made to generate a freely available test resource including speech and gestures. The annotations were created by Peter and Kita who is gesture researcher at the MPI for Psycholinguistics.",
+                "{lang='eng'}This  recording was made to generate a freely available test resource including speech and gestures. The annotations were created by Peter and Kita who is gesture researcher at the MPI for Psycholinguistics.",
                 doc.getFieldValue("description"));
         assertEquals("2002", doc.getFieldValue("year"));
         List<String> fieldValues = new ArrayList(doc.getFieldValues(FacetConstants.FIELD_FORMAT));
@@ -524,7 +524,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("Europe", doc.getFieldValue("continent"));
         assertEquals("Netherlands", doc.getFieldValue("country"));
         assertEquals("demo", doc.getFieldValue("genre"));
-        assertEquals("Test.", doc.getFieldValue("description"));
+        assertEquals("{lang='und'}Test.", doc.getFieldValue("description"));
         assertEquals("Should be null not empty string", null, doc.getFieldValue("organisation"));
         assertEquals(null, doc.getFieldValue("language"));
         assertEquals(null, doc.getFieldValue("subject"));
@@ -606,11 +606,11 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(3, fieldValues.size());
         List<String> descriptions = new ArrayList(fieldValues);
         Collections.sort(descriptions);
-        assertEquals("Channel: Talking;\n    Genre: Traditional Narrative / Story;\n    Country: Panama;\n"
+        assertEquals("{lang='und'}Channel: Talking;\n    Genre: Traditional Narrative / Story;\n    Country: Panama;\n"
                 + "    Place of Recording: Mulatuppu;\n    Event: Community Gathering;\n"
                 + "    Institutional Affiliation: University of Texas at Austin;\n    Participant Information: Political Leader;", descriptions.get(0).toString());
-        assertEquals("Test", descriptions.get(1).toString());
-        assertEquals("The one-eyed grandmother is one of many traditional Kuna stories performed "
+        assertEquals("{lang='und'}Test", descriptions.get(1).toString());
+        assertEquals("{lang='und'}The one-eyed grandmother is one of many traditional Kuna stories performed "
                 + "in the Kuna gathering house. This story, performed here by Pedro Arias, combines "
                 + "European derived motifs (Tom Thumb and Hansel and Gretel) with themes that seem more "
                 + "Kuna in origin. All are woven together and a moral is provided. Pedro Arias performed "
@@ -876,7 +876,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "                <ResourceName>Corpus of Present-day Written Estonian</ResourceName>\n";
         content += "                <ResourceType>Written Corpus</ResourceType>\n";
         content += "                <LanguagesOther />\n";
-        content += "                <Description>written general; 95 mio words; TEI/SGML</Description>\n";
+        content += "                <Description xml:lang='en'>written general; 95 mio words; TEI/SGML</Description>\n";
         content += "                <ContactPerson>Kadri.Muischnek@ut.ee</ContactPerson>\n";
         content += "                <Format />\n";
         content += "                <Institute>Test</Institute>\n";
@@ -911,7 +911,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("Test", doc.getFieldValue("organisation"));
         assertEquals(null, doc.getFieldValue("year"));
         assertEquals(null, doc.getFieldValue("genre"));
-        assertEquals("written general; 95 mio words; TEI/SGML", doc.getFieldValue("description"));
+        assertEquals("{lang='eng'}written general; 95 mio words; TEI/SGML", doc.getFieldValue("description"));
         assertEquals("Written Corpus", doc.getFieldValue(FacetConstants.FIELD_RESOURCE_CLASS));
     }
 }
