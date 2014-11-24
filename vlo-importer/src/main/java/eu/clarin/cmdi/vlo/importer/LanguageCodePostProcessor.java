@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 public class LanguageCodePostProcessor implements PostProcessor{
 
     private final static Logger LOG = LoggerFactory.getLogger(LanguageCodePostProcessor.class);
-
+    
     protected static final String CODE_PREFIX = "code:";
     protected static final String LANG_NAME_PREFIX = "name:";
     protected static final String ISO639_2_PREFIX = "ISO639-2:";
@@ -34,13 +34,6 @@ public class LanguageCodePostProcessor implements PostProcessor{
     protected static final String SIL_CODE_PREFIX_alt = "RFC-1766:x-sil-";
     
     private static final Pattern RFC1766_Pattern = Pattern.compile("^([a-z]{2,3})[-_][a-zA-Z]{2}$");
-
-    private Map<String, String> twoLetterCodesMap;
-    private Map<String, String> threeLetterCodesMap;
-    private Map<String, String> silToIso639Map;
-    private Map<String, String> languageNameToIso639Map;
-    private Map<String, String> iso639ToLanguageNameMap;
-    private Map<String, String> iso639_2TToISO639_3Map;
 
     /**
      * Returns the language code based on the mapping defined in the CMDI components: See http://trac.clarin.eu/ticket/40 for the mapping.
@@ -65,21 +58,21 @@ public class LanguageCodePostProcessor implements PostProcessor{
         result = result.replaceFirst(ISO639_2_PREFIX, "").replaceFirst(ISO639_3_PREFIX, "").replaceFirst(SIL_CODE_PREFIX, "").replaceFirst(SIL_CODE_PREFIX_alt, "");
         
         // input is already ISO 639-3?
-        if(getIso639ToLanguageNameMap().keySet().contains(result.toUpperCase()))
+        if(LanguageCodeUtils.getIso639ToLanguageNameMap().keySet().contains(result.toUpperCase()))
             return CODE_PREFIX + result.toLowerCase();
         
         // input is 2-letter code -> map to ISO 639-3
-        if(getSilToIso639Map().containsKey(result.toLowerCase())) {
-            return CODE_PREFIX + silToIso639Map.get(result.toLowerCase());
+        if(LanguageCodeUtils.getSilToIso639Map().containsKey(result.toLowerCase())) {
+            return CODE_PREFIX + LanguageCodeUtils.getSilToIso639Map().get(result.toLowerCase());
         }
 
-        if(getLanguageNameToIso639Map().containsKey(result)) { // (english) language name?
-            return CODE_PREFIX + getLanguageNameToIso639Map().get(result);
+        if(LanguageCodeUtils.getLanguageNameToIso639Map().containsKey(result)) { // (english) language name?
+            return CODE_PREFIX + LanguageCodeUtils.getLanguageNameToIso639Map().get(result);
         }
 
         // convert ISO 639-2/T codes to ISO 639-3
-        if (getIso6392TToISO6393Map().containsKey(result.toLowerCase())) {
-            return CODE_PREFIX + getIso6392TToISO6393Map().get(result.toLowerCase());
+        if (LanguageCodeUtils.getIso6392TToISO6393Map().containsKey(result.toLowerCase())) {
+            return CODE_PREFIX + LanguageCodeUtils.getIso6392TToISO6393Map().get(result.toLowerCase());
         }
         
         Matcher matcher = RFC1766_Pattern.matcher(result);
@@ -92,128 +85,4 @@ public class LanguageCodePostProcessor implements PostProcessor{
             result = LANG_NAME_PREFIX + result;
         return result;
     }
-  
-    public String getLanguageNameForLanguageCode(String langCode) {
-    	String result = getIso639ToLanguageNameMap().get(langCode);
-
-    	if(result == null)
-    		result = langCode;
-
-    	return result;
-    }
-    
-    protected Map<String, String> getSilToIso639Map() {
-        if (silToIso639Map == null) {
-            silToIso639Map = createSilToIsoCodeMap();
-        }
-        return silToIso639Map;
-    }
-
-    protected Map<String, String> getTwoLetterCountryCodeMap() {
-        if (twoLetterCodesMap == null) {
-            twoLetterCodesMap = createCodeMap(MetadataImporter.config.getLanguage2LetterCodeComponentUrl());
-        }
-        return twoLetterCodesMap;
-    }
-
-    protected Map<String, String> getThreeLetterCountryCodeMap() {
-        if (threeLetterCodesMap == null) {
-            threeLetterCodesMap = createCodeMap(MetadataImporter.config.getLanguage3LetterCodeComponentUrl());
-        }
-        return threeLetterCodesMap;
-    }
-
-    protected Map<String, String> getLanguageNameToIso639Map() {
-    	if (languageNameToIso639Map == null) {
-    		languageNameToIso639Map = createReverseCodeMap(MetadataImporter.config.getLanguage3LetterCodeComponentUrl());
-    	}
-    	return languageNameToIso639Map;
-    }
-
-    private Map<String, String> getIso639ToLanguageNameMap() {
-    	if (iso639ToLanguageNameMap == null) {
-    		iso639ToLanguageNameMap = createCodeMap(MetadataImporter.config.getLanguage3LetterCodeComponentUrl());
-    	}
-
-    	return iso639ToLanguageNameMap;
-    }
-   
-    /**
-     * Returns map of ISO 639-2/B codes to ISO 639-3
-     * 
-     *  It is strongly advised to use ISO 639-3 codes, the support for ISO 639-2 may be discontinued in the future
-     * 
-     * @return map of ISO 639-2/B codes to ISO 639-3
-     */
-    private Map<String, String> getIso6392TToISO6393Map() {
-        if (iso639_2TToISO639_3Map == null) {
-            iso639_2TToISO639_3Map = new HashMap<String, String>();
-            iso639_2TToISO639_3Map.put("alb", "sqi");
-            iso639_2TToISO639_3Map.put("arm", "hye");
-            iso639_2TToISO639_3Map.put("baq", "eus");
-            iso639_2TToISO639_3Map.put("bur", "mya");
-            iso639_2TToISO639_3Map.put("cze", "ces");
-            iso639_2TToISO639_3Map.put("chi", "zho");
-            iso639_2TToISO639_3Map.put("dut", "nld");
-            iso639_2TToISO639_3Map.put("fre", "fra");
-            iso639_2TToISO639_3Map.put("geo", "kat");
-            iso639_2TToISO639_3Map.put("ger", "deu");
-            iso639_2TToISO639_3Map.put("gre", "ell");
-            iso639_2TToISO639_3Map.put("ice", "isl");
-            iso639_2TToISO639_3Map.put("max", "mkd");
-            iso639_2TToISO639_3Map.put("mao", "mri");
-            iso639_2TToISO639_3Map.put("may", "msa");
-            iso639_2TToISO639_3Map.put("per", "fas");
-            iso639_2TToISO639_3Map.put("rum", "ron");
-            iso639_2TToISO639_3Map.put("slo", "slk");
-            iso639_2TToISO639_3Map.put("tib", "bod");
-            iso639_2TToISO639_3Map.put("wel", "cym");
-        }
-        
-        return iso639_2TToISO639_3Map;
-    }
-
-    private Map<String, String> createCodeMap(String url) {
-        LOG.debug("Creating language code map.");
-        try {
-            Map<String, String> result = CommonUtils.createCMDIComponentItemMap(url);
-            return result;
-        } catch (Exception e) {
-            throw new RuntimeException("Cannot instantiate postProcessor:", e);
-        }
-    }
-
-    private Map<String, String> createReverseCodeMap(String url) {
-        LOG.debug("Creating language code map.");
-        try {
-            Map<String, String> result = CommonUtils.createReverseCMDIComponentItemMap(url);
-            return result;
-        } catch (Exception e) {
-            throw new RuntimeException("Cannot instantiate postProcessor:", e);
-        }
-    }
-
-    private Map<String, String> createSilToIsoCodeMap() {
-        LOG.debug("Creating silToIso code map.");
-        try {
-            Map<String, String> result = new HashMap<String, String>();
-            DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-            domFactory.setNamespaceAware(true);
-            URL url = new URL(MetadataImporter.config.getSilToISO639CodesUrl());
-            DocumentBuilder builder = domFactory.newDocumentBuilder();
-            Document doc = builder.parse(url.openStream());
-            XPath xpath = XPathFactory.newInstance().newXPath();
-            NodeList nodeList = (NodeList) xpath.evaluate("//lang", doc, XPathConstants.NODESET);
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
-                String silCode = node.getFirstChild().getTextContent();
-                String isoCode = node.getLastChild().getTextContent();
-                result.put(silCode, isoCode);
-            }
-            return result;
-        } catch (Exception e) {
-            throw new RuntimeException("Cannot instantiate postProcessor:", e);
-        }
-    }
-
 }

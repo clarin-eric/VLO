@@ -27,13 +27,13 @@ public class LanguageNamePostProcessor extends LanguageCodePostProcessor {
                 langCode = langCode.substring(CODE_PREFIX.length());
             
             if (langCode.length() == 2) {
-                twoLetterCodesMap = getTwoLetterCountryCodeMap();
+                twoLetterCodesMap = LanguageCodeUtils.getTwoLetterCountryCodeMap();
                 String name = twoLetterCodesMap.get(langCode.toUpperCase());
                 if (name != null) {
                     result = name;
                 }
             } else if (langCode.length() == 3) {
-                threeLetterCodesMap = getThreeLetterCountryCodeMap();
+                threeLetterCodesMap = LanguageCodeUtils.getThreeLetterCountryCodeMap();
                 String name = threeLetterCodesMap.get(langCode.toUpperCase());
                 if (name != null) {
                     result = name;
