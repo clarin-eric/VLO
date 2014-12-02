@@ -63,6 +63,8 @@ public class VloConfig {
 
     //(required = false)
     private String nationalProjectMapping = "";
+    
+    private String organisationNamesUrl;
 
     private String countryComponentUrl = "";
 
@@ -134,7 +136,7 @@ public class VloConfig {
     private List<String> simpleSearchFacetField;
 
     private String collectionFacet;
-
+    
     // test related parameters
     //(required = false)
     private String reverseProxyPrefix = "";
@@ -936,6 +938,31 @@ public class VloConfig {
     public void setReverseProxyPrefix(String param) {
         reverseProxyPrefix = param;
     }
+    
+        /**
+     * Get the value of the organisationNamesUrl parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public String getOrganisationNamesUrl() {
+        return organisationNamesUrl;
+    }
+
+    /**
+     * Set the value of the organisationNamesUrl parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value
+     */
+    public void setOrganisationNamesUrl(String param) {
+        organisationNamesUrl = param;
+    }
+    
 
     /**
      * Get the value of the cqlEndpointFilter parameter<br><br>

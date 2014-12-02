@@ -56,6 +56,8 @@
     
     <nationalProjectMapping>/nationalProjectsMapping.xml</nationalProjectMapping>
     
+    <organisationNamesUrl>/OrganisationControlledVocabulary.xml</organisationNamesUrl>
+    
     <!-- 
         Facet field used to populate collection selector on search page 
         If disabled, the collection facet will not be shown (can be used to
