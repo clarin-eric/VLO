@@ -84,6 +84,9 @@ public class FacetConceptMapping {
         
         @XmlAttribute
         private String description = "";
+        
+        @XmlAttribute
+        private String definition = "";
 
         @XmlElement(name = "concept")
         private List<String> concepts = new ArrayList<String>();
@@ -166,6 +169,14 @@ public class FacetConceptMapping {
         
         public String getDescription() {
         	return this.description;
+        }
+        
+        public void setDefinition(String definition) {
+        	this.definition = definition;
+        }
+        
+        public String getDefinition() {
+        	return this.definition;
         }
 
         public void setPatterns(List<String> patterns) {
