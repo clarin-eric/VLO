@@ -445,7 +445,7 @@
    
    <!-- Field for autocompletion (suggester) -->
    <field name="_suggester" type="textauto" indexed="true" stored="false"/>
-   <copyField source="name" dest="_suggester"/>
+   <copyField source="text" dest="_suggester"/>
  </fields>
 
  <uniqueKey>id</uniqueKey>
