@@ -193,6 +193,12 @@
     <blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:DocumentationLanguages</blacklistPattern> <!-- IMS c:LexicalResourceProfile -->
     <blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:DocumentationLanguages</blacklistPattern> <!-- IMS c:MultimodalCorpus -->
   </facetConcept>
+  <facetConcept name="license" description="License which is used for the resource">
+      <concept>http://www.isocat.org/datcat/DC-2457</concept>
+      <concept>http://www.isocat.org/datcat/DC-3800</concept>      
+      <concept>http://www.isocat.org/datcat/DC-5439</concept>
+      <!--<concept>http://purl.org/dc/terms/license</concept>-->
+  </facetConcept>
   <facetConcept name="organisation" description="Organisation involved in creation and/or distribution of the resource">
     <concept>http://www.isocat.org/datcat/DC-2459</concept>
     <concept>http://www.isocat.org/datcat/DC-2979</concept>
