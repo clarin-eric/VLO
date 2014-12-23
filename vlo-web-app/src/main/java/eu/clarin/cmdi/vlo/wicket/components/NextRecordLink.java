@@ -43,16 +43,14 @@ public class NextRecordLink extends Link<SearchContext> {
     private PageParametersConverter<SolrDocument> documentParamConverter;
     @SpringBean(name="searchContextParamsConverter")
     private PageParametersConverter<SearchContext> contextParamConverter;
-    private final IModel<SearchContext> model;
 
     public NextRecordLink(String id, IModel<SearchContext> model) {
-        super(id);
-        this.model = model;
+        super(id, model);
     }
 
     @Override
     public void onClick() {
-        final SearchContext context = model.getObject();
+        final SearchContext context = getModelObject();
         final int index = (int) context.getIndex() + 1;
         // get the next record
         final List<SolrDocument> documents = documentService.getDocuments(context.getSelection(), index, 1);
@@ -67,7 +65,7 @@ public class NextRecordLink extends Link<SearchContext> {
     @Override
     public boolean isEnabled() {
         // disable for last item
-        final SearchContext context = model.getObject();
+        final SearchContext context = getModelObject();
         return context.getIndex() + 1 < context.getResultCount();
     }
 

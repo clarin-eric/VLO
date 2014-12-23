@@ -35,7 +35,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  * @author twagoo
  * @see NextRecordLink
  */
-public class PreviousRecordLink extends Link {
+public class PreviousRecordLink extends Link<SearchContext> {
 
     @SpringBean
     private SolrDocumentService documentService;
@@ -44,16 +44,13 @@ public class PreviousRecordLink extends Link {
     @SpringBean(name="searchContextParamsConverter")
     private PageParametersConverter<SearchContext> contextParamConverter;
 
-    private final IModel<SearchContext> model;
-
     public PreviousRecordLink(String id, IModel<SearchContext> model) {
-        super(id);
-        this.model = model;
+        super(id, model);
     }
 
     @Override
     public void onClick() {
-        final SearchContext context = model.getObject();
+        final SearchContext context = getModelObject();
         final int index = (int) context.getIndex() - 1;
         // get the previous record as from the service
         final List<SolrDocument> documents = documentService.getDocuments(context.getSelection(), index, 1);
@@ -68,7 +65,7 @@ public class PreviousRecordLink extends Link {
     @Override
     public boolean isEnabled() {
         // disable for first item
-        return model.getObject().getIndex() > 0;
+        return getModelObject().getIndex() > 0;
     }
 
 }
