@@ -152,12 +152,13 @@
       value verbatim (and hence don't support range queries, since the
       lexicographic ordering isn't equal to the numeric ordering)
     -->
+    <!-- Deprecated classes
     <fieldType name="pint" class="solr.IntField" omitNorms="true"/>
     <fieldType name="plong" class="solr.LongField" omitNorms="true"/>
     <fieldType name="pfloat" class="solr.FloatField" omitNorms="true"/>
     <fieldType name="pdouble" class="solr.DoubleField" omitNorms="true"/>
     <fieldType name="pdate" class="solr.DateField" sortMissingLast="true" omitNorms="true"/>
-
+    -->
 
     <!--
       Note:
@@ -169,11 +170,12 @@
       but with a lexicographic ordering the same as the numeric ordering,
       so that range queries work correctly.
     -->
+    <!-- Deprecated classes
     <fieldType name="sint" class="solr.SortableIntField" sortMissingLast="true" omitNorms="true"/>
     <fieldType name="slong" class="solr.SortableLongField" sortMissingLast="true" omitNorms="true"/>
     <fieldType name="sfloat" class="solr.SortableFloatField" sortMissingLast="true" omitNorms="true"/>
     <fieldType name="sdouble" class="solr.SortableDoubleField" sortMissingLast="true" omitNorms="true"/>
-
+    -->
 
     <!-- The "RandomSortField" is not used to store or search any
          data.  You can declare fields of this type it in your schema
@@ -418,6 +420,7 @@
    <field name="continent" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="country" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="language" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="license" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="organisation"  type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="genre"  type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="modality"  type="string" indexed="true" stored="true" multiValued="true"/>
@@ -443,8 +446,8 @@
    <field name="languages" type="string" indexed="true" stored="true" multiValued="true" />
    
    <!-- Field for autocompletion (suggester) -->
-   <field name="_suggester" type="textauto" indexed="true" stored="false"/>
-   <copyField source="name" dest="_suggester"/>
+   <field name="_suggester" type="textauto" indexed="true" stored="false" multiValued="true"/>
+   <copyField source="text" dest="_suggester"/>
  </fields>
 
  <uniqueKey>id</uniqueKey>
