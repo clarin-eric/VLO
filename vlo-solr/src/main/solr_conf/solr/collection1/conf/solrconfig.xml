@@ -23,7 +23,7 @@
      the configuration.  See https://issues.apache.org/jira/browse/SOLR-1167
 -->
 <config>
-    <luceneMatchVersion>LUCENE_40</luceneMatchVersion>
+    <luceneMatchVersion>4.8</luceneMatchVersion>
     
   <!-- Set this to 'false' if you want solr to continue working after it has 
        encountered an severe configuration error.  In a production environment, 
@@ -48,19 +48,19 @@
   <!-- A dir option by itself adds any files found in the directory to the
        classpath, this is useful for including all jars in a directory.
     -->
-  <lib dir="../../contrib/extraction/lib" />
+  <!--<lib dir="../../contrib/extraction/lib" />-->
   <!-- When a regex is specified in addition to a directory, only the files in that
        directory which completely match the regex (anchored on both ends)
        will be included.
     -->
-  <lib dir="../../dist/" regex="apache-solr-cell-\d.*\.jar" />
-  <lib dir="../../dist/" regex="apache-solr-clustering-\d.*\.jar" />
+  <!--<lib dir="../../dist/" regex="apache-solr-cell-\d.*\.jar" />
+  <lib dir="../../dist/" regex="apache-solr-clustering-\d.*\.jar" />-->
   <!-- If a dir option (with or without a regex) is used and nothing is found
        that matches, it will be ignored
     -->
-  <lib dir="../../contrib/clustering/lib/downloads/" />
+  <!--<lib dir="../../contrib/clustering/lib/downloads/" />
   <lib dir="../../contrib/clustering/lib/" />
-  <lib dir="/total/crap/dir/ignored" /> 
+  <lib dir="/total/crap/dir/ignored" /> -->
   <!-- an exact path can be used to specify a specific file.  This will cause
        a serious error to be logged if it can't be loaded.
   <lib path="../a-jar-that-does-not-exist.jar" /> 
@@ -735,10 +735,10 @@
        The response format differs from solr1.1 formatting and returns a standard error code.
        To enable solr1.1 behavior, remove the /update handler or change its path
     -->
-  <requestHandler name="/update" class="solr.XmlUpdateRequestHandler" />
+  <requestHandler name="/update" class="solr.UpdateRequestHandler" />
 
 
-  <requestHandler name="/update/javabin" class="solr.BinaryUpdateRequestHandler" />
+  <requestHandler name="/update/javabin" class="solr.UpdateRequestHandler" />
 
   <!--
    Analysis request handler.  Since Solr 1.3.  Use to return how a document is analyzed.  Useful
