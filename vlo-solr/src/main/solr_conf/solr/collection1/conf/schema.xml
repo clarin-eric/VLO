@@ -445,7 +445,7 @@
    <field name="languageCode" type="string" indexed="true" stored="true" multiValued="true" />
    
    <!-- Field for autocompletion (suggester) -->
-   <field name="_suggester" type="textauto" indexed="true" stored="false"/>
+   <field name="_suggester" type="textauto" indexed="true" stored="false" multiValued="true"/>
    <copyField source="text" dest="_suggester"/>
  </fields>
 
