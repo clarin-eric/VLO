@@ -432,6 +432,10 @@
    <field name="dataProvider" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="nationalProject" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="keywords" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="temporalCoverage" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="lifeCycleStatus" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="distributionType" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="rightsHolder" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
 
    <field name="_selfLink" type="string" indexed="true" stored="true" multiValued="false"/>
