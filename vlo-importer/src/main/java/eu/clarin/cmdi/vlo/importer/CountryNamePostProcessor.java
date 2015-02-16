@@ -17,13 +17,14 @@ public class CountryNamePostProcessor implements PostProcessor {
      * Returns the country name based on the mapping defined in the CMDI component:
      * http://catalog.clarin.eu/ds/ComponentRegistry/?item=clarin.eu:cr1:c_1271859438104 If no mapping is found the original value is
      * returned.
+     * @param value extracted "country" value from CMDI file
+     * @return List of country names
      */
     @Override
     public List<String> process(String value) {
         String result = value;
         if (result != null) {
-            Map<String, String> countryCodeMap = getCountryCodeMap();
-            String name = countryCodeMap.get(value.toUpperCase());
+            String name = getCountryCodeMap().get(value.toUpperCase());
             if (name != null) {
                 result = name;
             }
