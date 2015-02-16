@@ -1,22 +1,8 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-import eu.clarin.cmdi.vlo.CommonUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
