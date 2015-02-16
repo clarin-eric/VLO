@@ -14,18 +14,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CMDIParserVTDXML implements CMDIDataProcessor {
     private final Map<String, PostProcessor> postProcessors;
+    private final Boolean useLocalXSDCache;
+    private static final Pattern PROFILE_ID_PATTERN = Pattern.compile(".*(clarin.eu:cr1:p_[0-9]+).*");
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
     
     private static final String DEFAULT_LANGUAGE = "und";
 
-    public CMDIParserVTDXML(Map<String, PostProcessor> postProcessors) {
+    public CMDIParserVTDXML(Map<String, PostProcessor> postProcessors, Boolean useLocalXSDCache) {
         this.postProcessors = postProcessors;
+        this.useLocalXSDCache = useLocalXSDCache;
     }
 
     @Override
@@ -38,7 +43,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         fileInputStream.close();
         
         VTDNav nav = vg.getNav();
-        FacetMapping facetMapping = getFacetMapping(nav.cloneNav(), file.getAbsolutePath());
+        FacetMapping facetMapping = getFacetMapping(nav.cloneNav());
 
         if(facetMapping.getFacets().isEmpty()){
             LOG.error("Problems mapping facets for file: {}", file.getAbsolutePath());
@@ -61,69 +66,64 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     /**
      * Extracts valid XML patterns for all facet definitions
      * @param nav VTD Navigator
-     * @param cmdiFilePath Absolute path of the XML file for which nav was created
      * @return the facet mapping used to map meta data to facets
      * @throws VTDException 
      */
-    private FacetMapping getFacetMapping(VTDNav nav, String cmdiFilePath) throws VTDException {
-        String xsd = extractXsd(nav);
-        if (xsd == null) {
+    private FacetMapping getFacetMapping(VTDNav nav) throws VTDException {
+        String profileId = extractXsd(nav);
+        if (profileId == null) {
             throw new RuntimeException("Cannot get xsd schema so cannot get a proper mapping. Parse failed!");
-        }
-        if (xsd.indexOf("http") != xsd.lastIndexOf("http")){
-            LOG.info("No valid CMDI schema URL was extracted. This is an indication of a broken CMDI file (like false content in //MdProfile element). {}", cmdiFilePath);
         }
         String facetConceptsFile = MetadataImporter.config.getFacetConceptsFile();
         if (facetConceptsFile.length() == 0){
             // use the packaged facet mapping file
             facetConceptsFile = "/facetConcepts.xml";
         }
-        return FacetMappingFactory.getFacetMapping(facetConceptsFile, xsd);
+        return FacetMappingFactory.getFacetMapping(facetConceptsFile, profileId, useLocalXSDCache);
     }
 
     /**
      * Try two approaches to extract the XSD schema information from the CMDI file
      * @param nav VTD Navigator
-     * @return URL of CMDI schema, or null if neither the CMDI header nor the XMLSchema-instance's attributes contained the information
+     * @return ID of CMDI schema, or null if neither the CMDI header nor the XMLSchema-instance's attributes contained the information
      * @throws VTDException 
      */
     String extractXsd(VTDNav nav) throws VTDException {
-        String xsd = getXsdFromHeader(nav);
-        if (xsd == null) {
-            xsd = getXsdFromSchemaLocation(nav);
+        String profileID = getProfileIdFromHeader(nav);
+        if (profileID == null) {
+            profileID = getProfileIdFromSchemaLocation(nav);
         }
-        return xsd;
+        return profileID;
     }
 
     /**
      * Extract XSD schema information from CMDI header (using element //Header/MdProfile)
      * @param nav VTD Navigator
-     * @return URL to CMDI schema, or null if content of //Header/MdProfile element could not be read
+     * @return ID of CMDI schema, or null if content of //Header/MdProfile element could not be read
      * @throws XPathParseException
      * @throws XPathEvalException
      * @throws NavException 
      */
-    private String getXsdFromHeader(VTDNav nav) throws XPathParseException, XPathEvalException, NavException {
-        String result = null;
+    private String getProfileIdFromHeader(VTDNav nav) throws XPathParseException, XPathEvalException, NavException {
         nav.toElement(VTDNav.ROOT);
         AutoPilot ap = new AutoPilot(nav);
         setNameSpace(ap);
         ap.selectXPath("/c:CMD/c:Header/c:MdProfile/text()");
         int index = ap.evalXPath();
+        String profileId = null;
         if (index != -1) {
-            String profileId = nav.toString(index).trim();
-            result = MetadataImporter.config.getComponentRegistryProfileSchema(profileId);
+            profileId = nav.toString(index).trim();
         }
-        return result;
+        return profileId;
     }
 
     /**
      * Extract XSD schema information from schemaLocation or noNamespaceSchemaLocation attributes
      * @param nav VTD Navigator
-     * @return URL to CMDI schema, or null if attributes don't exist
+     * @return ID of CMDI schema, or null if attributes don't exist
      * @throws NavException 
      */
-    private String getXsdFromSchemaLocation(VTDNav nav) throws NavException {
+    private String getProfileIdFromSchemaLocation(VTDNav nav) throws NavException {
         String result = null;
         nav.toElement(VTDNav.ROOT);
         int index = nav.getAttrValNS("http://www.w3.org/2001/XMLSchema-instance", "schemaLocation");
@@ -136,7 +136,14 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                 result = nav.toNormalizedString(index);
             }
         }
-        return result;
+        
+        // extract profile ID
+        if(result != null) {
+        Matcher m = PROFILE_ID_PATTERN.matcher(result);
+        if(m.find())
+            return m.group(1);
+        }
+        return null;
     }
     
     /**

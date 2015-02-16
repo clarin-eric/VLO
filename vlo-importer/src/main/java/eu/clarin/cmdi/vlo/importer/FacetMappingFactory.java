@@ -34,9 +34,9 @@ public class FacetMappingFactory {
 
     private FacetMappingFactory() {
     }
-
-    public static FacetMapping getFacetMapping(String facetConceptsFile, String xsd) {
-        return INSTANCE.getOrCreateMapping(facetConceptsFile, xsd);
+    
+    public static FacetMapping getFacetMapping(String facetConceptsFile, String xsd, Boolean useLocalXSDCache) {
+        return INSTANCE.getOrCreateMapping(facetConceptsFile, xsd, useLocalXSDCache);
     }
 
     /**
@@ -47,14 +47,15 @@ public class FacetMappingFactory {
      *
      * @param facetConcepts name of the facet concepts file
      * @param xsd url of xml schema of cmdi profile
+     * @param useLocalXSDCache use local XML schema files instead of accessing the component registry 
      *
      * @return facet concept mapping
      */
-    private FacetMapping getOrCreateMapping(String facetConcepts, String xsd) {
+    private FacetMapping getOrCreateMapping(String facetConcepts, String xsd, Boolean useLocalXSDCache) {
         // check if concept mapping has already been created
         FacetMapping result = mapping.get(xsd);
         if (result == null) {
-            result = createMapping(facetConcepts, xsd);
+            result = createMapping(facetConcepts, xsd, useLocalXSDCache);
             mapping.put(xsd, result);
         }
         return result;
@@ -68,17 +69,18 @@ public class FacetMappingFactory {
      *
      * @param facetConcepts name of the facet concepts file
      * @param xsd url of xml schema of cmdi profile
+     * @param useLocalXSDCache use local XML schema files instead of accessing the component registry 
      *
      * @return the facet mapping used to map meta data to facets
      */
-    private FacetMapping createMapping(String facetConcepts, String xsd) {
+    private FacetMapping createMapping(String facetConcepts, String xsd, Boolean useLocalXSDCache) {
 
         FacetMapping result = new FacetMapping();
         // Gets the configuration. VLOMarshaller only reads in the facetconceptmapping.xml file and returns the result (though the reading in is implicit).
         FacetConceptMapping conceptMapping = VLOMarshaller.getFacetConceptMapping(facetConcepts);
         try {
             //The magic
-            Map<String, List<String>> conceptLinkPathMapping = createConceptLinkPathMapping(xsd);
+            Map<String, List<String>> conceptLinkPathMapping = createConceptLinkPathMapping(xsd, useLocalXSDCache);
             Map<String, String> pathConceptLinkMapping = null;
             // Below we put the stuff we found into the configuration class.
             for (FacetConcept facetConcept : conceptMapping.getFacetConcepts()) {
@@ -210,14 +212,21 @@ public class FacetMappingFactory {
      * (isocat data catagories).
      *
      * @param xsd URL of XML Schema of some CMDI profile
+     * @param useLocalXSDCache use local XML schema files instead of accessing the component registry 
      * @return Map (Data Category -> List of XPath expressions linked to the key
      * data category which can be found in CMDI files with this schema)
      * @throws NavException
      */
-    private Map<String, List<String>> createConceptLinkPathMapping(String xsd) throws NavException {
+    private Map<String, List<String>> createConceptLinkPathMapping(String xsd, Boolean useLocalXSDCache) throws NavException {
         Map<String, List<String>> result = new HashMap<String, List<String>>();
         VTDGen vg = new VTDGen();
-        boolean parseSuccess = vg.parseHttpUrl(xsd, true);
+        boolean parseSuccess;
+        if(useLocalXSDCache) {
+            parseSuccess = vg.parseFile(Thread.currentThread().getContextClassLoader().getResource("testProfiles/"+xsd+".xsd").getPath(), true);
+        } else {
+            parseSuccess = vg.parseHttpUrl(MetadataImporter.config.getComponentRegistryProfileSchema(xsd), true);
+        }
+            
         if (!parseSuccess) {
             LOG.error("Cannot create ConceptLink Map from xsd (xsd is probably not reachable): " + xsd + ". All metadata instances that use this xsd will not be imported correctly.");
             return result; //return empty map, so the incorrect xsd is not tried for all metadata instances that specify it.

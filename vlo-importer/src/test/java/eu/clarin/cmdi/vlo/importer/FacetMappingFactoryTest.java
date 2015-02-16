@@ -15,23 +15,18 @@ public class FacetMappingFactoryTest {
     
     private final static String FACETCONCEPTS_FILENAME = "/facetConceptsTest.xml";
     
-    private final static String IMDI_PROFILE_URL = 
-            "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438204/xsd";
-    private final static String OLAC_PROFILE_URL = 
-            "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026/xsd";
-    private final static String LRT_PROFILE_URL = 
-            "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1289827960126/xsd";
-    private final static String ID_PROFILE_URL = 
-            "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1290431694629/xsd";
-    private final static String TEXTCORPUSPROFILE_PROFILE_URL = 
-            "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1290431694580/xsd";
+    private final static String IMDI_PROFILE_ID = "clarin.eu:cr1:p_1271859438204";
+    private final static String OLAC_PROFILE_ID = "clarin.eu:cr1:p_1288172614026";
+    private final static String LRT_PROFILE_ID = "clarin.eu:cr1:p_1289827960126";
+    private final static String ID_PROFILE_ID = "clarin.eu:cr1:p_1290431694629";
+    private final static String TEXTCORPUSPROFILE_PROFILE_ID = "clarin.eu:cr1:p_1290431694580";
 
     private final static Logger LOG = LoggerFactory.getLogger(FacetMappingFactoryTest.class);
 
     @Test
     public void testGetImdiMapping() {
         FacetMapping facetMapping = FacetMappingFactory
-                .getFacetMapping(FACETCONCEPTS_FILENAME, IMDI_PROFILE_URL);
+                .getFacetMapping(FACETCONCEPTS_FILENAME, IMDI_PROFILE_ID, true);
         
         List<FacetConfiguration> facets = facetMapping.getFacets();
         assertEquals(22, facets.size());
@@ -181,7 +176,7 @@ public class FacetMappingFactoryTest {
     @Test
     public void testGetOlacMapping() {
         FacetMapping facetMapping = FacetMappingFactory
-                .getFacetMapping(FACETCONCEPTS_FILENAME, OLAC_PROFILE_URL);
+                .getFacetMapping(FACETCONCEPTS_FILENAME, OLAC_PROFILE_ID, true);
         
         List<FacetConfiguration> facets = facetMapping.getFacets();
         assertEquals(20, facets.size());
@@ -310,7 +305,7 @@ public class FacetMappingFactoryTest {
     @Test
     public void testGetLrtMapping() {
         FacetMapping facetMapping = FacetMappingFactory
-                .getFacetMapping(FACETCONCEPTS_FILENAME, LRT_PROFILE_URL);
+                .getFacetMapping(FACETCONCEPTS_FILENAME, LRT_PROFILE_ID, true);
 
         List<FacetConfiguration> facets = facetMapping.getFacets();
         assertEquals(19, facets.size());
@@ -438,7 +433,7 @@ public class FacetMappingFactoryTest {
     public void testGetIdMapping() throws Exception {
 
         FacetMapping facetMapping = FacetMappingFactory
-                .getFacetMapping(FACETCONCEPTS_FILENAME, ID_PROFILE_URL);
+                .getFacetMapping(FACETCONCEPTS_FILENAME, ID_PROFILE_ID, true);
 
         List<FacetConfiguration> facets = facetMapping.getFacets();
         
@@ -467,7 +462,7 @@ public class FacetMappingFactoryTest {
     @Test
     public void testStringBasedBlacklisting() {
         FacetMapping facetMapping = FacetMappingFactory
-                .getFacetMapping(FACETCONCEPTS_FILENAME, TEXTCORPUSPROFILE_PROFILE_URL);
+                .getFacetMapping(FACETCONCEPTS_FILENAME, TEXTCORPUSPROFILE_PROFILE_ID, true);
         List<FacetConfiguration> facets = facetMapping.getFacets();
         
         FacetConfiguration facet = facets.get(5);

@@ -136,7 +136,7 @@ public class MetadataImporter {
                     solrServer.deleteByQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
                     LOG.info("Deleting data of provider done.");
                 }
-                CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS);
+                CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS, false);
                 List<File> files = getFilesFromDataRoot(dataRoot.getRootFile());
                 for (File file : files) {
                     if (config.getMaxFileSize() > 0

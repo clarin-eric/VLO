@@ -18,7 +18,7 @@ public class CMDIParserVTDXMLTest extends ImporterTestcase {
         content += "   </Header>\n";
         content += "</CMD>\n";
         String xsd = getXsd(content);
-        assertEquals("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026/xsd", xsd);
+        assertEquals("clarin.eu:cr1:p_1288172614026", xsd);
     }
 
     @Test
@@ -29,7 +29,7 @@ public class CMDIParserVTDXMLTest extends ImporterTestcase {
         content += "     xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026/xsd\">\n";
         content += "</CMD>\n";
         String xsd = getXsd(content);
-        assertEquals("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026/xsd", xsd);
+        assertEquals("clarin.eu:cr1:p_1288172614026", xsd);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class CMDIParserVTDXMLTest extends ImporterTestcase {
         content += "     xsi:noNamespaceSchemaLocation=\"http://www.meertens.knaw.nl/oai/cmdi/diddd_sub_location_profile.xsd\">\n";
         content += "</CMD>\n";
         String xsd = getXsd(content);
-        assertEquals("http://www.meertens.knaw.nl/oai/cmdi/diddd_sub_location_profile.xsd", xsd);
+        assertEquals(null, xsd);
     }
 
     @Test
@@ -58,7 +58,7 @@ public class CMDIParserVTDXMLTest extends ImporterTestcase {
         vg.setDoc(content.getBytes());
         vg.parse(true);
         VTDNav nav = vg.getNav();
-        CMDIParserVTDXML parser = new CMDIParserVTDXML(null);
+        CMDIParserVTDXML parser = new CMDIParserVTDXML(null, true);
         String xsd = parser.extractXsd(nav);
         return xsd;
     }

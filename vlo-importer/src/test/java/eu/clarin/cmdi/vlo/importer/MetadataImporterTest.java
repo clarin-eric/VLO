@@ -270,7 +270,7 @@ public class MetadataImporterTest extends ImporterTestcase {
                         LOG.info("Start of processing: " + 
                                 dataRoot.getOriginName());
                         CMDIDataProcessor processor = new 
-                                CMDIParserVTDXML(POST_PROCESSORS);
+                                CMDIParserVTDXML(POST_PROCESSORS, true);
                         List<File> files = 
                                 getFilesFromDataRoot(dataRoot.getRootFile());
                         for (File file : files) {
