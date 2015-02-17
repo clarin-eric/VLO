@@ -162,8 +162,7 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-5358_3cd089fe-ad03-6181-b20c-635ea41ed818</concept>
 		<!--language (TEI) - MENZO: added for CLARIN-DK -->
 
-		<!--<concept>http://purl.org/dc/terms/language</concept>-->
-		<!-- Removed because of problems with OLAC-DcmiTerms profile -->
+		<concept>http://purl.org/dc/terms/language</concept>
 		<!-- Had to be removed due to IDSAGD_Speaker  <acceptableContext includeAny="false" includeEmpty="true"/>
     <rejectableContext includeAny="true"  includeEmpty="false">
       <concept>http://www.isocat.org/datcat/DC-4146</concept>
@@ -221,8 +220,7 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-5358_3cd089fe-ad03-6181-b20c-635ea41ed818</concept>
 		<!--language (TEI) - MENZO: added for CLARIN-DK -->
 
-		<!--<concept>http://purl.org/dc/terms/language</concept>-->
-		<!-- Removed because of problems with OLAC-DcmiTerms profile -->
+		<concept>http://purl.org/dc/terms/language</concept>
 		<!-- Had to be removed due to IDSAGD_Speaker  <acceptableContext includeAny="false" includeEmpty="true"/>
     <rejectableContext includeAny="true"  includeEmpty="false">
       <concept>http://www.isocat.org/datcat/DC-4146</concept>
@@ -280,8 +278,7 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-5358_3cd089fe-ad03-6181-b20c-635ea41ed818</concept>
 		<!--language (TEI) - MENZO: added for CLARIN-DK -->
 
-		<!--<concept>http://purl.org/dc/terms/language</concept>-->
-		<!-- Removed because of problems with OLAC-DcmiTerms profile -->
+		<concept>http://purl.org/dc/terms/language</concept>
 		<!-- Had to be removed due to IDSAGD_Speaker <acceptableContext includeAny="false" includeEmpty="true"/>
     <rejectableContext includeAny="true"  includeEmpty="false">
       <concept>http://www.isocat.org/datcat/DC-4146</concept>
