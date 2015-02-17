@@ -19,8 +19,8 @@
 
     <properties>
         <wicket.version>6.19.0</wicket.version>
-        <spring.version>3.2.9.RELEASE</spring.version>
-        <jetty.version>8.1.15.v20140411</jetty.version>
+        <spring.version>3.2.13.RELEASE</spring.version>
+        <jetty.version>8.1.16.v20140903</jetty.version>
         <!-- selects the appender for the log4j root logger -->
         <log4j.appender>File</log4j.appender>
         <vlo.logging.level>INFO</vlo.logging.level>
@@ -138,7 +138,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>17.0</version>
+            <version>18.0</version>
         </dependency>
         <dependency>
             <groupId>net.sf.saxon</groupId>
@@ -149,7 +149,7 @@
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>1.18.1</version>
+            <version>1.18.3</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -162,7 +162,7 @@
         <dependency>
             <groupId>net.bull.javamelody</groupId>
             <artifactId>javamelody-core</artifactId>
-            <version>1.51.0</version>
+            <version>1.55.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework</groupId>
