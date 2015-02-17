@@ -18,7 +18,7 @@
     <description></description>
 
     <properties>
-        <wicket.version>6.16.0</wicket.version>
+        <wicket.version>6.19.0</wicket.version>
         <spring.version>3.2.9.RELEASE</spring.version>
         <jetty.version>8.1.15.v20140411</jetty.version>
         <!-- selects the appender for the log4j root logger -->
