@@ -147,11 +147,6 @@ public class FacetMappingFactory {
                     }
                 }
 
-                //add hardcoded patterns only when there is no xpath generated from conceptlink
-                if (xpaths.isEmpty()) {
-                    xpaths.addAll(facetConcept.getPatterns());
-                }
-
                 // pattern-based blacklisting: remove all XPath expressions that contain a blacklisted substring;
                 // this is basically a hack to enhance the quality of the visualised information in the VLO;
                 // should be replaced by a more intelligent approach in the future
@@ -168,9 +163,12 @@ public class FacetMappingFactory {
 
                 config.setCaseInsensitive(facetConcept.isCaseInsensitive());
                 config.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
-                config.setPatterns(xpaths);
                 config.setName(facetConcept.getName());
-                if (!config.getPatterns().isEmpty()) {
+
+                config.setPatterns(xpaths);
+                config.setFallbackPatterns(facetConcept.getPatterns());
+
+                if (!config.getPatterns().isEmpty() || !config.getFallbackPatterns().isEmpty()) {
                     result.addFacet(config);
                 }
             }

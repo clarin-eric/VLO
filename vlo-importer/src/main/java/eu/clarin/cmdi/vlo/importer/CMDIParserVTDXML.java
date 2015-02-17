@@ -192,11 +192,22 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private void processFacets(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException {
         List<FacetConfiguration> facetList = facetMapping.getFacets();
         for (FacetConfiguration config : facetList) {
+            boolean matchedPattern = false;
             List<String> patterns = config.getPatterns();
             for (String pattern : patterns) {
-                boolean matchedPattern = matchPattern(cmdiData, nav, config, pattern, config.getAllowMultipleValues());
+                matchedPattern = matchPattern(cmdiData, nav, config, pattern, config.getAllowMultipleValues());
                 if (matchedPattern && !config.getAllowMultipleValues()) {
                     break;
+                }
+            }
+            
+            // using fallback patterns if extraction failed
+            if (matchedPattern == false) {
+                for (String pattern : config.getFallbackPatterns()) {
+                    matchedPattern = matchPattern(cmdiData, nav, config, pattern, config.getAllowMultipleValues());
+                    if (matchedPattern && !config.getAllowMultipleValues()) {
+                        break;
+                    }
                 }
             }
         }
