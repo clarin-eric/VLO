@@ -23,6 +23,7 @@ import eu.clarin.cmdi.vlo.pojo.DocumentField;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.wicket.model.DescriptionFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
@@ -115,14 +116,19 @@ public class FieldsTablePanel extends Panel {
         });
     }
 
-    private Label createValueLabel(String id, final IModel<String> facetNameModel, final IModel<String> valueModel) {
+    private Label createValueLabel(String id, final IModel<String> facetNameModel, final IModel<String> originalValueModel) {
         final String fieldName = facetNameModel.getObject();
+        
+        // allow for postprocessing or wrapping of the value model depending on the field
+        final IModel<String> valueModel = getValueModel(facetNameModel, originalValueModel);
+        
         if (SMART_LINK_FIELDS.contains(fieldName)) {
             // create label that generates links
             return new SmartLinkLabel(id, new HandleLinkModel(valueModel));
         } else {
             // add a label for the facet value
             final Label fieldLabel = new Label(id, valueModel);
+            
             // some selected fields may have HTML that needs to be preserved...
             fieldLabel.setEscapeModelStrings(!UNESCAPED_VALUE_FIELDS.contains(fieldName));
             return fieldLabel;
@@ -152,6 +158,14 @@ public class FieldsTablePanel extends Panel {
 
     protected boolean isShowFacetSelectLinks() {
         return true;
+    }
+
+    private IModel<String> getValueModel(IModel<String> facetNameModel, IModel<String> valueModel) {
+        if (FacetConstants.FIELD_DESCRIPTION.equals(facetNameModel.getObject())) {
+            //wrap in model that removes the language prefix
+            return new DescriptionFieldModel(valueModel);
+        }
+        return valueModel;
     }
 
 }
