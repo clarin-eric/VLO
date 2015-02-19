@@ -63,4 +63,10 @@ public class FacetConstants {
     public static final String FIELD_RESOURCE_SPLIT_CHAR = "|";
     public static final String URN_NBN_PREFIX = "urn:nbn";
     public static final String URN_NBN_RESOLVER_URL = "http://www.nbn-resolving.org/redirect/";
+
+    /**
+     * regular expression that matches the language prefix in description (group
+     * 1 matches the ISO639-3 language code)
+     */
+    public static final String DESCRIPTION_LANGUAGE_PATTERN = "^\\{lang='([a-z]{3})'\\}";
 }
