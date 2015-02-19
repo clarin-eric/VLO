@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloConfigFactory;
@@ -38,6 +39,8 @@ public abstract class ImporterTestcase {
         // optionally, modify the configuration here
         MetadataImporter.config.setComponentRegistryRESTURL("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/");
         config = MetadataImporter.config;
+        
+        MetadataImporter.languageCodeUtils = new LanguageCodeUtils(config);
     }
 
 }

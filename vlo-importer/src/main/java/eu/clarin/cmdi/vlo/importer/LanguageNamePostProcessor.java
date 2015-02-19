@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,8 @@ public class LanguageNamePostProcessor extends LanguageCodePostProcessor {
      */
     @Override
     public List<String> process(String value) {
+        final LanguageCodeUtils languageCodeUtils = MetadataImporter.languageCodeUtils;
+        
         String result = value;
         if (value != null) {
             String langCode = extractLanguageCode(value);
@@ -27,13 +30,13 @@ public class LanguageNamePostProcessor extends LanguageCodePostProcessor {
                 langCode = langCode.substring(CODE_PREFIX.length());
             
             if (langCode.length() == 2) {
-                twoLetterCodesMap = LanguageCodeUtils.getTwoLetterCountryCodeMap();
+                twoLetterCodesMap = languageCodeUtils.getTwoLetterCountryCodeMap();
                 String name = twoLetterCodesMap.get(langCode.toUpperCase());
                 if (name != null) {
                     result = name;
                 }
             } else if (langCode.length() == 3) {
-                threeLetterCodesMap = LanguageCodeUtils.getThreeLetterCountryCodeMap();
+                threeLetterCodesMap = languageCodeUtils.getThreeLetterCountryCodeMap();
                 String name = threeLetterCodesMap.get(langCode.toUpperCase());
                 if (name != null) {
                     result = name;

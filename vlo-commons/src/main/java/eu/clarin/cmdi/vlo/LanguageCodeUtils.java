@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.importer;
+package eu.clarin.cmdi.vlo;
 
 import eu.clarin.cmdi.vlo.CommonUtils;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,20 +33,29 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Some helper methods for working with language codes, extracted from {@link LanguageCodePostProcessor}
+ * Some helper methods for working with language codes, extracted from
+ * {@link LanguageCodePostProcessor}
+ *
  * @author Thomas Eckart
  */
 public class LanguageCodeUtils {
+
     private final static Logger LOG = LoggerFactory.getLogger(LanguageCodeUtils.class);
 
-    private static Map<String, String> twoLetterCodesMap;
-    private static Map<String, String> threeLetterCodesMap;
-    private static Map<String, String> silToIso639Map;
-    private static Map<String, String> languageNameToIso639Map;
-    private static Map<String, String> iso639ToLanguageNameMap;
-    private static Map<String, String> iso639_2TToISO639_3Map;
+    private Map<String, String> twoLetterCodesMap;
+    private Map<String, String> threeLetterCodesMap;
+    private Map<String, String> silToIso639Map;
+    private Map<String, String> languageNameToIso639Map;
+    private Map<String, String> iso639ToLanguageNameMap;
+    private Map<String, String> iso639_2TToISO639_3Map;
 
-    public static String getLanguageNameForLanguageCode(String langCode) {
+    private final VloConfig config;
+
+    public LanguageCodeUtils(VloConfig config) {
+        this.config = config;
+    }
+
+    public String getLanguageNameForLanguageCode(String langCode) {
         String result = getIso639ToLanguageNameMap().get(langCode);
 
         if (result == null) {
@@ -55,37 +65,37 @@ public class LanguageCodeUtils {
         return result;
     }
 
-    public static Map<String, String> getSilToIso639Map() {
+    public Map<String, String> getSilToIso639Map() {
         if (silToIso639Map == null) {
             silToIso639Map = createSilToIsoCodeMap();
         }
         return silToIso639Map;
     }
 
-    public static Map<String, String> getTwoLetterCountryCodeMap() {
+    public Map<String, String> getTwoLetterCountryCodeMap() {
         if (twoLetterCodesMap == null) {
-            twoLetterCodesMap = createCodeMap(MetadataImporter.config.getLanguage2LetterCodeComponentUrl());
+            twoLetterCodesMap = createCodeMap(config.getLanguage2LetterCodeComponentUrl());
         }
         return twoLetterCodesMap;
     }
 
-    public static Map<String, String> getThreeLetterCountryCodeMap() {
+    public Map<String, String> getThreeLetterCountryCodeMap() {
         if (threeLetterCodesMap == null) {
-            threeLetterCodesMap = createCodeMap(MetadataImporter.config.getLanguage3LetterCodeComponentUrl());
+            threeLetterCodesMap = createCodeMap(config.getLanguage3LetterCodeComponentUrl());
         }
         return threeLetterCodesMap;
     }
 
-    public static Map<String, String> getLanguageNameToIso639Map() {
+    public Map<String, String> getLanguageNameToIso639Map() {
         if (languageNameToIso639Map == null) {
-            languageNameToIso639Map = createReverseCodeMap(MetadataImporter.config.getLanguage3LetterCodeComponentUrl());
+            languageNameToIso639Map = createReverseCodeMap(config.getLanguage3LetterCodeComponentUrl());
         }
         return languageNameToIso639Map;
     }
 
-    public static Map<String, String> getIso639ToLanguageNameMap() {
+    public Map<String, String> getIso639ToLanguageNameMap() {
         if (iso639ToLanguageNameMap == null) {
-            iso639ToLanguageNameMap = createCodeMap(MetadataImporter.config.getLanguage3LetterCodeComponentUrl());
+            iso639ToLanguageNameMap = createCodeMap(config.getLanguage3LetterCodeComponentUrl());
         }
 
         return iso639ToLanguageNameMap;
@@ -99,7 +109,7 @@ public class LanguageCodeUtils {
      *
      * @return map of ISO 639-2/B codes to ISO 639-3
      */
-    public static Map<String, String> getIso6392TToISO6393Map() {
+    public Map<String, String> getIso6392TToISO6393Map() {
         if (iso639_2TToISO639_3Map == null) {
             iso639_2TToISO639_3Map = new HashMap<String, String>();
             iso639_2TToISO639_3Map.put("alb", "sqi");
@@ -127,7 +137,7 @@ public class LanguageCodeUtils {
         return iso639_2TToISO639_3Map;
     }
 
-    private static Map<String, String> createCodeMap(String url) {
+    private Map<String, String> createCodeMap(String url) {
         LOG.debug("Creating language code map.");
         try {
             Map<String, String> result = CommonUtils.createCMDIComponentItemMap(url);
@@ -137,7 +147,7 @@ public class LanguageCodeUtils {
         }
     }
 
-    private static Map<String, String> createReverseCodeMap(String url) {
+    private Map<String, String> createReverseCodeMap(String url) {
         LOG.debug("Creating language code map.");
         try {
             Map<String, String> result = CommonUtils.createReverseCMDIComponentItemMap(url);
@@ -147,13 +157,13 @@ public class LanguageCodeUtils {
         }
     }
 
-    private static Map<String, String> createSilToIsoCodeMap() {
+    private Map<String, String> createSilToIsoCodeMap() {
         LOG.debug("Creating silToIso code map.");
         try {
             Map<String, String> result = new HashMap<String, String>();
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             domFactory.setNamespaceAware(true);
-            URL url = new URL(MetadataImporter.config.getSilToISO639CodesUrl());
+            URL url = new URL(config.getSilToISO639CodesUrl());
             DocumentBuilder builder = domFactory.newDocumentBuilder();
             Document doc = builder.parse(url.openStream());
             XPath xpath = XPathFactory.newInstance().newXPath();

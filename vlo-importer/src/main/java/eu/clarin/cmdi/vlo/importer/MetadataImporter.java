@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.DataRoot;
@@ -438,6 +439,8 @@ public class MetadataImporter {
     
     public static VloConfig config;
 
+    public static LanguageCodeUtils languageCodeUtils;
+    
     /**
      * @param args
      * @throws MalformedURLException
@@ -510,6 +513,7 @@ public class MetadataImporter {
             System.out.println("Reading configuration from " + configUrl.toString());
             final XmlVloConfigFactory configFactory = new XmlVloConfigFactory(configUrl);
             MetadataImporter.config = configFactory.newConfig();
+            MetadataImporter.languageCodeUtils = new LanguageCodeUtils(MetadataImporter.config);
 
             // optionally, modify the configuration here
             // create and start the importer
