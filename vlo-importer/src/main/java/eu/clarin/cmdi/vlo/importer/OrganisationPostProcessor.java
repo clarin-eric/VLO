@@ -14,8 +14,6 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -24,7 +22,6 @@ import org.xml.sax.SAXException;
 public class OrganisationPostProcessor implements PostProcessor {
 
     private static Map<String, String> organisationNamesMap = null;
-    private final static Logger LOG = LoggerFactory.getLogger(OrganisationPostProcessor.class);
 
     /**
      * Splits values for organisation facet at delimiter ';' and replaces
