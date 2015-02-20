@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.config;
 
 import com.google.common.collect.Sets;
+import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
@@ -36,6 +37,8 @@ import eu.clarin.cmdi.vlo.service.impl.ResourceTypeCountingServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.SearchContextParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.UriResolverImpl;
 import eu.clarin.cmdi.vlo.service.impl.XmlTransformationServiceImpl;
+import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
+import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProviderImpl;
 import java.util.Properties;
 import javax.inject.Inject;
 import javax.xml.transform.OutputKeys;
@@ -125,4 +128,15 @@ public class VloServicesSpringConfig {
         return new InclusiveFieldFilter(
                 vloConfig.getTechnicalFields());
     }
+
+    @Bean
+    public LanguageCodeUtils languageCodeUtils() {
+        return new LanguageCodeUtils(vloConfig);
+    }
+
+    @Bean
+    public FieldValueConverterProvider fieldValueConverters() {
+        return new FieldValueConverterProviderImpl(languageCodeUtils());
+    }
+
 }

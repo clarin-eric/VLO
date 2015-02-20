@@ -23,6 +23,7 @@ import eu.clarin.cmdi.vlo.pojo.DocumentField;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.model.DescriptionFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
@@ -127,7 +128,7 @@ public class FieldsTablePanel extends Panel {
             return new SmartLinkLabel(id, new HandleLinkModel(valueModel));
         } else {
             // add a label for the facet value
-            final Label fieldLabel = new Label(id, valueModel);
+            final Label fieldLabel = new FieldValueLabel(id, valueModel, facetNameModel);
 
             // some selected fields may have HTML that needs to be preserved...
             fieldLabel.setEscapeModelStrings(!UNESCAPED_VALUE_FIELDS.contains(fieldName));

@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.provider.PartitionedDataProvider;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
@@ -68,6 +69,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     private final WebMarkupContainer valuesContainer;
     private final IModel<FieldValuesFilter> filterModel;
     private final int subListSize;
+    private final IModel<String> fieldNameModel;
 
     /**
      * Creates a new panel with selectable values for a single facet
@@ -113,6 +115,8 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         // create a popup window for all facet values
         valuesWindow = createAllValuesWindow("allValues");
         add(valuesWindow);
+
+        fieldNameModel = new PropertyModel<>(model, "name");
     }
 
     /**
@@ -202,7 +206,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         item.add(selectLink);
 
         // 'name' field from Count (name of value)
-        selectLink.add(new Label("name"));
+        selectLink.add(new FieldValueLabel("name", fieldNameModel));
         // 'count' field from Count (document count for value)
         selectLink.add(new Label("count"));
     }

@@ -55,6 +55,12 @@ public class LanguageCodeUtils {
         this.config = config;
     }
 
+    /**
+     *
+     * @param langCode an upper case ISO639-3 language code
+     * @return the name of the language if it is present in the language code
+     * map
+     */
     public String getLanguageNameForLanguageCode(String langCode) {
         String result = getIso639ToLanguageNameMap().get(langCode);
 

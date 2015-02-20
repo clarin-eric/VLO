@@ -21,6 +21,7 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import eu.clarin.cmdi.vlo.wicket.components.AjaxIndicatingForm;
+import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueOrderSelector;
 import eu.clarin.cmdi.vlo.wicket.model.BridgeModel;
 import eu.clarin.cmdi.vlo.wicket.model.BridgeOuterModel;
@@ -122,6 +123,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
     }
 
     private DataView<FacetField.Count> createValuesView(String id) {
+        final IModel<String> fieldNameModel = new PropertyModel<String>(getModel(), "name");
         return new DataView<FacetField.Count>(id, valuesProvider, ITEMS_PER_PAGE) {
 
             @Override
@@ -144,7 +146,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
                 item.add(selectLink);
 
                 // 'name' field from Count (name of value)
-                selectLink.add(new Label("name"));
+                selectLink.add(new FieldValueLabel("name", fieldNameModel));
 
                 // 'count' field from Count (document count for value)
                 item.add(new Label("count"));
