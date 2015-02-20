@@ -37,11 +37,23 @@ public class FieldValueLabel extends Label {
 
     private final IModel<String> fieldModel;
 
+    /**
+     *
+     * @param id component id
+     * @param fieldModel model that provides the name of the field
+     */
     public FieldValueLabel(String id, IModel<String> fieldModel) {
         super(id);
         this.fieldModel = fieldModel;
     }
 
+    /**
+     *
+     * @param id component id
+     * @param model model that provides the field value for this label (which
+     * may get converted on render)
+     * @param fieldModel model that provides the name of the field
+     */
     public FieldValueLabel(String id, IModel<?> model, IModel<String> fieldModel) {
         super(id, model);
         this.fieldModel = fieldModel;
@@ -56,6 +68,12 @@ public class FieldValueLabel extends Label {
             }
         }
         return super.getConverter(type);
+    }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        fieldModel.detach();
     }
 
 }
