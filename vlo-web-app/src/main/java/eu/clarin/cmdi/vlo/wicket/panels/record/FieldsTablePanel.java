@@ -58,7 +58,7 @@ public class FieldsTablePanel extends Panel {
      */
     private final static Collection<String> UNESCAPED_VALUE_FIELDS
             = ImmutableSet.of(
-                    FacetConstants.FIELD_LANGUAGES
+                    FacetConstants.FIELD_LANGUAGE_CODE
             );
 
     /**
@@ -118,17 +118,17 @@ public class FieldsTablePanel extends Panel {
 
     private Label createValueLabel(String id, final IModel<String> facetNameModel, final IModel<String> originalValueModel) {
         final String fieldName = facetNameModel.getObject();
-        
+
         // allow for postprocessing or wrapping of the value model depending on the field
         final IModel<String> valueModel = getValueModel(facetNameModel, originalValueModel);
-        
+
         if (SMART_LINK_FIELDS.contains(fieldName)) {
             // create label that generates links
             return new SmartLinkLabel(id, new HandleLinkModel(valueModel));
         } else {
             // add a label for the facet value
             final Label fieldLabel = new Label(id, valueModel);
-            
+
             // some selected fields may have HTML that needs to be preserved...
             fieldLabel.setEscapeModelStrings(!UNESCAPED_VALUE_FIELDS.contains(fieldName));
             return fieldLabel;

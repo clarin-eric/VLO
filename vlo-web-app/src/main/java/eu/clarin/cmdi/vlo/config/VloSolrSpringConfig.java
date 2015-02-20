@@ -95,7 +95,7 @@ public class VloSolrSpringConfig {
             FacetConstants.FIELD_NAME,
             FacetConstants.FIELD_DESCRIPTION,
             FacetConstants.FIELD_COLLECTION,
-            FacetConstants.FIELD_LANGUAGES,
+            FacetConstants.FIELD_LANGUAGE_CODE,
             FacetConstants.FIELD_MODALITY,
             FacetConstants.FIELD_CONTINENT,
             FacetConstants.FIELD_COUNTRY,
