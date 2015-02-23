@@ -60,9 +60,7 @@ public class FieldsTablePanel extends Panel {
      * contained in the field should be preserved
      */
     private final static Collection<String> UNESCAPED_VALUE_FIELDS
-            = ImmutableSet.of(
-                    FacetConstants.FIELD_LANGUAGE_CODE
-            );
+            = Collections.emptySet(); // ImmutableSet.of(FacetConstants.FIELD_LANGUAGE_CODE);
 
     /**
      * List of fields that should be rendered in a
