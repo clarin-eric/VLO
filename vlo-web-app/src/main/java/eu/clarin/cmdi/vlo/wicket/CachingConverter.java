@@ -130,6 +130,11 @@ public class CachingConverter<C> implements IConverter<C> {
             return true;
         }
 
+        @Override
+        public String toString() {
+            return String.format("{%s, %s}", key1.toString(), key2.toString());
+        }
+
     }
 
 }
