@@ -23,6 +23,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
+import eu.clarin.cmdi.vlo.wicket.CachingConverter;
 import java.io.Serializable;
 import java.text.Collator;
 import java.util.Collection;
@@ -246,13 +247,13 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
     private final static class NameOrdering extends Ordering<FacetField.Count> implements Serializable {
         
         private final Collator collator;
-        private final IConverter<String> converter;
+        private final IConverter converter;
         private final Locale locale;
         
         public NameOrdering(Locale locale, IConverter<String> converter) {
             collator = Collator.getInstance(locale);
             collator.setStrength(Collator.PRIMARY);
-            this.converter = converter;
+            this.converter = new CachingConverter(converter);
             this.locale = locale;
         }
         
