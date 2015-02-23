@@ -396,7 +396,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("Europe", doc.getFieldValue("continent"));
         assertEquals("English", doc.getFieldValue("language"));
         assertEquals("Netherlands", doc.getFieldValue("country"));
-        assertEquals("MPI for Psycholinguistics, MPG", doc.getFieldValue("organisation"));
+        assertEquals("Max Planck Institute for Psycholinguistics", doc.getFieldValue("organisation"));
         assertEquals("demo", doc.getFieldValue("genre"));
         assertEquals(
                 "{lang='eng'}This  recording was made to generate a freely available test resource including speech and gestures. The annotations were created by Peter and Kita who is gesture researcher at the MPI for Psycholinguistics.",
