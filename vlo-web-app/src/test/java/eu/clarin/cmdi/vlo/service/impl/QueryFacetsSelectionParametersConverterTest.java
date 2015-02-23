@@ -16,7 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
+import static eu.clarin.cmdi.vlo.FacetConstants.FIELD_COLLECTION;
+import static eu.clarin.cmdi.vlo.FacetConstants.FIELD_COUNTRY;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
@@ -43,7 +47,15 @@ public class QueryFacetsSelectionParametersConverterTest {
 
     @Before
     public void setUp() {
-        instance = new QueryFacetsSelectionParametersConverter();
+        VloConfig config = new VloConfig() {
+
+            @Override
+            public List<String> getAllFacetFields() {
+                return ImmutableList.of("facet1", "facet2", "facet3", "facet4");
+            }
+
+        };
+        instance = new QueryFacetsSelectionParametersConverter(config);
     }
 
     /**
@@ -59,6 +71,7 @@ public class QueryFacetsSelectionParametersConverterTest {
         params.add("fq", "facet1:valueB");
         params.add("fq", "facet2:value:C"); // has a colon in value
         params.add("fq", "illegal-no-colon"); //should get ignored
+        params.add("fq", "facet5:valueD"); //not in list, should get ignored
         params.add("fq", ""); // not a valid facet selection
         params.add("fq", "invalid"); // not a valid facet selection
         params.add("fqType", "facet1:or");
