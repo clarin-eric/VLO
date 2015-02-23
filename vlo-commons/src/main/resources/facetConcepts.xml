@@ -148,64 +148,6 @@
 		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground/c:Competence/c:LanguageVariety/c:LanguageVarietyPlace/c:Location/c:Country</blacklistPattern>
 		<!-- IDSAGD_Speaker -->
 	</facetConcept>
-	<facetConcept name="language" description="The object language relevant for the resource or tool" definition="The object language relevant for the resource or tool, i.e. the language of the source material of a resource, the object language of a language description, or the language supported by a linguistic tool. If a tool is language independent, please use the ISO 639-3 'und' for 'undefined'.">
-		<concept>http://www.isocat.org/datcat/DC-2482</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-2482_08eded24-4086-7e3f-88e5-e0807fb01e17</concept>
-		<!-- language code -->
-		<concept>http://www.isocat.org/datcat/DC-2484</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-2484_669684e7-cb9e-ea96-59cb-a25fe89b9b9d</concept>
-		<!-- language name -->
-		<concept>http://www.isocat.org/datcat/DC-5361</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-5361_ba085ec1-9746-52bf-8cc1-3c300ce16eb8</concept>
-		<!-- language usage (TEI) -->
-		<concept>http://www.isocat.org/datcat/DC-5358</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-5358_3cd089fe-ad03-6181-b20c-635ea41ed818</concept>
-		<!--language (TEI) - MENZO: added for CLARIN-DK -->
-
-		<concept>http://purl.org/dc/terms/language</concept>
-		<!-- Had to be removed due to IDSAGD_Speaker  <acceptableContext includeAny="false" includeEmpty="true"/>
-    <rejectableContext includeAny="true"  includeEmpty="false">
-      <concept>http://www.isocat.org/datcat/DC-4146</concept>
-      <concept>http://hdl.handle.net/11459/CCR_C-4146_5ccc45c8-d729-c180-2bf1-fccc56dde24d</concept>
-    </rejectableContext> -->
-		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms/c:language/@olac-language</pattern>
-		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms/c:subject/@olac-language</pattern>
-		<pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()</pattern>
-		<pattern>/c:CMD/c:Components/c:mods/c:language/c:languageTerm/text()</pattern>
-
-
-		<!--  <concept>http://www.isocat.org/datcat/DC-2468</concept>
-		      <concept>http://hdl.handle.net/11459/CCR_C-2468_e4135e12-c272-171e-a8a2-48339228387b</concept> -->
-		<!-- BAS REMOVED because of component SubjectLanguages -->
-
-		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms-ref/c:language/@olac-language</pattern>
-		<!-- IDS OLAC-DcmiTerms-ref -->
-		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms-ref-DWR/c:language/@olac-language</pattern>
-		<!-- IDS OLAC-DcmiTerms-ref-DWR -->
-		<!-- <pattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Operations/c:Operation/c:Input/c:ParameterGroup/c:Parameters/c:Parameter/c:Values/c:ParameterValue/c:Value/text()</pattern>-->
-		<!--  WeblichtWebservices, breaks Tübingen Resources (oai_sfs_uni_tuebingen_de_FID_15.xml)-->
-		<blacklistPattern>/c:Actor_Languages/c:Actor_Language/</blacklistPattern>
-		<!-- MPI (JK) -->
-		<blacklistPattern>/c:ActorLanguage/c:Language/c:ISO639/c:iso-639-3-code</blacklistPattern>
-		<blacklistPattern>/c:LanguageName</blacklistPattern>
-		<!-- general -->
-		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground</blacklistPattern>
-		<!-- IDS IDSAGD_Speaker -->
-		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Collection/c:DocumentationLanguages</blacklistPattern>
-		<!-- IDS IDSAGD_Corpus -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Documentations</blacklistPattern>
-		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:DocumentationLanguages</blacklistPattern>
-		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Documentations</blacklistPattern>
-		<!-- IMS ToolProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:ToolContext/c:DocumentationLanguages</blacklistPattern>
-		<!-- IMS ToolProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:DocumentationLanguages</blacklistPattern>
-		<!-- IMS c:LexicalResourceProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:DocumentationLanguages</blacklistPattern>
-		<!-- IMS c:MultimodalCorpus -->
-	</facetConcept>
 	<facetConcept name="languageCode" description="The object language relevant for the resource or tool" definition="The object language relevant for the resource or tool, i.e. the language of the source material of a resource, the object language of a language description, or the language supported by a linguistic tool. If a tool is language independent, please use the ISO 639-3 'und' for 'undefined'.">
 		<concept>http://www.isocat.org/datcat/DC-2482</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2482_08eded24-4086-7e3f-88e5-e0807fb01e17</concept>
@@ -245,65 +187,6 @@
 		<blacklistPattern>/c:Actor_Languages/c:Actor_Language/</blacklistPattern>
 		<!-- MPI (JK) -->
 		<blacklistPattern>/c:ActorLanguage/c:Language/c:ISO639/c:iso-639-3-code</blacklistPattern>
-		<blacklistPattern>/c:LanguageName</blacklistPattern>
-		<!-- general -->
-		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground</blacklistPattern>
-		<!-- IDS IDSAGD_Speaker -->
-		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Collection/c:DocumentationLanguages</blacklistPattern>
-		<!-- IDS IDSAGD_Corpus -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Documentations</blacklistPattern>
-		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:DocumentationLanguages</blacklistPattern>
-		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Documentations</blacklistPattern>
-		<!-- IMS ToolProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:ToolContext/c:DocumentationLanguages</blacklistPattern>
-		<!-- IMS ToolProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:DocumentationLanguages</blacklistPattern>
-		<!-- IMS c:LexicalResourceProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:DocumentationLanguages</blacklistPattern>
-		<!-- IMS c:MultimodalCorpus -->
-	</facetConcept>
-	<facetConcept name="languages" description="The object language relevant for the resource or tool" definition="The object language relevant for the resource or tool, i.e. the language of the source material of a resource, the object language of a language description, or the language supported by a linguistic tool. If a tool is language independent, please use the ISO 639-3 'und' for 'undefined'.">
-		<concept>http://www.isocat.org/datcat/DC-2482</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-2482_08eded24-4086-7e3f-88e5-e0807fb01e17</concept>
-		<!-- language code -->
-		<concept>http://www.isocat.org/datcat/DC-2484</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-2484_669684e7-cb9e-ea96-59cb-a25fe89b9b9d</concept>
-		<!-- language name -->
-		<concept>http://www.isocat.org/datcat/DC-5361</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-5361_ba085ec1-9746-52bf-8cc1-3c300ce16eb8</concept>
-		<!-- language usage (TEI) -->
-		<concept>http://www.isocat.org/datcat/DC-5358</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-5358_3cd089fe-ad03-6181-b20c-635ea41ed818</concept>
-		<!--language (TEI) - MENZO: added for CLARIN-DK -->
-
-		<concept>http://purl.org/dc/terms/language</concept>
-		<!-- Had to be removed due to IDSAGD_Speaker <acceptableContext includeAny="false" includeEmpty="true"/>
-    <rejectableContext includeAny="true"  includeEmpty="false">
-      <concept>http://www.isocat.org/datcat/DC-4146</concept>
-      <concept>http://hdl.handle.net/11459/CCR_C-4146_5ccc45c8-d729-c180-2bf1-fccc56dde24d</concept>
-    </rejectableContext>-->
-		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms/c:language/@olac-language</pattern>
-		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms/c:subject/@olac-language</pattern>
-		<pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()</pattern>
-		<pattern>/c:CMD/c:Components/c:mods/c:language/c:languageTerm/text()</pattern>
-
-
-		<!--  <concept>http://www.isocat.org/datcat/DC-2468</concept>
-		      <concept>http://hdl.handle.net/11459/CCR_C-2468_e4135e12-c272-171e-a8a2-48339228387b</concept> -->
-		<!-- BAS REMOVED because of component SubjectLanguages -->
-
-		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms-ref/c:language/@olac-language</pattern>
-		<!-- IDS OLAC-DcmiTerms-ref -->
-		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms-ref-DWR/c:language/@olac-language</pattern>
-		<!-- IDS OLAC-DcmiTerms-ref-DWR -->
-		<!-- <pattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Operations/c:Operation/c:Input/c:ParameterGroup/c:Parameters/c:Parameter/c:Values/c:ParameterValue/c:Value/text()</pattern>-->
-		<!--  WeblichtWebservices -->
-		<blacklistPattern>/c:Actor_Languages/c:Actor_Language/</blacklistPattern>
-		<!-- MPI (JK) -->
-		<blacklistPattern>/c:ActorLanguage/c:Language/c:ISO639/c:iso-639-3-code</blacklistPattern>
-		<!-- HZSK -->
 		<blacklistPattern>/c:LanguageName</blacklistPattern>
 		<!-- general -->
 		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground</blacklistPattern>
