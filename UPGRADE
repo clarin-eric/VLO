@@ -22,7 +22,7 @@ Quick overview of the upgrade steps (for details see DEPLOY-README)
     ./vlo_solr_importer.sh -c ../config/VloConfig.xml
 
 ---------------------------
-Upgrading from 3.1
+Upgrading from 3.0.x to 3.1
 ---------------------------
 
 * Update the external service running at <http://infra.clarin.eu/service/language/
