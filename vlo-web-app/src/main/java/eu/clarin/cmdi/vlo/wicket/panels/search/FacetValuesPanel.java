@@ -27,6 +27,7 @@ import eu.clarin.cmdi.vlo.wicket.provider.PartitionedDataProvider;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
+import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -53,6 +54,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  * A panel representing a single facet and its selectable values
@@ -71,6 +73,8 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     private final int subListSize;
     private final IModel<String> fieldNameModel;
 
+    @SpringBean
+    private FieldValueConverterProvider fieldValueConverterProvider;
     /**
      * Creates a new panel with selectable values for a single facet
      *
@@ -149,7 +153,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @return data view with value links
      */
     private DataView createValuesView(String id) {
-        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(getModel(), MAX_NUMBER_OF_FACETS_TO_SHOW, LOW_PRIORITY_VALUES) {
+        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(getModel(), MAX_NUMBER_OF_FACETS_TO_SHOW, LOW_PRIORITY_VALUES, fieldValueConverterProvider){
 
             @Override
             protected IModel<FieldValuesFilter> getFilterModel() {

@@ -26,6 +26,7 @@ import eu.clarin.cmdi.vlo.wicket.components.FieldValueOrderSelector;
 import eu.clarin.cmdi.vlo.wicket.model.BridgeModel;
 import eu.clarin.cmdi.vlo.wicket.model.BridgeOuterModel;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
+import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.util.Collections;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -48,6 +49,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  * A panel that shows all available values for a selected facet. Supports two
@@ -58,6 +60,9 @@ import org.apache.wicket.model.PropertyModel;
  * @author twagoo
  */
 public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
+
+    @SpringBean
+    private FieldValueConverterProvider fieldValueConverterProvider;
 
     private final FacetFieldValuesProvider valuesProvider;
     private final WebMarkupContainer valuesContainer;
@@ -88,7 +93,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         }
 
         // create a provider that shows all values and is sorted by name by default
-        valuesProvider = new FacetFieldValuesProvider(model, Integer.MAX_VALUE, FieldValueOrderSelector.NAME_SORT) {
+        valuesProvider = new FacetFieldValuesProvider(model, Integer.MAX_VALUE, FieldValueOrderSelector.NAME_SORT, fieldValueConverterProvider) {
 
             @Override
             protected IModel<FieldValuesFilter> getFilterModel() {
@@ -224,7 +229,6 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         });
         options.add(minOccurence);
     }
-
 
     private class UpdateOptionsFormBehavior extends OnChangeAjaxBehavior {
 

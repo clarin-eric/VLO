@@ -22,11 +22,16 @@ import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.Locale;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.convert.ConversionException;
+import org.apache.wicket.util.convert.converter.AbstractConverter;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Assert;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +44,9 @@ public class FacetFieldValuesProviderTest {
 
     public final static Collection<String> LOW_PRIORITY_VALUES = ImmutableSet.of("Xlow priority");
 
+    private final Mockery context = new JUnit4Mockery();
     private FacetField facetField;
+    private FieldValueConverterProvider valueConverterProvider;
 
     @Before
     public void setUp() {
@@ -49,6 +56,26 @@ public class FacetFieldValuesProviderTest {
         facetField.add("Xlow priority", 500);
         facetField.add("third value", 103);
         facetField.add("FOURTH value", 104); //intentional upper case, sort and filter should be case insensitive
+
+        valueConverterProvider = context.mock(FieldValueConverterProvider.class);
+        context.checking(new Expectations() {
+            {
+                allowing(valueConverterProvider).getConverter(with(any(String.class)));
+                will(returnValue(new AbstractConverter<String>() {
+
+                    @Override
+                    protected Class<String> getTargetType() {
+                        return String.class;
+                    }
+
+                    @Override
+                    public String convertToObject(String value, Locale locale) throws ConversionException {
+                        Assert.fail("convertToObject should not get called on the Field Value converter");
+                        return null;
+                    }
+                }));
+            }
+        });
     }
 
     /**
@@ -56,7 +83,7 @@ public class FacetFieldValuesProviderTest {
      */
     @Test
     public void testIteratorCountOrder() {
-        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, true));
+        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, true), valueConverterProvider);
 
         long first = 0;
         long count = 100;
@@ -92,7 +119,7 @@ public class FacetFieldValuesProviderTest {
      */
     @Test
     public void testIteratorCountOrderDescending() {
-        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, false));
+        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, false), valueConverterProvider);
 
         long first = 0;
         long count = 100;
@@ -128,7 +155,7 @@ public class FacetFieldValuesProviderTest {
      */
     @Test
     public void testIteratorCountOrderDefaultPriority() {
-        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, false));
+        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, false), valueConverterProvider);
 
         long first = 0;
         long count = 100;
@@ -163,7 +190,7 @@ public class FacetFieldValuesProviderTest {
      */
     @Test
     public void testIteratorNameOrderDescending() {
-        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, false));
+        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, false), valueConverterProvider);
 
         final long first = 0;
         final long count = 100;
@@ -205,7 +232,7 @@ public class FacetFieldValuesProviderTest {
         facetField.add("Etwas anderes", 1);
         facetField.add("één nederlandse waarde", 1);
 
-        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, true)) {
+        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, true), valueConverterProvider) {
 
             @Override
             protected Locale getLocale() {
@@ -245,7 +272,7 @@ public class FacetFieldValuesProviderTest {
      */
     @Test
     public void testIteratorOffset() {
-        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, true));
+        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, true), valueConverterProvider);
 
         final long first = 2;
         final long count = 100;
@@ -264,13 +291,13 @@ public class FacetFieldValuesProviderTest {
     public void testSize() {
         // potential is lower than limit
         {
-            final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, false));
+            final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, false), valueConverterProvider);
             // actual number is returned
             assertEquals(5, instance.size());
         }
         // potential is higher than limit
         {
-            final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 2, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, false));
+            final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 2, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, false), valueConverterProvider);
             // maximum number is returned (result is capped)
             assertEquals(2, instance.size());
         }
@@ -284,7 +311,7 @@ public class FacetFieldValuesProviderTest {
         final Model<FieldValuesFilter> filterModel = Model.of(new FieldValuesFilter());
         filterModel.getObject().setName("th");
 
-        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, true)) {
+        final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, true), valueConverterProvider) {
 
             @Override
             protected IModel<FieldValuesFilter> getFilterModel() {
@@ -307,7 +334,7 @@ public class FacetFieldValuesProviderTest {
         assertEquals("third value", valueCount.getName());
 
         assertFalse(result.hasNext());
-        
+
         instance.detach();
         // add minimal occurences condition to filter
         filterModel.getObject().setMinimalOccurence(104);
