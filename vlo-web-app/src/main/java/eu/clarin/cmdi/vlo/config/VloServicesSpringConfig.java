@@ -20,6 +20,7 @@ import com.google.common.collect.Sets;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
+import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
@@ -30,6 +31,7 @@ import eu.clarin.cmdi.vlo.service.handle.HandleClient;
 import eu.clarin.cmdi.vlo.service.handle.impl.HandleRestApiClient;
 import eu.clarin.cmdi.vlo.service.impl.DocumentParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
+import eu.clarin.cmdi.vlo.service.impl.FacetParameterMapperImpl;
 import eu.clarin.cmdi.vlo.service.impl.InclusiveFieldFilter;
 import eu.clarin.cmdi.vlo.service.impl.QueryFacetsSelectionParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ResourceStringConverterImpl;
@@ -84,10 +86,15 @@ public class VloServicesSpringConfig {
     public HandleClient handleClient() {
         return new HandleRestApiClient();
     }
+    
+    @Bean
+    public FacetParameterMapper facetParameterMapper() {
+        return new FacetParameterMapperImpl(languageCodeUtils());
+    }
 
     @Bean(name = "queryParametersConverter")
     public PageParametersConverter<QueryFacetsSelection> queryParametersConverter() {
-        return new QueryFacetsSelectionParametersConverter(vloConfig);
+        return new QueryFacetsSelectionParametersConverter(vloConfig, facetParameterMapper());
     }
 
     @Bean(name = "documentParamsConverter")
