@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Service that connects to the handle.net REST API and retrieves the URL for a
  * given handle.
- * 
+ *
  * Consider re-implementing using the handle API
  *
  * @author twagoo
@@ -98,16 +98,19 @@ public class HandleRestApiClient implements HandleClient {
     public String getUrlFromJson(final String jsonString) throws JSONException {
         // The handle API returns a JSON structure with a number of handle
         // record fields. We are only interested in the value at
-        // values[x].data where values[x].type == 'URL'
+        // values[x].data.value where values[x].type == 'URL'
 
         final JSONObject jsonResponse = new JSONObject(jsonString);
         final JSONArray valuesArray = jsonResponse.getJSONArray("values");
         for (int i = 0; i < valuesArray.length(); i++) {
             final JSONObject object = valuesArray.getJSONObject(i);
             final String type = object.getString("type");
-            if ("URL".equals(type)) {
-                // the field we were looking for
-                return object.getString("data");
+            if ("URL".equals(type) && object.has("data")) {
+                final JSONObject data = object.getJSONObject("data");
+                if (data.has("value")) {
+                    // the field we were looking for
+                    return data.getString("value");
+                }
             }
         }
         // no URL field??
