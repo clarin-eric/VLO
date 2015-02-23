@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
+import eu.clarin.cmdi.vlo.wicket.components.LanguageInfoLink;
 import com.google.common.collect.ImmutableSet;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -32,6 +33,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
 import org.apache.wicket.markup.html.basic.Label;
@@ -117,13 +119,15 @@ public class FieldsTablePanel extends Panel {
         });
     }
 
-    private Label createValueLabel(String id, final IModel<String> facetNameModel, final IModel<String> originalValueModel) {
+    private Component createValueLabel(String id, final IModel<String> facetNameModel, final IModel<String> originalValueModel) {
         final String fieldName = facetNameModel.getObject();
 
         // allow for postprocessing or wrapping of the value model depending on the field
         final IModel<String> valueModel = getValueModel(facetNameModel, originalValueModel);
 
-        if (SMART_LINK_FIELDS.contains(fieldName)) {
+        if (FacetConstants.FIELD_LANGUAGE_CODE.equals(facetNameModel.getObject())) {
+            return new LanguageInfoLink(id, valueModel, facetNameModel);
+        } else if (SMART_LINK_FIELDS.contains(fieldName)) {
             // create label that generates links
             return new SmartLinkLabel(id, new HandleLinkModel(valueModel));
         } else {
