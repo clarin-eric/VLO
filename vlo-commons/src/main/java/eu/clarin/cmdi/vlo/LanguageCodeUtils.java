@@ -145,7 +145,7 @@ public class LanguageCodeUtils {
     private Map<String, String> createCodeMap(String url) {
         LOG.debug("Creating language code map.");
         try {
-            Map<String, String> result = CommonUtils.createCMDIComponentItemMap(url);
+            Map<String, String> result = new ConcurrentHashMap<String, String>(CommonUtils.createCMDIComponentItemMap(url));
             return result;
         } catch (Exception e) {
             throw new RuntimeException("Cannot instantiate postProcessor:", e);
@@ -155,7 +155,7 @@ public class LanguageCodeUtils {
     private Map<String, String> createReverseCodeMap(String url) {
         LOG.debug("Creating language code map.");
         try {
-            Map<String, String> result = CommonUtils.createReverseCMDIComponentItemMap(url);
+            Map<String, String> result = new ConcurrentHashMap<String, String>(CommonUtils.createReverseCMDIComponentItemMap(url));
             return result;
         } catch (Exception e) {
             throw new RuntimeException("Cannot instantiate postProcessor:", e);
