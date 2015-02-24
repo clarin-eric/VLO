@@ -16,11 +16,10 @@
  */
 package eu.clarin.cmdi.vlo;
 
-import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
@@ -117,7 +116,7 @@ public class LanguageCodeUtils {
      */
     public Map<String, String> getIso6392TToISO6393Map() {
         if (iso639_2TToISO639_3Map == null) {
-            iso639_2TToISO639_3Map = new HashMap<String, String>();
+            iso639_2TToISO639_3Map = new ConcurrentHashMap<String, String>();
             iso639_2TToISO639_3Map.put("alb", "sqi");
             iso639_2TToISO639_3Map.put("arm", "hye");
             iso639_2TToISO639_3Map.put("baq", "eus");
@@ -166,7 +165,7 @@ public class LanguageCodeUtils {
     private Map<String, String> createSilToIsoCodeMap() {
         LOG.debug("Creating silToIso code map.");
         try {
-            Map<String, String> result = new HashMap<String, String>();
+            Map<String, String> result = new ConcurrentHashMap<String, String>();
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             domFactory.setNamespaceAware(true);
             URL url = new URL(config.getSilToISO639CodesUrl());
