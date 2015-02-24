@@ -47,7 +47,7 @@ public class FacetParameterMapperImpl extends IdentityMapper {
     @Override
     public String getFacet(String facet) {
         switch (facet) {
-            case FacetConstants.FIELD_LANGUAGE:
+            case FacetConstants.DEPRECATED_FIELD_LANGUAGE:
                 return FacetConstants.FIELD_LANGUAGE_CODE;
             default:
                 return super.getFacet(facet);
@@ -63,7 +63,7 @@ public class FacetParameterMapperImpl extends IdentityMapper {
     @Override
     public String getValue(String facet, String value) {
         switch (facet) {
-            case FacetConstants.FIELD_LANGUAGE:
+            case FacetConstants.DEPRECATED_FIELD_LANGUAGE:
                 return mapToLanguageCode(value);
             default:
                 return super.getValue(facet, value);

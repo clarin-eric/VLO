@@ -12,7 +12,6 @@ public class FacetConstants {
     public static final String FIELD_COLLECTION = "collection";
     public static final String FIELD_COUNTRY = "country";
     public static final String FIELD_CONTINENT = "continent";
-    public static final String FIELD_LANGUAGE = "language";
     public static final String FIELD_LICENSE = "license";
     public static final String FIELD_LANGUAGE_CODE = "languageCode";
     public static final String FIELD_YEAR = "year";
@@ -43,6 +42,9 @@ public class FacetConstants {
      * Facet constant associated with the search page type.
      */
     public static final String FIELD_SEARCHPAGE = "_searchPageRef";
+    
+    //Deprecated fields
+    public static final String DEPRECATED_FIELD_LANGUAGE = "language";
 
     //Normalized mimeTypes
     public static final String RESOURCE_TYPE_AUDIO = "audio";
