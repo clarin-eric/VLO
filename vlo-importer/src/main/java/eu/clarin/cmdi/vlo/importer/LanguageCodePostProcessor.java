@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +12,7 @@ import java.util.regex.Pattern;
 public class LanguageCodePostProcessor implements PostProcessor{
 
     private final static Logger LOG = LoggerFactory.getLogger(LanguageCodePostProcessor.class);
-    
+
     protected static final String CODE_PREFIX = "code:";
     protected static final String LANG_NAME_PREFIX = "name:";
     protected static final String ISO639_2_PREFIX = "ISO639-2:";
@@ -39,26 +40,28 @@ public class LanguageCodePostProcessor implements PostProcessor{
     }
 
     protected String extractLanguageCode(String value) {
+        final LanguageCodeUtils languageCodeUtils = MetadataImporter.languageCodeUtils;
+        
         String result = value;
         
         result = result.replaceFirst(ISO639_2_PREFIX, "").replaceFirst(ISO639_3_PREFIX, "").replaceFirst(SIL_CODE_PREFIX, "").replaceFirst(SIL_CODE_PREFIX_alt, "");
         
         // input is already ISO 639-3?
-        if(LanguageCodeUtils.getIso639ToLanguageNameMap().keySet().contains(result.toUpperCase()))
+        if(languageCodeUtils.getIso639ToLanguageNameMap().keySet().contains(result.toUpperCase()))
             return CODE_PREFIX + result.toLowerCase();
         
         // input is 2-letter code -> map to ISO 639-3
-        if(LanguageCodeUtils.getSilToIso639Map().containsKey(result.toLowerCase())) {
-            return CODE_PREFIX + LanguageCodeUtils.getSilToIso639Map().get(result.toLowerCase());
+        if(languageCodeUtils.getSilToIso639Map().containsKey(result.toLowerCase())) {
+            return CODE_PREFIX + languageCodeUtils.getSilToIso639Map().get(result.toLowerCase());
         }
 
-        if(LanguageCodeUtils.getLanguageNameToIso639Map().containsKey(result)) { // (english) language name?
-            return CODE_PREFIX + LanguageCodeUtils.getLanguageNameToIso639Map().get(result);
+        if(languageCodeUtils.getLanguageNameToIso639Map().containsKey(result)) { // (english) language name?
+            return CODE_PREFIX + languageCodeUtils.getLanguageNameToIso639Map().get(result);
         }
 
         // convert ISO 639-2/T codes to ISO 639-3
-        if (LanguageCodeUtils.getIso6392TToISO6393Map().containsKey(result.toLowerCase())) {
-            return CODE_PREFIX + LanguageCodeUtils.getIso6392TToISO6393Map().get(result.toLowerCase());
+        if (languageCodeUtils.getIso6392TToISO6393Map().containsKey(result.toLowerCase())) {
+            return CODE_PREFIX + languageCodeUtils.getIso6392TToISO6393Map().get(result.toLowerCase());
         }
         
         Matcher matcher = RFC1766_Pattern.matcher(result);

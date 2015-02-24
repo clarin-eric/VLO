@@ -34,15 +34,23 @@ public class OrganisationPostProcessor implements PostProcessor {
      */
     @Override
     public List<String> process(String value) {
-        String[] splitArray = value.split(";");
+        String[] splitArray = normalizeInputString(value).split(";");
         for (int i = 0; i < splitArray.length; i++) {
             String orgaName = splitArray[i];
-            if (getNormalizedOrganisationNamesMap().containsKey(orgaName)) {
-                splitArray[i] = getNormalizedOrganisationNamesMap().get(orgaName);
+            if (getNormalizedOrganisationNamesMap().containsKey(normalizeVariant(orgaName))) {
+                splitArray[i] = getNormalizedOrganisationNamesMap().get(normalizeVariant(orgaName));
             }
         }
-
+        
         return Arrays.asList(splitArray);
+    }
+    
+    private String normalizeInputString(String value) {
+        return value.replaceAll("\\s+", " ");
+    }
+    
+    private String normalizeVariant(String key) {
+        return key.toLowerCase().replaceAll("-", " ");
     }
 
     private Map<String, String> getNormalizedOrganisationNamesMap() {
@@ -74,7 +82,7 @@ public class OrganisationPostProcessor implements PostProcessor {
             String organisationName = node.getAttributes().getNamedItem("name").getTextContent();
             NodeList childNodeList = node.getChildNodes();
             for (int j = 0; j < childNodeList.getLength(); j++) {
-                String variation = childNodeList.item(j).getTextContent();
+                String variation = normalizeVariant(childNodeList.item(j).getTextContent());
                 result.put(variation, organisationName);
             }
         }

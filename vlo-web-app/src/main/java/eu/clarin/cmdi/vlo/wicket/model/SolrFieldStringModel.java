@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
 import java.util.Collection;
 import java.util.Iterator;
 import org.apache.solr.common.SolrDocument;
@@ -24,14 +25,15 @@ import org.apache.wicket.model.IModel;
 
 /**
  * Model that provides field values as String values for a given field values
- * model, both for singular values and multiple values (imploding the
- * latter into a single string)
+ * model, both for singular values and multiple values (imploding the latter
+ * into a single string)
  *
  * @author twagoo
  */
 public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
 
     private final IModel<Collection<Object>> fieldModel;
+    private final String field;
 
     /**
      * Wraps the document model and specified field name into a
@@ -41,15 +43,8 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
      * @param fieldName name of the field to take value from
      */
     public SolrFieldStringModel(IModel<SolrDocument> documentModel, String fieldName) {
-        this(new SolrFieldModel<Object>(documentModel, fieldName));
-    }
-
-    /**
-     *
-     * @param fieldModel model that provides field values as a collection
-     */
-    public SolrFieldStringModel(IModel<Collection<Object>> fieldModel) {
-        this.fieldModel = fieldModel;
+        fieldModel = new SolrFieldModel<Object>(documentModel, fieldName);
+        field = fieldName;
     }
 
     @Override
@@ -64,7 +59,7 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
     private String getValueString(final Collection<Object> fieldValues) {
         final Iterator<Object> iterator = fieldValues.iterator();
         if (iterator.hasNext()) {
-            final String firstValue = iterator.next().toString();
+            final String firstValue = postprocessValue(iterator.next().toString());
             if (iterator.hasNext()) {
                 return getMultipleValuesString(firstValue, iterator);
             } else {
@@ -90,6 +85,16 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
     public void detach() {
         super.detach();
         fieldModel.detach();
+    }
+
+    private String postprocessValue(String value) {
+        if (value != null) {
+            if (FacetConstants.FIELD_DESCRIPTION.equals(field)) {
+                //remove language prefix
+                return value.replaceAll(FacetConstants.DESCRIPTION_LANGUAGE_PATTERN, "");
+            }
+        }
+        return value;
     }
 
 }

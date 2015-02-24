@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
+import eu.clarin.cmdi.vlo.wicket.components.LanguageInfoLink;
 import com.google.common.collect.ImmutableSet;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -23,6 +24,8 @@ import eu.clarin.cmdi.vlo.pojo.DocumentField;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
+import eu.clarin.cmdi.vlo.wicket.model.DescriptionFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
@@ -30,6 +33,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
 import org.apache.wicket.markup.html.basic.Label;
@@ -56,9 +60,7 @@ public class FieldsTablePanel extends Panel {
      * contained in the field should be preserved
      */
     private final static Collection<String> UNESCAPED_VALUE_FIELDS
-            = ImmutableSet.of(
-                    FacetConstants.FIELD_LANGUAGES
-            );
+            = Collections.emptySet(); // ImmutableSet.of(FacetConstants.FIELD_LANGUAGE_CODE);
 
     /**
      * List of fields that should be rendered in a
@@ -115,14 +117,21 @@ public class FieldsTablePanel extends Panel {
         });
     }
 
-    private Label createValueLabel(String id, final IModel<String> facetNameModel, final IModel<String> valueModel) {
+    private Component createValueLabel(String id, final IModel<String> facetNameModel, final IModel<String> originalValueModel) {
         final String fieldName = facetNameModel.getObject();
-        if (SMART_LINK_FIELDS.contains(fieldName)) {
+
+        // allow for postprocessing or wrapping of the value model depending on the field
+        final IModel<String> valueModel = getValueModel(facetNameModel, originalValueModel);
+
+        if (FacetConstants.FIELD_LANGUAGE_CODE.equals(facetNameModel.getObject())) {
+            return new LanguageInfoLink(id, valueModel, facetNameModel);
+        } else if (SMART_LINK_FIELDS.contains(fieldName)) {
             // create label that generates links
             return new SmartLinkLabel(id, new HandleLinkModel(valueModel));
         } else {
             // add a label for the facet value
-            final Label fieldLabel = new Label(id, valueModel);
+            final Label fieldLabel = new FieldValueLabel(id, valueModel, facetNameModel);
+
             // some selected fields may have HTML that needs to be preserved...
             fieldLabel.setEscapeModelStrings(!UNESCAPED_VALUE_FIELDS.contains(fieldName));
             return fieldLabel;
@@ -152,6 +161,14 @@ public class FieldsTablePanel extends Panel {
 
     protected boolean isShowFacetSelectLinks() {
         return true;
+    }
+
+    private IModel<String> getValueModel(IModel<String> facetNameModel, IModel<String> valueModel) {
+        if (FacetConstants.FIELD_DESCRIPTION.equals(facetNameModel.getObject())) {
+            //wrap in model that removes the language prefix
+            return new DescriptionFieldModel(valueModel);
+        }
+        return valueModel;
     }
 
 }

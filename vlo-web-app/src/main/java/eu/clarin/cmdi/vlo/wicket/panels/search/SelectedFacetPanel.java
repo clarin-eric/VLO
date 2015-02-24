@@ -17,12 +17,12 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.pojo.FacetFieldSelection;
+import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -49,6 +49,7 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetFieldSelectio
     private ListView<String> createSelectionRemovers(String id) {
         // Model of the list of selected values in this facet
         final PropertyModel<List<String>> propertyModel = new PropertyModel<List<String>>(getModel(), "facetValues");
+        final PropertyModel<String> fieldNameModel = new PropertyModel(getModel(), "facetField.name");
         // Repeating container of value + unselection links
         final ListView<String> listView = new ListView<String>(id, propertyModel) {
 
@@ -60,7 +61,7 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetFieldSelectio
             @Override
             protected void populateItem(final ListItem<String> item) {
                 // A label showing the name of the facet
-                item.add(new Label("facetValue", item.getModel()));
+                item.add(new FieldValueLabel("facetValue", item.getModel(), fieldNameModel));
                 // A link to remove the value selection from this facet
                 item.add(new RemoveLink("unselectValue", item.getModel()));
             }

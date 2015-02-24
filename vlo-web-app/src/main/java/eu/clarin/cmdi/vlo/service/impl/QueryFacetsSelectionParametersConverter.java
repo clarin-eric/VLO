@@ -17,16 +17,21 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import static eu.clarin.cmdi.vlo.VloWebAppParameters.*;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
+import org.apache.wicket.Session;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
@@ -47,6 +52,30 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
      */
     public final static Splitter FILTER_SPLITTER = Splitter.on(":").limit(2);
 
+    private final Set<String> facetsDefined;
+    private final FacetParameterMapper facetParamMapper;
+
+    /**
+     * Constructs a converter that does not do any facet (value) mapping
+     *
+     * @param config VLO configuration
+     * @see FacetParameterMapper.IdentityMapper
+     */
+    public QueryFacetsSelectionParametersConverter(VloConfig config) {
+        this(config, new FacetParameterMapper.IdentityMapper());
+    }
+
+    /**
+     * Constructs a converter that applies the provided facet (value) mapping
+     *
+     * @param config VLO configuration
+     * @param facetParamMapper mapper to apply to facet names and values
+     */
+    public QueryFacetsSelectionParametersConverter(VloConfig config, FacetParameterMapper facetParamMapper) {
+        this.facetsDefined = ImmutableSet.copyOf(config.getAllFacetFields());
+        this.facetParamMapper = facetParamMapper;
+    }
+
     @Override
     public QueryFacetsSelection fromParameters(PageParameters params) {
         // Get query string from params
@@ -60,14 +89,16 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
             if (!selectionType.isEmpty()) {
                 final List<String> fqType = FILTER_SPLITTER.splitToList(selectionType.toString());
                 if (fqType.size() == 2) {
-                    final String facet = fqType.get(0);
+                    final String facet = facetParamMapper.getFacet(fqType.get(0));
                     final String type = fqType.get(1).toUpperCase();
 
-                    try {
-                        final FacetSelectionType facetSelectionType = FacetSelectionType.valueOf(type);
-                        selection.put(facet, new FacetSelection(facetSelectionType));
-                    } catch (IllegalArgumentException ex) {
-                        logger.warn("Unknown selection type passed into query parameter {}: {}", FILTER_QUERY_TYPE, type);
+                    if (facetsDefined.contains(facet)) {
+                        try {
+                            final FacetSelectionType facetSelectionType = FacetSelectionType.valueOf(type);
+                            selection.put(facet, new FacetSelection(facetSelectionType));
+                        } catch (IllegalArgumentException ex) {
+                            logger.warn("Unknown selection type passed into query parameter {}: {}", FILTER_QUERY_TYPE, type);
+                        }
                     }
                 } else {
                     logger.info("Illegal query parameter value for {}: {}", FILTER_QUERY_TYPE, selectionType);
@@ -81,12 +112,22 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
                 final List<String> fq = FILTER_SPLITTER.splitToList(facetValue.toString());
                 if (fq.size() == 2) {
                     // we have a facet - value pair
-                    final String facet = fq.get(0);
-                    final String value = fq.get(1);
-                    if (selection.containsKey(facet)) {
-                        selection.get(facet).getValues().add(value);
+                    final String requestedFacet = fq.get(0);
+                    final String facet = facetParamMapper.getFacet(requestedFacet);
+                    final String value = facetParamMapper.getValue(requestedFacet, fq.get(1));
+                    if (facetsDefined.contains(facet)) {
+                        if (selection.containsKey(facet)) {
+                            selection.get(facet).getValues().add(value);
+                        } else {
+                            selection.put(facet, new FacetSelection(Arrays.asList(value)));
+                        }
                     } else {
-                        selection.put(facet, new FacetSelection(Arrays.asList(value)));
+                        logger.debug("Undefined facet passed into query parameter {}: {}", FILTER_QUERY, facet);
+
+                        if (Session.exists()) {
+                            // generate Wicket error message
+                            Session.get().error("Unknown facet: " + facet);
+                        }
                     }
                 } else {
                     logger.info("Illegal query parameter value for {}: {}", FILTER_QUERY, facetValue);

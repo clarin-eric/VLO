@@ -630,7 +630,7 @@ public class DefaultVloConfigFactoryTest {
         System.out.println("getFacetFields");
 
         List<String> expResult = Arrays.asList(
-                "language",
+                "languageCode",
                 "collection",
                 "resourceClass",
                 "continent",
@@ -652,7 +652,7 @@ public class DefaultVloConfigFactoryTest {
     @Test
     public void testGetAllFacetsField() {
         final String[] expItems = new String[]{
-            "language",
+            "languageCode",
             "collection",
             "resourceClass",
             "modality",

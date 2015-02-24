@@ -27,7 +27,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
     
     private static final String DEFAULT_LANGUAGE = "und";
-
+    
     public CMDIParserVTDXML(Map<String, PostProcessor> postProcessors, Boolean useLocalXSDCache) {
         this.postProcessors = postProcessors;
         this.useLocalXSDCache = useLocalXSDCache;
@@ -243,8 +243,8 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             if(langAttrIndex != -1)
                 languageCode = nav.toString(langAttrIndex).trim();
             // replace 2-letter with 3-letter codes
-            if(LanguageCodeUtils.getSilToIso639Map().containsKey(languageCode))
-                languageCode = LanguageCodeUtils.getSilToIso639Map().get(languageCode);
+            if(MetadataImporter.languageCodeUtils.getSilToIso639Map().containsKey(languageCode))
+                languageCode = MetadataImporter.languageCodeUtils.getSilToIso639Map().get(languageCode);
             
             List<String> valueList = postProcess(config.getName(), value);
             for(int i=0; i<valueList.size(); i++) {

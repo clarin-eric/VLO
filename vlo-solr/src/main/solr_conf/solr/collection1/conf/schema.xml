@@ -419,7 +419,7 @@
    <field name="projectName" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="continent" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="country" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="language" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="languageCode" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="license" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="organisation"  type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="genre"  type="string" indexed="true" stored="true" multiValued="true"/>
@@ -447,8 +447,6 @@
    <field name="_lastSeen" type="tdate" indexed="true" stored="true" multiValued="false" />
    <field name="_searchPageRef" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="metadataSource" type="metadataSource" indexed="false" stored="true" multiValued="true" />
-   <field name="languages" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="languageCode" type="string" indexed="true" stored="true" multiValued="true" />
    
    <!-- Field for autocompletion (suggester) -->
    <field name="_suggester" type="textauto" indexed="true" stored="false" multiValued="true"/>

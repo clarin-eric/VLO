@@ -760,13 +760,6 @@
     <Organisation name="Department of General Linguistics, University of Helsinki">
         <Variation>University of Helsinki, Department of General Linguistics.</Variation>
     </Organisation>
-    <Organisation name="MPI for Psycholinguistics, MPG">
-        <Variation>MPI</Variation>
-        <Variation>Max Planck Institute for Psycholinguistics / MPG</Variation>
-        <Variation>MPI for Psycholinguistics</Variation>
-        <Variation>Max Planck Institute for Psycholinguistics</Variation>
-        <Variation>MPI Nijmegen</Variation>
-    </Organisation>
     <Organisation name="Heidelberger Akademie der Wissenschaften, University of Heidelberg">
         <Variation>University of Heidelberg, Heidelberger Akademie der Wissenschaften</Variation>
     </Organisation>
@@ -1487,6 +1480,7 @@
     </Organisation>
     <Organisation name="MPI">
         <Variation>Max Planck Institute</Variation>
+        <Variation>Max Planck Institut</Variation>
     </Organisation>
     <Organisation name="Finanstilsynet, OEM"/>
     <Organisation name="Abteilung Computerlinguistik, Friedrich-Alexander-Universität Erlangen-Nürnberg">
@@ -1867,7 +1861,6 @@
         <Variation>Université de Paris X</Variation>
         <Variation>Université Paris X- Nanterre</Variation>
         <Variation>Université Paris X Nanterre</Variation>
-        <Variation>Max Planck Institute for Evolutionary Anthropology</Variation>
     </Organisation>
     <Organisation name="Goethe University Frankfurt, Institute of Empirical Linguistics">
         <Variation>Goethe Univeristy Frankfurt, Institute of Empirical Linguistics</Variation>
@@ -1878,6 +1871,7 @@
     </Organisation>
     <Organisation name="Max Planck Institute for Evolutionary Anthropology">
         <Variation>Max-Planck-Institute for Evolutionary Anthropology</Variation>
+        <Variation>Max Planck Institute for Evolutionary Anthropology</Variation>
     </Organisation>
     <Organisation name="National Foreign Language Resource Center, University of Hawai?i"/>
     <Organisation name="Department of Computer Science, Vassar College (New York US)">
@@ -2062,6 +2056,26 @@
         <Variation>Max Planck Institute for Psycholinguistics (Nijmegen, Netherlands)</Variation>
         <Variation>Max Planck Institute for Psycolinguistics</Variation>
         <Variation>Max Planck Institute for Psycholinguisticsc</Variation>
+        <Variation>Max Planck Institut fuer Psycholinguistik, Nijmegen, Nl.</Variation>
+        <Variation>Max-Planck-Institut für Psycholinguistik</Variation>
+        <Variation>Max Planck Institute for Psycholinguistics / MPG</Variation>
+        <Variation>MPI for Psycholinguistics</Variation>
+        <Variation>MPI for psycholinguistics, Nijmegen</Variation>
+        <Variation>Max Planck Institute for Psycholinguistics</Variation>
+        <Variation>MPI Nijmegen</Variation>
+        <Variation>Max-Planck-Institut fÃ¼r Psycholinguistik</Variation>
+        <Variation>Max Planck for Psycholinguisics, Nijmegen, NL</Variation>
+	<Variation>Max-Planck-Institüt für Psycholinguïstik</Variation>
+        <Variation>Max-Planck-Institüt für Psycholinguïstiek</Variation>
+        <Variation>Mac Planck Institute for Psycholinguistics</Variation>
+	<Variation>Max Planck Institut fÃ¼r Psychlinguistik</Variation>
+        <Variation>Max Planck Institut fÃÂ¼r Psychlinguistik</Variation>
+	<Variation>Max Planck Institute for Psycho-Linguistics</Variation>
+	<Variation>MPI for Psycholinguistics (Nijmegen, Netherlands)</Variation>
+	<Variation>Max Plank Institute for Psycholinguistics</Variation>
+	<Variation>MPI for Psycholinguistics Nijmegen</Variation>
+        <Variation>Max-Planck-Institüt für Psucholinguïstik</Variation>
+        <Variation>Max-Planck-Institüt für Psychlinguïstik</Variation>
     </Organisation>
     <Organisation name="Witwatersrand University Press">
         <Variation>University of Witwatersand Press</Variation>
@@ -2134,10 +2148,6 @@ Wolfgang Goethe Universität Frankfurt</Variation>
     </Organisation>
     <Organisation name="Institute of Cybernetics, Tallinn University of Technology">
         <Variation>Institute of Cybernetics at Tallinn University of Technology</Variation>
-    </Organisation>
-    <Organisation name="MPI für Psycholinguistik">
-        <Variation>Max Planck Institut fuer Psycholinguistik, Nijmegen, Nl.</Variation>
-        <Variation>Max-Planck-Institut für Psycholinguistik</Variation>
     </Organisation>
     <Organisation name="Sheldon Press">
         <Variation>The Superintendent, Government Press</Variation>

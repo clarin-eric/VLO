@@ -69,7 +69,7 @@
     
     <!-- Fields shown as facets on the search page -->
     <facetFields>        
-        <facetField>language</facetField>
+        <facetField>languageCode</facetField>
         <facetField>collection</facetField>
         <facetField>resourceClass</facetField>
         <facetField>continent</facetField>
@@ -85,7 +85,7 @@
     </facetFields>
         
     <simpleSearchFacetFields>
-        <simpleSearchFacetField>language</simpleSearchFacetField>
+        <simpleSearchFacetField>languageCode</simpleSearchFacetField>
         <simpleSearchFacetField>collection</simpleSearchFacetField>
         <simpleSearchFacetField>resourceClass</simpleSearchFacetField>
         <simpleSearchFacetField>modality</simpleSearchFacetField>
@@ -96,7 +96,7 @@
     <searchResultFields>
         <searchResultField>name</searchResultField>
         <searchResultField>country</searchResultField>
-        <searchResultField>languages</searchResultField>
+        <searchResultField>languageCode</searchResultField>
         <searchResultField>modality</searchResultField>
         <searchResultField>subject</searchResultField>
         <searchResultField>genre</searchResultField>
