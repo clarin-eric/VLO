@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
  * @author twagoo
  */
 public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Count, FieldValuesOrder> implements ListProvider<FacetField.Count> {
-    
+
     private final static Logger logger = LoggerFactory.getLogger(FacetFieldValuesProvider.class);
     private final IModel<FacetField> model;
     private final int maxNumberOfItems;
@@ -89,7 +89,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
     public FacetFieldValuesProvider(IModel<FacetField> model, int max, Collection<String> lowPriorityValues, FieldValueConverterProvider fieldValueConverterProvider) {
         this(model, max, lowPriorityValues, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, false), fieldValueConverterProvider);
     }
-    
+
     public FacetFieldValuesProvider(IModel<FacetField> model, int max, SortParam<FieldValuesOrder> sort, FieldValueConverterProvider fieldValueConverterProvider) {
         this(model, max, null, sort, fieldValueConverterProvider);
     }
@@ -119,13 +119,13 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
     protected IModel<FieldValuesFilter> getFilterModel() {
         return null;
     }
-    
+
     @Override
     public Iterator<? extends FacetField.Count> iterator(long first, long count) {
         // return iterator starting at specified offset
         return getList().listIterator((int) first);
     }
-    
+
     @Override
     public List<? extends FacetField.Count> getList() {
         final Iterable<Count> filteredValues = getFilteredValues();
@@ -138,7 +138,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
             return sorted;
         }
     }
-    
+
     @Override
     public long size() {
         if (size == null) {
@@ -146,7 +146,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
         }
         return size;
     }
-    
+
     @Override
     public IModel<FacetField.Count> model(FacetField.Count object) {
         return new Model(object);
@@ -157,17 +157,18 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
      */
     private Iterable<FacetField.Count> filter(List<FacetField.Count> list) {
         if (hasFilter()) {
+            final IConverter<String> converter = fieldValueConverterProvider.getConverter(model.getObject().getName());
             return Iterables.filter(list, new Predicate<FacetField.Count>() {
                 @Override
                 public boolean apply(Count input) {
-                    return getFilterModel().getObject().matches(input);
+                    return getFilterModel().getObject().matches(input, converter);
                 }
             });
         } else {
             return list;
         }
     }
-    
+
     private Iterable<Count> getFilteredValues() {
         if (filtered == null) {
             // get all the values
@@ -176,7 +177,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
         }
         return filtered;
     }
-    
+
     private long getSize() {
         if (hasFilter()) {
             return Math.min(maxNumberOfItems, Iterables.size(getFilteredValues()));
@@ -188,7 +189,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
             return Math.min(maxNumberOfItems, model.getObject().getValueCount());
         }
     }
-    
+
     private boolean hasFilter() {
         return getFilterModel() != null && getFilterModel().getObject() != null && !getFilterModel().getObject().isEmpty();
     }
@@ -206,7 +207,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
             return getBaseOrdering();
         }
     }
-    
+
     private Ordering getBaseOrdering() {
         final Ordering ordering;
         if (getSort().getProperty() == FieldValuesOrder.COUNT) {
@@ -216,14 +217,14 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
         } else {
             ordering = Ordering.natural();
         }
-        
+
         if (getSort().isAscending()) {
             return ordering;
         } else {
             return ordering.reverse();
         }
     }
-    
+
     protected Locale getLocale() {
         try {
             final Session session = Session.get();
@@ -235,28 +236,28 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
         }
         return Locale.getDefault();
     }
-    
+
     private final static class CountOrdering extends Ordering<FacetField.Count> {
-        
+
         @Override
         public int compare(Count arg0, Count arg1) {
             return Long.compare(arg0.getCount(), arg1.getCount());
         }
     };
-    
+
     private final static class NameOrdering extends Ordering<FacetField.Count> implements Serializable {
-        
+
         private final Collator collator;
         private final IConverter converter;
         private final Locale locale;
-        
+
         public NameOrdering(Locale locale, IConverter<String> converter) {
             collator = Collator.getInstance(locale);
             collator.setStrength(Collator.PRIMARY);
-            this.converter = new CachingConverter(converter);
+            this.converter = CachingConverter.wrap(converter);
             this.locale = locale;
         }
-        
+
         @Override
         public int compare(Count arg0, Count arg1) {
             if (converter == null) {
@@ -274,16 +275,16 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
      * the back of the list
      */
     private static class PriorityOrdering extends Ordering<FacetField.Count> {
-        
+
         private final Collection<String> lowPriorityValues;
-        
+
         public PriorityOrdering(Collection<String> lowPriorityValues) {
             this.lowPriorityValues = lowPriorityValues;
         }
-        
+
         @Override
         public int compare(Count arg0, Count arg1) {
-            
+
             if (lowPriorityValues.contains(arg0.getName())) {
                 if (!lowPriorityValues.contains(arg1.getName())) {
                     //arg0 is low priority, arg1 is not -> move arg0 to back
@@ -297,9 +298,9 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
             // so fall back to secondary comparator (assuming a compound)
             return 0;
         }
-        
+
     };
-    
+
     @Override
     public void detach() {
         model.detach();

@@ -20,6 +20,7 @@ import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import java.io.Serializable;
 import java.util.regex.Pattern;
 import org.apache.solr.client.solrj.response.FacetField.Count;
+import org.apache.wicket.util.convert.IConverter;
 
 /**
  * Defines a filter for field values (designed to be used by
@@ -61,13 +62,30 @@ public class FieldValuesFilter implements Serializable {
     /**
      *
      * @param count count (name + count) to check
+     * @param converter optional converter to apply to value before comparison
      * @return true IFF the {@link Count#getCount() } is more than {@link #getMinimalOccurence()
      * } {@link Count#getName() } contains {@link #getName() } (case
      * insensitive)
      */
-    public boolean matches(Count count) {
-        return count.getCount() >= minimalOccurence
-                && (namePattern == null || namePattern.matcher(count.getName()).find());
+    public boolean matches(Count count, IConverter<String> converter) {
+        if (count.getCount() >= minimalOccurence) {
+            if (namePattern == null) {
+                // no pattern to compare to, always matches
+                return true;
+            } else {
+                // convert value if converter is provided
+                final String value;
+                if (converter == null) {
+                    value = count.getName();
+                } else {
+                    value = converter.convertToString(count.getName(), null);
+                }
+                return namePattern.matcher(value).find();
+            }
+        } else {
+            // too few occurences, no match
+            return false;
+        }
     }
 
     public boolean isEmpty() {

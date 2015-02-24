@@ -3,9 +3,23 @@ Bug Fixes and Features
 VLO 3.1 (???)
 * Upgraded a number of dependencies including Solr, Wicket and Spring to a more recent version
 	<https://trac.clarin.eu/ticket/541>
-* A facet containing the language code was added
-	<https://trac.clarin.eu/ticket/547>
-* Removed the obsolete 'imdiBrowserUrl' configuration option
+* More fields get indexed for the autocomplete/suggestion function in the search box 
+	<https://trac.clarin.eu/ticket/624>
+* Mapping improvements:
+	* Fallback to fields defined by pattern (path) if no value is found in a field with a matching concept link
+		<https://trac.clarin.eu/ticket/554>
+		<https://trac.clarin.eu/ticket/668>
+	* Automatic curation of values in the 'organisation' facet
+		<https://trac.clarin.eu/ticket/683>
+	* Better support for RFC1766 codes (such as 'en_US' and 'nl_NL')
+		<https://trac.clarin.eu/ticket/686>
+	* The 'language' facet is replaced by an (internal) representation based on language code if applicable
+		<https://trac.clarin.eu/ticket/547>
+	* Regular expressions for national project mapping 
+		<https://trac.clarin.eu/ticket/681>
+	* Content language is stored for descriptions
+		<https://trac.clarin.eu/ticket/667>
+
 
 VLO 3.0.1 (June 2014)
 * DC-3786 (application type) was added to facet 'resourceClass'

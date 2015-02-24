@@ -68,6 +68,22 @@ public class CachingConverter<C> implements IConverter<C> {
         this.inner = converter;
     }
 
+    /**
+     * Convenience factory method for wrapping a converter
+     *
+     * @param <C> The object to convert from and to String
+     * @param inner converter to wrap, can be null
+     * @return a new {@link CachingConverter} instance wrapping the inner
+     * converter, or null if inner is null
+     */
+    public static <C> IConverter<C> wrap(IConverter<C> inner) {
+        if (inner == null) {
+            return null;
+        } else {
+            return new CachingConverter(inner);
+        }
+    }
+
     @Override
     public C convertToObject(String value, Locale locale) throws ConversionException {
         try {
