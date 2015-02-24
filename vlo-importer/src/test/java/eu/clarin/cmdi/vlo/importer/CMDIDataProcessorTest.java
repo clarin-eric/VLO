@@ -790,7 +790,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
         SolrInputDocument doc = data.getSolrDocument();
-//        Collection<Object> values = doc.getFieldValues(FacetConstants.FIELD_LANGUAGE);
+//        Collection<Object> values = doc.getFieldValues(FacetConstants.DEPRECATED_FIELD_LANGUAGE);
 //        assertEquals(2, values.size());
 //        Iterator<Object> iter = values.iterator();
 //        assertEquals("French", iter.next());
