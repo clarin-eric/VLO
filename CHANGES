@@ -21,6 +21,7 @@ VLO 3.1 (???)
 		<https://trac.clarin.eu/ticket/681>
 	* Content language is stored for descriptions
 		<https://trac.clarin.eu/ticket/667>
+* A number of changes in VloConfig.xml; see UPGRADE instructions for details
 
 
 VLO 3.0.1 (June 2014)
