@@ -30,6 +30,13 @@ info.php> to select the 'languageCode' facet using ISO639-3 language codes, e.g.
 <http://catalog.clarin.eu/vlo/search?fq=languageCode:code:nep> for 'nep'. Contact
 Sander Maijers <sander@clarin.eu> for more information.
 
+* Take not of the following changes in VloConfig.xml:
+- 'imdiBrowserUrl' element has been removed
+- 'organisationNamesUrl' element has been added (should normally have 
+'/OrganisationControlledVocabulary.xml' as its value)
+- the 'language' facet has been replaced with 'languageCode'; the latter replaces the
+former in the 'facetField', 'simpleSearchFacetField' and 'searchResultField' elements
+
 ---------------------------
 Upgrading from 3.0 to 3.0.1
 ---------------------------
