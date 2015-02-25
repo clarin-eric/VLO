@@ -34,30 +34,6 @@ public class SolrFieldLabel extends Label {
      * @param id id of label
      * @param documentModel model that holds document to show field of
      * @param fieldName name of field to show value of
-     */
-    public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName) {
-        super(id, new SolrFieldStringModel(documentModel, fieldName));
-    }
-
-    /**
-     *
-     * @param id id of label
-     * @param documentModel model that holds document to show field of
-     * @param fieldName name of field to show value of
-     * @param maxLength maximum length to allow
-     * @param truncatePoint point to truncate if string is too long
-     */
-    public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, int maxLength, int truncatePoint) {
-        super(id,
-                new TruncatingStringModel(
-                        new SolrFieldStringModel(documentModel, fieldName), maxLength, truncatePoint));
-    }
-
-    /**
-     *
-     * @param id id of label
-     * @param documentModel model that holds document to show field of
-     * @param fieldName name of field to show value of
      * @param nullFallback string to show if actual value is null
      */
     public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, String nullFallback) {

@@ -5,6 +5,8 @@ VLO 3.1 (???)
 	<https://trac.clarin.eu/ticket/541>
 * More fields get indexed for the autocomplete/suggestion function in the search box 
 	<https://trac.clarin.eu/ticket/624>
+* Fixed an issue with resolving resource handles
+	<https://trac.clarin.eu/ticket/666>
 * Mapping improvements:
 	* Fallback to fields defined by pattern (path) if no value is found in a field with a matching concept link
 		<https://trac.clarin.eu/ticket/554>

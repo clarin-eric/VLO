@@ -9,6 +9,7 @@ import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
+import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import javax.inject.Inject;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.WebPage;
@@ -36,6 +37,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     private SolrDocumentService documentService;
     @Inject
     private XmlTransformationService cmdiTransformationService;
+    @Inject
+    private FieldValueConverterProvider fieldValueConverterProvider;
     @Inject
     private VloConfig vloConfig;
 
@@ -143,6 +146,10 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
      */
     public XmlTransformationService getCmdiTransformationService() {
         return cmdiTransformationService;
+    }
+    
+    public FieldValueConverterProvider getFieldValueConverterProvider() {
+        return fieldValueConverterProvider;
     }
 
 }

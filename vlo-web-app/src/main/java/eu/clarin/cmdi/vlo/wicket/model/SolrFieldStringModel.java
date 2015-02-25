@@ -16,12 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.VloWicketApplication;
 import java.util.Collection;
 import java.util.Iterator;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.convert.IConverter;
 
 /**
  * Model that provides field values as String values for a given field values
@@ -43,7 +44,7 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
      * @param fieldName name of the field to take value from
      */
     public SolrFieldStringModel(IModel<SolrDocument> documentModel, String fieldName) {
-        fieldModel = new SolrFieldModel<Object>(documentModel, fieldName);
+        fieldModel = new SolrFieldModel<>(documentModel, fieldName);
         field = fieldName;
     }
 
@@ -59,7 +60,7 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
     private String getValueString(final Collection<Object> fieldValues) {
         final Iterator<Object> iterator = fieldValues.iterator();
         if (iterator.hasNext()) {
-            final String firstValue = postprocessValue(iterator.next().toString());
+            final String firstValue = iterator.next().toString();
             if (iterator.hasNext()) {
                 return getMultipleValuesString(firstValue, iterator);
             } else {
@@ -71,9 +72,10 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
     }
 
     protected String getMultipleValuesString(final String firstValue, final Iterator<Object> iterator) {
-        final StringBuilder valuesBuilder = new StringBuilder(firstValue).append("; ");
+        // for multiple value strings, run every individual value through the converter
+        final StringBuilder valuesBuilder = new StringBuilder(postprocessValue(firstValue)).append("; ");
         while (iterator.hasNext()) {
-            valuesBuilder.append(iterator.next().toString());
+            valuesBuilder.append(postprocessValue(iterator.next().toString()));
             if (iterator.hasNext()) {
                 valuesBuilder.append("; ");
             }
@@ -89,12 +91,16 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
 
     private String postprocessValue(String value) {
         if (value != null) {
-            if (FacetConstants.FIELD_DESCRIPTION.equals(field)) {
-                //remove language prefix
-                return value.replaceAll(FacetConstants.DESCRIPTION_LANGUAGE_PATTERN, "");
+            final IConverter<String> converter = getFieldValueConverter();
+            if (converter != null) {
+                return converter.convertToString(value, null);
             }
         }
         return value;
+    }
+
+    private IConverter<String> getFieldValueConverter() {
+        return VloWicketApplication.get().getFieldValueConverterProvider().getConverter(field);
     }
 
 }

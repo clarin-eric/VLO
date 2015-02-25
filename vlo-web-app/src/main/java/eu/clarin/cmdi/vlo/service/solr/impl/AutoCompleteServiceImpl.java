@@ -1,8 +1,8 @@
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
-import com.google.common.collect.Iterators;
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -49,6 +49,6 @@ public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoComplete
             }
         }
 
-        return Iterators.emptyIterator();
+        return  Collections.emptyIterator();
     }
 }

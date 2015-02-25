@@ -42,7 +42,7 @@ public class FacetConstants {
      * Facet constant associated with the search page type.
      */
     public static final String FIELD_SEARCHPAGE = "_searchPageRef";
-    
+
     //Deprecated fields
     public static final String DEPRECATED_FIELD_LANGUAGE = "language";
 
@@ -70,4 +70,10 @@ public class FacetConstants {
      * 1 matches the ISO639-3 language code)
      */
     public static final String DESCRIPTION_LANGUAGE_PATTERN = "^\\{lang='([a-z]{3})'\\}";
+
+    /**
+     * regular expression that matches the syntax of the 'languageCode' field
+     * (with either a language code or a name as indicated by the prefix)
+     */
+    public static final String LANGUAGE_CODE_PATTERN = "(name|code):(.*)";
 }
