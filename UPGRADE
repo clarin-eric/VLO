@@ -27,7 +27,8 @@ Upgrading from 3.0.x to 3.1
 
 * Update the external service running at <http://infra.clarin.eu/service/language/
 info.php> to select the 'languageCode' facet using ISO639-3 language codes, e.g. 
-<http://catalog.clarin.eu/vlo/search?fq=languageCode:code:nep> for 'nep'.
+<http://catalog.clarin.eu/vlo/search?fq=languageCode:code:nep> for 'nep'. Contact
+Sander Maijers <sander@clarin.eu> for more information.
 
 ---------------------------
 Upgrading from 3.0 to 3.0.1
