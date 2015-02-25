@@ -23,6 +23,7 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import eu.clarin.cmdi.vlo.service.handle.HandleClient;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.apache.wicket.ajax.json.JSONArray;
 import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.ajax.json.JSONObject;
@@ -79,8 +80,9 @@ public class HandleRestApiClient implements HandleClient {
                     .accept(MediaType.APPLICATION_JSON_TYPE)
                     .get(ClientResponse.class);
 
-            if (response.getClientResponseStatus() != ClientResponse.Status.OK) {
-                logger.error("Unexpected response status {} for {}", response.getClientResponseStatus(), requestUrl);
+            if (Response.Status.OK.getStatusCode() != response.getStatus()) {
+                final Response.StatusType statusInfo = response.getStatusInfo();
+                logger.error("Unexpected response status {} - {} for {}", statusInfo.getStatusCode(), statusInfo.getReasonPhrase(), requestUrl);
             } else {
                 final String responseString = response.getEntity(String.class);
                 return getUrlFromJson(responseString);
