@@ -30,8 +30,8 @@ import org.apache.wicket.util.convert.IConverter;
  */
 public class FieldValueConverterProviderImpl implements FieldValueConverterProvider {
 
+    private final static Pattern LANGUAGE_CODE_PATTERN = Pattern.compile(FacetConstants.LANGUAGE_CODE_PATTERN);
     private final LanguageCodeUtils languageCodeUtils;
-    private Pattern LANGUAGE_CODE_PATTERN = Pattern.compile("(name|code):(.*)");
 
     public FieldValueConverterProviderImpl(LanguageCodeUtils languageCodeUtils) {
         this.languageCodeUtils = languageCodeUtils;
@@ -42,12 +42,17 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
         switch (fieldName) {
             case FacetConstants.FIELD_LANGUAGE_CODE:
                 return languageCodeConverter;
+            case FacetConstants.FIELD_DESCRIPTION:
+                return descriptionConverter;
             default:
                 return null;
         }
 
     }
 
+    /**
+     * Abstract base class for one directional string converters
+     */
     private abstract class FieldValueConverter implements IConverter<String> {
 
         @Override
@@ -57,6 +62,12 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
 
     }
 
+    /**
+     * Converter for language code/name strings (following the pattern of
+     * {@link #LANGUAGE_CODE_PATTERN}) into language names
+     *
+     * @see LanguageCodeUtils#getLanguageNameForLanguageCode(java.lang.String)
+     */
     private final FieldValueConverter languageCodeConverter = new FieldValueConverter() {
 
         @Override
@@ -74,9 +85,22 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
                         return value;
                 }
             }
-            
+
             // does not match expected pattern, return original value
             return fieldValue;
+        }
+
+    };
+
+    /**
+     * Converter for description field values that strips out any language code
+     * prefix
+     */
+    private final FieldValueConverter descriptionConverter = new FieldValueConverter() {
+
+        @Override
+        public String convertToString(String fieldValue, Locale locale) throws ConversionException {
+            return fieldValue.replaceAll(FacetConstants.DESCRIPTION_LANGUAGE_PATTERN, "");
         }
 
     };
