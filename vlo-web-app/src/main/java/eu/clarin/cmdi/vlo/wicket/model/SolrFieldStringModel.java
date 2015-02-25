@@ -64,7 +64,7 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
             if (iterator.hasNext()) {
                 return getMultipleValuesString(firstValue, iterator);
             } else {
-                return firstValue;
+                return postprocessValue(firstValue);
             }
         } else {
             return null;
