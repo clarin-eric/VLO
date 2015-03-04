@@ -41,6 +41,9 @@ Contact Sander Maijers <sander@clarin.eu> for more information.
 - the 'language' facet has been replaced with 'languageCode'; the latter replaces the
 former in the 'facetField', 'simpleSearchFacetField' and 'searchResultField' elements
 
+* Flush the solr index (remove the data directory) and run a new import or copy the
+beta index over if it is based on a recent 3.1 import.
+
 ---------------------------
 Upgrading from 3.0 to 3.0.1
 ---------------------------
