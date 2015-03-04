@@ -10,8 +10,12 @@ Quick overview of the upgrade steps (for details see DEPLOY-README)
 - Unzip the vlo-solr-#.##.war in a new 'solr' directory
 - Unzip the vlo-web-app-#.##.war in a new 'vlo' directory
 
-- In the 'config' directory, adjust VloConfig.xml as needed (make a backup first);
- 	make sure that the data roots are up-to-date
+- In the 'config' directory, adjust VloConfig.xml as needed (make a backup first). In
+	particular, make sure that the following instance specific sections are kept:
+	- dataRoots and its children
+	- solrUrl
+	- homeUrl
+	- maxDaysInSolr
 - Make any further version specific adjustments as described in this document
 
 - Stop the Tomcat or at least the VLO web app and Solr applications
@@ -25,10 +29,10 @@ Quick overview of the upgrade steps (for details see DEPLOY-README)
 Upgrading from 3.0.x to 3.1
 ---------------------------
 
-* Update the external service running at <http://infra.clarin.eu/service/language/
-info.php> to select the 'languageCode' facet using ISO639-3 language codes, e.g. 
-<http://catalog.clarin.eu/vlo/search?fq=languageCode:code:nep> for 'nep'. Contact
-Sander Maijers <sander@clarin.eu> for more information.
+* (For stable version) Update the external service running at <http://infra.clarin.eu/
+service/language/info.php> to select the 'languageCode' facet using ISO639-3 language 
+codes, e.g. <http://catalog.clarin.eu/vlo/search?fq=languageCode:code:nep> for 'nep'. 
+Contact Sander Maijers <sander@clarin.eu> for more information.
 
 * Take not of the following changes in VloConfig.xml:
 - 'imdiBrowserUrl' element has been removed
