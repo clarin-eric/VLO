@@ -1,8 +1,9 @@
 Bug Fixes and Features
 
 VLO 3.1 (???)
-* Upgraded a number of dependencies including Solr, Wicket and Spring to a more recent version
-	<https://trac.clarin.eu/ticket/541>
+* Added the 'license' facet
+	<https://trac.clarin.eu/ticket/393>
+	<https://trac.clarin.eu/ticket/740>
 * More fields get indexed for the autocomplete/suggestion function in the search box 
 	<https://trac.clarin.eu/ticket/624>
 * Fixed an issue with resolving resource handles
@@ -21,6 +22,10 @@ VLO 3.1 (???)
 		<https://trac.clarin.eu/ticket/681>
 	* Content language is stored for descriptions
 		<https://trac.clarin.eu/ticket/667>
+* Upgraded a number of dependencies including Solr, Wicket and Spring to a more recent version
+	<https://trac.clarin.eu/ticket/541>
+* VLO importer logs to separate log directory
+	<https://trac.clarin.eu/ticket/741>
 * A number of changes in VloConfig.xml; see UPGRADE instructions for details
 
 
