@@ -56,6 +56,14 @@
             <outputDirectory>bin</outputDirectory>
             <filtered>true</filtered>
         </fileSet>
+        <!-- empty log directory -->
+        <fileSet>
+            <directory>src/main/assembly</directory>
+            <outputDirectory>log</outputDirectory>
+            <excludes>
+                <exclude>*</exclude>
+            </excludes>
+        </fileSet>
         <!-- config files -->
         <fileSet>
             <directory>${project.parent.basedir}/vlo-commons/src/main/resources</directory>
@@ -65,7 +73,7 @@
                 <include>*.xsl</include>
             </includes>
             <excludes>
-            	<exclude>VloConfig.xml</exclude>
+                <exclude>VloConfig.xml</exclude>
             </excludes>
             <outputDirectory>bin</outputDirectory>
         </fileSet>
@@ -101,7 +109,7 @@
         <fileSet>
             <directory>src/main/assembly</directory>
             <excludes>
-            	<exclude>*</exclude>
+                <exclude>*</exclude>
             </excludes>
             <outputDirectory>war/solr</outputDirectory>
         </fileSet>
@@ -110,7 +118,7 @@
         <fileSet>
             <directory>src/main/assembly</directory>
             <excludes>
-            	<exclude>*</exclude>
+                <exclude>*</exclude>
             </excludes>
             <outputDirectory>war/vlo</outputDirectory>
         </fileSet>

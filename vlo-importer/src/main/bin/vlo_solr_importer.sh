@@ -20,6 +20,9 @@ echo No configuration location specified, using default
 CONFIG=${DIR}/"../config/VloConfig.xml"
 fi
 
+LOGDIR=${DIR}/../log/
+echo Logging in ${LOGDIR}
+
 # Please specify the configuration to the importer via a system property or via
 # the command line. In case of a property add 
 #
@@ -32,5 +35,8 @@ fi
 # to the JAVA command. Please note the a specification on the command line will
 # take preference over a specification as a property.
 
-$JAVA -Xmx2024M -cp "${DIR}:${DIR}/vlo-importer-${project.version}-importer.jar" eu.clarin.cmdi.vlo.importer.MetadataImporter -c "$CONFIG"
+$JAVA -Xmx2024M \
+    -cp "${DIR}:${DIR}/vlo-importer-3.2-SNAPSHOT-importer.jar" \
+    -DIMPORTER_LOG_DIR=${LOGDIR} \
+    eu.clarin.cmdi.vlo.importer.MetadataImporter -c "$CONFIG"
 
