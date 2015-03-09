@@ -640,6 +640,7 @@ public class DefaultVloConfigFactoryTest {
                 "subject",
                 "format",
                 "organisation",
+                "license",
                 "nationalProject",
                 "keywords",
                 "dataProvider");
