@@ -228,8 +228,6 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-2459_fc4e74d6-84de-c8cd-1ae8-2c2be5ee90b1</concept>
 		<concept>http://www.isocat.org/datcat/DC-2979</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2979_8030473e-bbcb-6b87-3fd2-90554429ec50</concept>
-		<concept>http://purl.org/dc/terms/publisher</concept>
-		<concept>http://purl.org/dc/elements/1.1/publisher</concept>
 		<concept>http://www.isocat.org/datcat/DC-6134</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6134_72c22724-2615-fd70-2eff-8cd3cb59e91d</concept>
 		<concept>http://www.isocat.org/datcat/DC-6702</concept>
@@ -434,7 +432,7 @@
 		<pattern>/c:CMD/c:Header//text()</pattern>
 		<pattern>/c:CMD/c:Components//text()</pattern>
 	</facetConcept>
-	<facetConcept name="_componentProfile">
+	<facetConcept name="_componentProfile" allowMultipleValues="false">
 		<pattern>/c:CMD/c:Header/c:MdProfile/text()</pattern>
 	</facetConcept>
 	<facetConcept name="keywords" description="Keywords describing the resource or tool" definition="Keywords containing relevant information on the resource or tool not stated in other VLO metadata facets, consistently applied within the collection.">
