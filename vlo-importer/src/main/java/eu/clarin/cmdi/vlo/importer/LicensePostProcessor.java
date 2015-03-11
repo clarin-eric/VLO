@@ -21,10 +21,16 @@ public class LicensePostProcessor implements PostProcessor {
 
     @Override
     public List<String> process(final String value) {
+        String result = value;
         List<String> resultList = new ArrayList<String>();
+        
+        // first letter should be upper case
+        if(result.length() > 1) {
+            result = result.substring(0, 1).toUpperCase().concat(result.substring(1, result.length()));
+        }
 
         for (Pattern pattern : licenseMap.keySet()) {
-            Matcher licenseMatcher = pattern.matcher(value.trim());
+            Matcher licenseMatcher = pattern.matcher(result.trim());
             if (licenseMatcher.matches()) {
                 resultList.add(licenseMap.get(pattern));
                 break;
@@ -32,10 +38,10 @@ public class LicensePostProcessor implements PostProcessor {
         }
 
         if (resultList.isEmpty()) {
-            if (value.length() > MAX_LENGTH) {
+            if (result.length() > MAX_LENGTH) {
                 resultList.add(OTHER_VALUE);                        
             } else {
-                resultList.add(value.trim());
+                resultList.add(result.trim());
             }
         }
 
