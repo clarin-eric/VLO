@@ -36,7 +36,7 @@ echo Logging in ${LOGDIR}
 # take preference over a specification as a property.
 
 $JAVA -Xmx2024M \
-    -cp "${DIR}:${DIR}/vlo-importer-3.1-SNAPSHOT-importer.jar" \
+    -cp "${DIR}:${DIR}/vlo-importer-${project.version}-importer.jar" \
     -DIMPORTER_LOG_DIR=${LOGDIR} \
     eu.clarin.cmdi.vlo.importer.MetadataImporter -c "$CONFIG"
 
