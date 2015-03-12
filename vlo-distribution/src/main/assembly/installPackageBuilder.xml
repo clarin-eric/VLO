@@ -21,11 +21,11 @@
         <fileSet>
             <directory>${project.parent.basedir}</directory>
             <includes>
-                <include>CHANGES</include>
-                <include>DEPLOY-README</include>
-                <include>LICENSE</include>
-                <include>README</include>
-                <include>UPGRADE</include>
+                <include>CHANGES.txt</include>
+                <include>DEPLOY-README.txt</include>
+                <include>LICENSE.txt</include>
+                <include>README.txt</include>
+                <include>UPGRADE.txt</include>
             </includes>
             <outputDirectory>doc</outputDirectory>
         </fileSet>

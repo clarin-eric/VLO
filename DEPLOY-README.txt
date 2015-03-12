@@ -37,6 +37,9 @@ importer.
    directory, you can run the importer application. Since this application
    relies on the Solr server, we first need to install the Solr web application.
 
+   Recursively assign ownership of the entire unpacked distribution to the appropriate
+   user (i.e. 'vlouser' on catalog.clarin.eu).
+
 3. Solr server installation
 
    The VLO importer and web application use Solr as their database
