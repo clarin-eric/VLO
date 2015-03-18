@@ -71,7 +71,7 @@
        other than the default ./data under the Solr home.
        If replication is in use, this should match the replication configuration. -->
 <!--   <dataDir></dataDir>-->
-
+       
   <!--	Enables JMX if and only if an existing MBeanServer is found, use this
     if you want to configure JMX through JVM parameters. Remove this to disable
     exposing Solr configuration and statistics to JMX.
@@ -358,6 +358,8 @@
     <!-- default values for query parameters -->
      <lst name="defaults">
        <str name="echoParams">explicit</str>
+     <str name="defType">edismax</str>
+     <str name="q.alt">*:*</str>
        <!--
        <int name="rows">10</int>
        <str name="fl">*</str>
@@ -400,12 +402,13 @@
      <str name="defType">dismax</str>
      <str name="echoParams">explicit</str>
      <float name="tie">0.01</float>
-     <str name="qf">
+<!--     <str name="qf">
         text^0.5 features^1.0 name^1.2 sku^1.5 id^10.0 manu^1.1 cat^1.4
-     </str>
+     </str>-->
      <str name="pf">
-        text^0.2 features^1.1 name^1.5 manu^1.4 manu_exact^1.9
+        name^4 description^2
      </str>
+     <!--
      <str name="bf">
         popularity^0.5 recip(price,1,1000,1000)^0.3
      </str>
@@ -415,16 +418,16 @@
      <str name="mm">
         2&lt;-1 5&lt;-2 6&lt;90%
      </str>
-     <int name="ps">100</int>
+     <int name="ps">100</int>-->
      <str name="q.alt">*:*</str>
-     <!-- example highlighter config, enable per-query with hl=true -->
+<!--      example highlighter config, enable per-query with hl=true 
      <str name="hl.fl">text features name</str>
-     <!-- for this field, we want no fragmenting, just highlighting -->
+      for this field, we want no fragmenting, just highlighting 
      <str name="f.name.hl.fragsize">0</str>
-     <!-- instructs Solr to return the field itself if no query terms are
-          found -->
+      instructs Solr to return the field itself if no query terms are
+          found 
      <str name="f.name.hl.alternateField">name</str>
-     <str name="f.text.hl.fragmenter">regex</str> <!-- defined below -->
+     <str name="f.text.hl.fragmenter">regex</str>  defined below -->
     </lst>
   </requestHandler>
 
@@ -906,9 +909,9 @@
        in Solr's conf/xslt directory.  Changes to xslt files are checked for
        every xsltCacheLifetimeSeconds.  
    -->
-<!--  <queryResponseWriter name="xslt" class="org.apache.solr.response.XSLTResponseWriter">
+  <queryResponseWriter name="xslt" class="org.apache.solr.response.XSLTResponseWriter">
     <int name="xsltCacheLifetimeSeconds">5</int>
-  </queryResponseWriter>-->
+  </queryResponseWriter>
 
 
   <!-- example of registering a query parser

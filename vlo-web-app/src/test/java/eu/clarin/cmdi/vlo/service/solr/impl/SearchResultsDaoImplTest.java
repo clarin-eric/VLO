@@ -104,7 +104,7 @@ public class SearchResultsDaoImplTest extends AbstractSolrTestCase {
         query.setRows(10);
         query.setStart(0);
         query.setFields(FIELD_NAME, FIELD_ID, FIELD_DESCRIPTION);
-        query.setQuery("*:*");
+        query.setQuery(null);
 
         query.setFacet(true);
         query.setFacetMinCount(1);
@@ -132,7 +132,6 @@ public class SearchResultsDaoImplTest extends AbstractSolrTestCase {
         query.setRows(10);
         query.setStart(0);
         query.setFields(FIELD_NAME, FIELD_ID, FIELD_DESCRIPTION);
-        query.setQuery("*:*");
         {
             // all documents should match this
             SolrDocumentList documents = instance.getDocuments(query);

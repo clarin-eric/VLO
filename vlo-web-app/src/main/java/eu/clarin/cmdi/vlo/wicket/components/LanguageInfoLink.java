@@ -81,17 +81,21 @@ public class LanguageInfoLink extends GenericPanel<String> {
     protected void onConfigure() {
         // when a link can be generated (i.e. wehen a language code is 
         // available) show the link; otherwise show the fallback label
-        final boolean linkAvailable = getLanguageCode() != null;
+        final boolean linkAvailable = newLanguageCodeMatcher().matches();
         link.setVisible(linkAvailable);
         fallbackLabel.setVisible(!linkAvailable);
     }
 
     private String getLanguageCode() {
-        final Matcher matcher = LANGUAGE_CODE_REGEX.matcher(getModelObject());
+        final Matcher matcher = newLanguageCodeMatcher();
         if (matcher.matches() && matcher.groupCount() == 1) {
             return matcher.group(1);
         } else {
             return null;
         }
+    }
+
+    private Matcher newLanguageCodeMatcher() {
+        return LANGUAGE_CODE_REGEX.matcher(getModelObject());
     }
 }

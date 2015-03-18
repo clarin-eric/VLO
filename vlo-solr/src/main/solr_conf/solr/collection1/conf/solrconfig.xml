@@ -363,6 +363,12 @@
     <!-- default values for query parameters -->
      <lst name="defaults">
        <str name="echoParams">explicit</str>
+     <str name="defType">dismax</str>
+     <str name="q.alt">*:*</str>
+     <str name="qf">
+        name^8 description^4 keywords^2 languageCode^2 country^2 organisation^2 collection^1 modality^1 genre^1 continent^.5 id^.1
+     </str>
+     <!-- TODO: use bf to boost records with one or more resources -->
        <!--
        <int name="rows">10</int>
        <str name="fl">*</str>
