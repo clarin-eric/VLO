@@ -1,6 +1,6 @@
 Bug Fixes and Features
 
-VLO 3.1 (???)
+VLO 3.1 (March 2015)
 * Added the 'license' facet
 	<https://trac.clarin.eu/ticket/393>
 	<https://trac.clarin.eu/ticket/740>

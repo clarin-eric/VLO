@@ -17,6 +17,7 @@ appropriate user (i.e. 'vlouser' on catalog.clarin.eu)
 	- dataRoots and its children
 	- solrUrl
 	- homeUrl
+	- deleteAllFirst
 	- maxDaysInSolr
 - Make any further version specific adjustments as described in this document
 
