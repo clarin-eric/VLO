@@ -18,10 +18,13 @@ package eu.clarin.cmdi.vlo.wicket.components;
 
 import org.apache.wicket.extensions.markup.html.basic.DefaultLinkParser;
 import org.apache.wicket.extensions.markup.html.basic.ILinkParser;
+import org.apache.wicket.extensions.markup.html.basic.LinkParser;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.model.IModel;
+
+import static org.apache.wicket.extensions.markup.html.basic.DefaultLinkParser.URL_RENDER_STRATEGY;
 
 /**
  * Clone of {@link SmartLinkLabel} from wicket-extensions by Juergen Donnerstag
@@ -55,7 +58,7 @@ public class SmartLinkFieldValueLabel extends FieldValueLabel {
      * @return link parser
      */
     protected ILinkParser getLinkParser() {
-        return new DefaultLinkParser();
+        return new VloLinkParser();
     }
 
     /**
@@ -66,6 +69,26 @@ public class SmartLinkFieldValueLabel extends FieldValueLabel {
      */
     protected final CharSequence getSmartLink(final CharSequence text) {
         return getLinkParser().parse(text.toString());
+    }
+
+    /**
+     * Adapted version of {@link DefaultLinkParser} that does not parse e-mail
+     * addresses (to prevent false classifications of handle URIs containing an
+     * {@code @})
+     */
+    private static class VloLinkParser extends LinkParser {
+
+        /**
+         * URL pattern adapted from {@link DefaultLinkParser}; added the @ in
+         * the second part of the URI for cases like
+         * {@code hdl.handle.net/abc-123@format=cmdi}.
+         */
+        private static final String urlPattern = "([a-zA-Z]+://[\\w\\.\\-\\:\\/~]+)[\\w\\.:\\-/?&=%@]*";
+
+        public VloLinkParser() {
+            addLinkRenderStrategy(urlPattern, URL_RENDER_STRATEGY);
+        }
+
     }
 
 }
