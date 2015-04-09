@@ -70,7 +70,8 @@ public class FieldsTablePanel extends Panel {
             = ImmutableSet.of(
                     FacetConstants.FIELD_DESCRIPTION,
                     FacetConstants.FIELD_LANDINGPAGE,
-                    FacetConstants.FIELD_COMPLETE_METADATA
+                    FacetConstants.FIELD_COMPLETE_METADATA,
+                    FacetConstants.FIELD_SELF_LINK
             );
 
     @SpringBean
