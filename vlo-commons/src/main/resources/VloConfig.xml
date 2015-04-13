@@ -58,6 +58,8 @@
     
     <organisationNamesUrl>/OrganisationControlledVocabulary.xml</organisationNamesUrl>
     
+    <languageNameVariantsUrl>/LanguageNameVariantsMap.xml</languageNameVariantsUrl>
+    
     <!-- 
         Facet field used to populate collection selector on search page 
         If disabled, the collection facet will not be shown (can be used to
