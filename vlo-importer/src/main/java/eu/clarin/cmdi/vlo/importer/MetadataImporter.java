@@ -78,7 +78,6 @@ public class MetadataImporter {
         POST_PROCESSORS.put(FacetConstants.FIELD_COUNTRY, new CountryNamePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGE_CODE, new LanguageCodePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_AVAILABILITY, new AvailabilityPostProcessor());
-        POST_PROCESSORS.put(FacetConstants.FIELD_LICENSE, new LicensePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_ORGANISATION, new OrganisationPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_YEAR, new YearPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostProcessor());
