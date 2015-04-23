@@ -218,8 +218,8 @@
 		<!-- licenceType: Indication of the type of a copyright licence. -->
 		<concept>http://www.isocat.org/datcat/DC-6846</concept>
 		<!-- DASISH from DC Rights -->
-		<!-- <concept>http://www.isocat.org/datcat/DC-5439</concept>
-		     <concept>http://hdl.handle.net/11459/CCR_C-5439_98bb103d-476a-7f62-54b4-bf9de24d2229</concept> -->
+		<concept>http://www.isocat.org/datcat/DC-5439</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-5439_98bb103d-476a-7f62-54b4-bf9de24d2229</concept>
 		<!-- the DC is used in the distributionType facet -->
 		<!--<concept>http://purl.org/dc/terms/license</concept>-->
 	</facetConcept>
