@@ -65,6 +65,10 @@ public class VloConfig {
     private String nationalProjectMapping = "";
     
     private String organisationNamesUrl;
+    
+    private String languageNameVariantsUrl;
+    
+    private String licenseAvailabilityMapUrl;
 
     private String countryComponentUrl = "";
 
@@ -963,6 +967,53 @@ public class VloConfig {
         organisationNamesUrl = param;
     }
     
+    /**
+     * Get the value of the languageNameVariantsUrl parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public String getLanguageNameVariantsUrl() {
+        return languageNameVariantsUrl;
+    }
+
+    /**
+     * Set the value of the languageNameVariantsUrl parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value
+     */
+    public void setLanguageNameVariantsUrl(String param) {
+        languageNameVariantsUrl = param;
+    }
+    
+   /**
+     * Get the value of the licenseAvailabilityMapUrl parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public String getLicenseAvailabilityMapUrl() {
+        return licenseAvailabilityMapUrl;
+    }
+
+    /**
+     * Set the value of the licenseAvailabilityMapUrl parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value
+     */
+    public void setLicenseAvailabilityMapUrl(String param) {
+        licenseAvailabilityMapUrl = param;
+    }
 
     /**
      * Get the value of the cqlEndpointFilter parameter<br><br>

@@ -58,7 +58,11 @@
     
     <organisationNamesUrl>/OrganisationControlledVocabulary.xml</organisationNamesUrl>
     
-    <!-- 
+    <languageNameVariantsUrl>/LanguageNameVariantsMap.xml</languageNameVariantsUrl>
+    
+    <licenseAvailabilityMapUrl>/LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl>
+    
+    <!-- resourceAvailabilityMapUrl
         Facet field used to populate collection selector on search page 
         If disabled, the collection facet will not be shown (can be used to
         move the collection facet in with the other facets).
@@ -79,7 +83,7 @@
         <facetField>subject</facetField>
         <facetField>format</facetField>
         <facetField>organisation</facetField>
-        <facetField>license</facetField>
+        <facetField>availability</facetField>
         <facetField>nationalProject</facetField>
         <facetField>keywords</facetField>
         <facetField>dataProvider</facetField>

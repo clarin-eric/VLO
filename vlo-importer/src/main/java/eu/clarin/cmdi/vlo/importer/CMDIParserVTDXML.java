@@ -246,6 +246,12 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             if(MetadataImporter.languageCodeUtils.getSilToIso639Map().containsKey(languageCode))
                 languageCode = MetadataImporter.languageCodeUtils.getSilToIso639Map().get(languageCode);
             
+            // ignore non-English language names for facet LANGUAGE_CODE
+            if(config.getName().equals(FacetConstants.FIELD_LANGUAGE_CODE) && !languageCode.equals("en") && !languageCode.equals("eng") && !languageCode.equals("und")) {
+                index = ap.evalXPath();
+                continue;  
+            }
+            
             List<String> valueList = postProcess(config.getName(), value);
             for(int i=0; i<valueList.size(); i++) {
                 if(!allowMultipleValues && i>0)
