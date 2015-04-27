@@ -15,7 +15,7 @@ public class FacetConstants {
     public static final String FIELD_AVAILABILITY = "availability";
     public static final String FIELD_LICENSE = "license";
     public static final String FIELD_LANGUAGE_CODE = "languageCode";
-    public static final String FIELD_YEAR = "year";
+    public static final String FIELD_TEMPORAL_COVERAGE = "temporalCoverage";
     public static final String FIELD_GENRE = "genre";
     public static final String FIELD_MODALITY = "modality";
     public static final String FIELD_SUBJECT = "subject";

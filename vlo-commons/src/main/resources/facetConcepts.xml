@@ -67,15 +67,22 @@
 		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Publications/c:Publication/c:PublicationTitle/</blacklistPattern>
 		<!-- IMS c:MultimodalCorpus -->
 	</facetConcept>
-	<facetConcept name="year" description="Temporal information about the resource">
+	<facetConcept name="temporalCoverage" description="The temporal coverage of the source material of the resource" definition="The temporal coverage of the source material of the resource, i.e. not the time within which the resource was created, but when e.g. original texts were written or speech recordings made.">
+                <!-- completion year -->
 		<concept>http://www.isocat.org/datcat/DC-2509</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2509_3b86afe2-ebde-ba09-8a1c-fe6bdc46a739</concept>
+                <!-- creation date -->
 		<concept>http://www.isocat.org/datcat/DC-2510</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2510_2402e609-046a-dfbf-c2d7-5a2f1ae6dc86</concept>
+                <!-- publication date -->
 		<concept>http://www.isocat.org/datcat/DC-2538</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2538_8b697452-7ef3-9fce-ccf9-a7f344f11317</concept>
+                <!-- when -->
 		<concept>http://www.isocat.org/datcat/DC-6176</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6176_647a4954-a958-7304-d8a6-5851f2003f7c</concept>
+                <!-- Time coverage -->
+                <concept>http://www.isocat.org/datcat/DC-3664</concept>
+                <concept>http://hdl.handle.net/11459/CCR_C-3664_eb600f47-5123-efbe-251b-d952c65fc847</concept>
 
 
 		<concept>http://purl.org/dc/terms/created</concept>
