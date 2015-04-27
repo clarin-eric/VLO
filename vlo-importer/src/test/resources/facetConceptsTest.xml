@@ -56,7 +56,7 @@
     <blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Publications/c:Publication/c:PublicationTitle/</blacklistPattern> <!-- IMS c:LexicalResourceProfile -->
   	<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Publications/c:Publication/c:PublicationTitle/</blacklistPattern> <!-- IMS c:MultimodalCorpus -->
 	</facetConcept>
-	<facetConcept name="year" description="Temporal information about the resource">
+	<facetConcept name="temporalCoverage" description="The temporal coverage of the source material of the resource" definition="The temporal coverage of the source material of the resource, i.e. not the time within which the resource was created, but when e.g. original texts were written or speech recordings made.">
 		<concept>http://www.isocat.org/datcat/DC-2509</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2509_3b86afe2-ebde-ba09-8a1c-fe6bdc46a739</concept>
 		<concept>http://www.isocat.org/datcat/DC-2510</concept>
