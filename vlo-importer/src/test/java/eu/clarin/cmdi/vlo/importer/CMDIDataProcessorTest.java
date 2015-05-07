@@ -401,7 +401,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(
                 "{lang='eng'}This  recording was made to generate a freely available test resource including speech and gestures. The annotations were created by Peter and Kita who is gesture researcher at the MPI for Psycholinguistics.",
                 doc.getFieldValue("description"));
-        assertEquals("2002", doc.getFieldValue("year"));
+        assertEquals("2002-10-30", doc.getFieldValue("temporalCoverage"));
         List<String> fieldValues = new ArrayList(doc.getFieldValues(FacetConstants.FIELD_FORMAT));
         assertEquals(2, fieldValues.size());
         assertEquals("video/x-mpeg1", fieldValues.get(0));

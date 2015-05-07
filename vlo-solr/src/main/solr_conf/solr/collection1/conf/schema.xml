@@ -427,7 +427,6 @@
    <field name="modality"  type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="subject"  type="string" indexed="true" stored="true" multiValued="true" />
    <field name="description" type="text" indexed="true" stored="true" multiValued="true" />
-   <field name="year" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="resourceClass" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="format" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="dataProvider" type="string" indexed="true" stored="true" multiValued="false" />

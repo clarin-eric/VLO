@@ -67,7 +67,7 @@ public class FacetMappingFactoryTest {
                 mapping.getPatterns().get(1));
         mapping = facets.get(index++);
         
-        assertEquals(FacetConstants.FIELD_YEAR, mapping.getName());
+        assertEquals(FacetConstants.FIELD_TEMPORAL_COVERAGE, mapping.getName());
         assertEquals(2, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Components/c:Session/c:Date/text()", 
                 mapping.getPatterns().get(0));
@@ -210,7 +210,7 @@ public class FacetMappingFactoryTest {
                 mapping.getPatterns().get(0));
         mapping = facets.get(index++);
         
-        assertEquals(FacetConstants.FIELD_YEAR, mapping.getName());
+        assertEquals(FacetConstants.FIELD_TEMPORAL_COVERAGE, mapping.getName());
         assertEquals(3, mapping.getPatterns().size());
         assertEquals("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:created/text()", 
                 mapping.getPatterns().get(0));
@@ -336,7 +336,7 @@ public class FacetMappingFactoryTest {
                 mapping.getFallbackPatterns().get(1));
         mapping = facets.get(index++);
         
-        assertEquals(FacetConstants.FIELD_YEAR, mapping.getName());
+        assertEquals(FacetConstants.FIELD_TEMPORAL_COVERAGE, mapping.getName());
         assertEquals(3, mapping.getPatterns().size());
         assertEquals(
                 "/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:FinalizationYearResourceCreation/text()",
@@ -457,7 +457,7 @@ public class FacetMappingFactoryTest {
         List<FacetConfiguration> facets = facetMapping.getFacets();
         
         FacetConfiguration facet = facets.get(5);
-        assertEquals(FacetConstants.FIELD_YEAR, facet.getName());
+        assertEquals(FacetConstants.FIELD_TEMPORAL_COVERAGE, facet.getName());
         assertEquals(2, facet.getPatterns().size());
         assertEquals("/c:CMD/c:Components/c:TextCorpusProfile/c:GeneralInfo/c:CompletionYear/text()", facet.getPatterns().get(0));
         assertEquals("/c:CMD/c:Components/c:TextCorpusProfile/c:GeneralInfo/c:PublicationDate/text()", facet.getPatterns().get(1));

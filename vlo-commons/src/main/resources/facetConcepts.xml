@@ -67,23 +67,28 @@
 		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Publications/c:Publication/c:PublicationTitle/</blacklistPattern>
 		<!-- IMS c:MultimodalCorpus -->
 	</facetConcept>
-	<facetConcept name="year" description="Temporal information about the resource">
-		<concept>http://www.isocat.org/datcat/DC-2509</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-2509_3b86afe2-ebde-ba09-8a1c-fe6bdc46a739</concept>
-		<concept>http://www.isocat.org/datcat/DC-2510</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-2510_2402e609-046a-dfbf-c2d7-5a2f1ae6dc86</concept>
-		<concept>http://www.isocat.org/datcat/DC-2538</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-2538_8b697452-7ef3-9fce-ccf9-a7f344f11317</concept>
-		<concept>http://www.isocat.org/datcat/DC-6176</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-6176_647a4954-a958-7304-d8a6-5851f2003f7c</concept>
-
-
-		<concept>http://purl.org/dc/terms/created</concept>
-		<!-- (IDS) -->
-		<concept>http://purl.org/dc/terms/date</concept>
-		<!-- (IDS) -->
-		<concept>http://purl.org/dc/terms/issued</concept>
-		<!-- (IDS) -->
+        	<!-- test facets -->
+	<facetConcept name="temporalCoverage" description="The temporal coverage of the source material of the resource" definition="The temporal coverage of the source material of the resource, i.e. not the time within which the resource was created, but when e.g. original texts were written or speech recordings made.">
+		<concept>http://www.isocat.org/datcat/DC-2502</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2502_747eb0cd-03e9-cffb-34cc-d0c8c77e4c5a</concept>
+		<!-- dc:coverage restricted to temporal coverage -->
+		<concept>http://www.isocat.org/datcat/DC-3664</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-3664_eb600f47-5123-efbe-251b-d952c65fc847</concept>
+		<!-- “Basic time coverage information.” -->
+		<concept>http://www.isocat.org/datcat/DC-4343</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-4343_0d6e80e7-6f6c-5497-eac6-29b95a5fa9ec</concept>
+		<!-- Intervall. Described as “a : a space of time between events or states” -->
+		<concept>http://www.isocat.org/datcat/DC-5742</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-5742_66aaccdd-f1d0-a6a6-a4fb-efa704e06d8b</concept>
+		<!-- End time. Described as “Time at which an event ends”. -->
+		<concept>http://www.isocat.org/datcat/DC-3654</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-3654_f1608e88-95e6-4233-5d21-5312e76de32d</concept>
+		<!-- Start range. Described as “The beginning of a range.” used in the component TimeCoverage http://catalog.clarin.eu/ds/ComponentRegistry/?item=clarin.eu:cr1:c_1349361150714 -->
+		<concept>http://www.isocat.org/datcat/DC-3655</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-3655_bc4c2656-2946-0be9-49f0-021a811e531b</concept>
+		<!-- End range. Described as “The end of a range.” used in the component TimeCoverage http://catalog.clarin.eu/ds/ComponentRegistry/?item=clarin.eu:cr1:c_1349361150714 -->
+		<pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:coverage/text()</pattern>
+		<!-- dc:coverage, also contains spatial coverage info -->
 
 		<pattern>/c:CMD/Components/c:teiHeader/c:fileDesc/c:sourceDesc/c:biblFull/c:publicationStmt/c:date[@type="publication"]/text()</pattern>
 		<!-- BBAW teiHeader -->
@@ -465,29 +470,7 @@
 		<!--  BAS -->
 	</facetConcept>
 
-	<!-- test facets -->
-	<facetConcept name="temporalCoverage" description="The temporal coverage of the source material of the resource" definition="The temporal coverage of the source material of the resource, i.e. not the time within which the resource was created, but when e.g. original texts were written or speech recordings made.">
-		<concept>http://www.isocat.org/datcat/DC-2502</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-2502_747eb0cd-03e9-cffb-34cc-d0c8c77e4c5a</concept>
-		<!-- dc:coverage restricted to temporal coverage -->
-		<concept>http://www.isocat.org/datcat/DC-3664</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-3664_eb600f47-5123-efbe-251b-d952c65fc847</concept>
-		<!-- “Basic time coverage information.” -->
-		<concept>http://www.isocat.org/datcat/DC-4343</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-4343_0d6e80e7-6f6c-5497-eac6-29b95a5fa9ec</concept>
-		<!-- Intervall. Described as “a : a space of time between events or states” -->
-		<concept>http://www.isocat.org/datcat/DC-5742</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-5742_66aaccdd-f1d0-a6a6-a4fb-efa704e06d8b</concept>
-		<!-- End time. Described as “Time at which an event ends”. -->
-		<concept>http://www.isocat.org/datcat/DC-3654</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-3654_f1608e88-95e6-4233-5d21-5312e76de32d</concept>
-		<!-- Start range. Described as “The beginning of a range.” used in the component TimeCoverage http://catalog.clarin.eu/ds/ComponentRegistry/?item=clarin.eu:cr1:c_1349361150714 -->
-		<concept>http://www.isocat.org/datcat/DC-3655</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-3655_bc4c2656-2946-0be9-49f0-021a811e531b</concept>
-		<!-- End range. Described as “The end of a range.” used in the component TimeCoverage http://catalog.clarin.eu/ds/ComponentRegistry/?item=clarin.eu:cr1:c_1349361150714 -->
-		<pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:coverage/text()</pattern>
-		<!-- dc:coverage, also contains spatial coverage info -->
-	</facetConcept>
+        <!-- test facets -->
 	<facetConcept name="lifeCycleStatus" description="The status in the life cycle of the resource or tool" definition="The status in the life cycle of the resource or tool.">
 		<concept>http://www.isocat.org/datcat/DC-3818</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-3818_8c4aec73-1654-7565-9575-c4a17425ee29</concept>
