@@ -41,7 +41,6 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
     public SolrDocumentQueryFactoryImpl(Collection<String> documentFields) {
         defaultQueryTemplate = new SolrQuery();
         defaultQueryTemplate.setFields(documentFields.toArray(new String[]{}));
-        defaultQueryTemplate.setSort(SolrQuery.SortClause.asc(FacetConstants.FIELD_NAME));
     }
 
     @Override
