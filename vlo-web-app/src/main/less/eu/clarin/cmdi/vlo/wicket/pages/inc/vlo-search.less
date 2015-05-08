@@ -59,7 +59,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     width: 20%;
 }
 
-#searchresultsheader .searchresultpagination {
+#searchresultsheader .resultpagination {
     padding: 0;
     margin: 0;
     float: left;
@@ -68,22 +68,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     text-align: center;
 }
 
-#bottompagination {
+.resultpagination {
+    
+    span 
+    {
+        padding-left: 1px; 
+        padding-right: 1px
+    }
+
+    span.goto em {
+        font-weight: bold;
+        text-decoration: underline;
+        font-style: normal;
+    }
+}
+
+#bottompagination, #resourcespagination {
     clear: both;
     text-align: center;
     padding: 1em 0;
-}
-
-.searchresultpagination span 
-{
-    padding-left: 1px; 
-    padding-right: 1px
-}
-
-.searchresultpagination span.goto em {
-    font-weight: bold;
-    text-decoration: underline;
-    font-style: normal;
 }
 
 #searchresultpagecount{

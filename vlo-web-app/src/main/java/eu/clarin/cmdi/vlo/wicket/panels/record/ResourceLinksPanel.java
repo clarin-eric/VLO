@@ -25,10 +25,11 @@ import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import java.util.Collection;
 import java.util.List;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -42,6 +43,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public class ResourceLinksPanel extends Panel {
 
+    private static final int ITEMS_PER_PAGE = 12;
+
     @SpringBean(name = "resourceStringConverter")
     private ResourceStringConverter resourceStringConverter;
     @SpringBean(name = "resolvingResourceStringConverter")
@@ -54,23 +57,37 @@ public class ResourceLinksPanel extends Panel {
      */
     public ResourceLinksPanel(String id, IModel<Collection<String>> model) {
         super(id, model);
+
         // list view that shows all resources as links that show a resource details panel when clicked
-        add(new ResourcesListView("resource", new CollectionListModel<String>(model)));
+        final ResourcesListView resourceListing = new ResourcesListView("resource", new CollectionListModel<String>(model));
+        add(resourceListing);
+
+        // pagination
+        add(new AjaxPagingNavigator("paging", resourceListing) {
+
+            @Override
+            protected void onConfigure() {
+                setVisible(resourceListing.getPageCount() > 1);
+            }
+
+        });
+
+        //For Ajax updating of resource listing when paging
+        setOutputMarkupId(true);
     }
 
-    private class ResourcesListView extends ListView<String> {
+    private class ResourcesListView extends PageableListView<String> {
 
         public ResourcesListView(String id, IModel<? extends List<? extends String>> model) {
-            super(id, model);
+            super(id, model, ITEMS_PER_PAGE);
             setReuseItems(true);
         }
 
         @Override
         protected void populateItem(ListItem<String> item) {
             final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(resourceStringConverter, item.getModel());
-            
+
             // add a link that will show the resource details panel when clicked
-            
             // wrap href in model that transforms handle links
             final IModel<String> linkModel = new HandleLinkModel(new PropertyModel(resourceInfoModel, "href"));
             final ExternalLink link = new ExternalLink("showResource", linkModel);
