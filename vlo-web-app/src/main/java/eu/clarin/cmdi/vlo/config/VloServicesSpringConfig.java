@@ -27,8 +27,6 @@ import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
-import eu.clarin.cmdi.vlo.service.handle.HandleClient;
-import eu.clarin.cmdi.vlo.service.handle.impl.HandleRestApiClient;
 import eu.clarin.cmdi.vlo.service.impl.DocumentParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
 import eu.clarin.cmdi.vlo.service.impl.FacetParameterMapperImpl;
@@ -47,6 +45,9 @@ import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.stream.StreamSource;
+import nl.mpi.archiving.corpusstructure.core.handle.CachingHandleResolver;
+import nl.mpi.archiving.corpusstructure.core.handle.HandleApiResolver;
+import nl.mpi.archiving.corpusstructure.core.handle.HandleResolver;
 import org.apache.solr.common.SolrDocument;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -60,6 +61,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class VloServicesSpringConfig {
 
+    /**
+     * Handle resolution cache expiry in seconds
+     */
+    private static final int HANDLE_CACHE_EXPIRY = 3600;
+    
     @Inject
     VloConfig vloConfig;
 
@@ -80,13 +86,13 @@ public class VloServicesSpringConfig {
 
     @Bean
     public UriResolver uriResolver() {
-        return new UriResolverImpl(handleClient());
+        return new UriResolverImpl(handleResolver());
     }
 
-    public HandleClient handleClient() {
-        return new HandleRestApiClient();
+    public HandleResolver handleResolver() {
+        return new CachingHandleResolver(new HandleApiResolver(), HANDLE_CACHE_EXPIRY);
     }
-    
+
     @Bean
     public FacetParameterMapper facetParameterMapper() {
         return new FacetParameterMapperImpl(languageCodeUtils());
