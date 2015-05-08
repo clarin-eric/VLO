@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import static eu.clarin.cmdi.vlo.config.VloConfig.LANGUAGE_LINK_TEMPLATE_LANGUAGE_CODE_PLACEHOLDER;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.wicket.AttributeModifier;
@@ -38,7 +39,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  * @see FacetConstants#FIELD_LANGUAGE_CODE
- * @see VloConfig#getLanguageLinkPrefix()
+ * @see VloConfig#getLanguageLinkTemplate()
  */
 public class LanguageInfoLink extends GenericPanel<String> {
 
@@ -63,7 +64,7 @@ public class LanguageInfoLink extends GenericPanel<String> {
                 if (languageCode == null) {
                     return null;
                 } else {
-                    return vloConfig.getLanguageLinkPrefix() + languageCode;
+                    return vloConfig.getLanguageLinkTemplate().replace(LANGUAGE_LINK_TEMPLATE_LANGUAGE_CODE_PLACEHOLDER, languageCode);
                 }
             }
         }));

@@ -1,7 +1,5 @@
 package eu.clarin.cmdi.vlo.config;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,6 +15,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "VloConfig")
 public class VloConfig {
+
+    public static final String LANGUAGE_LINK_TEMPLATE_LANGUAGE_CODE_PLACEHOLDER = "{}";
 
     /*
      * VLO application parameter members<br><br>
@@ -63,11 +63,11 @@ public class VloConfig {
 
     //(required = false)
     private String nationalProjectMapping = "";
-    
+
     private String organisationNamesUrl;
-    
+
     private String languageNameVariantsUrl;
-    
+
     private String licenseAvailabilityMapUrl;
 
     private String countryComponentUrl = "";
@@ -93,7 +93,7 @@ public class VloConfig {
     @XmlElement
     private String imdiBrowserUrl = "";
 
-    private String languageLinkPrefix = "";
+    private String languageLinkTemplate = "";
 
     // web application user interface 
     private int facetOverviewLength = 0;
@@ -140,7 +140,7 @@ public class VloConfig {
     private List<String> simpleSearchFacetField;
 
     private String collectionFacet;
-    
+
     // test related parameters
     //(required = false)
     private String reverseProxyPrefix = "";
@@ -595,9 +595,10 @@ public class VloConfig {
      * documentation.
      *
      * @return the value
+     * @see #LANGUAGE_LINK_TEMPLATE_LANGUAGE_CODE_PLACEHOLDER
      */
-    public String getLanguageLinkPrefix() {
-        return languageLinkPrefix;
+    public String getLanguageLinkTemplate() {
+        return languageLinkTemplate;
     }
 
     /**
@@ -607,9 +608,10 @@ public class VloConfig {
      * documentation.
      *
      * @param param the value
+     * @see #LANGUAGE_LINK_TEMPLATE_LANGUAGE_CODE_PLACEHOLDER
      */
-    public void setLanguageLinkPrefix(String param) {
-        languageLinkPrefix = param;
+    public void setLanguageLinkTemplate(String param) {
+        languageLinkTemplate = param;
     }
 
     /**
@@ -942,8 +944,8 @@ public class VloConfig {
     public void setReverseProxyPrefix(String param) {
         reverseProxyPrefix = param;
     }
-    
-        /**
+
+    /**
      * Get the value of the organisationNamesUrl parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
@@ -966,7 +968,7 @@ public class VloConfig {
     public void setOrganisationNamesUrl(String param) {
         organisationNamesUrl = param;
     }
-    
+
     /**
      * Get the value of the languageNameVariantsUrl parameter<br><br>
      *
@@ -990,8 +992,8 @@ public class VloConfig {
     public void setLanguageNameVariantsUrl(String param) {
         languageNameVariantsUrl = param;
     }
-    
-   /**
+
+    /**
      * Get the value of the licenseAvailabilityMapUrl parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
