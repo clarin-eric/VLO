@@ -293,6 +293,8 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
     @Override
     public IModel<String> getCanonicalUrlModel() {
+        // omit query in link for canonical URL (record page gets same canonical
+        // URL regardless of search term)
         return new PermaLinkModel(null, getModel());
     }
 
