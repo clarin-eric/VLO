@@ -50,7 +50,10 @@ public class TestRecordPage {
     @Before
     public void setUp() {
         tester = new WicketTester(application);
+        
         document = new SolrDocument();
+        document.setField(FacetConstants.FIELD_ID, "documentId");
+        
         params = new PageParameters();
         params.set(VloWebAppParameters.DOCUMENT_ID, "documentId");
     }

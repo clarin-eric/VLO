@@ -91,7 +91,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
             }
 
         });
-        container.add(new TopLinksPanel("permalink", getModel()) {
+        container.add(new TopLinksPanel("permalink", new PermaLinkModel(getModel())) {
 
             @Override
             protected void onChange(AjaxRequestTarget target) {
@@ -174,5 +174,10 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
             target.add(facetsPanel);
             target.add(collectionsPanel);
         }
+    }
+
+    @Override
+    public IModel<String> getCanonicalUrlModel() {
+        return new PermaLinkModel(getModel());
     }
 }

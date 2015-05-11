@@ -68,7 +68,7 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
         add(navigation);
 
         navigation.add(new BookmarkablePageLink("breadcrumb", getApplication().getHomePage()));
-        navigation.add(new TopLinksPanel("topLinks"));
+        navigation.add(new TopLinksPanel("topLinks", null));
 
         // add a persistenet panel for selection of a value for the collection facet
         collectionsPanel = createCollectionsPanel("collectionsFacet");

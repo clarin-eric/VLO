@@ -176,7 +176,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     }
 
     private TopLinksPanel createPermalink(String id, final WebMarkupContainer topNavigation) {
-        return new TopLinksPanel(id, selectionModel, getModel()) {
+        return new TopLinksPanel(id, new PermaLinkModel(selectionModel, getModel())) {
 
             @Override
             protected void onChange(AjaxRequestTarget target) {
@@ -289,6 +289,11 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     @Override
     public IModel<String> getPageDescriptionModel() {
         return new SolrFieldStringModel(getModel(), FacetConstants.FIELD_DESCRIPTION);
+    }
+
+    @Override
+    public IModel<String> getCanonicalUrlModel() {
+        return new PermaLinkModel(null, getModel());
     }
 
     @Override
