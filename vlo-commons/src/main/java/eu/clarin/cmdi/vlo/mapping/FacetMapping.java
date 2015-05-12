@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer;
+package eu.clarin.cmdi.vlo.mapping;
 
 import java.util.ArrayList;
 import java.util.List;

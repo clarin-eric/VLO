@@ -1,5 +1,7 @@
-package eu.clarin.cmdi.vlo.importer;
+package eu.clarin.cmdi.vlo.mapping;
 
+import eu.clarin.cmdi.vlo.VLOMarshaller;
+import eu.clarin.cmdi.vlo.mapping.FacetConceptMapping;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -9,7 +11,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
+import eu.clarin.cmdi.vlo.mapping.FacetConceptMapping.FacetConcept;
 
 public class FacetConceptMappingTest {
 
