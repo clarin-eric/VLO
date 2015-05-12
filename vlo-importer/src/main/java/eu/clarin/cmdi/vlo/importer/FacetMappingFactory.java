@@ -1,15 +1,13 @@
-package eu.clarin.cmdi.vlo.mapping;
+package eu.clarin.cmdi.vlo.importer;
 
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.VLOMarshaller;
-import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.mapping.FacetConceptMapping.FacetConcept;
-import eu.clarin.cmdi.vlo.mapping.FacetConceptMapping.AcceptableContext;
-import eu.clarin.cmdi.vlo.mapping.FacetConceptMapping.RejectableContext;
+import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
+import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.AcceptableContext;
+import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.RejectableContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +35,8 @@ public class FacetMappingFactory {
     private FacetMappingFactory() {
     }
     
-    public static FacetMapping getFacetMapping(String facetConceptsFile, String xsd, Boolean useLocalXSDCache, VloConfig config) {
-        return INSTANCE.getOrCreateMapping(facetConceptsFile, xsd, useLocalXSDCache, config);
+    public static FacetMapping getFacetMapping(String facetConceptsFile, String xsd, Boolean useLocalXSDCache) {
+        return INSTANCE.getOrCreateMapping(facetConceptsFile, xsd, useLocalXSDCache);
     }
 
     /**
@@ -53,11 +51,11 @@ public class FacetMappingFactory {
      *
      * @return facet concept mapping
      */
-    private FacetMapping getOrCreateMapping(String facetConcepts, String xsd, Boolean useLocalXSDCache, VloConfig config) {
+    private FacetMapping getOrCreateMapping(String facetConcepts, String xsd, Boolean useLocalXSDCache) {
         // check if concept mapping has already been created
         FacetMapping result = mapping.get(xsd);
         if (result == null) {
-            result = createMapping(facetConcepts, xsd, useLocalXSDCache, config);
+            result = createMapping(facetConcepts, xsd, useLocalXSDCache);
             mapping.put(xsd, result);
         }
         return result;
@@ -75,14 +73,14 @@ public class FacetMappingFactory {
      *
      * @return the facet mapping used to map meta data to facets
      */
-    private FacetMapping createMapping(String facetConcepts, String xsd, Boolean useLocalXSDCache, VloConfig vloConfig) {
+    private FacetMapping createMapping(String facetConcepts, String xsd, Boolean useLocalXSDCache) {
 
         FacetMapping result = new FacetMapping();
         // Gets the configuration. VLOMarshaller only reads in the facetconceptmapping.xml file and returns the result (though the reading in is implicit).
         FacetConceptMapping conceptMapping = VLOMarshaller.getFacetConceptMapping(facetConcepts);
         try {
             //The magic
-            Map<String, List<String>> conceptLinkPathMapping = createConceptLinkPathMapping(xsd, useLocalXSDCache, vloConfig);
+            Map<String, List<String>> conceptLinkPathMapping = createConceptLinkPathMapping(xsd, useLocalXSDCache);
             Map<String, String> pathConceptLinkMapping = null;
             // Below we put the stuff we found into the configuration class.
             for (FacetConcept facetConcept : conceptMapping.getFacetConcepts()) {
@@ -217,14 +215,14 @@ public class FacetMappingFactory {
      * data category which can be found in CMDI files with this schema)
      * @throws NavException
      */
-    private Map<String, List<String>> createConceptLinkPathMapping(String xsd, Boolean useLocalXSDCache, VloConfig config) throws NavException {
+    private Map<String, List<String>> createConceptLinkPathMapping(String xsd, Boolean useLocalXSDCache) throws NavException {
         Map<String, List<String>> result = new HashMap<String, List<String>>();
         VTDGen vg = new VTDGen();
         boolean parseSuccess;
         if(useLocalXSDCache) {
-            parseSuccess = vg.parseFile(getClass().getResource("/testProfiles/"+xsd+".xsd").getPath(), true);
+            parseSuccess = vg.parseFile(Thread.currentThread().getContextClassLoader().getResource("testProfiles/"+xsd+".xsd").getPath(), true);
         } else {
-            parseSuccess = vg.parseHttpUrl(config.getComponentRegistryProfileSchema(xsd), true);
+            parseSuccess = vg.parseHttpUrl(MetadataImporter.config.getComponentRegistryProfileSchema(xsd), true);
         }
             
         if (!parseSuccess) {

@@ -1,8 +1,5 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import eu.clarin.cmdi.vlo.mapping.FacetConfiguration;
-import eu.clarin.cmdi.vlo.mapping.FacetMapping;
-import eu.clarin.cmdi.vlo.mapping.FacetMappingFactory;
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
 import com.ximpleware.VTDException;
@@ -82,7 +79,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             // use the packaged facet mapping file
             facetConceptsFile = "/facetConcepts.xml";
         }
-        return FacetMappingFactory.getFacetMapping(facetConceptsFile, profileId, useLocalXSDCache, MetadataImporter.config);
+        return FacetMappingFactory.getFacetMapping(facetConceptsFile, profileId, useLocalXSDCache);
     }
 
     /**

@@ -1,6 +1,5 @@
-package eu.clarin.cmdi.vlo;
+package eu.clarin.cmdi.vlo.importer;
 
-import eu.clarin.cmdi.vlo.mapping.FacetConceptMapping;
 import java.io.InputStream;
 import java.io.StringWriter;
 
@@ -32,7 +31,7 @@ public class VLOMarshaller {
      * @param inputStream
      * @return 
      */
-    public static FacetConceptMapping unmarshal(InputStream inputStream) {
+    static FacetConceptMapping unmarshal(InputStream inputStream) {
         try {
             JAXBContext jc = JAXBContext.newInstance(FacetConceptMapping.class);
             Unmarshaller u = jc.createUnmarshaller();
@@ -50,7 +49,7 @@ public class VLOMarshaller {
      * @param outputFile
      * @return 
      */
-    public static String marshal(FacetConceptMapping outputFile) {
+    static String marshal(FacetConceptMapping outputFile) {
         try {
             JAXBContext jc = JAXBContext.newInstance(FacetConceptMapping.class);
             Marshaller marshaller = jc.createMarshaller();
