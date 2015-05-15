@@ -18,6 +18,8 @@ package eu.clarin.cmdi.vlo.config;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
@@ -30,7 +32,7 @@ public class XmlVloConfigFactory extends AbstractXmlVloConfigFactory implements 
     private final URL configLocation;
 
     /**
-     * 
+     *
      * @param configLocation URL from which the configuration should be read
      */
     public XmlVloConfigFactory(URL configLocation) {
@@ -40,4 +42,14 @@ public class XmlVloConfigFactory extends AbstractXmlVloConfigFactory implements 
     protected InputStream getXmlConfigurationInputStream() throws IOException {
         return configLocation.openStream();
     }
+
+    @Override
+    protected URI getLocation() {
+        try {
+            return configLocation.toURI();
+        } catch (URISyntaxException ex) {
+            throw new RuntimeException("Invalid config file URI", ex);
+        }
+    }
+
 }

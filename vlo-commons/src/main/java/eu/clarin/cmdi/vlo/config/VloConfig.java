@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.config;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -150,6 +151,8 @@ public class VloConfig {
 
     //(required = false)
     private String cqlEndpointAlternative = "";
+
+    private URI configLocation;
 
     /**
      * Get and set methods for web application parameter members<br><br>
@@ -1064,4 +1067,22 @@ public class VloConfig {
     public void setCqlEndpointAlternative(String param) {
         cqlEndpointAlternative = param;
     }
+
+    /**
+     * Sets the originating file for the current configuration
+     *
+     * @param configFile the file this config was read from
+     */
+    public void setConfigLocation(URI configFile) {
+        this.configLocation = configFile;
+    }
+
+    /**
+     *
+     * @return the file this config was read from. may be null!
+     */
+    public URI getConfigLocation() {
+        return configLocation;
+    }
+
 }

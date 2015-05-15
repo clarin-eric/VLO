@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.config;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import javax.xml.bind.JAXBException;
 import javax.xml.transform.stream.StreamSource;
 
@@ -40,7 +41,9 @@ public abstract class AbstractXmlVloConfigFactory implements VloConfigFactory {
     public VloConfig newConfig() throws IOException {
         final InputStream fileStream = getXmlConfigurationInputStream();
         try {
-            return marshaller.unmarshal(new StreamSource(fileStream));
+            final VloConfig config = marshaller.unmarshal(new StreamSource(fileStream));
+            config.setConfigLocation(getLocation());
+            return config;
         } catch (JAXBException ex) {
             throw new RuntimeException("Could not deserialize configuration file", ex);
         } finally {
@@ -55,5 +58,7 @@ public abstract class AbstractXmlVloConfigFactory implements VloConfigFactory {
      * @throws IOException if stream could not be opened or read
      */
     protected abstract InputStream getXmlConfigurationInputStream() throws IOException;
+    
+    protected abstract URI getLocation();
 
 }
