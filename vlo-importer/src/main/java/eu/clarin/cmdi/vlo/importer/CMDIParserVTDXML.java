@@ -11,6 +11,7 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -75,10 +76,16 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             throw new RuntimeException("Cannot get xsd schema so cannot get a proper mapping. Parse failed!");
         }
         String facetConceptsFile = MetadataImporter.config.getFacetConceptsFile();
-        if (facetConceptsFile.length() == 0){
-            // use the packaged facet mapping file
-            facetConceptsFile = "/facetConcepts.xml";
+        
+        //resolve against config location? (empty = default location)
+        if(facetConceptsFile != null && !facetConceptsFile.isEmpty()) {
+            URI configLocation = MetadataImporter.config.getConfigLocation();
+            if(configLocation != null) {
+                URI facetConceptsLocation = configLocation.resolve(facetConceptsFile);
+                facetConceptsFile = new File(facetConceptsLocation).getAbsolutePath();
+            }
         }
+        
         return FacetMappingFactory.getFacetMapping(facetConceptsFile, profileId, useLocalXSDCache);
     }
 

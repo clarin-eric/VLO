@@ -1,5 +1,7 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.StringWriter;
 
@@ -7,29 +9,40 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class VLOMarshaller {
 
+    public static final String DEFAULT_FACET_CONCEPTS_FILE = "/facetConcepts.xml";
+    private final static Logger logger = LoggerFactory.getLogger(VLOMarshaller.class);
+
     /**
      * Get facet concepts mapping from a facet concept mapping file
-     * 
+     *
      * @param facetConcepts name of the facet concepts file
      * @return the facet concept mapping
      */
     public static FacetConceptMapping getFacetConceptMapping(
             String facetConcepts) {
 
-        InputStream inputStream =
-                VLOMarshaller.class.getResourceAsStream(facetConcepts);
-        
-        return unmarshal(inputStream);
+        if (facetConcepts == null || "".equals(facetConcepts)) {
+            return unmarshal(VLOMarshaller.class.getResourceAsStream(DEFAULT_FACET_CONCEPTS_FILE));
+        } else {
+            try {
+                return unmarshal(new FileInputStream(facetConcepts));
+            } catch (FileNotFoundException ex) {
+                logger.error("Could not find facets file: {}", facetConcepts);
+                return null;
+            }
+        }
     }
 
     /**
      * Get object from input stream
-     * 
+     *
      * @param inputStream
-     * @return 
+     * @return
      */
     static FacetConceptMapping unmarshal(InputStream inputStream) {
         try {
@@ -45,9 +58,9 @@ public class VLOMarshaller {
 
     /**
      * Put facet mapping object in output file
-     * 
+     *
      * @param outputFile
-     * @return 
+     * @return
      */
     static String marshal(FacetConceptMapping outputFile) {
         try {

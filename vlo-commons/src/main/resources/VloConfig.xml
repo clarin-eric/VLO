@@ -46,7 +46,8 @@
     
     <helpUrl>http://www.clarin.eu/vlo</helpUrl>
     
-    <facetConceptsFile>/facetConcepts.xml</facetConceptsFile>
+    <!-- leave empty to use default packaged definition -->
+    <facetConceptsFile><!-- use default packaged definition --></facetConceptsFile>
     
     <profileSchemaUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/{PROFILE_ID}/xsd</profileSchemaUrl>
     

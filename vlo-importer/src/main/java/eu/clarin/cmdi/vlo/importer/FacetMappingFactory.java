@@ -35,6 +35,13 @@ public class FacetMappingFactory {
     private FacetMappingFactory() {
     }
     
+    /**
+     * 
+     * @param facetConceptsFile path to facet concepts file, leave null or empty to use default
+     * @param xsd
+     * @param useLocalXSDCache
+     * @return 
+     */
     public static FacetMapping getFacetMapping(String facetConceptsFile, String xsd, Boolean useLocalXSDCache) {
         return INSTANCE.getOrCreateMapping(facetConceptsFile, xsd, useLocalXSDCache);
     }
