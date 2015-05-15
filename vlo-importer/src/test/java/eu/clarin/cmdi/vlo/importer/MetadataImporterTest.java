@@ -260,7 +260,7 @@ public class MetadataImporterTest extends ImporterTestcase {
             void startImport() throws MalformedURLException {
                 
                 // make sure the mapping file for testing is used
-                config.setFacetConceptsFile("/facetConceptsTest.xml");
+                config.setFacetConceptsFile(getTestFacetConceptFilePath());
                 
                 List<DataRoot> dataRoots = checkDataRoots();
                 long start = System.currentTimeMillis();
