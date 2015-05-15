@@ -18,8 +18,10 @@ package eu.clarin.cmdi.vlo.config;
 
 import com.google.common.collect.Sets;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
+import eu.clarin.cmdi.vlo.facets.FacetConceptsMarshaller;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
+import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
 import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
@@ -29,6 +31,7 @@ import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
 import eu.clarin.cmdi.vlo.service.impl.DocumentParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
+import eu.clarin.cmdi.vlo.service.impl.FacetDescriptionServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.FacetParameterMapperImpl;
 import eu.clarin.cmdi.vlo.service.impl.InclusiveFieldFilter;
 import eu.clarin.cmdi.vlo.service.impl.QueryFacetsSelectionParametersConverter;
@@ -41,6 +44,7 @@ import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProviderImpl;
 import java.util.Properties;
 import javax.inject.Inject;
+import javax.xml.bind.JAXBException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerConfigurationException;
@@ -150,6 +154,16 @@ public class VloServicesSpringConfig {
     @Bean
     public FieldValueConverterProvider fieldValueConverters() {
         return new FieldValueConverterProviderImpl(languageCodeUtils());
+    }
+    
+    @Bean
+    public FacetDescriptionService facetDescriptionsService() throws JAXBException {
+        return new FacetDescriptionServiceImpl(facetConceptsMarshaller(), vloConfig);
+    }
+
+    @Bean
+    public FacetConceptsMarshaller facetConceptsMarshaller() throws JAXBException {
+        return new FacetConceptsMarshaller();
     }
 
 }
