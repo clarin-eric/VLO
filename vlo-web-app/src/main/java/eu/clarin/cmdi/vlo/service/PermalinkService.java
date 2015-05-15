@@ -21,11 +21,13 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Page;
 
 /**
+ * Interface for a service that produces a URL given a page class and optionally
+ * a facet selection and document object
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 public interface PermalinkService {
-    
-    String getUrlString(Class<? extends Page> pageClass, QueryFacetsSelection selectionmodel, SolrDocument documentModel);
-    
+
+    String getUrlString(Class<? extends Page> pageClass, QueryFacetsSelection selection, SolrDocument document);
+
 }

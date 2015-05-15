@@ -24,6 +24,9 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
 /**
+ * Model that calls the {@link PermaLinkModel} registered in the active
+ * {@link VloWicketApplication} on the specified page combined with the facet
+ * selection and document available through the wrapped models (both optional)
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */

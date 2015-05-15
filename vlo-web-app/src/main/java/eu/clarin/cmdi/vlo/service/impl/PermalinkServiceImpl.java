@@ -29,6 +29,9 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
+ * Permalink service that uses a parameter converter and the current wicket
+ * request cycle to compute a permanent link for a given page and selection
+ * state
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
