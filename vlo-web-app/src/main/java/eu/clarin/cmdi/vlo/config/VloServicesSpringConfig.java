@@ -25,6 +25,7 @@ import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
 import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.service.PermalinkService;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.service.UriResolver;
@@ -34,6 +35,7 @@ import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
 import eu.clarin.cmdi.vlo.service.impl.FacetDescriptionServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.FacetParameterMapperImpl;
 import eu.clarin.cmdi.vlo.service.impl.InclusiveFieldFilter;
+import eu.clarin.cmdi.vlo.service.impl.PermalinkServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.QueryFacetsSelectionParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ResourceStringConverterImpl;
 import eu.clarin.cmdi.vlo.service.impl.ResourceTypeCountingServiceImpl;
@@ -72,51 +74,51 @@ public class VloServicesSpringConfig {
     
     @Inject
     VloConfig vloConfig;
-
+    
     @Bean
     public ResourceTypeCountingService resourceTypeCountingService() {
         return new ResourceTypeCountingServiceImpl(resourceStringConverter());
     }
-
+    
     @Bean(name = "resourceStringConverter")
     public ResourceStringConverter resourceStringConverter() {
         return new ResourceStringConverterImpl();
     }
-
+    
     @Bean(name = "resolvingResourceStringConverter")
     public ResourceStringConverter resolvingResourceStringConverter() {
         return new ResourceStringConverterImpl(uriResolver());
     }
-
+    
     @Bean
     public UriResolver uriResolver() {
         return new UriResolverImpl(handleResolver());
     }
-
+    
     public HandleResolver handleResolver() {
         return new CachingHandleResolver(new HandleApiResolver(), HANDLE_CACHE_EXPIRY);
     }
-
+    
     @Bean
     public FacetParameterMapper facetParameterMapper() {
         return new FacetParameterMapperImpl(languageCodeUtils());
     }
-
+    
     @Bean(name = "queryParametersConverter")
     public PageParametersConverter<QueryFacetsSelection> queryParametersConverter() {
         return new QueryFacetsSelectionParametersConverter(vloConfig, facetParameterMapper());
     }
-
+    
     @Bean(name = "documentParamsConverter")
     public PageParametersConverter<SolrDocument> documentParamsConverter() {
         return new DocumentParametersConverter();
     }
-
+    
     @Bean(name = "searchContextParamsConverter")
     public PageParametersConverter<SearchContext> searchContextParamsConverter() {
         return new SearchContextParametersConverter(queryParametersConverter());
     }
-
+    
     @Bean
     public XmlTransformationService cmdiTransformationService() throws TransformerConfigurationException {
         final Source xsltSource = new StreamSource(getClass().getResourceAsStream("/cmdi2xhtml.xsl"));
@@ -127,30 +129,30 @@ public class VloServicesSpringConfig {
         transformationProperties.setProperty(OutputKeys.ENCODING, "UTF-8");
         return new XmlTransformationServiceImpl(xsltSource, transformationProperties);
     }
-
+    
     @Bean(name = "basicPropertiesFilter")
     public FieldFilter basicPropertiesFieldFilter() {
         return new ExclusiveFieldFilter(Sets.union(
                 vloConfig.getIgnoredFields(),
                 vloConfig.getTechnicalFields()));
     }
-
+    
     @Bean(name = "searchResultPropertiesFilter")
     public FieldFilter searchResultPropertiesFilter() {
         return new InclusiveFieldFilter(vloConfig.getSearchResultFields());
     }
-
+    
     @Bean(name = "technicalPropertiesFilter")
     public FieldFilter technicalPropertiesFieldFilter() {
         return new InclusiveFieldFilter(
                 vloConfig.getTechnicalFields());
     }
-
+    
     @Bean
     public LanguageCodeUtils languageCodeUtils() {
         return new LanguageCodeUtils(vloConfig);
     }
-
+    
     @Bean
     public FieldValueConverterProvider fieldValueConverters() {
         return new FieldValueConverterProviderImpl(languageCodeUtils());
@@ -160,10 +162,15 @@ public class VloServicesSpringConfig {
     public FacetDescriptionService facetDescriptionsService() throws JAXBException {
         return new FacetDescriptionServiceImpl(facetConceptsMarshaller(), vloConfig);
     }
-
+    
     @Bean
     public FacetConceptsMarshaller facetConceptsMarshaller() throws JAXBException {
         return new FacetConceptsMarshaller();
     }
-
+    
+    @Bean
+    public PermalinkService permalinkService() {
+        return new PermalinkServiceImpl(queryParametersConverter());
+    }
+    
 }

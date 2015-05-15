@@ -30,6 +30,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.encoding.UrlEncoder;
+import org.slf4j.LoggerFactory;
 
 /**
  * A panel with three links:
@@ -83,7 +84,6 @@ public class TopLinksPanel extends GenericPanel<String> {
 
             @Override
             protected void onConfigure() {
-                super.onConfigure();
                 setVisible(TopLinksPanel.this.getModel() != null);
             }
         };
@@ -127,5 +127,12 @@ public class TopLinksPanel extends GenericPanel<String> {
             target.add(getPage());
         }
     }
+
+    @Override
+    protected void onConfigure() {
+        LoggerFactory.getLogger(getClass()).debug("top links panel onconfigure");
+    }
+    
+    
 
 }

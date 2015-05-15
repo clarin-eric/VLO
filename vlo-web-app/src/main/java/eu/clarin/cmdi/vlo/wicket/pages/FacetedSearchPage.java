@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.wicket.panels.SingleFacetPanel;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.wicket.panels.search.FacetsPanel;
@@ -91,7 +92,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
             }
 
         });
-        container.add(new TopLinksPanel("permalink", new PermaLinkModel(getModel())) {
+        container.add(new TopLinksPanel("permalink", new PermaLinkModel(getPageClass(), getModel())) {
 
             @Override
             protected void onChange(AjaxRequestTarget target) {
@@ -178,6 +179,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     @Override
     public IModel<String> getCanonicalUrlModel() {
-        return new PermaLinkModel(getModel());
+        return new PermaLinkModel(getPageClass(), getModel());
     }
 }
