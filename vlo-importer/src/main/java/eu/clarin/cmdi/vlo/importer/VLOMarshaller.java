@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -14,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 public class VLOMarshaller {
 
-    public static final String DEFAULT_FACET_CONCEPTS_FILE = "/facetConcepts.xml";
     private final static Logger logger = LoggerFactory.getLogger(VLOMarshaller.class);
 
     /**
@@ -27,7 +27,7 @@ public class VLOMarshaller {
             String facetConcepts) {
 
         if (facetConcepts == null || "".equals(facetConcepts)) {
-            return unmarshal(VLOMarshaller.class.getResourceAsStream(DEFAULT_FACET_CONCEPTS_FILE));
+            return unmarshal(VLOMarshaller.class.getResourceAsStream(VloConfig.DEFAULT_FACET_CONCEPTS_RESOURCE_FILE));
         } else {
             try {
                 return unmarshal(new FileInputStream(facetConcepts));

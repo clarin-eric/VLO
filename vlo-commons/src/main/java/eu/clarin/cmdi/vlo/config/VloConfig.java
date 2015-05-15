@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class VloConfig {
 
     public static final String LANGUAGE_LINK_TEMPLATE_LANGUAGE_CODE_PLACEHOLDER = "{}";
+    public static final String DEFAULT_FACET_CONCEPTS_RESOURCE_FILE = "/facetConcepts.xml";
 
     /*
      * VLO application parameter members<br><br>
