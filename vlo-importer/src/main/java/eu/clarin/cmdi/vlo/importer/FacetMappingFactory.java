@@ -172,7 +172,11 @@ public class FacetMappingFactory {
                 config.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
                 config.setName(facetConcept.getName());
 
-                config.setPatterns(xpaths);
+                LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>(xpaths);
+                if(xpaths.size() != linkedHashSet.size()) {
+                    LOG.error("Duplicate XPaths in : "+xpaths);
+                }
+                config.setPatterns(new ArrayList<String>(linkedHashSet));
                 config.setFallbackPatterns(facetConcept.getPatterns());
 
                 if (!config.getPatterns().isEmpty() || !config.getFallbackPatterns().isEmpty()) {
