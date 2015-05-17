@@ -13,10 +13,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -136,18 +137,23 @@ public class MetadataImporter {
                     LOG.info("Deleting data of provider done.");
                 }
                 CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS, false);
-                List<File> files = getFilesFromDataRoot(dataRoot.getRootFile());
-                for (File file : files) {
-                    if (config.getMaxFileSize() > 0
-                            && file.length() > config.getMaxFileSize()) {
-                        LOG.info("Skipping " + file.getAbsolutePath() + " because it is too large.");
-                    } else {
-                        LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
-                        processCmdi(file, dataRoot, processor);
+                List<List<File>> centreFilesList = getFilesFromDataRoot(dataRoot.getRootFile());
+                // import files from every endpoint
+                for(List<File> centreFiles : centreFilesList) {
+                    LOG.info("Processing directory: {}", centreFiles.get(0).getParent());
+                    for (File file : centreFiles) {
+                        if (config.getMaxFileSize() > 0
+                                && file.length() > config.getMaxFileSize()) {
+                            LOG.info("Skipping " + file.getAbsolutePath() + " because it is too large.");
+                        } else {
+                            LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
+                            processCmdi(file, dataRoot, processor);
+                        }
                     }
-                }
-                if (!docs.isEmpty()) {
-                    sendDocs();
+                    if (!docs.isEmpty()) {
+                        sendDocs();
+                    }
+                    updateDocumentHierarchy();
                 }
                 LOG.info("End of processing: " + dataRoot.getOriginName());
             }
@@ -202,20 +208,30 @@ public class MetadataImporter {
     }
 
     /**
-     * Get the rootFile or all files with VALID_CMDI_EXTENSIONS if rootFile is a
-     * directory
+     * Get all files with VALID_CMDI_EXTENSIONS if rootFile is a
+     * directory that contains center directories or rootFile if it is a file
      *
      * @param rootFile
-     * @return List with the rootFile or all contained files if rootFile is a
-     * directory
+     * @return List with centre Lists of all contained CMDI files if rootFile is a
+     * directory or rootFile if it is a File
      */
-    protected List<File> getFilesFromDataRoot(File rootFile) {
-        List<File> result = new ArrayList<File>();
-        if (rootFile.isFile()) {
-            result.add(rootFile);
+    protected List<List<File>> getFilesFromDataRoot(File rootFile) {
+        List<List<File>> result = new ArrayList<List<File>>();
+        if(rootFile.isFile()) {
+            List<File> singleFileList = new ArrayList<File>();
+            singleFileList.add(rootFile);
+            result.add(singleFileList);
         } else {
-            Collection<File> listFiles = FileUtils.listFiles(rootFile, VALID_CMDI_EXTENSIONS, true);
-            result.addAll(listFiles);
+            File[] centerDirs = rootFile.listFiles();
+            for(File centerDir : centerDirs) {
+                List<File> centerFileList = new ArrayList<File>();
+                if(centerDir.isDirectory()) {
+                    centerFileList.addAll(FileUtils.listFiles(centerDir, VALID_CMDI_EXTENSIONS, true));
+                }
+                
+                if(!centerFileList.isEmpty())
+                    result.add(centerFileList);
+            }
         }
         return result;
     }
@@ -433,6 +449,64 @@ public class MetadataImporter {
         paramMap.put("spellcheck.build", "true");
         SolrParams params = new MapSolrParams(paramMap);
         solrServer.query(params);
+    }
+    
+    /**
+     * Updates documents in Solr with their hierarchy weight and lists of related resources (hasPart & isPartOf)
+     * @throws SolrServerException
+     * @throws MalformedURLException 
+     */
+    private void updateDocumentHierarchy() throws SolrServerException, MalformedURLException, IOException {
+        LOG.info(ResourceStructureGraph.printStatistics(0));
+        List<SolrInputDocument> updateDocs = new ArrayList<SolrInputDocument>();
+        Iterator<CmdiVertex> vertexIter = ResourceStructureGraph.getFoundVertices().iterator();
+        while(vertexIter.hasNext()) {
+            CmdiVertex vertex = vertexIter.next();
+            List<String> incomingVertexNames = ResourceStructureGraph.getIncomingVertexNames(vertex);
+            List<String> outgoingVertexNames = ResourceStructureGraph.getOutgoingVertexNames(vertex);
+            
+            // update vertex if changes are necessary (necessary if non-default weight or edges to other resources)
+            if(vertex.getHierarchyWeight() != 0 || !incomingVertexNames.isEmpty() || !outgoingVertexNames.isEmpty()) {
+                SolrInputDocument doc = new SolrInputDocument();
+                doc.setField(FacetConstants.FIELD_ID, Arrays.asList(vertex.getId()));
+                
+                if(vertex.getHierarchyWeight() != 0) {
+                    Map<String, Integer> partialUpdate = new HashMap<String, Integer>();
+                    partialUpdate.put("set", Math.abs(vertex.getHierarchyWeight()));
+                    doc.addField(FacetConstants.FIELD_HIERARCHY_WEIGHT, partialUpdate);
+                }
+                
+                if(!incomingVertexNames.isEmpty()) {
+                    Map<String, List<String>> partialUpdate = new HashMap<String, List<String>>();
+                    partialUpdate.put("set", incomingVertexNames);
+                    doc.setField(FacetConstants.FIELD_HAS_PART, partialUpdate);
+                }
+                
+                if(!outgoingVertexNames.isEmpty()) {
+                    Map<String, List<String>> partialUpdate = new HashMap<String, List<String>>();
+                    partialUpdate.put("set", outgoingVertexNames);
+                    doc.setField(FacetConstants.FIELD_IS_PART_OF, partialUpdate);
+                }
+                updateDocs.add(doc);
+            }
+            
+            if (updateDocs.size() == config.getMaxDocsInList()) {
+                solrServer.add(updateDocs);
+                if (serverError != null) {
+                    throw new SolrServerException(serverError);
+                }
+                updateDocs = new ArrayList<SolrInputDocument>();
+            }
+        }
+        if(!updateDocs.isEmpty()) {
+            solrServer.add(updateDocs);
+            if (serverError != null) {
+                throw new SolrServerException(serverError);
+            }
+        }
+        solrServer.commit();
+
+        ResourceStructureGraph.clearResourceGraph();
     }
     
     public static VloConfig config;

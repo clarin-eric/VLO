@@ -8,8 +8,6 @@ import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.facets.FacetConceptsMarshaller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -181,6 +179,11 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @throws VTDException
      */
     private void processResources(CMDIData cmdiData, VTDNav nav) throws VTDException {
+        AutoPilot mdSelfLink = new AutoPilot(nav);
+        setNameSpace(mdSelfLink);
+        mdSelfLink.selectXPath("/c:CMD/c:Header/c:MdSelfLink");
+        String mdSelfLinkString = mdSelfLink.evalXPathToString();
+        ResourceStructureGraph.addResource(mdSelfLinkString);
 
         AutoPilot resourceProxy = new AutoPilot(nav);
         setNameSpace(resourceProxy);
@@ -206,6 +209,11 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             if (!ref.equals("") && !type.equals("")) {
                 // note that the mime type could be empty
                 cmdiData.addResource(ref, type, mimeType);
+            }
+            
+            // resource hierarchy information?
+            if(type.toLowerCase().equals("metadata")) {
+                ResourceStructureGraph.addEdge(ref, mdSelfLinkString);
             }
         }
     }
