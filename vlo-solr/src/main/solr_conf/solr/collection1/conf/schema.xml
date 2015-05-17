@@ -446,7 +446,13 @@
    <field name="_landingPageRef" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="_lastSeen" type="tdate" indexed="true" stored="true" multiValued="false" />
    <field name="_searchPageRef" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="_isPartOf" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="_hasPart" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="_hierarchyWeight" type="int" indexed="true" stored="true" multiValued="false" default='0'/>
    <field name="metadataSource" type="metadataSource" indexed="false" stored="true" multiValued="true" />
+   
+   <!-- Field _version_ for update log (needed for partial updates) -->
+   <field name="_version_" type="long" indexed="true" stored="true"/>
    
    <!-- Field for autocompletion (suggester) -->
    <field name="_suggester" type="textauto" indexed="true" stored="false" multiValued="true"/>
