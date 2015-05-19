@@ -52,26 +52,26 @@ import org.apache.wicket.util.convert.IConverter;
  * @author twagoo
  */
 public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
-    
+
     @SpringBean(name = "queryParametersConverter")
     private PageParametersConverter<QueryFacetsSelection> paramsConverter;
     @SpringBean
     private FieldValueConverterProvider fieldValueConverterProvider;
-    
+
     private final WebMarkupContainer query;
     private final WebMarkupContainer facets;
-    
+
     public BreadCrumbPanel(String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
         add(new BookmarkablePageLink("searchPage", FacetedSearchPage.class));
         add(query = createQuery(model, "query"));
         add(facets = createFacets(model, "facets"));
     }
-    
+
     private WebMarkupContainer createQuery(final IModel<QueryFacetsSelection> selectionModel, String id) {
         final WebMarkupContainer queryContainer = new WebMarkupContainer(id);
         final Link link = new AjaxFallbackLink("leavequery") {
-            
+
             @Override
             public void onClick(AjaxRequestTarget target) {
                 // make query object without selection
@@ -81,13 +81,24 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
         };
         link.add(new Label("content", new PropertyModel(selectionModel, "query")));
         queryContainer.add(link);
+
+        queryContainer.add(new AjaxFallbackLink("removal") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                // get a copy of the current selection
+                final QueryFacetsSelection newSelection = selectionModel.getObject().getCopy();
+                newSelection.setQuery(null);
+                onSelectionChanged(newSelection, target);
+            }
+        });
         return queryContainer;
     }
-    
+
     private WebMarkupContainer createFacets(final IModel<QueryFacetsSelection> model, String id) {
         final WebMarkupContainer facetsContainer = new WebMarkupContainer(id);
         facetsContainer.add(new AjaxFallbackLink("leaveselection") {
-            
+
             @Override
             public void onClick(AjaxRequestTarget target) {
                 onSelectionChanged(model.getObject(), target);
@@ -97,20 +108,20 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
         // create a provider that lists the facet name -> values entries
         final FacetSelectionProvider facetSelectionProvider = new FacetSelectionProvider(model);
         facetsContainer.add(new DataView<Map.Entry<String, FacetSelection>>("facet", facetSelectionProvider) {
-            
+
             @Override
             protected void populateItem(final Item<Map.Entry<String, FacetSelection>> item) {
                 final IModel<Map.Entry<String, FacetSelection>> selectionModel = item.getModel();
                 // add a label for the selected facet value(s)
                 final Label valueLabel = new Label("value", new PropertyModel(selectionModel, "value")) {
-                    
+
                     @Override
                     public <C> IConverter<C> getConverter(Class<C> type) {
                         final String facet = item.getModelObject().getKey();
                         // converter to render the value(s) nicely
                         return (IConverter<C>) new SelectionConverter(facet, fieldValueConverterProvider.getConverter(facet));
                     }
-                    
+
                 };
                 // add facet name as title attribute so that it becomes available through a tooltip
                 valueLabel.add(new AttributeModifier("title",
@@ -119,7 +130,7 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
 
                 // add a link for removal of the facet value selection
                 item.add(new AjaxFallbackLink("removal") {
-                    
+
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         // get a copy of the current selection
@@ -132,7 +143,7 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
                 });
             }
         });
-        
+
         return facetsContainer;
     }
 
@@ -147,14 +158,14 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
     protected void onSelectionChanged(QueryFacetsSelection selection, AjaxRequestTarget target) {
         setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(selection));
     }
-    
+
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        
+
         final String queryString = getModelObject().getQuery();
         final Map<String, FacetSelection> selection = getModelObject().getSelection();
-        
+
         query.setVisible(queryString != null && !queryString.isEmpty());
         facets.setVisible(selection != null && !selection.isEmpty());
     }
@@ -164,20 +175,20 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
      * collection (if singleton, show its value; if multiple, comma separated)
      */
     private class SelectionConverter implements IConverter<FacetSelection> {
-        
+
         private final String facet;
         private final IConverter<String> valueConverter;
-        
+
         public SelectionConverter(String facet, IConverter<String> valueConverter) {
             this.facet = facet;
             this.valueConverter = valueConverter;
         }
-        
+
         @Override
         public FacetSelection convertToObject(String value, Locale locale) throws ConversionException {
             throw new UnsupportedOperationException("Not supported yet.");
         }
-        
+
         @Override
         public String convertToString(FacetSelection selection, Locale locale) {
             switch (selection.getSelectionType()) {
@@ -192,16 +203,16 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
                 default:
                     return facet;
             }
-            
+
         }
-        
+
         private String getAnyValueString() {
             if (FacetConstants.FIELD_SEARCH_SERVICE.equals(facet)) {
                 return "Content searchable";
             }
             return "any " + facet;
         }
-        
+
         public String getCollectionString(FacetSelection selection, String valueSeparator, Locale locale) {
             final Collection<String> value = selection.getValues();
             //TODO: include selection type
@@ -218,7 +229,7 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
                 return sb.toString();
             }
         }
-        
+
         private String getConvertedValue(String string, Locale locale) {
             if (valueConverter != null) {
                 final String converted = valueConverter.convertToString(string, locale);
@@ -228,6 +239,6 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
             }
             return string;
         }
-        
+
     };
 }
