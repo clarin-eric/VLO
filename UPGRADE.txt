@@ -32,9 +32,25 @@ appropriate user (i.e. 'vlouser' on catalog.clarin.eu)
 Upgrading from 3.1 to 3.2
 ---------------------------
 * Take note of the following changes in VloConfig.xml:
+
+- 'facetConceptsFile' now defines the location of the facet/concept mapping 
+definition on disk; to use the default bundled definition, leave it empty. 
+Before this used to have the value '/facetConcepts.xml' which will no longer be
+valid - it can safely be replaced with either the empty string or 
+'facetConcepts.xml' to use the file in the same directory as VloConfig.xml.
+
 - 'languageLinkPrefix' element has been REPLACED by 'languageLinkTemplate';
 remove the former and add the following to existing configurations:
+
 	<languageLinkTemplate>https://infra.clarin.eu/content/language_info/data/{}.html</languageLinkTemplate>
+
+- 'languageNameVariantsUrl' and 'licenseAvailabilityMapUrl' are now required
+mapping configuration elements. So the following should normally be added:
+
+    <languageNameVariantsUrl>/LanguageNameVariantsMap.xml</languageNameVariantsUrl>   
+    <licenseAvailabilityMapUrl>/LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl>
+
+- The facet field 'availability' is now available
 
 ---------------------------
 Upgrading from 3.0.x to 3.1

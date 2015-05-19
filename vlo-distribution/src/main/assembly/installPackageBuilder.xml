@@ -74,6 +74,7 @@
             </includes>
             <excludes>
                 <exclude>VloConfig.xml</exclude>
+                <exclude>facetConcepts.xml</exclude>
             </excludes>
             <outputDirectory>bin</outputDirectory>
         </fileSet>
@@ -92,6 +93,7 @@
             <directory>${project.parent.basedir}/vlo-commons/src/main/resources</directory>
             <includes>
                 <include>VloConfig.xml</include>
+                 <include>facetConcepts.xml</include>
             </includes>
             <outputDirectory>config</outputDirectory>
         </fileSet> 
