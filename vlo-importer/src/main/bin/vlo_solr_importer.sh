@@ -35,7 +35,7 @@ echo Logging in ${LOGDIR}
 # to the JAVA command. Please note the a specification on the command line will
 # take preference over a specification as a property.
 
-$JAVA -Xmx2024M \
+$JAVA -Xmx3G \
     -cp "${DIR}:${DIR}/vlo-importer-${project.version}-importer.jar" \
     -DIMPORTER_LOG_DIR=${LOGDIR} \
     eu.clarin.cmdi.vlo.importer.MetadataImporter -c "$CONFIG"
