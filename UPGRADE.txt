@@ -50,6 +50,9 @@ mapping configuration elements. So the following should normally be added:
     <languageNameVariantsUrl>/LanguageNameVariantsMap.xml</languageNameVariantsUrl>   
     <licenseAvailabilityMapUrl>/LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl>
 
+- optional 'showResultScores' element, defaults to false. Should be false except
+when debugging result ranking.
+
 - The facet field 'availability' is now available
 
 ---------------------------

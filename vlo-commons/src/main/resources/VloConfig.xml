@@ -156,4 +156,6 @@
     <cqlEndpointFilter>http://cqlservlet.mpi.nl/</cqlEndpointFilter>
     
     <cqlEndpointAlternative>http://cqlservlet.mpi.nl/</cqlEndpointAlternative>
+    
+    <!--<showResultScores>false</showResultScores>-->
 </VloConfig>
