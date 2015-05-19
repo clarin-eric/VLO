@@ -105,6 +105,9 @@ public class VloConfig {
     private String helpUrl = "";
 
     private String feedbackFromUrl = "";
+
+    private boolean showResultScores = false;
+
     /**
      * A set of fields to be excluded from display<br><br>
      *
@@ -1086,4 +1089,11 @@ public class VloConfig {
         return configLocation;
     }
 
+    public void setShowResultScores(boolean showResultScores) {
+        this.showResultScores = showResultScores;
+    }
+
+    public boolean isShowResultScores() {
+        return showResultScores;
+    }
 }

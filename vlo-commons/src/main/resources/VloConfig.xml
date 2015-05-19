@@ -156,4 +156,7 @@
     <cqlEndpointFilter>http://cqlservlet.mpi.nl/</cqlEndpointFilter>
     
     <cqlEndpointAlternative>http://cqlservlet.mpi.nl/</cqlEndpointAlternative>
+    
+    <!-- makes the score for the result ranking visible in the search results -->
+    <showResultScores>false</showResultScores>
 </VloConfig>
