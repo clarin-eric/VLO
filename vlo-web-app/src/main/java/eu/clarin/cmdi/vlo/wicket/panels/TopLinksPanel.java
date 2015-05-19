@@ -112,10 +112,8 @@ public class TopLinksPanel extends GenericPanel<String> {
         final TextField<String> linkField = new TextField<String>(id, linkModel) {
 
             @Override
-            public boolean isVisible() {
-                // setting visibility onConfigure would have been nicer but in 
-                // some cases it does not render with that solution :(
-                return linkVisibilityModel.getObject();
+            protected void onConfigure() {
+                setVisible(linkVisibilityModel.getObject());
             }
 
         };

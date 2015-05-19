@@ -56,8 +56,12 @@ public class PermaLinkModel extends AbstractReadOnlyModel<String> {
 
     @Override
     public void detach() {
-        selectionmodel.detach();
-        documentModel.detach();
+        if (selectionmodel != null) {
+            selectionmodel.detach();
+        }
+        if (documentModel != null) {
+            documentModel.detach();
+        }
     }
 
 }
