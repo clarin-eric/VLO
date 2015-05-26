@@ -26,8 +26,8 @@ import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import java.util.Collection;
 import java.util.HashSet;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -73,7 +73,7 @@ public abstract class FacetPanel extends ExpandablePanel<FacetFieldSelection> {
         final Label label = new Label(id, new SolrFieldNameModel(facetNameModel));
         final SolrFieldDescriptionModel descriptionModel = new SolrFieldDescriptionModel(facetNameModel);
         logger.trace("Adding title attribute appender to facet title label {}: {}", facetNameModel, descriptionModel);
-        label.add(new AttributeAppender("title", descriptionModel));
+        label.add(new AttributeModifier("title", descriptionModel));
         return label;
     }
 
