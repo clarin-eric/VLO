@@ -1,5 +1,39 @@
 Bug Fixes and Features
 
+VLO 3.2 (June 2015)
+	
+Mapping:
+* Added search facet "Availability" based on licensing information
+	<https://trac.clarin.eu/ticket/393>
+* Non-English language names are ignored (if language code is not used)
+	<https://trac.clarin.eu/ticket/170>
+* Mapping of language name variants to canonical names (OLAC)
+	<https://trac.clarin.eu/ticket/749>
+* Mapping of language tags without olac-language attribute (OLAC)
+	<https://trac.clarin.eu/ticket/412>
+
+Search interface:
+* Added tooltips to facets with facet descriptions
+	<https://trac.clarin.eu/ticket/711>
+* Search term can be removed without removing facet selection in 'bread crumbs'
+	<https://trac.clarin.eu/ticket/619>
+* Search result ranking by relevance
+	<https://trac.clarin.eu/ticket/575>
+		
+Record page:
+* Paging of resources in record page
+	<https://trac.clarin.eu/ticket/565>
+* Improved handle resolution for resources in record page
+	<https://trac.clarin.eu/ticket/550>
+* Fixed handle link in record page for cases that contain an '@' character
+	<https://trac.clarin.eu/ticket/625>
+* Link to language info page uses new URL scheme
+	<https://trac.clarin.eu/ticket/753>
+
+Web application general:
+* VLO web pages contain a canonical URL link (improving search engine behaviour)
+	<https://trac.clarin.eu/ticket/135>
+	
 VLO 3.1 (March 2015)
 * Added the 'license' facet
 	<https://trac.clarin.eu/ticket/393>

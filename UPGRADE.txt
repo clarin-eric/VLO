@@ -12,8 +12,9 @@ Quick overview of the upgrade steps (for details see DEPLOY-README)
 - Recursively assign ownership of the entire unpacked distribution to the
 appropriate user (i.e. 'vlouser' on catalog.clarin.eu)
 
-- In the 'config' directory, adjust VloConfig.xml as needed (make a backup first). In
-	particular, make sure that the following instance specific sections are kept:
+- In the 'config' directory, adjust VloConfig.xml as needed (make a backup 
+first). In particular, make sure that the following instance specific sections
+are kept from the current version:
 	- dataRoots and its children
 	- solrUrl
 	- homeUrl
