@@ -56,6 +56,9 @@ when debugging result ranking.
 
 - The facet field 'availability' is now available
 
+* Be aware that the default maximum heap space of the importer has been
+increased from 2GB to 3GB (by means of a change in bin/vlo_solr_importer.sh).
+
 ---------------------------
 Upgrading from 3.0.x to 3.1
 ---------------------------
