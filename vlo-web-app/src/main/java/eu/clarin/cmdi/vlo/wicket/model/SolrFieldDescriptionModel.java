@@ -37,7 +37,6 @@ public class SolrFieldDescriptionModel extends AbstractReadOnlyModel<String> {
 
     @Override
     public String getObject() {
-        logger.trace("Getting description for facet {} from the description service", facetNameModel);
         return VloWicketApplication.get().getFacetDescriptionService().getDescription(facetNameModel.getObject());
     }
 
