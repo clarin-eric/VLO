@@ -55,8 +55,10 @@ public class FacetDescriptionServiceImpl implements FacetDescriptionService {
         final Source streamSource = getFacetConceptsSource();
         final FacetConcepts facetConcepts = marshaller.unmarshal(streamSource);
         for (FacetConcept concept : facetConcepts.getFacetConcept()) {
-            logger.debug("Found facet definition '{}'", concept.getName());
-            descriptions.put(concept.getName(), concept.getDescription());
+            if (concept.getDescription() != null) {
+                logger.debug("Found facet definition '{}'", concept.getName());
+                descriptions.put(concept.getName(), concept.getDescription());
+            }
         }
     }
 
@@ -89,6 +91,7 @@ public class FacetDescriptionServiceImpl implements FacetDescriptionService {
 
     @Override
     public String getDescription(String facetName) {
+        logger.trace("Facet description requested for {}", facetName);
         return descriptions.get(facetName);
     }
 
