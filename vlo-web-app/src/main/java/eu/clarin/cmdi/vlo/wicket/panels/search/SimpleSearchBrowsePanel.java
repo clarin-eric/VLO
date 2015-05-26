@@ -170,9 +170,10 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
             final PropertyModel facetNameModel = new PropertyModel(item.getModel(), "name");
             // wrap in field name model to get a friendly facet name based on name in FacetField
             final Label name = new Label("name", new SolrFieldNameModel(facetNameModel));
-            // add title attribute to get the facet description in a tooltip
-            name.add(new AttributeAppender("title", new SolrFieldDescriptionModel(facetNameModel)));
             select.add(name);
+            
+            // add title attribute to get the facet description in a tooltip
+            select.add(new AttributeAppender("title", new SolrFieldDescriptionModel(facetNameModel)));
             
             item.add(select);
 

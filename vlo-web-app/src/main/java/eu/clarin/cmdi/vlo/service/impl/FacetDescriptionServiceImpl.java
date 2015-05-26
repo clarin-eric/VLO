@@ -91,7 +91,6 @@ public class FacetDescriptionServiceImpl implements FacetDescriptionService {
 
     @Override
     public String getDescription(String facetName) {
-        logger.trace("Facet description requested for {}", facetName);
         return descriptions.get(facetName);
     }
 

@@ -19,6 +19,8 @@ package eu.clarin.cmdi.vlo.wicket.model;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -26,6 +28,7 @@ import org.apache.wicket.model.IModel;
  */
 public class SolrFieldDescriptionModel extends AbstractReadOnlyModel<String> {
 
+    private final static Logger logger = LoggerFactory.getLogger(SolrFieldDescriptionModel.class);
     private final IModel<String> facetNameModel;
 
     public SolrFieldDescriptionModel(IModel<String> facetNameModel) {
@@ -40,6 +43,11 @@ public class SolrFieldDescriptionModel extends AbstractReadOnlyModel<String> {
     @Override
     public void detach() {
         facetNameModel.detach();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[%s: '%s']", facetNameModel.getObject(), getObject());
     }
 
 }
