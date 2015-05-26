@@ -71,8 +71,9 @@ public abstract class FacetPanel extends ExpandablePanel<FacetFieldSelection> {
     protected Label createTitleLabel(String id) {
         final IModel<String> facetNameModel = new PropertyModel<>(getModel(), "facetField.name");
         final Label label = new Label(id, new SolrFieldNameModel(facetNameModel));
-        logger.trace("Adding title attribute appender to facet title label {}", facetNameModel);
-        label.add(new AttributeAppender("title", new SolrFieldDescriptionModel(facetNameModel)));
+        final SolrFieldDescriptionModel descriptionModel = new SolrFieldDescriptionModel(facetNameModel);
+        logger.trace("Adding title attribute appender to facet title label {}: {}", facetNameModel, descriptionModel);
+        label.add(new AttributeAppender("title", descriptionModel));
         return label;
     }
 

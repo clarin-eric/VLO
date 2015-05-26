@@ -46,4 +46,9 @@ public class SolrFieldDescriptionModel extends AbstractReadOnlyModel<String> {
         facetNameModel.detach();
     }
 
+    @Override
+    public String toString() {
+        return String.format("[%s: '%s']", facetNameModel.getObject(), getObject());
+    }
+
 }

@@ -85,4 +85,9 @@ public class FacetFieldSelectionModel extends AbstractReadOnlyModel<FacetFieldSe
         facetFieldModel.detach();
     }
 
+    @Override
+    public String toString() {
+        return String.format("[Field: %s; Selection: %s]", facetFieldModel.getObject().getName(), selectionModel.getObject().toString());
+    }
+    
 }
