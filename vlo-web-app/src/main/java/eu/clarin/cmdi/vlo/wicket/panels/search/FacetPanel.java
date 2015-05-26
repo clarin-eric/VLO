@@ -31,6 +31,8 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Panel that displays a single facet based on the current query/value
@@ -41,6 +43,7 @@ import org.apache.wicket.model.PropertyModel;
  * @author twagoo
  */
 public abstract class FacetPanel extends ExpandablePanel<FacetFieldSelection> {
+    private final static Logger logger = LoggerFactory.getLogger(FacetPanel.class);
 
     private final IModel<ExpansionState> expansionStateModel;
 
@@ -68,6 +71,7 @@ public abstract class FacetPanel extends ExpandablePanel<FacetFieldSelection> {
     protected Label createTitleLabel(String id) {
         final IModel<String> facetNameModel = new PropertyModel<>(getModel(), "facetField.name");
         final Label label = new Label(id, new SolrFieldNameModel(facetNameModel));
+        logger.trace("Adding title attribute appender to facet title label {}", facetNameModel);
         label.add(new AttributeAppender("title", new SolrFieldDescriptionModel(facetNameModel)));
         return label;
     }
