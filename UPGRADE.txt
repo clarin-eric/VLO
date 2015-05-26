@@ -12,8 +12,9 @@ Quick overview of the upgrade steps (for details see DEPLOY-README)
 - Recursively assign ownership of the entire unpacked distribution to the
 appropriate user (i.e. 'vlouser' on catalog.clarin.eu)
 
-- In the 'config' directory, adjust VloConfig.xml as needed (make a backup first). In
-	particular, make sure that the following instance specific sections are kept:
+- In the 'config' directory, adjust VloConfig.xml as needed (make a backup 
+first). In particular, make sure that the following instance specific sections
+are kept from the current version:
 	- dataRoots and its children
 	- solrUrl
 	- homeUrl
@@ -54,6 +55,9 @@ mapping configuration elements. So the following should normally be added:
 when debugging result ranking.
 
 - The facet field 'availability' is now available
+
+* Be aware that the default maximum heap space of the importer has been
+increased from 2GB to 3GB (by means of a change in bin/vlo_solr_importer.sh).
 
 ---------------------------
 Upgrading from 3.0.x to 3.1
