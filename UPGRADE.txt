@@ -25,7 +25,7 @@ are kept from the current version:
 - Stop the Tomcat or at least the VLO web app and Solr applications
 - Replace the 'current' symlink with a link to location of the new VLO directory
 
-- If needed, flush the Solr index (by removing the data directory)
+- If needed, flush the Solr index (by removing the data directory's content)
 - In 'bin', run the importer using the updated configuration file:
     ./vlo_solr_importer.sh -c ../config/VloConfig.xml
 

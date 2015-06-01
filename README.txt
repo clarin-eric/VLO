@@ -111,3 +111,7 @@ of records to be imported.
 
 Some progress information is logged to a file 'log/vlo-importer.log'. It gets
 rotated automatically by the import process.
+
+For a fresh import, even when the VLO is not configured to delete all documents
+from the index first, you can simply remove the contents of the Solr data 
+directory (check server configuration documentation for the exact location).
