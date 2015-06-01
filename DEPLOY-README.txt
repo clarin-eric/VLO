@@ -203,7 +203,11 @@ importer.
 
    	./vlo_solr_importer.sh
 
-   script in the vlo/bin directory. Messages are logged to the console. Because 
-   meta data is not static, it is recommended to run the importer a couple of 
-   times a week. Please note that, given the current (04.2014) set of data, a  
-   run typically takes between two and four hours.
+   script in the vlo/bin directory. Messages are logged to the a log file. 
+   Because meta data is not static, it is recommended to run the importer a 
+   couple of times a week. Please note that, given the current (04.2014) set of
+   data, a  run typically takes between two and four hours.
+   
+   More information about running the importer can be found in the README.txt
+   file.
+   
