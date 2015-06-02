@@ -54,6 +54,7 @@ import javax.xml.transform.stream.StreamSource;
 import nl.mpi.archiving.corpusstructure.core.handle.CachingHandleResolver;
 import nl.mpi.archiving.corpusstructure.core.handle.HandleApiResolver;
 import nl.mpi.archiving.corpusstructure.core.handle.HandleResolver;
+import nl.mpi.archiving.corpusstructure.core.handle.HttpHandleResolver;
 import org.apache.solr.common.SolrDocument;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -96,7 +97,7 @@ public class VloServicesSpringConfig {
     }
     
     public HandleResolver handleResolver() {
-        return new CachingHandleResolver(new HandleApiResolver(), HANDLE_CACHE_EXPIRY);
+        return new CachingHandleResolver(new HttpHandleResolver(), HANDLE_CACHE_EXPIRY);
     }
     
     @Bean
