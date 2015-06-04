@@ -134,7 +134,7 @@
       <bool name="wait">true</bool>
     </listener>
     -->
-
+    <updateLog/>
   </updateHandler>
   
   <!-- Use the following format to specify a custom IndexReaderFactory - allows for alternate
