@@ -114,6 +114,7 @@
     <!-- Fields ignored in the record page -->
     <ignoredFields>
         <ignoredField>format</ignoredField>
+        <ignoredField>score</ignoredField>
     </ignoredFields>
     
     <!-- Fields shown as technical fields in the record page -->
