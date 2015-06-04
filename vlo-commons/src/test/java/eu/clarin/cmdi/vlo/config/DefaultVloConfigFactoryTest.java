@@ -921,7 +921,7 @@ public class DefaultVloConfigFactoryTest {
     @Test
     public void testGetIgnoredFields() {
         Set<String> result = config.getIgnoredFields();
-        assertEquals(1, result.size());
+        assertEquals(2, result.size());
     }
 
     @Test
