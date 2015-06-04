@@ -6,21 +6,21 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>3.2-SNAPSHOT</version>
+        <version>3.3-SNAPSHOT</version>
     </parent>
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-web-app</artifactId>
     <packaging>war</packaging>
-    <version>3.2-SNAPSHOT</version>
+    <version>3.3-SNAPSHOT</version>
     <name>VLO Web Application</name>
     <description></description>
 
     <properties>
         <wicket.version>6.19.0</wicket.version>
         <spring.version>3.2.13.RELEASE</spring.version>
-        <jetty.version>8.1.16.v20140903</jetty.version>
+        <jetty.version>8.1.17.v20150415</jetty.version>
         <!-- selects the appender for the log4j root logger -->
         <log4j.appender>File</log4j.appender>
         <vlo.logging.level>INFO</vlo.logging.level>
@@ -149,12 +149,12 @@
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>1.18.3</version>
+            <version>1.19</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.3.2</version>
+            <version>3.4</version>
             <scope>test</scope>
             <type>jar</type>
         </dependency>
@@ -162,7 +162,7 @@
         <dependency>
             <groupId>net.bull.javamelody</groupId>
             <artifactId>javamelody-core</artifactId>
-            <version>1.55.0</version>
+            <version>1.56.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework</groupId>
@@ -173,6 +173,11 @@
                     <artifactId>spring-context</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>nl.mpi.corpusstructure</groupId>
+            <artifactId>corpus-structure-2-core</artifactId>
+            <version>1.1.6</version>
         </dependency>
     </dependencies>
     
@@ -296,7 +301,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.6</version>
+                <version>2.7</version>
                 <configuration>    
                     <formats> 
                         <format>xml</format>
@@ -330,7 +335,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.6</version>
+                <version>2.7</version>
             </plugin>
         </plugins>
     </reporting>

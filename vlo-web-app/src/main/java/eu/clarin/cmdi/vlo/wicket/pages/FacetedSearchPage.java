@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.wicket.panels.SingleFacetPanel;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.wicket.panels.search.FacetsPanel;
@@ -45,6 +46,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     private Component facetsPanel;
     private Component collectionsPanel;
     private Component navigation;
+    private Component searchForm;
 
     public FacetedSearchPage(IModel<QueryFacetsSelection> queryModel) {
         super(queryModel);
@@ -63,8 +65,9 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     private void addComponents() {
         navigation = createNavigation("navigation");
         add(navigation);
-
-        add(createSearchForm("search"));
+        
+        searchForm = createSearchForm("search");
+        add(searchForm);
 
         collectionsPanel = createCollectionsPanel("collections");
         add(collectionsPanel);
@@ -91,7 +94,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
             }
 
         });
-        container.add(new TopLinksPanel("permalink", getModel()) {
+        container.add(new TopLinksPanel("permalink", new PermaLinkModel(getPageClass(), getModel())) {
 
             @Override
             protected void onChange(AjaxRequestTarget target) {
@@ -116,7 +119,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private SearchForm createSearchForm(String id) {
-        final SearchForm searchForm = new SearchForm(id, getModel()) {
+        final SearchForm form = new SearchForm(id, getModel()) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
@@ -126,7 +129,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
             }
 
         };
-        return searchForm;
+        form.setOutputMarkupId(true);
+        return form;
     }
 
     private Component createCollectionsPanel(final String id) {
@@ -170,9 +174,15 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         // selection changed, update facets and search results
         if (target != null) { // null if JavaScript disabled
             target.add(navigation);
+            target.add(searchForm);
             target.add(searchResultsPanel);
             target.add(facetsPanel);
             target.add(collectionsPanel);
         }
+    }
+
+    @Override
+    public IModel<String> getCanonicalUrlModel() {
+        return new PermaLinkModel(getPageClass(), getModel());
     }
 }

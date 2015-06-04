@@ -16,31 +16,21 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.PageParametersConverter;
-import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
-import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.Url;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.encoding.UrlEncoder;
+import org.slf4j.LoggerFactory;
 
 /**
  * A panel with three links:
@@ -55,31 +45,16 @@ import org.apache.wicket.util.encoding.UrlEncoder;
  *
  * @author twagoo
  */
-public class TopLinksPanel extends GenericPanel<QueryFacetsSelection> {
+public class TopLinksPanel extends GenericPanel<String> {
 
-    @SpringBean(name = "queryParametersConverter")
-    private PageParametersConverter<QueryFacetsSelection> paramsConverter;
     @SpringBean
     private VloConfig vloConfig;
 
-    private final IModel<SolrDocument> documentModel;
     private final Model<Boolean> linkVisibilityModel;
 
-    public TopLinksPanel(String id) {
-        this(id, null, null);
-    }
-
-    public TopLinksPanel(String id, final IModel<QueryFacetsSelection> selectionmodel) {
-        this(id, selectionmodel, null);
-    }
-
-    public TopLinksPanel(String id, final IModel<QueryFacetsSelection> selectionmodel, final IModel<SolrDocument> documentModel) {
-        super(id, selectionmodel);
-        this.documentModel = documentModel;
-        this.linkVisibilityModel = new Model<Boolean>(false);
-
-        // create a model that provides a link to the current page
-        final IModel<String> linkModel = new PermaLinkModel(selectionmodel, documentModel);
+    public TopLinksPanel(String id, final IModel<String> linkModel) {
+        super(id, linkModel);
+        this.linkVisibilityModel = new Model<>(false);
 
         // action to link to request the permalink
         add(createPermaLink("linkRequest"));
@@ -109,7 +84,6 @@ public class TopLinksPanel extends GenericPanel<QueryFacetsSelection> {
 
             @Override
             protected void onConfigure() {
-                super.onConfigure();
                 setVisible(TopLinksPanel.this.getModel() != null);
             }
         };
@@ -136,22 +110,14 @@ public class TopLinksPanel extends GenericPanel<QueryFacetsSelection> {
 
     private TextField<String> createLinkField(String id, final IModel<String> linkModel) {
         final TextField<String> linkField = new TextField<String>(id, linkModel) {
+
             @Override
             protected void onConfigure() {
-                super.onConfigure();
                 setVisible(linkVisibilityModel.getObject());
             }
 
         };
         return linkField;
-    }
-
-    @Override
-    public void detachModels() {
-        super.detachModels();
-        if (documentModel != null) {
-            documentModel.detach();
-        }
     }
 
     protected void onChange(AjaxRequestTarget target) {
@@ -160,36 +126,11 @@ public class TopLinksPanel extends GenericPanel<QueryFacetsSelection> {
         }
     }
 
-    private class PermaLinkModel extends AbstractReadOnlyModel<String> {
-
-        private final IModel<QueryFacetsSelection> selectionmodel;
-        private final IModel<SolrDocument> documentModel;
-
-        public PermaLinkModel(IModel<QueryFacetsSelection> selectionmodel, IModel<SolrDocument> documentModel) {
-            this.selectionmodel = selectionmodel;
-            this.documentModel = documentModel;
-        }
-
-        @Override
-        public String getObject() {
-            final PageParameters params = new PageParameters();
-            if (selectionmodel != null) {
-                params.mergeWith(paramsConverter.toParameters(selectionmodel.getObject()));
-            }
-
-            if (documentModel != null) {
-                params.add(VloWebAppParameters.DOCUMENT_ID, documentModel.getObject().getFirstValue(FacetConstants.FIELD_ID));
-            }
-
-            final String style = Session.get().getStyle();
-            if (style != null) {
-                params.add(VloWebAppParameters.THEME, style);
-            }
-
-            final CharSequence url = urlFor(getPage().getClass(), params);
-            final String absoluteUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(url));
-            return absoluteUrl;
-        }
+    @Override
+    protected void onConfigure() {
+        LoggerFactory.getLogger(getClass()).debug("top links panel onconfigure");
     }
+    
+    
 
 }

@@ -18,21 +18,24 @@ package eu.clarin.cmdi.vlo.config;
 
 import com.google.common.collect.Sets;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
+import eu.clarin.cmdi.vlo.facets.FacetConceptsMarshaller;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
+import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
 import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.service.PermalinkService;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
-import eu.clarin.cmdi.vlo.service.handle.HandleClient;
-import eu.clarin.cmdi.vlo.service.handle.impl.HandleRestApiClient;
 import eu.clarin.cmdi.vlo.service.impl.DocumentParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
+import eu.clarin.cmdi.vlo.service.impl.FacetDescriptionServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.FacetParameterMapperImpl;
 import eu.clarin.cmdi.vlo.service.impl.InclusiveFieldFilter;
+import eu.clarin.cmdi.vlo.service.impl.PermalinkServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.QueryFacetsSelectionParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ResourceStringConverterImpl;
 import eu.clarin.cmdi.vlo.service.impl.ResourceTypeCountingServiceImpl;
@@ -43,10 +46,15 @@ import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProviderImpl;
 import java.util.Properties;
 import javax.inject.Inject;
+import javax.xml.bind.JAXBException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.stream.StreamSource;
+import nl.mpi.archiving.corpusstructure.core.handle.CachingHandleResolver;
+import nl.mpi.archiving.corpusstructure.core.handle.HandleApiResolver;
+import nl.mpi.archiving.corpusstructure.core.handle.HandleResolver;
+import nl.mpi.archiving.corpusstructure.core.handle.HttpHandleResolver;
 import org.apache.solr.common.SolrDocument;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -60,53 +68,58 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class VloServicesSpringConfig {
 
+    /**
+     * Handle resolution cache expiry in seconds
+     */
+    private static final int HANDLE_CACHE_EXPIRY = 3600;
+    
     @Inject
     VloConfig vloConfig;
-
+    
     @Bean
     public ResourceTypeCountingService resourceTypeCountingService() {
         return new ResourceTypeCountingServiceImpl(resourceStringConverter());
     }
-
+    
     @Bean(name = "resourceStringConverter")
     public ResourceStringConverter resourceStringConverter() {
         return new ResourceStringConverterImpl();
     }
-
+    
     @Bean(name = "resolvingResourceStringConverter")
     public ResourceStringConverter resolvingResourceStringConverter() {
         return new ResourceStringConverterImpl(uriResolver());
     }
-
+    
     @Bean
     public UriResolver uriResolver() {
-        return new UriResolverImpl(handleClient());
+        return new UriResolverImpl(handleResolver());
     }
-
-    public HandleClient handleClient() {
-        return new HandleRestApiClient();
+    
+    public HandleResolver handleResolver() {
+        return new CachingHandleResolver(new HttpHandleResolver(), HANDLE_CACHE_EXPIRY);
     }
     
     @Bean
     public FacetParameterMapper facetParameterMapper() {
         return new FacetParameterMapperImpl(languageCodeUtils());
     }
-
+    
     @Bean(name = "queryParametersConverter")
     public PageParametersConverter<QueryFacetsSelection> queryParametersConverter() {
         return new QueryFacetsSelectionParametersConverter(vloConfig, facetParameterMapper());
     }
-
+    
     @Bean(name = "documentParamsConverter")
     public PageParametersConverter<SolrDocument> documentParamsConverter() {
         return new DocumentParametersConverter();
     }
-
+    
     @Bean(name = "searchContextParamsConverter")
     public PageParametersConverter<SearchContext> searchContextParamsConverter() {
         return new SearchContextParametersConverter(queryParametersConverter());
     }
-
+    
     @Bean
     public XmlTransformationService cmdiTransformationService() throws TransformerConfigurationException {
         final Source xsltSource = new StreamSource(getClass().getResourceAsStream("/cmdi2xhtml.xsl"));
@@ -117,33 +130,48 @@ public class VloServicesSpringConfig {
         transformationProperties.setProperty(OutputKeys.ENCODING, "UTF-8");
         return new XmlTransformationServiceImpl(xsltSource, transformationProperties);
     }
-
+    
     @Bean(name = "basicPropertiesFilter")
     public FieldFilter basicPropertiesFieldFilter() {
         return new ExclusiveFieldFilter(Sets.union(
                 vloConfig.getIgnoredFields(),
                 vloConfig.getTechnicalFields()));
     }
-
+    
     @Bean(name = "searchResultPropertiesFilter")
     public FieldFilter searchResultPropertiesFilter() {
         return new InclusiveFieldFilter(vloConfig.getSearchResultFields());
     }
-
+    
     @Bean(name = "technicalPropertiesFilter")
     public FieldFilter technicalPropertiesFieldFilter() {
         return new InclusiveFieldFilter(
                 vloConfig.getTechnicalFields());
     }
-
+    
     @Bean
     public LanguageCodeUtils languageCodeUtils() {
         return new LanguageCodeUtils(vloConfig);
     }
-
+    
     @Bean
     public FieldValueConverterProvider fieldValueConverters() {
         return new FieldValueConverterProviderImpl(languageCodeUtils());
     }
-
+    
+    @Bean
+    public FacetDescriptionService facetDescriptionsService() throws JAXBException {
+        return new FacetDescriptionServiceImpl(facetConceptsMarshaller(), vloConfig);
+    }
+    
+    @Bean
+    public FacetConceptsMarshaller facetConceptsMarshaller() throws JAXBException {
+        return new FacetConceptsMarshaller();
+    }
+    
+    @Bean
+    public PermalinkService permalinkService() {
+        return new PermalinkServiceImpl(queryParametersConverter());
+    }
+    
 }

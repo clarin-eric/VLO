@@ -17,18 +17,23 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  *
@@ -36,6 +41,9 @@ import org.apache.wicket.model.IModel;
  */
 public class SearchResultItemPanel extends Panel {
 
+    @SpringBean
+    private VloConfig config;
+    
     private final Panel collapsedDetails;
     private final Panel expandedDetails;
     private final IModel<ExpansionState> expansionStateModel;
@@ -67,6 +75,11 @@ public class SearchResultItemPanel extends Panel {
         // add a collapsed details panel; only shown when expansion state is expanded (through onConfigure)
         expandedDetails = new SearchResultItemExpandedPanel("expandedDetails", documentModel, selectionModel);
         add(expandedDetails);
+
+        final MarkupContainer scoreContainer = new WebMarkupContainer("scoreContainer");
+        scoreContainer.add(new Label("score", new SolrFieldStringModel(documentModel, FacetConstants.FIELD_SOLR_SCORE)));
+        scoreContainer.setVisible(config.isShowResultScores());
+        add(scoreContainer);
 
         setOutputMarkupId(true);
     }

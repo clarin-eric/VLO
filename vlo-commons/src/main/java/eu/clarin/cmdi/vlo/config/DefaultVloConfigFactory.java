@@ -17,6 +17,8 @@
 package eu.clarin.cmdi.vlo.config;
 
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Creates an instance of the default configuration packed with the VLO commons
@@ -36,4 +38,14 @@ public class DefaultVloConfigFactory extends AbstractXmlVloConfigFactory {
     protected InputStream getXmlConfigurationInputStream() {
         return getClass().getResourceAsStream(DEFAULT_CONFIG_RESOURCE);
     }
+
+    @Override
+    protected URI getLocation() {
+        try {
+            return getClass().getResource(DEFAULT_CONFIG_RESOURCE).toURI();
+        } catch (URISyntaxException ex) {
+            throw new RuntimeException("Invalid config file URI", ex);
+        }
+    }
+
 }

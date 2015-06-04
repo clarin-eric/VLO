@@ -46,31 +46,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         session += "</CMD>\n";
         File sessionFile = createCmdiFile("testSession", session);
 
-        String content = "";
-        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1274880881885/xsd\">\n";
-        content += "   <Header>\n";
-        content += "      <MdSelfLink>testID2</MdSelfLink>\n";
-        content += "   </Header>\n";
-        content += "   <Resources>\n";
-        content += "      <ResourceProxyList>\n";
-        content += "         <ResourceProxy id=\"d28635e19\">\n";
-        content += "            <ResourceType>Metadata</ResourceType>\n";
-        content += "            <ResourceRef>" + sessionFile.getName() + "</ResourceRef>\n";
-        content += "         </ResourceProxy>\n";
-        content += "      </ResourceProxyList>\n";
-        content += "   </Resources>\n";
-        content += "   <Components>\n";
-        content += "      <imdi-corpus>\n";
-        content += "         <Corpus>\n";
-        content += "            <Name>MPI corpora</Name>\n";
-        content += "         </Corpus>\n";
-        content += "      </imdi-corpus>\n";
-        content += "   </Components>\n";
-        content += "</CMD>\n";
-        File rootFile = createCmdiFile("rootFile", content);
-
-        List<SolrInputDocument> docs = importData(rootFile.getParentFile());
+        List<SolrInputDocument> docs = importData(sessionFile);
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
         assertEquals("testID1Session", getValue(doc, FacetConstants.FIELD_ID));
@@ -260,7 +236,7 @@ public class MetadataImporterTest extends ImporterTestcase {
             void startImport() throws MalformedURLException {
                 
                 // make sure the mapping file for testing is used
-                config.setFacetConceptsFile("/facetConceptsTest.xml");
+                config.setFacetConceptsFile(getTestFacetConceptFilePath());
                 
                 List<DataRoot> dataRoots = checkDataRoots();
                 long start = System.currentTimeMillis();
@@ -272,7 +248,7 @@ public class MetadataImporterTest extends ImporterTestcase {
                         CMDIDataProcessor processor = new 
                                 CMDIParserVTDXML(POST_PROCESSORS, true);
                         List<File> files = 
-                                getFilesFromDataRoot(dataRoot.getRootFile());
+                                getFilesFromDataRoot(dataRoot.getRootFile()).get(0);
                         for (File file : files) {
                             if (config.getMaxFileSize () > 0
                                     && file.length() > 

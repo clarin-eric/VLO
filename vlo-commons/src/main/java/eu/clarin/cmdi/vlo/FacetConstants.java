@@ -26,6 +26,13 @@ public class FacetConstants {
     public static final String FIELD_COMPLETE_METADATA = "metadataSource";
     public static final String FIELD_NATIONAL_PROJECT = "nationalProject";
     public static final String FIELD_KEYWORDS = "keywords";
+    /**
+     * Solr pseudo-field that reveals the ranking score
+     *
+     * @see
+     * https://wiki.apache.org/solr/SolrRelevancyFAQ#How_can_I_see_the_relevancy_scores_for_search_results
+     */
+    public static final String FIELD_SOLR_SCORE = "score";
 
     //The _ facets are not meant to be shown to users.
     public static final String FIELD_SELF_LINK = "_selfLink";
@@ -34,6 +41,9 @@ public class FacetConstants {
     public static final String FIELD_CLARIN_PROFILE = "_componentProfile";
     public static final String FIELD_SEARCH_SERVICE = "_contentSearchRef";
     public static final String FIELD_LAST_SEEN = "_lastSeen";
+    public static final String FIELD_HIERARCHY_WEIGHT = "_hierarchyWeight";
+    public static final String FIELD_IS_PART_OF = "_isPartOf";
+    public static final String FIELD_HAS_PART = "_hasPart";
 
     /**
      * Facet constant associated with the landing page type.

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 CLARIN
+ * Copyright (C) 2015 CLARIN
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,31 +16,31 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
-import eu.clarin.cmdi.vlo.service.handle.impl.HandleRestApiClient;
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PREFIX;
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY;
-import eu.clarin.cmdi.vlo.service.handle.HandleClient;
 import eu.clarin.cmdi.vlo.service.UriResolver;
+import java.net.URI;
+import java.net.URISyntaxException;
+import nl.mpi.archiving.corpusstructure.core.handle.HandleResolver;
+import nl.mpi.archiving.corpusstructure.core.handle.InvalidHandleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Resolves a URI as follows: if the URI starts with the handle scheme or the
  * handle proxy, the handle is extracted and passed on to this resolver's
- * {@link HandleClient} and the result of {@link HandleClient#getUrl(java.lang.String)
- * } is returned; otherwise the original URI is returned.
+ * {@link HandleResolver} and the result of {@link HandleResolver#resolve(java.net.URI) 
+ * } is returned (as String); otherwise the original URI is returned.
  *
- * TODO: add support for resolving URN:NBN <https://trac.clarin.eu/ticket/535>
- * 
- * @author twagoo
+ * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 public class UriResolverImpl implements UriResolver {
 
-    private final static Logger logger = LoggerFactory.getLogger(HandleRestApiClient.class);
+    private final static Logger logger = LoggerFactory.getLogger(UriResolverImpl.class);
 
-    private final HandleClient handleClient;
+    private final HandleResolver handleClient;
 
-    public UriResolverImpl(HandleClient handleClient) {
+    public UriResolverImpl(HandleResolver handleClient) {
         this.handleClient = handleClient;
     }
 
@@ -48,30 +48,32 @@ public class UriResolverImpl implements UriResolver {
     public String resolve(String uri) {
         final String handle = getHandle(uri);
 
-        if (handle == null) {
-            return uri;
-        } else {
+        if (handle != null) {
             logger.debug("Calling handle client to resolve handle [{}]", uri);
-            final String resolved = handleClient.getUrl(handle);
-            if (resolved == null) {
-                return uri;
-            } else {
-                return resolved;
+            try {
+                final URI resolved = handleClient.resolve(new URI(handle));
+                if (resolved != null) {
+                    return resolved.toString();
+                }
+            } catch (InvalidHandleException ex) {
+                logger.warn("Invalid handle ecountered: {}", handle);
+            } catch (URISyntaxException ex) {
+                logger.warn("Invalid URI for handle: {}", handle);
             }
         }
+        // not a resolvable handle
+        return uri;
 
     }
 
     private String getHandle(String uri) {
-        final String handle;
         if (uri.startsWith(HANDLE_PREFIX)) {
-            handle = uri.substring(HANDLE_PREFIX.length());
+            return uri;
         } else if (uri.startsWith(HANDLE_PROXY)) {
-            handle = uri.substring(HANDLE_PROXY.length());
+            return HANDLE_PREFIX + uri.substring(HANDLE_PROXY.length());
         } else {
-            handle = null;
+            return null;
         }
-        return handle;
     }
 
 }

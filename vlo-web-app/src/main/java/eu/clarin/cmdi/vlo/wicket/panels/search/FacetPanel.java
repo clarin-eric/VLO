@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.FacetFieldSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
@@ -26,9 +27,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Panel that displays a single facet based on the current query/value
@@ -39,6 +43,7 @@ import org.apache.wicket.model.PropertyModel;
  * @author twagoo
  */
 public abstract class FacetPanel extends ExpandablePanel<FacetFieldSelection> {
+    private final static Logger logger = LoggerFactory.getLogger(FacetPanel.class);
 
     private final IModel<ExpansionState> expansionStateModel;
 
@@ -64,7 +69,10 @@ public abstract class FacetPanel extends ExpandablePanel<FacetFieldSelection> {
 
     @Override
     protected Label createTitleLabel(String id) {
-        return new Label(id, new SolrFieldNameModel(new PropertyModel(getModel(), "facetField.name")));
+        final IModel<String> facetNameModel = new PropertyModel<>(getModel(), "facetField.name");
+        final Label label = new Label(id, new SolrFieldNameModel(facetNameModel));
+        label.add(new AttributeAppender("title", new SolrFieldDescriptionModel(facetNameModel)));
+        return label;
     }
 
     @Override

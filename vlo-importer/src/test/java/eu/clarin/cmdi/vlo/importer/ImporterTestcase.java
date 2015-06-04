@@ -6,6 +6,7 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloConfigFactory;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -39,8 +40,16 @@ public abstract class ImporterTestcase {
         // optionally, modify the configuration here
         MetadataImporter.config.setComponentRegistryRESTURL("http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/");
         config = MetadataImporter.config;
-        
+
         MetadataImporter.languageCodeUtils = new LanguageCodeUtils(config);
+    }
+
+    public static String getTestFacetConceptFilePath() {
+        try {
+            return new File(ImporterTestcase.class.getResource("/facetConceptsTest.xml").toURI()).getAbsolutePath();
+        } catch (URISyntaxException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
 }

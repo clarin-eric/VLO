@@ -2,6 +2,7 @@ package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import org.junit.Before;
 import org.junit.Test;
 
 public class CMDIDataProcessorTest extends ImporterTestcase {
@@ -18,13 +20,17 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     private CMDIDataProcessor getDataParser() {
         return new CMDIParserVTDXML(MetadataImporter.POST_PROCESSORS, true);
     }
-    
+
+    @Before
+    @Override
+    public void setup() throws Exception {
+        super.setup();
+        // make sure the mapping file for testing is used
+        config.setFacetConceptsFile(getTestFacetConceptFilePath());
+    }
+
     @Test
     public void testCreateCMDIDataFromCorpus() throws Exception {
-        
-        // make sure the mapping file for testing is used
-        config.setFacetConceptsFile("/facetConceptsTest.xml");
-
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n";
@@ -85,10 +91,6 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
 
     @Test
     public void testCreateCMDIDataFromSession() throws Exception {
-        
-        // make sure the mapping file for testing is used
-        config.setFacetConceptsFile("/facetConceptsTest.xml");
-
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
@@ -411,10 +413,6 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
 
     @Test
     public void testCreateCMDISessionSmall() throws Exception {
-        
-        // make sure the mapping file for testing is used
-        config.setFacetConceptsFile("/facetConceptsTest.xml");
-
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
@@ -440,10 +438,6 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
 
     @Test
     public void testEmptyFieldsShouldBeNull() throws Exception {
-        
-        // make sure the mapping file for testing is used
-        config.setFacetConceptsFile("/facetConceptsTest.xml");
-
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
@@ -533,10 +527,6 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
 
     @Test
     public void testOlac() throws Exception {
-
-        // make sure the mapping file for testing is used
-        config.setFacetConceptsFile("/facetConceptsTest.xml");
-
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
@@ -620,10 +610,6 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
 
     @Test
     public void testOlacMultiFacets() throws Exception {
-        
-        // make sure the mapping file for testing is used
-        config.setFacetConceptsFile("/facetConceptsTest.xml");
-
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
@@ -716,10 +702,6 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
 
     @Test
     public void testIgnoreWhiteSpaceFacets() throws Exception {
-       
-        // make sure the mapping file for testing is used
-        config.setFacetConceptsFile("/facetConceptsTest.xml");
-
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
@@ -742,10 +724,6 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
 
     @Test
     public void testCountryCodesPostProcessing() throws Exception {
-        
-        // make sure the mapping file for testing is used
-        config.setFacetConceptsFile("/facetConceptsTest.xml");
-
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
@@ -768,10 +746,6 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
 
     @Test
     public void testLanguageCodesPostProcessing() throws Exception {
-        
-        // make sure the mapping file for testing is used
-        config.setFacetConceptsFile("/facetConceptsTest.xml");
-
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
@@ -799,10 +773,6 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
 
     @Test
     public void testOlacCollection() throws Exception {
-        
-        // make sure the mapping file for testing is used
-        config.setFacetConceptsFile("/facetConceptsTest.xml");
-
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
@@ -852,10 +822,6 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
 
     @Test
     public void testLrtCollection() throws Exception {
-       
-        // make sure the mapping file for testing is used
-        config.setFacetConceptsFile("/facetConceptsTest.xml");
-
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" ns0:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1289827960126/xsd\" xmlns:ns0=\"http://www.w3.org/2001/XMLSchema-instance\">\n";

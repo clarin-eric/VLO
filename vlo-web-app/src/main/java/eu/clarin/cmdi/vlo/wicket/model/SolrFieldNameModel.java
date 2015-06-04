@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import eu.clarin.cmdi.vlo.pojo.DocumentField;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.Application;
 import org.apache.wicket.model.IModel;

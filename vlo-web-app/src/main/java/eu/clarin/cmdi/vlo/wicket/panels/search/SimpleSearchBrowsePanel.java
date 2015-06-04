@@ -23,12 +23,14 @@ import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -163,9 +165,16 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
                     }
                 }
             };
-            select.add(new Label("name",
-                    // friendly facet name based on name in FacetField
-                    new SolrFieldNameModel(new PropertyModel(item.getModel(), "name"))));
+            
+            // add name label (with a description title attribute)
+            final PropertyModel facetNameModel = new PropertyModel(item.getModel(), "name");
+            // wrap in field name model to get a friendly facet name based on name in FacetField
+            final Label name = new Label("name", new SolrFieldNameModel(facetNameModel));
+            select.add(name);
+            
+            // add title attribute to get the facet description in a tooltip
+            select.add(new AttributeAppender("title", new SolrFieldDescriptionModel(facetNameModel)));
+            
             item.add(select);
 
             // show a separator except for the last item

@@ -59,7 +59,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     width: 20%;
 }
 
-#searchresultsheader .searchresultpagination {
+#searchresultsheader .resultpagination {
     padding: 0;
     margin: 0;
     float: left;
@@ -68,22 +68,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     text-align: center;
 }
 
-#bottompagination {
+.resultpagination {
+
+    span 
+    {
+        padding-left: 1px; 
+        padding-right: 1px
+    }
+
+    span.goto em {
+        font-weight: bold;
+        text-decoration: underline;
+        font-style: normal;
+    }
+}
+
+#bottompagination, #resourcespagination {
     clear: both;
     text-align: center;
     padding: 1em 0;
-}
-
-.searchresultpagination span 
-{
-    padding-left: 1px; 
-    padding-right: 1px
-}
-
-.searchresultpagination span.goto em {
-    font-weight: bold;
-    text-decoration: underline;
-    font-style: normal;
 }
 
 #searchresultpagecount{
@@ -104,28 +107,33 @@ li.searchresultitem {
     padding: 1em 0 1em .5em;
     border-bottom: 1px solid #999;
     margin: 0px;
-}
 
-li.searchresultitem a {
-    color: #000;
-}
+    a {
+        color: #000;
+    }
 
-li.searchresultitem h3 {
-    text-decoration: none;
-    float: left;
-    width: 75%;
-    font-weight: normal;
-}
+    h3 {
+        text-decoration: none;
+        float: left;
+        width: 75%;
+        font-weight: normal;
+    }
 
-li.searchresultitem h3 a {
-    color: #000A83;
-}
+    h3 a {
+        color: #000A83;
+    }
 
-li.searchresultitem .searchresultcollection{
-    width: 20%;
-    float: right;
-    text-align: right;
-    font-weight: bold;
+    .searchresultcollection{
+        width: 20%;
+        float: right;
+        text-align: right;
+        font-weight: bold;
+    }
+    
+    .score {
+        color: #999;
+        text-align: right;
+    }
 }
 
 .searchresultdescription{

@@ -23,9 +23,9 @@ importer.
 
   	 vlo-3.0-Distribution.tar.gz
 
-   in a temporary directory: 'temp'. Next, stop the Tomcat server: 
+   in a temporary directory: 'temp'. Next, stop the Tomcat server, e.g.: 
 
-   	/etc/init.d/tomcat6 stop 
+     /etc/init.d/tomcat6 stop 
 
    After the server has stopped, copy the contents of the vlo_parent-2.13 
    directory just created to a permanent directory, 'vlo', for example. In the
@@ -192,18 +192,22 @@ importer.
 
 6. Importing data
 
-   Before starting data import, first start the Tomcat server:
+   Before starting data import, first start the Tomcat server, e.g.:
 
-   	/etc/init.d/tomcat6 start
+   	 /etc/init.d/tomcat6 start
 
    To be sure the Solr server is working as it should, inspect the Tomcat log 
    file directory, and in that directory, check the solr.log and vlo.log files. 
 
    Next, you can run the importer by starting the 
 
-   	./vlo_solr_importer.sh
+   	 ./vlo_solr_importer.sh
 
-   script in the vlo/bin directory. Messages are logged to the console. Because 
-   meta data is not static, it is recommended to run the importer a couple of 
-   times a week. Please note that, given the current (04.2014) set of data, a  
-   run typically takes between two and four hours.
+   script in the vlo/bin directory. Messages are logged to the a log file. 
+   Because meta data is not static, it is recommended to run the importer a 
+   couple of times a week. Please note that, given the current (04.2014) set of
+   data, a  run typically takes between two and four hours.
+   
+   More information about running the importer can be found in the README.txt
+   file.
+   

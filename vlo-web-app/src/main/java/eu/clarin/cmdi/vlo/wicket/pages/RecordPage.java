@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
@@ -176,7 +177,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     }
 
     private TopLinksPanel createPermalink(String id, final WebMarkupContainer topNavigation) {
-        return new TopLinksPanel(id, selectionModel, getModel()) {
+        return new TopLinksPanel(id, new PermaLinkModel(getPageClass(), selectionModel, getModel())) {
 
             @Override
             protected void onChange(AjaxRequestTarget target) {
@@ -289,6 +290,13 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     @Override
     public IModel<String> getPageDescriptionModel() {
         return new SolrFieldStringModel(getModel(), FacetConstants.FIELD_DESCRIPTION);
+    }
+
+    @Override
+    public IModel<String> getCanonicalUrlModel() {
+        // omit query in link for canonical URL (record page gets same canonical
+        // URL regardless of search term)
+        return new PermaLinkModel(getPageClass(), null, getModel());
     }
 
     @Override

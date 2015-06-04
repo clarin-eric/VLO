@@ -1,11 +1,7 @@
 package eu.clarin.cmdi.vlo.config;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import static org.hamcrest.CoreMatchers.hasItems;
@@ -498,15 +494,15 @@ public class DefaultVloConfigFactoryTest {
     }
 
     /**
-     * Test the getLanguageLinkPrefix method
+     * Test the getLanguageLinkTemplate method
      */
     @Test
     public void testGetLanguageLinkPrefix() {
 
         System.out.println("getLanguageLinkPrefix");
 
-        String expResult = "http://infra.clarin.eu/service/language/info.php?code=";
-        String result = config.getLanguageLinkPrefix();
+        String expResult = "https://infra.clarin.eu/content/language_info/data/{}.html";
+        String result = config.getLanguageLinkTemplate();
 
         assertEquals(expResult, result);
     }
@@ -519,11 +515,11 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("setLanguageLinkPrefix");
 
-        String param = "http://infra.clarin.eu/service/language/info.php?code=";
+        String param = "https://infra.clarin.eu/content/language_info/data/{}.html";
 
-        config.setLanguageLinkPrefix(param);
+        config.setLanguageLinkTemplate(param);
 
-        String result = config.getLanguageLinkPrefix();
+        String result = config.getLanguageLinkTemplate();
 
         assertEquals(param, result);
     }

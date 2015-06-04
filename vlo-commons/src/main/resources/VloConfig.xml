@@ -46,7 +46,8 @@
     
     <helpUrl>http://www.clarin.eu/vlo</helpUrl>
     
-    <facetConceptsFile>/facetConcepts.xml</facetConceptsFile>
+    <!-- leave empty to use default packaged definition -->
+    <facetConceptsFile><!-- use default packaged definition --></facetConceptsFile>
     
     <profileSchemaUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/{PROFILE_ID}/xsd</profileSchemaUrl>
     
@@ -138,7 +139,7 @@
     
     <countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
     
-    <languageLinkPrefix>http://infra.clarin.eu/service/language/info.php?code=</languageLinkPrefix>
+    <languageLinkTemplate>https://infra.clarin.eu/content/language_info/data/{}.html</languageLinkTemplate>
     
     <feedbackFromUrl>http://www.clarin.eu/node/3759?url=</feedbackFromUrl>
 
@@ -155,4 +156,7 @@
     <cqlEndpointFilter>http://cqlservlet.mpi.nl/</cqlEndpointFilter>
     
     <cqlEndpointAlternative>http://cqlservlet.mpi.nl/</cqlEndpointAlternative>
+    
+    <!-- makes the score for the result ranking visible in the search results -->
+    <showResultScores>false</showResultScores>
 </VloConfig>

@@ -16,7 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
-import eu.clarin.cmdi.vlo.service.handle.HandleClient;
+import java.net.URI;
+import nl.mpi.archiving.corpusstructure.core.handle.HandleResolver;
+import nl.mpi.archiving.corpusstructure.core.handle.InvalidHandleException;
 import org.jmock.Expectations;
 import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
@@ -33,16 +35,16 @@ public class UriResolverImplTest {
 
     private final Mockery context = new JUnit4Mockery();
     private UriResolverImpl instance;
-    private HandleClient handleClient;
+    private HandleResolver handleClient;
 
     @Before
     public void setUp() {
-        handleClient = context.mock(HandleClient.class);
+        handleClient = context.mock(HandleResolver.class);
         instance = new UriResolverImpl(handleClient);
     }
 
     /**
-     * Test of resolve method, of class UriResolverImpl.
+     * Test of resolve method, of class HandleClientUriResolverImpl.
      */
     @Test
     public void testResolveNonHandle() {
@@ -51,14 +53,14 @@ public class UriResolverImplTest {
     }
 
     /**
-     * Test of resolve method, of class UriResolverImpl.
+     * Test of resolve method, of class HandleClientUriResolverImpl.
      */
     @Test
-    public void testResolveHandleScheme() {
+    public void testResolveHandleScheme() throws InvalidHandleException {
         context.checking(new Expectations() {
             {
-                oneOf(handleClient).getUrl("1234/5678");
-                will(returnValue("http://www.clarin.eu"));
+                oneOf(handleClient).resolve(URI.create("hdl:1234/5678"));
+                will(returnValue(URI.create("http://www.clarin.eu")));
             }
         });
         String result = instance.resolve("hdl:1234/5678");
@@ -66,14 +68,14 @@ public class UriResolverImplTest {
     }
 
     /**
-     * Test of resolve method, of class UriResolverImpl.
+     * Test of resolve method, of class HandleClientUriResolverImpl.
      */
     @Test
-    public void testResolveHandleProxy() {
+    public void testResolveHandleProxy() throws InvalidHandleException {
         context.checking(new Expectations() {
             {
-                oneOf(handleClient).getUrl("1234/5678");
-                will(returnValue("http://www.clarin.eu"));
+                oneOf(handleClient).resolve(URI.create("hdl:1234/5678"));
+                will(returnValue(URI.create("http://www.clarin.eu")));
             }
         });
         String result = instance.resolve("http://hdl.handle.net/1234/5678");

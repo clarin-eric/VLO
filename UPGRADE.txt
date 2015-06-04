@@ -12,8 +12,9 @@ Quick overview of the upgrade steps (for details see DEPLOY-README)
 - Recursively assign ownership of the entire unpacked distribution to the
 appropriate user (i.e. 'vlouser' on catalog.clarin.eu)
 
-- In the 'config' directory, adjust VloConfig.xml as needed (make a backup first). In
-	particular, make sure that the following instance specific sections are kept:
+- In the 'config' directory, adjust VloConfig.xml as needed (make a backup 
+first). In particular, make sure that the following instance specific sections
+are kept from the current version:
 	- dataRoots and its children
 	- solrUrl
 	- homeUrl
@@ -24,9 +25,39 @@ appropriate user (i.e. 'vlouser' on catalog.clarin.eu)
 - Stop the Tomcat or at least the VLO web app and Solr applications
 - Replace the 'current' symlink with a link to location of the new VLO directory
 
-- If needed, flush the Solr index (by removing the data directory)
+- If needed, flush the Solr index (by removing the data directory's content)
 - In 'bin', run the importer using the updated configuration file:
     ./vlo_solr_importer.sh -c ../config/VloConfig.xml
+
+---------------------------
+Upgrading from 3.1 to 3.2
+---------------------------
+* Take note of the following changes in VloConfig.xml:
+
+- 'facetConceptsFile' now defines the location of the facet/concept mapping 
+definition on disk; to use the default bundled definition, leave it empty. 
+Before this used to have the value '/facetConcepts.xml' which will no longer be
+valid - it can safely be replaced with either the empty string or 
+'facetConcepts.xml' to use the file in the same directory as VloConfig.xml.
+
+- 'languageLinkPrefix' element has been REPLACED by 'languageLinkTemplate';
+remove the former and add the following to existing configurations:
+
+	<languageLinkTemplate>https://infra.clarin.eu/content/language_info/data/{}.html</languageLinkTemplate>
+
+- 'languageNameVariantsUrl' and 'licenseAvailabilityMapUrl' are now required
+mapping configuration elements. So the following should normally be added:
+
+    <languageNameVariantsUrl>/LanguageNameVariantsMap.xml</languageNameVariantsUrl>   
+    <licenseAvailabilityMapUrl>/LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl>
+
+- optional 'showResultScores' element, defaults to false. Should be false except
+when debugging result ranking.
+
+- The facet field 'availability' is now available
+
+* Be aware that the default maximum heap space of the importer has been
+increased from 2GB to 3GB (by means of a change in bin/vlo_solr_importer.sh).
 
 ---------------------------
 Upgrading from 3.0.x to 3.1

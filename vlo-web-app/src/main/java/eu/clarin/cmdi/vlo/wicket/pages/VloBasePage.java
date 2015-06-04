@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
-import com.google.common.base.Strings;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -40,7 +39,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 /**
  * Base page for all VLO pages; has common header and footer markup and takes
@@ -123,6 +121,18 @@ public class VloBasePage<T> extends GenericWebPage<T> {
                 add(new AttributeAppender("content", getPageDescriptionModel()));
             }
         });
+
+        add(new WebComponent("canonicalUrl") {
+
+            @Override
+            protected void onRender() {
+                final IModel<String> canonicalUrlModel = getCanonicalUrlModel();
+                if (canonicalUrlModel != null) {
+                    getResponse().write("<link rel=\"canonical\" href=\"" + canonicalUrlModel.getObject() + "\"/>");
+                }
+            }
+
+        });
     }
 
     /**
@@ -145,6 +155,15 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         return new StringResourceModel("vloDescription", null, (Object[]) null);
     }
 
+    /**
+     *
+     * @return URL to include as a canonical HREF in the page header (null to
+     * omit such a reference)
+     */
+    public IModel<String> getCanonicalUrlModel() {
+        return null;
+    }
+
     @Override
     public void renderHead(IHeaderResponse response) {
         // Include CSS. Exact file will be chosen on basis of current locale and style (theme)
@@ -159,5 +178,6 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
         add(new HideJavascriptFallbackControlsBehavior());
     }
+
 
 }

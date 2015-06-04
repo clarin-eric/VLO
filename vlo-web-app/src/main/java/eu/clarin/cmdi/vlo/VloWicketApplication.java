@@ -1,6 +1,8 @@
 package eu.clarin.cmdi.vlo;
 
+import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.service.PermalinkService;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.pages.AboutPage;
@@ -39,6 +41,10 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     private XmlTransformationService cmdiTransformationService;
     @Inject
     private FieldValueConverterProvider fieldValueConverterProvider;
+    @Inject
+    private FacetDescriptionService facetDescriptionService;
+    @Inject
+    private PermalinkService permalinkService;
     @Inject
     private VloConfig vloConfig;
 
@@ -147,9 +153,17 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     public XmlTransformationService getCmdiTransformationService() {
         return cmdiTransformationService;
     }
-    
+
     public FieldValueConverterProvider getFieldValueConverterProvider() {
         return fieldValueConverterProvider;
+    }
+
+    public FacetDescriptionService getFacetDescriptionService() {
+        return facetDescriptionService;
+    }
+
+    public PermalinkService getPermalinkService() {
+        return permalinkService;
     }
 
 }

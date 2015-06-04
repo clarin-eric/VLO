@@ -10,7 +10,7 @@
     <!-- When updating the version number here, also update the version number
          in each module's pom.xml
     -->
-    <version>3.2-SNAPSHOT</version>
+    <version>3.3-SNAPSHOT</version>
     
     <description>Virtual Language Observatory (VLO) parent project</description>
     <organization>
@@ -27,8 +27,8 @@
     </modules>
 
     <properties>
-        <solr.version>4.8.1</solr.version>
-        <slf4j.version>1.7.10</slf4j.version>
+        <solr.version>4.10.4</solr.version>
+        <slf4j.version>1.7.12</slf4j.version>
         <saxon.version>9.5.1-8</saxon.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.hint.license>gpl30</netbeans.hint.license>
