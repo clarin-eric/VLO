@@ -127,6 +127,9 @@
         <technicalField>_contentSearchRef</technicalField>
         <technicalField>_lastSeen</technicalField>
         <technicalField>_componentProfile</technicalField>
+        <technicalField>_hierarchyWeight</technicalField>
+        <technicalField>_hasPart</technicalField>
+        <technicalField>_isPartOf</technicalField>
     </technicalFields>
     
     <languageFilters>

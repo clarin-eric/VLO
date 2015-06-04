@@ -927,7 +927,7 @@ public class DefaultVloConfigFactoryTest {
     @Test
     public void testGetTechnicalFields() {
         Set<String> result = config.getTechnicalFields();
-        assertEquals(9, result.size());
+        assertEquals(12, result.size());
     }
 
     @Test
