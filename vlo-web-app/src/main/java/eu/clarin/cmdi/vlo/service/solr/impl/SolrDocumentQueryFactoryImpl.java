@@ -41,6 +41,8 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
     public SolrDocumentQueryFactoryImpl(Collection<String> documentFields) {
         defaultQueryTemplate = new SolrQuery();
         defaultQueryTemplate.setFields(documentFields.toArray(new String[]{}));
+//        //TODO: qf (all fields with weights - make configurable (later)
+//        defaultQueryTemplate.setParam(DisMaxParams.QF, "name^20 description^10");
     }
 
     @Override

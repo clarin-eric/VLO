@@ -65,7 +65,7 @@ public class SolrDocumentQueryFactoryImplTest {
         assertTrue(fields.contains("field1"));
         assertTrue(fields.contains("field2"));
         assertTrue(fields.contains("field3"));
-        assertEquals("\"query\"", query.getQuery());
+        assertEquals("query", query.getQuery());
     }
 
     /**

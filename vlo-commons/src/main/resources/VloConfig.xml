@@ -128,6 +128,9 @@
         <technicalField>_contentSearchRef</technicalField>
         <technicalField>_lastSeen</technicalField>
         <technicalField>_componentProfile</technicalField>
+        <technicalField>_hierarchyWeight</technicalField>
+        <technicalField>_hasPart</technicalField>
+        <technicalField>_isPartOf</technicalField>
     </technicalFields>
     
     <languageFilters>
@@ -159,5 +162,5 @@
     <cqlEndpointAlternative>http://cqlservlet.mpi.nl/</cqlEndpointAlternative>
     
     <!-- makes the score for the result ranking visible in the search results -->
-    <showResultScores>false</showResultScores>
+    <showResultScores>true</showResultScores>
 </VloConfig>

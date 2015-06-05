@@ -57,7 +57,7 @@ public class SolrFacetQueryFactoryImplTest {
         SolrQuery query = instance.createFacetQuery(selection, FACET_FIELDS, 20);
 
         // default: query selects all values 
-        assertEquals("*:*", query.getQuery());
+        assertNull(query.getQuery());
 
         // no selection -> no filter queries
         assertEquals(0, query.getFilterQueries().length);
@@ -81,7 +81,7 @@ public class SolrFacetQueryFactoryImplTest {
         SolrQuery query = instance.createFacetQuery(new QueryFacetsSelection(selection), FACET_FIELDS, 20);
 
         // default: query selects all values 
-        assertEquals("*:*", query.getQuery());
+        assertNull(query.getQuery());
 
         // Only empty selections -> no filter queries
         assertEquals(0, query.getFilterQueries().length);
@@ -106,7 +106,7 @@ public class SolrFacetQueryFactoryImplTest {
         SolrQuery query = instance.createFacetQuery(new QueryFacetsSelection(selection), FACET_FIELDS, 20);
 
         // default: query selects all values 
-        assertEquals("*:*", query.getQuery());
+        assertNull(query.getQuery());
 
         // Expecting three filter queries as three values have been selected in total
         assertEquals(3, query.getFilterQueries().length);
@@ -132,7 +132,7 @@ public class SolrFacetQueryFactoryImplTest {
         SolrQuery query = instance.createFacetQuery(new QueryFacetsSelection("query string", selection), FACET_FIELDS, 20);
 
         assertEquals(1, query.getFilterQueries().length);
-        assertEquals("\"query\\ string\"", query.getQuery()); //space should be escaped, and query wrapped!
+        assertEquals("query string", query.getQuery());
 
         // Expecting three filter queries as three values have been selected in total
         assertEquals(1, query.getFilterQueries().length);

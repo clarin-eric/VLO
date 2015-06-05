@@ -118,6 +118,9 @@ public class VloSolrSpringConfig {
             FacetConstants.FIELD_LAST_SEEN,
             FacetConstants.FIELD_CLARIN_PROFILE,
             FacetConstants.FIELD_COMPLETE_METADATA,
+            FacetConstants.FIELD_HIERARCHY_WEIGHT,
+            FacetConstants.FIELD_HAS_PART,
+            FacetConstants.FIELD_IS_PART_OF,
             FacetConstants.FIELD_SOLR_SCORE
     );
 }
