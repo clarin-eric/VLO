@@ -368,7 +368,11 @@
      <str name="qf">
         name^8 description^4 keywords^2 languageCode^2 country^2 organisation^2 collection^1 modality^1 genre^1 continent^.5 id^.1
      </str>
+     <str name="bf">
+         <!-- boost by hierarchy weight (reverse order because lower numbers indicate a higher level -->
+         rord(_hierarchyWeight)
      <!-- TODO: use bf to boost records with one or more resources -->
+     </str>
        <!--
        <int name="rows">10</int>
        <str name="fl">*</str>
@@ -910,33 +914,33 @@
     <queryResponseWriter name="php" class="org.apache.solr.request.PHPResponseWriter"/>
     <queryResponseWriter name="phps" class="org.apache.solr.request.PHPSerializedResponseWriter"/>
 
-    <queryResponseWriter name="custom" class="com.example.MyResponseWriter"/>
-  -->
-
-  <!-- XSLT response writer transforms the XML output by any xslt file found
-       in Solr's conf/xslt directory.  Changes to xslt files are checked for
-       every xsltCacheLifetimeSeconds.  
-   -->
-  <queryResponseWriter name="xslt" class="org.apache.solr.response.XSLTResponseWriter">
-    <int name="xsltCacheLifetimeSeconds">5</int>
-  </queryResponseWriter>
-
-
-  <!-- example of registering a query parser
-  <queryParser name="lucene" class="org.apache.solr.search.LuceneQParserPlugin"/>
-  -->
-
-  <!-- example of registering a custom function parser 
-  <valueSourceParser name="myfunc" class="com.mycompany.MyValueSourceParser" />
-  -->
-
-  <!-- config for the admin interface -->
-  <admin>
-    <defaultQuery>solr</defaultQuery>
-
-    <!-- configure a healthcheck file for servers behind a loadbalancer
-    <healthcheck type="file">server-enabled</healthcheck>
+      <queryResponseWriter name="custom" class="com.example.MyResponseWriter"/>
     -->
-  </admin>
+
+    <!-- XSLT response writer transforms the XML output by any xslt file found
+        in Solr's conf/xslt directory.  Changes to xslt files are checked for
+        every xsltCacheLifetimeSeconds.  
+    -->
+    <queryResponseWriter name="xslt" class="org.apache.solr.response.XSLTResponseWriter">
+        <int name="xsltCacheLifetimeSeconds">5</int>
+    </queryResponseWriter>
+
+
+    <!-- example of registering a query parser
+    <queryParser name="lucene" class="org.apache.solr.search.LuceneQParserPlugin"/>
+    -->
+
+    <!-- example of registering a custom function parser 
+    <valueSourceParser name="myfunc" class="com.mycompany.MyValueSourceParser" />
+    -->
+
+    <!-- config for the admin interface -->
+    <admin>
+        <defaultQuery>solr</defaultQuery>
+
+        <!-- configure a healthcheck file for servers behind a loadbalancer
+        <healthcheck type="file">server-enabled</healthcheck>
+        -->
+    </admin>
 
 </config>
