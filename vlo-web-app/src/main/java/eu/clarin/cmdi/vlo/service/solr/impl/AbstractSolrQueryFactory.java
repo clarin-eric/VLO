@@ -39,7 +39,7 @@ public abstract class AbstractSolrQueryFactory {
             query.setQuery(SOLR_SEARCH_ALL);
         } else {
             // escape query content and wrap in quotes to make literal query
-            query.setQuery("\"" + ClientUtils.escapeQueryChars(queryString) + "\"");
+            query.setQuery(queryString);
         }
         final Map<String, FacetSelection> selections = queryFacetsSelections.getSelection();
         if (selections != null) {
