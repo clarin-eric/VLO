@@ -362,26 +362,37 @@
   <requestHandler name="standard" class="solr.SearchHandler" default="true">
     <!-- default values for query parameters -->
      <lst name="defaults">
-       <str name="echoParams">explicit</str>
-     <str name="defType">dismax</str>
-     <str name="q.alt">*:*</str>
-     <str name="qf">
-         <!-- TODO: Add _languagename field for search purposes? -->
-        name^8 description^4 keywords^2 languageCode^2 country^2 organisation^2 subject^2 collection^1 modality^1 genre^1 continent^.5 id^.1
-     </str>
-     <str name="pf">
-         name^2 description
-     </str>
-     <str name="bf">
-         <!-- boost by hierarchy weight (reverse order because lower numbers indicate a higher level -->
-         rord(_hierarchyWeight)
-     <!-- TODO: use bf to boost records with one or more resources -->
-     </str>
-       <!--
-       <int name="rows">10</int>
-       <str name="fl">*</str>
-       <str name="version">2.1</str>
-        -->
+        <str name="echoParams">explicit</str>
+        
+        <!-- See https://wiki.apache.org/solr/DisMaxQParserPlugin -->
+        <str name="defType">dismax</str>
+        
+        <!-- 'Fetch all documents' query -->
+        <str name="q.alt">*:*</str>
+        
+        <!-- Query fields -->
+        <str name="qf">
+            <!-- TODO: Add _languagename field for search purposes? -->
+           name^8 description^4 keywords^2 languageCode^2 country^2 organisation^2 subject^2 collection^1 modality^1 genre^1 continent^.5 id^.1
+        </str>
+        
+        <!-- Phrase fields (boost if phrase is matched) -->
+        <str name="pf">
+            name^2 description
+        </str>
+        
+        <!-- Boost fields (boost based on field value regardless of query) -->
+        <str name="bf">
+            <!-- boost by hierarchy weight (reverse order because lower numbers indicate a higher level -->
+            rord(_hierarchyWeight)
+           <!-- TODO: use bf to boost records with one or more resources? -->
+        </str>
+        
+          <!--
+          <int name="rows">10</int>
+          <str name="fl">*</str>
+          <str name="version">2.1</str>
+           -->
      </lst>
   </requestHandler>
 
