@@ -417,6 +417,7 @@ public class MetadataImporter {
             solrDocument.addField(FacetConstants.FIELD_RESOURCE, mimeType + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR
                     + resource.getResourceName());
         }
+        solrDocument.addField(FacetConstants.FIELD_RESOURCE_COUNT, resources.size());
     }
 
     /**
@@ -480,6 +481,7 @@ public class MetadataImporter {
                     Map<String, List<String>> partialUpdate = new HashMap<String, List<String>>();
                     partialUpdate.put("set", incomingVertexNames);
                     doc.setField(FacetConstants.FIELD_HAS_PART, partialUpdate);
+                    doc.setField(FacetConstants.FIELD_HAS_PART_COUNT, incomingVertexNames.size());
                 }
                 
                 if(!outgoingVertexNames.isEmpty()) {

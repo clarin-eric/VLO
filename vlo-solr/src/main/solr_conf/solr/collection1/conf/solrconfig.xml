@@ -383,9 +383,13 @@
         
         <!-- Boost fields (boost based on field value regardless of query) -->
         <str name="bf">
-            <!-- boost by hierarchy weight (reverse order because lower numbers indicate a higher level -->
-            rord(_hierarchyWeight)
-           <!-- TODO: use bf to boost records with one or more resources? -->
+            <!-- 
+                boost by hierarchy weight (reverse order because lower numbers
+                indicate a higher level), then by number of parts, then by
+                number of resources -->
+            rord(_hierarchyWeight) log(add(1,_hasPartCount))^.1 <!-- todo: deal with -infinity -->
+            <!-- TODO: prefer CLARIN records over non-CLARIN? -->
+            <!-- TODO: boost records with one or more resources (_resourceRefCount) -->
         </str>
         
           <!--
