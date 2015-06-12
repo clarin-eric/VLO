@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.parsers.DocumentBuilder;
@@ -148,7 +149,11 @@ public class LanguageCodeUtils {
             Map<String, String> result = new ConcurrentHashMap<String, String>(CommonUtils.createCMDIComponentItemMap(url));
             return result;
         } catch (Exception e) {
-            throw new RuntimeException("Cannot instantiate postProcessor:", e);
+            if (CommonUtils.SWALLOW_LOOKUP_ERRORS) {
+                return new HashMap<String, String>();
+            } else {
+                throw new RuntimeException("Cannot instantiate postProcessor:", e);
+            }
         }
     }
 
@@ -158,7 +163,11 @@ public class LanguageCodeUtils {
             Map<String, String> result = new ConcurrentHashMap<String, String>(CommonUtils.createReverseCMDIComponentItemMap(url));
             return result;
         } catch (Exception e) {
-            throw new RuntimeException("Cannot instantiate postProcessor:", e);
+            if (CommonUtils.SWALLOW_LOOKUP_ERRORS) {
+                return new HashMap<String, String>();
+            } else {
+                throw new RuntimeException("Cannot instantiate postProcessor:", e);
+            }
         }
     }
 
@@ -181,7 +190,11 @@ public class LanguageCodeUtils {
             }
             return result;
         } catch (Exception e) {
-            throw new RuntimeException("Cannot instantiate postProcessor:", e);
+            if (CommonUtils.SWALLOW_LOOKUP_ERRORS) {
+                return new HashMap<String, String>();
+            } else {
+                throw new RuntimeException("Cannot instantiate postProcessor:", e);
+            }
         }
     }
 

@@ -20,7 +20,14 @@ import org.xml.sax.SAXException;
 
 public final class CommonUtils {
 
+    /**
+     * Set to true to make run/import possible without a network connection
+     * (todo: make environment variable?)
+     */
+    public static final Boolean SWALLOW_LOOKUP_ERRORS = false; //ONLY COMMIT AS FALSE!
+
     private final static Set<String> ANNOTATION_MIMETYPES = new HashSet<String>();
+
     static {
         ANNOTATION_MIMETYPES.add("text/x-eaf+xml");
         ANNOTATION_MIMETYPES.add("text/x-shoebox-text");
@@ -32,15 +39,18 @@ public final class CommonUtils {
         ANNOTATION_MIMETYPES.add("application/smil+xml");
     }
     private final static Set<String> TEXT_MIMETYPES = new HashSet<String>();
+
     static {
         TEXT_MIMETYPES.add("application/pdf");
         TEXT_MIMETYPES.add("txt");
     }
     private final static Set<String> VIDEO_MIMETYPES = new HashSet<String>();
+
     static {
         VIDEO_MIMETYPES.add("application/mxf");
     }
     private final static Set<String> AUDIO_MIMETYPES = new HashSet<String>();
+
     static {
         AUDIO_MIMETYPES.add("application/ogg");
         AUDIO_MIMETYPES.add("wav");
@@ -74,8 +84,10 @@ public final class CommonUtils {
     }
 
     /**
-     * Create a mapping out of simple CMDI components for instance: lists of items: <item AppInfo="Tigrinya (ti)">ti</item> Will become key (after removal of trailing 2 or 3 letter codes),
-     * values: ti, Tigrinya
+     * Create a mapping out of simple CMDI components for instance: lists of
+     * items: <item AppInfo="Tigrinya (ti)">ti</item> Will become key (after
+     * removal of trailing 2 or 3 letter codes), values: ti, Tigrinya
+     *
      * @param urlToComponent
      * @return Map with item_value, AppInfo_value pairs
      * @throws XPathExpressionException
@@ -101,10 +113,12 @@ public final class CommonUtils {
         }
         return result;
     }
-    
+
     /**
-     * Create a mapping out of simple CMDI components for instance: lists of items: <item AppInfo="Tigrinya">ti</item> Will become key (after removal of trailing 2 or 3 letter codes),
-     * values: Tigrinya, ti
+     * Create a mapping out of simple CMDI components for instance: lists of
+     * items: <item AppInfo="Tigrinya">ti</item> Will become key (after removal
+     * of trailing 2 or 3 letter codes), values: Tigrinya, ti
+     *
      * @param urlToComponent
      * @return Map with item_value, AppInfo_value pairs
      * @throws XPathExpressionException
