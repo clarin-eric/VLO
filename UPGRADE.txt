@@ -7,10 +7,12 @@ Quick overview of the upgrade steps (for details see DEPLOY-README)
 - Unpack the VLO distribution tarball
 
 - Go to the 'war' directory
-- Unzip the vlo-solr-#.##.war in a new 'solr' directory
-- Unzip the vlo-web-app-#.##.war in a new 'vlo' directory
-- Recursively assign ownership of the entire unpacked distribution to the
-appropriate user (i.e. 'vlouser' on catalog.clarin.eu)
+- Run the 'unpack-wars.sh' script in that directory
+  (OR execute the following steps manually:
+	- Unzip the vlo-solr-#.##.war in a new 'solr' directory
+	- Unzip the vlo-web-app-#.##.war in a new 'vlo' directory
+	- Recursively assign ownership of the entire unpacked distribution to the
+	appropriate user, i.e. 'vlouser' on catalog.clarin.eu)
 
 - In the 'config' directory, adjust VloConfig.xml as needed (make a backup 
 first). In particular, make sure that the following instance specific sections
