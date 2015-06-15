@@ -88,6 +88,14 @@
             </includes>
             <outputDirectory>war</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>${project.parent.basedir}/vlo-distribution/src/main/bin</directory>
+            <includes>
+                <include>unpack-wars.sh</include>
+            </includes>
+            <outputDirectory>war</outputDirectory>
+        </fileSet>
+        
         <!-- config -->
         <fileSet>
             <directory>${project.parent.basedir}/vlo-commons/src/main/resources</directory>
