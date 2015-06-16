@@ -365,7 +365,7 @@
         <str name="echoParams">explicit</str>
         
         <!-- See https://wiki.apache.org/solr/DisMaxQParserPlugin -->
-        <str name="defType">dismax</str>
+        <str name="defType">edismax</str>
         
         <!-- 'Fetch all documents' query -->
         <str name="q.alt">*:*</str>
