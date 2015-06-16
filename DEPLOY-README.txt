@@ -143,6 +143,16 @@ importer.
    modifications should be applied to:
 
    	apps/WEB-INF/classes/log4j.properties
+   	
+   Wicket runs in development mode by default, and depending on the environment
+   you are deploying to this may be undesirable. To make sure it runs in
+   production ('deployment') mode, set the following JVM option in the 
+   Tomcat JVM:
+   	
+   	-Dwicket.configuration=deployment
+   
+   OR set a context parameter 'configuration' to the value 'deployment' in the
+   application's context fragment.
 
    Now the web application has been installed and configured, we only need to 
    have a look at the VLO importer's configuration.
