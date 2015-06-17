@@ -279,9 +279,10 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             @Override
             protected void onConfigure() {
                 final SolrDocument document = getModel().getObject();
+                final Object partCount = document.getFieldValue(FacetConstants.FIELD_HAS_PART_COUNT);
                 final boolean hasHierarchy // has known parent or children
-                        = null != document.getFieldValue(FacetConstants.FIELD_HAS_PART)
-                        || null != document.getFieldValue(FacetConstants.FIELD_IS_PART_OF);
+                        = null != document.getFieldValue(FacetConstants.FIELD_IS_PART_OF) // has parent
+                        || (null != partCount && !Integer.valueOf(0).equals(partCount)); // children count != 0
 
                 // only show hierarchy panel if there's anything to show
                 setVisible(hasHierarchy);
