@@ -24,14 +24,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <body>
         <wicket:panel>
             <h2>Hierarchy (test)</h2>
-            <ul class="recordtree">
+            <ul id="recordtree">
                 <li>
                     <div wicket:id="parent">
                      <a wicket:id="link"><span wicket:id="name"></span></a>
                      <span wicket:id="noparent">-</span>
                     </div>
                     <ul>
-                        <li><span wicket:id="this">this item</span></li>
+                        <li id="thisrecord"><span wicket:id="this">this item</span></li>
                         <ul>
                             <li wicket:id="child"><a wicket:id="link"><span wicket:id="name"></span></a></li>
                         </ul>

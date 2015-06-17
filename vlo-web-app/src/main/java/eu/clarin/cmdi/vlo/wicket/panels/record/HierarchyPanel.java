@@ -72,7 +72,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
             }
 
         };
-        parentLink.add(new Label("name", new SolrFieldStringModel(parentModel, FacetConstants.FIELD_NAME)));
+        parentLink.add(new SolrFieldLabel("name", parentModel, FacetConstants.FIELD_NAME, new StringResourceModel("recordpage.unnamedrecord", this, null)));
 
         final WebMarkupContainer noParentLabel = new WebMarkupContainer("noparent") {
 
@@ -105,7 +105,8 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                         setResponsePage(RecordPage.class, documentParamConverter.toParameters(childModel.getObject()));
                     }
                 };
-                childLink.add(new Label("name", new SolrFieldStringModel(childModel, FacetConstants.FIELD_NAME)));
+                childLink.add(new SolrFieldLabel("name", childModel, FacetConstants.FIELD_NAME, new StringResourceModel("recordpage.unnamedrecord", this, null)));
+
                 item.add(childLink);
             }
         };
