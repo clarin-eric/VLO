@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.model;
 
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 /**
  * Decorator for String models that replaces the value returned by 
@@ -28,18 +29,22 @@ import org.apache.wicket.model.IModel;
 public class NullFallbackModel implements IModel<String> {
 
     private final IModel<String> wrappedModel;
-    private final String fallbackValue;
+    private final IModel<String> fallbackModel;
 
     public NullFallbackModel(IModel<String> wrappedModel, String fallbackValue) {
+        this(wrappedModel, Model.of(fallbackValue));
+    }
+
+    public NullFallbackModel(IModel<String> wrappedModel, IModel<String> fallbackModel) {
         this.wrappedModel = wrappedModel;
-        this.fallbackValue = fallbackValue;
+        this.fallbackModel = fallbackModel;
     }
 
     @Override
     public String getObject() {
         final String wrappedValue = wrappedModel.getObject();
         if (wrappedValue == null) {
-            return fallbackValue;
+            return fallbackModel.getObject();
         } else {
             return wrappedValue;
         }
@@ -53,6 +58,7 @@ public class NullFallbackModel implements IModel<String> {
     @Override
     public void detach() {
         wrappedModel.detach();
+        fallbackModel.detach();
     }
 
 }

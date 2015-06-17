@@ -39,6 +39,10 @@ public class SolrFieldLabel extends Label {
     public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, String nullFallback) {
         super(id, new NullFallbackModel(new SolrFieldStringModel(documentModel, fieldName), nullFallback));
     }
+    
+    public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, IModel<String> nullFallback) {
+        super(id, new NullFallbackModel(new SolrFieldStringModel(documentModel, fieldName), nullFallback));
+    }
 
     /**
      *

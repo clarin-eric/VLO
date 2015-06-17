@@ -20,7 +20,9 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 
 /**
  * Detachable model for Solr documents that uses the {@link SolrDocumentService}
@@ -31,14 +33,18 @@ import org.apache.wicket.model.LoadableDetachableModel;
  */
 public class SolrDocumentModel extends LoadableDetachableModel<SolrDocument> {
 
-    private final String docId;
+    private final IModel<String> docId;
 
     public SolrDocumentModel(SolrDocument document) {
         super(document);
-        this.docId = (String) document.getFieldValue(FacetConstants.FIELD_ID);
+        this.docId = Model.of((String) document.getFieldValue(FacetConstants.FIELD_ID));
     }
 
     public SolrDocumentModel(String docId) {
+        this(Model.of(docId));
+    }
+
+    public SolrDocumentModel(IModel<String> docId) {
         this.docId = docId;
     }
 
@@ -47,13 +53,18 @@ public class SolrDocumentModel extends LoadableDetachableModel<SolrDocument> {
         if (docId == null) {
             return null;
         } else {
-            return getDocumentService().getDocument(docId);
+            final String id = docId.getObject();
+            if (id == null) {
+                return null;
+            } else {
+                return getDocumentService().getDocument(id);
+            }
         }
     }
 
     @Override
     public String toString() {
-        return String.format("%s docId=%s attached=%b", super.toString(), docId, isAttached());
+        return String.format("%s docId=%s attached=%b", super.toString(), docId.getObject(), isAttached());
     }
 
     protected SolrDocumentService getDocumentService() {
