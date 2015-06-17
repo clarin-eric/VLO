@@ -39,6 +39,7 @@ import eu.clarin.cmdi.vlo.wicket.panels.ContentSearchFormPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.TogglePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
+import eu.clarin.cmdi.vlo.wicket.panels.record.HierarchyPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordNavigationPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.ResourceLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
@@ -152,6 +153,8 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         add(createTechnicalDetailsPanel("technicalProperties"));
 
         createSearchLinks("searchlinks");
+
+        add(new HierarchyPanel("recordtree", getModel()));
     }
 
     private Component createNavigation(final String id) {
