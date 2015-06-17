@@ -152,9 +152,9 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         add(createCmdiContent("cmdi"));
         add(createTechnicalDetailsPanel("technicalProperties"));
 
-        createSearchLinks("searchlinks");
+        add(createHierarchyPanel("recordtree"));
 
-        add(new HierarchyPanel("recordtree", getModel()));
+        createSearchLinks("searchlinks");
     }
 
     private Component createNavigation(final String id) {
@@ -270,6 +270,23 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             protected Component createContent(String id) {
                 return new FieldsTablePanel(id, new DocumentFieldsProvider(getModel(), technicalPropertiesFilter, fieldOrder));
             }
+        };
+    }
+
+    private HierarchyPanel createHierarchyPanel(String id) {
+        return new HierarchyPanel(id, getModel()) {
+
+            @Override
+            protected void onConfigure() {
+                final SolrDocument document = getModel().getObject();
+                final boolean hasHierarchy // has known parent or children
+                        = null != document.getFieldValue(FacetConstants.FIELD_HAS_PART)
+                        || null != document.getFieldValue(FacetConstants.FIELD_IS_PART_OF);
+
+                // only show hierarchy panel if there's anything to show
+                setVisible(hasHierarchy);
+            }
+
         };
     }
 

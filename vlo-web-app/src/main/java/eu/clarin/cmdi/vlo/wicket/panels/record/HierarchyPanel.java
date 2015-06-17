@@ -91,8 +91,9 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
     }
 
     private Component createChildrenLinks(String id) {
-        IModel<Collection<String>> partIdsModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_HAS_PART);
-        return new ListView<String>(id, new CollectionListModel<>(partIdsModel)) {
+        final IModel<Collection<String>> partIdsModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_HAS_PART);
+        //TODO: page or limit (collections can be huge!)
+        return new ListView<String>(id, CollectionListModel.of(partIdsModel)) {
 
             @Override
             protected void populateItem(ListItem<String> item) {
