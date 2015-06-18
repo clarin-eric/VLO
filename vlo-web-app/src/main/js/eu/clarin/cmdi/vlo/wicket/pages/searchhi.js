@@ -6,6 +6,14 @@
  http://www.woolyss.free.fr/js/searchhi_Woolyss.js and say when not found */
 /* Modified 20120112 to use the URL instead of referrer */
 /* Modified 20140522 <twan@clarin.eu> replaced unescape() with decodeURIComponent() */
+/* Modified 20150618 <twan@clarin.eu> added list of terms to exclude from highlighting */
+
+// list of words to exclude from highlighting (must be lower case)
+var excludeWords = [
+    "and",
+    "or",
+    "not"
+];
 
 searchhi = {
     highlightWord: function(node, word) {
@@ -75,7 +83,10 @@ searchhi = {
         searchhi.found = 0;
         var words = wordstring.split(/\s+/);
         for (w = 0; w < words.length; w++) {
-            searchhi.highlightWord(document.getElementsByTagName("body")[0], words[w]);
+            if(excludeWords.indexOf(words[w].toLowerCase()) < 0) {
+                searchhi.highlightWord(document.getElementsByTagName("body")[0], words[w]);
+
+            }
         }
         if (searchhi.found === 0) {
             searchhi.nohits();
