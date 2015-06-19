@@ -267,7 +267,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         final AutoPilot ap = new AutoPilot(nav);
         setNameSpace(ap);
         ap.selectXPath(pattern);
-        
+
         boolean matchedPattern = false;
         int index = ap.evalXPath();
         while (index != -1) {
@@ -286,8 +286,18 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                 continue;
             }
 
-            final List<String> valueList = postProcess(config.getName(), value);
-            insertFacetValues(config.getName(), valueList, cmdiData, languageCode, allowMultipleValues, config.isCaseInsensitive());
+            final List<String> values = postProcess(config.getName(), value);
+            insertFacetValues(config.getName(), values, cmdiData, languageCode, allowMultipleValues, config.isCaseInsensitive());
+
+            // insert post-processed values into derived facet(s) if configured
+            for (String derivedFacet : config.getDerivedFacets()) {
+                final List<String> derivedValues = new ArrayList<String>();
+                for (String postProcessedValue : values) {
+                    derivedValues.addAll(postProcess(derivedFacet, postProcessedValue));
+                }
+                insertFacetValues(derivedFacet, derivedValues, cmdiData, languageCode, allowMultipleValues, config.isCaseInsensitive());
+            }
+
             index = ap.evalXPath();
 
             if (!allowMultipleValues) {

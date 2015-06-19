@@ -178,6 +178,7 @@ public class FacetMappingFactory {
                 }
                 config.setPatterns(new ArrayList<String>(linkedHashSet));
                 config.setFallbackPatterns(facetConcept.getPatterns());
+                config.setDerivedFacets(facetConcept.getDerivedFacets());
 
                 if (!config.getPatterns().isEmpty() || !config.getFallbackPatterns().isEmpty()) {
                     result.addFacet(config);

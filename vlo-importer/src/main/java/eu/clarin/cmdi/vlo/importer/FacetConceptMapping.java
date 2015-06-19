@@ -14,15 +14,17 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
 /**
  * Corresponds to the facet concepts file.
- * 
- * This class holds the mapping of facet name -> facetConcepts/patterns
- * A facetConcept is a ISOcat conceptLink e.g.: http://www.isocat.org/datcat/DC-2544
- * the conceptLink will be analysed and translated into a valid Xpath expression to extract data out of the metadata. 
- * Valid xpath expression e.g. /c:CMD/c:Header/c:MdSelfLink/text(), the 'c' namespace will be mapped to http://www.clarin.eu/cmd/ in the parser.
- * A pattern is an xpath expression used directly on the metadata. Use patterns only when a conceptLink does not suffice. 
+ *
+ * This class holds the mapping of facet name -> facetConcepts/patterns A
+ * facetConcept is a ISOcat conceptLink e.g.:
+ * http://www.isocat.org/datcat/DC-2544 the conceptLink will be analysed and
+ * translated into a valid Xpath expression to extract data out of the metadata.
+ * Valid xpath expression e.g. /c:CMD/c:Header/c:MdSelfLink/text(), the 'c'
+ * namespace will be mapped to http://www.clarin.eu/cmd/ in the parser. A
+ * pattern is an xpath expression used directly on the metadata. Use patterns
+ * only when a conceptLink does not suffice.
  *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -41,24 +43,27 @@ public class FacetConceptMapping {
     public void setFacetConcepts(List<FacetConcept> facetConcepts) {
         this.facetConcepts = facetConcepts;
     }
-    
+
     public Map<String, FacetConcept> getFacetConceptMap() {
-    	Map<String, FacetConcept> facetConceptMap = new HashMap<String, FacetConcept>();
-    	for(FacetConcept facet : getFacetConcepts())
-    		facetConceptMap.put(facet.getName(), facet);
-    	
-    	return facetConceptMap;
+        Map<String, FacetConcept> facetConceptMap = new HashMap<String, FacetConcept>();
+        for (FacetConcept facet : getFacetConcepts()) {
+            facetConceptMap.put(facet.getName(), facet);
+        }
+
+        return facetConceptMap;
     }
-    
+
     public void check() {
         for (FacetConcept facetConcept : getFacetConcepts()) {
             if (facetConcept.hasAcceptableContext() && facetConcept.hasRejectableContext()) {
                 AcceptableContext acceptableContext = facetConcept.getAcceptableContext();
                 RejectableContext rejectableContext = facetConcept.getRejectableContext();
-                if (acceptableContext.includeAny() && rejectableContext.includeAny())
-                    LOG.error("Error: any context is both acceptable and rejectable for facet '"+facetConcept.getName()+"'");
-                if (acceptableContext.includeEmpty() && rejectableContext.includeEmpty())
-                    LOG.error("Error: empty context is both acceptable and rejectable for facet '"+facetConcept.getName()+"'");
+                if (acceptableContext.includeAny() && rejectableContext.includeAny()) {
+                    LOG.error("Error: any context is both acceptable and rejectable for facet '" + facetConcept.getName() + "'");
+                }
+                if (acceptableContext.includeEmpty() && rejectableContext.includeEmpty()) {
+                    LOG.error("Error: empty context is both acceptable and rejectable for facet '" + facetConcept.getName() + "'");
+                }
             }
         }
     }
@@ -66,25 +71,29 @@ public class FacetConceptMapping {
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlRootElement(name = "facetConcept")
     public static class FacetConcept {
+
         @XmlAttribute
         private String name;
 
         /**
-         * Values will be stored lowercase by default, set isCaseInsensitive to true if you want to keep the case of the value
+         * Values will be stored lowercase by default, set isCaseInsensitive to
+         * true if you want to keep the case of the value
          */
         @XmlAttribute
         private boolean isCaseInsensitive = false;
 
         /**
-         * By default multiple values that are found for a matching pattern will be stored. For some facets this leads to too much values
-         * with little value for instance for "subject". Set allowMultipleValues to false will only store the first found value.
+         * By default multiple values that are found for a matching pattern will
+         * be stored. For some facets this leads to too much values with little
+         * value for instance for "subject". Set allowMultipleValues to false
+         * will only store the first found value.
          */
         @XmlAttribute
         private boolean allowMultipleValues = true;
-        
+
         @XmlAttribute
         private String description = "";
-        
+
         @XmlAttribute
         private String definition = "";
 
@@ -99,10 +108,13 @@ public class FacetConceptMapping {
 
         @XmlElement(name = "pattern")
         private List<String> patterns = new ArrayList<String>();
-        
+
         @XmlElement(name = "blacklistPattern")
         private List<String> blacklistPatterns = new ArrayList<String>();
-        
+
+        @XmlElement(name = "derivedFacet")
+        private List<String> derivedFacets = new ArrayList<String>();
+
         public void setConcepts(List<String> concepts) {
             this.concepts = concepts;
         }
@@ -118,9 +130,9 @@ public class FacetConceptMapping {
         public AcceptableContext getAcceptableContext() {
             return acceptableContext;
         }
-        
+
         public boolean hasAcceptableContext() {
-            return (acceptableContext!=null);
+            return (acceptableContext != null);
         }
 
         public void setRejectableContext(RejectableContext context) {
@@ -130,11 +142,11 @@ public class FacetConceptMapping {
         public RejectableContext getRejectableContext() {
             return rejectableContext;
         }
-        
+
         public boolean hasRejectableContext() {
-            return (rejectableContext!=null);
+            return (rejectableContext != null);
         }
-        
+
         public boolean hasContext() {
             return (hasAcceptableContext() || hasRejectableContext());
         }
@@ -162,21 +174,21 @@ public class FacetConceptMapping {
         public boolean isAllowMultipleValues() {
             return allowMultipleValues;
         }
-        
+
         public void setDescription(String description) {
-        	this.description = description;
+            this.description = description;
         }
-        
+
         public String getDescription() {
-        	return this.description;
+            return this.description;
         }
-        
+
         public void setDefinition(String definition) {
-        	this.definition = definition;
+            this.definition = definition;
         }
-        
+
         public String getDefinition() {
-        	return this.definition;
+            return this.definition;
         }
 
         public void setPatterns(List<String> patterns) {
@@ -186,7 +198,7 @@ public class FacetConceptMapping {
         public List<String> getPatterns() {
             return patterns;
         }
-        
+
         public void setBlacklistPatterns(List<String> blacklistPatterns) {
             this.blacklistPatterns = blacklistPatterns;
         }
@@ -195,13 +207,21 @@ public class FacetConceptMapping {
             return blacklistPatterns;
         }
 
+        public List<String> getDerivedFacets() {
+            return derivedFacets;
+        }
+
+        public void setDerivedFacets(List<String> derivedFacets) {
+            this.derivedFacets = derivedFacets;
+        }
+
         @Override
         public String toString() {
             return "name=" + name + ", patterns=" + patterns + ", concepts=" + concepts;
         }
 
     }
-    
+
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlRootElement(name = "acceptableContext")
     public static class AcceptableContext {
@@ -238,7 +258,7 @@ public class FacetConceptMapping {
         public boolean includeEmpty() {
             return includeEmpty;
         }
-        
+
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
@@ -277,7 +297,7 @@ public class FacetConceptMapping {
         public boolean includeEmpty() {
             return includeEmpty;
         }
-        
+
     }
 
 }

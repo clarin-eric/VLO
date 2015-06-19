@@ -5,16 +5,16 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Once created contains the information about the facets and such.
- * Just a container for some information, doesn't do processing.
+ * Once created contains the information about the facets and such. Just a
+ * container for some information, doesn't do processing.
  */
-
 public class FacetConfiguration {
 
     private String name;
-    private boolean caseInsensitive= false;
+    private boolean caseInsensitive = false;
     private List<String> patterns = new ArrayList<String>();
     private List<String> fallbackPatterns = new ArrayList<String>();
+    private List<String> derivedFacets = new ArrayList<String>();
     private boolean allowMultipleValues = true;
 
     public void setCaseInsensitive(boolean caseValue) {
@@ -28,7 +28,7 @@ public class FacetConfiguration {
     public void setPatterns(List<String> patterns) {
         this.patterns = patterns;
     }
-    
+
     public void setFallbackPatterns(List<String> fallbackPatterns) {
         this.fallbackPatterns = fallbackPatterns;
     }
@@ -36,7 +36,7 @@ public class FacetConfiguration {
     public void setPattern(String pattern) {
         this.patterns = Collections.singletonList(pattern);
     }
-    
+
     public void setFallbackPattern(String fallbackPattern) {
         this.fallbackPatterns = Collections.singletonList(fallbackPattern);
     }
@@ -47,7 +47,7 @@ public class FacetConfiguration {
     public List<String> getPatterns() {
         return patterns;
     }
-    
+
     public List<String> getFallbackPatterns() {
         return fallbackPatterns;
     }
@@ -62,7 +62,7 @@ public class FacetConfiguration {
 
     @Override
     public String toString() {
-        return "name="+name+", pattern="+patterns;
+        return "name=" + name + ", pattern=" + patterns;
     }
 
     public boolean getAllowMultipleValues() {
@@ -72,4 +72,13 @@ public class FacetConfiguration {
     public void setAllowMultipleValues(boolean allowMultipleValues) {
         this.allowMultipleValues = allowMultipleValues;
     }
+
+    public List<String> getDerivedFacets() {
+        return derivedFacets;
+    }
+
+    public void setDerivedFacets(List<String> derivedFacets) {
+        this.derivedFacets = derivedFacets;
+    }
+
 }
