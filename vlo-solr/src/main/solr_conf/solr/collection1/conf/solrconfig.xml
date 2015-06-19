@@ -373,7 +373,7 @@
         <!-- Query fields -->
         <str name="qf">
             <!-- TODO: Add _languagename field for search purposes? -->
-           text name^8 description^4 keywords^2 languageCode^2 country^2 organisation^2 subject^2 collection^1 modality^1 genre^1 continent^.5 id^.1
+           text name^8 description^4 keywords^2 languageName^2 country^2 organisation^2 subject^2 collection^1 modality^1 genre^1 continent^.5 id^.1
         </str>
         
         <!-- Phrase fields (boost if phrase is matched) -->
