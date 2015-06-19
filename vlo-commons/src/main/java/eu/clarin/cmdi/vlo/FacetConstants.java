@@ -15,7 +15,6 @@ public class FacetConstants {
     public static final String FIELD_AVAILABILITY = "availability";
     public static final String FIELD_LICENSE = "license";
     public static final String FIELD_LANGUAGE_CODE = "languageCode";
-    public static final String FIELD_LANGUAGE_NAME = "languageName";
     public static final String FIELD_TEMPORAL_COVERAGE = "temporalCoverage";
     public static final String FIELD_GENRE = "genre";
     public static final String FIELD_MODALITY = "modality";
@@ -47,6 +46,7 @@ public class FacetConstants {
     public static final String FIELD_IS_PART_OF = "_isPartOf";
     public static final String FIELD_HAS_PART = "_hasPart";
     public static final String FIELD_HAS_PART_COUNT = "_hasPartCount";
+    public static final String FIELD_LANGUAGE_NAME = "_languageName";
 
     /**
      * Facet constant associated with the landing page type.

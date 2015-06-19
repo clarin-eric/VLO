@@ -210,7 +210,7 @@
 		<!-- IMS c:LexicalResourceProfile -->
 		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:DocumentationLanguages</blacklistPattern>
 		<!-- IMS c:MultimodalCorpus -->
-                <derivedFacet>languageName</derivedFacet>
+                <derivedFacet>_languageName</derivedFacet>
 	</facetConcept>
         <facetConcept name="availability" description="The usage conditions for the resource or tool" definition="A rough description of the conditions under which the resource or tool can be used.">
 		<concept>http://www.isocat.org/datcat/DC-2457</concept>
