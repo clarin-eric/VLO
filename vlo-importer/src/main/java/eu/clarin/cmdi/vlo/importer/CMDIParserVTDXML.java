@@ -210,9 +210,9 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                 // note that the mime type could be empty
                 cmdiData.addResource(ref, type, mimeType);
             }
-            
+
             // resource hierarchy information?
-            if(type.toLowerCase().equals("metadata")) {
+            if (type.toLowerCase().equals("metadata")) {
                 ResourceStructureGraph.addEdge(ref, mdSelfLinkString);
             }
         }
@@ -264,10 +264,11 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @throws VTDException
      */
     private boolean matchPattern(CMDIData cmdiData, VTDNav nav, FacetConfiguration config, String pattern, Boolean allowMultipleValues) throws VTDException {
-        boolean matchedPattern = false;
-        AutoPilot ap = new AutoPilot(nav);
+        final AutoPilot ap = new AutoPilot(nav);
         setNameSpace(ap);
         ap.selectXPath(pattern);
+        
+        boolean matchedPattern = false;
         int index = ap.evalXPath();
         while (index != -1) {
             matchedPattern = true;
@@ -275,18 +276,9 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                 //if it is an attribute you need to add 1 to the index to get the right value
                 index++;
             }
-            String value = nav.toString(index);
+            final String value = nav.toString(index);
 
-            // extract language code in xml:lang if available
-            Integer langAttrIndex = nav.getAttrVal("xml:lang");
-            String languageCode = DEFAULT_LANGUAGE;
-            if (langAttrIndex != -1) {
-                languageCode = nav.toString(langAttrIndex).trim();
-            }
-            // replace 2-letter with 3-letter codes
-            if (MetadataImporter.languageCodeUtils.getSilToIso639Map().containsKey(languageCode)) {
-                languageCode = MetadataImporter.languageCodeUtils.getSilToIso639Map().get(languageCode);
-            }
+            final String languageCode = extractLanguageCode(nav);
 
             // ignore non-English language names for facet LANGUAGE_CODE
             if (config.getName().equals(FacetConstants.FIELD_LANGUAGE_CODE) && !languageCode.equals("en") && !languageCode.equals("eng") && !languageCode.equals("und")) {
@@ -294,17 +286,8 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                 continue;
             }
 
-            List<String> valueList = postProcess(config.getName(), value);
-            for (int i = 0; i < valueList.size(); i++) {
-                if (!allowMultipleValues && i > 0) {
-                    break;
-                }
-                String fieldValue = valueList.get(i).trim();
-                if (config.getName().equals(FacetConstants.FIELD_DESCRIPTION)) {
-                    fieldValue = "{lang='" + languageCode + "'}" + fieldValue;
-                }
-                cmdiData.addDocField(config.getName(), fieldValue, config.isCaseInsensitive());
-            }
+            final List<String> valueList = postProcess(config.getName(), value);
+            insertFacetValues(config.getName(), valueList, cmdiData, languageCode, allowMultipleValues, config.isCaseInsensitive());
             index = ap.evalXPath();
 
             if (!allowMultipleValues) {
@@ -312,6 +295,33 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             }
         }
         return matchedPattern;
+    }
+
+    private String extractLanguageCode(VTDNav nav) throws NavException {
+        // extract language code in xml:lang if available
+        Integer langAttrIndex = nav.getAttrVal("xml:lang");
+        String languageCode = DEFAULT_LANGUAGE;
+        if (langAttrIndex != -1) {
+            languageCode = nav.toString(langAttrIndex).trim();
+        }
+        // replace 2-letter with 3-letter codes
+        if (MetadataImporter.languageCodeUtils.getSilToIso639Map().containsKey(languageCode)) {
+            languageCode = MetadataImporter.languageCodeUtils.getSilToIso639Map().get(languageCode);
+        }
+        return languageCode;
+    }
+
+    private void insertFacetValues(String name, List<String> valueList, CMDIData cmdiData, String languageCode, boolean allowMultipleValues, boolean caseInsensitive) {
+        for (int i = 0; i < valueList.size(); i++) {
+            if (!allowMultipleValues && i > 0) {
+                break;
+            }
+            String fieldValue = valueList.get(i).trim();
+            if (name.equals(FacetConstants.FIELD_DESCRIPTION)) {
+                fieldValue = "{lang='" + languageCode + "'}" + fieldValue;
+            }
+            cmdiData.addDocField(name, fieldValue, caseInsensitive);
+        }
     }
 
     /**
