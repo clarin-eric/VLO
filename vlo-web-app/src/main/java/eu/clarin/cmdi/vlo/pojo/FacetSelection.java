@@ -116,4 +116,9 @@ public class FacetSelection implements Serializable {
                 && (values == null || values.isEmpty());
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s: %s", selectionType, values);
+    }
+
 }

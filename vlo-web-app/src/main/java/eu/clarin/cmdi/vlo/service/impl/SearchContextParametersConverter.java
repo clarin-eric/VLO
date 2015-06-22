@@ -29,6 +29,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Converter for the {@link VloWebAppParameters#SEARCH_INDEX} and
+ * {@link VloWebAppParameters#SEARCH_COUNT} parameters, which function to carry
+ * the result (paging) context (result count and offset) to and between record
+ * pages
  *
  * @author twagoo
  */
