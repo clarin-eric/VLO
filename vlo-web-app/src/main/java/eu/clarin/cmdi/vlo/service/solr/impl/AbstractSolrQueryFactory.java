@@ -51,7 +51,7 @@ public abstract class AbstractSolrQueryFactory {
                     switch (selection.getSelectionType()) {
                         case NOT_EMPTY:
                             //TODO: test
-                            encodedQueries.add(String.format("%s:['' TO *]", facetName));
+                            encodedQueries.add(String.format("%s:[* TO *]", facetName));
                             break;
                         case AND:
                             for (String value : selection.getValues()) {

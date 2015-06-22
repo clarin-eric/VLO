@@ -26,6 +26,8 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel;
+import static eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel.OPTIONS_FIELDS;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +54,10 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
      */
     public final static Splitter FILTER_SPLITTER = Splitter.on(":").limit(2);
 
+    /**
+     * Fields that aren't true facets but can be queried by the user via the
+     * {@link AdvancedSearchOptionsPanel}
+     */
     private final Set<String> facetsDefined;
     private final FacetParameterMapper facetParamMapper;
 
@@ -92,7 +98,7 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
                     final String facet = facetParamMapper.getFacet(fqType.get(0));
                     final String type = fqType.get(1).toUpperCase();
 
-                    if (facetsDefined.contains(facet)) {
+                    if (facetsDefined.contains(facet) || OPTIONS_FIELDS.contains(facet)) {
                         try {
                             final FacetSelectionType facetSelectionType = FacetSelectionType.valueOf(type);
                             selection.put(facet, new FacetSelection(facetSelectionType));

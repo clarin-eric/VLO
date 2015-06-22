@@ -207,10 +207,17 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
         }
 
         private String getAnyValueString() {
-            if (FacetConstants.FIELD_SEARCH_SERVICE.equals(facet)) {
-                return "Content searchable";
+            if (null != facet) {
+                switch (facet) {
+                    case FacetConstants.FIELD_SEARCH_SERVICE:
+                        return "Content searchable"; //TODO: make string property
+                    case FacetConstants.FIELD_HAS_PART_COUNT:
+                        return "Collection records"; //TODO: make string property
+                    default:
+                        return "any " + facet;
+                }
             }
-            return "any " + facet;
+            return "";
         }
 
         public String getCollectionString(FacetSelection selection, String valueSeparator, Locale locale) {

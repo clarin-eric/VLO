@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import com.google.common.collect.ImmutableSet;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
@@ -24,6 +25,7 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.model.ToggleModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
+import java.util.Collection;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.basic.Label;
@@ -42,30 +44,43 @@ import org.apache.wicket.model.IModel;
  */
 public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFacetsSelection> {
 
+    /**
+     * The fields that this panel provides options for
+     */
+    public final static Collection<String> OPTIONS_FIELDS = ImmutableSet.of(
+            FacetConstants.FIELD_HAS_PART_COUNT,
+            FacetConstants.FIELD_SEARCH_SERVICE);
+
     public AdvancedSearchOptionsPanel(String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
-
-        // create a model for the selection state for the FCS facet
-        final IModel<FacetSelection> fcsFacetModel = new FacetSelectionModel(model, FacetConstants.FIELD_SEARCH_SERVICE);
-        // wrap in a toggle model that allows switching between a null selection and a 'not empty' selection
-        final ToggleModel<FacetSelection> toggleModel = new ToggleModel<FacetSelection>(fcsFacetModel, null, new FacetSelection(FacetSelectionType.NOT_EMPTY));
-
         final Form options = new Form("options");
-        final CheckBox fcsCheck = new CheckBox("fcs", toggleModel);
-        fcsCheck.add(new OnChangeAjaxBehavior() {
+
+        final CheckBox fcsCheck = createFieldNotEmptyOption("fcs", FacetConstants.FIELD_SEARCH_SERVICE);
+        options.add(fcsCheck);
+        final CheckBox collectionCheck = createFieldNotEmptyOption("collection", FacetConstants.FIELD_HAS_PART_COUNT);
+        options.add(collectionCheck);
+        add(options);
+    }
+
+    private CheckBox createFieldNotEmptyOption(String id, String fieldName) {
+        // create a model for the selection state of the facet
+        final IModel<FacetSelection> facetModel = new FacetSelectionModel(getModel(), fieldName);
+        // wrap in a toggle model that allows switching between a null selection and a 'not empty' selection
+        final ToggleModel<FacetSelection> toggleModel = new ToggleModel<>(facetModel, null, new FacetSelection(FacetSelectionType.NOT_EMPTY));
+
+        final CheckBox checkBox = new CheckBox(id, toggleModel);
+        checkBox.add(new OnChangeAjaxBehavior() {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 selectionChanged(target);
             }
         });
-        options.add(fcsCheck);
-        add(options);
-
         // should initially be epxanded if one of the options was selected
         if (toggleModel.getObject()) {
             getExpansionModel().setObject(ExpansionState.EXPANDED);
         }
+        return checkBox;
     }
 
     @Override
