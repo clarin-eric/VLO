@@ -168,12 +168,15 @@
 		<!--language (TEI) - MENZO: added for CLARIN-DK -->
 
 		<concept>http://purl.org/dc/terms/language</concept>
-		<!-- Had to be removed due to IDSAGD_Speaker  <acceptableContext includeAny="false" includeEmpty="true"/>
-    <rejectableContext includeAny="true"  includeEmpty="false">
-      <concept>http://www.isocat.org/datcat/DC-4146</concept>
-      <concept>http://hdl.handle.net/11459/CCR_C-4146_5ccc45c8-d729-c180-2bf1-fccc56dde24d</concept>
-    </rejectableContext> -->
-		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms/c:language/@olac-language</pattern>
+
+                <acceptableContext includeAny="true" includeEmpty="true"/>
+                <rejectableContext includeAny="false"  includeEmpty="false">
+                    <concept>http://www.isocat.org/datcat/DC-4146</concept>
+                    <concept>http://hdl.handle.net/11459/CCR_C-4146_5ccc45c8-d729-c180-2bf1-fccc56dde24d</concept>
+                </rejectableContext>
+		
+                
+                <pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms/c:language/@olac-language</pattern>
 		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms/c:subject/@olac-language</pattern>
 		<pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()</pattern>
 		<pattern>/c:CMD/c:Components/c:mods/c:language/c:languageTerm/text()</pattern>
@@ -190,11 +193,11 @@
 		<!-- <pattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Operations/c:Operation/c:Input/c:ParameterGroup/c:Parameters/c:Parameter/c:Values/c:ParameterValue/c:Value/text()</pattern>-->
 		<!--  WeblichtWebservices, breaks Tübingen Resources (oai_sfs_uni_tuebingen_de_FID_15.xml)-->
 		<blacklistPattern>/c:Actor_Languages/c:Actor_Language/</blacklistPattern>
-		<!-- MPI (JK) -->
-		<blacklistPattern>/c:ActorLanguage/c:Language/c:ISO639/c:iso-639-3-code</blacklistPattern>
+		<!-- MPI (JK), BAS - fixed by context blacklist -->
+		<!--<blacklistPattern>/c:ActorLanguage/c:Language/c:ISO639/c:iso-639-3-code</blacklistPattern>-->
 		<blacklistPattern>/c:LanguageName</blacklistPattern>
-		<!-- general -->
-		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground</blacklistPattern>
+		<!-- general - fixed by context blacklist-->
+		<!--<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground</blacklistPattern>-->
 		<!-- IDS IDSAGD_Speaker -->
 		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Collection/c:DocumentationLanguages</blacklistPattern>
 		<!-- IDS IDSAGD_Corpus -->
