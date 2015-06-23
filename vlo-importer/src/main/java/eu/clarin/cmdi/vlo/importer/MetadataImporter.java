@@ -13,7 +13,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,9 +26,11 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.io.FileUtils;
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer;
 import org.apache.solr.client.solrj.util.ClientUtils;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.MapSolrParams;
 import org.apache.solr.common.params.SolrParams;
@@ -154,6 +155,7 @@ public class MetadataImporter {
                     if (!docs.isEmpty()) {
                         sendDocs();
                     }
+                    solrServer.commit();
                     updateDocumentHierarchy();
                 }
                 LOG.info("End of processing: " + dataRoot.getOriginName());
@@ -460,6 +462,7 @@ public class MetadataImporter {
      */
     private void updateDocumentHierarchy() throws SolrServerException, MalformedURLException, IOException {
         LOG.info(ResourceStructureGraph.printStatistics(0));
+        Boolean updatedDocs = false;
         List<SolrInputDocument> updateDocs = new ArrayList<SolrInputDocument>();
         Iterator<CmdiVertex> vertexIter = ResourceStructureGraph.getFoundVertices().iterator();
         while(vertexIter.hasNext()) {
@@ -467,28 +470,34 @@ public class MetadataImporter {
             List<String> incomingVertexNames = ResourceStructureGraph.getIncomingVertexNames(vertex);
             List<String> outgoingVertexNames = ResourceStructureGraph.getOutgoingVertexNames(vertex);
             
+            SolrQuery query;
             // update vertex if changes are necessary (necessary if non-default weight or edges to other resources)
             if(vertex.getHierarchyWeight() != 0 || !incomingVertexNames.isEmpty() || !outgoingVertexNames.isEmpty()) {
-                SolrInputDocument doc = new SolrInputDocument();
-                doc.setField(FacetConstants.FIELD_ID, Arrays.asList(vertex.getId()));
+                updatedDocs = true;
+                
+                // get document
+                query = new SolrQuery();
+                query.set("q", FacetConstants.FIELD_ID+":"+vertex.getId());
+                SolrDocumentList response = solrServer.query(query).getResults();
+                
+                // empty result set? may be the case if CMDI file was rejected due to missing ResourceProxys in {@link #processCmdi(File, DataRoot, CMDIDataProcessor) processCmdi}
+                if(response.size() == 0) {
+                    LOG.debug("Doc "+vertex.getId()+" not found while updating document hierarchy information");
+                    continue;
+                }
+                SolrInputDocument doc = ClientUtils.toSolrInputDocument(response.get(0));
                 
                 if(vertex.getHierarchyWeight() != 0) {
-                    Map<String, Integer> partialUpdate = new HashMap<String, Integer>();
-                    partialUpdate.put("set", Math.abs(vertex.getHierarchyWeight()));
-                    doc.addField(FacetConstants.FIELD_HIERARCHY_WEIGHT, partialUpdate);
+                    doc.setField(FacetConstants.FIELD_HIERARCHY_WEIGHT, Math.abs(vertex.getHierarchyWeight()));
                 }
                 
                 if(!incomingVertexNames.isEmpty()) {
-                    Map<String, List<String>> partialUpdate = new HashMap<String, List<String>>();
-                    partialUpdate.put("set", incomingVertexNames);
-                    doc.setField(FacetConstants.FIELD_HAS_PART, partialUpdate);
+                    doc.setField(FacetConstants.FIELD_HAS_PART, incomingVertexNames);
                     doc.setField(FacetConstants.FIELD_HAS_PART_COUNT, incomingVertexNames.size());
                 }
                 
                 if(!outgoingVertexNames.isEmpty()) {
-                    Map<String, List<String>> partialUpdate = new HashMap<String, List<String>>();
-                    partialUpdate.put("set", outgoingVertexNames);
-                    doc.setField(FacetConstants.FIELD_IS_PART_OF, partialUpdate);
+                    doc.setField(FacetConstants.FIELD_IS_PART_OF, outgoingVertexNames);
                 }
                 updateDocs.add(doc);
             }
@@ -507,7 +516,10 @@ public class MetadataImporter {
                 throw new SolrServerException(serverError);
             }
         }
-        solrServer.commit();
+        
+        if(updatedDocs) {
+            solrServer.commit();
+        }
 
         ResourceStructureGraph.clearResourceGraph();
     }
