@@ -31,13 +31,17 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public class RecordPageLink extends Link {
 
-    @SpringBean(name="documentParamsConverter")
+    @SpringBean(name = "documentParamsConverter")
     private PageParametersConverter<SolrDocument> documentParamConverter;
-    @SpringBean(name="searchContextParamsConverter")
+    @SpringBean(name = "searchContextParamsConverter")
     private PageParametersConverter<SearchContext> contextParamConverter;
 
     private final IModel<SolrDocument> documentModel;
     private final IModel<SearchContext> selectionModel;
+
+    public RecordPageLink(String id, IModel<SolrDocument> documentModel) {
+        this(id, documentModel, null);
+    }
 
     public RecordPageLink(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel) {
         super(id);
@@ -48,7 +52,9 @@ public class RecordPageLink extends Link {
     @Override
     public void onClick() {
         final PageParameters params = documentParamConverter.toParameters(documentModel.getObject());
-        params.mergeWith(contextParamConverter.toParameters(selectionModel.getObject()));
+        if (selectionModel != null) {
+            params.mergeWith(contextParamConverter.toParameters(selectionModel.getObject()));
+        }
         setResponsePage(RecordPage.class, params);
     }
 
@@ -56,7 +62,9 @@ public class RecordPageLink extends Link {
     public void detachModels() {
         super.detachModels();
         documentModel.detach();
-        selectionModel.detach();
+        if (selectionModel != null) {
+            selectionModel.detach();
+        }
     }
 
 }

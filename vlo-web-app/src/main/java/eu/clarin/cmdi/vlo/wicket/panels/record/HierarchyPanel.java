@@ -21,6 +21,8 @@ import com.google.common.collect.Iterators;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import eu.clarin.cmdi.vlo.wicket.components.NamedRecordPageLink;
+import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
@@ -33,10 +35,12 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.extensions.markup.html.repeater.tree.AbstractTree;
 import org.apache.wicket.extensions.markup.html.repeater.tree.DefaultNestedTree;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
+import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableTreeProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
@@ -65,29 +69,14 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
         final SolrFieldStringModel parentIdModel = new SolrFieldStringModel(getModel(), FacetConstants.FIELD_IS_PART_OF);
         final SolrDocumentModel parentModel = new SolrDocumentModel(parentIdModel);
 
-        final Link parentLink = new Link("link") {
-
-            @Override
-            public void onClick() {
-                setResponsePage(RecordPage.class, documentParamConverter.toParameters(parentModel.getObject()));
-            }
-
-            @Override
-            protected void onConfigure() {
-                setVisible(parentModel.getObject() != null);
-            }
-
-        };
-        parentLink.add(new SolrFieldLabel("name", parentModel, FacetConstants.FIELD_NAME, new StringResourceModel("recordpage.unnamedrecord", this, null)));
-
         final MarkupContainer parent = new WebMarkupContainer(id){
             
             @Override
             protected void onConfigure() {
-                setVisible(parentModel.getObject() == null);
+                setVisible(parentModel.getObject() != null);
             }
         };
-        parent.add(parentLink);
+        parent.add(new NamedRecordPageLink("link", parentModel));
 
         return parent;
     }
@@ -96,8 +85,8 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
         return new DefaultNestedTree<SolrDocument>(id, createProvider()) {
 
             @Override
-            protected Component newContentComponent(String id, IModel<SolrDocument> node) {
-                return new Label(id, new SolrFieldStringModel(node, FacetConstants.FIELD_NAME));
+            protected Component newContentComponent(String id, final IModel<SolrDocument> node) {
+                return new NamedRecordPageLink(id, node);
             }
 
         };

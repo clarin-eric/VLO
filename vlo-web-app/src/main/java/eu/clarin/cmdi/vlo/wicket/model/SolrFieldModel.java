@@ -45,7 +45,7 @@ public class SolrFieldModel<T> extends AbstractReadOnlyModel<Collection<T>> {
     public SolrFieldModel(IModel<SolrDocument> documentModel, String fieldName) {
         this(documentModel, Model.of(fieldName));
     }
-    
+
     /**
      *
      * @param documentModel model of document that holds the field values
@@ -58,12 +58,14 @@ public class SolrFieldModel<T> extends AbstractReadOnlyModel<Collection<T>> {
 
     @Override
     public Collection<T> getObject() {
-        final Collection<Object> fieldValues = documentModel.getObject().getFieldValues(fieldNameModel.getObject());
-        if (fieldValues == null) {
-            return null;
-        } else {
-            return transformCollectionType(fieldValues);
+        final SolrDocument document = documentModel.getObject();
+        if (document != null) {
+            final Collection<Object> fieldValues = document.getFieldValues(fieldNameModel.getObject());
+            if (fieldValues != null) {
+                return transformCollectionType(fieldValues);
+            }
         }
+        return null;
     }
 
     /**
