@@ -16,23 +16,27 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterators;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
-import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import java.util.Collection;
+import java.util.Iterator;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.extensions.markup.html.repeater.tree.AbstractTree;
+import org.apache.wicket.extensions.markup.html.repeater.tree.DefaultNestedTree;
+import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortableTreeProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
@@ -44,6 +48,9 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
+    @SpringBean
+    private SolrDocumentService documentService;
+
     @SpringBean(name = "documentParamsConverter")
     private PageParametersConverter<SolrDocument> documentParamConverter;
 
@@ -51,8 +58,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
         super(id, documentModel);
 
         add(createParentLink("parent"));
-        add(new SolrFieldLabel("this", documentModel, FacetConstants.FIELD_NAME, new StringResourceModel("recordpage.unnamedrecord", this, null)));
-        add(createChildrenLinks("child"));
+        add(createTree("tree"));
     }
 
     private MarkupContainer createParentLink(String id) {
@@ -74,40 +80,59 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
         };
         parentLink.add(new SolrFieldLabel("name", parentModel, FacetConstants.FIELD_NAME, new StringResourceModel("recordpage.unnamedrecord", this, null)));
 
-        final WebMarkupContainer noParentLabel = new WebMarkupContainer("noparent") {
-
+        final MarkupContainer parent = new WebMarkupContainer(id){
+            
             @Override
             protected void onConfigure() {
                 setVisible(parentModel.getObject() == null);
             }
-
         };
-
-        final MarkupContainer parent = new WebMarkupContainer(id);
         parent.add(parentLink);
-        parent.add(noParentLabel);
 
         return parent;
     }
 
-    private Component createChildrenLinks(String id) {
-        final IModel<Collection<String>> partIdsModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_HAS_PART);
-        //TODO: page or limit (collections can be huge!)
-        return new ListView<String>(id, CollectionListModel.of(partIdsModel)) {
+    private AbstractTree createTree(String id) {
+        return new DefaultNestedTree<SolrDocument>(id, createProvider()) {
 
             @Override
-            protected void populateItem(ListItem<String> item) {
-                final SolrDocumentModel childModel = new SolrDocumentModel(item.getModel());
-                final Link childLink = new Link("link") {
+            protected Component newContentComponent(String id, IModel<SolrDocument> node) {
+                return new Label(id, new SolrFieldStringModel(node, FacetConstants.FIELD_NAME));
+            }
+
+        };
+    }
+
+    private ITreeProvider createProvider() {
+        return new SortableTreeProvider<SolrDocument, Object>() {
+
+            @Override
+            public Iterator<? extends SolrDocument> getRoots() {
+                return Iterators.singletonIterator(HierarchyPanel.this.getModel().getObject());
+            }
+
+            @Override
+            public boolean hasChildren(SolrDocument node) {
+                Object partCount = node.getFieldValue(FacetConstants.FIELD_HAS_PART_COUNT);
+                return (partCount instanceof Number) && ((Number) partCount).intValue() > 0;
+            }
+
+            @Override
+            public Iterator<? extends SolrDocument> getChildren(SolrDocument node) {
+                final Collection<Object> parts = node.getFieldValues(FacetConstants.FIELD_HAS_PART);
+                return Iterators.transform(parts.iterator(), new Function<Object, SolrDocument>() {
 
                     @Override
-                    public void onClick() {
-                        setResponsePage(RecordPage.class, documentParamConverter.toParameters(childModel.getObject()));
+                    public SolrDocument apply(Object input) {
+                        String childId = input.toString();
+                        return documentService.getDocument(childId);
                     }
-                };
-                childLink.add(new SolrFieldLabel("name", childModel, FacetConstants.FIELD_NAME, new StringResourceModel("recordpage.unnamedrecord", this, null)));
+                });
+            }
 
-                item.add(childLink);
+            @Override
+            public IModel<SolrDocument> model(SolrDocument object) {
+                return new SolrDocumentModel(object);
             }
         };
     }
