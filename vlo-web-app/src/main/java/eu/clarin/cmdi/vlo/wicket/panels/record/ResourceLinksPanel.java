@@ -24,6 +24,8 @@ import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import java.util.Collection;
 import java.util.List;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.basic.Label;
@@ -71,7 +73,16 @@ public class ResourceLinksPanel extends Panel {
             }
 
         });
+        
+        add(new MarkupContainer("noResources") {
 
+            @Override
+            protected void onConfigure() {
+                setVisible(resourceListing.getPageCount() == 0);
+            }
+
+        });
+        
         //For Ajax updating of resource listing when paging
         setOutputMarkupId(true);
     }
