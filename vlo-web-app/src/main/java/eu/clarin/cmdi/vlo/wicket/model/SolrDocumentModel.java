@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.model;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import java.util.Objects;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -69,6 +70,26 @@ public class SolrDocumentModel extends LoadableDetachableModel<SolrDocument> {
 
     protected SolrDocumentService getDocumentService() {
         return VloWicketApplication.get().getDocumentService();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.docId);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final SolrDocumentModel other = (SolrDocumentModel) obj;
+        if (!Objects.equals(this.docId, other.docId)) {
+            return false;
+        }
+        return true;
     }
 
 }
