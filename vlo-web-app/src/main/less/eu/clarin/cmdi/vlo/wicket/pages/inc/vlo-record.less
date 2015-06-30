@@ -157,11 +157,6 @@ a.recordattributeinfo:after {
 
 /* Resource links with icons */
 
-#recordresources {
-    clear: both;
-    margin: 2em 0;
-}
-
 #recordresources a.resourceLink {
     display: inline-block;
     float: left;
@@ -280,6 +275,10 @@ span.recordresourcedetailsitem span {
     padding: 1em;
 }
 
+#recordtree {
+    padding-bottom: 1em;
+}
+
 #recordtree #thisrecord {
     list-style-type: circle;
     font-weight: bold;
@@ -296,10 +295,18 @@ span.recordresourcedetailsitem span {
     padding-bottom: 2px;
 }
 
-#recordtree #tree {
+#recordtree .tree-parent a {
+    color: black;
+}
+
+#recordtree #tree.has-parent {
     padding-left: 18px;
 }
 
 #recordtree .tree-branch {
     clear: both;
+}
+
+#recordtree .tree-branch a {
+    
 }
