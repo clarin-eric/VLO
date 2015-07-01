@@ -20,7 +20,7 @@ import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
-import eu.clarin.cmdi.vlo.wicket.components.SearchForm;
+import eu.clarin.cmdi.vlo.wicket.panels.search.SearchFormPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.SingleFacetPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SimpleSearchBrowsePanel;
@@ -76,7 +76,7 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
         add(collectionsPanel);
 
         // add a search form (on submit will go to faceted search page)
-        add(new SearchForm("search", model) {
+        add(new SearchFormPanel("search", model) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {

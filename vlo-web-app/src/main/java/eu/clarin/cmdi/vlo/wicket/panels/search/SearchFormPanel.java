@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.wicket.components;
+package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
@@ -23,6 +23,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteTextField;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -32,16 +33,18 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  *
  * @author twagoo
  */
-public abstract class SearchForm extends Form<QueryFacetsSelection> {
+public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection> {
 
     @SpringBean
     private AutoCompleteService autoCompleteDao;
 
-    public SearchForm(String id, IModel<QueryFacetsSelection> model) {
+    public SearchFormPanel(String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
 
+        final Form<QueryFacetsSelection> form = new Form<>("search", model);
+
         // Bind search field to 'query' property of model
-        add(new AutoCompleteTextField("query", new PropertyModel<String>(model, "query")) {
+        form.add(new AutoCompleteTextField("query", new PropertyModel<String>(model, "query")) {
 
             @Override
             protected Iterator<String> getChoices(String input) {
@@ -50,14 +53,16 @@ public abstract class SearchForm extends Form<QueryFacetsSelection> {
         });
 
         // Button allows partial updates but can fall back to a full (non-JS) refresh
-        add(new AjaxFallbackButton("searchSubmit", this) {
+        form.add(new AjaxFallbackButton("searchSubmit", form) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                SearchForm.this.onSubmit(target);
+                SearchFormPanel.this.onSubmit(target);
             }
         }
         );
+
+        add(form);
     }
 
     protected abstract void onSubmit(AjaxRequestTarget target);

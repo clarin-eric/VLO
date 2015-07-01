@@ -8,7 +8,7 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.panels.search.FacetPanel;
-import eu.clarin.cmdi.vlo.wicket.components.SearchForm;
+import eu.clarin.cmdi.vlo.wicket.panels.search.SearchFormPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
@@ -118,8 +118,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         return optionsPanel;
     }
 
-    private SearchForm createSearchForm(String id) {
-        final SearchForm form = new SearchForm(id, getModel()) {
+    private Panel createSearchForm(String id) {
+        final SearchFormPanel form = new SearchFormPanel(id, getModel()) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
