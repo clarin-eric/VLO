@@ -17,27 +17,28 @@
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.components.NamedRecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.extensions.markup.html.repeater.tree.AbstractTree;
 import org.apache.wicket.extensions.markup.html.repeater.tree.DefaultNestedTree;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableTreeProvider;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -49,33 +50,68 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
     @SpringBean
     private SolrDocumentService documentService;
 
-    private final SolrDocumentModel parentModel;
+    private final IModel<List<SolrDocument>> parentsModel;
 
     public HierarchyPanel(String id, IModel<SolrDocument> documentModel) {
         super(id, documentModel);
 
-        final SolrFieldStringModel parentIdModel = new SolrFieldStringModel(getModel(), FacetConstants.FIELD_IS_PART_OF);
-        parentModel = new SolrDocumentModel(parentIdModel);
+        // create a list model for the parents
+        parentsModel = createParentsModel();
 
-        add(createParentLink("parent"));
+        add(createParentLinks("parents"));
         add(createTree("tree"));
     }
 
-    private MarkupContainer createParentLink(String id) {
-        final MarkupContainer parent = new WebMarkupContainer(id) {
+    /**
+     * 
+     * @return a model that provides a list of the parent documents, model 
+     * object never null but can be empty
+     */
+    private IModel<List<SolrDocument>> createParentsModel() {
+        // model that 'loads' (i.e. extracts ids and retrieves the matching
+        // Solr documents) the parents only once
+        return new LoadableDetachableModel<List<SolrDocument>>() {
+            
+            @Override
+            protected List<SolrDocument> load() {
+                // get parent IDs
+                final Collection<Object> parentIds = getModel().getObject().getFieldValues(FacetConstants.FIELD_IS_PART_OF);
+                if (parentIds == null) {
+                    // no parents, so provide empty list of documents
+                    return Collections.emptyList();
+                } else {
+                    // parents found, convert ID collection into documents list
+                    final Iterator<SolrDocument> documentsIterator = Iterators.transform(parentIds.iterator(), new Function<Object, SolrDocument>() {
+
+                        @Override
+                        public SolrDocument apply(Object docId) {
+                            return documentService.getDocument(docId.toString());
+                        }
+                    });
+                    // creation of list will trigger conversion on the fly
+                    return ImmutableList.copyOf(documentsIterator);
+                }
+            }
+        };
+    }
+
+    private Component createParentLinks(String id) {
+        return new ListView<SolrDocument>(id, parentsModel) {
+
+            @Override
+            protected void populateItem(ListItem<SolrDocument> item) {
+                item.add(new NamedRecordPageLink("link", item.getModel()));
+            }
 
             @Override
             protected void onConfigure() {
-                setVisible(parentModel.getObject() != null);
+                setVisible(!parentsModel.getObject().isEmpty());
             }
         };
-        parent.add(new NamedRecordPageLink("link", parentModel));
-
-        return parent;
     }
 
-    private AbstractTree createTree(String id) {
-        final DefaultNestedTree<SolrDocument> tree = new DefaultNestedTree<SolrDocument>(id, createProvider()) {
+    private Component createTree(String id) {
+        final DefaultNestedTree<SolrDocument> tree = new DefaultNestedTree<SolrDocument>(id, createTreeProvider()) {
 
             @Override
             protected Component newContentComponent(String id, final IModel<SolrDocument> node) {
@@ -93,7 +129,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
             @Override
             public String getObject() {
-                if (parentModel.getObject() != null) {
+                if (!parentsModel.getObject().isEmpty()) {
                     return "has-parent";
                 } else {
                     return null;
@@ -103,7 +139,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
         return tree;
     }
 
-    private ITreeProvider createProvider() {
+    private ITreeProvider createTreeProvider() {
         return new SortableTreeProvider<SolrDocument, Object>() {
 
             @Override
@@ -140,7 +176,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
     @Override
     public void detachModels() {
         super.detachModels();
-        parentModel.detach();
+        parentsModel.detach();
     }
 
 }
