@@ -16,12 +16,16 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
 import java.util.Iterator;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteTextField;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
@@ -66,4 +70,12 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
     }
 
     protected abstract void onSubmit(AjaxRequestTarget target);
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        // include watermark JQuery extension sources
+        response.render(CssHeaderItem.forReference(JavaScriptResources.getJQueryUICSS()));
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getJQueryUIJS()));
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getSyntaxHelpJS()));
+    }
 }

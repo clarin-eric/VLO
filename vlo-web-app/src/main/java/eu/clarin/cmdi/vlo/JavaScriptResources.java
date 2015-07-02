@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo;
 
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
+import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 /**
@@ -28,6 +29,9 @@ public final class JavaScriptResources {
 
     private final static JavaScriptResourceReference VLO_FRONT = new JavaScriptResourceReference(VloBasePage.class, "vlo-front.js");
     private final static JavaScriptResourceReference VLO_HEADER = new JavaScriptResourceReference(VloBasePage.class, "vlo-header.js");
+    private final static JavaScriptResourceReference VLO_SYNTAX_HELP = new JavaScriptResourceReference(VloBasePage.class, "vlo-syntax-help.js");
+    private final static JavaScriptResourceReference JQUERY_UI = new JavaScriptResourceReference(VloBasePage.class, "jquery-ui-1.11.4.custom/jquery-ui.min.js");
+    private final static CssResourceReference JQUERY_UI_CSS = new CssResourceReference(VloBasePage.class, "jquery-ui-1.11.4.custom/jquery-ui.min.css");
     private final static JavaScriptResourceReference JQUERY_WATERMARK = new JavaScriptResourceReference(VloBasePage.class, "jquery.watermark-3.1.4/jquery.watermark.min.js");
     private final static JavaScriptResourceReference HIGHLIGHT = new JavaScriptResourceReference(RecordPage.class, "searchhi.js");
 
@@ -39,12 +43,23 @@ public final class JavaScriptResources {
         return VLO_HEADER;
     }
 
+    public static JavaScriptResourceReference getJQueryUIJS() {
+        return JQUERY_UI;
+    }
+    public static CssResourceReference getJQueryUICSS() {
+        return JQUERY_UI_CSS;
+    }
+
     public static JavaScriptResourceReference getJQueryWatermarkJS() {
         return JQUERY_WATERMARK;
     }
-    
+
     public static JavaScriptResourceReference getHighlightJS() {
         return HIGHLIGHT;
+    }
+
+    public static JavaScriptResourceReference getSyntaxHelpJS() {
+        return VLO_SYNTAX_HELP;
     }
 
 }
