@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+    <!--
+    Copyright (C) 2014 CLARIN
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for expands.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    -->
+
+    <!--
+        Created on : Jan 23, 2014, 5:10:53 PM
+        Author     : twagoo
+    
+        Based on "business one" template: http://www.opendesigns.org/design/business_one/
+    -->
+
+    <head>
+        <title>CLARIN VLO</title>
+    </head>
+
+    <body>
+
+        <wicket:extend>
+
+            <div id="topnavigation">
+                <div id="breadcrumbs">
+                    <a href="javascript: history.go(-1)">Back</a>
+                </div>
+                <div id="topnavigationlinks">
+                    <!--                    <wicket:container wicket:id="permalink">[permalink]</wicket:container>-->
+                </div>
+            </div>
+
+            <div class="content" id="help">
+
+                <h1>CLARIN Virtual Language Observatory: Help</h1>
+
+                <!-- TODO -->
+                <!--<h2>Facets</h2>-->
+
+                <h2 id="syntax">Search syntax</h2>
+                <p>
+                    In addition to navigating the resources by means of the selection
+                    of facet values, the VLO faceted browser also allows for searching
+                    by means of <strong>textual queries</strong>.
+                </p>
+                <p>
+                    Such queries are to be entered
+                    in the large <strong>text box</strong> at the top of the main page or faceted
+                    browsing page with the button labeled 'Search' next to it.
+                </p>
+                <p>
+                    In its simplest form, a search query consists of one or more
+                    terms, separated by a space character. Such queries result
+                    in the retrieval of all documents that have one or more occurrences
+                    of <em>all</em> of the included search terms. In other words,
+                    an <strong>AND</strong> operator is implied by default.
+                </p>
+                <h3>Advanced querying</h3>
+                <p>
+                    It is possible to construct a more specific query by means of
+                    a set of <strong>syntax features</strong> that can be processed 
+                    by the VLO. The supported syntax is that of the
+                    <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene Query Parser</a>
+                    <sup><a href="#noteedismax" id="refedismax">1</a></sup>
+                </p>
+                <p>
+                    The Lucene Query Parser syntax allows for the following
+                    <strong>boolean operators</strong>: 'AND', 'OR', 'NOT', '+'
+                    and '-'. It also allows for <strong>grouping</strong>
+                    of terms by means of parenthesis. 
+                    Terms can be combined into <strong>phrases</strong> by means
+                    of double quote characters.
+                </p>
+
+                The following <strong>examples</strong> illustrate the usage of these operators.
+                Click any of the following examples to perform that query 
+                on the actual data currently in the VLO:
+                <ul>
+                    <li><a class="example-query" href="search/?q=German%20AND%20acquisition">German AND acquisition</a></li>
+                    <li><a class="example-query" href="search/?q=Myanmar%20OR%20Birma%20OR%20Burma">Myanmar OR Birma OR Burma</a></li>
+                    <li><a class="example-query" href="search/?q=newspaper+AND+%28Czech+OR+Slovak%29">newspaper AND (Czech OR Slovak)</a></li>
+                    <li><a class="example-query" href="search/?q=Portuguese+-Brazil">Portuguese -Brazil</a> (equivalent to <a class="example-query" href="search/?q=Portuguese+NOT+Brazil">Portuguese NOT Brazil</a>)</li>
+                    <li><a class="example-query" href="search/?q=%22sign+language%22+AND+%28Sweden+OR+Finland%29">&quot;sign language&quot; AND (Sweden OR Finland)</a></li>
+                    
+                </ul>
+                <h3>Targeting fields</h3>
+                <p>
+                    In addition to the logical operators, the syntax also allows
+                    for search for occurrences of a term within a <strong>specific field</strong>,
+                    such as language or modality. To do so, enter the name of the
+                    field and the term to search for, separated by a semicolon.
+                    The asterisk ('*') can be used to achieve partial matches.
+                    Quotes are required to match a term that contains spaces.
+                </p>
+                <p>
+                    The following <strong>field names</strong> are available: 
+                    language, country, continent, modality, genre, subject, format,
+                    organisation, resourcetype, keyword.
+                    <br />
+                </p>
+
+                Click any of the following <strong>examples</strong> to perform that query 
+                on the actual data currently in the VLO:
+                <ul>
+                    <li><a class="example-query" href="search/?q=resourcetype:%22Linguistic+corpora%22">resourcetype:"Linguistic corpora"</a> (equivalent to selecting this value below the 'Resource Type' facet)</li>
+                    <li><a class="example-query" href="search/?q=language:*Sign*">language:*Sign*</a> (all records with a language name that contains the word 'sign')</li>
+                    <li><a class="example-query" href="search/?q=country:Finland+AND+language:Swedish+AND+NOT+language:Finnish">country:Finland AND language:Swedish AND NOT language:Finnish</a> (records in Finland with resources in the Swedish language but not in Finnish)</li>
+                    <li><a class="example-query" href="search/?q=format:video/*">format:video/*</a> (all records with video resources)</li>
+                </ul>
+                <p> 
+                    A <strong>full overview</strong> of syntax features, including
+                    options for fuzzy search, ranges, and term boosting, can be found at the
+                    <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene syntax description page</a>.
+                </p>
+
+                <h2>Notes</h2>
+                <p>
+                    <sup><a href="#refedismax" id="noteedismax">1</a></sup>
+                    Support for the Lucene syntax was implemented by using the
+                    <a href="https://cwiki.apache.org/confluence/display/solr/The+Extended+DisMax+Query+Parser">Solr Extended DisMax Query Parser</a>.
+                </p>
+
+            </div>
+        </wicket:extend>
+    </body>
+</html>

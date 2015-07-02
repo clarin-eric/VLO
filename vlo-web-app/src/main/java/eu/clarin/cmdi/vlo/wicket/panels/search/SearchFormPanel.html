@@ -29,7 +29,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <input wicket:id="query" id="searchbox" type="text" value="democratie" />
                         <input wicket:id="searchSubmit" id="searchbutton" type="submit" value="Search"/>
                     </span>
-                    <a id="syntax-help" href="SyntaxHelp.html" title="You can use &lt;em&gt;advanced search syntax&lt;/em&gt; here, for example by using the keywords AND, OR and NOT. &lt;strong&gt;Click to learn more.&lt;/strong&gt;"><span>?</span></a>
+                    <wicket:link>
+                        <a id="syntax-help" href="HelpPage.html#syntax" title="Enter one or more search terms or an advanced query, for example by using the keywords AND, OR and NOT. &lt;strong&gt;Click for more information.&lt;/strong&gt;"><span>?</span></a>
+                    </wicket:link>
                 </p>
             </form>
         </wicket:panel>

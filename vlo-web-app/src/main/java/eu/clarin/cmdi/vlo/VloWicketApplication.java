@@ -6,6 +6,7 @@ import eu.clarin.cmdi.vlo.service.PermalinkService;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.pages.AboutPage;
+import eu.clarin.cmdi.vlo.wicket.pages.HelpPage;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
@@ -106,6 +107,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         mountPage("/values/${" + AllFacetValuesPage.SELECTED_FACET_PARAM + "}", AllFacetValuesPage.class);
         // About page
         mountPage("/about", AboutPage.class);
+        // Help page
+        mountPage("/help", HelpPage.class);
     }
 
     private void setupCache() {
