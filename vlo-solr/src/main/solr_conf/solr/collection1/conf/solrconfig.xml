@@ -379,6 +379,11 @@
             _languageName
         </str>
         
+        <!-- alias: language = _languageName -->
+        <str name="f.resourcetype.qf">
+            resourceClass
+        </str>
+        
         <!-- Phrase fields (boost if phrase is matched) -->
         <str name="pf">
             name^2 description
