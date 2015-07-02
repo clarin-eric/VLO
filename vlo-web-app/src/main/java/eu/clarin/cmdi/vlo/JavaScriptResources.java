@@ -30,6 +30,7 @@ public final class JavaScriptResources {
     private final static JavaScriptResourceReference VLO_FRONT = new JavaScriptResourceReference(VloBasePage.class, "vlo-front.js");
     private final static JavaScriptResourceReference VLO_HEADER = new JavaScriptResourceReference(VloBasePage.class, "vlo-header.js");
     private final static JavaScriptResourceReference VLO_SYNTAX_HELP = new JavaScriptResourceReference(VloBasePage.class, "vlo-syntax-help.js");
+    private final static JavaScriptResourceReference VLO_FACETS = new JavaScriptResourceReference(VloBasePage.class, "vlo-facets.js");
     private final static JavaScriptResourceReference JQUERY_UI = new JavaScriptResourceReference(VloBasePage.class, "jquery-ui-1.11.4.custom/jquery-ui.min.js");
     private final static CssResourceReference JQUERY_UI_CSS = new CssResourceReference(VloBasePage.class, "jquery-ui-1.11.4.custom/jquery-ui.min.css");
     private final static JavaScriptResourceReference JQUERY_WATERMARK = new JavaScriptResourceReference(VloBasePage.class, "jquery.watermark-3.1.4/jquery.watermark.min.js");
@@ -41,6 +42,9 @@ public final class JavaScriptResources {
 
     public static JavaScriptResourceReference getVloHeaderJS() {
         return VLO_HEADER;
+    }
+    public static JavaScriptResourceReference getVloFacetsJS() {
+        return VLO_FACETS;
     }
 
     public static JavaScriptResourceReference getJQueryUIJS() {

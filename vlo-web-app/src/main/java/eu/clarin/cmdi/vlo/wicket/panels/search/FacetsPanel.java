@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
@@ -29,6 +30,9 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -144,6 +148,15 @@ public abstract class FacetsPanel extends GenericPanel<List<FacetField>> {
     public void detachModels() {
         super.detachModels();
         expansionModel.detach();
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        // JQuery UI for tooltips
+        response.render(CssHeaderItem.forReference(JavaScriptResources.getJQueryUICSS()));
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getJQueryUIJS()));
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getSyntaxHelpJS()));
+
     }
 
     protected abstract void selectionChanged(AjaxRequestTarget target);

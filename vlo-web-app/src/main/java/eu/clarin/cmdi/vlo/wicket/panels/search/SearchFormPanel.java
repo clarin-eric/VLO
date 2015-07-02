@@ -73,7 +73,7 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        // include watermark JQuery extension sources
+        // include script that activates the help button tooltip and JQuery UI on which it depends
         response.render(CssHeaderItem.forReference(JavaScriptResources.getJQueryUICSS()));
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getJQueryUIJS()));
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getSyntaxHelpJS()));

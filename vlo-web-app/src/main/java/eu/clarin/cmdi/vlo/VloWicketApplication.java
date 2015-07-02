@@ -90,6 +90,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         getResourceBundles().addJavaScriptBundle(VloBasePage.class, "vlo-js",
                 JavaScriptResources.getVloFrontJS(),
                 JavaScriptResources.getVloHeaderJS(),
+                JavaScriptResources.getSyntaxHelpJS(),
+                JavaScriptResources.getVloFacetsJS(),
                 JavaScriptResources.getJQueryUIJS(),
                 JavaScriptResources.getJQueryWatermarkJS()
         );
