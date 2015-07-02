@@ -107,7 +107,7 @@
                 <p>
                     The following <strong>field names</strong> are available: 
                     language, country, continent, modality, genre, subject, format,
-                    organisation, resourcetype, keyword.
+                    organisation, resourcetype, keyword, resources.
                     <br />
                 </p>
 
@@ -119,6 +119,7 @@
                     <li><a class="example-query" href="search/?q=country:%28Belgium+-Netherlands%29&fq=languageCode:code:nld">country:(Belgium -Netherlands)</a> (resources with Belgium as country but not also Netherlands)</li>
                     <li><a class="example-query" href="search/?q=country:Finland+AND+language:Swedish+AND+NOT+language:Finnish">country:Finland AND language:Swedish AND NOT language:Finnish</a> (records in Finland with resources in the Swedish language but not in Finnish)</li>
                     <li><a class="example-query" href="search/?q=format:video/*">format:video/*</a> (all records with video resources)</li>
+                    <li><a class="example-query" href="search/?q=resources:%5B5+TO+*%5D">resources:[5 TO *]</a> (all records with at least 5 resources)</li>
                 </ul>
                 <p> 
                     A <strong>full overview</strong> of syntax features, including

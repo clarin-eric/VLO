@@ -384,6 +384,11 @@
             resourceClass
         </str>
         
+        <!-- alias: language = _languageName -->
+        <str name="f.resources.qf">
+            _resourceRefCount
+        </str>
+        
         <!-- Phrase fields (boost if phrase is matched) -->
         <str name="pf">
             name^2 description
