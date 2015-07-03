@@ -29,9 +29,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 of. Click on the name of any of the records in this hierarchy to
                 navigate to that item.
             </p>
-            
-            <div class="tree-parent" wicket:id="parents">
-                <a wicket:id="link">[link]</a>
+
+            <div wicket:id="parents">
+                <div class="tree-parent" wicket:id="parentsList">
+                    <a wicket:id="link">[link]</a>
+                </div>
+                <a wicket:id="showAll">Show all... (<span wicket:id="itemCount">999</span>)</a>
             </div>
             <div id="tree" wicket:id="tree">[TREE]</div>
         </wicket:panel>

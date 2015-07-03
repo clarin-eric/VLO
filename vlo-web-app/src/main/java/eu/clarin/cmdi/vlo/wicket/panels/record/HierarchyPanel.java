@@ -29,16 +29,22 @@ import java.util.Iterator;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.repeater.tree.DefaultNestedTree;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableTreeProvider;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -47,6 +53,11 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
+    /**
+     * Number of parent nodes shown initially (before 'show all' expansion)
+     */
+    public static final int INITIAL_PARENTS_SHOWN = 5;
+    
     @SpringBean
     private SolrDocumentService documentService;
 
@@ -63,15 +74,15 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
     }
 
     /**
-     * 
-     * @return a model that provides a list of the parent documents, model 
+     *
+     * @return a model that provides a list of the parent documents, model
      * object never null but can be empty
      */
     private IModel<List<SolrDocument>> createParentsModel() {
         // model that 'loads' (i.e. extracts ids and retrieves the matching
         // Solr documents) the parents only once
         return new LoadableDetachableModel<List<SolrDocument>>() {
-            
+
             @Override
             protected List<SolrDocument> load() {
                 // get parent IDs
@@ -96,7 +107,12 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
     }
 
     private Component createParentLinks(String id) {
-        return new ListView<SolrDocument>(id, parentsModel) {
+        // list view of (first N) parents and a link to load all in an 
+        // Ajax-updatable container
+        final WebMarkupContainer container = new WebMarkupContainer(id);
+
+        // actual list of parents (paged)
+        final PageableListView<SolrDocument> parentsView = new PageableListView<SolrDocument>("parentsList", parentsModel, INITIAL_PARENTS_SHOWN) {
 
             @Override
             protected void populateItem(ListItem<SolrDocument> item) {
@@ -108,6 +124,29 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                 setVisible(!parentsModel.getObject().isEmpty());
             }
         };
+
+        // ajax link to load the entire list, only shown if applicable
+        final Link showAllLink = new IndicatingAjaxFallbackLink("showAll") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                parentsView.setItemsPerPage(parentsModel.getObject().size());
+                if (target != null) {
+                    target.add(container);
+                }
+            }
+
+            @Override
+            protected void onConfigure() {
+                setVisible(parentsView.getItemCount() > parentsView.getItemsPerPage());
+            }
+        };
+        showAllLink.add(new Label("itemCount", new PropertyModel<Integer>(parentsModel, "size")));
+
+        return container
+                .add(parentsView)
+                .add(showAllLink)
+                .setOutputMarkupId(true);
     }
 
     private Component createTree(String id) {
