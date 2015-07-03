@@ -88,12 +88,20 @@
                 Click any of the following examples to perform that query 
                 on the actual data currently in the VLO:
                 <ul>
-                    <li><a class="example-query" href="search/?q=German%20AND%20acquisition">German AND acquisition</a></li>
-                    <li><a class="example-query" href="search/?q=Myanmar%20OR%20Birma%20OR%20Burma">Myanmar OR Birma OR Burma</a></li>
-                    <li><a class="example-query" href="search/?q=newspaper+AND+%28Czech+OR+Slovak%29">newspaper AND (Czech OR Slovak)</a></li>
-                    <li><a class="example-query" href="search/?q=Portuguese+-Brazil">Portuguese -Brazil</a> (equivalent to <a class="example-query" href="search/?q=Portuguese+NOT+Brazil">Portuguese NOT Brazil</a>)</li>
-                    <li><a class="example-query" href="search/?q=%22sign+language%22+AND+%28Sweden+OR+Finland%29">&quot;sign language&quot; AND (Sweden OR Finland)</a></li>
-                    
+                    <li><a class="example-query" href="search/?q=German%20AND%20acquisition">German AND acquisition</a> (all records that match both terms)
+                        <ul>
+                            <li><a class="example-query" href="search/?q=German%20acquisition">German acquisition</a> is an equivalent query</li>
+                        </ul>
+                    </li>
+                    <li><a class="example-query" href="search/?q=Myanmar%20OR%20Birma%20OR%20Burma">Myanmar OR Birma OR Burma</a> (all records that match at least one of these terms)</li>
+                    <li><a class="example-query" href="search/?q=newspaper+AND+%28Czech+OR+Slovak%29">newspaper AND (Czech OR Slovak)</a> (all records that match the term 'newspaper' and at least one of the terms 'Czech' or 'Slovak')</li>
+                    <li><a class="example-query" href="search/?q=Portuguese+-Brazil">Portuguese -Brazil</a> (all records that match 'Portuguese' but do not have an occurrence of 'Brazil')
+                        <ul>
+                            <li><a class="example-query" href="search/?q=Portuguese+NOT+Brazil">Portuguese NOT Brazil</a> is an equivalent query</li>
+                        </ul>
+                    </li>
+                    <li><a class="example-query" href="search/?q=%22sign+language%22+AND+%28Sweden+OR+Finland%29">&quot;sign language&quot; AND (Sweden OR Finland)</a> (all records that match the phrase 'sign language' and at least one of the terms 'Sweden' or 'Finland')</li>
+
                 </ul>
                 <h3>Targeting fields</h3>
                 <p>
@@ -116,7 +124,7 @@
                 <ul>
                     <li><a class="example-query" href="search/?q=resourcetype:%22Linguistic+corpora%22">resourcetype:"Linguistic corpora"</a> (equivalent to selecting this value below the 'Resource Type' facet)</li>
                     <li><a class="example-query" href="search/?q=language:*Sign*">language:*Sign*</a> (all records with a language name that contains the word 'sign')</li>
-                    <li><a class="example-query" href="search/?q=country:%28Belgium+-Netherlands%29">country:(Belgium -Netherlands)</a> (resources with Belgium as country but not also Netherlands)</li>
+                    <li><a class="example-query" href="search/?q=country:%28Belgium+-Netherlands%29">country:(Belgium -Netherlands)</a> (all records with Belgium as country but not also Netherlands)</li>
                     <li><a class="example-query" href="search/?q=country:Finland+AND+language:Swedish+AND+NOT+language:Finnish">country:Finland AND language:Swedish AND NOT language:Finnish</a> (records in Finland with resources in the Swedish language but not in Finnish)</li>
                     <li><a class="example-query" href="search/?q=format:video/*">format:video/*</a> (all records with video resources)</li>
                     <li><a class="example-query" href="search/?q=resources:%5B5+TO+*%5D">resources:[5 TO *]</a> (all records with at least 5 resources)</li>
