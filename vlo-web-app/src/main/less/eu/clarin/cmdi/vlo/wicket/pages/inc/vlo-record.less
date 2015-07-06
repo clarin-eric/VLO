@@ -277,36 +277,52 @@ span.recordresourcedetailsitem span {
 
 #recordtree {
     padding-bottom: 1em;
+
+
+    #thisrecord {
+        list-style-type: circle;
+        font-weight: bold;
+    }
+
+    .tree-parent a.parent-up {
+        display: inline-block;
+        width: 16px;
+        background-image: url('up-3-filled-64.png'); /* icon from icons8.com */
+        background-repeat: no-repeat;
+        background-size: 12px;
+        background-position: top left;
+
+        min-height: 12px;
+        padding-bottom: 2px;
+
+        vertical-align: top;
+
+        &:hover {
+            background-color: #ccc;
+            text-decoration: none;
+        }
+
+        span {
+            display: none;
+        }
+    }
+
+    .tree-parent, .tree-branch content {
+        a {
+            color: black;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    #tree.has-parent {
+        padding-left: 18px;
+    }
+
+    .tree-branch {
+        clear: both;
+    }
 }
 
-#recordtree #thisrecord {
-    list-style-type: circle;
-    font-weight: bold;
-}
-
-#recordtree .tree-parent {
-    padding-left: 16px;
-    background-image: url('up-3-filled-64.png'); /* icon from icons8.com */
-    background-repeat: no-repeat;
-    background-size: 12px;
-    background-position: top left;
-
-    min-height: 12px;
-    padding-bottom: 2px;
-}
-
-#recordtree .tree-parent a {
-    color: black;
-}
-
-#recordtree #tree.has-parent {
-    padding-left: 18px;
-}
-
-#recordtree .tree-branch {
-    clear: both;
-}
-
-#recordtree .tree-branch a {
-    
-}

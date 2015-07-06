@@ -32,7 +32,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             <div wicket:id="parents">
                 <div class="tree-parent" wicket:id="parentsList">
-                    <a wicket:id="link">[link]</a>
+                    <a class="parent-up" wicket:id="up" title="Move up in hierarchy"><span>[up]</span></a>
+                    <wicket:container wicket:id="link">[link]</wicket:container>
                 </div>
                 <a wicket:id="showAll">Show all... (<span wicket:id="itemCount">999</span>)</a>
             </div>

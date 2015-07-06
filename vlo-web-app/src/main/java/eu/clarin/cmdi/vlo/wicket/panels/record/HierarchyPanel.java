@@ -30,6 +30,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
+import org.apache.wicket.extensions.markup.html.repeater.tree.AbstractTree;
 import org.apache.wicket.extensions.markup.html.repeater.tree.DefaultNestedTree;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableTreeProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -54,21 +55,28 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
      * Number of parent nodes shown initially (before 'show all' expansion)
      */
     public static final int INITIAL_PARENTS_SHOWN = 5;
-
+    
     @SpringBean
     private SolrDocumentService documentService;
-
+    
     private final IDataProvider<SolrDocument> parentsProvider;
-
+    private final AbstractTree<SolrDocument> tree;
+    private final IModel<SolrDocument> pageDocumentModel;
+    
     public HierarchyPanel(String id, IModel<SolrDocument> documentModel) {
         super(id, documentModel);
-
+        pageDocumentModel = documentModel;
+        
         parentsProvider = new ParentsDataProvider();
-
+        
         add(createParentLinks("parents"));
-        add(createTree("tree"));
+        
+        tree = createTree("tree");
+        add(tree);
+        
+        setOutputMarkupId(true);
     }
-
+    
     private Component createParentLinks(String id) {
         // data view of (first N) parents and a link to load all in an 
         // Ajax-updatable container
@@ -76,12 +84,24 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
         // actual view
         final DataView<SolrDocument> parentsView = new DataView<SolrDocument>("parentsList", parentsProvider, INITIAL_PARENTS_SHOWN) {
-
+            
             @Override
-            protected void populateItem(Item<SolrDocument> item) {
+            protected void populateItem(final Item<SolrDocument> item) {
                 item.add(new NamedRecordPageLink("link", item.getModel()));
+                item.add(new IndicatingAjaxFallbackLink("up") {
+                    
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        // tree root up one level, expand root for traceability by user
+                        HierarchyPanel.this.setModel(item.getModel());
+                        tree.expand(item.getModelObject());
+                        if (target != null) {
+                            target.add(HierarchyPanel.this);
+                        }
+                    }
+                });
             }
-
+            
             @Override
             protected void onConfigure() {
                 // hide if there are no parents to show
@@ -91,7 +111,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
         // ajax link to load the entire list, only shown if applicable
         final Link showAllLink = new IndicatingAjaxFallbackLink("showAll") {
-
+            
             @Override
             public void onClick(AjaxRequestTarget target) {
                 parentsView.setItemsPerPage(parentsProvider.size());
@@ -99,7 +119,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                     target.add(container);
                 }
             }
-
+            
             @Override
             protected void onConfigure() {
                 // hide if there are no more parents to load
@@ -108,31 +128,31 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
         };
         // show how many ndoes can be loaded
         showAllLink.add(new Label("itemCount", new PropertyModel<Integer>(parentsProvider, "size")));
-
+        
         return container
                 .add(parentsView)
                 .add(showAllLink)
                 .setOutputMarkupId(true);
     }
-
-    private Component createTree(String id) {
+    
+    private AbstractTree<SolrDocument> createTree(String id) {
         final DefaultNestedTree<SolrDocument> tree = new DefaultNestedTree<SolrDocument>(id, new HierarchyTreeProvider()) {
-
+            
             @Override
             protected Component newContentComponent(String id, final IModel<SolrDocument> node) {
                 return new NamedRecordPageLink(id, node) {
-
+                    
                     @Override
                     protected void onConfigure() {
-                        setEnabled(!node.equals(HierarchyPanel.this.getModel()));
+                        setEnabled(!node.equals(pageDocumentModel));
                     }
                 };
             }
-
+            
         };
         // style of tree depends on presence of parent nodes
         tree.add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
-
+            
             @Override
             public String getObject() {
                 if (parentsProvider.size() > 0) {
@@ -144,30 +164,31 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
         }, " "));
         return tree;
     }
-
+    
     @Override
     public void detachModels() {
         super.detachModels();
+        pageDocumentModel.detach();
     }
-
+    
     private class HierarchyTreeProvider extends SortableTreeProvider<SolrDocument, Object> {
-
+        
         @Override
         public Iterator<? extends SolrDocument> getRoots() {
             return Iterators.singletonIterator(HierarchyPanel.this.getModel().getObject());
         }
-
+        
         @Override
         public boolean hasChildren(SolrDocument node) {
             Object partCount = node.getFieldValue(FacetConstants.FIELD_HAS_PART_COUNT);
             return (partCount instanceof Number) && ((Number) partCount).intValue() > 0;
         }
-
+        
         @Override
         public Iterator<? extends SolrDocument> getChildren(SolrDocument node) {
             final Collection<Object> parts = node.getFieldValues(FacetConstants.FIELD_HAS_PART);
             return Iterators.transform(parts.iterator(), new Function<Object, SolrDocument>() {
-
+                
                 @Override
                 public SolrDocument apply(Object input) {
                     String childId = input.toString();
@@ -175,18 +196,18 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                 }
             });
         }
-
+        
         @Override
         public IModel<SolrDocument> model(SolrDocument object) {
             return new SolrDocumentModel(object);
         }
     }
-
+    
     private class ParentsDataProvider implements IDataProvider<SolrDocument> {
 
         // used to cache parent count (until detach)
         private Long size = null;
-
+        
         @Override
         public Iterator<? extends SolrDocument> iterator(long first, long count) {
             final Collection<Object> parentIds = HierarchyPanel.this.getModelObject().getFieldValues(FacetConstants.FIELD_IS_PART_OF);
@@ -196,7 +217,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
             } else {
                 // parents found, convert ID collection into documents list
                 return Iterators.transform(parentIds.iterator(), new Function<Object, SolrDocument>() {
-
+                    
                     @Override
                     public SolrDocument apply(Object docId) {
                         return documentService.getDocument(docId.toString());
@@ -204,7 +225,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                 });
             }
         }
-
+        
         @Override
         public long size() {
             if (size == null) {
@@ -219,16 +240,16 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
             }
             return size;
         }
-
+        
         @Override
         public IModel<SolrDocument> model(SolrDocument object) {
             return new SolrDocumentModel(object);
         }
-
+        
         @Override
         public void detach() {
             size = null;
         }
     }
-
+    
 }
