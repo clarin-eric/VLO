@@ -11,14 +11,8 @@ if [  -z $JAVA ]; then
 JAVA=/lat/java/bin/java
 fi
 
-# try to get the configuration file name from the command line options
-if [ 1 -eq $# ]; then
-CONFIG=$1
-else
-# fall back to default location
-echo No configuration location specified, using default
-CONFIG=${DIR}/"../config/VloConfig.xml"
-fi
+#default configuration file
+DFLT_CONFIG=${DIR}/"../config/VloConfig.xml"
 
 LOGDIR=${DIR}/../log/
 echo Logging in ${LOGDIR}
@@ -34,9 +28,14 @@ echo Logging in ${LOGDIR}
 #
 # to the JAVA command. Please note the a specification on the command line will
 # take preference over a specification as a property.
+# 
+# to process only subset of data roots from configuration file pass the list via command line:
+# -l path OR -l "path1 path2 ..."
+#
 
 $JAVA -Xmx3G \
     -cp "${DIR}:${DIR}/vlo-importer-${project.version}-importer.jar" \
+	-DconfigFile=${DFLT_CONFIG} \
     -DIMPORTER_LOG_DIR=${LOGDIR} \
-    eu.clarin.cmdi.vlo.importer.MetadataImporter -c "$CONFIG"
+    eu.clarin.cmdi.vlo.importer.MetadataImporter "$@"
 

@@ -1,22 +1,17 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import eu.clarin.cmdi.vlo.LanguageCodeUtils;
-import eu.clarin.cmdi.vlo.CommonUtils;
-import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.config.DataRoot;
-import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -36,6 +31,13 @@ import org.apache.solr.common.params.MapSolrParams;
 import org.apache.solr.common.params.SolrParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import eu.clarin.cmdi.vlo.CommonUtils;
+import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.LanguageCodeUtils;
+import eu.clarin.cmdi.vlo.config.DataRoot;
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
 
 /**
  * The main metadataImporter class. Also contains the main function.
@@ -92,6 +94,10 @@ public class MetadataImporter {
      * Constructor
      */
     public MetadataImporter() {}
+    
+    public MetadataImporter(String clDatarootsList) {
+    	this.clDatarootsList = clDatarootsList;
+    }
 
     /**
      * Contains MDSelflinks (usually). Just to know what we have already done.
@@ -120,6 +126,9 @@ public class MetadataImporter {
         
         initSolrServer();
         List<DataRoot> dataRoots = checkDataRoots();
+        
+        dataRoots = filterDataRootsWithCLArgs(dataRoots);
+        
         long start = System.currentTimeMillis();
         try {
             // Delete the whole Solr db
@@ -201,13 +210,58 @@ public class MetadataImporter {
      */
     protected List<DataRoot> checkDataRoots() {
         List<DataRoot> dataRoots = config.getDataRoots();
+        List<DataRoot> existingDataRoots = new LinkedList<DataRoot>();
         for (DataRoot dataRoot : dataRoots) {
             if (!dataRoot.getRootFile().exists()) {
-                LOG.error("Root file " + dataRoot.getRootFile() + " does not exist. Probable configuration error so stopping import.");
-                System.exit(1);
+            	LOG.warn("Root file " + dataRoot.getRootFile() + " does not exist. It could be configuration error! Proceeding with next ...");
+            } else{
+            	existingDataRoots.add(dataRoot);
             }
+            
         }
-        return dataRoots;
+        return existingDataRoots;
+    }
+    
+    /**
+     * if user specified which data roots should be imported,
+     * list of existing data roots will be filtered with the list from user
+     * 
+     * @return
+     */
+    protected List<DataRoot> filterDataRootsWithCLArgs(List<DataRoot> dataRoots){
+    	if(clDatarootsList == null)
+    		return dataRoots;
+    	
+    	
+    	LOG.info("Filtering configured data root files with command line arguments: \"" + clDatarootsList + "\"" ) ;
+    	
+    	LinkedList<File> fsDataRoots = new LinkedList<File>();
+    	
+    	List<String> paths = Arrays.asList((clDatarootsList.split("\\s+")));
+    	
+    	//Convert String paths to File objects for comparison
+    	for(String path: paths)
+    		fsDataRoots.add(new File(path));
+    	
+    	List<DataRoot> filteredDataRoots = new LinkedList<DataRoot>();
+    	try{
+    		//filter data
+    	dr: for(DataRoot dataRoot: dataRoots){
+    			for(File fsDataRoot: fsDataRoots){
+            		if(fsDataRoot.getCanonicalPath().equals(dataRoot.getRootFile().getCanonicalPath())){
+            			filteredDataRoots.add(dataRoot);
+            			fsDataRoots.remove(fsDataRoot);
+            			continue dr;
+            		}
+    			}
+    			LOG.info("Root file " + dataRoot.getRootFile() + " will be omitted from processing");
+        	}
+    	}catch (IOException e){
+    		filteredDataRoots = dataRoots;
+    	}
+
+    	
+		return filteredDataRoots;
     }
 
     /**
@@ -528,6 +582,9 @@ public class MetadataImporter {
 
     public static LanguageCodeUtils languageCodeUtils;
     
+    //data roots passed from command line    
+    private String clDatarootsList = null;
+    
     /**
      * @param args
      * @throws MalformedURLException
@@ -540,12 +597,21 @@ public class MetadataImporter {
 
         // use the Apache cli framework for getting command line parameters
         Options options = new Options();
+        
+        // Data root list passed from command line with -l option
+        String cldrList = null;
 
         /**
          * Add a "c" option, the option indicating the specification of an XML
          * configuration file
+         * 
+         * "l" option - to specify which data roots (from config file) to import 
+         * imports all by default
          */
         options.addOption("c", true, "-c <file> : use parameters specified in <file>");
+        options.addOption("l", true, "-l <dataroot> [ ' ' <dataroot> ]* :  space separated list of dataroots to be processed.\n"
+        		+ "If dataroot is not specified in config file it will be ignored.");
+        options.getOption("l").setOptionalArg(true);
         
         CommandLineParser parser = new PosixParser();
         
@@ -556,6 +622,10 @@ public class MetadataImporter {
 
                 // the "c" option was specified, now get its value
                 configFile = cmd.getOptionValue("c");
+            }
+            
+            if(cmd.hasOption("l")){
+            	cldrList = cmd.getOptionValue("l");
             }
             
         } catch (org.apache.commons.cli.ParseException ex) {
@@ -598,13 +668,14 @@ public class MetadataImporter {
                 configUrl = new File(configFile).toURI().toURL();
             }
             System.out.println("Reading configuration from " + configUrl.toString());
+            LOG.info("Reading configuration from " + configUrl.toString());
             final XmlVloConfigFactory configFactory = new XmlVloConfigFactory(configUrl);
             MetadataImporter.config = configFactory.newConfig();
             MetadataImporter.languageCodeUtils = new LanguageCodeUtils(MetadataImporter.config);
 
             // optionally, modify the configuration here
             // create and start the importer
-            MetadataImporter importer = new MetadataImporter();
+            MetadataImporter importer = new MetadataImporter(cldrList);
             importer.startImport();
 
             // finished importing
