@@ -20,6 +20,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import eu.clarin.cmdi.vlo.wicket.components.IndicatingNestedTree;
 import eu.clarin.cmdi.vlo.wicket.components.NamedRecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import java.util.Collection;
@@ -31,7 +32,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.repeater.tree.AbstractTree;
-import org.apache.wicket.extensions.markup.html.repeater.tree.DefaultNestedTree;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableTreeProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -136,7 +136,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
     }
     
     private AbstractTree<SolrDocument> createTree(String id) {
-        final DefaultNestedTree<SolrDocument> tree = new DefaultNestedTree<SolrDocument>(id, new HierarchyTreeProvider()) {
+        final AbstractTree<SolrDocument> result = new IndicatingNestedTree<SolrDocument>(id, new HierarchyTreeProvider()) {
             
             @Override
             protected Component newContentComponent(String id, final IModel<SolrDocument> node) {
@@ -151,7 +151,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
             
         };
         // style of tree depends on presence of parent nodes
-        tree.add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
+        result.add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
             
             @Override
             public String getObject() {
@@ -162,7 +162,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                 }
             }
         }, " "));
-        return tree;
+        return result;
     }
     
     @Override
