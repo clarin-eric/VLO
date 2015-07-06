@@ -31,7 +31,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.repeater.tree.DefaultNestedTree;
-import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableTreeProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -59,78 +58,23 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
     @SpringBean
     private SolrDocumentService documentService;
 
-//    private final IModel<List<SolrDocument>> parentsModel;
     private final IDataProvider<SolrDocument> parentsProvider;
 
     public HierarchyPanel(String id, IModel<SolrDocument> documentModel) {
         super(id, documentModel);
 
-        // create a list model for the parents
-//        parentsModel = createParentsModel();
-        parentsProvider = createParentsProvider();
+        parentsProvider = new ParentsDataProvider();
 
         add(createParentLinks("parents"));
         add(createTree("tree"));
     }
 
-    /**
-     *
-     * @return a provider for the parent documents
-     */
-    private IDataProvider<SolrDocument> createParentsProvider() {
-        return new IDataProvider<SolrDocument>() {
-
-            private Long size = null;
-
-            @Override
-            public Iterator<? extends SolrDocument> iterator(long first, long count) {
-                final Collection<Object> parentIds = HierarchyPanel.this.getModelObject().getFieldValues(FacetConstants.FIELD_IS_PART_OF);
-                if (parentIds == null) {
-                    // no parents, so provide empty list of documents
-                    return Collections.emptyIterator();
-                } else {
-                    // parents found, convert ID collection into documents list
-                    return Iterators.transform(parentIds.iterator(), new Function<Object, SolrDocument>() {
-
-                        @Override
-                        public SolrDocument apply(Object docId) {
-                            return documentService.getDocument(docId.toString());
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public long size() {
-                if (size == null) {
-                    final Collection<Object> fieldValues = HierarchyPanel.this.getModelObject().getFieldValues(FacetConstants.FIELD_IS_PART_OF);
-                    if (fieldValues == null) {
-                        size = 0L;
-                    } else {
-                        size = Long.valueOf(fieldValues.size());
-                    }
-                }
-                return size;
-            }
-
-            @Override
-            public IModel<SolrDocument> model(SolrDocument object) {
-                return new SolrDocumentModel(object);
-            }
-
-            @Override
-            public void detach() {
-                size = null;
-            }
-
-        };
-    }
-
     private Component createParentLinks(String id) {
-        // list view of (first N) parents and a link to load all in an 
+        // data view of (first N) parents and a link to load all in an 
         // Ajax-updatable container
         final WebMarkupContainer container = new WebMarkupContainer(id);
 
+        // actual view
         final DataView<SolrDocument> parentsView = new DataView<SolrDocument>("parentsList", parentsProvider, INITIAL_PARENTS_SHOWN) {
 
             @Override
@@ -140,6 +84,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
             @Override
             protected void onConfigure() {
+                // hide if there are no parents to show
                 setVisible(parentsProvider.size() > 0);
             }
         };
@@ -157,9 +102,11 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
             @Override
             protected void onConfigure() {
+                // hide if there are no more parents to load
                 setVisible(parentsView.getItemCount() > parentsView.getItemsPerPage());
             }
         };
+        // show how many ndoes can be loaded
         showAllLink.add(new Label("itemCount", new PropertyModel<Integer>(parentsProvider, "size")));
 
         return container
@@ -169,7 +116,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
     }
 
     private Component createTree(String id) {
-        final DefaultNestedTree<SolrDocument> tree = new DefaultNestedTree<SolrDocument>(id, createTreeProvider()) {
+        final DefaultNestedTree<SolrDocument> tree = new DefaultNestedTree<SolrDocument>(id, new HierarchyTreeProvider()) {
 
             @Override
             protected Component newContentComponent(String id, final IModel<SolrDocument> node) {
@@ -183,6 +130,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
             }
 
         };
+        // style of tree depends on presence of parent nodes
         tree.add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
 
             @Override
@@ -197,43 +145,90 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
         return tree;
     }
 
-    private ITreeProvider createTreeProvider() {
-        return new SortableTreeProvider<SolrDocument, Object>() {
-
-            @Override
-            public Iterator<? extends SolrDocument> getRoots() {
-                return Iterators.singletonIterator(HierarchyPanel.this.getModel().getObject());
-            }
-
-            @Override
-            public boolean hasChildren(SolrDocument node) {
-                Object partCount = node.getFieldValue(FacetConstants.FIELD_HAS_PART_COUNT);
-                return (partCount instanceof Number) && ((Number) partCount).intValue() > 0;
-            }
-
-            @Override
-            public Iterator<? extends SolrDocument> getChildren(SolrDocument node) {
-                final Collection<Object> parts = node.getFieldValues(FacetConstants.FIELD_HAS_PART);
-                return Iterators.transform(parts.iterator(), new Function<Object, SolrDocument>() {
-
-                    @Override
-                    public SolrDocument apply(Object input) {
-                        String childId = input.toString();
-                        return documentService.getDocument(childId);
-                    }
-                });
-            }
-
-            @Override
-            public IModel<SolrDocument> model(SolrDocument object) {
-                return new SolrDocumentModel(object);
-            }
-        };
-    }
-
     @Override
     public void detachModels() {
         super.detachModels();
+    }
+
+    private class HierarchyTreeProvider extends SortableTreeProvider<SolrDocument, Object> {
+
+        @Override
+        public Iterator<? extends SolrDocument> getRoots() {
+            return Iterators.singletonIterator(HierarchyPanel.this.getModel().getObject());
+        }
+
+        @Override
+        public boolean hasChildren(SolrDocument node) {
+            Object partCount = node.getFieldValue(FacetConstants.FIELD_HAS_PART_COUNT);
+            return (partCount instanceof Number) && ((Number) partCount).intValue() > 0;
+        }
+
+        @Override
+        public Iterator<? extends SolrDocument> getChildren(SolrDocument node) {
+            final Collection<Object> parts = node.getFieldValues(FacetConstants.FIELD_HAS_PART);
+            return Iterators.transform(parts.iterator(), new Function<Object, SolrDocument>() {
+
+                @Override
+                public SolrDocument apply(Object input) {
+                    String childId = input.toString();
+                    return documentService.getDocument(childId);
+                }
+            });
+        }
+
+        @Override
+        public IModel<SolrDocument> model(SolrDocument object) {
+            return new SolrDocumentModel(object);
+        }
+    }
+
+    private class ParentsDataProvider implements IDataProvider<SolrDocument> {
+
+        // used to cache parent count (until detach)
+        private Long size = null;
+
+        @Override
+        public Iterator<? extends SolrDocument> iterator(long first, long count) {
+            final Collection<Object> parentIds = HierarchyPanel.this.getModelObject().getFieldValues(FacetConstants.FIELD_IS_PART_OF);
+            if (parentIds == null) {
+                // no parents, so provide empty list of documents
+                return Collections.emptyIterator();
+            } else {
+                // parents found, convert ID collection into documents list
+                return Iterators.transform(parentIds.iterator(), new Function<Object, SolrDocument>() {
+
+                    @Override
+                    public SolrDocument apply(Object docId) {
+                        return documentService.getDocument(docId.toString());
+                    }
+                });
+            }
+        }
+
+        @Override
+        public long size() {
+            if (size == null) {
+                final Collection<Object> fieldValues = HierarchyPanel.this.getModelObject().getFieldValues(FacetConstants.FIELD_IS_PART_OF);
+                if (fieldValues == null) {
+                    // no parent field
+                    size = 0L;
+                } else {
+                    // any number of parent fields
+                    size = Long.valueOf(fieldValues.size());
+                }
+            }
+            return size;
+        }
+
+        @Override
+        public IModel<SolrDocument> model(SolrDocument object) {
+            return new SolrDocumentModel(object);
+        }
+
+        @Override
+        public void detach() {
+            size = null;
+        }
     }
 
 }
