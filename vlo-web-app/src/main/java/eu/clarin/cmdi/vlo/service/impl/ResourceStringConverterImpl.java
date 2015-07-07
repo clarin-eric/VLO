@@ -27,12 +27,16 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author twagoo
  */
 public class ResourceStringConverterImpl implements ResourceStringConverter {
+
+    private final static Logger logger = LoggerFactory.getLogger(ResourceStringConverterImpl.class);
 
     private final static String SPLIT_PATTERN = Pattern.quote(FacetConstants.FIELD_RESOURCE_SPLIT_CHAR);
     private final UriResolver resolver;
@@ -82,9 +86,11 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             if (path == null || path.isEmpty() || (scheme != null && scheme.equals(HANDLE_PREFIX))) {
                 return href;
             } else {
-                return FilenameUtils.getName(path);
+                //strip trailing slash, then get name
+                return FilenameUtils.getName(path.replaceAll("\\/$", ""));
             }
         } catch (URISyntaxException ex) {
+            logger.debug("Invalid URI, coult not extract file name: {}", href, ex);
             return href;
         }
     }
