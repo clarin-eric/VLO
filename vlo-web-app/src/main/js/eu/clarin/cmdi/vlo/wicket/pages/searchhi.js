@@ -12,7 +12,8 @@
 var excludeWords = [
     "and",
     "or",
-    "not"
+    "not",
+    "to"
 ];
 
 searchhi = {
