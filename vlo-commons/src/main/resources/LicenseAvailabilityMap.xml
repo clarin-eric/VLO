@@ -1,0 +1,153 @@
+<AvailabilityMap>
+    <Availability name="Free">
+        <License>Apache 2.0</License>
+        <License>Apache</License>
+        <License>ApacheLicence_2.0</License>
+        <License>Apache Licence 2.0</License>
+        <License>Apache-Licence</License>
+        <License>attribution</License>
+        <License>Available to all</License>
+        <License>Available to public</License>
+        <License>BSD-style</License>
+        <License>BSD</License>
+        <License>BSD or CC-BY-3.0</License>
+        <License>CC BY-SA 3.0</License>
+        <License>CC-BY-SA</License>
+        <License>CC-BY</License>
+        <License>CC-ZERO</License>
+        <License>CLARIN_PUB</License>
+        <License>CLARIN-PUB</License>
+        <License>free by CLARIN Service Provider federation</License>
+        <License>free; Distributed as a dissertation - "Lexikalische Polygenese im Konzeptbereich KOPF"</License>
+        <License>free</License>
+        <License>free; Free for academic use.</License>
+        <License>free; Free for research purposes.</License>
+        <License>freely available</License>
+        <License>freely usable</License>
+        <License>Free</License>
+        <License>GFDL</License>
+        <License>GNU GPL 3</License>
+        <License>GNU GPL</License>
+        <License>GNU GPL v2</License>
+        <License>GNU GPL v3</License>
+        <License>GNU GPL</License>
+        <License>GPL</License>
+        <License>GPL v2</License>
+        <License>GNU Public License</License>
+        <License>informLicensor</License>
+        <License>LGPL for Linguistic Resources</License>
+        <License>LGPL</License>
+        <License>open 2009</License>
+        <License>open access</License>
+        <License>Open Access</License>
+        <License>Open aceess</License>
+        <License>open</License>
+        <License>openly available</License>
+        <License>open to all</License>
+        <License>Princeton_Wordnet</License>
+        <License>PUB</License>
+        <License>public</License>
+        <License>redeposit</License>
+        <License>shareAlike</License>
+    </Availability>
+    <Availability name="Free for academic use">
+        <License>academic access</License>
+        <License>academic</License>
+        <License>academic-nonCommercialUse</License>
+        <License>academic - available for academic use</License>
+        <License>ACA</License>
+        <License>available to researcher/annotator</License>
+        <License>Binnen de kaders van de Gedragscode voor gebruik van persoonsgegevens in wetenschappelijk onderzoek van de VSNU (Vereniging van Samenwerkende Nederlandse Universiteiten) vrij beschikbaar voor dialectologisch, fonetisch, historisch of ander onderzoek. Onderzoekers wordt gevraagd bij publicatie als bron deze website te vermelden. Neem voor andersoortig gebruik contact op met het Meertens Instituut.</License>
+        <License>CC BY-NC 3.0 DE</License>
+        <License>CC BY-NC 3.0</License>
+        <License>CC BY-NC 4.0</License>
+        <License>CC BY-NC-SA 3.0</License>
+        <License>CC-BY-NC</License>
+        <License>CC - BY - NC</License>
+        <License>CC-BY-NC-SA</License>
+        <License>CC-by-nc-sa</License>
+        <License>CLARIN ACA</License>
+        <License>CLARIN_ACA</License>
+        <License>CLARIN-ACA</License>
+        <License>CLARIN_ACA-NC</License>
+        <License>disponible para indÃ­genas e investigadores</License>
+        <License>disponible para indígenas e investigadores</License>
+        <License>free available for purely academic institutions; fees apply for commercial institutions</License>
+        <License>free available for science</License>
+        <License>free available for scientific usage</License>
+        <License>free for academic use</License>
+        <License>free for academic use (subcat frames)</License>
+        <License>free for non-commercial use</License>
+        <License>freely available for academic research and education</License>
+        <License>freely available for research and education</License>
+        <License>freely available for science</License>
+        <License>freely usable for non-commercial usage (inform resource creator)</License>
+        <License>Free to use for research and teaching purposes.</License>
+        <License>Free to use for research and teaching purposes</License>
+        <License>non-commercial use</License>
+        <License>ree available for science</License>
+        <License>research use only</License>
+        <License>restricted: available to researchers with legitimate interest 1</License>
+        <License>restricted: available to researchers with legitimate interest 2</License>
+        <License>restricted: available to researchers with legitimate interest</License>
+        <License>The Conditions of Use for the IPROSLA data set specify among other things that no commercial use may be made of the data, that the creators of the data set should always be acknowledged in any publication on the data set, and that utmost care should be taken to protect the privacy of the families involved.</License>
+        <License>Vrij beschikbaar voor dialectologisch, fonetisch, historisch of ander onderzoek. Onderzoekers wordt gevraagd bij publicatie als bron deze website te vermelden. Neem voor andersoortig gebruik contact op met het Meertens Instituut</License>
+    </Availability>
+    <Availability name="Restricted">
+        <License>Access is restricted. Permission can be obtained by contacting the owner or the MPI</License>
+        <License>All data including audio is accessible for authorised researchers.</License>
+        <License>Annotation derzeit nicht vollständig. Freigabe erst nach Auswertung möglich. Lizensierung zur Veröffentlichung im Web als Vereinbarung nötig.</License>
+        <License>A special license is required because of the stem lexicon. SMOR (without a stem lexicon) comes with the SFST-tools (Stuttgart Finite State Transducer Tools) under the GNU Public License GPLv2.</License>
+        <License>available-restrictedUse</License>
+        <License>By permission of owner only</License>
+        <License>CC-BY-NC-ND</License>
+        <License>CC-BY-ND</License>
+        <License>CLARIN_RES</License>
+        <License>closed</License>
+        <License>Closed</License>
+        <License>Closed.</License>
+        <License>commercial</License>
+        <License>commercialUse</License>
+        <License>free; Contains personal data - photos and recordings. Oral permission for displying the photos, as long as they don't depict nude people.</License>
+        <License>Free to use for research and teaching purposes approved by the rights holder.</License>
+        <License>free; Use of text excerpts for scientific research.</License>
+        <License>internal</License>
+        <License>Linguistic Data Consortium, The Trustees of the University of Pennsylvania.</License>
+        <License>MS-C-NoReD-ND-FF</License>
+        <License>no access</License>
+        <License>no available</License>
+        <License>Not available</License>
+        <License>Nor available</License>
+        <License>noDerivatives</License>
+        <License>non available</License>
+        <License>no recordings available due to the sensitivity of the material</License>
+        <License>noRedistribution</License>
+        <License>no</License>
+        <License>No</License>
+        <License>not available to the public</License>
+        <License>other</License>
+        <License>proprietary</License>
+        <License>Recurso protegido - Protected resource</License>
+        <License>Registrierung erforderlich, die Texte der taz müssen erworben werden</License>
+        <License>Registrierung erforderlich, eingeschränkte Nutzung für nicht-akademische und kommerzielle Nutzung</License>
+        <License>RES</License>
+        <License>restricted</License>
+        <License>restricted 2009</License>
+        <License>Restricted</License>
+        <License>restricted - only available for licence owners</License>
+        <License>restringido/restricted</License>
+        <License>some concept definitions are open</License>
+        <License>special license</License>
+        <License>underNegotiation</License>
+    </Availability>
+    <Availability name="Upon request">
+        <License>available after registration</License>
+        <License>Available on request</License>
+        <License>Available upon request</License>
+        <License>free for academic use, request required</License>
+        <License>on request, for academic use</License>
+        <License>Please contact contact-person</License>
+        <License>request required</License>
+        <License>Upon Request</License>
+    </Availability>
+</AvailabilityMap>

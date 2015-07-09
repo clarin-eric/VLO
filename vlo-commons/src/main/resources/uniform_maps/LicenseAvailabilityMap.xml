@@ -1,0 +1,157 @@
+<mappings field="availability">
+   <mapping>
+      <value>Free</value>
+      <variant>Apache 2.0</variant>
+      <variant>Apache</variant>
+      <variant>ApacheLicence_2.0</variant>
+      <variant>Apache Licence 2.0</variant>
+      <variant>Apache-Licence</variant>
+      <variant>attribution</variant>
+      <variant>Available to all</variant>
+      <variant>Available to public</variant>
+      <variant>BSD-style</variant>
+      <variant>BSD</variant>
+      <variant>BSD or CC-BY-3.0</variant>
+      <variant>CC BY-SA 3.0</variant>
+      <variant>CC-BY-SA</variant>
+      <variant>CC-BY</variant>
+      <variant>CC-ZERO</variant>
+      <variant>CLARIN_PUB</variant>
+      <variant>CLARIN-PUB</variant>
+      <variant>free by CLARIN Service Provider federation</variant>
+      <variant>free; Distributed as a dissertation - "Lexikalische Polygenese im Konzeptbereich KOPF"</variant>
+      <variant>free</variant>
+      <variant>free; Free for academic use.</variant>
+      <variant>free; Free for research purposes.</variant>
+      <variant>freely available</variant>
+      <variant>freely usable</variant>
+      <variant>Free</variant>
+      <variant>GFDL</variant>
+      <variant>GNU GPL 3</variant>
+      <variant>GNU GPL</variant>
+      <variant>GNU GPL v2</variant>
+      <variant>GNU GPL v3</variant>
+      <variant>GNU GPL</variant>
+      <variant>GPL</variant>
+      <variant>GPL v2</variant>
+      <variant>GNU Public License</variant>
+      <variant>informLicensor</variant>
+      <variant>LGPL for Linguistic Resources</variant>
+      <variant>LGPL</variant>
+      <variant>open 2009</variant>
+      <variant>open access</variant>
+      <variant>Open Access</variant>
+      <variant>Open aceess</variant>
+      <variant>open</variant>
+      <variant>openly available</variant>
+      <variant>open to all</variant>
+      <variant>Princeton_Wordnet</variant>
+      <variant>PUB</variant>
+      <variant>public</variant>
+      <variant>redeposit</variant>
+      <variant>shareAlike</variant>
+   </mapping>
+   <mapping>
+      <value>Free for academic use</value>
+      <variant>academic access</variant>
+      <variant>academic</variant>
+      <variant>academic-nonCommercialUse</variant>
+      <variant>academic - available for academic use</variant>
+      <variant>ACA</variant>
+      <variant>available to researcher/annotator</variant>
+      <variant>Binnen de kaders van de Gedragscode voor gebruik van persoonsgegevens in wetenschappelijk onderzoek van de VSNU (Vereniging van Samenwerkende Nederlandse Universiteiten) vrij beschikbaar voor dialectologisch, fonetisch, historisch of ander onderzoek. Onderzoekers wordt gevraagd bij publicatie als bron deze website te vermelden. Neem voor andersoortig gebruik contact op met het Meertens Instituut.</variant>
+      <variant>CC BY-NC 3.0 DE</variant>
+      <variant>CC BY-NC 3.0</variant>
+      <variant>CC BY-NC 4.0</variant>
+      <variant>CC BY-NC-SA 3.0</variant>
+      <variant>CC-BY-NC</variant>
+      <variant>CC - BY - NC</variant>
+      <variant>CC-BY-NC-SA</variant>
+      <variant>CC-by-nc-sa</variant>
+      <variant>CLARIN ACA</variant>
+      <variant>CLARIN_ACA</variant>
+      <variant>CLARIN-ACA</variant>
+      <variant>CLARIN_ACA-NC</variant>
+      <variant>disponible para indÃ­genas e investigadores</variant>
+      <variant>disponible para indígenas e investigadores</variant>
+      <variant>free available for purely academic institutions; fees apply for commercial institutions</variant>
+      <variant>free available for science</variant>
+      <variant>free available for scientific usage</variant>
+      <variant>free for academic use</variant>
+      <variant>free for academic use (subcat frames)</variant>
+      <variant>free for non-commercial use</variant>
+      <variant>freely available for academic research and education</variant>
+      <variant>freely available for research and education</variant>
+      <variant>freely available for science</variant>
+      <variant>freely usable for non-commercial usage (inform resource creator)</variant>
+      <variant>Free to use for research and teaching purposes.</variant>
+      <variant>Free to use for research and teaching purposes</variant>
+      <variant>non-commercial use</variant>
+      <variant>ree available for science</variant>
+      <variant>research use only</variant>
+      <variant>restricted: available to researchers with legitimate interest 1</variant>
+      <variant>restricted: available to researchers with legitimate interest 2</variant>
+      <variant>restricted: available to researchers with legitimate interest</variant>
+      <variant>The Conditions of Use for the IPROSLA data set specify among other things that no commercial use may be made of the data, that the creators of the data set should always be acknowledged in any publication on the data set, and that utmost care should be taken to protect the privacy of the families involved.</variant>
+      <variant>Vrij beschikbaar voor dialectologisch, fonetisch, historisch of ander onderzoek. Onderzoekers wordt gevraagd bij publicatie als bron deze website te vermelden. Neem voor andersoortig gebruik contact op met het Meertens Instituut</variant>
+   </mapping>
+   <mapping>
+      <value>Restricted</value>
+      <variant>Access is restricted. Permission can be obtained by contacting the owner or the MPI</variant>
+      <variant>All data including audio is accessible for authorised researchers.</variant>
+      <variant>Annotation derzeit nicht vollständig. Freigabe erst nach Auswertung möglich. Lizensierung zur Veröffentlichung im Web als Vereinbarung nötig.</variant>
+      <variant>A special license is required because of the stem lexicon. SMOR (without a stem lexicon) comes with the SFST-tools (Stuttgart Finite State Transducer Tools) under the GNU Public License GPLv2.</variant>
+      <variant>available-restrictedUse</variant>
+      <variant>By permission of owner only</variant>
+      <variant>CC-BY-NC-ND</variant>
+      <variant>CC-BY-ND</variant>
+      <variant>CLARIN_RES</variant>
+      <variant>closed</variant>
+      <variant>Closed</variant>
+      <variant>Closed.</variant>
+      <variant>commercial</variant>
+      <variant>commercialUse</variant>
+      <variant>free; Contains personal data - photos and recordings. Oral permission for displying the photos, as long as they don't depict nude people.</variant>
+      <variant>Free to use for research and teaching purposes approved by the rights holder.</variant>
+      <variant>free; Use of text excerpts for scientific research.</variant>
+      <variant>internal</variant>
+      <variant>Linguistic Data Consortium, The Trustees of the University of Pennsylvania.</variant>
+      <variant>MS-C-NoReD-ND-FF</variant>
+      <variant>no access</variant>
+      <variant>no available</variant>
+      <variant>Not available</variant>
+      <variant>Nor available</variant>
+      <variant>noDerivatives</variant>
+      <variant>non available</variant>
+      <variant>no recordings available due to the sensitivity of the material</variant>
+      <variant>noRedistribution</variant>
+      <variant>no</variant>
+      <variant>No</variant>
+      <variant>not available to the public</variant>
+      <variant>other</variant>
+      <variant>proprietary</variant>
+      <variant>Recurso protegido - Protected resource</variant>
+      <variant>Registrierung erforderlich, die Texte der taz müssen erworben werden</variant>
+      <variant>Registrierung erforderlich, eingeschränkte Nutzung für nicht-akademische und kommerzielle Nutzung</variant>
+      <variant>RES</variant>
+      <variant>restricted</variant>
+      <variant>restricted 2009</variant>
+      <variant>Restricted</variant>
+      <variant>restricted - only available for licence owners</variant>
+      <variant>restringido/restricted</variant>
+      <variant>some concept definitions are open</variant>
+      <variant>special license</variant>
+      <variant>underNegotiation</variant>
+   </mapping>
+   <mapping>
+      <value>Upon request</value>
+      <variant>available after registration</variant>
+      <variant>Available on request</variant>
+      <variant>Available upon request</variant>
+      <variant>free for academic use, request required</variant>
+      <variant>on request, for academic use</variant>
+      <variant>Please contact contact-person</variant>
+      <variant>request required</variant>
+      <variant>Upon Request</variant>
+   </mapping>
+</mappings>

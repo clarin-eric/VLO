@@ -1,0 +1,79 @@
+<mappings field="national_project">
+   <mapping>
+      <value>CLARIN-D</value>
+      <variant>Berlin-Brandenburgische Akademie der Wissenschaften</variant>
+      <variant>Deutsches Textarchiv (1600–1900)</variant>
+      <variant>WebLicht Webservice Orchestrator</variant>
+      <variant>Tübingen Language Resources</variant>
+      <variant>TLA: Acquisition</variant>
+      <variant>Bavarian Archive for Speech Signals (BAS)</variant>
+      <variant>TLA: childes</variant>
+      <variant>TLA: Comprehension</variant>
+      <variant>TLA: DoBeS archive</variant>
+      <variant>TLA: Humanethologisches Filmarchiv</variant>
+      <variant>TLA: Language and Cognition</variant>
+      <variant>TLA: MPI für Bildungsforschung</variant>
+      <variant>TLA: Multilingualism</variant>
+      <variant>TLA: Neurobiology of language</variant>
+      <variant>TLA: Sign Language Typology</variant>
+      <variant>TLA: talkbank</variant>
+      <variant>Leipzig Corpora Collection</variant>
+      <variant>Hamburger Zentrum für Sprachkorpora (HZSK)</variant>
+      <variant>IMS, University of Stuttgart, Language Resources</variant>
+      <variant>AVATecH webservices</variant>
+      <variant>HZSK Webservices</variant>
+      <variant>Tübingen Curated Resource</variant>
+      <variant>Humboldt University of Berlin</variant>
+      <variant>Institut für Deutsche Sprache, CLARIN-D Zentrum, Mannheim</variant>
+      <variant>TLA Collections</variant>
+      <variant isRegExp="true">Universität des Saarlandes.*</variant>
+   </mapping>
+   <mapping>
+      <value>CLARIN-EU</value>
+      <variant>CLARIN LRT inventory</variant>
+      <variant>TLA: Adaptive Listening Group</variant>
+      <variant>TLA: AILLA</variant>
+      <variant>TLA: ANDES</variant>
+      <variant>TLA: Comparative cognitive anthropology</variant>
+      <variant>TLA: CORP-ORAL</variant>
+      <variant>TLA: Demo</variant>
+      <variant>TLA: ECHO</variant>
+      <variant>TLA: Evolutionary Processes in Language and Culture</variant>
+      <variant>TLA: ILSP INTERA contribution</variant>
+      <variant>TLA: Individual differences in language processing</variant>
+      <variant>TLA: SUCA</variant>
+   </mapping>
+   <mapping>
+      <value>CLARIN-NL</value>
+      <variant>TLA: DBD</variant>
+      <variant>TLA: IFA corpus</variant>
+      <variant>TLA: Leiden Archives</variant>
+      <variant>TLA: MPI CGN</variant>
+      <variant>TLA: Nijmegen corpora of casual speech</variant>
+      <variant>CLARIN-NL webservices</variant>
+      <variant>Nederlands Instituut voor Beeld en Geluid Academia collectie</variant>
+      <variant>INL Taalbank Nederlands</variant>
+      <variant>TLA: Corpus NGT</variant>
+      <variant>Dictionary of the Brabantic dialect</variant>
+      <variant>Dictionary of the Brabantic dialects - subcollection with core data</variant>
+      <variant>Dictionary of the Limburgian dialects</variant>
+      <variant>Dictionary of the Limburgian dialects - subcollection with core data</variant>
+      <variant>TLA: NEHOL</variant>
+      <variant>UBU Clarin Set</variant>
+      <variant isRegExp="true">Meertens.*</variant>
+   </mapping>
+   <mapping>
+      <value>CLARIN-DK-UCPH</value>
+      <variant>CLARIN-DK-UCPH Repository</variant>
+      <variant isRegExp="true">CLARIN-DK-UCPH.*</variant>
+   </mapping>
+   <mapping>
+      <value>LINDAT (CLARIN-CZ)</value>
+      <variant>LRT + Open Submissions Data &amp; Tools</variant>
+      <variant isRegExp="true">LINDAT / CLARIN.*</variant>
+   </mapping>
+   <mapping>
+      <value>Dutch Language Union</value>
+      <variant>TST-Centrale</variant>
+   </mapping>
+</mappings>

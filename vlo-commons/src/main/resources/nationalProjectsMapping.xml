@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- This file contains the mapping from MDCollectionDisplayName entries in meta data files to their national projects --> 
+<nationalProjects>
+	<nationalProjectMapping><MdCollectionDisplayName>Berlin-Brandenburgische Akademie der Wissenschaften</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Deutsches Textarchiv (1600–1900)</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>CLARIN LRT inventory</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>WebLicht Webservice Orchestrator</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Tübingen Language Resources</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: Acquisition</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: Adaptive Listening Group</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: AILLA</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: ANDES</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Bavarian Archive for Speech Signals (BAS)</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: childes</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: Comparative cognitive anthropology</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: Comprehension</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: CORP-ORAL</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: DBD</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: Demo</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: ECHO</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: DoBeS archive</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: Evolutionary Processes in Language and Culture</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: Humanethologisches Filmarchiv</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: IFA corpus</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: ILSP INTERA contribution</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: Individual differences in language processing</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: Language and Cognition</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: Leiden Archives</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: MPI CGN</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: MPI für Bildungsforschung</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: Multilingualism</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: Neurobiology of language</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: Nijmegen corpora of casual speech</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: SUCA</MdCollectionDisplayName><NationalProject>CLARIN-EU</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: Sign Language Typology</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>TLA: talkbank</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>CLARIN-NL webservices</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Nederlands Instituut voor Beeld en Geluid Academia collectie</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>INL Taalbank Nederlands</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>CLARIN-DK-UCPH Repository</MdCollectionDisplayName><NationalProject>CLARIN-DK-UCPH</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>LRT + Open Submissions Data &amp; Tools</MdCollectionDisplayName><NationalProject>LINDAT (CLARIN-CZ)</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Leipzig Corpora Collection</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>Hamburger Zentrum für Sprachkorpora (HZSK)</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+	<nationalProjectMapping><MdCollectionDisplayName>IMS, University of Stuttgart, Language Resources</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+
+	<nationalProjectMapping>
+		<MdCollectionDisplayName>AVATecH webservices</MdCollectionDisplayName>
+		<NationalProject>CLARIN-D</NationalProject>
+	</nationalProjectMapping>
+		
+	<nationalProjectMapping>
+		<MdCollectionDisplayName>HZSK Webservices</MdCollectionDisplayName>
+		<NationalProject>CLARIN-D</NationalProject>
+	</nationalProjectMapping>
+	
+	<nationalProjectMapping>
+		<MdCollectionDisplayName>Tübingen Curated Resource</MdCollectionDisplayName>
+		<NationalProject>CLARIN-D</NationalProject>
+	</nationalProjectMapping>
+	 
+	<nationalProjectMapping>
+		<MdCollectionDisplayName>Humboldt University of Berlin</MdCollectionDisplayName>
+		<NationalProject>CLARIN-D</NationalProject>
+	</nationalProjectMapping> 
+	
+	<nationalProjectMapping>
+		<MdCollectionDisplayName>Institut für Deutsche Sprache, CLARIN-D Zentrum, Mannheim</MdCollectionDisplayName>
+		<NationalProject>CLARIN-D</NationalProject>
+	</nationalProjectMapping> 
+	
+	<nationalProjectMapping>
+		<MdCollectionDisplayName>TLA Collections</MdCollectionDisplayName>
+		<NationalProject>CLARIN-D</NationalProject>
+	</nationalProjectMapping> 
+	
+	<nationalProjectMapping>
+		<MdCollectionDisplayName>TLA: Corpus NGT</MdCollectionDisplayName>
+		<NationalProject>CLARIN-NL</NationalProject>
+	</nationalProjectMapping>
+	
+	<nationalProjectMapping>
+		<MdCollectionDisplayName>Dictionary of the Brabantic dialect</MdCollectionDisplayName>
+		<NationalProject>CLARIN-NL</NationalProject>
+	</nationalProjectMapping>
+	
+	<nationalProjectMapping>
+		<MdCollectionDisplayName>Dictionary of the Brabantic dialects - subcollection with core data</MdCollectionDisplayName>
+		<NationalProject>CLARIN-NL</NationalProject>
+	</nationalProjectMapping>
+	
+	<nationalProjectMapping>
+		<MdCollectionDisplayName>Dictionary of the Limburgian dialects</MdCollectionDisplayName>
+		<NationalProject>CLARIN-NL</NationalProject>
+	</nationalProjectMapping>
+	
+	<nationalProjectMapping>
+		<MdCollectionDisplayName>Dictionary of the Limburgian dialects - subcollection with core data</MdCollectionDisplayName>
+		<NationalProject>CLARIN-NL</NationalProject>
+	</nationalProjectMapping>
+
+        <nationalProjectMapping>
+		<MdCollectionDisplayName>TLA: NEHOL</MdCollectionDisplayName>
+		<NationalProject>CLARIN-NL</NationalProject>
+	</nationalProjectMapping>
+	
+	<nationalProjectMapping>
+		<MdCollectionDisplayName>TST-Centrale</MdCollectionDisplayName>
+		<NationalProject>Dutch Language Union</NationalProject>
+	</nationalProjectMapping>
+	
+	<nationalProjectMapping>
+		<MdCollectionDisplayName>UBU Clarin Set</MdCollectionDisplayName>
+		<NationalProject>CLARIN-NL</NationalProject>
+	</nationalProjectMapping>
+
+	<nationalProjectMapping><MdCollectionDisplayName isRegExp="true">CLARIN-DK-UCPH.*</MdCollectionDisplayName><NationalProject>CLARIN-DK-UCPH</NationalProject></nationalProjectMapping>        
+       	<nationalProjectMapping><MdCollectionDisplayName isRegExp="true">LINDAT / CLARIN.*</MdCollectionDisplayName><NationalProject>LINDAT (CLARIN-CZ)</NationalProject></nationalProjectMapping>
+        <nationalProjectMapping><MdCollectionDisplayName isRegExp="true">Meertens.*</MdCollectionDisplayName><NationalProject>CLARIN-NL</NationalProject></nationalProjectMapping>
+        <nationalProjectMapping><MdCollectionDisplayName isRegExp="true">Universität des Saarlandes.*</MdCollectionDisplayName><NationalProject>CLARIN-D</NationalProject></nationalProjectMapping>
+</nationalProjects>

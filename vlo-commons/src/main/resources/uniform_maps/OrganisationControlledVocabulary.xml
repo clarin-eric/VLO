@@ -1,0 +1,3471 @@
+<mappings field="organization">
+   <mapping>
+      <value>AIATSIS</value>
+      <variant>Australian Institute of Aboriginal and Torres Strait Islander Studies (AIATSIS)</variant>
+      <variant>Australian Institute of Aboriginal Studies</variant>
+   </mapping>
+   <mapping>
+      <value>CNRS, IIAP, Department of Linguistics</value>
+      <variant>Centre national de la recherche scientifique (CNRS); Instituto de Investigaciones de la Amazonía Peruana (IIAP); Ruhr-University Bochum, Department of Linguistics</variant>
+      <variant>Centre national de la recherche scientifique, Instituto de Investigaciones de la Amazonía Peruana / Department of Linguistics / Ruhr-University Bochum</variant>
+   </mapping>
+   <mapping>
+      <value>RKK</value>
+      <variant>Rooms-Katholiek Kerkgenootschap</variant>
+   </mapping>
+   <mapping>
+      <value>Finnish language, University of Oulu</value>
+   </mapping>
+   <mapping>
+      <value>Consejo de Desarrollo Científico y Humanístico, Universidad Central de Venezuela</value>
+      <variant>Universidad Central de Venezuela, Consejo de Desarrollo Científico y Humanístico</variant>
+   </mapping>
+   <mapping>
+      <value>Kegan Paul</value>
+      <variant>Kegan Paul International</variant>
+      <variant>Kegan Paul.</variant>
+   </mapping>
+   <mapping>
+      <value>ILK, Computational Linguistics</value>
+      <variant>Computational Linguistics, Tilburg</variant>
+      <variant>ILK, Computational Linguitics, Tilburg University</variant>
+   </mapping>
+   <mapping>
+      <value>Feffer and Simons Incorporated</value>
+      <variant>Feffer &amp; Simons Incorporated</variant>
+      <variant>Feffer and Simons Inc.</variant>
+   </mapping>
+   <mapping>
+      <value>Center for SouthEast Asian Studies, University of California, Berkeley</value>
+      <variant>Center fo SouthEast Asian Studies, University of California, Berkeley</variant>
+   </mapping>
+   <mapping>
+      <value>Imprimerie Nationale</value>
+      <variant>Imprimerie nationale</variant>
+   </mapping>
+   <mapping>
+      <value>Departement of African Languages and Cultures, Ecole Normale Supérieure-Yaoundé</value>
+      <variant>Ecole Normale Supérieure-Yaoundé, Departement of African Languages and Cultures; Po Box 47, Yaoundé-Cameroon</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, Southern Illinois University at Carbondale</value>
+      <variant>Southern Illinois University at Carbondale, Department of Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Collège Liberman</value>
+      <variant>Collège Libermann</variant>
+      <variant>Le Collège Libermann</variant>
+   </mapping>
+   <mapping>
+      <value>South Asia Regional Studies, University of Pennsylvania</value>
+   </mapping>
+   <mapping>
+      <value>Instituto de Lingüística, Facultad de Filosofía y Letras</value>
+      <variant>Instituto de Lingüística, Facultad de Filosofía y Letras, Universidad de Buenos Aires</variant>
+   </mapping>
+   <mapping>
+      <value>Ablex Publishing Corporation</value>
+      <variant>Ablex</variant>
+   </mapping>
+   <mapping>
+      <value>University of Victoria</value>
+      <variant>University of Victoria, British Columbia, Canada</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Celtic, Institute of Irish Studies</value>
+      <variant>Queen's University of Belfast-Institute of Irish Studies-Dept. of Celtic</variant>
+   </mapping>
+   <mapping>
+      <value>Groote Eylandt Linguistics</value>
+      <variant>Groote Eylandt Linguistics.</variant>
+   </mapping>
+   <mapping>
+      <value>UiL-OTS, Utrecht University</value>
+   </mapping>
+   <mapping>
+      <value>University of Michigan, Ann Arbor</value>
+      <variant>University of Michigan</variant>
+   </mapping>
+   <mapping>
+      <value>J. M. Dent and Sons Limited</value>
+      <variant>J. M. Dent &amp; Sons Limited</variant>
+      <variant>J. M. Dent &amp; Sons Ltd</variant>
+   </mapping>
+   <mapping>
+      <value>SPEX</value>
+      <variant>SPEX / Radboud University Nijmegen / the Netherlands</variant>
+      <variant>SPEX, Radboud University Nijmegen, the Netherlands</variant>
+   </mapping>
+   <mapping>
+      <value>Undena Publications</value>
+      <variant>Undena Publishing</variant>
+   </mapping>
+   <mapping>
+      <value>Akademija Nauk SSSR</value>
+      <variant>Akademia Nauk SSSR</variant>
+      <variant>Akademija Nauk SSSR, Sibirskoe Otdelenie, Institut Istorii, Filologii i Filosofii</variant>
+      <variant>Akademija nauk SSSR, Institut Jazykoznanija</variant>
+      <variant>Akademija Nauk</variant>
+   </mapping>
+   <mapping>
+      <value>N, A</value>
+      <variant>NIET VAN TOEPASSING</variant>
+      <variant>Unspecified</variant>
+      <variant>Unknown</variant>
+      <variant>unaffiliated</variant>
+      <variant>NIET BEKEND</variant>
+      <variant>N/C</variant>
+      <variant>niet van toepassing</variant>
+      <variant>unknown</variant>
+   </mapping>
+   <mapping>
+      <value>Dipartimento per la Cooperazione allo Sviluppo, Comitato Tecnico Linguistico per l'Universita Nazionale Somala</value>
+      <variant>Dipartimento per la Cooperazione allo Sviluppo; Comitato Tecnico Linguistico per l'Universita Nazionale Somala, Ministero degli Affari Esteri</variant>
+   </mapping>
+   <mapping>
+      <value>Free Press</value>
+      <variant>The Free Press</variant>
+   </mapping>
+   <mapping>
+      <value>Gramedia, Cornell University Press</value>
+      <variant>Gramedia / Cornell University Press</variant>
+   </mapping>
+   <mapping>
+      <value>UFAL, Faculty of Mathematics and Physics</value>
+      <variant>UFAL, Faculty of Mathematics and Physics, Charles University in Prague</variant>
+   </mapping>
+   <mapping>
+      <value>University of Oregon</value>
+      <variant>University of Oregon / CIDCA</variant>
+   </mapping>
+   <mapping>
+      <value>Språkbanken, Department of Swedish Language</value>
+      <variant>Språkbanken, Dept. of Swedish Language, Göteborg University</variant>
+   </mapping>
+   <mapping>
+      <value>Fryske Akademy, KNAW</value>
+      <variant>Fryske Akademy - KNAW</variant>
+   </mapping>
+   <mapping>
+      <value>University of Chicago Press</value>
+      <variant>The University of Chicago Press</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, Stockholm University</value>
+      <variant>Stockholm University, Dept. of Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, University of Oregon</value>
+   </mapping>
+   <mapping>
+      <value>Humanities Press, Australian Institute of Aboriginal Studies</value>
+      <variant>Humanities Press / Australian Institute of Aboriginal Studies</variant>
+   </mapping>
+   <mapping>
+      <value>Almqvist &amp; Wiksell</value>
+      <variant>Almqvist and Wiksells</variant>
+      <variant>Almqvist and Wiksell</variant>
+      <variant>Almquist and Wiksells Boktryckerei</variant>
+      <variant>Almqvist &amp; Wiksell.</variant>
+   </mapping>
+   <mapping>
+      <value>University of Colorado; Volkswagen Foundation</value>
+      <variant>University of Colorado and VolkswagenStiftung</variant>
+   </mapping>
+   <mapping>
+      <value>NBG</value>
+      <variant>NBG/DBNL/INL</variant>
+   </mapping>
+   <mapping>
+      <value>MIT Press</value>
+      <variant>M.I.T. Press</variant>
+      <variant>Massachusetts Institute of Technology Press</variant>
+      <variant>Massachusetts Institute of Technology (MIT) Press</variant>
+   </mapping>
+   <mapping>
+      <value>Natural Language Processing Centre, Faculty of Informatics</value>
+      <variant>Natural Language Processing Centre, Faculty of Informatics Masaryk University</variant>
+   </mapping>
+   <mapping>
+      <value>Department for General Linguistics, Westfälische Wilhelms-Universität Münster</value>
+      <variant>Westfälische Wilhelms-Universität Münster, Department for General Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>NIAS</value>
+      <variant>Netherlands Institute of Advanced Study (NIAS)</variant>
+      <variant>Netherlands Institute of Advanced Study</variant>
+   </mapping>
+   <mapping>
+      <value>Bantam Books</value>
+      <variant>Bantam.</variant>
+   </mapping>
+   <mapping>
+      <value>Suomalaisen Kirjallisuuden Seura</value>
+      <variant>Suomalaisen kirjallisuuden Seura</variant>
+   </mapping>
+   <mapping>
+      <value>Institute for Aboriginal Development</value>
+      <variant>Institute of Aboriginal Development</variant>
+   </mapping>
+   <mapping>
+      <value>DISP, University of Rome Tor Vergata</value>
+      <variant>DISP - University of Rome Tor Vergata</variant>
+   </mapping>
+   <mapping>
+      <value>Linguistics Laboratory, University of Montana</value>
+   </mapping>
+   <mapping>
+      <value>University of Utah Press</value>
+      <variant>The University of Utah Press</variant>
+   </mapping>
+   <mapping>
+      <value>Center for Applied Linguistics</value>
+      <variant>The Center for Applied Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Musée Royal du Congo Belge</value>
+      <variant>Musee royal du Congo belge</variant>
+   </mapping>
+   <mapping>
+      <value>Institut de Linguistique Appliquee, Unversite d'Abidjan</value>
+   </mapping>
+   <mapping>
+      <value>Institute of Language and Literature, Academy of sciences of the Estonian SSR</value>
+      <variant>Academy of sciences of the Estonian SSR, Institute of Language and Literature</variant>
+   </mapping>
+   <mapping>
+      <value>TALG Research Group, University of Vigo</value>
+      <variant>TALG Research Group (University of Vigo)</variant>
+   </mapping>
+   <mapping>
+      <value>The Research Institute for the Languages of Finland</value>
+      <variant>Research Institute for the Languages of Finland</variant>
+   </mapping>
+   <mapping>
+      <value>Program in African Languages and Linguistics and the African Studies Program, Indiana University</value>
+      <variant>Indiana University, Program in African Languages and Linguistics and the African Studies Program</variant>
+   </mapping>
+   <mapping>
+      <value>Universität Köln</value>
+      <variant>Universität zu Köln</variant>
+   </mapping>
+   <mapping>
+      <value>African Studies Institute, University of the Witwatersrand</value>
+   </mapping>
+   <mapping>
+      <value>Institute of General Linguistics, University of Zurich</value>
+      <variant>University of Zurich, Institute of General Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Chemnitz University of Technology</value>
+      <variant>Technische Universität Chemnitz</variant>
+   </mapping>
+   <mapping>
+      <value>UCL SH&amp;PS, London</value>
+      <variant>UCL Speech Hearing and Phonetic Sciences, London</variant>
+      <variant>http://www.ucl.ac.uk/psychlangsci/research/speech/</variant>
+      <variant>UCL Speech Hearing and Phonetic Sciences (UCL SH&amp;PS, London UK)</variant>
+   </mapping>
+   <mapping>
+      <value>Lexicologie, VUA</value>
+      <variant>Lexicologie VUA</variant>
+   </mapping>
+   <mapping>
+      <value>Center for Spoken Language Understanding, Oregon Graduate Institute of Science and Technology</value>
+      <variant>Center for Spoken Language Understanding at Oregon Graduate Institute of Science and Technology</variant>
+   </mapping>
+   <mapping>
+      <value>Buske Verlag</value>
+      <variant>Buske</variant>
+   </mapping>
+   <mapping>
+      <value>Interdisciplinary Nanoscience Center, Aarhus Universitet</value>
+   </mapping>
+   <mapping>
+      <value>Linguistics and Cultures, School of Languages</value>
+      <variant>University of Manchester, School of Languages, Linguistics and Cultures</variant>
+   </mapping>
+   <mapping>
+      <value>Linguistics Department, Purdue University, USA</value>
+      <variant>Purdue University, USA - Linguistics Dept.</variant>
+   </mapping>
+   <mapping>
+      <value>Don Bosco Press</value>
+      <variant>Don Bosco</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of the Latvian language, University of Latvia</value>
+   </mapping>
+   <mapping>
+      <value>Association culturelle Te Reo o te Tuamotu, University of Kiel</value>
+      <variant>University of Kiel; Association culturelle Te Reo o te Tuamotu</variant>
+   </mapping>
+   <mapping>
+      <value>Stephen Austin and Sons, Limited</value>
+      <variant>Stephen Austin and Sons, Ltd.</variant>
+   </mapping>
+   <mapping>
+      <value>CONICET, Universidad Nacional de Formosa</value>
+      <variant>CONICET- Universidad Nacional de Formosa</variant>
+   </mapping>
+   <mapping>
+      <value>Friederichsen, de Gruyter and Company</value>
+      <variant>Friederichsen, de Gruyter &amp; Co</variant>
+      <variant>Friederichsen, de Gruyter &amp; Company</variant>
+      <variant>Friedrichsen, De Gruyter &amp; Co</variant>
+   </mapping>
+   <mapping>
+      <value>Institute for African Studies, University of Cologne</value>
+      <variant>University of Cologne, Institute for African Studies</variant>
+   </mapping>
+   <mapping>
+      <value>CLLE-ERSS</value>
+      <variant>CLLE-ERSS, IRIT</variant>
+   </mapping>
+   <mapping>
+      <value>Institut für Afrikanistik und Äthiopistik, Universität Hamburg</value>
+      <variant>Institut für Afrikanistik und Äthiopistik der Universität Hamburg</variant>
+   </mapping>
+   <mapping>
+      <value>Bell &amp; Howell</value>
+      <variant>Bell and Howell</variant>
+   </mapping>
+   <mapping>
+      <value>Centre of Southeast Asian Studies, Monash University</value>
+   </mapping>
+   <mapping>
+      <value>Tribal Cultural Research and Training Institute, Government of Andhra Pradesh</value>
+      <variant>Government of Andhra Pradesh, Tribal Cultural Research and Training Institute</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Classical Philology, University of Helsinki</value>
+   </mapping>
+   <mapping>
+      <value>Blackwell</value>
+      <variant>Blackwell.</variant>
+   </mapping>
+   <mapping>
+      <value>Département de sciences du langage, Université d'Aix-Marseille</value>
+      <variant>Département de sciences du langage, Université d'Aix-Marseille (Aix-en-Provence FR)</variant>
+   </mapping>
+   <mapping>
+      <value>Faber and Faber</value>
+      <variant>Faber &amp; Faber</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Cotabato Cultures, Notre Dame University</value>
+      <variant>Notre Dame University, Institute of Cotabato Cultures</variant>
+   </mapping>
+   <mapping>
+      <value>CSLI, Stanford University</value>
+      <variant>Center for the Study of Language and Information (CSLI)</variant>
+      <variant>Center for the Study of Language and Information</variant>
+      <variant>Center for the Study of Language and Information (CSLI) at Stanford University</variant>
+      <variant>Center for the Study of Language and Information / Stanford University</variant>
+      <variant>CSLI</variant>
+   </mapping>
+   <mapping>
+      <value>Dakar, Senegal : African Language Materials Archive,</value>
+      <variant>Dakar, Senegal : African Language Material Archive,</variant>
+      <variant>Dakar, Senegal African Language Materials Archive,</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of History and Philology, Academia Sinica</value>
+   </mapping>
+   <mapping>
+      <value>Cambridge University Press</value>
+      <variant>The Cambridge University Press</variant>
+      <variant>Cambridge University Press.</variant>
+      <variant>Cambrigde University Press</variant>
+   </mapping>
+   <mapping>
+      <value>K. Paul, Trench, Trubner and Company</value>
+      <variant>K. Paul, Trench, Trubner &amp; Company</variant>
+      <variant>K. Paul, Trench, Trubner and Co.</variant>
+   </mapping>
+   <mapping>
+      <value>CST, KUA</value>
+   </mapping>
+   <mapping>
+      <value>Asociación Proyecto Lingüístico Francisco Marroquín</value>
+      <variant>Asociación Proyecto Lingüístico Francisco Marroquín, PLFM</variant>
+   </mapping>
+   <mapping>
+      <value>University of Pennsylvania Press</value>
+      <variant>The University of Pennsylvania Press</variant>
+   </mapping>
+   <mapping>
+      <value>CERTEC, Humanistlaboratoriet</value>
+      <variant>CERTEC / Humanistlaboratoriet</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics and Research School of Pacific Studies, Australian National University</value>
+      <variant>Department of Linguistics Research School of Pacific and Asian Studies, Australian National University</variant>
+   </mapping>
+   <mapping>
+      <value>Amsterdam Centre for Language and Communication, University of Amsterdam</value>
+      <variant> Amsterdam Centre for Language &amp; Communication / University of Amsterdam</variant>
+      <variant>University of Amsterdam, Amsterdam Centre for Language &amp; Communication</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, Australian National University. Unpublished</value>
+   </mapping>
+   <mapping>
+      <value>Bayerisches Archiv für Sprachsignale</value>
+      <variant>Bavarian Archive for Speech Signals, Ludwig-Maximilians-Universitaet Muenchen</variant>
+   </mapping>
+   <mapping>
+      <value>Section de Linguistique Appliquée, Université Fédérale du Cameroun</value>
+      <variant>Université Fédérale du Cameroun, Section de Linguistique Appliquée</variant>
+   </mapping>
+   <mapping>
+      <value>Haag and Herchen Verlag</value>
+      <variant>Haag &amp; Herchen Verlag</variant>
+      <variant>Haag und Herchen</variant>
+   </mapping>
+   <mapping>
+      <value>North-East Frontier Agency</value>
+      <variant>North-East Frontier Agency Administration</variant>
+   </mapping>
+   <mapping>
+      <value>Universidad Nacional Autónoma de México</value>
+      <variant>Universidad Nactional Autónoma de México</variant>
+   </mapping>
+   <mapping>
+      <value>Söderströms förlag</value>
+      <variant>Söderström</variant>
+   </mapping>
+   <mapping>
+      <value>Lingsoft, Incorporated</value>
+      <variant>Lingsoft, Inc.</variant>
+   </mapping>
+   <mapping>
+      <value> The Institute for Comparative Research in Human Culture</value>
+      <variant>The Institute for Comparative Research in Human Culture</variant>
+   </mapping>
+   <mapping>
+      <value>Faculty of Arts, Leiden University</value>
+      <variant>Leiden University Faculty of Arts</variant>
+   </mapping>
+   <mapping>
+      <value>CLS, Radboud University</value>
+      <variant>Centre for Language Studies</variant>
+      <variant>Centre for Language Studies / Radboud University</variant>
+   </mapping>
+   <mapping>
+      <value>Werkgroep Informatica, Vrije Universiteit</value>
+      <variant>Wergroep Informatica Vrije Universiteit</variant>
+   </mapping>
+   <mapping>
+      <value>Institut für Sprachwissenschaft, Universität zu Köln</value>
+   </mapping>
+   <mapping>
+      <value>African Studies Program, University of Wisconsin</value>
+   </mapping>
+   <mapping>
+      <value>John Hopkins University Press </value>
+      <variant>Johns Hopkins University Press</variant>
+   </mapping>
+   <mapping>
+      <value>Alaska Native Language Center and Program, University of Alaska Fairbanks</value>
+      <variant>Alaska Native Language Center</variant>
+   </mapping>
+   <mapping>
+      <value>Atelier National Reproduction des Thèses, Université Lille III</value>
+   </mapping>
+   <mapping>
+      <value>IDS</value>
+      <variant>Institut für Deutsche Sprache</variant>
+      <variant>IDS: Institut für Deutsche Sprache</variant>
+   </mapping>
+   <mapping>
+      <value>Johns Hopkins University Press</value>
+      <variant>The Johns Hopkins Press</variant>
+   </mapping>
+   <mapping>
+      <value>Afrikcan Studies Center</value>
+      <variant>African Studies Center</variant>
+   </mapping>
+   <mapping>
+      <value>VEB Verlag Enzyklopädie</value>
+      <variant>VEB Verlag Enzyklopaedie</variant>
+      <variant>Verlag Enzyklopädie</variant>
+   </mapping>
+   <mapping>
+      <value>Faculty of Letters and Philosophy, University of Buenos Aires</value>
+      <variant>University of Buenos Aires, Faculty of Letters and Philosophy</variant>
+   </mapping>
+   <mapping>
+      <value>Reichert</value>
+      <variant>Reichert Verlag</variant>
+   </mapping>
+   <mapping>
+      <value>Radio Herrijzend Nederland</value>
+      <variant>RADIO HERRIJZEND NEDERLAND</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Anglo-Saxon, Norse, and Celtic, the University of Cambridge</value>
+      <variant>Department of Anglo-Saxon, Norse, and Celtic at the University of Cambridge</variant>
+   </mapping>
+   <mapping>
+      <value>MIT</value>
+      <variant>Massachusetts Institute of Technology</variant>
+      <variant>Massachusetts Institute of Technology (MIT)</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, Lund University</value>
+      <variant>Dept. of Linguistics, Lund University, Sweden</variant>
+   </mapping>
+   <mapping>
+      <value>Pacific Linguistics</value>
+      <variant>Pacific Linguisics</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Infrastructure, Planning, and Environment, Northern Territory Government</value>
+      <variant>Northern Territory Government, Dept of Infrastructure, Planning, and Environment</variant>
+   </mapping>
+   <mapping>
+      <value>Korpora.org, Universität Duisburg-Essen</value>
+      <variant>Korpora.org</variant>
+   </mapping>
+   <mapping>
+      <value>Diwurruwurru-Jaru Aboriginal Corporation</value>
+      <variant>Diwurruwurru-jaru Aboriginal Corporation</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Anthropology, University of Manitoba</value>
+   </mapping>
+   <mapping>
+      <value>Chicano Studies Research Center, UCLA</value>
+   </mapping>
+   <mapping>
+      <value>Miision porotestanonbe mbo sahaal ngal, Bamako</value>
+      <variant>Bamako : Miision porotestanonbe mbo sahaal ngal,</variant>
+   </mapping>
+   <mapping>
+      <value>Akademie Verlag</value>
+      <variant>Akademie-Verlag</variant>
+      <variant>Akademie-Verlag.</variant>
+   </mapping>
+   <mapping>
+      <value>DGCSS, KUA</value>
+   </mapping>
+   <mapping>
+      <value>G. Narr Verlag</value>
+      <variant>G. Narr</variant>
+   </mapping>
+   <mapping>
+      <value>Centre Territorial de Recherche et de Documentation Pédagogiques</value>
+      <variant>CTRDP</variant>
+   </mapping>
+   <mapping>
+      <value>Directorate of Information and Public Relations, Government of Arunachal Pradesh</value>
+   </mapping>
+   <mapping>
+      <value>Babylon Centre for Studies of Multilingualism in the Multicultural Society</value>
+      <variant>the Babylon Centre for Studies of Multilingualism in the Multicultural Society</variant>
+   </mapping>
+   <mapping>
+      <value>Applied Computing Department, Dundee University</value>
+      <variant>Applied Computing Department of Dundee University</variant>
+   </mapping>
+   <mapping>
+      <value>Research Group in Computational Linguistics, University of Wolverhampton</value>
+   </mapping>
+   <mapping>
+      <value>Department of Psychology, University of Jyväskylä</value>
+   </mapping>
+   <mapping>
+      <value>Cultures &amp; Religions, School of Languages</value>
+      <variant>University of Stirling, School of Languages, Cultures &amp; Religions</variant>
+   </mapping>
+   <mapping>
+      <value>Smithsonian Institution Press</value>
+      <variant>Smithsonian Press</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Indian Studies, University of Groningen</value>
+   </mapping>
+   <mapping>
+      <value>Ministerio de Gobierno, República de Colombia</value>
+      <variant>Ministerio de Gobierno</variant>
+   </mapping>
+   <mapping>
+      <value>Centre de recherche Valibel, Louvain</value>
+      <variant>http://www.uclouvain.be/valibel</variant>
+      <variant>Centre de recherche Valibel - Discours et variation (Valibel, Louvain BE)</variant>
+   </mapping>
+   <mapping>
+      <value>P. Shalom Publications incorporated</value>
+      <variant>P. Shalom Pub. Inc.</variant>
+   </mapping>
+   <mapping>
+      <value>MICA, Hanoi</value>
+      <variant>Multimedia, Information, Communication and Applications - UMI 2954 (MICA, Hanoi VN)</variant>
+      <variant>http://www.mica.edu.vn</variant>
+      <variant>Multimedia, Information, Communication and Applications, Hanoi</variant>
+   </mapping>
+   <mapping>
+      <value>Centro de Estudios Mayas Mexico, Universidad Nacional Autonoma de Mexico</value>
+      <variant>Universidad Nacional Autonoma de Mexico, Centro de Estudios Mayas Mexico</variant>
+   </mapping>
+   <mapping>
+      <value>CLUL, University of Lisbon</value>
+      <variant>University of Lisbon, CLUL-Centro de Linguística da Universidade de Lisboa</variant>
+      <variant>Centro de Linguística da Universidade de Lisboa / University of Lisbon</variant>
+   </mapping>
+   <mapping>
+      <value>Tip. Imp. Akademii Nauk</value>
+      <variant>Tip. Imperatorskoj akademii nauk</variant>
+   </mapping>
+   <mapping>
+      <value>Addison Wesley Longman</value>
+      <variant>Addison Wesley Longman</variant>
+      <variant>Addison Wesley Longman.</variant>
+   </mapping>
+   <mapping>
+      <value>Danmarks JordbrugsForskning</value>
+      <variant>Danmarks Jordbrugsforskning</variant>
+   </mapping>
+   <mapping>
+      <value>Southeast Asia Program, Department of Asian Studies</value>
+      <variant>Southeast Asia Program, Department of Asian Studies, Cornell University</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, Hartford Seminary Foundation</value>
+   </mapping>
+   <mapping>
+      <value>Département de linguistique, UNIGE</value>
+      <variant>http://www.unige.ch/lettres/linguistique/index.html</variant>
+      <variant>Département de linguistique  / Université de Genève</variant>
+      <variant>Université de Genève, Département de linguistique (UNIGE, Genève CH)</variant>
+   </mapping>
+   <mapping>
+      <value>Vandenhoeck &amp; Ruprecht</value>
+      <variant>Vandenhoeck and Ruprecht</variant>
+   </mapping>
+   <mapping>
+      <value>SIL</value>
+      <variant>Summer Institute of Lingusitics</variant>
+      <variant>Summer Institute of LInguistics</variant>
+      <variant>SIL of the University of Oklahoma</variant>
+      <variant>The Summer Institute of Linguistics</variant>
+      <variant>Summer Institute of Linguistics.</variant>
+      <variant>Summer Institute of Linguistics</variant>
+      <variant>SIL Publications</variant>
+      <variant>SIL International</variant>
+      <variant>Summer Institute of Linguistcs</variant>
+   </mapping>
+   <mapping>
+      <value>Institute fo the Study of Languages and Cultures of Asia and Africa, Tokyo University of Foreign Studies</value>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics and Nordic Studies, University of Oslo</value>
+   </mapping>
+   <mapping>
+      <value>John Wilson and Son</value>
+      <variant>John Wilson &amp; Son</variant>
+   </mapping>
+   <mapping>
+      <value>General Linguistics, Department of Linguistics</value>
+      <variant>General Linguistics, Department of Linguistics, University of Cologne</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, University of Illinois, Urbana</value>
+   </mapping>
+   <mapping>
+      <value>Instituto Nacional de Antropologia e Historia</value>
+      <variant>Instituto Nacional de Antropología e Historia</variant>
+   </mapping>
+   <mapping>
+      <value>Limsi, Orsay, France</value>
+      <variant>Laboratoire d'informatique pour la mécanique et les sciences de l'ingénieur - UPR 3251 (Limsi, Orsay FR)</variant>
+      <variant>Laboratoire d'informatique pour la mécanique et les sciences de l'ingénieur, Orsay, France</variant>
+      <variant>http://www.limsi.fr</variant>
+   </mapping>
+   <mapping>
+      <value>SIL, University of Oklahoma</value>
+      <variant>Summer Institute of Linguistics / University of Oklahoma</variant>
+      <variant>University of Oklahoma, Summer Institute of Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Springer</value>
+      <variant>Springer Verlag</variant>
+      <variant>Springer Verlag.</variant>
+   </mapping>
+   <mapping>
+      <value>University of Surrey</value>
+      <variant>Univeristy of Surrey</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, Max Planck Institute for Evolutionary Anthropology</value>
+      <variant>Max Planck Institute for Evolutionary Anthropology, Department of Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>BOS</value>
+      <variant>Boeddhistische Omroep Stichting</variant>
+   </mapping>
+   <mapping>
+      <value>Directorate of Research, Government of Arunachal Pradesh</value>
+   </mapping>
+   <mapping>
+      <value>Faculty of Slavonic Studies, Sofia University "Kliment Ohritski"</value>
+      <variant>Sofia University "Kliment Ohritski", Faculty of Slavonic Studies</variant>
+   </mapping>
+   <mapping>
+      <value>Faculty of Humanities and Social Sciences, University of Zagreb</value>
+      <variant>University of Zagreb, Faculty of Humanities and Social Sciences</variant>
+   </mapping>
+   <mapping>
+      <value>CONICET, Universidad de Buenos Aires</value>
+      <variant>CONICET - Universidad de Buenos Aires</variant>
+   </mapping>
+   <mapping>
+      <value>Center for Dutch Language and Speech, University of Antwerp</value>
+   </mapping>
+   <mapping>
+      <value>Harcourt and Brace</value>
+      <variant>Harcourt &amp; Brace</variant>
+   </mapping>
+   <mapping>
+      <value>Harper and Row</value>
+      <variant>Harper &amp; Row</variant>
+   </mapping>
+   <mapping>
+      <value>Centro de Lenguas Indígenas, Instituto de Investigaciones Históricas, Universidad Católica ʺAndres Belloʺ</value>
+      <variant>Centro de Lenguas Indígenas, Instituto de Investigaciones Históricas, Universidad Católica "Andres Bello"</variant>
+   </mapping>
+   <mapping>
+      <value>Open Court Publishing Company</value>
+      <variant>Open Court Publishing Co</variant>
+   </mapping>
+   <mapping>
+      <value>Campus Kortrijk, Katholieke Universiteit Leuven</value>
+      <variant>Katholieke Universiteit Leuven Campus Kortrijk</variant>
+   </mapping>
+   <mapping>
+      <value>David McKay</value>
+      <variant>David McKay Company Inc.</variant>
+   </mapping>
+   <mapping>
+      <value>Association culturelle Te Reo o te Tuamotu, Christian-Albrechts-Universität zu Kiel</value>
+      <variant>Christian-Albrechts-Universität zu Kiel, Association culturelle Te Reo o te Tuamotu, Te U'i hou o te Fenua 'Enata, Atuona, B.P. 26, Hiva 'Oa, Marquises-Sud</variant>
+      <variant>Christian-Albrechts-Universität zu Kiel, Association culturelle Te Reo o te Tuamotu</variant>
+   </mapping>
+   <mapping>
+      <value>Niemeyer</value>
+      <variant>Max Niemeyer</variant>
+      <variant>Max Niemeyer Verlag</variant>
+   </mapping>
+   <mapping>
+      <value>Macmillan</value>
+      <variant>Macmillan and Co. Ltd</variant>
+   </mapping>
+   <mapping>
+      <value>Albert-Ludwigs-Universität Freiburg i.Br.</value>
+      <variant>Albert-LUdwigs-Universität Freiburg i.Br.</variant>
+   </mapping>
+   <mapping>
+      <value>University of California Press</value>
+      <variant>University of California Publications</variant>
+      <variant>University of Californian Press</variant>
+   </mapping>
+   <mapping>
+      <value>Centre for Applied Language Studies, University of Jyväskylä</value>
+   </mapping>
+   <mapping>
+      <value>Viking Fund Publications in Anthropology</value>
+      <variant>Viking Fund</variant>
+      <variant>Viking Fund Inc.</variant>
+      <variant>The Viking Fund Publications in Anthropology</variant>
+      <variant>Viking Fund Publications</variant>
+   </mapping>
+   <mapping>
+      <value>Humanities Lab, Lund University</value>
+      <variant>Humanistlaboratoriet, Lund University, Sweden</variant>
+      <variant>Humanistlaboratoriet / Lund University, Sweden</variant>
+   </mapping>
+   <mapping>
+      <value>Arbeitsgruppe Kognitionsforschung, FB2, Universitä&#132;t Paderborn</value>
+      <variant>Arbeitsgruppe Kognitionsforschung, FB2, Universit&#132;t Paderborn</variant>
+      <variant>Arbeitsgruppe Kognitionsforschung, FB2, Universitä&#132;t Paderborn</variant>
+   </mapping>
+   <mapping>
+      <value>University of Oklahoma</value>
+      <variant> the University of Oklahoma</variant>
+   </mapping>
+   <mapping>
+      <value>Seminar für Deutsche Philologie, Georg August-Universität Göttingen</value>
+      <variant>Seminar für Deutsche Philologie; Georg August-Universität Göttingen</variant>
+   </mapping>
+   <mapping>
+      <value>M. Nijhoff</value>
+      <variant>M. Nijhoff / Albrecht &amp; Co</variant>
+      <variant>Martinus Nijhoff</variant>
+      <variant>Martinus Hijhoff</variant>
+      <variant>M. Nijhoff (KITLV)</variant>
+      <variant>M.Nijhoff</variant>
+   </mapping>
+   <mapping>
+      <value>Instituto Lingüístico de Verano de Centroamerica</value>
+      <variant>Instituto Lingüístics de Verano</variant>
+   </mapping>
+   <mapping>
+      <value>Asian Educational Services</value>
+      <variant>Asian Educational Serives</variant>
+   </mapping>
+   <mapping>
+      <value>CSH, New Delhi</value>
+      <variant>http://www.csh-delhi.com</variant>
+      <variant>Centre de sciences humaines (CSH, New Delhi IN)</variant>
+      <variant>Centre de sciences humaines, New Delhi</variant>
+   </mapping>
+   <mapping>
+      <value>Université de Dakar</value>
+      <variant>Universite de Dakar</variant>
+   </mapping>
+   <mapping>
+      <value>Meertens Institute</value>
+      <variant>Meertens Institute - KNAW</variant>
+      <variant>Meertens Institute (Royal Netherlands Academy of Arts and Sciences)</variant>
+      <variant>Meertens Instituut</variant>
+      <variant>Meertens Institute KNAW The Netherlands</variant>
+   </mapping>
+   <mapping>
+      <value>Instituto de Antropologia, Universidade de Coimbra</value>
+   </mapping>
+   <mapping>
+      <value>National Thai Studies Centre, Australian National University</value>
+      <variant>Australian National University, National Thai Studies Centre</variant>
+      <variant>The Australian National University, National Thai Studies Centre</variant>
+   </mapping>
+   <mapping>
+      <value>Indiana University</value>
+      <variant>Indiana University / Mouton</variant>
+      <variant>Indiana University and Mouton</variant>
+   </mapping>
+   <mapping>
+      <value>Faculté des Lettres et Sciences humaines, Université de Dakar</value>
+      <variant>Université de Dakar, Faculté des Lettres et Sciences humaines</variant>
+   </mapping>
+   <mapping>
+      <value>Center for Endangered Languages Documentation, Universitas Negeri Papua</value>
+   </mapping>
+   <mapping>
+      <value>Basil Blackwell</value>
+      <variant>Basil Blackwell.</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Scandinavian languages and literature, University of Helsinki</value>
+      <variant>The Department of Scandinavian Languages and Literature, University of Helsinki</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Technical and Further Education, Aboriginal Education Unit</value>
+   </mapping>
+   <mapping>
+      <value>Unité de Recherche Interdisciplinaire Octogone - EA4156, Toulouse</value>
+      <variant>Unité de Recherche Interdisciplinaire Octogone - EA4156 (Toulouse FR)</variant>
+      <variant>http://w3.octogone.univ-tlse2.fr</variant>
+   </mapping>
+   <mapping>
+      <value>Henry Young and Sons, Limited</value>
+      <variant>Henry Young &amp; Sons, Limited</variant>
+   </mapping>
+   <mapping>
+      <value>CIPL</value>
+      <variant>Centre Informatique de Philosophie et Lettres (CIPL)</variant>
+      <variant>Centre Informatique de Philosophie et Lettres</variant>
+   </mapping>
+   <mapping>
+      <value>Department. of Linguistics, Tribhuvan University, Kirtipur, Kathmandu</value>
+      <variant>Dept. of Linguistics ,Tribhuvan University ,Kirtipur ,Kathmandu</variant>
+   </mapping>
+   <mapping>
+      <value>Blaisdell Publishing Co.</value>
+      <variant>Blaisdell</variant>
+   </mapping>
+   <mapping>
+      <value>Kluwer</value>
+      <variant>Kluwer Academic Publishers</variant>
+      <variant>Kluwer Academic</variant>
+      <variant>Kluwer Academic Press</variant>
+   </mapping>
+   <mapping>
+      <value>Long Now Foundation</value>
+      <variant>Long Now Foundation (www.longnow.org)</variant>
+   </mapping>
+   <mapping>
+      <value>EUROTYP Programme, European Science Foundation</value>
+      <variant>European Science Foundation, EUROTYP Programme</variant>
+   </mapping>
+   <mapping>
+      <value>ASPIRH, Tarauacá</value>
+      <variant>ASPIRH (Associação do Povo Indígena do Rio Humaita), Tarauacá</variant>
+   </mapping>
+   <mapping>
+      <value>Shuter and Shooter</value>
+      <variant>Shuter &amp; Shooter</variant>
+   </mapping>
+   <mapping>
+      <value>Chicago Linguistic Society</value>
+      <variant>Chicago Linguistics Society</variant>
+      <variant>Chicago Linguistics Society, University of Chicago</variant>
+   </mapping>
+   <mapping>
+      <value>Holt, Rinehart and Winston</value>
+      <variant>Holt, Reinhart and Winston</variant>
+      <variant>Holt, Rinehart &amp; Winston</variant>
+   </mapping>
+   <mapping>
+      <value>Seminario de Lenguas Indígenas, Instituto de Investigaciones Filológicas</value>
+      <variant>Universidad Nacional Autonoma de México, Instituto de Investigaciones Filológicas, Seminario de Lenguas Indígenas</variant>
+   </mapping>
+   <mapping>
+      <value>LLink</value>
+      <variant>LLINK</variant>
+   </mapping>
+   <mapping>
+      <value>Østsamisk museum Neiden, Norway</value>
+      <variant>Østsamisk museum Neiden (Norway)</variant>
+   </mapping>
+   <mapping>
+      <value>Museum of Anthropology, University of Missouri</value>
+      <variant>University of Missouri, Museum of Anthropology</variant>
+   </mapping>
+   <mapping>
+      <value>Indiana University Press</value>
+      <variant>Indianan University Press</variant>
+      <variant>Indiana University Press and Mouton</variant>
+   </mapping>
+   <mapping>
+      <value>Phonetics Laboratory, University of Oxford</value>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, Punjabi University</value>
+   </mapping>
+   <mapping>
+      <value>Linguistics Program, University of Montana</value>
+      <variant>University of Montana, Linguistics Program</variant>
+   </mapping>
+   <mapping>
+      <value>Linguistic Society of the Philippines</value>
+      <variant>Linguistic Society of the Philippines.</variant>
+   </mapping>
+   <mapping>
+      <value>Gregg Press</value>
+      <variant>Gregg</variant>
+      <variant>Gregg International Publishers Ltd.</variant>
+      <variant>Gregg Press Ltd</variant>
+      <variant>Gregg Press Limited</variant>
+   </mapping>
+   <mapping>
+      <value>IMS, University of Stuttgart</value>
+      <variant>Institute for Natural Language Processing / University of Stuttgart</variant>
+      <variant>Institute for Natural Language Processing - IMS- , University of Stuttgart</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Phonetic Sciences, University of Amsterdam</value>
+      <variant>University of Amsterdam, Institute of Phonetic Sciences</variant>
+   </mapping>
+   <mapping>
+      <value>Colciencias, Universidad de los Andes</value>
+   </mapping>
+   <mapping>
+      <value>H. Aschehoug &amp; Company</value>
+      <variant>H. Aschehoug</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, Annamalai University</value>
+      <variant>Annamalai University, Department of Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Det Naturvidenskabelige Fakultet, Aarhus Universitet</value>
+   </mapping>
+   <mapping>
+      <value>Dutch HLT Agency</value>
+      <variant>Dutch HLT Agency (TST-Centrale)</variant>
+      <variant>TST-Centrale</variant>
+   </mapping>
+   <mapping>
+      <value>Faculté de Psychologie et des Sciences de l'Education, l’Université de Liège</value>
+      <variant>http://www.fapse.ulg.ac.be</variant>
+   </mapping>
+   <mapping>
+      <value>Meertens Instituut</value>
+      <variant>Meertens Institute</variant>
+   </mapping>
+   <mapping>
+      <value>Academia Sinica</value>
+      <variant>http://www.sinica.edu.tw/</variant>
+   </mapping>
+   <mapping>
+      <value>Conakry: Editions Ganndal</value>
+      <variant>Conakry : Editions Ganndal,</variant>
+   </mapping>
+   <mapping>
+      <value>Oxford University Press</value>
+      <variant>Oxford University Press.</variant>
+      <variant>The Oxford University Press</variant>
+   </mapping>
+   <mapping>
+      <value>BBAW</value>
+      <variant>Berlin-Brandenburgische Akademie der Wissenschaften </variant>
+      <variant>BBAW: Berlin</variant>
+   </mapping>
+   <mapping>
+      <value>Firma KLM Private Limited</value>
+      <variant>Firma KLM Private Ltd.</variant>
+   </mapping>
+   <mapping>
+      <value>Program in Comparative Studies on Southern Asia, Duke University</value>
+   </mapping>
+   <mapping>
+      <value>Harrassowitz Verlag</value>
+      <variant>Harrassowitz</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Music, University of Jyväskylä</value>
+   </mapping>
+   <mapping>
+      <value>Department of Language Studies, Umeå university (Umeå SE)</value>
+      <variant>http://www.sprak.umu.se</variant>
+   </mapping>
+   <mapping>
+      <value>MPI für Evolutionäre Anthropologie, MPG</value>
+      <variant>MPI für Evolutionäre Anthropologie</variant>
+      <variant>MPI EVA</variant>
+   </mapping>
+   <mapping>
+      <value>Jensco Limited</value>
+      <variant>Jensco Ltd.</variant>
+   </mapping>
+   <mapping>
+      <value>Leiden: Research School of Asian, African and Amerindian Studies, Universiteit Leiden</value>
+   </mapping>
+   <mapping>
+      <value>ILSP</value>
+      <variant>Institute for Language &amp; Speech Processing</variant>
+   </mapping>
+   <mapping>
+      <value>Department of General Linguistics, University of Helsinki</value>
+      <variant>University of Helsinki, Department of General Linguistics.</variant>
+   </mapping>
+   <mapping>
+      <value>Heidelberger Akademie der Wissenschaften, University of Heidelberg</value>
+      <variant>University of Heidelberg, Heidelberger Akademie der Wissenschaften</variant>
+   </mapping>
+   <mapping>
+      <value>Baptist Missionary Society</value>
+      <variant>The Baptist Missionary Society</variant>
+   </mapping>
+   <mapping>
+      <value>Centro de Investigación y Desarrolle Binnizá A. C. &amp; Instituto Lingüístico de Verano A. C.</value>
+      <variant>Centro de Investigación y Desarrolle Binnizá A. C. and Instituto Lingüístico de Verano A. C.</variant>
+   </mapping>
+   <mapping>
+      <value>Omrop Fryslan</value>
+      <variant>OMROP FRYSLAN</variant>
+   </mapping>
+   <mapping>
+      <value>CIIL</value>
+      <variant>Central Institute of Indian Languages</variant>
+   </mapping>
+   <mapping>
+      <value>A. A. Balkema</value>
+      <variant>Balkema</variant>
+   </mapping>
+   <mapping>
+      <value>Foreign Service Institute, Department of State</value>
+      <variant>Foreign Service Institute, Department of State, United States Government</variant>
+   </mapping>
+   <mapping>
+      <value>UCL division of psychology and language sciences, UCL</value>
+      <variant>http://www.phon.ucl.ac.uk</variant>
+      <variant>UCL division of psychology and language sciences (UCL, London UK)</variant>
+   </mapping>
+   <mapping>
+      <value>Mouton de Gruyter</value>
+      <variant>Mouton.</variant>
+      <variant>Mouton</variant>
+      <variant>Moutin de Gruyter</variant>
+      <variant>Mouton De Gruyter</variant>
+      <variant>Mouton de Guyter</variant>
+      <variant>Mouton &amp; Co</variant>
+      <variant>Mouton de Gryter</variant>
+   </mapping>
+   <mapping>
+      <value>Sabah Museum and State Archives Deptartment</value>
+      <variant>Sabah Museum and State Archives Dept</variant>
+   </mapping>
+   <mapping>
+      <value>Centre d'études des langues indigènes d'Amérique</value>
+      <variant>Centre d'études des langues indigènes d'Amérique (CNRS, IRD)</variant>
+   </mapping>
+   <mapping>
+      <value>ETRO, Vrije Universiteit Brussel</value>
+   </mapping>
+   <mapping>
+      <value>The Graduate Linguistics Students' Association, The University of Massachusetts</value>
+   </mapping>
+   <mapping>
+      <value>Maisonneuve Freres et Ch. Leclerc</value>
+      <variant>Maissonneuve frères &amp; C. Leclerc</variant>
+      <variant>Maisonneuve Freres &amp; Ch. Leclerc</variant>
+   </mapping>
+   <mapping>
+      <value>CSLI  Publications, Stanford University</value>
+      <variant>Center for the Study of Language and Information (CSLI) Publications</variant>
+      <variant>CSLI Publications</variant>
+   </mapping>
+   <mapping>
+      <value>RVU</value>
+      <variant>RVU Educatieve omroep</variant>
+   </mapping>
+   <mapping>
+      <value>Tankönyvkiadó</value>
+      <variant>Tankönyvk</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Comparative Linguistics (VTW), Leiden University</value>
+      <variant>Department of Comparative Linguistics (VTW) Leiden University</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Language and Communication Science, City University (London)</value>
+   </mapping>
+   <mapping>
+      <value>University of Antwerp (CNTS)</value>
+      <variant>CNTS Universiteit Antwerpen</variant>
+      <variant>Centrum voor Nederlandse Taal en Spraak, Antwerpen</variant>
+   </mapping>
+   <mapping>
+      <value>Smithsonian Institution</value>
+      <variant>Smithsonian Institute</variant>
+   </mapping>
+   <mapping>
+      <value>University of Alberta</value>
+      <variant>The University of Alberta</variant>
+   </mapping>
+   <mapping>
+      <value>ODIN project, Fresno</value>
+      <variant>California State University, Fresno, ODIN project </variant>
+   </mapping>
+   <mapping>
+      <value>IFA-groep, UvA</value>
+      <variant>IFA-groep UvA</variant>
+   </mapping>
+   <mapping>
+      <value>Curzon Press</value>
+      <variant>Curzon</variant>
+   </mapping>
+   <mapping>
+      <value>KTH</value>
+      <variant>Royal Institute of Technology (KTH, Stockholm SE)</variant>
+      <variant>http://www.kth.se</variant>
+      <variant>Royal Institute of Technology, Stockholm</variant>
+   </mapping>
+   <mapping>
+      <value>IFAN</value>
+      <variant>Institut Français d’Afrique Noire (IFAN)</variant>
+      <variant>L'Institut Français d'Afrique Noire (IFAN)</variant>
+      <variant>L'Institut Francçais d'Afrique Noire</variant>
+      <variant>Institut Français d’Afrique Noire</variant>
+   </mapping>
+   <mapping>
+      <value>Universitaet Kiel</value>
+      <variant>Universität Kiel</variant>
+   </mapping>
+   <mapping>
+      <value>Foris</value>
+      <variant>Foris.</variant>
+   </mapping>
+   <mapping>
+      <value>Grupo de investigación TALG, Universidade de Vigo</value>
+      <variant>Universidade de Vigo, Grupo de investigación TALG (Tecnoloxías e Aplicacións da Lingua Galega)</variant>
+      <variant>Grupo de investigación Tecnoloxías e Aplicacións da Lingua Galega / Universidade de Vigo</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Literacy Work and Literature Production of the United Methodist Church</value>
+      <variant>Dept. of Literacy Work and Literature Production of the United Methodist Church</variant>
+   </mapping>
+   <mapping>
+      <value>African Studies Centre, Michigan University</value>
+      <variant>Michigan University, African Studies Centre</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of East Asian Studies, University of California Berkeley</value>
+   </mapping>
+   <mapping>
+      <value>Averbury Publishing Company</value>
+      <variant>Avebury Publishing Company Limited</variant>
+   </mapping>
+   <mapping>
+      <value>University of Hawai'i Press</value>
+      <variant>University of Hawaii Press.</variant>
+      <variant>University of Hawaii Press</variant>
+      <variant>The University Press of Hawaii</variant>
+      <variant>University Press of Hawaii</variant>
+      <variant>The University of Hawaii Press</variant>
+   </mapping>
+   <mapping>
+      <value>netpatient</value>
+      <variant>netpatient.dk</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Language and Communication Science, City University London</value>
+      <variant>Department of Language and Communication Science, City University (London)</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Educational Sciences, University of Jyväskylä</value>
+   </mapping>
+   <mapping>
+      <value>Foris Publications, Koninklijk Instituut voor Taal-, Land- en Volkenkunde</value>
+      <variant>Foris Publications / Koninklijk Institut voor Taal-, Land- en Volkenkunde</variant>
+      <variant>Foris Pub</variant>
+      <variant>Foris Publications</variant>
+      <variant>Foris Publications Holland</variant>
+   </mapping>
+   <mapping>
+      <value>Akademisk Forlag</value>
+      <variant>Akademisk Forl</variant>
+   </mapping>
+   <mapping>
+      <value>STEDT</value>
+      <variant>Sino-Tibetan Etymological Dictionary and Thesaurus Project (STEDT) / Center for Southeast Asian Studies / University of California at Berkeley</variant>
+      <variant>Sino-Tibetan Etymological Dictionary and Thesaurus Project (STEDT), Center for Southeast Asian Studies, University of California at Berkeley</variant>
+   </mapping>
+   <mapping>
+      <value>Département de linguistique et phonétique générales, Université d'Aix-Marseille</value>
+      <variant>Département de linguistique et phonétique générales, Université d'Aix-Marseille (Aix-en-Provence FR)</variant>
+   </mapping>
+   <mapping>
+      <value>Seminar für Allgemeine Sprachwissenschaft, Universität Zürich</value>
+      <variant>Universität Zürich, Seminar für Allgemeine Sprachwissenschaft</variant>
+   </mapping>
+   <mapping>
+      <value>Instituto de Cooperacion Iberoamericana</value>
+      <variant>Instituto de Cooperación Iberoamericana</variant>
+   </mapping>
+   <mapping>
+      <value>FECONA</value>
+      <variant>Federación de Comunidades Nativas del Ampiyacu (FECONA)</variant>
+      <variant>Federación de Comunidades Nativas del río Ampiyacu (FECONA)</variant>
+      <variant>Federación de Comunidades Nativas del Ampiyacu</variant>
+   </mapping>
+   <mapping>
+      <value>Centre for Research on Language Diversity, La Trobe University</value>
+   </mapping>
+   <mapping>
+      <value>Surrey Morphology Group, University of Surrey</value>
+      <variant>University of Surrey, Surrey Morphology Group</variant>
+   </mapping>
+   <mapping>
+      <value>Centre for Sign Lingusitics, The Chinese University of Hong Kong</value>
+      <variant>The Chinese University of Hong Kong, Centre for Sign Lingusitics</variant>
+   </mapping>
+   <mapping>
+      <value>Hornbeam Press, Incorporated</value>
+      <variant>Hornbeam Press, Inc.</variant>
+   </mapping>
+   <mapping>
+      <value>Langues et Mondes</value>
+      <variant>Langues &amp; Mondes</variant>
+   </mapping>
+   <mapping>
+      <value>Ellehauge &amp; Kildemoes</value>
+      <variant>Ellehauge and Kildemoes</variant>
+   </mapping>
+   <mapping>
+      <value>VNU, Hanoi</value>
+      <variant>Vietnam National University (VNU, Hanoi VN)</variant>
+      <variant>Vietnam National University, Hanoi</variant>
+      <variant>http://www.vnu.edu.vn</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Information Studies and Interactive Media, University of Tampere</value>
+   </mapping>
+   <mapping>
+      <value>University Press Aberdeen</value>
+      <variant>The University Press Aberdeen</variant>
+   </mapping>
+   <mapping>
+      <value>University of Leipzig</value>
+      <variant>Universität Leipzig</variant>
+   </mapping>
+   <mapping>
+      <value>University of Rome Tor Vergata</value>
+      <variant>University of Rome "Tor Vergata"</variant>
+   </mapping>
+   <mapping>
+      <value>Faculty of Asian Studies, Australian National University</value>
+   </mapping>
+   <mapping>
+      <value>Gobierno del Estado de Sonora, Secretaria de Fomento Educativo y Cultura</value>
+   </mapping>
+   <mapping>
+      <value>UFAL, Charles University in Prague</value>
+      <variant>Institute of Formal and Applied Linguistics / Charles University in Prague</variant>
+      <variant>Charles University in Prague, UFAL</variant>
+   </mapping>
+   <mapping>
+      <value>The Danish eHealth Portal, Copenhagen, Denmark</value>
+      <variant>sundhed.dk</variant>
+   </mapping>
+   <mapping>
+      <value>Institut für Sprachwissenschaft, Universität Innsbruck</value>
+      <variant>Innsbrucker Beiträge zur Sprachwissenschaft</variant>
+      <variant>Institut für Sprachwissenschaft der Universität Innsbruck</variant>
+   </mapping>
+   <mapping>
+      <value>SELAF</value>
+      <variant>Société d'études linguistiques et anthropologiques de France (SELAF)</variant>
+      <variant>Societé pour L'Étude des Langue Africaines</variant>
+      <variant>Société d'études linguistiques et anthropologiques de France</variant>
+      <variant>Société des Etudes Linguistiques et Anthropologiques de France</variant>
+      <variant>Société d'Études Linguistiques et Anthropologiques de France</variant>
+      <variant>Société D'Études Linguistiques et Anthopologiques de France</variant>
+      <variant>Société d'Études Linguistiques et Anthropologiques de France (SELAF)</variant>
+      <variant>Societé pour l'étude des langues africaines</variant>
+   </mapping>
+   <mapping>
+      <value>Editions Jamana, Bamako</value>
+      <variant>Bamako : Editions Jamana,</variant>
+   </mapping>
+   <mapping>
+      <value>s.n.</value>
+      <variant>s.n</variant>
+      <variant>s. n.</variant>
+   </mapping>
+   <mapping>
+      <value>Sacramento Anthropology Society, Sacramento State College</value>
+   </mapping>
+   <mapping>
+      <value>Carnegie Mellon University</value>
+      <variant>Carnegie Mellon University, Ohio State U.</variant>
+   </mapping>
+   <mapping>
+      <value>Linguistics and Phonetics, Lund University</value>
+      <variant>http://www.sol.lu.se/en/lingvistik</variant>
+      <variant>Linguistics and Phonetics, Lund University (LU, Lund SE)</variant>
+   </mapping>
+   <mapping>
+      <value>Asiatic Society</value>
+      <variant>Asiatic Society of Bengal</variant>
+   </mapping>
+   <mapping>
+      <value>The Macquarie Library Pty Limited</value>
+      <variant>The Macquarie Library Pty Ltd.</variant>
+   </mapping>
+   <mapping>
+      <value>L'Harmattan</value>
+      <variant>Harmattan</variant>
+   </mapping>
+   <mapping>
+      <value>Sudan Research Unit, Faculty of Arts</value>
+      <variant>Sudan Research Unit, Faculty of Arts, University of Khartoum</variant>
+   </mapping>
+   <mapping>
+      <value>T.U.</value>
+      <variant>TU</variant>
+      <variant>T. U.</variant>
+      <variant>T.U&amp;gt;</variant>
+   </mapping>
+   <mapping>
+      <value>H. Aschehoug &amp;Co</value>
+      <variant>H. Aschehoug &amp; Company</variant>
+      <variant>H. Aschehoug &amp; Co</variant>
+   </mapping>
+   <mapping>
+      <value>Erhvervs- og Boligstyrelsen, Miljøstyrelsen</value>
+   </mapping>
+   <mapping>
+      <value>Research School CNWS, Leiden University</value>
+      <variant>Research School of Asian, African and Amerindian Studies / Leiden University</variant>
+      <variant>Research School CNWS</variant>
+   </mapping>
+   <mapping>
+      <value>The Three Candles</value>
+      <variant>The Three Candles.</variant>
+   </mapping>
+   <mapping>
+      <value>Cherokee Nation of Oklahoma</value>
+      <variant>Cherokke Nation of Oklahoma</variant>
+   </mapping>
+   <mapping>
+      <value>UFAL, MFF</value>
+      <variant>UFAL, MFF, Charles University in Prague</variant>
+   </mapping>
+   <mapping>
+      <value>Society for Promoting Christian Knowledge</value>
+      <variant>Society for promoting Christian knowledge</variant>
+   </mapping>
+   <mapping>
+      <value>Proyecto Linguistico Francisco Marroquin</value>
+      <variant>Proyecto Lingüístico Francisco Marroquín</variant>
+      <variant>Proyecto Linguístico Francisco Marroquín</variant>
+   </mapping>
+   <mapping>
+      <value>BOS
+</value>
+      <variant>Boeddhistische Omroep Stichting</variant>
+   </mapping>
+   <mapping>
+      <value>DFKI</value>
+      <variant>German Research Center for Artificial Intelligence - DFKI-</variant>
+      <variant>Deutsches Forschungszentrum für künstliche Intelligenz</variant>
+      <variant>Deutsches Forschungszentrum für künstliche Intelligenz (DFKI)</variant>
+      <variant>DFKI GmbH</variant>
+      <variant>German Research Center for Artificial Intelligence (DFKI)</variant>
+      <variant>German Research Center for Artificial Intelligence</variant>
+      <variant>Deutsches Forschungszentrum für künstliche Intelligenz DFKI</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Lexicography, University of Iceland</value>
+   </mapping>
+   <mapping>
+      <value>Ludwig-Maximilians-Universität München</value>
+      <variant>Ludwig-Maximilians-Universitaet Muenchen</variant>
+   </mapping>
+   <mapping>
+      <value>DSL, Denmark</value>
+      <variant>dsl.dk</variant>
+   </mapping>
+   <mapping>
+      <value>Mazda</value>
+      <variant>Mazda Publications</variant>
+   </mapping>
+   <mapping>
+      <value>Comparative Linguistics, University of Frankfurt</value>
+      <variant>University of Frankfurt, Comparative Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>HLT Agency</value>
+      <variant>HLT Agency (TST-Centrale - Centrale voor Taal- en Spraaktechnologie)</variant>
+      <variant>TST-Centrale</variant>
+   </mapping>
+   <mapping>
+      <value>School of Arts, Languages and Cultures, University of Manchester</value>
+      <variant>School of Arts, Languages, and Cultures, University of Manchester</variant>
+   </mapping>
+   <mapping>
+      <value>FEDUCO</value>
+      <variant>Feduco</variant>
+   </mapping>
+   <mapping>
+      <value>Enzyklopädie</value>
+      <variant>Enzyklopaedie</variant>
+      <variant>Enzyklopedie</variant>
+      <variant>Enzyklopädie.</variant>
+   </mapping>
+   <mapping>
+      <value>W. Heffer and Sons</value>
+      <variant>W. Heffers &amp; Sons</variant>
+   </mapping>
+   <mapping>
+      <value>Abteilung Allgemeine Sprachwissenschaft, Institut für Linguistik</value>
+      <variant>Institut für Linguistik, Abteilung Allgemeine Sprachwissenschaft, Universität zu Köln</variant>
+   </mapping>
+   <mapping>
+      <value>School of Languages, Linguistics and Cultures, University of Manchester</value>
+      <variant>School of Languages, Linguistics and Cultures, Manchester University</variant>
+      <variant>School of Languages, Linguistics and Cultures</variant>
+   </mapping>
+   <mapping>
+      <value>Museu Paraense Emílio Goeldi, Belém</value>
+      <variant>Museu Paraense Emï¿½lio Goeldi / Belï¿½m / PA / Brasil</variant>
+      <variant>Museu Paraense EmÃ­lio Goeldi / BelÃ©m / PA / Brasil</variant>
+   </mapping>
+   <mapping>
+      <value>Center for Southeast Asia Studies, Center for International Studies</value>
+      <variant>Ohio University Center for International Studies, Center for Southeast Asia Studies</variant>
+   </mapping>
+   <mapping>
+      <value>CDSP, Paris</value>
+      <variant>Centre de données socio-politiques (CDSP, Paris FR)</variant>
+      <variant>http://cdsp.sciences-po.fr</variant>
+      <variant>Centre de données socio-politiques, Paris</variant>
+   </mapping>
+   <mapping>
+      <value>Instituto de Investigaciones Antropológicas, Universidad Nacional Autónoma de México</value>
+   </mapping>
+   <mapping>
+      <value>TCMO, Radboud Universiteit Nijmegen</value>
+      <variant>TCMO Radboud Universiteit Nijmegen</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Nepal and Asian Studies, Tribhuvan University</value>
+      <variant>Institute for Nepal Studies / Tribhuvan University</variant>
+   </mapping>
+   <mapping>
+      <value>Anthropos Institute</value>
+      <variant>Anthropos</variant>
+      <variant>l'Institut Anthropos</variant>
+      <variant>Anthropos-Institut</variant>
+      <variant>Anthropos Institut</variant>
+   </mapping>
+   <mapping>
+      <value>Frederick Ungar Publishing Company</value>
+      <variant>Frederick Unger Publishing Company</variant>
+      <variant>Frederick Ungar Publishing Co</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Computational and Corpus Linguistics, University of Łódź</value>
+      <variant>Department of Computational and Corpus Linguistics at the University of Łódź</variant>
+   </mapping>
+   <mapping>
+      <value>CLS, KUN</value>
+      <variant>CLS / Faculty of Arts/ Radboud University</variant>
+      <variant>CLS-KUN</variant>
+   </mapping>
+   <mapping>
+      <value>Center for Sprogteknologi</value>
+      <variant>cst.ku.dk</variant>
+   </mapping>
+   <mapping>
+      <value>African Studies Center, Michigan State University</value>
+   </mapping>
+   <mapping>
+      <value>LPL, Aix-en-Provence, France</value>
+      <variant>Laboratoire parole et langage - UMR 7309 (LPL, Aix-en-Provence FR)</variant>
+      <variant>Laboratoire parole et langage, Aix-en-Provence, France</variant>
+      <variant>http://lpl-aix.fr</variant>
+   </mapping>
+   <mapping>
+      <value>Universitätsverlag C. Winter</value>
+      <variant>Universitätsverlag Heidelberg</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Neurology, Freie Universität Berlin</value>
+      <variant>Freie Universität Berlin, Department of Neurology</variant>
+   </mapping>
+   <mapping>
+      <value>Association d’ethnolinguistique amérindienne </value>
+      <variant>Association d’ethnolinguistique amérindienne (A.E.A.)</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, University of California at Los Angeles</value>
+   </mapping>
+   <mapping>
+      <value>VGH Wissenschaftsverlag</value>
+      <variant>VGH-Wissenschaftsverlag</variant>
+   </mapping>
+   <mapping>
+      <value>Prompsit Language Engeneering, Universitat d'Alacant</value>
+      <variant>Universitat d'Alacant - Prompsit Language Engeneering</variant>
+   </mapping>
+   <mapping>
+      <value>Aschehoug, Harvard University Press</value>
+      <variant>Harvard University Press / Aschehoug</variant>
+   </mapping>
+   <mapping>
+      <value>University of Groningen</value>
+      <variant>University Groningen</variant>
+      <variant>University of Groningen (alfa-informatica)</variant>
+   </mapping>
+   <mapping>
+      <value>Albrecht &amp; Compagnie</value>
+      <variant>Albrecht &amp; Co</variant>
+   </mapping>
+   <mapping>
+      <value>IRIT, Toulouse</value>
+      <variant>Institut de recherche en informatique de Toulouse - UMR 5505 (IRIT, Toulouse FR)</variant>
+      <variant>Institut de recherche en informatique de Toulouse, Toulouse</variant>
+      <variant>http://www.irit.fr</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Mathematics and Computer Science, University of Latvia</value>
+   </mapping>
+   <mapping>
+      <value>Centre for Speech Technology Research, University of Edinburgh</value>
+   </mapping>
+   <mapping>
+      <value>VWGÖ</value>
+      <variant>Verband der wissenschaftlichen Gesellschaft Österreichs (VWGÖ)</variant>
+      <variant>Verband der wissenschaftlichen Gesellschaft Österreichs</variant>
+   </mapping>
+   <mapping>
+      <value>Saphrograph Corporation</value>
+      <variant>Saphrograph Corp</variant>
+   </mapping>
+   <mapping>
+      <value>Dept. of computer science, University of Malta</value>
+      <variant>University of Malta, Dept. of computer science</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Zulu Language and Literature, University of Natal</value>
+   </mapping>
+   <mapping>
+      <value>CLIPS, Grenoble</value>
+      <variant>Communication langagière et interaction personne-système (CLIPS, Grenoble FR)</variant>
+      <variant>Communication langagière et interaction personne-système, Grenoble</variant>
+   </mapping>
+   <mapping>
+      <value>G. and W. Fraser</value>
+      <variant>G.&amp; W. Fraser</variant>
+   </mapping>
+   <mapping>
+      <value>ICP, Grenoble</value>
+      <variant>Institut de la communication parlée, Grenoble</variant>
+      <variant>Institut de la communication parlée (ICP, Grenoble FR)</variant>
+   </mapping>
+   <mapping>
+      <value>Izd. Moskovskogo University</value>
+      <variant>Izd-vo Moskovskogo universiteta</variant>
+   </mapping>
+   <mapping>
+      <value>Berkeley Language Center, University of California, Berkeley</value>
+      <variant>University of California, Berkeley, Berkeley Language Center</variant>
+   </mapping>
+   <mapping>
+      <value>Via Afrika Limited</value>
+      <variant>Via Afrika</variant>
+   </mapping>
+   <mapping>
+      <value>Izdat, Sovetskaja enciklopedija</value>
+      <variant>Izdat. sovetskaja enciklopedija</variant>
+      <variant>Izdat. Sovetskaja Enciklopedija</variant>
+   </mapping>
+   <mapping>
+      <value>Center for the Study of Language and Information</value>
+      <variant>The Center for the Study of Language and Information</variant>
+   </mapping>
+   <mapping>
+      <value>Institute for the Study of Languages and Cultures of Asia and Africa, Tokyo University of Foreign Studies</value>
+      <variant>Institute for the Study of Languages and Cuktures of Asia and Africa</variant>
+   </mapping>
+   <mapping>
+      <value>Centre for Language Technology, University of Copenhagen</value>
+      <variant>University of Copenhagen, Centre for Language Technology</variant>
+   </mapping>
+   <mapping>
+      <value>CGN consortium</value>
+      <variant>CGN consortium led by Language and Speech, Nijmegen and ELIS, Gent</variant>
+   </mapping>
+   <mapping>
+      <value>University of Oslo</value>
+      <variant>University of Oslo, NO2014</variant>
+      <variant>NO2014, University of Oslo</variant>
+   </mapping>
+   <mapping>
+      <value>Pergamon Press</value>
+   </mapping>
+   <mapping>
+      <value>Oxford Text Archive, University of Oxford</value>
+   </mapping>
+   <mapping>
+      <value>Assam Secretariat Printing Office</value>
+      <variant>The Assam Secretariat Printing Office</variant>
+   </mapping>
+   <mapping>
+      <value>GU, Göteborg</value>
+      <variant>Göteborgs universitet</variant>
+      <variant>http://www.flov.gu.se/</variant>
+      <variant>Göteborgs universitet (GU, Göteborg SE)</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Baltic Languages, University of Latvia</value>
+   </mapping>
+   <mapping>
+      <value>Juta and Company, Limited</value>
+      <variant>Juta &amp; Company, Limited</variant>
+      <variant>Juta and Co., LTD</variant>
+   </mapping>
+   <mapping>
+      <value>LOT</value>
+      <variant>Landelijke Onderzoekschool Taalwetenschap</variant>
+   </mapping>
+   <mapping>
+      <value>Institut für Finnougristik &amp; Uralistik, University of Hamburg</value>
+      <variant>University of Hamburg, Institut für Finnougristik/Uralistik</variant>
+   </mapping>
+   <mapping>
+      <value>NTC Publishing</value>
+      <variant>NTC Publication Group</variant>
+      <variant>NTC Publiction Group</variant>
+   </mapping>
+   <mapping>
+      <value>University of Hamburg</value>
+      <variant>University of Hmaburg</variant>
+   </mapping>
+   <mapping>
+      <value>Niue Centre, University of the South Pacific</value>
+      <variant>University of the South Pacific, Niue Centre</variant>
+   </mapping>
+   <mapping>
+      <value>Computational Linguistics, Saarland University</value>
+      <variant>Saarland University, Computational Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Institut für Afrikanistik, Universität Köln</value>
+      <variant>Universität zu Köln, Institut für Afrikanistik, Germany</variant>
+   </mapping>
+   <mapping>
+      <value>Danmarks Miljøundersøgelser</value>
+      <variant>Danmarks Miljøundersøgelser, Forlaget Hovedland</variant>
+   </mapping>
+   <mapping>
+      <value>National Institute of Pakistani Studies, Quaid-i-Azam University, Islamabad</value>
+   </mapping>
+   <mapping>
+      <value>Institut für Allgemeine Sprachwissenschaft, Westfaelische Wilhelms-Universitaet Muenster</value>
+   </mapping>
+   <mapping>
+      <value>LIAS, Leiden University</value>
+      <variant>Leiden University, LIAS</variant>
+   </mapping>
+   <mapping>
+      <value>Maisonneuve</value>
+      <variant>Maissonneuve</variant>
+      <variant>Maisonneuve y Cia</variant>
+   </mapping>
+   <mapping>
+      <value>Routledge</value>
+      <variant>Routledge.</variant>
+   </mapping>
+   <mapping>
+      <value>Latin American Center, University of California at Los Angeles</value>
+   </mapping>
+   <mapping>
+      <value>John Benjamins</value>
+      <variant>John Benjamins.</variant>
+      <variant>John Benjamins B.V.</variant>
+   </mapping>
+   <mapping>
+      <value>Linguistic Research Unit, Faculty of Arts</value>
+      <variant>Chulalongkorn University, Linguistic Research Unit, Faculty of Arts</variant>
+   </mapping>
+   <mapping>
+      <value>BBC</value>
+      <variant>British Broadcasting Corporation (BBC)</variant>
+      <variant>British Broadcasting Corporation</variant>
+   </mapping>
+   <mapping>
+      <value>United States Government Printing Office</value>
+      <variant>U. S. Government Printing Office</variant>
+      <variant>U.S. Government Printing Office</variant>
+   </mapping>
+   <mapping>
+      <value>Slavica Publishers</value>
+      <variant>Slavica Publisers</variant>
+      <variant>Slavica</variant>
+   </mapping>
+   <mapping>
+      <value>Instituto des estudios peruanos</value>
+      <variant>Instituto del estudios peruanos</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Anthropology, University of Auckland</value>
+      <variant>University of Auckland, Department of Anthropology</variant>
+   </mapping>
+   <mapping>
+      <value>Salesbury Press Limited</value>
+      <variant>Salesbury Press Ltd</variant>
+   </mapping>
+   <mapping>
+      <value>Instituto de Investigación e Integración Social del Estado de Oaxaca, El Colegio de México</value>
+      <variant>El Colegio de México, Instituto de Investigación e Integración Social del Estado de Oaxaca</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Anthropology, Yale University</value>
+   </mapping>
+   <mapping>
+      <value>ELRA</value>
+      <variant>ELRA (European Language Resources Association)</variant>
+      <variant>European Language Resources Association</variant>
+   </mapping>
+   <mapping>
+      <value>ITC-Irst, Trento, Italy</value>
+      <variant>ITC-Irst - Centro per la Ricerca Scientifica e Tecnologica, via Sommarive 18, Povo, Trento, Italy</variant>
+      <variant>Centro per la Ricerca Scientifica e Tecnologica, Trento, Italy</variant>
+   </mapping>
+   <mapping>
+      <value>Tampere Unit for Computer-Human Interaction, Department of Computer Sciences</value>
+      <variant>Department of Computer Sciences, Tampere Unit for Computer-Human Interaction, University of Tampere</variant>
+   </mapping>
+   <mapping>
+      <value>Département de lettres modernes, Université d'Aix-Marseille</value>
+      <variant>Département de lettres modernes, Université d'Aix-Marseille (Aix-en-Provence FR)</variant>
+   </mapping>
+   <mapping>
+      <value>Prentice-All Incorporated</value>
+      <variant>Prentice-All Inc.</variant>
+   </mapping>
+   <mapping>
+      <value>Center for Southeast Asian Studies, Northern Illinois University</value>
+      <variant>Northern Illinois University, Center for Southeast Asian Studies</variant>
+   </mapping>
+   <mapping>
+      <value>LUCL</value>
+      <variant>Bakola Documentation Project of the Dobes initiative, a research project of the Leiden University Center of Linguistics</variant>
+      <variant>Leiden University Center of Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Editorial Universidad de Costa Rica</value>
+      <variant>Editorial de Universidad de Costa Rica</variant>
+      <variant>Editorial Universitaria de Costa Rica</variant>
+      <variant>Editorial de la Universidad de Costa Rica</variant>
+   </mapping>
+   <mapping>
+      <value>Consejo Superior de Investigaciones Cientificas</value>
+      <variant>Consejo Superior de Investigaciones Cientificas, Instituto Bernardino de Sahagun</variant>
+   </mapping>
+   <mapping>
+      <value>Pacific Linguistics, Australian National University</value>
+   </mapping>
+   <mapping>
+      <value>MPI for Human Development, MPG</value>
+      <variant>Max Planck Institute for Human Development / MPG</variant>
+      <variant>MPI for Human Development</variant>
+   </mapping>
+   <mapping>
+      <value>TELEAC, NOT</value>
+      <variant>TELEAC</variant>
+   </mapping>
+   <mapping>
+      <value>Berlin-Brandenburg Academy of Sciences</value>
+      <variant>Berlin-Brandenburgische Akademie der Wissenschaften </variant>
+   </mapping>
+   <mapping>
+      <value>PT Balai Pustaka</value>
+      <variant>Balai Pustaka</variant>
+   </mapping>
+   <mapping>
+      <value>Gunter Narr</value>
+      <variant>Gunter Narr Verlag</variant>
+      <variant>Gunter Narr Verlag.</variant>
+      <variant>Gunter Narr.</variant>
+   </mapping>
+   <mapping>
+      <value>MPG</value>
+      <variant>Max Planck Gesellschaft</variant>
+   </mapping>
+   <mapping>
+      <value>Vishveshvaranand Vishva Bandhu Institute of Sanskrit and Indological Studies, Panjab University</value>
+   </mapping>
+   <mapping>
+      <value>Pacific Linguistics, Research School of Pacific and Asian Studies</value>
+   </mapping>
+   <mapping>
+      <value>VU University Amsterdam</value>
+      <variant>Vrije Universiteit Amsterdam</variant>
+      <variant>VU University Amsterdam, Netherlands</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Languages, University of Jyväskylä</value>
+   </mapping>
+   <mapping>
+      <value>University of Tilburg (ILK)</value>
+      <variant>ILK / Computational Linguistics / Tilburg University</variant>
+   </mapping>
+   <mapping>
+      <value>Joint Research Centre of the EU</value>
+      <variant>http://wt.jrc.it/lt/acquis/</variant>
+   </mapping>
+   <mapping>
+      <value>Centro de Estudios Linguisticos, University of Buenos Aires</value>
+   </mapping>
+   <mapping>
+      <value>Verlag J. J. Augustin</value>
+      <variant>Verlag J.J. Augustin</variant>
+   </mapping>
+   <mapping>
+      <value>Centre National de la Recherche Scientifique</value>
+      <variant>Centre National de la Recherche Scientifique (CNRS)</variant>
+      <variant>Centre National de la Reserche Scientifique</variant>
+   </mapping>
+   <mapping>
+      <value>Izdatel'skaja firma ʺVostochnaja literaturaʺ RAN</value>
+      <variant>Izdatel'skaja firma "Vostochnaja literatura" RAN</variant>
+   </mapping>
+   <mapping>
+      <value>CNRS, Université Lumière Lyon 2</value>
+      <variant>CNRS &amp; Université Lumière Lyon 2</variant>
+   </mapping>
+   <mapping>
+      <value>Omroep MAX</value>
+      <variant>OMROEP MAX</variant>
+   </mapping>
+   <mapping>
+      <value>SIL, Universitas Pattimura</value>
+      <variant>Summer Institute of Linguistics / Universitas Pattimura</variant>
+      <variant>Universitas Pattimura, Summer Institute of Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Department of State, Foreign Service Institute</value>
+   </mapping>
+   <mapping>
+      <value>Departamento de Publicaciones, El Colegio de México</value>
+      <variant>El Colegio de México, Departamento de Publicaciones</variant>
+   </mapping>
+   <mapping>
+      <value>No</value>
+      <variant>no</variant>
+      <variant>NO</variant>
+   </mapping>
+   <mapping>
+      <value>Freie Universität Berlin</value>
+      <variant>Freie Universitat Berlin</variant>
+      <variant>Freie UniversitÃ¤t Berlin / Germany</variant>
+      <variant>Freie UniversitÃ¤t Berlin</variant>
+      <variant>Freie Universitaet Berlin / Germany</variant>
+      <variant>Freie Universität Berlin / Germany</variant>
+      <variant>Freie Universitï¿½t Berlin / Germany</variant>
+      <variant>Freie Universitï¿½t Berlin</variant>
+   </mapping>
+   <mapping>
+      <value>Clarendon Press</value>
+      <variant>Clarendon</variant>
+      <variant>The Clarendon Press</variant>
+   </mapping>
+   <mapping>
+      <value>Centro de Lenguas Indígenas, Universidad Católica Andrés Bello</value>
+      <variant>Universidad Católica Andrés Bello, Centro de Lenguas Indígenas</variant>
+   </mapping>
+   <mapping>
+      <value>University of Alberta Press</value>
+      <variant>The University of Alberta Press</variant>
+   </mapping>
+   <mapping>
+      <value>Universidad Católica Andrés Bello</value>
+      <variant>Universidad Catolica Andres Bello</variant>
+      <variant>Universidad Católica Andres Bello</variant>
+   </mapping>
+   <mapping>
+      <value>Gumbaynggir Language and Culture Group</value>
+      <variant>the Gumbaynggir Language and Culture Group</variant>
+   </mapping>
+   <mapping>
+      <value>Croom Helm</value>
+      <variant>Croom Helm, Routledge</variant>
+      <variant>Croom Helm.</variant>
+   </mapping>
+   <mapping>
+      <value>Institut für Phonetik, Universität des Saarlandes</value>
+   </mapping>
+   <mapping>
+      <value>Geluidenbank</value>
+      <variant>GELUIDENBANK</variant>
+   </mapping>
+   <mapping>
+      <value>ASV, Universität Leipzig</value>
+      <variant>Automatische Sprachverarbeitung / Universität Leipzig</variant>
+      <variant>ASV: Universität Leipzig</variant>
+   </mapping>
+   <mapping>
+      <value>Neerlandistiek, KU Leuven</value>
+      <variant>Neerlandistiek KU Leuven</variant>
+   </mapping>
+   <mapping>
+      <value>J. L. van Schaik</value>
+      <variant>J.L. Van Schaik</variant>
+      <variant>J. L. Van Schaik</variant>
+      <variant>J. L. van Schaik.</variant>
+   </mapping>
+   <mapping>
+      <value>Le Figuier, Bamako, Mali</value>
+      <variant>Bamako, Mali : Le Figuier,</variant>
+   </mapping>
+   <mapping>
+      <value>n. p.</value>
+      <variant>n.p.</variant>
+   </mapping>
+   <mapping>
+      <value>Longmans, Green and Company</value>
+      <variant>Longmans, Green &amp; Co.</variant>
+      <variant>Longman, Green &amp; Co</variant>
+      <variant>Longman, Green and Co</variant>
+      <variant>Longmans, Green &amp; Co</variant>
+      <variant>Longmans, Green</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Computer Science, Polish Academy of Sciences</value>
+   </mapping>
+   <mapping>
+      <value>Carnegie Institution</value>
+      <variant>Carnegie Institution of Washington</variant>
+   </mapping>
+   <mapping>
+      <value>Helmut Buske Verlag</value>
+      <variant>Helmut Buske</variant>
+      <variant>Helmut Buske Verlag Hamburg</variant>
+   </mapping>
+   <mapping>
+      <value>Centro de Linguística, Universidade Nova de Lisboa</value>
+      <variant>Universidade Nova de Lisboa, Centro de Linguística</variant>
+   </mapping>
+   <mapping>
+      <value>Kyoto Project</value>
+      <variant>KYOTO PROJECT</variant>
+   </mapping>
+   <mapping>
+      <value>Centro de Estudos Filosóficos e Humanísticos, Universidade Católica Portuguesa</value>
+      <variant>Universidade Católica Portuguesa, Centro de Estudos Filosóficos e Humanísticos</variant>
+   </mapping>
+   <mapping>
+      <value>Centre for Linguistics, Leiden University</value>
+      <variant>Leiden University, Centre for Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>E.M.I.</value>
+      <variant>Editrice Missionaria Italiana</variant>
+      <variant>Editrice Missionaria Italiana (E.M.I.)</variant>
+   </mapping>
+   <mapping>
+      <value>Faculty of Arts, University of Amsterdam.</value>
+   </mapping>
+   <mapping>
+      <value>Human Language Technology Group, Department of Informatics</value>
+      <variant>University of Szeged, Department of Informatics, Human Language Technology Group</variant>
+   </mapping>
+   <mapping>
+      <value>Instituto de Lingüística, Universidad de Buenos Aires</value>
+      <variant>Universidad de Buenos Aires/ Instituto de Lingüística</variant>
+   </mapping>
+   <mapping>
+      <value>Bruno Hisbol</value>
+      <variant>Bruno/Hisbol</variant>
+   </mapping>
+   <mapping>
+      <value>Winter</value>
+      <variant>Winter.</variant>
+   </mapping>
+   <mapping>
+      <value>MPI</value>
+      <variant>Max Planck Institute</variant>
+      <variant>Max Planck Institut</variant>
+   </mapping>
+   <mapping>
+      <value>Finanstilsynet, OEM</value>
+   </mapping>
+   <mapping>
+      <value>Abteilung Computerlinguistik, Friedrich-Alexander-Universität Erlangen-Nürnberg</value>
+      <variant>Abteilung Computerlinguistik der Uni. Erlangen</variant>
+   </mapping>
+   <mapping>
+      <value>Arnoldus-Druckerei</value>
+      <variant>Arnoldus-Drukkerij</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Linguistics, University of Malta</value>
+      <variant>University of Malta Institute of Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>MPI for Evolutionary Anthropology, MPG</value>
+      <variant>Max Planck Institute for Evolutionary Anthropology / MPG</variant>
+      <variant>MPI for Evolutionary Anthropology</variant>
+      <variant>Max Planck Institute for Evolutionary Anthropology</variant>
+   </mapping>
+   <mapping>
+      <value>Leiden University</value>
+      <variant>University of Leiden</variant>
+      <variant>Leiden University, The Netherlands</variant>
+   </mapping>
+   <mapping>
+      <value>Radio Oranje</value>
+      <variant>RADIO ORANJE</variant>
+   </mapping>
+   <mapping>
+      <value>Survey of English Usage, University College London</value>
+   </mapping>
+   <mapping>
+      <value>Badan Penyelenggara Seri Nusa, Universitas Katolik Atmajaya Jakarta</value>
+      <variant>Badan Penyelenggara Seri Nusa Universitas Katolik Atma Jaya Jakarta</variant>
+   </mapping>
+   <mapping>
+      <value>Afrikanistik, Universität Bayreuth</value>
+      <variant>Universität Bayreuth, Afrikanistik</variant>
+   </mapping>
+   <mapping>
+      <value>Royal Asiatic Society</value>
+      <variant>Royal Asiatic Society of Great Britain and Ireland</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Phonetics, Research Institute for Linguistics</value>
+      <variant>Dept. of Phonetics, Research Institute for Linguistics, HAS</variant>
+   </mapping>
+   <mapping>
+      <value>The Institute of Modern English Language Studies, University of Leeds</value>
+   </mapping>
+   <mapping>
+      <value>Garland</value>
+      <variant>Garland.</variant>
+   </mapping>
+   <mapping>
+      <value>UniNE</value>
+      <variant>http://www2.unine.ch/linguistique.francaise/</variant>
+      <variant>Université de Neuchâtel</variant>
+      <variant>Université de Neuchâtel (UniNE, Neuchâtel CH)</variant>
+   </mapping>
+   <mapping>
+      <value>Vostochnaja literatura</value>
+      <variant>Vostochnaja Gruppa Nauka</variant>
+      <variant>Vostochnaja gruppa, Nauka</variant>
+      <variant>Vostochnaja Gruppa, Nauka</variant>
+   </mapping>
+   <mapping>
+      <value>C. A. Spin &amp; son</value>
+      <variant>C. A. Spin and son</variant>
+   </mapping>
+   <mapping>
+      <value>Otto Harrassowitz</value>
+      <variant>Otto Harrassovitz</variant>
+   </mapping>
+   <mapping>
+      <value>Home and van Thal</value>
+      <variant>Home &amp; van Thal</variant>
+   </mapping>
+   <mapping>
+      <value>Laboratório de Línguas Indígenas, UnB</value>
+      <variant>Laboratório de Línguas Indígenas (UnB)</variant>
+   </mapping>
+   <mapping>
+      <value>Bibliothèque de la faculté de philosophie et lettres, l'université de Liége</value>
+      <variant>Bibliothèque de la faculté de philosophie et lettres de l'université de Liége</variant>
+   </mapping>
+   <mapping>
+      <value>iNano, Aarhus Universitetsforlag</value>
+   </mapping>
+   <mapping>
+      <value>Research Centre for Linguistic Typology, La Trobe University</value>
+   </mapping>
+   <mapping>
+      <value>F. S. Crofts and company</value>
+      <variant>F. S. Crofts &amp; Company</variant>
+      <variant>F. S. Crofts &amp; Co</variant>
+   </mapping>
+   <mapping>
+      <value>Institut für Afrikanistik und Ägyptologie, Universität Wien</value>
+      <variant>Institut für Afrikanistik und Ägyptologie der Universität Wien</variant>
+   </mapping>
+   <mapping>
+      <value>Facultad de Filosofía y Letras, Universidad de Buenos Aires</value>
+      <variant>Facultad de Filosofía y Letras - Universidad de Buenos Aires</variant>
+   </mapping>
+   <mapping>
+      <value>Cornish Language Board</value>
+      <variant>Cornish Language Board, the author</variant>
+   </mapping>
+   <mapping>
+      <value>Academy of Sciences at Latvia</value>
+      <variant>Academy of Sciences of Latvia</variant>
+   </mapping>
+   <mapping>
+      <value>Gamzat Tsadas Institute of History, Language and Literature</value>
+      <variant>Gamzat Tsadas Institute of History, Language &amp; Literature</variant>
+   </mapping>
+   <mapping>
+      <value>Institut de Recherches Sahariennes, Université d'Alger</value>
+      <variant>Université d'Alger, Institut de Recherches Sahariennes</variant>
+   </mapping>
+   <mapping>
+      <value>CRISCO, Caen</value>
+      <variant>http://www.crisco.unicaen.fr</variant>
+      <variant>Centre de recherche inter-langues sur la signification en contexte, Caen</variant>
+      <variant>Centre de recherche inter-langues sur la signification en contexte - EA 4255 (Crisco, Caen FR)</variant>
+   </mapping>
+   <mapping>
+      <value>Anthropological Survey of India, Ministry of Human Resource Development</value>
+      <variant>Anthropological Survey of India, Government of India, Ministry of Human Resource Development</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of African and Asian Studies, University of Khartoum</value>
+   </mapping>
+   <mapping>
+      <value>Editions des ʺamis du musee basqueʺ et ʺIkasʺ</value>
+      <variant>Editions des "amis du musee basque" et "Ikas"</variant>
+   </mapping>
+   <mapping>
+      <value>Institut fuer Allgemeine u. Vergleichende Sprachwissenschaft, University of Kiel</value>
+   </mapping>
+   <mapping>
+      <value>Universitas Katolik Indonesia Atma Jaya</value>
+      <variant>Universitas Katolik Indonesia AtmaJaya</variant>
+      <variant>Universitas Atma Jaya</variant>
+   </mapping>
+   <mapping>
+      <value>SPCK</value>
+      <variant>Richard Clay &amp; Sons for the Society for Promoting Christian Knowledge</variant>
+      <variant>Richard Clay &amp; Sons for the Society for Promoting Christian Knowledge (SPCK)</variant>
+   </mapping>
+   <mapping>
+      <value>TST-Centrale, INL</value>
+      <variant>TST-Centrale/INL</variant>
+   </mapping>
+   <mapping>
+      <value>Editora da Unicamp</value>
+      <variant>Editora de Unicamp</variant>
+   </mapping>
+   <mapping>
+      <value>F. King and Sons, Printers and Publishers</value>
+      <variant>F. King &amp; Sons, Printers and Publishers</variant>
+   </mapping>
+   <mapping>
+      <value>Friedrich-Alexander-Universität Erlangen-Nürnberg</value>
+      <variant>Friedrich-Alexander-Universität Erlangen</variant>
+   </mapping>
+   <mapping>
+      <value>Hoddler Headline Public Limited Company</value>
+      <variant>Hoddler Headline Plc.</variant>
+   </mapping>
+   <mapping>
+      <value>University of Arizona Press</value>
+      <variant>The University of Arizona Press</variant>
+   </mapping>
+   <mapping>
+      <value>Gallimard</value>
+      <variant>Gallimard.</variant>
+   </mapping>
+   <mapping>
+      <value>Centre de Documentació Ramon Llull, Universitat de Barcelona</value>
+      <variant>Centre de Documentació Ramon Llull - Universitat de Barcelona</variant>
+   </mapping>
+   <mapping>
+      <value>Funk and Wagnalls Company</value>
+      <variant>Funk &amp; Wagnalls Company</variant>
+   </mapping>
+   <mapping>
+      <value>Linguistics dept, UNIL</value>
+      <variant>Linguistics dept / Université de Lausanne</variant>
+      <variant>UNIL/Linguistics dept</variant>
+   </mapping>
+   <mapping>
+      <value>UCREL, Lancaster University</value>
+      <variant>UCREL, Lancaster University, UK</variant>
+   </mapping>
+   <mapping>
+      <value>Nix &amp; Company</value>
+      <variant>Nix &amp; Co</variant>
+      <variant>Nix &amp; Co.</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, Research School of Pacific Studies</value>
+      <variant>Department of Linguistics, Research School of Pacific Studies, the Australian National University</variant>
+   </mapping>
+   <mapping>
+      <value>Izdatel'stvo Akademii Nauk SSSR</value>
+      <variant>Izd-vo Akademii nauk SSSR</variant>
+      <variant>Izdatel'stvo Akademii Nauka</variant>
+      <variant>Izdatel'stvo Akademii nauk SSSR</variant>
+      <variant>Izdatel'stvo AN SSSR</variant>
+      <variant>Izdatel'stvo Akademii nauk SSSR, Leningradskoe otdelenie</variant>
+      <variant>Izdatel'stvo akademii nauk, SSSR</variant>
+      <variant>Izdatel'stvo Akademii nauk Kazakhskij SSR</variant>
+      <variant>Izdatel'stvo Akademii Nauk Gruzinskoj SSR</variant>
+      <variant>Izdatel'stvo Nauka</variant>
+      <variant>Izdvo Akademii nauk SSSR</variant>
+      <variant>Izdatel’stvo Akademii Nauk SSSR</variant>
+      <variant>Izd-vo akademii nauk gruzinskoj SSR</variant>
+   </mapping>
+   <mapping>
+      <value>DFG, Freie Universität Berlin</value>
+      <variant>German Research Foundation (DFG); Freie Universität Berlin</variant>
+      <variant>German Research Foundation / Freie Universität Berlin</variant>
+   </mapping>
+   <mapping>
+      <value>Enfance &amp; Culture</value>
+      <variant>Enfance &amp; Culture (publisher)</variant>
+   </mapping>
+   <mapping>
+      <value>Peeters</value>
+      <variant>Peeters Press</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Estonian and General Linguistics, University of Tartu</value>
+      <variant>University of Tartu, Institute of Estonian and General Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Assam Secretariat Press</value>
+      <variant>The Assam Secretariat Press</variant>
+   </mapping>
+   <mapping>
+      <value>INL</value>
+      <variant>Instituut voor Nederlandse Lexicologie</variant>
+   </mapping>
+   <mapping>
+      <value>Government Printing Office</value>
+      <variant>Government Printer</variant>
+      <variant>Government Printing</variant>
+      <variant>Government Printing Department</variant>
+   </mapping>
+   <mapping>
+      <value>Kegan Paul Trench, Trübner, and Company</value>
+      <variant>Kegan Paul, Trench, Trübner and Co</variant>
+      <variant>Kegan Paul, Trench, Trubner &amp; Co., Ltd</variant>
+      <variant>Kegan Paul Trench, Trübner &amp; Company</variant>
+      <variant>Kegan Paul, Trench, Trübner &amp; Co. Ltd.</variant>
+      <variant>Kegan Paul, Trench, Trubner and Co. Ltd</variant>
+      <variant>Kegan Paul, Trench, Trubner and Co.</variant>
+   </mapping>
+   <mapping>
+      <value>Institut fur Sprachwissenschaft, Universität Bern</value>
+      <variant>Universität Bern, Institut fur Sprachwissenschaft</variant>
+   </mapping>
+   <mapping>
+      <value>Köppe</value>
+      <variant>Köppe Verlag</variant>
+   </mapping>
+   <mapping>
+      <value>TALEP, Laboratoire d'informatique fondamentale, Marseille</value>
+      <variant>Traitement automatique du langage écrit et parlé, Laboratoire d'informatique fondamentale (TALEP, Marseille FR)</variant>
+      <variant>Traitement automatique du langage écrit et parlé, Laboratoire d'informatique fondamentale, Marseille</variant>
+      <variant>http://www.lif.univ-mrs.fr/spip.php?article353</variant>
+   </mapping>
+   <mapping>
+      <value>Sprachwissenschaftliches Institut, Universität Bochum</value>
+   </mapping>
+   <mapping>
+      <value>FECONAPU</value>
+      <variant>FECONAPU (Federación das Comunidades Nativas del Purus)</variant>
+      <variant>Federación das Comunidades Nativas del Purus</variant>
+      <variant>Feconapu</variant>
+   </mapping>
+   <mapping>
+      <value>ELPR Publication, Gakuin University</value>
+   </mapping>
+   <mapping>
+      <value>Erhvervs- og Selskabsstyrelsen, OEM</value>
+   </mapping>
+   <mapping>
+      <value>Tribhuvan University</value>
+      <variant>Tribhuvan University, Nepal</variant>
+      <variant>Trivuwan University</variant>
+   </mapping>
+   <mapping>
+      <value>Institut fur Afrikanistik, Universität zu Köln</value>
+      <variant>Institut für Afrikanistik</variant>
+      <variant>Institut fur Afrikanistik, Universität Köln</variant>
+   </mapping>
+   <mapping>
+      <value>University of Potsdam</value>
+      <variant>Universität Potsdam</variant>
+   </mapping>
+   <mapping>
+      <value>KITLV Press</value>
+      <variant>KITLV Uitgeverij</variant>
+   </mapping>
+   <mapping>
+      <value>Avebury Publishing Company Limited</value>
+      <variant>Averbury Publishing Company</variant>
+   </mapping>
+   <mapping>
+      <value>Institut d'Ethnologie, Université de Paris</value>
+   </mapping>
+   <mapping>
+      <value>Germanistik, Linguistik</value>
+      <variant>Universität Duisburg-Essen / Fakultät Geisteswissenschaften / Germanistik / Linguistik</variant>
+   </mapping>
+   <mapping>
+      <value>Research Institute for Artificial Intelligence, Romanian Academy of Sciences</value>
+   </mapping>
+   <mapping>
+      <value>CEDDLA</value>
+      <variant>Centro de Documentación Digital en Lingüística y Antropología (CEDDLA)</variant>
+      <variant>CEDDLA (Centro de Documentación Digital en Lingüítstica y Antropología)</variant>
+      <variant>Centro de Documentación Digital en Lingüística y Antropología</variant>
+   </mapping>
+   <mapping>
+      <value>Syntax Research Center, University of California</value>
+   </mapping>
+   <mapping>
+      <value>Humanwissenschaftliches Zentrum, Ludwig-Maximilian Universität München</value>
+      <variant>Humanwissenschaftliches Zentrum der Ludwig-Maximilian Universität München</variant>
+   </mapping>
+   <mapping>
+      <value>EHU, IXA group</value>
+      <variant>EHU (IXA group)</variant>
+   </mapping>
+   <mapping>
+      <value>University of Buea</value>
+      <variant>University of Buea, Cameroon</variant>
+   </mapping>
+   <mapping>
+      <value>Volkswagen Foundation</value>
+      <variant>Volkswagen Stiftung</variant>
+   </mapping>
+   <mapping>
+      <value>Division Publicaciones y Ediciones, Universidad de la Republica</value>
+      <variant>Universidad de la Republica, Division Publicaciones y Ediciones</variant>
+   </mapping>
+   <mapping>
+      <value>Peter Lang</value>
+      <variant>P. Lang</variant>
+   </mapping>
+   <mapping>
+      <value>Fondo Editorial INC-ASDI</value>
+      <variant>Fondo Editorial INC/ASDI</variant>
+   </mapping>
+   <mapping>
+      <value>Stanford Linguistics Association</value>
+      <variant>Stanford Linguisticss Association</variant>
+   </mapping>
+   <mapping>
+      <value>ASCIPM, Filadelfia-Ed. El Gráfico</value>
+      <variant>ASCIPM / Filadelfia-Ed. El Gráfico</variant>
+   </mapping>
+   <mapping>
+      <value>European Organization for Nuclear Research (CERN), Geneva, Switzerland</value>
+      <variant>European Organizatio for Nuclear Research (CERN), Geneva, Switzerland</variant>
+   </mapping>
+   <mapping>
+      <value>El Colegio de México</value>
+      <variant>El Colégio de Mexico</variant>
+   </mapping>
+   <mapping>
+      <value>Éditions du Centre national de la recherche scientifique</value>
+      <variant>Editions du Centre national de la recherche scientifique</variant>
+   </mapping>
+   <mapping>
+      <value>Language Centre, Universiti Kebangsaan Malaysia</value>
+   </mapping>
+   <mapping>
+      <value>MPI for Evolutionary Anthropology</value>
+      <variant>Max-Planck-Institute for Evolutionary Anthropology</variant>
+      <variant>Max Planck Institute for Evolutionary Anthropology</variant>
+   </mapping>
+   <mapping>
+      <value>Instituo Roberto Payró, Facultad de Filosofía y Letras</value>
+      <variant>Instituo Roberto Payró, Facultad de Filosofía y Letras, Universidad de Buenos Aires</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of African Studies, University of Ibadan</value>
+      <variant>University of Ibadan-Institute of African Studies</variant>
+   </mapping>
+   <mapping>
+      <value>MoDyCo, Paris</value>
+      <variant>Modèles, dynamiques, corpus - UMR 7114 (MoDyCo, Paris FR)</variant>
+      <variant>Modèles, dynamiques, corpus, Paris</variant>
+      <variant>http://www.modyco.fr</variant>
+   </mapping>
+   <mapping>
+      <value>Research Centre of African Languages and Literatures, University of Ghent</value>
+   </mapping>
+   <mapping>
+      <value>BAS</value>
+      <variant>Bavarian Archive for Speech Signals</variant>
+      <variant>Bavarian Archive for Speech Signals (BAS)</variant>
+      <variant>Bayerisches Archiv für Sprachsignale</variant>
+      <variant>BAS: Bayerische Archiv für Sprachsignale</variant>
+   </mapping>
+   <mapping>
+      <value>McGraw-Hill</value>
+      <variant>McGraw-Hill Book Company</variant>
+   </mapping>
+   <mapping>
+      <value>SOAS</value>
+      <variant>School of Oriental and African Studies, University of London.</variant>
+      <variant>School of Oriental and African Studies, University of London</variant>
+      <variant>School of Oriental and African Studies (SOAS) / University of London</variant>
+      <variant>SOAS (School of Oriental and African Studies), University of London</variant>
+      <variant>School of Oriental and African Studies, W. C. I.</variant>
+      <variant>School Of Oriental and African Studies</variant>
+      <variant>School of Oriental and African Studies</variant>
+   </mapping>
+   <mapping>
+      <value>École Pratique de Hautes Etudes</value>
+      <variant>École Pratique des Hautes Etudes (France)</variant>
+   </mapping>
+   <mapping>
+      <value>Lincom Europa</value>
+      <variant>Lincom Europa.</variant>
+      <variant>Lincom</variant>
+   </mapping>
+   <mapping>
+      <value>The Centre of Oral History, Daugavpils University</value>
+      <variant>The Centre of Oral History (Daugavpils University)</variant>
+   </mapping>
+   <mapping>
+      <value>Nauka</value>
+      <variant>Nauka.</variant>
+      <variant>Nauka, Leningradskoe otd-nie</variant>
+      <variant>Nauka, Sibirskoe otdelenie</variant>
+      <variant>Nauka, Glavnaja redakcija vostochnoj literatury</variant>
+      <variant>Nauka i izkustvo</variant>
+      <variant>Nauka Sibirskoe otdelenie / Nauka</variant>
+      <variant>Nauka, Vostochnaja literatura</variant>
+   </mapping>
+   <mapping>
+      <value>Afrique et Langage</value>
+      <variant>Afrique et langage</variant>
+      <variant>Afrique et langages</variant>
+   </mapping>
+   <mapping>
+      <value>Instituto Lingüístico de Verano</value>
+      <variant>Instituto Lingüistico de Verano</variant>
+      <variant>Instituto Linguistico de Verano</variant>
+   </mapping>
+   <mapping>
+      <value>Arnold</value>
+      <variant>Arnold.</variant>
+   </mapping>
+   <mapping>
+      <value>Columbia University Press</value>
+      <variant>Colombia University Press</variant>
+   </mapping>
+   <mapping>
+      <value>Charles University</value>
+      <variant>Charles University in Prague</variant>
+   </mapping>
+   <mapping>
+      <value>University of Texas at Arlington</value>
+      <variant> University of Texas, Arlington</variant>
+      <variant>the University of Texas at Arlington</variant>
+      <variant>The University of Texas at Arlington</variant>
+      <variant>The University of Texas at Arlington.</variant>
+      <variant>University of Texas, Arlington</variant>
+      <variant>The University of Texas at Arlinton</variant>
+      <variant>University of Texas at Arlington.</variant>
+      <variant>University of Arlington</variant>
+   </mapping>
+   <mapping>
+      <value>Mulce.org ; Universite Blaise Pascal ; France</value>
+      <variant>Mulce (MULtimodal Corpus Exchange); URL:http://mulce.org</variant>
+   </mapping>
+   <mapping>
+      <value>Summer Institute of Linguistics, University of North Dakota</value>
+      <variant>University of North Dakota, Summer Institute of Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Centre for Deaf Studies, University of Bristol</value>
+   </mapping>
+   <mapping>
+      <value>Conakry: Weebitande Dudal</value>
+      <variant>Conakry : Weebitande Dudal,</variant>
+   </mapping>
+   <mapping>
+      <value>Max-Planck-Gesellschaft</value>
+      <variant>Max Planck Gesellschaft</variant>
+   </mapping>
+   <mapping>
+      <value>Filozofska fakulteta, University of Ljubljana</value>
+   </mapping>
+   <mapping>
+      <value>Département des langues africaines et linguistique, Université Fédérale du Cameroun</value>
+   </mapping>
+   <mapping>
+      <value>Université de Paris X, Nanterre</value>
+      <variant>Université de Paris X</variant>
+      <variant>Université Paris X- Nanterre</variant>
+      <variant>Université Paris X Nanterre</variant>
+   </mapping>
+   <mapping>
+      <value>Goethe University Frankfurt, Institute of Empirical Linguistics</value>
+      <variant>Goethe Univeristy Frankfurt, Institute of Empirical Linguistics</variant>
+      <variant>Goehte University Frankfurt, Institute of Empirical Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>CELGA, University of Coimbra</value>
+      <variant>University of Coimbra, CELGA (Centro de Esudos de Linguística Geral e Aplicada)</variant>
+   </mapping>
+   <mapping>
+      <value>Max Planck Institute for Evolutionary Anthropology</value>
+      <variant>Max-Planck-Institute for Evolutionary Anthropology</variant>
+      <variant>Max Planck Institute for Evolutionary Anthropology</variant>
+   </mapping>
+   <mapping>
+      <value>National Foreign Language Resource Center, University of Hawai?i</value>
+   </mapping>
+   <mapping>
+      <value>Department of Computer Science, Vassar College (New York US)</value>
+      <variant>http://www.cs.vassar.edu</variant>
+   </mapping>
+   <mapping>
+      <value>CREDO, Marseille</value>
+      <variant>http://www.pacific-credo.fr</variant>
+      <variant>Centre de Recherche et de Documentation sur l'Océanie - UMR 7308 (CREDO, Marseille FR)</variant>
+      <variant>Centre de Recherche et de Documentation sur l'Océanie, Marseille</variant>
+   </mapping>
+   <mapping>
+      <value>Département FLE, Université d'Aix-Marseille</value>
+      <variant>http://fleunivprovence.blogspot.fr/</variant>
+      <variant>Département FLE - Français langue étrangère, Université d'Aix-Marseille (Aix-en-Provence FR)</variant>
+      <variant>Département Français langue étrangère / Université d'Aix-Marseille</variant>
+   </mapping>
+   <mapping>
+      <value>Centre for Languages and Literature, Lund University</value>
+      <variant>Centre for Languages and Literature at Lund University, Sweden</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Publication, Gauhati University</value>
+   </mapping>
+   <mapping>
+      <value>Noord-Hollandsche Uitgevers-Maatschappij</value>
+      <variant>Noord-Hollandsche Uitgevers Maatschappij</variant>
+   </mapping>
+   <mapping>
+      <value>UPNG Press</value>
+      <variant>University of Papua New Guinea Press</variant>
+   </mapping>
+   <mapping>
+      <value>Idaho Research Foundation, University of Idaho</value>
+   </mapping>
+   <mapping>
+      <value>Philological Section, Research Department</value>
+      <variant>Philological Section, Research Department, North East Frontier Agency</variant>
+   </mapping>
+   <mapping>
+      <value>Archives of Latvian Folklore, Institute of Literature, Folklore and Art</value>
+      <variant>Archives of Latvian Folklore, Institute of Literature, Folklore and Art, University of Latvia</variant>
+   </mapping>
+   <mapping>
+      <value>Avis &amp; Phillips Limited</value>
+      <variant>Avis and Phillips Ltd.</variant>
+   </mapping>
+   <mapping>
+      <value>Gairm Publications</value>
+      <variant>Gairm</variant>
+   </mapping>
+   <mapping>
+      <value>School of Oriental and African Studies, University of London</value>
+      <variant>University of London School of Oriental and African Studies</variant>
+   </mapping>
+   <mapping>
+      <value>Musee Royal de l'Afrique Centrale</value>
+      <variant>Musee Royale de l'Afrique Centrale</variant>
+      <variant>Musee Royal de L'Afrique Central</variant>
+      <variant>Musee Royal de L'Afrique Centrale</variant>
+      <variant>Musee royal de l'Afrique centrale</variant>
+      <variant>Musee Royal de l'Afrique Central</variant>
+      <variant>Musée royal de l'Afrique centrale</variant>
+   </mapping>
+   <mapping>
+      <value>Neerlandistiek, UU</value>
+      <variant>Neerlandistiek UU</variant>
+   </mapping>
+   <mapping>
+      <value>University of Sydney</value>
+      <variant>The University of Sydney</variant>
+      <variant>The University of Sydney, Australia</variant>
+      <variant>University of Sydney, Australia</variant>
+   </mapping>
+   <mapping>
+      <value>Lembaga Ilmu Pengetahuan Indonesia</value>
+      <variant>Lembaga Ilmu Pengetahuan Indonesia Rijkuniversiteit te Leiden</variant>
+   </mapping>
+   <mapping>
+      <value>MPI für Bildungsforschung, MPG</value>
+      <variant>MPI für Bildungsforschung</variant>
+   </mapping>
+   <mapping>
+      <value>WTUC, Taiwan</value>
+      <variant>Wenzao Ursuline College of Languages, Taiwan</variant>
+      <variant>Wenzao Ursuline College of Languages (WTUC, Taiwan TW)</variant>
+      <variant>http://c041.wtuc.edu.tw/front/bin/home.phtml</variant>
+   </mapping>
+   <mapping>
+      <value>Annamalai University</value>
+      <variant>Annamalai University, Annamalaiungegar</variant>
+   </mapping>
+   <mapping>
+      <value>ILTEC</value>
+      <variant>Instituto de Linguística Teórica e Computacional</variant>
+      <variant>ILTEC- Instituto de Linguística Teórica e Computacional</variant>
+   </mapping>
+   <mapping>
+      <value>Departemen Pendidikan dan Kebudayaan, Pusat Pembinaan dan Pengembangan Bahasa</value>
+      <variant>Pusat Pembinaan dan Pengembangan Bahasa, Departemen Pendidikan dan Kebudayaan</variant>
+   </mapping>
+   <mapping>
+      <value>Politieke Partijen</value>
+      <variant>POLITIEKE PARTIJEN</variant>
+   </mapping>
+   <mapping>
+      <value>D. Reimer</value>
+      <variant>D. Reimer (Ernst Vohsen)</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, University Of Khartoum</value>
+      <variant>University Of Khartoum, Department of Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Cercle Linguistique de Kanazawa, Kanazawa University</value>
+      <variant>Kanazawa University-Cercle Linguistique de Kanazawa</variant>
+   </mapping>
+   <mapping>
+      <value>Dietrich Reimer Verlag</value>
+      <variant>Dieter Reimer</variant>
+      <variant>Dietrich Reimer</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Linguistics, University of Leipzig</value>
+      <variant>University of Leipzig, Institute of Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Humboldt University Berlin</value>
+      <variant>Humboldt-University Berlin</variant>
+      <variant>Humboldt Universität zu Berlin</variant>
+      <variant>Humboldt-Universität zu Berlin</variant>
+   </mapping>
+   <mapping>
+      <value>Werkgroep Informatica, Faculty of Theology</value>
+      <variant>Free University Amsterdam, Faculty of Theology, Werkgroep Informatica</variant>
+   </mapping>
+   <mapping>
+      <value>Nationalmuseet. Danmarks Nyere Tid</value>
+      <variant>Nationalmuseet. Danmarks Nyere tid</variant>
+   </mapping>
+   <mapping>
+      <value>Centro de Estudios Paraguayos ʺAntonio Guaschʺ</value>
+      <variant>Centro de Estudios Paraguayos "Antonio Guasch"</variant>
+   </mapping>
+   <mapping>
+      <value>Canadian Plains Research Center, University of Regina</value>
+   </mapping>
+   <mapping>
+      <value>Preparatory Office, Institute of Linguistics</value>
+      <variant>Institute of Linguistics, Preparatory Office Academia Sinica</variant>
+      <variant>http://www.ling.sinica.edu.tw/</variant>
+   </mapping>
+   <mapping>
+      <value>Laboratoire d'Anthropologie Sociale, Paris</value>
+      <variant>Laboratoire d'Anthropologie Sociale (Paris)</variant>
+   </mapping>
+   <mapping>
+      <value>Center of Computational Linguistics, Vytautas Magnus University</value>
+   </mapping>
+   <mapping>
+      <value>Academic Computing Department, Summer Institute of Linguistics</value>
+      <variant>Academic Computing Department of Summer Institute of Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Cybernetics, University of West Bohemia</value>
+      <variant>University of West Bohemia, Department of Cybernetics</variant>
+   </mapping>
+   <mapping>
+      <value>Australian National University</value>
+      <variant>The Australian National University</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Linguistics, Faculty of Philosophy</value>
+      <variant>Institute of Linguistics, Faculty of Philosophy, University of Zagreb</variant>
+   </mapping>
+   <mapping>
+      <value>DMG</value>
+      <variant>Deutsche Morgenlandische Gesellschaft</variant>
+      <variant>Deutsche Morgenländische Gesellschaft</variant>
+   </mapping>
+   <mapping>
+      <value>University of Birmingham</value>
+      <variant>The University of Birmingham</variant>
+   </mapping>
+   <mapping>
+      <value>Institut Universitari de Lingüística Aplicada</value>
+      <variant>Institut Universitari de Lingüística Aplicada / Instituto Cervantes</variant>
+      <variant>Institut Universitari de Lingüística Aplicada, Universitat Pompeu Fabra</variant>
+   </mapping>
+   <mapping>
+      <value>Aarhus Universitetsforlag</value>
+      <variant>Aarhus Universitetsforlaget</variant>
+   </mapping>
+   <mapping>
+      <value>Allen &amp; Unwin</value>
+      <variant>Allen and Unwin</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Information Science, Academia Sinica</value>
+      <variant>http://www.iis.sinica.edu.tw/</variant>
+      <variant>Institute of Information Science Academia Sinica</variant>
+   </mapping>
+   <mapping>
+      <value>Cendera-wasih University and Summer Institute of Linguistics</value>
+      <variant>Cendera-wasih University and SIL</variant>
+      <variant>Cendera-Wasih University and Summer Institute of Linguistics</variant>
+      <variant>Cenderawasih University and Summer Institute of Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>George Routledge and Sons, Limited</value>
+      <variant>George Routledge &amp; Sons, Limited</variant>
+   </mapping>
+   <mapping>
+      <value>A.C. Nix &amp; Co</value>
+      <variant>A.C. Nix &amp; Co.</variant>
+   </mapping>
+   <mapping>
+      <value>Max Planck Institute for Psycholinguistics</value>
+      <variant>Max Planck Institute for                         Psycholinguistics (Nijmegen, Netherlands)</variant>
+      <variant>Max Planck Instiute for Psycholinguistics</variant>
+      <variant>Max Planck Institute for psycholinguistics</variant>
+      <variant>Max Planck Institute for Psycholinguistics, Nijmegen, Nl</variant>
+      <variant>Max Planck Institute for Psycholinguistics, Nijmegen, NL</variant>
+      <variant>Max Planck Institute for Psycholinguistics.</variant>
+      <variant>Max Planck institute for Psycholinguistics</variant>
+      <variant>Max Planck Institute for Psycholinguistics (MPI)</variant>
+      <variant>Max Planck Institute for Psycholinguistics, Nijmegen, Netherlands</variant>
+      <variant>Max-Planck-Institute for Psycholinguistics</variant>
+      <variant>Max Planc Institute for Psycholinguistics</variant>
+      <variant>Max Planck Institute for Psycholinguistics Nijmegen</variant>
+      <variant>Max Planck Institute for Psycholinguistics, Nijmegen</variant>
+      <variant>Max-Planck-Institute-for Psycholinguistics</variant>
+      <variant>Max-Planck Institute for Psycholinguistics</variant>
+      <variant>Max Planck Insitute for Psycholinguistics</variant>
+      <variant>Max Planck Institute for Psycholinguistics (Nijmegen, Netherlands)</variant>
+      <variant>Max Planck Institute for Psycolinguistics</variant>
+      <variant>Max Planck Institute for Psycholinguisticsc</variant>
+      <variant>Max Planck Institut fuer Psycholinguistik, Nijmegen, Nl.</variant>
+      <variant>Max-Planck-Institut für Psycholinguistik</variant>
+      <variant>Max Planck Institute for Psycholinguistics / MPG</variant>
+      <variant>MPI for Psycholinguistics</variant>
+      <variant>MPI for psycholinguistics, Nijmegen</variant>
+      <variant>Max Planck Institute for Psycholinguistics</variant>
+      <variant>MPI Nijmegen</variant>
+      <variant>Max-Planck-Institut fÃ¼r Psycholinguistik</variant>
+      <variant>Max Planck for Psycholinguisics, Nijmegen, NL</variant>
+      <variant>Max-Planck-Institüt für Psycholinguïstik</variant>
+      <variant>Max-Planck-Institüt für Psycholinguïstiek</variant>
+      <variant>Mac Planck Institute for Psycholinguistics</variant>
+      <variant>Max Planck Institut fÃ¼r Psychlinguistik</variant>
+      <variant>Max Planck Institut fÃ&#131;Â¼r Psychlinguistik</variant>
+      <variant>Max Planck Institute for Psycho-Linguistics</variant>
+      <variant>MPI for Psycholinguistics (Nijmegen, Netherlands)</variant>
+      <variant>Max Plank Institute for Psycholinguistics</variant>
+      <variant>MPI for Psycholinguistics Nijmegen</variant>
+      <variant>Max-Planck-Institüt für Psucholinguïstik</variant>
+      <variant>Max-Planck-Institüt für Psychlinguïstik</variant>
+   </mapping>
+   <mapping>
+      <value>Witwatersrand University Press</value>
+      <variant>University of Witwatersand Press</variant>
+      <variant>Witwatersrand Press</variant>
+      <variant>The University of the Witwatersrand Press</variant>
+      <variant>Wiwatersrand University Press</variant>
+      <variant>University of Witwatersrand Press</variant>
+   </mapping>
+   <mapping>
+      <value>Johann Wolfgang Goethe Universität Frankfurt</value>
+      <variant>Johann 
+Wolfgang Goethe Universität Frankfurt</variant>
+   </mapping>
+   <mapping>
+      <value>Stirling University</value>
+      <variant>Stirling University, UK</variant>
+   </mapping>
+   <mapping>
+      <value>University Publishing Projects</value>
+   </mapping>
+   <mapping>
+      <value>Université Paris Diderot</value>
+      <variant>Université Paris Diderot Paris 7</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Indology and Tamil Studies, Cologne University</value>
+   </mapping>
+   <mapping>
+      <value>Librairie Orientaliste Paul Geuthner</value>
+      <variant>Librairie Orientaliste Paul Geuthner.</variant>
+   </mapping>
+   <mapping>
+      <value>LEL, Edinburgh</value>
+      <variant>http://www.lel.ed.ac.uk</variant>
+      <variant>Linguistics and English Language, Edinburgh</variant>
+      <variant>Linguistics and English Language (LEL, Edinburgh UK)</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Development studies, University of Helsinki</value>
+   </mapping>
+   <mapping>
+      <value>Institut für Empirische Sprachwissenschaft, J. W. Goethe-Universität, Frankfurt</value>
+   </mapping>
+   <mapping>
+      <value>TALP</value>
+      <variant>Centro de Tecnologías y Aplicaciones del Lenguaje y del Habla (TALP)</variant>
+      <variant>Centro de Tecnologías y Aplicaciones del Lenguaje y del Habla</variant>
+   </mapping>
+   <mapping>
+      <value>OPIAC</value>
+      <variant>OPIAC (Organização dos Professores Indígenas do Acre)</variant>
+   </mapping>
+   <mapping>
+      <value>Royal Institute of Linguistics and Anthropology, Leiden</value>
+      <variant>Royal Institute of Linguistics and Anthropology, Leiden, The Netherlands</variant>
+   </mapping>
+   <mapping>
+      <value>National Anthropological Archives, Smithsonian Museum Support Center</value>
+   </mapping>
+   <mapping>
+      <value>Tilde</value>
+      <variant>Tilde as coordinator, Eurotermbank consortium</variant>
+   </mapping>
+   <mapping>
+      <value>American Indian Studies Center, UCLA</value>
+   </mapping>
+   <mapping>
+      <value>Ernest Laroux</value>
+      <variant>Ernest Ledoux</variant>
+      <variant>Ernest Leroux</variant>
+   </mapping>
+   <mapping>
+      <value>Nordeuropa-Institut, Humboldt-Universität zu Berlin</value>
+   </mapping>
+   <mapping>
+      <value>Routledge and Kegan Paul Limited</value>
+      <variant>Routledge and Kegan Paul Limited.</variant>
+   </mapping>
+   <mapping>
+      <value>The Peter De Ridder Press</value>
+      <variant>The Peter Ridder Press</variant>
+      <variant>The Peter de Redder Press</variant>
+   </mapping>
+   <mapping>
+      <value>Centre for English Corpus Linguistics, Université catholique de Louvain, Belgium</value>
+   </mapping>
+   <mapping>
+      <value>Carl Winter Universitätsverlag</value>
+      <variant>Carl Winter Universitatsverlag</variant>
+   </mapping>
+   <mapping>
+      <value>Izdatel'stvo Moskovskogo Universiteta</value>
+      <variant>Izdatelstvo Moskovskogo Universiteta</variant>
+      <variant>Izdatel'stvo vostochnoj literatury</variant>
+      <variant>Izdatel'stvo Moskovskogo universiteta</variant>
+      <variant>Izd. Moskovskogo University</variant>
+   </mapping>
+   <mapping>
+      <value>Department of African Languages, The Academy</value>
+      <variant>The Academy, Department of African Languages</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Cybernetics, Tallinn University of Technology</value>
+      <variant>Institute of Cybernetics at Tallinn University of Technology</variant>
+   </mapping>
+   <mapping>
+      <value>Sheldon Press</value>
+      <variant>The Superintendent, Government Press</variant>
+      <variant>The Sheldon Press</variant>
+      <variant>Superintendent Government Printing</variant>
+   </mapping>
+   <mapping>
+      <value>L'Aisathèque</value>
+      <variant>L'Asiathèque</variant>
+   </mapping>
+   <mapping>
+      <value>The Population Register Centre, Finland</value>
+      <variant>The Population Register Centre (Finland)</variant>
+   </mapping>
+   <mapping>
+      <value>Langues et Mondes, L'Asiathèque</value>
+      <variant>Langues &amp; Mondes L'asiatheque</variant>
+   </mapping>
+   <mapping>
+      <value>Charles E. Tuttle Company</value>
+      <variant>Charles E. Tuttle</variant>
+      <variant>Charles E. Tuttle Co</variant>
+      <variant>Charles E. Tuttle &amp; Co</variant>
+   </mapping>
+   <mapping>
+      <value>Clarke, Irwin &amp; Co. Ltd</value>
+      <variant>Clarke, Irwin and Co. Ltd</variant>
+   </mapping>
+   <mapping>
+      <value>Aboriginal Education Unit</value>
+      <variant>Aboriginal Studies and Teacher Education Centre</variant>
+   </mapping>
+   <mapping>
+      <value>Departement de linguistique generale et linguistique africaine, Faculte des lettres et sciences humaines</value>
+      <variant>Departement de linguistique generale et linguistique africaine de la Faculte des lettres et sciences humaines de l'Universite de Dakar</variant>
+      <variant>Département de Linguistique Générale et Linguistique Africaine, Université de Dakar</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Asian Studies, Cornell University</value>
+   </mapping>
+   <mapping>
+      <value>NHH</value>
+      <variant>Norwegian School of Economics and Business Administration (NHH)</variant>
+      <variant>Norwegian School of Economics and Business Administration</variant>
+   </mapping>
+   <mapping>
+      <value>Dept. Communications &amp; Computer Engineering, University of Malta</value>
+      <variant>University of Malta Dept. Computer and Communication Engineering</variant>
+   </mapping>
+   <mapping>
+      <value>USOM and the Bureau of Textbooks, Department of Education</value>
+      <variant>USOM and the Bureau of Textbooks, Department of Education of the Republic of Vietnam</variant>
+   </mapping>
+   <mapping>
+      <value>NLP Centre, Masaryk university</value>
+      <variant>Masaryk university, NLP Centre</variant>
+   </mapping>
+   <mapping>
+      <value>IPIPAN</value>
+      <variant>IPIPAN: Institute of Computer Science, Polish Academy of Sciences</variant>
+      <variant>Institute of Computer Science, Polish Academy of Sciences</variant>
+   </mapping>
+   <mapping>
+      <value>University Press</value>
+      <variant>The University Press</variant>
+   </mapping>
+   <mapping>
+      <value>Nordeuropa-institut, Humboldt-Universität zu Berlin</value>
+      <variant>Humboldt-Universität zu Berlin - Nordeuropainstitut</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Historical Antiquarian Studies</value>
+      <variant>Department of Historical and Antiquarian Studies, Government of Assam</variant>
+   </mapping>
+   <mapping>
+      <value>Russky Yazyk Publ. House</value>
+      <variant>Russkij jazyk</variant>
+   </mapping>
+   <mapping>
+      <value>School of Psychology, Liège University</value>
+      <variant>School of Psychology, Liège University (Liège BE)</variant>
+   </mapping>
+   <mapping>
+      <value>African Studies Program, Indiana University</value>
+      <variant>Indiana University-African Studies Program</variant>
+   </mapping>
+   <mapping>
+      <value>Kalan-diya, ACODEP, Bamako</value>
+      <variant>Bamako : Kalan-diya; ACODEP,</variant>
+      <variant>Kalan-diya, Appui aux collectivités décentralisées pour un développement participatif, Bamako</variant>
+   </mapping>
+   <mapping>
+      <value>Reidel</value>
+      <variant>Reidel.</variant>
+   </mapping>
+   <mapping>
+      <value>Volk und Wissen Verlag</value>
+      <variant>Volk und Wissen</variant>
+   </mapping>
+   <mapping>
+      <value>Mesoamerican Studies, Archaeological Institute</value>
+      <variant>University of Hamburg, Archaeological Institute, Mesoamerican Studies</variant>
+   </mapping>
+   <mapping>
+      <value>Faculty of Oriental Studies, University of Oxford</value>
+   </mapping>
+   <mapping>
+      <value>Peace Corps Training Programs, University of Washington</value>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, University of Cologne</value>
+      <variant>University of Cologne, Department of Linguistics - Universidad de Colonia, Departamento de Lingüística</variant>
+      <variant>University of Cologne, Department of Linguistics</variant>
+      <variant>Departamento de Lingüística / Universidad de Colonia</variant>
+   </mapping>
+   <mapping>
+      <value>Center for Near Eastern and North African Studies, University of Michigan</value>
+   </mapping>
+   <mapping>
+      <value>International Sign Linguistics Association and Deaf Studies Research Unit, University of Durham</value>
+   </mapping>
+   <mapping>
+      <value>Erhvervs- og Byggestyrelsen, Beredskabsstyrelsen og Søfartsstyrelsen</value>
+   </mapping>
+   <mapping>
+      <value>Groupes d'études inuit et circumpolaires, Association Inuksiutiit Katimajiit Inc.</value>
+      <variant>Association Inuksiutiit Katimajiit Inc., Groupes d'études inuit et circumpolaires, Université Laval.</variant>
+   </mapping>
+   <mapping>
+      <value>NMO</value>
+      <variant>Nederlandse Moslim Omroep</variant>
+   </mapping>
+   <mapping>
+      <value>Human Relations Area Files</value>
+      <variant>Human Relations Area Files, Inc.</variant>
+   </mapping>
+   <mapping>
+      <value>Universidad Católica del Tachira</value>
+      <variant>Universidad Católica de Tachira</variant>
+   </mapping>
+   <mapping>
+      <value>Georgetown University Press</value>
+   </mapping>
+   <mapping>
+      <value>Phonetics Laboratory, University of California</value>
+   </mapping>
+   <mapping>
+      <value>Langenscheidt</value>
+      <variant>Langenscheidt.</variant>
+   </mapping>
+   <mapping>
+      <value>Garland Publishing</value>
+      <variant>Garland Publishing Inc.</variant>
+      <variant>Garland Publishing Company</variant>
+      <variant>Garland Publishing, Inc.</variant>
+   </mapping>
+   <mapping>
+      <value>Postgraduate and Research Institute, Deccan College</value>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, University of Southern California</value>
+      <variant>University of Southern California, Department of Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>E. J. Brill</value>
+      <variant>E J. Brill</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, Ruhr-University Bochum</value>
+      <variant>Ruhr-University Bochum, Department of Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Institut für Afrikanistik, Universität zu Köln</value>
+   </mapping>
+   <mapping>
+      <value>Centro de Estudios, Universidad de Buenos Aires</value>
+   </mapping>
+   <mapping>
+      <value>Hodder and Stoughton</value>
+      <variant>Hodder &amp; Stoughton</variant>
+      <variant>Hodder and Stoughton for the English University Press</variant>
+      <variant>Hodder &amp; Stoughton</variant>
+   </mapping>
+   <mapping>
+      <value>Dekker &amp; van de Vegt N. V.</value>
+      <variant>Dekker and van de Vegt N. V.</variant>
+   </mapping>
+   <mapping>
+      <value>Joodse Omroep</value>
+      <variant>JOODSE OMROEP</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, The University of Hong Kong</value>
+   </mapping>
+   <mapping>
+      <value>Max Planck Digital Library</value>
+      <variant>Max Planck Digital Library, http://wals.info/author</variant>
+   </mapping>
+   <mapping>
+      <value>Pacific and Asian Linguistics Institute, University of Hawaii</value>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, University of Victoria</value>
+      <variant>University of Victoria, Department of Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Statens Byggeforskningsinstitut</value>
+      <variant>Statens Byggeforskningsinstitut, Aalborg Universitet</variant>
+   </mapping>
+   <mapping>
+      <value>The English Universities Press</value>
+      <variant>The English Universities Press Ltd.</variant>
+      <variant>The English Universities Press Ltd</variant>
+   </mapping>
+   <mapping>
+      <value>American Oriental Society</value>
+      <variant>American Oriental Society
+
+</variant>
+   </mapping>
+   <mapping>
+      <value>Museo Nacional de Antropologí­a</value>
+      <variant>Museo Nacional de Antropología</variant>
+   </mapping>
+   <mapping>
+      <value>BME MOKK</value>
+      <variant>Budapest University of Technology and Economics Media Research</variant>
+      <variant>Budapest University of Technology and Economics Media Research (BME MOKK)</variant>
+   </mapping>
+   <mapping>
+      <value>NOS</value>
+      <variant>NOS RTV</variant>
+   </mapping>
+   <mapping>
+      <value>The Department of Cultural Anthropology, Leiden University</value>
+      <variant>Leiden University, The Department of Cultural Anthropology</variant>
+   </mapping>
+   <mapping>
+      <value>Scott, Foresman and Company</value>
+      <variant>Scott, Foresman and Co</variant>
+   </mapping>
+   <mapping>
+      <value>Allgemeine Sprachwissenschaft, Universität Köln</value>
+      <variant>Universität zu Köln, Allgemeine Sprachwissenschaft</variant>
+   </mapping>
+   <mapping>
+      <value>Asociación Instituto Lingüístico de Verano</value>
+      <variant>Associación Instituto Lingüístico de Verano</variant>
+   </mapping>
+   <mapping>
+      <value>Rüdiger Köppe Verlag</value>
+      <variant>Rüdiger Köppe</variant>
+   </mapping>
+   <mapping>
+      <value>North-Holland</value>
+      <variant>North-Holland Publishing Company</variant>
+      <variant>North-Holland Publishing</variant>
+      <variant>North Holland</variant>
+   </mapping>
+   <mapping>
+      <value>Sen Wah Press and Company</value>
+      <variant>Sen Wah Press and Co</variant>
+   </mapping>
+   <mapping>
+      <value>Indiana University Center in Antropology, Folklore and Linguistics</value>
+      <variant>Indiana University Research Center in Anthropology, Folklore, and Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>IIAP</value>
+      <variant>ORDELORETO; SWISSAID; Instituto de Investigaciones de la Amazonía Peruana (IIAP)</variant>
+      <variant>Instituto de Investigaciones de la Amazonía Peruana (IIAP)</variant>
+      <variant>Instituto de Investigaciones de la Amazonía Peruana </variant>
+      <variant>ORDELORETO; SWISSAID; Instituto de Investigaciones de la Amazonía Peruana</variant>
+      <variant>Instituto de Investigaciones de la Amazonía Peruana (IIAP), Iquitos, Perú.</variant>
+      <variant>Instituto de Investigaciones de la Amazonía Peruana (IIAP) - Iquitos - Perú</variant>
+      <variant> Instituto de Investigaciones de la Amazonía Peruana</variant>
+   </mapping>
+   <mapping>
+      <value>CLARIN-D center, Natural Language Processing Group</value>
+      <variant>CLARIN-D center, Natural Language Processing Group, University of Leipzig</variant>
+   </mapping>
+   <mapping>
+      <value>World Language Documentation Centre, Universität Bamberg</value>
+      <variant>Universität Bamberg, World Language Documentation Centre</variant>
+   </mapping>
+   <mapping>
+      <value>LTG, Edinburgh University</value>
+   </mapping>
+   <mapping>
+      <value>Universidad de Buenos Aires</value>
+      <variant>Universidad de Buenos Aires.</variant>
+   </mapping>
+   <mapping>
+      <value>CLST, Radboud University</value>
+      <variant>Centre for Language and Speech Technology, Radboud University</variant>
+      <variant>Centre for Language and Speech Technology / Radboud University</variant>
+   </mapping>
+   <mapping>
+      <value>Fakultas Keguruan dan Ilmu Pendidikan, Universitas Tanjungpura</value>
+   </mapping>
+   <mapping>
+      <value>Seccion de Lingüística, Escuela de Filologia</value>
+      <variant>Universidad de Costa Rica, Escuela de Filologia, Seccion de Lingüística</variant>
+   </mapping>
+   <mapping>
+      <value>Narr</value>
+      <variant>Narr.</variant>
+   </mapping>
+   <mapping>
+      <value>IMLI RAN</value>
+      <variant>IMLI RAN, Nasledie</variant>
+      <variant>Imli Ran Nasledie</variant>
+   </mapping>
+   <mapping>
+      <value>University of Jaén (Spain)</value>
+      <variant>University of Jaén, Jaén (Spain)</variant>
+   </mapping>
+   <mapping>
+      <value>IULA, Universitat Pompeu Fabra</value>
+      <variant>Universitat Pompeu Fabra. Institut Universitari de Lingüística Aplicada (IULA)</variant>
+      <variant> Institut Universitari de Lingüística Aplicada / Universitat Pompeu Fabra</variant>
+   </mapping>
+   <mapping>
+      <value>Ministerio de Cultura</value>
+      <variant>Mininsterio de Cultura</variant>
+   </mapping>
+   <mapping>
+      <value>University of Tübingen</value>
+      <variant>University of Tuebingen</variant>
+   </mapping>
+   <mapping>
+      <value>Center for Vietnamese Studies and the Summer Institute of Linguistics</value>
+      <variant>Center for Vietnamese Studies and the Summer Institute if Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Philosophy and Sociology, University of Latvia</value>
+      <variant>Institute of Philosophy and Sociology of the University of Latvia</variant>
+   </mapping>
+   <mapping>
+      <value>Language Universals Project, Department of Linguistics</value>
+      <variant>Language Universals Project, Department of Linguistics, Stanford University</variant>
+   </mapping>
+   <mapping>
+      <value>John Benjamins, Australian National University Press</value>
+      <variant>John Benjamins / Australian National University Press</variant>
+   </mapping>
+   <mapping>
+      <value>Mittal Publications</value>
+      <variant>Mittal Publisher</variant>
+      <variant>Mittal</variant>
+      <variant>Mittal Publication</variant>
+   </mapping>
+   <mapping>
+      <value>Universität des Saarlandes</value>
+      <variant>Universitat des Saarlandes</variant>
+   </mapping>
+   <mapping>
+      <value>Franciscan Fathers Press</value>
+      <variant>Franciscan Fathers, St. Michael's Press</variant>
+   </mapping>
+   <mapping>
+      <value>Julius Groos</value>
+      <variant>Julius Gross</variant>
+   </mapping>
+   <mapping>
+      <value>Trübner &amp; Co.</value>
+      <variant>Trübner &amp; Co.</variant>
+   </mapping>
+   <mapping>
+      <value>Chikobava Institute of Linguistics, Tblisi, Georgia</value>
+      <variant>Chicobava Institute of Linguistics, Tblisi, Georgia</variant>
+   </mapping>
+   <mapping>
+      <value>Simpkin, Marshall, Hamilton, Kent and Corporation Limited</value>
+      <variant>Simpkin, Marshall, Hamilton, Kent &amp; Co Ltd</variant>
+   </mapping>
+   <mapping>
+      <value>CCRSS, Pune</value>
+      <variant>Centre for Cooperative Research in Social Sciences, Pune</variant>
+      <variant>Centre for Cooperative Research in Social Sciences (CCRSS, Pune IN)</variant>
+      <variant>http://ccrss.ws</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of African Studies, University of Ghana</value>
+   </mapping>
+   <mapping>
+      <value>Museum of Anthropology Publications, University of North Carolina</value>
+      <variant>University of North Carolina, Museum of Anthropology Publications</variant>
+   </mapping>
+   <mapping>
+      <value>Missioni Africane</value>
+      <variant>Missioni africane</variant>
+   </mapping>
+   <mapping>
+      <value>Longman</value>
+      <variant>Longman.</variant>
+      <variant>Longmans</variant>
+   </mapping>
+   <mapping>
+      <value>Zentrum für Allgemeine Sprachwissenschaft, Berlin</value>
+      <variant>ZAS, Humboldt University Berlin</variant>
+      <variant>ZAS</variant>
+   </mapping>
+   <mapping>
+      <value>CLA, Neuchâtel</value>
+      <variant>Centre de linguistique appliquée, Neuchâtel</variant>
+      <variant>http://www2.unine.ch/cla</variant>
+      <variant>Centre de linguistique appliquée (CLA, Neuchâtel CH)</variant>
+   </mapping>
+   <mapping>
+      <value>Lehrstuhl Phonetik und Lehrstuhl Slavistik, Philosophische Fakultät</value>
+      <variant>Lehrstuhl Phonetik (Fachrichtung 4.7) und Lehrstuhl Slavistik (Fachrichtung 4.4) der Philosophischen Fakultät II der Universität des Saarlandes</variant>
+   </mapping>
+   <mapping>
+      <value>ATILF, Université de Lorraine</value>
+      <variant>Analyse et Traitement Informatique de Langue Francaise / Université de Lorraine</variant>
+      <variant>ATILF</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Psychology, Ohio State University</value>
+      <variant>http://buckeyecorpus.osu.edu</variant>
+      <variant>Department of Psychology, Ohio State University (Columbus US)</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Modern Languages, University of Helsinki</value>
+      <variant>The Department of Modern Languages, University of Helsinki</variant>
+   </mapping>
+   <mapping>
+      <value>Gosudarstvennoe Izdat. Inostrannych i Nacionalnych Slovarej</value>
+      <variant>Gosudarstvennoe Izdat. Inostrannyx i Nacional'nyx Slovarej</variant>
+      <variant>Gosudastvennoe izdatel'stvo inostrannyx i nacional'nyx slovarej</variant>
+      <variant>Gosudarstvennoe Izdat. Inostrannyx u Nacional'nyx Slovarej</variant>
+      <variant>Gosudarstvennoe Izdat. Inostrannych i Nacional'nych Slovarej</variant>
+      <variant>Gosudarstvennoe izdatel'stvo inostrannyx i nacional'nych slovarej</variant>
+      <variant>Gosudarstvennoe Ucebno-Pedagogiceskoe Izdatel'stvo</variant>
+      <variant>Gosudarstvennoe Izdat. Inostrannych u Nacional'nych Slovarej</variant>
+   </mapping>
+   <mapping>
+      <value>Agence de Coopération Culturelle et Technique</value>
+      <variant>Agence de cooperation culturelle et technique</variant>
+      <variant>Agence de coopération culturelle et technique</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Phonetic Sciences, ACLC</value>
+      <variant>Institute of Phonetic Sciences/ACLC, Department of Linguistics, University of Amsterdam</variant>
+   </mapping>
+   <mapping>
+      <value>Hawaiian Studies Program, University of Hawaii</value>
+   </mapping>
+   <mapping>
+      <value>Státní Pedagogické Nakladatelství</value>
+      <variant>Slovenské Pedagogické Nakladatelàstvo</variant>
+      <variant>Slovenské Pedagogiské Nakladatel'stvo</variant>
+      <variant>Slovenské pedagogické nakladatel'stvo</variant>
+      <variant>Statni Pedagogické Nakladatelství</variant>
+   </mapping>
+   <mapping>
+      <value>RAN</value>
+      <variant>RAN, Institut etnologii i antropologii</variant>
+   </mapping>
+   <mapping>
+      <value>Suomalais-Ugrilainen Seura</value>
+      <variant>Suomalais-ugrilainen Seura</variant>
+   </mapping>
+   <mapping>
+      <value>Leiden Institute for Religious Studies</value>
+      <variant>Leiden Institute for Religious Studies, Wergroep Informatica Vrije Universiteit</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Linguistics, University of Nijmegen</value>
+      <variant>University of Nijmegen, Department of Linguistics</variant>
+   </mapping>
+   <mapping>
+      <value>Beauchemin &amp; Valois Publishers</value>
+      <variant>Beauchemin and Valois Publishers</variant>
+   </mapping>
+   <mapping>
+      <value>École des Hautes Etudes en Sciences Sociales</value>
+      <variant>Ecole des Hautes Etudes en Sciences Sociales</variant>
+   </mapping>
+   <mapping>
+      <value>University of British Columbia Press</value>
+      <variant>University of British Colombia Press</variant>
+   </mapping>
+   <mapping>
+      <value>Tel Aviv University</value>
+      <variant>Tel-Aviv University</variant>
+   </mapping>
+   <mapping>
+      <value>Motilal Banarsidass</value>
+      <variant>Motilal Banarsidass.</variant>
+      <variant>Motilal Bamarsidass</variant>
+   </mapping>
+   <mapping>
+      <value>Center of Asian Studies, University of Hong Kong</value>
+   </mapping>
+   <mapping>
+      <value>IPI PAN</value>
+      <variant>Shared initiative of Institute of Computer Science at Polish Academy of Sciences</variant>
+      <variant>Shared initiative of Institute of Computer Science at Polish Academy of Sciences(IPI PAN)</variant>
+   </mapping>
+   <mapping>
+      <value>H.W. Wilson Press</value>
+      <variant>H.W. Wilson</variant>
+   </mapping>
+   <mapping>
+      <value>Department of Anthropology, Northern Arizona University</value>
+   </mapping>
+   <mapping>
+      <value>China-Japan Program, Cornell University</value>
+      <variant>Cornell University China-Japan Program</variant>
+   </mapping>
+   <mapping>
+      <value>Baltos Lankos.</value>
+      <variant>Baltos Iankos</variant>
+   </mapping>
+   <mapping>
+      <value>Institute of Islamic Studies, McGill University</value>
+      <variant>McGill University, Institute of Islamic Studies</variant>
+   </mapping>
+   <mapping>
+      <value>Centre for Language Studies, Radboud University Nijmegen</value>
+      <variant>Radboud University Nijmegen, Centre for Language Studies</variant>
+   </mapping>
+   <mapping>
+      <value>Department of History and Ethnology, University of Jyväskylä</value>
+   </mapping>
+   <mapping>
+      <value>G. E. Stechert and Company</value>
+      <variant>G. E. Stechert</variant>
+      <variant>G. E. Stechert &amp; Company</variant>
+      <variant>G. E. Hechert and Company</variant>
+      <variant>G. E. Steichert &amp; Co.</variant>
+      <variant>G. E. Hechert &amp; Company</variant>
+   </mapping>
+   <mapping>
+      <value>Deccan College</value>
+      <variant>Deccan College Postgraduate and Research Institute</variant>
+   </mapping>
+   <mapping>
+      <value>Instituto de Investigacao Cientifica Tropical, Secretaria de Estado da Ciencia e Tecnologia</value>
+      <variant>Ministerio do Planeamento e da Administracao do Territorio, Secretaria de Estado da Ciencia e Tecnologia, Instituto de Investigacao Cientifica Tropical</variant>
+   </mapping>
+</mappings>

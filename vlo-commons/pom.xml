@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>eu.clarin.cmdi</groupId>
+        <artifactId>vlo</artifactId>
+        <version>3.3-SNAPSHOT</version>
+    </parent>
+    <groupId>eu.clarin.cmdi</groupId>
+    <artifactId>vlo-commons</artifactId>
+    <version>3.3-SNAPSHOT</version>
+    <name>VLO Commons</name>
+    <url>http://maven.apache.org</url>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <xml.path>src/main/resources</xml.path>
+        <xslt.path>${xml.path}/xslt</xslt.path>
+        <dest.path>${xml.path}/uniform_maps</dest.path>        
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>xmlunit</groupId>
+            <artifactId>xmlunit</artifactId>
+            <version>1.5</version>
+            <scope>test</scope>
+            <type>xml</type>
+            <classifier>ivy</classifier>
+        </dependency>
+    </dependencies>
+    
+  
+    
+    <build>
+    <pluginManagement>
+    	<plugins>
+    		<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>xml-maven-plugin</artifactId>
+                <executions>
+	                <execution>
+	                	<goals>
+	                		<goal>transform</goal>
+	                	</goals>
+	                </execution>
+                </executions>
+                <configuration>
+                    <transformationSets>
+                    
+                    <!-- LanguageNameVariantsMap.xml -->
+                        <transformationSet>
+                        	<dir>${xml.path}</dir>
+                        	<includes>
+                        		<include>LanguageNameVariantsMap.xml</include>
+                        	</includes>
+                            <stylesheet>${xslt.path}/language_transformer.xsl</stylesheet>
+                            <outputDir>${dest.path}</outputDir>                            
+                        </transformationSet>
+                    
+                    <!-- LicenseAvailabilityMap.xml -->
+                        <transformationSet>
+                        	<dir>${xml.path}</dir>
+                        	<includes>
+                        		<include>LicenseAvailabilityMap.xml</include>
+                        	</includes>
+                            <stylesheet>${xslt.path}/availability_transformer.xsl</stylesheet>
+                            <outputDir>${dest.path}</outputDir>
+                        </transformationSet>                        
+                    
+                    <!-- nationalProjectsMapping.xml -->
+                        <transformationSet>
+                        	<dir>${xml.path}</dir>
+                        	<includes>
+                        		<include>nationalProjectsMapping.xml</include>
+                        	</includes>
+                            <stylesheet>${xslt.path}/national_project_transformer.xsl</stylesheet>
+                            <outputDir>${dest.path}</outputDir>
+                        </transformationSet>
+                   <!-- OrganisationControlledVocabulary.xml -->     
+                        <transformationSet>
+                        	<dir>${xml.path}</dir>
+                        	<includes>
+                        		<include>OrganisationControlledVocabulary.xml</include>
+                        	</includes>
+                            <stylesheet>${xslt.path}/organization_transformer.xsl</stylesheet>
+                            <outputDir>${dest.path}</outputDir>
+                        </transformationSet> 
+                    </transformationSets>                    
+                </configuration>
+                
+                <!-- make the translation working with xslt2.0 -->
+                <dependencies>
+                    <dependency>
+						<groupId>net.sourceforge.saxon</groupId>
+						<artifactId>saxon</artifactId>
+						<version>9.1.0.8</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+    	</plugins>
+    </pluginManagement>
+    </build>
+</project>

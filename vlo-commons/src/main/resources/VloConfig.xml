@@ -1,0 +1,166 @@
+<VloConfig>
+    
+    <!-- Sets the maximum number of page instances which will be stored in the application scoped second level cache for faster retrieval -->
+    <pagesInApplicationCache>40</pagesInApplicationCache>
+    
+    <!-- Sets the maximum size (in KILOBYTES) of the File where page instances per session are stored. -->
+    <sessionCacheSize>10000</sessionCacheSize>
+   
+    <deleteAllFirst>true</deleteAllFirst>
+    
+    <maxDocsInList>128</maxDocsInList>
+    
+    <minDocsInSolrQueue>128</minDocsInSolrQueue>
+    
+    <solrTimeOut>300</solrTimeOut>
+    
+    <maxFileSize>10000000</maxFileSize>
+    
+    <maxDaysInSolr>0</maxDaysInSolr>
+    
+    <useHandleResolver>false</useHandleResolver>
+    
+    <printMapping>false</printMapping>
+    
+    <dataRoots>
+        <DataRoot>
+            <originName>CLARIN Centres</originName>
+            <rootFile>/lat/apache/htdocs/oai-harvester/clarin/results/cmdi/</rootFile>            
+            <prefix>http://catalog.clarin.eu/</prefix>
+            <tostrip>/lat/apache/htdocs/</tostrip>
+            <deleteFirst>false</deleteFirst>
+        </DataRoot>
+
+        <DataRoot>
+            <originName>Other</originName>
+            <rootFile>/lat/apache/htdocs/oai-harvester/others/results/cmdi</rootFile>            
+            <prefix>http://catalog.clarin.eu/</prefix>
+            <tostrip>/lat/apache/htdocs/</tostrip>
+            <deleteFirst>false</deleteFirst>
+        </DataRoot>
+    </dataRoots>
+    
+    <solrUrl>http://localhost:8080/vlo-solr/core0/</solrUrl>
+    
+    <homeUrl>http://www.clarin.eu/vlo</homeUrl>
+    
+    <helpUrl>http://www.clarin.eu/vlo</helpUrl>
+    
+    <!-- leave empty to use default packaged definition -->
+    <facetConceptsFile><!-- use default packaged definition --></facetConceptsFile>
+    
+    <profileSchemaUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/{PROFILE_ID}/xsd</profileSchemaUrl>
+    
+    <componentRegistryRESTURL>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/</componentRegistryRESTURL>
+    
+    <handleServerUrl>http://hdl.handle.net/</handleServerUrl>
+    
+    <nationalProjectMapping>/nationalProjectsMapping.xml</nationalProjectMapping>
+    
+    <organisationNamesUrl>/OrganisationControlledVocabulary.xml</organisationNamesUrl>
+    
+    <languageNameVariantsUrl>/LanguageNameVariantsMap.xml</languageNameVariantsUrl>
+    
+    <licenseAvailabilityMapUrl>/LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl>
+    
+    <!-- resourceAvailabilityMapUrl
+        Facet field used to populate collection selector on search page 
+        If disabled, the collection facet will not be shown (can be used to
+        move the collection facet in with the other facets).
+        
+        Uncomment to activate the separate collection facet display item.
+    -->
+    <!--<collectionFacet>collection</collectionFacet>-->
+    
+    <!-- Fields shown as facets on the search page -->
+    <facetFields>        
+        <facetField>languageCode</facetField>
+        <facetField>collection</facetField>
+        <facetField>resourceClass</facetField>
+        <facetField>continent</facetField>
+        <facetField>country</facetField>
+        <facetField>modality</facetField>
+        <facetField>genre</facetField>
+        <facetField>subject</facetField>
+        <facetField>format</facetField>
+        <facetField>organisation</facetField>
+        <facetField>availability</facetField>
+        <facetField>nationalProject</facetField>
+        <facetField>keywords</facetField>
+        <facetField>dataProvider</facetField>
+    </facetFields>
+        
+    <simpleSearchFacetFields>
+        <simpleSearchFacetField>languageCode</simpleSearchFacetField>
+        <simpleSearchFacetField>collection</simpleSearchFacetField>
+        <simpleSearchFacetField>resourceClass</simpleSearchFacetField>
+        <simpleSearchFacetField>modality</simpleSearchFacetField>
+        <simpleSearchFacetField>genre</simpleSearchFacetField>
+    </simpleSearchFacetFields>
+    
+    <!-- Fields shown in expanded search results on the search page -->
+    <searchResultFields>
+        <searchResultField>name</searchResultField>
+        <searchResultField>country</searchResultField>
+        <searchResultField>languageCode</searchResultField>
+        <searchResultField>modality</searchResultField>
+        <searchResultField>subject</searchResultField>
+        <searchResultField>genre</searchResultField>
+        <searchResultField>organisation</searchResultField>
+        <searchResultField>collection</searchResultField>
+        <searchResultField>nationalProject</searchResultField>
+    </searchResultFields>
+    
+    <!-- Fields ignored in the record page -->
+    <ignoredFields>
+        <ignoredField>format</ignoredField>
+        <ignoredField>score</ignoredField>
+    </ignoredFields>
+    
+    <!-- Fields shown as technical fields in the record page -->
+    <technicalFields>
+        <technicalField>id</technicalField>
+        <technicalField>_selfLink</technicalField>
+        <technicalField>dataProvider</technicalField>
+        <technicalField>metadataSource</technicalField>
+        <technicalField>_landingPageRef</technicalField>
+        <technicalField>_searchPageRef</technicalField>
+        <technicalField>_contentSearchRef</technicalField>
+        <technicalField>_lastSeen</technicalField>
+        <technicalField>_componentProfile</technicalField>
+        <technicalField>_hierarchyWeight</technicalField>
+        <technicalField>_hasPart</technicalField>
+        <technicalField>_isPartOf</technicalField>
+    </technicalFields>
+    
+    <languageFilters>
+        <languageFilter>filterOne</languageFilter>
+        <languageFilter>filterTwo</languageFilter>
+        <languageFilter>filterThree</languageFilter>
+    </languageFilters>
+    
+    <facetOverviewLength>30</facetOverviewLength>
+    
+    <countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
+    
+    <languageLinkTemplate>https://infra.clarin.eu/content/language_info/data/{}.html</languageLinkTemplate>
+    
+    <feedbackFromUrl>http://www.clarin.eu/node/3759?url=</feedbackFromUrl>
+
+    <language2LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438109/xml</language2LetterCodeComponentUrl>
+    
+    <language3LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438110/xml</language3LetterCodeComponentUrl>
+   
+    <silToISO639CodesUrl>http://www.clarin.eu/cmd/xslt/sil_to_iso6393.xml</silToISO639CodesUrl>
+    
+    <reverseProxyPrefix></reverseProxyPrefix>
+    
+    <FederatedContentSearchUrl>http://weblicht.sfs.uni-tuebingen.de/Aggregator/</FederatedContentSearchUrl>
+    
+    <cqlEndpointFilter>http://cqlservlet.mpi.nl/</cqlEndpointFilter>
+    
+    <cqlEndpointAlternative>http://cqlservlet.mpi.nl/</cqlEndpointAlternative>
+    
+    <!-- makes the score for the result ranking visible in the search results -->
+    <showResultScores>true</showResultScores>
+</VloConfig>

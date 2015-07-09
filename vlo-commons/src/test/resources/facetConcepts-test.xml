@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<facetConcepts>
+	<facetConcept name="id" allowMultipleValues="false">
+		<concept>http://www.isocat.org/datcat/DC-2573</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2573_ae7c2548-8a86-ab6e-7099-e28b7697d1a2</concept>
+		<pattern>/c:CMD/c:Header/c:MdSelfLink/text()</pattern>
+	</facetConcept>
+	<facetConcept name="_selfLink" allowMultipleValues="false">
+		<pattern>/c:CMD/c:Header/c:MdSelfLink/text()</pattern>
+	</facetConcept>
+	<facetConcept name="collection" description="The collection to which the resource or tool belongs" definition="The collection to which a resource or tool belongs. A resource or tool can only belong to one collection. A collection is based on a specific (legacy) archive or a certain type of resource within such an archive or centre. The members of a collection share basic metadata vocabularies for the information displayed in the VLO.">
+		<pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
+	</facetConcept>
+	<facetConcept name="projectName" description="The project within which the resource or tool was created" definition="The name of the project(s) originally involved in the creation of the resource or tool, also if these projects no longer exist or are not the ones to be contacted regarding the resource/tool, which is often the case.">
+		<concept>http://www.isocat.org/datcat/DC-2536</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2536_13fc5f10-c14a-1f64-a669-32736f6d3ef5</concept>
+		<concept>http://www.isocat.org/datcat/DC-2537</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2537_fa206273-223a-f4fa-dde3-ba59b965701f</concept>
+		<concept>http://www.isocat.org/datcat/DC-5414</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-5414_55fd7a9e-edae-d8ad-a64f-c8e1058e7a6d</concept>
+
+
+		<pattern>/c:CMD/c:Components/c:teiHeader/c:fileDesc/c:publicationStmt/c:publisher/c:orgName/c:orgName[@role="project"]/text()</pattern>
+		<!-- BBAW teiHeader -->
+		<pattern>/c:CMD/c:Components/c:media-session-profile/c:media-session/c:Corpus</pattern>
+		<!--  BAS media-session-profile-->
+		<pattern>/c:CMD/c:Components/c:media-corpus-profile/c:Collection/c:GeneralInfo/c:Title/text()</pattern>
+		<!-- BAS media-corpus-profile -->
+	</facetConcept>
+	<facetConcept name="name" allowMultipleValues="false" description="The name of the resource or tool" definition="The full public name of the resource or tool.">
+		<concept>http://www.isocat.org/datcat/DC-5428</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-5428_65670fd6-3426-68ac-8f29-faef6ffd02ce</concept>
+		<concept>http://www.isocat.org/datcat/DC-5127</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-5127_f2721b23-921c-46ba-8d4d-88b46aef6976</concept>
+		<concept>http://www.isocat.org/datcat/DC-4160</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-4160_192be757-0d8f-f4fe-b10b-d3d50de92482</concept>
+		<!-- CLARIN-D Webservices name -->
+		<concept>http://www.isocat.org/datcat/DC-4114</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-4114_747bf046-1208-940d-36ba-297e4de49e0c</concept>
+		<concept>http://www.isocat.org/datcat/DC-2544</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2544_3626545e-a21d-058c-ebfd-241c0464e7e5</concept>
+		<concept>http://www.isocat.org/datcat/DC-2545</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2545_d873f2ab-2a2f-29d6-a9ab-260cde57f227</concept>
+		<concept>http://www.isocat.org/rest/dc/4160</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-4160_192be757-0d8f-f4fe-b10b-d3d50de92482</concept>
+		<concept>http://purl.org/dc/terms/title</concept>
+		<concept>http://purl.org/dc/elements/1.1/title</concept>
+		<concept>http://www.isocat.org/datcat/DC-6119</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-6119_ea4226b5-8d55-e71e-730f-2a02e3adbeb4</concept>
+		<pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceName/text()</pattern>
+		<!-- no concept in lrt schema -->
+		<pattern>/c:CMD/c:Components/c:mods/c:titleInfo/title/text()</pattern>
+
+
+		<pattern>/c:CMD/c:Components/c:teiHeader/c:fileDesc/c:sourceDesc/c:bibl/text()</pattern>
+		<!-- BBAW teiHeader -->
+		<pattern>/c:CMD/c:Components/c:IDSAGD_Event/c:Label/text()</pattern>
+		<!-- IDS IDSAGD_Event -->
+		<pattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:Label/text()</pattern>
+		<!-- IDS IDSAGD_Speaker -->
+		<pattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Publications/c:Publication</pattern>
+		<!--  IMS TextCorpusProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Publications/c:Publication</blacklistPattern>
+		<!-- IMS ToolProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Publications/c:Publication/c:PublicationTitle/</blacklistPattern>
+		<!-- IMS c:LexicalResourceProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Publications/c:Publication/c:PublicationTitle/</blacklistPattern>
+		<!-- IMS c:MultimodalCorpus -->
+	</facetConcept>
+        	<!-- test facets -->
+	<facetConcept name="temporalCoverage" description="The temporal coverage of the source material of the resource" definition="The temporal coverage of the source material of the resource, i.e. not the time within which the resource was created, but when e.g. original texts were written or speech recordings made.">
+		<concept>http://www.isocat.org/datcat/DC-2502</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2502_747eb0cd-03e9-cffb-34cc-d0c8c77e4c5a</concept>
+		<!-- dc:coverage restricted to temporal coverage -->
+		<concept>http://www.isocat.org/datcat/DC-3664</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-3664_eb600f47-5123-efbe-251b-d952c65fc847</concept>
+		<!-- “Basic time coverage information.” -->
+		<concept>http://www.isocat.org/datcat/DC-4343</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-4343_0d6e80e7-6f6c-5497-eac6-29b95a5fa9ec</concept>
+		<!-- Intervall. Described as “a : a space of time between events or states” -->
+		<concept>http://www.isocat.org/datcat/DC-5742</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-5742_66aaccdd-f1d0-a6a6-a4fb-efa704e06d8b</concept>
+		<!-- End time. Described as “Time at which an event ends”. -->
+		<concept>http://www.isocat.org/datcat/DC-3654</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-3654_f1608e88-95e6-4233-5d21-5312e76de32d</concept>
+		<!-- Start range. Described as “The beginning of a range.” used in the component TimeCoverage http://catalog.clarin.eu/ds/ComponentRegistry/?item=clarin.eu:cr1:c_1349361150714 -->
+		<concept>http://www.isocat.org/datcat/DC-3655</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-3655_bc4c2656-2946-0be9-49f0-021a811e531b</concept>
+		<!-- End range. Described as “The end of a range.” used in the component TimeCoverage http://catalog.clarin.eu/ds/ComponentRegistry/?item=clarin.eu:cr1:c_1349361150714 -->
+		<pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:coverage/text()</pattern>
+		<!-- dc:coverage, also contains spatial coverage info -->
+
+		<pattern>/c:CMD/Components/c:teiHeader/c:fileDesc/c:sourceDesc/c:biblFull/c:publicationStmt/c:date[@type="publication"]/text()</pattern>
+		<!-- BBAW teiHeader -->
+		<pattern>/c:CMD/c:Components/c:teiHeader/c:fileDesc/c:publicationStmt/c:date[@type="publication"]/text()</pattern>
+		<!-- BBAW teiHeader -->
+		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Project/c:Duration</blacklistPattern>
+		<!-- IMS TextCorpusProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Project/c:Duration</blacklistPattern>
+		<!-- IMS ToolProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Project/c:Duration/c:CompletionYear</blacklistPattern>
+		<!-- IMS c:LexicalResourceProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Project/c:Duration/c:CompletionYear</blacklistPattern>
+		<!-- c:MultimodalCorpus -->
+		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Publications/c:Publication/c:PublicationDate</blacklistPattern>
+		<!-- c:MultimodalCorpus -->
+	</facetConcept>
+	<facetConcept name="continent" description="The continent of origin of the source material of the resource" definition="The continent of origin of the source material of the resource, i.e. not the continent in which the resource was created, but where e.g. original texts were written or speech recordings made.">
+		<concept>http://www.isocat.org/datcat/DC-2531</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2531_e0427265-2fc4-d23e-0a7c-a21981ec3734</concept>
+		<concept>http://www.isocat.org/datcat/DC-3791</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-3791_8f409aa8-2d57-5fc6-23f0-f490471807d8</concept>
+
+
+		<blacklistPattern>/c:HZSKCorpus/c:Collection/c:OriginLocation/c:Location/c:Continent</blacklistPattern>
+		<!-- HZSK -->
+		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:PersonalBackground/c:BirthPlace/c:Location/c:Continent</blacklistPattern>
+		<!-- IDSAGD_Speaker -->
+		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:PersonalBackground/c:Residence/c:Location/c:Continent</blacklistPattern>
+		<!-- IDSAGD_Speaker -->
+		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:ProfessionalBackground/c:Education/c:Place/c:Location/c:Continent</blacklistPattern>
+		<!-- IDSAGD_Speaker -->
+		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:ProfessionalBackground/c:Employment/c:Place/c:Location/c:Continent</blacklistPattern>
+		<!-- IDSAGD_Speaker -->
+		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground/c:Competence/c:LanguageVariety/c:LanguageVarietyPlace/c:Location/c:Continent</blacklistPattern>
+		<!-- IDSAGD_Speaker -->
+	</facetConcept>
+	<facetConcept name="country" description="The country of origin of the source material of the resource" definition="The country of origin of the source material of the resource, i.e. not the country in which the resource was created, but where e.g. original texts were written or speech recordings made.">
+		<concept>http://www.isocat.org/datcat/DC-2532</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2532_d004b0a6-fd1d-3ca3-abf1-1e6aeb3e37b2</concept>
+		<concept>http://www.isocat.org/datcat/DC-3792</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-3792_68c770a4-d58c-46dd-d429-5609ce5f81c3</concept>
+		<pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:spatial[@dcterms-type="ISO3166"]/text()</pattern>
+		<pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:coverage[@dcterms-type="ISO3166"]/text()</pattern>
+
+		<concept>http://www.isocat.org/datcat/DC-2092</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2092_36cd7ca8-e412-9f29-7ea7-4a3ba4ba2c91</concept>
+		<!-- add? -->
+
+
+		<blacklistPattern>/c:HZSKCorpus/c:Collection/c:OriginLocation/c:Location/c:Country</blacklistPattern>
+		<!-- HZSK -->
+		<blacklistPattern>/c:Location/c:Country/c:CountryName</blacklistPattern>
+		<!-- IMS ToolProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:PersonalBackground/c:BirthPlace/c:Location/c:Country</blacklistPattern>
+		<!-- IDSAGD_Speaker -->
+		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:PersonalBackground/c:Residence/c:Location/c:Country</blacklistPattern>
+		<!-- IDSAGD_Speaker -->
+		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:ProfessionalBackground/c:Education/c:Place/c:Location/c:Country</blacklistPattern>
+		<!-- IDSAGD_Speaker -->
+		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:ProfessionalBackground/c:Employment/c:Place/c:Location/c:Country</blacklistPattern>
+		<!-- IDSAGD_Speaker -->
+		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground/c:Competence/c:LanguageVariety/c:LanguageVarietyPlace/c:Location/c:Country</blacklistPattern>
+		<!-- IDSAGD_Speaker -->
+	</facetConcept>
+	<facetConcept name="languageCode" description="The object language relevant for the resource or tool" definition="The object language relevant for the resource or tool, i.e. the language of the source material of a resource, the object language of a language description, or the language supported by a linguistic tool. If a tool is language independent, please use the ISO 639-3 'und' for 'undefined'.">
+		<concept>http://www.isocat.org/datcat/DC-2482</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2482_08eded24-4086-7e3f-88e5-e0807fb01e17</concept>
+		<!-- language code -->
+		<concept>http://www.isocat.org/datcat/DC-2484</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2484_669684e7-cb9e-ea96-59cb-a25fe89b9b9d</concept>
+		<!-- language name -->
+		<concept>http://www.isocat.org/datcat/DC-5361</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-5361_ba085ec1-9746-52bf-8cc1-3c300ce16eb8</concept>
+		<!-- language usage (TEI) -->
+		<concept>http://www.isocat.org/datcat/DC-5358</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-5358_3cd089fe-ad03-6181-b20c-635ea41ed818</concept>
+		<!--language (TEI) - MENZO: added for CLARIN-DK -->
+
+		<concept>http://purl.org/dc/terms/language</concept>
+		<!-- Had to be removed due to IDSAGD_Speaker  <acceptableContext includeAny="false" includeEmpty="true"/>
+    <rejectableContext includeAny="true"  includeEmpty="false">
+      <concept>http://www.isocat.org/datcat/DC-4146</concept>
+      <concept>http://hdl.handle.net/11459/CCR_C-4146_5ccc45c8-d729-c180-2bf1-fccc56dde24d</concept>
+    </rejectableContext> -->
+		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms/c:language/@olac-language</pattern>
+		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms/c:subject/@olac-language</pattern>
+		<pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()</pattern>
+		<pattern>/c:CMD/c:Components/c:mods/c:language/c:languageTerm/text()</pattern>
+
+
+		<!--  <concept>http://www.isocat.org/datcat/DC-2468</concept>
+		      <concept>http://hdl.handle.net/11459/CCR_C-2468_e4135e12-c272-171e-a8a2-48339228387b</concept> -->
+		<!-- BAS REMOVED because of component SubjectLanguages -->
+
+		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms-ref/c:language/@olac-language</pattern>
+		<!-- IDS OLAC-DcmiTerms-ref -->
+		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms-ref-DWR/c:language/@olac-language</pattern>
+		<!-- IDS OLAC-DcmiTerms-ref-DWR -->
+		<!-- <pattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Operations/c:Operation/c:Input/c:ParameterGroup/c:Parameters/c:Parameter/c:Values/c:ParameterValue/c:Value/text()</pattern>-->
+		<!--  WeblichtWebservices, breaks Tübingen Resources (oai_sfs_uni_tuebingen_de_FID_15.xml)-->
+		<blacklistPattern>/c:Actor_Languages/c:Actor_Language/</blacklistPattern>
+		<!-- MPI (JK) -->
+		<blacklistPattern>/c:ActorLanguage/c:Language/c:ISO639/c:iso-639-3-code</blacklistPattern>
+		<blacklistPattern>/c:LanguageName</blacklistPattern>
+		<!-- general -->
+		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground</blacklistPattern>
+		<!-- IDS IDSAGD_Speaker -->
+		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Collection/c:DocumentationLanguages</blacklistPattern>
+		<!-- IDS IDSAGD_Corpus -->
+		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Documentations</blacklistPattern>
+		<!-- IMS TextCorpusProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:DocumentationLanguages</blacklistPattern>
+		<!-- IMS TextCorpusProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Documentations</blacklistPattern>
+		<!-- IMS ToolProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:ToolContext/c:DocumentationLanguages</blacklistPattern>
+		<!-- IMS ToolProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:DocumentationLanguages</blacklistPattern>
+		<!-- IMS c:LexicalResourceProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:DocumentationLanguages</blacklistPattern>
+		<!-- IMS c:MultimodalCorpus -->
+	</facetConcept>
+        <facetConcept name="availability" description="The usage conditions for the resource or tool" definition="A rough description of the conditions under which the resource or tool can be used.">
+		<concept>http://www.isocat.org/datcat/DC-2457</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2457_45bbaa1a-7002-2ecd-ab9d-57a189f694a6</concept>
+		<!-- A description of the licensing conditions... -->
+		<concept>http://www.isocat.org/datcat/DC-2453</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2453_1f0c3ea5-7966-ae11-d3c6-448424d4e6e8</concept>
+		<!-- A description of the terms of availability of the resource in simple words. -->
+		<concept>http://www.isocat.org/datcat/DC-3800</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-3800_12a79edd-0ffe-8d82-9831-45d125c54aee</concept>
+		<!-- licenceType: Indication of the type of a copyright licence. -->
+		<concept>http://www.isocat.org/datcat/DC-6846</concept>
+		<!-- DASISH from DC Rights -->
+		<concept>http://www.isocat.org/datcat/DC-5439</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-5439_98bb103d-476a-7f62-54b4-bf9de24d2229</concept>
+		<!-- the DC is used in the distributionType facet -->
+		<!--<concept>http://purl.org/dc/terms/license</concept>-->
+	</facetConcept>
+	<facetConcept name="license" description="The licensing conditions for the resource or tool" definition="The name of the license or a very brief description of the licensing conditions under which the resource or tool can be used.">
+		<concept>http://www.isocat.org/datcat/DC-2457</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2457_45bbaa1a-7002-2ecd-ab9d-57a189f694a6</concept>
+		<!-- A description of the licensing conditions... -->
+		<concept>http://www.isocat.org/datcat/DC-2453</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2453_1f0c3ea5-7966-ae11-d3c6-448424d4e6e8</concept>
+		<!-- A description of the terms of availability of the resource in simple words. -->
+		<concept>http://www.isocat.org/datcat/DC-3800</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-3800_12a79edd-0ffe-8d82-9831-45d125c54aee</concept>
+		<!-- licenceType: Indication of the type of a copyright licence. -->
+		<concept>http://www.isocat.org/datcat/DC-6846</concept>
+		<!-- DASISH from DC Rights -->
+		<!-- <concept>http://www.isocat.org/datcat/DC-5439</concept>
+		     <concept>http://hdl.handle.net/11459/CCR_C-5439_98bb103d-476a-7f62-54b4-bf9de24d2229</concept> -->
+		<!-- the DC is used in the distributionType facet -->
+		<!--<concept>http://purl.org/dc/terms/license</concept>-->
+	</facetConcept>
+	<facetConcept name="organisation" description="The organisation currently responsible for the resource or tool" definition="The name of the organisation currently responsible for the resource or tool, i.e. to be contacted with any questions or requests regarding the metadata or access to the resource/tool.">
+		<concept>http://www.isocat.org/datcat/DC-2459</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2459_fc4e74d6-84de-c8cd-1ae8-2c2be5ee90b1</concept>
+		<concept>http://www.isocat.org/datcat/DC-2979</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2979_8030473e-bbcb-6b87-3fd2-90554429ec50</concept>
+		<concept>http://www.isocat.org/datcat/DC-6134</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-6134_72c22724-2615-fd70-2eff-8cd3cb59e91d</concept>
+		<concept>http://www.isocat.org/datcat/DC-6702</concept>
+		<!-- distribution rights holder -->
+
+
+		<pattern>/c:CMD/Components/c:WebLichtWebService/c:Service/c:Contact/c:Organisation/text()</pattern>
+		<!--  IDS WebLichtWebService -->
+		<pattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Creation/c:Source/c:MediaFiles/c:MediaFile/c:Access/c:Contact/c:Organisation/text()</pattern>
+		<!--  IDS WebLichtWebService -->
+		<pattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Creation/c:Source/c:Derivation/c:Organisation/text()</pattern>
+		<!--  IDS WebLichtWebService -->
+		<blacklistPattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Creation/c:Creators/c:Creator</blacklistPattern>
+		<!--  IDS WebLichtWebService -->
+	</facetConcept>
+	<facetConcept name="genre" isCaseInsensitive="true" allowMultipleValues="true" description="The genre of the content of the resource" definition="The conventionalized discourse or text type of the content of the resource, consistently applied within the collection.">
+		<concept>http://www.isocat.org/datcat/DC-2470</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2470_d191f2b2-6339-f031-b534-70d526b28357</concept>
+		<concept>http://www.isocat.org/datcat/DC-3899</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-3899_c6c608e7-cb2e-1832-09ff-aee36e1f2ed4</concept>
+		<pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/@olac-linguistic-type</pattern>
+		<!-- Find concept and add attribute somehow -->
+		<pattern>/c:CMD/c:Components/c:mods/c:genre/text()</pattern>
+
+
+		<pattern>/c:CMD/c:Components/c:media-corpus-profile/c:Corpus/c:Topic/text()</pattern>
+		<!--  BAS media-corpus-profile -->
+		<pattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Keyword/text()</pattern>
+		<!-- IDS IDSAGD_Corpus -->
+	</facetConcept>
+	<facetConcept name="modality" isCaseInsensitive="true" allowMultipleValues="true" description="The modality of the content of the resource or intended for the tool" definition="The channel by which the signs in the content of the resource were transmitted or the modality for which a tool is intended, e.g. to regonize speech, gestures or entities of a text.">
+		<concept>http://www.isocat.org/datcat/DC-2490</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2490_44bc38a3-1799-4149-c791-40ac0176f0ff</concept>
+	</facetConcept>
+	<facetConcept name="subject" isCaseInsensitive="true" allowMultipleValues="true" description="The subject or topic of the content of the resource" definition="The subject or topic of the content of the resource, consistently applied within the collection.">
+		<concept>http://www.isocat.org/datcat/DC-2591</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2591_f769d93b-c007-d2c9-aff2-99e9177e5764</concept>
+		<concept>http://purl.org/dc/terms/subject</concept>
+		<concept>http://purl.org/dc/elements/1.1/subject</concept>
+		<concept>http://www.isocat.org/datcat/DC-6147</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-6147_ebed915e-f911-f128-cddc-466aa41c9c73</concept>
+		<concept>http://www.isocat.org/datcat/DC-5316</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-5316_2c6244b4-4f10-5e8e-49b6-26fbf7004791</concept>
+		<concept>http://www.isocat.org/datcat/DC-6543</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-6543_92dacb75-3098-0d5a-0665-94ddb6274f8c</concept>
+		<pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-linguistic-field</pattern>
+		<pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject[@dcterms-type="LCSH"]/text()</pattern>
+		<pattern>/c:CMD/c:Components/c:mods/c:subject/c:Topic/text()</pattern>
+
+
+		<pattern>/c:CMD/c:Components/c:media-session-profile/c:media-session/c:Content/c:Topic/text()</pattern>
+		<!--  BAS -->
+		<pattern>/c:CMD/c:Components/c:media-session-profile/c:media-session/c:Content/c:Task/text()</pattern>
+		<!--  BAS -->
+		<pattern>/c:CMD/c:Components/c:media-corpus-profile/c:Corpus/c:Topic/text()</pattern>
+		<!--  BAS media-corpus-profile -->
+		<pattern>/c:CMD/c:Components/c:IDSAGD_Event/c:IDSAGD_SpeechEvent/c:Topic/text()</pattern>
+		<!-- IDS IDSAGD_Event -->
+		<pattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Corpus/c:Modality/c:Modality/text()</pattern>
+		<!-- IDS IDSAGD_Corpus -->
+		<blacklistPattern>/c:CMD/c:Components/c:teiHeader/c:profileDesc/c:textClass</blacklistPattern>
+		<!-- BBAW -->
+	</facetConcept>
+	<facetConcept name="description" description="A general description of the resource or tool" definition="A general description of the resource or tool apropriate for the VLO context, i.e. for a specific language resource or tool.">
+		<concept>http://www.isocat.org/datcat/DC-2520</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2520_9eeedfb4-47d3-ddee-cfcb-99ac634bf1db</concept>
+		<concept>http://purl.org/dc/terms/description</concept>
+		<concept>http://purl.org/dc/elements/1.1/description</concept>
+		<concept>http://www.isocat.org/datcat/DC-6124</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-6124_2e45fdf9-ced2-89c9-a09d-b4769e9fede6</concept>
+		<pattern>/c:CMD/c:Components/c:mods/c:abstract/text()</pattern>
+
+
+		<pattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Collection/c:GeneralInfo/c:Description/text()</pattern>
+		<!-- IDS IDSAGD_Corpus -->
+		<pattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Collection/c:GeneralInfo/c:Description/c:Description/text()</pattern>
+		<!-- IDS IDSAGD_Corpus -->
+		<pattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Collection/c:Project/c:Description/text()</pattern>
+		<!-- IDS IDSAGD_Corpus -->
+		<pattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Collection/c:Project/c:Description/c:Description/text()</pattern>
+		<!-- IDS IDSAGD_Corpus -->
+
+		<blacklistPattern>/c:HZSKAssociatedFile/c:Type</blacklistPattern>
+		<!--  HZSK -->
+		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground</blacklistPattern>
+		<!-- IDS IDSAGD_Speaker -->
+		<blacklistPattern>/c:media-annotation-bundle/</blacklistPattern>
+		<!-- BAS media-session-profile -->
+		<blacklistPattern>/c:media-corpus-profile/c:Corpus/</blacklistPattern>
+		<!-- BAS media-corpus-profile -->
+		<blacklistPattern>/c:Components/c:LCC_CorpusProfile/c:LCC_Corpus/c:LCC_DataProviderList</blacklistPattern>
+		<!-- ASV -->
+		<blacklistPattern>/c:Components/c:LCC_DataProviderProfile/c:LCC_DataProvider/c:LCC_DataSourceList</blacklistPattern>
+		<!-- ASV -->
+		<blacklistPattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Contact/</blacklistPattern>
+		<!-- IMS WebLichtWebService -->
+		<blacklistPattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Creation/</blacklistPattern>
+		<!-- IMS WebLichtWebService -->
+		<blacklistPattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Operations</blacklistPattern>
+		<!-- IMS WebLichtWebService -->
+		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Project</blacklistPattern>
+		<!-- IMS TextCorpusProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Publications</blacklistPattern>
+		<!-- IMS TextCorpusProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Documentations</blacklistPattern>
+		<!-- IMS TextCorpusProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:CorpusContext</blacklistPattern>
+		<!-- IMS TextCorpusProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Creation</blacklistPattern>
+		<!-- IMS TextCorpusProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Access</blacklistPattern>
+		<!-- IMS TextCorpusProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:SubjectLanguages</blacklistPattern>
+		<!-- IMS TextCorpusProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:DocumentationLanguages</blacklistPattern>
+		<!-- IMS TextCorpusProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:SizeInfo</blacklistPattern>
+		<!-- IMS TextCorpusProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:ModalityInfo</blacklistPattern>
+		<!-- IMS TextCorpusProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:ValidationGrp</blacklistPattern>
+		<!-- IMS TextCorpusProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:TextTechnical</blacklistPattern>
+		<!-- IMS TextCorpusProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Project</blacklistPattern>
+		<!-- IMS ToolProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Publications</blacklistPattern>
+		<!-- IMS ToolProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Documentations</blacklistPattern>
+		<!-- IMS ToolProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Creators</blacklistPattern>
+		<!-- IMS ToolProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Access</blacklistPattern>
+		<!-- IMS ToolProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Copyright</blacklistPattern>
+		<!-- IMS ToolProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:ResourceContext</blacklistPattern>
+		<!-- IMS ToolProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:ToolContext</blacklistPattern>
+		<!-- IMS ToolProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Project</blacklistPattern>
+		<!-- IMS LexicalResourceProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Publications</blacklistPattern>
+		<!-- IMS LexicalResourceProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Creation</blacklistPattern>
+		<!-- IMS LexicalResourceProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:DocumentationLanguages</blacklistPattern>
+		<!-- IMS LexicalResourceProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Access</blacklistPattern>
+		<!-- IMS LexicalResourceProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:LexiconContext</blacklistPattern>
+		<!-- IMS LexicalResourceProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:SizeInfo</blacklistPattern>
+		<!-- IMS LexicalResourceProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:TextTechnical</blacklistPattern>
+		<!-- IMS LexicalResourceProfile -->
+		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:GeneralInfo/c:ModalityInfo</blacklistPattern>
+		<!-- IMS MultiModalCorpus -->
+		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Access</blacklistPattern>
+		<!-- IMS MultiModalCorpus -->
+		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Creation</blacklistPattern>
+		<!-- IMS MultiModalCorpus -->
+		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Project</blacklistPattern>
+		<!-- IMS MultiModalCorpus -->
+		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Publications</blacklistPattern>
+		<!-- IMS MultiModalCorpus -->
+		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:SubjectLanguages</blacklistPattern>
+		<!-- IMS MultiModalCorpus -->
+		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:DocumentationLanguages</blacklistPattern>
+		<!-- IMS MultiModalCorpus -->
+		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:MultimodalCorpusSpecific</blacklistPattern>
+		<!-- IMS MultiModalCorpus -->
+		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:TechnicalInfo</blacklistPattern>
+		<!-- IMS MultiModalCorpus -->
+	</facetConcept>
+	<facetConcept name="resourceClass" description="The type of the resource or tool (e.g. corpus, lexicon, grammar, tool...)" definition="The type of the resource or tool (e.g. corpus, lexicon, grammar, tool...).">
+		<concept>http://purl.org/dc/terms/type</concept>
+		<concept>http://purl.org/dc/elements/1.1/type</concept>
+		<concept>http://www.isocat.org/datcat/DC-3806</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-3806_e55e9ed6-b099-c21d-a634-3c7f4d22a215</concept>
+		<!-- not an official ISOcat PID - added to support cmdi-collectiontype, should be removed in the future -->
+		<concept>http://www.isocat.org/datcat/DC-5424</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-5424_3200a38b-344e-41de-e539-f71f80c38df8</concept>
+		<concept>http://www.isocat.org/datcat/DC-3786</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-3786_21c37142-994f-63a8-5a5b-a9fce07681a7</concept>
+		<pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceType/text()</pattern>
+		<pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/text()</pattern>
+		<pattern>/c:CMD/c:Components/c:mods/c:typeOfResource/text()</pattern>
+
+
+		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Creation/c:Source/c:MediaFiles</blacklistPattern>
+	</facetConcept>
+	<facetConcept name="format" description="The mime types used in the resource or by the tool" definition="The mime types of the files in the resource or consumed/produced by the tool.">
+		<concept>http://www.isocat.org/datcat/DC-2571</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2571_2be2e583-e5af-34c2-3673-93359ec1f7df</concept>
+		<concept>http://purl.org/dc/terms/format</concept>
+	</facetConcept>
+	<facetConcept name="nationalProject" description="The national CLARIN project providing the resource or tool" definition="The national CLARIN project providing the resource or tool.">
+		<pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
+	</facetConcept>
+	<facetConcept name="text">
+		<pattern>/c:CMD/c:Header//text()</pattern>
+		<pattern>/c:CMD/c:Components//text()</pattern>
+	</facetConcept>
+	<facetConcept name="_componentProfile" allowMultipleValues="false">
+		<pattern>/c:CMD/c:Header/c:MdProfile/text()</pattern>
+	</facetConcept>
+	<facetConcept name="keywords" description="Keywords describing the resource or tool" definition="Keywords containing relevant information on the resource or tool not stated in other VLO metadata facets, consistently applied within the collection.">
+		<concept>http://www.isocat.org/datcat/DC-5436</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-5436_6ab57c2c-5f8d-3561-6db6-d75da23d2637</concept>
+		<!-- not an official ISOcat PID - added to support LrtInventoryResource, should be removed in the future -->
+		<pattern>/c:CMD/c:Components/c:mods/c:classification/text()</pattern>
+
+
+		<pattern>/c:CMD/c:Components/c:media-session-profile/c:media-session/c:Corpus/text()</pattern>
+		<!--  BAS -->
+		<pattern>/c:CMD/c:Components/c:media-corpus-profile/c:Collection/c:Project/c:Title/text()</pattern>
+		<!--  BAS -->
+	</facetConcept>
+
+        <!-- test facets -->
+	<facetConcept name="lifeCycleStatus" description="The status in the life cycle of the resource or tool" definition="The status in the life cycle of the resource or tool.">
+		<concept>http://www.isocat.org/datcat/DC-3818</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-3818_8c4aec73-1654-7565-9575-c4a17425ee29</concept>
+		<!-- Life Cycle Status -->
+	</facetConcept>
+	<facetConcept name="distributionType" description="The audience for which the resource or tool is available" definition="A rights-based classification of language resources and tools, indicating the scope of the target audience (PUB/ACA/RES).">
+		<concept>http://www.isocat.org/datcat/DC-5439</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-5439_98bb103d-476a-7f62-54b4-bf9de24d2229</concept>
+		<!-- Preferably displayed as AVAILABILITY or just cleverly bundled with the license facet... -->
+	</facetConcept>
+	<facetConcept name="rightsHolder" description="The rights holder of the resource or tool" definition="The person or organization holding the full rights for the resource or tool.">
+		<concept>http://www.isocat.org/datcat/DC-6709</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-6709_cb3572ed-ffd3-04f1-c145-b9c1f26bfc82</concept>
+		<!-- IPR holder -->
+		<concept>http://purl.org/dc/terms/rightsHolder</concept>
+	</facetConcept>
+</facetConcepts>
