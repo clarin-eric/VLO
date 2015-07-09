@@ -1,0 +1,228 @@
+This file is generated on Apr 25, 2013 10:08:04 AM and only used to document the mapping.
+This file contains xsd name and a list of conceptName with xpath mappings that are generated.
+---------------------
+http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1311927752306/xsd
+FacetName:id
+Mappings:
+    /c:CMD/c:Header/c:MdSelfLink/text()
+    /c:CMD/c:Components/c:ToolService/c:GeneralInfo/c:ID/text()
+FacetName:collection
+Mappings:
+    /c:CMD/c:Header/c:MdCollectionDisplayName/text()
+FacetName:projectName
+Mappings:
+    /c:CMD/c:Components/c:ToolService/c:Project/c:Name/text()
+    /c:CMD/c:Components/c:ToolService/c:Project/c:Title/text()
+FacetName:name
+Mappings:
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Name/text()
+    /c:CMD/c:Components/c:ToolService/c:GeneralInfo/c:Name/text()
+    /c:CMD/c:Components/c:ToolService/c:GeneralInfo/c:Title/text()
+FacetName:year
+Mappings:
+    /c:CMD/c:Components/c:ToolService/c:Project/c:Duration/c:CompletionYear/text()
+FacetName:country
+Mappings:
+    /c:CMD/c:Components/c:ToolService/c:Country/text()
+    /c:CMD/c:Components/c:ToolService/c:Country/c:Code/text()
+FacetName:language
+Mappings:
+    /c:CMD/c:Components/c:ToolService/c:Documentation/c:DocumentationLanguages/c:Language/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Tool/c:toolInput/c:data/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Tool/c:toolOutput/c:data/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Tool/c:Documentation/c:DocumentationLanguages/c:Language/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Input/c:ParameterGroup/c:Parameters/c:Parameter/c:TechnicalMetadata/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Input/c:ParameterGroup/c:TechnicalMetadata/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Input/c:Parameter/c:TechnicalMetadata/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Output/c:ParameterGroup/c:Parameters/c:Parameter/c:TechnicalMetadata/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Output/c:ParameterGroup/c:TechnicalMetadata/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Output/c:Parameter/c:TechnicalMetadata/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Documentation/c:DocumentationLanguages/c:Language/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Documentation/c:DocumentationLanguages/c:Language/c:LanguageName/text()
+    /c:CMD/c:Components/c:ToolService/c:Tool/c:Documentation/c:DocumentationLanguages/c:Language/c:LanguageName/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Documentation/c:DocumentationLanguages/c:Language/c:LanguageName/text()
+FacetName:languages
+Mappings:
+    /c:CMD/c:Components/c:ToolService/c:Documentation/c:DocumentationLanguages/c:Language/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Tool/c:toolInput/c:data/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Tool/c:toolOutput/c:data/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Tool/c:Documentation/c:DocumentationLanguages/c:Language/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Input/c:ParameterGroup/c:Parameters/c:Parameter/c:TechnicalMetadata/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Input/c:ParameterGroup/c:TechnicalMetadata/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Input/c:Parameter/c:TechnicalMetadata/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Output/c:ParameterGroup/c:Parameters/c:Parameter/c:TechnicalMetadata/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Output/c:ParameterGroup/c:TechnicalMetadata/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Output/c:Parameter/c:TechnicalMetadata/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Documentation/c:DocumentationLanguages/c:Language/c:ISO639/c:iso-639-3-code/text()
+    /c:CMD/c:Components/c:ToolService/c:Documentation/c:DocumentationLanguages/c:Language/c:LanguageName/text()
+    /c:CMD/c:Components/c:ToolService/c:Tool/c:Documentation/c:DocumentationLanguages/c:Language/c:LanguageName/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Documentation/c:DocumentationLanguages/c:Language/c:LanguageName/text()
+FacetName:organisation
+Mappings:
+    /c:CMD/c:Components/c:ToolService/c:Creators/c:Creator/c:Contact/c:Organisation/text()
+    /c:CMD/c:Components/c:ToolService/c:Project/c:Contact/c:Organisation/text()
+    /c:CMD/c:Components/c:ToolService/c:Tool/c:Access/c:Contact/c:Organisation/text()
+FacetName:genre
+Mappings:
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/@olac-linguistic-type
+FacetName:subject
+Mappings:
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-linguistic-field
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject[@dcterms-type="LCSH"]/text()
+FacetName:description
+Mappings:
+    /c:CMD/c:Components/c:ToolService/c:GeneralInfo/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:GeneralInfo/c:Description/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Creators/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Creators/c:Description/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Project/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Project/c:Description/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Documentation/c:DocumentationLanguages/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Documentation/c:DocumentationLanguages/c:Description/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Tool/c:Documentation/c:DocumentationLanguages/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Tool/c:Documentation/c:DocumentationLanguages/c:Description/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Input/c:ParameterGroup/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Input/c:ParameterGroup/c:Parameters/c:Parameter/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Input/c:ParameterGroup/c:Parameters/c:Parameter/c:Values/c:ParameterValue/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Input/c:Parameter/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Input/c:Parameter/c:Values/c:ParameterValue/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Output/c:ParameterGroup/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Output/c:ParameterGroup/c:Parameters/c:Parameter/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Output/c:ParameterGroup/c:Parameters/c:Parameter/c:Values/c:ParameterValue/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Output/c:Parameter/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Output/c:Parameter/c:Values/c:ParameterValue/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Documentation/c:DocumentationLanguages/c:Description/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Documentation/c:DocumentationLanguages/c:Description/c:Description/text()
+FacetName:resourceType
+Mappings:
+    /c:CMD/c:Components/c:ToolService/c:Tool/c:toolInput/c:data/c:MimeType/text()
+    /c:CMD/c:Components/c:ToolService/c:Tool/c:toolOutput/c:data/c:MimeType/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Input/c:ParameterGroup/c:MIMEType/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Input/c:ParameterGroup/c:Parameters/c:Parameter/c:MIMEType/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Input/c:Parameter/c:MIMEType/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Output/c:ParameterGroup/c:MIMEType/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Output/c:ParameterGroup/c:Parameters/c:Parameter/c:MIMEType/text()
+    /c:CMD/c:Components/c:ToolService/c:Service/c:Operations/c:Operation/c:Output/c:Parameter/c:MIMEType/text()
+FacetName:nationalProject
+Mappings:
+    /c:CMD/c:Header/c:MdCollectionDisplayName/text()
+FacetName:text
+Mappings:
+    /c:CMD//text()
+FacetName:_componentProfile
+Mappings:
+    /c:CMD/c:Header/c:MdProfile/text()
+FacetName:tag
+Mappings:
+    /c:CMD/c:Components/c:ToolService/c:tags/c:tag/text()
+---------------------
+http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1289827960126/xsd
+FacetName:id
+Mappings:
+    /c:CMD/c:Header/c:MdSelfLink/text()
+FacetName:collection
+Mappings:
+    /c:CMD/c:Header/c:MdCollectionDisplayName/text()
+FacetName:name
+Mappings:
+    /c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceName/text()
+FacetName:year
+Mappings:
+    /c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:FinalizationYearResourceCreation/text()
+    /c:CMD/c:Components/c:LrtInventoryResource/c:LrtLexiconDetails/c:Date/text()
+    /c:CMD/c:Components/c:LrtInventoryResource/c:LrtServiceDetails/c:Date/text()
+FacetName:country
+Mappings:
+    /c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Countries/c:Country/text()
+    /c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Countries/c:Country/c:Code/text()
+FacetName:language
+Mappings:
+    /c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()
+FacetName:languages
+Mappings:
+    /c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()
+FacetName:organisation
+Mappings:
+    /c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Institute/text()
+FacetName:genre
+Mappings:
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/@olac-linguistic-type
+FacetName:subject
+Mappings:
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-linguistic-field
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject[@dcterms-type="LCSH"]/text()
+FacetName:description
+Mappings:
+    /c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Description/text()
+    /c:CMD/c:Components/c:LrtInventoryResource/c:LrtIPR/c:Description/text()
+FacetName:resourceType
+Mappings:
+    /c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceType/text()
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/text()
+FacetName:nationalProject
+Mappings:
+    /c:CMD/c:Header/c:MdCollectionDisplayName/text()
+FacetName:text
+Mappings:
+    /c:CMD//text()
+FacetName:_componentProfile
+Mappings:
+    /c:CMD/c:Header/c:MdProfile/text()
+FacetName:tag
+Mappings:
+    /c:CMD/c:Components/c:LrtInventoryResource/c:tags/c:tag/text()
+---------------------
+http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1345561703620/xsd
+FacetName:id
+Mappings:
+    /c:CMD/c:Header/c:MdSelfLink/text()
+FacetName:collection
+Mappings:
+    /c:CMD/c:Header/c:MdCollectionDisplayName/text()
+FacetName:name
+Mappings:
+    /c:CMD/c:Components/c:collection/c:CollectionInfo/c:Name/text()
+    /c:CMD/c:Components/c:collection/c:CollectionInfo/c:Title/text()
+FacetName:country
+Mappings:
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:spatial[@dcterms-type="ISO3166"]/text()
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:coverage[@dcterms-type="ISO3166"]/text()
+FacetName:language
+Mappings:
+    /c:CMD/c:Components/c:collection/c:CollectionInfo/c:ISO639/c:iso-639-3-code/text()
+FacetName:languages
+Mappings:
+    /c:CMD/c:Components/c:collection/c:CollectionInfo/c:ISO639/c:iso-639-3-code/text()
+FacetName:organisation
+Mappings:
+    /c:CMD/c:Components/c:collection/c:Contact/c:Organisation/text()
+FacetName:genre
+Mappings:
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/@olac-linguistic-type
+FacetName:subject
+Mappings:
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-linguistic-field
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject[@dcterms-type="LCSH"]/text()
+FacetName:description
+Mappings:
+    /c:CMD/c:Components/c:collection/c:CollectionInfo/c:Modality/c:Description/text()
+    /c:CMD/c:Components/c:collection/c:CollectionInfo/c:Modality/c:Description/c:Description/text()
+    /c:CMD/c:Components/c:collection/c:CollectionInfo/c:Description/text()
+    /c:CMD/c:Components/c:collection/c:CollectionInfo/c:Description/c:Description/text()
+    /c:CMD/c:Components/c:collection/c:WebReference/c:Description/text()
+FacetName:resourceType
+Mappings:
+    /c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceType/text()
+    /c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/text()
+FacetName:nationalProject
+Mappings:
+    /c:CMD/c:Header/c:MdCollectionDisplayName/text()
+FacetName:text
+Mappings:
+    /c:CMD//text()
+FacetName:_componentProfile
+Mappings:
+    /c:CMD/c:Header/c:MdProfile/text()
+---------------------
