@@ -16,8 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
@@ -32,6 +34,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.http.flow.AbortWithHttpErrorCodeException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
@@ -46,8 +49,12 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
 
     @SpringBean
     private FacetFieldsService facetFieldsService;
-    @SpringBean(name="queryParametersConverter")
+    @SpringBean(name = "queryParametersConverter")
     private PageParametersConverter<QueryFacetsSelection> parametersConverter;
+    @SpringBean
+    private FacetParameterMapper facetParamMapper;
+    @SpringBean
+    private VloConfig vloConfig;
 
     private final IModel<QueryFacetsSelection> selectionModel;
 
@@ -55,17 +62,21 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
         super(params);
 
         this.selectionModel = Model.of(parametersConverter.fromParameters(params));
-        final StringValue facet = params.get(SELECTED_FACET_PARAM);
-        if (facet.isEmpty()) {
+        final StringValue facetValue = params.get(SELECTED_FACET_PARAM);
+        if (facetValue.isEmpty()) {
             Session.get().error("No facet provided for all values page");
             throw new RestartResponseException(new FacetedSearchPage(selectionModel));
         }
 
-        // create a new model so that all values will be retrieved
-        setModel(new FacetFieldModel(facetFieldsService, facet.toString(), selectionModel, -1)); // gets all facet values
+        final String facet = facetParamMapper.getFacet(facetValue.toString());
+
+        if (vloConfig.getAllFacetFields().contains(facet)) {
+            // create a new model so that all values will be retrieved
+            setModel(new FacetFieldModel(facetFieldsService, facet, selectionModel, -1)); // gets all facet values
+        }
         if (getModelObject() == null) {
-            Session.get().error(String.format("Facet '%s' could not be found", facet));
-            throw new RestartResponseException(new FacetedSearchPage(selectionModel));
+            final String message = String.format("Facet '%s' could not be found", facet);
+            throw new AbortWithHttpErrorCodeException(404, message);
         }
 
         addComponents();

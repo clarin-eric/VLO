@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+	<head>
+
+		<title>CLARIN catalogue of language resources</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description"
+			content="With the CLARIN Virtual Language Observatory (VLO) faceted browser you can explore over half a million linguistic resources, services and tools available within CLARIN and related communities." />
+		<link href="bootstrap.min.css" rel="stylesheet" />
+		<link href="CLARIN.css" rel="stylesheet" />
+		
+		<style>
+			html,
+			body{
+			    margin:0;
+			    padding:0;
+			    height:100%;
+			}
+			#main-container{
+			    min-height:100%;
+			    position:relative;
+			}
+			#body{
+			    padding-bottom:100px; /* Height of the footer */
+			}
+			#footer{
+			    position:absolute;
+			    bottom:0;
+			    width:100%;
+			    height:100px; /* Height of the footer */
+			}
+			.centercolumn{
+			    text-align:center;
+			    margin-left:16px;
+			    margin-right:16px;
+			}
+			#footer{
+			    background-color:#f5f5f5;
+			}
+			.content{
+			    text-align:left;
+			    max-width:600px;
+			    min-width:270px
+			    
+			    margin:8px 15px 2px 20px;
+			    float:left;
+			}
+			.sidebar{
+			    float:left;
+			    width:214px;
+			    padding:16px 15px 15px 15px;
+			    display:block;
+			}
+		      ul {
+				width: 10em;
+				margin: 0; 
+				padding: 0.2em 0.8em 0.8em;
+
+			}
+ 
+			li {
+			  list-style: none;
+			  margin: 0.4em; 
+			  padding: 0;
+			  display: block;
+			  padding: 0.4em;
+			  text-decoration: none; 
+			  border: 1px solid blue;
+			  border-radius: 10px;
+			  box-shadow: 0px 5px 10px white inset;
+			  background-color: #054172;
+			  font-size:50%;
+			}
+			
+			li>a {
+			color:#ffffff;
+			}
+			#searchbox{
+			    min-width:200px;
+			    max-width:550px;
+			}
+			#searchcontrols{
+				min-width:250px;
+				max-width:600px;
+			}
+		</style>
+		<script type="text/javascript" src="http://catalog.clarin.eu/vlo/wicket/resource/org.apache.wicket.resource.JQueryResourceReference/jquery/jquery-1.11.2.min-ver-5790EAD7AD3BA27397AEDFA3D263B867.js"></script>
+		<script type="text/javascript" src="http://catalog.clarin.eu/vlo/wicket/resource/org.apache.wicket.ajax.AbstractDefaultAjaxBehavior/res/js/wicket-event-jquery.min-ver-2A8B8EF9295A81B4FF15AA3DE14044D7.js"></script>
+		<script type="text/javascript" src="http://catalog.clarin.eu/vlo/wicket/resource/org.apache.wicket.ajax.AbstractDefaultAjaxBehavior/res/js/wicket-ajax-jquery.min-ver-E104EDF0826B33507C50375F69A9AA5D.js"></script>
+		<script type="text/javascript" id="wicket-ajax-base-url">
+		/*<![CDATA[
+		* /
+		Wicket.Ajax.baseUrl = "?2";
+		/*//]]>*/
+		</script>
+		<script type="text/javascript" src="http://catalog.clarin.eu/vlo/wicket/resource/org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior/wicket-autocomplete.min-ver-9FB11C2AC0FBDE36252E50E13C8A305E.js"></script>
+		<script type="text/javascript">
+	/*<![CDATA[
+	* /
+            Wicket.Event.add(window, "domready", function (event) {
+                new Wicket.AutoComplete('searchbox', './?2-2.IBehaviorListener.0-search-query', {
+                    preselect: false, maxHeight: -1, adjustInputWidth: true, useSmartPositioning: false, useHideShowCoveredIEFix: true, showListOnEmptyInput: false, ignoreBordersWhenPositioning: true, showListOnFocusGain: false, throttleDelay: 300, minInputLength: 1, parameterName: 'q', showCompleteListOnFocusGain: false
+                },
+                null);;
+            });
+            /*//]]>*/
+</script>
+		<script type="text/javascript" src="http://catalog.clarin.eu/vlo/wicket/resource/eu.clarin.cmdi.vlo.wicket.pages.VloBasePage/vlo-js-ver-FB4B229992CC16269413EFAF634FFBE4"></script>
+		<script type="text/javascript">
+/*<![CDATA[
+* /
+            Wicket.Event.add(window, "domready", function (event) {
+                Wicket.Ajax.ajax({
+                    "f": "search", "u": "./?2-2.IBehaviorListener.0-search-searchSubmit", "e": "click", "c": "searchbutton", "sc": "searchSubmit", "m": "POST"
+                });;
+                Wicket.Ajax.ajax({
+                    "u": "./?2-2.IBehaviorListener.0-browse-facet-0-select", "e": "click", "c": "id123"
+                });;
+                Wicket.Ajax.ajax({
+                    "u": "./?2-2.IBehaviorListener.0-browse-facet-1-select", "e": "click", "c": "id124"
+                });;
+                Wicket.Ajax.ajax({
+                    "u": "./?2-2.IBehaviorListener.0-browse-facet-2-select", "e": "click", "c": "id125"
+                });;
+                Wicket.Ajax.ajax({
+                    "u": "./?2-2.IBehaviorListener.0-browse-facet-3-select", "e": "click", "c": "id126"
+                });;
+                Wicket.Ajax.ajax({
+                    "u": "./?2-2.IBehaviorListener.0-browse-facet-4-select", "e": "click", "c": "id127"
+                });;
+                var sheet = document.createElement('style')
+                sheet.innerHTML = ".nonjsfallback {display: none;}";
+                document.body.appendChild(sheet);;
+                Wicket.Event.publish(Wicket.Event.Topic.AJAX_HANDLERS_BOUND);;
+            });
+            /*//]]>*/
+</script>
+
+	</head>
+
+	<body>
+		<div id="main-container">
+			<div id="body">
+				<div id="push">
+					<div class="container">
+						<div class="top-gap">
+							<div class="row">
+								<div class="centercolumn">
+									<div class="input-group">
+										<div id="simplesearch" class="content">
+											<h2>Search</h2>
+											<form action="http://catalog.clarin.eu/vlo/?2&q="
+							onsubmit="window.open(this.action+encodeURIComponent(this.q.value), '_top’); return false;"
+							target="top">
+							<label for ="q">Search in the <a href="http://catalog.clarin.eu/vlo">Virtual Language Observatory</a> for language resources 
+						    in the CLARIN repositories:</label>
+							<input type="text" name="q" />
+						    <div class="description">(e.g. search for a language or a type of resource)</div>
+							<input type="submit" value="Search" />
+						      </form>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="footer">
+				<div class="container">
+					<div class="row">
+						<div style="position:relative; float:right;">
+							<div style="position:absolute; right:18px; top:18px">
+								<a href="#" target="_blank" tabindex="-1">
+									<img width="65" height="65" src="vlologo.png" />
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
