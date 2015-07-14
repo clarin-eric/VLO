@@ -37,15 +37,18 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
 
     @Override
     public CMDIData process(File file) throws VTDException, IOException {
-        CMDIData cmdiData = new CMDIData();
-        VTDGen vg = new VTDGen();
-        FileInputStream fileInputStream = new FileInputStream(file);
-        vg.setDoc(IOUtils.toByteArray(fileInputStream));
-        vg.parse(true);
-        fileInputStream.close();
+        final CMDIData cmdiData = new CMDIData();
+        final VTDGen vg = new VTDGen();
+        final FileInputStream fileInputStream = new FileInputStream(file);
+        try {
+            vg.setDoc(IOUtils.toByteArray(fileInputStream));
+            vg.parse(true);
+        } finally {
+            fileInputStream.close();
+        }
 
-        VTDNav nav = vg.getNav();
-        FacetMapping facetMapping = getFacetMapping(nav.cloneNav());
+        final VTDNav nav = vg.getNav();
+        final FacetMapping facetMapping = getFacetMapping(nav.cloneNav());
 
         if (facetMapping.getFacets().isEmpty()) {
             LOG.error("Problems mapping facets for file: {}", file.getAbsolutePath());
