@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" path="/vlo-web-app">
+<Context antiJARLocking="true" path="/vlo-web-app" sessionCookiePath="/">
     <!-- 
         If set, configuration will get read from this external location 
 
