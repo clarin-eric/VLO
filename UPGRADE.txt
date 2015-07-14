@@ -32,6 +32,16 @@ are kept from the current version:
     ./vlo_solr_importer.sh -c ../config/VloConfig.xml
 
 ---------------------------
+Upgrading from 3.2 to 3.2.1
+---------------------------
+* In the context fragment for the VLO web application, ADD the following 
+attribute to the <Context> root element:
+
+   sessionCookiePath="/"
+
+and, if set, REMOVE any "crossContext" parameter.
+ 
+---------------------------
 Upgrading from 3.1 to 3.2
 ---------------------------
 * Take note of the following changes in VloConfig.xml:

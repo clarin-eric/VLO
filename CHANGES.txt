@@ -1,5 +1,11 @@
 Bug Fixes and Features
 
+VLO 3.2.1 (July 2015)
+* Graceful handling of requests for all values of nonexistent facets
+* Included the VLO iframe page for the CLARIN-D homepage
+* Fixed a potential file descriptor leak in the VLO importer
+* Fixed appearence of 'jsessionid' parameter in the URL
+
 VLO 3.2 (June 2015)
 	
 Mapping:
