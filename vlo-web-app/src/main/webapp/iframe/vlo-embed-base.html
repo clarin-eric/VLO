@@ -85,58 +85,6 @@
 				max-width:600px;
 			}
 		</style>
-		<script type="text/javascript" src="http://catalog.clarin.eu/vlo/wicket/resource/org.apache.wicket.resource.JQueryResourceReference/jquery/jquery-1.11.2.min-ver-5790EAD7AD3BA27397AEDFA3D263B867.js"></script>
-		<script type="text/javascript" src="http://catalog.clarin.eu/vlo/wicket/resource/org.apache.wicket.ajax.AbstractDefaultAjaxBehavior/res/js/wicket-event-jquery.min-ver-2A8B8EF9295A81B4FF15AA3DE14044D7.js"></script>
-		<script type="text/javascript" src="http://catalog.clarin.eu/vlo/wicket/resource/org.apache.wicket.ajax.AbstractDefaultAjaxBehavior/res/js/wicket-ajax-jquery.min-ver-E104EDF0826B33507C50375F69A9AA5D.js"></script>
-		<script type="text/javascript" id="wicket-ajax-base-url">
-		/*<![CDATA[
-		* /
-		Wicket.Ajax.baseUrl = "?2";
-		/*//]]>*/
-		</script>
-		<script type="text/javascript" src="http://catalog.clarin.eu/vlo/wicket/resource/org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior/wicket-autocomplete.min-ver-9FB11C2AC0FBDE36252E50E13C8A305E.js"></script>
-		<script type="text/javascript">
-	/*<![CDATA[
-	* /
-            Wicket.Event.add(window, "domready", function (event) {
-                new Wicket.AutoComplete('searchbox', './?2-2.IBehaviorListener.0-search-query', {
-                    preselect: false, maxHeight: -1, adjustInputWidth: true, useSmartPositioning: false, useHideShowCoveredIEFix: true, showListOnEmptyInput: false, ignoreBordersWhenPositioning: true, showListOnFocusGain: false, throttleDelay: 300, minInputLength: 1, parameterName: 'q', showCompleteListOnFocusGain: false
-                },
-                null);;
-            });
-            /*//]]>*/
-</script>
-		<script type="text/javascript" src="http://catalog.clarin.eu/vlo/wicket/resource/eu.clarin.cmdi.vlo.wicket.pages.VloBasePage/vlo-js-ver-FB4B229992CC16269413EFAF634FFBE4"></script>
-		<script type="text/javascript">
-/*<![CDATA[
-* /
-            Wicket.Event.add(window, "domready", function (event) {
-                Wicket.Ajax.ajax({
-                    "f": "search", "u": "./?2-2.IBehaviorListener.0-search-searchSubmit", "e": "click", "c": "searchbutton", "sc": "searchSubmit", "m": "POST"
-                });;
-                Wicket.Ajax.ajax({
-                    "u": "./?2-2.IBehaviorListener.0-browse-facet-0-select", "e": "click", "c": "id123"
-                });;
-                Wicket.Ajax.ajax({
-                    "u": "./?2-2.IBehaviorListener.0-browse-facet-1-select", "e": "click", "c": "id124"
-                });;
-                Wicket.Ajax.ajax({
-                    "u": "./?2-2.IBehaviorListener.0-browse-facet-2-select", "e": "click", "c": "id125"
-                });;
-                Wicket.Ajax.ajax({
-                    "u": "./?2-2.IBehaviorListener.0-browse-facet-3-select", "e": "click", "c": "id126"
-                });;
-                Wicket.Ajax.ajax({
-                    "u": "./?2-2.IBehaviorListener.0-browse-facet-4-select", "e": "click", "c": "id127"
-                });;
-                var sheet = document.createElement('style')
-                sheet.innerHTML = ".nonjsfallback {display: none;}";
-                document.body.appendChild(sheet);;
-                Wicket.Event.publish(Wicket.Event.Topic.AJAX_HANDLERS_BOUND);;
-            });
-            /*//]]>*/
-</script>
-
 	</head>
 
 	<body>
@@ -150,10 +98,10 @@
 									<div class="input-group">
 										<div id="simplesearch" class="content">
 											<h2>Search</h2>
-											<form action="http://catalog.clarin.eu/vlo/?2&q="
+											<form action="../?2&q="
 							onsubmit="window.open(this.action+encodeURIComponent(this.q.value), '_top’); return false;"
 							target="top">
-							<label for ="q">Search in the <a href="http://catalog.clarin.eu/vlo">Virtual Language Observatory</a> for language resources 
+							<label for ="q">Search in the <a href="..">Virtual Language Observatory</a> for language resources 
 						    in the CLARIN repositories:</label>
 							<input type="text" name="q" />
 						    <div class="description">(e.g. search for a language or a type of resource)</div>
