@@ -62,8 +62,4 @@
     <listener>
         <listener-class>net.bull.javamelody.SessionListener</listener-class>
     </listener>
-    
-    <session-config>
-        <tracking-mode>COOKIE</tracking-mode>
-    </session-config>
 </web-app>
