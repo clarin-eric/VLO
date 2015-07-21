@@ -83,7 +83,7 @@ public class FacetConstants {
      * regular expression that matches the language prefix in description (group
      * 1 matches the ISO639-3 language code)
      */
-    public static final String DESCRIPTION_LANGUAGE_PATTERN = "^\\{lang='([a-z]{3})'\\}";
+    public static final String DESCRIPTION_LANGUAGE_PATTERN = "^\\{lang='([A-z-]+)'\\}";
 
     /**
      * regular expression that matches the syntax of the 'languageCode' field
