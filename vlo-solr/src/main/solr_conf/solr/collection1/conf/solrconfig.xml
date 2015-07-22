@@ -405,6 +405,21 @@
             <!-- TODO: boost records with one or more resources (_resourceRefCount) -->
         </str>
         
+        <!-- boost fields with a name -->
+        <str name="bq">
+            name:[* TO *]^2
+        </str>
+
+        <!-- boost fields with a description -->
+        <str name="bq">
+            description:[* TO *]
+        </str>
+        
+        <!-- boost fields with a resource or part -->
+        <str name="bq">
+            _hasPart:[* TO *] OR _resourceRef:[* TO *]
+        </str>
+        
           <!--
           <int name="rows">10</int>
           <str name="fl">*</str>
