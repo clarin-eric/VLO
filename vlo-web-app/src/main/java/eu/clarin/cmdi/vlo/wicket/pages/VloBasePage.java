@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
+import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
 import org.apache.wicket.Session;
@@ -27,6 +28,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.GenericWebPage;
 import org.apache.wicket.markup.html.WebComponent;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -176,8 +178,10 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         add(new FeedbackPanel("feedback"));
         add(new ExternalLink("help", vloConfig.getHelpUrl()));
 
+        // add 'class' attribute to header indicating version qualifier (e.g. 'beta')
+        add(new WebMarkupContainer("header").add(new AttributeAppender("class", VloWicketApplication.get().getAppVersionQualifier())));
+
         add(new HideJavascriptFallbackControlsBehavior());
     }
-
 
 }

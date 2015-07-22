@@ -113,3 +113,26 @@ div#feedback li.feedbackPanelERROR {
     color: red;
     font-weight: bold;
 }
+
+div#header .qualifier {
+    display: none; /* overridden depending on header class */
+
+    position: absolute;
+    top: 1em;
+    border: 1px solid;
+    text-align: center;
+    line-height: 2em;    
+    
+    border-color: red;
+    color: red;
+}
+
+div#header.snapshot div.qualifier.snapshot {
+    display: block;
+    width: 8em;
+}
+
+div#header.beta div.qualifier.beta {
+    display: block;
+    width: 5em;
+}

@@ -13,6 +13,9 @@ import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import javax.inject.Inject;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.WebPage;
@@ -50,6 +53,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     private VloConfig vloConfig;
 
     private ApplicationContext applicationContext;
+    private String appVersionQualifier;
 
     /**
      * @return the home page of this application
@@ -75,6 +79,10 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
 
         // configure Wicket cache according to parameters set in VloConfig 
         setupCache();
+
+        // determine version qualifier (e.g. 'beta'), which can be used to visually mark the base page
+        appVersionQualifier = determineVersionQualifier();
+        logger.info("Version qualifier: {}", appVersionQualifier);
     }
 
     private void registerResourceBundles() {
@@ -126,6 +134,28 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
 
     /**
      *
+     * @return a version qualifier, either 'snapshot', 'beta' or null
+     */
+    private String determineVersionQualifier() {
+        try (InputStream applicationPropertiesStream = getClass().getResourceAsStream("/application.properties")) {
+            Properties applicationProperties = new Properties();
+            applicationProperties.load(applicationPropertiesStream);
+            final String version = applicationProperties.getProperty("vlo.version");
+            if (version != null) {
+                if (version.endsWith("-SNAPSHOT")) {
+                    return "snapshot";
+                } else if (version.contains("beta")) {
+                    return "beta";
+                }
+            }
+        } catch (IOException ex) {
+            logger.error("Could not read application properties on init", ex);
+        }
+        return null;
+    }
+
+    /**
+     *
      * @return the active VLO wicket application
      */
     public static VloWicketApplication get() {
@@ -170,6 +200,10 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
 
     public PermalinkService getPermalinkService() {
         return permalinkService;
+    }
+
+    public String getAppVersionQualifier() {
+        return appVersionQualifier;
     }
 
 }
