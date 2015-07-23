@@ -41,7 +41,7 @@ public abstract class AbstractXmlVloConfigFactory implements VloConfigFactory {
     public VloConfig newConfig() throws IOException {
         final InputStream fileStream = getXmlConfigurationInputStream();
         try {
-            final VloConfig config = marshaller.unmarshal(new StreamSource(fileStream));
+            final VloConfig config = marshaller.unmarshal(new StreamSource(fileStream, getLocation().toString()));
             config.setConfigLocation(getLocation());
             return config;
         } catch (JAXBException ex) {
@@ -58,7 +58,7 @@ public abstract class AbstractXmlVloConfigFactory implements VloConfigFactory {
      * @throws IOException if stream could not be opened or read
      */
     protected abstract InputStream getXmlConfigurationInputStream() throws IOException;
-    
+
     protected abstract URI getLocation();
 
 }

@@ -29,6 +29,12 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
     </build>
     
     <!-- Build profiles prepare VloConfig.xml for different deployment enviroments -->
@@ -41,7 +47,7 @@
             </activation>
             <properties>
                 <vloconfig.solrUrl>http://localhost:8080/vlo-solr/core0/</vloconfig.solrUrl>
-                <!--TODO: xinclude dataroots -->
+                <vloconfig.dataRootsFile>dataroots-local.xml</vloconfig.dataRootsFile>
             </properties>
         </profile>
         
@@ -53,7 +59,7 @@
                 <vloconfig.maxDaysInSolr>7</vloconfig.maxDaysInSolr>
                 <vloconfig.solrUrl>http://localhost:8080/solr/core0/</vloconfig.solrUrl>
                 <vloconfig.homeUrl>http://vlo.clarin.eu</vloconfig.homeUrl>
-                <!--TODO: xinclude dataroots -->
+                <vloconfig.dataRootsFile>dataroots-production.xml</vloconfig.dataRootsFile>
             </properties>
         </profile>
         
@@ -62,7 +68,7 @@
             <id>dev-vm</id>
             <properties>
                 <vloconfig.solrUrl>http://localhost:8080/vlo-solr/core0/</vloconfig.solrUrl>
-                <!--TODO: xinclude dataroots -->
+                <vloconfig.dataRootsFile>dataroots-testvm.xml</vloconfig.dataRootsFile>
             </properties>
         </profile>
         
@@ -72,7 +78,7 @@
             <properties>
                 <vloconfig.solrUrl><!-- TODO!!! --></vloconfig.solrUrl>
                 <vloconfig.homeUrl>http://beta.vlo.clarin.eu</vloconfig.homeUrl>
-                <!--TODO: xinclude dataroots -->
+                <vloconfig.dataRootsFile>dataroots-production.xml</vloconfig.dataRootsFile>
             </properties>
         </profile>
     </profiles>

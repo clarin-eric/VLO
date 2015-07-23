@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.Properties;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import static org.junit.Assert.assertEquals;
@@ -30,17 +31,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ *
  * @author twagoo
  */
 public class VloConfigMarshallerTest {
     
+    private final static String VLO_CONFIG_FILE = "/VloConfig.xml";
     private final static Logger logger = LoggerFactory.getLogger(VloConfigMarshallerTest.class);
     private VloConfigMarshaller instance;
+    private Properties testProps;
     
     @Before
     public void setUp() throws Exception {
         instance = new VloConfigMarshaller();
+        testProps = new Properties();
+        testProps.load(getClass().getResourceAsStream("/vloconfig.properties"));
     }
 
     /**
@@ -48,13 +53,12 @@ public class VloConfigMarshallerTest {
      */
     @Test
     public void testUnmarshal() throws Exception {
-        InputStream configFile = getClass().getResourceAsStream("/VloConfig.xml");
-        VloConfig config = instance.unmarshal(new StreamSource(configFile));
+        InputStream configFile = getClass().getResourceAsStream(VLO_CONFIG_FILE);
+        VloConfig config = instance.unmarshal(new StreamSource(configFile, getClass().getResource(VLO_CONFIG_FILE).toString()));
         configFile.close();
         
         assertNotNull(config);
-        assertEquals("http://localhost:8080/vlo-solr/core0/", config.getSolrUrl());
-        assertEquals(2, config.getDataRoots().size());
+        assertEquals(testProps.getProperty("solrUrl"), config.getSolrUrl());
         assertEquals(14, config.getFacetFields().size());
     }
 

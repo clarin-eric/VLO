@@ -1,0 +1,17 @@
+<dataRoots>
+    <DataRoot>
+        <originName>CLARIN Centres</originName>
+        <rootFile>/lat/apache/htdocs/oai-harvester/clarin/results/cmdi/</rootFile>            
+        <prefix>http://catalog.clarin.eu/</prefix>
+        <tostrip>/lat/apache/htdocs/</tostrip>
+        <deleteFirst>false</deleteFirst>
+    </DataRoot>
+
+    <DataRoot>
+        <originName>Other</originName>
+        <rootFile>/lat/apache/htdocs/oai-harvester/others/results/cmdi</rootFile>            
+        <prefix>http://catalog.clarin.eu/</prefix>
+        <tostrip>/lat/apache/htdocs/</tostrip>
+        <deleteFirst>false</deleteFirst>
+    </DataRoot>
+</dataRoots>

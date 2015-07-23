@@ -20,9 +20,15 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
 /**
  * Serializes and deserializes {@link VloConfig} objects to/from XML files using
@@ -59,8 +65,25 @@ public class VloConfigMarshaller {
      * @throws JAXBException if an error occurs while unmarshalling
      */
     public final VloConfig unmarshal(Source source) throws JAXBException {
-        Unmarshaller unmarshaller = jc.createUnmarshaller();
-        return (VloConfig) unmarshaller.unmarshal(source);
+        final Unmarshaller unmarshaller = jc.createUnmarshaller();
+        
+        // custom parser, so that we can make it XInclude aware
+        final SAXParserFactory spf = SAXParserFactory.newInstance();
+        spf.setXIncludeAware(true);
+	spf.setNamespaceAware(true);
+
+        try {
+            final XMLReader xr = spf.newSAXParser().getXMLReader();
+            // XML transformation 'source' needs to be converted to a SAX 'input source'
+            final InputSource inputSource = SAXSource.sourceToInputSource(source);
+            final SAXSource saxSource = new SAXSource(xr, inputSource);
+
+            return (VloConfig) unmarshaller.unmarshal(saxSource);
+        } catch (ParserConfigurationException ex) {
+            throw new JAXBException(ex);
+        } catch (SAXException ex) {
+            throw new JAXBException(ex);
+        }
     }
 
 }

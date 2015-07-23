@@ -98,10 +98,11 @@
         
         <!-- config -->
         <fileSet>
-            <directory>${project.parent.basedir}/vlo-commons/src/main/resources</directory>
+            <directory>${project.parent.basedir}/vlo-commons/target/classes</directory>
             <includes>
                 <include>VloConfig.xml</include>
-                 <include>facetConcepts.xml</include>
+                <include>facetConcepts.xml</include>
+                <include>dataroots*.xml</include>
             </includes>
             <outputDirectory>config</outputDirectory>
         </fileSet> 

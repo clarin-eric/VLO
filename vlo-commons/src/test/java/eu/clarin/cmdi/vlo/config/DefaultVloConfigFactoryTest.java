@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.config;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.*;
@@ -19,10 +20,13 @@ public class DefaultVloConfigFactoryTest {
     }
 
     private VloConfig config;
+    private Properties testProps;
 
     @Before
     public void setUp() throws Exception {
         config = new DefaultVloConfigFactory().newConfig();
+        testProps = new Properties();
+        testProps.load(getClass().getResourceAsStream("/vloconfig.properties"));
     }
 
     /**
@@ -33,19 +37,17 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testGetDataRoots() {
+        final List<DataRoot> rootsReturned = config.getDataRoots();
 
-        List<DataRoot> dataRoots = Arrays.asList(
-                new DataRoot("CLARIN Centres",
-                        new File("/lat/apache/htdocs/oai-harvester/clarin/results/cmdi/"),
-                        "http://catalog.clarin.eu/",
-                        "/lat/apache/htdocs/", false),
-                new DataRoot("Other",
-                        new File("/lat/apache/htdocs/oai-harvester/others/results/cmdi"),
-                        "http://catalog.clarin.eu/",
-                        "/lat/apache/htdocs/", false));
-
-        List<DataRoot> rootsReturned = config.getDataRoots();
-        assertArrayEquals(dataRoots.toArray(), rootsReturned.toArray());
+        assertNotNull(rootsReturned);
+        assertTrue("One or more data roots should be defined", rootsReturned.size() > 0);
+        assertNotNull(rootsReturned.get(0).getOriginName());
+        assertTrue("Origin name cannot be empty", rootsReturned.get(0).getOriginName().length() > 0);
+        assertNotNull(rootsReturned.get(0).getPrefix());
+        assertTrue("Prefix cannot be empty", rootsReturned.get(0).getPrefix().length() > 0);
+        assertNotNull(rootsReturned.get(0).getRootFile());
+        assertTrue("Root file cannot be empty", rootsReturned.get(0).getRootFile().getName().length() > 0);
+        assertNotNull(rootsReturned.get(0).getToStrip());
     }
 
     /**
@@ -271,7 +273,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("deleteAllFirst");
 
-        boolean expResult = true;
+        boolean expResult = Boolean.valueOf(testProps.getProperty("deleteAllFirst"));
         boolean result = config.getDeleteAllFirst();
 
         assertEquals(expResult, result);
@@ -332,7 +334,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("getVloHomeLink");
 
-        String expResult = "http://www.clarin.eu/vlo";
+        String expResult = testProps.getProperty("homeUrl");
         String result = config.getHomeUrl();
 
         assertEquals(expResult, result);
@@ -363,7 +365,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("getHelpUrl");
 
-        String expResult = "http://www.clarin.eu/vlo";
+        String expResult = testProps.getProperty("helpUrl");
         String result = config.getHelpUrl();
 
         assertEquals(expResult, result);
@@ -394,7 +396,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("getSolrUrl");
 
-        String expResult = "http://localhost:8080/vlo-solr/core0/";
+        String expResult = testProps.getProperty("solrUrl");
         String result = config.getSolrUrl();
 
         assertEquals(expResult, result);
