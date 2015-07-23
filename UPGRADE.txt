@@ -14,15 +14,11 @@ Quick overview of the upgrade steps (for details see DEPLOY-README)
 	- Recursively assign ownership of the entire unpacked distribution to the
 	appropriate user, i.e. 'vlouser' on catalog.clarin.eu)
 
-- In the 'config' directory, adjust VloConfig.xml as needed (make a backup 
-first). In particular, make sure that the following instance specific sections
-are kept from the current version:
-	- dataRoots and its children
-	- solrUrl
-	- homeUrl
-	- deleteAllFirst
-	- maxDaysInSolr
-- Make any further version specific adjustments as described in this document
+- In the 'config' directory, inspect VloConfig.xml and the data roots 
+configuration file that is included into this file by means of XInclude. It is
+advised to perform a diff between the old and new versions of these files.
+Depending on configuration preferences, you may want to copy settings from the
+old configuration to the new one.
 
 - Stop the Tomcat or at least the VLO web app and Solr applications
 - Replace the 'current' symlink with a link to location of the new VLO directory
@@ -31,9 +27,14 @@ are kept from the current version:
 - In 'bin', run the importer using the updated configuration file:
     ./vlo_solr_importer.sh -c ../config/VloConfig.xml
 
----------------------------
-Upgrading from 3.2 to 3.2.1
----------------------------
+--------------------------
+Upgrading from 3.2 to 3.3
+--------------------------
+* Take note of the change in VloConfig.xml which moves the data roots definition
+out of VloConfig.xml by means of XInclude. The configuration file now gets
+prepared for deployment environments at build time, so it is no longer necessary
+to copy over old configuration values in all cases.
+
 * In the context fragment for the VLO web application, ADD the following 
 attribute to the <Context> root element:
 
