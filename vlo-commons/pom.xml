@@ -14,7 +14,69 @@
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        
+        <!-- default config values -->
+        <vloconfig.deleteAllFirst>true</vloconfig.deleteAllFirst>
+        <vloconfig.maxDaysInSolr>0</vloconfig.maxDaysInSolr>
+        <vloconfig.homeUrl>http://www.clarin.eu/vlo</vloconfig.homeUrl>
+        <vloconfig.helpUrl>http://www.clarin.eu/vlo</vloconfig.helpUrl>
     </properties>
+    
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+    
+    <!-- Build profiles prepare VloConfig.xml for different deployment enviroments -->
+    <profiles>
+        <profile>
+            <!-- For local testing, default profile -->
+            <id>local-testing</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <vloconfig.solrUrl>http://localhost:8080/vlo-solr/core0/</vloconfig.solrUrl>
+                <!--TODO: xinclude dataroots -->
+            </properties>
+        </profile>
+        
+        <profile>
+            <!-- For deployment to vlo.clarin.eu -->
+            <id>production</id>
+            <properties>
+                <vloconfig.deleteAllFirst>false</vloconfig.deleteAllFirst>
+                <vloconfig.maxDaysInSolr>7</vloconfig.maxDaysInSolr>
+                <vloconfig.solrUrl>http://localhost:8080/solr/core0/</vloconfig.solrUrl>
+                <vloconfig.homeUrl>http://vlo.clarin.eu</vloconfig.homeUrl>
+                <!--TODO: xinclude dataroots -->
+            </properties>
+        </profile>
+        
+        <profile>
+            <!-- For deployment to vlo.clarin.eu -->
+            <id>dev-vm</id>
+            <properties>
+                <vloconfig.solrUrl>http://localhost:8080/vlo-solr/core0/</vloconfig.solrUrl>
+                <!--TODO: xinclude dataroots -->
+            </properties>
+        </profile>
+        
+        <profile>
+            <!--  For deployment to beta.vlo.clarin.eu -->
+            <id>beta</id>
+            <properties>
+                <vloconfig.solrUrl><!-- TODO!!! --></vloconfig.solrUrl>
+                <vloconfig.homeUrl>http://beta.vlo.clarin.eu</vloconfig.homeUrl>
+                <!--TODO: xinclude dataroots -->
+            </properties>
+        </profile>
+    </profiles>
+    
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
