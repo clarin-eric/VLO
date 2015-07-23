@@ -1,5 +1,24 @@
 Bug Fixes and Features
 
+VLO 3.3 (...)
+
+* Ranking based on relevance with boosts for matches in certain fields and on
+basis of record properties such as hierarchy level and presence of name,
+description and resource references
+        <https://trac.clarin.eu/ticket/750>, <https://trac.clarin.eu/ticket/761>
+* Support for advanced search via query syntax, with instructions accessible
+via web application
+        <https://trac.clarin.eu/ticket/762>, <https://trac.clarin.eu/ticket/770>
+* Metadata hierarchies are processed on import and interactively presented
+in the web application
+        <https://trac.clarin.eu/ticket/382>
+* Further exlusion of actor languages in the 'language' facet
+        <https://trac.clarin.eu/ticket/246>
+* Hiding of language code prefixes in multi-lingual description fields
+        <https://trac.clarin.eu/ticket/778>
+* Addition of importer option to only import specific data roots
+        <https://trac.clarin.eu/ticket/768>
+
 VLO 3.2.1 (July 2015)
 * Graceful handling of requests for all values of nonexistent facets
 * Included the VLO iframe page for the CLARIN-D homepage
