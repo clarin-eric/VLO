@@ -87,7 +87,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
      * @param fieldValueConverterProvider
      */
     public FacetFieldValuesProvider(IModel<FacetField> model, int max, Collection<String> lowPriorityValues, FieldValueConverterProvider fieldValueConverterProvider) {
-        this(model, max, lowPriorityValues, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, false), fieldValueConverterProvider);
+        this(model, max, lowPriorityValues, new SortParam<>(FieldValuesOrder.COUNT, false), fieldValueConverterProvider);
     }
 
     public FacetFieldValuesProvider(IModel<FacetField> model, int max, SortParam<FieldValuesOrder> sort, FieldValueConverterProvider fieldValueConverterProvider) {
@@ -121,13 +121,13 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
     }
 
     @Override
-    public Iterator<? extends FacetField.Count> iterator(long first, long count) {
+    public Iterator<FacetField.Count> iterator(long first, long count) {
         // return iterator starting at specified offset
         return getList().listIterator((int) first);
     }
 
     @Override
-    public List<? extends FacetField.Count> getList() {
+    public List<FacetField.Count> getList() {
         final Iterable<Count> filteredValues = getFilteredValues();
         // sort what remains
         final ImmutableList sorted = getOrdering().immutableSortedCopy(filteredValues);

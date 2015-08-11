@@ -24,7 +24,6 @@ import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import java.util.Collection;
 import java.util.List;
-import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
@@ -61,7 +60,7 @@ public class ResourceLinksPanel extends Panel {
         super(id, model);
 
         // list view that shows all resources as links that show a resource details panel when clicked
-        final ResourcesListView resourceListing = new ResourcesListView("resource", new CollectionListModel<String>(model));
+        final ResourcesListView resourceListing = new ResourcesListView("resource", new CollectionListModel<>(model));
         add(resourceListing);
 
         // pagination
@@ -89,7 +88,7 @@ public class ResourceLinksPanel extends Panel {
 
     private class ResourcesListView extends PageableListView<String> {
 
-        public ResourcesListView(String id, IModel<? extends List<? extends String>> model) {
+        public ResourcesListView(String id, IModel<? extends List<String>> model) {
             super(id, model, ITEMS_PER_PAGE);
             setReuseItems(true);
         }

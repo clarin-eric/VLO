@@ -19,9 +19,9 @@ package eu.clarin.cmdi.vlo.wicket.panels.record;
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.StringResourceModel;
 
 /**
  * Panel that shows details for a selected resource (file name, mime type,
@@ -33,9 +33,9 @@ public class ResourceLinkDetailsPanel extends Panel {
 
     public ResourceLinkDetailsPanel(String id, IModel<ResourceInfo> model) {
         super(id, model);
-        setDefaultModel(new CompoundPropertyModel<ResourceInfo>(model));
+        setDefaultModel(new CompoundPropertyModel<>(model));
         // get the friendly name of the resource type dynamically from the resource bundle
-        add(new Label("resourceType", new StringResourceModel("resourcetype.${resourceType}.singular", model, model.getObject().getResourceType())));
+        add(new Label("resourceType", StringResourceModelMigration.of("resourcetype.${resourceType}.singular", model, model.getObject().getResourceType())));
         add(new Label("fileName"));
         add(new Label("mimeType"));
         add(new Label("href"));

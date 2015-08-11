@@ -128,12 +128,12 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
     }
 
     private DataView<FacetField.Count> createValuesView(String id) {
-        final IModel<String> fieldNameModel = new PropertyModel<String>(getModel(), "name");
+        final IModel<String> fieldNameModel = new PropertyModel<>(getModel(), "name");
         return new DataView<FacetField.Count>(id, valuesProvider, ITEMS_PER_PAGE) {
 
             @Override
             protected void populateItem(final Item<FacetField.Count> item) {
-                item.setDefaultModel(new CompoundPropertyModel<FacetField.Count>(item.getModel()));
+                item.setDefaultModel(new CompoundPropertyModel<>(item.getModel()));
 
                 // link to select an individual facet value
                 final Link selectLink = new AjaxFallbackLink("facetSelect") {
@@ -168,7 +168,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         sortSelect.add(new UpdateOptionsFormBehavior(options));
         options.add(sortSelect);
 
-        final TextField filterField = new TextField<String>("filter", new PropertyModel(filterModel, "name"));
+        final TextField filterField = new TextField<>("filter", new PropertyModel(filterModel, "name"));
         filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
 
             @Override
@@ -200,13 +200,13 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
     private void addOccurenceOptions(final Form options) {
 
         // Model that holds the actual number of occurences filtered on
-        final IModel<Integer> minOccurenceModel = new PropertyModel<Integer>(filterModel, "minimalOccurence");
+        final IModel<Integer> minOccurenceModel = new PropertyModel<>(filterModel, "minimalOccurence");
         // Model that represents the filter state ('bridge' between filter and selection)
         final IModel<Boolean> bridgeStateModel = Model.of(false);
         // Model that represents the *selected* number of minimal occurences (passes it on if not decoupled)
-        final IModel<Integer> minOccurenceSelectModel = new BridgeOuterModel<Integer>(minOccurenceModel, bridgeStateModel, 2);
+        final IModel<Integer> minOccurenceSelectModel = new BridgeOuterModel<>(minOccurenceModel, bridgeStateModel, 2);
         // Model that links the actual filter, selection and bridge (object opens and closes it)
-        final IModel<Boolean> minOccurenceCheckBoxModel = new BridgeModel<Integer>(minOccurenceModel, minOccurenceSelectModel, bridgeStateModel, 0);
+        final IModel<Boolean> minOccurenceCheckBoxModel = new BridgeModel<>(minOccurenceModel, minOccurenceSelectModel, bridgeStateModel, 0);
 
         // checkbox to open and close the 'bridge'
         final CheckBox minOccurenceToggle = new CheckBox("minOccurrencesToggle", minOccurenceCheckBoxModel);
@@ -214,7 +214,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         options.add(minOccurenceToggle);
 
         // Dropdown to select a value (which is applied to the filter if the 'bridge' is open)
-        final DropDownChoice<Integer> minOccurence = new DropDownChoice<Integer>("minOccurences", minOccurenceSelectModel, ImmutableList.of(2, 5, 10, 100, 1000));
+        final DropDownChoice<Integer> minOccurence = new DropDownChoice<>("minOccurences", minOccurenceSelectModel, ImmutableList.of(2, 5, 10, 100, 1000));
         minOccurence.add(new UpdateOptionsFormBehavior(options) {
 
             @Override

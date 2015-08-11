@@ -32,9 +32,9 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -154,7 +154,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
      * no description
      */
     public IModel<String> getPageDescriptionModel() {
-        return new StringResourceModel("vloDescription", null, (Object[]) null);
+        return StringResourceModelMigration.of("vloDescription", null, (Object[]) null);
     }
 
     /**

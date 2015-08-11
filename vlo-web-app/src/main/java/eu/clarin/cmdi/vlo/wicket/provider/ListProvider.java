@@ -25,6 +25,6 @@ import java.util.List;
  */
 public interface ListProvider<T> {
 
-    List<? extends T> getList();
+    List<T> getList();
     
 }

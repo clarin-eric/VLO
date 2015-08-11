@@ -18,8 +18,8 @@
     <description></description>
 
     <properties>
-        <wicket.version>6.20.0</wicket.version>
-        <spring.version>3.2.14.RELEASE</spring.version>
+        <wicket.version>7.0.0</wicket.version>
+        <spring.version>4.2.0.RELEASE</spring.version>
         <jetty.version>8.1.17.v20150415</jetty.version>
         <!-- selects the appender for the log4j root logger -->
         <log4j.appender>File</log4j.appender>

@@ -212,12 +212,12 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     }
 
     private void createSearchLinks(String id) {
-        final SolrFieldModel<String> searchPageModel = new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_SEARCHPAGE);
-        final SolrFieldModel<String> searchServiceModel = new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_SEARCH_SERVICE);
+        final SolrFieldModel<String> searchPageModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_SEARCHPAGE);
+        final SolrFieldModel<String> searchServiceModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_SEARCH_SERVICE);
         add(new WebMarkupContainer(id) {
             {
                 //Add search page links (can be multiple)
-                add(new ListView<String>("searchPage", new CollectionListModel<String>(searchPageModel)) {
+                add(new ListView<String>("searchPage", new CollectionListModel<>(searchPageModel)) {
 
                     @Override
                     protected void populateItem(ListItem item) {
@@ -226,7 +226,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 });
 
                 // We assume there can be multiple content search endpoints too
-                add(new ListView<String>("contentSearch", new CollectionListModel<String>(searchServiceModel)) {
+                add(new ListView<String>("contentSearch", new CollectionListModel<>(searchServiceModel)) {
 
                     @Override
                     protected void populateItem(ListItem<String> item) {
@@ -304,8 +304,8 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     public IModel<String> getTitleModel() {
         // Put the name of the record in the page title
         return new StringResourceModel("recordpage.title",
-                new NullFallbackModel(new SolrFieldStringModel(getModel(), FacetConstants.FIELD_NAME), getString("recordpage.unnamedrecord")),
-                DEFAULT_PAGE_TITLE);
+                new NullFallbackModel(new SolrFieldStringModel(getModel(), FacetConstants.FIELD_NAME), getString("recordpage.unnamedrecord")))
+                .setDefaultValue(DEFAULT_PAGE_TITLE);
     }
 
     @Override

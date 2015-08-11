@@ -75,6 +75,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
     @SpringBean
     private FieldValueConverterProvider fieldValueConverterProvider;
+
     /**
      * Creates a new panel with selectable values for a single facet
      *
@@ -131,7 +132,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      */
     private Form createFilterForm(String id) {
         final Form filterForm = new Form(id);
-        final TextField<String> filterField = new TextField<String>("filterText",
+        final TextField<String> filterField = new TextField<>("filterText",
                 new PropertyModel<String>(filterModel, "name"));
         // make field update 
         filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
@@ -153,7 +154,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @return data view with value links
      */
     private DataView createValuesView(String id) {
-        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(getModel(), MAX_NUMBER_OF_FACETS_TO_SHOW, LOW_PRIORITY_VALUES, fieldValueConverterProvider){
+        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(getModel(), MAX_NUMBER_OF_FACETS_TO_SHOW, LOW_PRIORITY_VALUES, fieldValueConverterProvider) {
 
             @Override
             protected IModel<FieldValuesFilter> getFilterModel() {
@@ -162,18 +163,18 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
         };
         // partition the values according to the specified partition size
-        final PartitionedDataProvider<Count, FieldValuesOrder> partitionedValuesProvider = new PartitionedDataProvider<FacetField.Count, FieldValuesOrder>(valuesProvider, subListSize);
+        final PartitionedDataProvider<Count, FieldValuesOrder> partitionedValuesProvider = new PartitionedDataProvider<>(valuesProvider, subListSize);
 
         // create the view for the partitions
-        final DataView<List<? extends Count>> valuesView = new DataView<List<? extends Count>>(id, partitionedValuesProvider) {
+        final DataView<List<Count>> valuesView = new DataView<List<Count>>(id, partitionedValuesProvider) {
 
             @Override
-            protected void populateItem(Item<List<? extends Count>> item) {
+            protected void populateItem(Item<List<Count>> item) {
                 // create a list view for the values in this partition
-                item.add(new ListView<Count>("facetValues", item.getModel()) {
+                item.add(new ListView("facetValues", item.getModel()) {
 
                     @Override
-                    protected void populateItem(ListItem<Count> item) {
+                    protected void populateItem(ListItem item) {
                         addFacetValue("facetSelect", item);
                     }
                 });
@@ -189,7 +190,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param item item to add link to
      */
     private void addFacetValue(String id, final ListItem<Count> item) {
-        item.setDefaultModel(new CompoundPropertyModel<Count>(item.getModel()));
+        item.setDefaultModel(new CompoundPropertyModel<>(item.getModel()));
 
         // link to select an individual facet value
         final Link selectLink = new IndicatingAjaxFallbackLink(id) {

@@ -37,11 +37,11 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
+import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -81,7 +81,7 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
             }
         };
         // set label on basis of string defined in resource bundle that takes the count model as a parameter
-        browseAllLink.add(new Label("recordCount", new StringResourceModel("simplesearch.allrecords", documentCountModel, new Object[]{})));
+        browseAllLink.add(new Label("recordCount", StringResourceModelMigration.of("simplesearch.allrecords", documentCountModel, new Object[]{})));
         add(browseAllLink);
 
         // add selectors for some facets
@@ -109,7 +109,7 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
         /**
          * Model that holds the currently selected facet
          */
-        private final IModel<String> selectedFacetModel = new Model<String>(null);
+        private final IModel<String> selectedFacetModel = new Model<>(null);
         private final IModel<QueryFacetsSelection> selectionModel;
 
         public FacetSelectorsView(String id, IModel<QueryFacetsSelection> selectionModel) {
