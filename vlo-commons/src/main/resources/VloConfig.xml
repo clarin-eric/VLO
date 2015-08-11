@@ -61,7 +61,6 @@
         <facetField>languageCode</facetField>
         <facetField>collection</facetField>
         <facetField>resourceClass</facetField>
-        <facetField>continent</facetField>
         <facetField>country</facetField>
         <facetField>modality</facetField>
         <facetField>genre</facetField>
