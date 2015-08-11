@@ -21,6 +21,7 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.components.SearchForm;
+import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.wicket.panels.SingleFacetPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SimpleSearchBrowsePanel;
@@ -63,12 +64,8 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
         setModel(model);
 
         // add an updatable container for breadcrumbs and top links
-        navigation = new WebMarkupContainer("navigation");
-        navigation.setOutputMarkupId(true);
+        navigation = createNavigation("navigation");
         add(navigation);
-
-        navigation.add(new BookmarkablePageLink("breadcrumb", getApplication().getHomePage()));
-        navigation.add(new TopLinksPanel("topLinks", null));
 
         // add a persistenet panel for selection of a value for the collection facet
         collectionsPanel = createCollectionsPanel("collectionsFacet");
@@ -87,6 +84,23 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
         // add a panel with browsing options
         browse = new SimpleSearchBrowsePanel("browse", getModel());
         add(browse);
+    }
+
+    private WebMarkupContainer createNavigation(String id) {
+        final WebMarkupContainer container = new WebMarkupContainer(id);
+        container.setOutputMarkupId(true);
+        container.add(new BookmarkablePageLink("breadcrumb", getApplication().getHomePage()));
+        container.add(new TopLinksPanel("topLinks", new PermaLinkModel(getPageClass(), getModel())) {
+
+            @Override
+            protected void onChange(AjaxRequestTarget target) {
+                if (target != null) {
+                    target.add(container);
+                }
+            }
+
+        });
+        return container;
     }
 
     private Component createCollectionsPanel(String id) {
