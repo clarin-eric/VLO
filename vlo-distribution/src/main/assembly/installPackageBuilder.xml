@@ -94,6 +94,8 @@
                 <include>unpack-wars.sh</include>
             </includes>
             <outputDirectory>war</outputDirectory>
+            <fileMode>0755</fileMode>
+            <filtered>true</filtered>
         </fileSet>
         
         <!-- config -->
