@@ -112,8 +112,7 @@
         <technicalField>_lastSeen</technicalField>
         <technicalField>_componentProfile</technicalField>
         <technicalField>_hierarchyWeight</technicalField>
-        <technicalField>_hasPart</technicalField>
-        <technicalField>_isPartOf</technicalField>
+        <technicalField>_hasPartCount</technicalField>
     </technicalFields>
     
     <languageFilters>
