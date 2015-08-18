@@ -38,7 +38,11 @@ public class SolrDocumentModel extends LoadableDetachableModel<SolrDocument> {
 
     public SolrDocumentModel(SolrDocument document) {
         super(document);
-        this.docId = Model.of((String) document.getFieldValue(FacetConstants.FIELD_ID));
+        if (document == null) {
+            this.docId = null;
+        } else {
+            this.docId = Model.of((String) document.getFieldValue(FacetConstants.FIELD_ID));
+        }
     }
 
     public SolrDocumentModel(String docId) {
