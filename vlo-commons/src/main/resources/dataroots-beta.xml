@@ -1,0 +1,16 @@
+<dataRoots>
+    <DataRoot>
+        <originName>CLARIN Centres</originName>
+        <rootFile>/srv/vlo-data/clarin/results/cmdi/</rootFile>
+        <prefix>http://beta-vlo.clarin.eu/data/</prefix>
+        <tostrip>/srv/vlo-data/</tostrip>
+        <deleteFirst>false</deleteFirst>
+    </DataRoot>
+    <DataRoot>
+        <originName>Other</originName>
+        <rootFile>/srv/vlo-data/others/results/cmdi</rootFile>
+        <prefix>http://beta-vlo.clarin.eu/data/</prefix>
+        <tostrip>/srv/vlo-data/</tostrip>
+        <deleteFirst>false</deleteFirst>
+    </DataRoot>
+</dataRoots>

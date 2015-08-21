@@ -52,6 +52,15 @@
         </profile>
         
         <profile>
+            <!-- For deployment to catalog-clarin.esc.rzg.mpg.de -->
+            <id>dev-vm</id>
+            <properties>
+                <vloconfig.solrUrl>http://localhost:8080/vlo-solr/core0/</vloconfig.solrUrl>
+                <vloconfig.dataRootsFile>dataroots-testvm.xml</vloconfig.dataRootsFile>
+            </properties>
+        </profile>
+        
+        <profile>
             <!-- For deployment to vlo.clarin.eu -->
             <id>production</id>
             <properties>
@@ -64,21 +73,14 @@
         </profile>
         
         <profile>
-            <!-- For deployment to vlo.clarin.eu -->
-            <id>dev-vm</id>
-            <properties>
-                <vloconfig.solrUrl>http://localhost:8080/vlo-solr/core0/</vloconfig.solrUrl>
-                <vloconfig.dataRootsFile>dataroots-testvm.xml</vloconfig.dataRootsFile>
-            </properties>
-        </profile>
-        
-        <profile>
-            <!--  For deployment to beta.vlo.clarin.eu -->
+            <!--  For deployment to beta-vlo.clarin.eu -->
             <id>beta</id>
             <properties>
-                <vloconfig.solrUrl><!-- TODO!!! --></vloconfig.solrUrl>
-                <vloconfig.homeUrl>http://beta.vlo.clarin.eu</vloconfig.homeUrl>
-                <vloconfig.dataRootsFile>dataroots-production.xml</vloconfig.dataRootsFile>
+                <vloconfig.deleteAllFirst>false</vloconfig.deleteAllFirst>
+                <vloconfig.maxDaysInSolr>7</vloconfig.maxDaysInSolr>
+                <vloconfig.solrUrl>http://172.17.42.1:8080/solr/core0/</vloconfig.solrUrl>
+                <vloconfig.homeUrl>http://beta-vlo.clarin.eu</vloconfig.homeUrl>
+                <vloconfig.dataRootsFile>dataroots-beta.xml</vloconfig.dataRootsFile>
             </properties>
         </profile>
     </profiles>
