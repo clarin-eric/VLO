@@ -144,5 +144,5 @@
     <cqlEndpointAlternative>http://cqlservlet.mpi.nl/</cqlEndpointAlternative>
     
     <!-- makes the score for the result ranking visible in the search results -->
-    <showResultScores>true</showResultScores>
+    <showResultScores>false</showResultScores>
 </VloConfig>
