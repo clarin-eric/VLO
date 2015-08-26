@@ -299,9 +299,6 @@
         <Variation>University of Amsterdam, Amsterdam Centre for Language &amp; Communication</Variation>
     </Organisation>
     <Organisation name="Department of Linguistics, Australian National University. Unpublished"/>
-    <Organisation name="Bayerisches Archiv für Sprachsignale">
-        <Variation>Bavarian Archive for Speech Signals, Ludwig-Maximilians-Universitaet Muenchen</Variation>
-    </Organisation>
     <Organisation name="Section de Linguistique Appliquée, Université Fédérale du Cameroun">
         <Variation>Université Fédérale du Cameroun, Section de Linguistique Appliquée</Variation>
     </Organisation>
@@ -1778,10 +1775,11 @@
         <Variation>http://www.modyco.fr</Variation>
     </Organisation>
     <Organisation name="Research Centre of African Languages and Literatures, University of Ghent"/>
-    <Organisation name="BAS">
-        <Variation>Bavarian Archive for Speech Signals</Variation>
+    <Organisation name="Bavarian Archive for Speech Signals">
+        <Variation>Bavarian Archive for Speech Signals, Ludwig-Maximilians-Universitaet Muenchen</Variation>
         <Variation>Bavarian Archive for Speech Signals (BAS)</Variation>
         <Variation>Bayerisches Archiv für Sprachsignale</Variation>
+        <Variation>BAS</Variation>
         <Variation>BAS: Bayerische Archiv für Sprachsignale</Variation>
     </Organisation>
     <Organisation name="McGraw-Hill">
