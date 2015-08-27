@@ -1,5 +1,12 @@
 <LanguageNames>
+    <Language name="Romanian; Moldavian; Moldovan">
+        <Variation>Romanian</Variation>
+        <Variation>Moldavian</Variation>
+        <Variation>Moldovan</Variation>
+    </Language>
     <Language name="Spanish; Castilian">
+        <Variation>Castilian</Variation>
+        <Variation>Spanish</Variation>
         <Variation>Spanish, Castilian</Variation>
     </Language>
 </LanguageNames>
