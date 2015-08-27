@@ -21,7 +21,6 @@ public class LanguageCodePostProcessorTest extends ImporterTestcase {
         PostProcessor processor = new LanguageCodePostProcessor();
         assertEquals("code:nld", processor.process("NL").get(0));
         assertEquals("code:eng", processor.process("en").get(0));
-        assertEquals("code:nld", processor.process("nl").get(0));
         assertEquals("code:fry", processor.process("fry").get(0));
         assertEquals("name:test", processor.process("test").get(0));
         assertEquals("", processor.process("").get(0));
@@ -32,11 +31,11 @@ public class LanguageCodePostProcessorTest extends ImporterTestcase {
         assertEquals("code:eus", processor.process("baq").get(0));
         assertEquals("code:eng", processor.process("eng").get(0));
         assertEquals("code:eng", processor.process("English").get(0));
-        assertEquals("code:deu", processor.process("German").get(0));
         assertEquals("code:esn", processor.process("Salvadoran Sign Language").get(0));
         assertEquals("code:eng", processor.process("en_US").get(0));
         assertEquals("code:nld", processor.process("nl-NL").get(0));
 	assertEquals("code:eng", processor.process("ISO639-2:eng").get(0));
         assertEquals("code:spa", processor.process("Spanish, Castilian").get(0));
+        assertEquals("code:ron", processor.process("Romanian").get(0));
     }
 }
