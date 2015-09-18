@@ -76,7 +76,6 @@ public abstract class FacetsPanel extends GenericPanel<List<FacetField>> {
                 // Create a facet field model which does a lookup by name,
                 // making it dynamic in case the selection and therefore
                 // set of available values changes
-                // TODO: Limit to number of items shown while keeping 'more' function?
                 final IModel<FacetField> facetFieldModel = new FacetFieldModel(facetFieldsService, item.getModelObject(), selectionModel);
                 item.add(
                         new FacetPanel("facet",
