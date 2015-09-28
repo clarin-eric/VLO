@@ -355,30 +355,22 @@ sammy.get
               if( 0 !== type_length )
               {
                 var global_elements_count = 0;
-                for( var i = 0; i < analysis_data[type].length; i += 2 )
+                if( 'string' === typeof analysis_data[type][1] )
                 {
-                  if( 'string' === typeof analysis_data[type][i+1] )
+                  analysis_data[type][1] = [{ 'text': analysis_data[type][1] }]
+                }
+
+                for( var i = 1; i < type_length; i += 2 )
+                {
+                  var tmp_type_length = analysis_data[type][i].length;
+                  for( var j = 0; j < tmp_type_length; j++ )
                   {
-                    analysis_data[type][i+1] = [{ 'text': analysis_data[type][i+1] }]
+                    global_elements_count = Math.max
+                    (
+                      ( analysis_data[type][i][j].positionHistory || [] )[0] || 1,
+                      global_elements_count
+                    );
                   }
-
-                  var tmp = {};
-                  var cols = analysis_data[type][i+1].filter
-                  (
-                    function( obj )
-                    {
-                      var obj_position = obj.position || 0;
-                      if( !tmp[obj_position] )
-                      {
-                        tmp[obj_position] = true;
-                        return true;
-                      }
-
-                      return false;
-                    }
-                  );
-
-                  global_elements_count = Math.max( global_elements_count, cols.length );
                 }
 
                 var content = '<div class="' + type + '">' + "\n";
