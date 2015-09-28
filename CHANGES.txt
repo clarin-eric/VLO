@@ -1,6 +1,6 @@
 Bug Fixes and Features
 
-VLO 3.3 (...)
+VLO 3.3 (September 2015)
 
 * Ranking based on relevance with boosts for matches in certain fields and on
 basis of record properties such as hierarchy level and presence of name,
@@ -20,6 +20,13 @@ in the web application
         <https://trac.clarin.eu/ticket/778>
 * Addition of importer option to only import specific data roots
         <https://trac.clarin.eu/ticket/768>
+* Extended language variants name map with all languages that have multiple
+names in ISO 639-3
+
+Known issues:
+* In some cases, it may happen that hierarchical relations to records that do
+not appear in the index are stored
+		<https://trac.clarin.eu/ticket/790>
 
 VLO 3.2.2 (August 2015)
 * Fixes an exception occurring when clicking the 'Report' link on the main page
