@@ -108,6 +108,8 @@ public class VloConfig {
 
     private boolean showResultScores = false;
 
+    private boolean processHierarchies = false;
+
     /**
      * A set of fields to be excluded from display<br><br>
      *
@@ -1095,5 +1097,23 @@ public class VloConfig {
 
     public boolean isShowResultScores() {
         return showResultScores;
+    }
+
+    /**
+     * Get the value of processHierarchies
+     *
+     * @return the value of processHierarchies
+     */
+    public boolean isProcessHierarchies() {
+        return processHierarchies;
+    }
+
+    /**
+     * Set the value of processHierarchies
+     *
+     * @param processHierarchies new value of processHierarchies
+     */
+    public void setProcessHierarchies(boolean processHierarchies) {
+        this.processHierarchies = processHierarchies;
     }
 }

@@ -165,7 +165,9 @@ public class MetadataImporter {
                         sendDocs();
                     }
                     solrServer.commit();
-                    updateDocumentHierarchy();
+                    if(config.isProcessHierarchies()){
+                        updateDocumentHierarchy();
+                    }
                 }
                 LOG.info("End of processing: " + dataRoot.getOriginName());
             }

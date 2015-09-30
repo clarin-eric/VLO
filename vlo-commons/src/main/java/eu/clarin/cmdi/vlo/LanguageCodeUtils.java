@@ -150,9 +150,10 @@ public class LanguageCodeUtils {
             return result;
         } catch (Exception e) {
             if (CommonUtils.SWALLOW_LOOKUP_ERRORS) {
+                LOG.warn("Ignoring exception", e);
                 return new HashMap<String, String>();
             } else {
-                throw new RuntimeException("Cannot instantiate postProcessor:", e);
+                throw new RuntimeException("Cannot instantiate postProcessor. URL: " + url, e);
             }
         }
     }
@@ -164,20 +165,22 @@ public class LanguageCodeUtils {
             return result;
         } catch (Exception e) {
             if (CommonUtils.SWALLOW_LOOKUP_ERRORS) {
+                LOG.warn("Ignoring exception", e);
                 return new HashMap<String, String>();
             } else {
-                throw new RuntimeException("Cannot instantiate postProcessor:", e);
+                throw new RuntimeException("Cannot instantiate postProcessor. URL: " + url, e);
             }
         }
     }
 
     private Map<String, String> createSilToIsoCodeMap() {
         LOG.debug("Creating silToIso code map.");
+        final String urlString = config.getSilToISO639CodesUrl();
         try {
             Map<String, String> result = new ConcurrentHashMap<String, String>();
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             domFactory.setNamespaceAware(true);
-            URL url = new URL(config.getSilToISO639CodesUrl());
+            URL url = new URL(urlString);
             DocumentBuilder builder = domFactory.newDocumentBuilder();
             Document doc = builder.parse(url.openStream());
             XPath xpath = XPathFactory.newInstance().newXPath();
@@ -191,9 +194,10 @@ public class LanguageCodeUtils {
             return result;
         } catch (Exception e) {
             if (CommonUtils.SWALLOW_LOOKUP_ERRORS) {
+                LOG.warn("Ignoring exception", e);
                 return new HashMap<String, String>();
             } else {
-                throw new RuntimeException("Cannot instantiate postProcessor:", e);
+                throw new RuntimeException("Cannot instantiate postProcessor. URL: " + urlString, e);
             }
         }
     }
