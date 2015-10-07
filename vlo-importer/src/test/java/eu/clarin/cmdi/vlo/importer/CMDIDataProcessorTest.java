@@ -401,7 +401,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("Max Planck Institute for Psycholinguistics", doc.getFieldValue("organisation"));
         assertEquals("demo", doc.getFieldValue("genre"));
         assertEquals(
-                "{lang='eng'}This  recording was made to generate a freely available test resource including speech and gestures. The annotations were created by Peter and Kita who is gesture researcher at the MPI for Psycholinguistics.",
+                "{code:eng}This  recording was made to generate a freely available test resource including speech and gestures. The annotations were created by Peter and Kita who is gesture researcher at the MPI for Psycholinguistics.",
                 doc.getFieldValue("description"));
         assertEquals("2002-10-30", doc.getFieldValue("temporalCoverage"));
         List<String> fieldValues = new ArrayList(doc.getFieldValues(FacetConstants.FIELD_FORMAT));
@@ -518,7 +518,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("Europe", doc.getFieldValue("continent"));
         assertEquals("Netherlands", doc.getFieldValue("country"));
         assertEquals("demo", doc.getFieldValue("genre"));
-        assertEquals("{lang='und'}Test.", doc.getFieldValue("description"));
+        assertEquals("{code:und}Test.", doc.getFieldValue("description"));
         assertEquals("Should be null not empty string", null, doc.getFieldValue("organisation"));
         assertEquals(null, doc.getFieldValue("language"));
         assertEquals(null, doc.getFieldValue("subject"));
@@ -596,11 +596,11 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(3, fieldValues.size());
         List<String> descriptions = new ArrayList(fieldValues);
         Collections.sort(descriptions);
-        assertEquals("{lang='und'}Channel: Talking;\n    Genre: Traditional Narrative / Story;\n    Country: Panama;\n"
+        assertEquals("{code:und}Channel: Talking;\n    Genre: Traditional Narrative / Story;\n    Country: Panama;\n"
                 + "    Place of Recording: Mulatuppu;\n    Event: Community Gathering;\n"
                 + "    Institutional Affiliation: University of Texas at Austin;\n    Participant Information: Political Leader;", descriptions.get(0).toString());
-        assertEquals("{lang='und'}Test", descriptions.get(1).toString());
-        assertEquals("{lang='und'}The one-eyed grandmother is one of many traditional Kuna stories performed "
+        assertEquals("{code:und}Test", descriptions.get(1).toString());
+        assertEquals("{code:und}The one-eyed grandmother is one of many traditional Kuna stories performed "
                 + "in the Kuna gathering house. This story, performed here by Pedro Arias, combines "
                 + "European derived motifs (Tom Thumb and Hansel and Gretel) with themes that seem more "
                 + "Kuna in origin. All are woven together and a moral is provided. Pedro Arias performed "
@@ -877,7 +877,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("Test", doc.getFieldValue("organisation"));
         assertEquals(null, doc.getFieldValue("year"));
         assertEquals(null, doc.getFieldValue("genre"));
-        assertEquals("{lang='eng'}written general; 95 mio words; TEI/SGML", doc.getFieldValue("description"));
+        assertEquals("{code:eng}written general; 95 mio words; TEI/SGML", doc.getFieldValue("description"));
         assertEquals("Written Corpus", doc.getFieldValue(FacetConstants.FIELD_RESOURCE_CLASS));
     }
 }

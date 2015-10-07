@@ -28,7 +28,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private static final Pattern PROFILE_ID_PATTERN = Pattern.compile(".*(clarin.eu:cr1:p_[0-9]+).*");
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
 
-    private static final String DEFAULT_LANGUAGE = "und";
+    private static final String DEFAULT_LANGUAGE = "code:und";
 
     public CMDIParserVTDXML(Map<String, PostProcessor> postProcessors, Boolean useLocalXSDCache) {
         this.postProcessors = postProcessors;
@@ -284,7 +284,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             final String languageCode = extractLanguageCode(nav);
 
             // ignore non-English language names for facet LANGUAGE_CODE
-            if (config.getName().equals(FacetConstants.FIELD_LANGUAGE_CODE) && !languageCode.equals("en") && !languageCode.equals("eng") && !languageCode.equals("und")) {
+            if (config.getName().equals(FacetConstants.FIELD_LANGUAGE_CODE) && !languageCode.equals("code:eng") && !languageCode.equals("code:und")) {
                 index = ap.evalXPath();
                 continue;
             }
@@ -313,15 +313,14 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private String extractLanguageCode(VTDNav nav) throws NavException {
         // extract language code in xml:lang if available
         Integer langAttrIndex = nav.getAttrVal("xml:lang");
-        String languageCode = DEFAULT_LANGUAGE;
+        String languageCode;
         if (langAttrIndex != -1) {
             languageCode = nav.toString(langAttrIndex).trim();
+        } else {
+            return DEFAULT_LANGUAGE;
         }
-        // replace 2-letter with 3-letter codes
-        if (MetadataImporter.languageCodeUtils.getSilToIso639Map().containsKey(languageCode)) {
-            languageCode = MetadataImporter.languageCodeUtils.getSilToIso639Map().get(languageCode);
-        }
-        return languageCode;
+
+        return postProcessors.get(FacetConstants.FIELD_LANGUAGE_CODE).process(languageCode).get(0);
     }
 
     private void insertFacetValues(String name, List<String> valueList, CMDIData cmdiData, String languageCode, boolean allowMultipleValues, boolean caseInsensitive) {
@@ -331,7 +330,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             }
             String fieldValue = valueList.get(i).trim();
             if (name.equals(FacetConstants.FIELD_DESCRIPTION)) {
-                fieldValue = "{lang='" + languageCode + "'}" + fieldValue;
+                fieldValue = "{" + languageCode + "}" + fieldValue;
             }
             cmdiData.addDocField(name, fieldValue, caseInsensitive);
         }
