@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableSet;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
@@ -26,12 +27,15 @@ import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.model.ToggleModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import java.util.Collection;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  * A panel showing advanced search options:
@@ -44,6 +48,9 @@ import org.apache.wicket.model.IModel;
  */
 public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFacetsSelection> {
 
+    @SpringBean
+    private VloConfig config;
+    
     /**
      * The fields that this panel provides options for
      */
@@ -57,8 +64,13 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
 
         final CheckBox fcsCheck = createFieldNotEmptyOption("fcs", FacetConstants.FIELD_SEARCH_SERVICE);
         options.add(fcsCheck);
+        
+        final MarkupContainer collectionsSection = new WebMarkupContainer("collectionsSection");
         final CheckBox collectionCheck = createFieldNotEmptyOption("collection", FacetConstants.FIELD_HAS_PART_COUNT);
-        options.add(collectionCheck);
+        collectionsSection.add(collectionCheck);
+        collectionsSection.setVisible(config.isProcessHierarchies());
+        options.add(collectionsSection);
+        
         add(options);
     }
 

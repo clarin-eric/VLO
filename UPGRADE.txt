@@ -35,6 +35,12 @@ out of VloConfig.xml by means of XInclude. The configuration file now gets
 prepared for deployment environments at build time, so it is no longer necessary
 to copy over old configuration values in all cases.
 
+* Decide whether hierarchies should be indexed and displayed, and set the new
+'processHierarchies' configuration element accordingly (true/false). This 
+governs the behaviour of both the importer (will simply skip the 'update 
+hierarchies' step if set to false) and the front end (will not display hierarchy
+related UI components).
+
 * In the context fragment for the VLO web application, ADD the following 
 attribute to the <Context> root element:
 

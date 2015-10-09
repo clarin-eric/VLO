@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
@@ -85,6 +86,8 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     private FieldFilter technicalPropertiesFilter;
     @SpringBean(name = "documentFieldOrder")
     private List<String> fieldOrder;
+    @SpringBean
+    private VloConfig config;
 
     private final IModel<SearchContext> navigationModel;
     private final IModel<QueryFacetsSelection> selectionModel;
@@ -152,7 +155,20 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         add(createCmdiContent("cmdi"));
         add(createTechnicalDetailsPanel("technicalProperties"));
 
-        add(createHierarchyPanel("recordtree"));
+        if (config.isProcessHierarchies()) {
+            // show hierarchy if applicable
+            add(createHierarchyPanel("recordtree"));
+        } else {
+            // invisible stub
+            add(new WebMarkupContainer("recordtree") {
+
+                @Override
+                public boolean isVisible() {
+                    return false;
+                }
+
+            });
+        }
 
         createSearchLinks("searchlinks");
     }
