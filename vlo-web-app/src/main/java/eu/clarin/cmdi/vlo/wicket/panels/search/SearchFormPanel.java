@@ -19,9 +19,13 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
+import eu.clarin.cmdi.vlo.wicket.components.IndicatingAjaxFallbackButton;
 import java.util.Iterator;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteTextField;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -42,6 +46,7 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
     @SpringBean
     private AutoCompleteService autoCompleteDao;
 
+    //private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
     public SearchFormPanel(String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
 
@@ -57,7 +62,7 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
         });
 
         // Button allows partial updates but can fall back to a full (non-JS) refresh
-        form.add(new AjaxFallbackButton("searchSubmit", form) {
+        form.add(new IndicatingAjaxFallbackButton("searchSubmit", form) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -68,6 +73,15 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
 
         add(form);
     }
+//
+//    /**
+//     * @see
+//     * org.apache.wicket.ajax.IAjaxIndicatorAware#getAjaxIndicatorMarkupId()
+//     */
+//    @Override
+//    public String getAjaxIndicatorMarkupId() {
+//        return indicatorAppender.getMarkupId();
+//    }
 
     protected abstract void onSubmit(AjaxRequestTarget target);
 
