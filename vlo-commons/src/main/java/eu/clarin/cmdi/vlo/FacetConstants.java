@@ -90,4 +90,9 @@ public class FacetConstants {
      * (with either a language code or a name as indicated by the prefix)
      */
     public static final String LANGUAGE_CODE_PATTERN = "(name|code):(.*)";
+    
+    /**
+     * Name of the Solr request handler for fast queries (no sorting, boosting or aliases)
+     */
+    public static final String SOLR_REQUEST_HANDLER_FAST = "fast";
 }

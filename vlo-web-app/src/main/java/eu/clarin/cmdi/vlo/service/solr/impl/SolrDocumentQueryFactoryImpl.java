@@ -61,6 +61,8 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
     public SolrQuery createDocumentQuery(String docId) {
         // make a query to look up a specific document by its ID
         final SolrQuery query = getDefaultDocumentQuery();
+        // we can use the 'fast' request handler here, document ranking is of no interest
+        query.setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
         // consider all documents
         query.setQuery(SOLR_SEARCH_ALL);
         // filter by ID
@@ -72,7 +74,7 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
                 .put(FacetConstants.FIELD_SELF_LINK, docId)
                 .build();
         query.addFilterQuery(createFilterOrQuery(idOrQueryMap));
-        
+
         // one result max
         query.setRows(1);
         return query;

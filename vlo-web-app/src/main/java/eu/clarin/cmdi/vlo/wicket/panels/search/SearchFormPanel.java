@@ -20,7 +20,10 @@ import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
 import java.util.Iterator;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteTextField;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -42,6 +45,7 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
     @SpringBean
     private AutoCompleteService autoCompleteDao;
 
+    //private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
     public SearchFormPanel(String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
 
@@ -63,12 +67,34 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 SearchFormPanel.this.onSubmit(target);
             }
+
+            @Override
+            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                super.updateAjaxAttributes(attributes);
+
+                // listener to start/stop indicating progress
+                AjaxCallListener listener = new AjaxCallListener() {
+
+                    @Override
+                    public CharSequence getBeforeHandler(Component component) {
+                        return ("startSearch();");
+                    }
+
+                    @Override
+                    public CharSequence getCompleteHandler(Component component) {
+                        return ("endSearch();");
+                    }
+
+                };
+                attributes.getAjaxCallListeners().add(listener);
+            }
+
         }
         );
 
         add(form);
     }
-
+   
     protected abstract void onSubmit(AjaxRequestTarget target);
 
     @Override
@@ -77,5 +103,6 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
         response.render(CssHeaderItem.forReference(JavaScriptResources.getJQueryUICSS()));
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getJQueryUIJS()));
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getSyntaxHelpJS()));
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getSearchFormJS()));
     }
 }

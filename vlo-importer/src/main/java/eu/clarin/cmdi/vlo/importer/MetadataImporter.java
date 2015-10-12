@@ -533,6 +533,7 @@ public class MetadataImporter {
                 
                 // get document
                 query = new SolrQuery();
+                query.setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
                 query.set("q", FacetConstants.FIELD_ID+":"+vertex.getId());
                 SolrDocumentList response = solrServer.query(query).getResults();
                 
