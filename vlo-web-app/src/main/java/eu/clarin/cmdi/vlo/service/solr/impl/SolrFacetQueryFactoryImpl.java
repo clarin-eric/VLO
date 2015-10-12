@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.service.solr.SolrFacetQueryFactory;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.List;
@@ -45,6 +46,8 @@ public class SolrFacetQueryFactoryImpl extends AbstractSolrQueryFactory implemen
     @Override
     public SolrQuery createFacetQuery(QueryFacetsSelection queryFacetsSelections, List<String> facets, int facetValueLimit) {
         final SolrQuery query = getBaseQuery(facets);
+        // we can use the 'fast' request handler here, document ranking is of no interest
+        query.setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
         addQueryFacetParameters(query, queryFacetsSelections);
         query.setFacetLimit(facetValueLimit);
         return query;
