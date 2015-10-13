@@ -46,8 +46,6 @@ public class SolrFacetQueryFactoryImpl extends AbstractSolrQueryFactory implemen
     @Override
     public SolrQuery createFacetQuery(QueryFacetsSelection queryFacetsSelections, List<String> facets, int facetValueLimit) {
         final SolrQuery query = getBaseQuery(facets);
-        // we can use the 'fast' request handler here, document ranking is of no interest
-        query.setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
         addQueryFacetParameters(query, queryFacetsSelections);
         query.setFacetLimit(facetValueLimit);
         return query;
