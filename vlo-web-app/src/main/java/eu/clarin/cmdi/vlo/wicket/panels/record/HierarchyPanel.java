@@ -324,7 +324,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
     private class ModelWrapper<T> extends AbstractReadOnlyModel<ModelWrapper<T>> implements Serializable {
 
         /**
-         * Limit reached? TODO: add count
+         * Limit reached?
          */
         private final boolean limit;
 
