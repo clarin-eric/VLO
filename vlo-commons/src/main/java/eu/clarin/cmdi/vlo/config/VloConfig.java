@@ -108,7 +108,7 @@ public class VloConfig {
 
     private boolean showResultScores = false;
 
-    private boolean processHierarchies = false;
+    private boolean processHierarchies = true;
 
     /**
      * A set of fields to be excluded from display<br><br>
