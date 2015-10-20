@@ -17,13 +17,14 @@
 package eu.clarin.cmdi.vlo.wicket;
 
 import com.google.common.collect.ImmutableSet;
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
-public class HighlightSearchTermScriptFactory {
+public class HighlightSearchTermScriptFactory implements Serializable {
 
     private static final String HIGHLIGHT_FUNCTION = "$('%s').highlight(%s, {className:'%s'})";
 
