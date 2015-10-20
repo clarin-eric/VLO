@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.record;
 import eu.clarin.cmdi.vlo.wicket.components.LanguageInfoLink;
 import com.google.common.collect.ImmutableSet;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.DocumentField;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
@@ -27,6 +28,7 @@ import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.components.SmartLinkFieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import java.util.Collection;
@@ -34,7 +36,11 @@ import java.util.Collections;
 import java.util.List;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -88,7 +94,9 @@ public class FieldsTablePanel extends Panel {
                 final IModel<DocumentField> fieldModel = item.getModel();
                 final PropertyModel<String> fieldNameModel = new PropertyModel<String>(fieldModel, "fieldName");
                 final SolrFieldNameModel friendlyFieldNameModel = new SolrFieldNameModel(fieldNameModel);
-                item.add(new Label("fieldName", friendlyFieldNameModel));
+                final Label fieldName = new Label("fieldName", friendlyFieldNameModel);
+                item.add(fieldName);
+                fieldName.add(new AttributeAppender("title", new SolrFieldDescriptionModel(fieldNameModel)));
                 final PropertyModel<List> valuesModel = new PropertyModel<List>(fieldModel, "values");
                 item.add(new ListView("values", valuesModel) {
 
@@ -159,5 +167,13 @@ public class FieldsTablePanel extends Panel {
     protected boolean isShowFacetSelectLinks() {
         return true;
     }
+    
+//    re-enable for 'fancy' popups for the field descriptions
+//    @Override
+//    public void renderHead(IHeaderResponse response) {
+//        // JQuery UI for tooltips
+//        response.render(CssHeaderItem.forReference(JavaScriptResources.getJQueryUICSS()));
+//        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getFieldsTableJS()));
+//    }
 
 }
