@@ -22,6 +22,9 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.string.Strings;
 
 /**
  * A behavior that adds JavaScript, executed on DOM ready, to highlight
@@ -32,14 +35,32 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
  */
 public class HighlightSearchTermBehavior extends Behavior {
 
-    private static final String HIGHLIGHT_FUNCTION = "searchhi.init()";
+    private final HighlightSearchTermScriptFactory scriptFactory = new HighlightSearchTermScriptFactory();
 
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
         // include highlight script
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getHighlightJS()));
-        // after load, highlight 
-        response.render(OnDomReadyHeaderItem.forScript(HIGHLIGHT_FUNCTION));
+
+        final String words = getWordList(component);
+        if (!Strings.isEmpty(words)) {
+            String selector = getComponentSelector(component.getMarkupId());
+            // after load, highlight 
+            response.render(OnDomReadyHeaderItem.forScript(scriptFactory.createScript(selector, words)));
+        }
+    }
+
+    protected String getComponentSelector(String componentId) {
+        return "#" + componentId;
+    }
+
+    protected String getWordList(Component component) {
+        Request request = component.getPage().getRequestCycle().getRequest();
+        return request.getQueryParameters().getParameterValue(getQueryParam()).toString();
+    }
+
+    protected String getQueryParam() {
+        return "q";
     }
 
 }

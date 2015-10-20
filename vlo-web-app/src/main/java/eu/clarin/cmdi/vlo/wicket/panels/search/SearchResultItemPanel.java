@@ -20,6 +20,7 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
+import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermScriptFactory;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
@@ -34,6 +35,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.string.Strings;
 
 /**
  *
@@ -43,10 +45,11 @@ public class SearchResultItemPanel extends Panel {
 
     @SpringBean
     private VloConfig config;
-    
+
     private final Panel collapsedDetails;
     private final Panel expandedDetails;
     private final IModel<ExpansionState> expansionStateModel;
+    private final IModel<SearchContext> selectionModel;
 
     /**
      *
@@ -60,6 +63,7 @@ public class SearchResultItemPanel extends Panel {
     public SearchResultItemPanel(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel, IModel<ExpansionState> expansionStateModel) {
         super(id, documentModel);
         this.expansionStateModel = expansionStateModel;
+        this.selectionModel = selectionModel;
 
         final Link recordLink = new RecordPageLink("recordLink", documentModel, selectionModel);
         recordLink.add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME, "Unnamed record"));
@@ -99,6 +103,14 @@ public class SearchResultItemPanel extends Panel {
                 if (target != null) {
                     // parial update (just this search result item)
                     target.add(SearchResultItemPanel.this);
+
+                    // in case of a query, update highlight matching search terms after collapse/expand
+                    final String query = selectionModel.getObject().getSelection().getQuery();
+                    if (!Strings.isEmpty(query)) {
+                        final HighlightSearchTermScriptFactory scriptFactory = new HighlightSearchTermScriptFactory();
+                        final String selector = "#" + SearchResultItemPanel.this.getMarkupId();
+                        target.appendJavaScript(scriptFactory.createScript(selector, query));
+                    }
                 }
             }
         };

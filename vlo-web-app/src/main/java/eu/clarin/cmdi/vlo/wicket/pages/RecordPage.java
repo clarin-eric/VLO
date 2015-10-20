@@ -129,7 +129,6 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         }
 
         addComponents();
-        add(new HighlightSearchTermBehavior());
     }
 
     private void addComponents() {
@@ -137,16 +136,19 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         add(createNavigation("navigation"));
 
         final WebMarkupContainer topNavigation = new WebMarkupContainer("topnavigation");
-        topNavigation.setOutputMarkupId(true);
-        add(topNavigation);
-
-        topNavigation.add(new BreadCrumbPanel("breadcrumbs", selectionModel));
-        topNavigation.add(createPermalink("permalink", topNavigation));
+        add(topNavigation
+                .add(new BreadCrumbPanel("breadcrumbs", selectionModel))
+                .add(createPermalink("permalink", topNavigation))
+                .setOutputMarkupId(true)
+        );
 
         // General information section
         add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, getString("recordpage.unnamedrecord")));
         add(createLandingPageLink("landingPageLink"));
-        add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(getModel(), basicPropertiesFilter, fieldOrder)));
+        
+        final FieldsTablePanel fieldsTable = new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(getModel(), basicPropertiesFilter, fieldOrder));
+        fieldsTable.add(new HighlightSearchTermBehavior());
+        add(fieldsTable);
 
         // Resources section
         add(new ResourceLinksPanel("resources", new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_RESOURCE)));

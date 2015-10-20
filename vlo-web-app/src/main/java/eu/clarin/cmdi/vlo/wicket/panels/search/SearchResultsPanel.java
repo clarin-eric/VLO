@@ -17,6 +17,8 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
+import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermScriptFactory;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchResultExpansionStateModel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
@@ -25,6 +27,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
@@ -40,6 +44,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.string.StringValue;
 
 /**
  * Panel that has a data view on the current search results
@@ -92,6 +97,20 @@ public class SearchResultsPanel extends Panel {
 
         //For Ajax updating of search results
         setOutputMarkupId(true);
+        
+        add(new HighlightSearchTermBehavior(){
+
+            @Override
+            protected String getComponentSelector(String componentId) {
+                return ".searchresultitem"; //"h3, .searchresultdescription"
+            }
+
+            @Override
+            protected String getWordList(Component component) {
+                return selectionModel.getObject().getQuery();
+            }
+            
+        });
     }
     
     public void resetExpansion() {
