@@ -1,0 +1,83 @@
+/*
+ * Copyright (C) 2015 CLARIN
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package eu.clarin.cmdi.vlo.wicket;
+
+import com.google.common.collect.ImmutableSet;
+import java.util.Collection;
+import org.apache.wicket.util.string.StringValue;
+
+/**
+ *
+ * @author Twan Goosen <twan.goosen@mpi.nl>
+ */
+public class HighlightSearchTermScriptFactory {
+
+    private static final String HIGHLIGHT_FUNCTION = "$('%s').highlight(%s, {className:'%s'})";
+
+    private static final Collection<String> DEFAULT_EXCLUDE_WORDS = ImmutableSet.of("and", "or", "not", "to");
+
+    public String createScript(String componentSelector, final String words) {
+        return String.format(HIGHLIGHT_FUNCTION,
+                componentSelector, 
+                makeWordListArray(words),
+                getSearchWordClass()
+        );
+    }
+
+    /**
+     *
+     * @param wordList string of whitespace separated words
+     * @return a string representing a sanitised javascript array of words
+     */
+    private CharSequence makeWordListArray(String wordList) {
+        final StringBuilder sb = new StringBuilder("[");
+        final String[] words = wordList.split("\\s");
+        for (int i = 0; i < words.length; i++) {
+            final String word = sanitise(words[i]); //remove white space and quotes at beginning or end
+            // is on exclude list?
+            if (!getExcludeWords().contains(word.toLowerCase())) {
+                // wrap in quotes
+                sb.append("'").append(word).append("'");
+                if (i + 1 < words.length) {
+                    // prepare to append next
+                    sb.append(",");
+                }
+            }
+        }
+        return sb.append("]");
+    }
+
+    private String sanitise(String word) {
+        return word.replaceAll("^[\\s'\"]+|[\\s'\"]+$", "");
+    }
+
+    /**
+     *
+     * @return CSS class to mark matches with
+     */
+    protected String getSearchWordClass() {
+        return "searchword";
+    }
+
+    /**
+     *
+     * @return Words not to highlight
+     */
+    protected Collection<String> getExcludeWords() {
+        return DEFAULT_EXCLUDE_WORDS;
+    }
+}
