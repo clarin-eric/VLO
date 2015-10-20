@@ -18,7 +18,6 @@ package eu.clarin.cmdi.vlo.wicket;
 
 import com.google.common.collect.ImmutableSet;
 import java.util.Collection;
-import org.apache.wicket.util.string.StringValue;
 
 /**
  *
@@ -32,7 +31,7 @@ public class HighlightSearchTermScriptFactory {
 
     public String createScript(String componentSelector, final String words) {
         return String.format(HIGHLIGHT_FUNCTION,
-                componentSelector, 
+                componentSelector,
                 makeWordListArray(words),
                 getSearchWordClass()
         );
@@ -62,7 +61,24 @@ public class HighlightSearchTermScriptFactory {
     }
 
     private String sanitise(String word) {
-        return word.replaceAll("^[\\s'\"]+|[\\s'\"]+$", "");
+        //remove everything up to first colon and strip off quotation marks and white space
+        return word.replaceAll(
+                //match beginning 
+                "^("
+                //case with colon (also strip quotes + optional whitespace after quotes)
+                + "[^:\"']+:(['\"])?"
+                //or case without colon (strip quotes and white space)
+                + "|['\"]+"
+                + ")"
+                //match end
+                + "|("
+                //quotes
+                + "['\"]+"
+                //or boosting values
+                + "|['\"]?\\^.*"
+                + ")$",
+                //replace with empty string
+                "");
     }
 
     /**
