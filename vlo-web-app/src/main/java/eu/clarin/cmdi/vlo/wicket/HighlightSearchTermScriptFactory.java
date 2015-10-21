@@ -26,16 +26,28 @@ import java.util.Collection;
  */
 public class HighlightSearchTermScriptFactory implements Serializable {
 
-    private static final String HIGHLIGHT_FUNCTION = "$('%s').highlight(%s, {className:'%s'})";
+    public static final String HIGHLIGHT_FUNCTION = "$('%s').highlight(%s, {className:'%s', wordsOnly: %s})";
 
-    private static final Collection<String> DEFAULT_EXCLUDE_WORDS = ImmutableSet.of("and", "or", "not", "to");
+    public static final Collection<String> DEFAULT_EXCLUDE_WORDS = ImmutableSet.of("and", "or", "not", "to");
+
+    public static final String DEFAULT_CSS_CLASS = "searchword";
 
     public String createScript(String componentSelector, final String words) {
+        return createScript(componentSelector, words, DEFAULT_CSS_CLASS);
+    }
+
+    public String createScript(String componentSelector, final String words, String cssClass) {
         return String.format(HIGHLIGHT_FUNCTION,
                 componentSelector,
                 makeWordListArray(words),
-                getSearchWordClass()
+                cssClass,
+                matchWordsOnly(words)
         );
+    }
+
+    protected boolean matchWordsOnly(String query) {
+        // string with asterixes or question marks should match by character
+        return !query.matches(".*[\\*\\?].*");
     }
 
     /**
@@ -77,17 +89,11 @@ public class HighlightSearchTermScriptFactory implements Serializable {
                 + "['\"]+"
                 //or boosting values
                 + "|['\"]?\\^.*"
-                + ")$",
+                + ")$"
+                //also remove wildcard characters
+                + "|[\\?\\*]",
                 //replace with empty string
                 "");
-    }
-
-    /**
-     *
-     * @return CSS class to mark matches with
-     */
-    protected String getSearchWordClass() {
-        return "searchword";
     }
 
     /**
