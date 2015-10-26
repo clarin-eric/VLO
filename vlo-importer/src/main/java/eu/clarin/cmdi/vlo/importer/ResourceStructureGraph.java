@@ -52,14 +52,15 @@ public class ResourceStructureGraph {
      * @param mdSelfLink extracted MdSelfLink from CMDI file
      */
     public static void addResource(String mdSelfLink) {
-        if (!vertexIdMap.containsKey(mdSelfLink)) {
-            CmdiVertex newVertex = new CmdiVertex(StringUtils.normalizeIdString(mdSelfLink));
-            vertexIdMap.put(mdSelfLink, newVertex);
+        String normalizedMdSelfLink = StringUtils.normalizeIdString(mdSelfLink);
+        if (!vertexIdMap.containsKey(normalizedMdSelfLink)) {
+            CmdiVertex newVertex = new CmdiVertex(normalizedMdSelfLink);
+            vertexIdMap.put(normalizedMdSelfLink, newVertex);
         }
 
-        if (!foundVerticesSet.contains(vertexIdMap.get(mdSelfLink))) {
-            graph.addVertex(vertexIdMap.get(mdSelfLink));
-            foundVerticesSet.add(vertexIdMap.get(mdSelfLink));
+        if (!foundVerticesSet.contains(vertexIdMap.get(normalizedMdSelfLink))) {
+            graph.addVertex(vertexIdMap.get(normalizedMdSelfLink));
+            foundVerticesSet.add(vertexIdMap.get(normalizedMdSelfLink));
         } else {
             LOG.debug("Duplicate resource vertex mdSelfLink: " + mdSelfLink);
         }
@@ -72,23 +73,26 @@ public class ResourceStructureGraph {
      * @param targetVertexId target vertex ID (=hasPart)
      */
     public static void addEdge(String sourceVertexId, String targetVertexId) {
+        String normalizedSourceVertexId = StringUtils.normalizeIdString(sourceVertexId);
+        String normalizedTargetVertexId = StringUtils.normalizeIdString(targetVertexId);
+        
         // add vertices
-        if (!vertexIdMap.containsKey(sourceVertexId)) {
-            CmdiVertex sourceVertex = new CmdiVertex(StringUtils.normalizeIdString(sourceVertexId));
-            vertexIdMap.put(sourceVertexId, sourceVertex);
+        if (!vertexIdMap.containsKey(normalizedSourceVertexId)) {
+            CmdiVertex sourceVertex = new CmdiVertex(normalizedSourceVertexId);
+            vertexIdMap.put(normalizedSourceVertexId, sourceVertex);
             graph.addVertex(sourceVertex);
         }
 
-        if (!vertexIdMap.containsKey(targetVertexId)) {
-            CmdiVertex targetVertex = new CmdiVertex(StringUtils.normalizeIdString(targetVertexId));
-            vertexIdMap.put(targetVertexId, targetVertex);
+        if (!vertexIdMap.containsKey(normalizedTargetVertexId)) {
+            CmdiVertex targetVertex = new CmdiVertex(normalizedTargetVertexId);
+            vertexIdMap.put(normalizedTargetVertexId, targetVertex);
             graph.addVertex(targetVertex);
         }
 
         // add edge
         try {
-            graph.addEdge(vertexIdMap.get(sourceVertexId), vertexIdMap.get(targetVertexId));
-            updateDepthValues(vertexIdMap.get(sourceVertexId), new HashSet<CmdiVertex>());
+            graph.addEdge(vertexIdMap.get(normalizedSourceVertexId), vertexIdMap.get(normalizedTargetVertexId));
+            updateDepthValues(vertexIdMap.get(normalizedSourceVertexId), new HashSet<CmdiVertex>());
         } catch (IllegalArgumentException cfe) {
             // was a cycle -> ignore
             LOG.debug("Found cycle\t" + sourceVertexId + "\t" + targetVertexId);
@@ -161,10 +165,18 @@ public class ResourceStructureGraph {
     public static Set<CmdiVertex> getFoundVertices() {
         return foundVerticesSet;
     }
+    
+    public static CmdiVertex getVertex(String vertexId) {
+        return vertexIdMap.get(vertexId);        
+    }
+    
+    public static Map<String, CmdiVertex> getVertexIdMap() {
+        return vertexIdMap;
+    }
 
     /**
      * Get all vertices that are source of an edge where targetVertex is target.
-     * In other words get all vertices that are part of targetVertex.
+     * In other words get all resource vertices that are part of resource targetVertex.
      *
      * @param targetVertex
      * @return List of vertices that are source of an edge where targetVertex is
@@ -186,7 +198,7 @@ public class ResourceStructureGraph {
 
     /**
      * Get all vertices that are target of an edge where sourceVertex is source.
-     * In other words get all vertices of which sourceVertex is part of.
+     * In other words get all resource vertices of which resource sourceVertex is part of.
      *
      * @param sourceVertex
      * @return List of vertices that are target of an edge where sourceVertex is
@@ -272,6 +284,7 @@ class CmdiVertex {
 
     private final String id;
     private int hierarchyWeight = 0;
+    private boolean wasImported = false;
 
     public CmdiVertex(String id) {
         this.id = id;
@@ -287,6 +300,14 @@ class CmdiVertex {
 
     public int getHierarchyWeight() {
         return hierarchyWeight;
+    }
+    
+    public void setWasImported(boolean wasImported) {
+        this.wasImported = wasImported;
+    }
+    
+    public boolean getWasImported() {
+        return wasImported;
     }
 
     @Override

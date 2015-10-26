@@ -47,7 +47,6 @@ import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
  * defined in the configuration. The startImport function starts the importing
  * and so on.
  */
-@SuppressWarnings({"serial"})
 public class MetadataImporter {
 
     /**
@@ -228,7 +227,8 @@ public class MetadataImporter {
      * if user specified which data roots should be imported,
      * list of existing data roots will be filtered with the list from user
      * 
-     * @return
+     * @param dataRoots complete list of DataRoots
+     * @return list of DataRoots without DataRoots excluded by the user
      */
     protected List<DataRoot> filterDataRootsWithCLArgs(List<DataRoot> dataRoots){
     	if(clDatarootsList == null)
@@ -365,6 +365,8 @@ public class MetadataImporter {
                         // Other files will have only metadata resources and are considered 'collection' metadata files they
                         // are usually not very interesting (think imdi corpus files) and will not be included.
                         updateDocument(solrDocument, cmdiData, file, dataOrigin);
+                        if(ResourceStructureGraph.getVertex(cmdiData.getId()) != null)
+                            ResourceStructureGraph.getVertex(cmdiData.getId()).setWasImported(true);
                     } else {
                         nrOfIgnoredFiles++;
                     }
@@ -546,6 +548,20 @@ public class MetadataImporter {
                 
                 if(vertex.getHierarchyWeight() != 0) {
                     doc.setField(FacetConstants.FIELD_HIERARCHY_WEIGHT, Math.abs(vertex.getHierarchyWeight()));
+                }
+                
+                // remove vertices that were not imported
+                Iterator<String> incomingVertexIter = incomingVertexNames.iterator();
+                while(incomingVertexIter.hasNext()) {
+                    String vertexId = incomingVertexIter.next();
+                    if(ResourceStructureGraph.getVertex(vertexId) == null || !ResourceStructureGraph.getVertex(vertexId).getWasImported())
+                        incomingVertexIter.remove();
+                }
+                Iterator<String> outgoingVertexIter = outgoingVertexNames.iterator();
+                while(outgoingVertexIter.hasNext()) {
+                    String vertexId = outgoingVertexIter.next();
+                    if(ResourceStructureGraph.getVertex(vertexId) == null || !ResourceStructureGraph.getVertex(vertexId).getWasImported())
+                        outgoingVertexIter.remove();
                 }
                 
                 if(!incomingVertexNames.isEmpty()) {
