@@ -9,6 +9,7 @@ VLO 3.3.2 (November 2015)
 * Collection records with a large number of children only load the first few,
 allowing the user to load more if desired
         <https://trac.clarin.eu/ticket/805>
+* Search terms are now highlighted in the search results as well
 
 VLO 3.3.1 (September 2015)
 
