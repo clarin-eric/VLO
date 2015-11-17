@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<xs:schema 	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="mappings">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="mapping" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="normalizedValue">
+              	<xs:complexType>
+              		<xs:attribute name="value" type="xs:string"/>
+              	</xs:complexType>
+              </xs:element>
+              <xs:element name="variant" minOccurs="0" maxOccurs="unbounded">
+              	<xs:complexType>
+              		<xs:sequence>
+              			<xs:element name="cross-mappings" maxOccurs="unbounded" minOccurs="0">
+              				<xs:complexType>
+              					<xs:sequence>
+              						<xs:element name="cross-mapping" maxOccurs="unbounded" minOccurs="1">
+              							<xs:complexType>
+              								<xs:sequence>
+              									<xs:element name="facet" type="xs:string"/>
+              									<xs:element name="value" type="xs:string"/>
+              								</xs:sequence>
+              							</xs:complexType>
+              						</xs:element>
+              					</xs:sequence>
+              				</xs:complexType>
+              			</xs:element>
+              		</xs:sequence>
+              		<xs:attribute name="value" type="xs:string"/>
+              		<!-- left for patterns in nationalProjectMappings.xml -->
+              		<xs:attribute name="isRegExp" type="xs:boolean" use="optional"/>
+              	</xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="field" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+              		

@@ -1,0 +1,385 @@
+<mappings field="languageCode">
+   <mapping>
+      <normalizedValue value="Abkhazian; Abkhaz"/>
+      <variant value="Abkhazian"/>
+      <variant value="Abkhaz"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Adyghe; Adygei"/>
+      <variant value="Adyghe"/>
+      <variant value="Adygei"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Official Aramaic; Imperial Aramaic"/>
+      <variant value="Official Aramaic"/>
+      <variant value="Imperial Aramaic"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Mapudungun; Mapuche"/>
+      <variant value="Mapudungun"/>
+      <variant value="Mapuche"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Asturian; Bable; Leonese; Asturleonese"/>
+      <variant value="Asturian"/>
+      <variant value="Bable"/>
+      <variant value="Leonese"/>
+      <variant value="Asturleonese"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Avar; Avarish; Avaric"/>
+      <variant value="Avar"/>
+      <variant value="Avarish"/>
+      <variant value="Avaric"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Beja; Bedawiyet"/>
+      <variant value="Beja"/>
+      <variant value="Bedawiyet"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Bengali; Bangla"/>
+      <variant value="Bengali"/>
+      <variant value="Bangla"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Bini; Edo"/>
+      <variant value="Bini"/>
+      <variant value="Edo"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Blin; Bilin"/>
+      <variant value="Blin"/>
+      <variant value="Bilin"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Catalan; Valencian"/>
+      <variant value="Catalan"/>
+      <variant value="Valencian"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Chipewyan; Dene Suline"/>
+      <variant value="Chipewyan"/>
+      <variant value="Dene Suline"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Church Slavic; Old Slavonic; Old Church Slavonic; Church Slavonic; Old Bulgarian"/>
+      <variant value="Church Slavic"/>
+      <variant value="Old Slavonic"/>
+      <variant value="Old Church Slavonic"/>
+      <variant value="Church Slavonic"/>
+      <variant value="Old Bulgarian"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Crimean Tatar; Crimean Turkish"/>
+      <variant value="Crimean Tatar"/>
+      <variant value="Crimean Turkish"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Divehi; Dhivehi; Maldivian"/>
+      <variant value="Divehi"/>
+      <variant value="Dhivehi"/>
+      <variant value="Maldivian"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Dzongkha; Bhutani; Butanese"/>
+      <variant value="Dzongkha"/>
+      <variant value="Bhutani"/>
+      <variant value="Butanese"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Faroese; Faeroese"/>
+      <variant value="Faroese"/>
+      <variant value="Faeroese"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Farsi; Persian"/>
+      <variant value="Farsi"/>
+      <variant value="Persian"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Filipino; Pilipino"/>
+      <variant value="Filipino"/>
+      <variant value="Pilipino"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Fulah; Fula; Fulani; Fulfulde; Peul"/>
+      <variant value="Fulah"/>
+      <variant value="Fula"/>
+      <variant value="Fulani"/>
+      <variant value="Fulfulde"/>
+      <variant value="Peul"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Gaelic; Scottish Gaelic"/>
+      <variant value="Gaelic"/>
+      <variant value="Scottish Gaelic"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Swiss German; Alemannic; Alsatian"/>
+      <variant value="Swiss German"/>
+      <variant value="Alemannic"/>
+      <variant value="Alsatian"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Haitian; Haitian Creole"/>
+      <variant value="Haitian"/>
+      <variant value="Haitian Creole"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Sichuan Yi; Nuosu"/>
+      <variant value="Sichuan Yi"/>
+      <variant value="Nuosu"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Kachin; Jingpho"/>
+      <variant value="Kachin"/>
+      <variant value="Jingpho"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Greenlandic; Kalaallisut"/>
+      <variant value="Greenlandic"/>
+      <variant value="Kalaallisut"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Khotanese; Sakan"/>
+      <variant value="Khotanese"/>
+      <variant value="Sakan"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Kikuyu; Gikuyu"/>
+      <variant value="Kikuyu"/>
+      <variant value="Gikuyu"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Kinyarwanda; Rwanda"/>
+      <variant value="Kinyarwanda"/>
+      <variant value="Rwanda"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Kyrgyz; Kirghiz"/>
+      <variant value="Kyrgyz"/>
+      <variant value="Kirghiz"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Kuanyama; Kwanyama"/>
+      <variant value="Kuanyama"/>
+      <variant value="Kwanyama"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Laotian; Lao"/>
+      <variant value="Laotian"/>
+      <variant value="Lao"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Limburgish; Limburger; Limburgian"/>
+      <variant value="Limburgish"/>
+      <variant value="Limburger"/>
+      <variant value="Limburgian"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Letzeburgesch; Luxembourgish"/>
+      <variant value="Letzeburgesch"/>
+      <variant value="Luxembourgish"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Luganda; Ganda"/>
+      <variant value="Luganda"/>
+      <variant value="Ganda"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Mi'kmaq; Micmac"/>
+      <variant value="Mi'kmaq"/>
+      <variant value="Micmac"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Myanmar; Burmese"/>
+      <variant value="Myanmar"/>
+      <variant value="Burmese"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Navajo; Navaho"/>
+      <variant value="Navajo"/>
+      <variant value="Navaho"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Low German; Low Saxon"/>
+      <variant value="Low German"/>
+      <variant value="Low Saxon"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Nepal Bhasa; Newari"/>
+      <variant value="Nepal Bhasa"/>
+      <variant value="Newari"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Pedi; Sepedi; Northern Sotho"/>
+      <variant value="Pedi"/>
+      <variant value="Sepedi"/>
+      <variant value="Northern Sotho"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Classical Newari; Old Newari; Classical Nepal Bhasa"/>
+      <variant value="Classical Newari"/>
+      <variant value="Old Newari"/>
+      <variant value="Classical Nepal Bhasa"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Chichewa; Chewa; Nyanja"/>
+      <variant value="Chichewa"/>
+      <variant value="Chewa"/>
+      <variant value="Nyanja"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Occitan; Provençal"/>
+      <variant value="Occitan"/>
+      <variant value="Provençal"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Oromo; Afan Oromo; Galla"/>
+      <variant value="Oromo"/>
+      <variant value="Afan Oromo"/>
+      <variant value="Galla"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Ossetian; Ossetic"/>
+      <variant value="Ossetian"/>
+      <variant value="Ossetic"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Pampanga; Kapampangan"/>
+      <variant value="Pampanga"/>
+      <variant value="Kapampangan"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Punjabi; Panjabi"/>
+      <variant value="Punjabi"/>
+      <variant value="Panjabi"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Pashto; Pushto"/>
+      <variant value="Pashto"/>
+      <variant value="Pushto"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Rarotongan; Cook Islands Maori"/>
+      <variant value="Rarotongan"/>
+      <variant value="Cook Islands Maori"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Romany; Romani"/>
+      <variant value="Romany"/>
+      <variant value="Romani"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Romanian; Moldavian; Moldovan"/>
+      <variant value="Romanian"/>
+      <variant value="Moldavian"/>
+      <variant value="Moldovan"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Kirundi; Rundi"/>
+      <variant value="Kirundi"/>
+      <variant value="Rundi"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Aromanian; Arumanian; Macedo-Romanian"/>
+      <variant value="Aromanian"/>
+      <variant value="Arumanian"/>
+      <variant value="Macedo-Romanian"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Sango; Sangho"/>
+      <variant value="Sango"/>
+      <variant value="Sangho"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Lowlands Scots; Scots; Lallans"/>
+      <variant value="Lowlands Scots"/>
+      <variant value="Scots"/>
+      <variant value="Lallans"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Sinhala; Sinhalese; Singhalese"/>
+      <variant value="Sinhala"/>
+      <variant value="Sinhalese"/>
+      <variant value="Singhalese"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Sesotho; Southern Sotho"/>
+      <variant value="Sesotho"/>
+      <variant value="Southern Sotho"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Spanish; Castilian"/>
+      <variant value="Spanish"/>
+      <variant value="Castilian"/>
+      <variant value="Spanish, Castilian"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Swazi; Swati; Siswati"/>
+      <variant value="Swazi"/>
+      <variant value="Swati"/>
+      <variant value="Siswati"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Swahili; Kiswahili"/>
+      <variant value="Swahili"/>
+      <variant value="Kiswahili"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Tembo; Kitembo"/>
+      <variant value="Tembo"/>
+      <variant value="Kitembo"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Klingon; tlhIngan Hol"/>
+      <variant value="Klingon"/>
+      <variant value="tlhIngan Hol"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Tembo; Motembo"/>
+      <variant value="Tembo"/>
+      <variant value="Motembo"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Setswana; Tswana"/>
+      <variant value="Setswana"/>
+      <variant value="Tswana"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Uighur; Uyghur"/>
+      <variant value="Uighur"/>
+      <variant value="Uyghur"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Wolaytta; Walamo"/>
+      <variant value="Wolaytta"/>
+      <variant value="Walamo"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Kalmyk; Oirat"/>
+      <variant value="Kalmyk"/>
+      <variant value="Oirat"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Blissymbols; Blissymbolics; Bliss"/>
+      <variant value="Blissymbols"/>
+      <variant value="Blissymbolics"/>
+      <variant value="Bliss"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Zhuang; Chuang"/>
+      <variant value="Zhuang"/>
+      <variant value="Chuang"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Zaza; Dimili; Dimli; Kirdki; Kirmanjki; Zazaki"/>
+      <variant value="Zaza"/>
+      <variant value="Dimili"/>
+      <variant value="Dimli"/>
+      <variant value="Kirdki"/>
+      <variant value="Kirmanjki"/>
+      <variant value="Zazaki"/>
+   </mapping>
+</mappings>

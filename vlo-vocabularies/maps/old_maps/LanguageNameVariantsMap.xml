@@ -1,0 +1,315 @@
+<?xml version="1.0"?>
+<LanguageNames>
+    <Language name="Abkhazian; Abkhaz">
+        <Variation>Abkhazian</Variation>
+        <Variation>Abkhaz</Variation>
+    </Language>
+    <Language name="Adyghe; Adygei">
+        <Variation>Adyghe</Variation>
+        <Variation>Adygei</Variation>
+    </Language>
+    <Language name="Official Aramaic; Imperial Aramaic">
+        <Variation>Official Aramaic</Variation>
+        <Variation>Imperial Aramaic</Variation>
+    </Language>
+    <Language name="Mapudungun; Mapuche">
+        <Variation>Mapudungun</Variation>
+        <Variation>Mapuche</Variation>
+    </Language>
+    <Language name="Asturian; Bable; Leonese; Asturleonese">
+        <Variation>Asturian</Variation>
+        <Variation>Bable</Variation>
+        <Variation>Leonese</Variation>
+        <Variation>Asturleonese</Variation>
+    </Language>
+    <Language name="Avar; Avarish; Avaric">
+        <Variation>Avar</Variation>
+        <Variation>Avarish</Variation>
+        <Variation>Avaric</Variation>
+    </Language>
+    <Language name="Beja; Bedawiyet">
+        <Variation>Beja</Variation>
+        <Variation>Bedawiyet</Variation>
+    </Language>
+    <Language name="Bengali; Bangla">
+        <Variation>Bengali</Variation>
+        <Variation>Bangla</Variation>
+    </Language>
+    <Language name="Bini; Edo">
+        <Variation>Bini</Variation>
+        <Variation>Edo</Variation>
+    </Language>
+    <Language name="Blin; Bilin">
+        <Variation>Blin</Variation>
+        <Variation>Bilin</Variation>
+    </Language>
+    <Language name="Catalan; Valencian">
+        <Variation>Catalan</Variation>
+        <Variation>Valencian</Variation>
+    </Language>
+    <Language name="Chipewyan; Dene Suline">
+        <Variation>Chipewyan</Variation>
+        <Variation>Dene Suline</Variation>
+    </Language>
+    <Language name="Church Slavic; Old Slavonic; Old Church Slavonic; Church Slavonic; Old Bulgarian">
+        <Variation>Church Slavic</Variation>
+        <Variation>Old Slavonic</Variation>
+        <Variation>Old Church Slavonic</Variation>
+        <Variation>Church Slavonic</Variation>
+        <Variation>Old Bulgarian</Variation>
+    </Language>
+    <Language name="Crimean Tatar; Crimean Turkish">
+        <Variation>Crimean Tatar</Variation>
+        <Variation>Crimean Turkish</Variation>
+    </Language>
+    <Language name="Divehi; Dhivehi; Maldivian">
+        <Variation>Divehi</Variation>
+        <Variation>Dhivehi</Variation>
+        <Variation>Maldivian</Variation>
+    </Language>
+    <Language name="Dzongkha; Bhutani; Butanese">
+        <Variation>Dzongkha</Variation>
+        <Variation>Bhutani</Variation>
+        <Variation>Butanese</Variation>
+    </Language>
+    <Language name="Faroese; Faeroese">
+        <Variation>Faroese</Variation>
+        <Variation>Faeroese</Variation>
+    </Language>
+    <Language name="Farsi; Persian">
+        <Variation>Farsi</Variation>
+        <Variation>Persian</Variation>
+    </Language>
+    <Language name="Filipino; Pilipino">
+        <Variation>Filipino</Variation>
+        <Variation>Pilipino</Variation>
+    </Language>
+    <Language name="Fulah; Fula; Fulani; Fulfulde; Peul">
+        <Variation>Fulah</Variation>
+        <Variation>Fula</Variation>
+        <Variation>Fulani</Variation>
+        <Variation>Fulfulde</Variation>
+        <Variation>Peul</Variation>
+    </Language>
+    <Language name="Gaelic; Scottish Gaelic">
+        <Variation>Gaelic</Variation>
+        <Variation>Scottish Gaelic</Variation>
+    </Language>
+    <Language name="Swiss German; Alemannic; Alsatian">
+        <Variation>Swiss German</Variation>
+        <Variation>Alemannic</Variation>
+        <Variation>Alsatian</Variation>
+    </Language>
+    <Language name="Haitian; Haitian Creole">
+        <Variation>Haitian</Variation>
+        <Variation>Haitian Creole</Variation>
+    </Language>
+    <Language name="Sichuan Yi; Nuosu">
+        <Variation>Sichuan Yi</Variation>
+        <Variation>Nuosu</Variation>
+    </Language>
+    <Language name="Kachin; Jingpho">
+        <Variation>Kachin</Variation>
+        <Variation>Jingpho</Variation>
+    </Language>
+    <Language name="Greenlandic; Kalaallisut">
+        <Variation>Greenlandic</Variation>
+        <Variation>Kalaallisut</Variation>
+    </Language>
+    <Language name="Khotanese; Sakan">
+        <Variation>Khotanese</Variation>
+        <Variation>Sakan</Variation>
+    </Language>
+    <Language name="Kikuyu; Gikuyu">
+        <Variation>Kikuyu</Variation>
+        <Variation>Gikuyu</Variation>
+    </Language>
+    <Language name="Kinyarwanda; Rwanda">
+        <Variation>Kinyarwanda</Variation>
+        <Variation>Rwanda</Variation>
+    </Language>
+    <Language name="Kyrgyz; Kirghiz">
+        <Variation>Kyrgyz</Variation>
+        <Variation>Kirghiz</Variation>
+    </Language>
+    <Language name="Kuanyama; Kwanyama">
+        <Variation>Kuanyama</Variation>
+        <Variation>Kwanyama</Variation>
+    </Language>
+    <Language name="Laotian; Lao">
+        <Variation>Laotian</Variation>
+        <Variation>Lao</Variation>
+    </Language>
+    <Language name="Limburgish; Limburger; Limburgian">
+        <Variation>Limburgish</Variation>
+        <Variation>Limburger</Variation>
+        <Variation>Limburgian</Variation>
+    </Language>
+    <Language name="Letzeburgesch; Luxembourgish">
+        <Variation>Letzeburgesch</Variation>
+        <Variation>Luxembourgish</Variation>
+    </Language>
+    <Language name="Luganda; Ganda">
+        <Variation>Luganda</Variation>
+        <Variation>Ganda</Variation>
+    </Language>
+    <Language name="Mi'kmaq; Micmac">
+        <Variation>Mi'kmaq</Variation>
+        <Variation>Micmac</Variation>
+    </Language>
+    <Language name="Myanmar; Burmese">
+        <Variation>Myanmar</Variation>
+        <Variation>Burmese</Variation>
+    </Language>
+    <Language name="Navajo; Navaho">
+        <Variation>Navajo</Variation>
+        <Variation>Navaho</Variation>
+    </Language>
+    <Language name="Low German; Low Saxon">
+        <Variation>Low German</Variation>
+        <Variation>Low Saxon</Variation>
+    </Language>
+    <Language name="Nepal Bhasa; Newari">
+        <Variation>Nepal Bhasa</Variation>
+        <Variation>Newari</Variation>
+    </Language>
+    <Language name="Pedi; Sepedi; Northern Sotho">
+        <Variation>Pedi</Variation>
+        <Variation>Sepedi</Variation>
+        <Variation>Northern Sotho</Variation>
+    </Language>
+    <Language name="Classical Newari; Old Newari; Classical Nepal Bhasa">
+        <Variation>Classical Newari</Variation>
+        <Variation>Old Newari</Variation>
+        <Variation>Classical Nepal Bhasa</Variation>
+    </Language>
+    <Language name="Chichewa; Chewa; Nyanja">
+        <Variation>Chichewa</Variation>
+        <Variation>Chewa</Variation>
+        <Variation>Nyanja</Variation>
+    </Language>
+    <Language name="Occitan; Provençal">
+        <Variation>Occitan</Variation>
+        <Variation>Provençal</Variation>
+    </Language>
+    <Language name="Oromo; Afan Oromo; Galla">
+        <Variation>Oromo</Variation>
+        <Variation>Afan Oromo</Variation>
+        <Variation>Galla</Variation>
+    </Language>
+    <Language name="Ossetian; Ossetic">
+        <Variation>Ossetian</Variation>
+        <Variation>Ossetic</Variation>
+    </Language>
+    <Language name="Pampanga; Kapampangan">
+        <Variation>Pampanga</Variation>
+        <Variation>Kapampangan</Variation>
+    </Language>
+    <Language name="Punjabi; Panjabi">
+        <Variation>Punjabi</Variation>
+        <Variation>Panjabi</Variation>
+    </Language>
+    <Language name="Pashto; Pushto">
+        <Variation>Pashto</Variation>
+        <Variation>Pushto</Variation>
+    </Language>
+    <Language name="Rarotongan; Cook Islands Maori">
+        <Variation>Rarotongan</Variation>
+        <Variation>Cook Islands Maori</Variation>
+    </Language>
+    <Language name="Romany; Romani">
+        <Variation>Romany</Variation>
+        <Variation>Romani</Variation>
+    </Language>
+    <Language name="Romanian; Moldavian; Moldovan">
+        <Variation>Romanian</Variation>
+        <Variation>Moldavian</Variation>
+        <Variation>Moldovan</Variation>
+    </Language>
+    <Language name="Kirundi; Rundi">
+        <Variation>Kirundi</Variation>
+        <Variation>Rundi</Variation>
+    </Language>
+    <Language name="Aromanian; Arumanian; Macedo-Romanian">
+        <Variation>Aromanian</Variation>
+        <Variation>Arumanian</Variation>
+        <Variation>Macedo-Romanian</Variation>
+    </Language>
+    <Language name="Sango; Sangho">
+        <Variation>Sango</Variation>
+        <Variation>Sangho</Variation>
+    </Language>
+    <Language name="Lowlands Scots; Scots; Lallans">
+        <Variation>Lowlands Scots</Variation>
+        <Variation>Scots</Variation>
+        <Variation>Lallans</Variation>
+    </Language>
+    <Language name="Sinhala; Sinhalese; Singhalese">
+        <Variation>Sinhala</Variation>
+        <Variation>Sinhalese</Variation>
+        <Variation>Singhalese</Variation>
+    </Language>
+    <Language name="Sesotho; Southern Sotho">
+        <Variation>Sesotho</Variation>
+        <Variation>Southern Sotho</Variation>
+    </Language>
+    <Language name="Spanish; Castilian">
+        <Variation>Spanish</Variation>
+        <Variation>Castilian</Variation>
+        <Variation>Spanish, Castilian</Variation>
+    </Language>
+    <Language name="Swazi; Swati; Siswati">
+        <Variation>Swazi</Variation>
+        <Variation>Swati</Variation>
+        <Variation>Siswati</Variation>
+    </Language>
+    <Language name="Swahili; Kiswahili">
+        <Variation>Swahili</Variation>
+        <Variation>Kiswahili</Variation>
+    </Language>
+    <Language name="Tembo; Kitembo">
+        <Variation>Tembo</Variation>
+        <Variation>Kitembo</Variation>
+    </Language>
+    <Language name="Klingon; tlhIngan Hol">
+        <Variation>Klingon</Variation>
+        <Variation>tlhIngan Hol</Variation>
+    </Language>
+    <Language name="Tembo; Motembo">
+        <Variation>Tembo</Variation>
+        <Variation>Motembo</Variation>
+    </Language>
+    <Language name="Setswana; Tswana">
+        <Variation>Setswana</Variation>
+        <Variation>Tswana</Variation>
+    </Language>
+    <Language name="Uighur; Uyghur">
+        <Variation>Uighur</Variation>
+        <Variation>Uyghur</Variation>
+    </Language>
+    <Language name="Wolaytta; Walamo">
+        <Variation>Wolaytta</Variation>
+        <Variation>Walamo</Variation>
+    </Language>
+    <Language name="Kalmyk; Oirat">
+        <Variation>Kalmyk</Variation>
+        <Variation>Oirat</Variation>
+    </Language>
+    <Language name="Blissymbols; Blissymbolics; Bliss">
+        <Variation>Blissymbols</Variation>
+        <Variation>Blissymbolics</Variation>
+        <Variation>Bliss</Variation>
+    </Language>
+    <Language name="Zhuang; Chuang">
+        <Variation>Zhuang</Variation>
+        <Variation>Chuang</Variation>
+    </Language>
+    <Language name="Zaza; Dimili; Dimli; Kirdki; Kirmanjki; Zazaki">
+        <Variation>Zaza</Variation>
+        <Variation>Dimili</Variation>
+        <Variation>Dimli</Variation>
+        <Variation>Kirdki</Variation>
+        <Variation>Kirmanjki</Variation>
+        <Variation>Zazaki</Variation>
+    </Language>
+</LanguageNames>

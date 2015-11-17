@@ -1,0 +1,79 @@
+<mappings field="nationalProject">
+   <mapping>
+      <normalizedValue value="CLARIN-D"/>
+      <variant value="Berlin-Brandenburgische Akademie der Wissenschaften"/>
+      <variant value="Deutsches Textarchiv (1600–1900)"/>
+      <variant value="WebLicht Webservice Orchestrator"/>
+      <variant value="Tübingen Language Resources"/>
+      <variant value="TLA: Acquisition"/>
+      <variant value="Bavarian Archive for Speech Signals (BAS)"/>
+      <variant value="TLA: childes"/>
+      <variant value="TLA: Comprehension"/>
+      <variant value="TLA: DoBeS archive"/>
+      <variant value="TLA: Humanethologisches Filmarchiv"/>
+      <variant value="TLA: Language and Cognition"/>
+      <variant value="TLA: MPI für Bildungsforschung"/>
+      <variant value="TLA: Multilingualism"/>
+      <variant value="TLA: Neurobiology of language"/>
+      <variant value="TLA: Sign Language Typology"/>
+      <variant value="TLA: talkbank"/>
+      <variant value="Leipzig Corpora Collection"/>
+      <variant value="Hamburger Zentrum für Sprachkorpora (HZSK)"/>
+      <variant value="IMS, University of Stuttgart, Language Resources"/>
+      <variant value="AVATecH webservices"/>
+      <variant value="HZSK Webservices"/>
+      <variant value="Tübingen Curated Resource"/>
+      <variant value="Humboldt University of Berlin"/>
+      <variant value="Institut für Deutsche Sprache, CLARIN-D Zentrum, Mannheim"/>
+      <variant value="TLA Collections"/>
+      <variant value="Universität des Saarlandes.*" isRegExp="true"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CLARIN-EU"/>
+      <variant value="CLARIN LRT inventory"/>
+      <variant value="TLA: Adaptive Listening Group"/>
+      <variant value="TLA: AILLA"/>
+      <variant value="TLA: ANDES"/>
+      <variant value="TLA: Comparative cognitive anthropology"/>
+      <variant value="TLA: CORP-ORAL"/>
+      <variant value="TLA: Demo"/>
+      <variant value="TLA: ECHO"/>
+      <variant value="TLA: Evolutionary Processes in Language and Culture"/>
+      <variant value="TLA: ILSP INTERA contribution"/>
+      <variant value="TLA: Individual differences in language processing"/>
+      <variant value="TLA: SUCA"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CLARIN-NL"/>
+      <variant value="TLA: DBD"/>
+      <variant value="TLA: IFA corpus"/>
+      <variant value="TLA: Leiden Archives"/>
+      <variant value="TLA: MPI CGN"/>
+      <variant value="TLA: Nijmegen corpora of casual speech"/>
+      <variant value="CLARIN-NL webservices"/>
+      <variant value="Nederlands Instituut voor Beeld en Geluid Academia collectie"/>
+      <variant value="INL Taalbank Nederlands"/>
+      <variant value="TLA: Corpus NGT"/>
+      <variant value="Dictionary of the Brabantic dialect"/>
+      <variant value="Dictionary of the Brabantic dialects - subcollection with core data"/>
+      <variant value="Dictionary of the Limburgian dialects"/>
+      <variant value="Dictionary of the Limburgian dialects - subcollection with core data"/>
+      <variant value="TLA: NEHOL"/>
+      <variant value="UBU Clarin Set"/>
+      <variant value="Meertens.*" isRegExp="true"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CLARIN-DK-UCPH"/>
+      <variant value="CLARIN-DK-UCPH Repository"/>
+      <variant value="CLARIN-DK-UCPH.*" isRegExp="true"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="LINDAT (CLARIN-CZ)"/>
+      <variant value="LRT + Open Submissions Data &amp; Tools"/>
+      <variant value="LINDAT / CLARIN.*" isRegExp="true"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Dutch Language Union"/>
+      <variant value="TST-Centrale"/>
+   </mapping>
+</mappings>

@@ -1,0 +1,2546 @@
+<Organisations>
+    <Organisation name="AIATSIS">
+        <Variation>Australian Institute of Aboriginal and Torres Strait Islander Studies (AIATSIS)</Variation>
+        <Variation>Australian Institute of Aboriginal Studies</Variation>
+    </Organisation>
+    <Organisation name="CNRS, IIAP, Department of Linguistics">
+        <Variation>Centre national de la recherche scientifique (CNRS); Instituto de Investigaciones de la Amazonía Peruana (IIAP); Ruhr-University Bochum, Department of Linguistics</Variation>
+        <Variation>Centre national de la recherche scientifique, Instituto de Investigaciones de la Amazonía Peruana / Department of Linguistics / Ruhr-University Bochum</Variation>
+    </Organisation>
+    <Organisation name="RKK">
+        <Variation>Rooms-Katholiek Kerkgenootschap</Variation>
+    </Organisation>
+    <Organisation name="Finnish language, University of Oulu"/>
+    <Organisation name="Consejo de Desarrollo Científico y Humanístico, Universidad Central de Venezuela">
+        <Variation>Universidad Central de Venezuela, Consejo de Desarrollo Científico y Humanístico</Variation>
+    </Organisation>
+    <Organisation name="Kegan Paul">
+        <Variation>Kegan Paul International</Variation>
+        <Variation>Kegan Paul.</Variation>
+    </Organisation>
+    <Organisation name="ILK, Computational Linguistics">
+        <Variation>Computational Linguistics, Tilburg</Variation>
+        <Variation>ILK, Computational Linguitics, Tilburg University</Variation>
+    </Organisation>
+    <Organisation name="Feffer and Simons Incorporated">
+        <Variation>Feffer &amp; Simons Incorporated</Variation>
+        <Variation>Feffer and Simons Inc.</Variation>
+    </Organisation>
+    <Organisation name="Center for SouthEast Asian Studies, University of California, Berkeley">
+        <Variation>Center fo SouthEast Asian Studies, University of California, Berkeley</Variation>
+    </Organisation>
+    <Organisation name="Imprimerie Nationale">
+        <Variation>Imprimerie nationale</Variation>
+    </Organisation>
+    <Organisation name="Departement of African Languages and Cultures, Ecole Normale Supérieure-Yaoundé">
+        <Variation>Ecole Normale Supérieure-Yaoundé, Departement of African Languages and Cultures; Po Box 47, Yaoundé-Cameroon</Variation>
+    </Organisation>
+    <Organisation name="Department of Linguistics, Southern Illinois University at Carbondale">
+        <Variation>Southern Illinois University at Carbondale, Department of Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Collège Liberman">
+        <Variation>Collège Libermann</Variation>
+        <Variation>Le Collège Libermann</Variation>
+    </Organisation>
+    <Organisation name="South Asia Regional Studies, University of Pennsylvania"/>
+    <Organisation name="Instituto de Lingüística, Facultad de Filosofía y Letras">
+        <Variation>Instituto de Lingüística, Facultad de Filosofía y Letras, Universidad de Buenos Aires</Variation>
+    </Organisation>
+    <Organisation name="Ablex Publishing Corporation">
+        <Variation>Ablex</Variation>
+    </Organisation>
+    <Organisation name="University of Victoria">
+        <Variation>University of Victoria, British Columbia, Canada</Variation>
+    </Organisation>
+    <Organisation name="Department of Celtic, Institute of Irish Studies">
+        <Variation>Queen's University of Belfast-Institute of Irish Studies-Dept. of Celtic</Variation>
+    </Organisation>
+    <Organisation name="Groote Eylandt Linguistics">
+        <Variation>Groote Eylandt Linguistics.</Variation>
+    </Organisation>
+    <Organisation name="UiL-OTS, Utrecht University"/>
+    <Organisation name="University of Michigan, Ann Arbor">
+        <Variation>University of Michigan</Variation>
+    </Organisation>
+    <Organisation name="J. M. Dent&#160;and Sons Limited">
+        <Variation>J. M. Dent &amp; Sons Limited</Variation>
+        <Variation>J. M. Dent &amp; Sons Ltd</Variation>
+    </Organisation>
+    <Organisation name="SPEX">
+        <Variation>SPEX / Radboud University Nijmegen / the Netherlands</Variation>
+        <Variation>SPEX, Radboud University Nijmegen, the Netherlands</Variation>
+    </Organisation>
+    <Organisation name="Undena Publications">
+        <Variation>Undena Publishing</Variation>
+    </Organisation>
+    <Organisation name="Akademija Nauk SSSR">
+        <Variation>Akademia Nauk SSSR</Variation>
+        <Variation>Akademija Nauk SSSR, Sibirskoe Otdelenie, Institut Istorii, Filologii i Filosofii</Variation>
+        <Variation>Akademija nauk SSSR, Institut Jazykoznanija</Variation>
+        <Variation>Akademija Nauk</Variation>
+    </Organisation>
+    <Organisation name="N, A">
+        <Variation>NIET VAN TOEPASSING</Variation>
+        <Variation>Unspecified</Variation>
+        <Variation>Unknown</Variation>
+        <Variation>unaffiliated</Variation>
+        <Variation>NIET BEKEND</Variation>
+        <Variation>N/C</Variation>
+        <Variation>niet van toepassing</Variation>
+        <Variation>unknown</Variation>
+    </Organisation>
+    <Organisation name="Dipartimento per la Cooperazione allo Sviluppo, Comitato Tecnico Linguistico per l'Universita Nazionale Somala">
+        <Variation>Dipartimento per la Cooperazione allo Sviluppo; Comitato Tecnico Linguistico per l'Universita Nazionale Somala, Ministero degli Affari Esteri</Variation>
+    </Organisation>
+    <Organisation name="Free Press">
+        <Variation>The Free Press</Variation>
+    </Organisation>
+    <Organisation name="Gramedia, Cornell University Press">
+        <Variation>Gramedia / Cornell University Press</Variation>
+    </Organisation>
+    <Organisation name="UFAL, Faculty of Mathematics and Physics">
+        <Variation>UFAL, Faculty of Mathematics and Physics, Charles University in Prague</Variation>
+    </Organisation>
+    <Organisation name="University of Oregon">
+        <Variation>University of Oregon / CIDCA</Variation>
+    </Organisation>
+    <Organisation name="Språkbanken, Department of Swedish Language">
+        <Variation>Språkbanken, Dept. of Swedish Language, Göteborg University</Variation>
+    </Organisation>
+    <Organisation name="Fryske Akademy, KNAW">
+        <Variation>Fryske Akademy - KNAW</Variation>
+    </Organisation>
+    <Organisation name="University of Chicago Press">
+        <Variation>The University of Chicago Press</Variation>
+    </Organisation>
+    <Organisation name="Department of Linguistics, Stockholm University">
+        <Variation>Stockholm University, Dept. of Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Department of Linguistics, University of Oregon"/>
+    <Organisation name="Humanities Press, Australian Institute of Aboriginal Studies">
+        <Variation>Humanities Press / Australian Institute of Aboriginal Studies</Variation>
+    </Organisation>
+    <Organisation name="Almqvist &amp; Wiksell">
+        <Variation>Almqvist and Wiksells</Variation>
+        <Variation>Almqvist and Wiksell</Variation>
+        <Variation>Almquist and Wiksells Boktryckerei</Variation>
+        <Variation>Almqvist &amp; Wiksell.</Variation>
+    </Organisation>
+    <Organisation name="University of Colorado; Volkswagen Foundation">
+        <Variation>University of Colorado and VolkswagenStiftung</Variation>
+    </Organisation>
+    <Organisation name="NBG">
+        <Variation>NBG/DBNL/INL</Variation>
+    </Organisation>
+    <Organisation name="MIT Press">
+        <Variation>M.I.T. Press</Variation>
+        <Variation>Massachusetts Institute of Technology Press</Variation>
+        <Variation>Massachusetts Institute of Technology (MIT) Press</Variation>
+    </Organisation>
+    <Organisation name="Natural Language Processing Centre, Faculty of Informatics">
+        <Variation>Natural Language Processing Centre, Faculty of Informatics Masaryk University</Variation>
+    </Organisation>
+    <Organisation name="Department for General Linguistics, Westfälische Wilhelms-Universität Münster">
+        <Variation>Westfälische Wilhelms-Universität Münster, Department for General Linguistics</Variation>
+    </Organisation>
+    <Organisation name="NIAS">
+        <Variation>Netherlands Institute of Advanced Study (NIAS)</Variation>
+        <Variation>Netherlands Institute of Advanced Study</Variation>
+    </Organisation>
+    <Organisation name="Bantam Books">
+        <Variation>Bantam.</Variation>
+    </Organisation>
+    <Organisation name="Suomalaisen Kirjallisuuden Seura">
+        <Variation>Suomalaisen kirjallisuuden Seura</Variation>
+    </Organisation>
+    <Organisation name="Institute for Aboriginal Development">
+        <Variation>Institute of Aboriginal Development</Variation>
+    </Organisation>
+    <Organisation name="DISP, University of Rome Tor Vergata">
+        <Variation>DISP - University of Rome Tor Vergata</Variation>
+    </Organisation>
+    <Organisation name="Linguistics Laboratory, University of Montana"/>
+    <Organisation name="University of Utah Press">
+        <Variation>The University of Utah Press</Variation>
+    </Organisation>
+    <Organisation name="Center for Applied Linguistics">
+        <Variation>The Center for Applied Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Musée Royal du Congo Belge">
+        <Variation>Musee royal du Congo belge</Variation>
+    </Organisation>
+    <Organisation name="Institut de Linguistique Appliquee, Unversite d'Abidjan"/>
+    <Organisation name="Institute of Language and Literature, Academy of sciences of the Estonian SSR">
+        <Variation>Academy of sciences of the Estonian SSR, Institute of Language and Literature</Variation>
+    </Organisation>
+    <Organisation name="TALG Research Group, University of Vigo">
+        <Variation>TALG Research Group (University of Vigo)</Variation>
+    </Organisation>
+    <Organisation name="The Research Institute for the Languages of Finland">
+        <Variation>Research Institute for the Languages of Finland</Variation>
+    </Organisation>
+    <Organisation name="Program in African Languages and Linguistics and the African Studies Program, Indiana University">
+        <Variation>Indiana University, Program in African Languages and Linguistics and the African Studies Program</Variation>
+    </Organisation>
+    <Organisation name="Universität Köln">
+        <Variation>Universität zu Köln</Variation>
+    </Organisation>
+    <Organisation name="African Studies Institute, University of the Witwatersrand"/>
+    <Organisation name="Institute of General Linguistics, University of Zurich">
+        <Variation>University of Zurich, Institute of General Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Chemnitz University of Technology">
+        <Variation>Technische Universität Chemnitz</Variation>
+    </Organisation>
+    <Organisation name="UCL SH&amp;PS, London">
+        <Variation>UCL Speech Hearing and Phonetic Sciences, London</Variation>
+        <Variation>http://www.ucl.ac.uk/psychlangsci/research/speech/</Variation>
+        <Variation>UCL Speech Hearing and Phonetic Sciences (UCL SH&amp;PS, London UK)</Variation>
+    </Organisation>
+    <Organisation name="Lexicologie, VUA">
+        <Variation>Lexicologie VUA</Variation>
+    </Organisation>
+    <Organisation name="Center for Spoken Language Understanding, Oregon Graduate Institute of Science and Technology">
+        <Variation>Center for Spoken Language Understanding at Oregon Graduate Institute of Science and Technology</Variation>
+    </Organisation>
+    <Organisation name="Buske Verlag">
+        <Variation>Buske</Variation>
+    </Organisation>
+    <Organisation name="Interdisciplinary Nanoscience Center, Aarhus Universitet"/>
+    <Organisation name="Linguistics and Cultures, School of Languages">
+        <Variation>University of Manchester, School of Languages, Linguistics and Cultures</Variation>
+    </Organisation>
+    <Organisation name="Linguistics Department, Purdue University, USA">
+        <Variation>Purdue University, USA - Linguistics Dept.</Variation>
+    </Organisation>
+    <Organisation name="Don Bosco Press">
+        <Variation>Don Bosco</Variation>
+    </Organisation>
+    <Organisation name="Institute of the Latvian language, University of Latvia"/>
+    <Organisation name="Association culturelle Te Reo o te Tuamotu, University of Kiel">
+        <Variation>University of Kiel; Association culturelle Te Reo o te Tuamotu</Variation>
+    </Organisation>
+    <Organisation name="Stephen Austin and Sons, Limited">
+        <Variation>Stephen Austin and Sons, Ltd.</Variation>
+    </Organisation>
+    <Organisation name="CONICET, Universidad Nacional de Formosa">
+        <Variation>CONICET- Universidad Nacional de Formosa</Variation>
+    </Organisation>
+    <Organisation name="Friederichsen, de Gruyter and&#160;Company">
+        <Variation>Friederichsen, de Gruyter &amp; Co</Variation>
+        <Variation>Friederichsen, de Gruyter &amp; Company</Variation>
+        <Variation>Friedrichsen, De Gruyter &amp; Co</Variation>
+    </Organisation>
+    <Organisation name="Institute for African Studies, University of Cologne">
+        <Variation>University of Cologne, Institute for African Studies</Variation>
+    </Organisation>
+    <Organisation name="CLLE-ERSS">
+        <Variation>CLLE-ERSS, IRIT</Variation>
+    </Organisation>
+    <Organisation name="Institut für Afrikanistik und Äthiopistik, Universität Hamburg">
+        <Variation>Institut für Afrikanistik und Äthiopistik der Universität Hamburg</Variation>
+    </Organisation>
+    <Organisation name="Bell &amp; Howell">
+        <Variation>Bell and Howell</Variation>
+    </Organisation>
+    <Organisation name="Centre of Southeast Asian Studies, Monash University"/>
+    <Organisation name="Tribal Cultural Research and Training Institute, Government of Andhra Pradesh">
+        <Variation>Government of Andhra Pradesh, Tribal Cultural Research and Training Institute</Variation>
+    </Organisation>
+    <Organisation name="Department of Classical Philology, University of Helsinki"/>
+    <Organisation name="Blackwell">
+        <Variation>Blackwell.</Variation>
+    </Organisation>
+    <Organisation name="Département de sciences du langage, Université d'Aix-Marseille">
+        <Variation>Département de sciences du langage, Université d'Aix-Marseille (Aix-en-Provence FR)</Variation>
+    </Organisation>
+    <Organisation name="Faber and Faber">
+        <Variation>Faber &amp; Faber</Variation>
+    </Organisation>
+    <Organisation name="Institute of Cotabato Cultures, Notre Dame University">
+        <Variation>Notre Dame University, Institute of Cotabato Cultures</Variation>
+    </Organisation>
+    <Organisation name="CSLI, Stanford University">
+        <Variation>Center for the Study of Language and Information (CSLI)</Variation>
+        <Variation>Center for the Study of Language and Information</Variation>
+        <Variation>Center for the Study of Language and Information (CSLI) at Stanford University</Variation>
+        <Variation>Center for the Study of Language and Information / Stanford University</Variation>
+        <Variation>CSLI</Variation>
+    </Organisation>
+    <Organisation name="Dakar, Senegal : African Language Materials Archive,">
+        <Variation>Dakar, Senegal : African Language Material Archive,</Variation>
+        <Variation>Dakar, Senegal African Language Materials Archive,</Variation>
+    </Organisation>
+    <Organisation name="Institute of History and Philology, Academia Sinica"/>
+    <Organisation name="Cambridge University Press">
+        <Variation>The Cambridge University Press</Variation>
+        <Variation>Cambridge University Press.</Variation>
+        <Variation>Cambrigde University Press</Variation>
+    </Organisation>
+    <Organisation name="K. Paul, Trench, Trubner and Company">
+        <Variation>K. Paul, Trench, Trubner &amp; Company</Variation>
+        <Variation>K. Paul, Trench, Trubner and Co.</Variation>
+    </Organisation>
+    <Organisation name="CST, KUA"/>
+    <Organisation name="Asociación Proyecto Lingüístico Francisco Marroquín">
+        <Variation>Asociación Proyecto Lingüístico Francisco Marroquín, PLFM</Variation>
+    </Organisation>
+    <Organisation name="University of Pennsylvania Press">
+        <Variation>The University of Pennsylvania Press</Variation>
+    </Organisation>
+    <Organisation name="CERTEC, Humanistlaboratoriet">
+        <Variation>CERTEC / Humanistlaboratoriet</Variation>
+    </Organisation>
+    <Organisation name="Department of Linguistics and Research School of Pacific Studies, Australian National University">
+        <Variation>Department of Linguistics Research School of Pacific and Asian Studies, Australian National University</Variation>
+    </Organisation>
+    <Organisation name="Amsterdam Centre for Language and Communication, University of Amsterdam">
+        <Variation> Amsterdam Centre for Language &amp; Communication / University of Amsterdam</Variation>
+        <Variation>University of Amsterdam, Amsterdam Centre for Language &amp; Communication</Variation>
+    </Organisation>
+    <Organisation name="Department of Linguistics, Australian National University. Unpublished"/>
+    <Organisation name="Section de Linguistique Appliquée, Université Fédérale du Cameroun">
+        <Variation>Université Fédérale du Cameroun, Section de Linguistique Appliquée</Variation>
+    </Organisation>
+    <Organisation name="Haag and Herchen Verlag">
+        <Variation>Haag&#160;&amp; Herchen Verlag</Variation>
+        <Variation>Haag und Herchen</Variation>
+    </Organisation>
+    <Organisation name="North-East Frontier Agency">
+        <Variation>North-East Frontier Agency Administration</Variation>
+    </Organisation>
+    <Organisation name="Universidad Nacional Autónoma de México">
+        <Variation>Universidad Nactional Autónoma de México</Variation>
+    </Organisation>
+    <Organisation name="Söderströms förlag">
+        <Variation>Söderström</Variation>
+    </Organisation>
+    <Organisation name="Lingsoft, Incorporated">
+        <Variation>Lingsoft, Inc.</Variation>
+    </Organisation>
+    <Organisation name=" The Institute for Comparative Research in Human Culture">
+        <Variation>The Institute for Comparative Research in Human Culture</Variation>
+    </Organisation>
+    <Organisation name="Faculty of Arts, Leiden University">
+        <Variation>Leiden University Faculty of Arts</Variation>
+    </Organisation>
+    <Organisation name="CLS, Radboud University">
+        <Variation>Centre for Language Studies</Variation>
+        <Variation>Centre for Language Studies / Radboud University</Variation>
+    </Organisation>
+    <Organisation name="Werkgroep Informatica, Vrije Universiteit">
+        <Variation>Wergroep Informatica Vrije Universiteit</Variation>
+    </Organisation>
+    <Organisation name="Institut für Sprachwissenschaft, Universität zu Köln"/>
+    <Organisation name="African Studies Program, University of Wisconsin"/>
+    <Organisation name="John Hopkins University Press ">
+        <Variation>Johns Hopkins University Press</Variation>
+    </Organisation>
+    <Organisation name="Alaska Native Language Center and Program, University of Alaska Fairbanks">
+        <Variation>Alaska Native Language Center</Variation>
+    </Organisation>
+    <Organisation name="Atelier National Reproduction des Thèses, Université Lille III"/>
+    <Organisation name="IDS">
+        <Variation>Institut für Deutsche Sprache</Variation>
+        <Variation>IDS: Institut für Deutsche Sprache</Variation>
+    </Organisation>
+    <Organisation name="Johns Hopkins University Press">
+        <Variation>The Johns Hopkins Press</Variation>
+    </Organisation>
+    <Organisation name="Afrikcan Studies Center">
+        <Variation>African Studies Center</Variation>
+    </Organisation>
+    <Organisation name="VEB Verlag Enzyklopädie">
+        <Variation>VEB Verlag Enzyklopaedie</Variation>
+        <Variation>Verlag Enzyklopädie</Variation>
+    </Organisation>
+    <Organisation name="Faculty of Letters and Philosophy, University of Buenos Aires">
+        <Variation>University of Buenos Aires, Faculty of Letters and Philosophy</Variation>
+    </Organisation>
+    <Organisation name="Reichert">
+        <Variation>Reichert Verlag</Variation>
+    </Organisation>
+    <Organisation name="Radio Herrijzend Nederland">
+        <Variation>RADIO HERRIJZEND NEDERLAND</Variation>
+    </Organisation>
+    <Organisation name="Department of Anglo-Saxon, Norse, and Celtic, the University of Cambridge">
+        <Variation>Department of Anglo-Saxon, Norse, and Celtic at the University of Cambridge</Variation>
+    </Organisation>
+    <Organisation name="MIT">
+        <Variation>Massachusetts Institute of Technology</Variation>
+        <Variation>Massachusetts Institute of Technology (MIT)</Variation>
+    </Organisation>
+    <Organisation name="Department of Linguistics, Lund University">
+        <Variation>Dept. of Linguistics, Lund University, Sweden</Variation>
+    </Organisation>
+    <Organisation name="Pacific Linguistics">
+        <Variation>Pacific Linguisics</Variation>
+    </Organisation>
+    <Organisation name="Department of Infrastructure, Planning, and Environment, Northern Territory Government">
+        <Variation>Northern Territory Government, Dept of Infrastructure, Planning, and Environment</Variation>
+    </Organisation>
+    <Organisation name="Korpora.org, Universität Duisburg-Essen">
+        <Variation>Korpora.org</Variation>
+    </Organisation>
+    <Organisation name="Diwurruwurru-Jaru Aboriginal Corporation">
+        <Variation>Diwurruwurru-jaru Aboriginal Corporation</Variation>
+    </Organisation>
+    <Organisation name="Department of Anthropology, University of Manitoba"/>
+    <Organisation name="Chicano Studies Research Center, UCLA"/>
+    <Organisation name="Miision porotestanonbe mbo sahaal ngal, Bamako">
+        <Variation>Bamako : Miision porotestanonbe mbo sahaal ngal,</Variation>
+    </Organisation>
+    <Organisation name="Akademie Verlag">
+        <Variation>Akademie-Verlag</Variation>
+        <Variation>Akademie-Verlag.</Variation>
+    </Organisation>
+    <Organisation name="DGCSS, KUA"/>
+    <Organisation name="G. Narr Verlag">
+        <Variation>G. Narr</Variation>
+    </Organisation>
+    <Organisation name="Centre Territorial de Recherche et de Documentation Pédagogiques">
+        <Variation>CTRDP</Variation>
+    </Organisation>
+    <Organisation name="Directorate of Information and Public Relations, Government of Arunachal Pradesh"/>
+    <Organisation name="Babylon Centre for Studies of Multilingualism in the Multicultural Society">
+        <Variation>the Babylon Centre for Studies of Multilingualism in the Multicultural Society</Variation>
+    </Organisation>
+    <Organisation name="Applied Computing Department, Dundee University">
+        <Variation>Applied Computing Department of Dundee University</Variation>
+    </Organisation>
+    <Organisation name="Research Group in Computational Linguistics, University of Wolverhampton"/>
+    <Organisation name="Department of Psychology, University of Jyväskylä"/>
+    <Organisation name="Cultures &amp; Religions, School of Languages">
+        <Variation>University of Stirling, School of Languages, Cultures &amp; Religions</Variation>
+    </Organisation>
+    <Organisation name="Smithsonian Institution Press">
+        <Variation>Smithsonian Press</Variation>
+    </Organisation>
+    <Organisation name="Institute of Indian Studies, University of Groningen"/>
+    <Organisation name="Ministerio de Gobierno, República de Colombia">
+        <Variation>Ministerio de Gobierno</Variation>
+    </Organisation>
+    <Organisation name="Centre de recherche Valibel, Louvain">
+        <Variation>http://www.uclouvain.be/valibel</Variation>
+        <Variation>Centre de recherche Valibel - Discours et variation (Valibel, Louvain BE)</Variation>
+    </Organisation>
+    <Organisation name="P. Shalom Publications incorporated">
+        <Variation>P. Shalom Pub. Inc.</Variation>
+    </Organisation>
+    <Organisation name="MICA, Hanoi">
+        <Variation>Multimedia, Information, Communication and Applications - UMI 2954 (MICA, Hanoi VN)</Variation>
+        <Variation>http://www.mica.edu.vn</Variation>
+        <Variation>Multimedia, Information, Communication and Applications, Hanoi</Variation>
+    </Organisation>
+    <Organisation name="Centro de Estudios Mayas Mexico, Universidad Nacional Autonoma de Mexico">
+        <Variation>Universidad Nacional Autonoma de Mexico, Centro de Estudios Mayas Mexico</Variation>
+    </Organisation>
+    <Organisation name="CLUL, University of Lisbon">
+        <Variation>University of Lisbon, CLUL-Centro de Linguística da Universidade de Lisboa</Variation>
+        <Variation>Centro de Linguística da Universidade de Lisboa / University of Lisbon</Variation>
+    </Organisation>
+    <Organisation name="Tip. Imp. Akademii Nauk">
+        <Variation>Tip. Imperatorskoj akademii nauk</Variation>
+    </Organisation>
+    <Organisation name="Addison Wesley Longman">
+        <Variation>Addison Wesley&#160;Longman</Variation>
+        <Variation>Addison Wesley Longman.</Variation>
+    </Organisation>
+    <Organisation name="Danmarks JordbrugsForskning">
+        <Variation>Danmarks Jordbrugsforskning</Variation>
+    </Organisation>
+    <Organisation name="Southeast Asia Program, Department of Asian Studies">
+        <Variation>Southeast Asia Program, Department of Asian Studies, Cornell University</Variation>
+    </Organisation>
+    <Organisation name="Department of Linguistics, Hartford Seminary Foundation"/>
+    <Organisation name="Département de linguistique, UNIGE">
+        <Variation>http://www.unige.ch/lettres/linguistique/index.html</Variation>
+        <Variation>Département de linguistique  / Université de Genève</Variation>
+        <Variation>Université de Genève, Département de linguistique (UNIGE, Genève CH)</Variation>
+    </Organisation>
+    <Organisation name="Vandenhoeck &amp; Ruprecht">
+        <Variation>Vandenhoeck and Ruprecht</Variation>
+    </Organisation>
+    <Organisation name="SIL">
+        <Variation>Summer Institute of Lingusitics</Variation>
+        <Variation>Summer Institute of LInguistics</Variation>
+        <Variation>SIL of the University of Oklahoma</Variation>
+        <Variation>The Summer Institute of Linguistics</Variation>
+        <Variation>Summer Institute of Linguistics.</Variation>
+        <Variation>Summer Institute of Linguistics</Variation>
+        <Variation>SIL Publications</Variation>
+        <Variation>SIL International</Variation>
+        <Variation>Summer Institute of Linguistcs</Variation>
+    </Organisation>
+    <Organisation name="Institute fo the Study of Languages and Cultures of Asia and Africa, Tokyo University of Foreign Studies"/>
+    <Organisation name="Department of Linguistics and Nordic Studies, University of Oslo"/>
+    <Organisation name="John Wilson and Son">
+        <Variation>John Wilson&#160;&amp; Son</Variation>
+    </Organisation>
+    <Organisation name="General Linguistics, Department of Linguistics">
+        <Variation>General Linguistics, Department of Linguistics, University of Cologne</Variation>
+    </Organisation>
+    <Organisation name="Department of Linguistics, University of Illinois, Urbana"/>
+    <Organisation name="Instituto Nacional de Antropologia e Historia">
+        <Variation>Instituto Nacional de Antropología e Historia</Variation>
+    </Organisation>
+    <Organisation name="Limsi, Orsay, France">
+        <Variation>Laboratoire d'informatique pour la mécanique et les sciences de l'ingénieur - UPR 3251 (Limsi, Orsay FR)</Variation>
+        <Variation>Laboratoire d'informatique pour la mécanique et les sciences de l'ingénieur, Orsay, France</Variation>
+        <Variation>http://www.limsi.fr</Variation>
+    </Organisation>
+    <Organisation name="SIL, University of Oklahoma">
+        <Variation>Summer Institute of Linguistics / University of Oklahoma</Variation>
+        <Variation>University of Oklahoma, Summer Institute of Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Springer">
+        <Variation>Springer Verlag</Variation>
+        <Variation>Springer Verlag.</Variation>
+    </Organisation>
+    <Organisation name="University of Surrey">
+        <Variation>Univeristy of Surrey</Variation>
+    </Organisation>
+    <Organisation name="Department of Linguistics, Max Planck Institute for Evolutionary Anthropology">
+        <Variation>Max Planck Institute for Evolutionary Anthropology, Department of Linguistics</Variation>
+    </Organisation>
+    <Organisation name="BOS">
+        <Variation>Boeddhistische Omroep Stichting</Variation>
+    </Organisation>
+    <Organisation name="Directorate of Research, Government of Arunachal Pradesh"/>
+    <Organisation name="Faculty of Slavonic Studies, Sofia University &#34;Kliment Ohritski&#34;">
+        <Variation>Sofia University "Kliment Ohritski", Faculty of Slavonic Studies</Variation>
+    </Organisation>
+    <Organisation name="Faculty of Humanities and Social Sciences, University of Zagreb">
+        <Variation>University of Zagreb, Faculty of Humanities and Social Sciences</Variation>
+    </Organisation>
+    <Organisation name="CONICET, Universidad de Buenos Aires">
+        <Variation>CONICET - Universidad de Buenos Aires</Variation>
+    </Organisation>
+    <Organisation name="Center for Dutch Language and Speech, University of Antwerp"/>
+    <Organisation name="Harcourt and Brace">
+        <Variation>Harcourt&#160;&amp; Brace</Variation>
+    </Organisation>
+    <Organisation name="Harper and Row">
+        <Variation>Harper&#160;&amp; Row</Variation>
+    </Organisation>
+    <Organisation name="Centro de Lenguas Indígenas, Instituto de Investigaciones Históricas, Universidad Católica ʺAndres Belloʺ">
+        <Variation>Centro de Lenguas Indígenas, Instituto de Investigaciones Históricas, Universidad Católica "Andres Bello"</Variation>
+    </Organisation>
+    <Organisation name="Open Court Publishing Company">
+        <Variation>Open Court Publishing Co</Variation>
+    </Organisation>
+    <Organisation name="Campus Kortrijk, Katholieke Universiteit Leuven">
+        <Variation>Katholieke Universiteit Leuven Campus Kortrijk</Variation>
+    </Organisation>
+    <Organisation name="David McKay">
+        <Variation>David McKay Company Inc.</Variation>
+    </Organisation>
+    <Organisation name="Association culturelle Te Reo o te Tuamotu, Christian-Albrechts-Universität zu Kiel">
+        <Variation>Christian-Albrechts-Universität zu Kiel, Association culturelle Te Reo o te Tuamotu, Te U'i hou o te Fenua 'Enata, Atuona, B.P. 26, Hiva 'Oa, Marquises-Sud</Variation>
+        <Variation>Christian-Albrechts-Universität zu Kiel, Association culturelle Te Reo o te Tuamotu</Variation>
+    </Organisation>
+    <Organisation name="Niemeyer">
+        <Variation>Max Niemeyer</Variation>
+        <Variation>Max Niemeyer Verlag</Variation>
+    </Organisation>
+    <Organisation name="Macmillan">
+        <Variation>Macmillan and Co. Ltd</Variation>
+    </Organisation>
+    <Organisation name="Albert-Ludwigs-Universität Freiburg i.Br.">
+        <Variation>Albert-LUdwigs-Universität Freiburg i.Br.</Variation>
+    </Organisation>
+    <Organisation name="University of California Press">
+        <Variation>University of California Publications</Variation>
+        <Variation>University of Californian Press</Variation>
+    </Organisation>
+    <Organisation name="Centre for Applied Language Studies, University of Jyväskylä"/>
+    <Organisation name="Viking Fund Publications in Anthropology">
+        <Variation>Viking Fund</Variation>
+        <Variation>Viking Fund Inc.</Variation>
+        <Variation>The Viking Fund Publications in Anthropology</Variation>
+        <Variation>Viking Fund Publications</Variation>
+    </Organisation>
+    <Organisation name="Humanities Lab, Lund University">
+        <Variation>Humanistlaboratoriet, Lund University, Sweden</Variation>
+        <Variation>Humanistlaboratoriet /&#160;Lund University, Sweden</Variation>
+    </Organisation>
+    <Organisation name="Arbeitsgruppe Kognitionsforschung,&#160;FB2, Universität Paderborn">
+        <Variation>Arbeitsgruppe Kognitionsforschung, FB2, Universitt Paderborn</Variation>
+        <Variation>Arbeitsgruppe Kognitionsforschung, FB2, Universität Paderborn</Variation>
+    </Organisation>
+    <Organisation name="University of Oklahoma">
+        <Variation> the University of Oklahoma</Variation>
+    </Organisation>
+    <Organisation name="Seminar für Deutsche Philologie, Georg August-Universität Göttingen">
+        <Variation>Seminar für Deutsche Philologie; Georg August-Universität Göttingen</Variation>
+    </Organisation>
+    <Organisation name="M. Nijhoff">
+        <Variation>M. Nijhoff / Albrecht &amp; Co</Variation>
+        <Variation>Martinus Nijhoff</Variation>
+        <Variation>Martinus Hijhoff</Variation>
+        <Variation>M. Nijhoff (KITLV)</Variation>
+        <Variation>M.Nijhoff</Variation>
+    </Organisation>
+    <Organisation name="Instituto Lingüístico de Verano de Centroamerica">
+        <Variation>Instituto Lingüístics de Verano</Variation>
+    </Organisation>
+    <Organisation name="Asian Educational Services">
+        <Variation>Asian Educational Serives</Variation>
+    </Organisation>
+    <Organisation name="CSH, New Delhi">
+        <Variation>http://www.csh-delhi.com</Variation>
+        <Variation>Centre de sciences humaines (CSH, New Delhi IN)</Variation>
+        <Variation>Centre de sciences humaines, New Delhi</Variation>
+    </Organisation>
+    <Organisation name="Université de Dakar">
+        <Variation>Universite de Dakar</Variation>
+    </Organisation>
+    <Organisation name="Meertens Institute">
+        <Variation>Meertens Institute - KNAW</Variation>
+        <Variation>Meertens Institute (Royal Netherlands Academy of Arts and Sciences)</Variation>
+        <Variation>Meertens Instituut</Variation>
+        <Variation>Meertens Institute KNAW The Netherlands</Variation>
+    </Organisation>
+    <Organisation name="Instituto de Antropologia, Universidade de Coimbra"/>
+    <Organisation name="National Thai Studies Centre, Australian National University">
+        <Variation>Australian National University, National Thai Studies Centre</Variation>
+        <Variation>The Australian National University, National Thai Studies Centre</Variation>
+    </Organisation>
+    <Organisation name="Indiana University">
+        <Variation>Indiana University / Mouton</Variation>
+        <Variation>Indiana University and Mouton</Variation>
+    </Organisation>
+    <Organisation name="Faculté des Lettres et Sciences humaines, Université de Dakar">
+        <Variation>Université de Dakar, Faculté des Lettres et Sciences humaines</Variation>
+    </Organisation>
+    <Organisation name="Center for Endangered Languages Documentation, Universitas Negeri Papua"/>
+    <Organisation name="Basil Blackwell">
+        <Variation>Basil Blackwell.</Variation>
+    </Organisation>
+    <Organisation name="Department of Scandinavian languages and literature, University of Helsinki">
+        <Variation>The Department of Scandinavian Languages and Literature, University of Helsinki</Variation>
+    </Organisation>
+    <Organisation name="Department of Technical and Further Education, Aboriginal Education Unit"/>
+    <Organisation name="Unité de Recherche Interdisciplinaire Octogone - EA4156, Toulouse">
+        <Variation>Unité de Recherche Interdisciplinaire Octogone - EA4156 (Toulouse FR)</Variation>
+        <Variation>http://w3.octogone.univ-tlse2.fr</Variation>
+    </Organisation>
+    <Organisation name="Henry Young&#160;and Sons, Limited">
+        <Variation>Henry Young &amp; Sons, Limited</Variation>
+    </Organisation>
+    <Organisation name="CIPL">
+        <Variation>Centre Informatique de Philosophie et Lettres (CIPL)</Variation>
+        <Variation>Centre Informatique de Philosophie et Lettres</Variation>
+    </Organisation>
+    <Organisation name="Department. of Linguistics, Tribhuvan University, Kirtipur, Kathmandu">
+        <Variation>Dept. of Linguistics ,Tribhuvan University ,Kirtipur ,Kathmandu</Variation>
+    </Organisation>
+    <Organisation name="Blaisdell Publishing Co.">
+        <Variation>Blaisdell</Variation>
+    </Organisation>
+    <Organisation name="Kluwer">
+        <Variation>Kluwer Academic Publishers</Variation>
+        <Variation>Kluwer Academic</Variation>
+        <Variation>Kluwer Academic Press</Variation>
+    </Organisation>
+    <Organisation name="Long Now Foundation">
+        <Variation>Long Now Foundation (www.longnow.org)</Variation>
+    </Organisation>
+    <Organisation name="EUROTYP Programme, European Science Foundation">
+        <Variation>European Science Foundation, EUROTYP Programme</Variation>
+    </Organisation>
+    <Organisation name="ASPIRH, Tarauacá">
+        <Variation>ASPIRH (Associação do Povo Indígena do Rio Humaita), Tarauacá</Variation>
+    </Organisation>
+    <Organisation name="Shuter and Shooter">
+        <Variation>Shuter &amp; Shooter</Variation>
+    </Organisation>
+    <Organisation name="Chicago Linguistic Society">
+        <Variation>Chicago Linguistics Society</Variation>
+        <Variation>Chicago Linguistics Society, University of Chicago</Variation>
+    </Organisation>
+    <Organisation name="Holt, Rinehart and Winston">
+        <Variation>Holt, Reinhart and Winston</Variation>
+        <Variation>Holt, Rinehart&#160;&amp; Winston</Variation>
+    </Organisation>
+    <Organisation name="Seminario de Lenguas Indígenas, Instituto de Investigaciones Filológicas">
+        <Variation>Universidad Nacional Autonoma de México, Instituto de Investigaciones Filológicas, Seminario de Lenguas Indígenas</Variation>
+    </Organisation>
+    <Organisation name="LLink">
+        <Variation>LLINK</Variation>
+    </Organisation>
+    <Organisation name="Østsamisk museum Neiden, Norway">
+        <Variation>Østsamisk museum Neiden (Norway)</Variation>
+    </Organisation>
+    <Organisation name="Museum of Anthropology, University of Missouri">
+        <Variation>University of Missouri, Museum of Anthropology</Variation>
+    </Organisation>
+    <Organisation name="Indiana University Press">
+        <Variation>Indianan University Press</Variation>
+        <Variation>Indiana University Press and Mouton</Variation>
+    </Organisation>
+    <Organisation name="Phonetics Laboratory, University of Oxford"/>
+    <Organisation name="Department of Linguistics, Punjabi University"/>
+    <Organisation name="Linguistics Program, University of Montana">
+        <Variation>University of Montana, Linguistics Program</Variation>
+    </Organisation>
+    <Organisation name="Linguistic Society of the Philippines">
+        <Variation>Linguistic Society of the Philippines.</Variation>
+    </Organisation>
+    <Organisation name="Gregg Press">
+        <Variation>Gregg</Variation>
+        <Variation>Gregg International Publishers Ltd.</Variation>
+        <Variation>Gregg Press Ltd</Variation>
+        <Variation>Gregg Press Limited</Variation>
+    </Organisation>
+    <Organisation name="IMS, University of Stuttgart">
+        <Variation>Institute for Natural Language Processing / University of Stuttgart</Variation>
+        <Variation>Institute for Natural Language Processing - IMS- , University of Stuttgart</Variation>
+    </Organisation>
+    <Organisation name="Institute of Phonetic Sciences, University of Amsterdam">
+        <Variation>University of Amsterdam, Institute of Phonetic Sciences</Variation>
+    </Organisation>
+    <Organisation name="Colciencias, Universidad de los Andes"/>
+    <Organisation name="H. Aschehoug &amp; Company">
+        <Variation>H. Aschehoug</Variation>
+    </Organisation>
+    <Organisation name="Department of Linguistics, Annamalai University">
+        <Variation>Annamalai University, Department of Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Det Naturvidenskabelige Fakultet, Aarhus Universitet"/>
+    <Organisation name="Dutch HLT Agency">
+        <Variation>Dutch HLT Agency (TST-Centrale)</Variation>
+        <Variation>TST-Centrale</Variation>
+    </Organisation>
+    <Organisation name="Faculté de Psychologie et des Sciences de l'Education, l’Université de Liège">
+        <Variation>http://www.fapse.ulg.ac.be</Variation>
+    </Organisation>
+    <Organisation name="Meertens Instituut">
+        <Variation>Meertens Institute</Variation>
+    </Organisation>
+    <Organisation name="Academia Sinica">
+        <Variation>http://www.sinica.edu.tw/</Variation>
+    </Organisation>
+    <Organisation name="Conakry: Editions Ganndal">
+        <Variation>Conakry : Editions Ganndal,</Variation>
+    </Organisation>
+    <Organisation name="Oxford University Press">
+        <Variation>Oxford University Press.</Variation>
+        <Variation>The Oxford University Press</Variation>
+    </Organisation>
+    <Organisation name="BBAW">
+        <Variation>Berlin-Brandenburgische Akademie der Wissenschaften </Variation>
+        <Variation>BBAW: Berlin</Variation>
+    </Organisation>
+    <Organisation name="Firma KLM Private Limited">
+        <Variation>Firma KLM Private Ltd.</Variation>
+    </Organisation>
+    <Organisation name="Program in Comparative Studies on Southern Asia, Duke University"/>
+    <Organisation name="Harrassowitz Verlag">
+        <Variation>Harrassowitz</Variation>
+    </Organisation>
+    <Organisation name="Department of Music, University of Jyväskylä"/>
+    <Organisation name="Department of Language Studies, Umeå university (Umeå SE)">
+        <Variation>http://www.sprak.umu.se</Variation>
+    </Organisation>
+    <Organisation name="MPI für Evolutionäre Anthropologie, MPG">
+        <Variation>MPI für Evolutionäre Anthropologie</Variation>
+        <Variation>MPI EVA</Variation>
+    </Organisation>
+    <Organisation name="Jensco Limited">
+        <Variation>Jensco Ltd.</Variation>
+    </Organisation>
+    <Organisation name="Leiden: Research School of Asian, African and Amerindian Studies, Universiteit Leiden"/>
+    <Organisation name="ILSP">
+        <Variation>Institute for Language &amp; Speech Processing</Variation>
+    </Organisation>
+    <Organisation name="Department of General Linguistics, University of Helsinki">
+        <Variation>University of Helsinki, Department of General Linguistics.</Variation>
+    </Organisation>
+    <Organisation name="Heidelberger Akademie der Wissenschaften, University of Heidelberg">
+        <Variation>University of Heidelberg, Heidelberger Akademie der Wissenschaften</Variation>
+    </Organisation>
+    <Organisation name="Baptist Missionary Society">
+        <Variation>The Baptist Missionary Society</Variation>
+    </Organisation>
+    <Organisation name="Centro de Investigación y Desarrolle Binnizá A. C.&#160;&amp; Instituto Lingüístico de Verano A. C.">
+        <Variation>Centro de Investigación y Desarrolle Binnizá A. C. and Instituto Lingüístico de Verano A. C.</Variation>
+    </Organisation>
+    <Organisation name="Omrop Fryslan">
+        <Variation>OMROP FRYSLAN</Variation>
+    </Organisation>
+    <Organisation name="CIIL">
+        <Variation>Central Institute of Indian Languages</Variation>
+    </Organisation>
+    <Organisation name="A. A. Balkema">
+        <Variation>Balkema</Variation>
+    </Organisation>
+    <Organisation name="Foreign Service Institute, Department of State">
+        <Variation>Foreign Service Institute, Department of State, United States Government</Variation>
+    </Organisation>
+    <Organisation name="UCL division of psychology and language sciences, UCL">
+        <Variation>http://www.phon.ucl.ac.uk</Variation>
+        <Variation>UCL division of psychology and language sciences (UCL, London UK)</Variation>
+    </Organisation>
+    <Organisation name="Mouton de Gruyter">
+        <Variation>Mouton.</Variation>
+        <Variation>Mouton</Variation>
+        <Variation>Moutin de Gruyter</Variation>
+        <Variation>Mouton De Gruyter</Variation>
+        <Variation>Mouton de Guyter</Variation>
+        <Variation>Mouton &amp; Co</Variation>
+        <Variation>Mouton de Gryter</Variation>
+    </Organisation>
+    <Organisation name="Sabah Museum and State Archives Deptartment">
+        <Variation>Sabah Museum and State Archives Dept</Variation>
+    </Organisation>
+    <Organisation name="Centre d'études des langues indigènes d'Amérique">
+        <Variation>Centre d'études des langues indigènes d'Amérique (CNRS, IRD)</Variation>
+    </Organisation>
+    <Organisation name="ETRO, Vrije Universiteit Brussel"/>
+    <Organisation name="The Graduate Linguistics Students' Association, The University of Massachusetts"/>
+    <Organisation name="Maisonneuve Freres et Ch. Leclerc">
+        <Variation>Maissonneuve frères &amp; C. Leclerc</Variation>
+        <Variation>Maisonneuve Freres &amp; Ch. Leclerc</Variation>
+    </Organisation>
+    <Organisation name="CSLI  Publications, Stanford University">
+        <Variation>Center for the Study of Language and Information (CSLI) Publications</Variation>
+        <Variation>CSLI Publications</Variation>
+    </Organisation>
+    <Organisation name="RVU">
+        <Variation>RVU Educatieve omroep</Variation>
+    </Organisation>
+    <Organisation name="Tankönyvkiadó">
+        <Variation>Tankönyvk</Variation>
+    </Organisation>
+    <Organisation name="Department of Comparative Linguistics (VTW), Leiden University">
+        <Variation>Department of Comparative Linguistics (VTW) Leiden University</Variation>
+    </Organisation>
+    <Organisation name="Department of Language and Communication Science, City University (London)"/>
+    <Organisation name="University of Antwerp (CNTS)">
+        <Variation>CNTS Universiteit Antwerpen</Variation>
+        <Variation>Centrum voor Nederlandse Taal en Spraak, Antwerpen</Variation>
+    </Organisation>
+    <Organisation name="Smithsonian Institution">
+        <Variation>Smithsonian Institute</Variation>
+    </Organisation>
+    <Organisation name="University of Alberta">
+        <Variation>The University of Alberta</Variation>
+    </Organisation>
+    <Organisation name="ODIN project, Fresno">
+        <Variation>California State University, Fresno, ODIN project </Variation>
+    </Organisation>
+    <Organisation name="IFA-groep, UvA">
+        <Variation>IFA-groep UvA</Variation>
+    </Organisation>
+    <Organisation name="Curzon Press">
+        <Variation>Curzon</Variation>
+    </Organisation>
+    <Organisation name="KTH">
+        <Variation>Royal Institute of Technology (KTH, Stockholm SE)</Variation>
+        <Variation>http://www.kth.se</Variation>
+        <Variation>Royal Institute of Technology, Stockholm</Variation>
+    </Organisation>
+    <Organisation name="IFAN">
+        <Variation>Institut Français d’Afrique Noire (IFAN)</Variation>
+        <Variation>L'Institut Français d'Afrique Noire (IFAN)</Variation>
+        <Variation>L'Institut Francçais d'Afrique Noire</Variation>
+        <Variation>Institut Français d’Afrique Noire</Variation>
+    </Organisation>
+    <Organisation name="Universitaet Kiel">
+        <Variation>Universität Kiel</Variation>
+    </Organisation>
+    <Organisation name="Foris">
+        <Variation>Foris.</Variation>
+    </Organisation>
+    <Organisation name="Grupo de investigación TALG, Universidade de Vigo">
+        <Variation>Universidade de Vigo, Grupo de investigación TALG (Tecnoloxías e Aplicacións da Lingua Galega)</Variation>
+        <Variation>Grupo de investigación Tecnoloxías e Aplicacións da Lingua Galega / Universidade de Vigo</Variation>
+    </Organisation>
+    <Organisation name="Department of Literacy Work and Literature Production of the United Methodist Church">
+        <Variation>Dept. of Literacy Work and Literature Production of the United Methodist Church</Variation>
+    </Organisation>
+    <Organisation name="African Studies Centre, Michigan University">
+        <Variation>Michigan University, African Studies Centre</Variation>
+    </Organisation>
+    <Organisation name="Institute of East Asian Studies, University of California Berkeley"/>
+    <Organisation name="Averbury Publishing Company">
+        <Variation>Avebury Publishing Company Limited</Variation>
+    </Organisation>
+    <Organisation name="University of Hawai'i Press">
+        <Variation>University of Hawaii Press.</Variation>
+        <Variation>University of Hawaii Press</Variation>
+        <Variation>The University Press of Hawaii</Variation>
+        <Variation>University Press of Hawaii</Variation>
+        <Variation>The University of Hawaii Press</Variation>
+    </Organisation>
+    <Organisation name="netpatient">
+        <Variation>netpatient.dk</Variation>
+    </Organisation>
+    <Organisation name="Department of Language and Communication Science, City University London">
+        <Variation>Department of Language and Communication Science, City University (London)</Variation>
+    </Organisation>
+    <Organisation name="Department of Educational Sciences, University of Jyväskylä"/>
+    <Organisation name="Foris Publications, Koninklijk Instituut voor Taal-, Land- en Volkenkunde">
+        <Variation>Foris Publications / Koninklijk Institut voor Taal-, Land- en Volkenkunde</Variation>
+        <Variation>Foris Pub</Variation>
+        <Variation>Foris Publications</Variation>
+        <Variation>Foris Publications Holland</Variation>
+    </Organisation>
+    <Organisation name="Akademisk Forlag">
+        <Variation>Akademisk Forl</Variation>
+    </Organisation>
+    <Organisation name="STEDT">
+        <Variation>Sino-Tibetan Etymological Dictionary and Thesaurus Project (STEDT) / Center for Southeast Asian Studies / University of California at Berkeley</Variation>
+        <Variation>Sino-Tibetan Etymological Dictionary and Thesaurus Project (STEDT), Center for Southeast Asian Studies, University of California at Berkeley</Variation>
+    </Organisation>
+    <Organisation name="Département de linguistique et phonétique générales, Université d'Aix-Marseille">
+        <Variation>Département de linguistique et phonétique générales, Université d'Aix-Marseille (Aix-en-Provence FR)</Variation>
+    </Organisation>
+    <Organisation name="Seminar für Allgemeine Sprachwissenschaft, Universität Zürich">
+        <Variation>Universität Zürich, Seminar für Allgemeine Sprachwissenschaft</Variation>
+    </Organisation>
+    <Organisation name="Instituto de Cooperacion Iberoamericana">
+        <Variation>Instituto de Cooperación Iberoamericana</Variation>
+    </Organisation>
+    <Organisation name="FECONA">
+        <Variation>Federación de Comunidades Nativas del Ampiyacu (FECONA)</Variation>
+        <Variation>Federación de Comunidades Nativas del río Ampiyacu (FECONA)</Variation>
+        <Variation>Federación de Comunidades Nativas del Ampiyacu</Variation>
+    </Organisation>
+    <Organisation name="Centre for Research on Language Diversity, La Trobe University"/>
+    <Organisation name="Surrey Morphology Group, University of Surrey">
+        <Variation>University of Surrey, Surrey Morphology Group</Variation>
+    </Organisation>
+    <Organisation name="Centre for Sign Lingusitics, The Chinese University of Hong Kong">
+        <Variation>The Chinese University of Hong Kong, Centre for Sign Lingusitics</Variation>
+    </Organisation>
+    <Organisation name="Hornbeam Press, Incorporated">
+        <Variation>Hornbeam Press, Inc.</Variation>
+    </Organisation>
+    <Organisation name="Langues et Mondes">
+        <Variation>Langues &amp; Mondes</Variation>
+    </Organisation>
+    <Organisation name="Ellehauge &amp; Kildemoes">
+        <Variation>Ellehauge&#160;and Kildemoes</Variation>
+    </Organisation>
+    <Organisation name="VNU, Hanoi">
+        <Variation>Vietnam National University (VNU, Hanoi VN)</Variation>
+        <Variation>Vietnam National University, Hanoi</Variation>
+        <Variation>http://www.vnu.edu.vn</Variation>
+    </Organisation>
+    <Organisation name="Department of Information Studies and Interactive Media, University of Tampere"/>
+    <Organisation name="University Press Aberdeen">
+        <Variation>The University Press Aberdeen</Variation>
+    </Organisation>
+    <Organisation name="University of Leipzig">
+        <Variation>Universität Leipzig</Variation>
+    </Organisation>
+    <Organisation name="University of Rome Tor Vergata">
+        <Variation>University of Rome "Tor Vergata"</Variation>
+    </Organisation>
+    <Organisation name="Faculty of Asian Studies, Australian National University"/>
+    <Organisation name="Gobierno del Estado de Sonora, Secretaria de Fomento Educativo y Cultura"/>
+    <Organisation name="UFAL, Charles University in Prague">
+        <Variation>Institute of Formal and Applied Linguistics / Charles University in Prague</Variation>
+        <Variation>Charles University in Prague, UFAL</Variation>
+    </Organisation>
+    <Organisation name="The Danish eHealth Portal, Copenhagen, Denmark">
+        <Variation>sundhed.dk</Variation>
+    </Organisation>
+    <Organisation name="Institut für Sprachwissenschaft, Universität Innsbruck">
+        <Variation>Innsbrucker Beiträge zur Sprachwissenschaft</Variation>
+        <Variation>Institut für Sprachwissenschaft der Universität Innsbruck</Variation>
+    </Organisation>
+    <Organisation name="SELAF">
+        <Variation>Société d'études linguistiques et anthropologiques de France (SELAF)</Variation>
+        <Variation>Societé pour L'Étude des Langue Africaines</Variation>
+        <Variation>Société d'études linguistiques et anthropologiques de France</Variation>
+        <Variation>Société des Etudes Linguistiques et Anthropologiques de France</Variation>
+        <Variation>Société d'Études Linguistiques et Anthropologiques de France</Variation>
+        <Variation>Société D'Études Linguistiques et Anthopologiques de France</Variation>
+        <Variation>Société d'Études Linguistiques et Anthropologiques de France (SELAF)</Variation>
+        <Variation>Societé pour l'étude des langues africaines</Variation>
+    </Organisation>
+    <Organisation name="Editions Jamana, Bamako">
+        <Variation>Bamako : Editions Jamana,</Variation>
+    </Organisation>
+    <Organisation name="s.n.">
+        <Variation>s.n</Variation>
+        <Variation>s. n.</Variation>
+    </Organisation>
+    <Organisation name="Sacramento Anthropology Society, Sacramento State College"/>
+    <Organisation name="Carnegie Mellon University">
+        <Variation>Carnegie Mellon University, Ohio State U.</Variation>
+    </Organisation>
+    <Organisation name="Linguistics and Phonetics, Lund University">
+        <Variation>http://www.sol.lu.se/en/lingvistik</Variation>
+        <Variation>Linguistics and Phonetics, Lund University (LU, Lund SE)</Variation>
+    </Organisation>
+    <Organisation name="Asiatic Society">
+        <Variation>Asiatic Society of Bengal</Variation>
+    </Organisation>
+    <Organisation name="The Macquarie Library Pty Limited">
+        <Variation>The Macquarie Library Pty Ltd.</Variation>
+    </Organisation>
+    <Organisation name="L'Harmattan">
+        <Variation>Harmattan</Variation>
+    </Organisation>
+    <Organisation name="Sudan Research Unit, Faculty of Arts">
+        <Variation>Sudan Research Unit, Faculty of Arts, University of Khartoum</Variation>
+    </Organisation>
+    <Organisation name="T.U.">
+        <Variation>TU</Variation>
+        <Variation>T. U.</Variation>
+        <Variation>T.U&amp;gt;</Variation>
+    </Organisation>
+    <Organisation name="H. Aschehoug&#160;&amp;Co">
+        <Variation>H. Aschehoug &amp; Company</Variation>
+        <Variation>H. Aschehoug &amp; Co</Variation>
+    </Organisation>
+    <Organisation name="Erhvervs- og Boligstyrelsen, Miljøstyrelsen"/>
+    <Organisation name="Research School CNWS, Leiden University">
+        <Variation>Research School of Asian, African and Amerindian Studies / Leiden University</Variation>
+        <Variation>Research School CNWS</Variation>
+    </Organisation>
+    <Organisation name="The Three Candles">
+        <Variation>The Three Candles.</Variation>
+    </Organisation>
+    <Organisation name="Cherokee Nation of Oklahoma">
+        <Variation>Cherokke Nation of Oklahoma</Variation>
+    </Organisation>
+    <Organisation name="UFAL, MFF">
+        <Variation>UFAL, MFF, Charles University in Prague</Variation>
+    </Organisation>
+    <Organisation name="Society for Promoting Christian Knowledge">
+        <Variation>Society for promoting Christian knowledge</Variation>
+    </Organisation>
+    <Organisation name="Proyecto Linguistico Francisco Marroquin">
+        <Variation>Proyecto Lingüístico Francisco Marroquín</Variation>
+        <Variation>Proyecto Linguístico Francisco Marroquín</Variation>
+    </Organisation>
+    <Organisation name="BOS&#xA;">
+        <Variation>Boeddhistische Omroep Stichting</Variation>
+    </Organisation>
+    <Organisation name="DFKI">
+        <Variation>German Research Center for Artificial Intelligence - DFKI-</Variation>
+        <Variation>Deutsches Forschungszentrum für künstliche Intelligenz</Variation>
+        <Variation>Deutsches Forschungszentrum für künstliche Intelligenz (DFKI)</Variation>
+        <Variation>DFKI GmbH</Variation>
+        <Variation>German Research Center for Artificial Intelligence (DFKI)</Variation>
+        <Variation>German Research Center for Artificial Intelligence</Variation>
+        <Variation>Deutsches Forschungszentrum für künstliche Intelligenz DFKI</Variation>
+    </Organisation>
+    <Organisation name="Institute of Lexicography, University of Iceland"/>
+    <Organisation name="Ludwig-Maximilians-Universität München">
+        <Variation>Ludwig-Maximilians-Universitaet Muenchen</Variation>
+    </Organisation>
+    <Organisation name="DSL, Denmark">
+        <Variation>dsl.dk</Variation>
+    </Organisation>
+    <Organisation name="Mazda">
+        <Variation>Mazda Publications</Variation>
+    </Organisation>
+    <Organisation name="Comparative Linguistics, University of Frankfurt">
+        <Variation>University of Frankfurt, Comparative Linguistics</Variation>
+    </Organisation>
+    <Organisation name="HLT Agency">
+        <Variation>HLT Agency (TST-Centrale - Centrale voor Taal- en Spraaktechnologie)</Variation>
+        <Variation>TST-Centrale</Variation>
+    </Organisation>
+    <Organisation name="School of Arts, Languages and Cultures, University of Manchester">
+        <Variation>School of Arts, Languages, and Cultures, University of Manchester</Variation>
+    </Organisation>
+    <Organisation name="FEDUCO">
+        <Variation>Feduco</Variation>
+    </Organisation>
+    <Organisation name="Enzyklopädie">
+        <Variation>Enzyklopaedie</Variation>
+        <Variation>Enzyklopedie</Variation>
+        <Variation>Enzyklopädie.</Variation>
+    </Organisation>
+    <Organisation name="W. Heffer and Sons">
+        <Variation>W. Heffers &amp; Sons</Variation>
+    </Organisation>
+    <Organisation name="Abteilung Allgemeine Sprachwissenschaft, Institut für Linguistik">
+        <Variation>Institut für Linguistik, Abteilung Allgemeine Sprachwissenschaft, Universität zu Köln</Variation>
+    </Organisation>
+    <Organisation name="School of Languages, Linguistics and Cultures, University of Manchester">
+        <Variation>School of Languages, Linguistics and Cultures, Manchester University</Variation>
+        <Variation>School of Languages, Linguistics and Cultures</Variation>
+    </Organisation>
+    <Organisation name="Museu Paraense Emílio Goeldi, Belém">
+        <Variation>Museu Paraense Emï¿½lio Goeldi / Belï¿½m / PA / Brasil</Variation>
+        <Variation>Museu Paraense EmÃ­lio Goeldi / BelÃ©m / PA / Brasil</Variation>
+    </Organisation>
+    <Organisation name="Center for Southeast Asia Studies, Center for International Studies">
+        <Variation>Ohio University Center for International Studies, Center for Southeast Asia Studies</Variation>
+    </Organisation>
+    <Organisation name="CDSP, Paris">
+        <Variation>Centre de données socio-politiques (CDSP, Paris FR)</Variation>
+        <Variation>http://cdsp.sciences-po.fr</Variation>
+        <Variation>Centre de données socio-politiques, Paris</Variation>
+    </Organisation>
+    <Organisation name="Instituto de Investigaciones Antropológicas, Universidad Nacional Autónoma de México"/>
+    <Organisation name="TCMO, Radboud Universiteit Nijmegen">
+        <Variation>TCMO Radboud Universiteit Nijmegen</Variation>
+    </Organisation>
+    <Organisation name="Institute of Nepal and Asian Studies, Tribhuvan University">
+        <Variation>Institute for Nepal Studies / Tribhuvan University</Variation>
+    </Organisation>
+    <Organisation name="Anthropos Institute">
+        <Variation>Anthropos</Variation>
+        <Variation>l'Institut Anthropos</Variation>
+        <Variation>Anthropos-Institut</Variation>
+        <Variation>Anthropos Institut</Variation>
+    </Organisation>
+    <Organisation name="Frederick Ungar Publishing Company">
+        <Variation>Frederick Unger Publishing Company</Variation>
+        <Variation>Frederick Ungar Publishing Co</Variation>
+    </Organisation>
+    <Organisation name="Department of Computational and Corpus Linguistics, University of Łódź">
+        <Variation>Department of Computational and Corpus Linguistics at the University of Łódź</Variation>
+    </Organisation>
+    <Organisation name="CLS, KUN">
+        <Variation>CLS / Faculty of Arts/ Radboud University</Variation>
+        <Variation>CLS-KUN</Variation>
+    </Organisation>
+    <Organisation name="Center for Sprogteknologi">
+        <Variation>cst.ku.dk</Variation>
+    </Organisation>
+    <Organisation name="African Studies Center, Michigan State University"/>
+    <Organisation name="LPL, Aix-en-Provence, France">
+        <Variation>Laboratoire parole et langage - UMR 7309 (LPL, Aix-en-Provence FR)</Variation>
+        <Variation>Laboratoire parole et langage, Aix-en-Provence, France</Variation>
+        <Variation>http://lpl-aix.fr</Variation>
+    </Organisation>
+    <Organisation name="Universitätsverlag C. Winter">
+        <Variation>Universitätsverlag Heidelberg</Variation>
+    </Organisation>
+    <Organisation name="Department of Neurology, Freie Universität Berlin">
+        <Variation>Freie Universität Berlin, Department of Neurology</Variation>
+    </Organisation>
+    <Organisation name="Association d’ethnolinguistique amérindienne ">
+        <Variation>Association d’ethnolinguistique amérindienne (A.E.A.)</Variation>
+    </Organisation>
+    <Organisation name="Department of Linguistics, University of California at Los Angeles"/>
+    <Organisation name="VGH Wissenschaftsverlag">
+        <Variation>VGH-Wissenschaftsverlag</Variation>
+    </Organisation>
+    <Organisation name="Prompsit Language Engeneering, Universitat d'Alacant">
+        <Variation>Universitat d'Alacant - Prompsit Language Engeneering</Variation>
+    </Organisation>
+    <Organisation name="Aschehoug, Harvard University Press">
+        <Variation>Harvard University Press / Aschehoug</Variation>
+    </Organisation>
+    <Organisation name="University of Groningen">
+        <Variation>University Groningen</Variation>
+        <Variation>University of Groningen (alfa-informatica)</Variation>
+    </Organisation>
+    <Organisation name="Albrecht &amp; Compagnie">
+        <Variation>Albrecht &amp; Co</Variation>
+    </Organisation>
+    <Organisation name="IRIT, Toulouse">
+        <Variation>Institut de recherche en informatique de Toulouse - UMR 5505 (IRIT, Toulouse FR)</Variation>
+        <Variation>Institut de recherche en informatique de Toulouse, Toulouse</Variation>
+        <Variation>http://www.irit.fr</Variation>
+    </Organisation>
+    <Organisation name="Institute of Mathematics and Computer Science, University of Latvia"/>
+    <Organisation name="Centre for Speech Technology Research, University of Edinburgh"/>
+    <Organisation name="VWGÖ">
+        <Variation>Verband der wissenschaftlichen Gesellschaft Österreichs (VWGÖ)</Variation>
+        <Variation>Verband der wissenschaftlichen Gesellschaft Österreichs</Variation>
+    </Organisation>
+    <Organisation name="Saphrograph Corporation">
+        <Variation>Saphrograph Corp</Variation>
+    </Organisation>
+    <Organisation name="Dept. of computer science, University of Malta">
+        <Variation>University of Malta, Dept. of computer science</Variation>
+    </Organisation>
+    <Organisation name="Department of Zulu Language and Literature, University of Natal"/>
+    <Organisation name="CLIPS, Grenoble">
+        <Variation>Communication langagière et interaction personne-système (CLIPS, Grenoble FR)</Variation>
+        <Variation>Communication langagière et interaction personne-système, Grenoble</Variation>
+    </Organisation>
+    <Organisation name="G. and W. Fraser">
+        <Variation>G.&amp; W. Fraser</Variation>
+    </Organisation>
+    <Organisation name="ICP, Grenoble">
+        <Variation>Institut de la communication parlée, Grenoble</Variation>
+        <Variation>Institut de la communication parlée (ICP, Grenoble FR)</Variation>
+    </Organisation>
+    <Organisation name="Izd. Moskovskogo University">
+        <Variation>Izd-vo Moskovskogo universiteta</Variation>
+    </Organisation>
+    <Organisation name="Berkeley Language Center, University of California, Berkeley">
+        <Variation>University of California, Berkeley, Berkeley Language Center</Variation>
+    </Organisation>
+    <Organisation name="Via Afrika Limited">
+        <Variation>Via Afrika</Variation>
+    </Organisation>
+    <Organisation name="Izdat, Sovetskaja enciklopedija">
+        <Variation>Izdat. sovetskaja enciklopedija</Variation>
+        <Variation>Izdat. Sovetskaja Enciklopedija</Variation>
+    </Organisation>
+    <Organisation name="Center for the Study of Language and Information">
+        <Variation>The Center for the Study of Language and Information</Variation>
+    </Organisation>
+    <Organisation name="Institute for the Study of Languages and Cultures of Asia and Africa, Tokyo University of Foreign Studies">
+        <Variation>Institute for the Study of Languages and Cuktures of Asia and Africa</Variation>
+    </Organisation>
+    <Organisation name="Centre for Language Technology, University of Copenhagen">
+        <Variation>University of Copenhagen, Centre for Language Technology</Variation>
+    </Organisation>
+    <Organisation name="CGN consortium">
+        <Variation>CGN consortium led by Language and Speech, Nijmegen and ELIS, Gent</Variation>
+    </Organisation>
+    <Organisation name="University of Oslo">
+        <Variation>University of Oslo, NO2014</Variation>
+        <Variation>NO2014, University of Oslo</Variation>
+    </Organisation>
+    <Organisation name="Pergamon Press"/>
+    <Organisation name="Oxford Text Archive, University of Oxford"/>
+    <Organisation name="Assam Secretariat Printing Office">
+        <Variation>The Assam Secretariat Printing Office</Variation>
+    </Organisation>
+    <Organisation name="GU, Göteborg">
+        <Variation>Göteborgs universitet</Variation>
+        <Variation>http://www.flov.gu.se/</Variation>
+        <Variation>Göteborgs universitet (GU, Göteborg SE)</Variation>
+    </Organisation>
+    <Organisation name="Department of Baltic Languages, University of Latvia"/>
+    <Organisation name="Juta and Company, Limited">
+        <Variation>Juta &amp; Company, Limited</Variation>
+        <Variation>Juta and Co., LTD</Variation>
+    </Organisation>
+    <Organisation name="LOT">
+        <Variation>Landelijke Onderzoekschool Taalwetenschap</Variation>
+    </Organisation>
+    <Organisation name="Institut für Finnougristik &amp; Uralistik, University of Hamburg">
+        <Variation>University of Hamburg, Institut für Finnougristik/Uralistik</Variation>
+    </Organisation>
+    <Organisation name="NTC Publishing">
+        <Variation>NTC Publication Group</Variation>
+        <Variation>NTC Publiction Group</Variation>
+    </Organisation>
+    <Organisation name="University of Hamburg">
+        <Variation>University of Hmaburg</Variation>
+    </Organisation>
+    <Organisation name="Niue Centre, University of the South Pacific">
+        <Variation>University of the South Pacific, Niue Centre</Variation>
+    </Organisation>
+    <Organisation name="Computational Linguistics, Saarland University">
+        <Variation>Saarland University, Computational Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Institut für Afrikanistik, Universität Köln">
+        <Variation>Universität zu Köln, Institut für Afrikanistik, Germany</Variation>
+    </Organisation>
+    <Organisation name="Danmarks Miljøundersøgelser">
+        <Variation>Danmarks Miljøundersøgelser, Forlaget Hovedland</Variation>
+    </Organisation>
+    <Organisation name="National Institute of Pakistani Studies, Quaid-i-Azam University, Islamabad"/>
+    <Organisation name="Institut für Allgemeine Sprachwissenschaft, Westfaelische Wilhelms-Universitaet Muenster"/>
+    <Organisation name="LIAS, Leiden University">
+        <Variation>Leiden University, LIAS</Variation>
+    </Organisation>
+    <Organisation name="Maisonneuve">
+        <Variation>Maissonneuve</Variation>
+        <Variation>Maisonneuve y Cia</Variation>
+    </Organisation>
+    <Organisation name="Routledge">
+        <Variation>Routledge.</Variation>
+    </Organisation>
+    <Organisation name="Latin American Center, University of California at Los Angeles"/>
+    <Organisation name="John Benjamins">
+        <Variation>John Benjamins.</Variation>
+        <Variation>John Benjamins B.V.</Variation>
+    </Organisation>
+    <Organisation name="Linguistic Research Unit, Faculty of Arts">
+        <Variation>Chulalongkorn University, Linguistic Research Unit, Faculty of Arts</Variation>
+    </Organisation>
+    <Organisation name="BBC">
+        <Variation>British Broadcasting Corporation (BBC)</Variation>
+        <Variation>British Broadcasting Corporation</Variation>
+    </Organisation>
+    <Organisation name="United States Government Printing Office">
+        <Variation>U. S. Government Printing Office</Variation>
+        <Variation>U.S. Government Printing Office</Variation>
+    </Organisation>
+    <Organisation name="Slavica Publishers">
+        <Variation>Slavica Publisers</Variation>
+        <Variation>Slavica</Variation>
+    </Organisation>
+    <Organisation name="Instituto des estudios peruanos">
+        <Variation>Instituto del estudios peruanos</Variation>
+    </Organisation>
+    <Organisation name="Department of Anthropology, University of Auckland">
+        <Variation>University of Auckland, Department of Anthropology</Variation>
+    </Organisation>
+    <Organisation name="Salesbury Press Limited">
+        <Variation>Salesbury Press Ltd</Variation>
+    </Organisation>
+    <Organisation name="Instituto de Investigación e Integración Social del Estado de Oaxaca, El Colegio de México">
+        <Variation>El Colegio de México, Instituto de Investigación e Integración Social del Estado de Oaxaca</Variation>
+    </Organisation>
+    <Organisation name="Department of Anthropology, Yale University"/>
+    <Organisation name="ELRA">
+        <Variation>ELRA (European Language Resources Association)</Variation>
+        <Variation>European Language Resources Association</Variation>
+    </Organisation>
+    <Organisation name="ITC-Irst, Trento, Italy">
+        <Variation>ITC-Irst - Centro per la Ricerca Scientifica e Tecnologica, via Sommarive 18, Povo, Trento, Italy</Variation>
+        <Variation>Centro per la Ricerca Scientifica e Tecnologica, Trento, Italy</Variation>
+    </Organisation>
+    <Organisation name="Tampere Unit for Computer-Human Interaction, Department of Computer Sciences">
+        <Variation>Department of Computer Sciences, Tampere Unit for Computer-Human Interaction, University of Tampere</Variation>
+    </Organisation>
+    <Organisation name="Département de lettres modernes, Université d'Aix-Marseille">
+        <Variation>Département de lettres modernes, Université d'Aix-Marseille (Aix-en-Provence FR)</Variation>
+    </Organisation>
+    <Organisation name="Prentice-All Incorporated">
+        <Variation>Prentice-All Inc.</Variation>
+    </Organisation>
+    <Organisation name="Center for Southeast Asian Studies, Northern Illinois University">
+        <Variation>Northern Illinois University, Center for Southeast Asian Studies</Variation>
+    </Organisation>
+    <Organisation name="LUCL">
+        <Variation>Bakola Documentation Project of the Dobes initiative, a research project of the Leiden University Center of Linguistics</Variation>
+        <Variation>Leiden University Center of Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Editorial Universidad de Costa Rica">
+        <Variation>Editorial de Universidad de Costa Rica</Variation>
+        <Variation>Editorial Universitaria de Costa Rica</Variation>
+        <Variation>Editorial de la Universidad de Costa Rica</Variation>
+    </Organisation>
+    <Organisation name="Consejo Superior de Investigaciones Cientificas">
+        <Variation>Consejo Superior de Investigaciones Cientificas, Instituto Bernardino de Sahagun</Variation>
+    </Organisation>
+    <Organisation name="Pacific Linguistics, Australian National University"/>
+    <Organisation name="MPI for Human Development, MPG">
+        <Variation>Max Planck Institute for Human Development / MPG</Variation>
+        <Variation>MPI for Human Development</Variation>
+    </Organisation>
+    <Organisation name="TELEAC, NOT">
+        <Variation>TELEAC</Variation>
+    </Organisation>
+    <Organisation name="Berlin-Brandenburg Academy of Sciences">
+        <Variation>Berlin-Brandenburgische Akademie der Wissenschaften </Variation>
+    </Organisation>
+    <Organisation name="PT Balai Pustaka">
+        <Variation>Balai Pustaka</Variation>
+    </Organisation>
+    <Organisation name="Gunter Narr">
+        <Variation>Gunter Narr Verlag</Variation>
+        <Variation>Gunter Narr Verlag.</Variation>
+        <Variation>Gunter Narr.</Variation>
+    </Organisation>
+    <Organisation name="MPG">
+        <Variation>Max Planck Gesellschaft</Variation>
+    </Organisation>
+    <Organisation name="Vishveshvaranand Vishva Bandhu Institute of Sanskrit and Indological Studies, Panjab University"/>
+    <Organisation name="Pacific Linguistics, Research School of Pacific and Asian Studies"/>
+    <Organisation name="VU University Amsterdam">
+        <Variation>Vrije Universiteit Amsterdam</Variation>
+        <Variation>VU University Amsterdam, Netherlands</Variation>
+    </Organisation>
+    <Organisation name="Department of Languages, University of Jyväskylä"/>
+    <Organisation name="University of Tilburg (ILK)">
+        <Variation>ILK /&#160;Computational Linguistics /&#160;Tilburg University</Variation>
+    </Organisation>
+    <Organisation name="Joint Research Centre of the EU">
+        <Variation>http://wt.jrc.it/lt/acquis/</Variation>
+    </Organisation>
+    <Organisation name="Centro de Estudios Linguisticos, University of Buenos Aires"/>
+    <Organisation name="Verlag J. J. Augustin">
+        <Variation>Verlag J.J. Augustin</Variation>
+    </Organisation>
+    <Organisation name="Centre National de la Recherche Scientifique">
+        <Variation>Centre National de la Recherche Scientifique (CNRS)</Variation>
+        <Variation>Centre National de la Reserche Scientifique</Variation>
+    </Organisation>
+    <Organisation name="Izdatel'skaja firma ʺVostochnaja literaturaʺ RAN">
+        <Variation>Izdatel'skaja firma "Vostochnaja literatura" RAN</Variation>
+    </Organisation>
+    <Organisation name="CNRS, Université Lumière Lyon 2">
+        <Variation>CNRS &amp; Université Lumière Lyon 2</Variation>
+    </Organisation>
+    <Organisation name="Omroep MAX">
+        <Variation>OMROEP MAX</Variation>
+    </Organisation>
+    <Organisation name="SIL, Universitas Pattimura">
+        <Variation>Summer Institute of Linguistics / Universitas Pattimura</Variation>
+        <Variation>Universitas Pattimura, Summer Institute of Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Department of State, Foreign Service Institute"/>
+    <Organisation name="Departamento de Publicaciones, El Colegio de México">
+        <Variation>El Colegio de México, Departamento de Publicaciones</Variation>
+    </Organisation>
+    <Organisation name="No">
+        <Variation>no</Variation>
+        <Variation>NO</Variation>
+    </Organisation>
+    <Organisation name="Freie Universität Berlin">
+        <Variation>Freie Universitat Berlin</Variation>
+        <Variation>Freie UniversitÃ¤t Berlin / Germany</Variation>
+        <Variation>Freie UniversitÃ¤t Berlin</Variation>
+        <Variation>Freie Universitaet Berlin / Germany</Variation>
+        <Variation>Freie Universität Berlin / Germany</Variation>
+        <Variation>Freie Universitï¿½t Berlin / Germany</Variation>
+        <Variation>Freie Universitï¿½t Berlin</Variation>
+    </Organisation>
+    <Organisation name="Clarendon Press">
+        <Variation>Clarendon</Variation>
+        <Variation>The Clarendon Press</Variation>
+    </Organisation>
+    <Organisation name="Centro de Lenguas Indígenas, Universidad Católica Andrés Bello">
+        <Variation>Universidad Católica Andrés Bello, Centro de Lenguas Indígenas</Variation>
+    </Organisation>
+    <Organisation name="University of Alberta Press">
+        <Variation>The University of Alberta Press</Variation>
+    </Organisation>
+    <Organisation name="Universidad Católica Andrés Bello">
+        <Variation>Universidad Catolica Andres Bello</Variation>
+        <Variation>Universidad Católica Andres Bello</Variation>
+    </Organisation>
+    <Organisation name="Gumbaynggir Language and Culture Group">
+        <Variation>the Gumbaynggir Language and Culture Group</Variation>
+    </Organisation>
+    <Organisation name="Croom Helm">
+        <Variation>Croom Helm, Routledge</Variation>
+        <Variation>Croom Helm.</Variation>
+    </Organisation>
+    <Organisation name="Institut für Phonetik, Universität des Saarlandes"/>
+    <Organisation name="Geluidenbank">
+        <Variation>GELUIDENBANK</Variation>
+    </Organisation>
+    <Organisation name="ASV, Universität Leipzig">
+        <Variation>Automatische Sprachverarbeitung / Universität Leipzig</Variation>
+        <Variation>ASV: Universität Leipzig</Variation>
+    </Organisation>
+    <Organisation name="Neerlandistiek, KU Leuven">
+        <Variation>Neerlandistiek KU Leuven</Variation>
+    </Organisation>
+    <Organisation name="J. L. van Schaik">
+        <Variation>J.L. Van Schaik</Variation>
+        <Variation>J. L. Van Schaik</Variation>
+        <Variation>J. L. van Schaik.</Variation>
+    </Organisation>
+    <Organisation name="Le Figuier, Bamako, Mali">
+        <Variation>Bamako, Mali : Le Figuier,</Variation>
+    </Organisation>
+    <Organisation name="n. p.">
+        <Variation>n.p.</Variation>
+    </Organisation>
+    <Organisation name="Longmans, Green and Company">
+        <Variation>Longmans, Green &amp; Co.</Variation>
+        <Variation>Longman, Green &amp; Co</Variation>
+        <Variation>Longman, Green and Co</Variation>
+        <Variation>Longmans, Green &amp; Co</Variation>
+        <Variation>Longmans, Green</Variation>
+    </Organisation>
+    <Organisation name="Institute of Computer Science, Polish Academy of Sciences"/>
+    <Organisation name="Carnegie Institution">
+        <Variation>Carnegie Institution of Washington</Variation>
+    </Organisation>
+    <Organisation name="Helmut Buske Verlag">
+        <Variation>Helmut Buske</Variation>
+        <Variation>Helmut Buske Verlag Hamburg</Variation>
+    </Organisation>
+    <Organisation name="Centro de Linguística, Universidade Nova de Lisboa">
+        <Variation>Universidade Nova de Lisboa, Centro de Linguística</Variation>
+    </Organisation>
+    <Organisation name="Kyoto Project">
+        <Variation>KYOTO PROJECT</Variation>
+    </Organisation>
+    <Organisation name="Centro de Estudos Filosóficos e Humanísticos, Universidade Católica Portuguesa">
+        <Variation>Universidade Católica Portuguesa, Centro de Estudos Filosóficos e Humanísticos</Variation>
+    </Organisation>
+    <Organisation name="Centre for Linguistics, Leiden University">
+        <Variation>Leiden University, Centre for Linguistics</Variation>
+    </Organisation>
+    <Organisation name="E.M.I.">
+        <Variation>Editrice Missionaria Italiana</Variation>
+        <Variation>Editrice Missionaria Italiana (E.M.I.)</Variation>
+    </Organisation>
+    <Organisation name="Faculty of Arts, University of Amsterdam."/>
+    <Organisation name="Human Language Technology Group, Department of Informatics">
+        <Variation>University of Szeged, Department of Informatics, Human Language Technology Group</Variation>
+    </Organisation>
+    <Organisation name="Instituto de Lingüística, Universidad de Buenos Aires">
+        <Variation>Universidad de Buenos Aires/ Instituto de Lingüística</Variation>
+    </Organisation>
+    <Organisation name="Bruno Hisbol">
+        <Variation>Bruno/Hisbol</Variation>
+    </Organisation>
+    <Organisation name="Winter">
+        <Variation>Winter.</Variation>
+    </Organisation>
+    <Organisation name="MPI">
+        <Variation>Max Planck Institute</Variation>
+        <Variation>Max Planck Institut</Variation>
+    </Organisation>
+    <Organisation name="Finanstilsynet, OEM"/>
+    <Organisation name="Abteilung Computerlinguistik, Friedrich-Alexander-Universität Erlangen-Nürnberg">
+        <Variation>Abteilung Computerlinguistik der Uni. Erlangen</Variation>
+    </Organisation>
+    <Organisation name="Arnoldus-Druckerei">
+        <Variation>Arnoldus-Drukkerij</Variation>
+    </Organisation>
+    <Organisation name="Institute of Linguistics, University of Malta">
+        <Variation>University of Malta Institute of Linguistics</Variation>
+    </Organisation>
+    <Organisation name="MPI for Evolutionary Anthropology, MPG">
+        <Variation>Max Planck Institute for Evolutionary Anthropology / MPG</Variation>
+        <Variation>MPI for Evolutionary Anthropology</Variation>
+        <Variation>Max Planck Institute for Evolutionary Anthropology</Variation>
+    </Organisation>
+    <Organisation name="Leiden University">
+        <Variation>University of Leiden</Variation>
+        <Variation>Leiden University, The Netherlands</Variation>
+    </Organisation>
+    <Organisation name="Radio Oranje">
+        <Variation>RADIO ORANJE</Variation>
+    </Organisation>
+    <Organisation name="Survey of English Usage, University College London"/>
+    <Organisation name="Badan Penyelenggara Seri Nusa, Universitas Katolik Atmajaya Jakarta">
+        <Variation>Badan Penyelenggara Seri Nusa Universitas Katolik Atma Jaya Jakarta</Variation>
+    </Organisation>
+    <Organisation name="Afrikanistik, Universität Bayreuth">
+        <Variation>Universität Bayreuth, Afrikanistik</Variation>
+    </Organisation>
+    <Organisation name="Royal Asiatic Society">
+        <Variation>Royal Asiatic Society of Great Britain and Ireland</Variation>
+    </Organisation>
+    <Organisation name="Department of Phonetics, Research Institute for Linguistics">
+        <Variation>Dept. of Phonetics, Research Institute for Linguistics, HAS</Variation>
+    </Organisation>
+    <Organisation name="The Institute of Modern English Language Studies, University of Leeds"/>
+    <Organisation name="Garland">
+        <Variation>Garland.</Variation>
+    </Organisation>
+    <Organisation name="UniNE">
+        <Variation>http://www2.unine.ch/linguistique.francaise/</Variation>
+        <Variation>Université de Neuchâtel</Variation>
+        <Variation>Université de Neuchâtel (UniNE, Neuchâtel CH)</Variation>
+    </Organisation>
+    <Organisation name="Vostochnaja literatura">
+        <Variation>Vostochnaja Gruppa Nauka</Variation>
+        <Variation>Vostochnaja gruppa, Nauka</Variation>
+        <Variation>Vostochnaja Gruppa, Nauka</Variation>
+    </Organisation>
+    <Organisation name="C. A. Spin&#160;&amp; son">
+        <Variation>C. A. Spin and son</Variation>
+    </Organisation>
+    <Organisation name="Otto Harrassowitz">
+        <Variation>Otto Harrassovitz</Variation>
+    </Organisation>
+    <Organisation name="Home and van Thal">
+        <Variation>Home&#160;&amp; van Thal</Variation>
+    </Organisation>
+    <Organisation name="Laboratório de Línguas Indígenas, UnB">
+        <Variation>Laboratório de Línguas Indígenas (UnB)</Variation>
+    </Organisation>
+    <Organisation name="Bibliothèque de la faculté de philosophie et lettres, l'université de Liége">
+        <Variation>Bibliothèque de la faculté de philosophie et lettres de l'université de Liége</Variation>
+    </Organisation>
+    <Organisation name="iNano, Aarhus Universitetsforlag"/>
+    <Organisation name="Research Centre for Linguistic Typology, La Trobe University"/>
+    <Organisation name="F. S. Crofts and company">
+        <Variation>F. S. Crofts &amp; Company</Variation>
+        <Variation>F. S. Crofts &amp; Co</Variation>
+    </Organisation>
+    <Organisation name="Institut für Afrikanistik und Ägyptologie, Universität Wien">
+        <Variation>Institut für Afrikanistik und Ägyptologie der Universität Wien</Variation>
+    </Organisation>
+    <Organisation name="Facultad de Filosofía y Letras, Universidad de Buenos Aires">
+        <Variation>Facultad de Filosofía y Letras - Universidad de Buenos Aires</Variation>
+    </Organisation>
+    <Organisation name="Cornish Language Board">
+        <Variation>Cornish Language Board, the author</Variation>
+    </Organisation>
+    <Organisation name="Academy of Sciences at Latvia">
+        <Variation>Academy of Sciences of Latvia</Variation>
+    </Organisation>
+    <Organisation name="Gamzat Tsadas Institute of History, Language and Literature">
+        <Variation>Gamzat Tsadas Institute of History, Language&#160;&amp; Literature</Variation>
+    </Organisation>
+    <Organisation name="Institut de Recherches Sahariennes, Université d'Alger">
+        <Variation>Université d'Alger, Institut de Recherches Sahariennes</Variation>
+    </Organisation>
+    <Organisation name="CRISCO, Caen">
+        <Variation>http://www.crisco.unicaen.fr</Variation>
+        <Variation>Centre de recherche inter-langues sur la signification en contexte, Caen</Variation>
+        <Variation>Centre de recherche inter-langues sur la signification en contexte - EA 4255 (Crisco, Caen FR)</Variation>
+    </Organisation>
+    <Organisation name="Anthropological Survey of India, Ministry of Human Resource Development">
+        <Variation>Anthropological Survey of India, Government of India, Ministry of Human Resource Development</Variation>
+    </Organisation>
+    <Organisation name="Institute of African and Asian Studies, University of Khartoum"/>
+    <Organisation name="Editions des ʺamis du musee basqueʺ et ʺIkasʺ">
+        <Variation>Editions des "amis du musee basque" et "Ikas"</Variation>
+    </Organisation>
+    <Organisation name="Institut fuer Allgemeine u. Vergleichende Sprachwissenschaft, University of Kiel"/>
+    <Organisation name="Universitas Katolik Indonesia Atma Jaya">
+        <Variation>Universitas Katolik Indonesia AtmaJaya</Variation>
+        <Variation>Universitas Atma Jaya</Variation>
+    </Organisation>
+    <Organisation name="SPCK">
+        <Variation>Richard Clay &amp; Sons for the Society for Promoting Christian Knowledge</Variation>
+        <Variation>Richard Clay &amp; Sons for the Society for Promoting Christian Knowledge (SPCK)</Variation>
+    </Organisation>
+    <Organisation name="TST-Centrale, INL">
+        <Variation>TST-Centrale/INL</Variation>
+    </Organisation>
+    <Organisation name="Editora da Unicamp">
+        <Variation>Editora de Unicamp</Variation>
+    </Organisation>
+    <Organisation name="F. King&#160;and Sons, Printers and Publishers">
+        <Variation>F. King &amp; Sons, Printers and Publishers</Variation>
+    </Organisation>
+    <Organisation name="Friedrich-Alexander-Universität Erlangen-Nürnberg">
+        <Variation>Friedrich-Alexander-Universität Erlangen</Variation>
+    </Organisation>
+    <Organisation name="Hoddler Headline Public Limited Company">
+        <Variation>Hoddler Headline Plc.</Variation>
+    </Organisation>
+    <Organisation name="University of Arizona Press">
+        <Variation>The University of Arizona Press</Variation>
+    </Organisation>
+    <Organisation name="Gallimard">
+        <Variation>Gallimard.</Variation>
+    </Organisation>
+    <Organisation name="Centre de Documentació Ramon Llull, Universitat de Barcelona">
+        <Variation>Centre de Documentació Ramon Llull - Universitat de Barcelona</Variation>
+    </Organisation>
+    <Organisation name="Funk&#160;and Wagnalls Company">
+        <Variation>Funk &amp; Wagnalls Company</Variation>
+    </Organisation>
+    <Organisation name="Linguistics dept, UNIL">
+        <Variation>Linguistics dept / Université de Lausanne</Variation>
+        <Variation>UNIL/Linguistics dept</Variation>
+    </Organisation>
+    <Organisation name="UCREL, Lancaster University">
+        <Variation>UCREL, Lancaster University, UK</Variation>
+    </Organisation>
+    <Organisation name="Nix &amp; Company">
+        <Variation>Nix &amp; Co</Variation>
+        <Variation>Nix &amp; Co.</Variation>
+    </Organisation>
+    <Organisation name="Department of Linguistics, Research School of Pacific Studies">
+        <Variation>Department of Linguistics, Research School of Pacific Studies, the Australian National University</Variation>
+    </Organisation>
+    <Organisation name="Izdatel'stvo Akademii Nauk SSSR">
+        <Variation>Izd-vo Akademii nauk SSSR</Variation>
+        <Variation>Izdatel'stvo Akademii Nauka</Variation>
+        <Variation>Izdatel'stvo Akademii nauk SSSR</Variation>
+        <Variation>Izdatel'stvo AN SSSR</Variation>
+        <Variation>Izdatel'stvo Akademii nauk SSSR, Leningradskoe otdelenie</Variation>
+        <Variation>Izdatel'stvo akademii nauk, SSSR</Variation>
+        <Variation>Izdatel'stvo Akademii nauk Kazakhskij SSR</Variation>
+        <Variation>Izdatel'stvo Akademii Nauk Gruzinskoj SSR</Variation>
+        <Variation>Izdatel'stvo Nauka</Variation>
+        <Variation>Izdvo Akademii nauk SSSR</Variation>
+        <Variation>Izdatel’stvo Akademii Nauk SSSR</Variation>
+        <Variation>Izd-vo akademii nauk gruzinskoj SSR</Variation>
+    </Organisation>
+    <Organisation name="DFG, Freie Universität Berlin">
+        <Variation>German Research Foundation (DFG); Freie Universität Berlin</Variation>
+        <Variation>German Research Foundation&#160;/ Freie Universität Berlin</Variation>
+    </Organisation>
+    <Organisation name="Enfance &amp; Culture">
+        <Variation>Enfance &amp; Culture (publisher)</Variation>
+    </Organisation>
+    <Organisation name="Peeters">
+        <Variation>Peeters Press</Variation>
+    </Organisation>
+    <Organisation name="Institute of Estonian and General Linguistics, University of Tartu">
+        <Variation>University of Tartu, Institute of Estonian and General Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Assam Secretariat Press">
+        <Variation>The Assam Secretariat Press</Variation>
+    </Organisation>
+    <Organisation name="INL">
+        <Variation>Instituut voor Nederlandse Lexicologie</Variation>
+    </Organisation>
+    <Organisation name="Government Printing Office">
+        <Variation>Government Printer</Variation>
+        <Variation>Government Printing</Variation>
+        <Variation>Government Printing Department</Variation>
+    </Organisation>
+    <Organisation name="Kegan Paul Trench, Trübner, and Company">
+        <Variation>Kegan Paul, Trench, Trübner and Co</Variation>
+        <Variation>Kegan Paul, Trench, Trubner &amp; Co., Ltd</Variation>
+        <Variation>Kegan Paul Trench, Trübner&#160;&amp; Company</Variation>
+        <Variation>Kegan Paul, Trench, Trübner &amp; Co. Ltd.</Variation>
+        <Variation>Kegan Paul, Trench, Trubner and Co. Ltd</Variation>
+        <Variation>Kegan Paul, Trench, Trubner and Co.</Variation>
+    </Organisation>
+    <Organisation name="Institut fur Sprachwissenschaft, Universität Bern">
+        <Variation>Universität Bern, Institut fur Sprachwissenschaft</Variation>
+    </Organisation>
+    <Organisation name="Köppe">
+        <Variation>Köppe Verlag</Variation>
+    </Organisation>
+    <Organisation name="TALEP, Laboratoire d'informatique fondamentale,&#160;Marseille">
+        <Variation>Traitement automatique du langage écrit et parlé, Laboratoire d'informatique fondamentale (TALEP, Marseille FR)</Variation>
+        <Variation>Traitement automatique du langage écrit et parlé, Laboratoire d'informatique fondamentale, Marseille</Variation>
+        <Variation>http://www.lif.univ-mrs.fr/spip.php?article353</Variation>
+    </Organisation>
+    <Organisation name="Sprachwissenschaftliches Institut, Universität Bochum"/>
+    <Organisation name="FECONAPU">
+        <Variation>FECONAPU (Federación das Comunidades Nativas del Purus)</Variation>
+        <Variation>Federación das Comunidades Nativas del Purus</Variation>
+        <Variation>Feconapu</Variation>
+    </Organisation>
+    <Organisation name="ELPR Publication, Gakuin University"/>
+    <Organisation name="Erhvervs- og Selskabsstyrelsen, OEM"/>
+    <Organisation name="Tribhuvan University">
+        <Variation>Tribhuvan University, Nepal</Variation>
+        <Variation>Trivuwan University</Variation>
+    </Organisation>
+    <Organisation name="Institut fur Afrikanistik, Universität zu Köln">
+        <Variation>Institut für Afrikanistik</Variation>
+        <Variation>Institut fur Afrikanistik, Universität Köln</Variation>
+    </Organisation>
+    <Organisation name="University of Potsdam">
+        <Variation>Universität Potsdam</Variation>
+    </Organisation>
+    <Organisation name="KITLV Press">
+        <Variation>KITLV Uitgeverij</Variation>
+    </Organisation>
+    <Organisation name="Avebury Publishing Company Limited">
+        <Variation>Averbury Publishing Company</Variation>
+    </Organisation>
+    <Organisation name="Institut d'Ethnologie, Université de Paris"/>
+    <Organisation name="Germanistik, Linguistik">
+        <Variation>Universität Duisburg-Essen / Fakultät Geisteswissenschaften / Germanistik / Linguistik</Variation>
+    </Organisation>
+    <Organisation name="Research Institute for Artificial Intelligence, Romanian Academy of Sciences"/>
+    <Organisation name="CEDDLA">
+        <Variation>Centro de Documentación Digital en Lingüística y Antropología (CEDDLA)</Variation>
+        <Variation>CEDDLA (Centro de Documentación Digital en Lingüítstica y Antropología)</Variation>
+        <Variation>Centro de Documentación Digital en Lingüística y Antropología</Variation>
+    </Organisation>
+    <Organisation name="Syntax Research Center, University of California"/>
+    <Organisation name="Humanwissenschaftliches Zentrum, Ludwig-Maximilian Universität München">
+        <Variation>Humanwissenschaftliches Zentrum der Ludwig-Maximilian Universität München</Variation>
+    </Organisation>
+    <Organisation name="EHU, IXA group">
+        <Variation>EHU (IXA group)</Variation>
+    </Organisation>
+    <Organisation name="University of Buea">
+        <Variation>University of Buea, Cameroon</Variation>
+    </Organisation>
+    <Organisation name="Volkswagen Foundation">
+        <Variation>Volkswagen Stiftung</Variation>
+    </Organisation>
+    <Organisation name="Division Publicaciones y Ediciones, Universidad de la Republica">
+        <Variation>Universidad de la Republica, Division Publicaciones y Ediciones</Variation>
+    </Organisation>
+    <Organisation name="Peter Lang">
+        <Variation>P. Lang</Variation>
+    </Organisation>
+    <Organisation name="Fondo Editorial INC-ASDI">
+        <Variation>Fondo Editorial INC/ASDI</Variation>
+    </Organisation>
+    <Organisation name="Stanford Linguistics Association">
+        <Variation>Stanford Linguisticss Association</Variation>
+    </Organisation>
+    <Organisation name="ASCIPM, Filadelfia-Ed. El Gráfico">
+        <Variation>ASCIPM / Filadelfia-Ed. El Gráfico</Variation>
+    </Organisation>
+    <Organisation name="European Organization for Nuclear Research (CERN), Geneva, Switzerland">
+        <Variation>European Organizatio for Nuclear Research (CERN), Geneva, Switzerland</Variation>
+    </Organisation>
+    <Organisation name="El Colegio de México">
+        <Variation>El Colégio de Mexico</Variation>
+    </Organisation>
+    <Organisation name="Éditions du Centre national de la recherche scientifique">
+        <Variation>Editions du Centre national de la recherche scientifique</Variation>
+    </Organisation>
+    <Organisation name="Language Centre, Universiti Kebangsaan Malaysia"/>
+    <Organisation name="MPI for Evolutionary Anthropology">
+        <Variation>Max-Planck-Institute for Evolutionary Anthropology</Variation>
+        <Variation>Max Planck Institute for Evolutionary Anthropology</Variation>
+    </Organisation>
+    <Organisation name="Instituo Roberto Payró, Facultad de Filosofía y Letras">
+        <Variation>Instituo Roberto Payró, Facultad de Filosofía y Letras, Universidad de Buenos Aires</Variation>
+    </Organisation>
+    <Organisation name="Institute of African Studies, University of Ibadan">
+        <Variation>University of Ibadan-Institute of African Studies</Variation>
+    </Organisation>
+    <Organisation name="MoDyCo, Paris">
+        <Variation>Modèles, dynamiques, corpus - UMR 7114 (MoDyCo, Paris FR)</Variation>
+        <Variation>Modèles, dynamiques, corpus, Paris</Variation>
+        <Variation>http://www.modyco.fr</Variation>
+    </Organisation>
+    <Organisation name="Research Centre of African Languages and Literatures, University of Ghent"/>
+    <Organisation name="Bavarian Archive for Speech Signals">
+        <Variation>Bavarian Archive for Speech Signals, Ludwig-Maximilians-Universitaet Muenchen</Variation>
+        <Variation>Bavarian Archive for Speech Signals (BAS)</Variation>
+        <Variation>Bayerisches Archiv für Sprachsignale</Variation>
+        <Variation>BAS</Variation>
+        <Variation>BAS: Bayerische Archiv für Sprachsignale</Variation>
+    </Organisation>
+    <Organisation name="McGraw-Hill">
+        <Variation>McGraw-Hill Book Company</Variation>
+    </Organisation>
+    <Organisation name="SOAS">
+        <Variation>School of Oriental and African Studies, University of London.</Variation>
+        <Variation>School of Oriental and African Studies, University of London</Variation>
+        <Variation>School of Oriental and African Studies (SOAS) / University of London</Variation>
+        <Variation>SOAS (School of Oriental and African Studies), University of London</Variation>
+        <Variation>School of Oriental and African Studies, W. C. I.</Variation>
+        <Variation>School Of Oriental and African Studies</Variation>
+        <Variation>School of Oriental and African Studies</Variation>
+    </Organisation>
+    <Organisation name="École Pratique de Hautes Etudes">
+        <Variation>École Pratique des Hautes Etudes (France)</Variation>
+    </Organisation>
+    <Organisation name="Lincom Europa">
+        <Variation>Lincom Europa.</Variation>
+        <Variation>Lincom</Variation>
+    </Organisation>
+    <Organisation name="The Centre of Oral History, Daugavpils University">
+        <Variation>The Centre of Oral History (Daugavpils University)</Variation>
+    </Organisation>
+    <Organisation name="Nauka">
+        <Variation>Nauka.</Variation>
+        <Variation>Nauka, Leningradskoe otd-nie</Variation>
+        <Variation>Nauka, Sibirskoe otdelenie</Variation>
+        <Variation>Nauka, Glavnaja redakcija vostochnoj literatury</Variation>
+        <Variation>Nauka i izkustvo</Variation>
+        <Variation>Nauka Sibirskoe otdelenie / Nauka</Variation>
+        <Variation>Nauka, Vostochnaja literatura</Variation>
+    </Organisation>
+    <Organisation name="Afrique et Langage">
+        <Variation>Afrique et langage</Variation>
+        <Variation>Afrique et langages</Variation>
+    </Organisation>
+    <Organisation name="Instituto Lingüístico de Verano">
+        <Variation>Instituto Lingüistico de Verano</Variation>
+        <Variation>Instituto Linguistico de Verano</Variation>
+    </Organisation>
+    <Organisation name="Arnold">
+        <Variation>Arnold.</Variation>
+    </Organisation>
+    <Organisation name="Columbia University Press">
+        <Variation>Colombia University Press</Variation>
+    </Organisation>
+    <Organisation name="Charles University">
+        <Variation>Charles University in Prague</Variation>
+    </Organisation>
+    <Organisation name="University of Texas at Arlington">
+        <Variation> University of Texas, Arlington</Variation>
+        <Variation>the University of Texas at Arlington</Variation>
+        <Variation>The University of Texas at Arlington</Variation>
+        <Variation>The University of Texas at Arlington.</Variation>
+        <Variation>University of Texas, Arlington</Variation>
+        <Variation>The University of Texas at Arlinton</Variation>
+        <Variation>University of Texas at Arlington.</Variation>
+        <Variation>University of Arlington</Variation>
+    </Organisation>
+    <Organisation name="Mulce.org ; Universite Blaise Pascal ; France">
+        <Variation>Mulce (MULtimodal Corpus Exchange); URL:http://mulce.org</Variation>
+    </Organisation>
+    <Organisation name="Summer Institute of Linguistics, University of North Dakota">
+        <Variation>University of North Dakota, Summer Institute of Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Centre for Deaf Studies, University of Bristol"/>
+    <Organisation name="Conakry: Weebitande Dudal">
+        <Variation>Conakry : Weebitande Dudal,</Variation>
+    </Organisation>
+    <Organisation name="Max-Planck-Gesellschaft">
+        <Variation>Max Planck Gesellschaft</Variation>
+    </Organisation>
+    <Organisation name="Filozofska fakulteta, University of Ljubljana"/>
+    <Organisation name="Département des langues africaines et linguistique, Université Fédérale du Cameroun"/>
+    <Organisation name="Université de Paris X, Nanterre">
+        <Variation>Université de Paris X</Variation>
+        <Variation>Université Paris X- Nanterre</Variation>
+        <Variation>Université Paris X Nanterre</Variation>
+    </Organisation>
+    <Organisation name="Goethe University Frankfurt, Institute of Empirical Linguistics">
+        <Variation>Goethe Univeristy Frankfurt, Institute of Empirical Linguistics</Variation>
+        <Variation>Goehte University Frankfurt, Institute of Empirical Linguistics</Variation>
+    </Organisation>
+    <Organisation name="CELGA, University of Coimbra">
+        <Variation>University of Coimbra, CELGA (Centro de Esudos de Linguística Geral e Aplicada)</Variation>
+    </Organisation>
+    <Organisation name="Max Planck Institute for Evolutionary Anthropology">
+        <Variation>Max-Planck-Institute for Evolutionary Anthropology</Variation>
+        <Variation>Max Planck Institute for Evolutionary Anthropology</Variation>
+    </Organisation>
+    <Organisation name="National Foreign Language Resource Center, University of Hawai?i"/>
+    <Organisation name="Department of Computer Science, Vassar College (New York US)">
+        <Variation>http://www.cs.vassar.edu</Variation>
+    </Organisation>
+    <Organisation name="CREDO, Marseille">
+        <Variation>http://www.pacific-credo.fr</Variation>
+        <Variation>Centre de Recherche et de Documentation sur l'Océanie - UMR 7308 (CREDO, Marseille FR)</Variation>
+        <Variation>Centre de Recherche et de Documentation sur l'Océanie, Marseille</Variation>
+    </Organisation>
+    <Organisation name="Département FLE, Université d'Aix-Marseille">
+        <Variation>http://fleunivprovence.blogspot.fr/</Variation>
+        <Variation>Département FLE - Français langue étrangère, Université d'Aix-Marseille (Aix-en-Provence FR)</Variation>
+        <Variation>Département Français langue étrangère / Université d'Aix-Marseille</Variation>
+    </Organisation>
+    <Organisation name="Centre for Languages and Literature, Lund University">
+        <Variation>Centre for Languages and Literature at Lund University, Sweden</Variation>
+    </Organisation>
+    <Organisation name="Department of Publication, Gauhati University"/>
+    <Organisation name="Noord-Hollandsche Uitgevers-Maatschappij">
+        <Variation>Noord-Hollandsche Uitgevers Maatschappij</Variation>
+    </Organisation>
+    <Organisation name="UPNG Press">
+        <Variation>University of Papua New Guinea Press</Variation>
+    </Organisation>
+    <Organisation name="Idaho Research Foundation, University of Idaho"/>
+    <Organisation name="Philological Section, Research Department">
+        <Variation>Philological Section, Research Department, North East Frontier Agency</Variation>
+    </Organisation>
+    <Organisation name="Archives of Latvian Folklore, Institute of Literature, Folklore and Art">
+        <Variation>Archives of Latvian Folklore, Institute of Literature, Folklore and Art, University of Latvia</Variation>
+    </Organisation>
+    <Organisation name="Avis&#160;&amp; Phillips Limited">
+        <Variation>Avis and Phillips Ltd.</Variation>
+    </Organisation>
+    <Organisation name="Gairm Publications">
+        <Variation>Gairm</Variation>
+    </Organisation>
+    <Organisation name="School of Oriental and African Studies, University of London">
+        <Variation>University of London School of Oriental and African Studies</Variation>
+    </Organisation>
+    <Organisation name="Musee Royal de l'Afrique Centrale">
+        <Variation>Musee Royale de l'Afrique Centrale</Variation>
+        <Variation>Musee Royal de L'Afrique Central</Variation>
+        <Variation>Musee Royal de L'Afrique Centrale</Variation>
+        <Variation>Musee royal de l'Afrique centrale</Variation>
+        <Variation>Musee Royal de l'Afrique Central</Variation>
+        <Variation>Musée royal de l'Afrique centrale</Variation>
+    </Organisation>
+    <Organisation name="Neerlandistiek, UU">
+        <Variation>Neerlandistiek UU</Variation>
+    </Organisation>
+    <Organisation name="University of Sydney">
+        <Variation>The University of Sydney</Variation>
+        <Variation>The University of Sydney, Australia</Variation>
+        <Variation>University of Sydney, Australia</Variation>
+    </Organisation>
+    <Organisation name="Lembaga Ilmu Pengetahuan Indonesia">
+        <Variation>Lembaga Ilmu Pengetahuan Indonesia Rijkuniversiteit te Leiden</Variation>
+    </Organisation>
+    <Organisation name="MPI für Bildungsforschung, MPG">
+        <Variation>MPI für Bildungsforschung</Variation>
+    </Organisation>
+    <Organisation name="WTUC, Taiwan">
+        <Variation>Wenzao Ursuline College of Languages, Taiwan</Variation>
+        <Variation>Wenzao Ursuline College of Languages (WTUC, Taiwan TW)</Variation>
+        <Variation>http://c041.wtuc.edu.tw/front/bin/home.phtml</Variation>
+    </Organisation>
+    <Organisation name="Annamalai University">
+        <Variation>Annamalai University, Annamalaiungegar</Variation>
+    </Organisation>
+    <Organisation name="ILTEC">
+        <Variation>Instituto de Linguística Teórica e Computacional</Variation>
+        <Variation>ILTEC- Instituto de Linguística Teórica e Computacional</Variation>
+    </Organisation>
+    <Organisation name="Departemen Pendidikan dan Kebudayaan, Pusat Pembinaan dan Pengembangan Bahasa">
+        <Variation>Pusat Pembinaan dan Pengembangan Bahasa, Departemen Pendidikan dan Kebudayaan</Variation>
+    </Organisation>
+    <Organisation name="Politieke Partijen">
+        <Variation>POLITIEKE PARTIJEN</Variation>
+    </Organisation>
+    <Organisation name="D. Reimer">
+        <Variation>D. Reimer (Ernst Vohsen)</Variation>
+    </Organisation>
+    <Organisation name="Department of Linguistics, University Of Khartoum">
+        <Variation>University Of Khartoum, Department of Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Cercle Linguistique de Kanazawa, Kanazawa University">
+        <Variation>Kanazawa University-Cercle Linguistique de Kanazawa</Variation>
+    </Organisation>
+    <Organisation name="Dietrich Reimer Verlag">
+        <Variation>Dieter Reimer</Variation>
+        <Variation>Dietrich Reimer</Variation>
+    </Organisation>
+    <Organisation name="Institute of Linguistics, University of Leipzig">
+        <Variation>University of Leipzig, Institute of Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Humboldt University Berlin">
+        <Variation>Humboldt-University Berlin</Variation>
+        <Variation>Humboldt Universität zu Berlin</Variation>
+        <Variation>Humboldt-Universität zu Berlin</Variation>
+    </Organisation>
+    <Organisation name="Werkgroep Informatica, Faculty of Theology">
+        <Variation>Free University Amsterdam, Faculty of Theology, Werkgroep Informatica</Variation>
+    </Organisation>
+    <Organisation name="Nationalmuseet. Danmarks Nyere Tid">
+        <Variation>Nationalmuseet. Danmarks Nyere tid</Variation>
+    </Organisation>
+    <Organisation name="Centro de Estudios Paraguayos ʺAntonio Guaschʺ">
+        <Variation>Centro de Estudios Paraguayos "Antonio Guasch"</Variation>
+    </Organisation>
+    <Organisation name="Canadian Plains Research Center, University of Regina"/>
+    <Organisation name="Preparatory Office, Institute of Linguistics">
+        <Variation>Institute of Linguistics, Preparatory Office Academia Sinica</Variation>
+        <Variation>http://www.ling.sinica.edu.tw/</Variation>
+    </Organisation>
+    <Organisation name="Laboratoire d'Anthropologie Sociale, Paris">
+        <Variation>Laboratoire d'Anthropologie Sociale (Paris)</Variation>
+    </Organisation>
+    <Organisation name="Center of Computational Linguistics, Vytautas Magnus University"/>
+    <Organisation name="Academic Computing Department, Summer Institute of Linguistics">
+        <Variation>Academic Computing Department of Summer Institute of Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Department of Cybernetics, University of West Bohemia">
+        <Variation>University of West Bohemia, Department of Cybernetics</Variation>
+    </Organisation>
+    <Organisation name="Australian National University">
+        <Variation>The Australian National University</Variation>
+    </Organisation>
+    <Organisation name="Institute of Linguistics, Faculty of Philosophy">
+        <Variation>Institute of Linguistics, Faculty of Philosophy, University of Zagreb</Variation>
+    </Organisation>
+    <Organisation name="DMG">
+        <Variation>Deutsche Morgenlandische Gesellschaft</Variation>
+        <Variation>Deutsche Morgenländische Gesellschaft</Variation>
+    </Organisation>
+    <Organisation name="University of Birmingham">
+        <Variation>The University of Birmingham</Variation>
+    </Organisation>
+    <Organisation name="Institut Universitari de Lingüística Aplicada">
+        <Variation>Institut Universitari de Lingüística Aplicada / Instituto Cervantes</Variation>
+        <Variation>Institut Universitari de Lingüística Aplicada, Universitat Pompeu Fabra</Variation>
+    </Organisation>
+    <Organisation name="Aarhus Universitetsforlag">
+        <Variation>Aarhus Universitetsforlaget</Variation>
+    </Organisation>
+    <Organisation name="Allen &amp; Unwin">
+        <Variation>Allen and Unwin</Variation>
+    </Organisation>
+    <Organisation name="Institute of Information Science, Academia Sinica">
+        <Variation>http://www.iis.sinica.edu.tw/</Variation>
+        <Variation>Institute of Information Science Academia Sinica</Variation>
+    </Organisation>
+    <Organisation name="Cendera-wasih University and Summer Institute of Linguistics">
+        <Variation>Cendera-wasih University and SIL</Variation>
+        <Variation>Cendera-Wasih University and Summer Institute of Linguistics</Variation>
+        <Variation>Cenderawasih University and Summer Institute of Linguistics</Variation>
+    </Organisation>
+    <Organisation name="George Routledge and Sons, Limited">
+        <Variation>George Routledge&#160;&amp; Sons, Limited</Variation>
+    </Organisation>
+    <Organisation name="A.C. Nix &amp; Co">
+        <Variation>A.C. Nix &amp; Co.</Variation>
+    </Organisation>
+    <Organisation name="Max Planck Institute for Psycholinguistics">
+        <Variation>Max Planck Institute for                         Psycholinguistics (Nijmegen, Netherlands)</Variation>
+        <Variation>Max Planck Instiute for Psycholinguistics</Variation>
+        <Variation>Max Planck Institute for psycholinguistics</Variation>
+        <Variation>Max Planck Institute for Psycholinguistics, Nijmegen, Nl</Variation>
+        <Variation>Max Planck Institute for Psycholinguistics, Nijmegen, NL</Variation>
+        <Variation>Max Planck Institute for Psycholinguistics.</Variation>
+        <Variation>Max Planck institute for Psycholinguistics</Variation>
+        <Variation>Max Planck Institute for Psycholinguistics (MPI)</Variation>
+        <Variation>Max Planck Institute for Psycholinguistics, Nijmegen, Netherlands</Variation>
+        <Variation>Max-Planck-Institute for Psycholinguistics</Variation>
+        <Variation>Max Planc Institute for Psycholinguistics</Variation>
+        <Variation>Max Planck Institute for Psycholinguistics Nijmegen</Variation>
+        <Variation>Max Planck Institute for Psycholinguistics, Nijmegen</Variation>
+        <Variation>Max-Planck-Institute-for Psycholinguistics</Variation>
+        <Variation>Max-Planck Institute for Psycholinguistics</Variation>
+        <Variation>Max Planck Insitute for Psycholinguistics</Variation>
+        <Variation>Max Planck Institute for Psycholinguistics (Nijmegen, Netherlands)</Variation>
+        <Variation>Max Planck Institute for Psycolinguistics</Variation>
+        <Variation>Max Planck Institute for Psycholinguisticsc</Variation>
+        <Variation>Max Planck Institut fuer Psycholinguistik, Nijmegen, Nl.</Variation>
+        <Variation>Max-Planck-Institut für Psycholinguistik</Variation>
+        <Variation>Max Planck Institute for Psycholinguistics / MPG</Variation>
+        <Variation>MPI for Psycholinguistics</Variation>
+        <Variation>MPI for psycholinguistics, Nijmegen</Variation>
+        <Variation>Max Planck Institute for Psycholinguistics</Variation>
+        <Variation>MPI Nijmegen</Variation>
+        <Variation>Max-Planck-Institut fÃ¼r Psycholinguistik</Variation>
+        <Variation>Max Planck for Psycholinguisics, Nijmegen, NL</Variation>
+	<Variation>Max-Planck-Institüt für Psycholinguïstik</Variation>
+        <Variation>Max-Planck-Institüt für Psycholinguïstiek</Variation>
+        <Variation>Mac Planck Institute for Psycholinguistics</Variation>
+	<Variation>Max Planck Institut fÃ¼r Psychlinguistik</Variation>
+        <Variation>Max Planck Institut fÃÂ¼r Psychlinguistik</Variation>
+	<Variation>Max Planck Institute for Psycho-Linguistics</Variation>
+	<Variation>MPI for Psycholinguistics (Nijmegen, Netherlands)</Variation>
+	<Variation>Max Plank Institute for Psycholinguistics</Variation>
+	<Variation>MPI for Psycholinguistics Nijmegen</Variation>
+        <Variation>Max-Planck-Institüt für Psucholinguïstik</Variation>
+        <Variation>Max-Planck-Institüt für Psychlinguïstik</Variation>
+    </Organisation>
+    <Organisation name="Witwatersrand University Press">
+        <Variation>University of Witwatersand Press</Variation>
+        <Variation>Witwatersrand Press</Variation>
+        <Variation>The University of the Witwatersrand Press</Variation>
+        <Variation>Wiwatersrand University Press</Variation>
+        <Variation>University of Witwatersrand Press</Variation>
+    </Organisation>
+    <Organisation name="Johann Wolfgang Goethe Universität Frankfurt">
+        <Variation>Johann 
+Wolfgang Goethe Universität Frankfurt</Variation>
+    </Organisation>
+    <Organisation name="Stirling University">
+        <Variation>Stirling University, UK</Variation>
+    </Organisation>
+    <Organisation name="University Publishing Projects"/>
+    <Organisation name="Université Paris Diderot">
+        <Variation>Université Paris Diderot Paris 7</Variation>
+    </Organisation>
+    <Organisation name="Institute of Indology and Tamil Studies, Cologne University"/>
+    <Organisation name="Librairie Orientaliste Paul Geuthner">
+        <Variation>Librairie Orientaliste Paul Geuthner.</Variation>
+    </Organisation>
+    <Organisation name="LEL, Edinburgh">
+        <Variation>http://www.lel.ed.ac.uk</Variation>
+        <Variation>Linguistics and English Language, Edinburgh</Variation>
+        <Variation>Linguistics and English Language (LEL, Edinburgh UK)</Variation>
+    </Organisation>
+    <Organisation name="Institute of Development studies, University of Helsinki"/>
+    <Organisation name="Institut für Empirische Sprachwissenschaft, J. W. Goethe-Universität, Frankfurt"/>
+    <Organisation name="TALP">
+        <Variation>Centro de Tecnologías y Aplicaciones del Lenguaje y del Habla (TALP)</Variation>
+        <Variation>Centro de Tecnologías y Aplicaciones del Lenguaje y del Habla</Variation>
+    </Organisation>
+    <Organisation name="OPIAC">
+        <Variation>OPIAC (Organização dos Professores Indígenas do Acre)</Variation>
+    </Organisation>
+    <Organisation name="Royal Institute of Linguistics and Anthropology, Leiden">
+        <Variation>Royal Institute of Linguistics and Anthropology, Leiden, The Netherlands</Variation>
+    </Organisation>
+    <Organisation name="National Anthropological Archives, Smithsonian Museum Support Center"/>
+    <Organisation name="Tilde">
+        <Variation>Tilde as coordinator, Eurotermbank consortium</Variation>
+    </Organisation>
+    <Organisation name="American Indian Studies Center, UCLA"/>
+    <Organisation name="Ernest Laroux">
+        <Variation>Ernest Ledoux</Variation>
+        <Variation>Ernest Leroux</Variation>
+    </Organisation>
+    <Organisation name="Nordeuropa-Institut, Humboldt-Universität zu Berlin"/>
+    <Organisation name="Routledge and Kegan Paul Limited">
+        <Variation>Routledge and Kegan Paul Limited.</Variation>
+    </Organisation>
+    <Organisation name="The Peter De Ridder Press">
+        <Variation>The Peter Ridder Press</Variation>
+        <Variation>The Peter de Redder Press</Variation>
+    </Organisation>
+    <Organisation name="Centre for English Corpus Linguistics, Université catholique de Louvain, Belgium"/>
+    <Organisation name="Carl Winter Universitätsverlag">
+        <Variation>Carl Winter Universitatsverlag</Variation>
+    </Organisation>
+    <Organisation name="Izdatel'stvo Moskovskogo Universiteta">
+        <Variation>Izdatelstvo Moskovskogo Universiteta</Variation>
+        <Variation>Izdatel'stvo vostochnoj literatury</Variation>
+        <Variation>Izdatel'stvo Moskovskogo universiteta</Variation>
+        <Variation>Izd. Moskovskogo University</Variation>
+    </Organisation>
+    <Organisation name="Department of African Languages, The Academy">
+        <Variation>The Academy, Department of African Languages</Variation>
+    </Organisation>
+    <Organisation name="Institute of Cybernetics, Tallinn University of Technology">
+        <Variation>Institute of Cybernetics at Tallinn University of Technology</Variation>
+    </Organisation>
+    <Organisation name="Sheldon Press">
+        <Variation>The Superintendent, Government Press</Variation>
+        <Variation>The Sheldon Press</Variation>
+        <Variation>Superintendent Government Printing</Variation>
+    </Organisation>
+    <Organisation name="L'Aisathèque">
+        <Variation>L'Asiathèque</Variation>
+    </Organisation>
+    <Organisation name="The Population Register Centre, Finland">
+        <Variation>The Population Register Centre (Finland)</Variation>
+    </Organisation>
+    <Organisation name="Langues et Mondes, L'Asiathèque">
+        <Variation>Langues &amp; Mondes L'asiatheque</Variation>
+    </Organisation>
+    <Organisation name="Charles E. Tuttle Company">
+        <Variation>Charles E. Tuttle</Variation>
+        <Variation>Charles E. Tuttle Co</Variation>
+        <Variation>Charles E. Tuttle &amp; Co</Variation>
+    </Organisation>
+    <Organisation name="Clarke, Irwin &amp; Co. Ltd">
+        <Variation>Clarke, Irwin and Co. Ltd</Variation>
+    </Organisation>
+    <Organisation name="Aboriginal Education Unit">
+        <Variation>Aboriginal Studies and Teacher Education Centre</Variation>
+    </Organisation>
+    <Organisation name="Departement de linguistique generale et linguistique africaine, Faculte des lettres et sciences humaines">
+        <Variation>Departement de linguistique generale et linguistique africaine de la Faculte des lettres et sciences humaines de l'Universite de Dakar</Variation>
+        <Variation>Département de Linguistique Générale et Linguistique Africaine, Université de Dakar</Variation>
+    </Organisation>
+    <Organisation name="Department of Asian Studies, Cornell University"/>
+    <Organisation name="NHH">
+        <Variation>Norwegian School of Economics and Business Administration (NHH)</Variation>
+        <Variation>Norwegian School of Economics and Business Administration</Variation>
+    </Organisation>
+    <Organisation name="Dept. Communications &amp; Computer Engineering, University of Malta">
+        <Variation>University of Malta Dept. Computer and Communication Engineering</Variation>
+    </Organisation>
+    <Organisation name="USOM and the Bureau of Textbooks, Department of Education">
+        <Variation>USOM and the Bureau of Textbooks, Department of Education of the Republic of Vietnam</Variation>
+    </Organisation>
+    <Organisation name="NLP Centre, Masaryk university">
+        <Variation>Masaryk university, NLP Centre</Variation>
+    </Organisation>
+    <Organisation name="IPIPAN">
+        <Variation>IPIPAN: Institute of Computer Science, Polish Academy of Sciences</Variation>
+        <Variation>Institute of Computer Science, Polish Academy of Sciences</Variation>
+    </Organisation>
+    <Organisation name="University Press">
+        <Variation>The University Press</Variation>
+    </Organisation>
+    <Organisation name="Nordeuropa-institut, Humboldt-Universität zu Berlin">
+        <Variation>Humboldt-Universität zu Berlin - Nordeuropainstitut</Variation>
+    </Organisation>
+    <Organisation name="Department of Historical Antiquarian Studies">
+        <Variation>Department of Historical and Antiquarian Studies, Government of Assam</Variation>
+    </Organisation>
+    <Organisation name="Russky Yazyk Publ. House">
+        <Variation>Russkij jazyk</Variation>
+    </Organisation>
+    <Organisation name="School of Psychology, Liège University">
+        <Variation>School of Psychology, Liège University (Liège BE)</Variation>
+    </Organisation>
+    <Organisation name="African Studies Program, Indiana University">
+        <Variation>Indiana University-African Studies Program</Variation>
+    </Organisation>
+    <Organisation name="Kalan-diya, ACODEP, Bamako">
+        <Variation>Bamako : Kalan-diya; ACODEP,</Variation>
+        <Variation>Kalan-diya,&#160;Appui aux collectivités décentralisées pour un développement participatif, Bamako</Variation>
+    </Organisation>
+    <Organisation name="Reidel">
+        <Variation>Reidel.</Variation>
+    </Organisation>
+    <Organisation name="Volk und Wissen Verlag">
+        <Variation>Volk und Wissen</Variation>
+    </Organisation>
+    <Organisation name="Mesoamerican Studies, Archaeological Institute">
+        <Variation>University of Hamburg, Archaeological Institute, Mesoamerican Studies</Variation>
+    </Organisation>
+    <Organisation name="Faculty of Oriental Studies, University of Oxford"/>
+    <Organisation name="Peace Corps Training Programs, University of Washington"/>
+    <Organisation name="Department of Linguistics, University of Cologne">
+        <Variation>University of Cologne, Department of Linguistics - Universidad de Colonia, Departamento de Lingüística</Variation>
+        <Variation>University of Cologne, Department of Linguistics</Variation>
+        <Variation>Departamento de Lingüística / Universidad de Colonia</Variation>
+    </Organisation>
+    <Organisation name="Center for Near Eastern and North African Studies, University of Michigan"/>
+    <Organisation name="International Sign Linguistics Association and Deaf Studies Research Unit, University of Durham"/>
+    <Organisation name="Erhvervs- og Byggestyrelsen, Beredskabsstyrelsen og Søfartsstyrelsen"/>
+    <Organisation name="Groupes d'études inuit et circumpolaires, Association Inuksiutiit Katimajiit Inc.">
+        <Variation>Association Inuksiutiit Katimajiit Inc., Groupes d'études inuit et circumpolaires, Université Laval.</Variation>
+    </Organisation>
+    <Organisation name="NMO">
+        <Variation>Nederlandse Moslim Omroep</Variation>
+    </Organisation>
+    <Organisation name="Human Relations Area Files">
+        <Variation>Human Relations Area Files, Inc.</Variation>
+    </Organisation>
+    <Organisation name="Universidad Católica del Tachira">
+        <Variation>Universidad Católica de Tachira</Variation>
+    </Organisation>
+    <Organisation name="Georgetown University Press"/>
+    <Organisation name="Phonetics Laboratory, University of California"/>
+    <Organisation name="Langenscheidt">
+        <Variation>Langenscheidt.</Variation>
+    </Organisation>
+    <Organisation name="Garland Publishing">
+        <Variation>Garland Publishing Inc.</Variation>
+        <Variation>Garland Publishing Company</Variation>
+        <Variation>Garland Publishing, Inc.</Variation>
+    </Organisation>
+    <Organisation name="Postgraduate and Research Institute, Deccan College"/>
+    <Organisation name="Department of Linguistics, University of Southern California">
+        <Variation>University of Southern California, Department of Linguistics</Variation>
+    </Organisation>
+    <Organisation name="E. J. Brill">
+        <Variation>E J. Brill</Variation>
+    </Organisation>
+    <Organisation name="Department of Linguistics, Ruhr-University Bochum">
+        <Variation>Ruhr-University Bochum, Department of Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Institut für Afrikanistik, Universität zu Köln"/>
+    <Organisation name="Centro de Estudios, Universidad de Buenos Aires"/>
+    <Organisation name="Hodder and Stoughton">
+        <Variation>Hodder &amp; Stoughton</Variation>
+        <Variation>Hodder and Stoughton for the English University Press</Variation>
+        <Variation>Hodder&#160;&amp; Stoughton</Variation>
+    </Organisation>
+    <Organisation name="Dekker&#160;&amp; van de Vegt N. V.">
+        <Variation>Dekker and van de Vegt N. V.</Variation>
+    </Organisation>
+    <Organisation name="Joodse Omroep">
+        <Variation>JOODSE OMROEP</Variation>
+    </Organisation>
+    <Organisation name="Department of Linguistics, The University of Hong Kong"/>
+    <Organisation name="Max Planck Digital Library">
+        <Variation>Max Planck Digital Library, http://wals.info/author</Variation>
+    </Organisation>
+    <Organisation name="Pacific and Asian Linguistics Institute, University of Hawaii"/>
+    <Organisation name="Department of Linguistics, University of Victoria">
+        <Variation>University of Victoria, Department of Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Statens Byggeforskningsinstitut">
+        <Variation>Statens Byggeforskningsinstitut, Aalborg Universitet</Variation>
+    </Organisation>
+    <Organisation name="The English Universities Press">
+        <Variation>The English Universities Press Ltd.</Variation>
+        <Variation>The English Universities Press Ltd</Variation>
+    </Organisation>
+    <Organisation name="American Oriental Society">
+        <Variation>American Oriental Society
+
+</Variation>
+    </Organisation>
+    <Organisation name="Museo Nacional de Antropologí­a">
+        <Variation>Museo Nacional de Antropología</Variation>
+    </Organisation>
+    <Organisation name="BME MOKK">
+        <Variation>Budapest University of Technology and Economics Media Research</Variation>
+        <Variation>Budapest University of Technology and Economics Media Research (BME MOKK)</Variation>
+    </Organisation>
+    <Organisation name="NOS">
+        <Variation>NOS RTV</Variation>
+    </Organisation>
+    <Organisation name="The Department of Cultural Anthropology, Leiden University">
+        <Variation>Leiden University, The Department of Cultural Anthropology</Variation>
+    </Organisation>
+    <Organisation name="Scott, Foresman and Company">
+        <Variation>Scott, Foresman and Co</Variation>
+    </Organisation>
+    <Organisation name="Allgemeine Sprachwissenschaft, Universität Köln">
+        <Variation>Universität zu Köln, Allgemeine Sprachwissenschaft</Variation>
+    </Organisation>
+    <Organisation name="Asociación Instituto Lingüístico de Verano">
+        <Variation>Associación Instituto Lingüístico de Verano</Variation>
+    </Organisation>
+    <Organisation name="Rüdiger Köppe Verlag">
+        <Variation>Rüdiger Köppe</Variation>
+    </Organisation>
+    <Organisation name="North-Holland">
+        <Variation>North-Holland Publishing Company</Variation>
+        <Variation>North-Holland Publishing</Variation>
+        <Variation>North Holland</Variation>
+    </Organisation>
+    <Organisation name="Sen Wah Press and Company">
+        <Variation>Sen Wah Press and Co</Variation>
+    </Organisation>
+    <Organisation name="Indiana University Center in Antropology, Folklore and Linguistics">
+        <Variation>Indiana University Research Center in Anthropology, Folklore, and Linguistics</Variation>
+    </Organisation>
+    <Organisation name="IIAP">
+        <Variation>ORDELORETO; SWISSAID; Instituto de Investigaciones de la Amazonía Peruana (IIAP)</Variation>
+        <Variation>Instituto de Investigaciones de la Amazonía Peruana (IIAP)</Variation>
+        <Variation>Instituto de Investigaciones de la Amazonía Peruana </Variation>
+        <Variation>ORDELORETO; SWISSAID; Instituto de Investigaciones de la Amazonía Peruana</Variation>
+        <Variation>Instituto de Investigaciones de la Amazonía Peruana (IIAP), Iquitos, Perú.</Variation>
+        <Variation>Instituto de Investigaciones de la Amazonía Peruana (IIAP) - Iquitos - Perú</Variation>
+        <Variation> Instituto de Investigaciones de la Amazonía Peruana</Variation>
+    </Organisation>
+    <Organisation name="CLARIN-D center, Natural Language Processing Group">
+        <Variation>CLARIN-D center, Natural Language Processing Group, University of Leipzig</Variation>
+    </Organisation>
+    <Organisation name="World Language Documentation Centre, Universität Bamberg">
+        <Variation>Universität Bamberg, World Language Documentation Centre</Variation>
+    </Organisation>
+    <Organisation name="LTG, Edinburgh University"/>
+    <Organisation name="Universidad de Buenos Aires">
+        <Variation>Universidad de Buenos Aires.</Variation>
+    </Organisation>
+    <Organisation name="CLST, Radboud University">
+        <Variation>Centre for Language and Speech Technology, Radboud University</Variation>
+        <Variation>Centre for Language and Speech Technology / Radboud University</Variation>
+    </Organisation>
+    <Organisation name="Fakultas Keguruan dan Ilmu Pendidikan, Universitas Tanjungpura"/>
+    <Organisation name="Seccion de Lingüística, Escuela de Filologia">
+        <Variation>Universidad de Costa Rica, Escuela de Filologia, Seccion de Lingüística</Variation>
+    </Organisation>
+    <Organisation name="Narr">
+        <Variation>Narr.</Variation>
+    </Organisation>
+    <Organisation name="IMLI RAN">
+        <Variation>IMLI RAN, Nasledie</Variation>
+        <Variation>Imli Ran Nasledie</Variation>
+    </Organisation>
+    <Organisation name="University of Jaén (Spain)">
+        <Variation>University of Jaén, Jaén (Spain)</Variation>
+    </Organisation>
+    <Organisation name="IULA, Universitat Pompeu Fabra">
+        <Variation>Universitat Pompeu Fabra. Institut Universitari de Lingüística Aplicada (IULA)</Variation>
+        <Variation> Institut Universitari de Lingüística Aplicada / Universitat Pompeu Fabra</Variation>
+    </Organisation>
+    <Organisation name="Ministerio de Cultura">
+        <Variation>Mininsterio de Cultura</Variation>
+    </Organisation>
+    <Organisation name="University of Tübingen">
+        <Variation>University of Tuebingen</Variation>
+    </Organisation>
+    <Organisation name="Center for Vietnamese Studies and the Summer Institute of Linguistics">
+        <Variation>Center for Vietnamese Studies and the Summer Institute if Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Institute of Philosophy and Sociology, University of Latvia">
+        <Variation>Institute of Philosophy and Sociology of the University of Latvia</Variation>
+    </Organisation>
+    <Organisation name="Language Universals Project, Department of Linguistics">
+        <Variation>Language Universals Project, Department of Linguistics, Stanford University</Variation>
+    </Organisation>
+    <Organisation name="John Benjamins, Australian National University Press">
+        <Variation>John Benjamins / Australian National University Press</Variation>
+    </Organisation>
+    <Organisation name="Mittal Publications">
+        <Variation>Mittal Publisher</Variation>
+        <Variation>Mittal</Variation>
+        <Variation>Mittal Publication</Variation>
+    </Organisation>
+    <Organisation name="Universität des Saarlandes">
+        <Variation>Universitat des Saarlandes</Variation>
+    </Organisation>
+    <Organisation name="Franciscan Fathers Press">
+        <Variation>Franciscan Fathers, St. Michael's Press</Variation>
+    </Organisation>
+    <Organisation name="Julius Groos">
+        <Variation>Julius Gross</Variation>
+    </Organisation>
+    <Organisation name="Trübner&#160;&amp; Co.">
+        <Variation>Trübner &amp; Co.</Variation>
+    </Organisation>
+    <Organisation name="Chikobava Institute of Linguistics, Tblisi, Georgia">
+        <Variation>Chicobava Institute of Linguistics, Tblisi, Georgia</Variation>
+    </Organisation>
+    <Organisation name="Simpkin, Marshall, Hamilton, Kent and Corporation Limited">
+        <Variation>Simpkin, Marshall, Hamilton, Kent &amp; Co Ltd</Variation>
+    </Organisation>
+    <Organisation name="CCRSS, Pune">
+        <Variation>Centre for Cooperative Research in Social Sciences, Pune</Variation>
+        <Variation>Centre for Cooperative Research in Social Sciences (CCRSS, Pune IN)</Variation>
+        <Variation>http://ccrss.ws</Variation>
+    </Organisation>
+    <Organisation name="Institute of African Studies, University of Ghana"/>
+    <Organisation name="Museum of Anthropology Publications, University of North Carolina">
+        <Variation>University of North Carolina, Museum of Anthropology Publications</Variation>
+    </Organisation>
+    <Organisation name="Missioni Africane">
+        <Variation>Missioni africane</Variation>
+    </Organisation>
+    <Organisation name="Longman">
+        <Variation>Longman.</Variation>
+        <Variation>Longmans</Variation>
+    </Organisation>
+    <Organisation name="Zentrum für Allgemeine Sprachwissenschaft, Berlin">
+        <Variation>ZAS, Humboldt University Berlin</Variation>
+        <Variation>ZAS</Variation>
+    </Organisation>
+    <Organisation name="CLA, Neuchâtel">
+        <Variation>Centre de linguistique appliquée, Neuchâtel</Variation>
+        <Variation>http://www2.unine.ch/cla</Variation>
+        <Variation>Centre de linguistique appliquée (CLA, Neuchâtel CH)</Variation>
+    </Organisation>
+    <Organisation name="Lehrstuhl Phonetik und Lehrstuhl Slavistik, Philosophische Fakultät">
+        <Variation>Lehrstuhl Phonetik (Fachrichtung 4.7) und Lehrstuhl Slavistik (Fachrichtung 4.4) der Philosophischen Fakultät II der Universität des Saarlandes</Variation>
+    </Organisation>
+    <Organisation name="ATILF, Université de Lorraine">
+        <Variation>Analyse et Traitement Informatique de Langue Francaise / Université de Lorraine</Variation>
+        <Variation>ATILF</Variation>
+    </Organisation>
+    <Organisation name="Department of Psychology, Ohio State University">
+        <Variation>http://buckeyecorpus.osu.edu</Variation>
+        <Variation>Department of Psychology, Ohio State University (Columbus US)</Variation>
+    </Organisation>
+    <Organisation name="Department of Modern Languages, University of Helsinki">
+        <Variation>The Department of Modern Languages, University of Helsinki</Variation>
+    </Organisation>
+    <Organisation name="Gosudarstvennoe Izdat. Inostrannych i Nacionalnych Slovarej">
+        <Variation>Gosudarstvennoe Izdat. Inostrannyx i Nacional'nyx Slovarej</Variation>
+        <Variation>Gosudastvennoe izdatel'stvo inostrannyx i nacional'nyx slovarej</Variation>
+        <Variation>Gosudarstvennoe Izdat. Inostrannyx u Nacional'nyx Slovarej</Variation>
+        <Variation>Gosudarstvennoe Izdat. Inostrannych i Nacional'nych Slovarej</Variation>
+        <Variation>Gosudarstvennoe izdatel'stvo inostrannyx i nacional'nych slovarej</Variation>
+        <Variation>Gosudarstvennoe Ucebno-Pedagogiceskoe Izdatel'stvo</Variation>
+        <Variation>Gosudarstvennoe Izdat. Inostrannych u Nacional'nych Slovarej</Variation>
+    </Organisation>
+    <Organisation name="Agence de Coopération Culturelle et Technique">
+        <Variation>Agence de cooperation culturelle et technique</Variation>
+        <Variation>Agence de coopération culturelle et technique</Variation>
+    </Organisation>
+    <Organisation name="Institute of Phonetic Sciences, ACLC">
+        <Variation>Institute of Phonetic Sciences/ACLC, Department of Linguistics, University of Amsterdam</Variation>
+    </Organisation>
+    <Organisation name="Hawaiian Studies Program, University of Hawaii"/>
+    <Organisation name="Státní Pedagogické Nakladatelství">
+        <Variation>Slovenské Pedagogické Nakladatelàstvo</Variation>
+        <Variation>Slovenské Pedagogiské Nakladatel'stvo</Variation>
+        <Variation>Slovenské pedagogické nakladatel'stvo</Variation>
+        <Variation>Statni Pedagogické Nakladatelství</Variation>
+    </Organisation>
+    <Organisation name="RAN">
+        <Variation>RAN, Institut etnologii i antropologii</Variation>
+    </Organisation>
+    <Organisation name="Suomalais-Ugrilainen Seura">
+        <Variation>Suomalais-ugrilainen Seura</Variation>
+    </Organisation>
+    <Organisation name="Leiden Institute for Religious Studies">
+        <Variation>Leiden Institute for Religious Studies, Wergroep Informatica Vrije Universiteit</Variation>
+    </Organisation>
+    <Organisation name="Department of Linguistics, University of Nijmegen">
+        <Variation>University of Nijmegen, Department of Linguistics</Variation>
+    </Organisation>
+    <Organisation name="Beauchemin &amp; Valois Publishers">
+        <Variation>Beauchemin and Valois Publishers</Variation>
+    </Organisation>
+    <Organisation name="École des Hautes Etudes en Sciences Sociales">
+        <Variation>Ecole des Hautes Etudes en Sciences Sociales</Variation>
+    </Organisation>
+    <Organisation name="University of British Columbia Press">
+        <Variation>University of British Colombia Press</Variation>
+    </Organisation>
+    <Organisation name="Tel Aviv University">
+        <Variation>Tel-Aviv University</Variation>
+    </Organisation>
+    <Organisation name="Motilal Banarsidass">
+        <Variation>Motilal Banarsidass.</Variation>
+        <Variation>Motilal Bamarsidass</Variation>
+    </Organisation>
+    <Organisation name="Center of Asian Studies, University of Hong Kong"/>
+    <Organisation name="IPI PAN">
+        <Variation>Shared initiative of Institute of Computer Science at Polish Academy of Sciences</Variation>
+        <Variation>Shared initiative of Institute of Computer Science at Polish Academy of Sciences(IPI PAN)</Variation>
+    </Organisation>
+    <Organisation name="H.W. Wilson Press">
+        <Variation>H.W. Wilson</Variation>
+    </Organisation>
+    <Organisation name="Department of Anthropology, Northern Arizona University"/>
+    <Organisation name="China-Japan Program, Cornell University">
+        <Variation>Cornell University China-Japan Program</Variation>
+    </Organisation>
+    <Organisation name="Baltos Lankos.">
+        <Variation>Baltos Iankos</Variation>
+    </Organisation>
+    <Organisation name="Institute of Islamic Studies, McGill University">
+        <Variation>McGill University, Institute of Islamic Studies</Variation>
+    </Organisation>
+    <Organisation name="Centre for Language Studies, Radboud University Nijmegen">
+        <Variation>Radboud University Nijmegen, Centre for Language Studies</Variation>
+    </Organisation>
+    <Organisation name="Department of History and Ethnology, University of Jyväskylä"/>
+    <Organisation name="G. E. Stechert and Company">
+        <Variation>G. E. Stechert</Variation>
+        <Variation>G. E. Stechert&#160;&amp; Company</Variation>
+        <Variation>G. E. Hechert and Company</Variation>
+        <Variation>G. E. Steichert &amp; Co.</Variation>
+        <Variation>G. E. Hechert&#160;&amp; Company</Variation>
+    </Organisation>
+    <Organisation name="Deccan College">
+        <Variation>Deccan College Postgraduate and Research Institute</Variation>
+    </Organisation>
+    <Organisation name="Instituto de Investigacao Cientifica Tropical, Secretaria de Estado da Ciencia e Tecnologia">
+        <Variation>Ministerio do Planeamento e da Administracao do Territorio, Secretaria de Estado da Ciencia e Tecnologia, Instituto de Investigacao Cientifica Tropical</Variation>
+    </Organisation>
+</Organisations>

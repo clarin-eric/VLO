@@ -1,0 +1,131 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>eu.clarin.cmdi</groupId>
+    <artifactId>vlo-vocabularies</artifactId> 
+    <version>3.4-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    
+    <parent>
+        <groupId>eu.clarin.cmdi</groupId>
+        <artifactId>vlo</artifactId>
+        <version>3.4-SNAPSHOT</version>
+    </parent>
+	
+
+	<properties>		
+		<old_maps.path>maps/old_maps</old_maps.path>
+		<xslt.path>maps/xslt</xslt.path>
+		<dest.path>maps/uniform_maps</dest.path>
+
+		<saxon.version>9.1.0.8</saxon.version>
+		<slf4j.version>1.7.12</slf4j.version>
+		<junit.version>4.12</junit.version>
+        		  
+	</properties>
+
+	
+	<build>
+		<!-- add uniform maps to class path -->
+		<resources>
+			<resource>
+				<directory>maps/uniform_maps</directory>
+			</resource>
+		</resources>
+		<!--  xml:transform plugin for converting old map formats to the uniform using xslts -->
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>xml-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>transform</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<transformationSets>
+
+						<!-- LanguageNameVariantsMap.xml -->
+						<transformationSet>
+							<dir>${old_maps.path}</dir>
+							<includes>
+								<include>LanguageNameVariantsMap.xml</include>
+							</includes>
+							<stylesheet>${xslt.path}/language_transformer.xsl</stylesheet>
+							<outputDir>${dest.path}</outputDir>
+						</transformationSet>
+
+						<!-- LicenseAvailabilityMap.xml -->
+						<transformationSet>
+							<dir>${old_maps.path}</dir>
+							<includes>
+								<include>LicenseAvailabilityMap.xml</include>
+							</includes>
+							<stylesheet>${xslt.path}/availability_transformer.xsl</stylesheet>
+							<outputDir>${dest.path}</outputDir>
+						</transformationSet>
+
+					<!-- nationalProjectsMapping.xml -->
+						<transformationSet>
+							<dir>${old_maps.path}</dir>
+							<includes>
+								<include>nationalProjectsMapping.xml</include>
+							</includes>
+							<stylesheet>${xslt.path}/national_project_transformer.xsl</stylesheet>
+							<outputDir>${dest.path}</outputDir>
+						</transformationSet>
+
+					<!-- OrganisationControlledVocabulary.xml -->
+						<transformationSet>
+							<dir>${old_maps.path}</dir>
+							<includes>
+								<include>OrganisationControlledVocabulary.xml</include>
+							</includes>
+							<stylesheet>${xslt.path}/organization_transformer.xsl</stylesheet>
+							<outputDir>${dest.path}</outputDir>
+						</transformationSet>
+					</transformationSets>
+				</configuration>
+
+		<!-- make the translation working with xslt2.0 -->
+				<dependencies>
+					<dependency>
+						<groupId>net.sourceforge.saxon</groupId>
+						<artifactId>saxon</artifactId>
+						<version>${saxon.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+			
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.7</version>
+		</dependency>
+	</dependencies>
+</project>
