@@ -3,9 +3,11 @@ package eu.clarin.cmdi.vlo;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class StringUtils {
-
+	
     /**
      * Converts a newlines in to html (&lt;br/&gt;), not using &lt;p&gt; because it renders differently on firefox/safari/chrome/ie etc...
      * Heavily inspired on: 
@@ -70,5 +72,25 @@ public final class StringUtils {
         }
         return normalizedString.toString();
     }
+    
+    public static String uncapitalizeFirstLetter(String value){
+		return value.substring(0, 1).toLowerCase() + value.substring(1);
+	}
+    
+    public static String capitalizeFirstLetter(String value){
+		return value.substring(0, 1).toUpperCase() + value.substring(1);
+	}
+        
+    public static String createStringFromArray(String... values){
+    	String res = "";
+    	
+    	for(String str: values){
+    		res += str;
+    	}
+    	
+    	return res;
+    	
+    }
+    
 
 }

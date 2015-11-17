@@ -39,13 +39,15 @@
     
     <handleServerUrl>http://hdl.handle.net/</handleServerUrl>
     
-    <nationalProjectMapping>/nationalProjectsMapping.xml</nationalProjectMapping>
+    <nationalProjectMapping>nationalProjectsMapping.xml</nationalProjectMapping>
     
-    <organisationNamesUrl>/OrganisationControlledVocabulary.xml</organisationNamesUrl>
+    <organisationNamesUrl>OrganisationControlledVocabulary.xml</organisationNamesUrl>
     
-    <languageNameVariantsUrl>/LanguageNameVariantsMap.xml</languageNameVariantsUrl>
+    <languageNameVariantsUrl>LanguageNameVariantsMap.xml</languageNameVariantsUrl>
     
-    <licenseAvailabilityMapUrl>/LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl>
+    <licenseAvailabilityMapUrl>LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl>
+    
+    <resourceClassMapUrl>resourceTypeMap.xml</resourceClassMapUrl>
     
     <!-- resourceAvailabilityMapUrl
         Facet field used to populate collection selector on search page 

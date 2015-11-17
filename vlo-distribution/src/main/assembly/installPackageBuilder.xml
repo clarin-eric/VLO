@@ -64,21 +64,15 @@
                 <exclude>*</exclude>
             </excludes>
         </fileSet>
-        <!-- config files -->
+         <!-- uniform maps -->
         <fileSet>
-            <directory>${project.parent.basedir}/vlo-commons/src/main/resources</directory>
+            <directory>${project.parent.basedir}/vlo-vocabularies/maps/uniform_maps</directory>
             <includes>
-                <include>*.properties</include>
                 <include>*.xml</include>
-                <include>*.xsl</include>
             </includes>
-            <excludes>
-                <exclude>VloConfig.xml</exclude>
-                <exclude>facetConcepts.xml</exclude>
-            </excludes>
             <outputDirectory>bin</outputDirectory>
         </fileSet>
-
+                
         <!-- the web application files to be packaged -->
         <!-- war file -->
         <fileSet>

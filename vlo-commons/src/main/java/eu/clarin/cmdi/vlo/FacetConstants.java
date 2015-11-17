@@ -26,6 +26,8 @@ public class FacetConstants {
     public static final String FIELD_COMPLETE_METADATA = "metadataSource";
     public static final String FIELD_NATIONAL_PROJECT = "nationalProject";
     public static final String FIELD_KEYWORDS = "keywords";
+    public static final String FIELD_PROFILE = "profileName";
+    
     /**
      * Solr pseudo-field that reveals the ranking score
      *

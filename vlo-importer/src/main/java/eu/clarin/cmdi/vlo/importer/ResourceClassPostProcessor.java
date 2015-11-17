@@ -3,7 +3,7 @@ package eu.clarin.cmdi.vlo.importer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResourceClassPostProcessor extends LanguageCodePostProcessor {
+public class ResourceClassPostProcessor implements PostProcessor {
     /**
      * Postprocess ResourceClass values
      * @param value extracted ResourcClass information

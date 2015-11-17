@@ -2,15 +2,11 @@ package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
 import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
 
 public class NationalProjectPostProcessorTest extends ImporterTestcase {
-
-    @Before
-    public void setUp() throws Exception {
-        new DefaultVloConfigFactory().newConfig();
-    }
 
     @Test
     public void testNationalProject() {

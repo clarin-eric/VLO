@@ -24,6 +24,7 @@
         <module>vlo-importer</module>
         <module>vlo-commons</module>
         <module>vlo-distribution</module>
+		<module>vlo-vocabularies</module>
     </modules>
 
     <properties>
@@ -67,4 +68,5 @@
             <url>http://lux15.mpi.nl/nexus/content/groups/public</url>
         </repository>
     </repositories>
+    	
 </project>

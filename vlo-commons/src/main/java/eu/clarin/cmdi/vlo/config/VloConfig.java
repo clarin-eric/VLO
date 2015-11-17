@@ -71,6 +71,8 @@ public class VloConfig {
     private String languageNameVariantsUrl;
 
     private String licenseAvailabilityMapUrl;
+    
+    private String resourceClassMapUrl;
 
     private String countryComponentUrl = "";
 
@@ -1025,6 +1027,14 @@ public class VloConfig {
     public void setLicenseAvailabilityMapUrl(String param) {
         licenseAvailabilityMapUrl = param;
     }
+    
+    public String getResourceClassMapUrl() {
+		return resourceClassMapUrl;
+	}
+
+	public void setResourceClassMapUrl(String resourceClassMapUrl) {
+		this.resourceClassMapUrl = resourceClassMapUrl;
+	}
 
     /**
      * Get the value of the cqlEndpointFilter parameter<br><br>
