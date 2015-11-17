@@ -16,18 +16,23 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
-import eu.clarin.cmdi.vlo.pojo.FacetFieldSelection;
-import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.Model;
+
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 
 /**
  * A panel representing a single facet and its selected values, allowing for
@@ -35,21 +40,40 @@ import org.apache.wicket.model.PropertyModel;
  *
  * @author twagoo
  */
-public abstract class SelectedFacetPanel extends GenericPanel<FacetFieldSelection> {
+public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
 
-    public SelectedFacetPanel(String id, final IModel<FacetFieldSelection> model) {
+    public SelectedFacetPanel(String id, String facetName, final IModel<FacetSelection> model) {
         super(id, model);
 
         // Add removers for all selected values for collapsed state
-        add(createSelectionRemovers("facetValueRemover"));
+        add(createSelectionRemovers("facetValueRemover", facetName));
         // Add selected items to expanded state
-        add(createSelectionRemovers("selectedItem"));
+        add(createSelectionRemovers("selectedItem", facetName));
     }
-
-    private ListView<String> createSelectionRemovers(String id) {
+        
+    private ListView<String> createSelectionRemovers(String id, String facetName) {
         // Model of the list of selected values in this facet
-        final PropertyModel<List<String>> propertyModel = new PropertyModel<List<String>>(getModel(), "facetValues");
-        final PropertyModel<String> fieldNameModel = new PropertyModel(getModel(), "facetField.name");
+    	
+    	List<String> selectedValues;
+		if (getModelObject().getValues() != null)
+			selectedValues = new CopyOnWriteArrayList<String>(getModelObject().getValues());
+		else
+			selectedValues = Collections.emptyList();
+		
+		
+    	final IModel<List<String>> propertyModel = new AbstractReadOnlyModel<List<String>>() {
+    		
+			@Override
+			public List<String> getObject() {
+				return new ArrayList(SelectedFacetPanel.this.getModelObject().getValues());
+			}
+    		
+		};
+		final IModel<String> fieldNameModel = new Model<String>(facetName);
+        //final PropertyModel<List<String>> propertyModel= new PropertyModel<List<String>>(getModel(), "facetValues");
+        //final PropertyModel<String> fieldNameModel = new PropertyModel(getModel(), "facetField.name");
+        
+    	
         // Repeating container of value + unselection links
         final ListView<String> listView = new ListView<String>(id, propertyModel) {
 
@@ -78,7 +102,7 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetFieldSelectio
      * @param target Ajax target allowing for a partial update. May be null
      * (fallback)!
      */
-    protected abstract void onValuesUnselected(String facet, Collection<String> valuesRemoved, AjaxRequestTarget target);
+    protected abstract void onValuesUnselected(Collection<String> valuesRemoved, AjaxRequestTarget target);
 
     public class RemoveLink extends IndicatingAjaxFallbackLink {
 
@@ -93,9 +117,7 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetFieldSelectio
         public void onClick(AjaxRequestTarget target) {
             // Remove a single value
             // Call callback
-            onValuesUnselected(
-                    SelectedFacetPanel.this.getModelObject().getFacetField().getName(),
-                    Collections.singleton(valueModel.getObject()), target);
+            onValuesUnselected(Collections.singleton(valueModel.getObject()), target);
         }
 
     }

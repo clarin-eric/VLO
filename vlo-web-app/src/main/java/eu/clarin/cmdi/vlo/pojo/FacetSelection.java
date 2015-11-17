@@ -29,7 +29,7 @@ import java.util.Collection;
 public class FacetSelection implements Serializable {
 
     private final FacetSelectionType selectionType;
-    private final Collection<String> values;
+    private Collection<String> values;
 
     /**
      * Creates an {@link FacetSelectionType#AND} selection for the specified
@@ -76,6 +76,20 @@ public class FacetSelection implements Serializable {
     public Collection<String> getValues() {
         return values;
     }
+    
+    public void setValues(Collection<String> values){
+    	this.values = values;
+    	
+    }
+    
+    public void removeValues(Collection<String> valuesToBeRemoved){
+    	if(valuesToBeRemoved != null){
+	    	for(String val: valuesToBeRemoved){
+	    		this.values.remove(val);
+	    	}
+    	}
+    }
+    
 
     public FacetSelection getCopy() {
         return new FacetSelection(selectionType, values);

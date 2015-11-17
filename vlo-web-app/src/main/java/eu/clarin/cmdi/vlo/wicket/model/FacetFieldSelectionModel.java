@@ -16,16 +16,17 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import eu.clarin.cmdi.vlo.pojo.FacetFieldSelection;
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
-import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 
 /**
  * Model for FacetFieldSelection that simply wraps a QueryFacetsSelection model
@@ -33,7 +34,7 @@ import org.apache.wicket.model.IModel;
  *
  * @author twagoo
  */
-public class FacetFieldSelectionModel extends AbstractReadOnlyModel<FacetFieldSelection> implements FacetFieldSelection {
+public class FacetFieldSelectionModel extends AbstractReadOnlyModel<FacetSelection> {
 
     private final IModel<QueryFacetsSelection> selectionModel;
     private final IModel<FacetField> facetFieldModel;
@@ -48,15 +49,23 @@ public class FacetFieldSelectionModel extends AbstractReadOnlyModel<FacetFieldSe
         this.selectionModel = selectionModel;
     }
 
-    @Override
+ 
+    //@Override
+   	public IModel<FacetField> getFacetFieldAsModel() {
+   		return facetFieldModel;
+   	}
+    
+    
+    //@Override
     public FacetField getFacetField() {
         return facetFieldModel.getObject();
     }
+    
 
-    @Override
+
+   // @Override
     public List<String> getFacetValues() {
-        final String facetName = getFacetField().getName();
-        final FacetSelection selection = getSelection().getSelectionValues(facetName);
+        final FacetSelection selection = getObject();
         if (selection == null) {
             return Collections.emptyList();
         } else {
@@ -68,15 +77,24 @@ public class FacetFieldSelectionModel extends AbstractReadOnlyModel<FacetFieldSe
             }
         }
     }
+    
+   
 
-    @Override
+	//@Override
+	public IModel<QueryFacetsSelection> getSelectionAsModel() {
+		return selectionModel;
+	}
+    
+
+    //@Override
     public QueryFacetsSelection getSelection() {
         return selectionModel.getObject();
     }
 
     @Override
-    public FacetFieldSelection getObject() {
-        return this;
+    public FacetSelection getObject() {
+    	final String facetName = getFacetField().getName();
+    	return getSelection().getSelectionValues(facetName);
     }
 
     @Override
@@ -89,5 +107,6 @@ public class FacetFieldSelectionModel extends AbstractReadOnlyModel<FacetFieldSe
     public String toString() {
         return String.format("[Field: %s; Selection: %s]", facetFieldModel.getObject().getName(), selectionModel.getObject().toString());
     }
-    
+
+	
 }

@@ -27,6 +27,8 @@ import eu.clarin.cmdi.vlo.wicket.model.BridgeModel;
 import eu.clarin.cmdi.vlo.wicket.model.BridgeOuterModel;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
+
+import java.util.Collection;
 import java.util.Collections;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -142,9 +144,8 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
                     public void onClick(AjaxRequestTarget target) {
                         // call callback
                         onValuesSelected(
-                                item.getModelObject().getFacetField().getName(),
                                 // for now only single values can be selected
-                                new FacetSelection(Collections.singleton(item.getModelObject().getName())),
+                        		Collections.singleton(item.getModelObject().getName()),
                                 target);
                     }
                 };
@@ -255,11 +256,10 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
     /**
      * Callback triggered when values have been selected on this facet
      *
-     * @param facet name of the facet this panel represents
      * @param values selected values
      * @param target Ajax target allowing for a partial update. May be null
      * (fallback)!
      */
-    protected abstract void onValuesSelected(String facet, FacetSelection values, AjaxRequestTarget target);
+    protected abstract void onValuesSelected(Collection<String> values, AjaxRequestTarget target);
 
 }

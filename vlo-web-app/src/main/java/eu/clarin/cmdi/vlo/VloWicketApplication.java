@@ -1,22 +1,11 @@
 package eu.clarin.cmdi.vlo;
 
-import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
-import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.service.PermalinkService;
-import eu.clarin.cmdi.vlo.service.XmlTransformationService;
-import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
-import eu.clarin.cmdi.vlo.wicket.pages.AboutPage;
-import eu.clarin.cmdi.vlo.wicket.pages.HelpPage;
-import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
-import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
-import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
-import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
-import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
-import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
 import javax.inject.Inject;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -28,6 +17,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
+import eu.clarin.cmdi.vlo.service.PermalinkService;
+import eu.clarin.cmdi.vlo.service.XmlTransformationService;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import eu.clarin.cmdi.vlo.wicket.pages.AboutPage;
+import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
+import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
+import eu.clarin.cmdi.vlo.wicket.pages.HelpPage;
+import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
+import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
+import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
+import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 
 /**
  * Application object for your web application. If you want to run this

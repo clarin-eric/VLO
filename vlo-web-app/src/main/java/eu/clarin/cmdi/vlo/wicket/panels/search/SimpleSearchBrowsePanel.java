@@ -16,17 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
-import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
-import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.PageParametersConverter;
-import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
-import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
-import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
-import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
-import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
+import java.util.Collection;
+
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
@@ -43,6 +34,18 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
+import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
+import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
 
 /**
  * Panel to be shown on {@link SimpleSearchPage} that has a number of links for
@@ -124,10 +127,10 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
             final FacetValuesPanel values = new FacetValuesPanel("values", item.getModel(), selectionModel) {
 
                 @Override
-                protected void onValuesSelected(String facet, FacetSelection values, AjaxRequestTarget target) {
+                protected void onValuesSelected(Collection<String> values, AjaxRequestTarget target) {
                     // value selected, make a new selection (in this panel we do not want to change the existing selection)...
                     final QueryFacetsSelection newSelection = selectionModel.getObject().getCopy();
-                    newSelection.selectValues(facet, values);
+                    newSelection.selectValues(getModelObject().getName(), new FacetSelection(values));
                     // ...then submit to search page
                     setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(newSelection));
                 }

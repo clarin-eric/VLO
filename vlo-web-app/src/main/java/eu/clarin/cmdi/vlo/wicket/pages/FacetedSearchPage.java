@@ -1,30 +1,33 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
-import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
-import eu.clarin.cmdi.vlo.wicket.panels.SingleFacetPanel;
-import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.wicket.panels.search.FacetsPanel;
-import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.PageParametersConverter;
-import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
-import eu.clarin.cmdi.vlo.wicket.panels.search.FacetPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.search.SearchFormPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel;
-import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
-import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.search.FacetValuesPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel;
 import java.util.List;
+
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
+import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
+import eu.clarin.cmdi.vlo.wicket.model.FacetNamesModel;
+import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
+import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.SingleFacetPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.search.FacetPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.search.FacetValuesPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.search.FacetsPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.search.SearchFormPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel;
 
 /**
  * The main search page showing a search form, facets, and search results
@@ -47,9 +50,16 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     private Component collectionsPanel;
     private Component navigation;
     private Component searchForm;
+    
+    
+    IModel<List<String>> facetNamesModel;
+    FacetFieldsModel fieldsModel;
+    
+    
 
     public FacetedSearchPage(IModel<QueryFacetsSelection> queryModel) {
         super(queryModel);
+        createModels();
         addComponents();
     }
 
@@ -59,7 +69,14 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         final QueryFacetsSelection selection = paramsConverter.fromParameters(parameters);
         final IModel<QueryFacetsSelection> queryModel = new Model<QueryFacetsSelection>(selection);
         setModel(queryModel);
+        createModels();
         addComponents();
+    }
+    
+    
+    private void createModels(){
+    	facetNamesModel = new FacetNamesModel(vloConfig.getFacetFields());
+        fieldsModel = new FacetFieldsModel(facetFieldsService, facetNamesModel.getObject(), getModel(), -1);
     }
 
     private void addComponents() {
@@ -138,7 +155,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         final WebMarkupContainer enclosure = new WebMarkupContainer(id);
         enclosure.setOutputMarkupId(true);
         if (vloConfig.getCollectionFacet() != null) {
-            final FacetPanel panel = new SingleFacetPanel("collectionsFacet", getModel(), vloConfig.getCollectionFacet(), facetFieldsService, 3) {
+            final FacetPanel panel = new SingleFacetPanel("collectionsFacet", vloConfig.getCollectionFacet(), getModel(), facetFieldsService, 3) {
 
                 @Override
                 protected void selectionChanged(AjaxRequestTarget target) {
@@ -157,9 +174,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private Panel createFacetsPanel(final String id) {
-        final IModel<QueryFacetsSelection> queryModel = getModel();
-        final IModel<List<FacetField>> facetFieldsModel = new FacetFieldsModel(facetFieldsService, vloConfig.getFacetFields(), queryModel, FacetValuesPanel.MAX_NUMBER_OF_FACETS_TO_SHOW);
-        final FacetsPanel panel = new FacetsPanel(id, facetFieldsModel, queryModel) {
+        
+        final FacetsPanel panel = new FacetsPanel(id, facetNamesModel, fieldsModel, getModel()) {
 
             @Override
             protected void selectionChanged(AjaxRequestTarget target) {
@@ -171,6 +187,10 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private void updateSelection(AjaxRequestTarget target) {
+    	
+    	//detach facetFieldsModel when selection is changed
+    	fieldsModel.detach();
+    	
         // selection changed, update facets and search results
         if (target != null) { // null if JavaScript disabled
             target.add(navigation);

@@ -16,16 +16,16 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
-import com.google.common.collect.ImmutableList;
 import static eu.clarin.cmdi.vlo.FacetConstants.FIELD_COLLECTION;
 import static eu.clarin.cmdi.vlo.FacetConstants.FIELD_COUNTRY;
 import static eu.clarin.cmdi.vlo.FacetConstants.FIELD_DESCRIPTION;
 import static eu.clarin.cmdi.vlo.FacetConstants.FIELD_ID;
 import static eu.clarin.cmdi.vlo.FacetConstants.FIELD_NAME;
-import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.importer.CMDIData;
+import static org.hamcrest.Matchers.equalTo;
+
 import java.io.File;
 import java.util.List;
+
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.client.solrj.response.FacetField;
@@ -36,7 +36,11 @@ import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.hamcrest.Matchers.*;
+
+import com.google.common.collect.ImmutableList;
+
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.importer.CMDIData;
 
 /**
  * Example taken from

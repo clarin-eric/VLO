@@ -16,16 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
-import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
-import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
-import eu.clarin.cmdi.vlo.service.PageParametersConverter;
-import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
-import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
-import eu.clarin.cmdi.vlo.wicket.panels.search.AllFacetValuesPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
+import java.util.Collection;
+
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
@@ -38,6 +30,17 @@ import org.apache.wicket.request.http.flow.AbortWithHttpErrorCodeException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
+
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
+import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
+import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
+import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.search.AllFacetValuesPanel;
 
 /**
  *
@@ -72,7 +75,8 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
 
         if (vloConfig.getAllFacetFields().contains(facet)) {
             // create a new model so that all values will be retrieved
-            setModel(new FacetFieldModel(facetFieldsService, facet, selectionModel, -1)); // gets all facet values
+        	
+            setModel(new FacetFieldModel(facet, facetFieldsService, selectionModel)); // gets all facet values
         }
         if (getModelObject() == null) {
             final String message = String.format("Facet '%s' could not be found", facet);
@@ -96,7 +100,7 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
         add(new AllFacetValuesPanel("values", getModel()) {
 
             @Override
-            protected void onValuesSelected(String facet, FacetSelection values, AjaxRequestTarget target) {
+            protected void onValuesSelected(Collection<String> values, AjaxRequestTarget target) {
                 // Create updated selection state
                 final QueryFacetsSelection newSelection;
                 if (selectionModel != null) {
@@ -104,7 +108,7 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
                 } else {
                     newSelection = new QueryFacetsSelection();
                 }
-                newSelection.selectValues(facet, values);
+                newSelection.selectValues(getModelObject().getName(), new FacetSelection(values));
 
                 // Redirect to search page with updated model
                 final FacetedSearchPage searchPage = new FacetedSearchPage(Model.of(newSelection));

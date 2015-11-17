@@ -106,7 +106,7 @@ public class SimpleSearchPage extends VloBasePage<QueryFacetsSelection> {
     private Component createCollectionsPanel(String id) {
         // collection facet is optional...
         if (vloConfig.getCollectionFacet() != null) {
-            return new SingleFacetPanel(id, getModel(), vloConfig.getCollectionFacet(), facetFieldsService, 3) {
+            return new SingleFacetPanel(id, vloConfig.getCollectionFacet(), getModel(), facetFieldsService, 3) {
 
                 @Override
                 protected void selectionChanged(AjaxRequestTarget target) {

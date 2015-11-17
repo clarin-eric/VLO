@@ -24,6 +24,7 @@ import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.provider.PartitionedDataProvider;
+import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
@@ -72,7 +73,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     private final IModel<FieldValuesFilter> filterModel;
     private final int subListSize;
     private final IModel<String> fieldNameModel;
-
+    
     @SpringBean
     private FieldValueConverterProvider fieldValueConverterProvider;
 
@@ -202,9 +203,8 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
                 // call callback
                 onValuesSelected(
-                        item.getModelObject().getFacetField().getName(),
                         // for now only single values can be selected
-                        new FacetSelection(Collections.singleton(item.getModelObject().getName())),
+                		Collections.singleton(item.getModelObject().getName()),
                         target);
             }
         };
@@ -242,7 +242,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             protected void onConfigure() {
                 super.onConfigure();
                 // only show if there actually are more values!
-                setVisible(getModel().getObject().getValueCount() > MAX_NUMBER_OF_FACETS_TO_SHOW);
+                setVisible(getModelObject().getValueCount() > MAX_NUMBER_OF_FACETS_TO_SHOW);
             }
 
         };
@@ -270,12 +270,12 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         final AllFacetValuesPanel allValuesPanel = new AllFacetValuesPanel(window.getContentId(), getModel(), filterModel) {
 
             @Override
-            protected void onValuesSelected(String facet, FacetSelection values, AjaxRequestTarget target) {
+            protected void onValuesSelected(Collection<String> values, AjaxRequestTarget target) {
                 if (target != null) {
                     // target can be null if selection link was opened in a new tab
                     window.close(target);
                 }
-                FacetValuesPanel.this.onValuesSelected(facet, values, target);
+                FacetValuesPanel.this.onValuesSelected(values, target);
             }
         };
         window.addOrReplace(allValuesPanel);
@@ -288,6 +288,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         selectionModel.detach();
         filterModel.detach();
     }
+    
 
     /**
      * Callback triggered when values have been selected on this facet
@@ -297,8 +298,8 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param target Ajax target allowing for a partial update. May be null
      * (fallback)!
      */
-    protected abstract void onValuesSelected(String facet, FacetSelection values, AjaxRequestTarget target);
-
+    protected abstract void onValuesSelected(Collection<String> values, AjaxRequestTarget target);
+    
     @Override
     protected void onBeforeRender() {
         super.onBeforeRender();

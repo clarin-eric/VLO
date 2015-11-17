@@ -59,7 +59,21 @@ public class TestFacetedSearchPage {
                 atLeast(1).of(facetFieldsService).getFacetFieldCount(with(any(List.class)));
                 will(returnValue(2L));
                 atLeast(1).of(facetFieldsService).getFacetFields(with(any(QueryFacetsSelection.class)), with(any(List.class)), with(any(Integer.class)));
-                will(returnValue(Arrays.asList(new FacetField("collection"), new FacetField("language"), new FacetField("resource class"))));
+                will(returnValue(Arrays.asList(
+                		new FacetField("languageCode"),
+                		new FacetField("collection"),
+                		new FacetField("resourceClass"),
+                		new FacetField("country"),
+                		new FacetField("modality"),
+                		new FacetField("genre"), 
+                		new FacetField("subject"),
+                		new FacetField("format"),
+                		new FacetField("organisation"),
+                		new FacetField("availability"),
+                		new FacetField("nationalProject"),
+                		new FacetField("keywords"),
+                		new FacetField("dataProvider")
+                )));
 
                 // mock search results
                 atLeast(1).of(documentService).getDocumentCount(with(any(QueryFacetsSelection.class)));
