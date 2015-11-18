@@ -2,3 +2,7 @@
 /vlo-commons/target/
 /vlo-vocabularies/target/
 /vlo-importer/target/
+/vlo-distribution/target/
+/vlo-web-app/target/
+/vlo-importer/nbactions*
+/vlo-web-app/nbactions*
