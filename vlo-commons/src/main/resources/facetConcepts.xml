@@ -250,6 +250,9 @@
 		     <concept>http://hdl.handle.net/11459/CCR_C-5439_98bb103d-476a-7f62-54b4-bf9de24d2229</concept> -->
 		<!-- the DC is used in the distributionType facet -->
 		<!--<concept>http://purl.org/dc/terms/license</concept>-->
+		<!-- URL of the license -->
+		<concept>http://www.isocat.org/datcat/DC-6586</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-6586_2c79d86a-5a75-0890-d407-7d9cb86b9beb</concept>
 	</facetConcept>
 	<facetConcept name="organisation" description="The organisation currently responsible for the resource or tool" definition="The name of the organisation currently responsible for the resource or tool, i.e. to be contacted with any questions or requests regarding the metadata or access to the resource/tool.">
 		<concept>http://www.isocat.org/datcat/DC-2459</concept>
