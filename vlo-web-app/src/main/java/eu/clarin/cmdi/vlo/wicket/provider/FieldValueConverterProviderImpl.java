@@ -100,6 +100,7 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
 
         @Override
         public String convertToString(String fieldValue, Locale locale) throws ConversionException {
+            //For now, we simply ignore this information (see <https://trac.clarin.eu/ticket/780>)
             return fieldValue.replaceAll(FacetConstants.DESCRIPTION_LANGUAGE_PATTERN, "");
         }
 
