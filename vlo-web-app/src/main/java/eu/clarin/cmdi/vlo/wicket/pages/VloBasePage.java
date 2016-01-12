@@ -184,32 +184,8 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
         add(new HideJavascriptFallbackControlsBehavior());
 
-        add(new WebComponent("piwik") {
-            final static int id = 3;
-            final static String piwikHost = "https://stats.clarin.eu/";
-            final static String domains = "*.catalog.clarin.eu";
-
-            @Override
-            protected void onRender() {
-                getResponse().write("\n"
-                        + "<!-- Piwik -->\n"
-                        + "<script type=\"text/javascript\">\n"
-                        + "  var _paq = _paq || [];\n"
-                        + "  _paq.push([\"setDomains\", [\"" + domains + "\"]]);\n"
-                        + "  _paq.push(['trackPageView']);\n"
-                        + "  _paq.push(['enableLinkTracking']);\n"
-                        + "  (function() {\n"
-                        + "        var u=\"" + piwikHost + "\";\n"
-                        + "        _paq.push(['setTrackerUrl', u+'piwik.php']);\n"
-                        + "        _paq.push(['setSiteId', " + id + "]);\n"
-                        + "        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';\n"
-                        + "        g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g, s);\n"
-                        + "  })();\n"
-                        + "</script>\n"
-                        + "<noscript><p><img src=\"" + piwikHost + "piwik.php?idsite=" + id + "\" style=\"border: 0;\" alt=\"\" /></p></noscript>\n"
-                        + "<!-- End Piwik Code -->");
-            }
-        });
+        add(new PiwikTracker("piwik", "3", "https://stats.clarin.eu/", "*.catalog.clarin.eu"));
     }
+
 
 }
