@@ -5,7 +5,7 @@ import java.io.File;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
-import eu.clarin.vlo.sitempa.pojo.Sitemap;
+import eu.clarin.vlo.sitemap.pojo.Sitemap;
 
 public class SitemapMarshaller {
 	

@@ -11,7 +11,7 @@ import com.ximpleware.AutoPilot;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 
-import eu.clarin.vlo.sitempa.pojo.Sitemap.URL;
+import eu.clarin.vlo.sitemap.pojo.Sitemap.URL;
 
 public class SOLRService {
 	

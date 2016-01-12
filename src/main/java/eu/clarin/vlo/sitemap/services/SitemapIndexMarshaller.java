@@ -6,7 +6,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
 import eu.clarin.vlo.sitemap.gen.Config;
-import eu.clarin.vlo.sitempa.pojo.SitemapIndex;
+import eu.clarin.vlo.sitemap.pojo.SitemapIndex;
 
 public class SitemapIndexMarshaller {
 	

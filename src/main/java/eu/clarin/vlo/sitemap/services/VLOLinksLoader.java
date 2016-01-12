@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.util.LinkedList;
 import java.util.List;
 
-import eu.clarin.vlo.sitempa.pojo.Sitemap.URL;
+import eu.clarin.vlo.sitemap.pojo.Sitemap.URL;
 
 public class VLOLinksLoader {
 	

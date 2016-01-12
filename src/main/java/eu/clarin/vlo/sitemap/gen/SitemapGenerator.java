@@ -11,13 +11,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
+import eu.clarin.vlo.sitemap.pojo.Sitemap;
+import eu.clarin.vlo.sitemap.pojo.SitemapIndex;
+import eu.clarin.vlo.sitemap.pojo.Sitemap.URL;
 import eu.clarin.vlo.sitemap.services.SOLRService;
 import eu.clarin.vlo.sitemap.services.SitemapIndexMarshaller;
 import eu.clarin.vlo.sitemap.services.SitemapMarshaller;
 import eu.clarin.vlo.sitemap.services.VLOLinksLoader;
-import eu.clarin.vlo.sitempa.pojo.Sitemap;
-import eu.clarin.vlo.sitempa.pojo.Sitemap.URL;
-import eu.clarin.vlo.sitempa.pojo.SitemapIndex;
 
 public class SitemapGenerator {
 			
