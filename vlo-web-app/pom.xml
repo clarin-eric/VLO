@@ -275,28 +275,27 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.google.code.maven-svn-revision-number-plugin</groupId>
-                <artifactId>svn-revision-number-maven-plugin</artifactId>
-                <version>1.13</version> <!-- please use the latest version -->
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>2.2.0</version>
                 <executions>
                     <execution>
                         <goals>
                             <goal>revision</goal>
-                        </goals>
+                         </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <entries>
-                        <entry>
-                            <path>${project.basedir}</path>
-                            <prefix>vlo</prefix>
-                            <depth>infinity</depth>
-                            <reportUnversioned>true</reportUnversioned>
-                            <reportIgnored>false</reportIgnored>
-                            <reportOutOfDate>false</reportOutOfDate>
-                        </entry>
-                    </entries>
+                    <dotGitDirectory>${project.parent.basedir}/.git</dotGitDirectory>
+                    <prefix>git</prefix>
+                    <dateFormat>yyyy-dd-MM HH:mm:ss z</dateFormat>
+
+                    <verbose>false</verbose>
+                    <skip>false</skip>
+
+                    <abbrevLength>7</abbrevLength>
                 </configuration>
+
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
