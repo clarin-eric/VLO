@@ -18,4 +18,25 @@
         name="eu.carlin.cmdi.vlo.solr.serverUrl" 
         value="http://localhost:8080/vlo_solr/core0/"/>
     -->
-</Context>
+
+    <!-- Piwik configuration, see https://piwik.org and https://stats.clarin.eu -->
+    <!--    <Parameter 
+            name="eu.carlin.cmdi.vlo.piwik.enableTracker" 
+            description="'true' or 'false', defaults to 'false'"
+            value="true"/>
+
+        <Parameter 
+            name="eu.carlin.cmdi.vlo.piwik.siteId" 
+            description="defaults to '3'"
+            value="1"/>
+
+        <Parameter 
+            name="eu.carlin.cmdi.vlo.piwik.host" 
+            description="defaults to 'https://stats.clarin.eu/'"
+            value="https://stats.clarin.eu/"/>
+
+        <Parameter 
+            name="eu.carlin.cmdi.vlo.piwik.domains" 
+            description="defaults to '*.catalog.clarin.eu'"
+            value="*.catalog.clarin.eu"/>-->
+    </Context>

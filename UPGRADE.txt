@@ -28,6 +28,37 @@ old configuration to the new one.
     ./vlo_solr_importer.sh -c ../config/VloConfig.xml
 
 --------------------------
+Upgrading from 3.3 to 3.4
+--------------------------
+
+* The Piwik tracker is now configurable via context parameters. Set the 
+following parameters according to your preferences:
+
+    <Parameter 
+        name="eu.carlin.cmdi.vlo.piwik.enableTracker" 
+        description="'true' or 'false', defaults to 'false'"
+        value="true"/>
+
+    <!-- Further piwik parameters can be skipped if enableTracker is false -->
+
+    <Parameter 
+        name="eu.carlin.cmdi.vlo.piwik.siteId" 
+        description="defaults to '3'"
+        value="1"/>
+    
+    <Parameter 
+        name="eu.carlin.cmdi.vlo.piwik.host" 
+        description="defaults to 'https://stats.clarin.eu/'"
+        value="https://stats.clarin.eu/"/>
+    
+    <Parameter 
+        name="eu.carlin.cmdi.vlo.piwik.domains" 
+        description="defaults to '*.catalog.clarin.eu'"
+        value="*.catalog.clarin.eu"/>
+
+See <https://stats.clarin.eu> for configuration details per environment.
+
+--------------------------
 Upgrading from 3.2 to 3.3
 --------------------------
 * Take note of the change in VloConfig.xml which moves the data roots definition

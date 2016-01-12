@@ -75,6 +75,14 @@ xxx             - VLO version number
 		or set a context parameter 'configuration' to the value 
                 'deployment' in the application's context fragment.
 		
+                Piwik access statistics can be configured by setting the 
+                following context parameters:
+                    - eu.carlin.cmdi.vlo.piwik.enableTracker (set true to enable)
+                    - eu.carlin.cmdi.vlo.piwik.siteId (defaults to production value)
+                    - eu.carlin.cmdi.vlo.piwik.host (defaults to production value)
+                    - eu.carlin.cmdi.vlo.piwik.domains (defaults to production value)
+                See packaged context.xml for details and examples.
+
 4. Importer configuration
 	
 	Modify DataRoot for importer directly in $VLO/config/VloConfig.xml or in
