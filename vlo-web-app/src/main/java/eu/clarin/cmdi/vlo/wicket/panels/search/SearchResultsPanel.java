@@ -170,7 +170,7 @@ public class SearchResultsPanel extends Panel {
                         // bind to items per page property of pageable
                         new PropertyModel<Long>(resultsView, "itemsPerPage"),
                         ITEMS_PER_PAGE_OPTIONS);
-        pageSizeDropDown.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        pageSizeDropDown.add(new AjaxFormComponentUpdatingBehavior("change") {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
