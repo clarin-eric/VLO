@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 public class Config {
 	
 	private static final String PROPERTIES_FILE = "config.properties";
+	
 	static final Logger _logger = LoggerFactory.getLogger(Config.class);
 	
 	public static final String MAX_URLS_PER_SITEMAP;
@@ -19,12 +20,11 @@ public class Config {
 	public static final String SOLR_QUERY_URL;
 	public static final String INCLUDE_URLS;
 	
-	static {
-		_logger.info("reading properties from {}", PROPERTIES_FILE);
-		Properties prop = new Properties();
+	static {		
 		try{
-			InputStream is = Config.class.getResourceAsStream(PROPERTIES_FILE);
-			prop.load(is);
+			_logger.info("reading properties from {}", PROPERTIES_FILE);
+			Properties prop = new Properties();
+			prop.load(Config.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE));
 			
 			MAX_URLS_PER_SITEMAP = prop.getProperty("MAX_URLS_PER_SITEMAP");
 			OUTPUT_FOLDER = prop.getProperty("OUTPUT_FOLDER");
@@ -34,6 +34,9 @@ public class Config {
 			SOLR_QUERY_URL = prop.getProperty("SOLR_QUERY_URL");
 			INCLUDE_URLS = prop.getProperty("INCLUDE_URLS");
 			
+			_logger.info("properties were successfully read");
+			
+
 		}catch(Exception e){
 			_logger.error("Error while reading {} from classpath!", PROPERTIES_FILE);
 			throw new RuntimeException(e);

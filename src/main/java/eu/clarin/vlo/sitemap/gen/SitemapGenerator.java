@@ -1,5 +1,12 @@
 package eu.clarin.vlo.sitemap.gen;
 
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +34,11 @@ public class SitemapGenerator {
 			
 	public void generateVLOSitemap(){
 		try{
+			
+			//clean sitemap output folder or create if it doesnt exist
+			cleanOutputDir();
+			
+			//create urls
 			List<URL> urls = new LinkedList<>();
 			
 			for(String staticURL: Config.INCLUDE_URLS.split(","))
@@ -38,9 +50,30 @@ public class SitemapGenerator {
 			createSitemapIndex(createSitemaps(urls));
 			
 		}catch(Exception e){
+			_logger.error("Error while generating sitemaps", e);
 			throw new RuntimeException(e);
 		}
 		
+	}
+	
+	private void cleanOutputDir() throws Exception{
+		Path outputDir = Paths.get(Config.OUTPUT_FOLDER);
+		if(!Files.exists(outputDir)){//create folder if it doesnt exist
+			Files.createDirectory(outputDir);
+			_logger.info("Directory {} is created", outputDir);
+		}else{//if exists deelte existing sitemap files
+			Files.walkFileTree(outputDir, new SimpleFileVisitor<Path>(){
+				
+				@Override
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+					String fileName = file.getFileName().toString();
+					if(fileName.startsWith(Config.SITEMAP_INDEX_NAME) || fileName.startsWith(Config.SITEMAP_NAME_PREFIX))
+						Files.delete(file);
+					return FileVisitResult.CONTINUE;					
+				}				
+			});
+			_logger.info("Directory {} is cleaned", outputDir);
+		}		
 	}
 	
 	public void createSitemapIndex(List<String> maps) throws Exception{
