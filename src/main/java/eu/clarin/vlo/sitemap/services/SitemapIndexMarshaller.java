@@ -17,10 +17,13 @@ public class SitemapIndexMarshaller {
 	
 	public void marshall(SitemapIndex index) throws Exception{
 		_logger.info("Generating index");
+		
+		String fileName = Config.OUTPUT_FOLDER + "/" + Config.SITEMAP_INDEX_NAME;
+		
 		JAXBContext jaxbContext = JAXBContext.newInstance(SitemapIndex.class);
 		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		jaxbMarshaller.marshal(index, new File(Config.VLO_SITEMAP_INDEX_NAME));
+		jaxbMarshaller.marshal(index, new File(fileName));
 		
 		_logger.info("Finished");
 	}	

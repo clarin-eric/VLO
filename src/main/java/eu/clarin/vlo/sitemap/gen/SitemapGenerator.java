@@ -20,7 +20,6 @@ import eu.clarin.vlo.sitemap.pojo.SitemapIndex;
 import eu.clarin.vlo.sitemap.services.SOLRService;
 import eu.clarin.vlo.sitemap.services.SitemapIndexMarshaller;
 import eu.clarin.vlo.sitemap.services.SitemapMarshaller;
-import eu.clarin.vlo.sitemap.services.VLOLinksLoader;
 
 public class SitemapGenerator {
 	
@@ -28,14 +27,16 @@ public class SitemapGenerator {
 			
 	public void generateVLOSitemap(){
 		try{
-			SOLRService service = new SOLRService();
+			List<URL> urls = new LinkedList<>();
 			
-			List<URL> urls = VLOLinksLoader.loadLinks();			
-			urls.addAll(service.getRecordURLS());			
+			for(String staticURL: Config.INCLUDE_URLS.split(","))
+				urls.add(new URL(staticURL.trim()));					
+			urls.addAll(new SOLRService().getRecordURLS());			
 			
 			_logger.info("Total number of URLs " + urls.size());
 			
 			createSitemapIndex(createSitemaps(urls));
+			
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -65,13 +66,15 @@ public class SitemapGenerator {
 		int sitemapCnt = 1;
 		
 		while(true){
-			List<URL> subURLs = urls.subList(ind, Math.min(ind + Config.MAX_ENTRIES, urls.size()));
-			ind += Config.MAX_ENTRIES;
+			int maxUrlsPerSitemap = Integer.valueOf(Config.MAX_URLS_PER_SITEMAP);
+			
+			List<URL> subURLs = urls.subList(ind, Math.min(ind + maxUrlsPerSitemap, urls.size()));
+			ind += maxUrlsPerSitemap;
 			
 			Sitemap sitemap = new Sitemap();
 			sitemap.setUrls(subURLs);
 			
-			String sitemapName = Config.VLO_SITEMAP_CHUNK_NAME.replace("xx", String.valueOf(sitemapCnt++));
+			String sitemapName = Config.SITEMAP_NAME_PREFIX + sitemapCnt++;
 			sitemaps.add(sitemapName);			
 			
 			

@@ -11,18 +11,16 @@ import com.ximpleware.AutoPilot;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 
+import eu.clarin.vlo.sitemap.gen.Config;
 import eu.clarin.vlo.sitemap.pojo.Sitemap.URL;
 
 public class SOLRService {
 	
 	public static final Logger _logger = LoggerFactory.getLogger(SOLRService.class);
-
-	static final String SERVER = "https://minerva.arz.oeaw.ac.at/tomcat/vlo-solr/core0/select?";
-	static final String RECORD_URL = "https://vlo.clarin.eu/record?docId=";
 	
-	static final String GET_IDS = "fl=id&rows=";
-	
+	//to increase performances, should be increased in future
 	static final int MAX_NUM_OF_RECORDS = 1000000; //1M
+	static final String GET_IDS = "fl=id&rows=";
 	
 	
 	private VTDGen vg;
@@ -35,10 +33,10 @@ public class SOLRService {
 
 		List<URL> ids = new ArrayList<URL>(MAX_NUM_OF_RECORDS);
 		
-		boolean parseSuccess = vg.parseHttpUrl(SERVER + GET_IDS + MAX_NUM_OF_RECORDS, false);
+		boolean parseSuccess = vg.parseHttpUrl(Config.SOLR_QUERY_URL + GET_IDS + MAX_NUM_OF_RECORDS, false);
 		
 		if(!parseSuccess)
-			throw new RuntimeException("error parsing result from: " + SERVER + GET_IDS + MAX_NUM_OF_RECORDS);
+			throw new RuntimeException("error parsing result from: " + Config.SOLR_QUERY_URL + GET_IDS + MAX_NUM_OF_RECORDS);
 		
 		VTDNav nav = vg.getNav();		
 		AutoPilot ap = new AutoPilot(nav);
@@ -48,7 +46,7 @@ public class SOLRService {
 		int i = -1;
 		while((i = ap.evalXPath()) != -1){
 			String id = nav.toNormalizedString(nav.getText());
-			ids.add(new URL(RECORD_URL + id));
+			ids.add(new URL(Config.RECORD_URL_TEMPLATE + id));
 		}
 		
 		return ids;
