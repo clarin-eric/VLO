@@ -11,15 +11,20 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import eu.clarin.vlo.sitemap.pojo.Sitemap;
-import eu.clarin.vlo.sitemap.pojo.SitemapIndex;
 import eu.clarin.vlo.sitemap.pojo.Sitemap.URL;
+import eu.clarin.vlo.sitemap.pojo.SitemapIndex;
 import eu.clarin.vlo.sitemap.services.SOLRService;
 import eu.clarin.vlo.sitemap.services.SitemapIndexMarshaller;
 import eu.clarin.vlo.sitemap.services.SitemapMarshaller;
 import eu.clarin.vlo.sitemap.services.VLOLinksLoader;
 
 public class SitemapGenerator {
+	
+	static Logger _logger = LoggerFactory.getLogger(SitemapGenerator.class);
 			
 	public void generateVLOSitemap(){
 		try{
@@ -28,7 +33,7 @@ public class SitemapGenerator {
 			List<URL> urls = VLOLinksLoader.loadLinks();			
 			urls.addAll(service.getRecordURLS());			
 			
-			System.out.println("size is " + urls.size());
+			_logger.info("Total number of URLs " + urls.size());
 			
 			createSitemapIndex(createSitemaps(urls));
 		}catch(Exception e){

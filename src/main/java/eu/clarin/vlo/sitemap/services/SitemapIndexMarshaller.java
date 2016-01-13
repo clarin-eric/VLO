@@ -5,20 +5,24 @@ import java.io.File;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import eu.clarin.vlo.sitemap.gen.Config;
 import eu.clarin.vlo.sitemap.pojo.SitemapIndex;
 
 public class SitemapIndexMarshaller {
 	
+	static Logger _logger = LoggerFactory.getLogger(SitemapIndexMarshaller.class);
 	
 	public void marshall(SitemapIndex index) throws Exception{
-		System.out.println("Generating index");
+		_logger.info("Generating index");
 		JAXBContext jaxbContext = JAXBContext.newInstance(SitemapIndex.class);
 		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 		jaxbMarshaller.marshal(index, new File(Config.VLO_SITEMAP_INDEX_NAME));
 		
-		System.out.println("Finished");
+		_logger.info("Finished");
 	}	
 
 }
