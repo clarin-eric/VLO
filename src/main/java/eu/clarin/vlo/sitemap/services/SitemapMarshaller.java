@@ -16,7 +16,7 @@ public class SitemapMarshaller {
 	static Logger _logger = LoggerFactory.getLogger(SitemapMarshaller.class);
 	
 	public Void marshall(Sitemap sitemap, String fileName) throws Exception{
-		fileName = Config.OUTPUT_FOLDER + "/" + fileName;
+		fileName = Config.OUTPUT_FOLDER + "/" + fileName + ".xml";
 		_logger.info("Generating " + fileName);
 		File xml = new File(fileName);
 		JAXBContext jaxbContext = JAXBContext.newInstance(Sitemap.class);
