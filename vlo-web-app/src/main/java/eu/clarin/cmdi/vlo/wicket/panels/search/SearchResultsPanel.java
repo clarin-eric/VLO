@@ -91,8 +91,10 @@ public class SearchResultsPanel extends Panel {
         add(resultsView);
 
         // pagination navigators
-        final MarkupContainer navigatorTop = add(new AjaxPagingNavigator("pagingTop", resultsView));
-        final MarkupContainer navigatorBottom = add(new AjaxPagingNavigator("pagingBottom", resultsView));
+        final AjaxPagingNavigator navigatorTop = new AjaxPagingNavigator("pagingTop", resultsView);
+        final AjaxPagingNavigator navigatorBottom = new AjaxPagingNavigator("pagingBottom", resultsView);
+        add(navigatorTop);
+        add(navigatorBottom);
 
         // add Piwik tracking behavior
         if (piwikConfig.isEnabled()) {
