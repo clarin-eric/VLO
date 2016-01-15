@@ -6,3 +6,4 @@
 /vlo-web-app/target/
 /vlo-importer/nbactions*
 /vlo-web-app/nbactions*
+.DS_Store

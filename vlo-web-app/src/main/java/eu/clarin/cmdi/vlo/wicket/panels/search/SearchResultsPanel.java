@@ -16,6 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikEventTrackingBehavior;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
@@ -27,6 +29,7 @@ import java.util.List;
 import java.util.Set;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
@@ -42,6 +45,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +63,9 @@ public class SearchResultsPanel extends Panel {
     private final IDataProvider<SolrDocument> solrDocumentProvider;
     private final DataView<SolrDocument> resultsView;
     private final IModel<Set<Object>> expansionsModel;
+
+    @SpringBean
+    private PiwikConfig piwikConfig;
 
     public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, selectionModel);
@@ -84,20 +91,14 @@ public class SearchResultsPanel extends Panel {
         add(resultsView);
 
         // pagination navigators
-        add(new AjaxPagingNavigator("pagingTop", resultsView) {
+        final MarkupContainer navigatorTop = add(new AjaxPagingNavigator("pagingTop", resultsView));
+        final MarkupContainer navigatorBottom = add(new AjaxPagingNavigator("pagingBottom", resultsView));
 
-            @Override
-            protected void onAjaxEvent(AjaxRequestTarget target) {
-                super.onAjaxEvent(target); //To change body of generated methods, choose Tools | Templates.
-                log.debug("AjaxPagingNavigator.AjaxEvent");
-                final String pageTitle = "Search page";
-                target.appendJavaScript(
-                        "var tracker = Piwik.getAsyncTracker();"
-                        + "tracker.trackPageView('" + pageTitle + "');");
-            }
-
-        });
-        add(new AjaxPagingNavigator("pagingBottom", resultsView));
+        // add Piwik tracking behavior
+        if (piwikConfig.isEnabled()) {
+            navigatorTop.add(new AjaxPiwikEventTrackingBehavior("Search page"));
+            navigatorBottom.add(new AjaxPiwikEventTrackingBehavior("Search page"));
+        }
 
         // total result counter
         add(createResultCount("resultCount"));
