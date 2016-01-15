@@ -55,8 +55,10 @@ import org.slf4j.LoggerFactory;
  */
 public class SearchResultsPanel extends Panel {
 
-    public final static Logger log = LoggerFactory.getLogger(SearchResultsPanel.class);
-
+    public static final Logger log = LoggerFactory.getLogger(SearchResultsPanel.class);
+    
+    public static final String TRACKING_EVENT_TITLE = "Search page";
+    
     public static final List<Long> ITEMS_PER_PAGE_OPTIONS = Arrays.asList(5L, 10L, 25L, 50L, 100L);
 
     private final IDataProvider<SolrDocument> solrDocumentProvider;
@@ -97,8 +99,8 @@ public class SearchResultsPanel extends Panel {
 
         // add Piwik tracking behavior
         if (piwikConfig.isEnabled()) {
-            navigatorTop.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior("Search page"));
-            navigatorBottom.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior("Search page"));
+            navigatorTop.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior(TRACKING_EVENT_TITLE));
+            navigatorBottom.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior(TRACKING_EVENT_TITLE));
         }
 
         // total result counter
@@ -192,6 +194,9 @@ public class SearchResultsPanel extends Panel {
                 target.add(SearchResultsPanel.this);
             }
         });
+        if (piwikConfig.isEnabled()) {
+            pageSizeDropDown.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior("change", TRACKING_EVENT_TITLE));
+        }
         resultPageSizeForm.add(pageSizeDropDown);
 
         return resultPageSizeForm;
