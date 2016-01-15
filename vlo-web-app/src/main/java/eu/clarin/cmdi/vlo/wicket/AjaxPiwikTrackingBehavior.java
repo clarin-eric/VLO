@@ -28,24 +28,20 @@ import org.apache.wicket.behavior.Behavior;
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
-public abstract class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
+public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
 
     public static final String DEFAULT_EVENT = "click";
-    public static final String TRACKER_VARIABLE_NAME = "tracker";
+    private final String trackerCommand;
 
-    protected AjaxPiwikTrackingBehavior(String event) {
+    protected AjaxPiwikTrackingBehavior(String event, String trackerCommand) {
         super(event);
+        this.trackerCommand = trackerCommand;
     }
 
     @Override
     protected void onEvent(AjaxRequestTarget target) {
-        target.appendJavaScript(String.format(
-                "var %s = Piwik.getAsyncTracker(); %s", 
-                TRACKER_VARIABLE_NAME, 
-                getTrackerCommand(TRACKER_VARIABLE_NAME)));
+        target.appendJavaScript("var tracker = Piwik.getAsyncTracker(); tracker." + trackerCommand);
     }
-
-    protected abstract String getTrackerCommand(String trackerName);
 
     /**
      * Tracking of an action with a custom name
@@ -55,14 +51,7 @@ public abstract class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
      * @return
      */
     public static Behavior newEventTrackingBehavior(String event, final String actionTitle) {
-        return new AjaxPiwikTrackingBehavior(event) {
-
-            @Override
-            protected String getTrackerCommand(String trackerName) {
-                return trackerName + ".trackPageView('" + actionTitle + "');";
-            }
-
-        };
+        return new AjaxPiwikTrackingBehavior(event, "trackPageView('" + actionTitle + "');");
     }
 
     public static Behavior newEventTrackingBehavior(final String actionTitle) {
