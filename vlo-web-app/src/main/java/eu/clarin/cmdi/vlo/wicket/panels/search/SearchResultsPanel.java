@@ -17,8 +17,8 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
-import eu.clarin.cmdi.vlo.wicket.AjaxPiwikEventTrackingBehavior;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchResultExpansionStateModel;
@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Set;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
@@ -98,8 +97,8 @@ public class SearchResultsPanel extends Panel {
 
         // add Piwik tracking behavior
         if (piwikConfig.isEnabled()) {
-            navigatorTop.add(new AjaxPiwikEventTrackingBehavior("Search page"));
-            navigatorBottom.add(new AjaxPiwikEventTrackingBehavior("Search page"));
+            navigatorTop.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior("Search page"));
+            navigatorBottom.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior("Search page"));
         }
 
         // total result counter
