@@ -18,7 +18,6 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
-import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermScriptFactory;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchResultExpansionStateModel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
@@ -28,7 +27,6 @@ import java.util.List;
 import java.util.Set;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
@@ -44,7 +42,8 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.string.StringValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Panel that has a data view on the current search results
@@ -53,12 +52,14 @@ import org.apache.wicket.util.string.StringValue;
  */
 public class SearchResultsPanel extends Panel {
 
+    public final static Logger log = LoggerFactory.getLogger(SearchResultsPanel.class);
+
     public static final List<Long> ITEMS_PER_PAGE_OPTIONS = Arrays.asList(5L, 10L, 25L, 50L, 100L);
 
     private final IDataProvider<SolrDocument> solrDocumentProvider;
     private final DataView<SolrDocument> resultsView;
     private final IModel<Set<Object>> expansionsModel;
-    
+
     public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, selectionModel);
         add(new Label("title", new SearchResultsTitleModel(selectionModel)));
@@ -83,7 +84,19 @@ public class SearchResultsPanel extends Panel {
         add(resultsView);
 
         // pagination navigators
-        add(new AjaxPagingNavigator("pagingTop", resultsView));
+        add(new AjaxPagingNavigator("pagingTop", resultsView) {
+
+            @Override
+            protected void onAjaxEvent(AjaxRequestTarget target) {
+                super.onAjaxEvent(target); //To change body of generated methods, choose Tools | Templates.
+                log.debug("AjaxPagingNavigator.AjaxEvent");
+                final String pageTitle = "Search page";
+                target.appendJavaScript(
+                        "var tracker = Piwik.getAsyncTracker();"
+                        + "tracker.trackPageView('" + pageTitle + "');");
+            }
+
+        });
         add(new AjaxPagingNavigator("pagingBottom", resultsView));
 
         // total result counter
@@ -97,8 +110,8 @@ public class SearchResultsPanel extends Panel {
 
         //For Ajax updating of search results
         setOutputMarkupId(true);
-        
-        add(new HighlightSearchTermBehavior(){
+
+        add(new HighlightSearchTermBehavior() {
 
             @Override
             protected String getComponentSelector(String componentId) {
@@ -109,10 +122,10 @@ public class SearchResultsPanel extends Panel {
             protected String getWordList(Component component) {
                 return selectionModel.getObject().getQuery();
             }
-            
+
         });
     }
-    
+
     public void resetExpansion() {
         expansionsModel.getObject().clear();
     }
@@ -158,7 +171,7 @@ public class SearchResultsPanel extends Panel {
                 // hide if no results
                 setVisible(resultsView.getItemCount() > 0);
             }
-            
+
         };
     }
 
