@@ -17,8 +17,10 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.JavaScriptResources;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import java.util.Iterator;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -44,9 +46,11 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
 
     @SpringBean
     private AutoCompleteService autoCompleteDao;
+    @SpringBean
+    private PiwikConfig piwikConfig;
 
     //private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
-    public SearchFormPanel(String id, IModel<QueryFacetsSelection> model) {
+    public SearchFormPanel(String id, final IModel<QueryFacetsSelection> model) {
         super(id, model);
 
         final Form<QueryFacetsSelection> form = new Form<>("search", model);
@@ -61,7 +65,7 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
         });
 
         // Button allows partial updates but can fall back to a full (non-JS) refresh
-        form.add(new AjaxFallbackButton("searchSubmit", form) {
+        final AjaxFallbackButton submitButton = new AjaxFallbackButton("searchSubmit", form) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -89,12 +93,22 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
                 attributes.getAjaxCallListeners().add(listener);
             }
 
+        };
+        if (piwikConfig.isEnabled()) {
+            //add tracking behaviour to search button
+            submitButton.add(new AjaxPiwikTrackingBehavior.SearchTrackingBehavior("click") {
+
+                @Override
+                protected String getKeywords(AjaxRequestTarget target) {
+                    return model.getObject().getQuery();
+                }
+            });
         }
-        );
+        form.add(submitButton);
 
         add(form);
     }
-   
+
     protected abstract void onSubmit(AjaxRequestTarget target);
 
     @Override

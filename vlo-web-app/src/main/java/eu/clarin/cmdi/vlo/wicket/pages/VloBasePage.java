@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
 import org.apache.wicket.Session;
@@ -64,6 +65,9 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
     @SpringBean
     private VloConfig vloConfig;
+    
+    @SpringBean
+    private PiwikConfig piwikConfig;
 
     public VloBasePage() {
         addComponents();
@@ -182,6 +186,15 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         add(new WebMarkupContainer("header").add(new AttributeAppender("class", VloWicketApplication.get().getAppVersionQualifier())));
 
         add(new HideJavascriptFallbackControlsBehavior());
+        
+        // add Piwik tracker (if enabled)
+        if(piwikConfig.isEnabled()) {
+            add(new PiwikTracker("piwik", piwikConfig.getSiteId(), piwikConfig.getPiwikHost(), piwikConfig.getDomains()));
+        } else {
+            //empty placeholder
+            add(new WebMarkupContainer("piwik"));
+        }
     }
+
 
 }
