@@ -44,7 +44,9 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
 
     @Override
     protected void onEvent(AjaxRequestTarget target) {
-        final String js = "var tracker = Piwik.getAsyncTracker(); tracker." + getTrackerCommand(target);
+        final String js = "if(Piwik != null) { "
+                + "var tracker = Piwik.getAsyncTracker(); if(tracker != null) { tracker." + getTrackerCommand(target)
+                + ";}}";
         log.debug("Calling Piwik API: {}", js);
         target.appendJavaScript(js);
     }
@@ -61,7 +63,7 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
      * @return
      */
     public static Behavior newEventTrackingBehavior(String event, final String actionTitle) {
-        return new AjaxPiwikTrackingBehavior(event, "trackPageView('" + actionTitle + "');");
+        return new AjaxPiwikTrackingBehavior(event, "trackPageView('" + actionTitle + "')");
     }
 
     public static Behavior newEventTrackingBehavior(final String actionTitle) {
