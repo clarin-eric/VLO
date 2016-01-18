@@ -19,6 +19,8 @@ package eu.clarin.cmdi.vlo.wicket;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Behavior that sends a tracking request to the Piwik tracker on an Ajax event.
@@ -30,6 +32,8 @@ import org.apache.wicket.behavior.Behavior;
  */
 public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
 
+    public static final Logger log = LoggerFactory.getLogger(AjaxPiwikTrackingBehavior.class);
+    
     public static final String DEFAULT_EVENT = "click";
     private final String trackerCommand;
 
@@ -40,7 +44,13 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
 
     @Override
     protected void onEvent(AjaxRequestTarget target) {
-        target.appendJavaScript("var tracker = Piwik.getAsyncTracker(); tracker." + trackerCommand);
+        final String js = "var tracker = Piwik.getAsyncTracker(); tracker." + getTrackerCommand(target);
+        log.debug("Calling Piwik API: {}", js);
+        target.appendJavaScript(js);
+    }
+
+    protected String getTrackerCommand(AjaxRequestTarget target) {
+        return trackerCommand;
     }
 
     /**
@@ -56,5 +66,20 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
 
     public static Behavior newEventTrackingBehavior(final String actionTitle) {
         return newEventTrackingBehavior(DEFAULT_EVENT, actionTitle);
+    }
+
+    public static abstract class SearchTrackingBehavior extends AjaxPiwikTrackingBehavior {
+
+        public SearchTrackingBehavior(String event) {
+            super(event, null);
+        }
+
+        @Override
+        protected String getTrackerCommand(AjaxRequestTarget target) {
+            return "trackSiteSearch('" + getKeywords(target) + "')";
+        }
+
+        protected abstract String getKeywords(AjaxRequestTarget target);
+
     }
 }
