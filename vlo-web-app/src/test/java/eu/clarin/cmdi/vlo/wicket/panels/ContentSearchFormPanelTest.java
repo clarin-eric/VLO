@@ -32,8 +32,11 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -76,11 +79,18 @@ public class ContentSearchFormPanelTest {
      * Custom configuration injected into web app for testing
      */
     @Configuration
+    @PropertySource(value = "classpath:/config.default.properties", ignoreResourceNotFound = false)
     @Import({
         VloApplicationTestConfig.class,
         VloSolrSpringConfig.class,
         VloServicesSpringConfig.class})
     static class ContextConfiguration {
+
+        @Bean
+        public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+            return new PropertySourcesPlaceholderConfigurer();
+        }
+
     }
 
     /**
