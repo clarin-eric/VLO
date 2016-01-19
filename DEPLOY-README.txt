@@ -77,10 +77,10 @@ xxx             - VLO version number
 		
                 Piwik access statistics can be configured by setting the 
                 following context parameters:
-                    - eu.carlin.cmdi.vlo.piwik.enableTracker (set true to enable)
-                    - eu.carlin.cmdi.vlo.piwik.siteId (defaults to production value)
-                    - eu.carlin.cmdi.vlo.piwik.host (defaults to production value)
-                    - eu.carlin.cmdi.vlo.piwik.domains (defaults to production value)
+                    - eu.clarin.cmdi.vlo.piwik.enableTracker (set true to enable)
+                    - eu.clarin.cmdi.vlo.piwik.siteId (defaults to production value)
+                    - eu.clarin.cmdi.vlo.piwik.host (defaults to production value)
+                    - eu.clarin.cmdi.vlo.piwik.domains (defaults to production value)
                 See packaged context.xml for details and examples.
 
 4. Importer configuration
