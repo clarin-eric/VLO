@@ -8,7 +8,7 @@ public class AvailabilityPostProcessorTest extends ImporterTestcase {
     
 
     @Test
-    public void testLanguageCode() {
+    public void testAvailabilityMapping() {
         PostProcessor processor = new AvailabilityPostProcessor();     
         assertEquals("Free", processor.process("Apache Licence 2.0").get(0));
         assertEquals("Free", processor.process("Open Access").get(0));
