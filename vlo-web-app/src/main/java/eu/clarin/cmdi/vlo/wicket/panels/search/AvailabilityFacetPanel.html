@@ -24,21 +24,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <body>
         <wicket:extend>
             <div class="sbilinks facetvalues">
-                <!--
-                <form wicket:id="options" id="advancedoptions">
-                    <ul>
-                        <li>
-                            <input wicket:id="fcs" type="checkbox" id="onlyfcs"/>
-                            <label for="onlyfcs">Only include resources that support content search</label>
-                        </li>
-                        <li wicket:id="collectionsSection">
-                            <input wicket:id="collection" type="checkbox" id="onlycollections"/>
-                            <label for="onlycollections">Only include collection resources</label>
-                        </li>
-                    </ul>
+                <form wicket:id="availability" id="availability">
+                    <input id="pub" type="checkbox" wicket:id="pub"/><label for="pub" title="Resources and tools that are publicly accessible" >PUB</label>
+                    <input id="aca" type="checkbox" wicket:id="aca"/><label for="aca" title="Resources and tools that are accessible with academic credentials">ACA</label>
+                    <input id="res" type="checkbox" wicket:id="res"/><label for="res" title="Resources and tools with access on individual basis">RES</label>
                     <input type="submit" value="Apply" class="nonjsfallback" />
                 </form>
-                -->
             </div>
         </wicket:extend>
     </body>

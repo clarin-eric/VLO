@@ -16,11 +16,19 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
+import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -28,8 +36,20 @@ import org.apache.wicket.model.IModel;
  */
 public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacetsSelection> {
 
-    public AvailabilityFacetPanel(String id, IModel<QueryFacetsSelection> model) {
-        super(id, model);
+    private final static Logger log = LoggerFactory.getLogger(AvailabilityFacetPanel.class);
+
+    @SpringBean
+    private FacetFieldsService fieldsService;
+
+    public AvailabilityFacetPanel(String id, IModel<QueryFacetsSelection> selectionModel) {
+        super(id, selectionModel);
+        final FacetSelectionModel fieldSelectionModel = new FacetSelectionModel(selectionModel, FacetConstants.FIELD_AVAILABILITY);
+
+        add(new Form("availability")
+                .add(new CheckBox("pub"))
+                .add(new CheckBox("aca"))
+                .add(new CheckBox("res"))
+        );
     }
 
     @Override
