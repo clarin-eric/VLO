@@ -52,9 +52,11 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
         final FacetSelectionModel fieldSelectionModel = new FacetSelectionModel(selectionModel, FacetConstants.FIELD_AVAILABILITY);
 
         add(new Form("availability")
+                //TOOD: add counts to the labels
                 .add(createValueCheckbox("pub", fieldSelectionModel, selectionModel, FacetConstants.AVAILABILITY_LEVEL_PUB))
                 .add(createValueCheckbox("aca", fieldSelectionModel, selectionModel, FacetConstants.AVAILABILITY_LEVEL_ACA))
                 .add(createValueCheckbox("res", fieldSelectionModel, selectionModel, FacetConstants.AVAILABILITY_LEVEL_RES))
+                //TODO: Unknown should probably be 'other than pub, aca, res'
                 .add(createValueCheckbox("unk", fieldSelectionModel, selectionModel, FacetConstants.AVAILABILITY_LEVEL_UNKNOWN))
         );
     }
