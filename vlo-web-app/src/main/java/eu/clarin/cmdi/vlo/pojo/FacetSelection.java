@@ -28,7 +28,7 @@ import java.util.Collection;
  */
 public class FacetSelection implements Serializable {
 
-    private final FacetSelectionType selectionType;
+    private FacetSelectionType selectionType;
     private Collection<String> values;
 
     /**
@@ -69,6 +69,10 @@ public class FacetSelection implements Serializable {
         return selectionType;
     }
 
+    public void setSelectionType(FacetSelectionType selectionType) {
+        this.selectionType = selectionType;
+    }
+
     /**
      *
      * @return values subject to selection type
@@ -76,20 +80,19 @@ public class FacetSelection implements Serializable {
     public Collection<String> getValues() {
         return values;
     }
-    
-    public void setValues(Collection<String> values){
-    	this.values = values;
-    	
+
+    public void setValues(Collection<String> values) {
+        this.values = values;
+
     }
-    
-    public void removeValues(Collection<String> valuesToBeRemoved){
-    	if(valuesToBeRemoved != null){
-	    	for(String val: valuesToBeRemoved){
-	    		this.values.remove(val);
-	    	}
-    	}
+
+    public void removeValues(Collection<String> valuesToBeRemoved) {
+        if (valuesToBeRemoved != null) {
+            for (String val : valuesToBeRemoved) {
+                this.values.remove(val);
+            }
+        }
     }
-    
 
     public FacetSelection getCopy() {
         return new FacetSelection(selectionType, values);
