@@ -58,6 +58,11 @@ public abstract class AbstractSolrQueryFactory {
                                 encodedQueries.add(createFilterQuery(facetName, value));
                             }
                             break;
+                        case NOT:
+                            for (String value : selection.getValues()) {
+                                encodedQueries.add(createNegativeFilterQuery(facetName, value));
+                            }
+                            break;
                         default:
                             //TODO: support OR,NOT
                             throw new UnsupportedOperationException("Unsupported selection type: " + selection.getSelectionType());
@@ -68,9 +73,18 @@ public abstract class AbstractSolrQueryFactory {
         }
     }
 
-    protected final String createFilterQuery(String facetName, String value) {
+    private String createFilterQuery(String facetName, String value) {
+        return createFilterQuery("%s:\"%s\"", facetName, value);
+    }
+
+    private String createNegativeFilterQuery(String facetName, String value) {
+        // escape value and wrap in quotes to make literal query, prepend negator
+        return createFilterQuery("-%s:\"%s\"", facetName, value);
+    }
+
+    private final String createFilterQuery(String _formatString, String facetName, String value) {
         // escape value and wrap in quotes to make literal query
-        return String.format("%s:\"%s\"", facetName, ClientUtils.escapeQueryChars(value));
+        return String.format(_formatString, facetName, ClientUtils.escapeQueryChars(value));
     }
 
     /**

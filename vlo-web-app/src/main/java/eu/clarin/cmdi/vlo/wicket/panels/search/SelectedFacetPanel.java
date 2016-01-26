@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
@@ -32,7 +31,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
+import org.apache.wicket.markup.html.basic.Label;
 
 /**
  * A panel representing a single facet and its selected values, allowing for
@@ -50,32 +51,21 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
         // Add selected items to expanded state
         add(createSelectionRemovers("selectedItem", facetName));
     }
-        
+
     private ListView<String> createSelectionRemovers(String id, String facetName) {
         // Model of the list of selected values in this facet
-    	
-    	List<String> selectedValues;
-		if (getModelObject().getValues() != null)
-			selectedValues = new CopyOnWriteArrayList<String>(getModelObject().getValues());
-		else
-			selectedValues = Collections.emptyList();
-		
-		
-    	final IModel<List<String>> propertyModel = new AbstractReadOnlyModel<List<String>>() {
-    		
-			@Override
-			public List<String> getObject() {
-				return new ArrayList(SelectedFacetPanel.this.getModelObject().getValues());
-			}
-    		
-		};
-		final IModel<String> fieldNameModel = new Model<String>(facetName);
-        //final PropertyModel<List<String>> propertyModel= new PropertyModel<List<String>>(getModel(), "facetValues");
-        //final PropertyModel<String> fieldNameModel = new PropertyModel(getModel(), "facetField.name");
-        
-    	
+        final IModel<List<String>> valuesModel = new AbstractReadOnlyModel<List<String>>() {
+
+            @Override
+            public List<String> getObject() {
+                return new ArrayList(SelectedFacetPanel.this.getModelObject().getValues());
+            }
+
+        };
+        final IModel<String> fieldNameModel = new Model<>(facetName);
+
         // Repeating container of value + unselection links
-        final ListView<String> listView = new ListView<String>(id, propertyModel) {
+        final ListView<String> listView = new ListView<String>(id, valuesModel) {
 
             /**
              * Populates an individual value selection remover
@@ -84,6 +74,14 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
              */
             @Override
             protected void populateItem(final ListItem<String> item) {
+                item.add(new Label("negator", "- ") {
+
+                    @Override
+                    protected void onConfigure() {
+                        setVisible(SelectedFacetPanel.this.getModelObject().getSelectionType() == FacetSelectionType.NOT);
+                    }
+
+                });
                 // A label showing the name of the facet
                 item.add(new FieldValueLabel("facetValue", item.getModel(), fieldNameModel));
                 // A link to remove the value selection from this facet
@@ -97,7 +95,6 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
     /**
      * Callback triggered when values have been removed from this facet
      *
-     * @param facet name of the facet this panel represents
      * @param valuesRemoved removed values
      * @param target Ajax target allowing for a partial update. May be null
      * (fallback)!
