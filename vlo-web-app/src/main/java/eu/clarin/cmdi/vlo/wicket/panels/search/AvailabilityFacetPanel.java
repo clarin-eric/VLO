@@ -17,11 +17,17 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
+import java.util.HashSet;
+import java.util.Set;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
@@ -38,18 +44,27 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
 
     private final static Logger log = LoggerFactory.getLogger(AvailabilityFacetPanel.class);
 
-    @SpringBean
-    private FacetFieldsService fieldsService;
-
-    public AvailabilityFacetPanel(String id, IModel<QueryFacetsSelection> selectionModel) {
+    public AvailabilityFacetPanel(String id, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, selectionModel);
         final FacetSelectionModel fieldSelectionModel = new FacetSelectionModel(selectionModel, FacetConstants.FIELD_AVAILABILITY);
 
         add(new Form("availability")
-                .add(new CheckBox("pub"))
-                .add(new CheckBox("aca"))
-                .add(new CheckBox("res"))
+                .add(createValueCheckbox("pub", fieldSelectionModel, selectionModel, FacetConstants.AVAILABILITY_LEVEL_PUB))
+                .add(createValueCheckbox("aca", fieldSelectionModel, selectionModel, FacetConstants.AVAILABILITY_LEVEL_ACA))
+                .add(createValueCheckbox("res", fieldSelectionModel, selectionModel, FacetConstants.AVAILABILITY_LEVEL_RES))
+                .add(createValueCheckbox("unk", fieldSelectionModel, selectionModel, FacetConstants.AVAILABILITY_LEVEL_UNKNOWN))
         );
+    }
+
+    private Component createValueCheckbox(final String id, final FacetSelectionModel fieldSelectionModel, final IModel<QueryFacetsSelection> selectionModel, final String targetValue) {
+        return new CheckBox(id, new AvailabilityLevelBooleanModel(targetValue, fieldSelectionModel, selectionModel))
+                .add(new OnChangeAjaxBehavior() {
+
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        selectionChanged(target);
+                    }
+                });
     }
 
     @Override
@@ -58,5 +73,58 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
     }
 
     protected abstract void selectionChanged(AjaxRequestTarget target);
+
+    private static class AvailabilityLevelBooleanModel implements IModel<Boolean> {
+
+        private final FacetSelectionModel fieldSelectionModel;
+        private final String targetValue;
+        private final IModel<QueryFacetsSelection> selectionModel;
+
+        public AvailabilityLevelBooleanModel(String targetValue, FacetSelectionModel fieldSelectionModel, IModel<QueryFacetsSelection> selectionModel) {
+            this.fieldSelectionModel = fieldSelectionModel;
+            this.targetValue = targetValue;
+            this.selectionModel = selectionModel;
+        }
+
+        @Override
+        public Boolean getObject() {
+            final FacetSelection selection = fieldSelectionModel.getObject();
+            if (selection != null) {
+                if (selection.getSelectionType() == FacetSelectionType.AND) {
+                    return selection.getValues().contains(targetValue);
+                } else if (selection.getSelectionType() == FacetSelectionType.NOT) {
+                    return !selection.getValues().contains(targetValue);
+                }
+            }
+            return true;
+        }
+
+        @Override
+        public void setObject(Boolean select) {
+            FacetSelection selection = fieldSelectionModel.getObject();
+            if (selection == null) {
+                selection = new FacetSelection(FacetSelectionType.NOT);
+            } else {
+                selection.setSelectionType(FacetSelectionType.NOT);
+            }
+
+            final Set<String> values = new HashSet<>(selection.getValues());
+            if (select) {
+                //remove from NOT
+                values.remove(targetValue);
+            } else {
+                //add to NOT
+                values.add(targetValue);
+            }
+            selection.setValues(values);
+
+            selectionModel.getObject().selectValues(FacetConstants.FIELD_AVAILABILITY, selection);
+        }
+
+        @Override
+        public void detach() {
+            fieldSelectionModel.detach();
+        }
+    }
 
 }
