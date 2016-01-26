@@ -637,7 +637,6 @@ public class DefaultVloConfigFactoryTest {
                 "subject",
                 "format",
                 "organisation",
-                "availability",
                 "nationalProject",
                 "keywords",
                 "dataProvider");

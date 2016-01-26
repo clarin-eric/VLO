@@ -69,7 +69,6 @@
         <facetField>subject</facetField>
         <facetField>format</facetField>
         <facetField>organisation</facetField>
-        <facetField>availability</facetField>
         <facetField>nationalProject</facetField>
         <facetField>keywords</facetField>
         <facetField>dataProvider</facetField>
