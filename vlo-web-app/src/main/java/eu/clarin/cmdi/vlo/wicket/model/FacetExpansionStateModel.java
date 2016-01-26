@@ -18,7 +18,6 @@ package eu.clarin.cmdi.vlo.wicket.model;
 
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import java.util.Map;
-import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.model.IModel;
 
 /**
