@@ -20,7 +20,6 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import java.util.HashSet;
@@ -32,11 +31,15 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Dedicated panel for deselecting availability levels. Notice that this panel
+ * works on basis of negative selection, i.e. boxes are checked UNLESS the
+ * corresponding value is explicitly excluded in a NOT query.
+ *
+ * @see FacetSelectionType#NOT
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
@@ -89,31 +92,35 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
         @Override
         public Boolean getObject() {
             final FacetSelection selection = fieldSelectionModel.getObject();
-            if (selection != null) {
-                if (selection.getSelectionType() == FacetSelectionType.AND) {
-                    return selection.getValues().contains(targetValue);
-                } else if (selection.getSelectionType() == FacetSelectionType.NOT) {
-                    return !selection.getValues().contains(targetValue);
-                }
+            if (selection == null) {
+                //no selection -> no deselection
+                return true;
             }
-            return true;
+            
+            if (selection.getSelectionType() == FacetSelectionType.AND) {
+                return selection.getValues().contains(targetValue);
+            } else if (selection.getSelectionType() == FacetSelectionType.NOT) {
+                return !selection.getValues().contains(targetValue);
+            } else {
+                return true;
+            }
         }
 
         @Override
         public void setObject(Boolean select) {
+            // try to keep existing selection if present, but make sure it has 
+            // selection type NOT
             FacetSelection selection = fieldSelectionModel.getObject();
-            if (selection == null) {
+            if (selection == null || selection.getSelectionType() != FacetSelectionType.NOT) {
                 selection = new FacetSelection(FacetSelectionType.NOT);
-            } else {
-                selection.setSelectionType(FacetSelectionType.NOT);
             }
 
             final Set<String> values = new HashSet<>(selection.getValues());
             if (select) {
-                //remove from NOT
+                //allow this value, i.e. remove from NOT
                 values.remove(targetValue);
             } else {
-                //add to NOT
+                //disallow this value, i.e. include in NOT
                 values.add(targetValue);
             }
             selection.setValues(values);

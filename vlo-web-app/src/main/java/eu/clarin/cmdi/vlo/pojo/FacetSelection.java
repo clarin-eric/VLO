@@ -28,7 +28,7 @@ import java.util.Collection;
  */
 public class FacetSelection implements Serializable {
 
-    private FacetSelectionType selectionType;
+    private final FacetSelectionType selectionType;
     private Collection<String> values;
 
     /**
@@ -67,10 +67,6 @@ public class FacetSelection implements Serializable {
      */
     public FacetSelectionType getSelectionType() {
         return selectionType;
-    }
-
-    public void setSelectionType(FacetSelectionType selectionType) {
-        this.selectionType = selectionType;
     }
 
     /**
