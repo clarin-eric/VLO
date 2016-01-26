@@ -2,7 +2,6 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import java.util.List;
 
-import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -22,9 +21,9 @@ import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.SingleFacetPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.search.AvailabilityFacetPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.FacetPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.search.FacetValuesPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.FacetsPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchFormPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel;
@@ -91,8 +90,11 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
         facetsPanel = createFacetsPanel("facets");
         add(facetsPanel);
+        
+        final Panel availabilityFacetPanel = createAvailabilityPanel("availability");
+        add(availabilityFacetPanel);
 
-        Panel optionsPanel = createOptionsPanel("options");
+        final Panel optionsPanel = createOptionsPanel("options");
         add(optionsPanel);
 
         searchResultsPanel = new SearchResultsPanel("searchResults", getModel());
@@ -126,6 +128,17 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private Panel createOptionsPanel(String id) {
         final Panel optionsPanel = new AdvancedSearchOptionsPanel(id, getModel()) {
+
+            @Override
+            protected void selectionChanged(AjaxRequestTarget target) {
+                updateSelection(target);
+            }
+        };
+        return optionsPanel;
+    }
+
+    private Panel createAvailabilityPanel(String id) {
+        final Panel optionsPanel = new AvailabilityFacetPanel(id, getModel()) {
 
             @Override
             protected void selectionChanged(AjaxRequestTarget target) {
