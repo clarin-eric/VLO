@@ -47,10 +47,11 @@ import org.slf4j.LoggerFactory;
 public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacetsSelection> {
 
     private final static Logger log = LoggerFactory.getLogger(AvailabilityFacetPanel.class);
-
+    public static final String AVAILABILITY_FIELD = FacetConstants.FIELD_AVAILABILITY;
+    
     public AvailabilityFacetPanel(String id, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, selectionModel);
-        final FacetSelectionModel fieldSelectionModel = new FacetSelectionModel(selectionModel, FacetConstants.FIELD_AVAILABILITY);
+        final FacetSelectionModel fieldSelectionModel = new FacetSelectionModel(selectionModel, AVAILABILITY_FIELD);
 
         add(new Form("availability")
                 //TOOD: add counts to the labels
@@ -131,7 +132,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
             }
 
             // set on selection model (needed in case it is a new facet selection object)
-            selectionModel.getObject().selectValues(FacetConstants.FIELD_AVAILABILITY, selection);
+            selectionModel.getObject().selectValues(AVAILABILITY_FIELD, selection);
         }
 
         @Override

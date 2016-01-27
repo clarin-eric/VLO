@@ -23,11 +23,13 @@ import static eu.clarin.cmdi.vlo.VloWebAppParameters.*;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel;
 import static eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel.OPTIONS_FIELDS;
+import static eu.clarin.cmdi.vlo.wicket.panels.search.AvailabilityFacetPanel.AVAILABILITY_FIELD;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -98,7 +100,7 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
                     final String facet = facetParamMapper.getFacet(fqType.get(0));
                     final String type = fqType.get(1).toUpperCase();
 
-                    if (facetsDefined.contains(facet) || OPTIONS_FIELDS.contains(facet)) {
+                    if (isAllowedFacetName(facet)) {
                         try {
                             final FacetSelectionType facetSelectionType = FacetSelectionType.valueOf(type);
                             selection.put(facet, new FacetSelection(facetSelectionType));
@@ -118,14 +120,32 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
                 final List<String> fq = FILTER_SPLITTER.splitToList(facetValue.toString());
                 if (fq.size() == 2) {
                     // we have a facet - value pair
-                    final String requestedFacet = fq.get(0);
+
+                    //get facet name, may be a case of "not"
+                    final String facetString = fq.get(0);
+                    //check if negated
+                    final boolean negated = facetString.startsWith("-");
+
+                    //get actual facet name
+                    final String requestedFacet;
+                    if (negated) {
+                        //skip negation for actual facet name
+                        requestedFacet = facetString.substring(1);
+                    } else {
+                        requestedFacet = facetString;
+                    }
                     final String facet = facetParamMapper.getFacet(requestedFacet);
+
                     final String value = facetParamMapper.getValue(requestedFacet, fq.get(1));
-                    if (facetsDefined.contains(facet)) {
+                    if (isAllowedFacetName(facet)) {
                         if (selection.containsKey(facet)) {
                             selection.get(facet).getValues().add(value);
                         } else {
                             selection.put(facet, new FacetSelection(Arrays.asList(value)));
+                        }
+                        if (negated) {
+                            //negate selection
+                            selection.get(facet).setQualifier(value, FacetSelectionValueQualifier.NOT);
                         }
                     } else {
                         logger.debug("Undefined facet passed into query parameter {}: {}", FILTER_QUERY, facet);
@@ -142,6 +162,10 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
         }
 
         return new QueryFacetsSelection(query, selection);
+    }
+
+    public boolean isAllowedFacetName(final String facet) {
+        return facetsDefined.contains(facet) || OPTIONS_FIELDS.contains(facet) || AVAILABILITY_FIELD.equals(facet);
     }
 
     @Override
@@ -164,7 +188,8 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
             }
             for (String value : facetSelection.getValues()) {
                 //TODO: Encode?
-                params.add(FILTER_QUERY, String.format("%s:%s", facet, value));
+                final boolean negated = facetSelection.getQualifier(value) == FacetSelectionValueQualifier.NOT;
+                params.add(FILTER_QUERY, String.format(negated ? "-%s:%s" : "%s:%s", facet, value));
             }
         }
 
