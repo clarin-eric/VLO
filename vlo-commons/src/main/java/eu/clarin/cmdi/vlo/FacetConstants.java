@@ -119,10 +119,8 @@ public class FacetConstants {
      */
     public static final String AVAILABILITY_LEVEL_RES = "RES";
     /**
-     * Unknown level for the 'availability' facet
-     *
-     * @see #FIELD_AVAILABILITY
+     * Special value representing no value for a given field or facet 
      */
-    public static final String AVAILABILITY_LEVEL_UNKNOWN = "UNK";
+    public static String NO_VALUE = "[{null}]";
 
 }

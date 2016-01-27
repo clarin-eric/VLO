@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
@@ -74,13 +75,21 @@ public abstract class AbstractSolrQueryFactory {
     }
 
     private String createFilterQuery(String facetName, String value) {
-        // escape value and wrap in quotes to make literal query
-        return createFilterQuery("%s:\"%s\"", facetName, value);
+        if (value.equals(FacetConstants.NO_VALUE)) {
+            return String.format("-%s:[* TO *]", facetName);
+        } else {
+            // escape value and wrap in quotes to make literal query
+            return createFilterQuery("%s:\"%s\"", facetName, value);
+        }
     }
 
     private String createNegativeFilterQuery(String facetName, String value) {
-        // escape value and wrap in quotes to make literal query, prepend negator
-        return createFilterQuery("-%s:\"%s\"", facetName, value);
+        if (value.equals(FacetConstants.NO_VALUE)) {
+            return String.format("%s:[* TO *]", facetName);
+        } else {
+            // escape value and wrap in quotes to make literal query, prepend negator
+            return createFilterQuery("-%s:\"%s\"", facetName, value);
+        }
     }
 
     private String createFilterQuery(String _formatString, String facetName, String value) {

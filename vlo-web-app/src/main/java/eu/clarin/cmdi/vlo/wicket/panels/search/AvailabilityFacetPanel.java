@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
+import eu.clarin.cmdi.vlo.wicket.model.ToggleModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import java.util.Collection;
 import java.util.Collections;
@@ -40,7 +41,7 @@ import org.slf4j.LoggerFactory;
  * works on basis of negative selection, i.e. boxes are checked UNLESS the
  * corresponding value is explicitly excluded in a NOT query.
  *
- * @see FacetSelectionType#NOT
+ * @see FacetSelectionValueQualifier#NOT
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
@@ -48,7 +49,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
 
     private final static Logger log = LoggerFactory.getLogger(AvailabilityFacetPanel.class);
     public static final String AVAILABILITY_FIELD = FacetConstants.FIELD_AVAILABILITY;
-    
+
     public AvailabilityFacetPanel(String id, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, selectionModel);
         final FacetSelectionModel fieldSelectionModel = new FacetSelectionModel(selectionModel, AVAILABILITY_FIELD);
@@ -58,9 +59,8 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
                 .add(createValueCheckbox("pub", fieldSelectionModel, selectionModel, FacetConstants.AVAILABILITY_LEVEL_PUB))
                 .add(createValueCheckbox("aca", fieldSelectionModel, selectionModel, FacetConstants.AVAILABILITY_LEVEL_ACA))
                 .add(createValueCheckbox("res", fieldSelectionModel, selectionModel, FacetConstants.AVAILABILITY_LEVEL_RES))
-                //TODO: Unknown should probably be 'other than pub, aca, res'
-                .add(createValueCheckbox("unk", fieldSelectionModel, selectionModel, FacetConstants.AVAILABILITY_LEVEL_UNKNOWN))
-        );
+                .add(createValueCheckbox("unk", fieldSelectionModel, selectionModel, FacetConstants.NO_VALUE))
+                );
     }
 
     private Component createValueCheckbox(final String id, final FacetSelectionModel fieldSelectionModel, final IModel<QueryFacetsSelection> selectionModel, final String targetValue) {
@@ -121,7 +121,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
             if (selection == null) {
                 selection = new FacetSelection(FacetSelectionType.AND);
             }
-            
+
             //remember we are using a subtractive model here :)
             if (select) {
                 //remove negative selection
