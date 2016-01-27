@@ -93,78 +93,87 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
         final List<StringValue> facetValues = params.getValues(FILTER_QUERY);
         final HashMap<String, FacetSelection> selection = Maps.newHashMapWithExpectedSize(facetValues.size());
 
+        // Get selection type from params
         for (StringValue selectionType : facetSelectionTypes) {
             if (!selectionType.isEmpty()) {
-                final List<String> fqType = FILTER_SPLITTER.splitToList(selectionType.toString());
-                if (fqType.size() == 2) {
-                    final String facet = facetParamMapper.getFacet(fqType.get(0));
-                    final String type = fqType.get(1).toUpperCase();
-
-                    if (isAllowedFacetName(facet)) {
-                        try {
-                            final FacetSelectionType facetSelectionType = FacetSelectionType.valueOf(type);
-                            selection.put(facet, new FacetSelection(facetSelectionType));
-                        } catch (IllegalArgumentException ex) {
-                            logger.warn("Unknown selection type passed into query parameter {}: {}", FILTER_QUERY_TYPE, type);
-                        }
-                    }
-                } else {
-                    logger.info("Illegal query parameter value for {}: {}", FILTER_QUERY_TYPE, selectionType);
-                }
+                applySelectionTypeFromParameter(selectionType, selection);
             }
         }
 
         // Get facet selections from params
         for (StringValue facetValue : facetValues) {
             if (!facetValue.isEmpty()) {
-                final List<String> fq = FILTER_SPLITTER.splitToList(facetValue.toString());
-                if (fq.size() == 2) {
-                    // we have a facet - value pair
-
-                    //get facet name, may be a case of "not"
-                    final String facetString = fq.get(0);
-                    //check if negated
-                    final boolean negated = facetString.startsWith("-");
-
-                    //get actual facet name
-                    final String requestedFacet;
-                    if (negated) {
-                        //skip negation for actual facet name
-                        requestedFacet = facetString.substring(1);
-                    } else {
-                        requestedFacet = facetString;
-                    }
-                    final String facet = facetParamMapper.getFacet(requestedFacet);
-
-                    final String value = facetParamMapper.getValue(requestedFacet, fq.get(1));
-                    if (isAllowedFacetName(facet)) {
-                        if (selection.containsKey(facet)) {
-                            selection.get(facet).getValues().add(value);
-                        } else {
-                            selection.put(facet, new FacetSelection(Arrays.asList(value)));
-                        }
-                        if (negated) {
-                            //negate selection
-                            selection.get(facet).setQualifier(value, FacetSelectionValueQualifier.NOT);
-                        }
-                    } else {
-                        logger.debug("Undefined facet passed into query parameter {}: {}", FILTER_QUERY, facet);
-
-                        if (Session.exists()) {
-                            // generate Wicket error message
-                            Session.get().error("Unknown facet: " + facet);
-                        }
-                    }
-                } else {
-                    logger.info("Illegal query parameter value for {}: {}", FILTER_QUERY, facetValue);
-                }
+                applyFacetValueFromParameter(facetValue, selection);
             }
         }
 
         return new QueryFacetsSelection(query, selection);
     }
 
-    public boolean isAllowedFacetName(final String facet) {
+    private void applySelectionTypeFromParameter(StringValue selectionType, final HashMap<String, FacetSelection> selection) {
+        final List<String> fqType = FILTER_SPLITTER.splitToList(selectionType.toString());
+        if (fqType.size() == 2) {
+            final String facet = facetParamMapper.getFacet(fqType.get(0));
+            final String type = fqType.get(1).toUpperCase();
+            
+            if (isAllowedFacetName(facet)) {
+                try {
+                    final FacetSelectionType facetSelectionType = FacetSelectionType.valueOf(type);
+                    selection.put(facet, new FacetSelection(facetSelectionType));
+                } catch (IllegalArgumentException ex) {
+                    logger.warn("Unknown selection type passed into query parameter {}: {}", FILTER_QUERY_TYPE, type);
+                }
+            }
+        } else {
+            logger.info("Illegal query parameter value for {}: {}", FILTER_QUERY_TYPE, selectionType);
+        }
+    }
+
+    private void applyFacetValueFromParameter(StringValue facetValue, final HashMap<String, FacetSelection> selection) {
+        final List<String> fq = FILTER_SPLITTER.splitToList(facetValue.toString());
+        if (fq.size() == 2) {
+            // we have a facet - value pair
+            
+            //get facet name, may be a case of "not"
+            final String facetString = fq.get(0);
+            //check if negated
+            final boolean negated = facetString.startsWith("-");
+            
+            //get actual facet name
+            final String requestedFacet;
+            if (negated) {
+                //skip negation for actual facet name
+                requestedFacet = facetString.substring(1);
+            } else {
+                requestedFacet = facetString;
+            }
+            final String facet = facetParamMapper.getFacet(requestedFacet);
+            
+            final String value = facetParamMapper.getValue(requestedFacet, fq.get(1));
+            if (isAllowedFacetName(facet)) {
+                if (selection.containsKey(facet)) {
+                    selection.get(facet).getValues().add(value);
+                } else {
+                    selection.put(facet, new FacetSelection(Arrays.asList(value)));
+                }
+                if (negated) {
+                    //negate selection
+                    selection.get(facet).setQualifier(value, FacetSelectionValueQualifier.NOT);
+                }
+            } else {
+                logger.debug("Undefined facet passed into query parameter {}: {}", FILTER_QUERY, facet);
+                
+                if (Session.exists()) {
+                    // generate Wicket error message
+                    Session.get().error("Unknown facet: " + facet);
+                }
+            }
+        } else {
+            logger.info("Illegal query parameter value for {}: {}", FILTER_QUERY, facetValue);
+        }
+    }
+
+    private boolean isAllowedFacetName(final String facet) {
         return facetsDefined.contains(facet) || OPTIONS_FIELDS.contains(facet) || AVAILABILITY_FIELD.equals(facet);
     }
 
