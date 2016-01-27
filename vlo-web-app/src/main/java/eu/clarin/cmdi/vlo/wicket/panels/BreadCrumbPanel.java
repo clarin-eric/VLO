@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
@@ -196,8 +197,6 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
                     return getCollectionString(selection, " and ", locale);
                 case OR:
                     return getCollectionString(selection, " or ", locale);
-                case NOT:
-                    return "not [" + getCollectionString(selection, " or ", locale) + "]";
                 case NOT_EMPTY:
                     return getAnyValueString();
                 default:
@@ -226,15 +225,22 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
             if (value.isEmpty()) {
                 return "";
             } else if (value.size() == 1) {
-                return getConvertedValue(value.iterator().next(), locale);
+                return getConvertedValueString(selection, value.iterator().next(), locale).toString();
             } else {
                 final Iterator<String> iterator = value.iterator();
-                final StringBuilder sb = new StringBuilder(getConvertedValue(iterator.next(), locale));
+                final StringBuilder sb = new StringBuilder(getConvertedValueString(selection, iterator.next(), locale));
                 while (iterator.hasNext()) {
-                    sb.append(valueSeparator).append(getConvertedValue(iterator.next(), locale));
+                    sb.append(valueSeparator).append(getConvertedValueString(selection, iterator.next(), locale));
                 }
                 return sb.toString();
             }
+        }
+
+        private CharSequence getConvertedValueString(FacetSelection selection, String string, Locale locale) {
+            if (selection.getQualifier(string) == FacetSelectionValueQualifier.NOT) {
+                return new StringBuilder("NOT ").append(getConvertedValue(string, locale));
+            }
+            return getConvertedValue(string, locale);
         }
 
         private String getConvertedValue(String string, Locale locale) {

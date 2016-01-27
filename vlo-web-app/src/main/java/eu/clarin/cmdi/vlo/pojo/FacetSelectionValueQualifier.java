@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 CLARIN
+ * Copyright (C) 2016 CLARIN
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,24 +18,12 @@ package eu.clarin.cmdi.vlo.pojo;
 
 /**
  *
- * @author twagoo
+ * @author Twan Goosen <twan.goosen@mpi.nl>
  */
-public enum FacetSelectionType {
-
+public enum FacetSelectionValueQualifier {
     /**
-     * Specifies a selection of all documents with a non-empty value for this
-     * facet; values supplied in the selection should be ignored
+     * Negates a value selection, {@literal i.e.} expresses the exclusion of
+     * documents with the associated value
      */
-    NOT_EMPTY,
-    /**
-     * Specifies a selection of all documents that match all values supplied in
-     * the selection
-     */
-    AND,
-    /**
-     * Specifies a selection of all documents that match at least one of the
-     * values supplied in the selection
-     */
-    OR
-
+    NOT
 }

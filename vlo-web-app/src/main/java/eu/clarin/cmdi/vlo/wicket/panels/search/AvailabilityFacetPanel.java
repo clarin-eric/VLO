@@ -19,11 +19,12 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
+import java.util.Collections;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
@@ -98,35 +99,38 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
                 //no selection -> no deselection
                 return true;
             }
-            
-            if (selection.getSelectionType() == FacetSelectionType.AND) {
-                return selection.getValues().contains(targetValue);
-            } else if (selection.getSelectionType() == FacetSelectionType.NOT) {
-                return !selection.getValues().contains(targetValue);
-            } else {
-                return true;
+
+            final Collection<String> selectedValues = selection.getValues();
+            final boolean valueExcluded = selection.getQualifier(targetValue) == FacetSelectionValueQualifier.NOT;
+            switch (selection.getSelectionType()) {
+                case AND:
+                    return !(valueExcluded && selectedValues.contains(targetValue));
+                case OR:
+                    return !valueExcluded && selectedValues.contains(targetValue);
+                default:
+                    log.warn("Selection type neither AND or OR!");
+                    return true;
             }
         }
 
         @Override
         public void setObject(Boolean select) {
-            // try to keep existing selection if present, but make sure it has 
-            // selection type NOT
+            // try to keep existing selection if present
             FacetSelection selection = fieldSelectionModel.getObject();
-            if (selection == null || selection.getSelectionType() != FacetSelectionType.NOT) {
-                selection = new FacetSelection(FacetSelectionType.NOT);
+            if (selection == null) {
+                selection = new FacetSelection(FacetSelectionType.AND);
             }
-
-            final Set<String> values = new HashSet<>(selection.getValues());
+            
+            //remember we are using a subtractive model here :)
             if (select) {
-                //allow this value, i.e. remove from NOT
-                values.remove(targetValue);
+                //remove negative selection
+                selection.removeValues(Collections.singleton(targetValue));
             } else {
-                //disallow this value, i.e. include in NOT
-                values.add(targetValue);
+                //add a negative selection for this value
+                selection.addValue(targetValue, FacetSelectionValueQualifier.NOT);
             }
-            selection.setValues(values);
 
+            // set on selection model (needed in case it is a new facet selection object)
             selectionModel.getObject().selectValues(FacetConstants.FIELD_AVAILABILITY, selection);
         }
 

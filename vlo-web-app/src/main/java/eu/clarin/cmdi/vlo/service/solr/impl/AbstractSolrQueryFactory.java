@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -55,16 +56,15 @@ public abstract class AbstractSolrQueryFactory {
                             break;
                         case AND:
                             for (String value : selection.getValues()) {
-                                encodedQueries.add(createFilterQuery(facetName, value));
-                            }
-                            break;
-                        case NOT:
-                            for (String value : selection.getValues()) {
-                                encodedQueries.add(createNegativeFilterQuery(facetName, value));
+                                if (selection.getQualifier(value) == FacetSelectionValueQualifier.NOT) {
+                                    encodedQueries.add(createNegativeFilterQuery(facetName, value));
+                                } else {
+                                    encodedQueries.add(createFilterQuery(facetName, value));
+                                }
                             }
                             break;
                         default:
-                            //TODO: support OR,NOT
+                            //TODO: support OR
                             throw new UnsupportedOperationException("Unsupported selection type: " + selection.getSelectionType());
                     }
                 }
@@ -74,6 +74,7 @@ public abstract class AbstractSolrQueryFactory {
     }
 
     private String createFilterQuery(String facetName, String value) {
+        // escape value and wrap in quotes to make literal query
         return createFilterQuery("%s:\"%s\"", facetName, value);
     }
 
@@ -82,8 +83,7 @@ public abstract class AbstractSolrQueryFactory {
         return createFilterQuery("-%s:\"%s\"", facetName, value);
     }
 
-    private final String createFilterQuery(String _formatString, String facetName, String value) {
-        // escape value and wrap in quotes to make literal query
+    private String createFilterQuery(String _formatString, String facetName, String value) {
         return String.format(_formatString, facetName, ClientUtils.escapeQueryChars(value));
     }
 

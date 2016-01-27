@@ -32,6 +32,7 @@ import org.apache.wicket.model.Model;
 
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import org.apache.wicket.markup.html.basic.Label;
 
@@ -78,7 +79,7 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
 
                     @Override
                     protected void onConfigure() {
-                        setVisible(SelectedFacetPanel.this.getModelObject().getSelectionType() == FacetSelectionType.NOT);
+                        setVisible(SelectedFacetPanel.this.getModelObject().getQualifier(item.getModelObject()) == FacetSelectionValueQualifier.NOT);
                     }
 
                 });
