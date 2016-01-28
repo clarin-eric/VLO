@@ -22,7 +22,6 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
-import eu.clarin.cmdi.vlo.wicket.model.ToggleModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import java.util.Collection;
 import java.util.Collections;

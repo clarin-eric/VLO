@@ -17,7 +17,6 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableList;
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import eu.clarin.cmdi.vlo.wicket.components.AjaxIndicatingForm;

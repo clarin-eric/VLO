@@ -18,13 +18,11 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableSet;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.provider.PartitionedDataProvider;
-import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
