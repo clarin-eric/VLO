@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.provider;
 
 import com.google.common.collect.ImmutableSet;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
+import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import java.util.Collection;
 import java.util.Iterator;
@@ -308,8 +309,9 @@ public class FacetFieldValuesProviderTest {
      */
     @Test
     public void testFiltered() {
-        final Model<FieldValuesFilter> filterModel = Model.of(new FieldValuesFilter());
-        filterModel.getObject().setName("th");
+        final NameAndCountFieldValuesFilter filter = new NameAndCountFieldValuesFilter();
+        filter.setName("th");
+        final Model<FieldValuesFilter> filterModel = new Model<FieldValuesFilter>(filter);
 
         final FacetFieldValuesProvider instance = new FacetFieldValuesProvider(Model.of(facetField), 10, LOW_PRIORITY_VALUES, new SortParam<FieldValuesOrder>(FieldValuesOrder.NAME, true), valueConverterProvider) {
 
@@ -337,15 +339,15 @@ public class FacetFieldValuesProviderTest {
 
         instance.detach();
         // add minimal occurences condition to filter
-        filterModel.getObject().setMinimalOccurence(104);
-        filterModel.getObject().setName(null);
+        filter.setMinimalOccurence(104);
+        filter.setName(null);
         // re-evaluate - only 'FOURTH' and 'low priority' value should match
         assertEquals(2, instance.size());
 
         instance.detach();
         // test literal matching
-        filterModel.getObject().setMinimalOccurence(0);
-        filterModel.getObject().setName("*");
+        filter.setMinimalOccurence(0);
+        filter.setName("*");
         // re-evaluate - only "second value*" value should match
         assertEquals(1, instance.size());
     }
