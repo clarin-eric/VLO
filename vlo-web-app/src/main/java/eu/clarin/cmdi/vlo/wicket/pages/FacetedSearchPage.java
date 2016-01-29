@@ -49,12 +49,11 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     private Component collectionsPanel;
     private Component navigation;
     private Component searchForm;
-    
-    
+    private Component optionsPanel;
+    private Component availabilityFacetPanel;
+
     IModel<List<String>> facetNamesModel;
     FacetFieldsModel fieldsModel;
-    
-    
 
     public FacetedSearchPage(IModel<QueryFacetsSelection> queryModel) {
         super(queryModel);
@@ -71,17 +70,16 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         createModels();
         addComponents();
     }
-    
-    
-    private void createModels(){
-    	facetNamesModel = new FacetNamesModel(vloConfig.getFacetFields());
+
+    private void createModels() {
+        facetNamesModel = new FacetNamesModel(vloConfig.getFacetFields());
         fieldsModel = new FacetFieldsModel(facetFieldsService, facetNamesModel.getObject(), getModel(), -1);
     }
 
     private void addComponents() {
         navigation = createNavigation("navigation");
         add(navigation);
-        
+
         searchForm = createSearchForm("search");
         add(searchForm);
 
@@ -90,11 +88,11 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
         facetsPanel = createFacetsPanel("facets");
         add(facetsPanel);
-        
-        final Panel availabilityFacetPanel = createAvailabilityPanel("availability");
+
+        availabilityFacetPanel = createAvailabilityPanel("availability");
         add(availabilityFacetPanel);
 
-        final Panel optionsPanel = createOptionsPanel("options");
+        optionsPanel = createOptionsPanel("options");
         add(optionsPanel);
 
         searchResultsPanel = new SearchResultsPanel("searchResults", getModel());
@@ -134,18 +132,20 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
                 updateSelection(target);
             }
         };
+        optionsPanel.setOutputMarkupId(true);
         return optionsPanel;
     }
 
     private Panel createAvailabilityPanel(String id) {
-        final Panel optionsPanel = new AvailabilityFacetPanel(id, getModel()) {
+        final Panel availabilityPanel = new AvailabilityFacetPanel(id, getModel()) {
 
             @Override
             protected void selectionChanged(AjaxRequestTarget target) {
                 updateSelection(target);
             }
         };
-        return optionsPanel;
+        availabilityPanel.setOutputMarkupId(true);
+        return availabilityPanel;
     }
 
     private Panel createSearchForm(String id) {
@@ -187,7 +187,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private Panel createFacetsPanel(final String id) {
-        
+
         final FacetsPanel panel = new FacetsPanel(id, facetNamesModel, fieldsModel, getModel()) {
 
             @Override
@@ -200,10 +200,10 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private void updateSelection(AjaxRequestTarget target) {
-    	
-    	//detach facetFieldsModel when selection is changed
-    	fieldsModel.detach();
-    	
+
+        //detach facetFieldsModel when selection is changed
+        fieldsModel.detach();
+
         // selection changed, update facets and search results
         if (target != null) { // null if JavaScript disabled
             target.add(navigation);
@@ -211,6 +211,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
             target.add(searchResultsPanel);
             target.add(facetsPanel);
             target.add(collectionsPanel);
+            target.add(optionsPanel);
+            target.add(availabilityFacetPanel);
         }
     }
 
