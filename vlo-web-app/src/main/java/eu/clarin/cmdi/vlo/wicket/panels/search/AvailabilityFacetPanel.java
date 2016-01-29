@@ -18,14 +18,13 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
-import java.util.Collections;
 import java.util.List;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FixedSetFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
+import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
@@ -58,12 +57,13 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
     public final static List<String> AVAILABILITY_LEVELS = ImmutableList.of("PUB", "ACA", "RES", FacetConstants.NO_VALUE);  //TODO - get these from config or global
 
     @SpringBean
-    private FacetFieldsService facetFieldsService;
-    @SpringBean
     private FieldValueConverterProvider fieldValueConverterProvider;
 
-    public AvailabilityFacetPanel(String id, final IModel<QueryFacetsSelection> selectionModel) {
+    private final FacetFieldsModel facetFieldsModel;
+
+    public AvailabilityFacetPanel(String id, final IModel<QueryFacetsSelection> selectionModel, FacetFieldsModel facetFieldsModel) {
         super(id, selectionModel);
+        this.facetFieldsModel = facetFieldsModel;
 
         add(new Form("availability")
                 .add(new DataView<Count>("option", getValuesProvider()) {
@@ -80,7 +80,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
     }
 
     private FacetFieldValuesProvider getValuesProvider() {
-        final IModel<FacetField> facetFieldModel = new FacetFieldModel(AVAILABILITY_FIELD, facetFieldsService, getModel());
+        final IModel<FacetField> facetFieldModel = new FacetFieldModel(AVAILABILITY_FIELD, facetFieldsModel);
         final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(facetFieldModel, fieldValueConverterProvider) {
             final IModel<FieldValuesFilter> valuesFilter = new Model<FieldValuesFilter>(new FixedSetFieldValuesFilter(AVAILABILITY_LEVELS));
             final Ordering<Count> valuesOrdering = Ordering.from(new FacetNameComparator(AVAILABILITY_LEVELS));
@@ -130,4 +130,12 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
         }
 
     }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        facetFieldsModel.detach();;
+    }
+
 }
+

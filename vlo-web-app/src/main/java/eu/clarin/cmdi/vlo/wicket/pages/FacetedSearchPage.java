@@ -1,5 +1,8 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import eu.clarin.cmdi.vlo.FacetConstants;
 import java.util.List;
 
 import org.apache.wicket.Component;
@@ -36,6 +39,7 @@ import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel;
 public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private static final long serialVersionUID = 1L;
+    private final static List<String> ADDITIONAL_FACETS = ImmutableList.of(FacetConstants.FIELD_AVAILABILITY);
 
     @SpringBean
     private FacetFieldsService facetFieldsService;
@@ -52,8 +56,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     private Component optionsPanel;
     private Component availabilityFacetPanel;
 
-    IModel<List<String>> facetNamesModel;
-    FacetFieldsModel fieldsModel;
+    private IModel<List<String>> facetNamesModel;
+    private FacetFieldsModel fieldsModel;
 
     public FacetedSearchPage(IModel<QueryFacetsSelection> queryModel) {
         super(queryModel);
@@ -65,15 +69,17 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         super(parameters);
 
         final QueryFacetsSelection selection = paramsConverter.fromParameters(parameters);
-        final IModel<QueryFacetsSelection> queryModel = new Model<QueryFacetsSelection>(selection);
+        final IModel<QueryFacetsSelection> queryModel = new Model<>(selection);
         setModel(queryModel);
         createModels();
         addComponents();
     }
 
     private void createModels() {
-        facetNamesModel = new FacetNamesModel(vloConfig.getFacetFields());
-        fieldsModel = new FacetFieldsModel(facetFieldsService, facetNamesModel.getObject(), getModel(), -1);
+        final List<String> facetFields = vloConfig.getFacetFields();
+        final List<String> allFields = ImmutableList.copyOf(Iterables.concat(facetFields, ADDITIONAL_FACETS));
+        facetNamesModel = new FacetNamesModel(facetFields);
+        fieldsModel = new FacetFieldsModel(facetFieldsService, allFields, getModel(), -1);
     }
 
     private void addComponents() {
@@ -137,7 +143,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private Panel createAvailabilityPanel(String id) {
-        final Panel availabilityPanel = new AvailabilityFacetPanel(id, getModel()) {
+        final Panel availabilityPanel = new AvailabilityFacetPanel(id, getModel(), fieldsModel) {
 
             @Override
             protected void selectionChanged(AjaxRequestTarget target) {
