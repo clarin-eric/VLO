@@ -66,6 +66,7 @@ public abstract class AbstractSolrQueryFactory {
                             }
                             break;
                         case OR:
+                            //notice that OR ignores qualifiers, so it does not support e.g. (A OR (NOT B))
                             encodedQueries.add(createFacetOrQuery(facetName, selection.getValues()));
                             break;
                         default:
