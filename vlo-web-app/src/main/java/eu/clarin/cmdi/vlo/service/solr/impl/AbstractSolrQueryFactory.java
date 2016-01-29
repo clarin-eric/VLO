@@ -21,6 +21,7 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -64,8 +65,10 @@ public abstract class AbstractSolrQueryFactory {
                                 }
                             }
                             break;
+                        case OR:
+                            encodedQueries.add(createFacetOrQuery(facetName, selection.getValues()));
+                            break;
                         default:
-                            //TODO: support OR
                             throw new UnsupportedOperationException("Unsupported selection type: " + selection.getSelectionType());
                     }
                 }
@@ -114,6 +117,37 @@ public abstract class AbstractSolrQueryFactory {
                 queryBuilder.append(" OR ");
             }
         }
+        return queryBuilder.toString();
+    }
+
+    /**
+     * Creates an OR filter query for a single facet for a number of values
+     *
+     * @param facetName facet that should be matched
+     * @param values allowed values
+     * @return
+     */
+    private String createFacetOrQuery(String facetName, Collection<String> values) {
+        // escape value and wrap in quotes to make literal query
+        final StringBuilder queryBuilder = new StringBuilder(facetName).append(":(");
+        // loop over values
+        final Iterator<String> iterator = values.iterator();
+        while (iterator.hasNext()) {
+            final String value = iterator.next();
+            
+            if (value.equals(FacetConstants.NO_VALUE)) {
+                //special null case
+                queryBuilder.append("[* TO *]");
+            } else {
+                queryBuilder.append(ClientUtils.escapeQueryChars(value));
+            }
+            
+            // add 'OR' connector except for last token
+            if (iterator.hasNext()) {
+                queryBuilder.append(" OR ");
+            }
+        }
+        queryBuilder.append(")");
         return queryBuilder.toString();
     }
 
