@@ -65,10 +65,26 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
     public AvailabilityFacetPanel(String id, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, selectionModel);
 
-        final IModel<FieldValuesFilter> valuesFilter = new Model<FieldValuesFilter>(new FixedSetFieldValuesFilter(AVAILABILITY_LEVELS));
+        add(new Form("availability")
+                .add(new DataView<Count>("option", getValuesProvider()) {
+                    @Override
+                    protected void populateItem(Item<Count> item) {
+                        final String facetValue = item.getModelObject().getName();
+                        item.add(createValueCheckbox("selector", facetValue));
+                        item.add(new Label("label", new PropertyModel<String>(item.getModel(), "name")));
+                    }
 
-        final IModel<FacetField> facetFieldModel = new FacetFieldModel(AVAILABILITY_FIELD, facetFieldsService, selectionModel);
-        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(facetFieldModel, Collections.<String>emptySet(), fieldValueConverterProvider) {
+                })
+                .add(createValueCheckbox("unk", FacetConstants.NO_VALUE))
+        );
+    }
+
+    private FacetFieldValuesProvider getValuesProvider() {
+        final IModel<FacetField> facetFieldModel = new FacetFieldModel(AVAILABILITY_FIELD, facetFieldsService, getModel());
+        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(facetFieldModel, fieldValueConverterProvider) {
+            final IModel<FieldValuesFilter> valuesFilter = new Model<FieldValuesFilter>(new FixedSetFieldValuesFilter(AVAILABILITY_LEVELS));
+            final Ordering<Count> valuesOrdering = Ordering.from(new FacetNameComparator(AVAILABILITY_LEVELS));
+
             @Override
             protected IModel<FieldValuesFilter> getFilterModel() {
                 return valuesFilter;
@@ -76,27 +92,14 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
 
             @Override
             protected Ordering getOrdering() {
-                return Ordering.from(new FacetNameComparator(AVAILABILITY_LEVELS));
+                return valuesOrdering;
             }
-
         };
-
-        add(new Form("availability")
-                .add(new DataView<Count>("option", valuesProvider) {
-                    @Override
-                    protected void populateItem(Item<Count> item) {
-                        final String facetValue = item.getModelObject().getName();
-                        item.add(createValueCheckbox("selector", selectionModel, facetValue));
-                        item.add(new Label("label", new PropertyModel<String>(item.getModel(), "name")));
-                    }
-
-                })
-                .add(createValueCheckbox("unk", selectionModel, FacetConstants.NO_VALUE))
-        );
+        return valuesProvider;
     }
 
-    private Component createValueCheckbox(final String id, final IModel<QueryFacetsSelection> selectionModel, final String targetValue) {
-        return new CheckBox(id, new FixedValueSetBooleanSelectionModel(AVAILABILITY_FIELD, AVAILABILITY_LEVELS, targetValue, selectionModel))
+    private Component createValueCheckbox(final String id, final String targetValue) {
+        return new CheckBox(id, new FixedValueSetBooleanSelectionModel(AVAILABILITY_FIELD, AVAILABILITY_LEVELS, targetValue, getModel()))
                 .add(new OnChangeAjaxBehavior() {
 
                     @Override
