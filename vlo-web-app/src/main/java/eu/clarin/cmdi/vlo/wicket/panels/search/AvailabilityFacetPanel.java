@@ -16,12 +16,17 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
+import eu.clarin.cmdi.vlo.pojo.FixedSetFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
@@ -29,10 +34,6 @@ import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.Component;
@@ -44,6 +45,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
@@ -59,7 +61,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
 
     private final static Logger log = LoggerFactory.getLogger(AvailabilityFacetPanel.class);
     public static final String AVAILABILITY_FIELD = FacetConstants.FIELD_AVAILABILITY;
-    public final static List<String> availableValues = Arrays.asList("PUB", "ACA", "RES", FacetConstants.NO_VALUE);  //TODO - get these from config or global
+    public final static List<String> AVAILABILITY_LEVELS = ImmutableList.of("PUB", "ACA", "RES", FacetConstants.NO_VALUE);  //TODO - get these from config or global
 
     @SpringBean
     private FacetFieldsService facetFieldsService;
@@ -70,11 +72,13 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
         super(id, selectionModel);
         final FacetSelectionModel fieldSelectionModel = new FacetSelectionModel(selectionModel, AVAILABILITY_FIELD);
 
+        final IModel<FieldValuesFilter> valuesFilter = new Model<FieldValuesFilter>(new FixedSetFieldValuesFilter(AVAILABILITY_LEVELS));
+
         final IModel<FacetField> facetFieldModel = new FacetFieldModel(AVAILABILITY_FIELD, facetFieldsService, selectionModel);
         final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(facetFieldModel, Collections.<String>emptySet(), fieldValueConverterProvider) {
             @Override
             protected IModel<FieldValuesFilter> getFilterModel() {
-                return super.getFilterModel(); //TODO: filter out all except for fixed items
+                return valuesFilter;
             }
 
             @Override
@@ -159,7 +163,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
                     selection = new FacetSelection(FacetSelectionType.OR);
                 } else {
                     //unselect, so all used to be selected
-                    selection = new FacetSelection(FacetSelectionType.OR, availableValues);
+                    selection = new FacetSelection(FacetSelectionType.OR, AVAILABILITY_LEVELS);
                 }
             }
 
@@ -172,7 +176,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
             if (selection.getValues().isEmpty()) {
                 //make a negative selection on all available values
                 final FacetSelection negativeSelection = new FacetSelection(FacetSelectionType.AND);
-                for (String val : availableValues) {
+                for (String val : AVAILABILITY_LEVELS) {
                     negativeSelection.addValue(val, FacetSelectionValueQualifier.NOT);
                 }
                 selectionModel.getObject().selectValues(AVAILABILITY_FIELD, negativeSelection);
