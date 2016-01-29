@@ -29,8 +29,10 @@ import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.Component;
@@ -49,10 +51,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Dedicated panel for deselecting availability levels. Notice that this panel
- * works on basis of negative selection, i.e. boxes are checked UNLESS the
- * corresponding value is explicitly excluded in a NOT query.
- *
- * @see FacetSelectionValueQualifier#NOT
+ * allows for 'OR' selection on a number of preconfigured values
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
@@ -60,6 +59,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
 
     private final static Logger log = LoggerFactory.getLogger(AvailabilityFacetPanel.class);
     public static final String AVAILABILITY_FIELD = FacetConstants.FIELD_AVAILABILITY;
+    public final static List<String> availableValues = Arrays.asList("PUB", "ACA", "RES", FacetConstants.NO_VALUE);  //TODO - get these from config or global
 
     @SpringBean
     private FacetFieldsService facetFieldsService;
@@ -151,23 +151,35 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
 
         @Override
         public void setObject(Boolean select) {
-            // try to keep existing selection if present
+            // try to keep existing selection if present, but only if type is OR
             FacetSelection selection = fieldSelectionModel.getObject();
-            if (selection == null) {
-                selection = new FacetSelection(FacetSelectionType.AND);
+            if (selection == null || selection.getSelectionType() != FacetSelectionType.OR) {
+                if (select) {
+                    //select, so none used to be selected
+                    selection = new FacetSelection(FacetSelectionType.OR);
+                } else {
+                    //unselect, so all used to be selected
+                    selection = new FacetSelection(FacetSelectionType.OR, availableValues);
+                }
             }
 
-            //remember we are using a subtractive model here :)
             if (select) {
-                //remove negative selection
-                selection.removeValues(Collections.singleton(targetValue));
+                selection.addValue(targetValue, null);
             } else {
-                //add a negative selection for this value
-                selection.addValue(targetValue, FacetSelectionValueQualifier.NOT);
+                selection.removeValues(Collections.singleton(targetValue));
             }
 
-            // set on selection model (needed in case it is a new facet selection object)
-            selectionModel.getObject().selectValues(AVAILABILITY_FIELD, selection);
+            if (selection.getValues().isEmpty()) {
+                //make a negative selection on all available values
+                final FacetSelection negativeSelection = new FacetSelection(FacetSelectionType.AND);
+                for (String val : availableValues) {
+                    negativeSelection.addValue(val, FacetSelectionValueQualifier.NOT);
+                }
+                selectionModel.getObject().selectValues(AVAILABILITY_FIELD, negativeSelection);
+            } else {
+                // set on selection model (needed in case it is a new facet selection object)
+                selectionModel.getObject().selectValues(AVAILABILITY_FIELD, selection);
+            }
         }
 
         @Override
