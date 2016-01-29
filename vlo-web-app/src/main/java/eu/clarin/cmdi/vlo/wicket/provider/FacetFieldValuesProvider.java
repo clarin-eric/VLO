@@ -213,15 +213,17 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
     }
 
     private Ordering getBaseOrdering() {
-        final Ordering ordering;
-        if (getSort().getProperty() == FieldValuesOrder.COUNT) {
-            ordering = new CountOrdering();
-        } else if (getSort().getProperty() == FieldValuesOrder.NAME) {
-            ordering = new NameOrdering(getLocale(), fieldValueConverterProvider.getConverter(model.getObject().getName()));
-        } else {
-            ordering = Ordering.natural();
+        switch (getSort().getProperty()) {
+            case COUNT:
+                return applyOrder(new CountOrdering());
+            case NAME:
+                return applyOrder(new NameOrdering(getLocale(), fieldValueConverterProvider.getConverter(model.getObject().getName())));
+            default:
+                return Ordering.arbitrary();
         }
+    }
 
+    private Ordering applyOrder(Ordering ordering) {
         if (getSort().isAscending()) {
             return ordering;
         } else {
