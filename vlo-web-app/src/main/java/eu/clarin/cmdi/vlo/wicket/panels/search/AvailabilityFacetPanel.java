@@ -29,6 +29,8 @@ import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
+import java.io.Serializable;
+import java.util.Comparator;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.Component;
@@ -74,7 +76,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
 
             @Override
             protected Ordering getOrdering() {
-                return super.getOrdering(); //TODO: return fixed order
+                return Ordering.from(new FacetNameComparator(AVAILABILITY_LEVELS));
             }
 
         };
@@ -111,4 +113,18 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
 
     protected abstract void selectionChanged(AjaxRequestTarget target);
 
+    private static class FacetNameComparator implements Comparator<Count>, Serializable {
+
+        private final List<String> names;
+
+        public FacetNameComparator(List<String> names) {
+            this.names = ImmutableList.copyOf(names);
+        }
+
+        @Override
+        public int compare(Count o1, Count o2) {
+            return names.indexOf(o1.getName()) - names.indexOf(o2.getName());
+        }
+
+    }
 }
