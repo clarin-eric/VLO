@@ -16,22 +16,34 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
+import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
+import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
+import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
+import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.util.Collection;
 import java.util.Collections;
+import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,17 +61,41 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
     private final static Logger log = LoggerFactory.getLogger(AvailabilityFacetPanel.class);
     public static final String AVAILABILITY_FIELD = FacetConstants.FIELD_AVAILABILITY;
 
+    @SpringBean
+    private FacetFieldsService facetFieldsService;
+    @SpringBean
+    private FieldValueConverterProvider fieldValueConverterProvider;
+
     public AvailabilityFacetPanel(String id, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, selectionModel);
         final FacetSelectionModel fieldSelectionModel = new FacetSelectionModel(selectionModel, AVAILABILITY_FIELD);
 
+        final IModel<FacetField> facetFieldModel = new FacetFieldModel(AVAILABILITY_FIELD, facetFieldsService, selectionModel);
+        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(facetFieldModel, Collections.<String>emptySet(), fieldValueConverterProvider) {
+            @Override
+            protected IModel<FieldValuesFilter> getFilterModel() {
+                return super.getFilterModel(); //TODO: filter out all except for fixed items
+            }
+
+            @Override
+            protected Ordering getOrdering() {
+                return super.getOrdering(); //TODO: return fixed order
+            }
+
+        };
+
         add(new Form("availability")
-                //TOOD: add counts to the labels
-                .add(createValueCheckbox("pub", fieldSelectionModel, selectionModel, FacetConstants.AVAILABILITY_LEVEL_PUB))
-                .add(createValueCheckbox("aca", fieldSelectionModel, selectionModel, FacetConstants.AVAILABILITY_LEVEL_ACA))
-                .add(createValueCheckbox("res", fieldSelectionModel, selectionModel, FacetConstants.AVAILABILITY_LEVEL_RES))
+                .add(new DataView<Count>("option", valuesProvider) {
+                    @Override
+                    protected void populateItem(Item<Count> item) {
+                        final String facetValue = item.getModelObject().getName();
+                        item.add(createValueCheckbox("selector", fieldSelectionModel, selectionModel, facetValue));
+                        item.add(new Label("label", new PropertyModel<String>(item.getModel(), "name")));
+                    }
+
+                })
                 .add(createValueCheckbox("unk", fieldSelectionModel, selectionModel, FacetConstants.NO_VALUE))
-                );
+        );
     }
 
     private Component createValueCheckbox(final String id, final FacetSelectionModel fieldSelectionModel, final IModel<QueryFacetsSelection> selectionModel, final String targetValue) {

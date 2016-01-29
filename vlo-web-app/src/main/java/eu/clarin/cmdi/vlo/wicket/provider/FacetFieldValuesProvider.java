@@ -66,6 +66,10 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
      */
     private Iterable<Count> filtered;
 
+    public FacetFieldValuesProvider(IModel<FacetField> model, FieldValueConverterProvider fieldValueConverterProvider) {
+        this(model, null, fieldValueConverterProvider);
+    }
+
     /**
      * Creates a provider without a maximum number of values. Bound to
      * {@link Integer#MAX_VALUE}.
@@ -197,7 +201,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
     /* 
      * ORDERING
      */
-    private Ordering getOrdering() {
+    protected Ordering getOrdering() {
         if (lowPriorityValues != null && getSort().getProperty() == FieldValuesOrder.COUNT) {
             // in case of count, low priority fields should always be moved to the back
             // rest should be sorted as requested
