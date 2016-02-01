@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.config;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -26,7 +27,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
-public class FieldValueDescriptor {
+public class FieldValueDescriptor implements Serializable {
 
     private String value;
     private String displayValue;

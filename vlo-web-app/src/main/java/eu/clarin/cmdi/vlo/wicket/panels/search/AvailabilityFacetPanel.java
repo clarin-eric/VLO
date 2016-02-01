@@ -17,25 +17,32 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 import java.util.List;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FixedSetFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
+import eu.clarin.cmdi.vlo.wicket.model.MapValueModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.Map;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
@@ -44,6 +51,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.util.MapModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -60,22 +68,46 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
 
     @SpringBean
     private FieldValueConverterProvider fieldValueConverterProvider;
+    @SpringBean
+    private VloConfig vloConfig;
 
     private final FacetFieldsModel facetFieldsModel;
 
     public AvailabilityFacetPanel(String id, final IModel<QueryFacetsSelection> selectionModel, FacetFieldsModel facetFieldsModel) {
         super(id, selectionModel);
         this.facetFieldsModel = facetFieldsModel;
-        
-        final Model<String> fieldNameModel = Model.of(AVAILABILITY_FIELD);
+
+        //some models that we can reuse:
+        final IModel<String> fieldNameModel = Model.of(AVAILABILITY_FIELD);
+        //model of (a serializable copy of) the availability levels map with descriptions and display names for each level
+        final IModel<Map<String, FieldValueDescriptor>> descriptorsModel
+                = new MapModel<>(Maps.newHashMap(FieldValueDescriptor.toMap(vloConfig.getAvailabilityValues())));
+
         add(new Form("availability")
                 .add(new DataView<Count>("option", getValuesProvider()) {
                     @Override
                     protected void populateItem(Item<Count> item) {
-                        final String facetValue = item.getModelObject().getName();
-                        item.add(createValueCheckbox("selector", facetValue));
-                        item.add(new FieldValueLabel("label", new PropertyModel<String>(item.getModel(), "name"), fieldNameModel));
-                        item.add(new Label("count", new PropertyModel<String>(item.getModel(), "count")));
+                        //model for actual value
+                        final PropertyModel<String> valueModel = new PropertyModel<>(item.getModel(), "name");
+
+                        //checkbox
+                        final Component selector = createValueCheckbox("selector", valueModel.getObject());
+                        item.add(selector);
+
+                        //label 
+                        item.add(new WebMarkupContainer("label")
+                                //child label
+                                .add(new FieldValueLabel("name", valueModel, fieldNameModel))
+                                //count label
+                                .add(new Label("count", new PropertyModel<String>(item.getModel(), "count")))
+                                //reference to checkbox
+                                .add(new AttributeModifier("for", selector.getMarkupId()))
+                        );
+
+                        //description as tooltip (title)
+                        final IModel<FieldValueDescriptor> descriptorModel = new MapValueModel<>(descriptorsModel, valueModel);
+                        final IModel<String> descriptionModel = new PropertyModel<>(descriptorModel, "description");
+                        item.add(new AttributeModifier("title", descriptionModel));
                     }
                 })
         );
