@@ -138,4 +138,3 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
     }
 
 }
-
