@@ -35,12 +35,12 @@ import org.slf4j.LoggerFactory;
  * @author twagoo
  */
 public class VloConfigMarshallerTest {
-    
+
     private final static String VLO_CONFIG_FILE = "/VloConfig.xml";
     private final static Logger logger = LoggerFactory.getLogger(VloConfigMarshallerTest.class);
     private VloConfigMarshaller instance;
     private Properties testProps;
-    
+
     @Before
     public void setUp() throws Exception {
         instance = new VloConfigMarshaller();
@@ -56,10 +56,13 @@ public class VloConfigMarshallerTest {
         InputStream configFile = getClass().getResourceAsStream(VLO_CONFIG_FILE);
         VloConfig config = instance.unmarshal(new StreamSource(configFile, getClass().getResource(VLO_CONFIG_FILE).toString()));
         configFile.close();
-        
+
         assertNotNull(config);
         assertEquals(testProps.getProperty("solrUrl"), config.getSolrUrl());
         assertEquals(12, config.getFacetFields().size());
+
+        assertEquals(4, config.getAvailabilityValues().size());
+        assertEquals("Public", config.getAvailabilityValues().get(0).getDisplayValue());
     }
 
     /**
@@ -71,9 +74,13 @@ public class VloConfigMarshallerTest {
         config.setSolrUrl("http://server/solr");
         config.setDataRoots(Arrays.asList(new DataRoot("originName", new File("rootFile"), "prefix", "toStrip", Boolean.FALSE)));
         config.setFacetFields(Arrays.asList("collection", "country", "continent"));
+        config.setAvailabilityValues(Arrays.asList(
+                new FieldValueDescriptor("PUB", "Public", "Description for public"),
+                new FieldValueDescriptor("ACA", "Academic", "Description for academic")
+        ));
         final StringWriter sw = new StringWriter();
         instance.marshal(config, new StreamResult(sw));
         logger.debug(sw.toString());
     }
-    
+
 }

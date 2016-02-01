@@ -115,6 +115,29 @@
         <technicalField>_hierarchyWeight</technicalField>
         <technicalField>_hasPartCount</technicalField>
     </technicalFields>
+      
+    <!-- 
+        This defines the availability levels shown in the web app and their
+        display values and descriptions
+    -->
+    <availability>
+        <availabilityValue value="PUB">
+            <displayValue>Public</displayValue>
+            <description><!--TODO-->Description for public</description>
+        </availabilityValue>
+        <availabilityValue value="ACA">
+            <displayValue>Academic</displayValue>
+            <description><!--TODO-->Description for academic</description>
+        </availabilityValue>
+        <availabilityValue value="RES">
+            <displayValue>Restricted for individual</displayValue>
+            <description><!--TODO-->Description for restricted</description>
+        </availabilityValue>
+        <availabilityValue value="UNSPECIFIED">
+            <displayValue>Unspecified</displayValue>
+            <description><!--TODO-->Resources without specification of availability (contact the original provider)</description>
+        </availabilityValue>
+    </availability>
     
     <languageFilters>
         <languageFilter>filterOne</languageFilter>
