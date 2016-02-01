@@ -47,14 +47,15 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  * Dedicated panel for deselecting availability levels. Notice that this panel
- * allows for 'OR' selection on a number of preconfigured values
+ * allows for 'OR' selection on a number of preconfigured values. It also assumes
+ * that every document has a value for this field.
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacetsSelection> {
 
     public static final String AVAILABILITY_FIELD = FacetConstants.FIELD_AVAILABILITY;
-    public final static List<String> AVAILABILITY_LEVELS = ImmutableList.of("PUB", "ACA", "RES", FacetConstants.NO_VALUE);  //TODO - get these from config or global
+    public final static List<String> AVAILABILITY_LEVELS = ImmutableList.of("PUB", "ACA", "RES", "UNSPECIFIED");  //TODO - get these from config or global + description
 
     @SpringBean
     private FieldValueConverterProvider fieldValueConverterProvider;
@@ -75,7 +76,6 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
                     }
 
                 })
-                .add(createValueCheckbox("unk", FacetConstants.NO_VALUE))
         );
     }
 
