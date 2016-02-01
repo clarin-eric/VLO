@@ -66,8 +66,12 @@ public abstract class AbstractSolrQueryFactory {
                             }
                             break;
                         case OR:
-                            //notice that OR ignores qualifiers, so it does not support e.g. (A OR (NOT B))
+                            // notice that OR ignores qualifiers, so it does not support e.g. (A OR (NOT B))
                             encodedQueries.add(createFacetOrQuery(facetName, selection.getValues()));
+                            // replace facet field with version prefixed with exclude statement 
+                            // (see <http://wiki.apache.org/solr/SimpleFacetParameters#Multi-Select_Faceting_and_LocalParams>)
+                            query.removeFacetField(facetName);
+                            query.addFacetField(String.format("{!ex=%1$s}%1$s",facetName));
                             break;
                         default:
                             throw new UnsupportedOperationException("Unsupported selection type: " + selection.getSelectionType());
@@ -130,19 +134,20 @@ public abstract class AbstractSolrQueryFactory {
      */
     private String createFacetOrQuery(String facetName, Collection<String> values) {
         // escape value and wrap in quotes to make literal query
-        final StringBuilder queryBuilder = new StringBuilder(facetName).append(":(");
+        // prefix field name with tag statement (see <http://wiki.apache.org/solr/SimpleFacetParameters#Multi-Select_Faceting_and_LocalParams>)
+        final StringBuilder queryBuilder = new StringBuilder(String.format("{!tag=%1$s}%1$s",facetName)).append(":(");
         // loop over values
         final Iterator<String> iterator = values.iterator();
         while (iterator.hasNext()) {
             final String value = iterator.next();
-            
+
             if (value.equals(FacetConstants.NO_VALUE)) {
                 //special null case
                 queryBuilder.append("[* TO *]");
             } else {
                 queryBuilder.append(ClientUtils.escapeQueryChars(value));
             }
-            
+
             // add 'OR' connector except for last token
             if (iterator.hasNext()) {
                 queryBuilder.append(" OR ");
