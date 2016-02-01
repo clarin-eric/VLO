@@ -18,7 +18,10 @@ package eu.clarin.cmdi.vlo.wicket.provider;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
+import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.wicket.util.convert.ConversionException;
@@ -32,9 +35,11 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
 
     private final static Pattern LANGUAGE_CODE_PATTERN = Pattern.compile(FacetConstants.LANGUAGE_CODE_PATTERN);
     private final LanguageCodeUtils languageCodeUtils;
+    private final FieldValueConverter availabilityConverter;
 
-    public FieldValueConverterProviderImpl(LanguageCodeUtils languageCodeUtils) {
+    public FieldValueConverterProviderImpl(LanguageCodeUtils languageCodeUtils, VloConfig vloConfig) {
         this.languageCodeUtils = languageCodeUtils;
+        this.availabilityConverter = new FieldDescriptiorValueConverter(FieldValueDescriptor.toMap(vloConfig.getAvailabilityValues()));
     }
 
     @Override
@@ -44,6 +49,8 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
                 return languageCodeConverter;
             case FacetConstants.FIELD_DESCRIPTION:
                 return descriptionConverter;
+            case FacetConstants.FIELD_AVAILABILITY:
+                return availabilityConverter;
             default:
                 return null;
         }
@@ -105,5 +112,24 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
         }
 
     };
+
+    private static class FieldDescriptiorValueConverter extends FieldValueConverter {
+
+        private final Map<String, FieldValueDescriptor> fieldMap;
+
+        public FieldDescriptiorValueConverter(Map<String, FieldValueDescriptor> fieldMap) {
+            this.fieldMap = fieldMap;
+        }
+
+        @Override
+        public String convertToString(String value, Locale locale) {
+            if (fieldMap.containsKey(value)) {
+                return fieldMap.get(value).getDisplayValue();
+            } else {
+                return value;
+            }
+        }
+
+    }
 
 }

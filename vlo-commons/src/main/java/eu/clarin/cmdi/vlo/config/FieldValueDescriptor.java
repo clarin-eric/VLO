@@ -16,6 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.config;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Maps;
+import java.util.Collection;
+import java.util.Map;
 import javax.xml.bind.annotation.XmlAttribute;
 
 /**
@@ -91,6 +95,14 @@ public class FieldValueDescriptor {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public static Map<String, FieldValueDescriptor> toMap(Collection<FieldValueDescriptor> descriptor) {
+        return Maps.uniqueIndex(descriptor, new Function<FieldValueDescriptor, String>() {
+            public String apply(FieldValueDescriptor f) {
+                return f.getValue();
+            }
+        });
     }
 
 }

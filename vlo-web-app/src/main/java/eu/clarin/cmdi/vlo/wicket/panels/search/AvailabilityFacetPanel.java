@@ -23,6 +23,7 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FixedSetFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
@@ -65,14 +66,15 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
     public AvailabilityFacetPanel(String id, final IModel<QueryFacetsSelection> selectionModel, FacetFieldsModel facetFieldsModel) {
         super(id, selectionModel);
         this.facetFieldsModel = facetFieldsModel;
-
+        
+        final Model<String> fieldNameModel = Model.of(AVAILABILITY_FIELD);
         add(new Form("availability")
                 .add(new DataView<Count>("option", getValuesProvider()) {
                     @Override
                     protected void populateItem(Item<Count> item) {
                         final String facetValue = item.getModelObject().getName();
                         item.add(createValueCheckbox("selector", facetValue));
-                        item.add(new Label("label", new PropertyModel<String>(item.getModel(), "name")));
+                        item.add(new FieldValueLabel("label", new PropertyModel<String>(item.getModel(), "name"), fieldNameModel));
                         item.add(new Label("count", new PropertyModel<String>(item.getModel(), "count")));
                     }
                 })
