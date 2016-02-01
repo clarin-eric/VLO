@@ -16,7 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 import java.util.List;
@@ -64,7 +67,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacetsSelection> {
 
     public static final String AVAILABILITY_FIELD = FacetConstants.FIELD_AVAILABILITY;
-    public final static List<String> AVAILABILITY_LEVELS = ImmutableList.of("PUB", "ACA", "RES", "UNSPECIFIED");  //TODO - get these from config or global + description
+    private final List<String> availabilityLevels;
 
     @SpringBean
     private FieldValueConverterProvider fieldValueConverterProvider;
@@ -76,6 +79,8 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
     public AvailabilityFacetPanel(String id, final IModel<QueryFacetsSelection> selectionModel, FacetFieldsModel facetFieldsModel) {
         super(id, selectionModel);
         this.facetFieldsModel = facetFieldsModel;
+
+        this.availabilityLevels = getLevelsFromConfig(vloConfig);
 
         //some models that we can reuse:
         final IModel<String> fieldNameModel = Model.of(AVAILABILITY_FIELD);
@@ -116,8 +121,8 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
     private FacetFieldValuesProvider getValuesProvider() {
         final IModel<FacetField> facetFieldModel = new FacetFieldModel(AVAILABILITY_FIELD, facetFieldsModel);
         final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(facetFieldModel, fieldValueConverterProvider) {
-            final IModel<FieldValuesFilter> valuesFilter = new Model<FieldValuesFilter>(new FixedSetFieldValuesFilter(AVAILABILITY_LEVELS));
-            final Ordering<Count> valuesOrdering = Ordering.from(new FacetNameComparator(AVAILABILITY_LEVELS));
+            final IModel<FieldValuesFilter> valuesFilter = new Model<FieldValuesFilter>(new FixedSetFieldValuesFilter(availabilityLevels));
+            final Ordering<Count> valuesOrdering = Ordering.from(new FacetNameComparator(availabilityLevels));
 
             @Override
             protected IModel<FieldValuesFilter> getFilterModel() {
@@ -133,7 +138,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
     }
 
     private Component createValueCheckbox(final String id, final String targetValue) {
-        return new CheckBox(id, new FixedValueSetBooleanSelectionModel(AVAILABILITY_FIELD, AVAILABILITY_LEVELS, targetValue, getModel()))
+        return new CheckBox(id, new FixedValueSetBooleanSelectionModel(AVAILABILITY_FIELD, availabilityLevels, targetValue, getModel()))
                 .add(new OnChangeAjaxBehavior() {
 
                     @Override
@@ -169,6 +174,15 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
     public void detachModels() {
         super.detachModels();
         facetFieldsModel.detach();;
+    }
+
+    private static List<String> getLevelsFromConfig(VloConfig config) {
+        return Lists.newArrayList(Iterables.transform(config.getAvailabilityValues(), new Function<FieldValueDescriptor, String>() {
+            @Override
+            public String apply(FieldValueDescriptor input) {
+                return input.getValue();
+            }
+        }));
     }
 
 }
