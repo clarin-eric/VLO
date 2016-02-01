@@ -118,9 +118,5 @@ public class FacetConstants {
      * @see #FIELD_AVAILABILITY
      */
     public static final String AVAILABILITY_LEVEL_RES = "RES";
-    /**
-     * Special value representing no value for a given field or facet 
-     */
-    public static String NO_VALUE = "[{null}]";
 
 }

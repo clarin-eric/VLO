@@ -250,14 +250,7 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
                     return converted;
                 }
             }
-            
-            //no converted or no conversion output...
-            if (FacetConstants.NO_VALUE.equals(string)) {
-                //special case: selection of documents wihtout value
-                return "without value";
-            } else {
-                return string;
-            }
+            return string;
         }
 
     };
