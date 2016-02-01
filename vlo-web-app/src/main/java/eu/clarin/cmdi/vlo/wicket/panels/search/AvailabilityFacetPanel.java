@@ -18,9 +18,8 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 import java.util.List;
 import eu.clarin.cmdi.vlo.FacetConstants;
@@ -80,13 +79,13 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
         super(id, selectionModel);
         this.facetFieldsModel = facetFieldsModel;
 
-        this.availabilityLevels = getLevelsFromConfig(vloConfig);
+        this.availabilityLevels = ImmutableList.copyOf(getLevelsFromConfig(vloConfig));
 
         //some models that we can reuse:
         final IModel<String> fieldNameModel = Model.of(AVAILABILITY_FIELD);
         //model of (a serializable copy of) the availability levels map with descriptions and display names for each level
         final IModel<Map<String, FieldValueDescriptor>> descriptorsModel
-                = new MapModel<>(Maps.newHashMap(FieldValueDescriptor.toMap(vloConfig.getAvailabilityValues())));
+                = new MapModel<>(ImmutableMap.copyOf(FieldValueDescriptor.toMap(vloConfig.getAvailabilityValues())));
 
         add(new Form("availability")
                 .add(new DataView<Count>("option", getValuesProvider()) {
@@ -177,12 +176,12 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
     }
 
     private static List<String> getLevelsFromConfig(VloConfig config) {
-        return Lists.newArrayList(Iterables.transform(config.getAvailabilityValues(), new Function<FieldValueDescriptor, String>() {
+        return Lists.transform(config.getAvailabilityValues(), new Function<FieldValueDescriptor, String>() {
             @Override
             public String apply(FieldValueDescriptor input) {
                 return input.getValue();
             }
-        }));
+        });
     }
 
 }
