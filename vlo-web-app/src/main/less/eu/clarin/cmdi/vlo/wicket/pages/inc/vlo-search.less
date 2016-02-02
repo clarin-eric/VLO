@@ -174,8 +174,73 @@ li.searchresultitem {
 
     .licenseInfo {
         float: right;
-        max-width: 25%;
+        width: 25%;
+        min-height: 1em;
         text-align: right;
+
+        .availabilityTag, .licenseTag {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            margin: .1em;
+            padding: 0;
+            border: 1px solid;    
+            border-radius: 50%;
+        }
+
+        .availabilityTag {
+            &.PUB {
+                background-color: green;
+                border-color: lightgreen;
+            }
+            &.ACA {
+                background-color: blue;
+                border-color: lightblue;
+            }
+            &.RES {
+                background-color: red;
+                border-color: lightcoral;
+            }
+            &.UNSPECIFIED {
+                border: none;
+
+                &:after {
+                    content: '?';
+                }
+            }
+            &.BY, &.ND, &.SA {
+                border: none;
+                height: 1.2em;
+                width: 1.2em;
+                background-size: 1em 1em;
+                background-position-y: .1em;
+                background-position-x: .1em;
+                background-repeat: no-repeat;
+                margin: 0;
+            }
+            &.BY {
+                background-image: url('by.large.png');
+            }
+            &.SA {
+                background-image: url('sa.large.png');
+            }
+            &.ND {
+                background-image: url('nd.large.png');
+            }
+        }
+
+        .licenseTag {
+            background-image: url('fine_print-64.png'); ; /* icon from icons8.com */
+            height: 1.2em;
+            width: 1.2em;
+            background-size: 1em 1em;
+
+            //TODO: specific licenses, e.g.:
+            /*
+                &.GPL3 {
+                }
+            */
+        }
     }
 
 }

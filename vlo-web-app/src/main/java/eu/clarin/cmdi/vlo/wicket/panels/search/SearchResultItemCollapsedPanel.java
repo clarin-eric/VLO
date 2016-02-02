@@ -20,20 +20,28 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
+import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
+import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -76,6 +84,33 @@ public class SearchResultItemCollapsedPanel extends Panel {
                 setVisible(countProvider.size() > 0);
             }
         });
+
+        //add 'tags' for all availability values
+        final SolrFieldModel<String> availabilityModel = new SolrFieldModel<>(documentModel, FacetConstants.FIELD_AVAILABILITY);
+        add(new ListView<String>("availabilityTag", new CollectionListModel<>(availabilityModel)) {
+            @Override
+            protected void populateItem(ListItem<String> item) {
+                item
+                        .add(new AttributeAppender("class", item.getModel(), " "))
+                        .add(new AttributeModifier("title", item.getModel()));
+            }
+        });
+
+        //add 'tag' for all licence values
+        //TODO: turn into link to licence section of the record page
+        final IModel<String> licenseModel = new SolrFieldStringModel(documentModel, FacetConstants.FIELD_LICENSE);
+        final WebMarkupContainer licenseTag = new WebMarkupContainer("licenseTag") {
+            @Override
+            protected void onConfigure() {
+                setVisible(licenseModel.getObject() != null);
+            }
+        };
+        //TODO: turn into link to licence section of the record page
+        add(licenseTag
+                .add(new AttributeAppender("class", licenseModel, " ")) //TODO: map to id for license image (via css class)
+                .add(new AttributeModifier("title", licenseModel)) //TODO: map to license name
+        );
+
     }
 
     @Override
