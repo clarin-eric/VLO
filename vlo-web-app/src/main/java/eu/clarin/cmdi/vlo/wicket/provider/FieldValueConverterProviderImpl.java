@@ -64,8 +64,30 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
 
         @Override
         public String convertToObject(String value, Locale locale) throws ConversionException {
+            //inversion not supported
             throw new UnsupportedOperationException("Not supported");
         }
+
+        @Override
+        public String convertToString(String value, Locale locale) {
+            final String converted = getConvertedValue(value, locale);
+            if (converted == null) {
+                return value;
+            } else {
+                return converted;
+            }
+        }
+
+        /**
+         * Gets a converted value for the provided value and locale for {@link #convertToString(java.lang.String, java.util.Locale)
+         * }. Can return null in which case the original value needs to be
+         * provided by the calling method.
+         *
+         * @param value value to convert
+         * @param locale locale for conversion
+         * @return converted value or null if no converted value is available
+         */
+        protected abstract String getConvertedValue(String value, Locale locale);
 
     }
 
@@ -78,7 +100,7 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
     private final FieldValueConverter languageCodeConverter = new FieldValueConverter() {
 
         @Override
-        public String convertToString(String fieldValue, Locale locale) throws ConversionException {
+        public String getConvertedValue(String fieldValue, Locale locale) throws ConversionException {
             final Matcher matcher = LANGUAGE_CODE_PATTERN.matcher(fieldValue);
             if (matcher.matches() && matcher.groupCount() == 2) {
                 final String type = matcher.group(1);
@@ -93,8 +115,8 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
                 }
             }
 
-            // does not match expected pattern, return original value
-            return fieldValue;
+            // does not match expected pattern
+            return null;
         }
 
     };
@@ -106,7 +128,7 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
     private final FieldValueConverter descriptionConverter = new FieldValueConverter() {
 
         @Override
-        public String convertToString(String fieldValue, Locale locale) throws ConversionException {
+        public String getConvertedValue(String fieldValue, Locale locale) throws ConversionException {
             //For now, we simply ignore this information (see <https://trac.clarin.eu/ticket/780>)
             return fieldValue.replaceAll(FacetConstants.DESCRIPTION_LANGUAGE_PATTERN, "");
         }
@@ -122,11 +144,11 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
         }
 
         @Override
-        public String convertToString(String value, Locale locale) {
+        public String getConvertedValue(String value, Locale locale) {
             if (fieldMap.containsKey(value)) {
                 return fieldMap.get(value).getDisplayValue();
             } else {
-                return value;
+                return null;
             }
         }
 
