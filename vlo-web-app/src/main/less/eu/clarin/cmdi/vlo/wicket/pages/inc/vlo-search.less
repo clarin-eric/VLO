@@ -210,11 +210,12 @@ li.searchresultitem {
                 border-color: lightcoral;
             }
             &.UNSPECIFIED {
-                border: none;
-
-                &:after {
-                    content: '?';
-                }
+                //maybe don't show at all (unless expanded)?
+                border-style: dotted;
+                background-image: url('question_mark-64.png');
+                background-size: .6em;
+                background-position: .3em;
+                background-repeat: no-repeat;
             }
 
             //TODO: Merge below with general availabilityTag style once everything has an icon image
