@@ -173,9 +173,12 @@ li.searchresultitem {
     }
 
     .licenseInfo {
-        float: right;
-        width: 25%;
-        min-height: 1em;
+        position: relative;
+        right: .5em;
+        bottom: 1.5em;
+        clear: both;
+        width: 100%;
+        margin-bottom: -2em;
         text-align: right;
 
         .availabilityTag, .licenseTag {
@@ -192,7 +195,7 @@ li.searchresultitem {
             /* mixins from vlo-license-icons.less */
             .availability-icon-classes();
             .availability-modifier-icon-classes();
-            
+
             // TODO: replace below once icons for levels are available
             &.PUB {
                 background-color: green;
@@ -213,7 +216,7 @@ li.searchresultitem {
                     content: '?';
                 }
             }
-            
+
             //TODO: Merge below with general availabilityTag style once everything has an icon image
             &.BY, &.ND, &.SA {
                 border: none;

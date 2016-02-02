@@ -89,6 +89,8 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
 
         // add a container for the resources (only visible if there are actual resources)
         add(createResourcesView("resources", searchContextModel));
+        
+        add(new SearchResultItemLicensePanel("licenseInfo", documentModel));
     }
 
     private WebMarkupContainer createResourcesView(String id, final IModel<SearchContext> selectionModel) {
