@@ -230,12 +230,16 @@ li.searchresultitem {
         }
 
         .licenseTag {
-            background-image: url('fine_print-64.png'); ; /* icon from icons8.com */
             height: 1.2em;
             width: 1.2em;
             background-size: 1em 1em;
+            /* default icon indicating there is a known licence */
+            background-image: url('fine_print-64.png'); /* icon from icons8.com */
 
-            //TODO: specific licenses, e.g.:
+            &.CC {
+                background-image: url('cc.large.png');
+            }
+            //TODO: other specific licenses, e.g.:
             /*
                 &.GPL3 {
                 }
