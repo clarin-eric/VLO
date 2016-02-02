@@ -189,6 +189,11 @@ li.searchresultitem {
         }
 
         .availabilityTag {
+            /* mixins from vlo-license-icons.less */
+            .availability-icon-classes();
+            .availability-modifier-icon-classes();
+            
+            // TODO: replace below once icons for levels are available
             &.PUB {
                 background-color: green;
                 border-color: lightgreen;
@@ -208,6 +213,8 @@ li.searchresultitem {
                     content: '?';
                 }
             }
+            
+            //TODO: Merge below with general availabilityTag style once everything has an icon image
             &.BY, &.ND, &.SA {
                 border: none;
                 height: 1.2em;
@@ -218,15 +225,6 @@ li.searchresultitem {
                 background-repeat: no-repeat;
                 margin: 0;
             }
-            &.BY {
-                background-image: @cc-by-icon;
-            }
-            &.SA {
-                background-image: @cc-sa-icon;
-            }
-            &.ND {
-                background-image: @cc-nd-icon;
-            }
         }
 
         .licenseTag {
@@ -236,14 +234,8 @@ li.searchresultitem {
             /* default icon indicating there is a known licence */
             background-image: url('fine_print-64.png'); /* icon from icons8.com */
 
-            &.CC {
-                background-image: @cc-license;
-            }
-            //TODO: other specific licenses, e.g.:
-            /*
-                &.GPL3 {
-                }
-            */
+            /* mixin from vlo-license-icons.less */
+            .license-icon-classes(); 
         }
     }
 
