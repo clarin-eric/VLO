@@ -68,7 +68,7 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
     /**
      * Abstract base class for one directional string converters
      */
-    private abstract class FieldValueConverter implements IConverter<String> {
+    private static abstract class FieldValueConverter implements IConverter<String> {
 
         @Override
         public String convertToObject(String value, Locale locale) throws ConversionException {
