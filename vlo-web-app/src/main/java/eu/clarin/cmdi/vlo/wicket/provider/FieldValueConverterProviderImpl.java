@@ -16,16 +16,22 @@
  */
 package eu.clarin.cmdi.vlo.wicket.provider;
 
+import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -33,13 +39,15 @@ import org.apache.wicket.util.convert.IConverter;
  */
 public class FieldValueConverterProviderImpl implements FieldValueConverterProvider {
 
+    private final static Logger logger = LoggerFactory.getLogger(FieldValueConverterProviderImpl.class);
     private final static Pattern LANGUAGE_CODE_PATTERN = Pattern.compile(FacetConstants.LANGUAGE_CODE_PATTERN);
+    private final static String AVAILABILITY_VALUES_PROPERTIES_FILE = "/availabilityValues.properties";
     private final LanguageCodeUtils languageCodeUtils;
     private final FieldValueConverter availabilityConverter;
 
     public FieldValueConverterProviderImpl(LanguageCodeUtils languageCodeUtils, VloConfig vloConfig) {
         this.languageCodeUtils = languageCodeUtils;
-        this.availabilityConverter = new FieldDescriptiorValueConverter(FieldValueDescriptor.toMap(vloConfig.getAvailabilityValues()));
+        this.availabilityConverter = createAvailabilityConverter(vloConfig);
     }
 
     @Override
@@ -135,11 +143,43 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
 
     };
 
-    private static class FieldDescriptiorValueConverter extends FieldValueConverter {
+    /**
+     * Availability values from converter that reads config, with fallback to
+     * properties
+     *
+     * @param vloConfig
+     * @return
+     * @throws RuntimeException
+     */
+    private FieldValueConverter createAvailabilityConverter(VloConfig vloConfig) throws RuntimeException {
+        //base converter
+        final FieldDescriptorValueConverter availabilityDescriptorConverter = new FieldDescriptorValueConverter(
+                ImmutableMap.copyOf(FieldValueDescriptor.toMap(vloConfig.getAvailabilityValues())));
+        try {
+            //wrap in properties converter for fallback
+            try (final InputStream availabilityProperties = getClass().getResourceAsStream(AVAILABILITY_VALUES_PROPERTIES_FILE)) {
+                if (availabilityProperties != null) {
+                    final Properties properties = new Properties();
+                    properties.load(availabilityProperties);
+                    return new PropertyFallbackValueConverter(properties, availabilityDescriptorConverter);
+                }
+            }
+        } catch (IOException ex) {
+            logger.error("Properties for availability values could not be loaded", ex);
+        }
+        //no properties to fall back to, use base converter
+        return availabilityDescriptorConverter;
+    }
+
+    /**
+     * Converter that looks up a field value in a map that holds
+     * {@link FieldValueDescriptor} objects index by value string
+     */
+    private static class FieldDescriptorValueConverter extends FieldValueConverter {
 
         private final Map<String, FieldValueDescriptor> fieldMap;
 
-        public FieldDescriptiorValueConverter(Map<String, FieldValueDescriptor> fieldMap) {
+        public FieldDescriptorValueConverter(Map<String, FieldValueDescriptor> fieldMap) {
             this.fieldMap = fieldMap;
         }
 
@@ -150,6 +190,39 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
             } else {
                 return null;
             }
+        }
+
+    }
+
+    /**
+     * Converter that tries using a wrapped converter first, and in case of
+     * failure looks up a value mapping from a properties object
+     */
+    private static class PropertyFallbackValueConverter extends FieldValueConverter {
+
+        private final Properties properties;
+        private final FieldValueConverter converter;
+
+        public PropertyFallbackValueConverter(Properties properties, FieldValueConverter converter) {
+            this.properties = properties;
+            this.converter = converter;
+        }
+
+        public PropertyFallbackValueConverter(Properties properties) {
+            this(properties, null);
+        }
+
+        @Override
+        protected String getConvertedValue(String value, Locale locale) {
+            //if we have a converter, try it first
+            if (converter != null) {
+                final String convertedValue = converter.getConvertedValue(value, locale);
+                if (convertedValue != null) {
+                    return convertedValue;
+                } //else: no success, continue below
+            }
+            //no converter or conversion unsuccessful
+            return properties.getProperty(value, null); // if not found, null should be returned in line with method contract
         }
 
     }
