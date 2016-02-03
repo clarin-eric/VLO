@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import java.util.Collection;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -57,6 +58,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
             }
 
         };
+        container.add(createOriginalContextContainer("originalContext"));
         return container;
     }
 
@@ -67,21 +69,29 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
                 setVisible(!isInfoAvailable());
             }
         };
-        final IModel<String> landingPageHrefModel
-                // wrap in model that transforms handle links
-                = new HandleLinkModel(
-                        // get landing page from document
-                        new SolrFieldStringModel(getModel(), FacetConstants.FIELD_LANDINGPAGE));
-        // add landing page link
-        container.add(new WebMarkupContainer("originalContext") {
+        container.add(createOriginalContextContainer("originalContext"));
+        return container;
+    }
+
+    public MarkupContainer createOriginalContextContainer(final String id) {
+        // get landing page from document
+        final SolrFieldStringModel valueModel = new SolrFieldStringModel(getModel(), FacetConstants.FIELD_LANDINGPAGE);
+        // wrap in model that transforms handle links
+        final IModel<String> landingPageHrefModel = new HandleLinkModel(valueModel);
+        
+        //create container
+        final MarkupContainer originalContext = new WebMarkupContainer(id) {
 
             @Override
             protected void onConfigure() {
                 setVisible(landingPageHrefModel.getObject() != null);
             }
-
-        }.add(new ExternalLink("landingPage", landingPageHrefModel)));
-        return container;
+        };
+        
+        // add landing page link
+        originalContext.add(new ExternalLink("landingPage", landingPageHrefModel));
+        
+        return originalContext;
     }
 
     public boolean isInfoAvailable() {

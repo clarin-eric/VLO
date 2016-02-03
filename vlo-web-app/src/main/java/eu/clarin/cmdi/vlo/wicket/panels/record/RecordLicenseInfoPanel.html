@@ -24,16 +24,43 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <body>
         <wicket:panel>
             <div wicket:id="availableInfo" class="licenseInfo">
-                <p>Licence info available</p>
-                <p>TODO: display!</p>
+                <p>
+                    The following information regarding <strong>availability and/or 
+                        licencing</strong> has been extracted from the information 
+                    offered by the original provider:
+                </p>
+                <ul>
+<!--
+                    <li wicket:id="license"><span wicket:id="licenseDescription"></span></li>
+                    <li wicket:id="availability"><span wicket:id="availabilityDescription"></span></li>
+-->
+                </ul>
+                <!--TODO: access info -->
+                <p>
+                    Please note that the information extracted by the VLO is not
+                    necessarily complete or accurate. 
+
+                    Before using any of the resources or tools described on this page, 
+                    record, please <strong>check the information</strong> 
+                    at the original source or contact the original provider.
+
+                    <span wicket:id="originalContext">
+                        In most cases, the best way to find legal information 
+                        regarding the described resources and/or tools is viewing 
+                        the record in its
+                        <strong>
+                            <a href="" wicket:id="landingPage">original context</a>
+                        </strong>.
+                    </span>
+                </p>
             </div>
             <div wicket:id="noInfo" class="noLicenseInfo">
                 <p>
                     <strong>No information regarding availability and/or 
-                    licencing</strong> has been extracted from the information 
+                        licencing</strong> has been extracted from the information 
                     offered by the original provider.
                     Before using any of the resources or tools described on this page, 
-                    record please <strong>check the information</strong> 
+                    record, please <strong>check the information</strong> 
                     at the original source or contact the original provider.
                 </p>
                 <p wicket:id="originalContext">
