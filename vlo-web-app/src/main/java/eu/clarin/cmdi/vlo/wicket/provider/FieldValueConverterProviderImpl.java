@@ -109,6 +109,9 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
 
         @Override
         public String getConvertedValue(String fieldValue, Locale locale) throws ConversionException {
+            if (fieldValue == null) {
+                return null;
+            }
             final Matcher matcher = LANGUAGE_CODE_PATTERN.matcher(fieldValue);
             if (matcher.matches() && matcher.groupCount() == 2) {
                 final String type = matcher.group(1);
@@ -137,6 +140,9 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
 
         @Override
         public String getConvertedValue(String fieldValue, Locale locale) throws ConversionException {
+            if (fieldValue == null) {
+                return null;
+            }
             //For now, we simply ignore this information (see <https://trac.clarin.eu/ticket/780>)
             return fieldValue.replaceAll(FacetConstants.DESCRIPTION_LANGUAGE_PATTERN, "");
         }
@@ -221,8 +227,14 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
                     return convertedValue;
                 } //else: no success, continue below
             }
+
             //no converter or conversion unsuccessful
-            return properties.getProperty(value, null); // if not found, null should be returned in line with method contract
+            if (value == null) {
+                //property key cannot be null
+                return null;
+            } else {
+                return properties.getProperty(value, null); // if not found, null should be returned in line with method contract
+            }
         }
 
     }

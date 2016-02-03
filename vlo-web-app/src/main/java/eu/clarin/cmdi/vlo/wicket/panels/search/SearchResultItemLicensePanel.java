@@ -18,6 +18,8 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
+import eu.clarin.cmdi.vlo.wicket.model.ConvertedFieldValueModel;
+import eu.clarin.cmdi.vlo.wicket.model.FormattedStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import org.apache.solr.common.SolrDocument;
@@ -28,13 +30,14 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 /**
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
-
+    
     public SearchResultItemLicensePanel(String id, IModel<SolrDocument> model) {
         super(id, model);
 
@@ -45,7 +48,9 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
             protected void populateItem(ListItem<String> item) {
                 item
                         .add(new AttributeAppender("class", item.getModel(), " "))
-                        .add(new AttributeModifier("title", item.getModel())); //TODO: use converter to get a friendly name for the tooltip
+                        .add(new AttributeModifier("title",
+                                new FormattedStringModel(Model.of("Availability: %s"),
+                                        new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_AVAILABILITY))));                
             }
         });
 
@@ -58,12 +63,12 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
                 setVisible(licenseModel.getObject() != null);
             }
         };
-        
+
         //TODO: turn into link to licence section of the record page
         add(licenseTag
                 .add(new AttributeAppender("class", licenseModel, " ")) //TODO: map to id for license image (via css class)
                 .add(new AttributeModifier("title", licenseModel)) //TODO: map to license name
         );
     }
-
+    
 }
