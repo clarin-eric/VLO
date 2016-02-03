@@ -38,7 +38,6 @@ import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Map;
-import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -50,6 +49,7 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -78,73 +78,11 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
     public AvailabilityFacetPanel(String id, final IModel<QueryFacetsSelection> selectionModel, FacetFieldsModel facetFieldsModel) {
         super(id, selectionModel);
         this.facetFieldsModel = facetFieldsModel;
-
         this.availabilityLevels = ImmutableList.copyOf(getLevelsFromConfig(vloConfig));
 
-        //some models that we can reuse:
-        final IModel<String> fieldNameModel = Model.of(AVAILABILITY_FIELD);
-        //model of (a serializable copy of) the availability levels map with descriptions and display names for each level
-        final IModel<Map<String, FieldValueDescriptor>> descriptorsModel
-                = new MapModel<>(ImmutableMap.copyOf(FieldValueDescriptor.toMap(vloConfig.getAvailabilityValues())));
-
         add(new Form("availability")
-                .add(new DataView<Count>("option", getValuesProvider()) {
-                    @Override
-                    protected void populateItem(Item<Count> item) {
-                        //model for actual value
-                        final PropertyModel<String> valueModel = new PropertyModel<>(item.getModel(), "name");
-
-                        //checkbox
-                        final Component selector = createValueCheckbox("selector", valueModel.getObject());
-                        item.add(selector);
-
-                        //label 
-                        item.add(new WebMarkupContainer("label")
-                                //child label
-                                .add(new FieldValueLabel("name", valueModel, fieldNameModel))
-                                //count label
-                                .add(new Label("count", new PropertyModel<String>(item.getModel(), "count")))
-                                //reference to checkbox
-                                .add(new AttributeModifier("for", selector.getMarkupId()))
-                        );
-
-                        //description as tooltip (title)
-                        final IModel<FieldValueDescriptor> descriptorModel = new MapValueModel<>(descriptorsModel, valueModel);
-                        final IModel<String> descriptionModel = new PropertyModel<>(descriptorModel, "description");
-                        item.add(new AttributeModifier("title", descriptionModel));
-                    }
-                })
+                .add(new AvailabilityDataView("option", new AvailabilityValuesProvider()))
         );
-    }
-
-    private FacetFieldValuesProvider getValuesProvider() {
-        final IModel<FacetField> facetFieldModel = new FacetFieldModel(AVAILABILITY_FIELD, facetFieldsModel);
-        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(facetFieldModel, fieldValueConverterProvider) {
-            final IModel<FieldValuesFilter> valuesFilter = new Model<FieldValuesFilter>(new FixedSetFieldValuesFilter(availabilityLevels));
-            final Ordering<Count> valuesOrdering = Ordering.from(new FacetNameComparator(availabilityLevels));
-
-            @Override
-            protected IModel<FieldValuesFilter> getFilterModel() {
-                return valuesFilter;
-            }
-
-            @Override
-            protected Ordering getOrdering() {
-                return valuesOrdering;
-            }
-        };
-        return valuesProvider;
-    }
-
-    private Component createValueCheckbox(final String id, final String targetValue) {
-        return new CheckBox(id, new FixedValueSetBooleanSelectionModel(AVAILABILITY_FIELD, availabilityLevels, targetValue, getModel()))
-                .add(new OnChangeAjaxBehavior() {
-
-                    @Override
-                    protected void onUpdate(AjaxRequestTarget target) {
-                        selectionChanged(target);
-                    }
-                });
     }
 
     @Override
@@ -152,8 +90,101 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
         return new Label(id, "Availability");
     }
 
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        facetFieldsModel.detach();
+    }
+
+    private static List<String> getLevelsFromConfig(VloConfig config) {
+        return Lists.transform(config.getAvailabilityValues(), new Function<FieldValueDescriptor, String>() {
+            @Override
+            public String apply(FieldValueDescriptor input) {
+                return input.getValue();
+            }
+        });
+    }
+
     protected abstract void selectionChanged(AjaxRequestTarget target);
 
+    private class AvailabilityDataView extends DataView<Count> {
+
+        private final IModel<String> fieldNameModel = Model.of(AVAILABILITY_FIELD);
+        /**
+         * Model of (a serializable copy of) the availability levels map with
+         * descriptions and display names for each level
+         */
+        private final IModel<Map<String, FieldValueDescriptor>> descriptorsModel
+                = new MapModel<>(ImmutableMap.copyOf(FieldValueDescriptor.toMap(vloConfig.getAvailabilityValues())));
+
+        public AvailabilityDataView(String id, IDataProvider<Count> dataProvider) {
+            super(id, dataProvider);
+        }
+
+        @Override
+        protected void populateItem(Item<Count> item) {
+            //model for actual value
+            final PropertyModel<String> valueModel = new PropertyModel<>(item.getModel(), "name");
+
+            //checkbox
+            final Component selector = createValueCheckbox("selector", valueModel.getObject());
+            item.add(selector);
+
+            //label
+            item.add(new WebMarkupContainer("label")
+                    //child label
+                    .add(new FieldValueLabel("name", valueModel, fieldNameModel))
+                    //count label
+                    .add(new Label("count", new PropertyModel<String>(item.getModel(), "count")))
+                    //reference to checkbox
+                    .add(new AttributeModifier("for", selector.getMarkupId()))
+            );
+
+            //description as tooltip (title)
+            final IModel<FieldValueDescriptor> descriptorModel = new MapValueModel<>(descriptorsModel, valueModel);
+            final IModel<String> descriptionModel = new PropertyModel<>(descriptorModel, "description");
+            item.add(new AttributeModifier("title", descriptionModel));
+        }
+
+        private Component createValueCheckbox(final String id, final String targetValue) {
+            return new CheckBox(id, new FixedValueSetBooleanSelectionModel(AVAILABILITY_FIELD, availabilityLevels, targetValue, getModel()))
+                    .add(new OnChangeAjaxBehavior() {
+
+                        @Override
+                        protected void onUpdate(AjaxRequestTarget target) {
+                            selectionChanged(target);
+                        }
+                    });
+        }
+    }
+
+    /**
+     * Provides availability values filtered by the set of configured values in
+     * the specified order
+     */
+    private class AvailabilityValuesProvider extends FacetFieldValuesProvider {
+
+        private final IModel<FieldValuesFilter> valuesFilter = new Model<FieldValuesFilter>(new FixedSetFieldValuesFilter(availabilityLevels));
+        private final Ordering<Count> valuesOrdering = Ordering.from(new FacetNameComparator(availabilityLevels));
+
+        public AvailabilityValuesProvider() {
+            super(new FacetFieldModel(AVAILABILITY_FIELD, facetFieldsModel), fieldValueConverterProvider);
+        }
+
+        @Override
+        protected IModel<FieldValuesFilter> getFilterModel() {
+            return valuesFilter;
+        }
+
+        @Override
+        protected Ordering getOrdering() {
+            return valuesOrdering;
+        }
+    }
+
+    /**
+     * Comparator on basis of the value of {@link Count#getName()}
+     */
     private static class FacetNameComparator implements Comparator<Count>, Serializable {
 
         private final List<String> names;
@@ -167,21 +198,6 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
             return names.indexOf(o1.getName()) - names.indexOf(o2.getName());
         }
 
-    }
-
-    @Override
-    public void detachModels() {
-        super.detachModels();
-        facetFieldsModel.detach();;
-    }
-
-    private static List<String> getLevelsFromConfig(VloConfig config) {
-        return Lists.transform(config.getAvailabilityValues(), new Function<FieldValueDescriptor, String>() {
-            @Override
-            public String apply(FieldValueDescriptor input) {
-                return input.getValue();
-            }
-        });
     }
 
 }
