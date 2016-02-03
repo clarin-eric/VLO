@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.wicket.panels.record.RecordLicenseInfoPanel;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
@@ -152,6 +153,8 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
         // Resources section
         add(new ResourceLinksPanel("resources", new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_RESOURCE)));
+        
+        add(new RecordLicenseInfoPanel("licenseInfo", getModel()));
 
         // Technical section
         add(createCmdiContent("cmdi"));
