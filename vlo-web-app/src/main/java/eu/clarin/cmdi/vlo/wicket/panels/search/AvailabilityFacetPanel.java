@@ -43,6 +43,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -138,6 +139,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
                     .add(new Label("count", new PropertyModel<String>(item.getModel(), "count")))
                     //reference to checkbox
                     .add(new AttributeModifier("for", selector.getMarkupId()))
+                    .add(new AttributeAppender("class", valueModel, " "))
             );
 
             //description as tooltip (title)
