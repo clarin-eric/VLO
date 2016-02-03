@@ -183,58 +183,25 @@ li.searchresultitem {
 
         .availabilityTag, .licenseTag {
             display: inline-block;
-            width: 1em;
-            height: 1em;
-            margin: .1em;
+            height: 1.2em;
+            width: 1.2em;
+            margin: 0;
             padding: 0;
-            border: 1px solid;    
-            border-radius: 50%;
+
+            background-image: url('license/other.png');
+            background-size: 1em 1em;
+            background-position-y: .1em;
+            background-position-x: .1em;
+            background-repeat: no-repeat;
         }
 
         .availabilityTag {
             /* mixins from vlo-license-icons.less */
             .availability-icon-classes();
             .availability-modifier-icon-classes();
-
-            // TODO: replace below once icons for levels are available
-            &.PUB {
-                background-color: green;
-                border-color: lightgreen;
-            }
-            &.ACA {
-                background-color: blue;
-                border-color: lightblue;
-            }
-            &.RES {
-                background-color: red;
-                border-color: lightcoral;
-            }
-            &.UNSPECIFIED {
-                //maybe don't show at all (unless expanded)?
-                border-style: dotted;
-                background-image: url('question_mark-64.png');
-                background-size: .6em;
-                background-position: .3em;
-                background-repeat: no-repeat;
-            }
-
-            //TODO: Merge below with general availabilityTag style once everything has an icon image
-            &.BY, &.ND, &.SA {
-                border: none;
-                height: 1.2em;
-                width: 1.2em;
-                background-size: 1em 1em;
-                background-position-y: .1em;
-                background-position-x: .1em;
-                background-repeat: no-repeat;
-                margin: 0;
-            }
         }
 
         .licenseTag {
-            height: 1.2em;
-            width: 1.2em;
-            background-size: 1em 1em;
             /* default icon indicating there is a known licence */
             background-image: url('fine_print-64.png'); /* icon from icons8.com */
 
