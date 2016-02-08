@@ -330,15 +330,49 @@ div.licenseInfo, div.noLicenseInfo {
     margin-top: 1em;
 }
 
+@licenseInfoIconSize: 2em;
+
 div.noLicenseInfo {
-    padding-left: 5em;
+    padding-left: @licenseInfoIconSize + 1em;
     background-image: url('license/unspecified.png');
-    background-size: 4em;
+    background-size: @licenseInfoIconSize;
     background-position: 0px 0px;
     background-repeat: no-repeat;
-    min-height: 5em;
-    
+    min-height: @licenseInfoIconSize + 1em;
+
     p:last-child {
         padding-bottom: 0;
+    }
+}
+
+div.licenseInfo {
+    ul {
+        margin: 0 1em;
+
+        li {
+            list-style: none;
+
+            background-image: url('license/other.png'); /*default*/
+            background-size: @licenseInfoIconSize;
+            background-position-y: .1em;
+            background-position-x: .1em;
+            background-repeat: no-repeat;
+
+            padding-left: @licenseInfoIconSize + 1em;
+            margin-bottom: 0;
+            height: @licenseInfoIconSize + .5em;
+
+            span {
+                display: block;
+                line-height: @licenseInfoIconSize + .5em;
+                vertical-align: middle;
+            }
+        }
+
+        li.availability {
+            /* mixins from vlo-license-icons.less */
+            .availability-icon-classes();
+            .availability-modifier-icon-classes();
+        }
     }
 }
