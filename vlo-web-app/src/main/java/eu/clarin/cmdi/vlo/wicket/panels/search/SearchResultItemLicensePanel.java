@@ -17,6 +17,8 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.pojo.SearchContext;
+import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.ConvertedFieldValueModel;
 import eu.clarin.cmdi.vlo.wicket.model.FormattedStringModel;
@@ -37,20 +39,25 @@ import org.apache.wicket.model.Model;
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
-    
-    public SearchResultItemLicensePanel(String id, IModel<SolrDocument> model) {
+
+    private final IModel<SearchContext> searchContextModel;
+
+    public SearchResultItemLicensePanel(String id, final IModel<SolrDocument> model, final IModel<SearchContext> searchContextModel) {
         super(id, model);
+        this.searchContextModel = searchContextModel;
 
         //add 'tags' for all availability values
         final SolrFieldModel<String> availabilityModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_AVAILABILITY);
         add(new ListView<String>("availabilityTag", new CollectionListModel<>(availabilityModel)) {
             @Override
             protected void populateItem(ListItem<String> item) {
-                item
+                // add link to record
+                item.add(new RecordPageLink("recordLink", model, searchContextModel) //TODO: pass param to jump to license
                         .add(new AttributeAppender("class", item.getModel(), " "))
                         .add(new AttributeModifier("title",
                                 new FormattedStringModel(Model.of("Availability: %s"),
-                                        new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_AVAILABILITY))));                
+                                        new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_AVAILABILITY))))
+                );
             }
         });
 
@@ -66,9 +73,16 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
 
         //TODO: turn into link to licence section of the record page
         add(licenseTag
+                .add(new RecordPageLink("recordLink", model, searchContextModel)) //TODO: pass param to jump to license
                 .add(new AttributeAppender("class", licenseModel, " ")) //TODO: map to id for license image (via css class)
                 .add(new AttributeModifier("title", licenseModel)) //TODO: map to license name
         );
     }
-    
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        searchContextModel.detach();
+    }
+
 }
