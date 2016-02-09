@@ -5,25 +5,27 @@
 	</formats>
 	<includeBaseDirectory>true</includeBaseDirectory>
 	<fileSets>
-
-		<!-- documentation to be packaged -->
 		<fileSet>
 			<directory>${project.parent.basedir}/src/main/resources</directory>
 			<includes>
 				<include>config.properties</include>
 				<include>start.sh</include>
 			</includes>
-			<outputDirectory />
+			<outputDirectory/>
 		</fileSet>
-
-		<!-- importer related files to be packaged -->
-		<!-- jar file -->
+		<fileSet>
+			<directory>${project.parent.basedir}</directory>
+			<includes>
+				<include>README.md</include>
+			</includes>
+			<outputDirectory/>
+		</fileSet>
 		<fileSet>
 			<directory>${project.parent.basedir}/target</directory>
 			<includes>
 				<include>*.jar</include>
 			</includes>
-			<outputDirectory />
+			<outputDirectory/>
 		</fileSet>
 	</fileSets>
 </assembly>
