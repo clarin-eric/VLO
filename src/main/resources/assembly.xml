@@ -1,0 +1,29 @@
+<assembly>
+	<id>sitemap-gen-dist</id>
+	<formats>
+		<format>tar.gz</format>
+	</formats>
+	<includeBaseDirectory>true</includeBaseDirectory>
+	<fileSets>
+
+		<!-- documentation to be packaged -->
+		<fileSet>
+			<directory>${project.parent.basedir}/src/main/resources</directory>
+			<includes>
+				<include>config.properties</include>
+				<include>start.sh</include>
+			</includes>
+			<outputDirectory />
+		</fileSet>
+
+		<!-- importer related files to be packaged -->
+		<!-- jar file -->
+		<fileSet>
+			<directory>${project.parent.basedir}/target</directory>
+			<includes>
+				<include>*.jar</include>
+			</includes>
+			<outputDirectory />
+		</fileSet>
+	</fileSets>
+</assembly>
