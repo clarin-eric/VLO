@@ -99,6 +99,9 @@
     <ignoredFields>
         <ignoredField>format</ignoredField>
         <ignoredField>score</ignoredField>
+        <ignoredField>license</ignoredField>
+        <ignoredField>availability</ignoredField>
+        <ignoredField>accessInfo</ignoredField>
     </ignoredFields>
     
     <!-- Fields shown as technical fields in the record page -->
