@@ -122,23 +122,27 @@
     <!-- 
         This defines the availability levels shown in the web app and their
         display values and descriptions
+
+        Descriptions are shown on the record page and as tooltip in the 
+        availability facet. Values have been adapted from 
+        <https://www.clarin.eu/content/license-categories>.
     -->
     <availability>
         <availabilityValue value="PUB">
             <displayValue>Public</displayValue>
-            <description><!--TODO-->Description for public</description>
+            <description>PUB language resources can be distributed publicly. The distribution of these materials is not restricted by copyright or personal data protection issues.</description>
         </availabilityValue>
         <availabilityValue value="ACA">
             <displayValue>Academic</displayValue>
-            <description><!--TODO-->Description for academic</description>
+            <description>ACA language resources can be accessed only for research purposes. The end-user does not need to ask for usage permission but can access the resources via e.g. federated login.</description>
         </availabilityValue>
         <availabilityValue value="RES">
             <displayValue>Restricted for individual</displayValue>
-            <description><!--TODO-->Description for restricted</description>
+            <description>RES language resources have additional restrictions, which require permission from the rights holder. These resources may contain material whose usage is limited due to copyright and/or personal data protection issues.</description>
         </availabilityValue>
         <availabilityValue value="UNSPECIFIED">
             <displayValue>Unspecified</displayValue>
-            <description><!--TODO-->Resources without specification of availability (contact the original provider)</description>
+            <description>No specification of availability (contact the original provider)</description>
         </availabilityValue>
     </availability>
     
