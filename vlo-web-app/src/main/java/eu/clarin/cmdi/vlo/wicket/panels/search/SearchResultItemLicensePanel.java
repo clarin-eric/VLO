@@ -61,22 +61,20 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
             }
         });
 
-        //add 'tag' for all licence values
-        //TODO: turn into link to licence section of the record page
-        final IModel<String> licenseModel = new SolrFieldStringModel(getModel(), FacetConstants.FIELD_LICENSE);
-        final WebMarkupContainer licenseTag = new WebMarkupContainer("licenseTag") {
+        //add 'tags' for all licence values
+        final SolrFieldModel<String> licensesModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_LICENSE);
+        add(new ListView<String>("licenseTag", new CollectionListModel<>(licensesModel)) {
             @Override
-            protected void onConfigure() {
-                setVisible(licenseModel.getObject() != null);
+            protected void populateItem(ListItem<String> item) {
+                // add link to record
+                item.add(new RecordPageLink("recordLink", model, searchContextModel) //TODO: pass param to jump to license
+                        .add(new AttributeAppender("class", item.getModel(), " ")) //TODO: map to id for license image (via css class)
+                        .add(new AttributeModifier("title",
+                                new FormattedStringModel(Model.of("Licence: %s"),
+                                        new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_LICENSE)))) //TODO: map to license name
+                );
             }
-        };
-
-        //TODO: turn into link to licence section of the record page
-        add(licenseTag
-                .add(new RecordPageLink("recordLink", model, searchContextModel)) //TODO: pass param to jump to license
-                .add(new AttributeAppender("class", licenseModel, " ")) //TODO: map to id for license image (via css class)
-                .add(new AttributeModifier("title", licenseModel)) //TODO: map to license name
-        );
+        });
     }
 
     @Override

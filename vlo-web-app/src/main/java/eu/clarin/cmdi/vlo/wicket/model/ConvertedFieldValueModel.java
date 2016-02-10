@@ -22,6 +22,8 @@ import org.apache.wicket.Session;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Read-only model that wraps a string model that provides a field value and a
@@ -32,24 +34,31 @@ import org.apache.wicket.util.convert.IConverter;
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 public class ConvertedFieldValueModel extends AbstractReadOnlyModel<String> {
-
+    
+    private final static Logger logger = LoggerFactory.getLogger(ConvertedFieldValueModel.class);
+    
     private final IModel<String> valueModel;
     private final String field;
-
+    
     public ConvertedFieldValueModel(IModel<String> valueModel, String field) {
         this.valueModel = valueModel;
         this.field = field;
     }
-
+    
     @Override
     public String getObject() {
         final IConverter<String> converter = VloWicketApplication.get().getFieldValueConverterProvider().getConverter(field);
-        return converter.convertToString(valueModel.getObject(), Session.get().getLocale());
+        if (converter == null) {
+            logger.warn("No converter for field {}", field);
+            return valueModel.getObject();
+        } else {
+            return converter.convertToString(valueModel.getObject(), Session.get().getLocale());
+        }
     }
-
+    
     @Override
     public void detach() {
         valueModel.detach();
     }
-
+    
 }
