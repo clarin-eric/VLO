@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.clarin.vlo</groupId>
 	<artifactId>sitemap-gen</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 
 	<properties>
 		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -42,34 +42,56 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<!-- don't create jar, leave this to maven-assembly-->
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.1</version>
+				<executions>
+				  <execution>
+					<id>default-jar</id>
+					<phase>none</phase>
+				  </execution>
+				</executions>
+			  </plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.5.5</version>
-				<configuration>
-				<descriptors>
-					<descriptor>
-						src/main/resources/assembly.xml
-					</descriptor>
-				</descriptors>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<archive>
-						<manifest>
-							<mainClass>eu.clarin.vlo.sitemap.gen.Main</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
 				<executions>
 					<execution>
-						<id>make-assembly</id>
+						<id>build-jar-with-dependencies</id>
+						<configuration>
+							<appendAssemblyId>false</appendAssemblyId>
+							<archive>
+								<manifest>
+									<mainClass>eu.clarin.vlo.sitemap.gen.Main</mainClass>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<finalName>${project.artifactId}-${project.version}</finalName>
+						</configuration>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>build-distribution</id>
+						<configuration>
+							<appendAssemblyId>false</appendAssemblyId>
+							<descriptors>
+								<descriptor>src/assembly/dist.xml</descriptor>
+							</descriptors>
+							<finalName>sitemap-dist</finalName>
+						</configuration>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>		 
 		</plugins>
 	</build>
 </project>
