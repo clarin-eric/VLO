@@ -18,13 +18,12 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableSet;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
+import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.provider.PartitionedDataProvider;
-import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
@@ -103,7 +102,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         this.subListSize = subListSize;
 
         // shared model that holds the string for filtering the values (quick search)
-        filterModel = Model.of(new FieldValuesFilter());
+        filterModel = new Model<FieldValuesFilter>(new NameAndCountFieldValuesFilter());
         // create a form with an input bound to the filter model
         add(createFilterForm("filter"));
 
@@ -199,7 +198,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 // reset filter
-                filterModel.getObject().setName(null);
+                ((NameAndCountFieldValuesFilter) filterModel.getObject()).setName(null);
 
                 // call callback
                 onValuesSelected(

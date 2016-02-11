@@ -76,6 +76,7 @@ public class SearchResultItemCollapsedPanel extends Panel {
                 setVisible(countProvider.size() > 0);
             }
         });
+        add(new SearchResultItemLicensePanel("licenseInfo", documentModel, selectionModel));
     }
 
     @Override

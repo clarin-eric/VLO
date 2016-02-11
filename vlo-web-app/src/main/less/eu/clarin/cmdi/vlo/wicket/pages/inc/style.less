@@ -258,19 +258,27 @@ div.content a, div.content a:hover
   font-family: verdana, arial, sans-serif;
   clear: both;
   text-align: center; 
+
+
+  a {
+      text-decoration: none;
+      padding: 0px 0px 2px 0px;
+      border-bottom: 1px dashed;
+  }
+
+  a:hover { 
+      text-decoration: none;
+      padding: 0px 0px 2px 0px;
+      border-bottom: 1px solid;
+  }
+
+  .footer-fineprint, .footer-fineprint a {
+      color: #999;
+      font-size: 80%;
+      padding-top: 1em;
+  }
 }
 
-#footer a
-{ text-decoration: none;
-  padding: 0px 0px 2px 0px;
-  border-bottom: 1px dashed;
-}
-
-#footer a:hover
-{ text-decoration: none;
-  padding: 0px 0px 2px 0px;
-  border-bottom: 1px solid;
-}
 
 /* Based on Nifty Corners: rounded corners without images */
 /* By Alessandro Fulciniti */

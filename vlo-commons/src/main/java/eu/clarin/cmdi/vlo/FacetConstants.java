@@ -28,7 +28,7 @@ public class FacetConstants {
     public static final String FIELD_NATIONAL_PROJECT = "nationalProject";
     public static final String FIELD_KEYWORDS = "keywords";
     public static final String FIELD_PROFILE = "profileName";
-    
+
     /**
      * Solr pseudo-field that reveals the ranking score
      *
@@ -93,9 +93,30 @@ public class FacetConstants {
      * (with either a language code or a name as indicated by the prefix)
      */
     public static final String LANGUAGE_CODE_PATTERN = "(name|code):(.*)";
-    
+
     /**
-     * Name of the Solr request handler for fast queries (no sorting, boosting or aliases)
+     * Name of the Solr request handler for fast queries (no sorting, boosting
+     * or aliases)
      */
     public static final String SOLR_REQUEST_HANDLER_FAST = "fast";
+
+    /**
+     * PUB level for the 'availability' facet
+     *
+     * @see #FIELD_AVAILABILITY
+     */
+    public static final String AVAILABILITY_LEVEL_PUB = "PUB";
+    /**
+     * ACA level for the 'availability' facet
+     *
+     * @see #FIELD_AVAILABILITY
+     */
+    public static final String AVAILABILITY_LEVEL_ACA = "ACA";
+    /**
+     * RES level for the 'availability' facet
+     *
+     * @see #FIELD_AVAILABILITY
+     */
+    public static final String AVAILABILITY_LEVEL_RES = "RES";
+
 }

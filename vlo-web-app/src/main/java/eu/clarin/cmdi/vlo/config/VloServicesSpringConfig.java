@@ -155,7 +155,7 @@ public class VloServicesSpringConfig {
 
     @Bean
     public FieldValueConverterProvider fieldValueConverters() {
-        return new FieldValueConverterProviderImpl(languageCodeUtils());
+        return new FieldValueConverterProviderImpl(languageCodeUtils(), vloConfig);
     }
 
     @Bean

@@ -37,9 +37,12 @@ public class FieldValueLabel extends Label {
     private final IModel<String> fieldModel;
 
     /**
+     * Use some Wicket magic and obtain the value from the property of the
+     * parent's default model
      *
      * @param id component id
      * @param fieldModel model that provides the name of the field
+     * @see Label#Label(java.lang.String, org.apache.wicket.model.IModel)
      */
     public FieldValueLabel(String id, IModel<String> fieldModel) {
         super(id);

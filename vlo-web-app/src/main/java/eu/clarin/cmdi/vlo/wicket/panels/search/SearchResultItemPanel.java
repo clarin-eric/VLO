@@ -73,7 +73,7 @@ public class SearchResultItemPanel extends Panel {
         add(createExpansionStateToggle("expansionStateToggle"));
 
         // add a collapsed details panel; only shown when expansion state is collapsed (through onConfigure)
-        collapsedDetails = new SearchResultItemCollapsedPanel("collapsedDetials", documentModel, selectionModel);
+        collapsedDetails = new SearchResultItemCollapsedPanel("collapsedDetails", documentModel, selectionModel);
         add(collapsedDetails);
 
         // add a collapsed details panel; only shown when expansion state is expanded (through onConfigure)

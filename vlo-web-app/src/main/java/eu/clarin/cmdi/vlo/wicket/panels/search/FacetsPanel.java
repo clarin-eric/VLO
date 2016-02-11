@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
-import eu.clarin.cmdi.vlo.JavaScriptResources;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

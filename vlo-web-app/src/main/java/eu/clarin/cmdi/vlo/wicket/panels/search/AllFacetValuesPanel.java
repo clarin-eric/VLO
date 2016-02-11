@@ -17,8 +17,8 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableList;
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
+import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import eu.clarin.cmdi.vlo.wicket.components.AjaxIndicatingForm;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
@@ -91,7 +91,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         if (filterModel != null) {
             this.filterModel = filterModel;
         } else {
-            this.filterModel = Model.of(new FieldValuesFilter());
+            this.filterModel = new Model<FieldValuesFilter>(new NameAndCountFieldValuesFilter());
         }
 
         // create a provider that shows all values and is sorted by name by default

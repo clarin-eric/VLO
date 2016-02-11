@@ -129,7 +129,7 @@ li.searchresultitem {
         text-align: right;
         font-weight: bold;
     }
-    
+
     .score {
         color: #999;
         text-align: right;
@@ -144,32 +144,73 @@ li.searchresultitem {
     text-decoration: underline;
 }
 
-.searchresultitem .searchword {
-    font-weight: bold;
-}
+.searchresultitem {
 
-.searchresultresources {
-    width: 70%;
-    float: left;
-    clear: left;
-    padding: 0px;
-}
+    .searchword {
+        font-weight: bold;
+    }
 
-.searchresultresources ul {
-    display: inline;
-    padding: 0em 0em 0em .5em;
-    margin: 0px;
-    border-right: 1px solid;
-}
+    .searchresultresources {
+        width: 70%;
+        float: left;
+        clear: left;
+        padding: 0px;
 
-.searchresultresources ul li {
-    display: inline;
-    list-style: none;
-    padding: 0em 0em 0em .5em;
-    margin: 0em .5em 0em 0em;
-    border-left: 1px solid;
-}
+        ul {
+            display: inline;
+            padding: 0em 0em 0em .5em;
+            margin: 0px;
+            border-right: 1px solid;
 
+            li {
+                display: inline;
+                list-style: none;
+                padding: 0em 0em 0em .5em;
+                margin: 0em .5em 0em 0em;
+                border-left: 1px solid;
+            }
+        }
+    }
+
+    .licenseInfo {
+        position: relative;
+        right: .5em;
+        bottom: 1.5em;
+        clear: both;
+        width: 100%;
+        margin-bottom: -2em;
+        text-align: right;
+
+        .availabilityTag, .licenseTag {
+            display: inline-block;
+            height: 1.2em;
+            width: 1.2em;
+            margin: 0;
+            padding: 0;
+
+            background-image: url('license/other.png');
+            background-size: 1em 1em;
+            background-position-y: .1em;
+            background-position-x: .1em;
+            background-repeat: no-repeat;
+        }
+
+        .availabilityTag {
+            /* mixins from vlo-license-icons.less */
+            .availability-icon-classes();
+            .availability-modifier-icon-classes();
+        }
+
+        .licenseTag {
+            /* default icon indicating there is a known licence */
+            background-image: url('fine_print-64.png'); /* icon from icons8.com */
+
+            /* mixin from vlo-license-icons.less */
+            .license-icon-classes(); 
+        }
+    }
+
+}
 
 div.searchresultattributes {
     padding: 0px 0px 8px 12px;
