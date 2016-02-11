@@ -23,11 +23,11 @@ import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.ConvertedFieldValueModel;
 import eu.clarin.cmdi.vlo.wicket.model.FormattedStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
+import eu.clarin.cmdi.vlo.wicket.model.StringReplaceModel;
+import java.util.regex.Pattern;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -63,15 +63,20 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
 
         //add 'tags' for all licence values
         final SolrFieldModel<String> licensesModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_LICENSE);
+        //pattern to match non-alphanumeric characters (for replacement in CSS class)
+        final IModel<Pattern> nonAlphanumericPatternModel = Model.of(Pattern.compile("[^a-zA-Z0-9]"));
+
         add(new ListView<String>("licenseTag", new CollectionListModel<>(licensesModel)) {
             @Override
             protected void populateItem(ListItem<String> item) {
                 // add link to record
                 item.add(new RecordPageLink("recordLink", model, searchContextModel) //TODO: pass param to jump to license
-                        .add(new AttributeAppender("class", item.getModel(), " ")) //TODO: map to id for license image (via css class)
+                        //add CSS class. Since value is URI, replace all non-alphanumeric characters with underscore
+                        .add(new AttributeAppender("class",
+                                new StringReplaceModel(item.getModel(), nonAlphanumericPatternModel, Model.of("_")), " "))
                         .add(new AttributeModifier("title",
                                 new FormattedStringModel(Model.of("Licence: %s"),
-                                        new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_LICENSE)))) //TODO: map to license name
+                                        new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_LICENSE))))
                 );
             }
         });

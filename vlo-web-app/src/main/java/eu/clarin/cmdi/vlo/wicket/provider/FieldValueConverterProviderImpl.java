@@ -42,12 +42,19 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
     private final static Logger logger = LoggerFactory.getLogger(FieldValueConverterProviderImpl.class);
     private final static Pattern LANGUAGE_CODE_PATTERN = Pattern.compile(FacetConstants.LANGUAGE_CODE_PATTERN);
     private final static String AVAILABILITY_VALUES_PROPERTIES_FILE = "/availabilityValues.properties";
+    private final static String LICENSE_VALUES_PROPERTIES_FILE = "/licenseNames.properties";
     private final LanguageCodeUtils languageCodeUtils;
     private final FieldValueConverter availabilityConverter;
+    private final FieldValueConverter licenseConverter;
 
     public FieldValueConverterProviderImpl(LanguageCodeUtils languageCodeUtils, VloConfig vloConfig) {
-        this.languageCodeUtils = languageCodeUtils;
-        this.availabilityConverter = createAvailabilityConverter(vloConfig);
+        try {
+            this.languageCodeUtils = languageCodeUtils;
+            this.availabilityConverter = createAvailabilityConverter(vloConfig);
+            this.licenseConverter = new PropertyFallbackValueConverter(LICENSE_VALUES_PROPERTIES_FILE);
+        } catch (IOException ex) {
+            throw new RuntimeException("Value converter properties could not be loaded", ex);
+        }
     }
 
     @Override
@@ -59,10 +66,11 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
                 return descriptionConverter;
             case FacetConstants.FIELD_AVAILABILITY:
                 return availabilityConverter;
+            case FacetConstants.FIELD_LICENSE:
+                return licenseConverter;
             default:
                 return null;
         }
-
     }
 
     /**
@@ -157,24 +165,13 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
      * @return
      * @throws RuntimeException
      */
-    private FieldValueConverter createAvailabilityConverter(VloConfig vloConfig) throws RuntimeException {
+    private FieldValueConverter createAvailabilityConverter(VloConfig vloConfig) throws IOException {
         //base converter
         final FieldDescriptorValueConverter availabilityDescriptorConverter = new FieldDescriptorValueConverter(
                 ImmutableMap.copyOf(FieldValueDescriptor.toMap(vloConfig.getAvailabilityValues())));
-        try {
-            //wrap in properties converter for fallback
-            try (final InputStream availabilityProperties = getClass().getResourceAsStream(AVAILABILITY_VALUES_PROPERTIES_FILE)) {
-                if (availabilityProperties != null) {
-                    final Properties properties = new Properties();
-                    properties.load(availabilityProperties);
-                    return new PropertyFallbackValueConverter(properties, availabilityDescriptorConverter);
-                }
-            }
-        } catch (IOException ex) {
-            logger.error("Properties for availability values could not be loaded", ex);
-        }
-        //no properties to fall back to, use base converter
-        return availabilityDescriptorConverter;
+        //wrap in properties converter for fallback
+        return new PropertyFallbackValueConverter(AVAILABILITY_VALUES_PROPERTIES_FILE, availabilityDescriptorConverter);
+
     }
 
     /**
@@ -214,6 +211,14 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
             this.converter = converter;
         }
 
+        public PropertyFallbackValueConverter(String propertiesResource, FieldValueConverter converter) throws IOException {
+            this(loadProperties(propertiesResource), converter);
+        }
+
+        public PropertyFallbackValueConverter(String propertiesResource) throws IOException {
+            this(propertiesResource, null);
+        }
+
         public PropertyFallbackValueConverter(Properties properties) {
             this(properties, null);
         }
@@ -235,6 +240,14 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
             } else {
                 return properties.getProperty(value, null); // if not found, null should be returned in line with method contract
             }
+        }
+
+        private static Properties loadProperties(final String resource) throws IOException {
+            //wrap in properties converter for fallback
+            final InputStream availabilityProperties = PropertyFallbackValueConverter.class.getResourceAsStream(resource);
+            final Properties properties = new Properties();
+            properties.load(availabilityProperties);
+            return properties;
         }
 
     }

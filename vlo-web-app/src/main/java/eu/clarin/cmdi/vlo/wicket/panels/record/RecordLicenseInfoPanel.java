@@ -28,11 +28,11 @@ import eu.clarin.cmdi.vlo.wicket.model.MapValueModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
-import eu.clarin.cmdi.vlo.wicket.panels.TogglePanel;
+import eu.clarin.cmdi.vlo.wicket.model.StringReplaceModel;
 import java.util.Collection;
 import java.util.Map;
+import java.util.regex.Pattern;
 import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -94,12 +94,18 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
     }
 
     private MarkupContainer createLicenseItems(final String id) {
+        //pattern to match non-alphanumeric characters (for replacement in CSS class)
+        final IModel<Pattern> nonAlphanumericPatternModel = Model.of(Pattern.compile("[^a-zA-Z0-9]"));
+
         return new ListView<String>(id, new CollectionListModel<>(licensesModel)) {
             @Override
             protected void populateItem(ListItem<String> item) {
                 //TODO: add link to licence page
-                item.add(new Label("licenseName", new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_LICENSE)));
-                item.add(new AttributeAppender("class", item.getModel(), " "));
+                item.add(new Label("licenseName",
+                        new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_LICENSE)));
+                //since value is URI, replace all non-alphanumeric characters with underscore
+                item.add(new AttributeAppender("class",
+                        new StringReplaceModel(item.getModel(), nonAlphanumericPatternModel, Model.of("_")), " "));
             }
         };
     }

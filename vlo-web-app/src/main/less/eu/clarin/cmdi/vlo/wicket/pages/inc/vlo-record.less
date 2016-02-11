@@ -364,8 +364,6 @@ div#licenseInfo {
         }
 
         &#licenseAvailability li {
-
-            background-image: url('license/other.png'); /*default*/
             background-size: @licenseInfoIconSize;
             background-position-y: .35em;
             background-position-x: .25em;
@@ -381,10 +379,12 @@ div#licenseInfo {
             }
 
             &.license {
-                //TODO: icons
+                background-image: url('fine_print-64.png'); /* default (icon from icons8.com) */
+                .license-icon-classes();
             }
 
             &.availability {
+                background-image: url('license/other.png'); /*default*/
                 /* mixins from vlo-license-icons.less */
                 .availability-icon-classes();
                 .availability-modifier-icon-classes();
