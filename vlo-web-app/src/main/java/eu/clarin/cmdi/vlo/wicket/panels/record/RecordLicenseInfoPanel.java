@@ -143,20 +143,30 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
         accessInfoContainer.add(new ToggleLink("accessInfoToggle",
                 showDetailsModel,
                 Model.of("Show all available licence/availabilty information"),
-                Model.of("Hide detailed information")) {
+                Model.of("Hide detailed licence/availabilty information")) {
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 if (target != null) {
                     target.add(accessInfoContainer);
                 }
             }
+
+            @Override
+            protected void onConfigure() {
+                //if availability and license are both null, disable toggling
+                setVisible(availabilityModel.getObject() != null || licensesModel.getObject() != null);
+            }
+
         });
 
         //add a container-wrapped (for toggling) list of 'access info' items
         accessInfoContainer.add(new WebMarkupContainer("accessInfoTable") {
             @Override
             protected void onConfigure() {
-                setVisible(showDetailsModel.getObject());
+                setVisible(showDetailsModel.getObject()
+                        //if availability and license are both null, always display
+                        || (availabilityModel.getObject() == null && licensesModel.getObject() == null)
+                );
             }
         }.add(new ListView<String>("accessInfoItem", new CollectionListModel<>(accessInfoModel)) {
             @Override
