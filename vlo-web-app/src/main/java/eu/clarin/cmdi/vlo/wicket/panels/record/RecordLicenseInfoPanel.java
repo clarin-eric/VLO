@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.wicket.components.ToggleLink;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.ConvertedFieldValueModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
@@ -33,6 +34,7 @@ import java.util.Map;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -127,8 +129,6 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
     }
 
     private MarkupContainer createAccessInfo(String id) {
-        //        return new TogglePanel(id, Model.of("Show all available information"), Model.of("Hide details")) {
-
         final WebMarkupContainer accessInfoContainer = new WebMarkupContainer(id) {
 
             @Override
@@ -136,9 +136,9 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
                 setVisible(accessInfoModel.getObject() != null);
             }
         };
+        accessInfoContainer.setOutputMarkupId(true);
 
-        final IModel<Boolean> showDetailsModel = Model.of(Boolean.TRUE);
-
+        final IModel<Boolean> showDetailsModel = Model.of(Boolean.FALSE);
         accessInfoContainer.add(new ListView<String>("accessInfoItem", new CollectionListModel<>(accessInfoModel)) {
             @Override
             protected void populateItem(ListItem<String> item) {
@@ -150,6 +150,15 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
                 setVisible(showDetailsModel.getObject());
             }
 
+        });
+
+        accessInfoContainer.add(new ToggleLink("accessInfoToggle", showDetailsModel, Model.of("Show all available information"), Model.of("Hide details")) {
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                if (target != null) {
+                    target.add(accessInfoContainer);
+                }
+            }
         });
         return accessInfoContainer;
     }
