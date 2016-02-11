@@ -331,6 +331,7 @@ div.licenseInfo, div.noLicenseInfo {
 }
 
 @licenseInfoIconSize: 2em;
+@licenseInfoTableWidth: 60em;
 
 div.noLicenseInfo {
     padding-left: @licenseInfoIconSize + 1em;
@@ -345,13 +346,13 @@ div.noLicenseInfo {
     }
 }
 
-div.licenseInfo {
+div#licenseInfo {
     p {
         padding: 0;
     }
 
     ul {
-        width: 60em;
+        width: @licenseInfoTableWidth;
         border: 1px dashed #999;
         border-bottom: none;
 
@@ -378,7 +379,7 @@ div.licenseInfo {
                 display: block;
                 padding-top: .25em;
             }
-            
+
             &.license {
                 //TODO: icons
             }
@@ -388,6 +389,14 @@ div.licenseInfo {
                 .availability-icon-classes();
                 .availability-modifier-icon-classes();
             }
+        }
+    }
+
+    #accessInfo {
+        margin: 1em;
+
+        ul {
+            width: @licenseInfoTableWidth - 1em;
         }
     }
 }

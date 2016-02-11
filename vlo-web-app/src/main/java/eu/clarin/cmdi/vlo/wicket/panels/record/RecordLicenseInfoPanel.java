@@ -138,21 +138,12 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
         };
         accessInfoContainer.setOutputMarkupId(true);
 
+        // add a toggler for raw 'access info'
         final IModel<Boolean> showDetailsModel = Model.of(Boolean.FALSE);
-        accessInfoContainer.add(new ListView<String>("accessInfoItem", new CollectionListModel<>(accessInfoModel)) {
-            @Override
-            protected void populateItem(ListItem<String> item) {
-                item.add(new Label("accessInfoValue", item.getModel()));
-            }
-
-            @Override
-            protected void onConfigure() {
-                setVisible(showDetailsModel.getObject());
-            }
-
-        });
-
-        accessInfoContainer.add(new ToggleLink("accessInfoToggle", showDetailsModel, Model.of("Show all available information"), Model.of("Hide details")) {
+        accessInfoContainer.add(new ToggleLink("accessInfoToggle",
+                showDetailsModel,
+                Model.of("Show all available licence/availabilty information"),
+                Model.of("Hide detailed information")) {
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 if (target != null) {
@@ -160,6 +151,19 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
                 }
             }
         });
+
+        //add a container-wrapped (for toggling) list of 'access info' items
+        accessInfoContainer.add(new WebMarkupContainer("accessInfoTable") {
+            @Override
+            protected void onConfigure() {
+                setVisible(showDetailsModel.getObject());
+            }
+        }.add(new ListView<String>("accessInfoItem", new CollectionListModel<>(accessInfoModel)) {
+            @Override
+            protected void populateItem(ListItem<String> item) {
+                item.add(new Label("accessInfoValue", item.getModel()));
+            }
+        }));
         return accessInfoContainer;
     }
 
