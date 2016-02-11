@@ -27,9 +27,11 @@ import eu.clarin.cmdi.vlo.wicket.model.MapValueModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
+import eu.clarin.cmdi.vlo.wicket.panels.TogglePanel;
 import java.util.Collection;
 import java.util.Map;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -39,6 +41,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.MapModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -81,13 +84,14 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
         container.add(createLicenseItems("license"));
         //add labels for all availability values
         container.add(createAvailabilityItems("availability"));
+        container.add(createAccessInfo("accessInfo"));
 
         container.add(createOriginalContextContainer("originalContext"));
 
         return container;
     }
 
-    private ListView<String> createLicenseItems(final String id) {
+    private MarkupContainer createLicenseItems(final String id) {
         return new ListView<String>(id, new CollectionListModel<>(licensesModel)) {
             @Override
             protected void populateItem(ListItem<String> item) {
@@ -98,7 +102,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
         };
     }
 
-    private ListView<String> createAvailabilityItems(final String id) {
+    private MarkupContainer createAvailabilityItems(final String id) {
         //model will be used to fetch availability descriptions
         final IModel<Map<String, FieldValueDescriptor>> descriptorsModel
                 = new MapModel<>(ImmutableMap.copyOf(FieldValueDescriptor.toMap(vloConfig.getAvailabilityValues())));
@@ -120,6 +124,34 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
                 item.add(new AttributeAppender("class", item.getModel(), " "));
             }
         };
+    }
+
+    private MarkupContainer createAccessInfo(String id) {
+        //        return new TogglePanel(id, Model.of("Show all available information"), Model.of("Hide details")) {
+
+        final WebMarkupContainer accessInfoContainer = new WebMarkupContainer(id) {
+
+            @Override
+            protected void onConfigure() {
+                setVisible(accessInfoModel.getObject() != null);
+            }
+        };
+
+        final IModel<Boolean> showDetailsModel = Model.of(Boolean.TRUE);
+
+        accessInfoContainer.add(new ListView<String>("accessInfoItem", new CollectionListModel<>(accessInfoModel)) {
+            @Override
+            protected void populateItem(ListItem<String> item) {
+                item.add(new Label("accessInfoValue", item.getModel()));
+            }
+
+            @Override
+            protected void onConfigure() {
+                setVisible(showDetailsModel.getObject());
+            }
+
+        });
+        return accessInfoContainer;
     }
 
     private WebMarkupContainer createNoInfoContainer(final String id) {

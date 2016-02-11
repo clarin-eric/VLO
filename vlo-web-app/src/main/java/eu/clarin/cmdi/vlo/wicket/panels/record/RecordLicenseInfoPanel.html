@@ -29,14 +29,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         licencing</strong> has been extracted from the information 
                     offered by the original provider:
                 </p>
-                <ul>
-<!--
-                    <li wicket:id="license"><span wicket:id="licenseDescription"></span></li>
--->
+                <ul id="licenseAvailability">
                     <li class="license" wicket:id="license"><span wicket:id="licenseName"></span></li>
                     <li class="availability" wicket:id="availability"><span wicket:id="availabilityDescription"></span></li>
                 </ul>
-                <!--TODO: access info -->
+                <div wicket:id="accessInfo" >
+                    <a><span>Show all available information/Hide details</span></a>
+                    <ul id="originalLicenseInfo">
+                        <li wicket:id="accessInfoItem"><span wicket:id="accessInfoValue"></span></li>
+                    </ul>
+                </div>
                 <p>
                     Please <strong>verify this information</strong> 
                     at the original source or contact the original provider

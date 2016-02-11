@@ -354,9 +354,15 @@ div.licenseInfo {
         width: 60em;
         border: 1px dashed #999;
         border-bottom: none;
-        
+
         li {
             list-style: none;
+            padding: .25em;
+            border-bottom: 1px dashed #999;
+            margin-bottom: 0;
+        }
+
+        &#licenseAvailability li {
 
             background-image: url('license/other.png'); /*default*/
             background-size: @licenseInfoIconSize;
@@ -366,21 +372,22 @@ div.licenseInfo {
 
 
             padding: .25em 0 .25em @licenseInfoIconSize + 1em;
-            border-bottom: 1px dashed #999;
-
-            margin-bottom: 0;
             min-height: @licenseInfoIconSize + .5em;
 
             span {
                 display: block;
                 padding-top: .25em;
             }
-        }
+            
+            &.license {
+                //TODO: icons
+            }
 
-        li.availability {
-            /* mixins from vlo-license-icons.less */
-            .availability-icon-classes();
-            .availability-modifier-icon-classes();
+            &.availability {
+                /* mixins from vlo-license-icons.less */
+                .availability-icon-classes();
+                .availability-modifier-icon-classes();
+            }
         }
     }
 }
