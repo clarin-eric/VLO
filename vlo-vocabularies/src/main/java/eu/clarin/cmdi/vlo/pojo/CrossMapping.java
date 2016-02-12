@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.normalization.pojo;
+package eu.clarin.cmdi.vlo.pojo;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

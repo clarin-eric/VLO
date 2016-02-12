@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 
-public class LanguageCodePostProcessor extends PostProcessorsWithControlledVocabulary{
+public class LanguageCodePostProcessor extends PostProcessorsWithVocabularyMap{
 
     private final static Logger LOG = LoggerFactory.getLogger(LanguageCodePostProcessor.class);
     
@@ -52,7 +52,7 @@ public class LanguageCodePostProcessor extends PostProcessorsWithControlledVocab
         result = result.replaceFirst(ISO639_2_PREFIX, "").replaceFirst(ISO639_3_PREFIX, "").replaceFirst(SIL_CODE_PREFIX, "").replaceFirst(SIL_CODE_PREFIX_alt, "");
         
         // map known language name variants to their offical name
-        result = normalize(result);
+        result = normalize(result, result).get(0);
         
         // input is already ISO 639-3?
         if(languageCodeUtils.getIso639ToLanguageNameMap().keySet().contains(result.toUpperCase())) {
