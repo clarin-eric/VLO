@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.normalization.service;
+package eu.clarin.cmdi.vlo.transformers;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -12,7 +12,7 @@ import javax.xml.bind.Unmarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.clarin.cmdi.vlo.normalization.pojo.VariantsMap;
+import eu.clarin.cmdi.vlo.pojo.VariantsMap;
 
 public class VariantsMapMarshaller {
 	

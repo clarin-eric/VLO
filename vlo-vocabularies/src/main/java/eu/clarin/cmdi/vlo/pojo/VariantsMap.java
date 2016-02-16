@@ -1,6 +1,7 @@
-package eu.clarin.cmdi.vlo.normalization.pojo;
+package eu.clarin.cmdi.vlo.pojo;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -11,8 +12,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import eu.clarin.cmdi.vlo.normalization.service.NormalizationVocabulary;
-import eu.clarin.cmdi.vlo.normalization.service.VocabularyEntry;
+import eu.clarin.cmdi.vlo.normalization.NormalizationVocabulary;
+import eu.clarin.cmdi.vlo.normalization.VocabularyEntry;
 
 /**
  * @author dostojic
@@ -70,12 +71,17 @@ public class VariantsMap{
 		boolean containsRegEx = false;
 		
 		for(Mapping m: mappings)
-			if(m.getVariants() != null)
+			if(m.getVariants() != null){
+				List<String> normalizedValues = new LinkedList<String>();
+				for(String v: m.getValue().split(";"))
+					normalizedValues.add(v.trim());
+				
 				for(Variant v: m.getVariants()){					
-					listOfEntries.add(new VocabularyEntry(v.getValue().trim(), m.getValue().trim(), v.isRegExp(), v.getCrossMappings()));
+					listOfEntries.add(new VocabularyEntry(v.getValue().trim(),normalizedValues, v.isRegExp(), v.getCrossMappings()));
 					if(v.isRegExp())
 						containsRegEx = true;
 				}
+			}
 
 		return new NormalizationVocabulary(listOfEntries.toArray(new VocabularyEntry[0]), containsRegEx); 
 		

@@ -1,20 +1,21 @@
-package eu.clarin.cmdi.vlo.normalization.service;
+package eu.clarin.cmdi.vlo.normalization;
 
+import java.util.List;
 import java.util.Map;
 
 public interface NormalizationService {
 
 	
 	/*
-	 * returns normalized value from vocabulary map or specified value in case of mismatch
+	 * returns normalized values from vocabulary map or null in case of mismatch
+	 * variation can be mapped into mulitiple normalized values, 
 	 * 
 	 * @param input - value from record
-	 * @param fallbackOutput - specified returned value in case of mismatch 
-	 * @return normalized value if there is a match otherwise input value
+	 * @return normalized values if there is a match otherwise input value
 	 * 
 	 */
 	
-	public String normalize(String input, String fallbackOutput);	
+	public List<String> normalize(String input);	
 	
 	
 	/*
