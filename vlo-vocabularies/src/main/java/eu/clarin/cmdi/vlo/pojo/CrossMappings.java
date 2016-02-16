@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.normalization.pojo;
+package eu.clarin.cmdi.vlo.pojo;
 
 import java.util.List;
 

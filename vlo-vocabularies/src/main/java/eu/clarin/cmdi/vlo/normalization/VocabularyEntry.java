@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.normalization.service;
+package eu.clarin.cmdi.vlo.normalization;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,22 +6,18 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import eu.clarin.cmdi.vlo.normalization.pojo.CrossMapping;
+import eu.clarin.cmdi.vlo.pojo.CrossMapping;
 
 public class VocabularyEntry {
 	
 	private String originalVal;
-	private String normalizedValue;
+	private List<String> normalizedValues;
 	private boolean isRegEx;
-	private Map<String, String> crossMap;
+	private Map<String, String> crossMap;	
 	
-	
-	
-	
-	
-	public VocabularyEntry(String originalVal, String normalizedValue, boolean isRegEx, List<CrossMapping> crossMap) {
+	public VocabularyEntry(String originalVal, List<String> normalizedValues, boolean isRegEx, List<CrossMapping> crossMap) {
 		this.originalVal = originalVal;
-		this.normalizedValue = normalizedValue;
+		this.normalizedValues = normalizedValues;
 		this.isRegEx = isRegEx;
 		this.crossMap = new HashMap<String, String>();
 		if(crossMap != null)
@@ -38,12 +34,12 @@ public class VocabularyEntry {
 		this.originalVal = val;
 	}
 	
-	public String getNormalizedValue() {
-		return normalizedValue;
+	public List<String> getNormalizedValue() {
+		return normalizedValues;
 	}
 	
-	public void setNormalizedValue(String normalizedValue) {
-		this.normalizedValue = normalizedValue;
+	public void setNormalizedValue(List<String> normalizedValues) {
+		this.normalizedValues = normalizedValues;
 	}
 	
 	public boolean isRegEx() {
@@ -65,7 +61,10 @@ public class VocabularyEntry {
 	
 	@Override
 	public String toString() {
-		return originalVal + " -> " + normalizedValue + ", isRegEx=" + isRegEx + ", " + crossMap.toString(); 
+		String normalizedVals = "";
+		for(String val: normalizedValues)
+			normalizedVals += val + ", ";
+		return originalVal + " -> " + normalizedValues + ", isRegEx=" + isRegEx + ", " + crossMap.toString(); 
 	}
 
 }

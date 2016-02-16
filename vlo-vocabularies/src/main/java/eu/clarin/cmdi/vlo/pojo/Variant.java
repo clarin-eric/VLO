@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.normalization.pojo;
+package eu.clarin.cmdi.vlo.pojo;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ public class Variant{
 
 	public void setValue(String value) {
 		this.value = value;
-	}
+	}	
 
 	public List<CrossMapping> getCrossMappings() {
 		return crossMappings != null? crossMappings.getCrossMappings() : null;
