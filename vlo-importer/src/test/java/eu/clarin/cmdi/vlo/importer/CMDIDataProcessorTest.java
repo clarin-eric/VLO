@@ -867,7 +867,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(0, dataResources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(9, doc.getFieldNames().size());
+        assertEquals(String.format("Expected field set different from %s", doc.getFieldNames()), 9, doc.getFieldNames().size());
         assertEquals("clarin.eu:lrt:433", doc.getFieldValue("_selfLink"));
         assertEquals("Corpus of Present-day Written Estonian", doc.getFieldValue("name"));
         assertEquals(null, doc.getFieldValue("continent"));
