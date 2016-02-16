@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.wicket.components.ToggleLink;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.ConvertedFieldValueModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
@@ -27,10 +28,13 @@ import eu.clarin.cmdi.vlo.wicket.model.MapValueModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
+import eu.clarin.cmdi.vlo.wicket.model.StringReplaceModel;
 import java.util.Collection;
 import java.util.Map;
+import java.util.regex.Pattern;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -39,6 +43,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.MapModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -81,24 +86,31 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
         container.add(createLicenseItems("license"));
         //add labels for all availability values
         container.add(createAvailabilityItems("availability"));
+        container.add(createAccessInfo("accessInfo"));
 
         container.add(createOriginalContextContainer("originalContext"));
 
         return container;
     }
 
-    private ListView<String> createLicenseItems(final String id) {
+    private MarkupContainer createLicenseItems(final String id) {
+        //pattern to match non-alphanumeric characters (for replacement in CSS class)
+        final IModel<Pattern> nonAlphanumericPatternModel = Model.of(Pattern.compile("[^a-zA-Z0-9]"));
+
         return new ListView<String>(id, new CollectionListModel<>(licensesModel)) {
             @Override
             protected void populateItem(ListItem<String> item) {
                 //TODO: add link to licence page
-                item.add(new Label("licenseName", new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_LICENSE)));
-                item.add(new AttributeAppender("class", item.getModel(), " "));
+                item.add(new Label("licenseName",
+                        new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_LICENSE)));
+                //since value is URI, replace all non-alphanumeric characters with underscore
+                item.add(new AttributeAppender("class",
+                        new StringReplaceModel(item.getModel(), nonAlphanumericPatternModel, Model.of("_")), " "));
             }
         };
     }
 
-    private ListView<String> createAvailabilityItems(final String id) {
+    private MarkupContainer createAvailabilityItems(final String id) {
         //model will be used to fetch availability descriptions
         final IModel<Map<String, FieldValueDescriptor>> descriptorsModel
                 = new MapModel<>(ImmutableMap.copyOf(FieldValueDescriptor.toMap(vloConfig.getAvailabilityValues())));
@@ -120,6 +132,55 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
                 item.add(new AttributeAppender("class", item.getModel(), " "));
             }
         };
+    }
+
+    private MarkupContainer createAccessInfo(String id) {
+        final WebMarkupContainer accessInfoContainer = new WebMarkupContainer(id) {
+
+            @Override
+            protected void onConfigure() {
+                setVisible(accessInfoModel.getObject() != null);
+            }
+        };
+        accessInfoContainer.setOutputMarkupId(true);
+
+        // add a toggler for raw 'access info'
+        final IModel<Boolean> showDetailsModel = Model.of(Boolean.FALSE);
+        accessInfoContainer.add(new ToggleLink("accessInfoToggle",
+                showDetailsModel,
+                Model.of("Show all available licence/availabilty information"),
+                Model.of("Hide detailed licence/availabilty information")) {
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                if (target != null) {
+                    target.add(accessInfoContainer);
+                }
+            }
+
+            @Override
+            protected void onConfigure() {
+                //if availability and license are both null, disable toggling
+                setVisible(availabilityModel.getObject() != null || licensesModel.getObject() != null);
+            }
+
+        });
+
+        //add a container-wrapped (for toggling) list of 'access info' items
+        accessInfoContainer.add(new WebMarkupContainer("accessInfoTable") {
+            @Override
+            protected void onConfigure() {
+                setVisible(showDetailsModel.getObject()
+                        //if availability and license are both null, always display
+                        || (availabilityModel.getObject() == null && licensesModel.getObject() == null)
+                );
+            }
+        }.add(new ListView<String>("accessInfoItem", new CollectionListModel<>(accessInfoModel)) {
+            @Override
+            protected void populateItem(ListItem<String> item) {
+                item.add(new Label("accessInfoValue", item.getModel()));
+            }
+        }));
+        return accessInfoContainer;
     }
 
     private WebMarkupContainer createNoInfoContainer(final String id) {

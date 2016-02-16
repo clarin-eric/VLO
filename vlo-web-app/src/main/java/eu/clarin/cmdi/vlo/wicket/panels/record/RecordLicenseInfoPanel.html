@@ -23,20 +23,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <div wicket:id="availableInfo" class="licenseInfo">
+            <div wicket:id="availableInfo" id="licenseInfo">
                 <p>
                     The following information regarding <strong>availability and/or 
                         licencing</strong> has been extracted from the information 
                     offered by the original provider:
                 </p>
-                <ul>
-<!--
-                    <li wicket:id="license"><span wicket:id="licenseDescription"></span></li>
--->
+                <ul id="licenseAvailability">
                     <li class="license" wicket:id="license"><span wicket:id="licenseName"></span></li>
                     <li class="availability" wicket:id="availability"><span wicket:id="availabilityDescription"></span></li>
                 </ul>
-                <!--TODO: access info -->
+                <div id="accessInfo" wicket:id="accessInfo" >
+                    <a wicket:id="accessInfoToggle"></a>
+                    <ul wicket:id="accessInfoTable">
+                        <li wicket:id="accessInfoItem"><span wicket:id="accessInfoValue"></span></li>
+                    </ul>
+                </div>
                 <p>
                     Please <strong>verify this information</strong> 
                     at the original source or contact the original provider

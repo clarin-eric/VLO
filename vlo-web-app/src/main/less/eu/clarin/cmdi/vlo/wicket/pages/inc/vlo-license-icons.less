@@ -36,7 +36,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // licence icons
 .license-icon-classes() {
-    &.CC { background-image: url('license/cc.large.png'); }
-    &.CC0 { background-image: url('license/zero.large.png'); }
-    &.GPLv3 { background-image: url('license/gplv3.png'); }
+    /*CC*/
+    &._http___creativecommons_org_licenses_by_3_0_,
+    &._http___creativecommons_org_licenses_by-sa_3_0_,
+    &._http___creativecommons_org_licenses_by-nc_3_0_,
+    &._http___creativecommons_org_licenses_by-nc-sa_3_0_ { background-image: url('license/cc.large.png'); }
+    /*CC0*/
+    &.http___creativecommons_org_publicdomain_zero_1_0_legalcode_txt { background-image: url('license/zero.large.png'); }
+/*    GPL
+    &.GPLv3 { background-image: url('license/gplv3.png'); }*/
 }
