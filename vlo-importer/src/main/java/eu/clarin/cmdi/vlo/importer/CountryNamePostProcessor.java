@@ -50,7 +50,7 @@ public class CountryNamePostProcessor implements PostProcessor {
             Map<String, String> result = CommonUtils.createCMDIComponentItemMap(MetadataImporter.config.getCountryComponentUrl());
             return result;
         } catch (Exception e) {
-            if (CommonUtils.SWALLOW_LOOKUP_ERRORS) {
+            if (CommonUtils.shouldSwallowLookupErrors()) {
                 return new HashMap<String, String>();
             } else {
                 throw new RuntimeException("Cannot instantiate postProcessor:", e);

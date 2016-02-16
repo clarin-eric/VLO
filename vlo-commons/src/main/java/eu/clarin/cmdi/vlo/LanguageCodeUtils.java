@@ -149,7 +149,7 @@ public class LanguageCodeUtils {
             Map<String, String> result = new ConcurrentHashMap<String, String>(CommonUtils.createCMDIComponentItemMap(url));
             return result;
         } catch (Exception e) {
-            if (CommonUtils.SWALLOW_LOOKUP_ERRORS) {
+            if (CommonUtils.shouldSwallowLookupErrors()) {
                 LOG.warn("Ignoring exception", e);
                 return new HashMap<String, String>();
             } else {
@@ -164,7 +164,7 @@ public class LanguageCodeUtils {
             Map<String, String> result = new ConcurrentHashMap<String, String>(CommonUtils.createReverseCMDIComponentItemMap(url));
             return result;
         } catch (Exception e) {
-            if (CommonUtils.SWALLOW_LOOKUP_ERRORS) {
+            if (CommonUtils.shouldSwallowLookupErrors()) {
                 LOG.warn("Ignoring exception", e);
                 return new HashMap<String, String>();
             } else {
@@ -193,7 +193,7 @@ public class LanguageCodeUtils {
             }
             return result;
         } catch (Exception e) {
-            if (CommonUtils.SWALLOW_LOOKUP_ERRORS) {
+            if (CommonUtils.shouldSwallowLookupErrors()) {
                 LOG.warn("Ignoring exception", e);
                 return new HashMap<String, String>();
             } else {

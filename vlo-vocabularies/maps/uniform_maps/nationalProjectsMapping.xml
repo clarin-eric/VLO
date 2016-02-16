@@ -76,12 +76,4 @@
       <normalizedValue value="Dutch Language Union"/>
       <variant value="TST-Centrale"/>
    </mapping>
-   <mapping>
-      <normalizedValue value="CLARINO"/>
-      <variant value="clarino"/>
-      <variant value="Clarino: Published Data"/>
-      <variant value="CLARINO NB – Språkbanken"/>
-      <variant value="Clarino UiB"/>
-      <variant value="Clarino UiT"/>
-   </mapping>
 </mappings>
