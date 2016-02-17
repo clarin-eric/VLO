@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import static eu.clarin.cmdi.vlo.wicket.FragmentEncodingMountedMapper.FRAGMENT_PAGE_PARAMETER;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.link.Link;
@@ -83,7 +84,7 @@ public class RecordPageLink extends Link {
             params.mergeWith(contextParamConverter.toParameters(selectionModel.getObject()));
         }
         if (fragment != null) {
-            params.add("#", fragment);
+            params.add(FRAGMENT_PAGE_PARAMETER, fragment);
         }
         setResponsePage(RecordPage.class, params);
     }

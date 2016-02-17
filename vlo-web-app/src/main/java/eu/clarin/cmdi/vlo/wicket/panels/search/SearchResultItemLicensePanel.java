@@ -53,7 +53,7 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
             @Override
             protected void populateItem(ListItem<String> item) {
                 // add link to record
-                item.add(new RecordPageLink("recordLink", model, searchContextModel, RecordPage.LICENSE_SECTION_ANCHOR) //TODO: pass param to jump to license
+                item.add(new RecordPageLink("recordLink", model, searchContextModel, RecordPage.LICENSE_SECTION_ANCHOR)
                         .add(new AttributeAppender("class", item.getModel(), " "))
                         .add(new AttributeModifier("title",
                                 new FormattedStringModel(Model.of("Availability: %s"),
@@ -71,7 +71,7 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
             @Override
             protected void populateItem(ListItem<String> item) {
                 // add link to record
-                item.add(new RecordPageLink("recordLink", model, searchContextModel, RecordPage.LICENSE_SECTION_ANCHOR) //TODO: pass param to jump to license
+                item.add(new RecordPageLink("recordLink", model, searchContextModel, RecordPage.LICENSE_SECTION_ANCHOR)
                         //add CSS class. Since value is URI, replace all non-alphanumeric characters with underscore
                         .add(new AttributeAppender("class",
                                 new StringReplaceModel(item.getModel(), nonAlphanumericPatternModel, Model.of("_")), " "))
