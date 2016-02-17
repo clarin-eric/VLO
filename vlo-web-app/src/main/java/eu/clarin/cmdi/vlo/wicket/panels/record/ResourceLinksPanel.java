@@ -16,17 +16,21 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
 import eu.clarin.cmdi.vlo.wicket.ResourceTypeCssBehaviour;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
-import java.util.Collection;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import java.util.List;
+import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -54,13 +58,21 @@ public class ResourceLinksPanel extends Panel {
     /**
      *
      * @param id panel id
-     * @param model model that holds the collection of resource strings
+     * @param documentModel model of document that holds the resources
      */
-    public ResourceLinksPanel(String id, IModel<Collection<String>> model) {
-        super(id, model);
+    public ResourceLinksPanel(String id, IModel<SolrDocument> documentModel) {
+        super(id, documentModel);
+        
+        final SolrFieldModel<String> resourcesModel
+                = new SolrFieldModel<String>(documentModel, FacetConstants.FIELD_RESOURCE);
+        final IModel<String> landingPageModel
+                // wrap in model that transforms handle links
+                = new HandleLinkModel(
+                        // get landing page from document
+                        new SolrFieldStringModel(documentModel, FacetConstants.FIELD_LANDINGPAGE));
 
         // list view that shows all resources as links that show a resource details panel when clicked
-        final ResourcesListView resourceListing = new ResourcesListView("resource", new CollectionListModel<>(model));
+        final ResourcesListView resourceListing = new ResourcesListView("resource", new CollectionListModel<>(resourcesModel));
         add(resourceListing);
 
         // pagination
@@ -72,7 +84,7 @@ public class ResourceLinksPanel extends Panel {
             }
 
         });
-        
+
         add(new MarkupContainer("noResources") {
 
             @Override
@@ -80,8 +92,14 @@ public class ResourceLinksPanel extends Panel {
                 setVisible(resourceListing.getPageCount() == 0);
             }
 
-        });
-        
+        }.add(new WebMarkupContainer("landingPageContainer") {
+            @Override
+            protected void onConfigure() {
+                setVisible(landingPageModel.getObject() != null);
+            }
+
+        }.add(new ExternalLink("landingPageLink", landingPageModel))));
+
         //For Ajax updating of resource listing when paging
         setOutputMarkupId(true);
     }

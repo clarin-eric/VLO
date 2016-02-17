@@ -33,7 +33,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </wicket:container>
             </div>
             <p wicket:id="noResources">
-                This record does not provide any links to resources
+                This record does not provide any links to resources.
+                <span wicket:id="landingPageContainer">
+                    However, resources or services may be available for this record at its
+                    <a wicket:id="landingPageLink" target="_blank">original provider</a>.
+                </span>
             </p>
             <div wicket:id="paging" id="resourcespagination" class="resultpagination">[paging]</div>
         </wicket:panel>

@@ -72,10 +72,10 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  * @author twagoo
  */
 public class RecordPage extends VloBasePage<SolrDocument> {
-    
+
     public final static String LICENSE_SECTION_ANCHOR = "recordlicense";
     private final static ResourceReference CMDI_HTML_CSS = new CssResourceReference(RecordPage.class, "cmdi.css");
-    
+
     @SpringBean(name = "documentParamsConverter")
     private PageParametersConverter<SolrDocument> documentParamConverter;
     @SpringBean(name = "queryParametersConverter")
@@ -90,7 +90,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     private List<String> fieldOrder;
     @SpringBean
     private VloConfig config;
-    
+
     private final IModel<SearchContext> navigationModel;
     private final IModel<QueryFacetsSelection> selectionModel;
 
@@ -129,14 +129,14 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         } else {
             setModel(new SolrDocumentModel(document));
         }
-        
+
         addComponents();
     }
-    
+
     private void addComponents() {
         // Navigation
         add(createNavigation("navigation"));
-        
+
         final WebMarkupContainer topNavigation = new WebMarkupContainer("topnavigation");
         add(topNavigation
                 .add(new BreadCrumbPanel("breadcrumbs", selectionModel))
@@ -147,51 +147,51 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         // General information section
         add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, getString("recordpage.unnamedrecord")));
         add(createLandingPageLink("landingPageLink"));
-        
+
         final FieldsTablePanel fieldsTable = new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(getModel(), basicPropertiesFilter, fieldOrder));
         fieldsTable.add(new HighlightSearchTermBehavior());
         add(fieldsTable);
 
         // Resources section
-        add(new ResourceLinksPanel("resources", new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_RESOURCE)));
-        
+        add(new ResourceLinksPanel("resources", getModel()));
+
         add(new RecordLicenseInfoPanel("licenseInfo", getModel())
                 .setMarkupId(LICENSE_SECTION_ANCHOR));
 
         // Technical section
         add(createCmdiContent("cmdi"));
         add(createTechnicalDetailsPanel("technicalProperties"));
-        
+
         if (config.isProcessHierarchies()) {
             // show hierarchy if applicable
             add(createHierarchyPanel("recordtree"));
         } else {
             // invisible stub
             add(new WebMarkupContainer("recordtree") {
-                
+
                 @Override
                 public boolean isVisible() {
                     return false;
                 }
-                
+
             });
         }
-        
+
         createSearchLinks("searchlinks");
     }
-    
+
     private Component createNavigation(final String id) {
         if (navigationModel != null) {
             // Add a panel that shows the index of the current record in the
             // resultset and allows for forward/backward navigation
             return new RecordNavigationPanel(id, navigationModel) {
-                
+
                 @Override
                 protected void onConfigure() {
                     final SearchContext context = navigationModel.getObject();
                     setVisible(context != null && context.getResultCount() > 1);
                 }
-                
+
             };
         } else {
             // If no context model is available (i.e. when coming from a bookmark
@@ -201,20 +201,20 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             return navigationDummy;
         }
     }
-    
+
     private TopLinksPanel createPermalink(String id, final WebMarkupContainer topNavigation) {
         return new TopLinksPanel(id, new PermaLinkModel(getPageClass(), selectionModel, getModel())) {
-            
+
             @Override
             protected void onChange(AjaxRequestTarget target) {
                 if (target != null) {
                     target.add(topNavigation);
                 }
             }
-            
+
         };
     }
-    
+
     private ExternalLink createLandingPageLink(String id) {
         final IModel<String> landingPageHrefModel
                 // wrap in model that transforms handle links
@@ -223,17 +223,17 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                         new SolrFieldStringModel(getModel(), FacetConstants.FIELD_LANDINGPAGE));
         // add landing page link
         final ExternalLink landingPageLink = new ExternalLink(id, landingPageHrefModel) {
-            
+
             @Override
             protected void onConfigure() {
                 super.onConfigure();
                 setVisible(landingPageHrefModel.getObject() != null);
             }
-            
+
         };
         return landingPageLink;
     }
-    
+
     private void createSearchLinks(String id) {
         final SolrFieldModel<String> searchPageModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_SEARCHPAGE);
         final SolrFieldModel<String> searchServiceModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_SEARCH_SERVICE);
@@ -241,7 +241,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             {
                 //Add search page links (can be multiple)
                 add(new ListView<String>("searchPage", new CollectionListModel<>(searchPageModel)) {
-                    
+
                     @Override
                     protected void populateItem(ListItem item) {
                         item.add(new ExternalLink("searchLink", item.getModel()));
@@ -250,30 +250,30 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
                 // We assume there can be multiple content search endpoints too
                 add(new ListView<String>("contentSearch", new CollectionListModel<>(searchServiceModel)) {
-                    
+
                     @Override
                     protected void populateItem(ListItem<String> item) {
                         item.add(new ContentSearchFormPanel("fcsForm", RecordPage.this.getModel(), item.getModel()));
                     }
                 });
             }
-            
+
             @Override
-            
+
             protected void onConfigure() {
                 super.onConfigure();
                 setVisible(searchPageModel.getObject() != null || searchServiceModel.getObject() != null);
             }
-            
+
         });
     }
-    
+
     private Component createCmdiContent(String id) {
-        
+
         final IModel<String> locationModel = new SolrFieldStringModel(getModel(), FacetConstants.FIELD_FILENAME);
         final UrlFromStringModel locationUrlModel = new UrlFromStringModel(locationModel);
         final TogglePanel togglePanel = new TogglePanel(id, Model.of("Show all metadata fields"), Model.of("Hide all metadata fields")) {
-            
+
             @Override
             protected Component createContent(String id) {
                 final Label cmdiContentLabel = new Label(id, new XsltModel(locationUrlModel));
@@ -285,20 +285,20 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         togglePanel.add(new HighlightSearchTermBehavior());
         return togglePanel;
     }
-    
+
     private TogglePanel createTechnicalDetailsPanel(String id) {
         return new TogglePanel(id, Model.of("Show technical details"), Model.of("Hide technical details")) {
-            
+
             @Override
             protected Component createContent(String id) {
                 return new FieldsTablePanel(id, new DocumentFieldsProvider(getModel(), technicalPropertiesFilter, fieldOrder));
             }
         };
     }
-    
+
     private HierarchyPanel createHierarchyPanel(String id) {
         return new HierarchyPanel(id, getModel()) {
-            
+
             @Override
             protected void onConfigure() {
                 final SolrDocument document = getModel().getObject();
@@ -310,10 +310,10 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 // only show hierarchy panel if there's anything to show
                 setVisible(hasHierarchy);
             }
-            
+
         };
     }
-    
+
     @Override
     public void detachModels() {
         super.detachModels();
@@ -322,7 +322,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             navigationModel.detach();
         }
     }
-    
+
     @Override
     public IModel<String> getTitleModel() {
         // Put the name of the record in the page title
@@ -330,24 +330,24 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 new NullFallbackModel(new SolrFieldStringModel(getModel(), FacetConstants.FIELD_NAME), getString("recordpage.unnamedrecord")))
                 .setDefaultValue(DEFAULT_PAGE_TITLE);
     }
-    
+
     @Override
     public IModel<String> getPageDescriptionModel() {
         return new SolrFieldStringModel(getModel(), FacetConstants.FIELD_DESCRIPTION);
     }
-    
+
     @Override
     public IModel<String> getCanonicalUrlModel() {
         // omit query in link for canonical URL (record page gets same canonical
         // URL regardless of search term)
         return new PermaLinkModel(getPageClass(), null, getModel());
     }
-    
+
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         // add styling for CMDI to HTML transformation output
         response.render(CssHeaderItem.forReference(CMDI_HTML_CSS));
     }
-    
+
 }
