@@ -99,10 +99,20 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
 
         return new ListView<String>(id, new CollectionListModel<>(licensesModel)) {
             @Override
-            protected void populateItem(ListItem<String> item) {
-                //TODO: add link to licence page
-                item.add(new Label("licenseName",
-                        new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_LICENSE)));
+            protected void populateItem(final ListItem<String> item) {
+                final IModel<String> linkPageModel = Model.of("test");
+                //create link to licence page
+                item.add(new ExternalLink("licensePage", linkPageModel) {
+                    {
+                        add(new Label("licenseName", new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_LICENSE)));
+                    }
+
+                    @Override
+                    public boolean isEnabled() {
+                        return linkPageModel.getObject() != null;
+                    }
+
+                });
                 //since value is URI, replace all non-alphanumeric characters with underscore
                 item.add(new AttributeAppender("class",
                         new StringReplaceModel(item.getModel(), nonAlphanumericPatternModel, Model.of("_")), " "));
