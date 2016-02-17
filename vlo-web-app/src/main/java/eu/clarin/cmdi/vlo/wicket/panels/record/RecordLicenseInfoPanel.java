@@ -45,6 +45,7 @@ import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.model.util.MapModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -100,7 +101,13 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
         return new ListView<String>(id, new CollectionListModel<>(licensesModel)) {
             @Override
             protected void populateItem(final ListItem<String> item) {
-                final IModel<String> linkPageModel = Model.of("test");
+                //Model for the license URL: URLs are taken from the license 
+                //URL property file. The fallback will guarantee a null value, 
+                //even if no property has been defined for the license id at hand
+                final IModel<String> linkPageModel = new NullFallbackModel(
+                        new StringResourceModel("license.url.${}", this, item.getModel()), //see licenseUrls.properties
+                        new Model<String>());
+
                 //create link to licence page
                 item.add(new ExternalLink("licensePage", linkPageModel) {
                     {

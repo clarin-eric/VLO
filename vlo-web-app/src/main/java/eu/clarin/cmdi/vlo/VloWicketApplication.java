@@ -95,6 +95,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("fieldNames"));
         // register the resource of resource type names and class properties
         getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("resourceTypes"));
+        // register the resource of license URLs (used in RecordLicenseInfoPanel)
+        getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("licenseUrls"));
         // register the resource of application properties (version information filtered at build time)
         getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("application"));
         // register JavaScript bundle (combines  JavaScript source in a single resource to decrease number of client requests)

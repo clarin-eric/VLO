@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
+import java.util.MissingResourceException;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -42,11 +43,16 @@ public class NullFallbackModel implements IModel<String> {
 
     @Override
     public String getObject() {
-        final String wrappedValue = wrappedModel.getObject();
-        if (wrappedValue == null) {
+        try {
+            final String wrappedValue = wrappedModel.getObject();
+            if (wrappedValue == null) {
+                return fallbackModel.getObject();
+            } else {
+                return wrappedValue;
+            }
+        } catch (MissingResourceException ex) {
+            //this can happen with the StringResourceModel if the property is not defined
             return fallbackModel.getObject();
-        } else {
-            return wrappedValue;
         }
     }
 
