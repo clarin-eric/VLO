@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -13,8 +14,15 @@ public class AvailabilityPostProcessor extends PostProcessorsWithVocabularyMap {
     
 
     @Override
-    public List<String> process(final String value) {  
-        return normalize(value, value.length() > MAX_LENGTH? OTHER_VALUE : value.trim());
+    public List<String> process(final String value) {
+    	String normalizedVal = normalize(value);
+    	if(normalizedVal == null)
+    		return Arrays.asList(value.length() > MAX_LENGTH? OTHER_VALUE : value.trim());
+    	//Availability variants can be normalized with multiple values, in vocabulary they are separated with ;
+    	else{
+    		return Arrays.asList(normalizedVal.split(";"));
+    	}
+        
     }
 
 

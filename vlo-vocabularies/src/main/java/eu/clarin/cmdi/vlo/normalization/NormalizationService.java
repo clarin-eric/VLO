@@ -1,6 +1,5 @@
 package eu.clarin.cmdi.vlo.normalization;
 
-import java.util.List;
 import java.util.Map;
 
 public interface NormalizationService {
@@ -15,7 +14,7 @@ public interface NormalizationService {
 	 * 
 	 */
 	
-	public List<String> normalize(String input);	
+	public String normalize(String input);	
 	
 	
 	/*
