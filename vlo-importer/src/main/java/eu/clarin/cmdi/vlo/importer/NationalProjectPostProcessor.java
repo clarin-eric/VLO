@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class NationalProjectPostProcessor extends PostProcessorsWithVocabularyMa
      */
     @Override
     public List<String> process(String value) {
-    	return normalize(value.trim(), "");
+    	return Arrays.asList(normalize(value.trim(), ""));
     }
     
 

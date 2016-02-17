@@ -11,13 +11,13 @@ import eu.clarin.cmdi.vlo.pojo.CrossMapping;
 public class VocabularyEntry {
 	
 	private String originalVal;
-	private List<String> normalizedValues;
+	private String normalizedValue;
 	private boolean isRegEx;
 	private Map<String, String> crossMap;	
 	
-	public VocabularyEntry(String originalVal, List<String> normalizedValues, boolean isRegEx, List<CrossMapping> crossMap) {
+	public VocabularyEntry(String originalVal, String normalizedValues, boolean isRegEx, List<CrossMapping> crossMap) {
 		this.originalVal = originalVal;
-		this.normalizedValues = normalizedValues;
+		this.normalizedValue = normalizedValues;
 		this.isRegEx = isRegEx;
 		this.crossMap = new HashMap<String, String>();
 		if(crossMap != null)
@@ -34,12 +34,12 @@ public class VocabularyEntry {
 		this.originalVal = val;
 	}
 	
-	public List<String> getNormalizedValue() {
-		return normalizedValues;
+	public String getNormalizedValue() {
+		return normalizedValue;
 	}
 	
-	public void setNormalizedValue(List<String> normalizedValues) {
-		this.normalizedValues = normalizedValues;
+	public void setNormalizedValue(String normalizedValue) {
+		this.normalizedValue = normalizedValue;
 	}
 	
 	public boolean isRegEx() {
@@ -62,9 +62,7 @@ public class VocabularyEntry {
 	@Override
 	public String toString() {
 		String normalizedVals = "";
-		for(String val: normalizedValues)
-			normalizedVals += val + ", ";
-		return originalVal + " -> " + normalizedValues + ", isRegEx=" + isRegEx + ", " + crossMap.toString(); 
+		return originalVal + " -> " + normalizedValue + ", isRegEx=" + isRegEx + ", " + crossMap.toString(); 
 	}
 
 }

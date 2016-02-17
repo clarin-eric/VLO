@@ -25,62 +25,63 @@ import eu.clarin.cmdi.vlo.transformers.VariantsMapMarshaller;
 
 public abstract class PostProcessorsWithVocabularyMap implements PostProcessor, NormalizationService {
 
-    private final static Logger _logger = LoggerFactory.getLogger(PostProcessorsWithVocabularyMap.class);
+	private final static Logger _logger = LoggerFactory.getLogger(PostProcessorsWithVocabularyMap.class);
 
-    private NormalizationVocabulary vocabulary;
+	private NormalizationVocabulary vocabulary;
 
-    public List<String> normalize(String value) {
-	if (vocabulary == null)
-	    initVocabulary();
+	public String normalize(String value) {
+		if (vocabulary == null)
+			initVocabulary();
 
-	return vocabulary.normalize(value);
-    }
-
-    public List<String> normalize(String value, String fallBackValue) {
-	List<String> normalizedVals = normalize(value);
-	return normalizedVals != null ? normalizedVals : Arrays.asList(fallBackValue);
-    }
-
-    public Map<String, String> getCrossMappings(String value) {
-	if (vocabulary == null)
-	    initVocabulary();
-
-	return vocabulary.getCrossMappings(value);
-    }
-
-    public abstract String getNormalizationMapURL();
-
-    private void initVocabulary() {
-	VariantsMap varinatsRawMap = getMappingFromFile(getNormalizationMapURL());
-	vocabulary = varinatsRawMap.getMap();
-
-	// printMap();
-    }
-
-    protected VariantsMap getMappingFromFile(String mapUrl) {
-
-	_logger.info("Reading vocabulary file from: {}", mapUrl);
-	// load records from file
-	// in the future this should be loaded from CLAVAS directly and the
-	// file only used as fallback
-
-	InputStream is = PostProcessorsWithVocabularyMap.class.getClassLoader().getResourceAsStream(mapUrl);
-	if (is == null)
-	    throw new RuntimeException("Cannot instantiate postProcessor, " + mapUrl + " is not on the classpath");
-
-	try {
-	    return VariantsMapMarshaller.unmarshal(is);
-	} catch (Exception e) {
-	    throw new RuntimeException("Cannot instantiate postProcessor: ", e);
+		//all variant values are kept in lower case
+		return vocabulary.normalize(value.toLowerCase());
 	}
 
-    }
+	public String normalize(String value, String fallBackValue) {
+		String normalizedVals = normalize(value);
+		return normalizedVals != null ? normalizedVals : fallBackValue;
+	}
 
-    // for debug
-    public void printMap() {
-	_logger.info("map contains {} entries", vocabulary.getEntries().length);
-	for (int i = 0; i < vocabulary.getEntries().length; i++)
-	    _logger.info(vocabulary.getEntries()[i].toString());
+	public Map<String, String> getCrossMappings(String value) {
+		if (vocabulary == null)
+			initVocabulary();
 
-    }
+		return vocabulary.getCrossMappings(value);
+	}
+
+	public abstract String getNormalizationMapURL();
+
+	private void initVocabulary() {
+		VariantsMap varinatsRawMap = getMappingFromFile(getNormalizationMapURL());
+		vocabulary = varinatsRawMap.getMap();
+
+		//printMap();
+	}
+
+	protected VariantsMap getMappingFromFile(String mapUrl) {
+
+		_logger.info("Reading vocabulary file from: {}", mapUrl);
+		// load records from file
+		// in the future this should be loaded from CLAVAS directly and the
+		// file only used as fallback
+
+		InputStream is = PostProcessorsWithVocabularyMap.class.getClassLoader().getResourceAsStream(mapUrl);
+		if (is == null)
+			throw new RuntimeException("Cannot instantiate postProcessor, " + mapUrl + " is not on the classpath");
+
+		try {
+			return VariantsMapMarshaller.unmarshal(is);
+		} catch (Exception e) {
+			throw new RuntimeException("Cannot instantiate postProcessor: ", e);
+		}
+
+	}
+
+	// for debug
+	public void printMap() {
+		_logger.info("map contains {} entries", vocabulary.getEntries().length);
+		for (int i = 0; i < vocabulary.getEntries().length; i++)
+			_logger.info(vocabulary.getEntries()[i].toString());
+
+	}
 }

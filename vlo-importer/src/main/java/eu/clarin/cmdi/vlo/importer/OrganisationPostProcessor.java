@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,18 +18,15 @@ public class OrganisationPostProcessor extends PostProcessorsWithVocabularyMap {
      */
     @Override
     public List<String> process(String value) {
-	String[] splitArray = normalizeInputString(value).split(";");
-	List<String> result = new LinkedList<>();
-	for (int i = 0; i < splitArray.length; i++) {
-	    List<String> normalizedVals = normalize(splitArray[i]);
-	    if (normalizedVals != null) {
-		for (String normalizedVal : normalizedVals)
-		    if (normalizedVal != null)// skip nulls
-			result.add(normalizedVal);
-	    }
-	}
-
-	return result;
+	
+    String[] splitArray = normalizeInputString(value).split(";");    
+    for (int i = 0; i < splitArray.length; i++) {
+        String orgaName = splitArray[i];
+        splitArray[i] = normalize(normalizeVariant(orgaName), splitArray[i]);
+    }
+    
+    return Arrays.asList(splitArray);
+	
     }
 
     @Override

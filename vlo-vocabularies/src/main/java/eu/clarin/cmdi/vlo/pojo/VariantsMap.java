@@ -72,12 +72,11 @@ public class VariantsMap{
 		
 		for(Mapping m: mappings)
 			if(m.getVariants() != null){
-				List<String> normalizedValues = new LinkedList<String>();
-				for(String v: m.getValue().split(";"))
-					normalizedValues.add(v.trim());
+				String normalizedValue = m.getValue();
 				
-				for(Variant v: m.getVariants()){					
-					listOfEntries.add(new VocabularyEntry(v.getValue().trim(),normalizedValues, v.isRegExp(), v.getCrossMappings()));
+				for(Variant v: m.getVariants()){
+					if(!containsVocabularyEntry(listOfEntries, v.getValue().trim().toLowerCase()))
+						listOfEntries.add(new VocabularyEntry(v.getValue().trim().toLowerCase(), normalizedValue, v.isRegExp(), v.getCrossMappings()));
 					if(v.isRegExp())
 						containsRegEx = true;
 				}
@@ -85,6 +84,14 @@ public class VariantsMap{
 
 		return new NormalizationVocabulary(listOfEntries.toArray(new VocabularyEntry[0]), containsRegEx); 
 		
+	}
+	
+	private boolean containsVocabularyEntry(List<VocabularyEntry> listOfEntries, String val){
+		for(VocabularyEntry entry: listOfEntries)
+			if(entry.getOriginalVal().equals(val))
+				return true;
+		
+		return false;
 	}
 	
 }

@@ -40,7 +40,7 @@ public class NormalizationVocabulary implements NormalizationService {
 		}
 	}
 	
-	public List<String> normalize(String value) {
+	public String normalize(String value) {
 		VocabularyEntry hit = getEntry(value);
 		return (hit != null) ? hit.getNormalizedValue() : null;
 	}
