@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -108,10 +109,13 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
                         new StringResourceModel("license.url.${}", this, item.getModel()), //see licenseUrls.properties
                         new Model<String>());
 
+                //Model for the user friendly name of the license
+                final ConvertedFieldValueModel licenseNameModel = new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_LICENSE);
+
                 //create link to licence page
                 item.add(new ExternalLink("licensePage", linkPageModel) {
                     {
-                        add(new Label("licenseName", new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_LICENSE)));
+                        add(new Label("licenseName", licenseNameModel));
                     }
 
                     @Override
@@ -120,7 +124,9 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
                     }
 
                 });
-                //since value is URI, replace all non-alphanumeric characters with underscore
+                //add tooltip for consistency with other legal information (availability)
+                item.add(new AttributeModifier("title", licenseNameModel));
+                //since value is URI, replace all non-alphanumeric characters with underscore for the CSS class
                 item.add(new AttributeAppender("class",
                         new StringReplaceModel(item.getModel(), nonAlphanumericPatternModel, Model.of("_")), " "));
             }
