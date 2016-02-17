@@ -24,6 +24,7 @@ import eu.clarin.cmdi.vlo.wicket.model.ConvertedFieldValueModel;
 import eu.clarin.cmdi.vlo.wicket.model.FormattedStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.StringReplaceModel;
+import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import java.util.regex.Pattern;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
@@ -52,7 +53,7 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
             @Override
             protected void populateItem(ListItem<String> item) {
                 // add link to record
-                item.add(new RecordPageLink("recordLink", model, searchContextModel) //TODO: pass param to jump to license
+                item.add(new RecordPageLink("recordLink", model, searchContextModel, RecordPage.LICENSE_SECTION_ANCHOR) //TODO: pass param to jump to license
                         .add(new AttributeAppender("class", item.getModel(), " "))
                         .add(new AttributeModifier("title",
                                 new FormattedStringModel(Model.of("Availability: %s"),
@@ -70,7 +71,7 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
             @Override
             protected void populateItem(ListItem<String> item) {
                 // add link to record
-                item.add(new RecordPageLink("recordLink", model, searchContextModel) //TODO: pass param to jump to license
+                item.add(new RecordPageLink("recordLink", model, searchContextModel, RecordPage.LICENSE_SECTION_ANCHOR) //TODO: pass param to jump to license
                         //add CSS class. Since value is URI, replace all non-alphanumeric characters with underscore
                         .add(new AttributeAppender("class",
                                 new StringReplaceModel(item.getModel(), nonAlphanumericPatternModel, Model.of("_")), " "))
