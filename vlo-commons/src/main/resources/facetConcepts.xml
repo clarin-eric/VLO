@@ -237,15 +237,24 @@
 		<!-- URL of the license -->
 		<concept>http://www.isocat.org/datcat/DC-6586</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6586_2c79d86a-5a75-0890-d407-7d9cb86b9beb</concept>
-                <!-- Possibly with filtering:
-                A description of the licensing conditions under which the resource can be used. -->
-<!--		<concept>http://www.isocat.org/datcat/DC-2457</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-2457_45bbaa1a-7002-2ecd-ab9d-57a189f694a6</concept>-->
+		
+		<!-- availability
+		Possibly with filtering:
+                A description of the licensing conditions. -->
+		<concept>http://www.isocat.org/datcat/DC-2453</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2453_1f0c3ea5-7966-ae11-d3c6-448424d4e6e8</concept>
                 
-                <!-- Possibly with filtering:
+		<!-- license
+		Possibly with filtering:
+                A description of the licensing conditions under which the resource can be used. -->
+		<concept>http://www.isocat.org/datcat/DC-2457</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2457_45bbaa1a-7002-2ecd-ab9d-57a189f694a6</concept>
+                
+                <!-- licence type
+		Possibly with filtering:
                 A description of the terms of availability of the resource in simple words. -->
-<!--		<concept>http://www.isocat.org/datcat/DC-3800</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-3800_12a79edd-0ffe-8d82-9831-45d125c54aee</concept>-->
+		<concept>http://www.isocat.org/datcat/DC-3800</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-3800_12a79edd-0ffe-8d82-9831-45d125c54aee</concept>
 
 	</facetConcept>
 	<facetConcept name="accessInfo" allowMultipleValues="true" 
