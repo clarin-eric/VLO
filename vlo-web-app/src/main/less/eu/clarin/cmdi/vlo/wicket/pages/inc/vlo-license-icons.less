@@ -37,6 +37,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // licence icons
 .license-icon-classes() {
     /* CC */
+    //general case, but requires CSS3 support
+    &[class*="___creativecommons_org_licenses"] { background-image: url('license/cc.large.png'); }
+    //specific known cases
     &.http___creativecommons_org_licenses_by_nc_3_0_,
     &.http___creativecommons_org_licenses_by_nc_3_0_de_,
     &.http___creativecommons_org_licenses_by_nc_4_0_,
@@ -44,6 +47,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     &.https___creativecommons_org_licenses_by_sa_3_0_de_,
     &.https___creativecommons_org_licenses_by_sa_4_0_,
     &.https___creativecommons_org_licenses_by_3_0_ { background-image: url('license/cc.large.png'); }
+    //special case for cc0
     &.https___creativecommons_org_publicdomain_zero_1_0_ { background-image: url('license/zero.large.png'); }
     
     /* GPL */
