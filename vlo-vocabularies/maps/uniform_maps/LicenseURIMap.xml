@@ -205,13 +205,17 @@
         <variant value="yes"/>
     </mapping>
     <mapping>
-        <normalizedValue value="http://creativecommons.org/licenses/by-nc/3.0/"/>
-        <variant value="https://creativecommons.org/licenses/by-nc/3.0/"/>
+        <normalizedValue value="https://creativecommons.org/licenses/by-nc/3.0/"/>
+        <variant value="http://creativecommons.org/licenses/by-nc/3.0/"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="https://creativecommons.org/licenses/by-nc/3.0/de/"/>
+        <variant value="http://creativecommons.org/licenses/by-nc/3.0/de/"/>
         <variant value="Creative Commons CC BY-NC 3.0 DE, http://creativecommons.org/licenses/by-nc/3.0/de/"/>
     </mapping>
     <mapping>
-        <normalizedValue value="http://creativecommons.org/licenses/by-nc/4.0/"/>
-        <variant value="https://creativecommons.org/licenses/by-nc/4.0/"/>
+        <normalizedValue value="https://creativecommons.org/licenses/by-nc/4.0/"/>
+        <variant value="http://creativecommons.org/licenses/by-nc/4.0/"/>
         <variant value="Dit werk is valt onder een Creative Commons Naamsvermelding-NietCommercieel 4.0 Internationaal-licentie.(http://creativecommons.org/licenses/by-nc/4.0/)"/>
         <variant value="Dit werk is valt onder een Creative Commons Naamsvermelding-NietCommercieel 4.0 Internationaal-licentie(http://creativecommons.org/licenses/by-nc/4.0/)"/>
     </mapping>
