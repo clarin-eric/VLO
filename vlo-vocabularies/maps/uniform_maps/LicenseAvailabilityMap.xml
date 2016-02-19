@@ -291,6 +291,24 @@
         <variant value="Korpus nicht im endgültigem Zustand Generelle Freigabe kann erst erfolgen, wenn die erfassten Daten ausgewertet wurden. Vollständige Freigabe nur auf Anfrage."/>
         <variant value="nor available"/>
         <variant value="not available"/>
+		
+		<variant value="Annotation derzeit nicht vollständig. Freigabe erst nach Auswertung möglich. Lizensierung zur Veröffentlichung im Web als Vereinbarung nötig."/>
+        <variant value="A special license is required because of the stem lexicon. SMOR (without a stem lexicon) comes with the SFST-tools (Stuttgart Finite State Transducer Tools) under the GNU Public License GPLv2."/>
+        <variant value="not available to the public"/>
+        <variant value="other"/>
+        <variant value="proprietary"/>
+        <variant value="Recurso protegido - Protected resource"/>
+        <variant value="underNegotiation"/>
+		
+		<variant value="no access"/>
+        <variant value="no available"/>
+        <variant value="Not available"/>
+        <variant value="Nor available"/>
+        <variant value="non available"/>
+        <variant value="no recordings available due to the sensitivity of the material"/>
+        <variant value="no"/>
+        <variant value="No"/>
+		
     </mapping>
     <mapping>
         <normalizedValue value="RES; BY; NC; PRIV"/>
@@ -324,25 +342,7 @@
         <variant value="shareAlike"/>
     </mapping>
     <mapping>
-        <normalizedValue value="unavailable"/>
-        <variant value="no access"/>
-        <variant value="no available"/>
-        <variant value="Not available"/>
-        <variant value="Nor available"/>
-        <variant value="non available"/>
-        <variant value="no recordings available due to the sensitivity of the material"/>
-        <variant value="no"/>
-        <variant value="No"/>
-    </mapping>
-    <mapping>
         <normalizedValue value="UNSPECIFIED"/>
-        <variant value="Annotation derzeit nicht vollständig. Freigabe erst nach Auswertung möglich. Lizensierung zur Veröffentlichung im Web als Vereinbarung nötig."/>
-        <variant value="A special license is required because of the stem lexicon. SMOR (without a stem lexicon) comes with the SFST-tools (Stuttgart Finite State Transducer Tools) under the GNU Public License GPLv2."/>
-        <variant value="not available to the public"/>
-        <variant value="other"/>
-        <variant value="proprietary"/>
-        <variant value="Recurso protegido - Protected resource"/>
-        <variant value="underNegotiation"/>
         <variant value="Unspecified"/>
         <variant value="unspecified"/>
     </mapping>
