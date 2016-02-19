@@ -119,7 +119,7 @@ If the VLO is empty, you will need to run an import first.
 To run an import, go the 'bin' child directory of the VLO application directory 
 and run
 
-	`./vlo_solr_importer.sh`
+`./vlo_solr_importer.sh`
 	
 as the appropriate user (e.g. 'vlouser'). 
 
