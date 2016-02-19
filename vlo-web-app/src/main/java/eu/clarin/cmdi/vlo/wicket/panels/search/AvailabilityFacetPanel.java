@@ -43,8 +43,10 @@ import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -65,7 +67,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
-public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacetsSelection> {
+public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacetsSelection> implements IAjaxIndicatorAware {
 
     public static final String AVAILABILITY_FIELD = FacetConstants.FIELD_AVAILABILITY;
     private final List<String> availabilityLevels;
@@ -77,16 +79,19 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
 
     private final FacetFieldsModel facetFieldsModel;
 
+    private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
+
     public AvailabilityFacetPanel(String id, final IModel<QueryFacetsSelection> selectionModel, FacetFieldsModel facetFieldsModel) {
         super(id, selectionModel);
         this.facetFieldsModel = facetFieldsModel;
         this.availabilityLevels = ImmutableList.copyOf(getLevelsFromConfig(vloConfig));
-        
+
         final AvailabilityValuesProvider valuesProvider = new AvailabilityValuesProvider();
         add(new Form("availability")
                 .add(new AvailabilityDataView("option", valuesProvider))
+                .add(indicatorAppender)
         );
-        
+
         if (selectionModel.getObject().getSelectionValues(AVAILABILITY_FIELD) != null) {
             //if there any selection, make initially expanded
             getExpansionModel().setObject(ExpansionState.EXPANDED);
@@ -102,6 +107,11 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
     public void detachModels() {
         super.detachModels();
         facetFieldsModel.detach();
+    }
+
+    @Override
+    public String getAjaxIndicatorMarkupId() {
+        return indicatorAppender.getMarkupId();
     }
 
     private static List<String> getLevelsFromConfig(VloConfig config) {
@@ -156,6 +166,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
         }
 
         private Component createValueCheckbox(final String id, final String targetValue) {
+            //TODO: wait indicator on change
             return new CheckBox(id, new FixedValueSetBooleanSelectionModel(AVAILABILITY_FIELD, availabilityLevels, targetValue, getModel()))
                     .add(new OnChangeAjaxBehavior() {
 
