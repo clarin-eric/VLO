@@ -48,20 +48,24 @@ can always be traced back to its sources!
 
 * Make a tag of the version to release:
 
-	svn cp . ../tags/vlo-3.x	#executed from trunk
+	````
+	git checkout development
+	git checkbout -b release-vlo-3.x
+	```
 
 * Change the version number in the poms to match the release
   (should match the directory name and be non-snapshot!!):
 
-	cd ../tags/vlo-3.x
+	```
 	mvn versions:set -DnewVersion=3.x
+	```
 
   This will update the version numbers of the parent pom and all VLO
   modules in one go!
 
 * Build the tag and inspect the output of vlo-distribution
 
-	mvn clean install 		#do not skip unit tests ;)
+	`mvn clean install 		#do not skip unit tests ;)`
 
   Unpack the tarball in vlo-distribution/target somehwere and check its
   contents on version numbers, config files etc.
@@ -71,17 +75,33 @@ can always be traced back to its sources!
 
 * Clean up and commit
 
+	```
 	mvn versions:commit 		#cleans up POM backups
 	mvn clean			#cleans up build outpit
 	svn commit -m "Created tag for VLO version 3.x"
+	git commit
+	```
+* Merge into master and tag to finalise the release 
 
-* Update the version number of the trunk if the release was a stable
+	```
+	git checkout master
+	git merge --no-ff release-vlo-3.x	#maybe some conflicts needs to be resolved after this
+	git push
+	#tag
+	git tag -a 3.x
+	git push --tags
+	```
+	
+* Merge changes into development
 
-	cd ../../trunk
+	```
+	git checkout development
+	git merge release-vlo-3.x		#maybe some conflicts needs to be resolved after this
 	mvn version:set -DnewVersion 3.y-SNAPSHOT
 	mvn versions:commit
-	svn commit -m "Bumped trunk version to 3.y-SNAPSHOT"
-
+	git commit
+	git push
+	```
 * Done!
 
 After building the entire project, a deployment package will be present in the
