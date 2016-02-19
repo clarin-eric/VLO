@@ -335,7 +335,7 @@
         <variant value="No"/>
     </mapping>
     <mapping>
-        <normalizedValue value="undefined"/>
+        <normalizedValue value="UNSPECIFIED"/>
         <variant value="Annotation derzeit nicht vollständig. Freigabe erst nach Auswertung möglich. Lizensierung zur Veröffentlichung im Web als Vereinbarung nötig."/>
         <variant value="A special license is required because of the stem lexicon. SMOR (without a stem lexicon) comes with the SFST-tools (Stuttgart Finite State Transducer Tools) under the GNU Public License GPLv2."/>
         <variant value="not available to the public"/>
