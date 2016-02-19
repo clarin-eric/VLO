@@ -25,6 +25,7 @@ import java.util.List;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FixedSetFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
@@ -80,10 +81,16 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
         super(id, selectionModel);
         this.facetFieldsModel = facetFieldsModel;
         this.availabilityLevels = ImmutableList.copyOf(getLevelsFromConfig(vloConfig));
-
+        
+        final AvailabilityValuesProvider valuesProvider = new AvailabilityValuesProvider();
         add(new Form("availability")
-                .add(new AvailabilityDataView("option", new AvailabilityValuesProvider()))
+                .add(new AvailabilityDataView("option", valuesProvider))
         );
+        
+        if (selectionModel.getObject().getSelectionValues(AVAILABILITY_FIELD) != null) {
+            //if there any selection, make initially expanded
+            getExpansionModel().setObject(ExpansionState.EXPANDED);
+        }
     }
 
     @Override
