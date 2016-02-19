@@ -12,9 +12,7 @@ Using the VLO faceted browser, you can browse metadata by facet. It consists of 
 software components: a Solr server with VLO specific configuration, an importer and a
 web application front end.
 
-For more information, see the wiki page:
-
-	https://trac.clarin.eu/wiki/CmdiVirtualLanguageObservatory
+For more information, see the [wiki page](https://trac.clarin.eu/wiki/CmdiVirtualLanguageObservatory).
 
 # What should I read?
 
@@ -121,17 +119,18 @@ If the VLO is empty, you will need to run an import first.
 To run an import, go the 'bin' child directory of the VLO application directory 
 and run
 
-	./vlo_solr_importer.sh
+	`./vlo_solr_importer.sh`
 	
 as the appropriate user (e.g. 'vlouser'). 
 
 It's advisable to run this in a detached background process (for example using 
 "screen") because an import can take quite a long time depending on the amount
-of records to be imported.
+of records to be imported. Also make sure that enough memory is available. 
+Some VM parameters are configured inside the script.
 
 Some progress information is logged to a file 'log/vlo-importer.log'. It gets
 rotated automatically by the import process.
 
-For a fresh import, even when the VLO is not configured to delete all documents
+For a __fresh import__, even when the VLO is not configured to delete all documents
 from the index first, you can simply remove the contents of the Solr data 
 directory (check server configuration documentation for the exact location).
