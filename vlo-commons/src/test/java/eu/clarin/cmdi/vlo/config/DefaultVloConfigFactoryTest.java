@@ -596,7 +596,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("getNationalProjectMapping");
 
-        String expResult = "/nationalProjectsMapping.xml";
+        String expResult = "nationalProjectsMapping.xml";
         String result = config.getNationalProjectMapping();
 
         assertEquals(expResult, result);
@@ -637,7 +637,6 @@ public class DefaultVloConfigFactoryTest {
                 "subject",
                 "format",
                 "organisation",
-                "availability",
                 "nationalProject",
                 "keywords",
                 "dataProvider");
@@ -920,7 +919,7 @@ public class DefaultVloConfigFactoryTest {
     @Test
     public void testGetIgnoredFields() {
         Set<String> result = config.getIgnoredFields();
-        assertEquals(2, result.size());
+        assertEquals(5, result.size());
     }
 
     @Test

@@ -66,6 +66,10 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
      */
     private Iterable<Count> filtered;
 
+    public FacetFieldValuesProvider(IModel<FacetField> model, FieldValueConverterProvider fieldValueConverterProvider) {
+        this(model, null, fieldValueConverterProvider);
+    }
+
     /**
      * Creates a provider without a maximum number of values. Bound to
      * {@link Integer#MAX_VALUE}.
@@ -87,7 +91,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
      * @param fieldValueConverterProvider
      */
     public FacetFieldValuesProvider(IModel<FacetField> model, int max, Collection<String> lowPriorityValues, FieldValueConverterProvider fieldValueConverterProvider) {
-        this(model, max, lowPriorityValues, new SortParam<FieldValuesOrder>(FieldValuesOrder.COUNT, false), fieldValueConverterProvider);
+        this(model, max, lowPriorityValues, new SortParam<>(FieldValuesOrder.COUNT, false), fieldValueConverterProvider);
     }
 
     public FacetFieldValuesProvider(IModel<FacetField> model, int max, SortParam<FieldValuesOrder> sort, FieldValueConverterProvider fieldValueConverterProvider) {
@@ -121,13 +125,13 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
     }
 
     @Override
-    public Iterator<? extends FacetField.Count> iterator(long first, long count) {
+    public Iterator<FacetField.Count> iterator(long first, long count) {
         // return iterator starting at specified offset
         return getList().listIterator((int) first);
     }
 
     @Override
-    public List<? extends FacetField.Count> getList() {
+    public List<FacetField.Count> getList() {
         final Iterable<Count> filteredValues = getFilteredValues();
         // sort what remains
         final ImmutableList sorted = getOrdering().immutableSortedCopy(filteredValues);
@@ -197,7 +201,7 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
     /* 
      * ORDERING
      */
-    private Ordering getOrdering() {
+    protected Ordering getOrdering() {
         if (lowPriorityValues != null && getSort().getProperty() == FieldValuesOrder.COUNT) {
             // in case of count, low priority fields should always be moved to the back
             // rest should be sorted as requested
@@ -209,15 +213,17 @@ public class FacetFieldValuesProvider extends SortableDataProvider<FacetField.Co
     }
 
     private Ordering getBaseOrdering() {
-        final Ordering ordering;
-        if (getSort().getProperty() == FieldValuesOrder.COUNT) {
-            ordering = new CountOrdering();
-        } else if (getSort().getProperty() == FieldValuesOrder.NAME) {
-            ordering = new NameOrdering(getLocale(), fieldValueConverterProvider.getConverter(model.getObject().getName()));
-        } else {
-            ordering = Ordering.natural();
+        switch (getSort().getProperty()) {
+            case COUNT:
+                return applyOrder(new CountOrdering());
+            case NAME:
+                return applyOrder(new NameOrdering(getLocale(), fieldValueConverterProvider.getConverter(model.getObject().getName())));
+            default:
+                return Ordering.arbitrary();
         }
+    }
 
+    private Ordering applyOrder(Ordering ordering) {
         if (getSort().isAscending()) {
             return ordering;
         } else {

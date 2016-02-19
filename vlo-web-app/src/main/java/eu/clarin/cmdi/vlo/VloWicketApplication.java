@@ -1,22 +1,11 @@
 package eu.clarin.cmdi.vlo;
 
-import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
-import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.service.PermalinkService;
-import eu.clarin.cmdi.vlo.service.XmlTransformationService;
-import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
-import eu.clarin.cmdi.vlo.wicket.pages.AboutPage;
-import eu.clarin.cmdi.vlo.wicket.pages.HelpPage;
-import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
-import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
-import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
-import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
-import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
-import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
 import javax.inject.Inject;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -28,6 +17,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
+import eu.clarin.cmdi.vlo.service.PermalinkService;
+import eu.clarin.cmdi.vlo.service.XmlTransformationService;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import eu.clarin.cmdi.vlo.wicket.FragmentEncodingMountedMapper;
+import eu.clarin.cmdi.vlo.wicket.pages.AboutPage;
+import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
+import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
+import eu.clarin.cmdi.vlo.wicket.pages.HelpPage;
+import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
+import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
+import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
+import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
+import org.apache.wicket.Page;
 
 /**
  * Application object for your web application. If you want to run this
@@ -92,6 +97,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("fieldNames"));
         // register the resource of resource type names and class properties
         getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("resourceTypes"));
+        // register the resource of license URLs (used in RecordLicenseInfoPanel)
+        getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("licenseUrls"));
         // register the resource of application properties (version information filtered at build time)
         getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("application"));
         // register JavaScript bundle (combines  JavaScript source in a single resource to decrease number of client requests)
@@ -110,7 +117,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         mountPage("/search", FacetedSearchPage.class);
         // Record (query result) page. E.g. /vlo/record?docId=abc123
         // (cannot encode docId in path because it contains a slash)
-        mountPage("/record", RecordPage.class);
+        mountPageWithFragmentSupport("/record", RecordPage.class);
         // All facet values page (kept for compatibility with old bookmarks)
         // E.g. /vlo/values/genre?facetMinOccurs=1 (min occurs not in path 
         // because it's a filter on the facet list)
@@ -206,4 +213,20 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         return appVersionQualifier;
     }
 
+    /**
+     * Like {@link #mountPage(java.lang.String, java.lang.Class) }, but using {@link FragmentEncodingMountedMapper}
+     *
+     * @param <T> type of page
+     *
+     * @param path the path to mount the page class on
+     * @param pageClass the page class to be mounted
+     * @return the mapper that provides the mount point
+     *
+     * @see WebApplication#mountPage(java.lang.String, java.lang.Class)
+     */
+    public <T extends Page> FragmentEncodingMountedMapper mountPageWithFragmentSupport(String path, Class<T> pageClass) {
+        final FragmentEncodingMountedMapper mapper = new FragmentEncodingMountedMapper(path, pageClass);
+        mount(mapper);
+        return mapper;
+    }
 }

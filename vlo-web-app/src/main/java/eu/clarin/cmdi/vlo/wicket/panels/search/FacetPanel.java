@@ -16,23 +16,22 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
-import eu.clarin.cmdi.vlo.pojo.ExpansionState;
-import eu.clarin.cmdi.vlo.pojo.FacetFieldSelection;
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
-import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
-import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import java.util.Collection;
-import java.util.HashSet;
+
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import eu.clarin.cmdi.vlo.pojo.ExpansionState;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.model.SelectionModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
+import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 
 /**
  * Panel that displays a single facet based on the current query/value
@@ -42,50 +41,48 @@ import org.slf4j.LoggerFactory;
  *
  * @author twagoo
  */
-public abstract class FacetPanel extends ExpandablePanel<FacetFieldSelection> {
+public abstract class FacetPanel extends ExpandablePanel<String> {
     private final static Logger logger = LoggerFactory.getLogger(FacetPanel.class);
-
-    private final IModel<ExpansionState> expansionStateModel;
 
     private final SelectedFacetPanel selectedFacetPanel;
     private final FacetValuesPanel facetValuesPanel;
 
-    public FacetPanel(String id, IModel<FacetFieldSelection> selectionModel, IModel<ExpansionState> expansionState) {
-        this(id, selectionModel, expansionState, 0);
+    public FacetPanel(String id, IModel<String> facetNameModel, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, IModel<ExpansionState> expansionState) {
+        this(id, facetNameModel, facetFieldModel, selectionModel, expansionState, 0);
     }
 
-    public FacetPanel(String id, IModel<FacetFieldSelection> selectionModel, IModel<ExpansionState> expansionState, int subListSize) {
-        super(id, selectionModel, expansionState);
-        this.expansionStateModel = expansionState;
+    public FacetPanel(String id, IModel<String> facetNameModel, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, IModel<ExpansionState> expansionState, int subListSize) {
+        super(id, facetNameModel, expansionState);
 
         // panel showing values for selection
-        facetValuesPanel = createFacetValuesPanel("facetValues", subListSize);
+        facetValuesPanel = createFacetValuesPanel("facetValues", facetNameModel.getObject(), facetFieldModel, selectionModel, subListSize);
         add(facetValuesPanel);
 
         // panel showing current selection, allowing for deselection
-        selectedFacetPanel = createSelectedFacetPanel("facetSelection");
+        selectedFacetPanel = createSelectedFacetPanel("facetSelection", facetNameModel.getObject(), selectionModel);
         add(selectedFacetPanel);
     }
 
     @Override
     protected Label createTitleLabel(String id) {
-        final IModel<String> facetNameModel = new PropertyModel<>(getModel(), "facetField.name");
-        final Label label = new Label(id, new SolrFieldNameModel(facetNameModel));
-        label.add(new AttributeAppender("title", new SolrFieldDescriptionModel(facetNameModel)));
+        final Label label = new Label(id, new SolrFieldNameModel(getModel()));
+        label.add(new AttributeAppender("title", new SolrFieldDescriptionModel(getModel())));
         return label;
     }
 
     @Override
     protected void onConfigure() {
         super.onConfigure();
-
-        final boolean valuesSelected = !getModelObject().getFacetValues().isEmpty();
+        
+        final boolean valuesSelected = !selectedFacetPanel.getModelObject().isEmpty();
         facetValuesPanel.setVisible(!valuesSelected);
         selectedFacetPanel.setVisible(valuesSelected);
-
-        // hide this entire panel is no values are selectable
-        setVisible(!isHideIfNoValues() || valuesSelected || getModelObject().getFacetField().getValueCount() > 0);
+        
+        
+        // hide this entire panel if nothing is selected or there is nothing to be selected
+        setVisible(!isHideIfNoValues() || valuesSelected || facetValuesPanel.getModelObject().getValueCount() > 0);
     }
+    
 
     /**
      *
@@ -96,15 +93,14 @@ public abstract class FacetPanel extends ExpandablePanel<FacetFieldSelection> {
         return true;
     }
 
-    private FacetValuesPanel createFacetValuesPanel(String id, int subListSize) {
-        return new FacetValuesPanel(id,
-                new PropertyModel<FacetField>(getModel(), "facetField"),
-                new PropertyModel<QueryFacetsSelection>(getModel(), "selection"), subListSize) {
+    private FacetValuesPanel createFacetValuesPanel(String id, final String facetName, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, int subListSize) {
+    	return new FacetValuesPanel(id, facetFieldModel, selectionModel, subListSize) {
                     @Override
-                    public void onValuesSelected(String facet, FacetSelection value, AjaxRequestTarget target) {
+                    public void onValuesSelected(Collection<String> values, AjaxRequestTarget target) {
                         // A value has been selected on this facet's panel, update the model!
-                        FacetPanel.this.getModelObject().getSelection().selectValues(facet, value);
-                        if (target != null) {
+                    	selectionModel.getObject().addNewFacetValue(facetName, values);
+                       
+                    	if (target != null) {
                             // reload entire page for now
                             selectionChanged(target);
                         }
@@ -112,26 +108,18 @@ public abstract class FacetPanel extends ExpandablePanel<FacetFieldSelection> {
                 };
     }
 
-    private SelectedFacetPanel createSelectedFacetPanel(String id) {
-        return new SelectedFacetPanel(id, getModel()) {
+    private SelectedFacetPanel createSelectedFacetPanel(String id, final String facetName, final IModel<QueryFacetsSelection> selectionModel) {
+    	return new SelectedFacetPanel(id, facetName, new SelectionModel(facetName, selectionModel)) {
             @Override
-            public void onValuesUnselected(String facet, Collection<String> valuesRemoved, AjaxRequestTarget target) {
-                final QueryFacetsSelection selection = getModelObject().getSelection();
-
+            public void onValuesUnselected(Collection<String> valuesRemoved, AjaxRequestTarget target) {
                 // Values have been removed, calculate remainder
-                final FacetSelection facetSelection = selection.getSelectionValues(facet);
-                final Collection<String> currentSelection = facetSelection.getValues();
-                final Collection<String> newSelection = new HashSet<String>(currentSelection);
-                newSelection.removeAll(valuesRemoved);
+                selectionModel.getObject().removeFacetValue(facetName, valuesRemoved);
 
-                // Update model (keep selection type)
-                selection.selectValues(facet, new FacetSelection(facetSelection.getSelectionType(), newSelection));
-
-                // collapse after removal
-                // TODO: should be removed, but then list of values
-                // does not seem to update correctly
-                expansionStateModel.setObject(ExpansionState.COLLAPSED);
-
+             // collapse after removal
+             // TODO: should be removed, but then list of values
+             // does not seem to update correctly
+             expansionModel.setObject(ExpansionState.COLLAPSED);
+                
                 if (target != null) {
                     // reload entire page for now
                     selectionChanged(target);

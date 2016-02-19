@@ -1,0 +1,3 @@
+Q: How to generate XML normalization maps in uniform format from the old maps?
+A: make sure that you installed maven. Run mvn xml:transform 
+

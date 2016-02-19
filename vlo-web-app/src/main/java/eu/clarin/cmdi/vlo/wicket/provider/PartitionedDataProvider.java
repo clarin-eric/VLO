@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.provider;
 
+import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 import java.util.Iterator;
@@ -33,9 +34,9 @@ import org.apache.wicket.model.Model;
  * @param <T> the type of provided data
  * @param <S> the type of the sorting parameter
  */
-public class PartitionedDataProvider<T, S> implements ISortableDataProvider<List<? extends T>, S> {
+public class PartitionedDataProvider<T, S> implements ISortableDataProvider<List<T>, S> {
 
-    private final ISortableDataProvider<? extends T, S> provider;
+    private final ISortableDataProvider<T, S> provider;
     private final int partitionSize;
 
     /**
@@ -50,16 +51,19 @@ public class PartitionedDataProvider<T, S> implements ISortableDataProvider<List
     }
 
     @Override
-    public Iterator<? extends List<? extends T>> iterator(long first, long count) {
+    public Iterator<? extends List<T>> iterator(long first, long count) {
         if (partitionSize > 0) {
             // translate first, count to item level
             final long itemsFirst = first * partitionSize;
             final long itemsCount = count * partitionSize;
+            // reduce wildcard to upper bound (i.e. remove "? extends")
+            final Iterator<T> iterator
+                    = Iterators.transform(provider.iterator(itemsFirst, itemsCount), Functions.<T>identity());
             // split up values 
-            return Iterators.partition(provider.iterator(itemsFirst, itemsCount), partitionSize);
+            return Iterators.partition(iterator, partitionSize);
         } else {
             // return a single list (wrapped in a singleton iterator)
-            final List<? extends T> valuesList;
+            final List<T> valuesList;
             if (provider instanceof ListProvider) {
                 // get list straight out of provider, prevent double wrapping
                 valuesList = ((ListProvider<T>) provider).getList();
@@ -90,7 +94,7 @@ public class PartitionedDataProvider<T, S> implements ISortableDataProvider<List
     }
 
     @Override
-    public IModel<List<? extends T>> model(List<? extends T> object) {
+    public IModel<List<T>> model(List<T> object) {
         // Iterators.partition sometimes returns lists that are not deeply serializable, 
         // so we need to copy this into a serializable list here :(
         return Model.ofList(ImmutableList.copyOf(object));

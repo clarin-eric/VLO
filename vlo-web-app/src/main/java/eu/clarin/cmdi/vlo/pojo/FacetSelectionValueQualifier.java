@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 CLARIN
+ * Copyright (C) 2016 CLARIN
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,22 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package eu.clarin.cmdi.vlo.pojo;
-
-import java.util.List;
-import org.apache.solr.client.solrj.response.FacetField;
 
 /**
  *
- * @author twagoo
+ * @author Twan Goosen <twan.goosen@mpi.nl>
  */
-public interface FacetFieldSelection {
-
-    FacetField getFacetField();
-
-    List<String> getFacetValues();
-
-    QueryFacetsSelection getSelection();
-    
+public enum FacetSelectionValueQualifier {
+    /**
+     * Negates a value selection, {@literal i.e.} expresses the exclusion of
+     * documents with the associated value
+     */
+    NOT
 }

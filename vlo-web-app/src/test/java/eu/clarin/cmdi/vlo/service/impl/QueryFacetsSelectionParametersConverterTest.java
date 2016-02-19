@@ -18,8 +18,6 @@ package eu.clarin.cmdi.vlo.service.impl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
-import static eu.clarin.cmdi.vlo.FacetConstants.FIELD_COLLECTION;
-import static eu.clarin.cmdi.vlo.FacetConstants.FIELD_COUNTRY;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;

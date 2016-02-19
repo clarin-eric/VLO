@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import eu.clarin.cmdi.vlo.wicket.components.ToggleLink;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -51,30 +52,15 @@ public abstract class TogglePanel extends Panel {
         super(id);
 
         // add the actual toggle link
-        final Link toggler = new IndicatingAjaxFallbackLink("toggler") {
-
+        final Component toggler = new ToggleLink("toggler", visibilityModel, showTextModel, hideTextModel) {
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                visibilityModel.setObject(!visibilityModel.getObject());
+            protected void onClick(AjaxRequestTarget target) {
                 if (target != null) {
                     target.add(TogglePanel.this);
                 }
             }
         };
         add(toggler);
-
-        // add the text, with a dynamic model that gets the value depending on the toggle state
-        toggler.add(new Label("toggleText", new AbstractReadOnlyModel<String>() {
-
-            @Override
-            public String getObject() {
-                if (visibilityModel.getObject()) {
-                    return hideTextModel.getObject();
-                } else {
-                    return showTextModel.getObject();
-                }
-            }
-        }));
 
         // make 'class' attribute depend on toggle state
         add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {

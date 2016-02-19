@@ -1,0 +1,3464 @@
+<mappings field="organisation">
+   <mapping>
+      <normalizedValue value="AIATSIS"/>
+      <variant value="Australian Institute of Aboriginal and Torres Strait Islander Studies (AIATSIS)"/>
+      <variant value="Australian Institute of Aboriginal Studies"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CNRS, IIAP, Department of Linguistics"/>
+      <variant value="Centre national de la recherche scientifique (CNRS); Instituto de Investigaciones de la Amazonía Peruana (IIAP); Ruhr-University Bochum, Department of Linguistics"/>
+      <variant value="Centre national de la recherche scientifique, Instituto de Investigaciones de la Amazonía Peruana / Department of Linguistics / Ruhr-University Bochum"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="RKK"/>
+      <variant value="Rooms-Katholiek Kerkgenootschap"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Finnish language, University of Oulu"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Consejo de Desarrollo Científico y Humanístico, Universidad Central de Venezuela"/>
+      <variant value="Universidad Central de Venezuela, Consejo de Desarrollo Científico y Humanístico"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Kegan Paul"/>
+      <variant value="Kegan Paul International"/>
+      <variant value="Kegan Paul."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="ILK, Computational Linguistics"/>
+      <variant value="Computational Linguistics, Tilburg"/>
+      <variant value="ILK, Computational Linguitics, Tilburg University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Feffer and Simons Incorporated"/>
+      <variant value="Feffer &amp; Simons Incorporated"/>
+      <variant value="Feffer and Simons Inc."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Center for SouthEast Asian Studies, University of California, Berkeley"/>
+      <variant value="Center fo SouthEast Asian Studies, University of California, Berkeley"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Imprimerie Nationale"/>
+      <variant value="Imprimerie nationale"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Departement of African Languages and Cultures, Ecole Normale Supérieure-Yaoundé"/>
+      <variant value="Ecole Normale Supérieure-Yaoundé, Departement of African Languages and Cultures; Po Box 47, Yaoundé-Cameroon"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, Southern Illinois University at Carbondale"/>
+      <variant value="Southern Illinois University at Carbondale, Department of Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Collège Liberman"/>
+      <variant value="Collège Libermann"/>
+      <variant value="Le Collège Libermann"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="South Asia Regional Studies, University of Pennsylvania"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Instituto de Lingüística, Facultad de Filosofía y Letras"/>
+      <variant value="Instituto de Lingüística, Facultad de Filosofía y Letras, Universidad de Buenos Aires"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Ablex Publishing Corporation"/>
+      <variant value="Ablex"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Victoria"/>
+      <variant value="University of Victoria, British Columbia, Canada"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Celtic, Institute of Irish Studies"/>
+      <variant value="Queen's University of Belfast-Institute of Irish Studies-Dept. of Celtic"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Groote Eylandt Linguistics"/>
+      <variant value="Groote Eylandt Linguistics."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="UiL-OTS, Utrecht University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Michigan, Ann Arbor"/>
+      <variant value="University of Michigan"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="J. M. Dent and Sons Limited"/>
+      <variant value="J. M. Dent &amp; Sons Limited"/>
+      <variant value="J. M. Dent &amp; Sons Ltd"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="SPEX"/>
+      <variant value="SPEX / Radboud University Nijmegen / the Netherlands"/>
+      <variant value="SPEX, Radboud University Nijmegen, the Netherlands"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Undena Publications"/>
+      <variant value="Undena Publishing"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Akademija Nauk SSSR"/>
+      <variant value="Akademia Nauk SSSR"/>
+      <variant value="Akademija Nauk SSSR, Sibirskoe Otdelenie, Institut Istorii, Filologii i Filosofii"/>
+      <variant value="Akademija nauk SSSR, Institut Jazykoznanija"/>
+      <variant value="Akademija Nauk"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="N, A"/>
+      <variant value="NIET VAN TOEPASSING"/>
+      <variant value="Unspecified"/>
+      <variant value="Unknown"/>
+      <variant value="unaffiliated"/>
+      <variant value="NIET BEKEND"/>
+      <variant value="N/C"/>
+      <variant value="niet van toepassing"/>
+      <variant value="unknown"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Dipartimento per la Cooperazione allo Sviluppo, Comitato Tecnico Linguistico per l'Universita Nazionale Somala"/>
+      <variant value="Dipartimento per la Cooperazione allo Sviluppo; Comitato Tecnico Linguistico per l'Universita Nazionale Somala, Ministero degli Affari Esteri"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Free Press"/>
+      <variant value="The Free Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Gramedia, Cornell University Press"/>
+      <variant value="Gramedia / Cornell University Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="UFAL, Faculty of Mathematics and Physics"/>
+      <variant value="UFAL, Faculty of Mathematics and Physics, Charles University in Prague"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Oregon"/>
+      <variant value="University of Oregon / CIDCA"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Språkbanken, Department of Swedish Language"/>
+      <variant value="Språkbanken, Dept. of Swedish Language, Göteborg University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Fryske Akademy, KNAW"/>
+      <variant value="Fryske Akademy - KNAW"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Chicago Press"/>
+      <variant value="The University of Chicago Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, Stockholm University"/>
+      <variant value="Stockholm University, Dept. of Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, University of Oregon"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Humanities Press, Australian Institute of Aboriginal Studies"/>
+      <variant value="Humanities Press / Australian Institute of Aboriginal Studies"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Almqvist &amp; Wiksell"/>
+      <variant value="Almqvist and Wiksells"/>
+      <variant value="Almqvist and Wiksell"/>
+      <variant value="Almquist and Wiksells Boktryckerei"/>
+      <variant value="Almqvist &amp; Wiksell."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Colorado; Volkswagen Foundation"/>
+      <variant value="University of Colorado and VolkswagenStiftung"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="NBG"/>
+      <variant value="NBG/DBNL/INL"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="MIT Press"/>
+      <variant value="M.I.T. Press"/>
+      <variant value="Massachusetts Institute of Technology Press"/>
+      <variant value="Massachusetts Institute of Technology (MIT) Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Natural Language Processing Centre, Faculty of Informatics"/>
+      <variant value="Natural Language Processing Centre, Faculty of Informatics Masaryk University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department for General Linguistics, Westfälische Wilhelms-Universität Münster"/>
+      <variant value="Westfälische Wilhelms-Universität Münster, Department for General Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="NIAS"/>
+      <variant value="Netherlands Institute of Advanced Study (NIAS)"/>
+      <variant value="Netherlands Institute of Advanced Study"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Bantam Books"/>
+      <variant value="Bantam."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Suomalaisen Kirjallisuuden Seura"/>
+      <variant value="Suomalaisen kirjallisuuden Seura"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute for Aboriginal Development"/>
+      <variant value="Institute of Aboriginal Development"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="DISP, University of Rome Tor Vergata"/>
+      <variant value="DISP - University of Rome Tor Vergata"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Linguistics Laboratory, University of Montana"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Utah Press"/>
+      <variant value="The University of Utah Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Center for Applied Linguistics"/>
+      <variant value="The Center for Applied Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Musée Royal du Congo Belge"/>
+      <variant value="Musee royal du Congo belge"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institut de Linguistique Appliquee, Unversite d'Abidjan"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Language and Literature, Academy of sciences of the Estonian SSR"/>
+      <variant value="Academy of sciences of the Estonian SSR, Institute of Language and Literature"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="TALG Research Group, University of Vigo"/>
+      <variant value="TALG Research Group (University of Vigo)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="The Research Institute for the Languages of Finland"/>
+      <variant value="Research Institute for the Languages of Finland"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Program in African Languages and Linguistics and the African Studies Program, Indiana University"/>
+      <variant value="Indiana University, Program in African Languages and Linguistics and the African Studies Program"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Universität Köln"/>
+      <variant value="Universität zu Köln"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="African Studies Institute, University of the Witwatersrand"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of General Linguistics, University of Zurich"/>
+      <variant value="University of Zurich, Institute of General Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Chemnitz University of Technology"/>
+      <variant value="Technische Universität Chemnitz"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="UCL SH&amp;PS, London"/>
+      <variant value="UCL Speech Hearing and Phonetic Sciences, London"/>
+      <variant value="http://www.ucl.ac.uk/psychlangsci/research/speech/"/>
+      <variant value="UCL Speech Hearing and Phonetic Sciences (UCL SH&amp;PS, London UK)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Lexicologie, VUA"/>
+      <variant value="Lexicologie VUA"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Center for Spoken Language Understanding, Oregon Graduate Institute of Science and Technology"/>
+      <variant value="Center for Spoken Language Understanding at Oregon Graduate Institute of Science and Technology"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Buske Verlag"/>
+      <variant value="Buske"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Interdisciplinary Nanoscience Center, Aarhus Universitet"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Linguistics and Cultures, School of Languages"/>
+      <variant value="University of Manchester, School of Languages, Linguistics and Cultures"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Linguistics Department, Purdue University, USA"/>
+      <variant value="Purdue University, USA - Linguistics Dept."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Don Bosco Press"/>
+      <variant value="Don Bosco"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of the Latvian language, University of Latvia"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Association culturelle Te Reo o te Tuamotu, University of Kiel"/>
+      <variant value="University of Kiel; Association culturelle Te Reo o te Tuamotu"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Stephen Austin and Sons, Limited"/>
+      <variant value="Stephen Austin and Sons, Ltd."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CONICET, Universidad Nacional de Formosa"/>
+      <variant value="CONICET- Universidad Nacional de Formosa"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Friederichsen, de Gruyter and Company"/>
+      <variant value="Friederichsen, de Gruyter &amp; Co"/>
+      <variant value="Friederichsen, de Gruyter &amp; Company"/>
+      <variant value="Friedrichsen, De Gruyter &amp; Co"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute for African Studies, University of Cologne"/>
+      <variant value="University of Cologne, Institute for African Studies"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CLLE-ERSS"/>
+      <variant value="CLLE-ERSS, IRIT"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institut für Afrikanistik und Äthiopistik, Universität Hamburg"/>
+      <variant value="Institut für Afrikanistik und Äthiopistik der Universität Hamburg"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Bell &amp; Howell"/>
+      <variant value="Bell and Howell"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centre of Southeast Asian Studies, Monash University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Tribal Cultural Research and Training Institute, Government of Andhra Pradesh"/>
+      <variant value="Government of Andhra Pradesh, Tribal Cultural Research and Training Institute"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Classical Philology, University of Helsinki"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Blackwell"/>
+      <variant value="Blackwell."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Département de sciences du langage, Université d'Aix-Marseille"/>
+      <variant value="Département de sciences du langage, Université d'Aix-Marseille (Aix-en-Provence FR)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Faber and Faber"/>
+      <variant value="Faber &amp; Faber"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Cotabato Cultures, Notre Dame University"/>
+      <variant value="Notre Dame University, Institute of Cotabato Cultures"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CSLI, Stanford University"/>
+      <variant value="Center for the Study of Language and Information (CSLI)"/>
+      <variant value="Center for the Study of Language and Information"/>
+      <variant value="Center for the Study of Language and Information (CSLI) at Stanford University"/>
+      <variant value="Center for the Study of Language and Information / Stanford University"/>
+      <variant value="CSLI"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Dakar, Senegal : African Language Materials Archive,"/>
+      <variant value="Dakar, Senegal : African Language Material Archive,"/>
+      <variant value="Dakar, Senegal African Language Materials Archive,"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of History and Philology, Academia Sinica"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Cambridge University Press"/>
+      <variant value="The Cambridge University Press"/>
+      <variant value="Cambridge University Press."/>
+      <variant value="Cambrigde University Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="K. Paul, Trench, Trubner and Company"/>
+      <variant value="K. Paul, Trench, Trubner &amp; Company"/>
+      <variant value="K. Paul, Trench, Trubner and Co."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CST, KUA"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Asociación Proyecto Lingüístico Francisco Marroquín"/>
+      <variant value="Asociación Proyecto Lingüístico Francisco Marroquín, PLFM"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Pennsylvania Press"/>
+      <variant value="The University of Pennsylvania Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CERTEC, Humanistlaboratoriet"/>
+      <variant value="CERTEC / Humanistlaboratoriet"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics and Research School of Pacific Studies, Australian National University"/>
+      <variant value="Department of Linguistics Research School of Pacific and Asian Studies, Australian National University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Amsterdam Centre for Language and Communication, University of Amsterdam"/>
+      <variant value=" Amsterdam Centre for Language &amp; Communication / University of Amsterdam"/>
+      <variant value="University of Amsterdam, Amsterdam Centre for Language &amp; Communication"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, Australian National University. Unpublished"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Section de Linguistique Appliquée, Université Fédérale du Cameroun"/>
+      <variant value="Université Fédérale du Cameroun, Section de Linguistique Appliquée"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Haag and Herchen Verlag"/>
+      <variant value="Haag &amp; Herchen Verlag"/>
+      <variant value="Haag und Herchen"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="North-East Frontier Agency"/>
+      <variant value="North-East Frontier Agency Administration"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Universidad Nacional Autónoma de México"/>
+      <variant value="Universidad Nactional Autónoma de México"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Söderströms förlag"/>
+      <variant value="Söderström"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Lingsoft, Incorporated"/>
+      <variant value="Lingsoft, Inc."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value=" The Institute for Comparative Research in Human Culture"/>
+      <variant value="The Institute for Comparative Research in Human Culture"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Faculty of Arts, Leiden University"/>
+      <variant value="Leiden University Faculty of Arts"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CLS, Radboud University"/>
+      <variant value="Centre for Language Studies"/>
+      <variant value="Centre for Language Studies / Radboud University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Werkgroep Informatica, Vrije Universiteit"/>
+      <variant value="Wergroep Informatica Vrije Universiteit"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institut für Sprachwissenschaft, Universität zu Köln"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="African Studies Program, University of Wisconsin"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="John Hopkins University Press "/>
+      <variant value="Johns Hopkins University Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Alaska Native Language Center and Program, University of Alaska Fairbanks"/>
+      <variant value="Alaska Native Language Center"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Atelier National Reproduction des Thèses, Université Lille III"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="IDS"/>
+      <variant value="Institut für Deutsche Sprache"/>
+      <variant value="IDS: Institut für Deutsche Sprache"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Johns Hopkins University Press"/>
+      <variant value="The Johns Hopkins Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Afrikcan Studies Center"/>
+      <variant value="African Studies Center"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="VEB Verlag Enzyklopädie"/>
+      <variant value="VEB Verlag Enzyklopaedie"/>
+      <variant value="Verlag Enzyklopädie"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Faculty of Letters and Philosophy, University of Buenos Aires"/>
+      <variant value="University of Buenos Aires, Faculty of Letters and Philosophy"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Reichert"/>
+      <variant value="Reichert Verlag"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Radio Herrijzend Nederland"/>
+      <variant value="RADIO HERRIJZEND NEDERLAND"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Anglo-Saxon, Norse, and Celtic, the University of Cambridge"/>
+      <variant value="Department of Anglo-Saxon, Norse, and Celtic at the University of Cambridge"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="MIT"/>
+      <variant value="Massachusetts Institute of Technology"/>
+      <variant value="Massachusetts Institute of Technology (MIT)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, Lund University"/>
+      <variant value="Dept. of Linguistics, Lund University, Sweden"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Pacific Linguistics"/>
+      <variant value="Pacific Linguisics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Infrastructure, Planning, and Environment, Northern Territory Government"/>
+      <variant value="Northern Territory Government, Dept of Infrastructure, Planning, and Environment"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Korpora.org, Universität Duisburg-Essen"/>
+      <variant value="Korpora.org"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Diwurruwurru-Jaru Aboriginal Corporation"/>
+      <variant value="Diwurruwurru-jaru Aboriginal Corporation"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Anthropology, University of Manitoba"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Chicano Studies Research Center, UCLA"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Miision porotestanonbe mbo sahaal ngal, Bamako"/>
+      <variant value="Bamako : Miision porotestanonbe mbo sahaal ngal,"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Akademie Verlag"/>
+      <variant value="Akademie-Verlag"/>
+      <variant value="Akademie-Verlag."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="DGCSS, KUA"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="G. Narr Verlag"/>
+      <variant value="G. Narr"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centre Territorial de Recherche et de Documentation Pédagogiques"/>
+      <variant value="CTRDP"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Directorate of Information and Public Relations, Government of Arunachal Pradesh"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Babylon Centre for Studies of Multilingualism in the Multicultural Society"/>
+      <variant value="the Babylon Centre for Studies of Multilingualism in the Multicultural Society"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Applied Computing Department, Dundee University"/>
+      <variant value="Applied Computing Department of Dundee University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Research Group in Computational Linguistics, University of Wolverhampton"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Psychology, University of Jyväskylä"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Cultures &amp; Religions, School of Languages"/>
+      <variant value="University of Stirling, School of Languages, Cultures &amp; Religions"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Smithsonian Institution Press"/>
+      <variant value="Smithsonian Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Indian Studies, University of Groningen"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Ministerio de Gobierno, República de Colombia"/>
+      <variant value="Ministerio de Gobierno"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centre de recherche Valibel, Louvain"/>
+      <variant value="http://www.uclouvain.be/valibel"/>
+      <variant value="Centre de recherche Valibel - Discours et variation (Valibel, Louvain BE)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="P. Shalom Publications incorporated"/>
+      <variant value="P. Shalom Pub. Inc."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="MICA, Hanoi"/>
+      <variant value="Multimedia, Information, Communication and Applications - UMI 2954 (MICA, Hanoi VN)"/>
+      <variant value="http://www.mica.edu.vn"/>
+      <variant value="Multimedia, Information, Communication and Applications, Hanoi"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centro de Estudios Mayas Mexico, Universidad Nacional Autonoma de Mexico"/>
+      <variant value="Universidad Nacional Autonoma de Mexico, Centro de Estudios Mayas Mexico"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CLUL, University of Lisbon"/>
+      <variant value="University of Lisbon, CLUL-Centro de Linguística da Universidade de Lisboa"/>
+      <variant value="Centro de Linguística da Universidade de Lisboa / University of Lisbon"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Tip. Imp. Akademii Nauk"/>
+      <variant value="Tip. Imperatorskoj akademii nauk"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Addison Wesley Longman"/>
+      <variant value="Addison Wesley Longman"/>
+      <variant value="Addison Wesley Longman."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Danmarks JordbrugsForskning"/>
+      <variant value="Danmarks Jordbrugsforskning"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Southeast Asia Program, Department of Asian Studies"/>
+      <variant value="Southeast Asia Program, Department of Asian Studies, Cornell University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, Hartford Seminary Foundation"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Département de linguistique, UNIGE"/>
+      <variant value="http://www.unige.ch/lettres/linguistique/index.html"/>
+      <variant value="Département de linguistique  / Université de Genève"/>
+      <variant value="Université de Genève, Département de linguistique (UNIGE, Genève CH)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Vandenhoeck &amp; Ruprecht"/>
+      <variant value="Vandenhoeck and Ruprecht"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="SIL"/>
+      <variant value="Summer Institute of Lingusitics"/>
+      <variant value="Summer Institute of LInguistics"/>
+      <variant value="SIL of the University of Oklahoma"/>
+      <variant value="The Summer Institute of Linguistics"/>
+      <variant value="Summer Institute of Linguistics."/>
+      <variant value="Summer Institute of Linguistics"/>
+      <variant value="SIL Publications"/>
+      <variant value="SIL International"/>
+      <variant value="Summer Institute of Linguistcs"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute fo the Study of Languages and Cultures of Asia and Africa, Tokyo University of Foreign Studies"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics and Nordic Studies, University of Oslo"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="John Wilson and Son"/>
+      <variant value="John Wilson &amp; Son"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="General Linguistics, Department of Linguistics"/>
+      <variant value="General Linguistics, Department of Linguistics, University of Cologne"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, University of Illinois, Urbana"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Instituto Nacional de Antropologia e Historia"/>
+      <variant value="Instituto Nacional de Antropología e Historia"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Limsi, Orsay, France"/>
+      <variant value="Laboratoire d'informatique pour la mécanique et les sciences de l'ingénieur - UPR 3251 (Limsi, Orsay FR)"/>
+      <variant value="Laboratoire d'informatique pour la mécanique et les sciences de l'ingénieur, Orsay, France"/>
+      <variant value="http://www.limsi.fr"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="SIL, University of Oklahoma"/>
+      <variant value="Summer Institute of Linguistics / University of Oklahoma"/>
+      <variant value="University of Oklahoma, Summer Institute of Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Springer"/>
+      <variant value="Springer Verlag"/>
+      <variant value="Springer Verlag."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Surrey"/>
+      <variant value="Univeristy of Surrey"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, Max Planck Institute for Evolutionary Anthropology"/>
+      <variant value="Max Planck Institute for Evolutionary Anthropology, Department of Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="BOS"/>
+      <variant value="Boeddhistische Omroep Stichting"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Directorate of Research, Government of Arunachal Pradesh"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Faculty of Slavonic Studies, Sofia University &#34;Kliment Ohritski&#34;"/>
+      <variant value="Sofia University &#34;Kliment Ohritski&#34;, Faculty of Slavonic Studies"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Faculty of Humanities and Social Sciences, University of Zagreb"/>
+      <variant value="University of Zagreb, Faculty of Humanities and Social Sciences"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CONICET, Universidad de Buenos Aires"/>
+      <variant value="CONICET - Universidad de Buenos Aires"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Center for Dutch Language and Speech, University of Antwerp"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Harcourt and Brace"/>
+      <variant value="Harcourt &amp; Brace"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Harper and Row"/>
+      <variant value="Harper &amp; Row"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centro de Lenguas Indígenas, Instituto de Investigaciones Históricas, Universidad Católica ʺAndres Belloʺ"/>
+      <variant value="Centro de Lenguas Indígenas, Instituto de Investigaciones Históricas, Universidad Católica &#34;Andres Bello&#34;"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Open Court Publishing Company"/>
+      <variant value="Open Court Publishing Co"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Campus Kortrijk, Katholieke Universiteit Leuven"/>
+      <variant value="Katholieke Universiteit Leuven Campus Kortrijk"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="David McKay"/>
+      <variant value="David McKay Company Inc."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Association culturelle Te Reo o te Tuamotu, Christian-Albrechts-Universität zu Kiel"/>
+      <variant value="Christian-Albrechts-Universität zu Kiel, Association culturelle Te Reo o te Tuamotu, Te U'i hou o te Fenua 'Enata, Atuona, B.P. 26, Hiva 'Oa, Marquises-Sud"/>
+      <variant value="Christian-Albrechts-Universität zu Kiel, Association culturelle Te Reo o te Tuamotu"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Niemeyer"/>
+      <variant value="Max Niemeyer"/>
+      <variant value="Max Niemeyer Verlag"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Macmillan"/>
+      <variant value="Macmillan and Co. Ltd"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Albert-Ludwigs-Universität Freiburg i.Br."/>
+      <variant value="Albert-LUdwigs-Universität Freiburg i.Br."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of California Press"/>
+      <variant value="University of California Publications"/>
+      <variant value="University of Californian Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centre for Applied Language Studies, University of Jyväskylä"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Viking Fund Publications in Anthropology"/>
+      <variant value="Viking Fund"/>
+      <variant value="Viking Fund Inc."/>
+      <variant value="The Viking Fund Publications in Anthropology"/>
+      <variant value="Viking Fund Publications"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Humanities Lab, Lund University"/>
+      <variant value="Humanistlaboratoriet, Lund University, Sweden"/>
+      <variant value="Humanistlaboratoriet / Lund University, Sweden"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Arbeitsgruppe Kognitionsforschung, FB2, Universitä&#132;t Paderborn"/>
+      <variant value="Arbeitsgruppe Kognitionsforschung, FB2, Universit&#132;t Paderborn"/>
+      <variant value="Arbeitsgruppe Kognitionsforschung, FB2, Universitä&#132;t Paderborn"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Oklahoma"/>
+      <variant value=" the University of Oklahoma"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Seminar für Deutsche Philologie, Georg August-Universität Göttingen"/>
+      <variant value="Seminar für Deutsche Philologie; Georg August-Universität Göttingen"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="M. Nijhoff"/>
+      <variant value="M. Nijhoff / Albrecht &amp; Co"/>
+      <variant value="Martinus Nijhoff"/>
+      <variant value="Martinus Hijhoff"/>
+      <variant value="M. Nijhoff (KITLV)"/>
+      <variant value="M.Nijhoff"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Instituto Lingüístico de Verano de Centroamerica"/>
+      <variant value="Instituto Lingüístics de Verano"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Asian Educational Services"/>
+      <variant value="Asian Educational Serives"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CSH, New Delhi"/>
+      <variant value="http://www.csh-delhi.com"/>
+      <variant value="Centre de sciences humaines (CSH, New Delhi IN)"/>
+      <variant value="Centre de sciences humaines, New Delhi"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Université de Dakar"/>
+      <variant value="Universite de Dakar"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Meertens Institute"/>
+      <variant value="Meertens Institute - KNAW"/>
+      <variant value="Meertens Institute (Royal Netherlands Academy of Arts and Sciences)"/>
+      <variant value="Meertens Instituut"/>
+      <variant value="Meertens Institute KNAW The Netherlands"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Instituto de Antropologia, Universidade de Coimbra"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="National Thai Studies Centre, Australian National University"/>
+      <variant value="Australian National University, National Thai Studies Centre"/>
+      <variant value="The Australian National University, National Thai Studies Centre"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Indiana University"/>
+      <variant value="Indiana University / Mouton"/>
+      <variant value="Indiana University and Mouton"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Faculté des Lettres et Sciences humaines, Université de Dakar"/>
+      <variant value="Université de Dakar, Faculté des Lettres et Sciences humaines"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Center for Endangered Languages Documentation, Universitas Negeri Papua"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Basil Blackwell"/>
+      <variant value="Basil Blackwell."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Scandinavian languages and literature, University of Helsinki"/>
+      <variant value="The Department of Scandinavian Languages and Literature, University of Helsinki"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Technical and Further Education, Aboriginal Education Unit"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Unité de Recherche Interdisciplinaire Octogone - EA4156, Toulouse"/>
+      <variant value="Unité de Recherche Interdisciplinaire Octogone - EA4156 (Toulouse FR)"/>
+      <variant value="http://w3.octogone.univ-tlse2.fr"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Henry Young and Sons, Limited"/>
+      <variant value="Henry Young &amp; Sons, Limited"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CIPL"/>
+      <variant value="Centre Informatique de Philosophie et Lettres (CIPL)"/>
+      <variant value="Centre Informatique de Philosophie et Lettres"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department. of Linguistics, Tribhuvan University, Kirtipur, Kathmandu"/>
+      <variant value="Dept. of Linguistics ,Tribhuvan University ,Kirtipur ,Kathmandu"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Blaisdell Publishing Co."/>
+      <variant value="Blaisdell"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Kluwer"/>
+      <variant value="Kluwer Academic Publishers"/>
+      <variant value="Kluwer Academic"/>
+      <variant value="Kluwer Academic Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Long Now Foundation"/>
+      <variant value="Long Now Foundation (www.longnow.org)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="EUROTYP Programme, European Science Foundation"/>
+      <variant value="European Science Foundation, EUROTYP Programme"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="ASPIRH, Tarauacá"/>
+      <variant value="ASPIRH (Associação do Povo Indígena do Rio Humaita), Tarauacá"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Shuter and Shooter"/>
+      <variant value="Shuter &amp; Shooter"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Chicago Linguistic Society"/>
+      <variant value="Chicago Linguistics Society"/>
+      <variant value="Chicago Linguistics Society, University of Chicago"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Holt, Rinehart and Winston"/>
+      <variant value="Holt, Reinhart and Winston"/>
+      <variant value="Holt, Rinehart &amp; Winston"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Seminario de Lenguas Indígenas, Instituto de Investigaciones Filológicas"/>
+      <variant value="Universidad Nacional Autonoma de México, Instituto de Investigaciones Filológicas, Seminario de Lenguas Indígenas"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="LLink"/>
+      <variant value="LLINK"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Østsamisk museum Neiden, Norway"/>
+      <variant value="Østsamisk museum Neiden (Norway)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Museum of Anthropology, University of Missouri"/>
+      <variant value="University of Missouri, Museum of Anthropology"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Indiana University Press"/>
+      <variant value="Indianan University Press"/>
+      <variant value="Indiana University Press and Mouton"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Phonetics Laboratory, University of Oxford"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, Punjabi University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Linguistics Program, University of Montana"/>
+      <variant value="University of Montana, Linguistics Program"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Linguistic Society of the Philippines"/>
+      <variant value="Linguistic Society of the Philippines."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Gregg Press"/>
+      <variant value="Gregg"/>
+      <variant value="Gregg International Publishers Ltd."/>
+      <variant value="Gregg Press Ltd"/>
+      <variant value="Gregg Press Limited"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="IMS, University of Stuttgart"/>
+      <variant value="Institute for Natural Language Processing / University of Stuttgart"/>
+      <variant value="Institute for Natural Language Processing - IMS- , University of Stuttgart"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Phonetic Sciences, University of Amsterdam"/>
+      <variant value="University of Amsterdam, Institute of Phonetic Sciences"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Colciencias, Universidad de los Andes"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="H. Aschehoug &amp; Company"/>
+      <variant value="H. Aschehoug"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, Annamalai University"/>
+      <variant value="Annamalai University, Department of Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Det Naturvidenskabelige Fakultet, Aarhus Universitet"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Dutch HLT Agency"/>
+      <variant value="Dutch HLT Agency (TST-Centrale)"/>
+      <variant value="TST-Centrale"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Faculté de Psychologie et des Sciences de l'Education, l’Université de Liège"/>
+      <variant value="http://www.fapse.ulg.ac.be"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Meertens Instituut"/>
+      <variant value="Meertens Institute"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Academia Sinica"/>
+      <variant value="http://www.sinica.edu.tw/"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Conakry: Editions Ganndal"/>
+      <variant value="Conakry : Editions Ganndal,"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Oxford University Press"/>
+      <variant value="Oxford University Press."/>
+      <variant value="The Oxford University Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="BBAW"/>
+      <variant value="Berlin-Brandenburgische Akademie der Wissenschaften "/>
+      <variant value="BBAW: Berlin"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Firma KLM Private Limited"/>
+      <variant value="Firma KLM Private Ltd."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Program in Comparative Studies on Southern Asia, Duke University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Harrassowitz Verlag"/>
+      <variant value="Harrassowitz"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Music, University of Jyväskylä"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Language Studies, Umeå university (Umeå SE)"/>
+      <variant value="http://www.sprak.umu.se"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="MPI für Evolutionäre Anthropologie, MPG"/>
+      <variant value="MPI für Evolutionäre Anthropologie"/>
+      <variant value="MPI EVA"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Jensco Limited"/>
+      <variant value="Jensco Ltd."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Leiden: Research School of Asian, African and Amerindian Studies, Universiteit Leiden"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="ILSP"/>
+      <variant value="Institute for Language &amp; Speech Processing"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of General Linguistics, University of Helsinki"/>
+      <variant value="University of Helsinki, Department of General Linguistics."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Heidelberger Akademie der Wissenschaften, University of Heidelberg"/>
+      <variant value="University of Heidelberg, Heidelberger Akademie der Wissenschaften"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Baptist Missionary Society"/>
+      <variant value="The Baptist Missionary Society"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centro de Investigación y Desarrolle Binnizá A. C. &amp; Instituto Lingüístico de Verano A. C."/>
+      <variant value="Centro de Investigación y Desarrolle Binnizá A. C. and Instituto Lingüístico de Verano A. C."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Omrop Fryslan"/>
+      <variant value="OMROP FRYSLAN"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CIIL"/>
+      <variant value="Central Institute of Indian Languages"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="A. A. Balkema"/>
+      <variant value="Balkema"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Foreign Service Institute, Department of State"/>
+      <variant value="Foreign Service Institute, Department of State, United States Government"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="UCL division of psychology and language sciences, UCL"/>
+      <variant value="http://www.phon.ucl.ac.uk"/>
+      <variant value="UCL division of psychology and language sciences (UCL, London UK)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Mouton de Gruyter"/>
+      <variant value="Mouton."/>
+      <variant value="Mouton"/>
+      <variant value="Moutin de Gruyter"/>
+      <variant value="Mouton De Gruyter"/>
+      <variant value="Mouton de Guyter"/>
+      <variant value="Mouton &amp; Co"/>
+      <variant value="Mouton de Gryter"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Sabah Museum and State Archives Deptartment"/>
+      <variant value="Sabah Museum and State Archives Dept"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centre d'études des langues indigènes d'Amérique"/>
+      <variant value="Centre d'études des langues indigènes d'Amérique (CNRS, IRD)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="ETRO, Vrije Universiteit Brussel"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="The Graduate Linguistics Students' Association, The University of Massachusetts"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Maisonneuve Freres et Ch. Leclerc"/>
+      <variant value="Maissonneuve frères &amp; C. Leclerc"/>
+      <variant value="Maisonneuve Freres &amp; Ch. Leclerc"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CSLI  Publications, Stanford University"/>
+      <variant value="Center for the Study of Language and Information (CSLI) Publications"/>
+      <variant value="CSLI Publications"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="RVU"/>
+      <variant value="RVU Educatieve omroep"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Tankönyvkiadó"/>
+      <variant value="Tankönyvk"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Comparative Linguistics (VTW), Leiden University"/>
+      <variant value="Department of Comparative Linguistics (VTW) Leiden University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Language and Communication Science, City University (London)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Antwerp (CNTS)"/>
+      <variant value="CNTS Universiteit Antwerpen"/>
+      <variant value="Centrum voor Nederlandse Taal en Spraak, Antwerpen"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Smithsonian Institution"/>
+      <variant value="Smithsonian Institute"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Alberta"/>
+      <variant value="The University of Alberta"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="ODIN project, Fresno"/>
+      <variant value="California State University, Fresno, ODIN project "/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="IFA-groep, UvA"/>
+      <variant value="IFA-groep UvA"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Curzon Press"/>
+      <variant value="Curzon"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="KTH"/>
+      <variant value="Royal Institute of Technology (KTH, Stockholm SE)"/>
+      <variant value="http://www.kth.se"/>
+      <variant value="Royal Institute of Technology, Stockholm"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="IFAN"/>
+      <variant value="Institut Français d’Afrique Noire (IFAN)"/>
+      <variant value="L'Institut Français d'Afrique Noire (IFAN)"/>
+      <variant value="L'Institut Francçais d'Afrique Noire"/>
+      <variant value="Institut Français d’Afrique Noire"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Universitaet Kiel"/>
+      <variant value="Universität Kiel"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Foris"/>
+      <variant value="Foris."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Grupo de investigación TALG, Universidade de Vigo"/>
+      <variant value="Universidade de Vigo, Grupo de investigación TALG (Tecnoloxías e Aplicacións da Lingua Galega)"/>
+      <variant value="Grupo de investigación Tecnoloxías e Aplicacións da Lingua Galega / Universidade de Vigo"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Literacy Work and Literature Production of the United Methodist Church"/>
+      <variant value="Dept. of Literacy Work and Literature Production of the United Methodist Church"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="African Studies Centre, Michigan University"/>
+      <variant value="Michigan University, African Studies Centre"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of East Asian Studies, University of California Berkeley"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Averbury Publishing Company"/>
+      <variant value="Avebury Publishing Company Limited"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Hawai'i Press"/>
+      <variant value="University of Hawaii Press."/>
+      <variant value="University of Hawaii Press"/>
+      <variant value="The University Press of Hawaii"/>
+      <variant value="University Press of Hawaii"/>
+      <variant value="The University of Hawaii Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="netpatient"/>
+      <variant value="netpatient.dk"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Language and Communication Science, City University London"/>
+      <variant value="Department of Language and Communication Science, City University (London)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Educational Sciences, University of Jyväskylä"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Foris Publications, Koninklijk Instituut voor Taal-, Land- en Volkenkunde"/>
+      <variant value="Foris Publications / Koninklijk Institut voor Taal-, Land- en Volkenkunde"/>
+      <variant value="Foris Pub"/>
+      <variant value="Foris Publications"/>
+      <variant value="Foris Publications Holland"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Akademisk Forlag"/>
+      <variant value="Akademisk Forl"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="STEDT"/>
+      <variant value="Sino-Tibetan Etymological Dictionary and Thesaurus Project (STEDT) / Center for Southeast Asian Studies / University of California at Berkeley"/>
+      <variant value="Sino-Tibetan Etymological Dictionary and Thesaurus Project (STEDT), Center for Southeast Asian Studies, University of California at Berkeley"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Département de linguistique et phonétique générales, Université d'Aix-Marseille"/>
+      <variant value="Département de linguistique et phonétique générales, Université d'Aix-Marseille (Aix-en-Provence FR)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Seminar für Allgemeine Sprachwissenschaft, Universität Zürich"/>
+      <variant value="Universität Zürich, Seminar für Allgemeine Sprachwissenschaft"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Instituto de Cooperacion Iberoamericana"/>
+      <variant value="Instituto de Cooperación Iberoamericana"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="FECONA"/>
+      <variant value="Federación de Comunidades Nativas del Ampiyacu (FECONA)"/>
+      <variant value="Federación de Comunidades Nativas del río Ampiyacu (FECONA)"/>
+      <variant value="Federación de Comunidades Nativas del Ampiyacu"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centre for Research on Language Diversity, La Trobe University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Surrey Morphology Group, University of Surrey"/>
+      <variant value="University of Surrey, Surrey Morphology Group"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centre for Sign Lingusitics, The Chinese University of Hong Kong"/>
+      <variant value="The Chinese University of Hong Kong, Centre for Sign Lingusitics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Hornbeam Press, Incorporated"/>
+      <variant value="Hornbeam Press, Inc."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Langues et Mondes"/>
+      <variant value="Langues &amp; Mondes"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Ellehauge &amp; Kildemoes"/>
+      <variant value="Ellehauge and Kildemoes"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="VNU, Hanoi"/>
+      <variant value="Vietnam National University (VNU, Hanoi VN)"/>
+      <variant value="Vietnam National University, Hanoi"/>
+      <variant value="http://www.vnu.edu.vn"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Information Studies and Interactive Media, University of Tampere"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University Press Aberdeen"/>
+      <variant value="The University Press Aberdeen"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Leipzig"/>
+      <variant value="Universität Leipzig"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Rome Tor Vergata"/>
+      <variant value="University of Rome &#34;Tor Vergata&#34;"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Faculty of Asian Studies, Australian National University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Gobierno del Estado de Sonora, Secretaria de Fomento Educativo y Cultura"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="UFAL, Charles University in Prague"/>
+      <variant value="Institute of Formal and Applied Linguistics / Charles University in Prague"/>
+      <variant value="Charles University in Prague, UFAL"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="The Danish eHealth Portal, Copenhagen, Denmark"/>
+      <variant value="sundhed.dk"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institut für Sprachwissenschaft, Universität Innsbruck"/>
+      <variant value="Innsbrucker Beiträge zur Sprachwissenschaft"/>
+      <variant value="Institut für Sprachwissenschaft der Universität Innsbruck"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="SELAF"/>
+      <variant value="Société d'études linguistiques et anthropologiques de France (SELAF)"/>
+      <variant value="Societé pour L'Étude des Langue Africaines"/>
+      <variant value="Société d'études linguistiques et anthropologiques de France"/>
+      <variant value="Société des Etudes Linguistiques et Anthropologiques de France"/>
+      <variant value="Société d'Études Linguistiques et Anthropologiques de France"/>
+      <variant value="Société D'Études Linguistiques et Anthopologiques de France"/>
+      <variant value="Société d'Études Linguistiques et Anthropologiques de France (SELAF)"/>
+      <variant value="Societé pour l'étude des langues africaines"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Editions Jamana, Bamako"/>
+      <variant value="Bamako : Editions Jamana,"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="s.n."/>
+      <variant value="s.n"/>
+      <variant value="s. n."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Sacramento Anthropology Society, Sacramento State College"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Carnegie Mellon University"/>
+      <variant value="Carnegie Mellon University, Ohio State U."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Linguistics and Phonetics, Lund University"/>
+      <variant value="http://www.sol.lu.se/en/lingvistik"/>
+      <variant value="Linguistics and Phonetics, Lund University (LU, Lund SE)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Asiatic Society"/>
+      <variant value="Asiatic Society of Bengal"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="The Macquarie Library Pty Limited"/>
+      <variant value="The Macquarie Library Pty Ltd."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="L'Harmattan"/>
+      <variant value="Harmattan"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Sudan Research Unit, Faculty of Arts"/>
+      <variant value="Sudan Research Unit, Faculty of Arts, University of Khartoum"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="T.U."/>
+      <variant value="TU"/>
+      <variant value="T. U."/>
+      <variant value="T.U&amp;gt;"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="H. Aschehoug &amp;Co"/>
+      <variant value="H. Aschehoug &amp; Company"/>
+      <variant value="H. Aschehoug &amp; Co"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Erhvervs- og Boligstyrelsen, Miljøstyrelsen"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Research School CNWS, Leiden University"/>
+      <variant value="Research School of Asian, African and Amerindian Studies / Leiden University"/>
+      <variant value="Research School CNWS"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="The Three Candles"/>
+      <variant value="The Three Candles."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Cherokee Nation of Oklahoma"/>
+      <variant value="Cherokke Nation of Oklahoma"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="UFAL, MFF"/>
+      <variant value="UFAL, MFF, Charles University in Prague"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Society for Promoting Christian Knowledge"/>
+      <variant value="Society for promoting Christian knowledge"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Proyecto Linguistico Francisco Marroquin"/>
+      <variant value="Proyecto Lingüístico Francisco Marroquín"/>
+      <variant value="Proyecto Linguístico Francisco Marroquín"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="BOS&#xA;"/>
+      <variant value="Boeddhistische Omroep Stichting"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="DFKI"/>
+      <variant value="German Research Center for Artificial Intelligence - DFKI-"/>
+      <variant value="Deutsches Forschungszentrum für künstliche Intelligenz"/>
+      <variant value="Deutsches Forschungszentrum für künstliche Intelligenz (DFKI)"/>
+      <variant value="DFKI GmbH"/>
+      <variant value="German Research Center for Artificial Intelligence (DFKI)"/>
+      <variant value="German Research Center for Artificial Intelligence"/>
+      <variant value="Deutsches Forschungszentrum für künstliche Intelligenz DFKI"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Lexicography, University of Iceland"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Ludwig-Maximilians-Universität München"/>
+      <variant value="Ludwig-Maximilians-Universitaet Muenchen"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="DSL, Denmark"/>
+      <variant value="dsl.dk"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Mazda"/>
+      <variant value="Mazda Publications"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Comparative Linguistics, University of Frankfurt"/>
+      <variant value="University of Frankfurt, Comparative Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="HLT Agency"/>
+      <variant value="HLT Agency (TST-Centrale - Centrale voor Taal- en Spraaktechnologie)"/>
+      <variant value="TST-Centrale"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="School of Arts, Languages and Cultures, University of Manchester"/>
+      <variant value="School of Arts, Languages, and Cultures, University of Manchester"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="FEDUCO"/>
+      <variant value="Feduco"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Enzyklopädie"/>
+      <variant value="Enzyklopaedie"/>
+      <variant value="Enzyklopedie"/>
+      <variant value="Enzyklopädie."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="W. Heffer and Sons"/>
+      <variant value="W. Heffers &amp; Sons"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Abteilung Allgemeine Sprachwissenschaft, Institut für Linguistik"/>
+      <variant value="Institut für Linguistik, Abteilung Allgemeine Sprachwissenschaft, Universität zu Köln"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="School of Languages, Linguistics and Cultures, University of Manchester"/>
+      <variant value="School of Languages, Linguistics and Cultures, Manchester University"/>
+      <variant value="School of Languages, Linguistics and Cultures"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Museu Paraense Emílio Goeldi, Belém"/>
+      <variant value="Museu Paraense Emï¿½lio Goeldi / Belï¿½m / PA / Brasil"/>
+      <variant value="Museu Paraense EmÃ­lio Goeldi / BelÃ©m / PA / Brasil"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Center for Southeast Asia Studies, Center for International Studies"/>
+      <variant value="Ohio University Center for International Studies, Center for Southeast Asia Studies"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CDSP, Paris"/>
+      <variant value="Centre de données socio-politiques (CDSP, Paris FR)"/>
+      <variant value="http://cdsp.sciences-po.fr"/>
+      <variant value="Centre de données socio-politiques, Paris"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Instituto de Investigaciones Antropológicas, Universidad Nacional Autónoma de México"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="TCMO, Radboud Universiteit Nijmegen"/>
+      <variant value="TCMO Radboud Universiteit Nijmegen"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Nepal and Asian Studies, Tribhuvan University"/>
+      <variant value="Institute for Nepal Studies / Tribhuvan University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Anthropos Institute"/>
+      <variant value="Anthropos"/>
+      <variant value="l'Institut Anthropos"/>
+      <variant value="Anthropos-Institut"/>
+      <variant value="Anthropos Institut"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Frederick Ungar Publishing Company"/>
+      <variant value="Frederick Unger Publishing Company"/>
+      <variant value="Frederick Ungar Publishing Co"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Computational and Corpus Linguistics, University of Łódź"/>
+      <variant value="Department of Computational and Corpus Linguistics at the University of Łódź"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CLS, KUN"/>
+      <variant value="CLS / Faculty of Arts/ Radboud University"/>
+      <variant value="CLS-KUN"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Center for Sprogteknologi"/>
+      <variant value="cst.ku.dk"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="African Studies Center, Michigan State University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="LPL, Aix-en-Provence, France"/>
+      <variant value="Laboratoire parole et langage - UMR 7309 (LPL, Aix-en-Provence FR)"/>
+      <variant value="Laboratoire parole et langage, Aix-en-Provence, France"/>
+      <variant value="http://lpl-aix.fr"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Universitätsverlag C. Winter"/>
+      <variant value="Universitätsverlag Heidelberg"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Neurology, Freie Universität Berlin"/>
+      <variant value="Freie Universität Berlin, Department of Neurology"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Association d’ethnolinguistique amérindienne "/>
+      <variant value="Association d’ethnolinguistique amérindienne (A.E.A.)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, University of California at Los Angeles"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="VGH Wissenschaftsverlag"/>
+      <variant value="VGH-Wissenschaftsverlag"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Prompsit Language Engeneering, Universitat d'Alacant"/>
+      <variant value="Universitat d'Alacant - Prompsit Language Engeneering"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Aschehoug, Harvard University Press"/>
+      <variant value="Harvard University Press / Aschehoug"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Groningen"/>
+      <variant value="University Groningen"/>
+      <variant value="University of Groningen (alfa-informatica)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Albrecht &amp; Compagnie"/>
+      <variant value="Albrecht &amp; Co"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="IRIT, Toulouse"/>
+      <variant value="Institut de recherche en informatique de Toulouse - UMR 5505 (IRIT, Toulouse FR)"/>
+      <variant value="Institut de recherche en informatique de Toulouse, Toulouse"/>
+      <variant value="http://www.irit.fr"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Mathematics and Computer Science, University of Latvia"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centre for Speech Technology Research, University of Edinburgh"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="VWGÖ"/>
+      <variant value="Verband der wissenschaftlichen Gesellschaft Österreichs (VWGÖ)"/>
+      <variant value="Verband der wissenschaftlichen Gesellschaft Österreichs"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Saphrograph Corporation"/>
+      <variant value="Saphrograph Corp"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Dept. of computer science, University of Malta"/>
+      <variant value="University of Malta, Dept. of computer science"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Zulu Language and Literature, University of Natal"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CLIPS, Grenoble"/>
+      <variant value="Communication langagière et interaction personne-système (CLIPS, Grenoble FR)"/>
+      <variant value="Communication langagière et interaction personne-système, Grenoble"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="G. and W. Fraser"/>
+      <variant value="G.&amp; W. Fraser"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="ICP, Grenoble"/>
+      <variant value="Institut de la communication parlée, Grenoble"/>
+      <variant value="Institut de la communication parlée (ICP, Grenoble FR)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Izd. Moskovskogo University"/>
+      <variant value="Izd-vo Moskovskogo universiteta"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Berkeley Language Center, University of California, Berkeley"/>
+      <variant value="University of California, Berkeley, Berkeley Language Center"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Via Afrika Limited"/>
+      <variant value="Via Afrika"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Izdat, Sovetskaja enciklopedija"/>
+      <variant value="Izdat. sovetskaja enciklopedija"/>
+      <variant value="Izdat. Sovetskaja Enciklopedija"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Center for the Study of Language and Information"/>
+      <variant value="The Center for the Study of Language and Information"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute for the Study of Languages and Cultures of Asia and Africa, Tokyo University of Foreign Studies"/>
+      <variant value="Institute for the Study of Languages and Cuktures of Asia and Africa"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centre for Language Technology, University of Copenhagen"/>
+      <variant value="University of Copenhagen, Centre for Language Technology"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CGN consortium"/>
+      <variant value="CGN consortium led by Language and Speech, Nijmegen and ELIS, Gent"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Oslo"/>
+      <variant value="University of Oslo, NO2014"/>
+      <variant value="NO2014, University of Oslo"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Pergamon Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Oxford Text Archive, University of Oxford"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Assam Secretariat Printing Office"/>
+      <variant value="The Assam Secretariat Printing Office"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="GU, Göteborg"/>
+      <variant value="Göteborgs universitet"/>
+      <variant value="http://www.flov.gu.se/"/>
+      <variant value="Göteborgs universitet (GU, Göteborg SE)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Baltic Languages, University of Latvia"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Juta and Company, Limited"/>
+      <variant value="Juta &amp; Company, Limited"/>
+      <variant value="Juta and Co., LTD"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="LOT"/>
+      <variant value="Landelijke Onderzoekschool Taalwetenschap"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institut für Finnougristik &amp; Uralistik, University of Hamburg"/>
+      <variant value="University of Hamburg, Institut für Finnougristik/Uralistik"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="NTC Publishing"/>
+      <variant value="NTC Publication Group"/>
+      <variant value="NTC Publiction Group"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Hamburg"/>
+      <variant value="University of Hmaburg"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Niue Centre, University of the South Pacific"/>
+      <variant value="University of the South Pacific, Niue Centre"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Computational Linguistics, Saarland University"/>
+      <variant value="Saarland University, Computational Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institut für Afrikanistik, Universität Köln"/>
+      <variant value="Universität zu Köln, Institut für Afrikanistik, Germany"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Danmarks Miljøundersøgelser"/>
+      <variant value="Danmarks Miljøundersøgelser, Forlaget Hovedland"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="National Institute of Pakistani Studies, Quaid-i-Azam University, Islamabad"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institut für Allgemeine Sprachwissenschaft, Westfaelische Wilhelms-Universitaet Muenster"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="LIAS, Leiden University"/>
+      <variant value="Leiden University, LIAS"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Maisonneuve"/>
+      <variant value="Maissonneuve"/>
+      <variant value="Maisonneuve y Cia"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Routledge"/>
+      <variant value="Routledge."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Latin American Center, University of California at Los Angeles"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="John Benjamins"/>
+      <variant value="John Benjamins."/>
+      <variant value="John Benjamins B.V."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Linguistic Research Unit, Faculty of Arts"/>
+      <variant value="Chulalongkorn University, Linguistic Research Unit, Faculty of Arts"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="BBC"/>
+      <variant value="British Broadcasting Corporation (BBC)"/>
+      <variant value="British Broadcasting Corporation"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="United States Government Printing Office"/>
+      <variant value="U. S. Government Printing Office"/>
+      <variant value="U.S. Government Printing Office"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Slavica Publishers"/>
+      <variant value="Slavica Publisers"/>
+      <variant value="Slavica"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Instituto des estudios peruanos"/>
+      <variant value="Instituto del estudios peruanos"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Anthropology, University of Auckland"/>
+      <variant value="University of Auckland, Department of Anthropology"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Salesbury Press Limited"/>
+      <variant value="Salesbury Press Ltd"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Instituto de Investigación e Integración Social del Estado de Oaxaca, El Colegio de México"/>
+      <variant value="El Colegio de México, Instituto de Investigación e Integración Social del Estado de Oaxaca"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Anthropology, Yale University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="ELRA"/>
+      <variant value="ELRA (European Language Resources Association)"/>
+      <variant value="European Language Resources Association"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="ITC-Irst, Trento, Italy"/>
+      <variant value="ITC-Irst - Centro per la Ricerca Scientifica e Tecnologica, via Sommarive 18, Povo, Trento, Italy"/>
+      <variant value="Centro per la Ricerca Scientifica e Tecnologica, Trento, Italy"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Tampere Unit for Computer-Human Interaction, Department of Computer Sciences"/>
+      <variant value="Department of Computer Sciences, Tampere Unit for Computer-Human Interaction, University of Tampere"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Département de lettres modernes, Université d'Aix-Marseille"/>
+      <variant value="Département de lettres modernes, Université d'Aix-Marseille (Aix-en-Provence FR)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Prentice-All Incorporated"/>
+      <variant value="Prentice-All Inc."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Center for Southeast Asian Studies, Northern Illinois University"/>
+      <variant value="Northern Illinois University, Center for Southeast Asian Studies"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="LUCL"/>
+      <variant value="Bakola Documentation Project of the Dobes initiative, a research project of the Leiden University Center of Linguistics"/>
+      <variant value="Leiden University Center of Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Editorial Universidad de Costa Rica"/>
+      <variant value="Editorial de Universidad de Costa Rica"/>
+      <variant value="Editorial Universitaria de Costa Rica"/>
+      <variant value="Editorial de la Universidad de Costa Rica"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Consejo Superior de Investigaciones Cientificas"/>
+      <variant value="Consejo Superior de Investigaciones Cientificas, Instituto Bernardino de Sahagun"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Pacific Linguistics, Australian National University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="MPI for Human Development, MPG"/>
+      <variant value="Max Planck Institute for Human Development / MPG"/>
+      <variant value="MPI for Human Development"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="TELEAC, NOT"/>
+      <variant value="TELEAC"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Berlin-Brandenburg Academy of Sciences"/>
+      <variant value="Berlin-Brandenburgische Akademie der Wissenschaften "/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="PT Balai Pustaka"/>
+      <variant value="Balai Pustaka"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Gunter Narr"/>
+      <variant value="Gunter Narr Verlag"/>
+      <variant value="Gunter Narr Verlag."/>
+      <variant value="Gunter Narr."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="MPG"/>
+      <variant value="Max Planck Gesellschaft"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Vishveshvaranand Vishva Bandhu Institute of Sanskrit and Indological Studies, Panjab University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Pacific Linguistics, Research School of Pacific and Asian Studies"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="VU University Amsterdam"/>
+      <variant value="Vrije Universiteit Amsterdam"/>
+      <variant value="VU University Amsterdam, Netherlands"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Languages, University of Jyväskylä"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Tilburg (ILK)"/>
+      <variant value="ILK / Computational Linguistics / Tilburg University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Joint Research Centre of the EU"/>
+      <variant value="http://wt.jrc.it/lt/acquis/"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centro de Estudios Linguisticos, University of Buenos Aires"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Verlag J. J. Augustin"/>
+      <variant value="Verlag J.J. Augustin"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centre National de la Recherche Scientifique"/>
+      <variant value="Centre National de la Recherche Scientifique (CNRS)"/>
+      <variant value="Centre National de la Reserche Scientifique"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Izdatel'skaja firma ʺVostochnaja literaturaʺ RAN"/>
+      <variant value="Izdatel'skaja firma &#34;Vostochnaja literatura&#34; RAN"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CNRS, Université Lumière Lyon 2"/>
+      <variant value="CNRS &amp; Université Lumière Lyon 2"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Omroep MAX"/>
+      <variant value="OMROEP MAX"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="SIL, Universitas Pattimura"/>
+      <variant value="Summer Institute of Linguistics / Universitas Pattimura"/>
+      <variant value="Universitas Pattimura, Summer Institute of Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of State, Foreign Service Institute"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Departamento de Publicaciones, El Colegio de México"/>
+      <variant value="El Colegio de México, Departamento de Publicaciones"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="No"/>
+      <variant value="no"/>
+      <variant value="NO"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Freie Universität Berlin"/>
+      <variant value="Freie Universitat Berlin"/>
+      <variant value="Freie UniversitÃ¤t Berlin / Germany"/>
+      <variant value="Freie UniversitÃ¤t Berlin"/>
+      <variant value="Freie Universitaet Berlin / Germany"/>
+      <variant value="Freie Universität Berlin / Germany"/>
+      <variant value="Freie Universitï¿½t Berlin / Germany"/>
+      <variant value="Freie Universitï¿½t Berlin"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Clarendon Press"/>
+      <variant value="Clarendon"/>
+      <variant value="The Clarendon Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centro de Lenguas Indígenas, Universidad Católica Andrés Bello"/>
+      <variant value="Universidad Católica Andrés Bello, Centro de Lenguas Indígenas"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Alberta Press"/>
+      <variant value="The University of Alberta Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Universidad Católica Andrés Bello"/>
+      <variant value="Universidad Catolica Andres Bello"/>
+      <variant value="Universidad Católica Andres Bello"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Gumbaynggir Language and Culture Group"/>
+      <variant value="the Gumbaynggir Language and Culture Group"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Croom Helm"/>
+      <variant value="Croom Helm, Routledge"/>
+      <variant value="Croom Helm."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institut für Phonetik, Universität des Saarlandes"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Geluidenbank"/>
+      <variant value="GELUIDENBANK"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="ASV, Universität Leipzig"/>
+      <variant value="Automatische Sprachverarbeitung / Universität Leipzig"/>
+      <variant value="ASV: Universität Leipzig"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Neerlandistiek, KU Leuven"/>
+      <variant value="Neerlandistiek KU Leuven"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="J. L. van Schaik"/>
+      <variant value="J.L. Van Schaik"/>
+      <variant value="J. L. Van Schaik"/>
+      <variant value="J. L. van Schaik."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Le Figuier, Bamako, Mali"/>
+      <variant value="Bamako, Mali : Le Figuier,"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="n. p."/>
+      <variant value="n.p."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Longmans, Green and Company"/>
+      <variant value="Longmans, Green &amp; Co."/>
+      <variant value="Longman, Green &amp; Co"/>
+      <variant value="Longman, Green and Co"/>
+      <variant value="Longmans, Green &amp; Co"/>
+      <variant value="Longmans, Green"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Computer Science, Polish Academy of Sciences"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Carnegie Institution"/>
+      <variant value="Carnegie Institution of Washington"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Helmut Buske Verlag"/>
+      <variant value="Helmut Buske"/>
+      <variant value="Helmut Buske Verlag Hamburg"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centro de Linguística, Universidade Nova de Lisboa"/>
+      <variant value="Universidade Nova de Lisboa, Centro de Linguística"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Kyoto Project"/>
+      <variant value="KYOTO PROJECT"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centro de Estudos Filosóficos e Humanísticos, Universidade Católica Portuguesa"/>
+      <variant value="Universidade Católica Portuguesa, Centro de Estudos Filosóficos e Humanísticos"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centre for Linguistics, Leiden University"/>
+      <variant value="Leiden University, Centre for Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="E.M.I."/>
+      <variant value="Editrice Missionaria Italiana"/>
+      <variant value="Editrice Missionaria Italiana (E.M.I.)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Faculty of Arts, University of Amsterdam."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Human Language Technology Group, Department of Informatics"/>
+      <variant value="University of Szeged, Department of Informatics, Human Language Technology Group"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Instituto de Lingüística, Universidad de Buenos Aires"/>
+      <variant value="Universidad de Buenos Aires/ Instituto de Lingüística"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Bruno Hisbol"/>
+      <variant value="Bruno/Hisbol"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Winter"/>
+      <variant value="Winter."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="MPI"/>
+      <variant value="Max Planck Institute"/>
+      <variant value="Max Planck Institut"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Finanstilsynet, OEM"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Abteilung Computerlinguistik, Friedrich-Alexander-Universität Erlangen-Nürnberg"/>
+      <variant value="Abteilung Computerlinguistik der Uni. Erlangen"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Arnoldus-Druckerei"/>
+      <variant value="Arnoldus-Drukkerij"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Linguistics, University of Malta"/>
+      <variant value="University of Malta Institute of Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="MPI for Evolutionary Anthropology, MPG"/>
+      <variant value="Max Planck Institute for Evolutionary Anthropology / MPG"/>
+      <variant value="MPI for Evolutionary Anthropology"/>
+      <variant value="Max Planck Institute for Evolutionary Anthropology"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Leiden University"/>
+      <variant value="University of Leiden"/>
+      <variant value="Leiden University, The Netherlands"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Radio Oranje"/>
+      <variant value="RADIO ORANJE"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Survey of English Usage, University College London"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Badan Penyelenggara Seri Nusa, Universitas Katolik Atmajaya Jakarta"/>
+      <variant value="Badan Penyelenggara Seri Nusa Universitas Katolik Atma Jaya Jakarta"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Afrikanistik, Universität Bayreuth"/>
+      <variant value="Universität Bayreuth, Afrikanistik"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Royal Asiatic Society"/>
+      <variant value="Royal Asiatic Society of Great Britain and Ireland"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Phonetics, Research Institute for Linguistics"/>
+      <variant value="Dept. of Phonetics, Research Institute for Linguistics, HAS"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="The Institute of Modern English Language Studies, University of Leeds"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Garland"/>
+      <variant value="Garland."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="UniNE"/>
+      <variant value="http://www2.unine.ch/linguistique.francaise/"/>
+      <variant value="Université de Neuchâtel"/>
+      <variant value="Université de Neuchâtel (UniNE, Neuchâtel CH)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Vostochnaja literatura"/>
+      <variant value="Vostochnaja Gruppa Nauka"/>
+      <variant value="Vostochnaja gruppa, Nauka"/>
+      <variant value="Vostochnaja Gruppa, Nauka"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="C. A. Spin &amp; son"/>
+      <variant value="C. A. Spin and son"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Otto Harrassowitz"/>
+      <variant value="Otto Harrassovitz"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Home and van Thal"/>
+      <variant value="Home &amp; van Thal"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Laboratório de Línguas Indígenas, UnB"/>
+      <variant value="Laboratório de Línguas Indígenas (UnB)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Bibliothèque de la faculté de philosophie et lettres, l'université de Liége"/>
+      <variant value="Bibliothèque de la faculté de philosophie et lettres de l'université de Liége"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="iNano, Aarhus Universitetsforlag"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Research Centre for Linguistic Typology, La Trobe University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="F. S. Crofts and company"/>
+      <variant value="F. S. Crofts &amp; Company"/>
+      <variant value="F. S. Crofts &amp; Co"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institut für Afrikanistik und Ägyptologie, Universität Wien"/>
+      <variant value="Institut für Afrikanistik und Ägyptologie der Universität Wien"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Facultad de Filosofía y Letras, Universidad de Buenos Aires"/>
+      <variant value="Facultad de Filosofía y Letras - Universidad de Buenos Aires"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Cornish Language Board"/>
+      <variant value="Cornish Language Board, the author"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Academy of Sciences at Latvia"/>
+      <variant value="Academy of Sciences of Latvia"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Gamzat Tsadas Institute of History, Language and Literature"/>
+      <variant value="Gamzat Tsadas Institute of History, Language &amp; Literature"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institut de Recherches Sahariennes, Université d'Alger"/>
+      <variant value="Université d'Alger, Institut de Recherches Sahariennes"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CRISCO, Caen"/>
+      <variant value="http://www.crisco.unicaen.fr"/>
+      <variant value="Centre de recherche inter-langues sur la signification en contexte, Caen"/>
+      <variant value="Centre de recherche inter-langues sur la signification en contexte - EA 4255 (Crisco, Caen FR)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Anthropological Survey of India, Ministry of Human Resource Development"/>
+      <variant value="Anthropological Survey of India, Government of India, Ministry of Human Resource Development"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of African and Asian Studies, University of Khartoum"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Editions des ʺamis du musee basqueʺ et ʺIkasʺ"/>
+      <variant value="Editions des &#34;amis du musee basque&#34; et &#34;Ikas&#34;"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institut fuer Allgemeine u. Vergleichende Sprachwissenschaft, University of Kiel"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Universitas Katolik Indonesia Atma Jaya"/>
+      <variant value="Universitas Katolik Indonesia AtmaJaya"/>
+      <variant value="Universitas Atma Jaya"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="SPCK"/>
+      <variant value="Richard Clay &amp; Sons for the Society for Promoting Christian Knowledge"/>
+      <variant value="Richard Clay &amp; Sons for the Society for Promoting Christian Knowledge (SPCK)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="TST-Centrale, INL"/>
+      <variant value="TST-Centrale/INL"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Editora da Unicamp"/>
+      <variant value="Editora de Unicamp"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="F. King and Sons, Printers and Publishers"/>
+      <variant value="F. King &amp; Sons, Printers and Publishers"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Friedrich-Alexander-Universität Erlangen-Nürnberg"/>
+      <variant value="Friedrich-Alexander-Universität Erlangen"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Hoddler Headline Public Limited Company"/>
+      <variant value="Hoddler Headline Plc."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Arizona Press"/>
+      <variant value="The University of Arizona Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Gallimard"/>
+      <variant value="Gallimard."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centre de Documentació Ramon Llull, Universitat de Barcelona"/>
+      <variant value="Centre de Documentació Ramon Llull - Universitat de Barcelona"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Funk and Wagnalls Company"/>
+      <variant value="Funk &amp; Wagnalls Company"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Linguistics dept, UNIL"/>
+      <variant value="Linguistics dept / Université de Lausanne"/>
+      <variant value="UNIL/Linguistics dept"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="UCREL, Lancaster University"/>
+      <variant value="UCREL, Lancaster University, UK"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Nix &amp; Company"/>
+      <variant value="Nix &amp; Co"/>
+      <variant value="Nix &amp; Co."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, Research School of Pacific Studies"/>
+      <variant value="Department of Linguistics, Research School of Pacific Studies, the Australian National University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Izdatel'stvo Akademii Nauk SSSR"/>
+      <variant value="Izd-vo Akademii nauk SSSR"/>
+      <variant value="Izdatel'stvo Akademii Nauka"/>
+      <variant value="Izdatel'stvo Akademii nauk SSSR"/>
+      <variant value="Izdatel'stvo AN SSSR"/>
+      <variant value="Izdatel'stvo Akademii nauk SSSR, Leningradskoe otdelenie"/>
+      <variant value="Izdatel'stvo akademii nauk, SSSR"/>
+      <variant value="Izdatel'stvo Akademii nauk Kazakhskij SSR"/>
+      <variant value="Izdatel'stvo Akademii Nauk Gruzinskoj SSR"/>
+      <variant value="Izdatel'stvo Nauka"/>
+      <variant value="Izdvo Akademii nauk SSSR"/>
+      <variant value="Izdatel’stvo Akademii Nauk SSSR"/>
+      <variant value="Izd-vo akademii nauk gruzinskoj SSR"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="DFG, Freie Universität Berlin"/>
+      <variant value="German Research Foundation (DFG); Freie Universität Berlin"/>
+      <variant value="German Research Foundation / Freie Universität Berlin"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Enfance &amp; Culture"/>
+      <variant value="Enfance &amp; Culture (publisher)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Peeters"/>
+      <variant value="Peeters Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Estonian and General Linguistics, University of Tartu"/>
+      <variant value="University of Tartu, Institute of Estonian and General Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Assam Secretariat Press"/>
+      <variant value="The Assam Secretariat Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="INL"/>
+      <variant value="Instituut voor Nederlandse Lexicologie"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Government Printing Office"/>
+      <variant value="Government Printer"/>
+      <variant value="Government Printing"/>
+      <variant value="Government Printing Department"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Kegan Paul Trench, Trübner, and Company"/>
+      <variant value="Kegan Paul, Trench, Trübner and Co"/>
+      <variant value="Kegan Paul, Trench, Trubner &amp; Co., Ltd"/>
+      <variant value="Kegan Paul Trench, Trübner &amp; Company"/>
+      <variant value="Kegan Paul, Trench, Trübner &amp; Co. Ltd."/>
+      <variant value="Kegan Paul, Trench, Trubner and Co. Ltd"/>
+      <variant value="Kegan Paul, Trench, Trubner and Co."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institut fur Sprachwissenschaft, Universität Bern"/>
+      <variant value="Universität Bern, Institut fur Sprachwissenschaft"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Köppe"/>
+      <variant value="Köppe Verlag"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="TALEP, Laboratoire d'informatique fondamentale, Marseille"/>
+      <variant value="Traitement automatique du langage écrit et parlé, Laboratoire d'informatique fondamentale (TALEP, Marseille FR)"/>
+      <variant value="Traitement automatique du langage écrit et parlé, Laboratoire d'informatique fondamentale, Marseille"/>
+      <variant value="http://www.lif.univ-mrs.fr/spip.php?article353"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Sprachwissenschaftliches Institut, Universität Bochum"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="FECONAPU"/>
+      <variant value="FECONAPU (Federación das Comunidades Nativas del Purus)"/>
+      <variant value="Federación das Comunidades Nativas del Purus"/>
+      <variant value="Feconapu"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="ELPR Publication, Gakuin University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Erhvervs- og Selskabsstyrelsen, OEM"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Tribhuvan University"/>
+      <variant value="Tribhuvan University, Nepal"/>
+      <variant value="Trivuwan University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institut fur Afrikanistik, Universität zu Köln"/>
+      <variant value="Institut für Afrikanistik"/>
+      <variant value="Institut fur Afrikanistik, Universität Köln"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Potsdam"/>
+      <variant value="Universität Potsdam"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="KITLV Press"/>
+      <variant value="KITLV Uitgeverij"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Avebury Publishing Company Limited"/>
+      <variant value="Averbury Publishing Company"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institut d'Ethnologie, Université de Paris"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Germanistik, Linguistik"/>
+      <variant value="Universität Duisburg-Essen / Fakultät Geisteswissenschaften / Germanistik / Linguistik"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Research Institute for Artificial Intelligence, Romanian Academy of Sciences"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CEDDLA"/>
+      <variant value="Centro de Documentación Digital en Lingüística y Antropología (CEDDLA)"/>
+      <variant value="CEDDLA (Centro de Documentación Digital en Lingüítstica y Antropología)"/>
+      <variant value="Centro de Documentación Digital en Lingüística y Antropología"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Syntax Research Center, University of California"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Humanwissenschaftliches Zentrum, Ludwig-Maximilian Universität München"/>
+      <variant value="Humanwissenschaftliches Zentrum der Ludwig-Maximilian Universität München"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="EHU, IXA group"/>
+      <variant value="EHU (IXA group)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Buea"/>
+      <variant value="University of Buea, Cameroon"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Volkswagen Foundation"/>
+      <variant value="Volkswagen Stiftung"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Division Publicaciones y Ediciones, Universidad de la Republica"/>
+      <variant value="Universidad de la Republica, Division Publicaciones y Ediciones"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Peter Lang"/>
+      <variant value="P. Lang"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Fondo Editorial INC-ASDI"/>
+      <variant value="Fondo Editorial INC/ASDI"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Stanford Linguistics Association"/>
+      <variant value="Stanford Linguisticss Association"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="ASCIPM, Filadelfia-Ed. El Gráfico"/>
+      <variant value="ASCIPM / Filadelfia-Ed. El Gráfico"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="European Organization for Nuclear Research (CERN), Geneva, Switzerland"/>
+      <variant value="European Organizatio for Nuclear Research (CERN), Geneva, Switzerland"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="El Colegio de México"/>
+      <variant value="El Colégio de Mexico"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Éditions du Centre national de la recherche scientifique"/>
+      <variant value="Editions du Centre national de la recherche scientifique"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Language Centre, Universiti Kebangsaan Malaysia"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="MPI for Evolutionary Anthropology"/>
+      <variant value="Max-Planck-Institute for Evolutionary Anthropology"/>
+      <variant value="Max Planck Institute for Evolutionary Anthropology"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Instituo Roberto Payró, Facultad de Filosofía y Letras"/>
+      <variant value="Instituo Roberto Payró, Facultad de Filosofía y Letras, Universidad de Buenos Aires"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of African Studies, University of Ibadan"/>
+      <variant value="University of Ibadan-Institute of African Studies"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="MoDyCo, Paris"/>
+      <variant value="Modèles, dynamiques, corpus - UMR 7114 (MoDyCo, Paris FR)"/>
+      <variant value="Modèles, dynamiques, corpus, Paris"/>
+      <variant value="http://www.modyco.fr"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Research Centre of African Languages and Literatures, University of Ghent"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Bavarian Archive for Speech Signals"/>
+      <variant value="Bavarian Archive for Speech Signals, Ludwig-Maximilians-Universitaet Muenchen"/>
+      <variant value="Bavarian Archive for Speech Signals (BAS)"/>
+      <variant value="Bayerisches Archiv für Sprachsignale"/>
+      <variant value="BAS"/>
+      <variant value="BAS: Bayerische Archiv für Sprachsignale"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="McGraw-Hill"/>
+      <variant value="McGraw-Hill Book Company"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="SOAS"/>
+      <variant value="School of Oriental and African Studies, University of London."/>
+      <variant value="School of Oriental and African Studies, University of London"/>
+      <variant value="School of Oriental and African Studies (SOAS) / University of London"/>
+      <variant value="SOAS (School of Oriental and African Studies), University of London"/>
+      <variant value="School of Oriental and African Studies, W. C. I."/>
+      <variant value="School Of Oriental and African Studies"/>
+      <variant value="School of Oriental and African Studies"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="École Pratique de Hautes Etudes"/>
+      <variant value="École Pratique des Hautes Etudes (France)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Lincom Europa"/>
+      <variant value="Lincom Europa."/>
+      <variant value="Lincom"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="The Centre of Oral History, Daugavpils University"/>
+      <variant value="The Centre of Oral History (Daugavpils University)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Nauka"/>
+      <variant value="Nauka."/>
+      <variant value="Nauka, Leningradskoe otd-nie"/>
+      <variant value="Nauka, Sibirskoe otdelenie"/>
+      <variant value="Nauka, Glavnaja redakcija vostochnoj literatury"/>
+      <variant value="Nauka i izkustvo"/>
+      <variant value="Nauka Sibirskoe otdelenie / Nauka"/>
+      <variant value="Nauka, Vostochnaja literatura"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Afrique et Langage"/>
+      <variant value="Afrique et langage"/>
+      <variant value="Afrique et langages"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Instituto Lingüístico de Verano"/>
+      <variant value="Instituto Lingüistico de Verano"/>
+      <variant value="Instituto Linguistico de Verano"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Arnold"/>
+      <variant value="Arnold."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Columbia University Press"/>
+      <variant value="Colombia University Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Charles University"/>
+      <variant value="Charles University in Prague"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Texas at Arlington"/>
+      <variant value=" University of Texas, Arlington"/>
+      <variant value="the University of Texas at Arlington"/>
+      <variant value="The University of Texas at Arlington"/>
+      <variant value="The University of Texas at Arlington."/>
+      <variant value="University of Texas, Arlington"/>
+      <variant value="The University of Texas at Arlinton"/>
+      <variant value="University of Texas at Arlington."/>
+      <variant value="University of Arlington"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Mulce.org ; Universite Blaise Pascal ; France"/>
+      <variant value="Mulce (MULtimodal Corpus Exchange); URL:http://mulce.org"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Summer Institute of Linguistics, University of North Dakota"/>
+      <variant value="University of North Dakota, Summer Institute of Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centre for Deaf Studies, University of Bristol"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Conakry: Weebitande Dudal"/>
+      <variant value="Conakry : Weebitande Dudal,"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Max-Planck-Gesellschaft"/>
+      <variant value="Max Planck Gesellschaft"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Filozofska fakulteta, University of Ljubljana"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Département des langues africaines et linguistique, Université Fédérale du Cameroun"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Université de Paris X, Nanterre"/>
+      <variant value="Université de Paris X"/>
+      <variant value="Université Paris X- Nanterre"/>
+      <variant value="Université Paris X Nanterre"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Goethe University Frankfurt, Institute of Empirical Linguistics"/>
+      <variant value="Goethe Univeristy Frankfurt, Institute of Empirical Linguistics"/>
+      <variant value="Goehte University Frankfurt, Institute of Empirical Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CELGA, University of Coimbra"/>
+      <variant value="University of Coimbra, CELGA (Centro de Esudos de Linguística Geral e Aplicada)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Max Planck Institute for Evolutionary Anthropology"/>
+      <variant value="Max-Planck-Institute for Evolutionary Anthropology"/>
+      <variant value="Max Planck Institute for Evolutionary Anthropology"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="National Foreign Language Resource Center, University of Hawai?i"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Computer Science, Vassar College (New York US)"/>
+      <variant value="http://www.cs.vassar.edu"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CREDO, Marseille"/>
+      <variant value="http://www.pacific-credo.fr"/>
+      <variant value="Centre de Recherche et de Documentation sur l'Océanie - UMR 7308 (CREDO, Marseille FR)"/>
+      <variant value="Centre de Recherche et de Documentation sur l'Océanie, Marseille"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Département FLE, Université d'Aix-Marseille"/>
+      <variant value="http://fleunivprovence.blogspot.fr/"/>
+      <variant value="Département FLE - Français langue étrangère, Université d'Aix-Marseille (Aix-en-Provence FR)"/>
+      <variant value="Département Français langue étrangère / Université d'Aix-Marseille"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centre for Languages and Literature, Lund University"/>
+      <variant value="Centre for Languages and Literature at Lund University, Sweden"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Publication, Gauhati University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Noord-Hollandsche Uitgevers-Maatschappij"/>
+      <variant value="Noord-Hollandsche Uitgevers Maatschappij"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="UPNG Press"/>
+      <variant value="University of Papua New Guinea Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Idaho Research Foundation, University of Idaho"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Philological Section, Research Department"/>
+      <variant value="Philological Section, Research Department, North East Frontier Agency"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Archives of Latvian Folklore, Institute of Literature, Folklore and Art"/>
+      <variant value="Archives of Latvian Folklore, Institute of Literature, Folklore and Art, University of Latvia"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Avis &amp; Phillips Limited"/>
+      <variant value="Avis and Phillips Ltd."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Gairm Publications"/>
+      <variant value="Gairm"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="School of Oriental and African Studies, University of London"/>
+      <variant value="University of London School of Oriental and African Studies"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Musee Royal de l'Afrique Centrale"/>
+      <variant value="Musee Royale de l'Afrique Centrale"/>
+      <variant value="Musee Royal de L'Afrique Central"/>
+      <variant value="Musee Royal de L'Afrique Centrale"/>
+      <variant value="Musee royal de l'Afrique centrale"/>
+      <variant value="Musee Royal de l'Afrique Central"/>
+      <variant value="Musée royal de l'Afrique centrale"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Neerlandistiek, UU"/>
+      <variant value="Neerlandistiek UU"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Sydney"/>
+      <variant value="The University of Sydney"/>
+      <variant value="The University of Sydney, Australia"/>
+      <variant value="University of Sydney, Australia"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Lembaga Ilmu Pengetahuan Indonesia"/>
+      <variant value="Lembaga Ilmu Pengetahuan Indonesia Rijkuniversiteit te Leiden"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="MPI für Bildungsforschung, MPG"/>
+      <variant value="MPI für Bildungsforschung"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="WTUC, Taiwan"/>
+      <variant value="Wenzao Ursuline College of Languages, Taiwan"/>
+      <variant value="Wenzao Ursuline College of Languages (WTUC, Taiwan TW)"/>
+      <variant value="http://c041.wtuc.edu.tw/front/bin/home.phtml"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Annamalai University"/>
+      <variant value="Annamalai University, Annamalaiungegar"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="ILTEC"/>
+      <variant value="Instituto de Linguística Teórica e Computacional"/>
+      <variant value="ILTEC- Instituto de Linguística Teórica e Computacional"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Departemen Pendidikan dan Kebudayaan, Pusat Pembinaan dan Pengembangan Bahasa"/>
+      <variant value="Pusat Pembinaan dan Pengembangan Bahasa, Departemen Pendidikan dan Kebudayaan"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Politieke Partijen"/>
+      <variant value="POLITIEKE PARTIJEN"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="D. Reimer"/>
+      <variant value="D. Reimer (Ernst Vohsen)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, University Of Khartoum"/>
+      <variant value="University Of Khartoum, Department of Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Cercle Linguistique de Kanazawa, Kanazawa University"/>
+      <variant value="Kanazawa University-Cercle Linguistique de Kanazawa"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Dietrich Reimer Verlag"/>
+      <variant value="Dieter Reimer"/>
+      <variant value="Dietrich Reimer"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Linguistics, University of Leipzig"/>
+      <variant value="University of Leipzig, Institute of Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Humboldt University Berlin"/>
+      <variant value="Humboldt-University Berlin"/>
+      <variant value="Humboldt Universität zu Berlin"/>
+      <variant value="Humboldt-Universität zu Berlin"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Werkgroep Informatica, Faculty of Theology"/>
+      <variant value="Free University Amsterdam, Faculty of Theology, Werkgroep Informatica"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Nationalmuseet. Danmarks Nyere Tid"/>
+      <variant value="Nationalmuseet. Danmarks Nyere tid"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centro de Estudios Paraguayos ʺAntonio Guaschʺ"/>
+      <variant value="Centro de Estudios Paraguayos &#34;Antonio Guasch&#34;"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Canadian Plains Research Center, University of Regina"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Preparatory Office, Institute of Linguistics"/>
+      <variant value="Institute of Linguistics, Preparatory Office Academia Sinica"/>
+      <variant value="http://www.ling.sinica.edu.tw/"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Laboratoire d'Anthropologie Sociale, Paris"/>
+      <variant value="Laboratoire d'Anthropologie Sociale (Paris)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Center of Computational Linguistics, Vytautas Magnus University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Academic Computing Department, Summer Institute of Linguistics"/>
+      <variant value="Academic Computing Department of Summer Institute of Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Cybernetics, University of West Bohemia"/>
+      <variant value="University of West Bohemia, Department of Cybernetics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Australian National University"/>
+      <variant value="The Australian National University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Linguistics, Faculty of Philosophy"/>
+      <variant value="Institute of Linguistics, Faculty of Philosophy, University of Zagreb"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="DMG"/>
+      <variant value="Deutsche Morgenlandische Gesellschaft"/>
+      <variant value="Deutsche Morgenländische Gesellschaft"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Birmingham"/>
+      <variant value="The University of Birmingham"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institut Universitari de Lingüística Aplicada"/>
+      <variant value="Institut Universitari de Lingüística Aplicada / Instituto Cervantes"/>
+      <variant value="Institut Universitari de Lingüística Aplicada, Universitat Pompeu Fabra"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Aarhus Universitetsforlag"/>
+      <variant value="Aarhus Universitetsforlaget"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Allen &amp; Unwin"/>
+      <variant value="Allen and Unwin"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Information Science, Academia Sinica"/>
+      <variant value="http://www.iis.sinica.edu.tw/"/>
+      <variant value="Institute of Information Science Academia Sinica"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Cendera-wasih University and Summer Institute of Linguistics"/>
+      <variant value="Cendera-wasih University and SIL"/>
+      <variant value="Cendera-Wasih University and Summer Institute of Linguistics"/>
+      <variant value="Cenderawasih University and Summer Institute of Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="George Routledge and Sons, Limited"/>
+      <variant value="George Routledge &amp; Sons, Limited"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="A.C. Nix &amp; Co"/>
+      <variant value="A.C. Nix &amp; Co."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Max Planck Institute for Psycholinguistics"/>
+      <variant value="Max Planck Institute for                         Psycholinguistics (Nijmegen, Netherlands)"/>
+      <variant value="Max Planck Instiute for Psycholinguistics"/>
+      <variant value="Max Planck Institute for psycholinguistics"/>
+      <variant value="Max Planck Institute for Psycholinguistics, Nijmegen, Nl"/>
+      <variant value="Max Planck Institute for Psycholinguistics, Nijmegen, NL"/>
+      <variant value="Max Planck Institute for Psycholinguistics."/>
+      <variant value="Max Planck institute for Psycholinguistics"/>
+      <variant value="Max Planck Institute for Psycholinguistics (MPI)"/>
+      <variant value="Max Planck Institute for Psycholinguistics, Nijmegen, Netherlands"/>
+      <variant value="Max-Planck-Institute for Psycholinguistics"/>
+      <variant value="Max Planc Institute for Psycholinguistics"/>
+      <variant value="Max Planck Institute for Psycholinguistics Nijmegen"/>
+      <variant value="Max Planck Institute for Psycholinguistics, Nijmegen"/>
+      <variant value="Max-Planck-Institute-for Psycholinguistics"/>
+      <variant value="Max-Planck Institute for Psycholinguistics"/>
+      <variant value="Max Planck Insitute for Psycholinguistics"/>
+      <variant value="Max Planck Institute for Psycholinguistics (Nijmegen, Netherlands)"/>
+      <variant value="Max Planck Institute for Psycolinguistics"/>
+      <variant value="Max Planck Institute for Psycholinguisticsc"/>
+      <variant value="Max Planck Institut fuer Psycholinguistik, Nijmegen, Nl."/>
+      <variant value="Max-Planck-Institut für Psycholinguistik"/>
+      <variant value="Max Planck Institute for Psycholinguistics / MPG"/>
+      <variant value="MPI for Psycholinguistics"/>
+      <variant value="MPI for psycholinguistics, Nijmegen"/>
+      <variant value="Max Planck Institute for Psycholinguistics"/>
+      <variant value="MPI Nijmegen"/>
+      <variant value="Max-Planck-Institut fÃ¼r Psycholinguistik"/>
+      <variant value="Max Planck for Psycholinguisics, Nijmegen, NL"/>
+      <variant value="Max-Planck-Institüt für Psycholinguïstik"/>
+      <variant value="Max-Planck-Institüt für Psycholinguïstiek"/>
+      <variant value="Mac Planck Institute for Psycholinguistics"/>
+      <variant value="Max Planck Institut fÃ¼r Psychlinguistik"/>
+      <variant value="Max Planck Institut fÃ&#131;Â¼r Psychlinguistik"/>
+      <variant value="Max Planck Institute for Psycho-Linguistics"/>
+      <variant value="MPI for Psycholinguistics (Nijmegen, Netherlands)"/>
+      <variant value="Max Plank Institute for Psycholinguistics"/>
+      <variant value="MPI for Psycholinguistics Nijmegen"/>
+      <variant value="Max-Planck-Institüt für Psucholinguïstik"/>
+      <variant value="Max-Planck-Institüt für Psychlinguïstik"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Witwatersrand University Press"/>
+      <variant value="University of Witwatersand Press"/>
+      <variant value="Witwatersrand Press"/>
+      <variant value="The University of the Witwatersrand Press"/>
+      <variant value="Wiwatersrand University Press"/>
+      <variant value="University of Witwatersrand Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Johann Wolfgang Goethe Universität Frankfurt"/>
+      <variant value="Johann &#xA;Wolfgang Goethe Universität Frankfurt"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Stirling University"/>
+      <variant value="Stirling University, UK"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University Publishing Projects"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Université Paris Diderot"/>
+      <variant value="Université Paris Diderot Paris 7"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Indology and Tamil Studies, Cologne University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Librairie Orientaliste Paul Geuthner"/>
+      <variant value="Librairie Orientaliste Paul Geuthner."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="LEL, Edinburgh"/>
+      <variant value="http://www.lel.ed.ac.uk"/>
+      <variant value="Linguistics and English Language, Edinburgh"/>
+      <variant value="Linguistics and English Language (LEL, Edinburgh UK)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Development studies, University of Helsinki"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institut für Empirische Sprachwissenschaft, J. W. Goethe-Universität, Frankfurt"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="TALP"/>
+      <variant value="Centro de Tecnologías y Aplicaciones del Lenguaje y del Habla (TALP)"/>
+      <variant value="Centro de Tecnologías y Aplicaciones del Lenguaje y del Habla"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="OPIAC"/>
+      <variant value="OPIAC (Organização dos Professores Indígenas do Acre)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Royal Institute of Linguistics and Anthropology, Leiden"/>
+      <variant value="Royal Institute of Linguistics and Anthropology, Leiden, The Netherlands"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="National Anthropological Archives, Smithsonian Museum Support Center"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Tilde"/>
+      <variant value="Tilde as coordinator, Eurotermbank consortium"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="American Indian Studies Center, UCLA"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Ernest Laroux"/>
+      <variant value="Ernest Ledoux"/>
+      <variant value="Ernest Leroux"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Nordeuropa-Institut, Humboldt-Universität zu Berlin"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Routledge and Kegan Paul Limited"/>
+      <variant value="Routledge and Kegan Paul Limited."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="The Peter De Ridder Press"/>
+      <variant value="The Peter Ridder Press"/>
+      <variant value="The Peter de Redder Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centre for English Corpus Linguistics, Université catholique de Louvain, Belgium"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Carl Winter Universitätsverlag"/>
+      <variant value="Carl Winter Universitatsverlag"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Izdatel'stvo Moskovskogo Universiteta"/>
+      <variant value="Izdatelstvo Moskovskogo Universiteta"/>
+      <variant value="Izdatel'stvo vostochnoj literatury"/>
+      <variant value="Izdatel'stvo Moskovskogo universiteta"/>
+      <variant value="Izd. Moskovskogo University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of African Languages, The Academy"/>
+      <variant value="The Academy, Department of African Languages"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Cybernetics, Tallinn University of Technology"/>
+      <variant value="Institute of Cybernetics at Tallinn University of Technology"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Sheldon Press"/>
+      <variant value="The Superintendent, Government Press"/>
+      <variant value="The Sheldon Press"/>
+      <variant value="Superintendent Government Printing"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="L'Aisathèque"/>
+      <variant value="L'Asiathèque"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="The Population Register Centre, Finland"/>
+      <variant value="The Population Register Centre (Finland)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Langues et Mondes, L'Asiathèque"/>
+      <variant value="Langues &amp; Mondes L'asiatheque"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Charles E. Tuttle Company"/>
+      <variant value="Charles E. Tuttle"/>
+      <variant value="Charles E. Tuttle Co"/>
+      <variant value="Charles E. Tuttle &amp; Co"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Clarke, Irwin &amp; Co. Ltd"/>
+      <variant value="Clarke, Irwin and Co. Ltd"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Aboriginal Education Unit"/>
+      <variant value="Aboriginal Studies and Teacher Education Centre"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Departement de linguistique generale et linguistique africaine, Faculte des lettres et sciences humaines"/>
+      <variant value="Departement de linguistique generale et linguistique africaine de la Faculte des lettres et sciences humaines de l'Universite de Dakar"/>
+      <variant value="Département de Linguistique Générale et Linguistique Africaine, Université de Dakar"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Asian Studies, Cornell University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="NHH"/>
+      <variant value="Norwegian School of Economics and Business Administration (NHH)"/>
+      <variant value="Norwegian School of Economics and Business Administration"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Dept. Communications &amp; Computer Engineering, University of Malta"/>
+      <variant value="University of Malta Dept. Computer and Communication Engineering"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="USOM and the Bureau of Textbooks, Department of Education"/>
+      <variant value="USOM and the Bureau of Textbooks, Department of Education of the Republic of Vietnam"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="NLP Centre, Masaryk university"/>
+      <variant value="Masaryk university, NLP Centre"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="IPIPAN"/>
+      <variant value="IPIPAN: Institute of Computer Science, Polish Academy of Sciences"/>
+      <variant value="Institute of Computer Science, Polish Academy of Sciences"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University Press"/>
+      <variant value="The University Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Nordeuropa-institut, Humboldt-Universität zu Berlin"/>
+      <variant value="Humboldt-Universität zu Berlin - Nordeuropainstitut"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Historical Antiquarian Studies"/>
+      <variant value="Department of Historical and Antiquarian Studies, Government of Assam"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Russky Yazyk Publ. House"/>
+      <variant value="Russkij jazyk"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="School of Psychology, Liège University"/>
+      <variant value="School of Psychology, Liège University (Liège BE)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="African Studies Program, Indiana University"/>
+      <variant value="Indiana University-African Studies Program"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Kalan-diya, ACODEP, Bamako"/>
+      <variant value="Bamako : Kalan-diya; ACODEP,"/>
+      <variant value="Kalan-diya, Appui aux collectivités décentralisées pour un développement participatif, Bamako"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Reidel"/>
+      <variant value="Reidel."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Volk und Wissen Verlag"/>
+      <variant value="Volk und Wissen"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Mesoamerican Studies, Archaeological Institute"/>
+      <variant value="University of Hamburg, Archaeological Institute, Mesoamerican Studies"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Faculty of Oriental Studies, University of Oxford"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Peace Corps Training Programs, University of Washington"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, University of Cologne"/>
+      <variant value="University of Cologne, Department of Linguistics - Universidad de Colonia, Departamento de Lingüística"/>
+      <variant value="University of Cologne, Department of Linguistics"/>
+      <variant value="Departamento de Lingüística / Universidad de Colonia"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Center for Near Eastern and North African Studies, University of Michigan"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="International Sign Linguistics Association and Deaf Studies Research Unit, University of Durham"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Erhvervs- og Byggestyrelsen, Beredskabsstyrelsen og Søfartsstyrelsen"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Groupes d'études inuit et circumpolaires, Association Inuksiutiit Katimajiit Inc."/>
+      <variant value="Association Inuksiutiit Katimajiit Inc., Groupes d'études inuit et circumpolaires, Université Laval."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="NMO"/>
+      <variant value="Nederlandse Moslim Omroep"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Human Relations Area Files"/>
+      <variant value="Human Relations Area Files, Inc."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Universidad Católica del Tachira"/>
+      <variant value="Universidad Católica de Tachira"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Georgetown University Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Phonetics Laboratory, University of California"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Langenscheidt"/>
+      <variant value="Langenscheidt."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Garland Publishing"/>
+      <variant value="Garland Publishing Inc."/>
+      <variant value="Garland Publishing Company"/>
+      <variant value="Garland Publishing, Inc."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Postgraduate and Research Institute, Deccan College"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, University of Southern California"/>
+      <variant value="University of Southern California, Department of Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="E. J. Brill"/>
+      <variant value="E J. Brill"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, Ruhr-University Bochum"/>
+      <variant value="Ruhr-University Bochum, Department of Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institut für Afrikanistik, Universität zu Köln"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centro de Estudios, Universidad de Buenos Aires"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Hodder and Stoughton"/>
+      <variant value="Hodder &amp; Stoughton"/>
+      <variant value="Hodder and Stoughton for the English University Press"/>
+      <variant value="Hodder &amp; Stoughton"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Dekker &amp; van de Vegt N. V."/>
+      <variant value="Dekker and van de Vegt N. V."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Joodse Omroep"/>
+      <variant value="JOODSE OMROEP"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, The University of Hong Kong"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Max Planck Digital Library"/>
+      <variant value="Max Planck Digital Library, http://wals.info/author"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Pacific and Asian Linguistics Institute, University of Hawaii"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, University of Victoria"/>
+      <variant value="University of Victoria, Department of Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Statens Byggeforskningsinstitut"/>
+      <variant value="Statens Byggeforskningsinstitut, Aalborg Universitet"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="The English Universities Press"/>
+      <variant value="The English Universities Press Ltd."/>
+      <variant value="The English Universities Press Ltd"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="American Oriental Society"/>
+      <variant value="American Oriental Society&#xA;&#xA;"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Museo Nacional de Antropologí­a"/>
+      <variant value="Museo Nacional de Antropología"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="BME MOKK"/>
+      <variant value="Budapest University of Technology and Economics Media Research"/>
+      <variant value="Budapest University of Technology and Economics Media Research (BME MOKK)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="NOS"/>
+      <variant value="NOS RTV"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="The Department of Cultural Anthropology, Leiden University"/>
+      <variant value="Leiden University, The Department of Cultural Anthropology"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Scott, Foresman and Company"/>
+      <variant value="Scott, Foresman and Co"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Allgemeine Sprachwissenschaft, Universität Köln"/>
+      <variant value="Universität zu Köln, Allgemeine Sprachwissenschaft"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Asociación Instituto Lingüístico de Verano"/>
+      <variant value="Associación Instituto Lingüístico de Verano"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Rüdiger Köppe Verlag"/>
+      <variant value="Rüdiger Köppe"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="North-Holland"/>
+      <variant value="North-Holland Publishing Company"/>
+      <variant value="North-Holland Publishing"/>
+      <variant value="North Holland"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Sen Wah Press and Company"/>
+      <variant value="Sen Wah Press and Co"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Indiana University Center in Antropology, Folklore and Linguistics"/>
+      <variant value="Indiana University Research Center in Anthropology, Folklore, and Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="IIAP"/>
+      <variant value="ORDELORETO; SWISSAID; Instituto de Investigaciones de la Amazonía Peruana (IIAP)"/>
+      <variant value="Instituto de Investigaciones de la Amazonía Peruana (IIAP)"/>
+      <variant value="Instituto de Investigaciones de la Amazonía Peruana "/>
+      <variant value="ORDELORETO; SWISSAID; Instituto de Investigaciones de la Amazonía Peruana"/>
+      <variant value="Instituto de Investigaciones de la Amazonía Peruana (IIAP), Iquitos, Perú."/>
+      <variant value="Instituto de Investigaciones de la Amazonía Peruana (IIAP) - Iquitos - Perú"/>
+      <variant value=" Instituto de Investigaciones de la Amazonía Peruana"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CLARIN-D center, Natural Language Processing Group"/>
+      <variant value="CLARIN-D center, Natural Language Processing Group, University of Leipzig"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="World Language Documentation Centre, Universität Bamberg"/>
+      <variant value="Universität Bamberg, World Language Documentation Centre"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="LTG, Edinburgh University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Universidad de Buenos Aires"/>
+      <variant value="Universidad de Buenos Aires."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CLST, Radboud University"/>
+      <variant value="Centre for Language and Speech Technology, Radboud University"/>
+      <variant value="Centre for Language and Speech Technology / Radboud University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Fakultas Keguruan dan Ilmu Pendidikan, Universitas Tanjungpura"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Seccion de Lingüística, Escuela de Filologia"/>
+      <variant value="Universidad de Costa Rica, Escuela de Filologia, Seccion de Lingüística"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Narr"/>
+      <variant value="Narr."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="IMLI RAN"/>
+      <variant value="IMLI RAN, Nasledie"/>
+      <variant value="Imli Ran Nasledie"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Jaén (Spain)"/>
+      <variant value="University of Jaén, Jaén (Spain)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="IULA, Universitat Pompeu Fabra"/>
+      <variant value="Universitat Pompeu Fabra. Institut Universitari de Lingüística Aplicada (IULA)"/>
+      <variant value=" Institut Universitari de Lingüística Aplicada / Universitat Pompeu Fabra"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Ministerio de Cultura"/>
+      <variant value="Mininsterio de Cultura"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of Tübingen"/>
+      <variant value="University of Tuebingen"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Center for Vietnamese Studies and the Summer Institute of Linguistics"/>
+      <variant value="Center for Vietnamese Studies and the Summer Institute if Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Philosophy and Sociology, University of Latvia"/>
+      <variant value="Institute of Philosophy and Sociology of the University of Latvia"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Language Universals Project, Department of Linguistics"/>
+      <variant value="Language Universals Project, Department of Linguistics, Stanford University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="John Benjamins, Australian National University Press"/>
+      <variant value="John Benjamins / Australian National University Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Mittal Publications"/>
+      <variant value="Mittal Publisher"/>
+      <variant value="Mittal"/>
+      <variant value="Mittal Publication"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Universität des Saarlandes"/>
+      <variant value="Universitat des Saarlandes"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Franciscan Fathers Press"/>
+      <variant value="Franciscan Fathers, St. Michael's Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Julius Groos"/>
+      <variant value="Julius Gross"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Trübner &amp; Co."/>
+      <variant value="Trübner &amp; Co."/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Chikobava Institute of Linguistics, Tblisi, Georgia"/>
+      <variant value="Chicobava Institute of Linguistics, Tblisi, Georgia"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Simpkin, Marshall, Hamilton, Kent and Corporation Limited"/>
+      <variant value="Simpkin, Marshall, Hamilton, Kent &amp; Co Ltd"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CCRSS, Pune"/>
+      <variant value="Centre for Cooperative Research in Social Sciences, Pune"/>
+      <variant value="Centre for Cooperative Research in Social Sciences (CCRSS, Pune IN)"/>
+      <variant value="http://ccrss.ws"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of African Studies, University of Ghana"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Museum of Anthropology Publications, University of North Carolina"/>
+      <variant value="University of North Carolina, Museum of Anthropology Publications"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Missioni Africane"/>
+      <variant value="Missioni africane"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Longman"/>
+      <variant value="Longman."/>
+      <variant value="Longmans"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Zentrum für Allgemeine Sprachwissenschaft, Berlin"/>
+      <variant value="ZAS, Humboldt University Berlin"/>
+      <variant value="ZAS"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="CLA, Neuchâtel"/>
+      <variant value="Centre de linguistique appliquée, Neuchâtel"/>
+      <variant value="http://www2.unine.ch/cla"/>
+      <variant value="Centre de linguistique appliquée (CLA, Neuchâtel CH)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Lehrstuhl Phonetik und Lehrstuhl Slavistik, Philosophische Fakultät"/>
+      <variant value="Lehrstuhl Phonetik (Fachrichtung 4.7) und Lehrstuhl Slavistik (Fachrichtung 4.4) der Philosophischen Fakultät II der Universität des Saarlandes"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="ATILF, Université de Lorraine"/>
+      <variant value="Analyse et Traitement Informatique de Langue Francaise / Université de Lorraine"/>
+      <variant value="ATILF"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Psychology, Ohio State University"/>
+      <variant value="http://buckeyecorpus.osu.edu"/>
+      <variant value="Department of Psychology, Ohio State University (Columbus US)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Modern Languages, University of Helsinki"/>
+      <variant value="The Department of Modern Languages, University of Helsinki"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Gosudarstvennoe Izdat. Inostrannych i Nacionalnych Slovarej"/>
+      <variant value="Gosudarstvennoe Izdat. Inostrannyx i Nacional'nyx Slovarej"/>
+      <variant value="Gosudastvennoe izdatel'stvo inostrannyx i nacional'nyx slovarej"/>
+      <variant value="Gosudarstvennoe Izdat. Inostrannyx u Nacional'nyx Slovarej"/>
+      <variant value="Gosudarstvennoe Izdat. Inostrannych i Nacional'nych Slovarej"/>
+      <variant value="Gosudarstvennoe izdatel'stvo inostrannyx i nacional'nych slovarej"/>
+      <variant value="Gosudarstvennoe Ucebno-Pedagogiceskoe Izdatel'stvo"/>
+      <variant value="Gosudarstvennoe Izdat. Inostrannych u Nacional'nych Slovarej"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Agence de Coopération Culturelle et Technique"/>
+      <variant value="Agence de cooperation culturelle et technique"/>
+      <variant value="Agence de coopération culturelle et technique"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Phonetic Sciences, ACLC"/>
+      <variant value="Institute of Phonetic Sciences/ACLC, Department of Linguistics, University of Amsterdam"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Hawaiian Studies Program, University of Hawaii"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Státní Pedagogické Nakladatelství"/>
+      <variant value="Slovenské Pedagogické Nakladatelàstvo"/>
+      <variant value="Slovenské Pedagogiské Nakladatel'stvo"/>
+      <variant value="Slovenské pedagogické nakladatel'stvo"/>
+      <variant value="Statni Pedagogické Nakladatelství"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="RAN"/>
+      <variant value="RAN, Institut etnologii i antropologii"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Suomalais-Ugrilainen Seura"/>
+      <variant value="Suomalais-ugrilainen Seura"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Leiden Institute for Religious Studies"/>
+      <variant value="Leiden Institute for Religious Studies, Wergroep Informatica Vrije Universiteit"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Linguistics, University of Nijmegen"/>
+      <variant value="University of Nijmegen, Department of Linguistics"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Beauchemin &amp; Valois Publishers"/>
+      <variant value="Beauchemin and Valois Publishers"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="École des Hautes Etudes en Sciences Sociales"/>
+      <variant value="Ecole des Hautes Etudes en Sciences Sociales"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="University of British Columbia Press"/>
+      <variant value="University of British Colombia Press"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Tel Aviv University"/>
+      <variant value="Tel-Aviv University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Motilal Banarsidass"/>
+      <variant value="Motilal Banarsidass."/>
+      <variant value="Motilal Bamarsidass"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Center of Asian Studies, University of Hong Kong"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="IPI PAN"/>
+      <variant value="Shared initiative of Institute of Computer Science at Polish Academy of Sciences"/>
+      <variant value="Shared initiative of Institute of Computer Science at Polish Academy of Sciences(IPI PAN)"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="H.W. Wilson Press"/>
+      <variant value="H.W. Wilson"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of Anthropology, Northern Arizona University"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="China-Japan Program, Cornell University"/>
+      <variant value="Cornell University China-Japan Program"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Baltos Lankos."/>
+      <variant value="Baltos Iankos"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Institute of Islamic Studies, McGill University"/>
+      <variant value="McGill University, Institute of Islamic Studies"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Centre for Language Studies, Radboud University Nijmegen"/>
+      <variant value="Radboud University Nijmegen, Centre for Language Studies"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Department of History and Ethnology, University of Jyväskylä"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="G. E. Stechert and Company"/>
+      <variant value="G. E. Stechert"/>
+      <variant value="G. E. Stechert &amp; Company"/>
+      <variant value="G. E. Hechert and Company"/>
+      <variant value="G. E. Steichert &amp; Co."/>
+      <variant value="G. E. Hechert &amp; Company"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Deccan College"/>
+      <variant value="Deccan College Postgraduate and Research Institute"/>
+   </mapping>
+   <mapping>
+      <normalizedValue value="Instituto de Investigacao Cientifica Tropical, Secretaria de Estado da Ciencia e Tecnologia"/>
+      <variant value="Ministerio do Planeamento e da Administracao do Territorio, Secretaria de Estado da Ciencia e Tecnologia, Instituto de Investigacao Cientifica Tropical"/>
+   </mapping>
+</mappings>

@@ -246,11 +246,11 @@ span.recordresourcedetailsitem span {
 
 /* Technical details */
 
-#record .collapsed a.contenttoggle:before {
+#record .collapsed .contenttoggle a:before {
     content: '+ ';
 }
 
-#record .expanded a.contenttoggle:before {
+#record .expanded .contenttoggle a:before {
     content: '- ';
 }
 
@@ -326,3 +326,77 @@ span.recordresourcedetailsitem span {
     }
 }
 
+div.licenseInfo, div.noLicenseInfo {
+    margin-top: 1em;
+}
+
+@licenseInfoIconSize: 2em;
+@licenseInfoTableWidth: 60em;
+
+div.noLicenseInfo {
+    padding-left: @licenseInfoIconSize + 1em;
+    background-image: url('license/unspecified.png');
+    background-size: @licenseInfoIconSize;
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+    min-height: @licenseInfoIconSize + 1em;
+
+    p:last-child {
+        padding-bottom: 0;
+    }
+}
+
+div#licenseInfo {
+    p {
+        padding: 0;
+    }
+
+    ul {
+        width: @licenseInfoTableWidth;
+        border: 1px dashed #999;
+        border-bottom: none;
+
+        li {
+            list-style: none;
+            padding: .25em;
+            border-bottom: 1px dashed #999;
+            margin-bottom: 0;
+        }
+
+        &#licenseAvailability li {
+            background-size: @licenseInfoIconSize;
+            background-position-y: .35em;
+            background-position-x: .25em;
+            background-repeat: no-repeat;
+
+
+            padding: .25em 0 .25em @licenseInfoIconSize + 1em;
+            min-height: @licenseInfoIconSize + .5em;
+
+            span {
+                display: block;
+                padding-top: .25em;
+            }
+
+            &.license {
+                background-image: url('fine_print-64.png'); /* default (icon from icons8.com) */
+                .license-icon-classes();
+            }
+
+            &.availability {
+                background-image: url('license/other.png'); /*default*/
+                /* mixins from vlo-license-icons.less */
+                .availability-icon-classes();
+                .availability-modifier-icon-classes();
+            }
+        }
+    }
+
+    #accessInfo {
+        margin: 1em;
+
+        ul {
+            width: @licenseInfoTableWidth - 1em;
+        }
+    }
+}

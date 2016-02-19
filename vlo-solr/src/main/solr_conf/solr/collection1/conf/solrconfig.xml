@@ -134,6 +134,7 @@
       <bool name="wait">true</bool>
     </listener>
     -->
+    <updateLog/>
   </updateHandler>
   
   <!-- Use the following format to specify a custom IndexReaderFactory - allows for alternate
@@ -389,6 +390,11 @@
             _resourceRefCount
         </str>
         
+        <!-- alias: licence = license -->
+        <str name="f.licence.qf">
+            license
+        </str>
+        
         <!-- Phrase fields (boost if phrase is matched) -->
         <str name="pf">
             name^2 description
@@ -399,8 +405,8 @@
             <!-- 
                 boost by hierarchy weight (reverse order because lower numbers
                 indicate a higher level), then by number of parts (differentiate
-                up till 50) -->
-            rord(_hierarchyWeight) log(add(1,min(50,_hasPartCount)))^.1
+                up till 50), then by recency of import -->
+            rord(_hierarchyWeight) log(add(1,min(50,_hasPartCount)))^.2 recip(ms(NOW,_lastSeen),3.16e-11,1,1)^.2
             <!-- TODO: prefer CLARIN records over non-CLARIN? -->
             <!-- TODO: boost records with one or more resources (_resourceRefCount) -->
         </str>
@@ -805,7 +811,8 @@
        The response format differs from solr1.1 formatting and returns a standard error code.
        To enable solr1.1 behavior, remove the /update handler or change its path
     -->
-  <requestHandler name="/update" class="solr.UpdateRequestHandler" />
+   <!-- since Solr 4.10 this requestHandler is implicit, will be generated automatically
+   <requestHandler name="/update" class="solr.UpdateRequestHandler" />-->
 
 
   <requestHandler name="/update/javabin" class="solr.UpdateRequestHandler" />
@@ -861,8 +868,8 @@
   <requestHandler name="/analysis/field" class="solr.FieldAnalysisRequestHandler" />
 
 
-  <!-- CSV update handler, loaded on demand -->
-  <requestHandler name="/update/csv" class="solr.CSVRequestHandler" startup="lazy" />
+  <!-- since Solr 4.10 this requestHandler is implicit, will be generated automatically -->
+  <!-- <requestHandler name="/update/csv" class="solr.CSVRequestHandler" startup="lazy" />-->
 
 
   <!-- 

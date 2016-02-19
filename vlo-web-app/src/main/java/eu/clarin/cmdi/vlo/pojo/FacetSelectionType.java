@@ -36,11 +36,6 @@ public enum FacetSelectionType {
      * Specifies a selection of all documents that match at least one of the
      * values supplied in the selection
      */
-    OR,
-    /**
-     * Specifies a selection of all documents that match none of the values
-     * supplied in the selection
-     */
-    NOT
+    OR
 
 }

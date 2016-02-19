@@ -20,12 +20,6 @@ import org.xml.sax.SAXException;
 
 public final class CommonUtils {
 
-    /**
-     * Set to true to make run/import possible without a network connection
-     * (todo: make environment variable?)
-     */
-    public static final Boolean SWALLOW_LOOKUP_ERRORS = false; //ONLY COMMIT AS FALSE!
-
     private final static Set<String> ANNOTATION_MIMETYPES = new HashSet<String>();
 
     static {
@@ -54,6 +48,17 @@ public final class CommonUtils {
     static {
         AUDIO_MIMETYPES.add("application/ogg");
         AUDIO_MIMETYPES.add("wav");
+    }
+
+    /**
+     * Set system property {@code vlo.swallowLookupErrors} to 'true' to make
+     * run/import possible without a network connection
+     *
+     * @return whether {@code vlo.swallowLookupErrors} equals 'true'
+     */
+    public static Boolean shouldSwallowLookupErrors() {
+        final String propVal = System.getProperty("vlo.swallowLookupErrors", "false");
+        return Boolean.valueOf(propVal);
     }
 
     private CommonUtils() {

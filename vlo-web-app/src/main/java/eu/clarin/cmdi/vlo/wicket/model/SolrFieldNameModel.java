@@ -19,9 +19,9 @@ package eu.clarin.cmdi.vlo.wicket.model;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.Application;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
-import org.apache.wicket.settings.def.ResourceSettings;
 
 /**
  * Model that uses a {@link StringResourceModel} to produce a human friendly
@@ -40,9 +40,8 @@ public class SolrFieldNameModel extends StringResourceModel {
     }
     
     public SolrFieldNameModel(IModel<String> model) {
-        super("field.${}",
-                model,
-                model.getObject()); // default to internal field name)
+        super("field.${}", model);
+        setDefaultValue(Model.of(model.getObject())); //TODO: check if this is necessary, added on migration to Wicket 7
     }
 
 }

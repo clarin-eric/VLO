@@ -16,6 +16,25 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import java.util.Collection;
+
+import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.GenericPanel;
+import org.apache.wicket.migrate.StringResourceModelMigration;
+import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
@@ -27,22 +46,6 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
-import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.StringResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  * Panel to be shown on {@link SimpleSearchPage} that has a number of links for
@@ -81,7 +84,7 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
             }
         };
         // set label on basis of string defined in resource bundle that takes the count model as a parameter
-        browseAllLink.add(new Label("recordCount", new StringResourceModel("simplesearch.allrecords", documentCountModel, new Object[]{})));
+        browseAllLink.add(new Label("recordCount", StringResourceModelMigration.of("simplesearch.allrecords", documentCountModel, new Object[]{})));
         add(browseAllLink);
 
         // add selectors for some facets
@@ -109,7 +112,7 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
         /**
          * Model that holds the currently selected facet
          */
-        private final IModel<String> selectedFacetModel = new Model<String>(null);
+        private final IModel<String> selectedFacetModel = new Model<>(null);
         private final IModel<QueryFacetsSelection> selectionModel;
 
         public FacetSelectorsView(String id, IModel<QueryFacetsSelection> selectionModel) {
@@ -124,10 +127,10 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
             final FacetValuesPanel values = new FacetValuesPanel("values", item.getModel(), selectionModel) {
 
                 @Override
-                protected void onValuesSelected(String facet, FacetSelection values, AjaxRequestTarget target) {
+                protected void onValuesSelected(Collection<String> values, AjaxRequestTarget target) {
                     // value selected, make a new selection (in this panel we do not want to change the existing selection)...
                     final QueryFacetsSelection newSelection = selectionModel.getObject().getCopy();
-                    newSelection.selectValues(facet, values);
+                    newSelection.selectValues(getModelObject().getName(), new FacetSelection(values));
                     // ...then submit to search page
                     setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(newSelection));
                 }

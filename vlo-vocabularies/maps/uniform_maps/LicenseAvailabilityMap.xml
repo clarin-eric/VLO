@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mappings field="availability">
+    <mapping>
+        <normalizedValue value="--"/>
+        <variant value="available-restrictedUse"/>
+        <variant value="commercial"/>
+        <variant value="commercialUse"/>
+        <variant value="1"/>
+        <variant value="2"/>
+        <variant value="3"/>
+        <variant value="4"/>
+        <variant value="[free; free for academic use; restricted use; request required; user license required; unknown]"/>
+        <variant value="__"/>
+        <variant value="476306KB"/>
+        <variant value="94408KB"/>
+        <variant value="archiving+dissemination"/>
+        <variant value="Available"/>
+        <variant value="available"/>
+        <variant value="BAS:aGender"/>
+        <variant value="BAS:ALC"/>
+        <variant value="BAS:ASICA"/>
+        <variant value="BAS:CI_1"/>
+        <variant value="BAS:CLIPS_MT_MANUAL"/>
+        <variant value="BAS:FORMTASK"/>
+        <variant value="BAS:HEMPEL"/>
+        <variant value="BAS:HOESI"/>
+        <variant value="BAS:NM-MoCap-Corpus"/>
+        <variant value="BAS:PD1"/>
+        <variant value="BAS:PD2"/>
+        <variant value="BAS:PHATTSESSIONZ"/>
+        <variant value="BAS:RVG1_CLARIN"/>
+        <variant value="BAS:RVG-J"/>
+        <variant value="BAS:SaGA"/>
+        <variant value="BAS:SC1"/>
+        <variant value="BAS:SC10"/>
+        <variant value="BAS:SHC"/>
+        <variant value="BAS:SIGNUM"/>
+        <variant value="BAS:SK"/>
+        <variant value="BAS:SMC"/>
+        <variant value="BAS:SVC"/>
+        <variant value="BAS:TAXI"/>
+        <variant value="BAS:VERIF1DE"/>
+        <variant value="BAS:VM1"/>
+        <variant value="BAS:VM2"/>
+        <variant value="BAS:VMEMO"/>
+        <variant value="BAS:ZIPTEL"/>
+        <variant value="CC-BY-..."/>
+        <variant value="test"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="ACA"/>
+        <variant value="free by CLARIN Service Provider federation"/>
+        <variant value="free; Free for academic use."/>
+        <variant value="free; Free for research purposes."/>
+        <variant value="academic access"/>
+        <variant value="academic"/>
+        <variant value="academic - available for academic use"/>
+        <variant value="ACA"/>
+        <variant value="available to researcher/annotator"/>
+        <variant value="Binnen de kaders van de Gedragscode voor gebruik van persoonsgegevens in wetenschappelijk onderzoek van de VSNU (Vereniging van Samenwerkende Nederlandse Universiteiten) vrij beschikbaar voor dialectologisch, fonetisch, historisch of ander onderzoek. Onderzoekers wordt gevraagd bij publicatie als bron deze website te vermelden. Neem voor andersoortig gebruik contact op met het Meertens Instituut."/>
+        <variant value="CLARIN ACA"/>
+        <variant value="CLARIN_ACA"/>
+        <variant value="CLARIN-ACA"/>
+        <variant value="disponible para indígenas e investigadores"/>
+        <variant value="disponible para indÃgenas e investigadores"/>
+        <variant value="free available for science"/>
+        <variant value="free available for scientific usage"/>
+        <variant value="free for academic use"/>
+        <variant value="free for academic use (subcat frames)"/>
+        <variant value="freely available for academic research and education"/>
+        <variant value="freely available for research and education"/>
+        <variant value="freely available for science"/>
+        <variant value="Free to use for research and teaching purposes."/>
+        <variant value="Free to use for research and teaching purposes"/>
+        <variant value="ree available for science"/>
+        <variant value="research use only"/>
+        <variant value="Vrij beschikbaar voor dialectologisch, fonetisch, historisch of ander onderzoek. Onderzoekers wordt gevraagd bij publicatie als bron deze website te vermelden. Neem voor andersoortig gebruik contact op met het Meertens Instituut"/>
+        <variant value="Free for academic use"/>
+        <variant value="Free for academic use.non applicable for commercial parties"/>
+        <variant value="free for science"/>
+        <variant value="Free, accessible through CLARIN Institutional login"/>
+        <variant value="HZSK-ACA"/>
+        <variant value="restricted; Free for academic use, but issues with the comic licenses may have to be dealt with."/>
+        <variant value="restricted; Free for academic use, copyright owned by Professor Svenka Savic, Novi Sad (Serbia)."/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="ACA; RES;FF"/>
+        <variant value="free for academic use; available to commercial parties, but not for free; user licence required for all parties; restricted use"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="ACA;NC"/>
+        <variant value="academic-nonCommercialUse"/>
+        <variant value="CLARIN_ACA-NC"/>
+        <variant value="free for academic use; non applicable for commercial parties"/>
+        <variant value="free for academic use; non applicable for commercial parties"/>
+        <variant value="free for academic use; non appliccable for commercial parties"/>
+        <variant value="free for academic use; non appliccable for commercial parties"/>
+        <variant value="free for academic use; non appliccable for commercial parties"/>
+        <variant value="restricted; free for academic, but not for commercial use."/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="ACA;NC;RES;FF"/>
+        <variant value="free for academic use by non-commercial organisation; 15.000 euro for commercial use and for use by commercial organisation; user licence required"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="ACA;REQ"/>
+        <variant value="Free to use for research purposes provided permission has been granted by rights holder."/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="ACA;RES;FF"/>
+        <variant value="free available for purely academic institutions; fees apply for commercial institutions"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="BY"/>
+        <variant value="attribution"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="CC;BY;NC;SA"/>
+        <variant value="freely available for non-commercial research use (CC BY-NC-SA Licence)"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="DEP"/>
+        <variant value="redeposit"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="INF"/>
+        <variant value="informLicensor"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="NC"/>
+        <variant value="free for non-commercial use"/>
+        <variant value="non-commercial use"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="NC; INF"/>
+        <variant value="freely usable for non-commercial usage (inform resource creator)"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="ND"/>
+        <variant value="noDerivatives"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="NORED"/>
+        <variant value="noRedistribution"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="Other"/>
+        <variant value="restricted"/>
+        <variant value="restricted 2009"/>
+        <variant value="Restricted"/>
+        <variant value="restricted - only available for licence owners"/>
+        <variant value="restringido/restricted"/>
+        <variant value="some concept definitions are open"/>
+        <variant value="special license"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="PUB"/>
+        <variant value="Available to all"/>
+        <variant value="Available to public"/>
+        <variant value="CC-ZERO"/>
+        <variant value="CLARIN_PUB"/>
+        <variant value="CLARIN-PUB"/>
+        <variant value="free; Distributed as a dissertation - &quot;&quot;Lexikalische Polygenese im Konzeptbereich KOPF&quot;&quot;"/>
+        <variant value="free"/>
+        <variant value="freely available"/>
+        <variant value="freely usable"/>
+        <variant value="Free"/>
+        <variant value="open 2009"/>
+        <variant value="open access"/>
+        <variant value="Open Access"/>
+        <variant value="Open aceess"/>
+        <variant value="open"/>
+        <variant value="openly available"/>
+        <variant value="open to all"/>
+        <variant value="Princeton_Wordnet"/>
+        <variant value="PUB"/>
+        <variant value="public"/>
+        <variant value="Die Nutzung des Wörterbuchs ist online über eine kostenfreie Abfrage einzelner Artikel möglich."/>
+        <variant value="free; Corpus contains personal data, but person names have been changed."/>
+        <variant value="HZSK-PUB"/>
+        <variant value="Individual lexical entries of this dictionary can be accessed freely online"/>
+        <variant value="Open"/>
+        <variant value="Open access"/>
+        <variant value="Public"/>
+        <variant value="This resource can be used online http://retro.dwds.de/?corpus=1&amp;cc=OSTWEST"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="PUB+ID"/>
+        <variant value="available after registration"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="PUB;BY"/>
+        <variant value="Apache 2.0"/>
+        <variant value="Apache"/>
+        <variant value="ApacheLicence_2.0"/>
+        <variant value="Apache Licence 2.0"/>
+        <variant value="Apache-Licence"/>
+        <variant value="BSD-style"/>
+        <variant value="BSD"/>
+        <variant value="BSD or CC-BY-3.0"/>
+        <variant value="CC-BY"/>
+        <variant value="LGPL for Linguistic Resources"/>
+        <variant value="LGPL"/>
+        <variant value="Creative_Commons-BY"/>
+        <variant value="Lesser General Public License For Linguistic Resources"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="PUB;BY;NC"/>
+        <variant value="CC BY-NC 3.0 DE"/>
+        <variant value="CC BY-NC 3.0"/>
+        <variant value="CC BY-NC 4.0"/>
+        <variant value="CC-BY-NC"/>
+        <variant value="CC - BY - NC"/>
+        <variant value="Creative Commons CC BY-NC 3.0 DE, http://creativecommons.org/licenses/by-nc/3.0/de/"/>
+        <variant value="Dit werk is valt onder een Creative Commons Naamsvermelding-NietCommercieel 4.0 Internationaal-licentie(http://creativecommons.org/licenses/by-nc/4.0/)"/>
+        <variant value="http://creativecommons.org/licenses/by-nc/3.0/ "/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="PUB;BY;NC;ND"/>
+        <variant value="CC-BY-NC-ND"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="PUB;BY;NC;SA"/>
+        <variant value="CC BY-NC-SA 3.0"/>
+        <variant value="CC-BY-NC-SA"/>
+        <variant value="CC-by-nc-sa"/>
+        <variant value="MSCommons-BY-NC-SA"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="PUB;BY;ND"/>
+        <variant value="CC-BY-ND"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="PUB;BY;SA"/>
+        <variant value="CC BY-SA 3.0"/>
+        <variant value="CC-BY-SA"/>
+        <variant value="GFDL"/>
+        <variant value="GNU GPL 3"/>
+        <variant value="GNU GPL"/>
+        <variant value="GNU GPL v2"/>
+        <variant value="GNU GPL v3"/>
+        <variant value="GNU GPL"/>
+        <variant value="GPL"/>
+        <variant value="GPL v2"/>
+        <variant value="GNU Public License"/>
+        <variant value="Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)"/>
+        <variant value="Creative Commons Attribution-ShareAlike 3.0"/>
+        <variant value="GNU General Public License"/>
+        <variant value="GNU General Public License, version 3"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="PUB;REG"/>
+        <variant value="free; online subscription for the digitalized newspaper texts."/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="PUC"/>
+        <variant value="yes"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="REG;REQ"/>
+        <variant value="mit Benutzerlizenz (Formular online zum Download); für nicht akademischen Gebrauch auf Anfrage bei Erhard Hinrichs"/>
+        <variant value="mit Benutzerlizenz (Formular online zum Download); für nicht akademischen Gebrauch auf Anfrage bei Prof. Dr. Erhard Hinrichs"/>
+        <variant value="with user license (license form online accessible); for non-academic use please contact Erhard Hinrichs"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="REQ"/>
+        <variant value="upon request"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="RES"/>
+        <variant value="Access is restricted. Permission can be obtained by contacting the owner or the MPI"/>
+        <variant value="All data including audio is accessible for authorised researchers."/>
+        <variant value="By permission of owner only"/>
+        <variant value="CLARIN_RES"/>
+        <variant value="closed"/>
+        <variant value="Closed"/>
+        <variant value="Closed."/>
+        <variant value="free; Use of text excerpts for scientific research."/>
+        <variant value="internal"/>
+        <variant value="Linguistic Data Consortium, The Trustees of the University of Pennsylvania."/>
+        <variant value="Registrierung erforderlich, eingeschränkte Nutzung für nicht-akademische und kommerzielle Nutzung"/>
+        <variant value="RES"/>
+        <variant value="Available on request"/>
+        <variant value="Available upon request"/>
+        <variant value="free for academic use, request required"/>
+        <variant value="on request, for academic use"/>
+        <variant value="Please contact contact-person"/>
+        <variant value="request required"/>
+        <variant value="Upon Request"/>
+        <variant value="HZSK-RES"/>
+        <variant value="Korpus nicht im endgültigem Zustand Generelle Freigabe kann erst erfolgen, wenn die erfassten Daten ausgewertet wurden. Vollständige Freigabe nur auf Anfrage."/>
+        <variant value="nor available"/>
+        <variant value="not available"/>
+		
+		<variant value="Annotation derzeit nicht vollständig. Freigabe erst nach Auswertung möglich. Lizensierung zur Veröffentlichung im Web als Vereinbarung nötig."/>
+        <variant value="A special license is required because of the stem lexicon. SMOR (without a stem lexicon) comes with the SFST-tools (Stuttgart Finite State Transducer Tools) under the GNU Public License GPLv2."/>
+        <variant value="not available to the public"/>
+        <variant value="other"/>
+        <variant value="proprietary"/>
+        <variant value="Recurso protegido - Protected resource"/>
+        <variant value="underNegotiation"/>
+		
+		<variant value="no access"/>
+        <variant value="no available"/>
+        <variant value="Not available"/>
+        <variant value="Nor available"/>
+        <variant value="non available"/>
+        <variant value="no recordings available due to the sensitivity of the material"/>
+        <variant value="no"/>
+        <variant value="No"/>
+		
+    </mapping>
+    <mapping>
+        <normalizedValue value="RES; BY; NC; PRIV"/>
+        <variant value="The Conditions of Use for the IPROSLA data set specify among other things that no commercial use may be made of the data, that the creators of the data set should always be acknowledged in any publication on the data set, and that utmost care should be taken to protect the privacy of the families involved."/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="RES; PLAN"/>
+        <variant value="restricted: available to researchers with legitimate interest 1"/>
+        <variant value="restricted: available to researchers with legitimate interest 2"/>
+        <variant value="restricted: available to researchers with legitimate interest"/>
+        <variant value="Free to use for research and teaching purposes approved by the rights holder."/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="RES;FF"/>
+        <variant value="Registrierung erforderlich, die Texte der taz müssen erworben werden"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="RES;FF;LOC;LRT;Other"/>
+        <variant value="ELRA_END_USER"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="RES;FF;LRT"/>
+        <variant value="MS-C-NoReD-ND-FF"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="RES;PRIV"/>
+        <variant value="free; Contains personal data - photos and recordings. Oral permission for displying the photos, as long as they don't depict nude people."/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="SA"/>
+        <variant value="shareAlike"/>
+    </mapping>
+    <mapping>
+        <normalizedValue value="UNSPECIFIED"/>
+        <variant value="Unspecified"/>
+        <variant value="unspecified"/>
+    </mapping>
+</mappings>

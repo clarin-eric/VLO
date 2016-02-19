@@ -281,29 +281,48 @@ var solr_admin = function( app_config )
         .css( 'width', ( selector_width - 2 ) + 'px' );
     }
 
-    if( cores.initFailures )
-    {
-      var failures = [];
-      for( var core_name in cores.initFailures )
-      {
-        failures.push
-        (
-          '<li>' +
-            '<strong>' + core_name.esc() + ':</strong>' + "\n" +
-            cores.initFailures[core_name].esc() + "\n" +
-          '</li>'
-        );
-      }
-
-      if( 0 !== failures.length )
-      {
-        var init_failures = $( '#init-failures' );
-
-        init_failures.show();
-        $( 'ul', init_failures ).html( failures.join( "\n" ) );
-      }
-    }
+    this.check_for_init_failures( cores );
   };
+
+  this.remove_init_failures = function remove_init_failures()
+  {
+    $( '#init-failures' )
+      .hide()
+      .find( 'ul' )
+        .empty();
+  }
+
+  this.check_for_init_failures = function check_for_init_failures( cores )
+  {
+    if( !cores.initFailures )
+    {
+      this.remove_init_failures();
+      return false;
+    }
+
+    var failures = [];
+    for( var core_name in cores.initFailures )
+    {
+      failures.push
+      (
+        '<li>' +
+          '<strong>' + core_name.esc() + ':</strong>' + "\n" +
+          cores.initFailures[core_name].esc() + "\n" +
+        '</li>'
+      );
+    }
+
+    if( 0 === failures.length )
+    {
+      this.remove_init_failures();
+      return false;
+    }
+
+    $( '#init-failures' )
+      .show()
+      .find( 'ul' )
+        .html( failures.join( "\n" ) );
+  }
 
   this.run = function()
   {
@@ -364,14 +383,13 @@ var solr_admin = function( app_config )
                     //Keep this in alphabetical order after the overview
                     '<li class="overview"><a href="#/' + core_name + '"><span>Overview</span></a></li>' + "\n" +
                     '<li class="analysis"><a href="#/' + core_name + '/analysis"><span>Analysis</span></a></li>' + "\n" +
-                    '<li class="config"><a href="#/' + core_name + '/config"><span>Config</span></a></li>' + "\n" +
                     '<li class="dataimport"><a href="#/' + core_name + '/dataimport"><span>Dataimport</span></a></li>' + "\n" +
                     '<li class="documents"><a href="#/' + core_name + '/documents"><span>Documents</span></a></li>' + "\n" +
+                    '<li class="files"><a href="#/' + core_name + '/files"><span>Files</span></a></li>' + "\n" +
                     '<li class="ping"><a rel="' + that.config.solr_path + '/' + core_name + '/admin/ping"><span>Ping</span></a></li>' + "\n" +
                     '<li class="plugins"><a href="#/' + core_name + '/plugins"><span>Plugins / Stats</span></a></li>' + "\n" +
                     '<li class="query"><a href="#/' + core_name + '/query"><span>Query</span></a></li>' + "\n" +
                     '<li class="replication"><a href="#/' + core_name + '/replication"><span>Replication</span></a></li>' + "\n" +
-                    '<li class="schema"><a href="#/' + core_name + '/schema"><span>Schema</span></a></li>' + "\n" +
                     '<li class="schema-browser"><a href="#/' + core_name + '/schema-browser"><span>Schema Browser</span></a></li>'
                   )
                   .show();

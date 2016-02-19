@@ -19,10 +19,9 @@ package eu.clarin.cmdi.vlo.wicket.model;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import java.util.Collections;
-import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
  * Decorator for {@link FacetFieldsModel} for a selection of a single facet.
@@ -37,44 +36,36 @@ import org.apache.wicket.model.LoadableDetachableModel;
  *
  * @author twagoo
  */
-public class FacetFieldModel extends LoadableDetachableModel<FacetField> {
+public class FacetFieldModel extends AbstractReadOnlyModel<FacetField> {
 
-    //todo: can probably be made more efficient/elegant than wrapping fields model
     private final FacetFieldsModel fieldsModel;
+    private final String facetName;
     
-    /**
-     *
-     * @param facetField facet field to provide
-     * @param selectionModel model that provides current query/selection
-     */
-    public FacetFieldModel(FacetFieldsService service, FacetField facetField, IModel<QueryFacetsSelection> selectionModel) {
-        super(facetField);
-        fieldsModel = new FacetFieldsModel(service, Collections.singletonList(facetField.getName()), selectionModel, -1);
-    }
-
+    
     /**
      *
      * @param service service to use for facet field retrieval
      * @param facet facet to provide
      * @param selectionModel model that provides current query/selection
      */
-    public FacetFieldModel(FacetFieldsService service, String facet, IModel<QueryFacetsSelection> selectionModel, int valueLimit) {
-        fieldsModel = new FacetFieldsModel(service, Collections.singletonList(facet), selectionModel, valueLimit);
+    public FacetFieldModel(String facet, FacetFieldsService service, IModel<QueryFacetsSelection> selectionModel) {
+    	this(facet, new FacetFieldsModel(service, Collections.singletonList(facet), selectionModel, -1));
+    }
+    
+    public FacetFieldModel(String facetName, FacetFieldsModel fieldsModel){
+    	this.fieldsModel = fieldsModel;
+    	this.facetName = facetName;
     }
 
     @Override
-    protected FacetField load() {
-        final List<FacetField> fieldsList = fieldsModel.getObject();
-        if (fieldsList == null || fieldsList.isEmpty()) {
-            return null;
-        } else {
-            return fieldsList.get(0);
-        }
+    public FacetField getObject() {
+        return fieldsModel.getFacetField(facetName);
     }
 
-    @Override
-    public void detach() {
-        super.detach();
-        fieldsModel.detach();
+    
+    public void detachFacetFieldsModel(){
+    	fieldsModel.detach();
     }
+
+
 }

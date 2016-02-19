@@ -18,8 +18,8 @@ package eu.clarin.cmdi.vlo.wicket;
 
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.StringResourceModel;
 
 /**
  * Set the class attribute on a component from the value associated with the
@@ -34,7 +34,7 @@ public class ResourceTypeCssBehaviour extends AttributeAppender {
                 // Matches the 'resourceType' property of the resource info model
                 // to one of the properties in resourceTypeClass.properties file
                 // (defaults to "")
-                new StringResourceModel("resourcetype.${resourceType}.class", resourceInfoModel, "", new Object[0]));
+                StringResourceModelMigration.of("resourcetype.${resourceType}.class", resourceInfoModel, "", new Object[0]));
         // separate CSS classes with a space
         setSeparator(" ");
     }

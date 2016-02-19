@@ -32,6 +32,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
+import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -58,7 +59,7 @@ public class SearchResultItemCollapsedPanel extends Panel {
         add(new SolrFieldLabel("description", documentModel, FacetConstants.FIELD_DESCRIPTION, "", MAX_DESCRIPTION_LENGTH, LONG_DESCRIPTION_TRUNCATE_POINT));
 
         // get model for resources
-        final SolrFieldModel<String> resourcesModel = new SolrFieldModel<String>(documentModel, FacetConstants.FIELD_RESOURCE);
+        final SolrFieldModel<String> resourcesModel = new SolrFieldModel<>(documentModel, FacetConstants.FIELD_RESOURCE);
         // wrap with a count provider
         final ResouceTypeCountDataProvider countProvider = new ResouceTypeCountDataProvider(resourcesModel, countingService);
 
@@ -75,6 +76,7 @@ public class SearchResultItemCollapsedPanel extends Panel {
                 setVisible(countProvider.size() > 0);
             }
         });
+        add(new SearchResultItemLicensePanel("licenseInfo", documentModel, selectionModel));
     }
 
     @Override
@@ -111,9 +113,9 @@ public class SearchResultItemCollapsedPanel extends Panel {
         private IModel<String> getResourceCountModel(final IModel<ResourceTypeCount> resourceTypeCountModel) {
             // first create a string model that provides the type of resources 
             // in the right number (plural or singular, conveniently supplied by ResourceTypeCount)
-            final StringResourceModel resourceTypeModel = new StringResourceModel("resourcetype.${resourceType}.${number}", resourceTypeCountModel, "?");
+            final StringResourceModel resourceTypeModel = StringResourceModelMigration.of("resourcetype.${resourceType}.${number}", resourceTypeCountModel, "?");
             // inject this into the resource string that combines it with count
-            return new StringResourceModel("resources.typecount", this, resourceTypeCountModel, resourceTypeModel);
+            return StringResourceModelMigration.of("resources.typecount", this, resourceTypeCountModel, resourceTypeModel);
         }
     }
 

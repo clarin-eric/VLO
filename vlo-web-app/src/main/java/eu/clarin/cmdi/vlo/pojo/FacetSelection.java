@@ -17,9 +17,12 @@
 package eu.clarin.cmdi.vlo.pojo;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents the selection for a single facet
@@ -29,7 +32,8 @@ import java.util.Collection;
 public class FacetSelection implements Serializable {
 
     private final FacetSelectionType selectionType;
-    private final Collection<String> values;
+    private Collection<String> values;
+    private final Map<String, FacetSelectionValueQualifier> qualifiers;
 
     /**
      * Creates an {@link FacetSelectionType#AND} selection for the specified
@@ -51,6 +55,10 @@ public class FacetSelection implements Serializable {
     }
 
     public FacetSelection(FacetSelectionType selectionType, Collection<String> values) {
+        this(selectionType, values, Maps.<String, FacetSelectionValueQualifier>newHashMap());
+    }
+
+    public FacetSelection(FacetSelectionType selectionType, Collection<String> values, Map<String, FacetSelectionValueQualifier> qualifiers) {
         this.selectionType = selectionType;
         // always store as array list, which is modifiable and serialisable
         if (values instanceof ArrayList) {
@@ -58,6 +66,12 @@ public class FacetSelection implements Serializable {
         } else {
             // copy to new list
             this.values = Lists.newArrayList(values);
+        }
+        if (qualifiers instanceof HashMap) {
+            this.qualifiers = qualifiers;
+        } else {
+            //copy to new hashmap
+            this.qualifiers = Maps.newHashMap(qualifiers);
         }
     }
 
@@ -77,8 +91,62 @@ public class FacetSelection implements Serializable {
         return values;
     }
 
+    public void setValues(Collection<String> values) {
+        this.values = values;
+    }
+
+    /**
+     * Sets a qualifier for one value within this facet selection, allow for
+     * negation
+     *
+     * @param value value to qualify
+     * @param qualifier qualifier for this value
+     */
+    public void setQualifier(String value, FacetSelectionValueQualifier qualifier) {
+        qualifiers.put(value, qualifier);
+    }
+
+    /**
+     * Gets the qualifier (such as
+     * {@link FacetSelectionValueQualifier#NOT negation}) for one value within
+     * this facet selection, can be null
+     *
+     * @param value value to get qualifier for
+     * @return qualifier for this value
+     */
+    public FacetSelectionValueQualifier getQualifier(String value) {
+        return qualifiers.get(value);
+    }
+
+    public void removeValues(Collection<String> valuesToBeRemoved) {
+        if (valuesToBeRemoved != null) {
+            for (String val : valuesToBeRemoved) {
+                this.values.remove(val);
+                this.qualifiers.remove(val);
+            }
+        }
+    }
+
+    /**
+     * Adds a value to the selection, optionally with qualifier
+     *
+     * @param value value to add to selection
+     * @param qualifier qualifier for this value, if null any existing qualifier
+     * for this value is removed
+     */
+    public void addValue(String value, FacetSelectionValueQualifier qualifier) {
+        if (!values.contains(value)) {
+            values.add(value);
+        }
+        if (qualifier == null) {
+            qualifiers.remove(value);
+        } else {
+            qualifiers.put(value, qualifier);
+        }
+    }
+
     public FacetSelection getCopy() {
-        return new FacetSelection(selectionType, values);
+        return new FacetSelection(selectionType, values, qualifiers);
     }
 
     @Override

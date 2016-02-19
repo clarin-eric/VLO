@@ -16,17 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
-import eu.clarin.cmdi.vlo.JavaScriptResources;
-import eu.clarin.cmdi.vlo.pojo.ExpansionState;
-import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
-import eu.clarin.cmdi.vlo.wicket.model.FacetExpansionStateModel;
-import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
-import eu.clarin.cmdi.vlo.wicket.model.FacetFieldSelectionModel;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.solr.client.solrj.response.FacetField;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
@@ -39,7 +32,13 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.MapModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import eu.clarin.cmdi.vlo.JavaScriptResources;
+import eu.clarin.cmdi.vlo.pojo.ExpansionState;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.model.FacetExpansionStateModel;
+import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
+import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 
 /**
  * A panel representing a group of facets.
@@ -49,10 +48,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  *
  * @author twagoo
  */
-public abstract class FacetsPanel extends GenericPanel<List<FacetField>> {
+public abstract class FacetsPanel extends GenericPanel<List<String>> {
 
-    @SpringBean
-    private FacetFieldsService facetFieldsService;
     private MapModel<String, ExpansionState> expansionModel;
 
     /**
@@ -63,25 +60,25 @@ public abstract class FacetsPanel extends GenericPanel<List<FacetField>> {
      * @param selectionModel model representing the current query/value
      * selection state
      */
-    public FacetsPanel(final String id, final IModel<List<FacetField>> facetsModel, final IModel<QueryFacetsSelection> selectionModel) {
-        super(id, facetsModel);
+    public FacetsPanel(final String id, final IModel<List<String>> facetNamesModel, final FacetFieldsModel fieldsModel, final IModel<QueryFacetsSelection> selectionModel) {
+        super(id, facetNamesModel);
 
         final Map<String, ExpansionState> expansionStateMap = new HashMap<String, ExpansionState>();
         expansionModel = new MapModel<String, ExpansionState>(expansionStateMap);
-
-        final ListView<FacetField> facetsView = new ListView<FacetField>("facets", facetsModel) {
+        
+        final ListView<String> facetsView = new ListView<String>("facets", facetNamesModel) {
 
             @Override
-            protected void populateItem(ListItem<FacetField> item) {
-                // Create a facet field model which does a lookup by name,
+            protected void populateItem(ListItem<String> item) {
+            	// Create a facet field model which does a lookup by name,
                 // making it dynamic in case the selection and therefore
                 // set of available values changes
-                // TODO: Limit to number of items shown while keeping 'more' function?
-                final IModel<FacetField> facetFieldModel = new FacetFieldModel(facetFieldsService, item.getModelObject(), selectionModel);
                 item.add(
-                        new FacetPanel("facet",
-                                new FacetFieldSelectionModel(facetFieldModel, selectionModel),
-                                new FacetExpansionStateModel(facetFieldModel, expansionModel)) {
+                        new FacetPanel("facet", 
+                        		item.getModel(),
+                        		new FacetFieldModel(item.getModelObject(), fieldsModel), 
+                                selectionModel,
+                                new FacetExpansionStateModel(item.getModel(), expansionModel)) {
 
                             @Override
                             protected void selectionChanged(AjaxRequestTarget target) {
@@ -139,8 +136,8 @@ public abstract class FacetsPanel extends GenericPanel<List<FacetField>> {
 
     private void setAllFacetsExpansionState(final ExpansionState state) {
         final Map<String, ExpansionState> expansionMap = expansionModel.getObject();
-        for (FacetField facet : getModelObject()) {
-            expansionMap.put(facet.getName(), state);
+        for (String facetName : getModelObject()) {
+            expansionMap.put(facetName, state);
         }
     }
 

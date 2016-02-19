@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import static eu.clarin.cmdi.vlo.wicket.FragmentEncodingMountedMapper.FRAGMENT_PAGE_PARAMETER;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.link.Link;
@@ -26,6 +27,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
+ * Link to the {@link RecordPage Record Page} for a document with an optional
+ * search context, both provided by a model
  *
  * @author twagoo
  */
@@ -38,15 +41,40 @@ public class RecordPageLink extends Link {
 
     private final IModel<SolrDocument> documentModel;
     private final IModel<SearchContext> selectionModel;
+    private final String fragment;
 
+    /**
+     *
+     * @param id component id
+     * @param documentModel document model
+     */
     public RecordPageLink(String id, IModel<SolrDocument> documentModel) {
-        this(id, documentModel, null);
+        this(id, documentModel, null, null);
     }
 
+    /**
+     *
+     * @param id component id
+     * @param documentModel document model
+     * @param selectionModel search context model
+     */
     public RecordPageLink(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel) {
+        this(id, documentModel, selectionModel, null);
+    }
+
+    /**
+     *
+     * @param id component id
+     * @param documentModel document model
+     * @param selectionModel search context model
+     * @param pageFragment page id/anchor to jump to, to be converted into a
+     * fragment identifier in the target URL (can be null)
+     */
+    public RecordPageLink(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel, String pageFragment) {
         super(id);
         this.documentModel = documentModel;
         this.selectionModel = selectionModel;
+        this.fragment = pageFragment;
     }
 
     @Override
@@ -54,6 +82,9 @@ public class RecordPageLink extends Link {
         final PageParameters params = documentParamConverter.toParameters(documentModel.getObject());
         if (selectionModel != null) {
             params.mergeWith(contextParamConverter.toParameters(selectionModel.getObject()));
+        }
+        if (fragment != null) {
+            params.add(FRAGMENT_PAGE_PARAMETER, fragment);
         }
         setResponsePage(RecordPage.class, params);
     }

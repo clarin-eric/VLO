@@ -16,24 +16,31 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
-import eu.clarin.cmdi.vlo.wicket.model.FacetFieldSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.FacetPanel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
 /**
  *
  * @author twagoo
  */
 public abstract class SingleFacetPanel extends FacetPanel {
+	
+	//public FacetPanel(String id, IModel<String> facetName, IModel<FacetFieldSelection> selectionModel, IModel<ExpansionState> expansionState, int subListSize) {
 
-    public SingleFacetPanel(String id, IModel<QueryFacetsSelection> queryModel, String facetName, FacetFieldsService facetFieldsService, int subListSize) {
+    public SingleFacetPanel(String id, String facetName, IModel<QueryFacetsSelection> queryModel,  FacetFieldsService facetFieldsService, int subListSize) {
         //TODO: Limit to number of items shown while keeping 'more' function?
-        super(id, new FacetFieldSelectionModel(new FacetFieldModel(facetFieldsService, facetName, queryModel, -1), queryModel), Model.of(ExpansionState.COLLAPSED), subListSize);
+    	super(id, 
+    			new Model(facetName), 
+    			new FacetFieldModel(facetName, facetFieldsService, queryModel), 
+    			queryModel, 
+				Model.of(ExpansionState.COLLAPSED),
+				subListSize);
     }
 
     @Override

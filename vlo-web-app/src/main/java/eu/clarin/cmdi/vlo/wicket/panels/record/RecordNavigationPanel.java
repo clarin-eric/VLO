@@ -21,10 +21,10 @@ import eu.clarin.cmdi.vlo.wicket.components.NextRecordLink;
 import eu.clarin.cmdi.vlo.wicket.components.PreviousRecordLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.GenericPanel;
+import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.StringResourceModel;
 
 /**
  * Panel that shows the index of the current record and has forward/backward
@@ -37,14 +37,16 @@ public class RecordNavigationPanel extends GenericPanel<SearchContext> {
     public RecordNavigationPanel(String id, final IModel<SearchContext> model) {
         super(id, model);
 
+        
+        
         // Add a label 'record X of Y'
-        add(new Label("recordIndex", new StringResourceModel("record.navigation.index", this, model,
+        add(new Label("recordIndex", StringResourceModelMigration.of("record.navigation.index", this, model,
                 new Object[]{
                     // These values get inserted into the string
                     // First: index shifted with +1 (because count starts at 0)
                     new ShiftedIndexModel(new PropertyModel<Long>(model, "index"), +1),
                     // Second: total result count, unmodified
-                    new PropertyModel<Integer>(model, "resultCount")
+                    new PropertyModel<>(model, "resultCount")
                 }
         )));
 

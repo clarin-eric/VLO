@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.wicket.panels.record.RecordLicenseInfoPanel;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
@@ -72,6 +73,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public class RecordPage extends VloBasePage<SolrDocument> {
 
+    public final static String LICENSE_SECTION_ANCHOR = "recordlicense";
     private final static ResourceReference CMDI_HTML_CSS = new CssResourceReference(RecordPage.class, "cmdi.css");
 
     @SpringBean(name = "documentParamsConverter")
@@ -145,13 +147,16 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         // General information section
         add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, getString("recordpage.unnamedrecord")));
         add(createLandingPageLink("landingPageLink"));
-        
+
         final FieldsTablePanel fieldsTable = new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(getModel(), basicPropertiesFilter, fieldOrder));
         fieldsTable.add(new HighlightSearchTermBehavior());
         add(fieldsTable);
 
         // Resources section
-        add(new ResourceLinksPanel("resources", new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_RESOURCE)));
+        add(new ResourceLinksPanel("resources", getModel()));
+
+        add(new RecordLicenseInfoPanel("licenseInfo", getModel())
+                .setMarkupId(LICENSE_SECTION_ANCHOR));
 
         // Technical section
         add(createCmdiContent("cmdi"));
@@ -230,12 +235,12 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     }
 
     private void createSearchLinks(String id) {
-        final SolrFieldModel<String> searchPageModel = new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_SEARCHPAGE);
-        final SolrFieldModel<String> searchServiceModel = new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_SEARCH_SERVICE);
+        final SolrFieldModel<String> searchPageModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_SEARCHPAGE);
+        final SolrFieldModel<String> searchServiceModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_SEARCH_SERVICE);
         add(new WebMarkupContainer(id) {
             {
                 //Add search page links (can be multiple)
-                add(new ListView<String>("searchPage", new CollectionListModel<String>(searchPageModel)) {
+                add(new ListView<String>("searchPage", new CollectionListModel<>(searchPageModel)) {
 
                     @Override
                     protected void populateItem(ListItem item) {
@@ -244,7 +249,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 });
 
                 // We assume there can be multiple content search endpoints too
-                add(new ListView<String>("contentSearch", new CollectionListModel<String>(searchServiceModel)) {
+                add(new ListView<String>("contentSearch", new CollectionListModel<>(searchServiceModel)) {
 
                     @Override
                     protected void populateItem(ListItem<String> item) {
@@ -322,8 +327,8 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     public IModel<String> getTitleModel() {
         // Put the name of the record in the page title
         return new StringResourceModel("recordpage.title",
-                new NullFallbackModel(new SolrFieldStringModel(getModel(), FacetConstants.FIELD_NAME), getString("recordpage.unnamedrecord")),
-                DEFAULT_PAGE_TITLE);
+                new NullFallbackModel(new SolrFieldStringModel(getModel(), FacetConstants.FIELD_NAME), getString("recordpage.unnamedrecord")))
+                .setDefaultValue(DEFAULT_PAGE_TITLE);
     }
 
     @Override

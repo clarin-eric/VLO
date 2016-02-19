@@ -36,18 +36,17 @@ import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
+import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -90,10 +89,12 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
 
         // add a container for the resources (only visible if there are actual resources)
         add(createResourcesView("resources", searchContextModel));
+        
+        add(new SearchResultItemLicensePanel("licenseInfo", documentModel, searchContextModel));
     }
 
     private WebMarkupContainer createResourcesView(String id, final IModel<SearchContext> selectionModel) {
-        final SolrFieldModel<String> resourceModel = new SolrFieldModel<String>(getModel(), FacetConstants.FIELD_RESOURCE);
+        final SolrFieldModel<String> resourceModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_RESOURCE);
         // create a container for the list view that is only visible if there actually are resources
         final WebMarkupContainer container = new WebMarkupContainer(id) {
             @Override
@@ -118,7 +119,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
 
         };
         // add a record page link that shows the number of resources not shown
-        moreLink.add(new Label("moreLabel", new StringResourceModel("resources.more", new AbstractReadOnlyModel<Integer>() {
+        moreLink.add(new Label("moreLabel", StringResourceModelMigration.of("resources.more", new AbstractReadOnlyModel<Integer>() {
 
             @Override
             public Integer getObject() {
@@ -133,7 +134,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
 
     private PageableListView createResourcesList(String id, SolrFieldModel<String> resourceModel) {
         // list of resources in this record
-        final IModel<List<String>> resourceListModel = new CollectionListModel<String>(resourceModel);
+        final IModel<List<String>> resourceListModel = new CollectionListModel<>(resourceModel);
         // use a a pageable view so that the number of resources actually shown is limited
         return new PageableListView<String>(id, resourceListModel, MAX_RESOURCES_TO_SHOW) {
 

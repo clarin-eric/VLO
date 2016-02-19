@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!--
+Copyright (C) 2014 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+    <head>
+        <title>facet panel</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <wicket:extend>
+            <div class="sbilinks facetvalues">
+                <form wicket:id="availability" id="availability">
+                    <div>
+                        <ul>
+                            <li wicket:id="option">
+                                <input type="checkbox" wicket:id="selector"/><label wicket:id="label"><span wicket:id="name">LEVEL</span> <span dir="ltr">(<span wicket:id="count">123</span>)</span></label> 
+                            </li>
+                        </ul>
+                        <!--
+                        <input id="pub" type="checkbox" wicket:id="pub"/><label for="pub" title="Resources and tools that are publicly accessible" >PUB</label>
+                        <input id="aca" type="checkbox" wicket:id="aca"/><label for="aca" title="Resources and tools that are accessible with academic credentials">ACA</label>
+                        <input id="res" type="checkbox" wicket:id="res"/><label for="res" title="Resources and tools with access on individual basis">RES</label>
+                        -->
+                        <input type="submit" value="Apply" class="nonjsfallback" />    
+                    </div>
+                </form>
+
+                <p style="margin-top: .5em;">
+                    These levels provide an indication of the degree to which resources and tools are publicly accessible.
+                    Please check the specific conditions on any resource or tool that you end up using.
+                </p>
+
+            </div>
+        </wicket:extend>
+    </body>
+</html>

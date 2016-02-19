@@ -17,12 +17,13 @@ public abstract class ImporterTestcase {
 
     private final VloConfigFactory configFactory = new DefaultVloConfigFactory();
     protected VloConfig config;
+    private char ch = 'a';
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
     protected File createCmdiFile(String name, String content) throws IOException {
-        File file = tempFolder.newFile(name + System.currentTimeMillis() + ".cmdi");
+        File file = tempFolder.newFile(name + System.currentTimeMillis() + "_" + ch++ + ".cmdi");
         FileUtils.writeStringToFile(file, content, "UTF-8");
         return file;
     }

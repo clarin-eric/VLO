@@ -71,54 +71,54 @@ public class VloServicesSpringConfig {
      * Handle resolution cache expiry in seconds
      */
     private static final int HANDLE_CACHE_EXPIRY = 3600;
-    
+
     @Inject
     VloConfig vloConfig;
-    
+
     @Bean
     public ResourceTypeCountingService resourceTypeCountingService() {
         return new ResourceTypeCountingServiceImpl(resourceStringConverter());
     }
-    
+
     @Bean(name = "resourceStringConverter")
     public ResourceStringConverter resourceStringConverter() {
         return new ResourceStringConverterImpl();
     }
-    
+
     @Bean(name = "resolvingResourceStringConverter")
     public ResourceStringConverter resolvingResourceStringConverter() {
         return new ResourceStringConverterImpl(uriResolver());
     }
-    
+
     @Bean
     public UriResolver uriResolver() {
         return new UriResolverImpl(handleResolver());
     }
-    
+
     public HandleResolver handleResolver() {
         return new CachingHandleResolver(new HandleRestApiResolver(), HANDLE_CACHE_EXPIRY);
     }
-    
+
     @Bean
     public FacetParameterMapper facetParameterMapper() {
         return new FacetParameterMapperImpl(languageCodeUtils());
     }
-    
+
     @Bean(name = "queryParametersConverter")
     public PageParametersConverter<QueryFacetsSelection> queryParametersConverter() {
         return new QueryFacetsSelectionParametersConverter(vloConfig, facetParameterMapper());
     }
-    
+
     @Bean(name = "documentParamsConverter")
     public PageParametersConverter<SolrDocument> documentParamsConverter() {
         return new DocumentParametersConverter();
     }
-    
+
     @Bean(name = "searchContextParamsConverter")
     public PageParametersConverter<SearchContext> searchContextParamsConverter() {
         return new SearchContextParametersConverter(queryParametersConverter());
     }
-    
+
     @Bean
     public XmlTransformationService cmdiTransformationService() throws TransformerConfigurationException {
         final Source xsltSource = new StreamSource(getClass().getResourceAsStream("/cmdi2xhtml.xsl"));
@@ -129,48 +129,53 @@ public class VloServicesSpringConfig {
         transformationProperties.setProperty(OutputKeys.ENCODING, "UTF-8");
         return new XmlTransformationServiceImpl(xsltSource, transformationProperties);
     }
-    
+
     @Bean(name = "basicPropertiesFilter")
     public FieldFilter basicPropertiesFieldFilter() {
         return new ExclusiveFieldFilter(Sets.union(
                 vloConfig.getIgnoredFields(),
                 vloConfig.getTechnicalFields()));
     }
-    
+
     @Bean(name = "searchResultPropertiesFilter")
     public FieldFilter searchResultPropertiesFilter() {
         return new InclusiveFieldFilter(vloConfig.getSearchResultFields());
     }
-    
+
     @Bean(name = "technicalPropertiesFilter")
     public FieldFilter technicalPropertiesFieldFilter() {
         return new InclusiveFieldFilter(
                 vloConfig.getTechnicalFields());
     }
-    
+
     @Bean
     public LanguageCodeUtils languageCodeUtils() {
         return new LanguageCodeUtils(vloConfig);
     }
-    
+
     @Bean
     public FieldValueConverterProvider fieldValueConverters() {
-        return new FieldValueConverterProviderImpl(languageCodeUtils());
+        return new FieldValueConverterProviderImpl(languageCodeUtils(), vloConfig);
     }
-    
+
     @Bean
     public FacetDescriptionService facetDescriptionsService() throws JAXBException {
         return new FacetDescriptionServiceImpl(facetConceptsMarshaller(), vloConfig);
     }
-    
+
     @Bean
     public FacetConceptsMarshaller facetConceptsMarshaller() throws JAXBException {
         return new FacetConceptsMarshaller();
     }
-    
+
     @Bean
     public PermalinkService permalinkService() {
         return new PermalinkServiceImpl(queryParametersConverter());
     }
-    
+
+    @Bean
+    public PiwikConfig piwikConfig() {
+        return new PiwikConfig();
+    }
+
 }

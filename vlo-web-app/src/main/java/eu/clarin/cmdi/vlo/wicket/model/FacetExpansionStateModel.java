@@ -18,7 +18,6 @@ package eu.clarin.cmdi.vlo.wicket.model;
 
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import java.util.Map;
-import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.model.IModel;
 
 /**
@@ -29,7 +28,7 @@ import org.apache.wicket.model.IModel;
  */
 public class FacetExpansionStateModel implements IModel<ExpansionState> {
 
-    private final IModel<FacetField> facetModel;
+    private final IModel<String> facetName;
     private final IModel<Map<String, ExpansionState>> expansionStateMapModel;
 
     /**
@@ -37,14 +36,14 @@ public class FacetExpansionStateModel implements IModel<ExpansionState> {
      * @param facetModel model that holds the current facet
      * @param expansionStateMapModel model that holds the map of expansion states
      */
-    public FacetExpansionStateModel(IModel<FacetField> facetModel, IModel<Map<String, ExpansionState>> expansionStateMapModel) {
-        this.facetModel = facetModel;
+    public FacetExpansionStateModel(IModel<String> facetName, IModel<Map<String, ExpansionState>> expansionStateMapModel) {
+        this.facetName = facetName;
         this.expansionStateMapModel = expansionStateMapModel;
     }
 
     @Override
     public ExpansionState getObject() {
-        final String facet = facetModel.getObject().getName();
+        final String facet = facetName.getObject();
         final ExpansionState state = expansionStateMapModel.getObject().get(facet);
         if (state == null) {
             return ExpansionState.COLLAPSED;
@@ -55,13 +54,13 @@ public class FacetExpansionStateModel implements IModel<ExpansionState> {
 
     @Override
     public void setObject(ExpansionState object) {
-        final String facet = facetModel.getObject().getName();
+        final String facet = facetName.getObject();
         expansionStateMapModel.getObject().put(facet, object);
     }
 
     @Override
     public void detach() {
-        facetModel.detach();
+    	facetName.detach();
         expansionStateMapModel.detach();
     }
 

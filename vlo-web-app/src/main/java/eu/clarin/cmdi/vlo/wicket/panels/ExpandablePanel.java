@@ -38,7 +38,7 @@ import org.apache.wicket.model.Model;
  */
 public abstract class ExpandablePanel<T> extends GenericPanel<T> {
 
-    private final IModel<ExpansionState> expansionModel;
+    protected final IModel<ExpansionState> expansionModel;
 
     /**
      * Creates the panel with its own expansion state model which is closed

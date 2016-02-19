@@ -36,10 +36,6 @@ import static org.apache.wicket.extensions.markup.html.basic.DefaultLinkParser.U
  */
 public class SmartLinkFieldValueLabel extends FieldValueLabel {
 
-    public SmartLinkFieldValueLabel(String id, IModel<String> fieldModel) {
-        super(id, fieldModel);
-    }
-
     public SmartLinkFieldValueLabel(String id, IModel<?> model, IModel<String> fieldModel) {
         super(id, model, fieldModel);
     }

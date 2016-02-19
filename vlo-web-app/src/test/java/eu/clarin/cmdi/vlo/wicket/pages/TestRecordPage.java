@@ -7,6 +7,7 @@ import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.VloServicesSpringConfig;
 import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import eu.clarin.cmdi.vlo.wicket.panels.ContentSearchFormPanelTest;
 import javax.inject.Inject;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -21,6 +22,8 @@ import org.junit.runner.RunWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
@@ -50,10 +53,10 @@ public class TestRecordPage {
     @Before
     public void setUp() {
         tester = new WicketTester(application);
-        
+
         document = new SolrDocument();
         document.setField(FacetConstants.FIELD_ID, "documentId");
-        
+
         params = new PageParameters();
         params.set(VloWebAppParameters.DOCUMENT_ID, "documentId");
     }
@@ -104,6 +107,7 @@ public class TestRecordPage {
      * Custom configuration injected into web app for testing
      */
     @Configuration
+    @PropertySource(value = "classpath:/config.default.properties", ignoreResourceNotFound = false)
     @Import({
         VloSolrSpringTestConfig.class,
         VloApplicationTestConfig.class,
@@ -113,6 +117,11 @@ public class TestRecordPage {
         @Bean
         public Mockery mockery() {
             return new JUnit4Mockery();
+        }
+
+        @Bean
+        public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+            return new PropertySourcesPlaceholderConfigurer();
         }
     }
 

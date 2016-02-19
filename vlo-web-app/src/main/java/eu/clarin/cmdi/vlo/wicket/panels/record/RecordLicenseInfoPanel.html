@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!--
+Copyright (C) 2016 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+    <head>
+        <title>license and availability info panel</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <wicket:panel>
+            <div wicket:id="availableInfo" id="licenseInfo">
+                <p>
+                    The following information regarding <strong>availability and/or 
+                        licencing</strong> has been extracted from the information 
+                    offered by the original provider:
+                </p>
+                <ul id="licenseAvailability">
+                    <li class="license" wicket:id="license">
+                        <a wicket:id="licensePage" target="_blank"><span wicket:id="licenseName"></span></a>
+                    </li>
+                    <li class="availability" wicket:id="availability">
+                        <span wicket:id="availabilityDescription"></span>
+                    </li>
+                </ul>
+                <div id="accessInfo" wicket:id="accessInfo" >
+                    <a wicket:id="accessInfoToggle"></a>
+                    <ul wicket:id="accessInfoTable">
+                        <li wicket:id="accessInfoItem"><span wicket:id="accessInfoValue"></span></li>
+                    </ul>
+                </div>
+                <p>
+                    Please <strong>verify this information</strong> 
+                    at the original source or contact the original provider
+                    before using any of the resources or tools described on this
+                    page.
+
+                    <span wicket:id="originalContext">
+                        You can usually find this information, or contact 
+                        information, by viewing
+                        <strong>
+                        <a href="" wicket:id="landingPage">
+                            the original provider's page for this record
+                        </a>
+                    </strong>.
+                    </span>
+                </p>
+            </div>
+            <div wicket:id="noInfo" class="noLicenseInfo">
+                <p>
+                    <strong>No information regarding availability and/or 
+                        licencing</strong> has been extracted from the information 
+                    offered by the original provider.
+                    Before using any of the resources or tools described on this page, 
+                    record, please <strong>check the information</strong> 
+                    at the original source or contact the original provider.
+                </p>
+                <p wicket:id="originalContext">
+                    In most cases, the best way to find legal information 
+                    regarding the described resources and/or tools is viewing 
+                    <strong>
+                        <a href="" wicket:id="landingPage">
+                            the original provider's page for this record
+                        </a>
+                    </strong>.
+                </p>
+            </div>
+        </wicket:panel>
+    </body>
+
+</html>

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+VMOPTS="-Xmx5G"
+
 # Get the script's source directory
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -33,7 +35,7 @@ echo Logging in ${LOGDIR}
 # -l path OR -l "path1 path2 ..."
 #
 
-$JAVA -Xmx3G \
+$JAVA ${VMOPTS} \
     -cp "${DIR}:${DIR}/vlo-importer-${project.version}-importer.jar" \
 	-DconfigFile=${DFLT_CONFIG} \
     -DIMPORTER_LOG_DIR=${LOGDIR} \

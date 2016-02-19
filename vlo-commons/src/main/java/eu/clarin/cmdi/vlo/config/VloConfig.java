@@ -72,6 +72,10 @@ public class VloConfig {
 
     private String licenseAvailabilityMapUrl;
 
+    private String resourceClassMapUrl;
+    
+    private String licenseURIMapUrl;
+
     private String countryComponentUrl = "";
 
     private String language2LetterCodeComponentUrl = "";
@@ -1026,7 +1030,24 @@ public class VloConfig {
         licenseAvailabilityMapUrl = param;
     }
 
-    /**
+    public String getResourceClassMapUrl() {
+        return resourceClassMapUrl;
+    }
+
+    public void setResourceClassMapUrl(String resourceClassMapUrl) {
+        this.resourceClassMapUrl = resourceClassMapUrl;
+    }    
+    
+
+    public String getLicenseURIMapUrl() {
+		return licenseURIMapUrl;
+	}
+
+	public void setLicenseURIMapUrl(String licenseURIMapUrl) {
+		this.licenseURIMapUrl = licenseURIMapUrl;
+	}
+
+	/**
      * Get the value of the cqlEndpointFilter parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
@@ -1116,4 +1137,17 @@ public class VloConfig {
     public void setProcessHierarchies(boolean processHierarchies) {
         this.processHierarchies = processHierarchies;
     }
+
+    private List<FieldValueDescriptor> availabilityValue;
+
+    @XmlElementWrapper(name = "availability")
+    @XmlElement(name = "availabilityValue")
+    public List<FieldValueDescriptor> getAvailabilityValues() {
+        return availabilityValue;
+    }
+
+    public void setAvailabilityValues(List<FieldValueDescriptor> availabilityValues) {
+        this.availabilityValue = availabilityValues;
+    }
+
 }

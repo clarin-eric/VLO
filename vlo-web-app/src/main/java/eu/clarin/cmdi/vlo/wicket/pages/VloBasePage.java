@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
 import org.apache.wicket.Session;
@@ -32,9 +33,9 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -64,6 +65,9 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
     @SpringBean
     private VloConfig vloConfig;
+    
+    @SpringBean
+    private PiwikConfig piwikConfig;
 
     public VloBasePage() {
         addComponents();
@@ -154,7 +158,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
      * no description
      */
     public IModel<String> getPageDescriptionModel() {
-        return new StringResourceModel("vloDescription", null, (Object[]) null);
+        return StringResourceModelMigration.of("vloDescription", null, (Object[]) null);
     }
 
     /**
@@ -182,6 +186,15 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         add(new WebMarkupContainer("header").add(new AttributeAppender("class", VloWicketApplication.get().getAppVersionQualifier())));
 
         add(new HideJavascriptFallbackControlsBehavior());
+        
+        // add Piwik tracker (if enabled)
+        if(piwikConfig.isEnabled()) {
+            add(new PiwikTracker("piwik", piwikConfig.getSiteId(), piwikConfig.getPiwikHost(), piwikConfig.getDomains()));
+        } else {
+            //empty placeholder
+            add(new WebMarkupContainer("piwik"));
+        }
     }
+
 
 }

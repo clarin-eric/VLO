@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>eu.clarin.cmdi</groupId>
+    <artifactId>vlo-vocabularies</artifactId> 
+    <version>3.4-beta1</version>
+    <packaging>jar</packaging>
+    
+    <parent>
+        <groupId>eu.clarin.cmdi</groupId>
+        <artifactId>vlo</artifactId>
+        <version>3.4-beta1</version>
+    </parent>
+	
+
+	<properties>		
+		<old_maps.path>maps/old_maps</old_maps.path>
+		<xslt.path>maps/xslt</xslt.path>
+		<dest.path>maps/uniform_maps</dest.path>
+
+		<saxon.version>9.1.0.8</saxon.version>
+		<slf4j.version>1.7.12</slf4j.version>
+		<junit.version>4.12</junit.version>
+        		  
+	</properties>
+
+	
+	<build>
+		<!-- add uniform maps to class path -->
+		<resources>
+			<resource>
+				<directory>maps/uniform_maps</directory>
+			</resource>
+		</resources>
+	</build>
+			
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.7</version>
+		</dependency>
+	</dependencies>
+</project>
