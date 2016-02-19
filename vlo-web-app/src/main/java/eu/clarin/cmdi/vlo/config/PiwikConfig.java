@@ -36,7 +36,7 @@ public class PiwikConfig {
     @Value("${eu.clarin.cmdi.vlo.piwik.host:https://stats.clarin.eu/}")
     private String piwikHost;
 
-    @Value("${eu.clarin.cmdi.vlo.piwik.domains:*.catalog.clarin.eu}")
+    @Value("${eu.clarin.cmdi.vlo.piwik.domains:*.vlo.clarin.eu}")
     private String domains;
 
     public boolean isEnabled() {
