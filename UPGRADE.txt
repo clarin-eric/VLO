@@ -73,6 +73,9 @@ following parameters according to your preferences:
 
 See <https://stats.clarin.eu> for configuration details per environment.
 
+* Notice that the VLO importer script has an heap space maximum size that has
+been increased to 5G (see bin/vlo_solr_importer.sh)
+
 --------------------------
 Upgrading from 3.2 to 3.3
 --------------------------
