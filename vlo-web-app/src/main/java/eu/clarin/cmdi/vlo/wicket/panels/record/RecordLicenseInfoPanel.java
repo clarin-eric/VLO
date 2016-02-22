@@ -138,6 +138,8 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
         final IModel<Map<String, FieldValueDescriptor>> descriptorsModel
                 = new MapModel<>(ImmutableMap.copyOf(FieldValueDescriptor.toMap(vloConfig.getAvailabilityValues())));
 
+        //TODO: Impose order, at least show pub/aca/res first
+        
         return new ListView<String>(id, new CollectionListModel<>(availabilityModel)) {
             @Override
             protected void populateItem(ListItem<String> item) {
