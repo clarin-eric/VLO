@@ -74,7 +74,8 @@ following parameters according to your preferences:
 See <https://stats.clarin.eu> for configuration details per environment.
 
 * Notice that the VLO importer script has an heap space maximum size that has
-been increased to 5G (see bin/vlo_solr_importer.sh)
+been increased to 6G (see bin/vlo_solr_importer.sh). This can be configured
+by means of the newly added "VMOPTS" variable in the script file.
 
 * There have been changes to the Solr configuration, so make sure to run or use
 a fresh import started with a clean index.
