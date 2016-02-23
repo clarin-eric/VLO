@@ -17,9 +17,11 @@
 package eu.clarin.cmdi.vlo.config;
 
 import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlAttribute;
 
@@ -98,12 +100,36 @@ public class FieldValueDescriptor implements Serializable {
         this.description = description;
     }
 
+    /**
+     * Creates a map value => descriptor
+     *
+     * @param descriptor
+     * @return {@link FieldValueDescriptor} map with keys taken from {@link FieldValueDescriptor#getValue()
+     * }
+     */
     public static Map<String, FieldValueDescriptor> toMap(Collection<FieldValueDescriptor> descriptor) {
         return Maps.uniqueIndex(descriptor, new Function<FieldValueDescriptor, String>() {
             public String apply(FieldValueDescriptor f) {
                 return f.getValue();
             }
         });
+    }
+
+    /**
+     * Creates list of values
+     *
+     * @param descriptors descriptors to extract values from
+     * @return list of values obtained via
+     * {@link FieldValueDescriptor#getValue()}
+     */
+    public static List<String> valuesList(List<FieldValueDescriptor> descriptors) {
+        return Lists.newArrayList(Lists.transform(descriptors, new Function<FieldValueDescriptor, String>() {
+            @Override
+            public String apply(FieldValueDescriptor input) {
+                //we are only interested in the value
+                return input.getValue();
+            }
+        }));
     }
 
 }

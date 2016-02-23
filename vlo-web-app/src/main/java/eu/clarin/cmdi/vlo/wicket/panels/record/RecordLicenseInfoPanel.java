@@ -17,9 +17,11 @@
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
 import eu.clarin.cmdi.vlo.wicket.components.ToggleLink;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.ConvertedFieldValueModel;
@@ -64,7 +66,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
     private final IModel<Collection<String>> availabilityModel;
     private final IModel<Collection<String>> accessInfoModel;
     private final IModel<Collection<String>> licensesModel;
-
+    
     public RecordLicenseInfoPanel(String id, IModel<SolrDocument> model) {
         super(id, model);
         this.availabilityModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_AVAILABILITY);
@@ -138,7 +140,12 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
         final IModel<Map<String, FieldValueDescriptor>> descriptorsModel
                 = new MapModel<>(ImmutableMap.copyOf(FieldValueDescriptor.toMap(vloConfig.getAvailabilityValues())));
 
-        return new ListView<String>(id, new CollectionListModel<>(availabilityModel)) {
+        //define the order for availability values
+        final Ordering<String> availabilityOrder = new PreferredExplicitOrdering(
+                //extract the 'primary' availability values from the configuration
+                FieldValueDescriptor.valuesList(vloConfig.getAvailabilityValues()));
+        
+        return new ListView<String>(id, new CollectionListModel<>(availabilityModel, availabilityOrder)) {
             @Override
             protected void populateItem(ListItem<String> item) {
 
