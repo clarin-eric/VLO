@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
@@ -51,7 +52,7 @@ public class SearchResultItemCollapsedPanel extends Panel {
     private final IModel<SearchContext> selectionModel;
     private final IModel<SolrDocument> documentModel;
 
-    public SearchResultItemCollapsedPanel(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel) {
+    public SearchResultItemCollapsedPanel(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel, Ordering<String> availabilityOrdering) {
         super(id, documentModel);
         this.documentModel = documentModel;
         this.selectionModel = selectionModel;
@@ -76,7 +77,8 @@ public class SearchResultItemCollapsedPanel extends Panel {
                 setVisible(countProvider.size() > 0);
             }
         });
-        add(new SearchResultItemLicensePanel("licenseInfo", documentModel, selectionModel));
+        
+        add(new SearchResultItemLicensePanel("licenseInfo", documentModel, selectionModel, availabilityOrdering));
     }
 
     @Override

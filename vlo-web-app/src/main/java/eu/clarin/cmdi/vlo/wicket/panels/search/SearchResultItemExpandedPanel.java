@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
@@ -54,9 +55,9 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  * @author twagoo
  */
 public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
-
+    
     private static final int MAX_RESOURCES_TO_SHOW = 10;
-
+    
     @SpringBean(name = "searchResultPropertiesFilter")
     private FieldFilter propertiesFilter;
     @SpringBean(name = "resourceStringConverter")
@@ -65,34 +66,34 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
     ResourceStringConverter resolvingResourceStringConverter;
     @SpringBean(name = "documentFieldOrder")
     private List<String> fieldOrder;
-
-    public SearchResultItemExpandedPanel(String id, final IModel<SolrDocument> documentModel, final IModel<SearchContext> searchContextModel) {
+    
+    public SearchResultItemExpandedPanel(String id, final IModel<SolrDocument> documentModel, final IModel<SearchContext> searchContextModel, Ordering<String> availabilityOrdering) {
         super(id, documentModel);
 
         // add untruncated description
         final NullFallbackModel descriptionModel = new NullFallbackModel(new SolrFieldStringModel(documentModel, FacetConstants.FIELD_DESCRIPTION), "");
         add(new SmartLinkFieldValueLabel("description", descriptionModel, Model.of(FacetConstants.FIELD_DESCRIPTION)));
-        
+
         // add link to record
         add(new RecordPageLink("recordLink", documentModel, searchContextModel));
 
         // table with some basic properties
         add(new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(documentModel, propertiesFilter, fieldOrder)) {
-
+            
             @Override
             protected boolean isShowFacetSelectLinks() {
                 // do not show the value selection links
                 return false;
             }
-
+            
         });
 
         // add a container for the resources (only visible if there are actual resources)
         add(createResourcesView("resources", searchContextModel));
         
-        add(new SearchResultItemLicensePanel("licenseInfo", documentModel, searchContextModel));
+        add(new SearchResultItemLicensePanel("licenseInfo", documentModel, searchContextModel, availabilityOrdering));
     }
-
+    
     private WebMarkupContainer createResourcesView(String id, final IModel<SearchContext> selectionModel) {
         final SolrFieldModel<String> resourceModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_RESOURCE);
         // create a container for the list view that is only visible if there actually are resources
@@ -102,42 +103,42 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
                 super.onConfigure();
                 setVisible(resourceModel.getObject() != null);
             }
-
+            
         };
-
+        
         final PageableListView resourcesView = createResourcesList("resource", resourceModel);
         container.add(resourcesView);
 
         // create a link to the record page that is only visible when there are more resources than shown
         final RecordPageLink moreLink = new RecordPageLink("more", getModel(), selectionModel) {
-
+            
             @Override
             protected void onConfigure() {
                 super.onConfigure();
                 setVisible(resourcesView.getPageCount() > 1);
             }
-
+            
         };
         // add a record page link that shows the number of resources not shown
         moreLink.add(new Label("moreLabel", StringResourceModelMigration.of("resources.more", new AbstractReadOnlyModel<Integer>() {
-
+            
             @Override
             public Integer getObject() {
                 return resourceModel.getObject().size() - MAX_RESOURCES_TO_SHOW;
             }
-
+            
         }, "more...")));
         container.add(moreLink);
-
+        
         return container;
     }
-
+    
     private PageableListView createResourcesList(String id, SolrFieldModel<String> resourceModel) {
         // list of resources in this record
         final IModel<List<String>> resourceListModel = new CollectionListModel<>(resourceModel);
         // use a a pageable view so that the number of resources actually shown is limited
         return new PageableListView<String>(id, resourceListModel, MAX_RESOURCES_TO_SHOW) {
-
+            
             @Override
             protected void populateItem(final ListItem<String> item) {
                 // get resource string converted into a ResourceInfo model
@@ -150,14 +151,14 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
 
                 // once loaded, make Ajax request to resolve handles and update resource link
                 resourceLink.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
-
+                    
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
                         // update resource link
                         target.add(resourceLink);
                     }
                 });
-
+                
                 resourceLink.add(new ResourceLinkDetailsPanel("details", resourceInfoModel));
 
                 // sets the css class depending on the resource type
@@ -168,10 +169,10 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
             }
         };
     }
-
+    
     @Override
     public void detachModels() {
         super.detachModels();
     }
-
+    
 }

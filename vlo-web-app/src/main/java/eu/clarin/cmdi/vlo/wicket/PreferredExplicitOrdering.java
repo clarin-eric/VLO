@@ -17,13 +17,14 @@
 package eu.clarin.cmdi.vlo.wicket;
 
 import com.google.common.collect.Ordering;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
-public class PreferredExplicitOrdering<T> extends Ordering<T> {
+public class PreferredExplicitOrdering<T> extends Ordering<T> implements Serializable {
 
     private final List<T> preferredItems;
 

@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
@@ -59,8 +60,9 @@ public class SearchResultItemPanel extends Panel {
      * record page when link is clicked)
      * @param expansionStateModel model for the expansion state of this search
      * item
+     * @param availabilityOrdering ordering for availability 'tags'
      */
-    public SearchResultItemPanel(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel, IModel<ExpansionState> expansionStateModel) {
+    public SearchResultItemPanel(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel, IModel<ExpansionState> expansionStateModel, Ordering<String> availabilityOrdering) {
         super(id, documentModel);
         this.expansionStateModel = expansionStateModel;
         this.selectionModel = selectionModel;
@@ -73,11 +75,11 @@ public class SearchResultItemPanel extends Panel {
         add(createExpansionStateToggle("expansionStateToggle"));
 
         // add a collapsed details panel; only shown when expansion state is collapsed (through onConfigure)
-        collapsedDetails = new SearchResultItemCollapsedPanel("collapsedDetails", documentModel, selectionModel);
+        collapsedDetails = new SearchResultItemCollapsedPanel("collapsedDetails", documentModel, selectionModel, availabilityOrdering);
         add(collapsedDetails);
 
         // add a collapsed details panel; only shown when expansion state is expanded (through onConfigure)
-        expandedDetails = new SearchResultItemExpandedPanel("expandedDetails", documentModel, selectionModel);
+        expandedDetails = new SearchResultItemExpandedPanel("expandedDetails", documentModel, selectionModel, availabilityOrdering);
         add(expandedDetails);
 
         final MarkupContainer scoreContainer = new WebMarkupContainer("scoreContainer");

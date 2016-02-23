@@ -16,10 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import com.google.common.collect.Ordering;
+import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
+import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchResultExpansionStateModel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
@@ -66,6 +70,8 @@ public class SearchResultsPanel extends Panel {
     private final IModel<Set<Object>> expansionsModel;
 
     @SpringBean
+    private VloConfig vloConfig;
+    @SpringBean
     private PiwikConfig piwikConfig;
 
     public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel) {
@@ -75,6 +81,14 @@ public class SearchResultsPanel extends Panel {
         solrDocumentProvider = new SolrDocumentProvider(selectionModel);
 
         expansionsModel = new Model(new HashSet<Object>());
+        
+        
+        //define the order for availability values
+        final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering(
+                //extract the 'primary' availability values from the configuration
+                FieldValueDescriptor.valuesList(vloConfig.getAvailabilityValues()));
+
+        
         // data view for search results
         resultsView = new DataView<SolrDocument>("resultItem", solrDocumentProvider, 10) {
 
@@ -85,7 +99,7 @@ public class SearchResultsPanel extends Panel {
                 final SearchContextModel contextModel = new SearchContextModel(index, size, selectionModel);
                 // single result item
                 item.add(new SearchResultItemPanel("resultItemDetails", item.getModel(), contextModel,
-                        new SearchResultExpansionStateModel(expansionsModel, item.getModel())
+                        new SearchResultExpansionStateModel(expansionsModel, item.getModel()), availabilityOrdering
                 ));
             }
         };

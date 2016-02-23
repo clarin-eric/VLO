@@ -46,11 +46,11 @@ public class CollectionListModel<T> implements IModel<List<T>> {
     @Override
     public List<T> getObject() {
         final Collection object = collectionModel.getObject();
-        if (ordering == null) {
+        if (object == null) {
+            return null;
+        } else if (ordering == null) {
             if (object instanceof List) {
                 return (List<T>) object;
-            } else if (object == null) {
-                return null;
             } else {
                 return Lists.newArrayList(object);
             }
