@@ -18,7 +18,7 @@ import org.junit.Test;
 public class CMDIDataProcessorTest extends ImporterTestcase {
 
     private CMDIDataProcessor getDataParser() {
-        return new CMDIParserVTDXML(MetadataImporter.POST_PROCESSORS, true);
+        return new CMDIParserVTDXML(MetadataImporter.POST_PROCESSORS, config, true);
     }
 
     @Before

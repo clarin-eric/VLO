@@ -146,7 +146,7 @@ public class MetadataImporter {
                     solrServer.deleteByQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
                     LOG.info("Deleting data of provider done.");
                 }
-                CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS, false);
+                CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS, config, false);
                 List<List<File>> centreFilesList = getFilesFromDataRoot(dataRoot.getRootFile());
                 // import files from every endpoint
                 for(List<File> centreFiles : centreFilesList) {
@@ -352,7 +352,7 @@ public class MetadataImporter {
                 SolrInputDocument solrDocument = cmdiData.getSolrDocument();
                 if (solrDocument != null) {
                     updateDocument(solrDocument, cmdiData, file, dataOrigin);
-                    if(ResourceStructureGraph.getVertex(cmdiData.getId()) != null)
+                    if(config.isProcessHierarchies() && ResourceStructureGraph.getVertex(cmdiData.getId()) != null)
                         ResourceStructureGraph.getVertex(cmdiData.getId()).setWasImported(true);
                 }
             } else {

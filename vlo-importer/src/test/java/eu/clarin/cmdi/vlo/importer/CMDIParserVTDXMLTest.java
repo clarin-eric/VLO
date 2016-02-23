@@ -2,6 +2,7 @@ package eu.clarin.cmdi.vlo.importer;
 
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import org.junit.Test;
@@ -58,7 +59,7 @@ public class CMDIParserVTDXMLTest extends ImporterTestcase {
         vg.setDoc(content.getBytes());
         vg.parse(true);
         VTDNav nav = vg.getNav();
-        CMDIParserVTDXML parser = new CMDIParserVTDXML(null, true);
+        CMDIParserVTDXML parser = new CMDIParserVTDXML(null, new VloConfig(), true);
         String xsd = parser.extractXsd(nav);
         return xsd;
     }
