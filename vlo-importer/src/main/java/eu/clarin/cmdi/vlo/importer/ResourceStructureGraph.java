@@ -40,10 +40,10 @@ public class ResourceStructureGraph {
 
     protected final static Logger LOG = LoggerFactory.getLogger(ResourceStructureGraph.class);
 
-    private static DirectedAcyclicGraph<CmdiVertex, DefaultEdge> graph = new DirectedAcyclicGraph<CmdiVertex, DefaultEdge>(
+    private static DirectedAcyclicGraph<CmdiVertex, DefaultEdge> graph = new DirectedAcyclicGraph<>(
             DefaultEdge.class);
-    private static Map<String, CmdiVertex> vertexIdMap = new HashMap<String, CmdiVertex>();
-    private static Set<CmdiVertex> foundVerticesSet = new HashSet<CmdiVertex>();
+    private static Map<String, CmdiVertex> vertexIdMap = new HashMap<>();
+    private static Set<CmdiVertex> foundVerticesSet = new HashSet<>();
     
     // configuration for restricting max number of hasPart-edges
     private static final Integer MAX_INDEGREE = 500;
@@ -118,7 +118,7 @@ public class ResourceStructureGraph {
      * infinite loops for cycles
      */
     private static void updateDepthValues(CmdiVertex startVertex, Set<CmdiVertex> alreadySeenVerticesSet) {
-        alreadySeenVerticesSet = new HashSet<CmdiVertex>();
+        alreadySeenVerticesSet = new HashSet<>();
         alreadySeenVerticesSet.add(startVertex);
 
         // upwards, is part of other resource -> use decremented minimal value
@@ -193,7 +193,7 @@ public class ResourceStructureGraph {
      * target
      */
     public static List<String> getIncomingVertexNames(CmdiVertex targetVertex) {
-        List<String> vertexNamesList = new ArrayList<String>();
+        List<String> vertexNamesList = new ArrayList<>();
         Set<DefaultEdge> incomingEdges = graph.incomingEdgesOf(targetVertex);
         Iterator<DefaultEdge> edgeIter = incomingEdges.iterator();
         while (edgeIter.hasNext()) {
@@ -215,7 +215,7 @@ public class ResourceStructureGraph {
      * source
      */
     public static List<String> getOutgoingVertexNames(CmdiVertex sourceVertex) {
-        List<String> vertexNamesList = new ArrayList<String>();
+        List<String> vertexNamesList = new ArrayList<>();
         Set<DefaultEdge> outgoingEdges = graph.outgoingEdgesOf(sourceVertex);
         Iterator<DefaultEdge> edgeIter = outgoingEdges.iterator();
         while (edgeIter.hasNext()) {
@@ -232,9 +232,9 @@ public class ResourceStructureGraph {
      * Reset resource hierarchy graph (= deleting vertices + edges)
      */
     public static void clearResourceGraph() {
-        vertexIdMap = new HashMap<String, CmdiVertex>();
-        foundVerticesSet = new HashSet<CmdiVertex>();
-        graph = new DirectedAcyclicGraph<CmdiVertex, DefaultEdge>(DefaultEdge.class);
+        vertexIdMap = new HashMap<>();
+        foundVerticesSet = new HashSet<>();
+        graph = new DirectedAcyclicGraph<>(DefaultEdge.class);
         highIndegreeIds = new HashSet<>();
     }
 
@@ -254,7 +254,7 @@ public class ResourceStructureGraph {
         // count broken + valid edges
         int count = 0;
         Iterator<DefaultEdge> edgeIter = graph.edgeSet().iterator();
-        HashSet<DefaultEdge> brokenEdgeSet = new HashSet<DefaultEdge>();
+        HashSet<DefaultEdge> brokenEdgeSet = new HashSet<>();
         while (edgeIter.hasNext()) {
             DefaultEdge edge = edgeIter.next();
             if (foundVerticesSet.contains(graph.getEdgeTarget(edge)) && foundVerticesSet.contains(graph.getEdgeSource(edge))) {
