@@ -421,9 +421,19 @@
             description:[* TO *]
         </str>
         
-        <!-- boost fields with a resource or part -->
+        <!-- boost fields with a resource -->
         <str name="bq">
-            _hasPart:[* TO *] OR _resourceRef:[* TO *]
+            _resourceRef:[* TO *]
+        </str>
+        
+        <!-- boost resources with public availability (but not if combined with another availability level) -->
+        <str name="bq">
+            availability:(PUB -ACA -RES -UNSPECIFIED)^2
+        </str>
+        
+        <!-- boost resources with academic availability (but less than public and not if combined with another availability level) -->
+        <str name="bq">
+            availability:(ACA -PUB -RES -UNSPECIFIED)^0.5
         </str>
         
           <!--
