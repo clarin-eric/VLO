@@ -283,7 +283,7 @@ public class ResourceStructureGraph {
         // valid edges
         sb.append(", valid edges: ").append(count);
         if(!highIndegreeIds.isEmpty())
-            sb.append("\nLinks omitted for ").append(highIndegreeIds.size()).append(" too popular nodes (Indegree > ").append(MAX_INDEGREE).append(").");
+            sb.append("\nEdges omitted for ").append(highIndegreeIds.size()).append(" too popular nodes (Indegree > ").append(MAX_INDEGREE).append(").");
         return sb.toString();
     }
 }
