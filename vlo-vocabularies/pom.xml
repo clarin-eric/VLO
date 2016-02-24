@@ -3,6 +3,7 @@
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-vocabularies</artifactId> 
     <version>3.4-SNAPSHOT</version>
+    <name>VLO Vocabularies</name>
     <packaging>jar</packaging>
     
     <parent>
