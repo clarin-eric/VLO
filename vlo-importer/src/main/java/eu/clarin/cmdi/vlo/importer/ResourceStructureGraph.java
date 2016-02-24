@@ -44,6 +44,10 @@ public class ResourceStructureGraph {
             DefaultEdge.class);
     private static Map<String, CmdiVertex> vertexIdMap = new HashMap<String, CmdiVertex>();
     private static Set<CmdiVertex> foundVerticesSet = new HashSet<CmdiVertex>();
+    
+    // configuration for restricting max number of hasPart-edges
+    private static final Integer MAX_INDEGREE = 500;
+    private static Set<String> highIndegreeIds = new HashSet<>();
 
     /**
      * Adds new vertex to graph, used to remember all CMDI files that were
@@ -75,6 +79,12 @@ public class ResourceStructureGraph {
     public static void addEdge(String sourceVertexId, String targetVertexId) {
         String normalizedSourceVertexId = StringUtils.normalizeIdString(sourceVertexId);
         String normalizedTargetVertexId = StringUtils.normalizeIdString(targetVertexId);
+        
+        // Omit adding edges to extremely popular target nodes
+        if(graph.inDegreeOf(vertexIdMap.get(normalizedTargetVertexId)) > MAX_INDEGREE) {
+            highIndegreeIds.add(normalizedTargetVertexId);
+            return;
+        }
         
         // add vertices
         if (!vertexIdMap.containsKey(normalizedSourceVertexId)) {
@@ -225,6 +235,7 @@ public class ResourceStructureGraph {
         vertexIdMap = new HashMap<String, CmdiVertex>();
         foundVerticesSet = new HashSet<CmdiVertex>();
         graph = new DirectedAcyclicGraph<CmdiVertex, DefaultEdge>(DefaultEdge.class);
+        highIndegreeIds = new HashSet<>();
     }
 
     /**
@@ -271,6 +282,8 @@ public class ResourceStructureGraph {
 
         // valid edges
         sb.append(", valid edges: ").append(count);
+        if(!highIndegreeIds.isEmpty())
+            sb.append("\nEdges omitted for ").append(highIndegreeIds.size()).append(" too popular nodes (Indegree > ").append(MAX_INDEGREE).append(").");
         return sb.toString();
     }
 }
