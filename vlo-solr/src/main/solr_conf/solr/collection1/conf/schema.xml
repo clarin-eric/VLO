@@ -435,7 +435,7 @@
    <field name="lifeCycleStatus" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="distributionType" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="rightsHolder" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
+   <field name="text" type="text" indexed="true" stored="true" multiValued="true"/>
 
    <field name="_selfLink" type="string" indexed="true" stored="true" multiValued="false"/>
    <field name="_fileName" type="string" indexed="true" stored="true" multiValued="false" />
