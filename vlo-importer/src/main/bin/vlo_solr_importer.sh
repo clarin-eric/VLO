@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VMOPTS="-Xmx6G"
+VMOPTS="-Xmx4G"
 
 # Get the script's source directory
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

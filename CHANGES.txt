@@ -33,7 +33,7 @@ result and the record page
 * Fixed issue with indexing of files in metadata hierarchies
     <https://trac.clarin.eu/ticket/831>
 * The 'continent' facet was removed from the search interface
-* The importer can now request up to 6 gigabytes of heap space
+* The importer can now request up to 4 gigabytes of heap space
 
 VLO 3.3.2 (November 2015)
 
