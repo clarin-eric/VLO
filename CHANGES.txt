@@ -34,6 +34,8 @@ result and the record page
     <https://trac.clarin.eu/ticket/831>
 * The 'continent' facet was removed from the search interface
 * The importer can now request up to 4 gigabytes of heap space
+* A sitemap generator has been added (separate tool than can be run after
+import to generate a sitemap for search engines)
 
 VLO 3.3.2 (November 2015)
 

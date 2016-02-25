@@ -80,6 +80,20 @@ by means of the newly added "VMOPTS" variable in the script file.
 * There have been changes to the Solr configuration, so make sure to run or use
 a fresh import started with a clean index.
 
+* _Optionally_ configure the VLO sitemap generator, which can be found in 
+bin/sitemap-generator:
+    - Prepare a target directory for the sitemap file(s)
+    - Copy the configuration.properties file to a stable location and edit the
+    values to match the current environment
+    - Schedule the following command to be run after the importer completes:
+
+        ${VLO_DIR}/bin/sitemap-generator/start.sh ${SITEMAP_CONFIG_PROPS_FILE}
+
+    - Configure your web server to serve the contents of this directory via a 
+    stable public URL
+    - Register the sitemap URL with Google and/or other search engines
+(See the README file in bin/sitemap-generator for more information)
+
 --------------------------
 Upgrading from 3.2 to 3.3
 --------------------------
