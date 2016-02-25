@@ -44,6 +44,8 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
@@ -166,7 +168,6 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
         }
 
         private Component createValueCheckbox(final String id, final String targetValue) {
-            //TODO: wait indicator on change
             return new CheckBox(id, new FixedValueSetBooleanSelectionModel(AVAILABILITY_FIELD, availabilityLevels, targetValue, getModel()))
                     .add(new OnChangeAjaxBehavior() {
 
@@ -174,7 +175,20 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
                         protected void onUpdate(AjaxRequestTarget target) {
                             selectionChanged(target);
                         }
+
+                        @Override
+                        protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                            super.updateAjaxAttributes(attributes);
+
+                            attributes.getAjaxCallListeners().add(new AjaxCallListener()
+                                    //disable checkboxes while updating via AJAX
+                                    .onBeforeSend("$('form#availability input').prop('disabled', true);")
+                                    //re-enable checkboxes afterwards
+                                    .onDone("$('form#availability input').prop('disabled', false);"));
+                        }
+
                     });
+
         }
     }
 
