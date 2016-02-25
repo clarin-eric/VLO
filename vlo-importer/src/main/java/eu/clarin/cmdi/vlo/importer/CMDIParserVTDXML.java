@@ -8,6 +8,7 @@ import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,10 +30,12 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
 
     private static final String DEFAULT_LANGUAGE = "code:und";
+    private final VloConfig config;
 
-    public CMDIParserVTDXML(Map<String, PostProcessor> postProcessors, Boolean useLocalXSDCache) {
+    public CMDIParserVTDXML(Map<String, PostProcessor> postProcessors, VloConfig config, Boolean useLocalXSDCache) {
         this.postProcessors = postProcessors;
         this.useLocalXSDCache = useLocalXSDCache;
+        this.config = config;
     }
 
     @Override
@@ -186,7 +189,9 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         setNameSpace(mdSelfLink);
         mdSelfLink.selectXPath("/c:CMD/c:Header/c:MdSelfLink");
         String mdSelfLinkString = mdSelfLink.evalXPathToString();
-        ResourceStructureGraph.addResource(mdSelfLinkString);
+        if (config.isProcessHierarchies()) {
+            ResourceStructureGraph.addResource(mdSelfLinkString);
+        }
 
         AutoPilot resourceProxy = new AutoPilot(nav);
         setNameSpace(resourceProxy);
@@ -215,7 +220,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             }
 
             // resource hierarchy information?
-            if (type.toLowerCase().equals("metadata")) {
+            if (config.isProcessHierarchies() && type.toLowerCase().equals("metadata")) {
                 ResourceStructureGraph.addEdge(ref, mdSelfLinkString);
             }
         }
@@ -291,9 +296,10 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
 
             final List<String> values = postProcess(config.getName(), value);
             //discard '--' values
-            if(values != null && !values.isEmpty() && values.get(0).equals("--"))
+            if (values != null && !values.isEmpty() && values.get(0).equals("--")) {
                 return matchedPattern;
-            
+            }
+
             insertFacetValues(config.getName(), values, cmdiData, languageCode, allowMultipleValues, config.isCaseInsensitive());
 
             // insert post-processed values into derived facet(s) if configured
