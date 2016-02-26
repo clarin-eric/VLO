@@ -44,6 +44,7 @@ public class ResourceStructureGraph {
             DefaultEdge.class);
     private static Map<String, CmdiVertex> vertexIdMap = new HashMap<>();
     private static Set<CmdiVertex> foundVerticesSet = new HashSet<>();
+    private static Map<String, Integer> edgeCountMap = new HashMap<>();
     
     // configuration for restricting max number of hasPart-edges
     private static Integer maxIndegree = 500;
@@ -79,6 +80,12 @@ public class ResourceStructureGraph {
     public static void addEdge(String sourceVertexId, String targetVertexId) {
         String normalizedSourceVertexId = StringUtils.normalizeIdString(sourceVertexId);
         String normalizedTargetVertexId = StringUtils.normalizeIdString(targetVertexId);
+        
+        // count all hasPart edges (even those to files not imported in the VLO)
+        if(!edgeCountMap.keySet().contains(normalizedTargetVertexId))
+            edgeCountMap.put(normalizedTargetVertexId, 1);
+        else
+            edgeCountMap.put(normalizedTargetVertexId, edgeCountMap.get(normalizedTargetVertexId)+1);
         
         // Omit adding edges to extremely popular target nodes
         if(graph.inDegreeOf(vertexIdMap.get(normalizedTargetVertexId)) > maxIndegree) {
@@ -236,6 +243,7 @@ public class ResourceStructureGraph {
         foundVerticesSet = new HashSet<>();
         graph = new DirectedAcyclicGraph<>(DefaultEdge.class);
         highIndegreeIds = new HashSet<>();
+        edgeCountMap = new HashMap<>();
     }
 
     /**
@@ -244,6 +252,10 @@ public class ResourceStructureGraph {
      */
     public static void setMaxIndegree(Integer maxIndegree) {
         ResourceStructureGraph.maxIndegree = maxIndegree;
+    }
+    
+    public static Map<String, Integer> getEdgeCountMap() {
+        return edgeCountMap;
     }
 
     /**
