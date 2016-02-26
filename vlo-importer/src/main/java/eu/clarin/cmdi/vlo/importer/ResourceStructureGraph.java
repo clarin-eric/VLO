@@ -46,7 +46,7 @@ public class ResourceStructureGraph {
     private static Set<CmdiVertex> foundVerticesSet = new HashSet<>();
     
     // configuration for restricting max number of hasPart-edges
-    private static final Integer MAX_INDEGREE = 500;
+    private static Integer maxIndegree = 500;
     private static Set<String> highIndegreeIds = new HashSet<>();
 
     /**
@@ -81,7 +81,7 @@ public class ResourceStructureGraph {
         String normalizedTargetVertexId = StringUtils.normalizeIdString(targetVertexId);
         
         // Omit adding edges to extremely popular target nodes
-        if(graph.inDegreeOf(vertexIdMap.get(normalizedTargetVertexId)) > MAX_INDEGREE) {
+        if(graph.inDegreeOf(vertexIdMap.get(normalizedTargetVertexId)) > maxIndegree) {
             highIndegreeIds.add(normalizedTargetVertexId);
             return;
         }
@@ -239,6 +239,14 @@ public class ResourceStructureGraph {
     }
 
     /**
+     * Modify the default value for maximum indegree of vertices (hasPart relation)
+     * @param maxIndegree
+     */
+    public static void setMaxIndegree(Integer maxIndegree) {
+        ResourceStructureGraph.maxIndegree = maxIndegree;
+    }
+
+    /**
      * Get some statistics about the resource hierarchy graph
      *
      * @param maxBrokenEdges maximal number of examples of broken edges (=source
@@ -283,7 +291,7 @@ public class ResourceStructureGraph {
         // valid edges
         sb.append(", valid edges: ").append(count);
         if(!highIndegreeIds.isEmpty())
-            sb.append("\nEdges omitted for ").append(highIndegreeIds.size()).append(" too popular nodes (Indegree > ").append(MAX_INDEGREE).append(").");
+            sb.append("\nEdges omitted for ").append(highIndegreeIds.size()).append(" nodes (Indegree > ").append(maxIndegree).append(").");
         return sb.toString();
     }
 }

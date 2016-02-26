@@ -123,8 +123,10 @@ public class MetadataImporter {
         
         initSolrServer();
         List<DataRoot> dataRoots = checkDataRoots();
-        
         dataRoots = filterDataRootsWithCLArgs(dataRoots);
+        
+        if(config.isProcessHierarchies())
+            ResourceStructureGraph.setMaxIndegree(config.getMaxIndegreeInHierarchyGraph());
         
         long start = System.currentTimeMillis();
         try {
