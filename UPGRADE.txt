@@ -31,6 +31,12 @@ old configuration to the new one.
 Upgrading from 3.3 to 3.4
 --------------------------
 
+* The following mandatory element has been added to the VloConfig.xml file:
+
+    <maxIndegreeInHierarchyGraph>500</maxIndegreeInHierarchyGraph>
+
+This value can be used as is in most environments, including production.
+
 * A set of 'availability' values needs to be configured in VloConfig.xml. This
 determines which values are shown for the availability facet in the web app,
 and also allows for the setting of a description and display value. An example
