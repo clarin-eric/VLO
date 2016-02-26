@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
@@ -43,13 +44,13 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
 
     private final IModel<SearchContext> searchContextModel;
 
-    public SearchResultItemLicensePanel(String id, final IModel<SolrDocument> model, final IModel<SearchContext> searchContextModel) {
+    public SearchResultItemLicensePanel(String id, final IModel<SolrDocument> model, final IModel<SearchContext> searchContextModel, final Ordering<String> availabilityOrder) {
         super(id, model);
         this.searchContextModel = searchContextModel;
 
         //add 'tags' for all availability values
         final SolrFieldModel<String> availabilityModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_AVAILABILITY);
-        add(new ListView<String>("availabilityTag", new CollectionListModel<>(availabilityModel)) {
+        add(new ListView<String>("availabilityTag", new CollectionListModel<>(availabilityModel, availabilityOrder)) {
             @Override
             protected void populateItem(ListItem<String> item) {
                 // add link to record

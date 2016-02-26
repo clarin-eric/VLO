@@ -37,8 +37,7 @@ import org.slf4j.LoggerFactory;
  * <ul>
  * <li>A link to toggle a text input which shows a bookmarkable link to the
  * current page with parameters representing the current model (permalink)</li>
- * <li>A link to the help pages (URL taken from {@link VloConfig#getHelpUrl()
- * })</li>
+ * <li>A link to the help pages (/help)</li>
  * <li>A feedback link for the current page (base URL taken from {@link VloConfig#getFeedbackFromUrl()
  * })</li>
  * </ul>
@@ -61,7 +60,6 @@ public class TopLinksPanel extends GenericPanel<String> {
         // field that holds the actual link
         add(createLinkField("linkfield", linkModel));
 
-        add(new ExternalLink("help", vloConfig.getHelpUrl()));
         add(new Link("feedback") {
 
             @Override
@@ -130,7 +128,5 @@ public class TopLinksPanel extends GenericPanel<String> {
     protected void onConfigure() {
         LoggerFactory.getLogger(getClass()).debug("top links panel onconfigure");
     }
-    
-    
 
 }

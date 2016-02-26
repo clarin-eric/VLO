@@ -1,5 +1,42 @@
 Bug Fixes and Features
 
+VLO 3.4 (March 2015)
+
+* Major revisions and improvements to the mapping of availability, licence and
+access information
+    <https://trac.clarin.eu/ticket/813>
+    <https://trac.clarin.eu/ticket/814>
+    <https://trac.clarin.eu/ticket/852>
+    <https://trac.clarin.eu/ticket/857>
+* Prominent presentation of availability and licence information in search
+result and the record page
+    <https://trac.clarin.eu/ticket/812>
+* Dedicated facet value selector for main availability levels (PUB/ACA/RES)
+* Added legal information about VLO to about page
+    <https://trac.clarin.eu/ticket/804>
+* More references to the landing page and rephrasing of label 'original context'
+    <https://trac.clarin.eu/ticket/751>
+* Visual indication of search activity
+    <https://trac.clarin.eu/ticket/800>
+* More recently imported records appear first
+    <https://trac.clarin.eu/ticket/815>
+* More files included in hierarchies
+    <https://trac.clarin.eu/ticket/828>
+* Uniform mapping/normalisation definition format
+    <https://trac.clarin.eu/ticket/773>
+* Improved Solr querying performance
+    <https://trac.clarin.eu/ticket/795>
+* Upgraded front end to Wicket 7
+    <https://trac.clarin.eu/ticket/785>
+* Improved Piwik reporting and, also for AJAX requests, and better configuration
+    <https://trac.clarin.eu/ticket/752>
+* Fixed issue with indexing of files in metadata hierarchies
+    <https://trac.clarin.eu/ticket/831>
+* The 'continent' facet was removed from the search interface
+* The importer can now request up to 4 gigabytes of heap space
+* A sitemap generator has been added (separate tool than can be run after
+import to generate a sitemap for search engines)
+
 VLO 3.3.2 (November 2015)
 
 * Fixed issue with hierarchy links to unavailable records

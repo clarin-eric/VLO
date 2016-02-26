@@ -29,20 +29,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // licence 'modifiers'
 .availability-modifier-icon-classes() {
+    //see https://www.clarin.eu/content/clarin-license-category-calculator
     &.BY { background-image: url('license/by.large.png'); }
     &.SA { background-image: url('license/sa.large.png'); }
     &.ND { background-image: url('license/nd.large.png'); }
     &.NC { background-image: url('license/nc-eu.large.png'); }
-    &.META {} //TODO
-    &.ID {} //TODO
-    &.FF {} //TODO
-    &.PLAN {} //TODO
-    &.INF {} //TODO
-    &.LOC {} //TODO
-    &.LRT {} //TODO
-    &.PRIV {} //TODO
-    &.NORED {} //TODO
-    &.DEP {} //TODO
+    &.ID { background-image: url('license/id.png'); }
+    &.FF { background-image: url('license/ff.png'); }
+    &.INF { background-image: url('license/inf.png'); }
+    &.DEP  { background-image: url('license/dep.png'); }
+    &.LOC  { background-image: url('license/loc.png'); }
+    &.LRT  { background-image: url('license/lrt.png'); }
+    &.REQ { background-image: url('license/req.png'); }
+    &.PRIV { background-image: url('license/priv.png'); }
+    &.PLAN { background-image: url('license/plan.png'); }
+    &.META  { background-image: url('license/meta.png'); }
+    &.NORED  { background-image: url('license/nored.png'); }
     //[class="*"] (Other non-standard conditions)
 }
 
@@ -62,8 +64,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     //special case for cc0
     &.https___creativecommons_org_publicdomain_zero_1_0_ { background-image: url('license/zero.large.png'); }
     
-    /* GPL */
+    /* GPL & LGPL */
     &.http___www_gnu_org_licenses_gpl_3_0_html { background-image: url('license/gplv3.png'); }
+    &.http___www.gnu.org_licenses_lgpl_3_0_html { background-image: url('license/lgplv3.png'); }
     //&.http___www_gnu_org_licenses_gpl_2_0_html {}
     
     /* Apache */

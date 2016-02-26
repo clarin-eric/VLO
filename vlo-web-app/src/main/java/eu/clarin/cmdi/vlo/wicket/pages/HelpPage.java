@@ -14,13 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package eu.clarin.cmdi.vlo.wicket.pages;
+
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  * Only markup
+ *
  * @author twagoo
  */
 public class HelpPage extends VloBasePage {
-    
+
+    @SpringBean
+    private VloConfig vloConfig;
+
+    public HelpPage() {
+        add(new ExternalLink("moreInfo", vloConfig.getHelpUrl()));
+    }
+
 }

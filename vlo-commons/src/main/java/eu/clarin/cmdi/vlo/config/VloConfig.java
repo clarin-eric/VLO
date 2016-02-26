@@ -113,6 +113,8 @@ public class VloConfig {
     private boolean showResultScores = false;
 
     private boolean processHierarchies = true;
+    
+    private Integer maxIndegreeInHierarchyGraph = 500;
 
     /**
      * A set of fields to be excluded from display<br><br>
@@ -1136,6 +1138,24 @@ public class VloConfig {
      */
     public void setProcessHierarchies(boolean processHierarchies) {
         this.processHierarchies = processHierarchies;
+    }
+    
+    /**
+     * Get the value of maxIndegreeInHierarchyGraph
+     *
+     * @return the value of maxIndegreeInHierarchyGraph
+     */
+    public Integer getMaxIndegreeInHierarchyGraph() {
+        return maxIndegreeInHierarchyGraph;
+    }
+
+    /**
+     * Set the value of maxIndegreeInHierarchyGraph
+     *
+     * @param maxIndegreeInHierarchyGraph new value of maxIndegreeInHierarchyGraph
+     */
+    public void setMaxIndegreeInHierarchyGraph(Integer maxIndegreeInHierarchyGraph) {
+        this.maxIndegreeInHierarchyGraph = maxIndegreeInHierarchyGraph;
     }
 
     private List<FieldValueDescriptor> availabilityValue;

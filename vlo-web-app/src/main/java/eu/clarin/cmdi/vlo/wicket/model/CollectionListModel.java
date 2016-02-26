@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.model;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 import java.util.Collection;
 import java.util.List;
 import org.apache.wicket.model.IModel;
@@ -31,20 +32,30 @@ import org.apache.wicket.model.IModel;
 public class CollectionListModel<T> implements IModel<List<T>> {
 
     private final IModel<Collection<T>> collectionModel;
+    private final Ordering<T> ordering;
 
     public CollectionListModel(IModel<Collection<T>> collectionModel) {
+        this(collectionModel, null);
+    }
+
+    public CollectionListModel(IModel<Collection<T>> collectionModel, Ordering<T> ordering) {
         this.collectionModel = collectionModel;
+        this.ordering = ordering;
     }
 
     @Override
     public List<T> getObject() {
         final Collection object = collectionModel.getObject();
-        if (object instanceof List) {
-            return (List<T>) object;
-        } else if (object == null) {
+        if (object == null) {
             return null;
+        } else if (ordering == null) {
+            if (object instanceof List) {
+                return (List<T>) object;
+            } else {
+                return Lists.newArrayList(object);
+            }
         } else {
-            return Lists.newArrayList(object);
+            return ordering.sortedCopy(object);
         }
     }
 

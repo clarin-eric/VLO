@@ -95,7 +95,7 @@ public class MetadataMapper {
             MetadataImporter.config.setPrintMapping(true);
             MetadataImporter.languageCodeUtils = new LanguageCodeUtils(MetadataImporter.config);
             
-            CMDIDataProcessor processor = new CMDIParserVTDXML(MetadataImporter.POST_PROCESSORS, false);
+            CMDIDataProcessor processor = new CMDIParserVTDXML(MetadataImporter.POST_PROCESSORS, MetadataImporter.config, false);
             
             if (recordFile == null) {
                 String message = "Could not get record filename - stopping.";

@@ -31,6 +31,12 @@ old configuration to the new one.
 Upgrading from 3.3 to 3.4
 --------------------------
 
+* The following mandatory element has been added to the VloConfig.xml file:
+
+    <maxIndegreeInHierarchyGraph>500</maxIndegreeInHierarchyGraph>
+
+This value can be used as is in most environments, including production.
+
 * A set of 'availability' values needs to be configured in VloConfig.xml. This
 determines which values are shown for the availability facet in the web app,
 and also allows for the setting of a description and display value. An example
@@ -59,7 +65,7 @@ following parameters according to your preferences:
     <Parameter 
         name="eu.clarin.cmdi.vlo.piwik.siteId" 
         description="defaults to '3'"
-        value="1"/>
+        value="3"/> <!-- '1' for testing/beta, '3' for production -->
     
     <Parameter 
         name="eu.clarin.cmdi.vlo.piwik.host" 
@@ -68,13 +74,31 @@ following parameters according to your preferences:
     
     <Parameter 
         name="eu.clarin.cmdi.vlo.piwik.domains" 
-        description="defaults to '*.catalog.clarin.eu'"
-        value="*.catalog.clarin.eu"/>
+        description="defaults to '*.vlo.clarin.eu'"
+        value="*.vlo.clarin.eu"/> <!-- should match public hostname -->
 
 See <https://stats.clarin.eu> for configuration details per environment.
 
 * Notice that the VLO importer script has an heap space maximum size that has
-been increased to 5G (see bin/vlo_solr_importer.sh)
+been increased to 4 Gb (see bin/vlo_solr_importer.sh). This can be configured
+by means of the newly added "VMOPTS" variable in the script file.
+
+* There have been changes to the Solr configuration, so make sure to run or use
+a fresh import started with a clean index.
+
+* _Optionally_ configure the VLO sitemap generator, which can be found in 
+bin/sitemap-generator:
+    - Prepare a target directory for the sitemap file(s)
+    - Copy the configuration.properties file to a stable location and edit the
+    values to match the current environment
+    - Schedule the following command to be run after the importer completes:
+
+        ${VLO_DIR}/bin/sitemap-generator/start.sh ${SITEMAP_CONFIG_PROPS_FILE}
+
+    - Configure your web server to serve the contents of this directory via a 
+    stable public URL
+    - Register the sitemap URL with Google and/or other search engines
+(See the README file in bin/sitemap-generator for more information)
 
 --------------------------
 Upgrading from 3.2 to 3.3

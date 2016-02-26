@@ -7,3 +7,4 @@
 /vlo-importer/nbactions*
 /vlo-web-app/nbactions*
 .DS_Store
+/vlo-sitemap/target/

@@ -29,6 +29,10 @@
         <variant value="GNU General Public License, version 3"/>
     </mapping>
     <mapping>
+        <normalizedValue value="http://www.gnu.org/licenses/lgpl-3.0.html"/>
+        <variant value="GNU LGPL 3.0"/>
+    </mapping>
+    <mapping>
         <normalizedValue value="http://www.meta-net.eu/meta-share/meta-share-licenses/META-SHARE%20COMMONS_BYNCSA%20v1.0.pdf"/>
         <variant value="MSCommons-BY-NC-SA"/>
     </mapping>

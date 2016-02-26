@@ -21,11 +21,9 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.io.FileUtils;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer;
 import org.apache.solr.client.solrj.util.ClientUtils;
-import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.MapSolrParams;
 import org.apache.solr.common.params.SolrParams;
@@ -73,7 +71,7 @@ public class MetadataImporter {
      * _type_ are applied to the value before storing the new value in the solr
      * document.
      */
-    final static Map<String, PostProcessor> POST_PROCESSORS = new HashMap<String, PostProcessor>();
+    final static Map<String, PostProcessor> POST_PROCESSORS = new HashMap<>();
     
     static {
         POST_PROCESSORS.put(FacetConstants.FIELD_ID, new IdPostProcessor());
@@ -102,12 +100,12 @@ public class MetadataImporter {
     /**
      * Contains MDSelflinks (usually). Just to know what we have already done.
      */
-    protected final Set<String> processedIds = new HashSet<String>();
+    protected final Set<String> processedIds = new HashSet<>();
     /**
      * Some caching for solr documents (we are more efficient if we ram a whole
      * bunch to the solr server at once.
      */
-    protected List<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
+    protected List<SolrInputDocument> docs = new ArrayList<>();
 
     // SOME STATS
     protected int nrOFDocumentsSend;
@@ -125,8 +123,10 @@ public class MetadataImporter {
         
         initSolrServer();
         List<DataRoot> dataRoots = checkDataRoots();
-        
         dataRoots = filterDataRootsWithCLArgs(dataRoots);
+        
+        if(config.isProcessHierarchies())
+            ResourceStructureGraph.setMaxIndegree(config.getMaxIndegreeInHierarchyGraph());
         
         long start = System.currentTimeMillis();
         try {
@@ -146,7 +146,7 @@ public class MetadataImporter {
                     solrServer.deleteByQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
                     LOG.info("Deleting data of provider done.");
                 }
-                CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS, false);
+                CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS, config, false);
                 List<List<File>> centreFilesList = getFilesFromDataRoot(dataRoot.getRootFile());
                 // import files from every endpoint
                 for(List<File> centreFiles : centreFilesList) {
@@ -188,9 +188,7 @@ public class MetadataImporter {
                     solrServer.commit();
                     buildSuggesterIndex();
                 }
-            } catch (SolrServerException e) {
-                LOG.error("cannot commit:\n", e);
-            } catch (IOException e) {
+            } catch (SolrServerException | IOException e) {
                 LOG.error("cannot commit:\n", e);
             }
         }
@@ -209,7 +207,7 @@ public class MetadataImporter {
      */
     protected List<DataRoot> checkDataRoots() {
         List<DataRoot> dataRoots = config.getDataRoots();
-        List<DataRoot> existingDataRoots = new LinkedList<DataRoot>();
+        List<DataRoot> existingDataRoots = new LinkedList<>();
         for (DataRoot dataRoot : dataRoots) {
             if (!dataRoot.getRootFile().exists()) {
             	LOG.warn("Root file " + dataRoot.getRootFile() + " does not exist. It could be configuration error! Proceeding with next ...");
@@ -235,7 +233,7 @@ public class MetadataImporter {
     	
     	LOG.info("Filtering configured data root files with command line arguments: \"" + clDatarootsList + "\"" ) ;
     	
-    	LinkedList<File> fsDataRoots = new LinkedList<File>();
+    	LinkedList<File> fsDataRoots = new LinkedList<>();
     	
     	List<String> paths = Arrays.asList((clDatarootsList.split("\\s+")));
     	
@@ -243,7 +241,7 @@ public class MetadataImporter {
     	for(String path: paths)
     		fsDataRoots.add(new File(path));
     	
-    	List<DataRoot> filteredDataRoots = new LinkedList<DataRoot>();
+    	List<DataRoot> filteredDataRoots = new LinkedList<>();
     	try{
     		//filter data
     	dr: for(DataRoot dataRoot: dataRoots){
@@ -273,15 +271,15 @@ public class MetadataImporter {
      * directory or rootFile if it is a File
      */
     protected List<List<File>> getFilesFromDataRoot(File rootFile) {
-        List<List<File>> result = new ArrayList<List<File>>();
+        List<List<File>> result = new ArrayList<>();
         if(rootFile.isFile()) {
-            List<File> singleFileList = new ArrayList<File>();
+            List<File> singleFileList = new ArrayList<>();
             singleFileList.add(rootFile);
             result.add(singleFileList);
         } else {
             File[] centerDirs = rootFile.listFiles();
             for(File centerDir : centerDirs) {
-                List<File> centerFileList = new ArrayList<File>();
+                List<File> centerFileList = new ArrayList<>();
                 if(centerDir.isDirectory()) {
                     centerFileList.addAll(FileUtils.listFiles(centerDir, VALID_CMDI_EXTENSIONS, true));
                 }
@@ -352,7 +350,7 @@ public class MetadataImporter {
                 SolrInputDocument solrDocument = cmdiData.getSolrDocument();
                 if (solrDocument != null) {
                     updateDocument(solrDocument, cmdiData, file, dataOrigin);
-                    if(ResourceStructureGraph.getVertex(cmdiData.getId()) != null)
+                    if(config.isProcessHierarchies() && ResourceStructureGraph.getVertex(cmdiData.getId()) != null)
                         ResourceStructureGraph.getVertex(cmdiData.getId()).setWasImported(true);
                 }
             } else {
@@ -437,7 +435,7 @@ public class MetadataImporter {
      * @param cmdiData
      */
     protected void addResourceData(SolrInputDocument solrDocument, CMDIData cmdiData) {
-        List<Object> fieldValues = solrDocument.containsKey(FacetConstants.FIELD_FORMAT) ? new ArrayList<Object>(solrDocument
+        List<Object> fieldValues = solrDocument.containsKey(FacetConstants.FIELD_FORMAT) ? new ArrayList<>(solrDocument
                 .getFieldValues(FacetConstants.FIELD_FORMAT)) : null;
         solrDocument.removeField(FacetConstants.FIELD_FORMAT); //Remove old values they might be overwritten.
         List<Resource> resources = cmdiData.getDataResources();
@@ -479,7 +477,7 @@ public class MetadataImporter {
         if (serverError != null) {
             throw new SolrServerException(serverError);
         }
-        docs = new ArrayList<SolrInputDocument>();
+        docs = new ArrayList<>();
     }
 
     /**
@@ -490,7 +488,7 @@ public class MetadataImporter {
      */
     private void buildSuggesterIndex() throws SolrServerException, MalformedURLException {
         LOG.info("Building index for autocompletion.");
-        HashMap<String, String> paramMap = new HashMap<String, String>();
+        HashMap<String, String> paramMap = new HashMap<>();
         paramMap.put("qt", "/suggest");
         paramMap.put("spellcheck.build", "true");
         SolrParams params = new MapSolrParams(paramMap);
@@ -505,33 +503,23 @@ public class MetadataImporter {
     private void updateDocumentHierarchy() throws SolrServerException, MalformedURLException, IOException {
         LOG.info(ResourceStructureGraph.printStatistics(0));
         Boolean updatedDocs = false;
-        List<SolrInputDocument> updateDocs = new ArrayList<SolrInputDocument>();
+        List<SolrInputDocument> updateDocs = new ArrayList<>();
         Iterator<CmdiVertex> vertexIter = ResourceStructureGraph.getFoundVertices().iterator();
         while(vertexIter.hasNext()) {
             CmdiVertex vertex = vertexIter.next();
             List<String> incomingVertexNames = ResourceStructureGraph.getIncomingVertexNames(vertex);
             List<String> outgoingVertexNames = ResourceStructureGraph.getOutgoingVertexNames(vertex);
             
-            SolrQuery query;
             // update vertex if changes are necessary (necessary if non-default weight or edges to other resources)
             if(vertex.getHierarchyWeight() != 0 || !incomingVertexNames.isEmpty() || !outgoingVertexNames.isEmpty()) {
                 updatedDocs = true;
-                
-                // get document
-                query = new SolrQuery();
-                query.setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
-                query.set("q", FacetConstants.FIELD_ID+":"+vertex.getId());
-                SolrDocumentList response = solrServer.query(query).getResults();
-                
-                // empty result set? may be the case if CMDI file was rejected due to missing ResourceProxys in {@link #processCmdi(File, DataRoot, CMDIDataProcessor) processCmdi}
-                if(response.size() == 0) {
-                    LOG.debug("Doc "+vertex.getId()+" not found while updating document hierarchy information");
-                    continue;
-                }
-                SolrInputDocument doc = ClientUtils.toSolrInputDocument(response.get(0));
+                SolrInputDocument doc = new SolrInputDocument();
+                doc.setField(FacetConstants.FIELD_ID, Arrays.asList(vertex.getId()));
                 
                 if(vertex.getHierarchyWeight() != 0) {
-                    doc.setField(FacetConstants.FIELD_HIERARCHY_WEIGHT, Math.abs(vertex.getHierarchyWeight()));
+                    Map<String, Integer> partialUpdateMap = new HashMap<>();
+                    partialUpdateMap.put("set", Math.abs(vertex.getHierarchyWeight()));
+                    doc.setField(FacetConstants.FIELD_HIERARCHY_WEIGHT, partialUpdateMap);
                 }
                 
                 // remove vertices that were not imported
@@ -549,12 +537,19 @@ public class MetadataImporter {
                 }
                 
                 if(!incomingVertexNames.isEmpty()) {
-                    doc.setField(FacetConstants.FIELD_HAS_PART, incomingVertexNames);
-                    doc.setField(FacetConstants.FIELD_HAS_PART_COUNT, incomingVertexNames.size());
+                    Map<String, List<String>> partialUpdateMap = new HashMap<>();
+                    partialUpdateMap.put("set", incomingVertexNames);
+                    doc.setField(FacetConstants.FIELD_HAS_PART, partialUpdateMap);
+                    
+                    Map<String, Integer> partialUpdateMapCount = new HashMap<>();
+                    partialUpdateMapCount.put("set", incomingVertexNames.size());
+                    doc.setField(FacetConstants.FIELD_HAS_PART_COUNT, partialUpdateMapCount);
                 }
                 
                 if(!outgoingVertexNames.isEmpty()) {
-                    doc.setField(FacetConstants.FIELD_IS_PART_OF, outgoingVertexNames);
+                    Map<String, List<String>> partialUpdateMap = new HashMap<>();
+                    partialUpdateMap.put("set", outgoingVertexNames);
+                    doc.setField(FacetConstants.FIELD_IS_PART_OF, partialUpdateMap);
                 }
                 updateDocs.add(doc);
             }
@@ -564,7 +559,7 @@ public class MetadataImporter {
                 if (serverError != null) {
                     throw new SolrServerException(serverError);
                 }
-                updateDocs = new ArrayList<SolrInputDocument>();
+                updateDocs = new ArrayList<>();
             }
         }
         if(!updateDocs.isEmpty()) {

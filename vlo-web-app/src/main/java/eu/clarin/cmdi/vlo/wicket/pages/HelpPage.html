@@ -46,8 +46,50 @@
 
                 <h1>CLARIN Virtual Language Observatory: Help</h1>
 
-                <!-- TODO -->
-                <!--<h2>Facets</h2>-->
+                <p>
+                    The Virtual Language Observatory (VLO) faceted browser was developed 
+                    within CLARIN as a means to explore linguistic resources, services 
+                    and tools available within CLARIN and related communities.
+                    Its aim is to provide an easy to use interface, allowing for a 
+                    uniform search and discovery process for a large number of resources
+                    from a wide variety of domains and providers.
+                </p>
+                
+                <p>
+                    More information can be found on the
+                    <a target="_blank" wicket:id="moreInfo" href="">VLO page on the CLARIN website</a>.
+                </p>
+                
+                <h2>Faceted browsing</h2>
+                <p>
+                    The VLO search interface presents a number of <em>facets</em>, 
+                    for each of which a value can be selected in order to narrow down
+                    the selection of displayed records. For example, to only include
+                    records that relate to Spain as a country, open the facet <em>Country</em>
+                    and select the value <em>Spain</em>. Notice that next to each available value,
+                    a number is displayed that indicates the number of records within
+                    the current selection that contain that value, in other words the number
+                    of remaining records should that value be selected.
+                </p>
+                <p>
+                    Only the values that occur in the current selection (that is, the
+                    records that match the already selected values and the optional
+                    textual query (see <a href="#syntax">below</a>)) are shown. The VLO shows up to ten of the most 
+                    frequently occurring values for each facet when you click on the
+                    facet name. If there are more then ten available values, there
+                    is a link labeled <em>more...</em>, which leads to a pop-up showing
+                    all available values (given the current selections), than can be
+                    filtered textually and sorted either alphabetically or by number of
+                    matching records. It is also possible to search for facet values
+                    by typing (part of) a value in the filter box below the facet name 
+                    and above the facet values (<em>'Type to search for more'</em>)
+                    in the panel next to the search results.
+                </p>
+                <p>
+                    Facets that do not have any matching records given the current
+                    selection will not be displayed in the facets panel in the
+                    VLO search interface.
+                </p>
 
                 <h2 id="syntax">Search syntax</h2>
                 <p>
