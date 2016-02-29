@@ -63,6 +63,27 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         return cmdiData;
     }
 
+    @Override
+    public String extractMdSelfLink(File file) throws VTDException, IOException {
+        final VTDGen vg = new VTDGen();
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
+            vg.setDoc(IOUtils.toByteArray(fileInputStream));
+            vg.parse(true);
+        }
+        final VTDNav nav = vg.getNav();
+        nav.toElement(VTDNav.ROOT);
+        AutoPilot ap = new AutoPilot(nav);
+        setNameSpace(ap);
+        ap.selectXPath("/c:CMD/c:Header/c:MdSelfLink/text()");
+        int index = ap.evalXPath();
+
+        String mdSelfLink = null;
+        if (index != -1) {
+            mdSelfLink = nav.toString(index).trim();
+        }
+        return mdSelfLink;
+    }
+
     /**
      * Setting namespace for Autopilot ap
      *
