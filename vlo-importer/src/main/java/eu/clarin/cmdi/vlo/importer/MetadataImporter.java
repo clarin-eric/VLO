@@ -167,6 +167,7 @@ public class MetadataImporter {
                                 mdSelfLink = processor.extractMdSelfLink(file);
                             } catch (Exception e) {
                                 LOG.error("error in file: {}", file, e);
+                                nrOfFilesWithError++;
                             }
                             if(mdSelfLink != null)
                                 mdSelfLinkSet.add(StringUtils.normalizeIdString(mdSelfLink));
