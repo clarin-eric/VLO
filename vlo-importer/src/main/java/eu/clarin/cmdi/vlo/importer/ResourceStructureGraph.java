@@ -45,6 +45,7 @@ public class ResourceStructureGraph {
     private static Map<String, CmdiVertex> vertexIdMap = new HashMap<>();
     private static Set<CmdiVertex> foundVerticesSet = new HashSet<>();
     private static Map<String, Integer> edgeCountMap = new HashMap<>();
+    private static Set<String> occurringMdSelfLinks = new HashSet<>();
     
     // configuration for restricting max number of hasPart-edges
     private static Integer maxIndegree = 500;
@@ -87,9 +88,8 @@ public class ResourceStructureGraph {
         else
             edgeCountMap.put(normalizedTargetVertexId, edgeCountMap.get(normalizedTargetVertexId)+1);
         
-        // Omit adding edges to extremely popular target nodes
-        if(graph.inDegreeOf(vertexIdMap.get(normalizedTargetVertexId)) > maxIndegree) {
-            highIndegreeIds.add(normalizedTargetVertexId);
+        // Omit adding edges to nodes that do not occur in the harvester set
+        if(!occurringMdSelfLinks.contains(normalizedSourceVertexId)) {
             return;
         }
         
@@ -236,7 +236,7 @@ public class ResourceStructureGraph {
     }
 
     /**
-     * Reset resource hierarchy graph (= deleting vertices + edges)
+     * Reset resource hierarchy graph (= deleting vertices + edges + supporting data structures)
      */
     public static void clearResourceGraph() {
         vertexIdMap = new HashMap<>();
@@ -244,6 +244,7 @@ public class ResourceStructureGraph {
         graph = new DirectedAcyclicGraph<>(DefaultEdge.class);
         highIndegreeIds = new HashSet<>();
         edgeCountMap = new HashMap<>();
+        occurringMdSelfLinks = new HashSet<>();
     }
 
     /**
@@ -256,6 +257,14 @@ public class ResourceStructureGraph {
     
     public static Map<String, Integer> getEdgeCountMap() {
         return edgeCountMap;
+    }
+    
+    /**
+     * Set set of all MdSelfLinks that actually occur in the processed collection. Will be used to omit the creation of edges to non-existing nodes.
+     * @param occurringMdSelfLinks 
+     */
+    public static void setOccurringMdSelfLinks(Set<String> occurringMdSelfLinks) {
+        ResourceStructureGraph.occurringMdSelfLinks = occurringMdSelfLinks;
     }
 
     /**
