@@ -449,7 +449,6 @@
    <field name="_isPartOf" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="_hasPart" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="_hasPartCount" type="int" indexed="true" stored="true" multiValued="false" />
-   <field name="_hasPartCountComplete" type="int" indexed="true" stored="true" multiValued="false" />
    <field name="_hierarchyWeight" type="int" indexed="true" stored="true" multiValued="false" default='0'/>
    <field name="_languageName" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="metadataSource" type="metadataSource" indexed="false" stored="true" multiValued="true" />

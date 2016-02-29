@@ -44,13 +44,8 @@ public class ResourceStructureGraph {
             DefaultEdge.class);
     private static Map<String, CmdiVertex> vertexIdMap = new HashMap<>();
     private static Set<CmdiVertex> foundVerticesSet = new HashSet<>();
-    private static Map<String, Integer> edgeCountMap = new HashMap<>();
     private static Set<String> occurringMdSelfLinks = new HashSet<>();
     
-    // configuration for restricting max number of hasPart-edges
-    private static Integer maxIndegree = 500;
-    private static Set<String> highIndegreeIds = new HashSet<>();
-
     /**
      * Adds new vertex to graph, used to remember all CMDI files that were
      * actually seen
@@ -81,13 +76,7 @@ public class ResourceStructureGraph {
     public static void addEdge(String sourceVertexId, String targetVertexId) {
         String normalizedSourceVertexId = StringUtils.normalizeIdString(sourceVertexId);
         String normalizedTargetVertexId = StringUtils.normalizeIdString(targetVertexId);
-        
-        // count all hasPart edges (even those to files not imported in the VLO)
-        if(!edgeCountMap.keySet().contains(normalizedTargetVertexId))
-            edgeCountMap.put(normalizedTargetVertexId, 1);
-        else
-            edgeCountMap.put(normalizedTargetVertexId, edgeCountMap.get(normalizedTargetVertexId)+1);
-        
+
         // Omit adding edges to nodes that do not occur in the harvester set
         if(!occurringMdSelfLinks.contains(normalizedSourceVertexId)) {
             return;
@@ -242,23 +231,9 @@ public class ResourceStructureGraph {
         vertexIdMap = new HashMap<>();
         foundVerticesSet = new HashSet<>();
         graph = new DirectedAcyclicGraph<>(DefaultEdge.class);
-        highIndegreeIds = new HashSet<>();
-        edgeCountMap = new HashMap<>();
         occurringMdSelfLinks = new HashSet<>();
     }
 
-    /**
-     * Modify the default value for maximum indegree of vertices (hasPart relation)
-     * @param maxIndegree
-     */
-    public static void setMaxIndegree(Integer maxIndegree) {
-        ResourceStructureGraph.maxIndegree = maxIndegree;
-    }
-    
-    public static Map<String, Integer> getEdgeCountMap() {
-        return edgeCountMap;
-    }
-    
     /**
      * Set set of all MdSelfLinks that actually occur in the processed collection. Will be used to omit the creation of edges to non-existing nodes.
      * @param occurringMdSelfLinks 
@@ -311,8 +286,6 @@ public class ResourceStructureGraph {
 
         // valid edges
         sb.append(", valid edges: ").append(count);
-        if(!highIndegreeIds.isEmpty())
-            sb.append("\nEdges omitted for ").append(highIndegreeIds.size()).append(" nodes (Indegree > ").append(maxIndegree).append(").");
         return sb.toString();
     }
 }

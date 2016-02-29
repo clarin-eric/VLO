@@ -127,9 +127,6 @@ public class MetadataImporter {
         List<DataRoot> dataRoots = checkDataRoots();
         dataRoots = filterDataRootsWithCLArgs(dataRoots);
         
-        if(config.isProcessHierarchies())
-            ResourceStructureGraph.setMaxIndegree(config.getMaxIndegreeInHierarchyGraph());
-        
         long start = System.currentTimeMillis();
         try {
             // Delete the whole Solr db
@@ -571,10 +568,6 @@ public class MetadataImporter {
                     Map<String, Integer> partialUpdateMapCount = new HashMap<>();
                     partialUpdateMapCount.put("set", incomingVertexNames.size());
                     doc.setField(FacetConstants.FIELD_HAS_PART_COUNT, partialUpdateMapCount);
-                    
-                    Integer completeEdgeCount = ResourceStructureGraph.getEdgeCountMap().get(vertex.getId());
-                    if(completeEdgeCount != null)
-                        doc.setField(FacetConstants.FIELD_HAS_PART_COUNT_COMPLETE, completeEdgeCount);
                 }
                 
                 if(!outgoingVertexNames.isEmpty()) {
