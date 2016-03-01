@@ -49,7 +49,6 @@ public class FacetConstants {
     public static final String FIELD_IS_PART_OF = "_isPartOf";
     public static final String FIELD_HAS_PART = "_hasPart";
     public static final String FIELD_HAS_PART_COUNT = "_hasPartCount";
-    public static final String FIELD_HAS_PART_COUNT_COMPLETE = "_hasPartCountComplete";
     public static final String FIELD_LANGUAGE_NAME = "_languageName";
 
     /**
