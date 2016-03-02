@@ -423,7 +423,7 @@
         
         <!-- boost fields with a resource -->
         <str name="bq">
-            _resourceRef:[* TO *]
+            _hasPart:[* TO *] OR _resourceRef:[* TO *]
         </str>
         
         <!-- boost resources with public availability (but not if combined with another availability level) -->
