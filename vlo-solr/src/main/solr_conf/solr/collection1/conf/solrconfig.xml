@@ -407,7 +407,7 @@
                 indicate a higher level), then by number of parts (differentiate
                 up till 50), then by recency of import -->
             rord(_hierarchyWeight) log(add(1,min(50,_hasPartCount)))^.2 recip(ms(NOW,_lastSeen),3.16e-11,1,1)^.2
-            <!-- TODO: prefer CLARIN records over non-CLARIN? -->
+            <!-- TODO: prefer CLARIN records over non-CLARIN? -->availability
             <!-- TODO: boost records with one or more resources (_resourceRefCount) -->
         </str>
         
@@ -428,12 +428,12 @@
         
         <!-- boost resources with public availability (but not if combined with another availability level) -->
         <str name="bq">
-            availability:(PUB -ACA -RES -UNSPECIFIED)^2
+            availability:(PUB -ACA -RES -UNSPECIFIED)^0.5
         </str>
         
         <!-- boost resources with academic availability (but less than public and not if combined with another availability level) -->
         <str name="bq">
-            availability:(ACA -PUB -RES -UNSPECIFIED)^0.5
+            availability:(ACA -PUB -RES -UNSPECIFIED)^0.2
         </str>
         
           <!--
