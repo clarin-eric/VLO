@@ -4,6 +4,8 @@ import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
+import com.ximpleware.XPathEvalException;
+import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.AcceptableContext;
@@ -253,7 +255,7 @@ public class FacetMappingFactory {
                 int datcatIndex = getDatcatIndex(vn);
                 if (datcatIndex != -1) {
                     String conceptLink = vn.toNormalizedString(datcatIndex);
-                    String xpath = createXpath(elementPath);
+                    String xpath = createXpath(elementPath, null);
                     List<String> values = result.get(conceptLink);
                     if (values == null) {
                         values = new ArrayList<String>();
@@ -261,6 +263,37 @@ public class FacetMappingFactory {
                     }
                     values.add(xpath);
                 }
+
+                // look for associated attributes with concept links
+                vn.push();
+                AutoPilot attributeAutopilot = new AutoPilot(vn);
+                attributeAutopilot.declareXPathNameSpace("xs", "http://www.w3.org/2001/XMLSchema");
+
+                try {
+                    attributeAutopilot.selectXPath("./xs:complexType/xs:simpleContent/xs:extension/xs:attribute");
+                    while (attributeAutopilot.evalXPath() != -1) {
+                        int attributeDatcatIndex = getDatcatIndex(vn);
+                        int attributeNameIndex = vn.getAttrVal("name");
+
+                        if (attributeNameIndex != -1 && attributeDatcatIndex != -1) {
+                            String attributeName = vn.toNormalizedString(attributeNameIndex);
+                            String conceptLink = vn.toNormalizedString(attributeDatcatIndex);
+
+                            String xpath = createXpath(elementPath, attributeName);
+                            List<String> values = result.get(conceptLink);
+                            if (values == null) {
+                                values = new ArrayList<>();
+                                result.put(conceptLink, values);
+                            }
+                            values.add(xpath);
+                        }
+                    }
+                } catch (XPathParseException | XPathEvalException | NavException e) {
+                    LOG.error("Cannot extract attributes for element "+elementName+". Will continue anyway...", e);
+                }
+
+                // returning to normal element-based workflow
+                vn.pop();
             }
         }
         return result;
@@ -288,14 +321,20 @@ public class FacetMappingFactory {
      * Given an xml-token path thingy create an xpath.
      *
      * @param elementPath
+     * @param attributeName will be appended as attribute to XPath expression if not null
      * @return
      */
-    private String createXpath(Deque<Token> elementPath) {
+    private String createXpath(Deque<Token> elementPath, String attributeName) {
         StringBuilder xpath = new StringBuilder("/");
         for (Token token : elementPath) {
             xpath.append("c:").append(token.name).append("/");
         }
-        return xpath.append("text()").toString();
+
+        if (attributeName != null) {
+            return xpath.append("@").append(attributeName).toString();
+        } else {
+            return xpath.append("text()").toString();
+        }
     }
 
     /**
