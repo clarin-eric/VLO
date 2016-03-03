@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
+import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
@@ -112,6 +113,7 @@ public class MetadataImporter {
     protected int nrOfFilesAnalyzed = 0;
     protected int nrOfFilesWithoutId = 0;
     protected int nrOfFilesWithError = 0;
+    protected int nrOfFilesTooLarge = 0;
 
     /**
      * Retrieve all files with VALID_CMDI_EXTENSIONS from all DataRoot entries
@@ -124,9 +126,6 @@ public class MetadataImporter {
         initSolrServer();
         List<DataRoot> dataRoots = checkDataRoots();
         dataRoots = filterDataRootsWithCLArgs(dataRoots);
-        
-        if(config.isProcessHierarchies())
-            ResourceStructureGraph.setMaxIndegree(config.getMaxIndegreeInHierarchyGraph());
         
         long start = System.currentTimeMillis();
         try {
@@ -151,14 +150,39 @@ public class MetadataImporter {
                 // import files from every endpoint
                 for(List<File> centreFiles : centreFilesList) {
                     LOG.info("Processing directory: {}", centreFiles.get(0).getParent());
+
+                    // identify mdSelfLinks and remove too large files from center file list
+                    LOG.info("Extracting mdSelfLinks");
+                    Set<String> mdSelfLinkSet = new HashSet<>();
+                    Set<File> ignoredFileSet = new HashSet<>();
                     for (File file : centreFiles) {
                         if (config.getMaxFileSize() > 0
                                 && file.length() > config.getMaxFileSize()) {
                             LOG.info("Skipping " + file.getAbsolutePath() + " because it is too large.");
+                            nrOfFilesTooLarge++;
+                            ignoredFileSet.add(file);
                         } else {
-                            LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
-                            processCmdi(file, dataRoot, processor);
+                            String mdSelfLink = null;
+                            try {
+                                mdSelfLink = processor.extractMdSelfLink(file);
+                            } catch (Exception e) {
+                                LOG.error("error in file: {}", file, e);
+                                nrOfFilesWithError++;
+                            }
+                            if(mdSelfLink != null)
+                                mdSelfLinkSet.add(StringUtils.normalizeIdString(mdSelfLink));
                         }
+                    }
+                    centreFiles.removeAll(ignoredFileSet);
+
+                    // inform structure graph about MdSelfLinks of all files in this collection
+                    ResourceStructureGraph.setOccurringMdSelfLinks(mdSelfLinkSet);
+                    LOG.info("...extracted {} mdSelfLinks", mdSelfLinkSet.size());
+
+                    // process every file in this collection
+                    for (File file : centreFiles) {
+                        LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
+                        processCmdi(file, dataRoot, processor);
                     }
                     if (!docs.isEmpty()) {
                         sendDocs();
@@ -195,6 +219,7 @@ public class MetadataImporter {
         long took = (System.currentTimeMillis() - start) / 1000;
         LOG.info("Found " + nrOfFilesWithoutId + " file(s) without an id. (id is generated based on fileName but that may not be unique)");
         LOG.info("Found " + nrOfFilesWithError + " file(s) with errors.");
+        LOG.info("Found " + nrOfFilesTooLarge + " file(s) too large.");
         LOG.info("Update of " + nrOFDocumentsSend + " took " + took + " secs. Total nr of files analyzed " + nrOfFilesAnalyzed);
         solrServer.shutdown();
     }

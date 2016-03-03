@@ -180,7 +180,4 @@
     <showResultScores>false</showResultScores>
     
     <processHierarchies>true</processHierarchies>
-    
-    <!-- max indegree for a node regarding hasPart relations, only relevant if processHierarchies is set to "true" -->
-    <maxIndegreeInHierarchyGraph>500</maxIndegreeInHierarchyGraph>
 </VloConfig>

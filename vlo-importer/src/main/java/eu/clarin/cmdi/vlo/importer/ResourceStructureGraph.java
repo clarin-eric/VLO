@@ -44,11 +44,8 @@ public class ResourceStructureGraph {
             DefaultEdge.class);
     private static Map<String, CmdiVertex> vertexIdMap = new HashMap<>();
     private static Set<CmdiVertex> foundVerticesSet = new HashSet<>();
+    private static Set<String> occurringMdSelfLinks = new HashSet<>();
     
-    // configuration for restricting max number of hasPart-edges
-    private static Integer maxIndegree = 500;
-    private static Set<String> highIndegreeIds = new HashSet<>();
-
     /**
      * Adds new vertex to graph, used to remember all CMDI files that were
      * actually seen
@@ -79,10 +76,9 @@ public class ResourceStructureGraph {
     public static void addEdge(String sourceVertexId, String targetVertexId) {
         String normalizedSourceVertexId = StringUtils.normalizeIdString(sourceVertexId);
         String normalizedTargetVertexId = StringUtils.normalizeIdString(targetVertexId);
-        
-        // Omit adding edges to extremely popular target nodes
-        if(graph.inDegreeOf(vertexIdMap.get(normalizedTargetVertexId)) > maxIndegree) {
-            highIndegreeIds.add(normalizedTargetVertexId);
+
+        // Omit adding edges to nodes that do not occur in the harvester set
+        if(!occurringMdSelfLinks.contains(normalizedSourceVertexId)) {
             return;
         }
         
@@ -229,21 +225,21 @@ public class ResourceStructureGraph {
     }
 
     /**
-     * Reset resource hierarchy graph (= deleting vertices + edges)
+     * Reset resource hierarchy graph (= deleting vertices + edges + supporting data structures)
      */
     public static void clearResourceGraph() {
         vertexIdMap = new HashMap<>();
         foundVerticesSet = new HashSet<>();
         graph = new DirectedAcyclicGraph<>(DefaultEdge.class);
-        highIndegreeIds = new HashSet<>();
+        occurringMdSelfLinks = new HashSet<>();
     }
 
     /**
-     * Modify the default value for maximum indegree of vertices (hasPart relation)
-     * @param maxIndegree
+     * Set set of all MdSelfLinks that actually occur in the processed collection. Will be used to omit the creation of edges to non-existing nodes.
+     * @param occurringMdSelfLinks 
      */
-    public static void setMaxIndegree(Integer maxIndegree) {
-        ResourceStructureGraph.maxIndegree = maxIndegree;
+    public static void setOccurringMdSelfLinks(Set<String> occurringMdSelfLinks) {
+        ResourceStructureGraph.occurringMdSelfLinks = occurringMdSelfLinks;
     }
 
     /**
@@ -290,8 +286,6 @@ public class ResourceStructureGraph {
 
         // valid edges
         sb.append(", valid edges: ").append(count);
-        if(!highIndegreeIds.isEmpty())
-            sb.append("\nEdges omitted for ").append(highIndegreeIds.size()).append(" nodes (Indegree > ").append(maxIndegree).append(").");
         return sb.toString();
     }
 }
