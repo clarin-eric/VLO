@@ -117,6 +117,7 @@
     <mapping>
         <normalizedValue value="CC;BY;NC;SA"/>
         <variant value="freely available for non-commercial research use (CC BY-NC-SA Licence)"/>
+        <variant value="http://creativecommons.org/licenses/by-nc-sa/4.0/"/>
     </mapping>
     <mapping>
         <normalizedValue value="DEP"/>

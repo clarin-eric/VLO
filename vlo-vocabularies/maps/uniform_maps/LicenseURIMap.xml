@@ -1,77 +1,91 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mappings field="license">
-    <mapping>
-        <normalizedValue value="https://creativecommons.org/licenses/by-nc/3.0/"/>
-        <variant value="http://creativecommons.org/licenses/by-nc/3.0/"/>
-    </mapping>
-    <mapping>
-        <normalizedValue value="https://creativecommons.org/licenses/by-nc/3.0/de/"/>
-        <variant value="http://creativecommons.org/licenses/by-nc/3.0/de/"/>
-        <variant value="Creative Commons CC BY-NC 3.0 DE, http://creativecommons.org/licenses/by-nc/3.0/de/"/>
-    </mapping>
-    <mapping>
-        <normalizedValue value="https://creativecommons.org/licenses/by-nc/4.0/"/>
-        <variant value="http://creativecommons.org/licenses/by-nc/4.0/"/>
-        <variant value="Dit werk is valt onder een Creative Commons Naamsvermelding-NietCommercieel 4.0 Internationaal-licentie.(http://creativecommons.org/licenses/by-nc/4.0/)"/>
-        <variant value="Dit werk is valt onder een Creative Commons Naamsvermelding-NietCommercieel 4.0 Internationaal-licentie(http://creativecommons.org/licenses/by-nc/4.0/)"/>
-    </mapping>
-    <mapping>
-        <normalizedValue value="http://www.apache.org/licenses/LICENSE-2.0"/>
-        <variant value="ApacheLicence_2.0"/>
-        <variant value="Apache Licence 2.0"/>
-    </mapping>
-    <mapping>
-        <normalizedValue value="http://www.gnu.org/licenses/gpl-2.0.html"/>
-        <variant value="GPL v2"/>
-    </mapping>
-    <mapping>
-        <normalizedValue value="http://www.gnu.org/licenses/gpl-3.0.html"/>
-        <variant value="GNU General Public License, version 3"/>
-    </mapping>
-    <mapping>
-        <normalizedValue value="http://www.gnu.org/licenses/lgpl-3.0.html"/>
-        <variant value="GNU LGPL 3.0"/>
-    </mapping>
-    <mapping>
-        <normalizedValue value="http://www.meta-net.eu/meta-share/meta-share-licenses/META-SHARE%20COMMONS_BYNCSA%20v1.0.pdf"/>
-        <variant value="MSCommons-BY-NC-SA"/>
-    </mapping>
-    <mapping>
-        <normalizedValue value="http://www.meta-net.eu/meta-share/meta-share-licenses/META-SHARE%20Commercial%20NoRedistribution%20NoDerivatives%20For-a-fee-v1.0.pdf"/>
-        <variant value="MS-C-NoReD-ND-FF"/>
-    </mapping>
-    <mapping>
-        <normalizedValue value="https://creativecommons.org/licenses/by-sa/3.0/"/>
-        <variant value="http://creativecommons.org/licenses/by-sa/3.0/"/>
-        <variant value="Creative Commons Attribution-ShareAlike 3.0"/>
-        <variant value="Namensnennung - Weitergabe unter gleichen Bedingungen 3.0 Deutschland (CC BY-SA 3.0 DE)"/>
-    </mapping>
-    <mapping>
-        <normalizedValue value="https://creativecommons.org/licenses/by-sa/4.0/"/>
-        <variant value="http://creativecommons.org/licenses/by-sa/4.0/"/>
-        <variant value="Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)"/>
-        <variant value="HZSK-ACA (Text) / CC-by-sa-4.0 (Annotation)"/>
-    </mapping>
-    <mapping>
-        <normalizedValue value="https://creativecommons.org/licenses/by/3.0/"/>
-        <variant value="http://creativecommons.org/licenses/by/3.0/"/>
-        <variant value="***************************************************************************** * This work is licensed under a Creative Commons Attribution 3.0 Unported License. * CC-BY 3.0: * You are free: * to Share — to copy, distribute and transmit the work * to Remix — to adapt the work * to make commercial use of the work * Under the following conditions: * Attribution — You must attribute the work in the manner specified by the * author or licensor (but not in any way that suggests that they * endorse you or your use of the work). ***************************************************************************** * * Please cite this paper if you use these constructions: * Wiltrud Kessler and Hinrich Schütze (2012) * Classification of Inconsistent Sentiment Words Using Syntactic Constructions. * In Proceedings of the 24th International Conference on Computational Linguistics * (COLING 2012) * Mumbai, India, 10.-14. December 2012. * *****************************************************************************"/>
-        <variant value="This work is licensed under a Creative Commons Attribution 3.0 Unported License. * CC-BY 3.0: * You are free: * to Share — to copy, distribute and transmit the work * to Remix — to adapt the work * to make commercial use of the work * Under the following conditions: * Attribution — You must attribute the work in the manner specified by the * author or licensor (but not in any way that suggests that they * endorse you or your use of the work). ***************************************************************************** * Please cite this paper if you use the data: * Wiltrud Kessler and Jonas Kuhn (2014) * A Corpus of Comparisons in Product Reviews. * In Proceedings of the 9th Language Resources and Evaluation Conference (LREC 2014), * Reykjavik, Iceland, 28-30. May 2014."/>
-    </mapping>
-    <mapping>
-        <normalizedValue value="https://creativecommons.org/publicdomain/zero/1.0/"/>
-        <variant value="CC-ZERO"/>
-        <variant value="CC0"/>
-        <variant value="Creative_Commons-ZERO (CC-ZERO)"/>
-        <variant value="http://creativecommons.org/publicdomain/zero/1.0/"/>
-        <variant value="http://creativecommons.org/publicdomain/zero/1.0/legalcode.txt"/>
-    </mapping>
-    <mapping>
-        <normalizedValue value="https://kitwiki.csc.fi/twiki/bin/view/FinCLARIN/ClarinEULA"/>
-        <variant value="CLARIN_ACA"/>
-        <variant value="CLARIN_ACA-NC"/>
-        <variant value="CLARIN_PUB"/>
-        <variant value="CLARIN_RES"/>
-        <variant value="CLARIN ACA"/>
-    </mapping>
+	<mapping>
+		<normalizedValue value="https://creativecommons.org/licenses/by-nc/3.0/" />
+		<variant value="http://creativecommons.org/licenses/by-nc/3.0/" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="https://creativecommons.org/licenses/by-nc/3.0/de/" />
+		<variant value="http://creativecommons.org/licenses/by-nc/3.0/de/" />
+		<variant
+			value="Creative Commons CC BY-NC 3.0 DE, http://creativecommons.org/licenses/by-nc/3.0/de/" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="https://creativecommons.org/licenses/by-nc/4.0/" />
+		<variant value="http://creativecommons.org/licenses/by-nc/4.0/" />
+		<variant
+			value="Dit werk is valt onder een Creative Commons Naamsvermelding-NietCommercieel 4.0 Internationaal-licentie.(http://creativecommons.org/licenses/by-nc/4.0/)" />
+		<variant
+			value="Dit werk is valt onder een Creative Commons Naamsvermelding-NietCommercieel 4.0 Internationaal-licentie(http://creativecommons.org/licenses/by-nc/4.0/)" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="http://www.apache.org/licenses/LICENSE-2.0" />
+		<variant value="ApacheLicence_2.0" />
+		<variant value="Apache Licence 2.0" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="http://www.gnu.org/licenses/gpl-2.0.html" />
+		<variant value="GPL v2" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="http://www.gnu.org/licenses/gpl-3.0.html" />
+		<variant value="GNU General Public License, version 3" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="http://www.gnu.org/licenses/lgpl-3.0.html" />
+		<variant value="GNU LGPL 3.0" />
+	</mapping>
+	<mapping>
+		<normalizedValue
+			value="http://www.meta-net.eu/meta-share/meta-share-licenses/META-SHARE%20COMMONS_BYNCSA%20v1.0.pdf" />
+		<variant value="MSCommons-BY-NC-SA" />
+	</mapping>
+	<mapping>
+		<normalizedValue
+			value="http://www.meta-net.eu/meta-share/meta-share-licenses/META-SHARE%20Commercial%20NoRedistribution%20NoDerivatives%20For-a-fee-v1.0.pdf" />
+		<variant value="MS-C-NoReD-ND-FF" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="https://creativecommons.org/licenses/by-sa/3.0/" />
+		<variant value="http://creativecommons.org/licenses/by-sa/3.0/" />
+		<variant value="Creative Commons Attribution-ShareAlike 3.0" />
+		<variant
+			value="Namensnennung - Weitergabe unter gleichen Bedingungen 3.0 Deutschland (CC BY-SA 3.0 DE)" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="https://creativecommons.org/licenses/by-sa/4.0/" />
+		<variant value="http://creativecommons.org/licenses/by-sa/4.0/" />
+		<variant value="Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)" />
+		<variant value="HZSK-ACA (Text) / CC-by-sa-4.0 (Annotation)" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="https://creativecommons.org/licenses/by/3.0/" />
+		<variant value="http://creativecommons.org/licenses/by/3.0/" />
+		<variant
+			value="***************************************************************************** * This work is licensed under a Creative Commons Attribution 3.0 Unported License. * CC-BY 3.0: * You are free: * to Share — to copy, distribute and transmit the work * to Remix — to adapt the work * to make commercial use of the work * Under the following conditions: * Attribution — You must attribute the work in the manner specified by the * author or licensor (but not in any way that suggests that they * endorse you or your use of the work). ***************************************************************************** * * Please cite this paper if you use these constructions: * Wiltrud Kessler and Hinrich Schütze (2012) * Classification of Inconsistent Sentiment Words Using Syntactic Constructions. * In Proceedings of the 24th International Conference on Computational Linguistics * (COLING 2012) * Mumbai, India, 10.-14. December 2012. * *****************************************************************************" />
+		<variant
+			value="This work is licensed under a Creative Commons Attribution 3.0 Unported License. * CC-BY 3.0: * You are free: * to Share — to copy, distribute and transmit the work * to Remix — to adapt the work * to make commercial use of the work * Under the following conditions: * Attribution — You must attribute the work in the manner specified by the * author or licensor (but not in any way that suggests that they * endorse you or your use of the work). ***************************************************************************** * Please cite this paper if you use the data: * Wiltrud Kessler and Jonas Kuhn (2014) * A Corpus of Comparisons in Product Reviews. * In Proceedings of the 9th Language Resources and Evaluation Conference (LREC 2014), * Reykjavik, Iceland, 28-30. May 2014." />
+	</mapping>
+	<mapping>
+		<normalizedValue value="https://creativecommons.org/publicdomain/zero/1.0/" />
+		<variant value="CC-ZERO" />
+		<variant value="CC0" />
+		<variant value="Creative_Commons-ZERO (CC-ZERO)" />
+		<variant value="http://creativecommons.org/publicdomain/zero/1.0/" />
+		<variant
+			value="http://creativecommons.org/publicdomain/zero/1.0/legalcode.txt" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="https://creativecommons.org/licenses/by-nc-sa/4.0/" />
+		<variant value="http://creativecommons.org/licenses/by-nc-sa/4.0/" />
+	</mapping>
+	<mapping>
+		<normalizedValue
+			value="https://kitwiki.csc.fi/twiki/bin/view/FinCLARIN/ClarinEULA" />
+		<variant value="CLARIN_ACA" />
+		<variant value="CLARIN_ACA-NC" />
+		<variant value="CLARIN_PUB" />
+		<variant value="CLARIN_RES" />
+		<variant value="CLARIN ACA" />
+	</mapping>
 </mappings>

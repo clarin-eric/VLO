@@ -230,8 +230,14 @@
 		<!-- DASISH from DC Rights -->
 		<concept>http://www.isocat.org/datcat/DC-5439</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5439_98bb103d-476a-7f62-54b4-bf9de24d2229</concept>
+		
+		<!-- URL of the license -->
+		<concept>http://www.isocat.org/datcat/DC-6586</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-6586_2c79d86a-5a75-0890-d407-7d9cb86b9beb</concept>
+				
 		<!-- the DC is used in the distributionType facet -->
-		<!--<concept>http://purl.org/dc/terms/license</concept>-->
+		<!--<concept>http://purl.org/dc/terms/license</concept>-->		
+		
 	</facetConcept>
 	<facetConcept name="license" allowMultipleValues="true" description="The licensing conditions for the resource or tool" definition="The name of the license or a very brief description of the licensing conditions under which the resource or tool can be used.">
 		<!-- URL of the license -->
