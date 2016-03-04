@@ -66,6 +66,10 @@
         <variant value="http://creativecommons.org/publicdomain/zero/1.0/"/>
         <variant value="http://creativecommons.org/publicdomain/zero/1.0/legalcode.txt"/>
     </mapping>
+        <mapping>
+        <normalizedValue value="https://creativecommons.org/licenses/by-nc-sa/4.0/"/>
+        <variant value="http://creativecommons.org/licenses/by-nc-sa/4.0/"/>
+    </mapping>
     <mapping>
         <normalizedValue value="https://kitwiki.csc.fi/twiki/bin/view/FinCLARIN/ClarinEULA"/>
         <variant value="CLARIN_ACA"/>
