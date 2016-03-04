@@ -6,14 +6,14 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>3.4-beta3</version>
+        <version>3.4-SNAPSHOT</version>
     </parent>
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-distribution</artifactId>
     <packaging>pom</packaging>
-    <version>3.4-beta3</version>
+    <version>3.4-SNAPSHOT</version>
     <name>VLO Distribution</name>
     <description>
         Creates a package for server distribution of the VLO. It includes WAR
