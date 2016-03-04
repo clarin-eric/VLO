@@ -134,7 +134,6 @@
       <concept>http://www.isocat.org/datcat/DC-4146</concept>
       <concept>http://hdl.handle.net/11459/CCR_C-4146_5ccc45c8-d729-c180-2bf1-fccc56dde24d</concept>
     </rejectableContext> -->
-		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms/c:language/@olac-language</pattern>
 		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms/c:subject/@olac-language</pattern>
 		<pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()</pattern>
 		<pattern>/c:CMD/c:Components/c:mods/c:language/c:languageTerm/text()</pattern>

@@ -231,7 +231,6 @@ public class FacetMappingFactoryTest {
         assertEquals(2, mapping.getPatterns().size());
         assertTrue(mapping.getPatterns().contains("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:language/text()"));
         assertTrue(mapping.getPatterns().contains("/c:CMD/c:Components/c:OLAC-DcmiTerms/c:language/@olac-language"));
-        assertEquals("/c:CMD/c:Components//c:OLAC-DcmiTerms/c:language/@olac-language", mapping.getFallbackPatterns().get(0));
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_ORGANISATION, mapping.getName());
