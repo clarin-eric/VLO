@@ -115,7 +115,7 @@
         <variant value="attribution"/>
     </mapping>
     <mapping>
-        <normalizedValue value="CC;BY;NC;SA"/>
+        <normalizedValue value="BY;NC;SA"/>
         <variant value="freely available for non-commercial research use (CC BY-NC-SA Licence)"/>
         <variant value="http://creativecommons.org/licenses/by-nc-sa/4.0/"/>
     </mapping>
