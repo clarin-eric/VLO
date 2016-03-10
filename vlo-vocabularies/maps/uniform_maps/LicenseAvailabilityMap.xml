@@ -246,6 +246,7 @@
         <variant value="CC-BY-NC-SA"/>
         <variant value="CC-by-nc-sa"/>
         <variant value="freely available for non-commercial research use (CC BY-NC-SA Licence)"/>
+        <variant value="http://creativecommons.org/licenses/by-nc-sa/4.0/"/>
     </mapping>
     <mapping>
         <normalizedValue value="PUB;BY;ND"/>
