@@ -180,7 +180,6 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
     private void addComponents() {
         add(new FeedbackPanel("feedback"));
-        add(new ExternalLink("help", vloConfig.getHelpUrl()));
 
         // add 'class' attribute to header indicating version qualifier (e.g. 'beta')
         add(new WebMarkupContainer("header").add(new AttributeAppender("class", VloWicketApplication.get().getAppVersionQualifier())));
