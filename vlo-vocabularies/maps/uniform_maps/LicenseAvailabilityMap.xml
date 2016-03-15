@@ -12,6 +12,8 @@
         <variant value="Not available"/>
         <variant value="Nor available"/>
         <variant value="non available"/>
+		<variant value="No availability"/>
+		<variant value="No Availability"/>
         <variant value="no recordings available due to the sensitivity of the material"/>
         <variant value="no"/>
         <variant value="No"/>
@@ -35,6 +37,10 @@
         <variant value="BAS:ALC"/>
         <variant value="BAS:ASICA"/>
         <variant value="BAS:CI_1"/>
+		<variant value="BAS:CI_2_Vowels"/>		
+		<variant value="BAS:CI_2_VOT"/>
+		<variant value="BAS:CI_2_Sibilants"/>
+		<variant value="BAS:CI_2_Cluster"/>		
         <variant value="BAS:CLIPS_MT_MANUAL"/>
         <variant value="BAS:FORMTASK"/>
         <variant value="BAS:HEMPEL"/>
@@ -82,14 +88,14 @@
         <variant value="CLARIN ACA"/>
         <variant value="CLARIN_ACA"/>
         <variant value="CLARIN-ACA"/>
-
         <variant value="disponible para indígenas e investigadores"/>
         <variant value="disponible para indÃgenas e investigadores"/>
         <variant value="free available for science"/>
         <variant value="free available for scientific usage"/>
         <variant value="Free for academic use"/>
         <variant value="free for academic use"/>
-        <variant value="free for academic use (subcat frames)"/>
+        <variant value="free for academic use (subcat frames)"/>		
+		<variant value="Free for use in research in teaching."/>		
         <variant value="freely available for academic research and education"/>
         <variant value="freely available for research and education"/>
         <variant value="freely available for science"/>
@@ -107,6 +113,7 @@
         <variant value="mit Benutzerlizenz (Formular online zum Download); für nicht akademischen Gebrauch auf Anfrage bei Erhard Hinrichs"/>
         <variant value="mit Benutzerlizenz (Formular online zum Download); für nicht akademischen Gebrauch auf Anfrage bei Prof. Dr. Erhard Hinrichs"/>
         <variant value="restricted; Free for academic use, copyright owned by Professor Svenka Savic, Novi Sad (Serbia)."/>
+		<variant value="Registrierung erforderlich, eingeschränkte Nutzung für nicht- akademische und kommerzielle Nutzung"/>
     </mapping>
     <mapping>
         <normalizedValue value="ACA;META;NC;SA"/>
@@ -261,6 +268,7 @@
         <variant value="GNU GPL"/>
         <variant value="GNU GPL v2"/>
         <variant value="GNU GPL v3"/>
+		<variant value="GPLv3+"/>
         <variant value="GNU GPL"/>
         <variant value="GPL"/>
         <variant value="GPL v2"/>
@@ -269,11 +277,13 @@
         <variant value="Creative Commons Attribution-ShareAlike 3.0"/>
         <variant value="GNU General Public License"/>
         <variant value="GNU General Public License, version 3"/>
+		<variant value="Namensnennung - Weitergabe unter gleichen Bedingungen 3.0 Deutschland (CC BY-SA 3.0 DE)"/>
     </mapping>
     <mapping>
         <normalizedValue value="PUB;ID"/>
         <variant value="available after registration"/>
         <variant value="free; online subscription for the digitalized newspaper texts."/>
+		<variant value="REG"/>
     </mapping>
     <mapping>
         <normalizedValue value="PUB;PRIV"/>
