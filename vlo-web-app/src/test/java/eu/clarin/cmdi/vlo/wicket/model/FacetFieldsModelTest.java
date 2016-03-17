@@ -75,7 +75,7 @@ public class FacetFieldsModelTest {
         assertEquals(result, result2);
     }
 
-    private static Matcher<Iterable<FacetField>> hasFacetField(String facetName) {
+    private static Matcher<Iterable<? super FacetField>> hasFacetField(String facetName) {
         return Matchers.<FacetField>hasItem(Matchers.<FacetField>hasProperty("name", equalTo(facetName)));
     }
 
