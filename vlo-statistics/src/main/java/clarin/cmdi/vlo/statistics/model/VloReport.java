@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class VloReport {
 
-    private int recordCount;
+    private long recordCount;
     private List<CollectionCount> collections;
 
     /**
@@ -34,7 +34,7 @@ public class VloReport {
      *
      * @return the value of recordCount
      */
-    public int getRecordCount() {
+    public long getRecordCount() {
         return recordCount;
     }
 
@@ -43,7 +43,7 @@ public class VloReport {
      *
      * @param recordCount new value of recordCount
      */
-    public void setRecordCount(int recordCount) {
+    public void setRecordCount(long recordCount) {
         this.recordCount = recordCount;
     }
 

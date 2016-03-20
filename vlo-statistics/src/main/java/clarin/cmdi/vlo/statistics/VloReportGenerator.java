@@ -59,9 +59,23 @@ public class VloReportGenerator {
     }
 
     public void run() throws SolrServerException, IOException, JAXBException {
+        // Report object
         final VloReport report = new VloReport();
+
+        // Gather statistics
+        report.setRecordCount(getRecordCount());
         report.setCollections(obtainCollectionCounts());
+
+        // Write report
         marshallReport(report);
+    }
+
+    private long getRecordCount() throws SolrServerException {
+        final SolrQuery query = new SolrQuery();
+        query.setQuery("*:*");
+        query.setRows(0);
+        final QueryResponse result = solrServer.query(query);
+        return result.getResults().getNumFound();
     }
 
     private List<CollectionCount> obtainCollectionCounts() throws SolrServerException {
@@ -127,7 +141,6 @@ public class VloReportGenerator {
 
         // Write to stdout
         marshaller.marshal(report, System.out);
-
     }
 
 }
