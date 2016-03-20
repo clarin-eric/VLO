@@ -17,11 +17,13 @@
 package clarin.cmdi.vlo.statistics.model;
 
 import java.util.List;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
+@XmlRootElement
 public class VloReport {
 
     private int recordCount;

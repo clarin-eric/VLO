@@ -18,6 +18,7 @@ package clarin.cmdi.vlo.statistics;
 
 import clarin.cmdi.vlo.statistics.model.VloReport;
 import clarin.cmdi.vlo.statistics.model.VloReport.CollectionCount;
+import com.oracle.xmlns.internal.webservices.jaxws_databinding.ObjectFactory;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
@@ -27,6 +28,9 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
@@ -54,9 +58,10 @@ public class VloReportGenerator {
         this.solrServer = new HttpSolrServer(config.getSolrUrl());
     }
 
-    public void run() throws SolrServerException, IOException {
+    public void run() throws SolrServerException, IOException, JAXBException {
         final VloReport report = new VloReport();
         report.setCollections(obtainCollectionCounts());
+        marshallReport(report);
     }
 
     private List<CollectionCount> obtainCollectionCounts() throws SolrServerException {
@@ -80,7 +85,7 @@ public class VloReportGenerator {
         return counts;
     }
 
-    public static void main(String[] args) throws MalformedURLException, IOException, SolrServerException {
+    public static void main(String[] args) throws MalformedURLException, IOException, SolrServerException, JAXBException {
         if (args.length < 2) {
             logger.error("Provide configuration location and output file as parameters");
             System.exit(1);
@@ -108,6 +113,21 @@ public class VloReportGenerator {
         logger.info("Gathering statistics...");
         final VloReportGenerator vloReportGenerator = new VloReportGenerator(vloConfig, outputLocation);
         vloReportGenerator.run();
+    }
+
+    private void marshallReport(VloReport report) throws JAXBException {
+        // Prepare marshaller
+        final JAXBContext jc = JAXBContext.newInstance(VloReport.class);
+        final Marshaller marshaller = jc.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+        // Write to target
+        logger.info("Writing report to {}", outputLocation);
+        marshaller.marshal(report, outputLocation);
+
+        // Write to stdout
+        marshaller.marshal(report, System.out);
+
     }
 
 }
