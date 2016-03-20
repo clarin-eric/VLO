@@ -1,0 +1,77 @@
+/*
+ * Copyright (C) 2016 CLARIN
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package clarin.cmdi.vlo.statistics;
+
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ *
+ * @author Twan Goosen <twan.goosen@mpi.nl>
+ */
+public class VloReportGenerator {
+
+    private final static Logger logger = LoggerFactory.getLogger(VloReportGenerator.class);
+
+    private final VloConfig config;
+    private final File outputLocation;
+
+    public VloReportGenerator(VloConfig config, File outputLocation) {
+        this.config = config;
+        this.outputLocation = outputLocation;
+    }
+
+    public void run() {
+        
+    }
+
+    public static void main(String[] args) throws MalformedURLException, IOException {
+        if (args.length < 2) {
+            logger.error("Provide configuration location and output file as parameters");
+            System.exit(1);
+        }
+
+        final File configLocation = new File(args[0]);
+        if (!configLocation.exists()) {
+            logger.error("Configuration file {} does not exist", configLocation);
+            System.exit(1);
+        }
+
+        final File outputLocation = new File(args[1]);
+        if (outputLocation.exists() && (outputLocation.isDirectory() || !outputLocation.canWrite())) {
+            logger.error("Cannot write to output file {}", outputLocation);
+            System.exit(1);
+        }
+
+        // load config
+        logger.debug("Loading configuration from {}", configLocation);
+        final XmlVloConfigFactory xmlVloConfigFactory
+                = new XmlVloConfigFactory(configLocation.toURI().toURL());
+        final VloConfig vloConfig = xmlVloConfigFactory.newConfig();
+        
+        // start report generator
+        final VloReportGenerator vloReportGenerator = new VloReportGenerator(vloConfig, outputLocation);
+        vloReportGenerator.run();
+    }
+
+}
