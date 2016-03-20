@@ -16,22 +16,23 @@
  */
 package clarin.cmdi.vlo.statistics;
 
+import clarin.cmdi.vlo.statistics.model.VloReport;
+import clarin.cmdi.vlo.statistics.model.VloReport.CollectionCount;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrRequest;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
-import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.util.NamedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,19 +55,29 @@ public class VloReportGenerator {
     }
 
     public void run() throws SolrServerException, IOException {
-        obtainCollectionCounts();
+        final VloReport report = new VloReport();
+        report.setCollections(obtainCollectionCounts());
     }
 
-    private void obtainCollectionCounts() throws SolrServerException {
+    private List<CollectionCount> obtainCollectionCounts() throws SolrServerException {
         final SolrQuery query = new SolrQuery();
         query.setRows(0);
         query.setFacet(true);
         query.addFacetField(FacetConstants.FIELD_COLLECTION);
         query.setFacetLimit(-1);
-        
+
         final QueryResponse result = solrServer.query(query);
         final FacetField collectionField = result.getFacetField(FacetConstants.FIELD_COLLECTION);
         logger.info("Collection field: {}", collectionField.getValues());
+
+        final List<CollectionCount> counts
+                = collectionField.getValues().stream().map((count) -> {
+                    CollectionCount collectionCount = new CollectionCount();
+                    collectionCount.setCollection(count.getName());
+                    collectionCount.setCount(count.getCount());
+                    return collectionCount;
+                }).collect(Collectors.toList());
+        return counts;
     }
 
     public static void main(String[] args) throws MalformedURLException, IOException, SolrServerException {
@@ -92,7 +103,7 @@ public class VloReportGenerator {
         final XmlVloConfigFactory xmlVloConfigFactory
                 = new XmlVloConfigFactory(configLocation.toURI().toURL());
         final VloConfig vloConfig = xmlVloConfigFactory.newConfig();
-        
+
         // start report generator
         logger.info("Gathering statistics...");
         final VloReportGenerator vloReportGenerator = new VloReportGenerator(vloConfig, outputLocation);
