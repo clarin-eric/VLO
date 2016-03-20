@@ -62,9 +62,13 @@ public class VloReportGenerator {
         // Report object
         final VloReport report = new VloReport();
 
-        // Gather statistics
-        report.setRecordCount(getRecordCount());
-        report.setCollections(obtainCollectionCounts());
+        try {
+            // Gather statistics
+            report.setRecordCount(getRecordCount());
+            report.setCollections(obtainCollectionCounts());
+        } finally {
+            solrServer.shutdown();
+        }
 
         // Write report
         marshallReport(report);
