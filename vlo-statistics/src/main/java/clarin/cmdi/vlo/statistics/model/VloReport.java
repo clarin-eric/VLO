@@ -28,6 +28,7 @@ public class VloReport {
 
     private long recordCount;
     private List<CollectionCount> collections;
+    private List<Facet> facets;
 
     /**
      * Get the value of recordCount
@@ -63,6 +64,14 @@ public class VloReport {
      */
     public void setCollections(List<CollectionCount> collections) {
         this.collections = collections;
+    }
+
+    public void setFacets(List<Facet> facets) {
+        this.facets = facets;
+    }
+
+    public List<Facet> getFacets() {
+        return facets;
     }
 
     public static class CollectionCount {
@@ -105,6 +114,49 @@ public class VloReport {
          */
         public void setCollection(String collection) {
             this.collection = collection;
+        }
+
+    }
+
+    public static class Facet {
+
+        private String name;
+        private long valueCount;
+
+        /**
+         * Get the value of valueCount
+         *
+         * @return the value of valueCount
+         */
+        public long getValueCount() {
+            return valueCount;
+        }
+
+        /**
+         * Set the value of valueCount
+         *
+         * @param valueCount new value of valueCount
+         */
+        public void setValueCount(long valueCount) {
+            this.valueCount = valueCount;
+        }
+
+        /**
+         * Get the value of name
+         *
+         * @return the value of name
+         */
+        public String getName() {
+            return name;
+        }
+
+        /**
+         * Set the value of name
+         *
+         * @param name new value of name
+         */
+        public void setName(String name) {
+            this.name = name;
         }
 
     }
