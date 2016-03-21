@@ -66,6 +66,7 @@ public class VloReportGenerator {
             // Gather statistics
             report.setRecordCount(getRecordCount());
             report.setCollections(obtainCollectionCounts());
+            //TODO: Facet statistics: number of different values, top 5/10 values
         } finally {
             solrServer.shutdown();
         }
