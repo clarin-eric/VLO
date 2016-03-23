@@ -45,7 +45,7 @@ public class SitemapGenerator {
 	    // create urls
 	    List<URL> urls = new LinkedList<>();
 
-	    for (String staticURL : Config.INCLUDE_URLS.split(","))
+	    for (String staticURL : Config.INCLUDE_URLS)
 		urls.add(new URL(staticURL.trim()));
 	    urls.addAll(new SOLRService().getRecordURLS());
 
@@ -109,7 +109,7 @@ public class SitemapGenerator {
 	    sitemap.setUrls(subURLs);
 
 	    String sitemapName = Config.SITEMAP_NAME_PREFIX + sitemapCnt++;
-	    sitemaps.add(sitemapName);
+	    sitemaps.add(Config.VLO_URL + Config.OUTPUT_FOLDER + "/" + sitemapName);
 
 	    tasks.add(() -> new SitemapMarshaller().marshall(sitemap, sitemapName));
 
