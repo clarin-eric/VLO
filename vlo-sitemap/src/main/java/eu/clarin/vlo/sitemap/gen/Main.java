@@ -32,6 +32,7 @@ public class Main {
 	Config.MAX_URLS_PER_SITEMAP = prop.getString("MAX_URLS_PER_SITEMAP");
 	Config.OUTPUT_FOLDER = prop.getString("OUTPUT_FOLDER");
 	Config.VLO_URL = prop.getString("VLO_URL");
+	Config.SITEMAP_BASE_URL = prop.getString("SITEMAP_BASE_URL");
 	Config.SITEMAP_NAME_PREFIX = prop.getString("SITEMAP_NAME_PREFIX");
 	Config.SITEMAP_INDEX_NAME = prop.getString("SITEMAP_INDEX_NAME");
 	Config.RECORD_URL_TEMPLATE = prop.getString("RECORD_URL_TEMPLATE");

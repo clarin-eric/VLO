@@ -1,9 +1,6 @@
 package eu.clarin.vlo.sitemap.gen;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -109,7 +105,7 @@ public class SitemapGenerator {
 	    sitemap.setUrls(subURLs);
 
 	    String sitemapName = Config.SITEMAP_NAME_PREFIX + sitemapCnt++;
-	    sitemaps.add(Config.VLO_URL + Config.OUTPUT_FOLDER + "/" + sitemapName);
+	    sitemaps.add(Config.SITEMAP_BASE_URL + sitemapName + ".xml");
 
 	    tasks.add(() -> new SitemapMarshaller().marshall(sitemap, sitemapName));
 
