@@ -37,6 +37,12 @@ import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import static java.time.temporal.ChronoUnit.DAYS;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 
 /**
  * The main metadataImporter class. Also contains the main function.
@@ -144,6 +150,8 @@ public class MetadataImporter {
                     LOG.info("Deleting data for data provider: " + dataRoot.getOriginName());
                     solrServer.deleteByQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
                     LOG.info("Deleting data of provider done.");
+                } else {
+                    updateDaysSinceLastImport(dataRoot);
                 }
                 CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS, config, false);
                 List<List<File>> centreFilesList = getFilesFromDataRoot(dataRoot.getRootFile());
@@ -439,6 +447,9 @@ public class MetadataImporter {
         Date dt = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         solrDocument.addField(FacetConstants.FIELD_LAST_SEEN, df.format(dt));
+        
+        // set number of days since last import to '0'
+        solrDocument.addField(FacetConstants.FIELD_DAYS_SINCE_LAST_SEEN, 0);
 
         // add resource proxys      
         addResourceData(solrDocument, cmdiData);
@@ -569,6 +580,12 @@ public class MetadataImporter {
                     Map<String, Integer> partialUpdateMapCount = new HashMap<>();
                     partialUpdateMapCount.put("set", incomingVertexNames.size());
                     doc.setField(FacetConstants.FIELD_HAS_PART_COUNT, partialUpdateMapCount);
+                    
+                    // add hasPartCount weight
+                    Double hasPartCountWeight = Math.log10(1 + Math.min(50, incomingVertexNames.size()));
+                    Map<String, Double> partialUpdateMapCountWeight = new HashMap<>();
+                    partialUpdateMapCountWeight.put("set", hasPartCountWeight);
+                    doc.setField(FacetConstants.FIELD_HAS_PART_COUNT_WEIGHT, partialUpdateMapCountWeight);
                 }
                 
                 if(!outgoingVertexNames.isEmpty()) {
@@ -599,6 +616,72 @@ public class MetadataImporter {
         }
 
         ResourceStructureGraph.clearResourceGraph();
+    }
+    
+    /**
+     * Update "days since last import" field for all Solr records of dataRoot
+     * @param dataRoot
+     * @throws SolrServerException
+     * @throws IOException 
+     */
+    private void updateDaysSinceLastImport(DataRoot dataRoot) throws SolrServerException, IOException {
+        LOG.info("Updating \"days since last import\" in Solr");
+        SolrQuery query = new SolrQuery();
+        query.setQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
+        int fetchSize = 1000;
+        query.setRows(fetchSize);
+        QueryResponse rsp = solrServer.query(query);
+
+        int offset = 0;
+        long totalResults = rsp.getResults().getNumFound();
+
+        Boolean updatedDocs = false;
+        List<SolrInputDocument> updateDocs = new ArrayList<>();
+        LocalDate nowDate = LocalDate.now();
+        while (offset < totalResults) {
+            query.setStart(offset);
+            query.setRows(fetchSize);
+
+            for (SolrDocument doc : solrServer.query(query).getResults()) {
+                updatedDocs = true;
+
+                String recordId = (String) doc.getFieldValue(FacetConstants.FIELD_ID);
+                Date lastImportDate = (Date) doc.getFieldValue(FacetConstants.FIELD_LAST_SEEN);
+                LocalDate oldDate = lastImportDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                long daysSinceLastSeen = DAYS.between(oldDate, nowDate);
+
+                SolrInputDocument updateDoc = new SolrInputDocument();
+                updateDoc.setField(FacetConstants.FIELD_ID, recordId);
+
+                Map<String, Long> partialUpdateMap = new HashMap<>();
+                partialUpdateMap.put("set", daysSinceLastSeen);
+                updateDoc.setField(FacetConstants.FIELD_DAYS_SINCE_LAST_SEEN, partialUpdateMap);
+
+                updateDocs.add(updateDoc);
+
+                if (updateDocs.size() == config.getMaxDocsInList()) {
+                    solrServer.add(updateDocs);
+                    if (serverError != null) {
+                        throw new SolrServerException(serverError);
+                    }
+                    updateDocs = new ArrayList<>();
+                }
+            }
+            offset += fetchSize;
+        }
+
+        if (!updateDocs.isEmpty()) {
+            solrServer.add(updateDocs);
+            if (serverError != null) {
+                throw new SolrServerException(serverError);
+            }
+        }
+
+        if (updatedDocs) {
+            solrServer.commit();
+        }
+
+        LOG.info("Updating \"days since last import\" done.");
     }
     
     public static VloConfig config;

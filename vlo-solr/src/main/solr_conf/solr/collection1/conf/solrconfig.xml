@@ -406,7 +406,7 @@
                 boost by hierarchy weight (reverse order because lower numbers
                 indicate a higher level), then by number of parts (differentiate
                 up till 50), then by recency of import -->
-            rord(_hierarchyWeight) log(add(1,min(50,_hasPartCount)))^.2 recip(ms(NOW,_lastSeen),3.16e-11,1,1)^.2
+            rord(_hierarchyWeight) _hasPartCountWeight^.2  rord(_daysSinceLastSeen)^.2
             <!-- TODO: prefer CLARIN records over non-CLARIN? -->
         </str>
         
