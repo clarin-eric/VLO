@@ -409,7 +409,7 @@
  </types>
 
 
-
+ <!-- All fields (except copyField targets) are stored to allow partial updates --> 
  <fields>
    <field name="id" type="string" indexed="true" stored="true" required="true"/>
    <field name="collection" type="string" indexed="true" stored="true" multiValued="true" />
