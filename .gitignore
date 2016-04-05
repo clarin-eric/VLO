@@ -8,3 +8,4 @@
 /vlo-web-app/nbactions*
 .DS_Store
 /vlo-sitemap/target/
+/vlo-statistics/target/
