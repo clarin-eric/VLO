@@ -4,7 +4,7 @@
 	<groupId>eu.clarin.vlo</groupId>
 	<artifactId>vlo-sitemap</artifactId>
 	<version>3.4.1</version>
-        <name>VLO Sitemap Generator</name>
+	<name>VLO Sitemap Generator</name>
     
         <parent>
             <groupId>eu.clarin.cmdi</groupId>

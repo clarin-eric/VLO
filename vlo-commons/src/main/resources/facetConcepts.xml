@@ -176,7 +176,6 @@
                 </rejectableContext>
 		
                 
-                <pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms/c:language/@olac-language</pattern>
 		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms/c:subject/@olac-language</pattern>
 		<pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()</pattern>
 		<pattern>/c:CMD/c:Components/c:mods/c:language/c:languageTerm/text()</pattern>

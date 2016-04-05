@@ -26,6 +26,7 @@
         <module>vlo-distribution</module>
         <module>vlo-vocabularies</module>
         <module>vlo-sitemap</module>
+        <module>vlo-statistics</module>
     </modules>
 
     <properties>
