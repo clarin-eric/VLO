@@ -16,7 +16,6 @@
  */
 package clarin.cmdi.vlo.statistics.collector;
 
-import clarin.cmdi.vlo.statistics.VloReportGenerator;
 import clarin.cmdi.vlo.statistics.model.VloReport;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -36,7 +35,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CollectionsCollector implements VloStatisticsCollector {
 
-    private final static Logger logger = LoggerFactory.getLogger(VloReportGenerator.class);
+    private final static Logger logger = LoggerFactory.getLogger(CollectionsCollector.class);
 
     @Override
     public void collect(VloReport report, VloConfig config, SolrServer solrServer) throws SolrServerException {
