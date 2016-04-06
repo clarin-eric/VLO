@@ -21,18 +21,13 @@ import clarin.cmdi.vlo.statistics.collector.FacetValueCountsCollector;
 import clarin.cmdi.vlo.statistics.collector.RecordCountCollector;
 import clarin.cmdi.vlo.statistics.collector.VloStatisticsCollector;
 import clarin.cmdi.vlo.statistics.model.VloReport;
-import clarin.cmdi.vlo.statistics.model.VloReport.CollectionCount;
-import clarin.cmdi.vlo.statistics.model.VloReport.Facet;
+import clarin.cmdi.vlo.statistics.reporting.VloReportHandler;
 import com.google.common.collect.ImmutableList;
-import com.timgroup.statsd.NonBlockingStatsDClient;
-import com.timgroup.statsd.StatsDClient;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.slf4j.Logger;
@@ -48,31 +43,37 @@ public class VloReportGenerator {
 
     private final VloConfig config;
     private final HttpSolrServer solrServer;
-    private File xmlOutputFile;
-    private int statsdPort;
-    private String statsdHost;
-    private String statsdPrefix;
     private final List<VloStatisticsCollector> collectors;
+    private final List<VloReportHandler> resultHandlers;
 
     public VloReportGenerator(VloConfig config) {
-        this.config = config;
-        this.solrServer = new HttpSolrServer(config.getSolrUrl());
+        this(config,
+                //set the default collectors that will be executed in order when creating the report
+                ImmutableList.of(
+                        new RecordCountCollector(),
+                        new CollectionsCollector(),
+                        new FacetValueCountsCollector()
+                //TODO: add collector for record ages
+                ));
+    }
 
-        //set the collectors that will be executed in order when creating the report
-        this. collectors = ImmutableList.of(
-                new RecordCountCollector(),
-                new CollectionsCollector(),
-                new FacetValueCountsCollector()
-        //TODO: add collector for record ages
-        );
+    public VloReportGenerator(VloConfig config, List<VloStatisticsCollector> collectors) {
+        this(config, collectors, new ArrayList<>());
+    }
+
+    public VloReportGenerator(VloConfig config, List<VloStatisticsCollector> collectors, List<VloReportHandler> resultHandlers) {
+        this.config = config;
+        this.collectors = collectors;
+        this.resultHandlers = resultHandlers;
+        this.solrServer = new HttpSolrServer(config.getSolrUrl());
     }
 
     public void run() throws SolrServerException, IOException, JAXBException {
-        // Report object
+        // Empty report object
         final VloReport report = new VloReport();
 
+        // Gather statistics
         try {
-            // Gather statistics
             for (VloStatisticsCollector collector : collectors) {
                 logger.info("Running {}", collector.getClass().getSimpleName());
                 collector.collect(report, config, solrServer);
@@ -81,54 +82,15 @@ public class VloReportGenerator {
             solrServer.shutdown();
         }
 
-        if (xmlOutputFile != null) {
-            // Write report
-            marshallReport(report);
-        }
-        if (statsdHost != null) {
-            sendToStatsd(report);
+        // Handle results (write output etc)
+        for (VloReportHandler handler : resultHandlers) {
+            logger.info("Handling results with {}", handler.getClass().getSimpleName());
+            handler.handleReport(report);
         }
     }
 
-    private void marshallReport(VloReport report) throws JAXBException {
-        // Prepare marshaller
-        final JAXBContext jc = JAXBContext.newInstance(VloReport.class);
-        final Marshaller marshaller = jc.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-        // Write to target
-        logger.info("Writing report to {}", xmlOutputFile);
-        marshaller.marshal(report, xmlOutputFile);
-    }
-
-    private void sendToStatsd(VloReport report) {
-        logger.info("Sending reports to statsd server {}:{} with prefix '{}'", statsdHost, statsdPort, statsdPrefix);
-        final StatsDClient client = new NonBlockingStatsDClient(statsdPrefix + ".index", statsdHost, statsdPort);
-        client.gauge("nrRecords", report.getRecordCount());
-        for (CollectionCount counts : report.getCollections()) {
-            final String name = counts.getCollection().replaceAll("\\s", "_").replaceAll(":", "-");
-            client.gauge("collections." + name, counts.getCount());
-        }
-        for (Facet facet : report.getFacets()) {
-            client.gauge("facetValueCounts." + facet.getName(), facet.getValueCount());
-        }
-        client.stop();
-    }
-
-    public void setXmlOutputFile(File xmlOutputFile) {
-        this.xmlOutputFile = xmlOutputFile;
-    }
-
-    public void setStatsdHost(String statsdHost) {
-        this.statsdHost = statsdHost;
-    }
-
-    public void setStatsdPort(int port) {
-        this.statsdPort = port;
-    }
-
-    public void setStatsdPrefix(String statsdPrefix) {
-        this.statsdPrefix = statsdPrefix;
+    public List<VloReportHandler> getResultHandlers() {
+        return resultHandlers;
     }
 
 }

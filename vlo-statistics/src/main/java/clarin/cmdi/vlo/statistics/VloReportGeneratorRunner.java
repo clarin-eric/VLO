@@ -16,6 +16,8 @@
  */
 package clarin.cmdi.vlo.statistics;
 
+import clarin.cmdi.vlo.statistics.reporting.StatsdReporter;
+import clarin.cmdi.vlo.statistics.reporting.XmlReportWriter;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
 import java.io.File;
@@ -35,12 +37,12 @@ import org.slf4j.LoggerFactory;
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 public class VloReportGeneratorRunner {
-
+    
     private final static Logger logger = LoggerFactory.getLogger(VloReportGeneratorRunner.class);
-
+    
     public static void main(String[] args) throws MalformedURLException, IOException, SolrServerException, JAXBException {
         final Properties properties = loadProperties(args);
-
+        
         final File configLocation = new File(properties.getProperty("vlo.config.file", "VloConfig.xml"));
         if (!configLocation.exists()) {
             logger.error("Configuration file {} does not exist", configLocation);
@@ -62,7 +64,7 @@ public class VloReportGeneratorRunner {
         logger.info("Gathering statistics...");
         vloReportGenerator.run();
     }
-
+    
     private static Properties loadProperties(String[] args) throws IOException {
         final String propsFile;
         if (args.length >= 1) {
@@ -80,14 +82,14 @@ public class VloReportGeneratorRunner {
         properties.load(new FileReader(args[0]));
         return properties;
     }
-
+    
     private static void applyConfigurationOptions(final VloReportGenerator vloReportGenerator, final Properties properties) {
         //output file
         final String outputFileBase = properties.getProperty("report.xml.file.name");
         if (outputFileBase != null) {
             // create full output filename
             final StringBuilder outputFileNameBuilder = new StringBuilder(outputFileBase);
-
+            
             final String dateFormatString = properties.getProperty("report.xml.file.dateformat");
             if (dateFormatString != null) {
                 final SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatString);
@@ -105,7 +107,7 @@ public class VloReportGeneratorRunner {
                 System.exit(1);
             } else {
                 logger.info("An XML report will be generated in {}", xmlReportTarget);
-                vloReportGenerator.setXmlOutputFile(xmlReportTarget);
+                vloReportGenerator.getResultHandlers().add(new XmlReportWriter(xmlReportTarget));
             }
         }
 
@@ -118,12 +120,11 @@ public class VloReportGeneratorRunner {
                 logger.error("One or more statsd properties have not been configured correctly");
                 System.exit(1);
             }
-
-            vloReportGenerator.setStatsdHost(statsdHost);
-            vloReportGenerator.setStatsdPrefix(statsdPrefix);
-
+            
             try {
-                vloReportGenerator.setStatsdPort(Integer.parseInt(statsdPort));
+                final int portNumber = Integer.parseInt(statsdPort);
+                logger.info("Statistics will be sent to {}:{}", statsdHost, portNumber);
+                vloReportGenerator.getResultHandlers().add(new StatsdReporter(statsdPrefix, statsdHost, portNumber));
             } catch (NumberFormatException ex) {
                 logger.error("Invalid statsd port number: {}", statsdPort);
                 logger.debug("Invalid statsd port number", ex);
