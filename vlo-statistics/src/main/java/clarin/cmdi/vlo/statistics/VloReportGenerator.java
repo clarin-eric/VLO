@@ -75,7 +75,7 @@ public class VloReportGenerator {
             // Write report
             marshallReport(report);
         }
-        if(statsdHost != null) {
+        if (statsdHost != null) {
             sendToStatsd(report);
         }
     }
@@ -146,6 +146,12 @@ public class VloReportGenerator {
         logger.info("Sending reports to statsd server {}:{} with prefix '{}'", statsdHost, statsdPort, statsdPrefix);
         final StatsDClient client = new NonBlockingStatsDClient(statsdPrefix + ".index", statsdHost, statsdPort);
         client.gauge("nrRecords", report.getRecordCount());
+        for (CollectionCount counts : report.getCollections()) {
+            client.gauge("collections." + counts.getCollection(), counts.getCount());
+        }
+        for (Facet facet : report.getFacets()) {
+            client.gauge("facetValueCounts." + facet.getName(), facet.getValueCount());
+        }
         client.stop();
     }
 
