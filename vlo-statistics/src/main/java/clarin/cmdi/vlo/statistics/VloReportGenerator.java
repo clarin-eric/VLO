@@ -19,6 +19,8 @@ package clarin.cmdi.vlo.statistics;
 import clarin.cmdi.vlo.statistics.model.VloReport;
 import clarin.cmdi.vlo.statistics.model.VloReport.CollectionCount;
 import clarin.cmdi.vlo.statistics.model.VloReport.Facet;
+import com.timgroup.statsd.NonBlockingStatsDClient;
+import com.timgroup.statsd.StatsDClient;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.File;
@@ -142,7 +144,9 @@ public class VloReportGenerator {
 
     private void sendToStatsd(VloReport report) {
         logger.info("Sending reports to statsd server {}:{} with prefix '{}'", statsdHost, statsdPort, statsdPrefix);
-        //TODO
+        final StatsDClient client = new NonBlockingStatsDClient(statsdPrefix + ".index", statsdHost, statsdPort);
+        client.gauge("nrRecords", report.getRecordCount());
+        client.stop();
     }
 
     public void setXmlOutputFile(File xmlOutputFile) {
