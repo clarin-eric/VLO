@@ -21,15 +21,9 @@ import clarin.cmdi.vlo.statistics.model.VloReport.CollectionCount;
 import clarin.cmdi.vlo.statistics.model.VloReport.Facet;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Properties;
 import java.util.stream.Collectors;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -155,110 +149,16 @@ public class VloReportGenerator {
         this.xmlOutputFile = xmlOutputFile;
     }
 
-    private void setStatsdHost(String statsdHost) {
+    public void setStatsdHost(String statsdHost) {
         this.statsdHost = statsdHost;
     }
 
-    private void setStatsdPort(int port) {
+    public void setStatsdPort(int port) {
         this.statsdPort = port;
     }
 
-    private void setStatsdPrefix(String statsdPrefix) {
+    public void setStatsdPrefix(String statsdPrefix) {
         this.statsdPrefix = statsdPrefix;
-    }
-
-    public static void main(String[] args) throws MalformedURLException, IOException, SolrServerException, JAXBException {
-        final Properties properties = loadProperties(args);
-
-        final File configLocation = new File(properties.getProperty("vlo.config.file", "VloConfig.xml"));
-        if (!configLocation.exists()) {
-            logger.error("Configuration file {} does not exist", configLocation);
-            System.exit(1);
-        }
-
-        // load config
-        logger.info("Loading configuration from {}", configLocation);
-        final XmlVloConfigFactory xmlVloConfigFactory
-                = new XmlVloConfigFactory(configLocation.toURI().toURL());
-        final VloConfig vloConfig = xmlVloConfigFactory.newConfig();
-
-        // instantiate generator
-        final VloReportGenerator vloReportGenerator = new VloReportGenerator(vloConfig);
-        // complete configuration
-        applyConfigurationOptions(vloReportGenerator, properties);
-
-        // start report generator
-        logger.info("Gathering statistics...");
-        vloReportGenerator.run();
-    }
-
-    private static Properties loadProperties(String[] args) throws IOException {
-        final String propsFile;
-        if (args.length >= 1) {
-            propsFile = args[0];
-        } else {
-            logger.warn("No configuration file provided. Trying default location.");
-            propsFile = "configuration.properties";
-        }
-        final File propertiesLocation = new File(propsFile);
-        if (!propertiesLocation.exists()) {
-            logger.error("Configuration file {} does not exist", propertiesLocation);
-            System.exit(1);
-        }
-        final Properties properties = new Properties();
-        properties.load(new FileReader(args[0]));
-        return properties;
-    }
-
-    private static void applyConfigurationOptions(final VloReportGenerator vloReportGenerator, final Properties properties) {
-        //output file
-        final String outputFileBase = properties.getProperty("report.xml.file.name");
-        if (outputFileBase != null) {
-            // create full output filename
-            final StringBuilder outputFileNameBuilder = new StringBuilder(outputFileBase);
-
-            final String dateFormatString = properties.getProperty("report.xml.file.dateformat");
-            if (dateFormatString != null) {
-                final SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatString);
-                final String datePart = dateFormat.format(Calendar.getInstance().getTime());
-                outputFileNameBuilder.append(datePart);
-            }
-
-            // append extension
-            outputFileNameBuilder.append(".xml");
-
-            // check if we will be able to write to this file
-            final File xmlReportTarget = new File(outputFileNameBuilder.toString());
-            if (xmlReportTarget.exists() && (xmlReportTarget.isDirectory() || !xmlReportTarget.canWrite())) {
-                logger.error("Cannot write to output file {}", xmlReportTarget);
-                System.exit(1);
-            } else {
-                logger.info("An XML report will be generated in {}", xmlReportTarget);
-                vloReportGenerator.setXmlOutputFile(xmlReportTarget);
-            }
-        }
-
-        //statsd
-        final String statsdHost = properties.getProperty("report.statsd.server.host");
-        if (statsdHost != null) {
-            final String statsdPort = properties.getProperty("report.statsd.server.port");
-            final String statsdPrefix = properties.getProperty("report.statsd.prefix");
-            if (statsdPort == null || statsdPrefix == null) {
-                logger.error("One or more statsd properties have not been configured correctly");
-                System.exit(1);
-            }
-
-            vloReportGenerator.setStatsdHost(statsdHost);
-            vloReportGenerator.setStatsdPrefix(statsdPrefix);
-
-            try {
-                vloReportGenerator.setStatsdPort(Integer.parseInt(statsdPort));
-            } catch (NumberFormatException ex) {
-                logger.error("Invalid statsd port number: {}", statsdPort);
-                logger.debug("Invalid statsd port number", ex);
-                System.exit(1);
-            }
-        }
     }
 
 }
