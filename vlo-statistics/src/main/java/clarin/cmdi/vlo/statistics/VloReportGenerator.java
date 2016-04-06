@@ -67,6 +67,8 @@ public class VloReportGenerator {
             report.setRecordCount(getRecordCount());
             report.setCollections(obtainCollectionCounts());
             report.setFacets(obtainFacetStats());
+
+            //TODO: report on record age
         } finally {
             solrServer.shutdown();
         }
