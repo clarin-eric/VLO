@@ -145,6 +145,7 @@
             </includes>
             <outputDirectory>config</outputDirectory>
         </fileSet>        
+        <!-- sitemap -->
         <fileSet>
             <directory>${project.parent.basedir}/vlo-sitemap/target/sitemap-dist/sitemap-dist</directory>
             <excludes>
@@ -153,6 +154,7 @@
             </excludes>
             <outputDirectory>bin/sitemap-generator</outputDirectory>
         </fileSet>
+        <!-- sitemap binaries -->
         <fileSet>
             <directory>${project.parent.basedir}/vlo-sitemap/target/sitemap-dist/sitemap-dist</directory>
             <includes>
@@ -161,6 +163,25 @@
             </includes>
             <fileMode>0755</fileMode>
             <outputDirectory>bin/sitemap-generator</outputDirectory>
+        </fileSet>
+        <!-- statistics -->
+        <fileSet>
+            <directory>${project.parent.basedir}/vlo-statistics/target/statistics-dist/statistics-dist</directory>
+            <excludes>
+                <exclude>*.sh</exclude>
+                <exclude>*.jar</exclude>
+            </excludes>
+            <outputDirectory>bin/statistics</outputDirectory>
+        </fileSet>
+        <!-- statistics binaries -->
+        <fileSet>
+            <directory>${project.parent.basedir}/vlo-statistics/target/statistics-dist/statistics-dist</directory>
+            <includes>
+                <include>*.sh</include>
+                <include>*.jar</include>
+            </includes>
+            <fileMode>0755</fileMode>
+            <outputDirectory>bin/statistics</outputDirectory>
         </fileSet>
     </fileSets>
 </assembly>
