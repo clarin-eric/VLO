@@ -23,9 +23,13 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -43,23 +47,26 @@ import org.slf4j.LoggerFactory;
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 public class VloReportGenerator {
-    
+
     private final static Logger logger = LoggerFactory.getLogger(VloReportGenerator.class);
-    
+
     private final VloConfig config;
-    private final File outputLocation;
     private final HttpSolrServer solrServer;
-    
-    public VloReportGenerator(VloConfig config, File outputLocation) {
+    private File xmlOutputFile;
+
+    public VloReportGenerator(VloConfig config) {
         this.config = config;
-        this.outputLocation = outputLocation;
         this.solrServer = new HttpSolrServer(config.getSolrUrl());
     }
-    
+
+    public void setXmlOutputFile(File xmlOutputFile) {
+        this.xmlOutputFile = xmlOutputFile;
+    }
+
     public void run() throws SolrServerException, IOException, JAXBException {
         // Report object
         final VloReport report = new VloReport();
-        
+
         try {
             // Gather statistics
             report.setRecordCount(getRecordCount());
@@ -69,10 +76,12 @@ public class VloReportGenerator {
             solrServer.shutdown();
         }
 
-        // Write report
-        marshallReport(report);
+        if (xmlOutputFile != null) {
+            // Write report
+            marshallReport(report);
+        }
     }
-    
+
     private long getRecordCount() throws SolrServerException {
         final SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
@@ -80,18 +89,18 @@ public class VloReportGenerator {
         final QueryResponse result = solrServer.query(query);
         return result.getResults().getNumFound();
     }
-    
+
     private List<CollectionCount> obtainCollectionCounts() throws SolrServerException {
         final SolrQuery query = new SolrQuery();
         query.setRows(0);
         query.setFacet(true);
         query.addFacetField(FacetConstants.FIELD_COLLECTION);
         query.setFacetLimit(-1);
-        
+
         final QueryResponse result = solrServer.query(query);
         final FacetField collectionField = result.getFacetField(FacetConstants.FIELD_COLLECTION);
-        logger.info("Collection field: {}", collectionField.getValues());
-        
+        logger.debug("Collection field: {}", collectionField.getValues());
+
         final List<CollectionCount> counts
                 = collectionField.getValues().stream().map((count) -> {
                     CollectionCount collectionCount = new CollectionCount();
@@ -101,7 +110,7 @@ public class VloReportGenerator {
                 }).collect(Collectors.toList());
         return counts;
     }
-    
+
     private List<Facet> obtainFacetStats() throws SolrServerException {
         final SolrQuery query = new SolrQuery();
         query.setRows(0);
@@ -110,10 +119,10 @@ public class VloReportGenerator {
             query.addFacetField(field);
         });
         query.setFacetLimit(-1);
-        
+
         final QueryResponse result = solrServer.query(query);
         final List<FacetField> facetFields = result.getFacetFields();
-        
+
         final List<Facet> facets
                 = facetFields.stream().map((field) -> {
                     final Facet facet = new Facet();
@@ -123,7 +132,7 @@ public class VloReportGenerator {
                 }).collect(Collectors.toList());
         return facets;
     }
-    
+
     private void marshallReport(VloReport report) throws JAXBException {
         // Prepare marshaller
         final JAXBContext jc = JAXBContext.newInstance(VloReport.class);
@@ -131,28 +140,16 @@ public class VloReportGenerator {
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
         // Write to target
-        logger.info("Writing report to {}", outputLocation);
-        marshaller.marshal(report, outputLocation);
-
-        // Write to stdout
-        marshaller.marshal(report, System.out);
+        logger.info("Writing report to {}", xmlOutputFile);
+        marshaller.marshal(report, xmlOutputFile);
     }
-    
+
     public static void main(String[] args) throws MalformedURLException, IOException, SolrServerException, JAXBException {
-        if (args.length < 2) {
-            logger.error("Provide configuration location and output file as parameters");
-            System.exit(1);
-        }
-        
-        final File configLocation = new File(args[0]);
+        final Properties properties = loadProperties(args);
+
+        final File configLocation = new File(properties.getProperty("vlo.config.file", "VloConfig.xml"));
         if (!configLocation.exists()) {
             logger.error("Configuration file {} does not exist", configLocation);
-            System.exit(1);
-        }
-        
-        final File outputLocation = new File(args[1]);
-        if (outputLocation.exists() && (outputLocation.isDirectory() || !outputLocation.canWrite())) {
-            logger.error("Cannot write to output file {}", outputLocation);
             System.exit(1);
         }
 
@@ -162,10 +159,60 @@ public class VloReportGenerator {
                 = new XmlVloConfigFactory(configLocation.toURI().toURL());
         final VloConfig vloConfig = xmlVloConfigFactory.newConfig();
 
+        // instantiate generator
+        final VloReportGenerator vloReportGenerator = new VloReportGenerator(vloConfig);
+        // complete configuration
+        applyConfigurationOptions(vloReportGenerator, properties);
+        
         // start report generator
         logger.info("Gathering statistics...");
-        final VloReportGenerator vloReportGenerator = new VloReportGenerator(vloConfig, outputLocation);
         vloReportGenerator.run();
     }
-    
+
+    private static Properties loadProperties(String[] args) throws IOException {
+        final String propsFile;
+        if (args.length >= 1) {
+            propsFile = args[0];
+        } else {
+            logger.warn("No configuration file provided. Trying default location.");
+            propsFile = "configuration.properties";
+        }
+        final File propertiesLocation = new File(propsFile);
+        if (!propertiesLocation.exists()) {
+            logger.error("Configuration file {} does not exist", propertiesLocation);
+            System.exit(1);
+        }
+        final Properties properties = new Properties();
+        properties.load(new FileReader(args[0]));
+        return properties;
+    }
+
+    private static void applyConfigurationOptions(final VloReportGenerator vloReportGenerator, final Properties properties) {
+        final String outputFileBase = properties.getProperty("report.xml.file.name");
+        if (outputFileBase != null) {
+            // create full output filename
+            final StringBuilder outputFileNameBuilder = new StringBuilder(outputFileBase);
+
+            final String dateFormatString = properties.getProperty("report.xml.file.dateformat");
+            if (dateFormatString != null) {
+                final SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatString);
+                final String datePart = dateFormat.format(Calendar.getInstance().getTime());
+                outputFileNameBuilder.append(datePart);
+            }
+
+            // append extension
+            outputFileNameBuilder.append(".xml");
+
+            // check if we will be able to write to this file
+            final File xmlReportTarget = new File(outputFileNameBuilder.toString());
+            if (xmlReportTarget.exists() && (xmlReportTarget.isDirectory() || !xmlReportTarget.canWrite())) {
+                logger.error("Cannot write to output file {}", xmlReportTarget);
+                System.exit(1);
+            } else {
+                logger.info("An XML report will be generated in {}", xmlReportTarget);
+                vloReportGenerator.setXmlOutputFile(xmlReportTarget);
+            }
+        }
+    }
+
 }
