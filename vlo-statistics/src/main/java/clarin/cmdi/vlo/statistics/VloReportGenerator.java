@@ -53,14 +53,13 @@ public class VloReportGenerator {
     private final VloConfig config;
     private final HttpSolrServer solrServer;
     private File xmlOutputFile;
+    private int statsdPort;
+    private String statsdHost;
+    private String statsdPrefix;
 
     public VloReportGenerator(VloConfig config) {
         this.config = config;
         this.solrServer = new HttpSolrServer(config.getSolrUrl());
-    }
-
-    public void setXmlOutputFile(File xmlOutputFile) {
-        this.xmlOutputFile = xmlOutputFile;
     }
 
     public void run() throws SolrServerException, IOException, JAXBException {
@@ -79,6 +78,9 @@ public class VloReportGenerator {
         if (xmlOutputFile != null) {
             // Write report
             marshallReport(report);
+        }
+        if(statsdHost != null) {
+            sendToStatsd(report);
         }
     }
 
@@ -144,6 +146,27 @@ public class VloReportGenerator {
         marshaller.marshal(report, xmlOutputFile);
     }
 
+    private void sendToStatsd(VloReport report) {
+        logger.info("Sending reports to statsd server {}:{} with prefix '{}'", statsdHost, statsdPort, statsdPrefix);
+        //TODO
+    }
+
+    public void setXmlOutputFile(File xmlOutputFile) {
+        this.xmlOutputFile = xmlOutputFile;
+    }
+
+    private void setStatsdHost(String statsdHost) {
+        this.statsdHost = statsdHost;
+    }
+
+    private void setStatsdPort(int port) {
+        this.statsdPort = port;
+    }
+
+    private void setStatsdPrefix(String statsdPrefix) {
+        this.statsdPrefix = statsdPrefix;
+    }
+
     public static void main(String[] args) throws MalformedURLException, IOException, SolrServerException, JAXBException {
         final Properties properties = loadProperties(args);
 
@@ -163,7 +186,7 @@ public class VloReportGenerator {
         final VloReportGenerator vloReportGenerator = new VloReportGenerator(vloConfig);
         // complete configuration
         applyConfigurationOptions(vloReportGenerator, properties);
-        
+
         // start report generator
         logger.info("Gathering statistics...");
         vloReportGenerator.run();
@@ -188,6 +211,7 @@ public class VloReportGenerator {
     }
 
     private static void applyConfigurationOptions(final VloReportGenerator vloReportGenerator, final Properties properties) {
+        //output file
         final String outputFileBase = properties.getProperty("report.xml.file.name");
         if (outputFileBase != null) {
             // create full output filename
@@ -211,6 +235,28 @@ public class VloReportGenerator {
             } else {
                 logger.info("An XML report will be generated in {}", xmlReportTarget);
                 vloReportGenerator.setXmlOutputFile(xmlReportTarget);
+            }
+        }
+
+        //statsd
+        final String statsdHost = properties.getProperty("report.statsd.server.host");
+        if (statsdHost != null) {
+            final String statsdPort = properties.getProperty("report.statsd.server.port");
+            final String statsdPrefix = properties.getProperty("report.statsd.prefix");
+            if (statsdPort == null || statsdPrefix == null) {
+                logger.error("One or more statsd properties have not been configured correctly");
+                System.exit(1);
+            }
+
+            vloReportGenerator.setStatsdHost(statsdHost);
+            vloReportGenerator.setStatsdPrefix(statsdPrefix);
+
+            try {
+                vloReportGenerator.setStatsdPort(Integer.parseInt(statsdPort));
+            } catch (NumberFormatException ex) {
+                logger.error("Invalid statsd port number: {}", statsdPort);
+                logger.debug("Invalid statsd port number", ex);
+                System.exit(1);
             }
         }
     }
