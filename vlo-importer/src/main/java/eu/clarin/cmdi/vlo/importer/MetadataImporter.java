@@ -54,7 +54,7 @@ import org.apache.solr.common.SolrDocument;
  */
 public class MetadataImporter {
 
-    private static final int SOLR_SERVER_THREAD_COUNT = 4;
+    private static final int SOLR_SERVER_THREAD_COUNT = 2;
     /**
      * Defines which files to try and parse. In this case all files ending in
      * "xml" or "cmdi".
@@ -152,8 +152,6 @@ public class MetadataImporter {
                     LOG.info("Deleting data for data provider: " + dataRoot.getOriginName());
                     solrServer.deleteByQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
                     LOG.info("Deleting data of provider done.");
-                } else {
-                    updateDaysSinceLastImport(dataRoot);
                 }
                 CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS, config, false);
                 List<List<File>> centreFilesList = getFilesFromDataRoot(dataRoot.getRootFile());
@@ -203,6 +201,7 @@ public class MetadataImporter {
                         updateDocumentHierarchy();
                     }
                 }
+                updateDaysSinceLastImport(dataRoot);
                 LOG.info("End of processing: " + dataRoot.getOriginName());
             }
 
@@ -629,7 +628,10 @@ public class MetadataImporter {
     }
 
     /**
-     * Update "days since last import" field for all Solr records of dataRoot
+     * Update "days since last import" field for all Solr records of dataRoot.
+     * Notice that it will not touch records that have a "last seen" value newer
+     * than today. Therefore this should be called <em>after</em> normal 
+     * processing of data root!
      *
      * @param dataRoot
      * @throws SolrServerException
@@ -637,9 +639,15 @@ public class MetadataImporter {
      */
     private void updateDaysSinceLastImport(DataRoot dataRoot) throws SolrServerException, IOException {
         LOG.info("Updating \"days since last import\" in Solr for: {}", dataRoot.getOriginName());
-        
+
         SolrQuery query = new SolrQuery();
-        query.setQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
+        query.setQuery(
+                //we're going to process all records in the current data root...
+                FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName())
+                + " AND "
+                // ...that have a "last seen" value _older_ than today (on update/initialisation all records get 0 so we can skip the rest)
+                + FacetConstants.FIELD_LAST_SEEN + ":[* TO NOW/DAY]"
+        );
         query.setFields(FacetConstants.FIELD_ID, FacetConstants.FIELD_LAST_SEEN);
         int fetchSize = 1000;
         query.setRows(fetchSize);
@@ -647,13 +655,13 @@ public class MetadataImporter {
 
         final long totalResults = rsp.getResults().getNumFound();
         final LocalDate nowDate = LocalDate.now();
-        
+
         final int docsListSize = config.getMaxDocsInList();
         List<SolrInputDocument> updateDocs = new ArrayList<>(docsListSize);
-        
+
         Boolean updatedDocs = false;
         int offset = 0;
-        
+
         while (offset < totalResults) {
             query.setStart(offset);
             query.setRows(fetchSize);
