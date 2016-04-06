@@ -646,7 +646,7 @@ public class MetadataImporter {
                 FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName())
                 + " AND "
                 // ...that have a "last seen" value _older_ than today (on update/initialisation all records get 0 so we can skip the rest)
-                + FacetConstants.FIELD_LAST_SEEN + ":[* TO NOW/DAY]"
+                + FacetConstants.FIELD_LAST_SEEN + ":[* TO NOW-1DAY]"
         );
         query.setFields(FacetConstants.FIELD_ID, FacetConstants.FIELD_LAST_SEEN);
         int fetchSize = 1000;
