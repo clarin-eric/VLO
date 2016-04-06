@@ -95,7 +95,7 @@ public class VloReportGenerator {
         query.setRows(0);
         query.setFacet(true);
         query.addFacetField(FacetConstants.FIELD_COLLECTION);
-        query.setFacetLimit(-1);
+        query.setFacetLimit(Integer.MAX_VALUE);
 
         final QueryResponse result = solrServer.query(query);
         final FacetField collectionField = result.getFacetField(FacetConstants.FIELD_COLLECTION);
@@ -149,7 +149,8 @@ public class VloReportGenerator {
         final StatsDClient client = new NonBlockingStatsDClient(statsdPrefix + ".index", statsdHost, statsdPort);
         client.gauge("nrRecords", report.getRecordCount());
         for (CollectionCount counts : report.getCollections()) {
-            client.gauge("collections." + counts.getCollection(), counts.getCount());
+            final String name = counts.getCollection().replaceAll("\\s", "_").replaceAll(":", "-");
+            client.gauge("collections." + name, counts.getCount());
         }
         for (Facet facet : report.getFacets()) {
             client.gauge("facetValueCounts." + facet.getName(), facet.getValueCount());
