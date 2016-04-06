@@ -16,25 +16,25 @@
  */
 package clarin.cmdi.vlo.statistics;
 
+import clarin.cmdi.vlo.statistics.collector.CollectionsCollector;
+import clarin.cmdi.vlo.statistics.collector.FacetValueCountsCollector;
+import clarin.cmdi.vlo.statistics.collector.RecordCountCollector;
+import clarin.cmdi.vlo.statistics.collector.VloStatisticsCollector;
 import clarin.cmdi.vlo.statistics.model.VloReport;
 import clarin.cmdi.vlo.statistics.model.VloReport.CollectionCount;
 import clarin.cmdi.vlo.statistics.model.VloReport.Facet;
+import com.google.common.collect.ImmutableList;
 import com.timgroup.statsd.NonBlockingStatsDClient;
 import com.timgroup.statsd.StatsDClient;
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
-import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.solr.client.solrj.response.QueryResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,10 +52,19 @@ public class VloReportGenerator {
     private int statsdPort;
     private String statsdHost;
     private String statsdPrefix;
+    private final List<VloStatisticsCollector> collectors;
 
     public VloReportGenerator(VloConfig config) {
         this.config = config;
         this.solrServer = new HttpSolrServer(config.getSolrUrl());
+
+        //set the collectors that will be executed in order when creating the report
+        this. collectors = ImmutableList.of(
+                new RecordCountCollector(),
+                new CollectionsCollector(),
+                new FacetValueCountsCollector()
+        //TODO: add collector for record ages
+        );
     }
 
     public void run() throws SolrServerException, IOException, JAXBException {
@@ -64,11 +73,10 @@ public class VloReportGenerator {
 
         try {
             // Gather statistics
-            report.setRecordCount(getRecordCount());
-            report.setCollections(obtainCollectionCounts());
-            report.setFacets(obtainFacetStats());
-
-            //TODO: report on record age
+            for (VloStatisticsCollector collector : collectors) {
+                logger.info("Running {}", collector.getClass().getSimpleName());
+                collector.collect(report, config, solrServer);
+            }
         } finally {
             solrServer.shutdown();
         }
@@ -80,57 +88,6 @@ public class VloReportGenerator {
         if (statsdHost != null) {
             sendToStatsd(report);
         }
-    }
-
-    private long getRecordCount() throws SolrServerException {
-        final SolrQuery query = new SolrQuery();
-        query.setQuery("*:*");
-        query.setRows(0);
-        final QueryResponse result = solrServer.query(query);
-        return result.getResults().getNumFound();
-    }
-
-    private List<CollectionCount> obtainCollectionCounts() throws SolrServerException {
-        final SolrQuery query = new SolrQuery();
-        query.setRows(0);
-        query.setFacet(true);
-        query.addFacetField(FacetConstants.FIELD_COLLECTION);
-        query.setFacetLimit(Integer.MAX_VALUE);
-
-        final QueryResponse result = solrServer.query(query);
-        final FacetField collectionField = result.getFacetField(FacetConstants.FIELD_COLLECTION);
-        logger.debug("Collection field: {}", collectionField.getValues());
-
-        final List<CollectionCount> counts
-                = collectionField.getValues().stream().map((count) -> {
-                    CollectionCount collectionCount = new CollectionCount();
-                    collectionCount.setCollection(count.getName());
-                    collectionCount.setCount(count.getCount());
-                    return collectionCount;
-                }).collect(Collectors.toList());
-        return counts;
-    }
-
-    private List<Facet> obtainFacetStats() throws SolrServerException {
-        final SolrQuery query = new SolrQuery();
-        query.setRows(0);
-        query.setFacet(true);
-        config.getAllFacetFields().forEach((field) -> {
-            query.addFacetField(field);
-        });
-        query.setFacetLimit(-1);
-
-        final QueryResponse result = solrServer.query(query);
-        final List<FacetField> facetFields = result.getFacetFields();
-
-        final List<Facet> facets
-                = facetFields.stream().map((field) -> {
-                    final Facet facet = new Facet();
-                    facet.setName(field.getName());
-                    facet.setValueCount(field.getValueCount());
-                    return facet;
-                }).collect(Collectors.toList());
-        return facets;
     }
 
     private void marshallReport(VloReport report) throws JAXBException {
