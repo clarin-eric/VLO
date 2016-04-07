@@ -37,12 +37,12 @@ import org.slf4j.LoggerFactory;
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 public class VloReportGeneratorRunner {
-    
+
     private final static Logger logger = LoggerFactory.getLogger(VloReportGeneratorRunner.class);
-    
+
     public static void main(String[] args) throws MalformedURLException, IOException, SolrServerException, JAXBException {
         final Properties properties = loadProperties(args);
-        
+
         final File configLocation = new File(properties.getProperty("vlo.config.file", "VloConfig.xml"));
         if (!configLocation.exists()) {
             logger.error("Configuration file {} does not exist", configLocation);
@@ -64,7 +64,7 @@ public class VloReportGeneratorRunner {
         logger.info("Gathering statistics...");
         vloReportGenerator.run();
     }
-    
+
     private static Properties loadProperties(String[] args) throws IOException {
         final String propsFile;
         if (args.length >= 1) {
@@ -82,14 +82,14 @@ public class VloReportGeneratorRunner {
         properties.load(new FileReader(args[0]));
         return properties;
     }
-    
+
     private static void applyConfigurationOptions(final VloReportGenerator vloReportGenerator, final Properties properties) throws JAXBException {
         //output file
         final String outputFileBase = properties.getProperty("report.xml.file.name");
         if (outputFileBase != null) {
             // create full output filename
             final StringBuilder outputFileNameBuilder = new StringBuilder(outputFileBase);
-            
+
             final String dateFormatString = properties.getProperty("report.xml.file.dateformat");
             if (dateFormatString != null) {
                 final SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatString);
@@ -116,15 +116,25 @@ public class VloReportGeneratorRunner {
         if (statsdHost != null) {
             final String statsdPort = properties.getProperty("report.statsd.server.port");
             final String statsdPrefix = properties.getProperty("report.statsd.prefix");
-            if (statsdPort == null || statsdPrefix == null) {
+            final String statsdHistoryFile = properties.getProperty("report.statsd.historyFile");
+            if (statsdPort == null || statsdPrefix == null || statsdHistoryFile == null) {
                 logger.error("One or more statsd properties have not been configured correctly");
                 System.exit(1);
             }
-            
+
             try {
                 final int portNumber = Integer.parseInt(statsdPort);
                 logger.info("Statistics will be sent to {}:{}", statsdHost, portNumber);
-                vloReportGenerator.getResultHandlers().add(new StatsdReporter(statsdPrefix, statsdHost, portNumber));
+
+                final StatsdReporter statsdReporter = new StatsdReporter(statsdPrefix, statsdHost, portNumber, new File(statsdHistoryFile));
+
+                // we may want to use a no-op client
+                if ("true".equalsIgnoreCase(properties.getProperty("report.statsd.noop"))) {
+                    logger.warn("Using a no-op statsd client!");
+                    statsdReporter.setNoop(true);
+                }
+
+                vloReportGenerator.getResultHandlers().add(statsdReporter);
             } catch (NumberFormatException ex) {
                 logger.error("Invalid statsd port number: {}", statsdPort);
                 logger.debug("Invalid statsd port number", ex);
