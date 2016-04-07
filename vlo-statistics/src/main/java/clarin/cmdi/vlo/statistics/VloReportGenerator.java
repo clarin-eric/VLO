@@ -53,6 +53,7 @@ public class VloReportGenerator {
                         new RecordCountCollector(),
                         new CollectionsCollector(),
                         new FacetValueCountsCollector()
+                //TODO: add collector for data providers
                 //TODO: add collector for record ages
                 ));
     }
