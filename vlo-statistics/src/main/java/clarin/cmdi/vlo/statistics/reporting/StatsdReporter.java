@@ -51,7 +51,7 @@ public class StatsdReporter implements VloReportHandler {
 
             //send collections
             report.getCollections().stream().forEach((counts) -> {
-                final String name = counts.getCollection().replaceAll("\\s", "_").replaceAll(":", "-");
+                final String name = counts.getCollection().replaceAll("[^A-z0-9]", "_");
                 client.gauge("collections." + name, counts.getCount());
             });
 
