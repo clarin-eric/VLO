@@ -60,7 +60,7 @@ public class StatsdReporter implements VloReportHandler {
 
     @Override
     public void handleReport(VloReport report) {
-        logger.info("Sending reports to statsd server {}:{} with prefix '{}'", statsdHost, statsdPort, statsdPrefix);
+        logger.info((noop ? "NOT sending" : "Sending") + " reports to statsd server {}:{} with prefix '{}'", statsdHost, statsdPort, statsdPrefix);
         final StatsDClient client = newClient();
 
         try {
