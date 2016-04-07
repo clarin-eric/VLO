@@ -72,7 +72,7 @@
                             <appendAssemblyId>false</appendAssemblyId>
                             <archive>
                                 <manifest>
-                                    <mainClass>clarin.cmdi.vlo.statistics.VloReportGenerator</mainClass>
+                                    <mainClass>clarin.cmdi.vlo.statistics.VloReportGeneratorRunner</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>
