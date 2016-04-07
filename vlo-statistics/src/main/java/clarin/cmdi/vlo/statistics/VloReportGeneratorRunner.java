@@ -83,7 +83,7 @@ public class VloReportGeneratorRunner {
         return properties;
     }
     
-    private static void applyConfigurationOptions(final VloReportGenerator vloReportGenerator, final Properties properties) {
+    private static void applyConfigurationOptions(final VloReportGenerator vloReportGenerator, final Properties properties) throws JAXBException {
         //output file
         final String outputFileBase = properties.getProperty("report.xml.file.name");
         if (outputFileBase != null) {
