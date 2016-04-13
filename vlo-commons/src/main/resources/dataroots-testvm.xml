@@ -1,19 +1,19 @@
 <dataRoots>
 
     <DataRoot>
-        <originName>European Library</originName>
-        <rootFile>/lat/apache/htdocs/oai-harvester/european-library/results/cmdi/</rootFile>            
-        <prefix>http://catalog-clarin.esc.rzg.mpg.de/oai-harvester/</prefix>
-        <tostrip>/lat/apache/htdocs/oai-harvester/</tostrip>
-        <deleteFirst>false</deleteFirst>
-    </DataRoot>
-    
-    <DataRoot>
         <originName>CLARIN Centres</originName>
-        <rootFile>/data2/harvester/clarin/results/cmdi/</rootFile>            
-        <prefix>http://catalog-clarin.esc.rzg.mpg.de/cmdi/</prefix>
-        <tostrip>/data2/harvester/</tostrip>
+        <rootFile>/srv/vlo-data/clarin/results/cmdi/</rootFile>            
+        <prefix>http://alpha-vlo.clarin.eu/cmdi/</prefix>
+        <tostrip>/srv/vlo-data/</tostrip>
         <deleteFirst>false</deleteFirst>
     </DataRoot>
-    
+
+    <DataRoot>
+        <originName>Others</originName>
+        <rootFile>/srv/vlo-data/others/results/cmdi/</rootFile>            
+        <prefix>http://alpha-vlo.clarin.eu/cmdi/</prefix>
+        <tostrip>/srv/vlo-data/</tostrip>
+        <deleteFirst>false</deleteFirst>
+    </DataRoot>
+
 </dataRoots>

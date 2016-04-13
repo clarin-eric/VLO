@@ -55,8 +55,8 @@
             <!-- For deployment to catalog-clarin.esc.rzg.mpg.de -->
             <id>dev-vm</id>
             <properties>
-                <vloconfig.solrUrl>http://localhost:8080/vlo-solr/core0/</vloconfig.solrUrl>
-                <vloconfig.dataRootsFile>file:/lat/webapps/vlo/dataroots-testvm.xml</vloconfig.dataRootsFile>
+                <vloconfig.solrUrl>http://localhost:8080/solr/core0/</vloconfig.solrUrl>
+                <vloconfig.dataRootsFile>file:/srv/webapps/vlo/dataroots-testvm.xml</vloconfig.dataRootsFile>
             </properties>
         </profile>
         
