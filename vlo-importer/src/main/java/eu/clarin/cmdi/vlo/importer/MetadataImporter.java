@@ -37,6 +37,12 @@ import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import static java.time.temporal.ChronoUnit.DAYS;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 
 /**
  * The main metadataImporter class. Also contains the main function.
@@ -48,6 +54,7 @@ import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
  */
 public class MetadataImporter {
 
+    private static final int SOLR_SERVER_THREAD_COUNT = 2;
     /**
      * Defines which files to try and parse. In this case all files ending in
      * "xml" or "cmdi".
@@ -73,7 +80,7 @@ public class MetadataImporter {
      * document.
      */
     final static Map<String, PostProcessor> POST_PROCESSORS = new HashMap<>();
-    
+
     static {
         POST_PROCESSORS.put(FacetConstants.FIELD_ID, new IdPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_CONTINENT, new ContinentNamePostProcessor());
@@ -92,10 +99,11 @@ public class MetadataImporter {
     /**
      * Constructor
      */
-    public MetadataImporter() {}
-    
+    public MetadataImporter() {
+    }
+
     public MetadataImporter(String clDatarootsList) {
-    	this.clDatarootsList = clDatarootsList;
+        this.clDatarootsList = clDatarootsList;
     }
 
     /**
@@ -122,11 +130,11 @@ public class MetadataImporter {
      * @throws MalformedURLException
      */
     void startImport() throws MalformedURLException {
-        
+
         initSolrServer();
         List<DataRoot> dataRoots = checkDataRoots();
         dataRoots = filterDataRootsWithCLArgs(dataRoots);
-        
+
         long start = System.currentTimeMillis();
         try {
             // Delete the whole Solr db
@@ -148,7 +156,7 @@ public class MetadataImporter {
                 CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS, config, false);
                 List<List<File>> centreFilesList = getFilesFromDataRoot(dataRoot.getRootFile());
                 // import files from every endpoint
-                for(List<File> centreFiles : centreFilesList) {
+                for (List<File> centreFiles : centreFilesList) {
                     LOG.info("Processing directory: {}", centreFiles.get(0).getParent());
 
                     // identify mdSelfLinks and remove too large files from center file list
@@ -169,8 +177,9 @@ public class MetadataImporter {
                                 LOG.error("error in file: {}", file, e);
                                 nrOfFilesWithError++;
                             }
-                            if(mdSelfLink != null)
+                            if (mdSelfLink != null) {
                                 mdSelfLinkSet.add(StringUtils.normalizeIdString(mdSelfLink));
+                            }
                         }
                     }
                     centreFiles.removeAll(ignoredFileSet);
@@ -188,10 +197,11 @@ public class MetadataImporter {
                         sendDocs();
                     }
                     solrServer.commit();
-                    if(config.isProcessHierarchies()){
+                    if (config.isProcessHierarchies()) {
                         updateDocumentHierarchy();
                     }
                 }
+                updateDaysSinceLastImport(dataRoot);
                 LOG.info("End of processing: " + dataRoot.getOriginName());
             }
 
@@ -235,82 +245,84 @@ public class MetadataImporter {
         List<DataRoot> existingDataRoots = new LinkedList<>();
         for (DataRoot dataRoot : dataRoots) {
             if (!dataRoot.getRootFile().exists()) {
-            	LOG.warn("Root file " + dataRoot.getRootFile() + " does not exist. It could be configuration error! Proceeding with next ...");
-            } else{
-            	existingDataRoots.add(dataRoot);
+                LOG.warn("Root file " + dataRoot.getRootFile() + " does not exist. It could be configuration error! Proceeding with next ...");
+            } else {
+                existingDataRoots.add(dataRoot);
             }
-            
+
         }
         return existingDataRoots;
     }
-    
+
     /**
-     * if user specified which data roots should be imported,
-     * list of existing data roots will be filtered with the list from user
-     * 
+     * if user specified which data roots should be imported, list of existing
+     * data roots will be filtered with the list from user
+     *
      * @param dataRoots complete list of DataRoots
      * @return list of DataRoots without DataRoots excluded by the user
      */
-    protected List<DataRoot> filterDataRootsWithCLArgs(List<DataRoot> dataRoots){
-    	if(clDatarootsList == null)
-    		return dataRoots;
-    	
-    	
-    	LOG.info("Filtering configured data root files with command line arguments: \"" + clDatarootsList + "\"" ) ;
-    	
-    	LinkedList<File> fsDataRoots = new LinkedList<>();
-    	
-    	List<String> paths = Arrays.asList((clDatarootsList.split("\\s+")));
-    	
-    	//Convert String paths to File objects for comparison
-    	for(String path: paths)
-    		fsDataRoots.add(new File(path));
-    	
-    	List<DataRoot> filteredDataRoots = new LinkedList<>();
-    	try{
-    		//filter data
-    	dr: for(DataRoot dataRoot: dataRoots){
-    			for(File fsDataRoot: fsDataRoots){
-            		if(fsDataRoot.getCanonicalPath().equals(dataRoot.getRootFile().getCanonicalPath())){
-            			filteredDataRoots.add(dataRoot);
-            			fsDataRoots.remove(fsDataRoot);
-            			continue dr;
-            		}
-    			}
-    			LOG.info("Root file " + dataRoot.getRootFile() + " will be omitted from processing");
-        	}
-    	}catch (IOException e){
-    		filteredDataRoots = dataRoots;
-    	}
+    protected List<DataRoot> filterDataRootsWithCLArgs(List<DataRoot> dataRoots) {
+        if (clDatarootsList == null) {
+            return dataRoots;
+        }
 
-    	
-		return filteredDataRoots;
+        LOG.info("Filtering configured data root files with command line arguments: \"" + clDatarootsList + "\"");
+
+        LinkedList<File> fsDataRoots = new LinkedList<>();
+
+        List<String> paths = Arrays.asList((clDatarootsList.split("\\s+")));
+
+        //Convert String paths to File objects for comparison
+        for (String path : paths) {
+            fsDataRoots.add(new File(path));
+        }
+
+        List<DataRoot> filteredDataRoots = new LinkedList<>();
+        try {
+            //filter data
+            dr:
+            for (DataRoot dataRoot : dataRoots) {
+                for (File fsDataRoot : fsDataRoots) {
+                    if (fsDataRoot.getCanonicalPath().equals(dataRoot.getRootFile().getCanonicalPath())) {
+                        filteredDataRoots.add(dataRoot);
+                        fsDataRoots.remove(fsDataRoot);
+                        continue dr;
+                    }
+                }
+                LOG.info("Root file " + dataRoot.getRootFile() + " will be omitted from processing");
+            }
+        } catch (IOException e) {
+            filteredDataRoots = dataRoots;
+        }
+
+        return filteredDataRoots;
     }
 
     /**
-     * Get all files with VALID_CMDI_EXTENSIONS if rootFile is a
-     * directory that contains center directories or rootFile if it is a file
+     * Get all files with VALID_CMDI_EXTENSIONS if rootFile is a directory that
+     * contains center directories or rootFile if it is a file
      *
      * @param rootFile
-     * @return List with centre Lists of all contained CMDI files if rootFile is a
-     * directory or rootFile if it is a File
+     * @return List with centre Lists of all contained CMDI files if rootFile is
+     * a directory or rootFile if it is a File
      */
     protected List<List<File>> getFilesFromDataRoot(File rootFile) {
         List<List<File>> result = new ArrayList<>();
-        if(rootFile.isFile()) {
+        if (rootFile.isFile()) {
             List<File> singleFileList = new ArrayList<>();
             singleFileList.add(rootFile);
             result.add(singleFileList);
         } else {
             File[] centerDirs = rootFile.listFiles();
-            for(File centerDir : centerDirs) {
+            for (File centerDir : centerDirs) {
                 List<File> centerFileList = new ArrayList<>();
-                if(centerDir.isDirectory()) {
+                if (centerDir.isDirectory()) {
                     centerFileList.addAll(FileUtils.listFiles(centerDir, VALID_CMDI_EXTENSIONS, true));
                 }
-                
-                if(!centerFileList.isEmpty())
+
+                if (!centerFileList.isEmpty()) {
                     result.add(centerFileList);
+                }
             }
         }
         return result;
@@ -328,24 +340,24 @@ public class MetadataImporter {
      */
     protected void initSolrServer() throws MalformedURLException {
         String solrUrl = config.getSolrUrl();
-        LOG.info("Initializing Solr Server on " + solrUrl);
+        LOG.info("Initializing concurrent Solr Server on {} with {} threads", solrUrl, SOLR_SERVER_THREAD_COUNT);
 
         /* Specify the number of documents in the queue that will trigger the
          * threads, two of them, emptying it.
          */
         solrServer = new ConcurrentUpdateSolrServer(solrUrl,
-                config.getMinDocsInSolrQueue(), 2) {
-                    /*
+                config.getMinDocsInSolrQueue(), SOLR_SERVER_THREAD_COUNT) {
+            /*
                      * Let the super class method handle exceptions. Make the
                      * exception available to the importer in the form of the
                      * serverError variable.
-                     */
-                    @Override
-                    public void handleError(Throwable exception) {
-                        super.handleError(exception);
-                        serverError = exception;
-                    }
-                };
+             */
+            @Override
+            public void handleError(Throwable exception) {
+                super.handleError(exception);
+                serverError = exception;
+            }
+        };
     }
 
     /**
@@ -375,8 +387,9 @@ public class MetadataImporter {
                 SolrInputDocument solrDocument = cmdiData.getSolrDocument();
                 if (solrDocument != null) {
                     updateDocument(solrDocument, cmdiData, file, dataOrigin);
-                    if(config.isProcessHierarchies() && ResourceStructureGraph.getVertex(cmdiData.getId()) != null)
+                    if (config.isProcessHierarchies() && ResourceStructureGraph.getVertex(cmdiData.getId()) != null) {
                         ResourceStructureGraph.getVertex(cmdiData.getId()).setWasImported(true);
+                    }
                 }
             } else {
                 LOG.warn("Skipping {}, already processed id: {}", file, cmdiData.getId());
@@ -414,10 +427,10 @@ public class MetadataImporter {
         solrDocument.addField(FacetConstants.FIELD_DATA_PROVIDER, dataOrigin.getOriginName());
         solrDocument.addField(FacetConstants.FIELD_ID, cmdiData.getId());
         solrDocument.addField(FacetConstants.FIELD_FILENAME, file.getAbsolutePath());
-        
+
         String metadataSourceUrl = dataOrigin.getPrefix();
         metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getToStrip().length());
-        
+
         solrDocument.addField(FacetConstants.FIELD_COMPLETE_METADATA, metadataSourceUrl);
 
         // add SearchServices (should be CQL endpoint)
@@ -440,9 +453,12 @@ public class MetadataImporter {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         solrDocument.addField(FacetConstants.FIELD_LAST_SEEN, df.format(dt));
 
+        // set number of days since last import to '0'
+        solrDocument.addField(FacetConstants.FIELD_DAYS_SINCE_LAST_SEEN, 0);
+
         // add resource proxys      
         addResourceData(solrDocument, cmdiData);
-        
+
         LOG.debug("Adding document for submission to SOLR: {}", file);
         docs.add(solrDocument);
         if (docs.size() == config.getMaxDocsInList()) {
@@ -455,7 +471,7 @@ public class MetadataImporter {
      * specified in the "ResourceType" element of an imdi file or possibly
      * overwritten by some more specific xpath (as in the LRT cmdi files). So if
      * a type is overwritten and already in the solrDocument we take that type.
-     * 
+     *
      * @param solrDocument
      * @param cmdiData
      */
@@ -474,7 +490,7 @@ public class MetadataImporter {
                     mimeType = CommonUtils.normalizeMimeType("");
                 }
             }
-            
+
             FormatPostProcessor processor = new FormatPostProcessor();
             mimeType = processor.process(mimeType).get(0);
 
@@ -519,66 +535,76 @@ public class MetadataImporter {
         SolrParams params = new MapSolrParams(paramMap);
         solrServer.query(params);
     }
-    
+
     /**
-     * Updates documents in Solr with their hierarchy weight and lists of related resources (hasPart & isPartOf)
+     * Updates documents in Solr with their hierarchy weight and lists of
+     * related resources (hasPart & isPartOf)
+     *
      * @throws SolrServerException
-     * @throws MalformedURLException 
+     * @throws MalformedURLException
      */
     private void updateDocumentHierarchy() throws SolrServerException, MalformedURLException, IOException {
         LOG.info(ResourceStructureGraph.printStatistics(0));
         Boolean updatedDocs = false;
         List<SolrInputDocument> updateDocs = new ArrayList<>();
         Iterator<CmdiVertex> vertexIter = ResourceStructureGraph.getFoundVertices().iterator();
-        while(vertexIter.hasNext()) {
+        while (vertexIter.hasNext()) {
             CmdiVertex vertex = vertexIter.next();
             List<String> incomingVertexNames = ResourceStructureGraph.getIncomingVertexNames(vertex);
             List<String> outgoingVertexNames = ResourceStructureGraph.getOutgoingVertexNames(vertex);
-            
+
             // update vertex if changes are necessary (necessary if non-default weight or edges to other resources)
-            if(vertex.getHierarchyWeight() != 0 || !incomingVertexNames.isEmpty() || !outgoingVertexNames.isEmpty()) {
+            if (vertex.getHierarchyWeight() != 0 || !incomingVertexNames.isEmpty() || !outgoingVertexNames.isEmpty()) {
                 updatedDocs = true;
                 SolrInputDocument doc = new SolrInputDocument();
                 doc.setField(FacetConstants.FIELD_ID, Arrays.asList(vertex.getId()));
-                
-                if(vertex.getHierarchyWeight() != 0) {
+
+                if (vertex.getHierarchyWeight() != 0) {
                     Map<String, Integer> partialUpdateMap = new HashMap<>();
                     partialUpdateMap.put("set", Math.abs(vertex.getHierarchyWeight()));
                     doc.setField(FacetConstants.FIELD_HIERARCHY_WEIGHT, partialUpdateMap);
                 }
-                
+
                 // remove vertices that were not imported
                 Iterator<String> incomingVertexIter = incomingVertexNames.iterator();
-                while(incomingVertexIter.hasNext()) {
+                while (incomingVertexIter.hasNext()) {
                     String vertexId = incomingVertexIter.next();
-                    if(ResourceStructureGraph.getVertex(vertexId) == null || !ResourceStructureGraph.getVertex(vertexId).getWasImported())
+                    if (ResourceStructureGraph.getVertex(vertexId) == null || !ResourceStructureGraph.getVertex(vertexId).getWasImported()) {
                         incomingVertexIter.remove();
+                    }
                 }
                 Iterator<String> outgoingVertexIter = outgoingVertexNames.iterator();
-                while(outgoingVertexIter.hasNext()) {
+                while (outgoingVertexIter.hasNext()) {
                     String vertexId = outgoingVertexIter.next();
-                    if(ResourceStructureGraph.getVertex(vertexId) == null || !ResourceStructureGraph.getVertex(vertexId).getWasImported())
+                    if (ResourceStructureGraph.getVertex(vertexId) == null || !ResourceStructureGraph.getVertex(vertexId).getWasImported()) {
                         outgoingVertexIter.remove();
+                    }
                 }
-                
-                if(!incomingVertexNames.isEmpty()) {
+
+                if (!incomingVertexNames.isEmpty()) {
                     Map<String, List<String>> partialUpdateMap = new HashMap<>();
                     partialUpdateMap.put("set", incomingVertexNames);
                     doc.setField(FacetConstants.FIELD_HAS_PART, partialUpdateMap);
-                    
+
                     Map<String, Integer> partialUpdateMapCount = new HashMap<>();
                     partialUpdateMapCount.put("set", incomingVertexNames.size());
                     doc.setField(FacetConstants.FIELD_HAS_PART_COUNT, partialUpdateMapCount);
+
+                    // add hasPartCount weight
+                    Double hasPartCountWeight = Math.log10(1 + Math.min(50, incomingVertexNames.size()));
+                    Map<String, Double> partialUpdateMapCountWeight = new HashMap<>();
+                    partialUpdateMapCountWeight.put("set", hasPartCountWeight);
+                    doc.setField(FacetConstants.FIELD_HAS_PART_COUNT_WEIGHT, partialUpdateMapCountWeight);
                 }
-                
-                if(!outgoingVertexNames.isEmpty()) {
+
+                if (!outgoingVertexNames.isEmpty()) {
                     Map<String, List<String>> partialUpdateMap = new HashMap<>();
                     partialUpdateMap.put("set", outgoingVertexNames);
                     doc.setField(FacetConstants.FIELD_IS_PART_OF, partialUpdateMap);
                 }
                 updateDocs.add(doc);
             }
-            
+
             if (updateDocs.size() == config.getMaxDocsInList()) {
                 solrServer.add(updateDocs);
                 if (serverError != null) {
@@ -587,27 +613,109 @@ public class MetadataImporter {
                 updateDocs = new ArrayList<>();
             }
         }
-        if(!updateDocs.isEmpty()) {
+        if (!updateDocs.isEmpty()) {
             solrServer.add(updateDocs);
             if (serverError != null) {
                 throw new SolrServerException(serverError);
             }
         }
-        
-        if(updatedDocs) {
+
+        if (updatedDocs) {
             solrServer.commit();
         }
 
         ResourceStructureGraph.clearResourceGraph();
     }
-    
+
+    /**
+     * Update "days since last import" field for all Solr records of dataRoot.
+     * Notice that it will not touch records that have a "last seen" value newer
+     * than today. Therefore this should be called <em>after</em> normal 
+     * processing of data root!
+     *
+     * @param dataRoot
+     * @throws SolrServerException
+     * @throws IOException
+     */
+    private void updateDaysSinceLastImport(DataRoot dataRoot) throws SolrServerException, IOException {
+        LOG.info("Updating \"days since last import\" in Solr for: {}", dataRoot.getOriginName());
+
+        SolrQuery query = new SolrQuery();
+        query.setQuery(
+                //we're going to process all records in the current data root...
+                FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName())
+                + " AND "
+                // ...that have a "last seen" value _older_ than today (on update/initialisation all records get 0 so we can skip the rest)
+                + FacetConstants.FIELD_LAST_SEEN + ":[* TO NOW-1DAY]"
+        );
+        query.setFields(FacetConstants.FIELD_ID, FacetConstants.FIELD_LAST_SEEN);
+        int fetchSize = 1000;
+        query.setRows(fetchSize);
+        QueryResponse rsp = solrServer.query(query);
+
+        final long totalResults = rsp.getResults().getNumFound();
+        final LocalDate nowDate = LocalDate.now();
+
+        final int docsListSize = config.getMaxDocsInList();
+        List<SolrInputDocument> updateDocs = new ArrayList<>(docsListSize);
+
+        Boolean updatedDocs = false;
+        int offset = 0;
+
+        while (offset < totalResults) {
+            query.setStart(offset);
+            query.setRows(fetchSize);
+
+            for (SolrDocument doc : solrServer.query(query).getResults()) {
+                updatedDocs = true;
+
+                String recordId = (String) doc.getFieldValue(FacetConstants.FIELD_ID);
+                Date lastImportDate = (Date) doc.getFieldValue(FacetConstants.FIELD_LAST_SEEN);
+                LocalDate oldDate = lastImportDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                long daysSinceLastSeen = DAYS.between(oldDate, nowDate);
+
+                SolrInputDocument updateDoc = new SolrInputDocument();
+                updateDoc.setField(FacetConstants.FIELD_ID, recordId);
+
+                Map<String, Long> partialUpdateMap = new HashMap<>();
+                partialUpdateMap.put("set", daysSinceLastSeen);
+                updateDoc.setField(FacetConstants.FIELD_DAYS_SINCE_LAST_SEEN, partialUpdateMap);
+
+                updateDocs.add(updateDoc);
+
+                if (updateDocs.size() == docsListSize) {
+                    solrServer.add(updateDocs);
+                    if (serverError != null) {
+                        throw new SolrServerException(serverError);
+                    }
+                    updateDocs = new ArrayList<>(docsListSize);
+                }
+            }
+            offset += fetchSize;
+            LOG.info("Updating \"days since last import\": {} out of {} records updated", offset, totalResults);
+        }
+
+        if (!updateDocs.isEmpty()) {
+            solrServer.add(updateDocs);
+            if (serverError != null) {
+                throw new SolrServerException(serverError);
+            }
+        }
+
+        if (updatedDocs) {
+            solrServer.commit();
+        }
+
+        LOG.info("Updating \"days since last import\" done.");
+    }
+
     public static VloConfig config;
 
     public static LanguageCodeUtils languageCodeUtils;
-    
+
     //data roots passed from command line    
     private String clDatarootsList = null;
-    
+
     /**
      * @param args
      * @throws MalformedURLException
@@ -620,24 +728,24 @@ public class MetadataImporter {
 
         // use the Apache cli framework for getting command line parameters
         Options options = new Options();
-        
+
         // Data root list passed from command line with -l option
         String cldrList = null;
 
         /**
          * Add a "c" option, the option indicating the specification of an XML
          * configuration file
-         * 
-         * "l" option - to specify which data roots (from config file) to import 
+         *
+         * "l" option - to specify which data roots (from config file) to import
          * imports all by default
          */
         options.addOption("c", true, "-c <file> : use parameters specified in <file>");
         options.addOption("l", true, "-l <dataroot> [ ' ' <dataroot> ]* :  space separated list of dataroots to be processed.\n"
-        		+ "If dataroot is not specified in config file it will be ignored.");
+                + "If dataroot is not specified in config file it will be ignored.");
         options.getOption("l").setOptionalArg(true);
-        
+
         CommandLineParser parser = new PosixParser();
-        
+
         try {
             // parse the command line arguments
             CommandLine cmd = parser.parse(options, args);
@@ -646,11 +754,11 @@ public class MetadataImporter {
                 // the "c" option was specified, now get its value
                 configFile = cmd.getOptionValue("c");
             }
-            
-            if(cmd.hasOption("l")){
-            	cldrList = cmd.getOptionValue("l");
+
+            if (cmd.hasOption("l")) {
+                cldrList = cmd.getOptionValue("l");
             }
-            
+
         } catch (org.apache.commons.cli.ParseException ex) {
 
             /**
@@ -662,24 +770,24 @@ public class MetadataImporter {
             LOG.error(message);
             System.err.println(message);
         }
-        
+
         if (configFile == null) {
-            
+
             String message;
-            
+
             message = "Could not get config file name via the command line, trying the system properties.";
             LOG.info(message);
-            
+
             String key;
-            
+
             key = "configFile";
             configFile = System.getProperty(key);
         }
-        
+
         if (configFile == null) {
-            
+
             String message;
-            
+
             message = "Could not get filename as system property either - stopping.";
             LOG.error(message);
         } else {

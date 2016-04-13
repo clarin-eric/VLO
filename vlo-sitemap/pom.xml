@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.clarin.vlo</groupId>
 	<artifactId>vlo-sitemap</artifactId>
-	<version>3.4.0</version>
-        <name>VLO Sitemap Generator</name>
+	<version>3.4.1</version>
+	<name>VLO Sitemap Generator</name>
     
         <parent>
             <groupId>eu.clarin.cmdi</groupId>
             <artifactId>vlo</artifactId>
-            <version>3.4.0</version>
+            <version>3.4.1</version>
         </parent>
     
 	<properties>

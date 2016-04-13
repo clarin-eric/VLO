@@ -45,10 +45,12 @@ public class FacetConstants {
     public static final String FIELD_CLARIN_PROFILE = "_componentProfile";
     public static final String FIELD_SEARCH_SERVICE = "_contentSearchRef";
     public static final String FIELD_LAST_SEEN = "_lastSeen";
+    public static final String FIELD_DAYS_SINCE_LAST_SEEN = "_daysSinceLastSeen";
     public static final String FIELD_HIERARCHY_WEIGHT = "_hierarchyWeight";
     public static final String FIELD_IS_PART_OF = "_isPartOf";
     public static final String FIELD_HAS_PART = "_hasPart";
     public static final String FIELD_HAS_PART_COUNT = "_hasPartCount";
+    public static final String FIELD_HAS_PART_COUNT_WEIGHT = "_hasPartCountWeight";
     public static final String FIELD_LANGUAGE_NAME = "_languageName";
 
     /**

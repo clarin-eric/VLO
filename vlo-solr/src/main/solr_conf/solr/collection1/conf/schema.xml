@@ -409,7 +409,7 @@
  </types>
 
 
-
+ <!-- All fields (except copyField targets) are stored to allow partial updates --> 
  <fields>
    <field name="id" type="string" indexed="true" stored="true" required="true"/>
    <field name="collection" type="string" indexed="true" stored="true" multiValued="true" />
@@ -445,10 +445,13 @@
    <field name="_contentSearchRef" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="_landingPageRef" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="_lastSeen" type="tdate" indexed="true" stored="true" multiValued="false" />
+   <field name="_daysSinceLastSeen" type="int" indexed="true" stored="true" multiValued="false" default='0' />
    <field name="_searchPageRef" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="_isPartOf" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="_hasPart" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="_hasPartCount" type="int" indexed="true" stored="true" multiValued="false" />
+   <!-- _hasPartCountWeight = log(1 + Math.min(50, _hasPartCount)-->
+   <field name="_hasPartCountWeight" type="double" indexed="true" stored="true" multiValued="false"/>
    <field name="_hierarchyWeight" type="int" indexed="true" stored="true" multiValued="false" default='0'/>
    <field name="_languageName" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="metadataSource" type="metadataSource" indexed="false" stored="true" multiValued="true" />
