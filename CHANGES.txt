@@ -1,5 +1,13 @@
 Bug Fixes and Features
 
+VLO 3.4.1 (April 2015)
+
+* Fixed a critical querying performance issue
+	<https://trac.clarin.eu/ticket/906>
+* Fixed the sitemap generator
+* Small fixed in the icons
+* Included a report generator
+
 VLO 3.4 (March 2015)
 
 * Major revisions and improvements to the mapping of availability, licence and
