@@ -1,0 +1,81 @@
+/*
+Copyright (C) 2016 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/* 
+    Created on : Feb 2, 2016, 3:50:23 PM
+    Author     : Twan Goosen <twan.goosen@mpi.nl>
+*/
+
+.availability-icon-classes() {
+    &.PUB { background-image: url('license/pub.png'); }
+    &.ACA { background-image: url('license/aca.png'); }
+    &.RES { background-image: url('license/res.png'); }
+    &.UNSPECIFIED { background-image: url('license/unspecified.png'); }
+    &.unavailable { background-image: url('license/unavailable.png'); }
+}
+
+// licence 'modifiers'
+.availability-modifier-icon-classes() {
+    //see https://www.clarin.eu/content/clarin-license-category-calculator
+    &.BY { background-image: url('license/by.large.png'); }
+    &.SA { background-image: url('license/sa.large.png'); }
+    &.ND { background-image: url('license/nd.large.png'); }
+    &.NC { background-image: url('license/nc-eu.large.png'); }
+    &.ID { background-image: url('license/id.png'); }
+    &.FF { background-image: url('license/ff.png'); }
+    &.INF { background-image: url('license/inf.png'); }
+    &.DEP  { background-image: url('license/dep.png'); }
+    &.LOC  { background-image: url('license/loc.png'); }
+    &.LRT  { background-image: url('license/lrt.png'); }
+    &.REQ { background-image: url('license/req.png'); }
+    &.PRIV { background-image: url('license/priv.png'); }
+    &.PLAN { background-image: url('license/plan.png'); }
+    &.META  { background-image: url('license/meta.png'); }
+    &.NORED  { background-image: url('license/nored.png'); }
+    &.Other { background-image: url('license/other.png'); }
+}
+
+// licence icons
+.license-icon-classes() {
+    /* CC */
+    //general case, but requires CSS3 support
+    &[class*="___creativecommons_org_licenses"] { background-image: url('license/cc.large.png'); }
+    //specific known cases
+    &.https___creativecommons_org_licenses_by_nc_3_0_,
+    &.https___creativecommons_org_licenses_by_nc_3_0_de_,
+    &.https___creativecommons_org_licenses_by_nc_4_0_,
+    &.https___creativecommons_org_licenses_by_sa_3_0_,
+    &.https___creativecommons_org_licenses_by_sa_3_0_de_,
+    &.https___creativecommons_org_licenses_by_sa_4_0_,
+    &.https___creativecommons_org_licenses_by_3_0_ { background-image: url('license/cc.large.png'); }
+    //special case for cc0
+    &.https___creativecommons_org_publicdomain_zero_1_0_ { background-image: url('license/zero.large.png'); }
+    
+    /* GPL & LGPL */
+    &.http___www_gnu_org_licenses_gpl_3_0_html { background-image: url('license/gplv3.png'); }
+    &.http___www.gnu.org_licenses_lgpl_3_0_html { background-image: url('license/lgplv3.png'); }
+    //&.http___www_gnu_org_licenses_gpl_2_0_html {}
+    
+    /* Apache */
+    //&.http___www_apache_org_licenses_LICENSE_2_0 {}
+    
+    /* Meta-Share */
+    //&.http___www_meta_net_eu_meta_share_meta_share_licenses_META_SHARE_20Commercial_20NoRedistribution_20NoDerivatives_20For_a_fee_v1_0_pdf {}
+    //&.http___www_meta_net_eu_meta_share_meta_share_licenses_META_SHARE_20COMMONS_BYNCSA_20v1_0_pdf {}
+    
+    /* CLARIN */
+    &.https___kitwiki_csc_fi_twiki_bin_view_FinCLARIN_ClarinEULA { background-image: url('license/clarin.png'); }
+}

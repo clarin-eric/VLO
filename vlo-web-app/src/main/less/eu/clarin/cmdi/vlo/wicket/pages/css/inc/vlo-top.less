@@ -14,34 +14,26 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+div#header .qualifier {
+    display: none; /* overridden depending on header class */
 
-/* 
-    Created on : Jan 24, 2014, 10:06:50 AM
-    Author     : twagoo
-*/
+    position: absolute;
+    right: 5em;
+    top: 1em;
+    border: 1px solid;
+    text-align: center;
+    line-height: 2em;    
+    
+    border-color: red;
+    color: red;
+}
 
-/* COMMON STYLES FOR VLO THEMES */
+div#header.snapshot div.qualifier.snapshot {
+    display: block;
+    width: 8em;
+}
 
-/* styles for auxiliary pages (help, about, ...) */
-@import "vlo-aux";
-
-/* icon images */
-@import "vlo-license-icons";
-
-/* styles for static topic section */
-@import "vlo-top";
-
-/* base style */
-/*@import "style";*/
-
-/* styles for collection selection */
-/*@import "vlo-collections";*/
-
-/* styles for facet panels */
-/*@import "vlo-facets";*/
-
-/* styles for search bar */
-/*@import "vlo-search";*/
-
-/* styles for record details */
-/*@import "vlo-record";*/
+div#header.beta div.qualifier.beta {
+    display: block;
+    width: 5em;
+}
