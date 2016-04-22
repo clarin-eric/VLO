@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2014 CLARIN
+Copyright (C) 2015 CLARIN
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -14,16 +14,28 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 /* 
-    Created on : Jan 24, 2014, 10:06:50 AM
-    Author     : twagoo
+    Created on : Jul 2, 2015, 4:15:10 PM
+    Author     : Twan Goosen <twan.goosen@mpi.nl>
 */
 
-/* STYLE FOR DEFAULT THEME */
+/* "Help" page */
 
-/* base: clarin style */
-@import "inc/clarin/clarin";
+.example-query {
+    font-style: italic;   
+}
 
-/* common styling */
-@import "inc/vlo-common";
+/* "About" page */
+
+.licenceText {
+    font-style: italic;
+    margin-left: 1em;
+    padding-left: 1em;
+    border: 1px dotted;
+    margin-bottom: .5em;
+    
+    p {
+        padding-bottom: 0;
+        padding-top: .5em;
+    }
+}
