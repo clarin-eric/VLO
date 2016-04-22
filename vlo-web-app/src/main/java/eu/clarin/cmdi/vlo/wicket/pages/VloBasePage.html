@@ -1,66 +1,84 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
-    <!--
-    Copyright (C) 2014 CLARIN
-    
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for expands.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    -->
+<!--
+Copyright (C) 2016 CLARIN
 
-    <!--
-        Created on : Jan 23, 2014, 5:10:53 PM
-        Author     : twagoo
-    
-        Based on "business one" template: http://www.opendesigns.org/design/business_one/
-    -->
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for expands.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html>
     <head>
         <title wicket:id="title">CLARIN VLO</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="viewport" content="width=device-width"/>
         <meta wicket:id="pageDescription" name="description" content="" />
         <meta name="msvalidate.01" content="5328C9E13F0CD2549D6E6F4218714CBC" />
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>   
         <link wicket:id="canonicalUrl" rel="canonical" />
     </head>
-
     <body>
-        <div id="main">
-            <div wicket:id="header" id="header">
-                <div id="logo">
-                    <h1>CLARIN Virtual Language Observatory</h1>
-                    <a id="headerlink_clarin" href="http://www.clarin.eu/"><span>CLARIN</span></a>
-                    <div class="qualifier snapshot">TESTING</div>
-                    <div class="qualifier beta">BETA</div>
+        <div class="container">
+            <div>			
+                <div class="navbar-header">
+                    <div class="logo clarin-logo" style="width: 100px; height: 100px;"></div>
                 </div>
+                <h1>
+                    Virtual Language Observatory
+                </h1>
+                <!--                    
+                                    <div class="qualifier snapshot">TESTING</div>
+                                    <div class="qualifier beta">BETA</div>
+                -->
+            </div>							
+            <nav class="navbar nav-main">
+                <ul>
+                    <li><a
+                            href="#" class="lindat-logo"><span>Home</span></a>
+                    </li>
+                    <li><a
+                            href="#"><span>Search</span></a>
+                    </li>
+                    <li><a
+                            href="#"><span>Help</span></a>
+                    </li>
+                    <li><a
+                            href="#"><span>About</span></a>
+                    </li>
+                    <li><a href="http://www.clarin.eu/"><span>CLARIN</span></a></li>
+                </ul>
+            </nav>
+
+            <div class="row">
+                <div wicket:id="feedback" id="feedback">[feedback]</div>
             </div>
 
-            <div wicket:id="feedback" id="feedback">[feedback]</div>
-
-            <wicket:child />
-
-            <div id="footer">
-                CLARIN VLO version <wicket:message key="vlo.version" /> 
-                | <wicket:link><a href="HelpPage.html">help</a></wicket:link>
-                | <wicket:link><a href="AboutPage.html">about</a></wicket:link>
-                <div class="footer-fineprint">
-                    Copyright (C) 2010-2016 CLARIN ERIC<br />
-                    Icons by <a href="https://icons8.com">Icons8</a>
-                </div>
+            <div class="row">
+                <!-- page content -->
+                <wicket:child />
             </div>
+
         </div>
-        
-        <wicket:container wicket:id="piwik"><!-- piwik tracker --></wicket:container>
 
+
+        <div class="text-center small">
+            <p>CLARIN VLO version <wicket:message key="vlo.version" /> 
+            | <wicket:link><a href="HelpPage.html">help</a></wicket:link>
+            | <wicket:link><a href="AboutPage.html">about</a></wicket:link>
+        </p>
+        <p class="footer-fineprint">
+            Copyright (C) 2010-2016 CLARIN ERIC. All rights reserved.<br />
+            Icons by <a href="https://icons8.com">Icons8</a>
+        </p>
+    </div>
+
+    <wicket:container wicket:id="piwik"><!-- piwik tracker --></wicket:container>
     </body>
 </html>
