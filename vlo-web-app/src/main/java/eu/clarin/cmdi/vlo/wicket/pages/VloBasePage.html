@@ -43,19 +43,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </div>							
             <nav class="navbar nav-main">
                 <ul>
-                    <li><a
-                            href="#" class="lindat-logo"><span>Home</span></a>
+                    <li>
+                        <wicket:link><a href="SimpleSearchPage.html"><span>Home</span></a></wicket:link>
                     </li>
-                    <li><a
-                            href="#"><span>Search</span></a>
+                    <li>
+                        <wicket:link><a href="FacetedSearchPage.html"><span>Search</span></a></wicket:link>
                     </li>
-                    <li><a
-                            href="#"><span>Help</span></a>
+                    <li>
+                        <wicket:link><a href="HelpPage.html"><span>Help</span></a></wicket:link>
                     </li>
-                    <li><a
-                            href="#"><span>About</span></a>
+                    <li>
+                        <wicket:link><a href="AboutPage.html"><span>About</span></a></wicket:link>
                     </li>
-                    <li><a href="http://www.clarin.eu/"><span>CLARIN</span></a></li>
+                    <li>
+                        <a href="http://www.clarin.eu/"><span>CLARIN</span></a>
+                    </li>
                 </ul>
             </nav>
 
@@ -72,14 +74,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
         <div class="text-center small">
-            <p>CLARIN VLO version <wicket:message key="vlo.version" /> 
-            | <wicket:link><a href="HelpPage.html">help</a></wicket:link>
-            | <wicket:link><a href="AboutPage.html">about</a></wicket:link>
-        </p>
-        <p class="footer-fineprint">
-            Copyright (C) 2010-2016 CLARIN ERIC. All rights reserved.<br />
-            Icons by <a href="https://icons8.com">Icons8</a>
-        </p>
+            <p>CLARIN VLO version <wicket:message key="vlo.version" /></p>
+            <p class="footer-fineprint">
+                Copyright (C) 2010-2016 CLARIN ERIC. All rights reserved.<br />
+                Icons by <a href="https://icons8.com">Icons8</a>
+            </p>
     </div>
 
     <wicket:container wicket:id="piwik"><!-- piwik tracker --></wicket:container>
