@@ -23,17 +23,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <form wicket:id="search" action="" id="search">
-                <p>
-                    <span id="searchcontrols">
-                        <input wicket:id="query" id="searchbox" type="text" value="democratie" />
-                        <input wicket:id="searchSubmit" id="searchbutton" type="submit" value="Search"/>
+            <nav class="navbar navbar-default">
+                <div class="navbar-header">
+                    <span class="navbar-brand">
+                        <span class="glyphicon glyphicon-search"></span>
                     </span>
-                    <wicket:link>
-                        <a id="syntax-help" href="HelpPage.html#syntax" title="Enter one or more search terms or an advanced query, for example by using the keywords AND, OR and NOT. &lt;strong&gt;Click for more information.&lt;/strong&gt;"><span>?</span></a>
-                    </wicket:link>
-                </p>
-            </form>
+                </div>
+                <div class="container-fluid">
+                    <div class="collapse navbar-collapse">
+                        <form class="navbar-form navbar-left" wicket:id="search" action="" id="search">
+                            <p>
+                                <span id="searchcontrols">
+                                    <input wicket:id="query" id="searchbox" type="text" />
+                                    <input wicket:id="searchSubmit" id="searchbutton" type="submit" class="btn btn-default" value="Search"/>
+                                </span>
+                                <wicket:link>
+                                    <a id="syntax-help" href="HelpPage.html#syntax" title="Enter one or more search terms or an advanced query, for example by using the keywords AND, OR and NOT. &lt;strong&gt;Click for more information.&lt;/strong&gt;"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+                                </wicket:link>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+
+
         </wicket:panel>
     </body>
 </html>
