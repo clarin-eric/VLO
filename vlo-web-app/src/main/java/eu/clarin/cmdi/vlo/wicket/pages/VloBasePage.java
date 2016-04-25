@@ -173,6 +173,8 @@ public class VloBasePage<T> extends GenericWebPage<T> {
     @Override
     public void renderHead(IHeaderResponse response) {
         // Include CSS. Exact file will be chosen on basis of current locale and style (theme)
+//        response.render(CssHeaderItem.forReference(new CssResourceReference(VloBasePage.class, "bootstrap/css/bootstrap.css", getLocale(), getStyle(), getVariation())));
+//        response.render(CssHeaderItem.forReference(new CssResourceReference(VloBasePage.class, "bootstrap/css/bootstrap-theme.css", getLocale(), getStyle(), getVariation())));
         response.render(CssHeaderItem.forReference(new CssResourceReference(VloBasePage.class, "css/vlo.css", getLocale(), getStyle(), getVariation())));
         // Include JavaScript for header (e.g. permalink animation)
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloHeaderJS()));
