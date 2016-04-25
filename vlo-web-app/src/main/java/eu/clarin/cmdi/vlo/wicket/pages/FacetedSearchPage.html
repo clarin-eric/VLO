@@ -35,15 +35,20 @@
 
             <div wicket:id="navigation" id="topnavigation">
                 <div class="row">
-                    <ul class="breadcrumb" wicket:id="breadcrumbs" id="breadcrumbs">[BREADCRUMBS]</ul>
+                    <div class="col-md-10 hidden-xs hidden-sm">
+                        <ul class="breadcrumb" wicket:id="breadcrumbs" id="breadcrumbs">[BREADCRUMBS]</ul>
+                    </div>
+                    <div class="col-md-2 col-xs-12">
+                            <wicket:container wicket:id="permalink">[permalink]</wicket:container>
+                    </div>
                 </div>
-                <div class="row" id="topnavigationlinks">
+<!--                <div class="row" id="topnavigationlinks">
                     <div class="col-xs-12">
                         <div class="pull-right">
                             <wicket:container wicket:id="permalink">[permalink]</wicket:container>
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
 
             <div class="row" wicket:id="collections">
