@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import java.util.List;
 
 import org.apache.wicket.Component;
@@ -18,18 +19,24 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetNamesModel;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.SingleFacetPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.AvailabilityFacetPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.search.FacetPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.FacetsPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchFormPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsHeaderPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel;
+import static eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel.TRACKING_EVENT_TITLE;
+import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
+import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
+import org.apache.wicket.markup.repeater.AbstractPageableView;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 
 /**
  * The main search page showing a search form, facets, and search results
@@ -45,6 +52,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     private FacetFieldsService facetFieldsService;
     @SpringBean
     private VloConfig vloConfig;
+    @SpringBean
+    private PiwikConfig piwikConfig;
     @SpringBean(name = "queryParametersConverter")
     private PageParametersConverter<QueryFacetsSelection> paramsConverter;
 
@@ -54,6 +63,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     private Component searchForm;
     private Component optionsPanel;
     private Component availabilityFacetPanel;
+    private Component resultsHeader;
+    private Component navigatorBottom;
 
     private IModel<List<String>> facetNamesModel;
     private FacetFieldsModel fieldsModel;
@@ -72,6 +83,12 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         setModel(queryModel);
         createModels();
         addComponents();
+
+        // add Piwik tracking behavior
+        if (piwikConfig.isEnabled()) {
+            resultsHeader.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior(TRACKING_EVENT_TITLE));
+            navigatorBottom.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior(TRACKING_EVENT_TITLE));
+        }
     }
 
     private void createModels() {
@@ -97,8 +114,23 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         optionsPanel = createOptionsPanel("options");
         add(optionsPanel);
 
-        searchResultsPanel = new SearchResultsPanel("searchResults", getModel());
+        final IDataProvider<SolrDocument> solrDocumentProvider = new SolrDocumentProvider(getModel());
+
+        searchResultsPanel = new SearchResultsPanel("searchResults", getModel(), solrDocumentProvider);
         add(searchResultsPanel);
+
+        final AbstractPageableView<SolrDocument> resultsView = searchResultsPanel.getResultsView();
+
+        resultsHeader = createResultsHeader("searchresultsheader", getModel(), resultsView, solrDocumentProvider);
+        add(resultsHeader);
+
+        // pagination navigators
+        navigatorBottom = new AjaxPagingNavigator("pagingBottom", resultsView);
+        add(navigatorBottom);
+    }
+
+    private static SearchResultsHeaderPanel createResultsHeader(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocument> resultsView, IDataProvider<SolrDocument> solrDocumentProvider) {
+        return new SearchResultsHeaderPanel(id, model, resultsView, solrDocumentProvider);
     }
 
     private WebMarkupContainer createNavigation(String id) {
@@ -127,15 +159,15 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private Panel createOptionsPanel(String id) {
-        final Panel optionsPanel = new AdvancedSearchOptionsPanel(id, getModel()) {
+        final Panel panel = new AdvancedSearchOptionsPanel(id, getModel()) {
 
             @Override
             protected void selectionChanged(AjaxRequestTarget target) {
                 updateSelection(target);
             }
         };
-        optionsPanel.setOutputMarkupId(true);
-        return optionsPanel;
+        panel.setOutputMarkupId(true);
+        return panel;
     }
 
     private Panel createAvailabilityPanel(String id) {
@@ -188,10 +220,22 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
             target.add(navigation);
             target.add(searchForm);
             target.add(searchResultsPanel);
+            target.add(resultsHeader);
             target.add(facetsPanel);
             target.add(optionsPanel);
             target.add(availabilityFacetPanel);
         }
+    }
+
+    /**
+     * Gets called on each request before render
+     */
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+
+        // only show pagination navigators if there's more than one page
+        navigatorBottom.setVisible(searchResultsPanel.getPageCount() > 1);
     }
 
     @Override

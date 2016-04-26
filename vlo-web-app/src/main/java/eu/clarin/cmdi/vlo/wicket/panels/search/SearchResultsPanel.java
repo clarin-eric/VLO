@@ -26,7 +26,6 @@ import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchResultExpansionStateModel;
-import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -35,12 +34,12 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.navigation.paging.IPageableItems;
 import org.apache.wicket.markup.html.panel.GenericPanel;
+import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
@@ -65,7 +64,6 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
     
     public static final List<Long> ITEMS_PER_PAGE_OPTIONS = Arrays.asList(5L, 10L, 25L, 50L, 100L);
 
-    private final IDataProvider<SolrDocument> solrDocumentProvider;
     private final DataView<SolrDocument> resultsView;
     private final IModel<Set<Object>> expansionsModel;
 
@@ -73,16 +71,12 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
     private VloConfig vloConfig;
     @SpringBean
     private PiwikConfig piwikConfig;
-    private final AjaxPagingNavigator navigatorBottom;
 
-    public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel) {
+    public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel, IDataProvider<SolrDocument> solrDocumentProvider) {
         super(id, selectionModel);
+        this.expansionsModel = new Model(new HashSet<Object>());
+
         add(new Label("title", new SearchResultsTitleModel(selectionModel)));
-
-        solrDocumentProvider = new SolrDocumentProvider(selectionModel);
-
-        expansionsModel = new Model(new HashSet<Object>());
-        
         
         //define the order for availability values
         final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering(
@@ -105,21 +99,6 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
             }
         };
         add(resultsView);
-
-        final SearchResultsHeaderPanel resultsHeader = new SearchResultsHeaderPanel("searchresultsheader", selectionModel, resultsView, solrDocumentProvider);
-        add(resultsHeader);
-
-        // pagination navigators
-        navigatorBottom = new AjaxPagingNavigator("pagingBottom", resultsView);
-        add(navigatorBottom);
-
-        // add Piwik tracking behavior
-        if (piwikConfig.isEnabled()) {
-            resultsHeader.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior(TRACKING_EVENT_TITLE));
-            navigatorBottom.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior(TRACKING_EVENT_TITLE));
-        }
-
-
 
         // form to select number of results per page
         add(createResultPageSizeForm("resultPageSizeForm", resultsView));
@@ -144,17 +123,6 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
 
     public void resetExpansion() {
         expansionsModel.getObject().clear();
-    }
-
-    /**
-     * Gets called on each request before render
-     */
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-
-        // only show pagination navigators if there's more than one page
-        navigatorBottom.setVisible(resultsView.getPageCount() > 1);
     }
 
     private Form createResultPageSizeForm(String id, final IPageableItems resultsView) {
@@ -199,5 +167,15 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
             }
         }
     }
+
+    public AbstractPageableView<SolrDocument> getResultsView() {
+        return resultsView;
+    }
+    
+    public long getPageCount() {
+        return resultsView.getPageCount();
+    }
+    
+    
 
 }

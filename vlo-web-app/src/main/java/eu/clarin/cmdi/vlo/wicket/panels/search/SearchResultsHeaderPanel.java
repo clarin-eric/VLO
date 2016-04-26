@@ -51,6 +51,9 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
 
         // navigator in header
         add(navigatorTop = new AjaxPagingNavigator("pagingTop", resultsView));
+        
+        //For Ajax updating of search results
+        setOutputMarkupId(true);
     }
 
     @Override
