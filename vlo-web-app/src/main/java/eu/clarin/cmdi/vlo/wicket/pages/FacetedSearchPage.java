@@ -2,6 +2,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import java.util.List;
@@ -33,7 +34,6 @@ import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsHeaderPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
 import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 
@@ -125,7 +125,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         add(resultsHeader);
 
         // pagination navigators
-        navigatorBottom = new AjaxPagingNavigator("pagingBottom", resultsView);
+        navigatorBottom = new BootstrapAjaxPagingNavigator("pagingBottom", resultsView);
         add(navigatorBottom);
     }
 
