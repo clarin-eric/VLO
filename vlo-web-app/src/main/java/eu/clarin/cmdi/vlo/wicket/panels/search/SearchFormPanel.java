@@ -115,7 +115,6 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
     public void renderHead(IHeaderResponse response) {
         // include script that activates the help button tooltip and JQuery UI on which it depends
         response.render(CssHeaderItem.forReference(JavaScriptResources.getJQueryUICSS()));
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getJQueryUIJS()));
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getSyntaxHelpJS()));
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getSearchFormJS()));
     }

@@ -158,6 +158,11 @@
             <artifactId>corpus-structure-2-core</artifactId>
             <version>1.1.7</version>
         </dependency>
+        <dependency>
+            <groupId>de.agilecoders.wicket</groupId>
+            <artifactId>wicket-bootstrap-core</artifactId>
+            <version>0.10.6</version>
+        </dependency>
     </dependencies>
     
     <build>

@@ -1,5 +1,9 @@
 package eu.clarin.cmdi.vlo;
 
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.settings.BootstrapSettings;
+import de.agilecoders.wicket.core.settings.SingleThemeProvider;
+import de.agilecoders.wicket.core.settings.Theme;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -32,7 +36,12 @@ import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
+import java.util.Arrays;
+import java.util.List;
 import org.apache.wicket.Page;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.HeaderItem;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 /**
  * Application object for your web application. If you want to run this
@@ -76,6 +85,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     public void init() {
         super.init();
 
+        initBootstrap();
+
         // register global resource bundles (from .properties files)
         registerResourceBundles();
 
@@ -107,7 +118,6 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
                 JavaScriptResources.getVloHeaderJS(),
                 JavaScriptResources.getSyntaxHelpJS(),
                 JavaScriptResources.getVloFacetsJS(),
-                JavaScriptResources.getJQueryUIJS(),
                 JavaScriptResources.getJQueryWatermarkJS()
         );
     }
@@ -214,7 +224,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     }
 
     /**
-     * Like {@link #mountPage(java.lang.String, java.lang.Class) }, but using {@link FragmentEncodingMountedMapper}
+     * Like {@link #mountPage(java.lang.String, java.lang.Class) }, but using
+     * {@link FragmentEncodingMountedMapper}
      *
      * @param <T> type of page
      *
@@ -229,4 +240,28 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         mount(mapper);
         return mapper;
     }
+
+    private void initBootstrap() {
+        BootstrapSettings settings = new BootstrapSettings();
+        settings.setThemeProvider(new SingleThemeProvider(new ClarinBootstrapTheme()));
+        Bootstrap.install(this, settings);
+    }
+
+    static class ClarinBootstrapTheme extends Theme {
+
+        public ClarinBootstrapTheme() {
+            super("clarin-theme");
+        }
+
+        @Override
+        public List<HeaderItem> getDependencies() {
+            return Arrays.<HeaderItem>asList(
+                    //TODO: Make bundle?
+                    CssHeaderItem.forReference(Bootstrap.getSettings().getCssResourceReference()),
+                    CssHeaderItem.forReference(new CssResourceReference(VloBasePage.class, "css/clarin.css")),
+                    CssHeaderItem.forReference(new CssResourceReference(VloBasePage.class, "css/clarin-override.css"))
+            );
+        }
+    }
+
 }

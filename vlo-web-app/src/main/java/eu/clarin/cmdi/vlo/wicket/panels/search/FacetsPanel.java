@@ -151,7 +151,6 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
     public void renderHead(IHeaderResponse response) {
         // JQuery UI for tooltips
         response.render(CssHeaderItem.forReference(JavaScriptResources.getJQueryUICSS()));
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getJQueryUIJS()));
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getSyntaxHelpJS()));
 
     }
