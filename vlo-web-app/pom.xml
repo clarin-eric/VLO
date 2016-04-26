@@ -273,6 +273,8 @@
                     <skip>false</skip>
 
                     <abbrevLength>7</abbrevLength>
+                    
+                    <failOnNoGitDirectory>false</failOnNoGitDirectory>
                 </configuration>
 
             </plugin>
