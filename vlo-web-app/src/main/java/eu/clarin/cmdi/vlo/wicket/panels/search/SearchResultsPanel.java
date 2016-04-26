@@ -40,7 +40,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.navigation.paging.IPageableItems;
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
@@ -57,7 +57,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author twagoo
  */
-public class SearchResultsPanel extends Panel {
+public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
 
     public static final Logger log = LoggerFactory.getLogger(SearchResultsPanel.class);
     
@@ -73,6 +73,7 @@ public class SearchResultsPanel extends Panel {
     private VloConfig vloConfig;
     @SpringBean
     private PiwikConfig piwikConfig;
+    private final AjaxPagingNavigator navigatorBottom;
 
     public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, selectionModel);
@@ -105,23 +106,20 @@ public class SearchResultsPanel extends Panel {
         };
         add(resultsView);
 
+        final SearchResultsHeaderPanel resultsHeader = new SearchResultsHeaderPanel("searchresultsheader", selectionModel, resultsView, solrDocumentProvider);
+        add(resultsHeader);
+
         // pagination navigators
-        final AjaxPagingNavigator navigatorTop = new AjaxPagingNavigator("pagingTop", resultsView);
-        final AjaxPagingNavigator navigatorBottom = new AjaxPagingNavigator("pagingBottom", resultsView);
-        add(navigatorTop);
+        navigatorBottom = new AjaxPagingNavigator("pagingBottom", resultsView);
         add(navigatorBottom);
 
         // add Piwik tracking behavior
         if (piwikConfig.isEnabled()) {
-            navigatorTop.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior(TRACKING_EVENT_TITLE));
+            resultsHeader.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior(TRACKING_EVENT_TITLE));
             navigatorBottom.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior(TRACKING_EVENT_TITLE));
         }
 
-        // total result counter
-        add(createResultCount("resultCount"));
 
-        // page result indicater
-        add(createResultPageIndicator("resultPageIndicator", resultsView));
 
         // form to select number of results per page
         add(createResultPageSizeForm("resultPageSizeForm", resultsView));
@@ -156,41 +154,7 @@ public class SearchResultsPanel extends Panel {
         super.onConfigure();
 
         // only show pagination navigators if there's more than one page
-        final boolean showPaging = resultsView.getPageCount() > 1;
-        this.get("pagingTop").setVisible(showPaging);
-        this.get("pagingBottom").setVisible(showPaging);
-    }
-
-    private Label createResultCount(String id) {
-        final IModel<String> resultCountModel = new AbstractReadOnlyModel<String>() {
-
-            @Override
-            public String getObject() {
-                return String.format("%d results", solrDocumentProvider.size());
-            }
-        };
-        return new Label(id, resultCountModel);
-    }
-
-    private Label createResultPageIndicator(String id, final IPageableItems resultsView) {
-        IModel<String> indicatorModel = new AbstractReadOnlyModel<String>() {
-
-            @Override
-            public String getObject() {
-                final long firstShown = 1 + resultsView.getCurrentPage() * resultsView.getItemsPerPage();
-                final long lastShown = Math.min(resultsView.getItemCount(), firstShown + resultsView.getItemsPerPage() - 1);
-                return String.format("Showing %d to %d", firstShown, lastShown);
-            }
-        };
-        return new Label(id, indicatorModel) {
-
-            @Override
-            protected void onConfigure() {
-                // hide if no results
-                setVisible(resultsView.getItemCount() > 0);
-            }
-
-        };
+        navigatorBottom.setVisible(resultsView.getPageCount() > 1);
     }
 
     private Form createResultPageSizeForm(String id, final IPageableItems resultsView) {
