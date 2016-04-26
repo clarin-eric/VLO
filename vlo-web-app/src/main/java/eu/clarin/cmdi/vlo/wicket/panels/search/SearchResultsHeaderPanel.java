@@ -16,11 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
-import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import static eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel.ITEMS_PER_PAGE_OPTIONS;
-import static eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel.TRACKING_EVENT_TITLE;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -35,16 +32,12 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection> {
-
-    @SpringBean
-    private PiwikConfig piwikConfig;
     
     private final IDataProvider<SolrDocument> solrDocumentProvider;
     private final AbstractPageableView<SolrDocument> resultsView;
@@ -126,9 +119,6 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                 onChange(target);
             }
         });
-        if (piwikConfig.isEnabled()) {
-            pageSizeDropDown.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior("change", TRACKING_EVENT_TITLE));
-        }
         resultPageSizeForm.add(pageSizeDropDown);
 
         return resultPageSizeForm;

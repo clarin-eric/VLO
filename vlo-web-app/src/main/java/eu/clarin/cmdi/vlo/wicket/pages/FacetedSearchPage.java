@@ -31,7 +31,6 @@ import eu.clarin.cmdi.vlo.wicket.panels.search.FacetsPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchFormPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsHeaderPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel;
-import static eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel.TRACKING_EVENT_TITLE;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
@@ -47,6 +46,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private static final long serialVersionUID = 1L;
     private final static List<String> ADDITIONAL_FACETS = ImmutableList.of(FacetConstants.FIELD_AVAILABILITY);
+    public static final String TRACKING_EVENT_TITLE = "Search page";
 
     @SpringBean
     private FacetFieldsService facetFieldsService;

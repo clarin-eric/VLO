@@ -18,7 +18,6 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
-import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
@@ -52,8 +51,6 @@ import org.slf4j.LoggerFactory;
 public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
 
     public static final Logger log = LoggerFactory.getLogger(SearchResultsPanel.class);
-    
-    public static final String TRACKING_EVENT_TITLE = "Search page";
     
     public static final List<Long> ITEMS_PER_PAGE_OPTIONS = Arrays.asList(5L, 10L, 25L, 50L, 100L);
 
