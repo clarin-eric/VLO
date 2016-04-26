@@ -25,16 +25,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <wicket:panel>
             <form id="search-form" wicket:id="search" action="">
                 <div class="input-group">
-                    <!--                            <wicket:link>
-                                                    <a id="syntax-help" href="HelpPage.html#syntax" title="Enter one or more search terms or an advanced query, for example by using the keywords AND, OR and NOT. &lt;strong&gt;Click for more information.&lt;/strong&gt;"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
-                                                </wicket:link>-->
                     <input wicket:id="query" class="search-box form-control form-text" type="text" placeholder="Search" />
                     <span class="input-group-btn">
                         <button type="submit" wicket:id="searchSubmit" class="search-button btn btn-clarin-primary">
                             <span class="search-icon glyphicon glyphicon-search"></span>
                         </button>
+                        <wicket:link>
+                            <a class="btn" id="syntax-help" href="HelpPage.html#syntax" title="Enter one or more search terms or an advanced query, for example by using the keywords AND, OR and NOT. &lt;strong&gt;Click for more information.&lt;/strong&gt;"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
+                        </wicket:link>
                     </span>
                 </div>
+
             </form>
         </wicket:panel>
     </body>
