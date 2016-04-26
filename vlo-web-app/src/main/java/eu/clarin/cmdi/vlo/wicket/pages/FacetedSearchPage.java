@@ -50,7 +50,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private SearchResultsPanel searchResultsPanel;
     private Component facetsPanel;
-    private Component collectionsPanel;
     private Component navigation;
     private Component searchForm;
     private Component optionsPanel;
@@ -88,9 +87,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
         searchForm = createSearchForm("search");
         add(searchForm);
-
-        collectionsPanel = createCollectionsPanel("collections");
-        add(collectionsPanel);
 
         facetsPanel = createFacetsPanel("facets");
         add(facetsPanel);
@@ -169,29 +165,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         return form;
     }
 
-    private Component createCollectionsPanel(final String id) {
-        // collection facet is optional...
-        final WebMarkupContainer enclosure = new WebMarkupContainer(id);
-        enclosure.setOutputMarkupId(true);
-        if (vloConfig.getCollectionFacet() != null) {
-            final FacetPanel panel = new SingleFacetPanel("collectionsFacet", vloConfig.getCollectionFacet(), getModel(), facetFieldsService, 3) {
-
-                @Override
-                protected void selectionChanged(AjaxRequestTarget target) {
-                    updateSelection(target);
-                }
-
-            };
-            enclosure.add(panel);
-        } else {
-            // no collection facet, do not add the panel
-            final WebMarkupContainer placeholder = new WebMarkupContainer("collectionsFacet");
-            placeholder.setVisible(false);
-            enclosure.add(placeholder);
-        }
-        return enclosure;
-    }
-
     private Panel createFacetsPanel(final String id) {
 
         final FacetsPanel panel = new FacetsPanel(id, facetNamesModel, fieldsModel, getModel()) {
@@ -216,7 +189,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
             target.add(searchForm);
             target.add(searchResultsPanel);
             target.add(facetsPanel);
-            target.add(collectionsPanel);
             target.add(optionsPanel);
             target.add(availabilityFacetPanel);
         }
