@@ -16,16 +16,26 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
+import static eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel.ITEMS_PER_PAGE_OPTIONS;
+import static eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel.TRACKING_EVENT_TITLE;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.navigation.paging.IPageableItems;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  *
@@ -33,6 +43,9 @@ import org.apache.wicket.model.IModel;
  */
 public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection> {
 
+    @SpringBean
+    private PiwikConfig piwikConfig;
+    
     private final IDataProvider<SolrDocument> solrDocumentProvider;
     private final AbstractPageableView<SolrDocument> resultsView;
     private final AjaxPagingNavigator navigatorTop;
@@ -49,6 +62,9 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         // page result indicater
         add(createResultPageIndicator("resultPageIndicator", resultsView));
 
+        // form to select number of results per page
+        add(createResultPageSizeForm("resultPageSizeForm", resultsView));
+        
         // navigator in header
         add(navigatorTop = new AjaxPagingNavigator("pagingTop", resultsView));
         
@@ -95,10 +111,37 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         };
     }
 
+    private Form createResultPageSizeForm(String id, final IPageableItems resultsView) {
+        final Form resultPageSizeForm = new Form(id);
+
+        final DropDownChoice<Long> pageSizeDropDown
+                = new DropDownChoice<Long>("resultPageSize",
+                        // bind to items per page property of pageable
+                        new PropertyModel<Long>(resultsView, "itemsPerPage"),
+                        ITEMS_PER_PAGE_OPTIONS);
+        pageSizeDropDown.add(new AjaxFormComponentUpdatingBehavior("change") {
+
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                onChange(target);
+            }
+        });
+        if (piwikConfig.isEnabled()) {
+            pageSizeDropDown.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior("change", TRACKING_EVENT_TITLE));
+        }
+        resultPageSizeForm.add(pageSizeDropDown);
+
+        return resultPageSizeForm;
+    }
+
     @Override
     protected void onDetach() {
         super.onDetach();
         solrDocumentProvider.detach();
+    }
+    
+    protected void onChange(AjaxRequestTarget target) {
+        //do nothing
     }
 
 }

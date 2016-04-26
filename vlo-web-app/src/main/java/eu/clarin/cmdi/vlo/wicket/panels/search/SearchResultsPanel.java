@@ -21,7 +21,6 @@ import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
@@ -32,12 +31,7 @@ import java.util.List;
 import java.util.Set;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.navigation.paging.IPageableItems;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.Item;
@@ -46,7 +40,6 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,8 +62,6 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
 
     @SpringBean
     private VloConfig vloConfig;
-    @SpringBean
-    private PiwikConfig piwikConfig;
 
     public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel, IDataProvider<SolrDocument> solrDocumentProvider) {
         super(id, selectionModel);
@@ -100,9 +91,6 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
         };
         add(resultsView);
 
-        // form to select number of results per page
-        add(createResultPageSizeForm("resultPageSizeForm", resultsView));
-
         //For Ajax updating of search results
         setOutputMarkupId(true);
 
@@ -123,29 +111,6 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
 
     public void resetExpansion() {
         expansionsModel.getObject().clear();
-    }
-
-    private Form createResultPageSizeForm(String id, final IPageableItems resultsView) {
-        final Form resultPageSizeForm = new Form(id);
-
-        final DropDownChoice<Long> pageSizeDropDown
-                = new DropDownChoice<Long>("resultPageSize",
-                        // bind to items per page property of pageable
-                        new PropertyModel<Long>(resultsView, "itemsPerPage"),
-                        ITEMS_PER_PAGE_OPTIONS);
-        pageSizeDropDown.add(new AjaxFormComponentUpdatingBehavior("change") {
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                target.add(SearchResultsPanel.this);
-            }
-        });
-        if (piwikConfig.isEnabled()) {
-            pageSizeDropDown.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior("change", TRACKING_EVENT_TITLE));
-        }
-        resultPageSizeForm.add(pageSizeDropDown);
-
-        return resultPageSizeForm;
     }
 
     private static class SearchResultsTitleModel extends AbstractReadOnlyModel<String> {

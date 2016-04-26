@@ -28,6 +28,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <div class="resultpagination">
                 <div wicket:id="pagingTop">[PAGING]</div>
             </div>
+            
+            <form wicket:id="resultPageSizeForm" id="resultpagesizeform">
+                <label for="resultpagesize">Results per page:</label>
+                <select wicket:id="resultPageSize" id="resultpagesize">
+                    <option>5</option>
+                    <option>10</option>
+                    <option selected="selected">25</option>
+                    <option>50</option>
+                    <option>100</option>
+                </select>
+                <input type="submit" value="Apply" class="nonjsfallback" />
+            </form>
         </wicket:panel>
     </body>
 </html>

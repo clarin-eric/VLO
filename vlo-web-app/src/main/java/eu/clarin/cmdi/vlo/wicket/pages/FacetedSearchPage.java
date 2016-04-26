@@ -129,8 +129,14 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         add(navigatorBottom);
     }
 
-    private static SearchResultsHeaderPanel createResultsHeader(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocument> resultsView, IDataProvider<SolrDocument> solrDocumentProvider) {
-        return new SearchResultsHeaderPanel(id, model, resultsView, solrDocumentProvider);
+    private SearchResultsHeaderPanel createResultsHeader(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocument> resultsView, IDataProvider<SolrDocument> solrDocumentProvider) {
+        return new SearchResultsHeaderPanel(id, model, resultsView, solrDocumentProvider) {
+            @Override
+            protected void onChange(AjaxRequestTarget target) {
+                updateSelection(target);
+            }
+
+        };
     }
 
     private WebMarkupContainer createNavigation(String id) {
@@ -219,8 +225,9 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         if (target != null) { // null if JavaScript disabled
             target.add(navigation);
             target.add(searchForm);
-            target.add(searchResultsPanel);
             target.add(resultsHeader);
+            target.add(searchResultsPanel);
+            target.add(navigatorBottom);
             target.add(facetsPanel);
             target.add(optionsPanel);
             target.add(availabilityFacetPanel);
