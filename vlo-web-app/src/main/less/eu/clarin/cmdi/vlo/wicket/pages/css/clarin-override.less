@@ -19,6 +19,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : Twan Goosen <twan.goosen@mpi.nl>
 */
 
+.btn {
+    height: 38px; // same as .form-control
+
+    .glyphicon {
+        font-size: initial; // otherwise doesn't render because of .btn {font-size: @heading-base-font-size - 1;}
+    }
+}
+
 .form-inline {
     .btn {
         margin: 0;

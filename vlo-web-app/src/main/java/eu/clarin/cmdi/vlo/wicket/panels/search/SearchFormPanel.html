@@ -23,24 +23,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <div class="panel">
-                <div class="container-fluid">
-                    <div class="row">
-                        <form id="search-form" class="form-inline" wicket:id="search" action="">
-                            <div class="search-bar col-md-10 col-xs-8">
-                                <span class="search-icon glyphicon glyphicon-search"></span>
-                                <input wicket:id="query" class="form-control search-box" type="text" />
-                            </div>
-                            <div class="col-md-2 col-xs-4">
-                                <button type="submit" wicket:id="searchSubmit" class="search-button btn btn-clarin-primary">Search</button>
-                                <wicket:link>
-                                    <a id="syntax-help" href="HelpPage.html#syntax" title="Enter one or more search terms or an advanced query, for example by using the keywords AND, OR and NOT. &lt;strong&gt;Click for more information.&lt;/strong&gt;"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
-                                </wicket:link>
-                            </div>
-                        </form>
-                    </div>
+            <form id="search-form" wicket:id="search" action="">
+                <div class="input-group">
+                    <!--                            <wicket:link>
+                                                    <a id="syntax-help" href="HelpPage.html#syntax" title="Enter one or more search terms or an advanced query, for example by using the keywords AND, OR and NOT. &lt;strong&gt;Click for more information.&lt;/strong&gt;"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
+                                                </wicket:link>-->
+                    <input wicket:id="query" class="search-box form-control form-text" type="text" placeholder="Search" />
+                    <span class="input-group-btn">
+                        <button type="submit" wicket:id="searchSubmit" class="search-button btn btn-clarin-primary">
+                            <span class="search-icon glyphicon glyphicon-search"></span>
+                        </button>
+                    </span>
                 </div>
-            </div>
+            </form>
         </wicket:panel>
     </body>
 </html>
