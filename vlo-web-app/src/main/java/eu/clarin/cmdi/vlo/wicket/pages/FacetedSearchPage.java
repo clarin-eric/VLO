@@ -2,7 +2,6 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import java.util.List;
@@ -64,7 +63,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     private Component optionsPanel;
     private Component availabilityFacetPanel;
     private Component resultsHeader;
-    private Component navigatorBottom;
 
     private IModel<List<String>> facetNamesModel;
     private FacetFieldsModel fieldsModel;
@@ -87,7 +85,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         // add Piwik tracking behavior
         if (piwikConfig.isEnabled()) {
             resultsHeader.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior(TRACKING_EVENT_TITLE));
-            navigatorBottom.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior(TRACKING_EVENT_TITLE));
         }
     }
 
@@ -123,10 +120,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
         resultsHeader = createResultsHeader("searchresultsheader", getModel(), resultsView, solrDocumentProvider);
         add(resultsHeader);
-
-        // pagination navigators
-        navigatorBottom = new BootstrapAjaxPagingNavigator("pagingBottom", resultsView);
-        add(navigatorBottom);
     }
 
     private SearchResultsHeaderPanel createResultsHeader(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocument> resultsView, IDataProvider<SolrDocument> solrDocumentProvider) {
@@ -227,22 +220,10 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
             target.add(searchForm);
             target.add(resultsHeader);
             target.add(searchResultsPanel);
-            target.add(navigatorBottom);
             target.add(facetsPanel);
             target.add(optionsPanel);
             target.add(availabilityFacetPanel);
         }
-    }
-
-    /**
-     * Gets called on each request before render
-     */
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-
-        // only show pagination navigators if there's more than one page
-        navigatorBottom.setVisible(searchResultsPanel.getPageCount() > 1);
     }
 
     @Override

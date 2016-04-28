@@ -17,13 +17,17 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.Ordering;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchResultExpansionStateModel;
+import static eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage.TRACKING_EVENT_TITLE;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -49,25 +53,28 @@ import org.slf4j.LoggerFactory;
 public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
 
     public static final Logger log = LoggerFactory.getLogger(SearchResultsPanel.class);
-    
+
     public static final List<Long> ITEMS_PER_PAGE_OPTIONS = Arrays.asList(5L, 10L, 25L, 50L, 100L);
 
     private final DataView<SolrDocument> resultsView;
     private final IModel<Set<Object>> expansionsModel;
 
+    private Component navigatorBottom;
+    private Component navigatorTop;
     @SpringBean
     private VloConfig vloConfig;
+    @SpringBean
+    private PiwikConfig piwikConfig;
 
     public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel, IDataProvider<SolrDocument> solrDocumentProvider) {
         super(id, selectionModel);
         this.expansionsModel = new Model(new HashSet<Object>());
-        
+
         //define the order for availability values
         final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering(
                 //extract the 'primary' availability values from the configuration
                 FieldValueDescriptor.valuesList(vloConfig.getAvailabilityValues()));
 
-        
         // data view for search results
         resultsView = new DataView<SolrDocument>("resultItem", solrDocumentProvider, 10) {
 
@@ -100,6 +107,18 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
             }
 
         });
+
+        // pagination navigators
+        navigatorTop = new BootstrapAjaxPagingNavigator("pagingTop", resultsView);
+        add(navigatorTop);
+        navigatorBottom = new BootstrapAjaxPagingNavigator("pagingBottom", resultsView);
+        add(navigatorBottom);
+
+        // add Piwik tracking behavior
+        if (piwikConfig.isEnabled()) {
+            navigatorTop.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior(TRACKING_EVENT_TITLE));
+            navigatorBottom.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior(TRACKING_EVENT_TITLE));
+        }
     }
 
     public void resetExpansion() {
@@ -109,11 +128,18 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
     public AbstractPageableView<SolrDocument> getResultsView() {
         return resultsView;
     }
-    
-    public long getPageCount() {
-        return resultsView.getPageCount();
+
+    /**
+     * Gets called on each request before render
+     */
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+
+        // only show pagination navigators if there's more than one page
+        final boolean multiplePages = resultsView.getPageCount() > 1;
+        navigatorTop.setVisible(multiplePages);
+        navigatorBottom.setVisible(multiplePages);
     }
-    
-    
 
 }

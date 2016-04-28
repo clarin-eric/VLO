@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import static eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel.ITEMS_PER_PAGE_OPTIONS;
 import org.apache.solr.common.SolrDocument;
@@ -26,7 +25,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.navigation.paging.IPageableItems;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
@@ -42,7 +40,6 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
 
     private final IDataProvider<SolrDocument> solrDocumentProvider;
     private final AbstractPageableView<SolrDocument> resultsView;
-    private final PagingNavigator navigatorTop;
 
     public SearchResultsHeaderPanel(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocument> resultsView, IDataProvider<SolrDocument> solrDocumentProvider) {
         super(id, model);
@@ -53,9 +50,6 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         add(createSearchInfoLabel("searchInfo"));
         // form to select number of results per page
         add(createResultPageSizeForm("resultPageSizeForm", resultsView));
-
-        // navigator in header
-        add(navigatorTop = new BootstrapAjaxPagingNavigator("pagingTop", resultsView));
 
         //For Ajax updating of search results
         setOutputMarkupId(true);
@@ -81,13 +75,6 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                 }
             }
         });
-    }
-
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-        navigatorTop.setVisible(resultsView.getPageCount() > 1);
-
     }
 
     private Form createResultPageSizeForm(String id, final IPageableItems resultsView) {
