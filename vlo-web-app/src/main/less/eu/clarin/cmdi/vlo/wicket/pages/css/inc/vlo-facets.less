@@ -19,40 +19,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : Twan Goosen <twan.goosen@mpi.nl>
 */
 
+.facet.expandedfacet {
 
-/* facet collapse/expand */
-a.expandfacet, a.collapsefacet, a.expandfacet:hover, a.collapsefacet:hover {
-    float: left;
-    width: .5em;
-    margin: .7em 0em 0em .5em;
-    padding: 0em 0em 0em 0em;
-    text-decoration: none;
-    color: inherit;
+    a.expandfacet {
+        display:  none;
+    }
 }
 
-a.expandfacet span, a.collapsefacet span{
-    /* don't show expand/collapse label */
-    display: none;
+.facet.collapsedfacet { 
+
+    a.collapsefacet {
+        display:  none;
+    }
+
+    .facetvalues, .filterform {
+        display:  none;
+    }
+
+    .panel-body {
+        display: none;
+    }
 }
 
-a.expandfacet:after {
-    /* show BLACK DOWN-POINTING TRIANGLE character */
-    content: "+";
-}
-
-a.collapsefacet:after {
-    /* show BLACK UP-POINTING TRIANGLE  character*/
-    content: "-";
-}
-
-.facet.expandedfacet a.expandfacet,  .facet.expandedfacet a#showvalues{
-    display:  none;
-}
-
-.facet.collapsedfacet .facetvalues, .facet.collapsedfacet .filterform {
-    display:  none;
-}
-
-.facet.collapsedfacet a.collapsefacet {
-    display:  none;
-}
