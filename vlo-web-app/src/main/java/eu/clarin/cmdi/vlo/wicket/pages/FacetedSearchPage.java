@@ -132,6 +132,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(solrDocumentProvider.size() > 0);
             }
         };
