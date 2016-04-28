@@ -33,7 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="navbar-header"> 
                     <span class="navbar-brand">Virtual Language Observatory</span>
                 </div> 
-                <nav class=""> 
+                <nav> 
                     <ul class="nav navbar-nav"> 
                         <li>
                             <wicket:link><a href="SimpleSearchPage.html"><span>Home</span></a></wicket:link>
@@ -76,13 +76,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </div>
 
 
-        <div class="text-center small">
-            <p>CLARIN VLO version <wicket:message key="vlo.version" /></p>
-            <p class="footer-fineprint">
-                Copyright (C) 2010-2016 CLARIN ERIC. All rights reserved.<br />
-                Icons by <a href="https://icons8.com">Icons8</a>
-            </p>
-        </div>
+        <footer id="footer" class="navbar navbar-default">
+            <div class="container">
+                <div class="nav navbar-nav">
+                    <p>CLARIN VLO version <wicket:message key="vlo.version" /></p>
+                    <p class="footer-fineprint">
+                        Copyright (C) 2010-2016 CLARIN ERIC. All rights reserved.<br />
+                    </p>
+                </div>
+            </div>
+        </footer>
 
         <wicket:container wicket:id="piwik"><!-- piwik tracker --></wicket:container>
     </body>
