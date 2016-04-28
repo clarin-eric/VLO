@@ -26,6 +26,7 @@ import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
@@ -116,17 +117,19 @@ public class SearchResultItemPanel extends Panel {
                 }
             }
         };
-        expansionStateToggle.add(new Label("state", new AbstractReadOnlyModel<String>() {
+        expansionStateToggle.add(
+                new WebMarkupContainer("state").add(
+                        new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
 
-            @Override
-            public String getObject() {
-                if (expansionStateModel.getObject() == ExpansionState.COLLAPSED) {
-                    return "Expand";
-                } else {
-                    return "Collapse";
-                }
-            }
-        }));
+                            @Override
+                            public String getObject() {
+                                if (expansionStateModel.getObject() == ExpansionState.COLLAPSED) {
+                                    return "glyphicon glyphicon-expand";
+                                } else {
+                                    return "glyphicon glyphicon-collapse-up";
+                                }
+                            }
+                        })));
         return expansionStateToggle;
     }
 
