@@ -1,0 +1,58 @@
+/*
+Copyright (C) 2016 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/* 
+    Created on : Apr 28, 2016, 4:46:26 PM
+    Author     : Twan Goosen <twan.goosen@mpi.nl>
+*/
+
+
+/* facet collapse/expand */
+a.expandfacet, a.collapsefacet, a.expandfacet:hover, a.collapsefacet:hover {
+    float: left;
+    width: .5em;
+    margin: .7em 0em 0em .5em;
+    padding: 0em 0em 0em 0em;
+    text-decoration: none;
+    color: inherit;
+}
+
+a.expandfacet span, a.collapsefacet span{
+    /* don't show expand/collapse label */
+    display: none;
+}
+
+a.expandfacet:after {
+    /* show BLACK DOWN-POINTING TRIANGLE character */
+    content: "+";
+}
+
+a.collapsefacet:after {
+    /* show BLACK UP-POINTING TRIANGLE  character*/
+    content: "-";
+}
+
+.facet.expandedfacet a.expandfacet,  .facet.expandedfacet a#showvalues{
+    display:  none;
+}
+
+.facet.collapsedfacet .facetvalues, .facet.collapsedfacet .filterform {
+    display:  none;
+}
+
+.facet.collapsedfacet a.collapsefacet {
+    display:  none;
+}
