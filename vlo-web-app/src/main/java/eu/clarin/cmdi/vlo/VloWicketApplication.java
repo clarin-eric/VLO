@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo;
 
 import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.markup.html.themes.bootstrap.BootstrapTheme;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
 import de.agilecoders.wicket.core.settings.SingleThemeProvider;
 import de.agilecoders.wicket.core.settings.Theme;
@@ -243,7 +244,9 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
 
     private void initBootstrap() {
         BootstrapSettings settings = new BootstrapSettings();
-        settings.setThemeProvider(new SingleThemeProvider(new ClarinBootstrapTheme()));
+        settings.setThemeProvider(new SingleThemeProvider(
+                //new ClarinBootstrapTheme()));
+                new BootstrapTheme()));
         Bootstrap.install(this, settings);
     }
 
