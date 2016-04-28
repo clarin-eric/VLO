@@ -18,9 +18,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #header {
     .qualifier {
         display: none; /* overridden depending on header class */
-
-        color: red;
-        border: 1px solid red;
+        border: 2px dashed red;
+        span {
+            color: red;
+        }
     }
     /* for snapshot and beta, make matching qualifier item visible */
     &.snapshot .qualifier.snapshot,
