@@ -16,8 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import static eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel.ITEMS_PER_PAGE_OPTIONS;
+import java.util.Map;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -48,6 +50,8 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         this.resultsView = resultsView;
 
         add(createSearchInfoLabel("searchInfo"));
+        //TODO: show selected facet values (move from breadcrumbs bar) 
+
         // form to select number of results per page
         add(createResultPageSizeForm("resultPageSizeForm", resultsView));
 
@@ -60,17 +64,26 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
             @Override
             public String getObject() {
                 final QueryFacetsSelection selection = getModel().getObject();
-                if ((selection.getQuery() == null || selection.getQuery().isEmpty())
-                        && (selection.getSelection() == null || selection.getSelection().isEmpty())) {
-                    return String.format("Showing all %d records", solrDocumentProvider.size());
+                final Map<String, FacetSelection> facetSelection = selection.getSelection();
+                final boolean emptyFacetSelection = facetSelection == null || facetSelection.isEmpty();
+                final boolean emptyQuery = selection.getQuery() == null || selection.getQuery().isEmpty();
+                final long resultCount = solrDocumentProvider.size();
+                
+                if (emptyQuery && emptyFacetSelection) {
+                    return String.format("Showing all %d records%s", resultCount,
+                            emptyFacetSelection ? "" : " within selection"
+                    );
                 } else {
                     final long firstShown = 1 + resultsView.getCurrentPage() * resultsView.getItemsPerPage();
                     final long lastShown = Math.min(resultsView.getItemCount(), firstShown + resultsView.getItemsPerPage() - 1);
                     final String query = selection.getQuery();
-                    return String.format("Showing %s %d results%s",
-                            (resultsView.getPageCount() <= 1) ? "" : String.format("%d to %d of ", firstShown, lastShown),
-                            solrDocumentProvider.size(),
-                            query == null ? "" : String.format(" for '%s'", query)
+                    return String.format(
+                            String.format("%s%s%s",
+                                    resultCount == 0 ? "No results"
+                                            : String.format("Showing %s %d results",
+                                                    (resultsView.getPageCount() <= 1) ? "" : String.format("%d to %d of ", firstShown, lastShown), resultCount),
+                                    emptyFacetSelection ? "" : " within selection",
+                                    emptyQuery ? "" : String.format(" for '%s'", query))
                     );
                 }
             }

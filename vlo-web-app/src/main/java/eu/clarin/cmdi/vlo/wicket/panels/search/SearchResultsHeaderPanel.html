@@ -24,26 +24,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <body>
         <wicket:panel>
             <div role="navigation" class="navbar navbar-default">
-                <!--<div class="container-fluid">-->
-                    <ul class="nav navbar-nav">
-                        <li>
-                            <span class="navbar-text" wicket:id="searchInfo">Showing 1 to 25 of 604056 results for 'test'</span>
-                        </li>
-                    </ul>
-                    <form class="navbar-form navbar-right hidden-xs" wicket:id="resultPageSizeForm" id="resultpagesizeform">
-                        <div class="form-group">
-                            <label for="resultpagesize">Results per page:</label>
-                            <select class="form-control" wicket:id="resultPageSize" id="resultpagesize">
-                                <option>5</option>
-                                <option>10</option>
-                                <option selected="selected">25</option>
-                                <option>50</option>
-                                <option>100</option>
-                            </select>
-                            <button type="submit" value="Apply" class="btn btn-default nonjsfallback" />
-                        </div>
-                    </form>
-                <!--</div>-->
+                <ul class="nav navbar-nav">
+                    <li>
+                        <span class="navbar-text" wicket:id="searchInfo">Showing 1 to 25 of 604056 results for 'test'</span>
+                    </li>
+                </ul>
+                <form class="navbar-form navbar-right hidden-xs" wicket:id="resultPageSizeForm" id="resultpagesizeform">
+                    <div class="form-group">
+                        <label for="resultpagesize">Results per page:</label>
+                        <select class="form-control" wicket:id="resultPageSize" id="resultpagesize">
+                            <option>5</option>
+                            <option>10</option>
+                            <option selected="selected">25</option>
+                            <option>50</option>
+                            <option>100</option>
+                        </select>
+                        <button type="submit" value="Apply" class="btn btn-default nonjsfallback" />
+                    </div>
+                </form>
             </div>
         </wicket:panel>
     </body>
