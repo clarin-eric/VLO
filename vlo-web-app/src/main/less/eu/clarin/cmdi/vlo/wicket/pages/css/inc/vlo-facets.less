@@ -19,25 +19,46 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : Twan Goosen <twan.goosen@mpi.nl>
 */
 
-.facet.expandedfacet {
+.facet {
+    /* COLLAPSE AND EXPAND */
+    &.expandedfacet {
 
-    a.expandfacet {
-        display:  none;
+        a.expandfacet {
+            display:  none;
+        }
+    }
+
+    &.collapsedfacet { 
+
+        a.collapsefacet {
+            display:  none;
+        }
+
+        .facetvalues, .filterform {
+            display:  none;
+        }
+
+        .panel-body, panel-footer {
+            display: none;
+        }
+    }  
+
+    /* FACET VALUES */
+    .facetvalues { 
+        ul {
+
+            padding-left: 0em;
+            
+            li { 
+                list-style: none; 
+                margin: 7px 0px 7px 0px;
+
+                a, a:hover { 
+                    height: 16px;
+                    text-decoration: none; 
+                    width: 149px;
+                } 
+            }
+        }
     }
 }
-
-.facet.collapsedfacet { 
-
-    a.collapsefacet {
-        display:  none;
-    }
-
-    .facetvalues, .filterform {
-        display:  none;
-    }
-
-    .panel-body {
-        display: none;
-    }
-}
-
