@@ -14,28 +14,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-div#header .qualifier {
-    display: none; /* overridden depending on header class */
 
-    position: absolute;
-    right: 5em;
-    top: 1em;
-    border: 1px solid;
-    text-align: center;
-    line-height: 2em;    
-    
-    border-color: red;
-    color: red;
-}
+#header {
+    .qualifier {
+        display: none; /* overridden depending on header class */
 
-div#header.snapshot div.qualifier.snapshot {
-    display: block;
-    width: 8em;
-}
-
-div#header.beta div.qualifier.beta {
-    display: block;
-    width: 5em;
+        color: red;
+        border: 1px solid red;
+    }
+    /* for snapshot and beta, make matching qualifier item visible */
+    &.snapshot .qualifier.snapshot,
+    &.beta .qualifier.beta {
+        display: block;
+    }
 }
 
 .top-links {

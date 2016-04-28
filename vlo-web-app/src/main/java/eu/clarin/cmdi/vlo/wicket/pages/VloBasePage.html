@@ -23,42 +23,47 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta wicket:id="pageDescription" name="description" content="" />
         <meta name="msvalidate.01" content="5328C9E13F0CD2549D6E6F4218714CBC" />
-        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
-        <link href='http://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>   
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css' />
+        <link href='http://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css' />   
         <link wicket:id="canonicalUrl" rel="canonical" />
     </head>
     <body>
-        <div class="container">
-            <div wicket:id="header" id="header">	
-                <div class="navbar-header">
-                    <div class="logo clarin-logo" style="width: 100px; height: 100px;"></div>
-                </div>
-                <h1>
-                    Virtual Language Observatory
-                </h1>
-                <div class="qualifier snapshot">TESTING</div>
-                <div class="qualifier beta">BETA</div>
-            </div>							
-            <nav class="navbar nav-main">
-                <ul>
-                    <li>
-                        <wicket:link><a href="SimpleSearchPage.html"><span>Home</span></a></wicket:link>
-                    </li>
-                    <li>
-                        <wicket:link><a href="FacetedSearchPage.html"><span>Search</span></a></wicket:link>
-                    </li>
-                    <li>
-                        <wicket:link><a href="HelpPage.html"><span>Help</span></a></wicket:link>
-                    </li>
-                    <li class="hidden-xs">
-                        <wicket:link><a href="AboutPage.html"><span>About</span></a></wicket:link>
-                    </li>
-                    <li class="hidden-xs">
-                        <a href="http://www.clarin.eu/"><span>CLARIN</span></a>
-                    </li>
-                </ul>
-            </nav>
+        <header wicket:id="header" class="navbar navbar-default navbar-static-top" id="header" role="banner"> 
+            <div class="container"> 
+                <div class="navbar-header"> 
+                    <span class="navbar-brand">Virtual Language Observatory</span>
+                </div> 
+                <nav class=""> 
+                    <ul class="nav navbar-nav"> 
+                        <li>
+                            <wicket:link><a href="SimpleSearchPage.html"><span>Home</span></a></wicket:link>
+                        </li>
+                        <li>
+                            <wicket:link><a href="FacetedSearchPage.html"><span>Search</span></a></wicket:link>
+                        </li>
+                        <li>
+                            <wicket:link><a href="HelpPage.html"><span>Help</span></a></wicket:link>
+                        </li>
+                        <li class="hidden-xs">
+                            <wicket:link><a href="AboutPage.html"><span>About</span></a></wicket:link>
+                        </li>
+                    </ul> 
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="hidden-xs">
+                            <a href="http://www.clarin.eu/"><span>CLARIN</span></a>
+                        </li>
+                        <li class="qualifier snapshot">
+                            <span class="navbar-text">TESTING</span>
+                        </li>
+                        <li class="qualifier beta">
+                            <span class="navbar-text">BETA</span>
+                        </li>
+                    </ul> 
+                </nav> 
+            </div> 
+        </header>
 
+        <div class="container">
             <div class="row">
                 <div wicket:id="feedback" id="feedback">[feedback]</div>
             </div>
@@ -77,8 +82,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 Copyright (C) 2010-2016 CLARIN ERIC. All rights reserved.<br />
                 Icons by <a href="https://icons8.com">Icons8</a>
             </p>
-    </div>
+        </div>
 
-    <wicket:container wicket:id="piwik"><!-- piwik tracker --></wicket:container>
+        <wicket:container wicket:id="piwik"><!-- piwik tracker --></wicket:container>
     </body>
 </html>

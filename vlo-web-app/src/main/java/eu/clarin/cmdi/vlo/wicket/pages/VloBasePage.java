@@ -31,7 +31,6 @@ import org.apache.wicket.markup.html.GenericWebPage;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.IModel;
@@ -184,7 +183,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         add(new FeedbackPanel("feedback"));
 
         // add 'class' attribute to header indicating version qualifier (e.g. 'beta')
-        add(new WebMarkupContainer("header").add(new AttributeAppender("class", VloWicketApplication.get().getAppVersionQualifier())));
+        add(new WebMarkupContainer("header").add(new AttributeAppender("class", VloWicketApplication.get().getAppVersionQualifier(), " ")));
 
         add(new HideJavascriptFallbackControlsBehavior());
         
