@@ -30,13 +30,11 @@ import java.util.List;
 import java.util.Set;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -63,8 +61,6 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
     public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel, IDataProvider<SolrDocument> solrDocumentProvider) {
         super(id, selectionModel);
         this.expansionsModel = new Model(new HashSet<Object>());
-
-        add(new Label("title", new SearchResultsTitleModel(selectionModel)));
         
         //define the order for availability values
         final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering(
@@ -108,26 +104,6 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
 
     public void resetExpansion() {
         expansionsModel.getObject().clear();
-    }
-
-    private static class SearchResultsTitleModel extends AbstractReadOnlyModel<String> {
-
-        private final IModel<QueryFacetsSelection> selectionModel;
-
-        public SearchResultsTitleModel(IModel<QueryFacetsSelection> selectionModel) {
-            this.selectionModel = selectionModel;
-        }
-
-        @Override
-        public String getObject() {
-            final QueryFacetsSelection selection = selectionModel.getObject();
-            if ((selection.getQuery() == null || selection.getQuery().isEmpty())
-                    && (selection.getSelection() == null || selection.getSelection().isEmpty())) {
-                return "All records";
-            } else {
-                return "Search results";
-            }
-        }
     }
 
     public AbstractPageableView<SolrDocument> getResultsView() {

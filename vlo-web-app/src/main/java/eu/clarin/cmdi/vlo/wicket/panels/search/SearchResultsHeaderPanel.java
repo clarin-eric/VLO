@@ -39,7 +39,7 @@ import org.apache.wicket.model.PropertyModel;
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection> {
-    
+
     private final IDataProvider<SolrDocument> solrDocumentProvider;
     private final AbstractPageableView<SolrDocument> resultsView;
     private final PagingNavigator navigatorTop;
@@ -50,20 +50,37 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         this.solrDocumentProvider = solrDocumentProvider;
         this.resultsView = resultsView;
 
-        // total result counter
-        add(createResultCount("resultCount"));
-
-        // page result indicater
-        add(createResultPageIndicator("resultPageIndicator", resultsView));
-
+        add(createSearchInfoLabel("searchInfo"));
         // form to select number of results per page
         add(createResultPageSizeForm("resultPageSizeForm", resultsView));
-        
+
         // navigator in header
         add(navigatorTop = new BootstrapAjaxPagingNavigator("pagingTop", resultsView));
-        
+
         //For Ajax updating of search results
         setOutputMarkupId(true);
+    }
+
+    private Label createSearchInfoLabel(String id) {
+        return new Label(id, new AbstractReadOnlyModel<String>() {
+            @Override
+            public String getObject() {
+                final QueryFacetsSelection selection = getModel().getObject();
+                if ((selection.getQuery() == null || selection.getQuery().isEmpty())
+                        && (selection.getSelection() == null || selection.getSelection().isEmpty())) {
+                    return String.format("Showing all %d records", solrDocumentProvider.size());
+                } else {
+                    final long firstShown = 1 + resultsView.getCurrentPage() * resultsView.getItemsPerPage();
+                    final long lastShown = Math.min(resultsView.getItemCount(), firstShown + resultsView.getItemsPerPage() - 1);
+                    final String query = selection.getQuery();
+                    return String.format("Showing %s %d results%s",
+                            (resultsView.getPageCount() <= 1) ? "" : String.format("%d to %d of ", firstShown, lastShown),
+                            solrDocumentProvider.size(),
+                            query == null ? "" : String.format(" for '%s'", query)
+                    );
+                }
+            }
+        });
     }
 
     @Override
@@ -71,38 +88,6 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         super.onConfigure();
         navigatorTop.setVisible(resultsView.getPageCount() > 1);
 
-    }
-
-    private Label createResultCount(String id) {
-        final IModel<String> resultCountModel = new AbstractReadOnlyModel<String>() {
-
-            @Override
-            public String getObject() {
-                return String.format("%d results", solrDocumentProvider.size());
-            }
-        };
-        return new Label(id, resultCountModel);
-    }
-
-    private Label createResultPageIndicator(String id, final IPageableItems resultsView) {
-        IModel<String> indicatorModel = new AbstractReadOnlyModel<String>() {
-
-            @Override
-            public String getObject() {
-                final long firstShown = 1 + resultsView.getCurrentPage() * resultsView.getItemsPerPage();
-                final long lastShown = Math.min(resultsView.getItemCount(), firstShown + resultsView.getItemsPerPage() - 1);
-                return String.format("Showing %d to %d", firstShown, lastShown);
-            }
-        };
-        return new Label(id, indicatorModel) {
-
-            @Override
-            protected void onConfigure() {
-                // hide if no results
-                setVisible(resultsView.getItemCount() > 0);
-            }
-
-        };
     }
 
     private Form createResultPageSizeForm(String id, final IPageableItems resultsView) {
@@ -130,9 +115,9 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         super.onDetach();
         solrDocumentProvider.detach();
     }
-    
+
     protected void onChange(AjaxRequestTarget target) {
-        //do nothing
+        //noop - may be overridden
     }
 
 }
