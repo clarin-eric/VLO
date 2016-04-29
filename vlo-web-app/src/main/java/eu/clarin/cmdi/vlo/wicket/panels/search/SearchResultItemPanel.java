@@ -126,7 +126,7 @@ public class SearchResultItemPanel extends Panel {
                                 if (expansionStateModel.getObject() == ExpansionState.COLLAPSED) {
                                     return "glyphicon glyphicon-expand";
                                 } else {
-                                    return "glyphicon glyphicon-collapse-up";
+                                    return "glyphicon glyphicon-collapse-down";
                                 }
                             }
                         })));
