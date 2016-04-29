@@ -24,6 +24,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 .facet {
+    .panel {
+        margin-bottom: 10px;
+
+        .panel-heading a.expandfacet {
+            &, &:hover, &:active {
+                &, & span {
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+
     /* COLLAPSE AND EXPAND */
     &.expandedfacet {
 
@@ -57,7 +69,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         &.selected .panel-body {
             display: block;
         }
-        
+
         /* always hide footer when collapsed */
         .panel-footer {
             display: none;
@@ -66,7 +78,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     /* reduce padding for facet with selection */
     &.selected .panel-body {
-        padding: .5em;
+        padding: 0 10px;
     }
 
     /* FACET VALUES */
@@ -96,8 +108,8 @@ form#availability {
         background-size: 1em;
         background-position: .2em 0em;
         background-repeat: no-repeat;
-        
+
         .availability-icon-classes();
-        
+
     }
 }
