@@ -37,12 +37,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="col-md-2">
                     <div wicket:id="resources" class="searchresult-resources">
                         <ul title="Resources">
-                            <!--TODO: item for case of no resources -->
                             <li wicket:id="resourceCount">
                                 <a wicket:id="recordLink" href="record1.html">
                                     <span class="badge">
                                         <span wicket:id="resourceCountLabel">1</span>
                                         <span wicket:id="resourceTypeIcon" class="glyphicon" aria-hidden="true"></span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li wicket:id="noResources">
+                                <a wicket:id="recordLink" href="record1.html" title="Record without resource links">
+                                    <span class="badge">
+                                        <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
                                     </span>
                                 </a>
                             </li>

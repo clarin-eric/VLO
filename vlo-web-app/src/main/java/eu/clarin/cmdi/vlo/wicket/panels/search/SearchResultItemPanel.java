@@ -106,18 +106,18 @@ public class SearchResultItemPanel extends Panel {
         final ResouceTypeCountDataProvider countProvider = new ResouceTypeCountDataProvider(resourcesModel, countingService);
 
         // add a container for the resource type counts (only visible if there are actual resources)
-        add(new WebMarkupContainer("resources") {
-            {
+        add(new WebMarkupContainer("resources")
                 // view that shows provided counts
-                add(new ResourceCountDataView("resourceCount", countProvider));
-            }
+                .add(new ResourceCountDataView("resourceCount", countProvider))
+                .add(new WebMarkupContainer("noResources") {
 
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(countProvider.size() > 0);
-            }
-        });
+                    @Override
+                    protected void onConfigure() {
+                        super.onConfigure();
+                        setVisible(countProvider.size() == 0);
+                    }
+                }.add(new RecordPageLink("recordLink", documentModel, selectionModel)))
+        );
 
         add(new SearchResultItemLicensePanel("licenseInfo", documentModel, selectionModel, availabilityOrdering));
 
@@ -207,7 +207,7 @@ public class SearchResultItemPanel extends Panel {
             final Label label = new Label("resourceCountLabel", new PropertyModel<String>(item.getModel(), "count"));
             resourceLink.add(label);
 
-            final IModel<String> iconModel = StringResourceModelMigration.of("resourcetype.glyphiconclass.${resourceType}", item.getModel(), "glyphicon-question-sign");
+            final IModel<String> iconModel = StringResourceModelMigration.of("resourcetype.${resourceType}.glyphiconclass", item.getModel(), "glyphicon-question-sign");
             resourceLink.add(new WebMarkupContainer("resourceTypeIcon").add(new AttributeAppender("class", iconModel, " ")));
         }
 
