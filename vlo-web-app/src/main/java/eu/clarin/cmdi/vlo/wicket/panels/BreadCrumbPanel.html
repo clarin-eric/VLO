@@ -24,20 +24,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <body>
         <wicket:panel>
             <li><wicket:link>
-                <a href="SimpleSearchPage.html">VLO</a>
+                    <a href="SimpleSearchPage.html">VLO</a>
                 </wicket:link></li>
-                <li><a wicket:id="searchPage">Faceted search</a></li>
+            <li><a wicket:id="searchPage">Faceted search</a></li>
             <wicket:container wicket:id="query">
                 <li><a wicket:id="leavequery">Search: &quot;<span wicket:id="content"></span>&quot;</a>
-                <a wicket:id="removal" title="Remove query" class="breadcrumbunselect"><span>[Remove]</span></a>
+                    <a wicket:id="removal" title="Remove query" class="breadcrumbunselect">
+                        <span class="glyphicon glyphicon-remove remove-facet" 
+                              aria-hidden="true"
+                              alt="Remove"
+                              title="Remove this facet value from the current selection to show more results"
+                              ></span>
+                    </a>
                 </li>
             </wicket:container>
             <wicket:container wicket:id="facets">
                 <li><a wicket:id="leaveselection">Selections</a>: 
-                <wicket:container wicket:id="facet">
-                    <span class="breadcrumbfacet"><wicket:container wicket:id="value">[VALUE]</wicket:container>
-                        <a wicket:id="removal" title="Remove selection" class="breadcrumbunselect"><span>[Remove]</span></a></span>
-                </wicket:container>
+                    <wicket:container wicket:id="facet">
+                        <span class="breadcrumbfacet"><wicket:container wicket:id="value">[VALUE]</wicket:container>
+                            <a wicket:id="removal" title="Remove selection" class="breadcrumbunselect">
+                                <span class="glyphicon glyphicon-remove remove-facet"
+                                      aria-hidden="true"
+                                      alt="Remove"
+                                      title="Remove this facet value from the current selection to show more results">
+                                </span>
+                            </a>
+                        </span>
+                    </wicket:container>
                 </li>
             </wicket:container>
         </wicket:panel>
