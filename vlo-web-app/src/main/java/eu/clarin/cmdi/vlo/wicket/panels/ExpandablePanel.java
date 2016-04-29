@@ -85,6 +85,20 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
                 }
             }
         }));
+        add(new AttributeModifier("aria-expanded", new AbstractReadOnlyModel<String>() {
+
+            @Override
+            public String getObject() {
+                switch (expansionModel.getObject()) {
+                    case COLLAPSED:
+                        return "false";
+                    case EXPANDED:
+                        return "true";
+                    default:
+                        return "undefined";
+                }
+            }
+        }));
 
         // add expansion link
         add(new IndicatingAjaxFallbackLink("expand") {
@@ -96,7 +110,7 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
                     target.add(ExpandablePanel.this);
                 }
             }
-        });
+        }.add(new AttributeModifier("aria-controls", ExpandablePanel.this.getMarkupId())));
 
         // add collapse link
         add(new IndicatingAjaxFallbackLink("collapse") {
@@ -108,7 +122,7 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
                     target.add(ExpandablePanel.this);
                 }
             }
-        });
+        }.add(new AttributeModifier("aria-controls", ExpandablePanel.this.getMarkupId())));
     }
 
     private void createTitleToggler() {

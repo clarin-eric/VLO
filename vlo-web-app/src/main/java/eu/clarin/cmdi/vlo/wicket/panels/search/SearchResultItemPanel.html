@@ -30,7 +30,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <a wicket:id="recordLink" href="record1.html"><wicket:container wicket:id="title" >[TITLE]</wicket:container></a>
             </h3>
             <p class="searchresultmoreless">
-                <a wicket:id="expansionStateToggle" class="searchresultdetailstoggle"><span wicket:id="state"></span></a>
+                <a wicket:id="expansionStateToggle" class="searchresultdetailstoggle" title="Expand search result to show more details">
+                    <span wicket:id="state" aria-hidden="true"></span>
+                </a>
             </p>
             <div wicket:id="collapsedDetails" class="searchresultitembrief">[COLLAPSED]</div>
             <div wicket:id="expandedDetails" class="searchresultitemextended">[COLLAPSED]</div>
