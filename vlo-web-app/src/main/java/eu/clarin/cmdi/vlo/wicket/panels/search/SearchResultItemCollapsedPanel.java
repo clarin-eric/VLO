@@ -46,6 +46,8 @@ public class SearchResultItemCollapsedPanel extends Panel {
 
     private static final int MAX_DESCRIPTION_LENGTH = 350;
     private static final int LONG_DESCRIPTION_TRUNCATE_POINT = 320;
+    private static final int MAX_DESCRIPTION_LENGTH_SHORTER = 150;
+    private static final int LONG_DESCRIPTION_TRUNCATE_POINT_SHORTER = 120;
 
     @SpringBean
     private ResourceTypeCountingService countingService;
@@ -57,7 +59,10 @@ public class SearchResultItemCollapsedPanel extends Panel {
         this.documentModel = documentModel;
         this.selectionModel = selectionModel;
 
+        // description, truncated if too long
         add(new SolrFieldLabel("description", documentModel, FacetConstants.FIELD_DESCRIPTION, "", MAX_DESCRIPTION_LENGTH, LONG_DESCRIPTION_TRUNCATE_POINT));
+        // extra short description for smaller devices
+        add(new SolrFieldLabel("description-shorter", documentModel, FacetConstants.FIELD_DESCRIPTION, "", MAX_DESCRIPTION_LENGTH_SHORTER, LONG_DESCRIPTION_TRUNCATE_POINT_SHORTER));
 
         // get model for resources
         final SolrFieldModel<String> resourcesModel = new SolrFieldModel<>(documentModel, FacetConstants.FIELD_RESOURCE);
