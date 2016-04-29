@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     /* COLLAPSE AND EXPAND */
     &.expandedfacet {
 
+        /* hide show link */
         a.expandfacet {
             display:  none;
         }
@@ -39,18 +40,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     &.collapsedfacet { 
 
+        /* hide collapse link */
         a.collapsefacet {
             display:  none;
         }
 
+        /* hide selection mechanism */
         .facetvalues, .filterform {
             display:  none;
         }
 
-        .panel-body, panel-footer {
+        /* show body only if facet has a value selection */
+        .panel-body {
             display: none;
         }
-    }  
+        &.selected  {
+            display: block;
+        }
+        
+        /* always hide footer when collapsed */
+        .panel-footer {
+            display: none;
+        }
+    }
+
+    /* reduce padding for facet with selection */
+    &.selected .panel-body {
+        padding: .5em;
+    }
 
     /* FACET VALUES */
     .facetvalues { 
