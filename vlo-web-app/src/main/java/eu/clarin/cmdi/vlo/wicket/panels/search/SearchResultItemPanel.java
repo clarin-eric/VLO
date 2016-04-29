@@ -29,10 +29,12 @@ import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
+import java.io.Serializable;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -44,6 +46,7 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
@@ -58,7 +61,7 @@ public class SearchResultItemPanel extends Panel {
     private VloConfig config;
     @SpringBean
     private ResourceTypeCountingService countingService;
-    
+
     private final IModel<SearchContext> selectionModel;
     private final IModel<SolrDocument> documentModel;
 
@@ -196,9 +199,16 @@ public class SearchResultItemPanel extends Panel {
         @Override
         protected void populateItem(Item<ResourceTypeCount> item) {
             final Link resourceLink = new RecordPageLink("recordLink", documentModel, selectionModel);
-            final Label label = new Label("resourceCountLabel", getResourceCountModel(item.getModel()));
-            resourceLink.add(label);
             item.add(resourceLink);
+
+            final IModel<String> resourceCountModel = getResourceCountModel(item.getModel());
+            resourceLink.add(new AttributeModifier("title", resourceCountModel));
+
+            final Label label = new Label("resourceCountLabel", new PropertyModel<String>(item.getModel(), "count"));
+            resourceLink.add(label);
+
+            final IModel<String> iconModel = StringResourceModelMigration.of("resourcetype.glyphiconclass.${resourceType}", item.getModel(), "glyphicon-question-sign");
+            resourceLink.add(new WebMarkupContainer("resourceTypeIcon").add(new AttributeAppender("class", iconModel, " ")));
         }
 
         /**

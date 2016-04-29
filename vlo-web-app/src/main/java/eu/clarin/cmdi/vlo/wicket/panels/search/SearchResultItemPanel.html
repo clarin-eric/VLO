@@ -37,17 +37,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </div>
             <div class="row">
                 <div class="col-md-2 col-md-push-10">
-                    <div wicket:id="licenseInfo" class="licenseInfo">[LICENSE INFO]</div>
-                    <div wicket:id="resources" class="searchresultresources hidden-xs hidden-sm">
-                        Resources: 
-                        <ul>
+                    <div wicket:id="resources" class="searchresult-resources hidden-xs hidden-sm">
+                        <ul title="Resources">
                             <li wicket:id="resourceCount">
                                 <a wicket:id="recordLink" href="record1.html">
-                                    <wicket:container wicket:id="resourceCountLabel">1 text file</wicket:container>
+                                    <span class="badge">
+                                        <span wicket:id="resourceCountLabel">1</span>
+                                        <span wicket:id="resourceTypeIcon" class="glyphicon" aria-hidden="true"></span>
+                                    </span>
                                 </a>
                             </li>
                         </ul>
                     </div>
+                    <div wicket:id="licenseInfo" class="searchresult-licenseInfo">[LICENSE INFO]</div>
                 </div>
                 <div class="col-md-10 col-md-pull-2">
                     <p class="searchresultmoreless">
