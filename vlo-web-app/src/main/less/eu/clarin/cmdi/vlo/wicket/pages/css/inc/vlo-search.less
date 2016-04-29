@@ -54,21 +54,19 @@
             }
         }
         
-        padding-bottom: .5em;
-        margin-bottom: .5em;
-        border-bottom: 1px solid #ccc;
+        margin-top: 20px;
     }
 
     .searchresult-licenseInfo {
         .availabilityTag, .licenseTag {
             display: inline-block;
-            height: 1.2em;
-            width: 1.2em;
+            height: 1.4em;
+            width: 1.4em;
             margin: 0;
             padding: 0;
 
-            background-image: url('license/other.png');
-            background-size: 1em 1em;
+            background-image: url('@{license-icons-dir}other.png');
+            background-size: 1.2em 1.2em;
             background-position-y: .1em;
             background-position-x: .1em;
             background-repeat: no-repeat;
@@ -82,7 +80,7 @@
 
         .licenseTag {
             /* default icon indicating there is a known licence */
-            background-image: url('fine_print-64.png'); /* icon from icons8.com */
+            background-image: url('@{license-icons-dir}fine_print-64.png'); /* icon from icons8.com */
 
             /* mixin from vlo-license-icons.less */
             .license-icon-classes(); 

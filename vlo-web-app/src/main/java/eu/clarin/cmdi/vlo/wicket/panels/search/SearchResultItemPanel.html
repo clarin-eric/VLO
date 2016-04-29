@@ -29,16 +29,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-md-10">
                     <h3>
                         <a wicket:id="recordLink" href="record1.html"><wicket:container wicket:id="title" >[TITLE]</wicket:container></a>
                     </h3>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-2 col-md-push-10">
+                <div class="col-md-2">
                     <div wicket:id="resources" class="searchresult-resources">
                         <ul title="Resources">
+                            <!--TODO: item for case of no resources -->
                             <li wicket:id="resourceCount">
                                 <a wicket:id="recordLink" href="record1.html">
                                     <span class="badge">
@@ -49,6 +48,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             </li>
                         </ul>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 col-md-push-10">
                     <div wicket:id="licenseInfo" class="searchresult-licenseInfo">[LICENSE INFO]</div>
                 </div>
                 <div class="col-md-10 col-md-pull-2">
