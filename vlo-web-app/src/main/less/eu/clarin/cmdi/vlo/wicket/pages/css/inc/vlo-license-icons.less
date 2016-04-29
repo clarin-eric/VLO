@@ -19,40 +19,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : Twan Goosen <twan.goosen@mpi.nl>
 */
 
+/* Requires variables:
+    @license-icons-dir: location of availability/license icons directory
+*/
+
 .availability-icon-classes() {
-    &.PUB { background-image: url('license/pub.png'); }
-    &.ACA { background-image: url('license/aca.png'); }
-    &.RES { background-image: url('license/res.png'); }
-    &.UNSPECIFIED { background-image: url('license/unspecified.png'); }
-    &.unavailable { background-image: url('license/unavailable.png'); }
+    &.PUB { background-image: url('@{license-icons-dir}pub.png'); }
+    &.ACA { background-image: url('@{license-icons-dir}aca.png'); }
+    &.RES { background-image: url('@{license-icons-dir}res.png'); }
+    &.UNSPECIFIED { background-image: url('@{license-icons-dir}unspecified.png'); }
+    &.unavailable { background-image: url('@{license-icons-dir}unavailable.png'); }
 }
 
 // licence 'modifiers'
 .availability-modifier-icon-classes() {
     //see https://www.clarin.eu/content/clarin-license-category-calculator
-    &.BY { background-image: url('license/by.large.png'); }
-    &.SA { background-image: url('license/sa.large.png'); }
-    &.ND { background-image: url('license/nd.large.png'); }
-    &.NC { background-image: url('license/nc-eu.large.png'); }
-    &.ID { background-image: url('license/id.png'); }
-    &.FF { background-image: url('license/ff.png'); }
-    &.INF { background-image: url('license/inf.png'); }
-    &.DEP  { background-image: url('license/dep.png'); }
-    &.LOC  { background-image: url('license/loc.png'); }
-    &.LRT  { background-image: url('license/lrt.png'); }
-    &.REQ { background-image: url('license/req.png'); }
-    &.PRIV { background-image: url('license/priv.png'); }
-    &.PLAN { background-image: url('license/plan.png'); }
-    &.META  { background-image: url('license/meta.png'); }
-    &.NORED  { background-image: url('license/nored.png'); }
-    &.Other { background-image: url('license/other.png'); }
+    &.BY { background-image: url('@{license-icons-dir}by.large.png'); }
+    &.SA { background-image: url('@{license-icons-dir}sa.large.png'); }
+    &.ND { background-image: url('@{license-icons-dir}nd.large.png'); }
+    &.NC { background-image: url('@{license-icons-dir}nc-eu.large.png'); }
+    &.ID { background-image: url('@{license-icons-dir}id.png'); }
+    &.FF { background-image: url('@{license-icons-dir}ff.png'); }
+    &.INF { background-image: url('@{license-icons-dir}inf.png'); }
+    &.DEP  { background-image: url('@{license-icons-dir}dep.png'); }
+    &.LOC  { background-image: url('@{license-icons-dir}loc.png'); }
+    &.LRT  { background-image: url('@{license-icons-dir}lrt.png'); }
+    &.REQ { background-image: url('@{license-icons-dir}req.png'); }
+    &.PRIV { background-image: url('@{license-icons-dir}priv.png'); }
+    &.PLAN { background-image: url('@{license-icons-dir}plan.png'); }
+    &.META  { background-image: url('@{license-icons-dir}meta.png'); }
+    &.NORED  { background-image: url('@{license-icons-dir}nored.png'); }
+    &.Other { background-image: url('@{license-icons-dir}other.png'); }
 }
 
 // licence icons
 .license-icon-classes() {
     /* CC */
     //general case, but requires CSS3 support
-    &[class*="___creativecommons_org_licenses"] { background-image: url('license/cc.large.png'); }
+    &[class*="___creativecommons_org_licenses"] { background-image: url('@{license-icons-dir}cc.large.png'); }
     //specific known cases
     &.https___creativecommons_org_licenses_by_nc_3_0_,
     &.https___creativecommons_org_licenses_by_nc_3_0_de_,
@@ -60,13 +64,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     &.https___creativecommons_org_licenses_by_sa_3_0_,
     &.https___creativecommons_org_licenses_by_sa_3_0_de_,
     &.https___creativecommons_org_licenses_by_sa_4_0_,
-    &.https___creativecommons_org_licenses_by_3_0_ { background-image: url('license/cc.large.png'); }
+    &.https___creativecommons_org_licenses_by_3_0_ { background-image: url('@{license-icons-dir}cc.large.png'); }
     //special case for cc0
-    &.https___creativecommons_org_publicdomain_zero_1_0_ { background-image: url('license/zero.large.png'); }
+    &.https___creativecommons_org_publicdomain_zero_1_0_ { background-image: url('@{license-icons-dir}zero.large.png'); }
     
     /* GPL & LGPL */
-    &.http___www_gnu_org_licenses_gpl_3_0_html { background-image: url('license/gplv3.png'); }
-    &.http___www.gnu.org_licenses_lgpl_3_0_html { background-image: url('license/lgplv3.png'); }
+    &.http___www_gnu_org_licenses_gpl_3_0_html { background-image: url('@{license-icons-dir}gplv3.png'); }
+    &.http___www.gnu.org_licenses_lgpl_3_0_html { background-image: url('@{license-icons-dir}lgplv3.png'); }
     //&.http___www_gnu_org_licenses_gpl_2_0_html {}
     
     /* Apache */
@@ -77,5 +81,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     //&.http___www_meta_net_eu_meta_share_meta_share_licenses_META_SHARE_20COMMONS_BYNCSA_20v1_0_pdf {}
     
     /* CLARIN */
-    &.https___kitwiki_csc_fi_twiki_bin_view_FinCLARIN_ClarinEULA { background-image: url('license/clarin.png'); }
+    &.https___kitwiki_csc_fi_twiki_bin_view_FinCLARIN_ClarinEULA { background-image: url('@{license-icons-dir}clarin.png'); }
 }
