@@ -71,34 +71,9 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
 
     private void addExpandCollapse() {
         // class modifier to apply correct class depending on state
-        add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
-
-            @Override
-            public String getObject() {
-                switch (expansionModel.getObject()) {
-                    case COLLAPSED:
-                        return getCollapsedClass();
-                    case EXPANDED:
-                        return getExpandedClass();
-                    default:
-                        return getFallbackClass();
-                }
-            }
-        }));
-        add(new AttributeModifier("aria-expanded", new AbstractReadOnlyModel<String>() {
-
-            @Override
-            public String getObject() {
-                switch (expansionModel.getObject()) {
-                    case COLLAPSED:
-                        return "false";
-                    case EXPANDED:
-                        return "true";
-                    default:
-                        return "undefined";
-                }
-            }
-        }));
+        add(new AttributeModifier("class", new ExpansionStateRepresentationModel(expansionModel, getExpandedClass(), getCollapsedClass(), getFallbackClass())));
+        // aria-expended attribute for screenreaders
+        add(new AttributeModifier("aria-expanded", new ExpansionStateRepresentationModel(expansionModel, "true", "false", "undefined")));
 
         // add expansion link
         add(new IndicatingAjaxFallbackLink("expand") {
@@ -145,6 +120,7 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
 
         // Facet name becomes title
         titleLink.add(createTitleLabel("title"));
+        titleLink.add(new AttributeModifier("aria-controls", ExpandablePanel.this.getMarkupId()));
         add(titleLink);
     }
 
@@ -183,6 +159,39 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
      */
     protected String getCollapsedClass() {
         return "facet collapsedfacet";
+    }
+
+    private static class ExpansionStateRepresentationModel extends AbstractReadOnlyModel<String> {
+
+        private final IModel<ExpansionState> stateModel;
+        private final String expanded;
+        private final String collapsed;
+        private final String fallback;
+
+        public ExpansionStateRepresentationModel(IModel<ExpansionState> stateModel, String expanded, String collapsed, String fallback) {
+            this.stateModel = stateModel;
+            this.expanded = expanded;
+            this.collapsed = collapsed;
+            this.fallback = fallback;
+        }
+
+        @Override
+        public String getObject() {
+            switch (stateModel.getObject()) {
+                case COLLAPSED:
+                    return collapsed;
+                case EXPANDED:
+                    return expanded;
+                default:
+                    return fallback;
+            }
+        }
+
+        @Override
+        public void detach() {
+            stateModel.detach();
+        }
+
     }
 
 }
