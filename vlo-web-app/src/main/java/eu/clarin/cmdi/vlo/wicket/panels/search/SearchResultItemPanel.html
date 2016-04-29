@@ -23,20 +23,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <div class="score" wicket:id="scoreContainer">
-                Score:  <span wicket:id="score">[score]</span>
+            <div class="row score" wicket:id="scoreContainer">
+                <div class="col-xs-12">
+                    Score:  <span wicket:id="score">[score]</span>
+                </div>
             </div>
-            <h3>
-                <a wicket:id="recordLink" href="record1.html"><wicket:container wicket:id="title" >[TITLE]</wicket:container></a>
-            </h3>
-            <p class="searchresultmoreless">
-                <a wicket:id="expansionStateToggle" class="searchresultdetailstoggle" title="Expand search result to show more details">
-                    <span wicket:id="state" aria-hidden="true"></span>
-                </a>
-            </p>
-            <div wicket:id="collapsedDetails" class="searchresultitembrief">[COLLAPSED]</div>
-            <div wicket:id="expandedDetails" class="searchresultitemextended">[COLLAPSED]</div>
-            <div class="searchresultitemend"></div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>
+                        <a wicket:id="recordLink" href="record1.html"><wicket:container wicket:id="title" >[TITLE]</wicket:container></a>
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 col-md-push-10">
+                    (P) (CC)
+                </div>
+                <div class="col-md-10 col-md-pull-2">
+                    <p class="searchresultmoreless">
+                        <a wicket:id="expansionStateToggle" class="searchresultdetailstoggle" title="Expand search result to show more details">
+                            <span wicket:id="state" aria-hidden="true"></span>
+                        </a>
+                    </p>
+                    <div wicket:id="collapsedDetails" class="searchresultitembrief">[COLLAPSED]</div>
+                    <div wicket:id="expandedDetails" class="searchresultitemextended">[COLLAPSED]</div>
+                </div>
+            </div>
         </wicket:panel>
     </body>
 </html>
