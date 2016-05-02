@@ -33,9 +33,9 @@
     <!-- leave empty to use default packaged definition -->
     <facetConceptsFile><!-- use default packaged definition --></facetConceptsFile>
     
-    <profileSchemaUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/{PROFILE_ID}/xsd</profileSchemaUrl>
+    <profileSchemaUrl>http://alpha-vlo.clarin.eu/component-registry-rest/rest/registry/1.2/profiles/{PROFILE_ID}/xsd</profileSchemaUrl>
     
-    <componentRegistryRESTURL>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/</componentRegistryRESTURL>
+    <componentRegistryRESTURL>http://alpha-vlo.clarin.eu/component-registry-rest/rest/registry/1.2/profiles/</componentRegistryRESTURL>
     
     <handleServerUrl>http://hdl.handle.net/</handleServerUrl>
     
