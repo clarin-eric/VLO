@@ -73,8 +73,8 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         final VTDNav nav = vg.getNav();
         nav.toElement(VTDNav.ROOT);
         AutoPilot ap = new AutoPilot(nav);
-        setNameSpace(ap);
-        ap.selectXPath("/c:CMD/c:Header/c:MdSelfLink/text()");
+        setNameSpace(ap, null);
+        ap.selectXPath("/cmd:CMD/cmd:Header/cmd:MdSelfLink/text()");
         int index = ap.evalXPath();
 
         String mdSelfLink = null;
@@ -89,8 +89,11 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      *
      * @param ap
      */
-    private void setNameSpace(AutoPilot ap) {
-        ap.declareXPathNameSpace("c", "http://www.clarin.eu/cmd/");
+    private void setNameSpace(AutoPilot ap, String profileId) {
+        ap.declareXPathNameSpace("cmd", "http://www.clarin.eu/cmd/1");
+        if(profileId != null) {
+            ap.declareXPathNameSpace("cmdp", "http://www.clarin.eu/cmd/1/profiles/"+profileId);
+        }
     }
 
     /**
@@ -156,8 +159,8 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private String getProfileIdFromHeader(VTDNav nav) throws XPathParseException, XPathEvalException, NavException {
         nav.toElement(VTDNav.ROOT);
         AutoPilot ap = new AutoPilot(nav);
-        setNameSpace(ap);
-        ap.selectXPath("/c:CMD/c:Header/c:MdProfile/text()");
+        setNameSpace(ap, null);
+        ap.selectXPath("/cmd:CMD/cmd:Header/cmd:MdProfile/text()");
         int index = ap.evalXPath();
         String profileId = null;
         if (index != -1) {
@@ -180,7 +183,8 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         int index = nav.getAttrValNS("http://www.w3.org/2001/XMLSchema-instance", "schemaLocation");
         if (index != -1) {
             String schemaLocation = nav.toNormalizedString(index);
-            result = schemaLocation.split(" ")[1];
+            String[] schemaLocationArray = schemaLocation.split(" ");
+            result = schemaLocationArray[schemaLocationArray.length-1];
         } else {
             index = nav.getAttrValNS("http://www.w3.org/2001/XMLSchema-instance", "noNamespaceSchemaLocation");
             if (index != -1) {
@@ -207,28 +211,28 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      */
     private void processResources(CMDIData cmdiData, VTDNav nav) throws VTDException {
         AutoPilot mdSelfLink = new AutoPilot(nav);
-        setNameSpace(mdSelfLink);
-        mdSelfLink.selectXPath("/c:CMD/c:Header/c:MdSelfLink");
+        setNameSpace(mdSelfLink, null);
+        mdSelfLink.selectXPath("/cmd:CMD/cmd:Header/cmd:MdSelfLink");
         String mdSelfLinkString = mdSelfLink.evalXPathToString();
         if (config.isProcessHierarchies()) {
             ResourceStructureGraph.addResource(mdSelfLinkString);
         }
 
         AutoPilot resourceProxy = new AutoPilot(nav);
-        setNameSpace(resourceProxy);
-        resourceProxy.selectXPath("/c:CMD/c:Resources/c:ResourceProxyList/c:ResourceProxy");
+        setNameSpace(resourceProxy, null);
+        resourceProxy.selectXPath("/cmd:CMD/cmd:Resources/cmd:ResourceProxyList/cmd:ResourceProxy");
 
         AutoPilot resourceRef = new AutoPilot(nav);
-        setNameSpace(resourceRef);
-        resourceRef.selectXPath("c:ResourceRef");
+        setNameSpace(resourceRef, null);
+        resourceRef.selectXPath("cmd:ResourceRef");
 
         AutoPilot resourceType = new AutoPilot(nav);
-        setNameSpace(resourceType);
-        resourceType.selectXPath("c:ResourceType");
+        setNameSpace(resourceType, null);
+        resourceType.selectXPath("cmd:ResourceType");
 
         AutoPilot resourceMimeType = new AutoPilot(nav);
-        setNameSpace(resourceMimeType);
-        resourceMimeType.selectXPath("c:ResourceType/@mimetype");
+        setNameSpace(resourceMimeType, null);
+        resourceMimeType.selectXPath("cmd:ResourceType/@mimetype");
 
         while (resourceProxy.evalXPath() != -1) {
             String ref = resourceRef.evalXPathToString();
@@ -294,7 +298,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      */
     private boolean matchPattern(CMDIData cmdiData, VTDNav nav, FacetConfiguration config, String pattern, Boolean allowMultipleValues) throws VTDException {
         final AutoPilot ap = new AutoPilot(nav);
-        setNameSpace(ap);
+        setNameSpace(ap, extractXsd(nav));
         ap.selectXPath(pattern);
 
         boolean matchedPattern = false;
