@@ -125,7 +125,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
                 .add(facetsPanel)
                 .add(availabilityFacetPanel)
                 .add(optionsPanel)
-                .setOutputMarkupId(true)
+                .setOutputMarkupPlaceholderTag(true)
         );
 
         searchResultsPanel = new SearchResultsPanel("searchResults", getModel(), solrDocumentProvider) {
