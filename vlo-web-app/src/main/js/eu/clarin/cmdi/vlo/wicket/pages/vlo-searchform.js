@@ -24,8 +24,8 @@ function startSearch() {
 
     // this will animate (fade in, fade out) the search button
     interval = setInterval(function () {
-        element.animate({opacity:'-=0.5'}, 500);
-        element.animate({opacity:'+=1'}, 500);
+        element.animate({opacity: '-=0.5'}, 500);
+        element.animate({opacity: '+=1'}, 500);
     }, 500); // delay between 'loops'
 }
 
@@ -33,9 +33,16 @@ function endSearch() {
     // done searching, clean up
     var element = $('form#search-form .search-button');
     element.prop('disabled', false);
-    
+
     // stop the animation
-    if(interval !== null) { 
+    if (interval !== null) {
         clearInterval(interval);
     }
 }
+
+$(function () {
+    //enable nicer bootstrap-style tooltip via plugin
+    //http://getbootstrap.com/javascript/#tooltips
+    $('form#search-form [data-toggle="tooltip"]').tooltip();
+});
+
