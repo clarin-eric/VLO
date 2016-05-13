@@ -25,16 +25,15 @@ import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermScriptFactory;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
+import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeGlyphicon;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
-import java.io.Serializable;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -199,16 +198,11 @@ public class SearchResultItemPanel extends Panel {
         @Override
         protected void populateItem(Item<ResourceTypeCount> item) {
             final Link resourceLink = new RecordPageLink("recordLink", documentModel, selectionModel);
-            item.add(resourceLink);
-
-            final IModel<String> resourceCountModel = getResourceCountModel(item.getModel());
-            resourceLink.add(new AttributeModifier("title", resourceCountModel));
-
-            final Label label = new Label("resourceCountLabel", new PropertyModel<String>(item.getModel(), "count"));
-            resourceLink.add(label);
-
-            final IModel<String> iconModel = StringResourceModelMigration.of("resourcetype.${resourceType}.glyphiconclass", item.getModel(), "glyphicon-question-sign");
-            resourceLink.add(new WebMarkupContainer("resourceTypeIcon").add(new AttributeAppender("class", iconModel, " ")));
+            item.add(resourceLink
+                    .add(new Label("resourceCountLabel", new PropertyModel<String>(item.getModel(), "count")))
+                    .add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel<String>(item.getModel(), "resourceType")))
+                    .add(new AttributeModifier("title", getResourceCountModel(item.getModel())))
+            );
         }
 
         /**

@@ -23,6 +23,7 @@ import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
+import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeGlyphicon;
 import eu.clarin.cmdi.vlo.wicket.components.SmartLinkFieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
@@ -157,7 +158,8 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
                 });
                 
                 resourceLink.add(new ResourceLinkDetailsPanel("details", resourceInfoModel));
-
+                resourceLink.add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel<String>(resourceInfoModel, "resourceType")));
+                
                 // add to list
                 item.add(resourceLink);
             }
