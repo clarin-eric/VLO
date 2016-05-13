@@ -19,7 +19,7 @@ var interval;
 
 function startSearch() {
     // after a short while start animating the search button
-    var element = $('form#search #searchbutton');
+    var element = $('form#search-form .search-button');
     element.prop('disabled', true);
 
     // this will animate (fade in, fade out) the search button
@@ -31,7 +31,7 @@ function startSearch() {
 
 function endSearch() {
     // done searching, clean up
-    var element = $('form#search #searchbutton');
+    var element = $('form#search-form .search-button');
     element.prop('disabled', false);
     
     // stop the animation
