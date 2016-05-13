@@ -22,7 +22,6 @@ import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
-import eu.clarin.cmdi.vlo.wicket.ResourceTypeCssBehaviour;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SmartLinkFieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
@@ -158,9 +157,6 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
                 });
                 
                 resourceLink.add(new ResourceLinkDetailsPanel("details", resourceInfoModel));
-
-                // sets the css class depending on the resource type
-                item.add(new ResourceTypeCssBehaviour(resourceInfoModel));
 
                 // add to list
                 item.add(resourceLink);

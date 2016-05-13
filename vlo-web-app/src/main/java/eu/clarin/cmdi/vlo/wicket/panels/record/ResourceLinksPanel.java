@@ -19,7 +19,6 @@ package eu.clarin.cmdi.vlo.wicket.panels.record;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
-import eu.clarin.cmdi.vlo.wicket.ResourceTypeCssBehaviour;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
@@ -124,9 +123,6 @@ public class ResourceLinksPanel extends Panel {
             link.add(new Label("filename", new PropertyModel(resourceInfoModel, "fileName")));
             // add details panel shown on hover
             link.add(new ResourceLinkDetailsPanel("details", resourceInfoModel));
-
-            // apply the css class matching the resource type
-            link.add(new ResourceTypeCssBehaviour(resourceInfoModel));
 
             // make the link update via AJAX with resolved location (in case of handle)
             link.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
