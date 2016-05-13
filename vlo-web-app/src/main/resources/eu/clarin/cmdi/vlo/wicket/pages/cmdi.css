@@ -1,4 +1,4 @@
-li
+/*li
 {
     margin: 20px;
     margin-left: -1.2em;
@@ -10,7 +10,6 @@ li
     border: 1px ridge;
     font-weight: bold;
     padding: 5px;
-    /*float: left;*/
 }                    
 
 .leaf
@@ -25,8 +24,6 @@ li
     margin-left: 10px;
     padding: 5px;
     display: inline-block;
-    /*float: left;*/       
-    /*display: table-cell;*/
 }                    
 
 .attributes
@@ -34,7 +31,6 @@ li
     display: inline-block;
     font-style: italic;
     font-weight: normal;
-    /*background-color: rgba(100, 201, 234, 0.4);*/
 }
 
 footer
@@ -45,4 +41,4 @@ footer
 address
 {
     display: inline-block;
-}
+}*/
