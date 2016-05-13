@@ -56,15 +56,16 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
 
     public static final List<Long> ITEMS_PER_PAGE_OPTIONS = Arrays.asList(5L, 10L, 25L, 50L, 100L);
 
-    private final DataView<SolrDocument> resultsView;
-    private final IModel<Set<Object>> expansionsModel;
-
-    private Component navigatorBottom;
-    private Component navigatorTop;
     @SpringBean
     private VloConfig vloConfig;
     @SpringBean
     private PiwikConfig piwikConfig;
+
+    private final DataView<SolrDocument> resultsView;
+    private final IModel<Set<Object>> expansionsModel;
+
+    private final Component navigatorBottom;
+    private final Component navigatorTop;
 
     public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel, IDataProvider<SolrDocument> solrDocumentProvider) {
         super(id, selectionModel);

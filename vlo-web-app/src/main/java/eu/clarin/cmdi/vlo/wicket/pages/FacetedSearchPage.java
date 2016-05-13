@@ -136,12 +136,12 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
                 setVisible(solrDocumentProvider.size() > 0);
             }
         };
-        add(searchResultsPanel);
+        add(searchResultsPanel.setOutputMarkupPlaceholderTag(true));
 
         final AbstractPageableView<SolrDocument> resultsView = searchResultsPanel.getResultsView();
 
         resultsHeader = createResultsHeader("searchresultsheader", getModel(), resultsView, solrDocumentProvider);
-        add(resultsHeader);
+        add(resultsHeader.setOutputMarkupId(true));
     }
 
     private SearchResultsHeaderPanel createResultsHeader(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocument> resultsView, IDataProvider<SolrDocument> solrDocumentProvider) {
