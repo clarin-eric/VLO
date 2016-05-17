@@ -174,7 +174,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             @Override
             public Panel getPanel(String panelId) {
                 final RecordLicenseInfoPanel availabilityPanel = new RecordLicenseInfoPanel(panelId, getModel());
-                availabilityPanel.setMarkupId(LICENSE_SECTION_ANCHOR);
+                availabilityPanel.setMarkupId(LICENSE_SECTION_ANCHOR); //TODO: make it possible to use this target to select license info
                 return availabilityPanel;
             }
         });
@@ -182,28 +182,36 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             @Override
             public Panel getPanel(String panelId) {
                 final CmdiContentPanel cmdiPanel = new CmdiContentPanel(panelId, getModel());
-                
-                // highlight search terms when panel becomes visible
-                cmdiPanel.add(new HighlightSearchTermBehavior());
-                
+                cmdiPanel.add(new HighlightSearchTermBehavior()); // highlight search terms when panel becomes visible
                 return cmdiPanel;
             }
         });
         tabs.add(new AbstractTab(Model.of("Technical details")) {
             @Override
             public Panel getPanel(String panelId) {
-                return createTechnicalDetailsPanel(panelId);
+                return new FieldsTablePanel(panelId, new DocumentFieldsProvider(getModel(), technicalPropertiesFilter, fieldOrder));
             }
         });
 
         if (config.isProcessHierarchies()) {
             //TODO: make hierarchy an optional side pane instead
-            // show hierarchy if applicable
             tabs.add(new AbstractTab(Model.of("Hierarchy")) {
                 @Override
                 public Panel getPanel(String panelId) {
-                    return createHierarchyPanel(panelId);
+                    return new HierarchyPanel(panelId, getModel());
                 }
+
+                @Override
+                public boolean isVisible() {
+                    // only show hierarchy panel if there's anything to show
+                    final SolrDocument document = getModel().getObject();
+                    final Object partCount = document.getFieldValue(FacetConstants.FIELD_HAS_PART_COUNT);
+                    final boolean hasHierarchy // has known parent or children
+                            = null != document.getFieldValue(FacetConstants.FIELD_IS_PART_OF) // has parent
+                            || (null != partCount && !Integer.valueOf(0).equals(partCount)); // children count != 0
+                    return hasHierarchy;
+                }
+
             });
         }
 
@@ -296,28 +304,6 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             }
 
         });
-    }
-
-    private Panel createTechnicalDetailsPanel(String id) {
-        return new FieldsTablePanel(id, new DocumentFieldsProvider(getModel(), technicalPropertiesFilter, fieldOrder));
-    }
-
-    private HierarchyPanel createHierarchyPanel(String id) {
-        return new HierarchyPanel(id, getModel()) {
-
-            @Override
-            protected void onConfigure() {
-                final SolrDocument document = getModel().getObject();
-                final Object partCount = document.getFieldValue(FacetConstants.FIELD_HAS_PART_COUNT);
-                final boolean hasHierarchy // has known parent or children
-                        = null != document.getFieldValue(FacetConstants.FIELD_IS_PART_OF) // has parent
-                        || (null != partCount && !Integer.valueOf(0).equals(partCount)); // children count != 0
-
-                // only show hierarchy panel if there's anything to show
-                setVisible(hasHierarchy);
-            }
-
-        };
     }
 
     @Override
