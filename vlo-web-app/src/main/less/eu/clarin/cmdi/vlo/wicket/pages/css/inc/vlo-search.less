@@ -53,7 +53,7 @@
                 padding: 0;
             }
         }
-        
+
         margin-top: 20px;
     }
 
@@ -84,6 +84,19 @@
 
             /* mixin from vlo-license-icons.less */
             .license-icon-classes(); 
+        }
+    }
+
+    ul.searchresultresources {        
+        padding-left: 1em;
+
+        li {
+            list-style-type: none;
+            margin-bottom: .2em;
+
+            .recordresourcedetails {
+                display: none; //TODO: make display: block and apply styling (see old css)
+            }
         }
     }
 

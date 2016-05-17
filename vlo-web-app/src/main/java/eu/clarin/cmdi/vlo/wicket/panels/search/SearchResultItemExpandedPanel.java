@@ -158,7 +158,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
                 });
                 
                 resourceLink.add(new ResourceLinkDetailsPanel("details", resourceInfoModel));
-                resourceLink.add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel<String>(resourceInfoModel, "resourceType")));
+                item.add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel<String>(resourceInfoModel, "resourceType")));
                 
                 // add to list
                 item.add(resourceLink);

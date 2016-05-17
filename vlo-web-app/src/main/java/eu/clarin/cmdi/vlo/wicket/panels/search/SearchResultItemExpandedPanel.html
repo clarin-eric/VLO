@@ -32,11 +32,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <a class="btn btn-default" wicket:id="recordLink" title="Show detailed information for this search result">More details...</a>
                 </p>
                 <wicket:container wicket:id="resources">
-                    <h3>Resources</h3>
+                    <h4>Resources</h4><!-- panel title? -->
                     <ul class="searchresultresources">
                         <li wicket:id="resource">
+                            <span class="badge"><span wicket:id="resourceTypeIcon"></span></span>
                             <a wicket:id="resourceLink" class="resourceLink">
-                                <span class="badge"><span wicket:id="resourceTypeIcon"></span></span>
                                 <wicket:container wicket:id="resourceName"></wicket:container>
                                 <span wicket:id="details" class="recordresourcedetails"></span>
                             </a>
