@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
-import com.google.common.base.Function;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
@@ -48,12 +47,7 @@ public class PreviousRecordLink extends Link<SearchContext> {
 
     public PreviousRecordLink(String id, IModel<SearchContext> model) {
         super(id, model);
-    }
-
-    @Override
-    protected void onInitialize() {
-        super.onInitialize();
-        add(new LinkDisabledClassBehaviour(this));
+        add(new LinkDisabledClassBehaviour());
     }
 
     @Override

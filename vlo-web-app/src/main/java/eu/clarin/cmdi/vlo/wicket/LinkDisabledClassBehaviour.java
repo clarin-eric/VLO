@@ -16,45 +16,37 @@
  */
 package eu.clarin.cmdi.vlo.wicket;
 
-import com.google.common.base.Function;
-import java.io.Serializable;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 
 /**
- * Behaviour that adds the "disabled" class to a markup element if a (provided)
- * check indicates that the component is not enabled
+ * Behaviour that adds the "disabled" class to a markup element and sets the
+ * "disabled" attribute to "disabled" iff a (provided) check indicates that the
+ * component is not enabled. Useful with bootstrap link buttons.
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
-public class LinkDisabledClassBehaviour extends AttributeAppender implements Serializable {
+public class LinkDisabledClassBehaviour extends Behavior {
 
-    public LinkDisabledClassBehaviour(final Link link) {
-        this(new LinkEnabledFunction(link));
-    }
-
-    public LinkDisabledClassBehaviour(final Function<Void, Boolean> isEnabled) {
-        super("class", new AbstractReadOnlyModel<String>() {
-            @Override
-            public String getObject() {
-                return isEnabled.apply(null) ? null : "disabled";
-            }
-        }, " ");
-    }
-
-    private static class LinkEnabledFunction implements Function<Void, Boolean>, Serializable {
-
-        private final Link link;
-
-        public LinkEnabledFunction(Link link) {
-            this.link = link;
-        }
-
-        @Override
-        public Boolean apply(Void input) {
-            return link.isEnabled();
+    @Override
+    public void bind(Component component) {
+        super.bind(component);
+        if (component instanceof Link) {
+            final Link link = (Link) component;
+            final AbstractReadOnlyModel<String> disabledModel = new AbstractReadOnlyModel<String>() {
+                @Override
+                public String getObject() {
+                    return link.isEnabled() ? null : "disabled";
+                }
+            };
+            link.add(new AttributeAppender("class", disabledModel, " "));
+            link.add(new AttributeModifier("disabled", disabledModel));
+        } else {
+            throw new RuntimeException(getClass().getName() + " can only be used with Link components");
         }
     }
 }
