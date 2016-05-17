@@ -45,12 +45,16 @@ import eu.clarin.cmdi.vlo.wicket.panels.record.HierarchyPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordNavigationPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.ResourceLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
+import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -58,6 +62,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -148,36 +153,59 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, getString("recordpage.unnamedrecord")));
         add(createLandingPageLink("landingPageLink"));
 
-        final FieldsTablePanel fieldsTable = new FieldsTablePanel("documentProperties", new DocumentFieldsProvider(getModel(), basicPropertiesFilter, fieldOrder));
-        fieldsTable.add(new HighlightSearchTermBehavior());
-        add(fieldsTable);
+        add(createTabs("tabs"));
+        createSearchLinks("searchlinks");
+    }
 
-        // Resources section
-        add(new ResourceLinksPanel("resources", getModel()));
-
-        add(new RecordLicenseInfoPanel("licenseInfo", getModel())
-                .setMarkupId(LICENSE_SECTION_ANCHOR));
-
-        // Technical section
-        add(createCmdiContent("cmdi"));
-        add(createTechnicalDetailsPanel("technicalProperties"));
+    private Component createTabs(String id) {
+        final List<ITab> tabs = new ArrayList();
+        tabs.add(new AbstractTab(Model.of("Record details")) {
+            @Override
+            public Panel getPanel(String panelId) {
+                final FieldsTablePanel fieldsTable = new FieldsTablePanel(panelId, new DocumentFieldsProvider(getModel(), basicPropertiesFilter, fieldOrder));
+                fieldsTable.add(new HighlightSearchTermBehavior());
+                return fieldsTable;
+            }
+        });
+        tabs.add(new AbstractTab(Model.of("Resources")) {
+            @Override
+            public Panel getPanel(String panelId) {
+                return (new ResourceLinksPanel(panelId, getModel()));
+            }
+        });
+        tabs.add(new AbstractTab(Model.of("Availability")) {
+            @Override
+            public Panel getPanel(String panelId) {
+                final RecordLicenseInfoPanel availabilityPanel = new RecordLicenseInfoPanel(panelId, getModel());
+                availabilityPanel.setMarkupId(LICENSE_SECTION_ANCHOR);
+                return availabilityPanel;
+            }
+        });
+        tabs.add(new AbstractTab(Model.of("All metadata")) {
+            @Override
+            public Panel getPanel(String panelId) {
+                return createCmdiContent(panelId);
+            }
+        });
+        tabs.add(new AbstractTab(Model.of("Technical details")) {
+            @Override
+            public Panel getPanel(String panelId) {
+                return createTechnicalDetailsPanel(panelId);
+            }
+        });
 
         if (config.isProcessHierarchies()) {
+            //TODO: make hierarchy an optional side pane instead
             // show hierarchy if applicable
-            add(createHierarchyPanel("recordtree"));
-        } else {
-            // invisible stub
-            add(new WebMarkupContainer("recordtree") {
-
+            tabs.add(new AbstractTab(Model.of("Hierarchy")) {
                 @Override
-                public boolean isVisible() {
-                    return false;
+                public Panel getPanel(String panelId) {
+                    return createHierarchyPanel(panelId);
                 }
-
             });
         }
 
-        createSearchLinks("searchlinks");
+        return new TabbedPanel(id, tabs);
     }
 
     private Component createNavigation(final String id) {
@@ -268,7 +296,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         });
     }
 
-    private Component createCmdiContent(String id) {
+    private Panel createCmdiContent(String id) {
 
         final IModel<String> locationModel = new SolrFieldStringModel(getModel(), FacetConstants.FIELD_FILENAME);
         final UrlFromStringModel locationUrlModel = new UrlFromStringModel(locationModel);
@@ -286,7 +314,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         return togglePanel;
     }
 
-    private TogglePanel createTechnicalDetailsPanel(String id) {
+    private Panel createTechnicalDetailsPanel(String id) {
         return new TogglePanel(id, Model.of("Show technical details"), Model.of("Hide technical details")) {
 
             @Override
