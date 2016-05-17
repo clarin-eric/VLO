@@ -35,11 +35,9 @@ import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
-import eu.clarin.cmdi.vlo.wicket.model.UrlFromStringModel;
-import eu.clarin.cmdi.vlo.wicket.model.XsltModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.CmdiContentPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.ContentSearchFormPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.TogglePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.HierarchyPanel;
@@ -58,7 +56,6 @@ import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -167,7 +164,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 return fieldsTable;
             }
         });
-        tabs.add(new AbstractTab(Model.of("Resources")) {
+        tabs.add(new AbstractTab(Model.of("Resources")) { //TODO: resource count in title model
             @Override
             public Panel getPanel(String panelId) {
                 return (new ResourceLinksPanel(panelId, getModel()));
@@ -184,7 +181,12 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         tabs.add(new AbstractTab(Model.of("All metadata")) {
             @Override
             public Panel getPanel(String panelId) {
-                return createCmdiContent(panelId);
+                final CmdiContentPanel cmdiPanel = new CmdiContentPanel(panelId, getModel());
+                
+                // highlight search terms when panel becomes visible
+                cmdiPanel.add(new HighlightSearchTermBehavior());
+                
+                return cmdiPanel;
             }
         });
         tabs.add(new AbstractTab(Model.of("Technical details")) {
@@ -296,32 +298,8 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         });
     }
 
-    private Panel createCmdiContent(String id) {
-
-        final IModel<String> locationModel = new SolrFieldStringModel(getModel(), FacetConstants.FIELD_FILENAME);
-        final UrlFromStringModel locationUrlModel = new UrlFromStringModel(locationModel);
-        final TogglePanel togglePanel = new TogglePanel(id, Model.of("Show all metadata fields"), Model.of("Hide all metadata fields")) {
-
-            @Override
-            protected Component createContent(String id) {
-                final Label cmdiContentLabel = new Label(id, new XsltModel(locationUrlModel));
-                cmdiContentLabel.setEscapeModelStrings(false);
-                return cmdiContentLabel;
-            }
-        };
-        // highlight search terms when panel becomes visible
-        togglePanel.add(new HighlightSearchTermBehavior());
-        return togglePanel;
-    }
-
     private Panel createTechnicalDetailsPanel(String id) {
-        return new TogglePanel(id, Model.of("Show technical details"), Model.of("Hide technical details")) {
-
-            @Override
-            protected Component createContent(String id) {
-                return new FieldsTablePanel(id, new DocumentFieldsProvider(getModel(), technicalPropertiesFilter, fieldOrder));
-            }
-        };
+        return new FieldsTablePanel(id, new DocumentFieldsProvider(getModel(), technicalPropertiesFilter, fieldOrder));
     }
 
     private HierarchyPanel createHierarchyPanel(String id) {
