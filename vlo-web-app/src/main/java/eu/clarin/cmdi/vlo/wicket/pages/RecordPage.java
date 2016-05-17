@@ -164,7 +164,8 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 return fieldsTable;
             }
         });
-        tabs.add(new AbstractTab(Model.of("Resources")) { //TODO: resource count in title model
+        tabs.add(new AbstractTab(new StringResourceModel("recordpage.tabs.resources", // model to include resource count in tab title
+                new SolrFieldStringModel(getModel(), FacetConstants.FIELD_RESOURCE_COUNT))) {
             @Override
             public Panel getPanel(String panelId) {
                 return (new ResourceLinksPanel(panelId, getModel()));

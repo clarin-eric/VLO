@@ -123,6 +123,7 @@ public class VloSolrSpringConfig {
             FacetConstants.FIELD_HIERARCHY_WEIGHT,
             FacetConstants.FIELD_HAS_PART,
             FacetConstants.FIELD_HAS_PART_COUNT,
+            FacetConstants.FIELD_RESOURCE_COUNT,
             FacetConstants.FIELD_IS_PART_OF,
             FacetConstants.FIELD_SOLR_SCORE
     );
