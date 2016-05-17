@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.BootstrapTabbedPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordLicenseInfoPanel;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.FacetConstants;
@@ -54,7 +55,6 @@ import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
-import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -205,7 +205,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             });
         }
 
-        return new TabbedPanel(id, tabs);
+        return new BootstrapTabbedPanel(id, tabs);
     }
 
     private Component createNavigation(final String id) {
