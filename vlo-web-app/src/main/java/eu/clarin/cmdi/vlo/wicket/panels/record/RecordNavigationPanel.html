@@ -23,10 +23,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <div id="recordindex" wicket:id="recordIndex">[INDEX]</div>
-            <div id="recordprevnext">
-                <a wicket:id="previous">&lt; previous</a> 
-                | <a wicket:id="next">next &gt;</a><br />
+            <div class="row">
+                <div wicket:id="recordIndex" id="recordindex" class="col-xs-6">[INDEX]</div>
+                <div id="recordprevnext" class="col-xs-6">
+                    <div class="pull-right">
+                        <a class="btn btn-default" wicket:id="previous" title="Previous search result">&lt; previous</a> 
+                        <a class="btn btn-default" wicket:id="next" title="Next search result">next &gt;</a><br />
+                    </div>
+                </div>
             </div>
         </wicket:panel>
     </body>

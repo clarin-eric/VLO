@@ -16,9 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
+import com.google.common.base.Function;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import eu.clarin.cmdi.vlo.wicket.LinkDisabledClassBehaviour;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import java.util.List;
@@ -39,13 +41,19 @@ public class NextRecordLink extends Link<SearchContext> {
 
     @SpringBean
     private SolrDocumentService documentService;
-    @SpringBean(name="documentParamsConverter")
+    @SpringBean(name = "documentParamsConverter")
     private PageParametersConverter<SolrDocument> documentParamConverter;
-    @SpringBean(name="searchContextParamsConverter")
+    @SpringBean(name = "searchContextParamsConverter")
     private PageParametersConverter<SearchContext> contextParamConverter;
 
     public NextRecordLink(String id, IModel<SearchContext> model) {
         super(id, model);
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        add(new LinkDisabledClassBehaviour(this));
     }
 
     @Override
