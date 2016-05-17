@@ -16,9 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
+import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeGlyphicon;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
@@ -61,7 +63,7 @@ public class ResourceLinksPanel extends Panel {
      */
     public ResourceLinksPanel(String id, IModel<SolrDocument> documentModel) {
         super(id, documentModel);
-        
+
         final SolrFieldModel<String> resourcesModel
                 = new SolrFieldModel<String>(documentModel, FacetConstants.FIELD_RESOURCE);
         final IModel<String> landingPageModel
@@ -75,7 +77,7 @@ public class ResourceLinksPanel extends Panel {
         add(resourceListing);
 
         // pagination
-        add(new AjaxPagingNavigator("paging", resourceListing) {
+        add(new BootstrapAjaxPagingNavigator("paging", resourceListing) {
 
             @Override
             protected void onConfigure() {
@@ -118,6 +120,8 @@ public class ResourceLinksPanel extends Panel {
             // wrap href in model that transforms handle links
             final IModel<String> linkModel = new HandleLinkModel(new PropertyModel(resourceInfoModel, "href"));
             final ExternalLink link = new ExternalLink("showResource", linkModel);
+
+            link.add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel(resourceInfoModel, "resourceType")));;
 
             // set the file name as the link's text content
             link.add(new Label("filename", new PropertyModel(resourceInfoModel, "fileName")));

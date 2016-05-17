@@ -23,9 +23,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <div id="resourceList">
+            <div id="resourcelist">
                 <wicket:container wicket:id="resource">
-                    <a class="resourceLink" wicket:id="showResource">
+                    <a class="resourcelink" wicket:id="showResource">
+                        <span wicket:id="resourceTypeIcon"></span>
                         <wicket:container wicket:id="filename">resource.txt</wicket:container>
                         <span wicket:id="details" class="recordresourcedetails"></span>
                     </a>
@@ -38,7 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <strong><a wicket:id="landingPageLink" target="_blank">the original provider's page for this record</a></strong>.
                 </span>
             </p>
-            <div wicket:id="paging" id="resourcespagination" class="resultpagination">[paging]</div>
+            <ul wicket:id="paging" id="resourcespagination" class="resultpagination">[paging]</ul>
         </wicket:panel>
     </body>
 </html>
