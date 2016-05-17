@@ -135,9 +135,9 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
     private void addComponents() {
         // Navigation
-        add(createNavigation("navigation"));
+        add(createNavigation("recordNavigation"));
 
-        final WebMarkupContainer topNavigation = new WebMarkupContainer("topnavigation");
+        final WebMarkupContainer topNavigation = new WebMarkupContainer("navigation");
         add(topNavigation
                 .add(new BreadCrumbPanel("breadcrumbs", selectionModel))
                 .add(createPermalink("permalink", topNavigation))
