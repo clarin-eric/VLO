@@ -45,47 +45,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
 
-            <div class="content" id="record">
+            <wicket:container wicket:id="recordNavigation"></wicket:container>
 
-                <wicket:container wicket:id="recordNavigation"></wicket:container>
+            <h1 wicket:id="name" id="recordtitle">[TITLE]</h1>
 
-                <h1 wicket:id="name" id="recordtitle">[TITLE]</h1>
-                <a wicket:id="landingPageLink" target="_blank" id="recordlandingpage">Show the original provider's page for this record</a>
-
-<!--
-                <div id="recorddetails">
-                    <div id="recordProperties" wicket:id="documentProperties">[PROPERTIES TABLE]</div>
-                </div>-->
-
-<!--                <div wicket:id="licenseInfo">
-                    [LICENSE INFO]
-                </div>-->
+            <div id="recordoutlinks">
+                <a wicket:id="landingPageLink" target="_blank" id="recordlandingpage">
+                    <span class="glyphicon glyphicon-new-window"></span>
+                    <span>Show the original provider's page for this record</span>
+                </a>
 
                 <div wicket:id="searchlinks" id="recordsearchpage">
-                    <h2>Search</h2>
-                    <ul>
-                        <li wicket:id="searchPage">
-                            <a wicket:id="searchLink">Search page for this record</a>
-                        </li>
-                        <li wicket:id="contentSearch">
-                            <wicket:container wicket:id="fcsForm">[FCS form]</wicket:container>
-                        </li>
-                    </ul>
+                    <div wicket:id="searchPage">
+                        <a wicket:id="searchLink">
+                            <span class="glyphicon glyphicon-search"></span>
+                            <span>Search page for this record</span>
+                        </a>
+                    </div>
+                    <div wicket:id="contentSearch">
+                        <wicket:container wicket:id="fcsForm">[FCS form]</wicket:container>
+                    </div>
                 </div>
-
-                <div wicket:id="tabs" class="tabpanel">[TABS]</div>
-
-                <!--<div wicket:id="resources" id="recordresources">[RESOURCES]</div>-->
-
-                <!--<div id="recordtree" wicket:id="recordtree"></div>-->
-
-                <!--<h2>Advanced</h2>-->
-
-                <!--<div wicket:id="cmdi" id="recordcmdi">[CMDI metadata]</div>-->
-
-                <!--<div wicket:id="technicalProperties" id="recordtechnicaldetails">[TECHNICAL PROPERTIES TABLE]</div>-->
-
             </div>
+
+            <div wicket:id="tabs" class="tabpanel">[TABS]</div>
+
         </wicket:extend>
     </body>
 </html>
