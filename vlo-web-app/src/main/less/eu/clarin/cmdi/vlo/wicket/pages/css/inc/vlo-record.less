@@ -19,28 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : Twan Goosen <twan.goosen@mpi.nl>
 */
 
-.recorddetailstable {
-    .fieldName {
-        padding: 2px 0px;
-    }
-
-    .attributeValue {
-        ul {
-            padding: 0;
-            margin: 0;
-            li {
-                list-style: none;
-                border-bottom: 1px solid #ccc;
-                padding: 2px 0px;
-
-                &:last-child {
-                    border-bottom: none;
-                }
-            }
-        }
-    }
-}
-
 #recordprevnext {
     a.btn.disabled {
         pointer-events: initial;
@@ -57,23 +35,7 @@ h1#recordtitle {
     margin-bottom: .5em;
 }
 
-#resourcelist {
-
-    .resourcelink {
-        display: block;
-        margin-top: 5px;
-
-        .glyphicon {
-            font-size: 24px;
-        }
-
-        .recordresourcedetails {
-            display: none; //TODO: make display: block and apply styling (see old css)
-        }
-    }
-}
-
-.license-availability-tags {
+#record-license-availability-tags {
     a {
         display: inline-block;
         height: 1.4em;
@@ -103,84 +65,135 @@ h1#recordtitle {
     }
 }
 
-@licenseInfoIconSize: 2em;
-@licenseInfoTableWidth: 60em;
-
-div.recordLicenseInfo {
-    ul {
-        width: @licenseInfoTableWidth;
+.record-tabpanel {
+    .tab-content {
         padding-top: .5em;
         padding-bottom: .5em;
+    }
 
-        &.licenseAvailability {
+    .recorddetailstable {
+        margin-top: -.5em; // counter tab content padding for table
 
-            li {
-                list-style: none;
-                padding: .25em;
-                margin-bottom: 0;
-            }
+        .fieldName {
+            padding: 2px 0px;
+        }
 
-            &.licenseAvailability li {
-                background-size: @licenseInfoIconSize;
-                background-position-y: .35em;
-                background-position-x: .25em;
-                background-repeat: no-repeat;
+        .attributeValue {
+            ul {
+                padding: 0;
+                margin: 0;
+                li {
+                    list-style: none;
+                    border-bottom: 1px solid #ccc;
+                    padding: 2px 0px;
 
-
-                padding: .25em 0 .25em @licenseInfoIconSize + 1em;
-                min-height: @licenseInfoIconSize + .5em;
-
-                span {
-                    display: block;
-                    padding-top: .25em;
-                }
-
-                &.license {
-                    background-image: url('fine_print-64.png'); /* default (icon from icons8.com) */
-                    .license-icon-classes();
-                }
-
-                &.availability {
-                    background-image: url('license/other.png'); /*default*/
-                    /* mixins from vlo-license-icons.less */
-                    .availability-icon-classes();
-                    .availability-modifier-icon-classes();
+                    &:last-child {
+                        border-bottom: none;
+                    }
                 }
             }
         }
     }
 
-    .accessInfo {
+    #resourcelist {
 
-        ul li {
-            list-style-type: none;
+        a.resourcelink {
+            display: block;
+            margin-top: 5px;
 
-            &:before {
-                content: "-";
-                padding-right: .5em;
+            .glyphicon {
+                font-size: 24px;
+            }
+
+            .recordresourcedetails {
+                display: none; //TODO: make display: block and apply styling (see old css)
+            }
+
+            &:hover {
+                text-decoration: none;
             }
         }
     }
-}
 
-div.noRecordLicenseInfo {
-    padding-left: @licenseInfoIconSize + 1em;
-    background-image: url('license/unspecified.png');
-    background-size: @licenseInfoIconSize;
-    background-position: 0px 0px;
-    background-repeat: no-repeat;
-    min-height: @licenseInfoIconSize + 1em;
+    @licenseInfoIconSize: 2em;
+    @licenseInfoTableWidth: 60em;
 
-    p:last-child {
-        padding-bottom: 0;
+    div.recordLicenseInfo {
+        ul {
+            width: @licenseInfoTableWidth;
+            padding-top: .5em;
+            padding-bottom: .5em;
+
+            &.licenseAvailability {
+
+                li {
+                    list-style: none;
+                    padding: .25em;
+                    margin-bottom: 0;
+                }
+
+                &.licenseAvailability li {
+                    background-size: @licenseInfoIconSize;
+                    background-position-y: .35em;
+                    background-position-x: .25em;
+                    background-repeat: no-repeat;
+
+
+                    padding: .25em 0 .25em @licenseInfoIconSize + 1em;
+                    min-height: @licenseInfoIconSize + .5em;
+
+                    span {
+                        display: block;
+                        padding-top: .25em;
+                    }
+
+                    &.license {
+                        background-image: url('fine_print-64.png'); /* default (icon from icons8.com) */
+                        .license-icon-classes();
+                    }
+
+                    &.availability {
+                        background-image: url('@{license-icons-dir}other.png'); /*default*/
+                        /* mixins from vlo-license-icons.less */
+                        .availability-icon-classes();
+                        .availability-modifier-icon-classes();
+                    }
+                }
+            }
+        }
+
+        .accessInfo {
+
+            ul li {
+                list-style-type: none;
+
+                &:before {
+                    content: "-";
+                    padding-right: .5em;
+                }
+            }
+        }
     }
-}
 
-.tree-header {
-    .tree-parent {
-        a {
-            font-weight: none;
-            color: black;
+    div.noRecordLicenseInfo {
+        padding-left: @licenseInfoIconSize + 1em;
+        background-image: url('@{license-icons-dir}unspecified.png');
+        background-size: @licenseInfoIconSize;
+        background-position: 0px 0px;
+        background-repeat: no-repeat;
+        min-height: @licenseInfoIconSize + 1em;
+
+        p:last-child {
+            padding-bottom: 0;
+        }
+    }
+
+    .tree-header {
+        .tree-parent {
+            a {
+                font-weight: none;
+                color: black;
+            }
         }
     }
 }
