@@ -30,9 +30,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 navigate to that item.
             </p>
 
-            <div wicket:id="parents">
+            <div class="tree-header" wicket:id="parents">
                 <div class="tree-parent" wicket:id="parentsList">
-                    <a class="parent-up" wicket:id="up" title="Move up in hierarchy"><span>[up]</span></a>
+                    <a class="parent-up" wicket:id="up" title="Upwards expansion of hierarchy"><span class="glyphicon glyphicon-level-up" aria-hidden="true"></span></a>
                     <wicket:container wicket:id="link">[link]</wicket:container>
                 </div>
                 <a wicket:id="showAll">Show all... (<span wicket:id="itemCount">999</span>)</a>
