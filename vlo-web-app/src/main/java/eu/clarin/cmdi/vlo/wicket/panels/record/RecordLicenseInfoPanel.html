@@ -23,13 +23,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <div wicket:id="availableInfo" id="licenseInfo">
+            <div wicket:id="availableInfo" class="recordLicenseInfo">
                 <p>
                     The following information regarding <strong>availability and/or 
                         licencing</strong> has been extracted from the information 
                     offered by the original provider:
                 </p>
-                <ul id="licenseAvailability">
+                <ul class="licenseAvailability panel panel-default">
                     <li class="license" wicket:id="license">
                         <a wicket:id="licensePage" target="_blank"><span wicket:id="licenseName"></span></a>
                     </li>
@@ -37,9 +37,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <span wicket:id="availabilityDescription"></span>
                     </li>
                 </ul>
-                <div id="accessInfo" wicket:id="accessInfo" >
+                <div class="accessInfo" wicket:id="accessInfo" >
                     <a wicket:id="accessInfoToggle"></a>
-                    <ul wicket:id="accessInfoTable">
+                    <ul class="panel panel-default" wicket:id="accessInfoTable">
                         <li wicket:id="accessInfoItem"><span wicket:id="accessInfoValue"></span></li>
                     </ul>
                 </div>
@@ -56,7 +56,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </span>
                 </p>
             </div>
-            <div wicket:id="noInfo" class="noLicenseInfo">
+            <div wicket:id="noInfo" class="noRecordLicenseInfo">
                 <p>
                     <strong>No information regarding availability and/or 
                     licencing</strong> has been extracted from the information 

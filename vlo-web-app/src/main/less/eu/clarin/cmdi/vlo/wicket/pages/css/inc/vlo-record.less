@@ -72,6 +72,79 @@ h1#recordtitle {
     }
 }
 
+@licenseInfoIconSize: 2em;
+@licenseInfoTableWidth: 60em;
+
+div.recordLicenseInfo {
+    ul {
+        width: @licenseInfoTableWidth;
+        padding-top: .5em;
+        padding-bottom: .5em;
+
+        &.licenseAvailability {
+
+            li {
+                list-style: none;
+                padding: .25em;
+                margin-bottom: 0;
+            }
+
+            &.licenseAvailability li {
+                background-size: @licenseInfoIconSize;
+                background-position-y: .35em;
+                background-position-x: .25em;
+                background-repeat: no-repeat;
+
+
+                padding: .25em 0 .25em @licenseInfoIconSize + 1em;
+                min-height: @licenseInfoIconSize + .5em;
+
+                span {
+                    display: block;
+                    padding-top: .25em;
+                }
+
+                &.license {
+                    background-image: url('fine_print-64.png'); /* default (icon from icons8.com) */
+                    .license-icon-classes();
+                }
+
+                &.availability {
+                    background-image: url('license/other.png'); /*default*/
+                    /* mixins from vlo-license-icons.less */
+                    .availability-icon-classes();
+                    .availability-modifier-icon-classes();
+                }
+            }
+        }
+    }
+
+    .accessInfo {
+
+        ul li {
+            list-style-type: none;
+
+            &:before {
+                content: "-";
+                padding-right: .5em;
+            }
+        }
+    }
+}
+
+div.noRecordLicenseInfo {
+    padding-left: @licenseInfoIconSize + 1em;
+    background-image: url('license/unspecified.png');
+    background-size: @licenseInfoIconSize;
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+    min-height: @licenseInfoIconSize + 1em;
+
+    p:last-child {
+        padding-bottom: 0;
+    }
+}
+
 .tree-header {
     .tree-parent {
         a {
