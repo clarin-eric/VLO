@@ -66,13 +66,17 @@ h1#recordtitle {
 }
 
 .record-tabpanel {
+    @content-top-bottom-padding: .5em;
     .tab-content {
-        padding-top: .5em;
-        padding-bottom: .5em;
+        padding-top: @content-top-bottom-padding;
+        padding-bottom: @content-top-bottom-padding;
+
+        & > table {
+            margin-top: -@content-top-bottom-padding; // counter tab content padding for table
+        }
     }
 
     .recorddetailstable {
-        margin-top: -.5em; // counter tab content padding for table
 
         .fieldName {
             padding: 2px 0px;
@@ -95,15 +99,9 @@ h1#recordtitle {
         }
     }
 
-    #resourcelist {
+    table.resourcelist {
 
         a.resourcelink {
-            display: block;
-            margin-top: 5px;
-
-            .glyphicon {
-                font-size: 24px;
-            }
 
             .recordresourcedetails {
                 display: none; //TODO: make display: block and apply styling (see old css)

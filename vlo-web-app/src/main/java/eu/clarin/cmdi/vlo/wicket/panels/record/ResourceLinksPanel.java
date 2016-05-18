@@ -73,7 +73,13 @@ public class ResourceLinksPanel extends Panel {
 
         // list view that shows all resources as links that show a resource details panel when clicked
         final ResourcesListView resourceListing = new ResourcesListView("resource", new CollectionListModel<>(resourcesModel));
-        add(resourceListing);
+        add(new WebMarkupContainer("resources") {
+            @Override
+            protected void onConfigure() {
+                setVisible(resourceListing.getPageCount() > 0);
+            }
+
+        }.add(resourceListing).setOutputMarkupId(true));
 
         // pagination
         add(new BootstrapAjaxPagingNavigator("paging", resourceListing) {
@@ -120,12 +126,10 @@ public class ResourceLinksPanel extends Panel {
             final IModel<String> linkModel = new HandleLinkModel(new PropertyModel(resourceInfoModel, "href"));
             final ExternalLink link = new ExternalLink("showResource", linkModel);
 
-            link.add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel(resourceInfoModel, "resourceType")));;
+            item.add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel(resourceInfoModel, "resourceType")));;
 
             // set the file name as the link's text content
             link.add(new Label("filename", new PropertyModel(resourceInfoModel, "fileName")));
-            // add details panel shown on hover
-            link.add(new ResourceLinkDetailsPanel("details", resourceInfoModel));
 
             // make the link update via AJAX with resolved location (in case of handle)
             link.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
@@ -138,6 +142,10 @@ public class ResourceLinksPanel extends Panel {
 
             link.setOutputMarkupId(true);
             item.add(link);
+
+            // add details panel
+            item.add(new ResourceLinkDetailsPanel("details", resourceInfoModel));
+
         }
     }
 

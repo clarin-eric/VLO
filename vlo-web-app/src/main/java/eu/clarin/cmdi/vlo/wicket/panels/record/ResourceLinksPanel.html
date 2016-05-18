@@ -23,15 +23,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <div id="resourcelist">
+            <table wicket:id="resources" class="table table-striped resourcelist">
+                <tr>
+                    <th><!-- icon --></th>
+                    <th>Name</th>
+                    <th class="recordresourcedetailstitle">Type</th>
+                    <th class="recordresourcedetailsitem">File name</th>
+                    <th class="recordresourcedetailsitem">Mime type</th>
+                    <th class="recordresourcedetailsitem">Location</th>
+                </tr>
+
                 <wicket:container wicket:id="resource">
-                    <a class="resourcelink" wicket:id="showResource">
-                        <span wicket:id="resourceTypeIcon"></span>
-                        <wicket:container wicket:id="filename">resource.txt</wicket:container>
-                        <span wicket:id="details" class="recordresourcedetails"></span>
-                    </a>
+                    <tr>
+                        <td>                            
+                            <span wicket:id="resourceTypeIcon"></span>
+                        </td>
+                        <td>
+                            <a class="resourcelink" wicket:id="showResource">
+                                <wicket:container wicket:id="filename">resource.txt</wicket:container>
+                            </a>
+                        </td>
+                        <wicket:container wicket:id="details"></wicket:container>
+                    </tr>
                 </wicket:container>
-            </div>
+
+            </table>
             <p wicket:id="noResources">
                 This record does not provide any links to resources.
                 <span wicket:id="landingPageContainer">
