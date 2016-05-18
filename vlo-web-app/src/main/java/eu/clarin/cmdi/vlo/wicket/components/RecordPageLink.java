@@ -18,7 +18,6 @@ package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
-import static eu.clarin.cmdi.vlo.wicket.FragmentEncodingMountedMapper.FRAGMENT_PAGE_PARAMETER;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.link.Link;
@@ -41,7 +40,7 @@ public class RecordPageLink extends Link {
 
     private final IModel<SolrDocument> documentModel;
     private final IModel<SearchContext> selectionModel;
-    private final String fragment;
+    private final String initialTab;
 
     /**
      *
@@ -67,14 +66,13 @@ public class RecordPageLink extends Link {
      * @param id component id
      * @param documentModel document model
      * @param selectionModel search context model
-     * @param pageFragment page id/anchor to jump to, to be converted into a
-     * fragment identifier in the target URL (can be null)
+     * @param initialTab content tab to select initially (can be null)
      */
-    public RecordPageLink(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel, String pageFragment) {
+    public RecordPageLink(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel, String initialTab) {
         super(id);
         this.documentModel = documentModel;
         this.selectionModel = selectionModel;
-        this.fragment = pageFragment;
+        this.initialTab = initialTab;
     }
 
     @Override
@@ -83,8 +81,8 @@ public class RecordPageLink extends Link {
         if (selectionModel != null) {
             params.mergeWith(contextParamConverter.toParameters(selectionModel.getObject()));
         }
-        if (fragment != null) {
-            params.add(FRAGMENT_PAGE_PARAMETER, fragment);
+        if (initialTab != null) {
+            params.add(RecordPage.INITIAL_TAB_PAGE_PARAMETER, initialTab);
         }
         setResponsePage(RecordPage.class, params);
     }

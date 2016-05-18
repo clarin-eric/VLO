@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordLicenseInfoPanel;
@@ -49,6 +50,7 @@ import eu.clarin.cmdi.vlo.wicket.panels.record.ResourceLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultItemLicensePanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
@@ -57,6 +59,7 @@ import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -72,6 +75,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.string.StringValue;
 
 /**
  *
@@ -79,7 +83,21 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public class RecordPage extends VloBasePage<SolrDocument> {
 
-    public final static String LICENSE_SECTION_ANCHOR = "recordlicense";
+    /**
+     * Optional page parameter that determines the initial tab
+     */
+    public static final String INITIAL_TAB_PAGE_PARAMETER = "tab";
+    
+    public final static String DETAILS_SECTION = "details";
+    public final static String AVAILABILITY_SECTION = "availability";
+    public final static String RESOURCES_SECTION = "resources";
+    public final static String ALL_METADATA_SECTION = "cmdi";
+    public final static String TECHNICAL_DETAILS_SECTION = "technical";
+    public final static String HIERARCHY_SECTION = "hierarchy";
+    
+    private final static List<String> TABS_ORDER
+            = ImmutableList.of(DETAILS_SECTION, AVAILABILITY_SECTION, RESOURCES_SECTION, ALL_METADATA_SECTION, TECHNICAL_DETAILS_SECTION, HIERARCHY_SECTION);
+
     private final static ResourceReference CMDI_HTML_CSS = new CssResourceReference(RecordPage.class, "cmdi.css");
 
     @SpringBean(name = "documentParamsConverter")
@@ -136,10 +154,10 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             setModel(new SolrDocumentModel(document));
         }
 
-        addComponents();
+        addComponents(params);
     }
 
-    private void addComponents() {
+    private void addComponents(PageParameters params) {
         // Navigation
         add(createNavigation("recordNavigation"));
 
@@ -154,7 +172,16 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, getString("recordpage.unnamedrecord")));
         add(createLandingPageLink("landingPageLink"));
 
-        add(createTabs("tabs"));
+        final TabbedPanel tabs = createTabs("tabs");
+        final StringValue initialTab = params.get(INITIAL_TAB_PAGE_PARAMETER);
+        if (!initialTab.isEmpty()) {
+            final int tabIndex = TABS_ORDER.indexOf(initialTab.toString());
+            if (tabIndex >= 0) {
+                tabs.setSelectedTab(tabIndex);
+            }
+        }
+        add(tabs);
+
         add(createSearchLinks("searchlinks"));
         //define the order for availability values
         final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering(
@@ -163,9 +190,9 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         add(new SearchResultItemLicensePanel("licenseInfo", getModel(), navigationModel, availabilityOrdering));
     }
 
-    private Component createTabs(String id) {
-        final List<ITab> tabs = new ArrayList();
-        tabs.add(new AbstractTab(Model.of("Record details")) {
+    private TabbedPanel createTabs(String id) {
+        final List<ITab> tabs = new ArrayList(Collections.nCopies(TABS_ORDER.size(), null));
+        tabs.set(TABS_ORDER.indexOf(DETAILS_SECTION), new AbstractTab(Model.of("Record details")) {
             @Override
             public Panel getPanel(String panelId) {
                 final FieldsTablePanel fieldsTable = new FieldsTablePanel(panelId, new DocumentFieldsProvider(getModel(), basicPropertiesFilter, fieldOrder));
@@ -173,22 +200,22 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 return fieldsTable;
             }
         });
-        tabs.add(new AbstractTab(new StringResourceModel("recordpage.tabs.resources", // model to include resource count in tab title
+        tabs.set(TABS_ORDER.indexOf(RESOURCES_SECTION), new AbstractTab(new StringResourceModel("recordpage.tabs.resources", // model to include resource count in tab title
                 new SolrFieldStringModel(getModel(), FacetConstants.FIELD_RESOURCE_COUNT))) {
             @Override
             public Panel getPanel(String panelId) {
                 return (new ResourceLinksPanel(panelId, getModel()));
             }
         });
-        tabs.add(new AbstractTab(Model.of("Availability")) {
+        tabs.set(TABS_ORDER.indexOf(AVAILABILITY_SECTION), new AbstractTab(Model.of("Availability")) {
             @Override
             public Panel getPanel(String panelId) {
                 final RecordLicenseInfoPanel availabilityPanel = new RecordLicenseInfoPanel(panelId, getModel());
-                availabilityPanel.setMarkupId(LICENSE_SECTION_ANCHOR); //TODO: make it possible to use this target to select license info
+                availabilityPanel.setMarkupId(AVAILABILITY_SECTION); //TODO: make it possible to use this target to select license info
                 return availabilityPanel;
             }
         });
-        tabs.add(new AbstractTab(Model.of("All metadata")) {
+        tabs.set(TABS_ORDER.indexOf(ALL_METADATA_SECTION), new AbstractTab(Model.of("All metadata")) {
             @Override
             public Panel getPanel(String panelId) {
                 final CmdiContentPanel cmdiPanel = new CmdiContentPanel(panelId, getModel());
@@ -196,7 +223,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 return cmdiPanel;
             }
         });
-        tabs.add(new AbstractTab(Model.of("Technical details")) {
+        tabs.set(TABS_ORDER.indexOf(TECHNICAL_DETAILS_SECTION), new AbstractTab(Model.of("Technical details")) {
             @Override
             public Panel getPanel(String panelId) {
                 return new FieldsTablePanel(panelId, new DocumentFieldsProvider(getModel(), technicalPropertiesFilter, fieldOrder));
@@ -205,7 +232,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
         if (config.isProcessHierarchies()) {
             //TODO: make hierarchy an optional side pane instead
-            tabs.add(new AbstractTab(Model.of("Hierarchy")) {
+            tabs.set(TABS_ORDER.indexOf(HIERARCHY_SECTION), new AbstractTab(Model.of("Hierarchy")) {
                 @Override
                 public Panel getPanel(String panelId) {
                     return new HierarchyPanel(panelId, getModel());
@@ -223,6 +250,8 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 }
 
             });
+        } else {
+            tabs.remove(TABS_ORDER.indexOf(HIERARCHY_SECTION));
         }
 
         return new AjaxBootstrapTabbedPanel(id, tabs);
