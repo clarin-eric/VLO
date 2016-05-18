@@ -16,17 +16,20 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import com.google.common.collect.Ordering;
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordLicenseInfoPanel;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
+import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
+import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
@@ -43,6 +46,7 @@ import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.HierarchyPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordNavigationPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.ResourceLinksPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultItemLicensePanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import java.util.ArrayList;
 import java.util.List;
@@ -151,7 +155,12 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         add(createLandingPageLink("landingPageLink"));
 
         add(createTabs("tabs"));
-        createSearchLinks("searchlinks");
+        add(createSearchLinks("searchlinks"));
+        //define the order for availability values
+        final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering(
+                //extract the 'primary' availability values from the configuration
+                FieldValueDescriptor.valuesList(config.getAvailabilityValues()));
+        add(new SearchResultItemLicensePanel("licenseInfo", getModel(), navigationModel, availabilityOrdering));
     }
 
     private Component createTabs(String id) {
@@ -273,10 +282,10 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         return landingPageLink;
     }
 
-    private void createSearchLinks(String id) {
+    private Component createSearchLinks(String id) {
         final SolrFieldModel<String> searchPageModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_SEARCHPAGE);
         final SolrFieldModel<String> searchServiceModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_SEARCH_SERVICE);
-        add(new WebMarkupContainer(id) {
+        return new WebMarkupContainer(id) {
             {
                 //Add search page links (can be multiple)
                 add(new ListView<String>("searchPage", new CollectionListModel<>(searchPageModel)) {
@@ -304,7 +313,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 setVisible(searchPageModel.getObject() != null || searchServiceModel.getObject() != null);
             }
 
-        });
+        };
     }
 
     @Override

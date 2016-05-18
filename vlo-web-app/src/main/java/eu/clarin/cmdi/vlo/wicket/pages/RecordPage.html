@@ -49,21 +49,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             <h1 wicket:id="name" id="recordtitle">[TITLE]</h1>
 
-            <div id="recordoutlinks">
-                <a wicket:id="landingPageLink" target="_blank" id="recordlandingpage">
-                    <span class="glyphicon glyphicon-new-window"></span>
-                    <span>Show the original provider's page for this record</span>
-                </a>
-
-                <div wicket:id="searchlinks" id="recordsearchpage">
-                    <div wicket:id="searchPage">
-                        <a wicket:id="searchLink">
-                            <span class="glyphicon glyphicon-search"></span>
-                            <span>Search page for this record</span>
+            <div id="record-preamble" class="row">
+                <div class="col-md-4 col-md-push-8">
+                    <div wicket:id="licenseInfo" class="license-availability-tags pull-right">[license]</div>
+                </div>
+                <div class="col-md-8 col-md-pull-4">
+                    <div>
+                        <a wicket:id="landingPageLink" target="_blank" id="recordlandingpage">
+                            <span class="glyphicon glyphicon-new-window"></span>
+                            <span>Show the original provider's page for this record</span>
                         </a>
-                    </div>
-                    <div wicket:id="contentSearch">
-                        <wicket:container wicket:id="fcsForm">[FCS form]</wicket:container>
+
+                        <div wicket:id="searchlinks" id="recordsearchpage">
+                            <div wicket:id="searchPage">
+                                <a wicket:id="searchLink">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                    <span>Search page for this record</span>
+                                </a>
+                            </div>
+                            <div wicket:id="contentSearch">
+                                <wicket:container wicket:id="fcsForm">[FCS form]</wicket:container>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

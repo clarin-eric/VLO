@@ -52,8 +52,9 @@ h1#recordtitle {
     margin-top: 0;
 }
 
-#recordoutlinks {
-    margin: 1em 0;
+#record-preamble {
+    margin-top: 1em;
+    margin-bottom: .5em;
 }
 
 #resourcelist {
@@ -68,6 +69,36 @@ h1#recordtitle {
 
         .recordresourcedetails {
             display: none; //TODO: make display: block and apply styling (see old css)
+        }
+    }
+}
+
+.license-availability-tags {
+    a {
+        display: inline-block;
+        height: 1.4em;
+        width: 1.4em;
+        margin: 0;
+        padding: 0;
+
+        background-image: url('@{license-icons-dir}other.png');
+        background-size: 1.2em 1.2em;
+        background-position-y: .1em;
+        background-position-x: .1em;
+        background-repeat: no-repeat;
+
+        &.availabilityTag {
+            /* mixins from vlo-license-icons.less */
+            .availability-icon-classes();
+            .availability-modifier-icon-classes();
+        }
+
+        &.licenseTag {
+            /* default icon indicating there is a known licence */
+            background-image: url('@{license-icons-dir}fine_print-64.png'); /* icon from icons8.com */
+
+            /* mixin from vlo-license-icons.less */
+            .license-icon-classes(); 
         }
     }
 }
