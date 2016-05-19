@@ -36,6 +36,8 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.migrate.StringResourceModelMigration;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -64,7 +66,7 @@ public class ResourceLinksPanel extends Panel {
         super(id, documentModel);
 
         final SolrFieldModel<String> resourcesModel
-                = new SolrFieldModel<String>(documentModel, FacetConstants.FIELD_RESOURCE);
+                = new SolrFieldModel<>(documentModel, FacetConstants.FIELD_RESOURCE);
         final IModel<String> landingPageModel
                 // wrap in model that transforms handle links
                 = new HandleLinkModel(
@@ -120,6 +122,7 @@ public class ResourceLinksPanel extends Panel {
         @Override
         protected void populateItem(ListItem<String> item) {
             final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(resourceStringConverter, item.getModel());
+            item.setDefaultModel(new CompoundPropertyModel<>(resourceInfoModel));
 
             // add a link that will show the resource details panel when clicked
             // wrap href in model that transforms handle links
@@ -129,8 +132,7 @@ public class ResourceLinksPanel extends Panel {
             item.add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel(resourceInfoModel, "resourceType")));;
 
             // set the file name as the link's text content
-            link.add(new Label("filename", new PropertyModel(resourceInfoModel, "fileName")));
-
+            link.add(new Label("fileName", new PropertyModel(resourceInfoModel, "fileName")));
             // make the link update via AJAX with resolved location (in case of handle)
             link.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
 
@@ -143,8 +145,13 @@ public class ResourceLinksPanel extends Panel {
             link.setOutputMarkupId(true);
             item.add(link);
 
-            // add details panel
-            item.add(new ResourceLinkDetailsPanel("details", resourceInfoModel));
+            //detailed properties
+            item.add(new Label("originalFileName", new PropertyModel(resourceInfoModel, "fileName")));
+            item.add(new Label("mimeType"));
+            item.add(new Label("href"));
+
+            // get the friendly name of the resource type dynamically from the resource bundle
+            item.add(new Label("resourceType", StringResourceModelMigration.of("resourcetype.${resourceType}.singular", resourceInfoModel, resourceInfoModel.getObject().getResourceType())));
 
         }
     }
