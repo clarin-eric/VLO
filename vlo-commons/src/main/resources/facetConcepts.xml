@@ -521,5 +521,8 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-6709_cb3572ed-ffd3-04f1-c145-b9c1f26bfc82</concept>
 		<!-- IPR holder -->
 		<concept>http://purl.org/dc/terms/rightsHolder</concept>
+                <!-- Legal Owner -->
+                <concept>http://hdl.handle.net/11459/CCR_C-2956_519a4aab-2f76-0fd3-090e-f0d6b81a7dbb</concept>
+
 	</facetConcept>
 </facetConcepts>
