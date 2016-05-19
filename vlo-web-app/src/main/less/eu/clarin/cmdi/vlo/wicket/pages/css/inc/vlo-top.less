@@ -64,3 +64,23 @@ form#permalink input:hover {
     margin-bottom: 1em;
     text-align: right;
 }
+
+#topnavigation.row {
+    // entire top navigation should get a uniform background colour
+    background: #f5f5f5; /* TODO: get from bootstrap/CLARIN css? */
+    
+    // we need to override some bootstrap behaviour to make this lign out nicely :(
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 20px;
+    
+    & > div {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+    
+    ul.breadcrumb {
+        margin-bottom: 0px;
+        background: none;
+    }
+}
