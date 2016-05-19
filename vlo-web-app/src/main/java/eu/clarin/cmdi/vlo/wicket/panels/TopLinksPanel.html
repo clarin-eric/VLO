@@ -25,12 +25,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <wicket:panel>
             <wicket:enclosure child="linkRequest">
                 <form id="permalink" wicket:id="linkRequest">
-                    <input wicket:id="linkRequestButton" type="submit" title="Get a reusable/bookmarkable link to this page" value="Link" />
+                    <input wicket:id="linkRequestButton" type="submit" class="btn btn-default btn-xs" 
+                           title="Get a reusable/bookmarkable link to this page" value="Link" />
                 </form>
                 <input wicket:id="linkfield" type="text" id="permalinkfield"></input>
-                |
             </wicket:enclosure>
-            <a target="_blank" wicket:id="feedback" id="feedbacklink" href="" title="Report an issue with this page or record"><span>Report</span></a>
+            <a target="_blank" wicket:id="feedback" id="feedbacklink" class="btn btn-default btn-xs" 
+               title="Report an issue with this page or record"><span>Report</span></a>
         </wicket:panel>
     </body>
 </html>
