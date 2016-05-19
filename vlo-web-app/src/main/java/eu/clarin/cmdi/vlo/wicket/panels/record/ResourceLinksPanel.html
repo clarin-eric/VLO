@@ -25,20 +25,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <wicket:panel>
             <table wicket:id="resources" class="table table-striped resourcelist">
                 <tr>
-                    <th><!-- icon --></th>
-                    <th>Name</th>
-                    <th class="recordresourcedetailstitle">Type</th>
-                    <th wicket:id="expandHeaderColumn">
-                        <a wicket:id="toggleDetails" class="pull-right">
-                            <span class="glyphicon glyphicon-chevron-right"></span>
+                    <th class="recordresourcetypeicon"><!-- icon --></th>
+                    <th class="recordresourcename">Name</th>
+                    <th>Type</th>
+                    <th class="recordresourcedetailstoggle" wicket:id="expandHeaderColumn">
+                        <a wicket:id="toggleDetails" class="pull-right" title="Show details">
+                            <span class="glyphicon glyphicon-option-horizontal"></span>
                         </a>
                     </th>
                     <wicket:container wicket:id="detailsHeaderColumns">
-                        <th class="recordresourcedetailsitem">File name</th>
-                        <th class="recordresourcedetailsitem">Mime type</th>
-                        <th class="recordresourcedetailsitem">Location</th>
-                        <th>
-                            <a wicket:id="toggleDetails" class="pull-right">
+                        <th>Mime type</th>
+                        <th>Location</th>
+                        <th class="recordresourcedetailstoggle">
+                            <a wicket:id="toggleDetails" class="pull-right" title="Hide details">
                                 <span class="glyphicon glyphicon-chevron-left"></span>
                             </a>
                         </th>
@@ -47,20 +46,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                 <wicket:container wicket:id="resource">
                     <tr>
-                        <td>                            
+                        <td class="recordresourcetypeicon">                            
                             <span wicket:id="resourceTypeIcon"></span>
                         </td>
-                        <td>
-                            <a class="resourcelink" wicket:id="showResource">
+                        <td class="recordresourcename">
+                            <a wicket:id="showResource" class="resourcelink">
                                 <wicket:container wicket:id="fileName">resource.txt</wicket:container>
                             </a>
                         </td>
-                        <td class="recordresourcedetailstitle" wicket:id="resourceType">Text file</td>
+                        <td wicket:id="resourceType">Text file</td>
 
                         <wicket:container wicket:id="detailsColumns">
-                            <td class="recordresourcedetailsfile"><span wicket:id="originalFileName">Bachelorscriptie+Rene+Witteveen+3375005.docx</span></td>
-                            <td class="recordresourcedetailsmime"><span wicket:id="mimeType">application/msword</span></td>
-                            <td class="recordresourcedetailslocation"><span wicket:id="href">location</span></td>
+                            <td><span wicket:id="mimeType">application/msword</span></td>
+                            <td><span wicket:id="href">location</span></td>
                             <td></td>
                         </wicket:container>
                         <th wicket:id="expandColumn"></th>

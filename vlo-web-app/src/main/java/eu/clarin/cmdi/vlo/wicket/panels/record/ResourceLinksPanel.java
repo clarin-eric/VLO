@@ -190,7 +190,6 @@ public class ResourceLinksPanel extends Panel {
 
             //detailed properties
             item.add(new WebMarkupContainer("detailsColumns")
-                    .add(new Label("originalFileName", new PropertyModel(resourceInfoModel, "fileName")))
                     .add(new Label("mimeType"))
                     .add(new Label("href"))
                     .add(BooleanVisibilityBehavior.visibleOnTrue(detailsVisibleModel))
