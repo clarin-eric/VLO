@@ -31,11 +31,11 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -81,7 +81,7 @@ public class ResourceLinksPanel extends Panel {
 
         // create table of resources with optional details
         final ResourcesListView resourceListing = new ResourcesListView("resource", new CollectionListModel<>(resourcesModel));
-        add(createResourcesTable("resources", resourceListing));
+        add(resourcesTable = createResourcesTable("resources", resourceListing));
 
         // pagination
         add(new BootstrapAjaxPagingNavigator("paging", resourceListing) {
@@ -111,6 +111,7 @@ public class ResourceLinksPanel extends Panel {
         //For Ajax updating of resource listing when paging
         setOutputMarkupId(true);
     }
+    private final WebMarkupContainer resourcesTable;
 
     private WebMarkupContainer createResourcesTable(String id, final ResourcesListView resourceListing) {
         final WebMarkupContainer resourceListContainer = new WebMarkupContainer(id) {
@@ -118,36 +119,24 @@ public class ResourceLinksPanel extends Panel {
             protected void onConfigure() {
                 setVisible(resourceListing.getPageCount() > 0);
             }
-            
+
         };
         //add the actual listing
         resourceListContainer.add(resourceListing);
-        
+
         // headers for details columns
         resourceListContainer.add(
                 new WebMarkupContainer("detailsHeaderColumns")
-                        .add(new Link("toggleDetails") {
-                            @Override
-                            public void onClick() {
-                                //toggle visibility
-                                detailsVisibleModel.setObject(!detailsVisibleModel.getObject());
-                            }
-                        })
-                        .add(BooleanVisibilityBehavior.visibleOnTrue(detailsVisibleModel)) //only show when expanded
+                .add(new ResourceDetailsToggleLink("toggleDetails"))
+                .add(BooleanVisibilityBehavior.visibleOnTrue(detailsVisibleModel)) //only show when expanded
         );
         // header with detail expansion link
         resourceListContainer.add(
                 new WebMarkupContainer("expandHeaderColumn")
-                        .add(new Link("toggleDetails") {
-                            @Override
-                            public void onClick() {
-                                //toggle visibility
-                                detailsVisibleModel.setObject(!detailsVisibleModel.getObject());
-                            }
-                        })
-                        .add(BooleanVisibilityBehavior.visibleOnFalse(detailsVisibleModel)) //only show when not expanded
+                .add(new ResourceDetailsToggleLink("toggleDetails"))
+                .add(BooleanVisibilityBehavior.visibleOnFalse(detailsVisibleModel)) //only show when not expanded
         );
-        
+
         resourceListContainer.setOutputMarkupId(true);
         return resourceListContainer;
     }
@@ -199,6 +188,22 @@ public class ResourceLinksPanel extends Panel {
             );
 
         }
+    }
+
+    private class ResourceDetailsToggleLink extends AjaxFallbackLink {
+
+        public ResourceDetailsToggleLink(String id) {
+            super(id);
+        }
+
+        @Override
+        public void onClick(AjaxRequestTarget target) {
+            detailsVisibleModel.setObject(!detailsVisibleModel.getObject());
+            if (target != null) {
+                target.add(resourcesTable);
+            }
+        }
+
     }
 
     private static class BooleanVisibilityBehavior extends Behavior {
