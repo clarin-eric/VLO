@@ -28,9 +28,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <th><!-- icon --></th>
                     <th>Name</th>
                     <th class="recordresourcedetailstitle">Type</th>
-                    <th class="recordresourcedetailsitem">File name</th>
-                    <th class="recordresourcedetailsitem">Mime type</th>
-                    <th class="recordresourcedetailsitem">Location</th>
+                    <th wicket:id="expandHeaderColumn">
+                        <a wicket:id="toggleDetails" class="pull-right">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
+                    </th>
+                    <wicket:container wicket:id="detailsHeaderColumns">
+                        <th class="recordresourcedetailsitem">File name</th>
+                        <th class="recordresourcedetailsitem">Mime type</th>
+                        <th class="recordresourcedetailsitem">Location</th>
+                        <th>
+                            <a wicket:id="toggleDetails" class="pull-right">
+                                <span class="glyphicon glyphicon-chevron-left"></span>
+                            </a>
+                        </th>
+                    </wicket:container>
                 </tr>
 
                 <wicket:container wicket:id="resource">
@@ -44,9 +56,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             </a>
                         </td>
                         <td class="recordresourcedetailstitle" wicket:id="resourceType">Text file</td>
-                        <td class="recordresourcedetailsitem"><span wicket:id="originalFileName">Bachelorscriptie+Rene+Witteveen+3375005.docx</span></td>
-                        <td class="recordresourcedetailsitem"><span wicket:id="mimeType">application/msword</span></td>
-                        <td class="recordresourcedetailsitem"><span wicket:id="href">location</span></td>
+
+                        <wicket:container wicket:id="detailsColumns">
+                            <td class="recordresourcedetailsfile"><span wicket:id="originalFileName">Bachelorscriptie+Rene+Witteveen+3375005.docx</span></td>
+                            <td class="recordresourcedetailsmime"><span wicket:id="mimeType">application/msword</span></td>
+                            <td class="recordresourcedetailslocation"><span wicket:id="href">location</span></td>
+                            <td></td>
+                        </wicket:container>
+                        <th wicket:id="expandColumn"></th>
                     </tr>
                 </wicket:container>
 

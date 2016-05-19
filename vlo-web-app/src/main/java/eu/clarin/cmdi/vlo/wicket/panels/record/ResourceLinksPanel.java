@@ -28,17 +28,21 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -57,6 +61,8 @@ public class ResourceLinksPanel extends Panel {
     @SpringBean(name = "resolvingResourceStringConverter")
     private ResourceStringConverter resolvingResourceStringConverter;
 
+    private final IModel<Boolean> detailsVisibleModel = new Model<>(Boolean.FALSE);
+
     /**
      *
      * @param id panel id
@@ -73,15 +79,9 @@ public class ResourceLinksPanel extends Panel {
                         // get landing page from document
                         new SolrFieldStringModel(documentModel, FacetConstants.FIELD_LANDINGPAGE));
 
-        // list view that shows all resources as links that show a resource details panel when clicked
+        // create table of resources with optional details
         final ResourcesListView resourceListing = new ResourcesListView("resource", new CollectionListModel<>(resourcesModel));
-        add(new WebMarkupContainer("resources") {
-            @Override
-            protected void onConfigure() {
-                setVisible(resourceListing.getPageCount() > 0);
-            }
-
-        }.add(resourceListing).setOutputMarkupId(true));
+        add(createResourcesTable("resources", resourceListing));
 
         // pagination
         add(new BootstrapAjaxPagingNavigator("paging", resourceListing) {
@@ -110,6 +110,46 @@ public class ResourceLinksPanel extends Panel {
 
         //For Ajax updating of resource listing when paging
         setOutputMarkupId(true);
+    }
+
+    private WebMarkupContainer createResourcesTable(String id, final ResourcesListView resourceListing) {
+        final WebMarkupContainer resourceListContainer = new WebMarkupContainer(id) {
+            @Override
+            protected void onConfigure() {
+                setVisible(resourceListing.getPageCount() > 0);
+            }
+            
+        };
+        //add the actual listing
+        resourceListContainer.add(resourceListing);
+        
+        // headers for details columns
+        resourceListContainer.add(
+                new WebMarkupContainer("detailsHeaderColumns")
+                        .add(new Link("toggleDetails") {
+                            @Override
+                            public void onClick() {
+                                //toggle visibility
+                                detailsVisibleModel.setObject(!detailsVisibleModel.getObject());
+                            }
+                        })
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(detailsVisibleModel)) //only show when expanded
+        );
+        // header with detail expansion link
+        resourceListContainer.add(
+                new WebMarkupContainer("expandHeaderColumn")
+                        .add(new Link("toggleDetails") {
+                            @Override
+                            public void onClick() {
+                                //toggle visibility
+                                detailsVisibleModel.setObject(!detailsVisibleModel.getObject());
+                            }
+                        })
+                        .add(BooleanVisibilityBehavior.visibleOnFalse(detailsVisibleModel)) //only show when not expanded
+        );
+        
+        resourceListContainer.setOutputMarkupId(true);
+        return resourceListContainer;
     }
 
     private class ResourcesListView extends PageableListView<String> {
@@ -145,15 +185,46 @@ public class ResourceLinksPanel extends Panel {
             link.setOutputMarkupId(true);
             item.add(link);
 
-            //detailed properties
-            item.add(new Label("originalFileName", new PropertyModel(resourceInfoModel, "fileName")));
-            item.add(new Label("mimeType"));
-            item.add(new Label("href"));
-
             // get the friendly name of the resource type dynamically from the resource bundle
             item.add(new Label("resourceType", StringResourceModelMigration.of("resourcetype.${resourceType}.singular", resourceInfoModel, resourceInfoModel.getObject().getResourceType())));
 
+            //detailed properties
+            item.add(new WebMarkupContainer("detailsColumns")
+                    .add(new Label("originalFileName", new PropertyModel(resourceInfoModel, "fileName")))
+                    .add(new Label("mimeType"))
+                    .add(new Label("href"))
+                    .add(BooleanVisibilityBehavior.visibleOnTrue(detailsVisibleModel))
+            );
+            item.add(new WebMarkupContainer("expandColumn")
+                    .add(BooleanVisibilityBehavior.visibleOnFalse(detailsVisibleModel))
+            );
+
         }
+    }
+
+    private static class BooleanVisibilityBehavior extends Behavior {
+
+        private final IModel<Boolean> model;
+        private final Boolean visibilityState;
+
+        private BooleanVisibilityBehavior(IModel<Boolean> model, Boolean visibilityState) {
+            this.model = model;
+            this.visibilityState = visibilityState;
+        }
+
+        @Override
+        public void onConfigure(Component component) {
+            component.setVisible(visibilityState.equals(model.getObject()));
+        }
+
+        public static BooleanVisibilityBehavior visibleOnTrue(IModel<Boolean> model) {
+            return new BooleanVisibilityBehavior(model, Boolean.TRUE);
+        }
+
+        public static BooleanVisibilityBehavior visibleOnFalse(IModel<Boolean> model) {
+            return new BooleanVisibilityBehavior(model, Boolean.FALSE);
+        }
+
     }
 
 }
