@@ -29,6 +29,7 @@ import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeGlyphicon;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
+import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
@@ -115,7 +116,8 @@ public class SearchResultItemPanel extends Panel {
                         super.onConfigure();
                         setVisible(countProvider.size() == 0);
                     }
-                }.add(new RecordPageLink("recordLink", documentModel, selectionModel)))
+                }.add(new RecordPageLink("recordLink", documentModel, selectionModel)) //initial tab *not* resources as there are none...
+                )
         );
 
         add(new SearchResultItemLicensePanel("licenseInfo", documentModel, selectionModel, availabilityOrdering));
@@ -197,7 +199,7 @@ public class SearchResultItemPanel extends Panel {
 
         @Override
         protected void populateItem(Item<ResourceTypeCount> item) {
-            final Link resourceLink = new RecordPageLink("recordLink", documentModel, selectionModel);
+            final Link resourceLink = new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.RESOURCES_SECTION);
             item.add(resourceLink
                     .add(new Label("resourceCountLabel", new PropertyModel<String>(item.getModel(), "count")))
                     .add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel<String>(item.getModel(), "resourceType")))
