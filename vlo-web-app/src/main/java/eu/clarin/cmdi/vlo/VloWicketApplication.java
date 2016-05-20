@@ -76,7 +76,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
      */
     @Override
     public Class<? extends WebPage> getHomePage() {
-        return FacetedSearchPage.class;
+        return SimpleSearchPage.class;
     }
 
     /**
