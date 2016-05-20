@@ -135,8 +135,10 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 simpleModeModel.setObject(false);
-                target.add(searchContainer);
-                target.prependJavaScript("cb|transitionFromSimple(cb);");
+                if (target != null) {
+                    target.add(searchContainer);
+                    target.prependJavaScript("cb|transitionFromSimple(cb);");
+                }
             }
         });
 
@@ -252,7 +254,9 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
                 searchResultsPanel.resetExpansion();
                 if (simpleModeModel.getObject()) {
                     simpleModeModel.setObject(false);
-                    target.add(searchContainer); //update everything within container
+                    if (target != null) {
+                        target.add(searchContainer); //update everything within container
+                    }
                 }
                 updateSelection(target);
             }
