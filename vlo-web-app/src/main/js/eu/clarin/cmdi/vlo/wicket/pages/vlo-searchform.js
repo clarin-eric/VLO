@@ -46,3 +46,17 @@ $(function () {
     $('form#search-form [data-toggle="tooltip"]').tooltip();
 });
 
+function transitionFromSimple(cb) {
+    console.log("transition animation..");
+    $('.simple-only').slideUp({
+        duration: 'fast',
+        start: function() {
+            console.log("started..");
+            $('.hide-simple').slideDown('fast');
+        },
+        done: function() {
+            console.log("cb..");
+            cb();
+        }
+    });
+}

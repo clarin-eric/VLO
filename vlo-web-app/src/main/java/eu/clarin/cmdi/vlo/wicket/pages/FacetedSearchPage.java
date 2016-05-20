@@ -63,6 +63,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     @SpringBean(name = "queryParametersConverter")
     private PageParametersConverter<QueryFacetsSelection> paramsConverter;
 
+    private MarkupContainer searchContainer;
     private SearchResultsPanel searchResultsPanel;
     private Component facetsPanel;
     private Component navigation;
@@ -79,7 +80,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     public FacetedSearchPage(IModel<QueryFacetsSelection> queryModel) {
         this(queryModel, Model.of(false));
     }
-    
+
     public FacetedSearchPage(PageParameters parameters) {
         this(parameters, Model.of(false));
     }
@@ -98,11 +99,11 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
         final QueryFacetsSelection selection = paramsConverter.fromParameters(parameters);
         final IModel<QueryFacetsSelection> queryModel = new Model<>(selection);
-        
+
         setModel(queryModel);
         createModels();
         this.simpleModeModel = simpleModeModel;
-        
+
         addComponents();
 
         // add Piwik tracking behavior
@@ -119,32 +120,33 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private void addComponents() {
-        final WebMarkupContainer container = new WebMarkupContainer("searchContainer");
-        container.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
+        searchContainer = new WebMarkupContainer("searchContainer");
+        searchContainer.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
             @Override
             public String getObject() {
                 return simpleModeModel.getObject() ? "simple" : "";
             }
 
         }));
-        container.setOutputMarkupId(true);
-        add(container);
-        
-        container.add(new AjaxFallbackLink("toggleSimple") {
+        searchContainer.setOutputMarkupId(true);
+        add(searchContainer);
+
+        searchContainer.add(new AjaxFallbackLink("toggleSimple") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 simpleModeModel.setObject(false);
-                target.add(container);
+                target.add(searchContainer);
+                target.prependJavaScript("cb|transitionFromSimple(cb);");
             }
         });
 
         final IDataProvider<SolrDocument> solrDocumentProvider = new SolrDocumentProvider(getModel());
 
         navigation = createNavigation("navigation");
-        container.add(navigation);
+        searchContainer.add(navigation);
 
         searchForm = createSearchForm("search");
-        container.add(searchForm);
+        searchContainer.add(searchForm);
 
         selections = new WebMarkupContainer("selections") {
 
@@ -159,7 +161,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         availabilityFacetPanel = createAvailabilityPanel("availability");
         optionsPanel = createOptionsPanel("options");
 
-        container.add(selections
+        searchContainer.add(selections
                 .add(facetsPanel)
                 .add(availabilityFacetPanel)
                 .add(optionsPanel)
@@ -174,12 +176,12 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
                 setVisible(solrDocumentProvider.size() > 0);
             }
         };
-        container.add(searchResultsPanel.setOutputMarkupPlaceholderTag(true));
+        searchContainer.add(searchResultsPanel.setOutputMarkupPlaceholderTag(true));
 
         final AbstractPageableView<SolrDocument> resultsView = searchResultsPanel.getResultsView();
 
         resultsHeader = createResultsHeader("searchresultsheader", getModel(), resultsView, solrDocumentProvider);
-        container.add(resultsHeader.setOutputMarkupId(true));
+        searchContainer.add(resultsHeader.setOutputMarkupId(true));
     }
 
     private SearchResultsHeaderPanel createResultsHeader(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocument> resultsView, IDataProvider<SolrDocument> solrDocumentProvider) {
@@ -248,6 +250,10 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
             protected void onSubmit(AjaxRequestTarget target) {
                 // reset expansion state of search results
                 searchResultsPanel.resetExpansion();
+                if (simpleModeModel.getObject()) {
+                    simpleModeModel.setObject(false);
+                    target.add(searchContainer); //update everything within container
+                }
                 updateSelection(target);
             }
 
