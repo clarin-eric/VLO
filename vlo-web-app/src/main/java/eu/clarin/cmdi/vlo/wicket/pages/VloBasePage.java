@@ -63,9 +63,6 @@ public class VloBasePage<T> extends GenericWebPage<T> {
     public final static String DEFAULT_PAGE_TITLE = "CLARIN VLO";
 
     @SpringBean
-    private VloConfig vloConfig;
-    
-    @SpringBean
     private PiwikConfig piwikConfig;
 
     public VloBasePage() {
@@ -175,7 +172,6 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 //        response.render(CssHeaderItem.forReference(new CssResourceReference(VloBasePage.class, "bootstrap/css/bootstrap.css", getLocale(), getStyle(), getVariation())));
 //        response.render(CssHeaderItem.forReference(new CssResourceReference(VloBasePage.class, "bootstrap/css/bootstrap-theme.css", getLocale(), getStyle(), getVariation())));
         response.render(CssHeaderItem.forReference(new CssResourceReference(VloBasePage.class, "css/vlo.css", getLocale(), getStyle(), getVariation())));
-        response.render(CssHeaderItem.forReference(new CssResourceReference(VloBasePage.class, "font-awesome/css/font-awesome.min.css")));
         // Include JavaScript for header (e.g. permalink animation)
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloHeaderJS()));
     }
@@ -187,15 +183,14 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         add(new WebMarkupContainer("header").add(new AttributeAppender("class", VloWicketApplication.get().getAppVersionQualifier(), " ")));
 
         add(new HideJavascriptFallbackControlsBehavior());
-        
+
         // add Piwik tracker (if enabled)
-        if(piwikConfig.isEnabled()) {
+        if (piwikConfig.isEnabled()) {
             add(new PiwikTracker("piwik", piwikConfig.getSiteId(), piwikConfig.getPiwikHost(), piwikConfig.getDomains()));
         } else {
             //empty placeholder
             add(new WebMarkupContainer("piwik"));
         }
     }
-
 
 }
