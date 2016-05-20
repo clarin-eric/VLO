@@ -163,9 +163,9 @@ public class SearchResultItemPanel extends Panel {
                             @Override
                             public String getObject() {
                                 if (expansionStateModel.getObject() == ExpansionState.COLLAPSED) {
-                                    return "glyphicon glyphicon-expand";
+                                    return "fa fa-plus-square-o";
                                 } else {
-                                    return "glyphicon glyphicon-collapse-down";
+                                    return "fa fa-minus-square-o";
                                 }
                             }
                         })));
