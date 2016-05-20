@@ -57,6 +57,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
@@ -87,14 +88,14 @@ public class RecordPage extends VloBasePage<SolrDocument> {
      * Optional page parameter that determines the initial tab
      */
     public static final String INITIAL_TAB_PAGE_PARAMETER = "tab";
-    
+
     public final static String DETAILS_SECTION = "details";
     public final static String AVAILABILITY_SECTION = "availability";
     public final static String RESOURCES_SECTION = "resources";
     public final static String ALL_METADATA_SECTION = "cmdi";
     public final static String TECHNICAL_DETAILS_SECTION = "technical";
     public final static String HIERARCHY_SECTION = "hierarchy";
-    
+
     private final static List<String> TABS_ORDER
             = ImmutableList.of(DETAILS_SECTION, AVAILABILITY_SECTION, RESOURCES_SECTION, ALL_METADATA_SECTION, TECHNICAL_DETAILS_SECTION, HIERARCHY_SECTION);
 
@@ -187,7 +188,21 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering(
                 //extract the 'primary' availability values from the configuration
                 FieldValueDescriptor.valuesList(config.getAvailabilityValues()));
-        add(new SearchResultItemLicensePanel("licenseInfo", getModel(), navigationModel, availabilityOrdering));
+        add(new SearchResultItemLicensePanel("licenseInfo", getModel(), navigationModel, availabilityOrdering) {
+            @Override
+            protected WebMarkupContainer createLink(String id) {
+                return new AjaxFallbackLink(id) {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        tabs.setSelectedTab(TABS_ORDER.indexOf(AVAILABILITY_SECTION));
+                        if (target != null) {
+                            target.add(tabs);
+                        }
+                    }
+                };
+            }
+
+        });
     }
 
     private TabbedPanel createTabs(String id) {

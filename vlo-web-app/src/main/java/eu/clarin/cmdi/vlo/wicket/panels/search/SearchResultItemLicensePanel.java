@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -54,7 +55,7 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
             @Override
             protected void populateItem(ListItem<String> item) {
                 // add link to record
-                item.add(new RecordPageLink("recordLink", model, searchContextModel, RecordPage.AVAILABILITY_SECTION)
+                item.add(createLink("recordLink")
                         .add(new AttributeAppender("class", item.getModel(), " "))
                         .add(new AttributeModifier("title",
                                 new FormattedStringModel(Model.of("Availability: %s"),
@@ -72,7 +73,7 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
             @Override
             protected void populateItem(ListItem<String> item) {
                 // add link to record
-                item.add(new RecordPageLink("recordLink", model, searchContextModel, RecordPage.AVAILABILITY_SECTION)
+                item.add(createLink("recordLink")
                         //add CSS class. Since value is URI, replace all non-alphanumeric characters with underscore
                         .add(new AttributeAppender("class",
                                 new StringReplaceModel(item.getModel(), nonAlphanumericPatternModel, Model.of("_")), " "))
@@ -82,6 +83,10 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
                 );
             }
         });
+    }
+
+    protected WebMarkupContainer createLink(String id) {
+        return new RecordPageLink(id, getModel(), searchContextModel, RecordPage.AVAILABILITY_SECTION);
     }
 
     @Override
