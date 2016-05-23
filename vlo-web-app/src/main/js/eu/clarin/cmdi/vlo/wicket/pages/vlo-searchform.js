@@ -82,9 +82,21 @@ function hideSimple() {
     });
 }
 
+function ensureFillerSize() {
+    var simplefiller = $(".simple #simple-filler");
+    if (simplefiller.length > 0 && simplefiller.is(":visible")) {
+        var fillerHeight = 50 + $(window).height() - simplefiller.offset().top - $("footer").height();
+        simplefiller.height(Math.max(150, fillerHeight));
+    }
+}
+
 $(document).ready(function () {
     //prepare simple mode (if faceted search is in fact in simple mode)
     if ($("#faceted-search.simple").length > 0) { // check whether we have .simple
+        
+        //make sure that there is always room to scroll
+        ensureFillerSize();
+        $(window).resize(ensureFillerSize);
 
         //top navigation will be shown again once we have switched out of simple mode
         $(".simple #topnavigation").hide(0);
@@ -119,7 +131,7 @@ $(document).ready(function () {
             $('body').animate({
                 scrollTop: $("#search-content").offset().top - 20,
             }, 1000
-            );
+                    );
         });
     }
 });
