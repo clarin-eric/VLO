@@ -85,28 +85,40 @@ function hideSimple() {
 $(document).ready(function () {
     //prepare simple mode (if faceted search is in fact in simple mode)
     if ($("#faceted-search.simple").length > 0) { // check whether we have .simple
-        
+
         //top navigation will be shown again once we have switched out of simple mode
         $(".simple #topnavigation").hide(0);
 
+        //subtle scroll hint
         $(".simple #simple-filler p").fadeIn(10000);
 
+        //show non-simple contents when user scrolls to its area
         $(window).scroll(function () {
-            var bottom_of_window = $(window).scrollTop() + $(window).height();
-            var bottom_of_object = $(".simple #simple-filler").offset().top;
-            if (bottom_of_window > bottom_of_object) {
-                showSearchContent();
+            var filler = $(".simple #simple-filler");
+            if (filler.is(":visible")) { // filler is only visible if the user has not scrolled yet
+                var windowBottom = $(window).scrollTop() + $(window).height();
+                var fillerPos = filler.offset().top;
+                if (windowBottom > fillerPos) {
+                    showSearchContent();
+                }
+            } else {
+                //hide simple (mainly jumbotron) if scrolled beyond content top
+                if ($(".simple .jumbotron").is(":visible")) {
+                    var contentPos = $('#search-content').offset().top;
+                    if ($(window).scrollTop() > contentPos) {
+                        hideSimple();
+                    }
+                }
             }
         });
 
+        //handle 'show all' button
         $(".simple a#switch-from-simple").click(function (evt) {
             evt.preventDefault();
             showSearchContent();
             $('body').animate({
                 scrollTop: $("#search-content").offset().top - 20,
-            }, 1000, function () {
-                hideSimple();
-            }
+            }, 1000
             );
         });
     }
