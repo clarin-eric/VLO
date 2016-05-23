@@ -66,17 +66,6 @@ function showSearchContent() {
     $('.hide-simple').fadeIn();
 }
 
-function hideJumbotron() {
-    var height = $("#simple-jumbotron .jumbotron").height();
-    console.log("jumbotron height: " + height);
-    $("#simple-jumbotron .jumbotron").fadeOut(function () {
-        console.log("now scrolled to:" + $(window).scrollTop());
-        var scrollpos = $(window).scrollTop() - height;
-        console.log("scroll to:" + scrollpos);
-        window.scrollTo(0, scrollpos);
-    });
-}
-
 $(document).ready(function () {
     //TODO: only if exists $("#simple")
 
@@ -93,11 +82,7 @@ $(document).ready(function () {
         showSearchContent();
         $('body').animate({
             scrollTop: $("#topnavigation").offset().top - 5,
-        }
-        , 1000, function () {
-            //after animation
-            //hideJumbotron();
-        }
+        }, 1000
         );
     });
 });
