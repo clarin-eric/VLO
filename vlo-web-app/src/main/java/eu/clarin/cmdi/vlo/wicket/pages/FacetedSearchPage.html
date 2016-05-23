@@ -35,17 +35,6 @@
 
             <div wicket:id="searchContainer" id="faceted-search" class="simple">
 
-                <div wicket:id="navigation" id="topnavigation" class="row hide-simple">
-                    <div class="col-md-10 hidden-xs hidden-sm">
-                        <ul class="breadcrumb" wicket:id="breadcrumbs" id="breadcrumbs">[BREADCRUMBS]</ul>
-                    </div>
-                    <div class="col-md-2 col-xs-12">
-                        <div class="top-links padding pull-right">
-                            <wicket:container wicket:id="permalink">[permalink]</wicket:container>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="simple-only">
                     <div class="jumbotron">
                         <h1>CLARIN Virtual Language Observatory</h1>
@@ -55,7 +44,18 @@
                             narrow down to your area of interest or discover new
                             resources.
                         </p>
-                        <a wicket:id="toggleSimple" class="btn btn-primary btn-lg">See all records</a>
+                        <a href="#before-content" class="btn btn-primary btn-lg">See all records</a>
+                    </div>
+                </div>
+
+                <div wicket:id="navigation" id="topnavigation" class="row hide-simple">
+                    <div class="col-md-10 hidden-xs hidden-sm">
+                        <ul class="breadcrumb" wicket:id="breadcrumbs" id="breadcrumbs">[BREADCRUMBS]</ul>
+                    </div>
+                    <div class="col-md-2 col-xs-12">
+                        <div class="top-links padding pull-right">
+                            <wicket:container wicket:id="permalink">[permalink]</wicket:container>
+                        </div>
                     </div>
                 </div>
 
@@ -74,6 +74,13 @@
                         </div>
                     </div>
                 </div>
+                
+                <div id="simple-filler" class="simple-only"
+                     style="display: block; height: 10em;">
+                         <!-- TODO: dynamic height depending on window height -->
+                </div>
+                
+                <a name="before-content" />
 
                 <div class="row hide-simple">
 

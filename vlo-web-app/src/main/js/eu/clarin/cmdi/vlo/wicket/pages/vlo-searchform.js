@@ -60,3 +60,18 @@ function transitionFromSimple(cb) {
         }
     });
 }
+
+function showSearchContent() {
+    $("#simple-filler").hide();
+    $('.hide-simple').fadeIn();
+}
+
+$(document).ready(function() {
+   $(window).scroll(function() {
+      var bottom_of_window = $(window).scrollTop() + $(window).height();
+      var bottom_of_object = $("#simple-filler").offset().top;
+      if(bottom_of_window > bottom_of_object) {
+            showSearchContent();
+      }
+   });
+});

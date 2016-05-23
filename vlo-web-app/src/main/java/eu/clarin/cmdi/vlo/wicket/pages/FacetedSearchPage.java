@@ -130,20 +130,20 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         searchContainer.setOutputMarkupId(true);
         add(searchContainer);
 
-        searchContainer.add(new AjaxFallbackLink("toggleSimple") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                if (target != null) {
-                    //AJAX call - stay on page but switch simple state
-                    simpleModeModel.setObject(false);
-                    target.add(searchContainer);
-                    target.prependJavaScript("cb|transitionFromSimple(cb);");
-                } else {
-                    //Full page load, just new non-simple faceted search page
-                    setResponsePage(new FacetedSearchPage(FacetedSearchPage.this.getModel(), Model.of(Boolean.FALSE)));
-                }
-            }
-        });
+//        searchContainer.add(new AjaxFallbackLink("toggleSimple") {
+//            @Override
+//            public void onClick(AjaxRequestTarget target) {
+//                if (target != null) {
+//                    //AJAX call - stay on page but switch simple state
+//                    simpleModeModel.setObject(false);
+//                    target.add(searchContainer);
+//                    target.prependJavaScript("cb|transitionFromSimple(cb);");
+//                } else {
+//                    //Full page load, just new non-simple faceted search page
+//                    setResponsePage(new FacetedSearchPage(FacetedSearchPage.this.getModel(), Model.of(Boolean.FALSE)));
+//                }
+//            }
+//        });
 
         final IDataProvider<SolrDocument> solrDocumentProvider = new SolrDocumentProvider(getModel());
 
