@@ -50,11 +50,11 @@ function transitionFromSimple(cb) {
     console.log("transition animation..");
     $('.simple-only').slideUp({
         duration: 'fast',
-        start: function() {
+        start: function () {
             console.log("started..");
             $('.hide-simple').slideDown('fast');
         },
-        done: function() {
+        done: function () {
             console.log("cb..");
             cb();
         }
@@ -66,23 +66,38 @@ function showSearchContent() {
     $('.hide-simple').fadeIn();
 }
 
-$(document).ready(function() {
-   //TODO: only if exists $("#simple")
-   
-   $(window).scroll(function() {
-      var bottom_of_window = $(window).scrollTop() + $(window).height();
-      var bottom_of_object = $("#simple-filler").offset().top;
-      if(bottom_of_window > bottom_of_object) {
+function hideJumbotron() {
+    var height = $("#simple-jumbotron .jumbotron").height();
+    console.log("jumbotron height: " + height);
+    $("#simple-jumbotron .jumbotron").fadeOut(function () {
+        console.log("now scrolled to:" + $(window).scrollTop());
+        var scrollpos = $(window).scrollTop() - height;
+        console.log("scroll to:" + scrollpos);
+        window.scrollTo(0, scrollpos);
+    });
+}
+
+$(document).ready(function () {
+    //TODO: only if exists $("#simple")
+
+    $(window).scroll(function () {
+        var bottom_of_window = $(window).scrollTop() + $(window).height();
+        var bottom_of_object = $("#simple-filler").offset().top;
+        if (bottom_of_window > bottom_of_object) {
             showSearchContent();
-      }
-   });
-   
-   $(".simple a#switch-from-simple").click(function(evt) {
-      evt.preventDefault(); 
-      showSearchContent();
-      $('html, body').animate({
-        scrollTop: $("#topnavigation").offset().top - 5
-        //TODO: hide non-simple 
-    }, 1000);
-   });
+        }
+    });
+
+    $(".simple a#switch-from-simple").click(function (evt) {
+        evt.preventDefault();
+        showSearchContent();
+        $('body').animate({
+            scrollTop: $("#topnavigation").offset().top - 5,
+        }
+        , 1000, function () {
+            //after animation
+            //hideJumbotron();
+        }
+        );
+    });
 });
