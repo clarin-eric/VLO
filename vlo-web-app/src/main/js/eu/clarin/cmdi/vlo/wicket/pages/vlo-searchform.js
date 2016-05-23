@@ -67,11 +67,22 @@ function showSearchContent() {
 }
 
 $(document).ready(function() {
+   //TODO: only if exists $("#simple")
+   
    $(window).scroll(function() {
       var bottom_of_window = $(window).scrollTop() + $(window).height();
       var bottom_of_object = $("#simple-filler").offset().top;
       if(bottom_of_window > bottom_of_object) {
             showSearchContent();
       }
+   });
+   
+   $(".simple a#switch-from-simple").click(function(evt) {
+      evt.preventDefault(); 
+      showSearchContent();
+      $('html, body').animate({
+        scrollTop: $("#topnavigation").offset().top - 5
+        //TODO: hide non-simple 
+    }, 1000);
    });
 });
