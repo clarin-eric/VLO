@@ -16,6 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import static eu.clarin.cmdi.vlo.VloWebAppParameters.DOCUMENT_ID;
+import static eu.clarin.cmdi.vlo.VloWebAppParameters.FILTER_QUERY;
+import static eu.clarin.cmdi.vlo.VloWebAppParameters.QUERY;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.Set;
 import org.apache.wicket.model.IModel;
@@ -31,20 +34,25 @@ import org.apache.wicket.util.string.Strings;
 public class SimpleSearchPage extends FacetedSearchPage {
 
     public SimpleSearchPage(IModel<QueryFacetsSelection> queryModel) {
-        super(queryModel, Model.of(shouldBeSimple(queryModel.getObject())));
+        super(queryModel, Model.of(true));
+        if (!Strings.isEmpty(queryModel.getObject().getQuery()) || !queryModel.getObject().getSelection().isEmpty()) {
+            //query selection -> redirect to non-simple page
+            setResponsePage(new FacetedSearchPage(queryModel));
+        }
     }
 
     public SimpleSearchPage(PageParameters parameters) {
-        super(parameters, Model.of(shouldBeSimple(parameters)));
-    }
-
-    private static boolean shouldBeSimple(PageParameters parameters) {
+        super(parameters, Model.of(true));
+        
+        //see if another page would be more suitable
         final Set<String> keys = parameters.getNamedKeys();
-        return !keys.contains("q") && !keys.contains("fq");
-    }
-
-    private static boolean shouldBeSimple(QueryFacetsSelection queryModel) {
-        return Strings.isEmpty(queryModel.getQuery()) && queryModel.getSelection().isEmpty();
+        if (keys.contains(DOCUMENT_ID)) {
+            //document id -> redirect to record page
+            setResponsePage(new RecordPage(parameters));
+        } else if (keys.contains(QUERY) || keys.contains(FILTER_QUERY)) {
+            //query or selection parameters -> redirect to non-simple page
+            setResponsePage(new FacetedSearchPage(parameters));
+        }
     }
 
 }
