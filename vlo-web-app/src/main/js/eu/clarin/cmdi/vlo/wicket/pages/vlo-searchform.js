@@ -74,32 +74,40 @@ function hideSimple() {
     });
 
     //perform hide and set scroll position when done
-    $(".simple-only, .jumbotron").hide(0, function () {
-        window.scrollTo(0, scrollpos);
+    $("#topnavigation").show(0, function () {
+        scrollpos += $("#topnavigation").height();
+        $(".simple-only, .jumbotron").hide(0, function () {
+            window.scrollTo(0, scrollpos);
+        });
     });
 }
 
 $(document).ready(function () {
-    //TODO: only if exists $("#simple")
-    
-    $("#simple-filler p").fadeIn(5000);
+    //prepare simple mode (if faceted search is in fact in simple mode)
+    if ($("#faceted-search.simple").length > 0) { // check whether we have .simple
+        
+        //top navigation will be shown again once we have switched out of simple mode
+        $(".simple #topnavigation").hide(0);
 
-    $(window).scroll(function () {
-        var bottom_of_window = $(window).scrollTop() + $(window).height();
-        var bottom_of_object = $("#simple-filler").offset().top;
-        if (bottom_of_window > bottom_of_object) {
+        $(".simple #simple-filler p").fadeIn(10000);
+
+        $(window).scroll(function () {
+            var bottom_of_window = $(window).scrollTop() + $(window).height();
+            var bottom_of_object = $(".simple #simple-filler").offset().top;
+            if (bottom_of_window > bottom_of_object) {
+                showSearchContent();
+            }
+        });
+
+        $(".simple a#switch-from-simple").click(function (evt) {
+            evt.preventDefault();
             showSearchContent();
-        }
-    });
-
-    $(".simple a#switch-from-simple").click(function (evt) {
-        evt.preventDefault();
-        showSearchContent();
-        $('body').animate({
-            scrollTop: $("#search-content").offset().top - 20,
-        }, 1000, function () {
-            hideSimple();
-        }
-        );
-    });
+            $('body').animate({
+                scrollTop: $("#search-content").offset().top - 20,
+            }, 1000, function () {
+                hideSimple();
+            }
+            );
+        });
+    }
 });
