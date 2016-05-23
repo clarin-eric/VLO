@@ -23,18 +23,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <div id="facets" class="panel panel-default sidebaritem">
+            <div wicket:id="container" id="facets" class="panel panel-default sidebaritem">
                 <p>
                     Use the categories below to limit the search results to those matching the selected value(s).
                 </p>
                 <wicket:container wicket:id="facets">
                     <div wicket:id="facet">[facet]</div>
                 </wicket:container>
-<!--                <div wicket:id="batchLinks" id="expandcollapseall">
-                    <a wicket:id="expandAll" id="expandall">Expand all <span></span></a>
-                    <a wicket:id="collapseAll" id="collapseall">Collapse all <span></span></a>
-                    <a wicket:id="deselectAll" id="deselectall">Deselect all <span></span></a>
-                </div>-->
+                <a wicket:id="more" href="#" class="btn btn-default">
+                    <i class="fa fa-angle-double-down" aria-hidden="true"></i>
+                    <span>more facets...</span>
+                </a>
+                <a wicket:id="fewer" href="#" class="btn btn-default">
+                    <i class="fa fa-angle-double-up" aria-hidden="true"></i>
+                    <span>fewer facets...</span>
+                </a>
             </div>
         </wicket:panel>
     </body>

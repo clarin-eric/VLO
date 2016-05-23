@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
+import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
@@ -125,14 +126,12 @@ public class ResourceLinksPanel extends Panel {
         resourceListContainer.add(resourceListing);
 
         // headers for details columns
-        resourceListContainer.add(
-                new WebMarkupContainer("detailsHeaderColumns")
+        resourceListContainer.add(new WebMarkupContainer("detailsHeaderColumns")
                 .add(new ResourceDetailsToggleLink("toggleDetails"))
                 .add(BooleanVisibilityBehavior.visibleOnTrue(detailsVisibleModel)) //only show when expanded
         );
         // header with detail expansion link
-        resourceListContainer.add(
-                new WebMarkupContainer("expandHeaderColumn")
+        resourceListContainer.add(new WebMarkupContainer("expandHeaderColumn")
                 .add(new ResourceDetailsToggleLink("toggleDetails"))
                 .add(BooleanVisibilityBehavior.visibleOnFalse(detailsVisibleModel)) //only show when not expanded
         );
@@ -206,29 +205,5 @@ public class ResourceLinksPanel extends Panel {
 
     }
 
-    private static class BooleanVisibilityBehavior extends Behavior {
-
-        private final IModel<Boolean> model;
-        private final Boolean visibilityState;
-
-        private BooleanVisibilityBehavior(IModel<Boolean> model, Boolean visibilityState) {
-            this.model = model;
-            this.visibilityState = visibilityState;
-        }
-
-        @Override
-        public void onConfigure(Component component) {
-            component.setVisible(visibilityState.equals(model.getObject()));
-        }
-
-        public static BooleanVisibilityBehavior visibleOnTrue(IModel<Boolean> model) {
-            return new BooleanVisibilityBehavior(model, Boolean.TRUE);
-        }
-
-        public static BooleanVisibilityBehavior visibleOnFalse(IModel<Boolean> model) {
-            return new BooleanVisibilityBehavior(model, Boolean.FALSE);
-        }
-
-    }
 
 }

@@ -20,13 +20,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -36,9 +33,17 @@ import org.apache.wicket.model.util.MapModel;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
+import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetExpansionStateModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
+import eu.clarin.cmdi.vlo.wicket.model.ToggleModel;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.model.Model;
 
 /**
  * A panel representing a group of facets.
@@ -51,13 +56,15 @@ import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 public abstract class FacetsPanel extends GenericPanel<List<String>> {
 
     private MapModel<String, ExpansionState> expansionModel;
+    private IModel<Boolean> allFacetsShown = Model.of(false);
 
     /**
      *
      * @param id component id
-     * @param facetNamesModel model that provides the list of names of facets to show in
-     * this panel
-     * @param fieldsModel fields model to be passed to individual facet field models
+     * @param facetNamesModel model that provides the list of names of facets to
+     * show in this panel
+     * @param fieldsModel fields model to be passed to individual facet field
+     * models
      * @param selectionModel model representing the current query/value
      * selection state
      */
@@ -66,6 +73,12 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
 
         final Map<String, ExpansionState> expansionStateMap = new HashMap<>();
         expansionModel = new MapModel<>(expansionStateMap);
+
+        final MarkupContainer container = new WebMarkupContainer("container");
+        add(container
+                .setOutputMarkupId(true)
+                .add(new AttributeAppender("class", new BooleanOptionsModel<>(allFacetsShown, Model.of("show-all"), Model.of("show-primary")), " "))
+        );
 
         final ListView<String> facetsView = new ListView<String>("facets", facetNamesModel) {
 
@@ -91,55 +104,28 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
         };
         // facet list is not dynamic, so reuse items
         facetsView.setReuseItems(true);
-        add(facetsView);
+        container.add(facetsView);
 
-        // links to expand, collapse or deselect all facets
-        //add(createBatchLinks("batchLinks", selectionModel));
-    }
-
-    private Component createBatchLinks(String id, final IModel<QueryFacetsSelection> selectionModel) {
-        final WebMarkupContainer links = new WebMarkupContainer(id);
-        links.add(new IndicatingAjaxFallbackLink("expandAll") {
-
+        container.add(new AjaxFallbackLink("more") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                setAllFacetsExpansionState(ExpansionState.EXPANDED);
-                selectionChanged(target);
+                allFacetsShown.setObject(Boolean.TRUE);
+                if (target != null) {
+                    target.add(container);
+                }
             }
-        });
-        links.add(new IndicatingAjaxFallbackLink("collapseAll") {
 
+        }.add(BooleanVisibilityBehavior.visibleOnFalse(allFacetsShown)));
+
+        container.add(new AjaxFallbackLink("fewer") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                setAllFacetsExpansionState(ExpansionState.COLLAPSED);
-                selectionChanged(target);
+                allFacetsShown.setObject(Boolean.FALSE);
+                if (target != null) {
+                    target.add(container);
+                }
             }
-        });
-        links.add(new IndicatingAjaxFallbackLink("deselectAll") {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                String query = selectionModel.getObject().getQuery();
-
-                selectionModel.setObject(new QueryFacetsSelection(query));
-                selectionChanged(target);
-            }
-
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                final Map selection = selectionModel.getObject().getSelection();
-                setVisible(selection != null && !selection.isEmpty());
-            }
-        });
-        return links;
-    }
-
-    private void setAllFacetsExpansionState(final ExpansionState state) {
-        final Map<String, ExpansionState> expansionMap = expansionModel.getObject();
-        for (String facetName : getModelObject()) {
-            expansionMap.put(facetName, state);
-        }
+        }.add(BooleanVisibilityBehavior.visibleOnTrue(allFacetsShown)));
     }
 
     @Override
