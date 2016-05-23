@@ -66,8 +66,23 @@ function showSearchContent() {
     $('.hide-simple').fadeIn();
 }
 
+function hideSimple() {
+    var scrollpos = $(window).scrollTop();
+    //subtract height of elements to be hidden from scroll position
+    $(".simple-only, .jumbotron").each(function () {
+        scrollpos -= $(this).height();
+    });
+
+    //perform hide and set scroll position when done
+    $(".simple-only, .jumbotron").hide(0, function () {
+        window.scrollTo(0, scrollpos);
+    });
+}
+
 $(document).ready(function () {
     //TODO: only if exists $("#simple")
+    
+    $("#simple-filler p").fadeIn(5000);
 
     $(window).scroll(function () {
         var bottom_of_window = $(window).scrollTop() + $(window).height();
@@ -82,7 +97,9 @@ $(document).ready(function () {
         showSearchContent();
         $('body').animate({
             scrollTop: $("#topnavigation").offset().top - 5,
-        }, 1000
+        }, 1000, function () {
+            hideSimple();
+        }
         );
     });
 });
