@@ -94,7 +94,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
         add(facetsView);
 
         // links to expand, collapse or deselect all facets
-        add(createBatchLinks("batchLinks", selectionModel));
+        //add(createBatchLinks("batchLinks", selectionModel));
     }
 
     private Component createBatchLinks(String id, final IModel<QueryFacetsSelection> selectionModel) {
