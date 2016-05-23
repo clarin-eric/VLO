@@ -24,7 +24,6 @@ import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetNamesModel;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
-import eu.clarin.cmdi.vlo.wicket.model.ToggleModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.AvailabilityFacetPanel;
@@ -134,10 +133,14 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         searchContainer.add(new AjaxFallbackLink("toggleSimple") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                simpleModeModel.setObject(false);
                 if (target != null) {
+                    //AJAX call - stay on page but switch simple state
+                    simpleModeModel.setObject(false);
                     target.add(searchContainer);
                     target.prependJavaScript("cb|transitionFromSimple(cb);");
+                } else {
+                    //Full page load, just new non-simple faceted search page
+                    setResponsePage(new FacetedSearchPage(FacetedSearchPage.this.getModel(), Model.of(Boolean.FALSE)));
                 }
             }
         });
