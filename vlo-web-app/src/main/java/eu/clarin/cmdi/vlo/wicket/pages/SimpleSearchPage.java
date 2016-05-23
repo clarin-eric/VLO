@@ -17,22 +17,34 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import java.util.Set;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.Strings;
 
 /**
  * Extension of faceted search page with initial 'simple mode' model set to true
+ *
  * @author twagoo
  */
 public class SimpleSearchPage extends FacetedSearchPage {
 
     public SimpleSearchPage(IModel<QueryFacetsSelection> queryModel) {
-        super(queryModel, Model.of(true));
+        super(queryModel, Model.of(shouldBeSimple(queryModel.getObject())));
     }
 
     public SimpleSearchPage(PageParameters parameters) {
-        super(parameters, Model.of(true));
+        super(parameters, Model.of(shouldBeSimple(parameters)));
+    }
+
+    private static boolean shouldBeSimple(PageParameters parameters) {
+        final Set<String> keys = parameters.getNamedKeys();
+        return !keys.contains("q") && !keys.contains("fq");
+    }
+
+    private static boolean shouldBeSimple(QueryFacetsSelection queryModel) {
+        return Strings.isEmpty(queryModel.getQuery()) && queryModel.getSelection().isEmpty();
     }
 
 }
