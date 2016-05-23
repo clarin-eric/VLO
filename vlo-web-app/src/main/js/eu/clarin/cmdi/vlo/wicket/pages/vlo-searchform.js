@@ -96,7 +96,7 @@ $(document).ready(function () {
         evt.preventDefault();
         showSearchContent();
         $('body').animate({
-            scrollTop: $("#topnavigation").offset().top - 5,
+            scrollTop: $("#search-content").offset().top - 20,
         }, 1000, function () {
             hideSimple();
         }

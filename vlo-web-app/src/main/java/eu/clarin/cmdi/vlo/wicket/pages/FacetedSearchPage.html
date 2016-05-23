@@ -33,7 +33,18 @@
 
         <wicket:extend>
 
-            <div wicket:id="searchContainer" id="faceted-search" class="simple">
+            <div wicket:id="searchContainer" id="faceted-search">
+
+                <div wicket:id="navigation" id="topnavigation" class="row">
+                    <div class="col-md-10 hidden-xs hidden-sm">
+                        <ul class="breadcrumb" wicket:id="breadcrumbs" id="breadcrumbs">[BREADCRUMBS]</ul>
+                    </div>
+                    <div class="col-md-2 col-xs-12">
+                        <div class="top-links padding pull-right">
+                            <wicket:container wicket:id="permalink">[permalink]</wicket:container>
+                        </div>
+                    </div>
+                </div>
 
                 <div id="simple-jumbotron" class="simple-only">
                     <div class="jumbotron">
@@ -48,72 +59,66 @@
                     </div>
                 </div>
 
-                <div wicket:id="navigation" id="topnavigation" class="row hide-simple">
-                    <div class="col-md-10 hidden-xs hidden-sm">
-                        <ul class="breadcrumb" wicket:id="breadcrumbs" id="breadcrumbs">[BREADCRUMBS]</ul>
-                    </div>
-                    <div class="col-md-2 col-xs-12">
-                        <div class="top-links padding pull-right">
-                            <wicket:container wicket:id="permalink">[permalink]</wicket:container>
+                <div id="search-content">
+
+                    <div class="panel panel-default">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div wicket:id="search">[search form]</div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="panel panel-default">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div wicket:id="search">[search form]</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row hide-simple">
-                    <div class="col-xs-12">
-                        <div wicket:id="searchresultsheader">
-                            [results header]
-                        </div>
-                    </div>
-                </div>
-
-                <div id="simple-filler" class="simple-only">
-                    <p>
-                        Scroll down to see all records and facet options
-                    </p>
-                </div>
-
-                <a name="before-content" />
-
-                <div class="row hide-simple">
-
-                    <div class="col-md-8 col-md-push-4 content">
-                        <p class="visible-xs-block visible-sm-block">
-                            <a href="#selections">Scroll down</a> for options to narrow down the results
+                    <div id="simple-filler" class="simple-only">
+                        <p>
+                            Scroll down to see all records and facet options
                         </p>
-                        <div wicket:id="searchResults" id="searchresults">[SEARCH RESULTS]</div>
                     </div>
 
-                    <div class="col-md-4 col-md-pull-8" wicket:id="selections" id="selections">
+                    <div class="hide-simple">
 
-                        <div wicket:id="facets">[facets]</div>
-
-                        <div class="sidebaritem">
-                            <!--rounded corners - top ****--> 
-                            <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
-                            <div wicket:id="availability">[availability]</div>
-                            <!--rounded corners - bottom ****--> 
-                            <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
+                        <div class="row ">
+                            <div class="col-xs-12">
+                                <div wicket:id="searchresultsheader">
+                                    [results header]
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="sidebaritem">
-                            <!--rounded corners - top ****--> 
-                            <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
-                            <div wicket:id="options">[options]</div>
-                            <!--rounded corners - bottom ****--> 
-                            <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
+                        <div class="row">
+
+                            <div class="col-md-8 col-md-push-4 content">
+                                <p class="visible-xs-block visible-sm-block">
+                                    <a href="#selections">Scroll down</a> for options to narrow down the results
+                                </p>
+                                <div wicket:id="searchResults" id="searchresults">[SEARCH RESULTS]</div>
+                            </div>
+
+                            <div class="col-md-4 col-md-pull-8" wicket:id="selections" id="selections">
+
+                                <div wicket:id="facets">[facets]</div>
+
+                                <div class="sidebaritem">
+                                    <!--rounded corners - top ****--> 
+                                    <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
+                                    <div wicket:id="availability">[availability]</div>
+                                    <!--rounded corners - bottom ****--> 
+                                    <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
+                                </div>
+
+                                <div class="sidebaritem">
+                                    <!--rounded corners - top ****--> 
+                                    <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
+                                    <div wicket:id="options">[options]</div>
+                                    <!--rounded corners - bottom ****--> 
+                                    <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </wicket:extend>
     </body>
 </html>
