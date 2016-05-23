@@ -55,36 +55,37 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
     /**
      *
      * @param id component id
-     * @param facetsModel model that provides the list of facets to show in this
-     * panel
+     * @param facetNamesModel model that provides the list of names of facets to show in
+     * this panel
+     * @param fieldsModel fields model to be passed to individual facet field models
      * @param selectionModel model representing the current query/value
      * selection state
      */
     public FacetsPanel(final String id, final IModel<List<String>> facetNamesModel, final FacetFieldsModel fieldsModel, final IModel<QueryFacetsSelection> selectionModel) {
         super(id, facetNamesModel);
 
-        final Map<String, ExpansionState> expansionStateMap = new HashMap<String, ExpansionState>();
-        expansionModel = new MapModel<String, ExpansionState>(expansionStateMap);
-        
+        final Map<String, ExpansionState> expansionStateMap = new HashMap<>();
+        expansionModel = new MapModel<>(expansionStateMap);
+
         final ListView<String> facetsView = new ListView<String>("facets", facetNamesModel) {
 
             @Override
             protected void populateItem(ListItem<String> item) {
-            	// Create a facet field model which does a lookup by name,
+                // Create a facet field model which does a lookup by name,
                 // making it dynamic in case the selection and therefore
                 // set of available values changes
                 item.add(
-                        new FacetPanel("facet", 
-                        		item.getModel(),
-                        		new FacetFieldModel(item.getModelObject(), fieldsModel), 
+                        new FacetPanel("facet",
+                                item.getModel(),
+                                new FacetFieldModel(item.getModelObject(), fieldsModel),
                                 selectionModel,
                                 new FacetExpansionStateModel(item.getModel(), expansionModel)) {
 
-                            @Override
-                            protected void selectionChanged(AjaxRequestTarget target) {
-                                FacetsPanel.this.selectionChanged(target);
-                            }
-                        }
+                    @Override
+                    protected void selectionChanged(AjaxRequestTarget target) {
+                        FacetsPanel.this.selectionChanged(target);
+                    }
+                }
                 );
             }
         };
