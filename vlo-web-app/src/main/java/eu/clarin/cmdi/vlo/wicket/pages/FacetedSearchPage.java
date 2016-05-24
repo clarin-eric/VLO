@@ -40,6 +40,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -169,13 +170,22 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
                 selectionsExpandedModel.setObject(!selectionsExpandedModel.getObject());
                 if (target != null) {
                     target.add(selections);
+                    target.add(this);
                 }
             }
-        });
-        selections.add(new AttributeAppender("class",
-                new BooleanOptionsModel<>(selectionsExpandedModel, Model.of(""), Model.of("collapsed-xs-sm")),
+        }
+                .add(new Label("toggleSelectionsLabel", // dynamic button label 
+                        new BooleanOptionsModel<>(selectionsExpandedModel,
+                                Model.of("Hide facets and search options"),
+                                Model.of("Show facets and search options"))))
+                .setOutputMarkupId(true)
+        );
+        selections.add(new AttributeAppender("class", // set style for collapsed
+                new BooleanOptionsModel<>(selectionsExpandedModel,
+                        Model.of(""),
+                        Model.of("collapsed-xs-sm")),
                 " "));
-        
+
         //search results panel and header
         searchResultsPanel = new SearchResultsPanel("searchResults", getModel(), solrDocumentProvider) {
 
