@@ -17,8 +17,8 @@
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
-import eu.clarin.cmdi.vlo.wicket.components.NextRecordLink;
-import eu.clarin.cmdi.vlo.wicket.components.PreviousRecordLink;
+import eu.clarin.cmdi.vlo.wicket.components.RecordNavigationLink;
+import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.migrate.StringResourceModelMigration;
@@ -37,8 +37,6 @@ public class RecordNavigationPanel extends GenericPanel<SearchContext> {
     public RecordNavigationPanel(String id, final IModel<SearchContext> model, IModel<String> tabModel) {
         super(id, model);
 
-        
-        
         // Add a label 'record X of Y'
         add(new Label("recordIndex", StringResourceModelMigration.of("record.navigation.index", this, model,
                 new Object[]{
@@ -51,9 +49,40 @@ public class RecordNavigationPanel extends GenericPanel<SearchContext> {
         )));
 
         // Add a link to go to the previous record
-        add(new PreviousRecordLink("previous", model, tabModel));
+        add(createPreviousLink(model, tabModel));
         // Add a link to go to the next record
-        add(new NextRecordLink("next", model, tabModel));
+        add(createNextLink(model, tabModel));
+    }
+
+    private RecordNavigationLink createPreviousLink(final IModel<SearchContext> model, IModel<String> tabModel) {
+        return new RecordNavigationLink("previous", model, tabModel) {
+            @Override
+            protected IModel<SearchContext> getTargetModel() {
+                return SearchContextModel.previous(getModelObject());
+            }
+
+            @Override
+            protected boolean targetExists() {
+                // disable for first item
+                return getModelObject().getIndex() > 0;
+            }
+        };
+    }
+
+    private RecordNavigationLink createNextLink(final IModel<SearchContext> model, IModel<String> tabModel) {
+        return new RecordNavigationLink("next", model, tabModel) {
+            @Override
+            protected IModel<SearchContext> getTargetModel() {
+                return SearchContextModel.next(getModelObject());
+            }
+
+            @Override
+            protected boolean targetExists() {
+                // disable for last item
+                final SearchContext context = getModelObject();
+                return context.getIndex() + 1 < context.getResultCount();
+            }
+        };
     }
 
     /**
