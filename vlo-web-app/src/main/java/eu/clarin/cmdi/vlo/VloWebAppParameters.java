@@ -29,4 +29,9 @@ public class VloWebAppParameters {
     public static final String FILTER_QUERY_TYPE = "fqType";
     public static final String SEARCH_INDEX = "index";
     public static final String SEARCH_COUNT = "count";
+    
+    /**
+     * Optional page parameter that determines the initial tab
+     */
+    public static final String RECORD_PAGE_TAB = "tab";
 }

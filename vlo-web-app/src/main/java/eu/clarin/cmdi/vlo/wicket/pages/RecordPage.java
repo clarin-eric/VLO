@@ -68,6 +68,7 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -83,11 +84,6 @@ import org.apache.wicket.util.string.StringValue;
  * @author twagoo
  */
 public class RecordPage extends VloBasePage<SolrDocument> {
-
-    /**
-     * Optional page parameter that determines the initial tab
-     */
-    public static final String INITIAL_TAB_PAGE_PARAMETER = "tab";
 
     public final static String DETAILS_SECTION = "details";
     public final static String AVAILABILITY_SECTION = "availability";
@@ -173,8 +169,8 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, getString("recordpage.unnamedrecord")));
         add(createLandingPageLink("landingPageLink"));
 
-        final TabbedPanel tabs = createTabs("tabs");
-        final StringValue initialTab = params.get(INITIAL_TAB_PAGE_PARAMETER);
+        tabs = createTabs("tabs");
+        final StringValue initialTab = params.get(VloWebAppParameters.RECORD_PAGE_TAB);
         if (!initialTab.isEmpty()) {
             final int tabIndex = TABS_ORDER.indexOf(initialTab.toString());
             if (tabIndex >= 0) {
@@ -204,6 +200,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
         });
     }
+    private TabbedPanel tabs;
 
     private TabbedPanel createTabs(String id) {
         final List<ITab> tabs = new ArrayList(Collections.nCopies(TABS_ORDER.size(), null));
@@ -274,9 +271,16 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
     private Component createNavigation(final String id) {
         if (navigationModel != null) {
+            final IModel<String> tabModel = new AbstractReadOnlyModel<String>() {
+                @Override
+                public String getObject() {
+                    return TABS_ORDER.get(tabs.getSelectedTab());
+                }
+            };
+
             // Add a panel that shows the index of the current record in the
             // resultset and allows for forward/backward navigation
-            return new RecordNavigationPanel(id, navigationModel) {
+            return new RecordNavigationPanel(id, navigationModel, tabModel) {
 
                 @Override
                 protected void onConfigure() {

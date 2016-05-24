@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
+import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
@@ -82,7 +83,7 @@ public class RecordPageLink extends Link {
             params.mergeWith(contextParamConverter.toParameters(selectionModel.getObject()));
         }
         if (initialTab != null) {
-            params.add(RecordPage.INITIAL_TAB_PAGE_PARAMETER, initialTab);
+            params.add(VloWebAppParameters.RECORD_PAGE_TAB, initialTab);
         }
         setResponsePage(RecordPage.class, params);
     }

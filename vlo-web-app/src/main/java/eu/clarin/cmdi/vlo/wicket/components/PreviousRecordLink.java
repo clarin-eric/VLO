@@ -16,6 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
+import eu.clarin.cmdi.vlo.VloWebAppParameters;
+import static eu.clarin.cmdi.vlo.VloWebAppParameters.RECORD_PAGE_TAB;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
@@ -44,10 +46,12 @@ public class PreviousRecordLink extends Link<SearchContext> {
     private PageParametersConverter<SolrDocument> documentParamConverter;
     @SpringBean(name = "searchContextParamsConverter")
     private PageParametersConverter<SearchContext> contextParamConverter;
+    private final IModel<String> tabModel;
 
-    public PreviousRecordLink(String id, IModel<SearchContext> model) {
+    public PreviousRecordLink(String id, IModel<SearchContext> model, IModel<String> tabModel) {
         super(id, model);
         add(new LinkDisabledClassBehaviour());
+        this.tabModel = tabModel;
     }
 
     @Override
@@ -60,6 +64,9 @@ public class PreviousRecordLink extends Link<SearchContext> {
             // found it, go there
             final PageParameters params = documentParamConverter.toParameters(documents.get(0));
             params.mergeWith(contextParamConverter.toParameters(SearchContextModel.previous(context)));
+            if (tabModel.getObject() != null) {
+                params.add(RECORD_PAGE_TAB, tabModel.getObject());
+            }
             setResponsePage(RecordPage.class, params);
         }
     }
@@ -68,6 +75,13 @@ public class PreviousRecordLink extends Link<SearchContext> {
     public boolean isEnabled() {
         // disable for first item
         return getModelObject().getIndex() > 0;
+    }
+
+    @Override
+    protected void onDetach() {
+        if (tabModel != null) {
+            tabModel.detach();
+        }
     }
 
 }

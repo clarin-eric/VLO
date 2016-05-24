@@ -34,7 +34,7 @@ import org.apache.wicket.model.PropertyModel;
  */
 public class RecordNavigationPanel extends GenericPanel<SearchContext> {
 
-    public RecordNavigationPanel(String id, final IModel<SearchContext> model) {
+    public RecordNavigationPanel(String id, final IModel<SearchContext> model, IModel<String> tabModel) {
         super(id, model);
 
         
@@ -51,9 +51,9 @@ public class RecordNavigationPanel extends GenericPanel<SearchContext> {
         )));
 
         // Add a link to go to the previous record
-        add(new PreviousRecordLink("previous", model));
+        add(new PreviousRecordLink("previous", model, tabModel));
         // Add a link to go to the next record
-        add(new NextRecordLink("next", model));
+        add(new NextRecordLink("next", model, tabModel));
     }
 
     /**
