@@ -73,7 +73,7 @@ public class VloConfig {
     private String licenseAvailabilityMapUrl;
 
     private String resourceClassMapUrl;
-    
+
     private String licenseURIMapUrl;
 
     private String countryComponentUrl = "";
@@ -149,6 +149,9 @@ public class VloConfig {
 
     @XmlElementWrapper(name = "simpleSearchFacetFields")
     private List<String> simpleSearchFacetField;
+
+    @XmlElementWrapper(name = "primaryFacetFields")
+    private Set<String> primaryFacetField;
 
     private String collectionFacet;
 
@@ -720,6 +723,14 @@ public class VloConfig {
         this.simpleSearchFacetField = simpleSearchFacetField;
     }
 
+    public Set<String> getPrimaryFacetFields() {
+        return primaryFacetField;
+    }
+
+    public void setPrimaryFacetFields(Set<String> primaryFacetField) {
+        this.primaryFacetField = primaryFacetField;
+    }
+
     /**
      *
      * @return all facet fields, including collection facet (arbitrary order
@@ -1036,18 +1047,17 @@ public class VloConfig {
 
     public void setResourceClassMapUrl(String resourceClassMapUrl) {
         this.resourceClassMapUrl = resourceClassMapUrl;
-    }    
-    
+    }
 
     public String getLicenseURIMapUrl() {
-		return licenseURIMapUrl;
-	}
+        return licenseURIMapUrl;
+    }
 
-	public void setLicenseURIMapUrl(String licenseURIMapUrl) {
-		this.licenseURIMapUrl = licenseURIMapUrl;
-	}
+    public void setLicenseURIMapUrl(String licenseURIMapUrl) {
+        this.licenseURIMapUrl = licenseURIMapUrl;
+    }
 
-	/**
+    /**
      * Get the value of the cqlEndpointFilter parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO

@@ -631,14 +631,14 @@ public class DefaultVloConfigFactoryTest {
                 "languageCode",
                 "collection",
                 "resourceClass",
-                "country",
                 "modality",
+                "format",
+                "keywords",
                 "genre",
                 "subject",
-                "format",
+                "country",
                 "organisation",
                 "nationalProject",
-                "keywords",
                 "dataProvider");
 
         List<String> result = config.getFacetFields();
@@ -653,15 +653,15 @@ public class DefaultVloConfigFactoryTest {
             "collection",
             "resourceClass",
             "modality",
-            "genre",
-            "country",
-            "subject",
-            "organisation",
             "format",
-            "dataProvider",
-            "nationalProject",
             "keywords",
-            "collection"};
+            "genre",
+            "subject",
+            "country",
+            "organisation",
+            "dataProvider",
+            "nationalProject"
+        };
         List<String> result = config.getAllFacetFields();
 
         //order is not important in this case

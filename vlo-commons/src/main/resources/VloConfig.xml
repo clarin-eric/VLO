@@ -65,14 +65,14 @@
         <facetField>languageCode</facetField>
         <facetField>collection</facetField>
         <facetField>resourceClass</facetField>
-        <facetField>country</facetField>
         <facetField>modality</facetField>
+        <facetField>format</facetField>
+        <facetField>keywords</facetField>
         <facetField>genre</facetField>
         <facetField>subject</facetField>
-        <facetField>format</facetField>
+        <facetField>country</facetField>
         <facetField>organisation</facetField>
         <facetField>nationalProject</facetField>
-        <facetField>keywords</facetField>
         <facetField>dataProvider</facetField>
     </facetFields>
         
@@ -83,6 +83,15 @@
         <simpleSearchFacetField>modality</simpleSearchFacetField>
         <simpleSearchFacetField>genre</simpleSearchFacetField>
     </simpleSearchFacetFields>
+    
+    <primaryFacetFields>
+        <primaryFacetField>languageCode</primaryFacetField>
+        <primaryFacetField>collection</primaryFacetField>
+        <primaryFacetField>resourceClass</primaryFacetField>
+        <primaryFacetField>modality</primaryFacetField>
+        <primaryFacetField>format</primaryFacetField>
+        <primaryFacetField>keywords</primaryFacetField>
+    </primaryFacetFields>
     
     <!-- Fields shown in expanded search results on the search page -->
     <searchResultFields>
