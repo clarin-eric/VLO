@@ -38,8 +38,8 @@ import java.util.Map;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -163,7 +163,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
         // make "selections" panel collapsable on smaller screens
         final IModel<Boolean> selectionsExpandedModel = Model.of(false);
-        searchContainer.add(new AjaxFallbackLink("toggleSelections") {
+        searchContainer.add(new IndicatingAjaxFallbackLink("toggleSelections") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 selectionsExpandedModel.setObject(!selectionsExpandedModel.getObject());

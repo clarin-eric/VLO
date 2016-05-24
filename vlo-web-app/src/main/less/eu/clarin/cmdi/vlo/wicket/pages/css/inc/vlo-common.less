@@ -43,11 +43,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* styles for record details */
 @import "vlo-record";
 
-/* base style */
-/*@import "style";*/
+/* TODO: inherit these from bootstrap */
+@screen-md: 992px; //bootstrap default
+@screen-md-min: @screen-md;
+@screen-sm-max: (@screen-md-min - 1);
 
-/* styles for collection selection */
-/*@import "vlo-collections";*/
-
-/* styles for facet panels */
-/*@import "vlo-facets";*/
+@media (max-width: @screen-sm-max) {
+    .collapsed-xs-sm {
+        display: none;
+    }
+}
