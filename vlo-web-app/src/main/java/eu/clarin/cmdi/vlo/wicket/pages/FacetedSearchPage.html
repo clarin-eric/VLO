@@ -89,32 +89,36 @@
 
                         <div class="row">
 
-                            <div class="col-md-8 col-md-push-4 content">
-                                <p class="visible-xs-block visible-sm-block">
-                                    <a href="#selections">Scroll down</a> for options to narrow down the results
-                                </p>
-                                <div wicket:id="searchResults" id="searchresults">[SEARCH RESULTS]</div>
+                            <div class="col-md-4" wicket:id="selections" id="selections">
+
+                                <div>
+                                    <a id="toggleFacetsContainer" class="btn btn-primary visible-xs-block visible-sm-block hidden" role="button" 
+                                       data-toggle="collapse" href="#facetsContainer" 
+                                       aria-expanded="false" aria-controls="facetsContainer">Show/hide facets and search options</a>
+                                </div>
+
+                                <div class="collapse in" id="facetsContainer">
+
+                                    <h2 class="visible-xs-block visible-sm-block">Facets</h2>
+
+                                    <div wicket:id="facets">[facets]</div>
+
+                                    <h2 class="visible-xs-block visible-sm-block">Search options</h2>
+
+                                    <div class="sidebaritem">
+                                        <!--rounded corners - top ****--> 
+                                        <div wicket:id="availability">[availability]</div>
+                                    </div>
+
+                                    <div class="sidebaritem">
+                                        <div wicket:id="options">[options]</div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="col-md-4 col-md-pull-8" wicket:id="selections" id="selections">
-
-                                <div wicket:id="facets">[facets]</div>
-
-                                <div class="sidebaritem">
-                                    <!--rounded corners - top ****--> 
-                                    <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
-                                    <div wicket:id="availability">[availability]</div>
-                                    <!--rounded corners - bottom ****--> 
-                                    <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
-                                </div>
-
-                                <div class="sidebaritem">
-                                    <!--rounded corners - top ****--> 
-                                    <div class="rtop"><div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div></div>
-                                    <div wicket:id="options">[options]</div>
-                                    <!--rounded corners - bottom ****--> 
-                                    <div class="rbottom"><div class="r4"></div><div class="r3"></div><div class="r2"></div><div class="r1"></div></div>
-                                </div>
+                            <div class="col-md-8 content">
+                                <h2 class="visible-xs-block visible-sm-block">Search results</h2>
+                                <div wicket:id="searchResults" id="searchresults">[SEARCH RESULTS]</div>
                             </div>
                         </div>
                     </div>
