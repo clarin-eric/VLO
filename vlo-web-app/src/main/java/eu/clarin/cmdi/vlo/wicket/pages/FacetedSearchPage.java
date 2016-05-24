@@ -21,6 +21,7 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
+import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetNamesModel;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
@@ -38,6 +39,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -138,6 +140,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         searchForm = createSearchForm("search");
         searchContainer.add(searchForm);
 
+        //selections panel (facets and options)
         selections = new WebMarkupContainer("selections") {
 
             @Override
@@ -158,6 +161,22 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
                 .setOutputMarkupPlaceholderTag(true)
         );
 
+        // make "selections" panel collapsable on smaller screens
+        final IModel<Boolean> selectionsExpandedModel = Model.of(false);
+        searchContainer.add(new AjaxFallbackLink("toggleSelections") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                selectionsExpandedModel.setObject(!selectionsExpandedModel.getObject());
+                if (target != null) {
+                    target.add(selections);
+                }
+            }
+        });
+        selections.add(new AttributeAppender("class",
+                new BooleanOptionsModel<>(selectionsExpandedModel, Model.of(""), Model.of("collapsed-xs-sm")),
+                " "));
+        
+        //search results panel and header
         searchResultsPanel = new SearchResultsPanel("searchResults", getModel(), solrDocumentProvider) {
 
             @Override

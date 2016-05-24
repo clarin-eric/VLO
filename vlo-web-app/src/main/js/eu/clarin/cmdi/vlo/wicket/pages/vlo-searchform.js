@@ -91,21 +91,6 @@ function ensureFillerSize() {
 }
 
 $(document).ready(function () {
-    //if we have javascript, show a button to toggle the facets/search options section
-    $("a#toggleFacetsContainer").removeClass("hidden");
-    if ($("a#toggleFacetsContainer").is(":visible")) { //only on xs and sm
-        //Facets sidebar should be hidden initially.
-        $("#facetsContainer").removeClass("in");
-    }
-    $(window).resize(function(){
-        if (!$("a#toggleFacetsContainer").is(":visible")) {
-            //make sure that the facets panel is collapsed when the button becomes invisible
-            $("#facetsContainer").addClass("in");
-        }
-    });
-});
-
-$(document).ready(function () {
     //prepare simple mode (if faceted search is in fact in simple mode)
     if ($("#faceted-search.simple").length > 0) { // check whether we have .simple
 

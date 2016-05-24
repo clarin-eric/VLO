@@ -89,30 +89,25 @@
 
                         <div class="row">
 
+                            <div>
+                                <a wicket:id="toggleSelections" class="btn btn-primary visible-xs-block visible-sm-block" role="button" 
+                                   aria-controls="selections">Show/hide facets and search options</a>
+                            </div>
+                            
                             <div class="col-md-4" wicket:id="selections" id="selections">
+                                <h2 class="visible-xs-block visible-sm-block">Facets</h2>
 
-                                <div>
-                                    <a id="toggleFacetsContainer" class="btn btn-primary visible-xs-block visible-sm-block hidden" role="button" 
-                                       data-toggle="collapse" href="#facetsContainer" 
-                                       aria-expanded="false" aria-controls="facetsContainer">Show/hide facets and search options</a>
+                                <div wicket:id="facets">[facets]</div>
+
+                                <h2 class="visible-xs-block visible-sm-block">Search options</h2>
+
+                                <div class="sidebaritem">
+                                    <!--rounded corners - top ****--> 
+                                    <div wicket:id="availability">[availability]</div>
                                 </div>
 
-                                <div class="collapse in" id="facetsContainer">
-
-                                    <h2 class="visible-xs-block visible-sm-block">Facets</h2>
-
-                                    <div wicket:id="facets">[facets]</div>
-
-                                    <h2 class="visible-xs-block visible-sm-block">Search options</h2>
-
-                                    <div class="sidebaritem">
-                                        <!--rounded corners - top ****--> 
-                                        <div wicket:id="availability">[availability]</div>
-                                    </div>
-
-                                    <div class="sidebaritem">
-                                        <div wicket:id="options">[options]</div>
-                                    </div>
+                                <div class="sidebaritem">
+                                    <div wicket:id="options">[options]</div>
                                 </div>
                             </div>
 
