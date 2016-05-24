@@ -31,6 +31,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.MapModel;
 
 import eu.clarin.cmdi.vlo.JavaScriptResources;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
@@ -38,12 +39,14 @@ import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetExpansionStateModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
-import eu.clarin.cmdi.vlo.wicket.model.ToggleModel;
+import java.util.Collection;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  * A panel representing a group of facets.
@@ -54,6 +57,9 @@ import org.apache.wicket.model.Model;
  * @author twagoo
  */
 public abstract class FacetsPanel extends GenericPanel<List<String>> {
+
+    @SpringBean
+    private VloConfig vloConfig;
 
     private MapModel<String, ExpansionState> expansionModel;
     private IModel<Boolean> allFacetsShown = Model.of(false);
@@ -83,7 +89,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
         final ListView<String> facetsView = new ListView<String>("facets", facetNamesModel) {
 
             @Override
-            protected void populateItem(ListItem<String> item) {
+            protected void populateItem(final ListItem<String> item) {
                 // Create a facet field model which does a lookup by name,
                 // making it dynamic in case the selection and therefore
                 // set of available values changes
@@ -98,7 +104,21 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
                     protected void selectionChanged(AjaxRequestTarget target) {
                         FacetsPanel.this.selectionChanged(target);
                     }
-                }
+                }.add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
+                            //class appender that differentiates between primary and secondary facets (based on configuration)
+                            @Override
+                            public String getObject() {
+                                final Collection<String> primaryFacetFields = vloConfig.getPrimaryFacetFields();
+                                if (primaryFacetFields == null || primaryFacetFields.isEmpty()) {
+                                    //no primary facets configured, don't set a class
+                                    return null;
+                                } else if (primaryFacetFields.contains(item.getModelObject())) {
+                                    return "primary-facet";
+                                } else {
+                                    return "secondary-facet";
+                                }
+                            }
+                        }, " "))
                 );
             }
         };
