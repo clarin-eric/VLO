@@ -143,11 +143,6 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                 .add(new ResourceDetailsToggleLink("toggleDetails"))
                 .add(BooleanVisibilityBehavior.visibleOnTrue(detailsVisibleModel)) //only show when expanded
         );
-        // header with detail expansion link
-        resourceListContainer.add(new WebMarkupContainer("expandHeaderColumn")
-                .add(new ResourceDetailsToggleLink("toggleDetails"))
-                .add(BooleanVisibilityBehavior.visibleOnFalse(detailsVisibleModel)) //only show when not expanded
-        );
 
         resourceListContainer.setOutputMarkupId(true);
         return resourceListContainer;
@@ -194,9 +189,6 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                     .add(new Label("mimeType"))
                     .add(new Label("href"))
                     .add(BooleanVisibilityBehavior.visibleOnTrue(detailsVisibleModel))
-            );
-            item.add(new WebMarkupContainer("expandColumn")
-                    .add(BooleanVisibilityBehavior.visibleOnFalse(detailsVisibleModel))
             );
 
             // add links for options dropdown

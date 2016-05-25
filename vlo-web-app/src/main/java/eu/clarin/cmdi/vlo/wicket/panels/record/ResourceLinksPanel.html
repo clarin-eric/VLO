@@ -29,13 +29,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <th class="recordresourcename">Name</th>
                     <th>Type</th>
                     <th></th>
-                    <th class="recordresourcedetailstoggle" wicket:id="expandHeaderColumn">
-                        <a wicket:id="toggleDetails" class="pull-right" title="More details">
-                            <i class="fa fa-angle-double-right"></i>
-                        </a>
-                    </th>
                     <wicket:container wicket:id="detailsHeaderColumns">
-                        <th>Mime type</th>
+                        <th class="firstdetails">Mime type</th>
                         <th>Location</th>
                         <th class="recordresourcedetailstoggle">
                             <a wicket:id="toggleDetails" class="pull-right" title="Fewer details">
@@ -69,11 +64,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         </td>
 
                         <wicket:container wicket:id="detailsColumns">
-                            <td><span wicket:id="mimeType">application/msword</span></td>
+                            <td class="firstdetails"><span wicket:id="mimeType">application/msword</span></td>
                             <td><span wicket:id="href">location</span></td>
                             <td></td>
                         </wicket:container>
-                        <td wicket:id="expandColumn"></td>
                     </tr>
                 </wicket:container>
 
