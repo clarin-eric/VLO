@@ -214,7 +214,7 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
         private String getResourceLanguageCode() {
             final Collection<Object> languageValues = ResourceLinksPanel.this.getModelObject().getFieldValues(FacetConstants.FIELD_LANGUAGE_CODE);
-            if (languageValues.size() == 1) {
+            if (languageValues != null && languageValues.size() == 1) {
                 //if not exactly one language, so cannot be determined for this resource
                 final String languageFieldValue = languageValues.iterator().next().toString();
                 final LanguageInfo languageInfo = languageCodeUtils.decodeLanguageCodeString(languageFieldValue);
