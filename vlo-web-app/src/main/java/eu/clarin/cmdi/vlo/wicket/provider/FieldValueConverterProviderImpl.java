@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.provider;
 import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
+import eu.clarin.cmdi.vlo.LanguageCodeUtils.LanguageInfo;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
@@ -26,12 +27,8 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -39,8 +36,6 @@ import org.slf4j.LoggerFactory;
  */
 public class FieldValueConverterProviderImpl implements FieldValueConverterProvider {
 
-    private final static Logger logger = LoggerFactory.getLogger(FieldValueConverterProviderImpl.class);
-    private final static Pattern LANGUAGE_CODE_PATTERN = Pattern.compile(FacetConstants.LANGUAGE_CODE_PATTERN);
     private final static String AVAILABILITY_VALUES_PROPERTIES_FILE = "/availabilityValues.properties";
     private final static String LICENSE_VALUES_PROPERTIES_FILE = "/licenseNames.properties";
     private final LanguageCodeUtils languageCodeUtils;
@@ -117,25 +112,20 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
 
         @Override
         public String getConvertedValue(String fieldValue, Locale locale) throws ConversionException {
-            if (fieldValue == null) {
+            final LanguageInfo languageInfo = languageCodeUtils.decodeLanguageCodeString(fieldValue);
+
+            if (languageInfo == null) {
                 return null;
-            }
-            final Matcher matcher = LANGUAGE_CODE_PATTERN.matcher(fieldValue);
-            if (matcher.matches() && matcher.groupCount() == 2) {
-                final String type = matcher.group(1);
-                final String value = matcher.group(2);
-                switch (type) {
-                    case "code":
-                        // value is a language code, look up
-                        return languageCodeUtils.getLanguageNameForLanguageCode(value.toUpperCase());
-                    case "name":
-                        // value is the name to be shown
-                        return value;
+            } else {
+                switch (languageInfo.getType()) {
+                    case CODE:
+                        return languageCodeUtils.getLanguageNameForLanguageCode(languageInfo.getValue());
+                    case NAME:
+                        return languageInfo.getValue();
+                    default:
+                        return null;
                 }
             }
-
-            // does not match expected pattern
-            return null;
         }
 
     };

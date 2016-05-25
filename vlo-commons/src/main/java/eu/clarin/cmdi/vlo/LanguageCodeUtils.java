@@ -21,6 +21,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
@@ -41,6 +43,7 @@ import org.w3c.dom.NodeList;
 public class LanguageCodeUtils {
 
     private final static Logger LOG = LoggerFactory.getLogger(LanguageCodeUtils.class);
+    private final static Pattern LANGUAGE_CODE_PATTERN = Pattern.compile(eu.clarin.cmdi.vlo.FacetConstants.LANGUAGE_CODE_PATTERN);
 
     private Map<String, String> twoLetterCodesMap;
     private Map<String, String> threeLetterCodesMap;
@@ -200,6 +203,54 @@ public class LanguageCodeUtils {
                 throw new RuntimeException("Cannot instantiate postProcessor. URL: " + urlString, e);
             }
         }
+    }
+
+    public LanguageInfo decodeLanguageCodeString(String fieldValue) {
+        if (fieldValue != null) {
+            final Matcher matcher = LANGUAGE_CODE_PATTERN.matcher(fieldValue);
+            if (matcher.matches() && matcher.groupCount() == 2) {
+                final String type = matcher.group(1);
+                final String value = matcher.group(2);
+                switch (type) {
+                    case "code":
+                        // value is a language code, look up
+                        return new LanguageInfo(LanguageInfo.Type.CODE, value.toUpperCase());
+                    case "name":
+                        // value is the name to be shown
+                        return new LanguageInfo(LanguageInfo.Type.NAME, value);
+                }
+            }
+        }
+        return null;
+    }
+
+    public static class LanguageInfo {
+
+        public static enum Type {
+            CODE, NAME
+        }
+
+        private final Type type;
+        private final String value;
+
+        private LanguageInfo(Type type, String value) {
+            this.type = type;
+            this.value = value;
+        }
+
+        public Type getType() {
+            return type;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+    }
+    
+    protected LanguageCodeUtils() {
+        //for proxying
+        this(null);
     }
 
 }

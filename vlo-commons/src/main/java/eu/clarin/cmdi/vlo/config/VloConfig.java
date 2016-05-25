@@ -166,6 +166,8 @@ public class VloConfig {
     private String cqlEndpointAlternative = "";
 
     private URI configLocation;
+    
+    private String lrSwitchboardBaseUrl = "http://weblicht.sfs.uni-tuebingen.de/clrs/";
 
     /**
      * Get and set methods for web application parameter members<br><br>
@@ -1158,6 +1160,14 @@ public class VloConfig {
 
     public void setAvailabilityValues(List<FieldValueDescriptor> availabilityValues) {
         this.availabilityValue = availabilityValues;
+    }
+
+    public String getLrSwitchboardBaseUrl() {
+        return lrSwitchboardBaseUrl;
+    }
+
+    public void setLrSwitchboardBaseUrl(String lrSwitchboardBaseUrl) {
+        this.lrSwitchboardBaseUrl = lrSwitchboardBaseUrl;
     }
 
 }
