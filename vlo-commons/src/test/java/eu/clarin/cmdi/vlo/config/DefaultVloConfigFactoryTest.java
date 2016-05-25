@@ -933,4 +933,10 @@ public class DefaultVloConfigFactoryTest {
         List<String> result = config.getSimpleSearchFacetFields();
         assertEquals(5, result.size());
     }
+    
+    @Test 
+    public void testGetLrSwitchboardBaseUrl() {
+        String result = config.getLrSwitchboardBaseUrl();
+        assertEquals("http://weblicht.sfs.uni-tuebingen.de/clrs/", result);
+    }
 }

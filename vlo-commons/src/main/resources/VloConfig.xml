@@ -185,6 +185,8 @@
     
     <cqlEndpointAlternative>http://cqlservlet.mpi.nl/</cqlEndpointAlternative>
     
+    <lrSwitchboardBaseUrl>http://weblicht.sfs.uni-tuebingen.de/clrs/</lrSwitchboardBaseUrl>
+    
     <!-- makes the score for the result ranking visible in the search results -->
     <showResultScores>false</showResultScores>
     
