@@ -56,7 +56,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             </a>
                         </td>
                         <td wicket:id="resourceType">Text file</td>
-                        <td><a href="#" title="Options"><span class="glyphicon glyphicon-option-horizontal"></span></a></td>
+                        <td>
+                            <div class="dropdown">
+                                <a class="dropdown-toggle" href="#" title="Options" data-toggle="dropdown" aria-haspopup="true">
+                                    <span class="glyphicon glyphicon-option-horizontal"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li><a wicket:id="details"><span class="glyphicon glyphicon-info-sign"></span> Details</a></li>
+                                    <li><a href="#"><span class="glyphicon glyphicon-open-file"></span> Process with Language Resource Switchboard</a></li>
+                                </ul>
+                            </div>
+                        </td>
 
                         <wicket:container wicket:id="detailsColumns">
                             <td><span wicket:id="mimeType">application/msword</span></td>

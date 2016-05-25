@@ -185,6 +185,8 @@ public class ResourceLinksPanel extends Panel {
             item.add(new WebMarkupContainer("expandColumn")
                     .add(BooleanVisibilityBehavior.visibleOnFalse(detailsVisibleModel))
             );
+            
+            item.add(new ResourceDetailsToggleLink("details"));
 
         }
     }
