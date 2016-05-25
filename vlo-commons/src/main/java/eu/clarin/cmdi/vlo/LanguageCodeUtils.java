@@ -247,5 +247,10 @@ public class LanguageCodeUtils {
         }
 
     }
+    
+    protected LanguageCodeUtils() {
+        //for proxying
+        this(null);
+    }
 
 }
