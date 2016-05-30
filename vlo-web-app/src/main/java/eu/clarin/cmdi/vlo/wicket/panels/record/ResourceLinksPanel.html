@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <th class="recordresourcename">Name</th>
                     <th>Type</th>
                     <th></th>
+                    <th></th>
                 </tr>
 
                 <wicket:container wicket:id="resource">
@@ -48,16 +49,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                     <span class="glyphicon glyphicon-option-horizontal"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-right">
-                                    <li><a wicket:id="details"><span class="glyphicon glyphicon-info-sign"></span> <span wicket:id="label">Details</span></a></li>
                                     <li><a target="_blank" wicket:id="lrs"><span class="glyphicon glyphicon-open-file"></span> Process with Language Resource Switchboard</a></li>
                                 </ul>
                             </div>
+                        </td>
+                        <td>
+                            <a wicket:id="details" class="pull-right">
+                                <span wicket:id="show" class="glyphicon glyphicon-chevron-right" title="Show details"></span>
+                                <span wicket:id="hide" class="glyphicon glyphicon-chevron-down" title="Hide details"></span>
+                            </a>
                         </td>
                     </tr>
 
                     <tr wicket:id="detailsColumns" class="details">
                         <td></td>
-                        <td colspan="3">
+                        <td colspan="4">
                             <p>Mime type: <span wicket:id="mimeType">application/msword</span></p>
                             <p>Link: <span wicket:id="href">location</span></p>
                         </td>

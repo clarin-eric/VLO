@@ -26,7 +26,6 @@ import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeGlyphicon;
-import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
@@ -199,7 +198,9 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
             // toggle details option
             columns.add(new ResourceDetailsToggleLink("details", new PropertyModel<String>(resourceInfoModel, "href"))
-                    .add(new Label("label", new BooleanOptionsModel(itemDetailsShownModel, Model.of("Hide details"), Model.of("Show details")))));
+                    .add(new WebMarkupContainer("show").add(BooleanVisibilityBehavior.visibleOnFalse(itemDetailsShownModel)))
+                    .add(new WebMarkupContainer("hide").add(BooleanVisibilityBehavior.visibleOnTrue(itemDetailsShownModel)))
+            );
 
             item.add(new WebMarkupContainer("detailsColumns")
                     .add(new Label("mimeType"))
