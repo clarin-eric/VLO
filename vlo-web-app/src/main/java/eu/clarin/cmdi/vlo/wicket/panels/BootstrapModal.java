@@ -32,15 +32,15 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
-public abstract class BootstrapModalPanel extends Panel {
+public abstract class BootstrapModal extends Panel {
 
     private final IModel<Boolean> visibilityModel = Model.of(false);
 
-    public BootstrapModalPanel(String id) {
+    public BootstrapModal(String id) {
         super(id);
     }
 
-    public BootstrapModalPanel(String id, IModel<?> model) {
+    public BootstrapModal(String id, IModel<?> model) {
         super(id, model);
     }
 
@@ -77,7 +77,7 @@ public abstract class BootstrapModalPanel extends Panel {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(BootstrapModalPanel.class, "bootstrap-modal.js")));
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(BootstrapModal.class, "bootstrap-modal.js")));
     }
 
 }

@@ -26,7 +26,7 @@ import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.provider.PartitionedDataProvider;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
-import eu.clarin.cmdi.vlo.wicket.panels.BootstrapModalPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.BootstrapModal;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.util.Collection;
@@ -38,7 +38,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -56,7 +55,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -69,7 +67,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     public final static int MAX_NUMBER_OF_FACETS_TO_SHOW = 10; //TODO: get from config
     public final static Collection<String> LOW_PRIORITY_VALUES = ImmutableSet.of("unknown", "unspecified", "");
 
-    private final BootstrapModalPanel valuesWindow;
+    private final BootstrapModal valuesWindow;
     private final IModel<QueryFacetsSelection> selectionModel;
     private final WebMarkupContainer valuesContainer;
     private final IModel<FieldValuesFilter> filterModel;
@@ -258,8 +256,8 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param id component id
      * @return 'all facet values' modal window component
      */
-    private BootstrapModalPanel createAllValuesWindow(String id) {
-        final BootstrapModalPanel window = new BootstrapModalPanel(id) {
+    private BootstrapModal createAllValuesWindow(String id) {
+        final BootstrapModal window = new BootstrapModal(id) {
 
             @Override
             public IModel<String> getTitle() {
