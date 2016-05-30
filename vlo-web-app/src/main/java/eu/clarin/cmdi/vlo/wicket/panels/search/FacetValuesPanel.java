@@ -26,6 +26,7 @@ import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.provider.PartitionedDataProvider;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
+import eu.clarin.cmdi.vlo.wicket.panels.BootstrapModalPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.util.Collection;
@@ -33,6 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
@@ -54,6 +56,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -72,7 +75,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     private final IModel<FieldValuesFilter> filterModel;
     private final int subListSize;
     private final IModel<String> fieldNameModel;
-    
+
     @SpringBean
     private FieldValueConverterProvider fieldValueConverterProvider;
 
@@ -203,7 +206,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
                 // call callback
                 onValuesSelected(
                         // for now only single values can be selected
-                		Collections.singleton(item.getModelObject().getName()),
+                        Collections.singleton(item.getModelObject().getName()),
                         target);
             }
         };
@@ -259,35 +262,51 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         final ModalWindow window = new ModalWindow(id) {
 
             @Override
-            public IModel<String> getTitle() {
-                return new SolrFieldNameModel(getModel(), "name");
+            protected ResourceReference newCssResource() {
+                return null; //wicket css conflicts with bootstrap
             }
 
         };
         window.showUnloadConfirmation(false);
 
-        final AllFacetValuesPanel allValuesPanel = new AllFacetValuesPanel(window.getContentId(), getModel(), filterModel) {
-
+        final Component modalContent = new BootstrapModalPanel(window.getContentId()) {
             @Override
-            protected void onValuesSelected(Collection<String> values, AjaxRequestTarget target) {
-                if (target != null) {
-                    // target can be null if selection link was opened in a new tab
-                    window.close(target);
-                }
-                FacetValuesPanel.this.onValuesSelected(values, target);
+            protected Component createBodyContent(String id) {
+                return new AllFacetValuesPanel(id, getModel(), filterModel) {
+
+                    @Override
+                    protected void onValuesSelected(Collection<String> values, AjaxRequestTarget target) {
+                        if (target != null) {
+                            // target can be null if selection link was opened in a new tab
+                            window.close(target);
+                        }
+                        FacetValuesPanel.this.onValuesSelected(values, target);
+                    }
+                };
+            }
+            
+            @Override
+            public IModel<String> getTitle() {
+                return new SolrFieldNameModel(getModel(), "name");
             }
         };
-        window.addOrReplace(allValuesPanel);
+
+        window.addOrReplace(modalContent);
         return window;
     }
 
     @Override
     public void detachModels() {
         super.detachModels();
-        selectionModel.detach();
-        filterModel.detach();
+        
+        if (selectionModel != null) {
+            selectionModel.detach();
+        }
+        
+        if (filterModel != null) {
+            filterModel.detach();
+        }
     }
-    
 
     /**
      * Callback triggered when values have been selected on this facet
@@ -298,7 +317,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * (fallback)!
      */
     protected abstract void onValuesSelected(Collection<String> values, AjaxRequestTarget target);
-    
+
     @Override
     protected void onBeforeRender() {
         super.onBeforeRender();
