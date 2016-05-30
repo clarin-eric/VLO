@@ -41,11 +41,21 @@ public class ResourceStringConverterImplTest {
      */
     @Test
     public void testGetResourceInfoVideo() {
-        String resourceString = "video/mpeg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "video href";
+        String resourceString = "video/mpeg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "href"; //invalid URI
         ResourceInfo result = instance.getResourceInfo(resourceString);
-        assertEquals("video href", result.getHref());
+        assertEquals("href", result.getHref());
         assertEquals("video/mpeg", result.getMimeType());
         assertEquals(ResourceType.VIDEO, result.getResourceType());
+    }
+
+    /**
+     * Test of getResourceInfo method, of class ResourceStringConverterImpl.
+     */
+    @Test
+    public void testGetResourceInfoVideoInvalid() {
+        String resourceString = "video/mpeg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "video href"; //invalid URI
+        ResourceInfo result = instance.getResourceInfo(resourceString);
+        assertEquals("video href", result.getHref());
     }
 
     /**

@@ -92,7 +92,9 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
     @Override
     public void detachModels() {
         super.detachModels();
-        searchContextModel.detach();
+        if (searchContextModel != null) {
+            searchContextModel.detach();
+        }
     }
 
 }
