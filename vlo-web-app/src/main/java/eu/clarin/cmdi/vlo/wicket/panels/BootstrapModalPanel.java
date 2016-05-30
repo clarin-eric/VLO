@@ -16,16 +16,19 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
-import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 /**
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 public abstract class BootstrapModalPanel extends Panel {
+
+    private final IModel<Boolean> visibilityModel = Model.of(false);
 
     public BootstrapModalPanel(String id) {
         super(id);
@@ -38,13 +41,32 @@ public abstract class BootstrapModalPanel extends Panel {
     @Override
     protected void onInitialize() {
         super.onInitialize();
-        add(createBodyContent("bodyContent"));
         add(new Label("title", getTitle()));
+        setOutputMarkupId(true);
     }
 
-    protected abstract Component createBodyContent(String id);
+    @Override
+    protected void onConfigure() {
+        get("title").setVisible(visibilityModel.getObject());
+        get("bodyContent").setVisible(visibilityModel.getObject());
+    }
 
     protected abstract IModel<String> getTitle();
-    
-    //TODO: onclose
+
+    public void close(AjaxRequestTarget target) {
+        visibilityModel.setObject(false);
+        target.add(this);
+        target.appendJavaScript(String.format("$('#%s .modal').modal('hide')", getMarkupId(true)));
+    }
+
+    public void show(AjaxRequestTarget target) {
+        visibilityModel.setObject(true);
+        target.add(this);
+        target.appendJavaScript(String.format("$('#%s .modal').modal('show')", getMarkupId(true)));
+    }
+
+    public String getContentId() {
+        return "bodyContent";
+    }
+
 }

@@ -69,7 +69,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     public final static int MAX_NUMBER_OF_FACETS_TO_SHOW = 10; //TODO: get from config
     public final static Collection<String> LOW_PRIORITY_VALUES = ImmutableSet.of("unknown", "unspecified", "");
 
-    private final ModalWindow valuesWindow;
+    private final BootstrapModalPanel valuesWindow;
     private final IModel<QueryFacetsSelection> selectionModel;
     private final WebMarkupContainer valuesContainer;
     private final IModel<FieldValuesFilter> filterModel;
@@ -258,36 +258,24 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param id component id
      * @return 'all facet values' modal window component
      */
-    private ModalWindow createAllValuesWindow(String id) {
-        final ModalWindow window = new ModalWindow(id) {
+    private BootstrapModalPanel createAllValuesWindow(String id) {
+        final BootstrapModalPanel window = new BootstrapModalPanel(id) {
 
-            @Override
-            protected ResourceReference newCssResource() {
-                return null; //wicket css conflicts with bootstrap
-            }
-
-        };
-        window.showUnloadConfirmation(false);
-
-        final Component modalContent = new BootstrapModalPanel(window.getContentId()) {
-            @Override
-            protected Component createBodyContent(String id) {
-                return new AllFacetValuesPanel(id, getModel(), filterModel) {
-
-                    @Override
-                    protected void onValuesSelected(Collection<String> values, AjaxRequestTarget target) {
-                        if (target != null) {
-                            // target can be null if selection link was opened in a new tab
-                            window.close(target);
-                        }
-                        FacetValuesPanel.this.onValuesSelected(values, target);
-                    }
-                };
-            }
-            
             @Override
             public IModel<String> getTitle() {
                 return new SolrFieldNameModel(getModel(), "name");
+            }
+        };
+
+        final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), filterModel) {
+
+            @Override
+            protected void onValuesSelected(Collection<String> values, AjaxRequestTarget target) {
+                if (target != null) {
+                    // target can be null if selection link was opened in a new tab
+                    window.close(target);
+                }
+                FacetValuesPanel.this.onValuesSelected(values, target);
             }
         };
 
@@ -298,11 +286,11 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     @Override
     public void detachModels() {
         super.detachModels();
-        
+
         if (selectionModel != null) {
             selectionModel.detach();
         }
-        
+
         if (filterModel != null) {
             filterModel.detach();
         }
