@@ -138,12 +138,6 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         //add the actual listing
         resourceListContainer.add(resourceListing);
 
-        // headers for details columns
-        resourceListContainer.add(new WebMarkupContainer("detailsHeaderColumns")
-                .add(new ResourceDetailsToggleLink("toggleDetails"))
-                .add(BooleanVisibilityBehavior.visibleOnTrue(detailsVisibleModel)) //only show when expanded
-        );
-
         resourceListContainer.setOutputMarkupId(true);
         return resourceListContainer;
     }
