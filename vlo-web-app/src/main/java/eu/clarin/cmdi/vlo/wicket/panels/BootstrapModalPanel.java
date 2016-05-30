@@ -17,12 +17,18 @@
 package eu.clarin.cmdi.vlo.wicket.panels;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 /**
+ * Drop-in replacement for {@link ModalWindow} that uses bootstrap classes and
+ * JavaScript.
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
@@ -56,17 +62,22 @@ public abstract class BootstrapModalPanel extends Panel {
     public void close(AjaxRequestTarget target) {
         visibilityModel.setObject(false);
         target.add(this);
-        target.appendJavaScript(String.format("$('#%s .modal').modal('hide')", getMarkupId(true)));
+        target.prependJavaScript(String.format("cb|hideModal($('#%s .modal'), cb);", getMarkupId(true)));
     }
 
     public void show(AjaxRequestTarget target) {
         visibilityModel.setObject(true);
         target.add(this);
-        target.appendJavaScript(String.format("$('#%s .modal').modal('show')", getMarkupId(true)));
+        target.appendJavaScript(String.format("showModal($('#%s .modal'));", getMarkupId(true)));
     }
 
     public String getContentId() {
         return "bodyContent";
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(BootstrapModalPanel.class, "bootstrap-modal.js")));
     }
 
 }
