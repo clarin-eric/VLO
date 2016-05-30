@@ -41,6 +41,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -155,6 +156,8 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
         @Override
         protected void populateItem(ListItem<String> item) {
+            final Model<Integer> itemIndexModel = Model.of(item.getIndex());
+
             final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(resourceStringConverter, item.getModel());
             item.setDefaultModel(new CompoundPropertyModel<>(resourceInfoModel));
 
@@ -163,7 +166,11 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             final IModel<String> linkModel = new HandleLinkModel(new PropertyModel(resourceInfoModel, "href"));
             final ExternalLink link = new ExternalLink("showResource", linkModel);
 
-            item.add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel(resourceInfoModel, "resourceType")));;
+            final MarkupContainer columns = new WebMarkupContainer("itemColumns");
+            columns.add(new EvenOddClassAppender(itemIndexModel));
+            item.add(columns);
+
+            columns.add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel(resourceInfoModel, "resourceType")));;
 
             // set the file name as the link's text content
             link.add(new Label("fileName", new PropertyModel(resourceInfoModel, "fileName")));
@@ -177,10 +184,10 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             });
 
             link.setOutputMarkupId(true);
-            item.add(link);
+            columns.add(link);
 
             // get the friendly name of the resource type dynamically from the resource bundle
-            item.add(new Label("resourceType", StringResourceModelMigration.of("resourcetype.${resourceType}.singular", resourceInfoModel, resourceInfoModel.getObject().getResourceType())));
+            columns.add(new Label("resourceType", StringResourceModelMigration.of("resourcetype.${resourceType}.singular", resourceInfoModel, resourceInfoModel.getObject().getResourceType())));
 
             //detailed properties
             final IModel<Boolean> itemDetailsShownModel = new AbstractReadOnlyModel<Boolean>() {
@@ -189,17 +196,20 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                     return detailsVisibleModel.getObject().contains(resourceInfoModel.getObject().getHref());
                 }
             };
-            
+
+            // toggle details option
+            columns.add(new ResourceDetailsToggleLink("details", new PropertyModel<String>(resourceInfoModel, "href"))
+                    .add(new Label("label", new BooleanOptionsModel(itemDetailsShownModel, Model.of("Hide details"), Model.of("Show details")))));
+
             item.add(new WebMarkupContainer("detailsColumns")
                     .add(new Label("mimeType"))
                     .add(new Label("href"))
                     .add(BooleanVisibilityBehavior.visibleOnTrue(itemDetailsShownModel))
+                    .add(new EvenOddClassAppender(itemIndexModel))
             );
 
-            // add links for options dropdown
-            item.add(new ResourceDetailsToggleLink("details", new PropertyModel<String>(resourceInfoModel, "href"))
-                    .add(new Label("label", new BooleanOptionsModel(itemDetailsShownModel, Model.of("Hide details"), Model.of("Show details")))));
-            item.add(new ExternalLink("lrs", Model.of(getLanguageSwitchboardUrl(resourceInfoModel.getObject()))));
+            //Language Resource switchboard option 
+            columns.add(new ExternalLink("lrs", Model.of(getLanguageSwitchboardUrl(resourceInfoModel.getObject()))));
         }
 
         private String getLanguageSwitchboardUrl(ResourceInfo resourceInfo) {
@@ -232,6 +242,19 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             //all other cases: no info
             return "";
         }
+    }
+
+    public static class EvenOddClassAppender extends AttributeAppender {
+
+        public EvenOddClassAppender(final IModel<Integer> indexModel) {
+            super("class", new AbstractReadOnlyModel<String>() {
+                @Override
+                public String getObject() {
+                    return indexModel.getObject() % 2 == 0 ? "even" : "odd";
+                }
+            }, " ");
+        }
+
     }
 
     private class ResourceDetailsToggleLink extends AjaxFallbackLink<String> {

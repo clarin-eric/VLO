@@ -100,7 +100,7 @@ h1#recordtitle {
     }
 
     table.resourcelist {
-        
+
         th,td {
             &.recordresourcetypeicon {
                 max-width: 1em;
@@ -116,11 +116,17 @@ h1#recordtitle {
             }
         }
 
-        a.resourcelink {
-
-            .recordresourcedetails {
-                display: none; //TODO: make display: block and apply styling (see old css)
+        tr.header, tr.odd {
+            background-color: #f9f9f9; //TODO: from bootstrap theme
+        }
+        
+        tr.details {
+            td {
+                border-top: none;
             }
+        }
+
+        a.resourcelink {
 
             &:hover {
                 text-decoration: none;

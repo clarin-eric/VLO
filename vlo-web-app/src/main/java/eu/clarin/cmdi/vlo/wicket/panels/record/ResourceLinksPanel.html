@@ -23,8 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <table wicket:id="resources" class="table table-striped resourcelist">
-                <tr>
+            <table wicket:id="resources" class="table resourcelist">
+                <tr class="header">
                     <th class="recordresourcetypeicon"><!-- icon --></th>
                     <th class="recordresourcename">Name</th>
                     <th>Type</th>
@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </tr>
 
                 <wicket:container wicket:id="resource">
-                    <tr>
+                    <tr wicket:id="itemColumns">
                         <td class="recordresourcetypeicon">                            
                             <span wicket:id="resourceTypeIcon"></span>
                         </td>
@@ -55,15 +55,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         </td>
                     </tr>
 
-                    <wicket:container wicket:id="detailsColumns">
-                        <tr>
-                            <td></td>
-                            <td colspan="3">
-                                <p>Mime type: <span wicket:id="mimeType">application/msword</span></p>
-                                <p>Link: <span wicket:id="href">location</span></p>
-                            </td>
-                        </tr>
-                    </wicket:container>
+                    <tr wicket:id="detailsColumns" class="details">
+                        <td></td>
+                        <td colspan="3">
+                            <p>Mime type: <span wicket:id="mimeType">application/msword</span></p>
+                            <p>Link: <span wicket:id="href">location</span></p>
+                        </td>
+                    </tr>
                 </wicket:container>
 
             </table>
