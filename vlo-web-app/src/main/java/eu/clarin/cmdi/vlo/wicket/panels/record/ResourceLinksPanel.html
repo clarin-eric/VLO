@@ -48,7 +48,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                     <span class="glyphicon glyphicon-option-horizontal"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-right">
-                                    <li><a wicket:id="details"><span class="glyphicon glyphicon-info-sign"></span> Details</a></li>
+                                    <li><a wicket:id="details"><span class="glyphicon glyphicon-info-sign"></span> <span wicket:id="label">Details</span></a></li>
                                     <li><a target="_blank" wicket:id="lrs"><span class="glyphicon glyphicon-open-file"></span> Process with Language Resource Switchboard</a></li>
                                 </ul>
                             </div>
@@ -57,7 +57,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                     <wicket:container wicket:id="detailsColumns">
                         <tr>
-                            <td colspan="4">
+                            <td></td>
+                            <td colspan="3">
                                 <p>Mime type: <span wicket:id="mimeType">application/msword</span></p>
                                 <p>Link: <span wicket:id="href">location</span></p>
                             </td>

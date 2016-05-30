@@ -26,6 +26,7 @@ import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeGlyphicon;
+import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
@@ -33,6 +34,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
@@ -46,10 +48,12 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.migrate.StringResourceModelMigration;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +79,7 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
     @SpringBean(name = "resolvingResourceStringConverter")
     private ResourceStringConverter resolvingResourceStringConverter;
 
-    private final IModel<Boolean> detailsVisibleModel = new Model<>(Boolean.FALSE);
+    private final IModel<List<String>> detailsVisibleModel = new ListModel<>(new ArrayList<String>());
 
     /**
      *
@@ -179,18 +183,26 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             item.add(new Label("resourceType", StringResourceModelMigration.of("resourcetype.${resourceType}.singular", resourceInfoModel, resourceInfoModel.getObject().getResourceType())));
 
             //detailed properties
+            final IModel<Boolean> itemDetailsShownModel = new AbstractReadOnlyModel<Boolean>() {
+                @Override
+                public Boolean getObject() {
+                    return detailsVisibleModel.getObject().contains(resourceInfoModel.getObject().getHref());
+                }
+            };
+            
             item.add(new WebMarkupContainer("detailsColumns")
                     .add(new Label("mimeType"))
                     .add(new Label("href"))
-                    .add(BooleanVisibilityBehavior.visibleOnTrue(detailsVisibleModel))
+                    .add(BooleanVisibilityBehavior.visibleOnTrue(itemDetailsShownModel))
             );
 
             // add links for options dropdown
-            item.add(new ResourceDetailsToggleLink("details"));
-            item.add(new ExternalLink("lrs", Model.of(getUrl(resourceInfoModel.getObject()))));
+            item.add(new ResourceDetailsToggleLink("details", new PropertyModel<String>(resourceInfoModel, "href"))
+                    .add(new Label("label", new BooleanOptionsModel(itemDetailsShownModel, Model.of("Hide details"), Model.of("Show details")))));
+            item.add(new ExternalLink("lrs", Model.of(getLanguageSwitchboardUrl(resourceInfoModel.getObject()))));
         }
 
-        private String getUrl(ResourceInfo resourceInfo) {
+        private String getLanguageSwitchboardUrl(ResourceInfo resourceInfo) {
             try {
                 //create link for this resource to the language resource switchboard
                 final String href = resourceInfo.getHref();
@@ -222,15 +234,23 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         }
     }
 
-    private class ResourceDetailsToggleLink extends AjaxFallbackLink {
+    private class ResourceDetailsToggleLink extends AjaxFallbackLink<String> {
 
-        public ResourceDetailsToggleLink(String id) {
-            super(id);
+        public ResourceDetailsToggleLink(String id, IModel<String> idModel) {
+            super(id, idModel);
         }
 
         @Override
         public void onClick(AjaxRequestTarget target) {
-            detailsVisibleModel.setObject(!detailsVisibleModel.getObject());
+            final String id = getModel().getObject();
+
+            final List<String> visible = detailsVisibleModel.getObject();
+            if (visible.contains(id)) {
+                visible.remove(id);
+            } else {
+                visible.add(id);
+            }
+
             if (target != null) {
                 target.add(resourcesTable);
             }
