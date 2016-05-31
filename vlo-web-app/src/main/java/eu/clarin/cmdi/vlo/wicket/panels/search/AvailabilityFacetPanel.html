@@ -25,19 +25,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <wicket:extend>
             <div class="sbilinks facetvalues">
                 <form wicket:id="availability" id="availability">
-                    <div>
-                        <ul>
-                            <li wicket:id="option">
-                                <input type="checkbox" wicket:id="selector"/><label wicket:id="label"><span wicket:id="name">LEVEL</span> <span dir="ltr">(<span wicket:id="count">123</span>)</span></label> 
-                            </li>
-                        </ul>
-                        <!--
-                        <input id="pub" type="checkbox" wicket:id="pub"/><label for="pub" title="Resources and tools that are publicly accessible" >PUB</label>
-                        <input id="aca" type="checkbox" wicket:id="aca"/><label for="aca" title="Resources and tools that are accessible with academic credentials">ACA</label>
-                        <input id="res" type="checkbox" wicket:id="res"/><label for="res" title="Resources and tools with access on individual basis">RES</label>
-                        -->
-                        <input type="submit" value="Apply" class="nonjsfallback" />    
+                    <div class="checkbox" wicket:id="option">
+                        <label>
+                            <input type="checkbox" wicket:id="selector"/>
+                            <span class="availability-label" wicket:id="label"><span wicket:id="name">LEVEL</span> <span dir="ltr">(<span wicket:id="count">123</span>)</span></span>
+                        </label>
                     </div>
+                    <input type="submit" value="Apply" class="nonjsfallback" />    
                 </form>
 
                 <p style="margin-top: .5em;">

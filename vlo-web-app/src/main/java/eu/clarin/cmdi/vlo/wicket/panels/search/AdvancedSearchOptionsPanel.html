@@ -25,17 +25,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <wicket:extend>
             <div class="sbilinks facetvalues">
                 <form wicket:id="options" id="advancedoptions">
-                    <ul>
-                        <li>
-                            <input wicket:id="fcs" type="checkbox" id="onlyfcs"/>
-                            <label for="onlyfcs">Only include resources that support content search</label>
-                        </li>
-                        <li wicket:id="collectionsSection">
-                            <input wicket:id="collection" type="checkbox" id="onlycollections"/>
-                            <label for="onlycollections">Only include collection resources</label>
-                        </li>
-                    </ul>
-                    <input type="submit" value="Apply" class="nonjsfallback" />
+                    <div class="checkbox">
+                        <label>
+                            <input wicket:id="fcs" type="checkbox" id="onlyfcs"/>Only include resources that support content search
+                        </label>
+                    </div>
+                    <div class="checkbox" wicket:id="collectionsSection">
+                        <label>
+                            <input wicket:id="collection" type="checkbox" id="onlycollections"/>Only include collection resources
+                        </label>
+                    </div>
+                    <input type="submit" value="Apply" class="btn btn-default nonjsfallback" />
                 </form>
             </div>
         </wicket:extend>
