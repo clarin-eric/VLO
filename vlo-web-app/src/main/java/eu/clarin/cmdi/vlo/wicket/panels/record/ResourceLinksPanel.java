@@ -26,6 +26,7 @@ import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeGlyphicon;
+import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
@@ -44,6 +46,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -209,8 +212,31 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                     .add(new EvenOddClassAppender(itemIndexModel))
             );
 
+            columns.add(createOptionsDropdown(resourceInfoModel));
+        }
+
+        protected Component createOptionsDropdown(final ResourceInfoModel resourceInfoModel) {
+            final MarkupContainer dropDown = new WebMarkupContainer("dropdown");
+
+            //MENU OPTIONS
             //Language Resource switchboard option 
-            columns.add(new ExternalLink("lrs", Model.of(getLanguageSwitchboardUrl(resourceInfoModel.getObject()))));
+            dropDown.add(new ExternalLink("lrs", Model.of(getLanguageSwitchboardUrl(resourceInfoModel.getObject()))));
+
+            //TOGGLE STATE
+            //Make the Bootstrap dropdown menu work without javascript with the help of a toggle state....
+            
+            final IModel<Boolean> dropDownModel = Model.of(false);
+            //Toggle link - if javascript is enabled, this behaviour will be overridden by Bootstrap
+            return dropDown
+                    .add(new Link("dropdown-toggle") {
+                        @Override
+                        public void onClick() {
+                            //toggle state
+                            dropDownModel.setObject(!dropDownModel.getObject());
+                        }
+                    })
+                    //set 'open' class if open (bootstrap)
+                    .add(new AttributeAppender("class", new BooleanOptionsModel(dropDownModel, Model.of("open"), Model.of("")), " "));
         }
 
         private String getLanguageSwitchboardUrl(ResourceInfo resourceInfo) {
