@@ -18,26 +18,13 @@
 var interval;
 
 function startSearch() {
-    // after a short while start animating the search button
-    var element = $('form#search-form .search-button');
-    element.prop('disabled', true);
-
-    // this will animate (fade in, fade out) the search button
-    interval = setInterval(function () {
-        element.animate({opacity: '-=0.5'}, 500);
-        element.animate({opacity: '+=1'}, 500);
-    }, 500); // delay between 'loops'
+    $('form#search-form').addClass('loading');
+    $('form#search-form button').attr("disabled", "disabled");
 }
 
 function endSearch() {
-    // done searching, clean up
-    var element = $('form#search-form .search-button');
-    element.prop('disabled', false);
-
-    // stop the animation
-    if (interval !== null) {
-        clearInterval(interval);
-    }
+    $('form#search-form').removeClass('loading');
+    $('form#search-form button').removeAttr("disabled");
 }
 
 $(function () {

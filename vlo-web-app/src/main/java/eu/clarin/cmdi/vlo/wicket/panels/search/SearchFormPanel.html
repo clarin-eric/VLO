@@ -28,7 +28,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <input wicket:id="query" class="search-box form-control form-text" type="text" role="searchbox" placeholder="Search" />
                     <span class="input-group-btn">
                         <button type="submit" wicket:id="searchSubmit" class="search-button btn btn-clarin-primary">
-                            <span class="search-icon glyphicon glyphicon-search"></span>
+                            <span class="search-icon glyphicon glyphicon-search" aria-hidden="true"></span>
+                            <span class="loading-indicator">
+                                <i class="loading-icon fa fa-spinner fa-pulse" aria-hidden="true"></i>
+                                <span class="sr-only">Loading...</span>
+                            </span>
                         </button>
                         <wicket:link>
                             <a class="btn" id="syntax-help" href="HelpPage.html#syntax" 

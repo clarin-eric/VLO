@@ -6,9 +6,23 @@
 /*******************/
 #search-form {
 
-    .search-icon {
+    .search-icon, .loading-indicator {
         padding-left: 1em;
         padding-right: 1em;
+    }
+
+    .loading-indicator {
+        display: none;
+    }
+
+    &.loading {
+        .search-icon {
+            display: none;
+        }
+        
+        .loading-indicator {
+            display: initial;
+        }
     }
 }
 
