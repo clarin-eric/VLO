@@ -33,14 +33,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         <wicket:extend>
             <div wicket:id="navigation" id="topnavigation" class="row">
+                
+                <!-- smaller screens: only link back to search results -->
+                <div class="col-xs-8 visible-xs visible-sm">
+                    <ul class="breadcrumb" id="breadcrumbs">
+                        <li><a wicket:id="backToSearch">Back to the search results</a></li>
+                    </ul>
+                </div>
+                
+                <!-- larger screens: full breadcrumbs -->
                 <div class="col-md-10 hidden-xs hidden-sm">
                     <ul class="breadcrumb" wicket:id="breadcrumbs" id="breadcrumbs">[BREADCRUMBS]</ul>
                 </div>
-                <div class="col-md-2 col-xs-12">
+                
+                <div class="col-md-2 col-xs-4">
                     <div class="top-links padding pull-right">
                         <wicket:container wicket:id="permalink">[permalink]</wicket:container>
                     </div>
                 </div>
+                
             </div>
 
             <wicket:container wicket:id="recordNavigation"></wicket:container>

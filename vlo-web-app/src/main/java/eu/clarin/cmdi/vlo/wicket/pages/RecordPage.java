@@ -65,6 +65,7 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -162,6 +163,12 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         add(topNavigation
                 .add(new BreadCrumbPanel("breadcrumbs", selectionModel))
                 .add(createPermalink("permalink", topNavigation))
+                .add(new Link("backToSearch") {
+                    @Override
+                    public void onClick() {
+                        setResponsePage(new FacetedSearchPage(selectionModel));
+                    }
+                })
                 .setOutputMarkupId(true)
         );
 
