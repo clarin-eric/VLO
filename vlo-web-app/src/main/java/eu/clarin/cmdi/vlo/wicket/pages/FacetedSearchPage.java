@@ -313,6 +313,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
             target.add(resultsHeader);
             target.add(searchResultsPanel);
             target.add(selections);
+            target.appendJavaScript("applyFacetTooltips();");
         }
     }
 

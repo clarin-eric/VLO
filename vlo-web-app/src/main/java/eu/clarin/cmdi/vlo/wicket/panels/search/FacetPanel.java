@@ -32,7 +32,6 @@ import eu.clarin.cmdi.vlo.wicket.model.SelectionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 
 /**
@@ -134,6 +133,14 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
                 }
             }
         };
+    }
+
+    @Override
+    protected void onExpandCollapse(AjaxRequestTarget target) {
+        super.onExpandCollapse(target);
+        if (target != null) {
+            target.appendJavaScript("applyFacetTooltips();");
+        }
     }
 
     protected abstract void selectionChanged(AjaxRequestTarget target);

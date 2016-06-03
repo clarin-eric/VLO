@@ -17,12 +17,11 @@
 
 
 $(function () {
-    $("#facets").tooltip(
-            {
-                show: {
-                    delay: 300
-                }
-            }
-    );
+    applyFacetTooltips();
 });
 
+function applyFacetTooltips() {
+    //enable nicer bootstrap-style tooltip via plugin
+    //http://getbootstrap.com/javascript/#tooltips
+    $('#facets [data-toggle="tooltip"]').tooltip();    
+}
