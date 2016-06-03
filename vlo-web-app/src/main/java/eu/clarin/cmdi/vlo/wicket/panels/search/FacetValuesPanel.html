@@ -26,7 +26,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <div wicket:id="allValues" class="allFacetValues">[ALL VALUES]</div>
             <div class="sbilinks facetvalues">
                 <form wicket:id="filter" class="filterform" role="search" title="Filter values within this facet">
-                    <input wicket:id="filterText" type="text" role="searchbox" />
+                    <div class="form-group">
+                        <input wicket:id="filterText" class="form-control" 
+                               type="text" role="searchbox" placeholder="Type to filter or search for more" autocomplete="off" />
+                    </div>
                     <input type="submit" value="Search" class="nonjsfallback" />
                 </form>
                 <div wicket:id="valuesContainer">
