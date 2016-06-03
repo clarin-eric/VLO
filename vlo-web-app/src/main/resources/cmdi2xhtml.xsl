@@ -44,9 +44,9 @@
                         select="fn:count(child::element())"/>
                     <div class="row">
                      
-                        <div class="node col-xs-1">
-                            <xsl:value-of 
-                                select="fn:concat(local-name(), ' ')"/>
+                        <div class="node col-md-2">
+                            <strong><xsl:value-of 
+                                select="fn:concat(local-name(), ' ')"/></strong>
                             <xsl:if 
                                 test="count(@*) > 0">
                                 <div class="attributes">
@@ -62,64 +62,61 @@
                         <xsl:choose>
                             <xsl:when 
                                 test="$nchildren = 0 and not(not(child::node()))">
-                                <!--<br /><br />-->
-                                <div class="Component_tree_node_content">
-                                    <xsl:choose>
-                                        <xsl:when
-                                            test="self::element() castable as xs:string">
-                                            <xsl:variable
-                                                name="leaf_value" 
-                                                select="self::element() cast as xs:string"
-                                                as="xs:string"/>                                         
-                                            <xsl:variable
-                                                name="is_URL"
-                                                select="starts-with($leaf_value, 'http://') or starts-with($leaf_value, 'https://')"
-                                                as="xs:boolean"/> 
-                                            <div class="leaf col-xs-11">
-                                                <xsl:choose>
-                                                    <xsl:when 
-                                                        test="$is_URL">
-                                                        <a href="{$leaf_value}">
-                                                            <xsl:value-of 
-                                                                select="$leaf_value"/>
-                                                        </a>
-                                                    </xsl:when>
-                                                    <xsl:otherwise>                                    
+                                <xsl:choose>
+                                    <xsl:when
+                                        test="self::element() castable as xs:string">
+                                        <xsl:variable
+                                            name="leaf_value" 
+                                            select="self::element() cast as xs:string"
+                                            as="xs:string"/>                                         
+                                        <xsl:variable
+                                            name="is_URL"
+                                            select="starts-with($leaf_value, 'http://') or starts-with($leaf_value, 'https://')"
+                                            as="xs:boolean"/> 
+                                        <div class="leaf col-md-10">
+                                            <xsl:choose>
+                                                <xsl:when 
+                                                    test="$is_URL">
+                                                    <a href="{$leaf_value}">
                                                         <xsl:value-of 
-                                                            select="$leaf_value"/>                                         
-                                                    </xsl:otherwise>                                 
-                                                </xsl:choose>
-                                            </div>
-                                        </xsl:when>
-                                        <xsl:otherwise>                                    
-                                            <xsl:variable
-                                                name="leaf_value" 
-                                                select="format-number(self::element(), '#') cast as xs:string"
-                                                as="xs:string"/>
-                                            <xsl:variable
-                                                name="is_URL"
-                                                select="starts-with($leaf_value, 'http://') or starts-with($leaf_value, 'https://')"
-                                                as="xs:boolean"/> 
-                                            <div class="leaf col-xs-11">
-                                                <xsl:choose>
-                                                    <xsl:when 
-                                                        test="$is_URL">
-                                                        <a href="{$leaf_value}">
-                                                            <xsl:value-of select="$leaf_value"/>
-                                                        </a>
-                                                    </xsl:when>
-                                                    <xsl:otherwise>                                    
-                                                        <xsl:value-of 
-                                                            select="$leaf_value"/>                                         
-                                                    </xsl:otherwise>                                 
-                                                </xsl:choose>
-                                            </div>                  
-                                        </xsl:otherwise>                                 
-                                    </xsl:choose>
-                                </div>
+                                                            select="$leaf_value"/>
+                                                    </a>
+                                                </xsl:when>
+                                                <xsl:otherwise>                                    
+                                                    <xsl:value-of 
+                                                        select="$leaf_value"/>                                         
+                                                </xsl:otherwise>                                 
+                                            </xsl:choose>
+                                        </div>
+                                    </xsl:when>
+                                    <xsl:otherwise>                                    
+                                        <xsl:variable
+                                            name="leaf_value" 
+                                            select="format-number(self::element(), '#') cast as xs:string"
+                                            as="xs:string"/>
+                                        <xsl:variable
+                                            name="is_URL"
+                                            select="starts-with($leaf_value, 'http://') or starts-with($leaf_value, 'https://')"
+                                            as="xs:boolean"/> 
+                                        <div class="leaf col-md-10">
+                                            <xsl:choose>
+                                                <xsl:when 
+                                                    test="$is_URL">
+                                                    <a href="{$leaf_value}">
+                                                        <xsl:value-of select="$leaf_value"/>
+                                                    </a>
+                                                </xsl:when>
+                                                <xsl:otherwise>                                    
+                                                    <xsl:value-of 
+                                                        select="$leaf_value"/>                                         
+                                                </xsl:otherwise>                                 
+                                            </xsl:choose>
+                                        </div>                  
+                                    </xsl:otherwise>                                 
+                                </xsl:choose>
                             </xsl:when>
                             <xsl:otherwise>
-                                <div class="col-xs-11">
+                                <div class="col-md-10">
                                     <xsl:call-template 
                                         name="Component_tree">
                                         <xsl:with-param 
@@ -138,7 +135,7 @@
     </xsl:template>
 
     <xsl:template match="CMD">
-        <article style="background-color:#EEEEEE">
+        <article>
             <div class="endgame">
                 <xsl:if test="not(not(Resources/*[normalize-space()]))"> 
                     <div class="panel panel-default">                    
@@ -210,10 +207,7 @@
                 </xsl:if>
             </div>
                     
-            <p>
-                <h1>Metadata content</h1>
-                <xsl:call-template name="Component_tree"/>
-            </p>
+            <xsl:call-template name="Component_tree"/>
         </article>
     </xsl:template>
 </xsl:stylesheet>
