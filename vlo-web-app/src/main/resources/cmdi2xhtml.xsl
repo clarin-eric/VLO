@@ -31,7 +31,7 @@
             as="element()+" 
             select="/CMD/Components"/>
 
-        <ul>
+        <div class="container-fluid">
             <xsl:for-each 
                 select="$nodeset/element()">
                 <xsl:variable 
@@ -42,9 +42,9 @@
                     <xsl:variable 
                         name="nchildren" 
                         select="fn:count(child::element())"/>
-                    <li>
+                    <div class="row">
                      
-                        <code class="node">
+                        <div class="node col-xs-1">
                             <xsl:value-of 
                                 select="fn:concat(local-name(), ' ')"/>
                             <xsl:if 
@@ -57,7 +57,7 @@
                                     </xsl:for-each>
                                 </div>
                             </xsl:if>
-                        </code>
+                        </div>
                     
                         <xsl:choose>
                             <xsl:when 
@@ -75,7 +75,7 @@
                                                 name="is_URL"
                                                 select="starts-with($leaf_value, 'http://') or starts-with($leaf_value, 'https://')"
                                                 as="xs:boolean"/> 
-                                            <code class="leaf">
+                                            <div class="leaf col-xs-11">
                                                 <xsl:choose>
                                                     <xsl:when 
                                                         test="$is_URL">
@@ -89,7 +89,7 @@
                                                             select="$leaf_value"/>                                         
                                                     </xsl:otherwise>                                 
                                                 </xsl:choose>
-                                            </code>
+                                            </div>
                                         </xsl:when>
                                         <xsl:otherwise>                                    
                                             <xsl:variable
@@ -100,47 +100,49 @@
                                                 name="is_URL"
                                                 select="starts-with($leaf_value, 'http://') or starts-with($leaf_value, 'https://')"
                                                 as="xs:boolean"/> 
-                                            <code class="leaf">
+                                            <div class="leaf col-xs-11">
                                                 <xsl:choose>
                                                     <xsl:when 
                                                         test="$is_URL">
-                                                    <a href="{$leaf_value}"><xsl:value-of select="$leaf_value"/></a>
+                                                        <a href="{$leaf_value}">
+                                                            <xsl:value-of select="$leaf_value"/>
+                                                        </a>
                                                     </xsl:when>
                                                     <xsl:otherwise>                                    
                                                         <xsl:value-of 
                                                             select="$leaf_value"/>                                         
                                                     </xsl:otherwise>                                 
                                                 </xsl:choose>
-                                            </code>                  
+                                            </div>                  
                                         </xsl:otherwise>                                 
                                     </xsl:choose>
                                 </div>
                             </xsl:when>
                             <xsl:otherwise>
-                                <ul>
+                                <div class="col-xs-11">
                                     <xsl:call-template 
                                         name="Component_tree">
                                         <xsl:with-param 
                                             name="nodeset" 
                                             select="self::element()"/>
                                     </xsl:call-template>
-                                </ul>
+                                </div>
+                                
                             </xsl:otherwise>
                         </xsl:choose>
                                      
-                    </li>                                
+                    </div>                                
                 </xsl:if>
             </xsl:for-each>
-        </ul>
+        </div>
     </xsl:template>
 
     <xsl:template match="CMD">
         <article style="background-color:#EEEEEE">
             <div class="endgame">
                 <xsl:if test="not(not(Resources/*[normalize-space()]))"> 
-                    <p>                    
-                        <h1>Resources</h1>
-                        <table>
+                    <div class="panel panel-default">                    
+                        <table class="table">
                             <caption>Resources</caption>
                             <thead>
                                 <tr>
@@ -204,7 +206,7 @@
                                 </xsl:for-each>
                             </tbody>
                         </table>
-                    </p>
+                    </div>
                 </xsl:if>
             </div>
                     
