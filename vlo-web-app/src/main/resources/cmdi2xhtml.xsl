@@ -36,12 +36,13 @@
                 </span>
 
                 <xsl:if test="count(@*) > 0">
-                    <div class="attributes">
+                    <span class="node_attributes">
                         <xsl:for-each select="@*">
                             <span class="node_attribute">
-                                <xsl:value-of select="name()"/>="<xsl:value-of select="."/>" </span>
+                                <xsl:value-of select="name()"/>="<xsl:value-of select="."/>"
+                            </span>
                         </xsl:for-each>
-                    </div>
+                    </span>
                 </xsl:if>
 
                 <xsl:choose>
@@ -50,7 +51,7 @@
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:if test="child::node()">
-                            <div class="node children">
+                            <div class="node_children">
                                 <xsl:apply-templates mode="Component_Child" select="*"/>
                             </div>
                         </xsl:if>
@@ -104,7 +105,7 @@
     </xsl:template>
 
     <xsl:template match="CMD">
-        <article>
+        <article class="cmdi-record">
             <xsl:apply-templates select="/CMD/Components/*" mode="Component_Child"/>
         </article>
     </xsl:template>
