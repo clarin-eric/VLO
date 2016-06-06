@@ -22,7 +22,7 @@ public class MetadataImporterTest extends ImporterTestcase {
     public void testImporterSimple() throws Exception {
         String session = "";
         session += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        session += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
+        session += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1271859438204\">\n";
         session += "   <Header>\n";
         session += "      <MdCreationDate>2008-05-27</MdCreationDate>\n";
         session += "      <MdSelfLink> testID1Session</MdSelfLink>\n";
@@ -38,10 +38,10 @@ public class MetadataImporterTest extends ImporterTestcase {
         session += "      </ResourceProxyList>\n";
         session += "   </Resources>\n";
         session += "   <Components>\n";
-        session += "      <Session>\n";
-        session += "         <Name>kleve-route</Name>\n";
-        session += "         <Title>kleve-route-title</Title>\n";
-        session += "      </Session>\n";
+        session += "      <cmdp:Session>\n";
+        session += "         <cmdp:Name>kleve-route</cmdp:Name>\n";
+        session += "         <cmdp:Title>kleve-route-title</cmdp:Title>\n";
+        session += "      </cmdp:Session>\n";
         session += "   </Components>\n";
         session += "</CMD>\n";
         File sessionFile = createCmdiFile("testSession", session);
@@ -62,7 +62,7 @@ public class MetadataImporterTest extends ImporterTestcase {
     public void testImportWithMimeTypeOverride() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1289827960126\">\n";
         content += "   <Header>\n";
         content += "      <MdSelfLink>testID2</MdSelfLink>\n";
         content += "      <MdProfile>clarin.eu:cr1:p_1289827960126</MdProfile>\n";
@@ -80,13 +80,13 @@ public class MetadataImporterTest extends ImporterTestcase {
         content += "      </ResourceProxyList>\n";
         content += "   </Resources>\n";
         content += "   <Components>\n";
-        content += "     <LrtInventoryResource>\n";
-        content += "         <LrtCommon>\n";
-        content += "             <ResourceName>PALIC</ResourceName>\n";
-        content += "             <ResourceType>Application / Tool</ResourceType>\n";
-        content += "             <ResourceType>Text</ResourceType>\n";
-        content += "         </LrtCommon>\n";
-        content += "     </LrtInventoryResource>\n";
+        content += "     <cmdp:LrtInventoryResource>\n";
+        content += "         <cmdp:LrtCommon>\n";
+        content += "             <cmdp:ResourceName>PALIC</cmdp:ResourceName>\n";
+        content += "             <cmdp:ResourceType>Application / Tool</cmdp:ResourceType>\n";
+        content += "             <cmdp:ResourceType>Text</cmdp:ResourceType>\n";
+        content += "         </cmdp:LrtCommon>\n";
+        content += "     </cmdp:LrtInventoryResource>\n";
         content += "   </Components>\n";
         content += "</CMD>\n";
         File rootFile = createCmdiFile("rootFile", content);
@@ -112,7 +112,7 @@ public class MetadataImporterTest extends ImporterTestcase {
     @Test
     public void testImportWithNameSpaceGalore() throws Exception {
         String content = "";
-        content += "<cmdi:CMD CMDVersion=\"1.1\" xmlns:cmdi=\"http://www.clarin.eu/cmd/\"\n";
+        content += "<cmdi:CMD CMDVersion=\"1.1\" xmlns:cmdi=\"http://www.clarin.eu/cmd/1\" xmlns:cmdip=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1290431694629\"\n";
         content += "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.clarin.eu/cmd/ http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1290431694629/xsd\">\n";
         content += "    <cmdi:Header/>\n";
         content += "    <cmdi:Resources>\n";
@@ -126,12 +126,12 @@ public class MetadataImporterTest extends ImporterTestcase {
         content += "        <cmdi:ResourceRelationList/>\n";
         content += "    </cmdi:Resources>\n";
         content += "    <cmdi:Components>\n";
-        content += "        <cmdi:EastRepublican ref=\"TEI\">\n";
-        content += "            <cmdi:GeneralInformation>\n";
-        content += "                <cmdi:Identifier>hdl:11858/00-175C-0000-0000-E180-8</cmdi:Identifier>\n";
-        content += "                <cmdi:Title>L'Est R\u00e9publicain : \u00e9dition du 17 mai 1999</cmdi:Title>\n";
-        content += "            </cmdi:GeneralInformation>\n";
-        content += "        </cmdi:EastRepublican>\n";
+        content += "        <cmdip:EastRepublican ref=\"TEI\">\n";
+        content += "            <cmdip:GeneralInformation>\n";
+        content += "                <cmdip:Identifier>hdl:11858/00-175C-0000-0000-E180-8</cmdip:Identifier>\n";
+        content += "                <cmdip:Title>L'Est R\u00e9publicain : \u00e9dition du 17 mai 1999</cmdip:Title>\n";
+        content += "            </cmdip:GeneralInformation>\n";
+        content += "        </cmdip:EastRepublican>\n";
         content += "    </cmdi:Components>\n";
         content += "</cmdi:CMD>\n";
 
@@ -150,7 +150,7 @@ public class MetadataImporterTest extends ImporterTestcase {
     public void testNoIdTakeFileName() throws Exception {
         String session = "";
         session += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        session += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
+        session += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\">\n";
         session += "   <Header>\n";
         session += "      <MdProfile>clarin.eu:cr1:p_1271859438204</MdProfile>\n";
         session += "   </Header>\n";
@@ -175,26 +175,26 @@ public class MetadataImporterTest extends ImporterTestcase {
     public void testProjectName() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
-        content += "   <Header>\n";
-        content += "      <MdProfile>clarin.eu:cr1:p_1280305685235</MdProfile>\n";
-        content += "   </Header>\n";
-        content += "   <Resources>\n";
-        content += "   </Resources>\n";
-        content += "    <Components>\n";
-        content += "        <DynaSAND>\n";
-        content += "            <Collection>\n";
-        content += "                <GeneralInfo>\n";
-        content += "                    <Name>DiDDD</Name>\n";
-        content += "                    <ID>id1234</ID>\n";
-        content += "                </GeneralInfo>\n";
-        content += "                <Project>\n";
-        content += "                    <Name>DiDDD-project</Name>\n";
-        content += "                </Project>\n";
-        content += "            </Collection>\n";
-        content += "        </DynaSAND>\n";
-        content += "    </Components>\n";
-        content += "</CMD>\n";
+        content += "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1280305685235\">\n";
+        content += "   <cmd:Header>\n";
+        content += "      <cmd:MdProfile>clarin.eu:cr1:p_1280305685235</cmd:MdProfile>\n";
+        content += "   </cmd:Header>\n";
+        content += "   <cmd:Resources>\n";
+        content += "   </cmd:Resources>\n";
+        content += "    <cmd:Components>\n";
+        content += "        <cmdp:DynaSAND>\n";
+        content += "            <cmdp:Collection>\n";
+        content += "                <cmdp:GeneralInfo>\n";
+        content += "                    <cmdp:Name>DiDDD</cmdp:Name>\n";
+        content += "                    <cmdp:ID>id1234</cmdp:ID>\n";
+        content += "                </cmdp:GeneralInfo>\n";
+        content += "                <cmdp:Project>\n";
+        content += "                    <cmdp:Name>DiDDD-project</cmdp:Name>\n";
+        content += "                </cmdp:Project>\n";
+        content += "            </cmdp:Collection>\n";
+        content += "        </cmdp:DynaSAND>\n";
+        content += "    </cmd:Components>\n";
+        content += "</cmd:CMD>\n";
         File sessionFile = createCmdiFile("testSession", content);
 
         List<SolrInputDocument> docs = importData(sessionFile);
