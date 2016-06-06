@@ -166,7 +166,7 @@
     
     <language3LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438110/xml</language3LetterCodeComponentUrl>
    
-    <silToISO639CodesUrl>http://www.clarin.eu/cmd/xslt/sil_to_iso6393.xml</silToISO639CodesUrl>
+    <silToISO639CodesUrl>https://infra.clarin.eu/cmd/xslt/sil_to_iso6393.xml</silToISO639CodesUrl>
     
     <reverseProxyPrefix></reverseProxyPrefix>
     

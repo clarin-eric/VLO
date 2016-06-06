@@ -794,7 +794,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("getSilToISO639CodesUrl");
 
-        String expResult = "http://www.clarin.eu/cmd/xslt/sil_to_iso6393.xml";
+        String expResult = "https://infra.clarin.eu/cmd/xslt/sil_to_iso6393.xml";
         String result = config.getSilToISO639CodesUrl();
 
         assertEquals(expResult, result);
