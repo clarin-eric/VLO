@@ -35,28 +35,31 @@
                     <xsl:value-of select="local-name()"/>
                 </span>
 
-                <xsl:if test="count(@*) > 0">
-                    <span class="node_attributes">
-                        <xsl:for-each select="@*">
-                            <span class="node_attribute">
-                                <xsl:value-of select="name()"/>="<xsl:value-of select="."/>"
-                            </span>
-                        </xsl:for-each>
-                    </span>
-                </xsl:if>
+                <span class="node_content">
 
-                <xsl:choose>
-                    <xsl:when test="$nchildren = 0 and not(not(child::node()))">
-                        <xsl:apply-templates mode="leaf" select="."/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:if test="child::node()">
-                            <div class="node_children">
-                                <xsl:apply-templates mode="Component_Child" select="*"/>
-                            </div>
-                        </xsl:if>
-                    </xsl:otherwise>
-                </xsl:choose>
+                    <xsl:if test="count(@*) > 0">
+                        <span class="node_attributes">
+                            <xsl:for-each select="@*">
+                                <span class="node_attribute">
+                                    <xsl:value-of select="name()"/>="<xsl:value-of select="."/>"
+                                </span>
+                            </xsl:for-each>
+                        </span>
+                    </xsl:if>
+
+                    <xsl:choose>
+                        <xsl:when test="$nchildren = 0 and not(not(child::node()))">
+                            <xsl:apply-templates mode="leaf" select="."/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:if test="child::node()">
+                                <div class="node_children">
+                                    <xsl:apply-templates mode="Component_Child" select="*"/>
+                                </div>
+                            </xsl:if>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </span>
             </div>
         </xsl:if>
     </xsl:template>
