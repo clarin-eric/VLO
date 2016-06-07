@@ -35,20 +35,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         .node_value, .node_attribute {        
             display: block;
         }
-        .node_attributes {
-            font-style: italic;
-            font-family: monospace;
-            color: #339;
-        }
     }
 
     .node.parent {
         .node.parent {
             margin: 1em;
-            
+
             &:last-child {
                 margin-bottom: 0;
             }
         }
+    }
+    
+    .node_attributes {
+        font-style: italic;
+        font-family: monospace;
+        color: #339;
     }
 }

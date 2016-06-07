@@ -28,7 +28,7 @@
                             <xsl:value-of select="local-name()"/>
                         </span>
                         <span class="node_content">
-                            <xsl:apply-templates mode="attributes" select="." />
+                            <xsl:apply-templates mode="attributes" select="."/>
                             <xsl:if test="not(not(child::node()))">
                                 <xsl:apply-templates mode="leaf" select="."/>
                             </xsl:if>
@@ -38,10 +38,11 @@
                         <!-- parent -->
                         <xsl:attribute name="class">node parent panel panel-default</xsl:attribute>
                         <div class="panel-heading node_title">
+                            <xsl:apply-templates select="@ref"/>
                             <xsl:value-of select="local-name()"/>
+                            <xsl:apply-templates mode="attributes" select="."/>
                         </div>
                         <div class="panel-body node_content">
-                            <xsl:apply-templates mode="attributes" select="." />
                             <xsl:if test="child::node()">
                                 <div class="node_children">
                                     <xsl:apply-templates mode="Component_Child" select="*"/>
@@ -53,16 +54,28 @@
             </div>
         </xsl:if>
     </xsl:template>
-    
+
+    <xsl:template match="@ref">
+        <xsl:variable name="resourceRef" select="//ResourceProxy[@id=current()]/ResourceRef"/>
+        <xsl:if test="$resourceRef">
+            <a class="node_resource_ref">
+                <xsl:attribute name="href" select="replace($resourceRef, '^hdl:', 'http://hdl.handle.net/')"/>
+                <span class="glyphicon glyphicon-file">
+                    <xsl:attribute name="title" select="$resourceRef"/>
+                </span>
+            </a>
+        </xsl:if>
+        <xsl:text> </xsl:text>
+    </xsl:template>
+
     <xsl:template mode="attributes" match="*">
-        <xsl:if test="count(@*) > 0">
-            <span class="node_attributes">
+        <xsl:if test="count(@*[name() != 'ref']) > 0">
+            <div class="node_attributes">
                 <xsl:for-each select="@*">
                     <span class="node_attribute">
-                        <xsl:value-of select="name()"/>="<xsl:value-of
-                            select="."/>" </span>
+                        <xsl:value-of select="name()"/>="<xsl:value-of select="."/>" </span>
                 </xsl:for-each>
-            </span>
+            </div>
         </xsl:if>
     </xsl:template>
 
