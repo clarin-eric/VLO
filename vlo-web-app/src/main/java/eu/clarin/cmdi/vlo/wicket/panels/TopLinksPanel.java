@@ -17,9 +17,11 @@
 package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import java.io.Serializable;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
@@ -53,6 +55,20 @@ public class TopLinksPanel extends GenericPanel<String> {
     public TopLinksPanel(String id, final IModel<String> linkModel) {
         super(id, linkModel);
         this.linkVisibilityModel = new Model<>(false);
+
+        add(new BootstrapDropdown("shareOptions") {
+            @Override
+            protected Component createDropDownLink(String id) {
+                return super.createDropDownLink(id)
+                        .add(new AttributeAppender("class", "btn-sm", " "));
+            }
+
+            @Override
+            protected Serializable getButtonIconClass() {
+                return "fa fa-share-alt";
+            }
+
+        });
 
         // action to link to request the permalink
         add(createPermaLink("linkRequest"));

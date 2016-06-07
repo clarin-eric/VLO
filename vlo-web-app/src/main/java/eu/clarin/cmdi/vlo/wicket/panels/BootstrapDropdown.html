@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!--
+Copyright (C) 2016 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+    <head>
+        <title>permalink panel</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <wicket:panel>
+            <a wicket:id="button" role="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i wicket:id="buttonIcon" class="fa fa-cog" aria-hidden="true"></i> <span class="caret"></span>
+            </a>
+            <ul wicket:id="menu" class="dropdown-menu dropdown-menu-right">
+                <li><a href="#"><i class="fa fa-bookmark fw" aria-hidden="true"></i> Bookmark this</a></li> 
+                <li><a href="#"><i class="fa fa-clipboard fw" aria-hidden="true"></i> Copy link</a></li>
+                <li><a href="#"><i class="fa fa-envelope fw" aria-hidden="true"></i> Send link by e-mail</a></li>
+                <li><a href="#"><i class="fa fa-twitter-square fw" aria-hidden="true"></i> Share this on Twitter</a></li>
+                <!-- twitter: https://twitter.com/home?status=http%3A//vlo.clarin.eu -->
+                <li><a href="#"><i class="fa fa-facebook-square fw" aria-hidden="true"></i> Share this on Facebook</a></li>
+                <!-- facebook: https://www.facebook.com/sharer/sharer.php?u=http%3A//vlo.clarin.eu -->
+                <li><a href="#"><i class="fa fa-linkedin-square fw" aria-hidden="true"></i> Share this on LinkedIn</a></li>
+                <!-- LinkedIn: https://www.linkedin.com/shareArticle?mini=true&url=http%3A//vlo.clarin.eu/record_bla_bla&title=Title&summary=&source= -->
+            </ul>
+        </wicket:panel>
+    </body>
+</html>

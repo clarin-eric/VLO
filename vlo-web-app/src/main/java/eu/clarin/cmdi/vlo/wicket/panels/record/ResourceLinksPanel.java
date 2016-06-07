@@ -216,6 +216,7 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         }
 
         protected Component createOptionsDropdown(final ResourceInfoModel resourceInfoModel) {
+            //TODO: use new BootstrapDropdown class instead
             final MarkupContainer dropDown = new WebMarkupContainer("dropdown");
 
             //MENU OPTIONS
