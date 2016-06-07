@@ -23,15 +23,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <wicket:enclosure child="linkRequest">
-                <form id="permalink" wicket:id="linkRequest">
-                    <button wicket:id="linkRequestButton" type="submit" class="btn btn-default btn-sm" 
-                           title="Share or bookmark this page">
-                        <i class="fa fa-share-alt" aria-hidden="true"></i>
-                    </button>
-                </form>
-                <input wicket:id="linkfield" type="text" id="permalinkfield"></input>
-            </wicket:enclosure>
+            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-share-alt" aria-hidden="true"></i> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#"><i class="fa fa-bookmark fw" aria-hidden="true"></i> Bookmark this</a></li> 
+                <li><a href="#"><i class="fa fa-clipboard fw" aria-hidden="true"></i> Copy link</a></li>
+                <li><a href="#"><i class="fa fa-envelope fw" aria-hidden="true"></i> Send link by e-mail</a></li>
+                <li><a href="#"><i class="fa fa-twitter-square fw" aria-hidden="true"></i> Share this on Twitter</a></li>
+                <!-- twitter: https://twitter.com/home?status=http%3A//vlo.clarin.eu -->
+                <li><a href="#"><i class="fa fa-facebook-square fw" aria-hidden="true"></i> Share this on Facebook</a></li>
+                <!-- facebook: https://www.facebook.com/sharer/sharer.php?u=http%3A//vlo.clarin.eu -->
+                <li><a href="#"><i class="fa fa-linkedin-square fw" aria-hidden="true"></i> Share this on LinkedIn</a></li>
+                <!-- LinkedIn: https://www.linkedin.com/shareArticle?mini=true&url=http%3A//vlo.clarin.eu/record_bla_bla&title=Title&summary=&source= -->
+            </ul>
+            <div style="display: none">
+                <wicket:enclosure child="linkRequest">
+                    <form id="permalink" wicket:id="linkRequest">
+                        <button wicket:id="linkRequestButton" type="submit" class="btn btn-default btn-sm" 
+                                title="Share or bookmark this page">
+                            <i class="fa fa-share-alt" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                    <input wicket:id="linkfield" type="text" id="permalinkfield"></input>
+                </wicket:enclosure>
+            </div>
             <a target="_blank" wicket:id="feedback" id="feedbacklink" class="btn btn-default btn-sm" 
                title="Report an issue with this page or record">
                 <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
