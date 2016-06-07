@@ -24,6 +24,7 @@ import eu.clarin.cmdi.vlo.wicket.components.AjaxFallbackLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.components.IndicatingNestedTree;
 import eu.clarin.cmdi.vlo.wicket.components.NamedRecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
+import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
@@ -99,7 +100,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
             @Override
             protected void populateItem(final Item<SolrDocument> item) {
-                item.add(new NamedRecordPageLink("link", item.getModel()));
+                item.add(new NamedRecordPageLink("link", item.getModel(), RecordPage.HIERARCHY_SECTION));
                 item.add(new IndicatingAjaxFallbackLink("up") {
 
                     @Override
@@ -174,13 +175,16 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
                     };
                 } else {
-                    return new NamedRecordPageLink(id, node.getObject().getModel()) {
 
-                        @Override
-                        protected void onConfigure() {
-                            setEnabled(!node.equals(pageDocumentModel));
-                        }
-                    };
+                    return new NamedRecordPageLink(id, node.getObject().getModel(), RecordPage.HIERARCHY_SECTION)
+                            .add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
+                                @Override
+                                public String getObject() {
+                                    final boolean isCurrent = node.getObject().getModelObject().getFieldValue(FacetConstants.FIELD_ID)
+                                            .equals(pageDocumentModel.getObject().getFieldValue(FacetConstants.FIELD_ID));
+                                    return isCurrent ? "current" : "";
+                                }
+                            }, " "));
                 }
             }
 
