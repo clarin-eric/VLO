@@ -16,8 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown.DropdownMenuItem;
 import java.io.Serializable;
+import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
@@ -28,6 +31,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.encoding.UrlEncoder;
@@ -56,9 +60,46 @@ public class TopLinksPanel extends GenericPanel<String> {
         super(id, linkModel);
         this.linkVisibilityModel = new Model<>(false);
 
-        add(new BootstrapDropdown("shareOptions") {
+        final List<DropdownMenuItem> itemList = Lists.newArrayList(
+                new DropdownMenuItem("Bookmark this", "fa fa-bookmark fw") {
+            @Override
+            protected Link getLink(String id) {
+                return new Link(id) {
+                    @Override
+                    public void onClick() {
+                        //TODO
+                    }
+                };
+            }
+        },
+                new DropdownMenuItem("Copy link", "fa fa-clipboard fw") {
+            @Override
+            protected Link getLink(String id) {
+                return new Link(id) {
+                    @Override
+                    public void onClick() {
+                        //TODO
+                    }
+                };
+            }
+        }
+        //TODO:
+        //                <!--                <li><a href="#"><i class="fa fa-bookmark fw" aria-hidden="true"></i> Bookmark this</a></li> 
+        //                <li><a href="#"><i class="fa fa-clipboard fw" aria-hidden="true"></i> Copy link</a></li>
+        //                <li><a href="#"><i class="fa fa-envelope fw" aria-hidden="true"></i> Send link by e-mail</a></li>
+        //                <li><a href="#"><i class="fa fa-twitter-square fw" aria-hidden="true"></i> Share this on Twitter</a></li>
+        //                 twitter: https://twitter.com/home?status=http%3A//vlo.clarin.eu 
+        //                <li><a href="#"><i class="fa fa-facebook-square fw" aria-hidden="true"></i> Share this on Facebook</a></li>
+        //                 facebook: https://www.facebook.com/sharer/sharer.php?u=http%3A//vlo.clarin.eu 
+        //                <li><a href="#"><i class="fa fa-linkedin-square fw" aria-hidden="true"></i> Share this on LinkedIn</a></li>
+        //                 LinkedIn: https://www.linkedin.com/shareArticle?mini=true&url=http%3A//vlo.clarin.eu/record_bla_bla&title=Title&summary=&source= -->
+
+        );
+
+        add(new BootstrapDropdown("shareOptions", new ListModel<>(itemList)) {
             @Override
             protected Component createDropDownLink(String id) {
+
                 return super.createDropDownLink(id)
                         .add(new AttributeAppender("class", "btn-sm", " "));
             }

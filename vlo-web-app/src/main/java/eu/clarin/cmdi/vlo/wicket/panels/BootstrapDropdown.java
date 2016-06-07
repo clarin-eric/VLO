@@ -18,36 +18,45 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import java.io.Serializable;
+import java.util.List;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 /**
  * Bootstrap drop down menu component that also works without javascript
+ *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
-public class BootstrapDropdown extends GenericPanel<Boolean> {
+public class BootstrapDropdown extends GenericPanel<List<BootstrapDropdown.DropdownMenuItem>> {
 
-    public BootstrapDropdown(String id) {
-        super(id, Model.of(false));
+    private final IModel<Boolean> openStateModel;
+
+    public BootstrapDropdown(String id, IModel<List<DropdownMenuItem>> itemsModel) {
+        super(id, itemsModel);
+        this.openStateModel = Model.of(false);
     }
 
     @Override
     protected void onInitialize() {
         super.onInitialize();
-        
-        add(new AttributeAppender("class", new BooleanOptionsModel(getModel(), Model.of("dropdown open"), Model.of("dropdown")), " "));
-        
+
+        add(new AttributeAppender("class", new BooleanOptionsModel(openStateModel, Model.of("dropdown open"), Model.of("dropdown")), " "));
+
         add(createDropDownLink("button"));
         add(createMenu("menu"));
     }
 
     protected Component createDropDownLink(String id) {
-        final Link<Boolean> link = new Link<Boolean>(id, getModel()) {
+        final Link<Boolean> link = new Link<Boolean>(id, openStateModel) {
             @Override
             public void onClick() {
                 getModel().setObject(!getModelObject());
@@ -70,8 +79,42 @@ public class BootstrapDropdown extends GenericPanel<Boolean> {
 
     protected Component createMenu(String id) {
         final WebMarkupContainer menu = new WebMarkupContainer(id);
-        //TODO: repeater for menu items
+        menu.add(new ListView<DropdownMenuItem>("menuItem", getModel()) {
+            @Override
+            protected void populateItem(ListItem<DropdownMenuItem> item) {
+                final DropdownMenuItem itemObject = item.getModelObject();
+                //link that forms the menu item's action
+                item.add(itemObject.getLink("link")
+                        //link label defined by the menu item object
+                        .add(new Label("label", itemObject.getLabel()))
+                        //icon with icon class defined by the menu item object
+                        .add(new WebMarkupContainer("icon")
+                                .add(new AttributeModifier("class", itemObject.getIconClass())))
+                );
+            }
+        });
         return menu;
+    }
+
+    public abstract static class DropdownMenuItem implements Serializable {
+
+        private final String label;
+        private final String iconClass;
+
+        public DropdownMenuItem(String label, String iconClass) {
+            this.label = label;
+            this.iconClass = iconClass;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+        public String getIconClass() {
+            return iconClass;
+        }
+
+        protected abstract Link getLink(String id);
     }
 
 }
