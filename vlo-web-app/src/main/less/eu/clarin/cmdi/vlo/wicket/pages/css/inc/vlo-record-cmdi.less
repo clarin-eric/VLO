@@ -21,47 +21,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : Twan Goosen <twan.goosen@mpi.nl>
 */
 .cmdi-record {
-
-    .node_title {
-        font-weight: bold;
-        min-width: 5em;
-        display: inline-block;
-        margin-right: 1em;
-        vertical-align: top;
-    }
-
-    .node_content {
-        display: inline-block;
-    }
-
-    .node_value, .node_attribute {        
-        display: block;
-    }
-
-    .node_attributes {
-        font-style: italic;
-        font-family: monospace;
-        color: #339;
+    .node.leaf {
+        .node_title {
+            font-weight: bold;
+            min-width: 5em;
+            display: inline-block;
+            margin-right: 1em;
+            vertical-align: top;
+        }
+        .node_content {
+            display: inline-block;
+        }
+        .node_value, .node_attribute {        
+            display: block;
+        }
+        .node_attributes {
+            font-style: italic;
+            font-family: monospace;
+            color: #339;
+        }
     }
 
     .node.parent {
-        .node {
-            margin-left: 1em;
-        }
-
-        & > .node_title {
-            display: block;
-            width: 100%;
-
-            margin: .2em 0;
-            padding: .2em 0em;
-            border-width: 1px;
-            border-style: solid none;
-        }
-
-        &:first-child > .node_title {
-            border-top: none;
-            margin-top: 0;
+        .node.parent {
+            margin: 1em;
+            
+            &:last-child {
+                margin-bottom: 0;
+            }
         }
     }
 }

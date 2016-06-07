@@ -19,48 +19,50 @@
         <xsl:if test="not($subnodes_text = '' and $prune_Components_branches_without_text_values)">
             <xsl:variable name="nchildren" select="fn:count(child::element())"/>
 
-            <div class="node">
-                <xsl:attribute name="class">
-                    <xsl:text>node </xsl:text>
-                    <xsl:choose>
-                        <xsl:when test="$nchildren = 0">
-                            <xsl:text>leaf</xsl:text>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:text>parent</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:attribute>
-                <span class="node_title">
-                    <xsl:value-of select="local-name()"/>
-                </span>
-
-                <span class="node_content">
-
-                    <xsl:if test="count(@*) > 0">
-                        <span class="node_attributes">
-                            <xsl:for-each select="@*">
-                                <span class="node_attribute">
-                                    <xsl:value-of select="name()"/>="<xsl:value-of select="."/>"
-                                </span>
-                            </xsl:for-each>
+            <div>
+                <xsl:choose>
+                    <xsl:when test="$nchildren = 0">
+                        <!-- leaf -->
+                        <xsl:attribute name="class">node leaf</xsl:attribute>
+                        <span class="node_title">
+                            <xsl:value-of select="local-name()"/>
                         </span>
-                    </xsl:if>
-
-                    <xsl:choose>
-                        <xsl:when test="$nchildren = 0 and not(not(child::node()))">
-                            <xsl:apply-templates mode="leaf" select="."/>
-                        </xsl:when>
-                        <xsl:otherwise>
+                        <span class="node_content">
+                            <xsl:apply-templates mode="attributes" select="." />
+                            <xsl:if test="not(not(child::node()))">
+                                <xsl:apply-templates mode="leaf" select="."/>
+                            </xsl:if>
+                        </span>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- parent -->
+                        <xsl:attribute name="class">node parent panel panel-default</xsl:attribute>
+                        <div class="panel-heading node_title">
+                            <xsl:value-of select="local-name()"/>
+                        </div>
+                        <div class="panel-body node_content">
+                            <xsl:apply-templates mode="attributes" select="." />
                             <xsl:if test="child::node()">
                                 <div class="node_children">
                                     <xsl:apply-templates mode="Component_Child" select="*"/>
                                 </div>
                             </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </span>
+                        </div>
+                    </xsl:otherwise>
+                </xsl:choose>
             </div>
+        </xsl:if>
+    </xsl:template>
+    
+    <xsl:template mode="attributes" match="*">
+        <xsl:if test="count(@*) > 0">
+            <span class="node_attributes">
+                <xsl:for-each select="@*">
+                    <span class="node_attribute">
+                        <xsl:value-of select="name()"/>="<xsl:value-of
+                            select="."/>" </span>
+                </xsl:for-each>
+            </span>
         </xsl:if>
     </xsl:template>
 
