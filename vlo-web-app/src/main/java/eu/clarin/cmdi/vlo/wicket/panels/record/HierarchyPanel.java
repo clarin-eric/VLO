@@ -100,7 +100,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
             @Override
             protected void populateItem(final Item<SolrDocument> item) {
-                item.add(new NamedRecordPageLink("link", item.getModel(), RecordPage.HIERARCHY_SECTION));
+                item.add(new NamedRecordPageLink("link", item.getModel(), RecordPage.DETAILS_SECTION));
                 item.add(new IndicatingAjaxFallbackLink("up") {
 
                     @Override
@@ -176,7 +176,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                     };
                 } else {
 
-                    return new NamedRecordPageLink(id, node.getObject().getModel(), RecordPage.HIERARCHY_SECTION)
+                    return new NamedRecordPageLink(id, node.getObject().getModel(), RecordPage.DETAILS_SECTION)
                             .add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
                                 @Override
                                 public String getObject() {
