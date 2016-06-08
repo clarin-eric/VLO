@@ -101,7 +101,7 @@ public class TopLinksPanel extends Panel {
 
     private List<DropdownMenuItem> getShareMenuOptions() {
         return Lists
-                .newArrayList(new DropdownMenuItem("Bookmark this", "fa fa-bookmark fw") {
+                .newArrayList(new DropdownMenuItem("Bookmark this", "fa fa-bookmark fw") { //Bookmark
                     @Override
                     protected Link getLink(String id) {
                         return new Link(id) {
@@ -111,7 +111,7 @@ public class TopLinksPanel extends Panel {
                             }
                         };
                     }
-                }, new DropdownMenuItem("Copy link", "fa fa-clipboard fw") {
+                }, new DropdownMenuItem("Copy link", "fa fa-clipboard fw") { //Clipboard
                     @Override
                     protected Link getLink(String id) {
                         return new Link(id) {
@@ -121,7 +121,7 @@ public class TopLinksPanel extends Panel {
                             }
                         };
                     }
-                }, new DropdownMenuItem("Send link by e-mail", "fa fa-envelope fw") {
+                }, new DropdownMenuItem("Send link by e-mail", "fa fa-envelope fw") { //E-mail
                     @Override
                     protected Link getLink(String id) {
                         return new Link(id) {
@@ -137,7 +137,7 @@ public class TopLinksPanel extends Panel {
                             }
                         };
                     }
-                }, new DropdownMenuItem("Share this on Twitter", "fa fa-twitter-square fw") {
+                }, new DropdownMenuItem("Share this on Twitter", "fa fa-twitter-square fw") { //Twitter
                     @Override
                     protected Link getLink(String id) {
                         return (Link) new Link(id) {
@@ -152,7 +152,7 @@ public class TopLinksPanel extends Panel {
                             }
                         }.add(new AttributeAppender("target", "_blank"));
                     }
-                }, new DropdownMenuItem("Share this on Facebook", "fa fa-facebook-square fw") {
+                }, new DropdownMenuItem("Share this on Facebook", "fa fa-facebook-square fw") { // Facebook
                     @Override
                     protected Link getLink(String id) {
                         return (Link) new Link(id) {
@@ -165,7 +165,20 @@ public class TopLinksPanel extends Panel {
                             }
                         }.add(new AttributeAppender("target", "_blank"));
                     }
-                }, new DropdownMenuItem("Share this on LinkedIn", "fa fa-linkedin-square fw") {
+                }, new DropdownMenuItem("Share this on Google+", "fa fa-google-plus-square fw") { // Google+
+                    @Override
+                    protected Link getLink(String id) {
+                        return (Link) new Link(id) {
+                            @Override
+                            public void onClick() {
+                                final String url
+                                        = String.format("https://plus.google.com/share?url=%s",
+                                                encodeParam(linkModel.getObject()));
+                                throw new RedirectToUrlException(url);
+                            }
+                        }.add(new AttributeAppender("target", "_blank"));
+                    }
+                }, new DropdownMenuItem("Share this on LinkedIn", "fa fa-linkedin-square fw") { // LinkedIn
                     @Override
                     protected Link getLink(String id) {
                         return (Link) new Link(id) {
