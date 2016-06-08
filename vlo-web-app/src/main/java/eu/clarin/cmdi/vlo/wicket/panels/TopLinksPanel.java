@@ -140,7 +140,7 @@ public class TopLinksPanel extends Panel {
                 }, new DropdownMenuItem("Share this on Twitter", "fa fa-twitter-square fw") {
                     @Override
                     protected Link getLink(String id) {
-                        return new Link(id) {
+                        return (Link) new Link(id) {
                             @Override
                             public void onClick() {
                                 final String url
@@ -150,12 +150,12 @@ public class TopLinksPanel extends Panel {
                                                         linkModel.getObject())));
                                 throw new RedirectToUrlException(url);
                             }
-                        };
+                        }.add(new AttributeAppender("target", "_blank"));
                     }
                 }, new DropdownMenuItem("Share this on Facebook", "fa fa-facebook-square fw") {
                     @Override
                     protected Link getLink(String id) {
-                        return new Link(id) {
+                        return (Link) new Link(id) {
                             @Override
                             public void onClick() {
                                 final String url
@@ -163,12 +163,12 @@ public class TopLinksPanel extends Panel {
                                                 encodeParam(linkModel.getObject()));
                                 throw new RedirectToUrlException(url);
                             }
-                        };
+                        }.add(new AttributeAppender("target", "_blank"));
                     }
                 }, new DropdownMenuItem("Share this on LinkedIn", "fa fa-linkedin-square fw") {
                     @Override
                     protected Link getLink(String id) {
-                        return new Link(id) {
+                        return (Link) new Link(id) {
                             @Override
                             public void onClick() {
                                 final String url
@@ -177,7 +177,7 @@ public class TopLinksPanel extends Panel {
                                                 encodeParam(pageTitleModel.getObject()));
                                 throw new RedirectToUrlException(url);
                             }
-                        };
+                        }.add(new AttributeAppender("target", "_blank"));
                     }
                 }
                 );
