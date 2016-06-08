@@ -60,43 +60,7 @@ public class TopLinksPanel extends GenericPanel<String> {
         super(id, linkModel);
         this.linkVisibilityModel = new Model<>(false);
 
-        final List<DropdownMenuItem> itemList = Lists.newArrayList(
-                new DropdownMenuItem("Bookmark this", "fa fa-bookmark fw") {
-            @Override
-            protected Link getLink(String id) {
-                return new Link(id) {
-                    @Override
-                    public void onClick() {
-                        //TODO
-                    }
-                };
-            }
-        },
-                new DropdownMenuItem("Copy link", "fa fa-clipboard fw") {
-            @Override
-            protected Link getLink(String id) {
-                return new Link(id) {
-                    @Override
-                    public void onClick() {
-                        //TODO
-                    }
-                };
-            }
-        }
-        //TODO:
-        //                <!--                <li><a href="#"><i class="fa fa-bookmark fw" aria-hidden="true"></i> Bookmark this</a></li> 
-        //                <li><a href="#"><i class="fa fa-clipboard fw" aria-hidden="true"></i> Copy link</a></li>
-        //                <li><a href="#"><i class="fa fa-envelope fw" aria-hidden="true"></i> Send link by e-mail</a></li>
-        //                <li><a href="#"><i class="fa fa-twitter-square fw" aria-hidden="true"></i> Share this on Twitter</a></li>
-        //                 twitter: https://twitter.com/home?status=http%3A//vlo.clarin.eu 
-        //                <li><a href="#"><i class="fa fa-facebook-square fw" aria-hidden="true"></i> Share this on Facebook</a></li>
-        //                 facebook: https://www.facebook.com/sharer/sharer.php?u=http%3A//vlo.clarin.eu 
-        //                <li><a href="#"><i class="fa fa-linkedin-square fw" aria-hidden="true"></i> Share this on LinkedIn</a></li>
-        //                 LinkedIn: https://www.linkedin.com/shareArticle?mini=true&url=http%3A//vlo.clarin.eu/record_bla_bla&title=Title&summary=&source= -->
-
-        );
-
-        add(new BootstrapDropdown("shareOptions", new ListModel<>(itemList)) {
+        add(new BootstrapDropdown("shareOptions", new ListModel<>(getShareMenuOptions())) {
             @Override
             protected Component createDropDownLink(String id) {
 
@@ -128,6 +92,75 @@ public class TopLinksPanel extends GenericPanel<String> {
                 getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(feedbackUrl));
             }
         });
+    }
+
+    private List<DropdownMenuItem> getShareMenuOptions() {
+        return Lists
+                .newArrayList(new DropdownMenuItem("Bookmark this", "fa fa-bookmark fw") {
+                    @Override
+                    protected Link getLink(String id) {
+                        return new Link(id) {
+                            @Override
+                            public void onClick() {
+                                //TODO
+                            }
+                        };
+                    }
+                }, new DropdownMenuItem("Copy link", "fa fa-clipboard fw") {
+                    @Override
+                    protected Link getLink(String id) {
+                        return new Link(id) {
+                            @Override
+                            public void onClick() {
+                                //TODO
+                            }
+                        };
+                    }
+                }, new DropdownMenuItem("Send link by e-mail", "fa fa-envelope fw") {
+                    @Override
+                    protected Link getLink(String id) {
+                        return new Link(id) {
+                            @Override
+                            public void onClick() {
+                                //TODO
+                            }
+                        };
+                    }
+                }, new DropdownMenuItem("Share this on Twitter", "fa fa-twitter-square fw") {
+                    @Override
+                    protected Link getLink(String id) {
+                        return new Link(id) {
+                            @Override
+                            public void onClick() {
+                                //TODO
+                                //                 twitter: https://twitter.com/home?status=http%3A//vlo.clarin.eu
+                            }
+                        };
+                    }
+                }, new DropdownMenuItem("Share this on Facebook", "fa fa-facebook-square fw") {
+                    @Override
+                    protected Link getLink(String id) {
+                        return new Link(id) {
+                            @Override
+                            public void onClick() {
+                                //TODO
+                                //                 facebook: https://www.facebook.com/sharer/sharer.php?u=http%3A//vlo.clarin.eu
+                            }
+                        };
+                    }
+                }, new DropdownMenuItem("Share this on LinkedIn", "fa fa-linkedin-square fw") {
+                    @Override
+                    protected Link getLink(String id) {
+                        return new Link(id) {
+                            @Override
+                            public void onClick() {
+                                //TODO
+                                //                 LinkedIn: https://www.linkedin.com/shareArticle?mini=true&url=http%3A//vlo.clarin.eu/record_bla_bla&title=Title&summary=&source= -->
+                            }
+                        };
+                    }
+                }
+                );
     }
 
     private Component createPermaLink(String id) {
