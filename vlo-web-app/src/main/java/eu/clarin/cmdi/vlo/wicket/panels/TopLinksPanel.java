@@ -28,10 +28,11 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.GenericPanel;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.encoding.UrlEncoder;
@@ -49,15 +50,19 @@ import org.slf4j.LoggerFactory;
  *
  * @author twagoo
  */
-public class TopLinksPanel extends GenericPanel<String> {
+public class TopLinksPanel extends Panel {
 
     @SpringBean
     private VloConfig vloConfig;
 
     private final Model<Boolean> linkVisibilityModel;
+    private final IModel<String> linkModel;
+    private final IModel<String> pageTitleModel;
 
-    public TopLinksPanel(String id, final IModel<String> linkModel) {
-        super(id, linkModel);
+    public TopLinksPanel(String id, final IModel<String> linkModel, final IModel<String> pageTitleModel) {
+        super(id);
+        this.linkModel = linkModel;
+        this.pageTitleModel = pageTitleModel != null ? pageTitleModel : new Model<String>(null);
         this.linkVisibilityModel = new Model<>(false);
 
         add(new BootstrapDropdown("shareOptions", new ListModel<>(getShareMenuOptions())) {
@@ -122,7 +127,13 @@ public class TopLinksPanel extends GenericPanel<String> {
                         return new Link(id) {
                             @Override
                             public void onClick() {
-                                //TODO
+                                final String url
+                                        = String.format("mailto:?subject=%s&body=%s",
+                                                //interestingly, for 'mailto' links it seems that the parameters need to be encoded using the path strategy...
+                                                //see http://stackoverflow.com/a/1211256 and https://en.wikipedia.org/wiki/Mailto
+                                                encodePath(pageTitleModel.getObject()),
+                                                encodePath(linkModel.getObject()));
+                                throw new RedirectToUrlException(url);
                             }
                         };
                     }
@@ -132,8 +143,12 @@ public class TopLinksPanel extends GenericPanel<String> {
                         return new Link(id) {
                             @Override
                             public void onClick() {
-                                //TODO
-                                //                 twitter: https://twitter.com/home?status=http%3A//vlo.clarin.eu
+                                final String url
+                                        = String.format("https://twitter.com/home?status=%s",
+                                                encodeParam(String.format("%s %s",
+                                                        pageTitleModel.getObject(),
+                                                        linkModel.getObject())));
+                                throw new RedirectToUrlException(url);
                             }
                         };
                     }
@@ -143,8 +158,10 @@ public class TopLinksPanel extends GenericPanel<String> {
                         return new Link(id) {
                             @Override
                             public void onClick() {
-                                //TODO
-                                //                 facebook: https://www.facebook.com/sharer/sharer.php?u=http%3A//vlo.clarin.eu
+                                final String url
+                                        = String.format("http://www.facebook.com/sharer/sharer.php?u=%s",
+                                                encodeParam(linkModel.getObject()));
+                                throw new RedirectToUrlException(url);
                             }
                         };
                     }
@@ -154,8 +171,11 @@ public class TopLinksPanel extends GenericPanel<String> {
                         return new Link(id) {
                             @Override
                             public void onClick() {
-                                //TODO
-                                //                 LinkedIn: https://www.linkedin.com/shareArticle?mini=true&url=http%3A//vlo.clarin.eu/record_bla_bla&title=Title&summary=&source= -->
+                                final String url
+                                        = String.format("https://www.linkedin.com/shareArticle?url=%s&title=%s",
+                                                encodeParam(linkModel.getObject()),
+                                                encodeParam(pageTitleModel.getObject()));
+                                throw new RedirectToUrlException(url);
                             }
                         };
                     }
@@ -171,7 +191,7 @@ public class TopLinksPanel extends GenericPanel<String> {
 
             @Override
             protected void onConfigure() {
-                setVisible(TopLinksPanel.this.getModel() != null);
+                setVisible(linkModel != null);
             }
         };
 
@@ -216,6 +236,14 @@ public class TopLinksPanel extends GenericPanel<String> {
     @Override
     protected void onConfigure() {
         LoggerFactory.getLogger(getClass()).debug("top links panel onconfigure");
+    }
+
+    private static String encodeParam(String param) {
+        return UrlEncoder.QUERY_INSTANCE.encode(param, "UTF-8");
+    }
+
+    private static String encodePath(String param) {
+        return UrlEncoder.PATH_INSTANCE.encode(param, "UTF-8");
     }
 
 }

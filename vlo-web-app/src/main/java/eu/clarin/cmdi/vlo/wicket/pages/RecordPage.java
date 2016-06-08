@@ -306,7 +306,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     }
 
     private TopLinksPanel createPermalink(String id, final WebMarkupContainer topNavigation) {
-        return new TopLinksPanel(id, new PermaLinkModel(getPageClass(), selectionModel, getModel())) {
+        return new TopLinksPanel(id, new PermaLinkModel(getPageClass(), selectionModel, getModel()), getTitleModel()) {
 
             @Override
             protected void onChange(AjaxRequestTarget target) {
