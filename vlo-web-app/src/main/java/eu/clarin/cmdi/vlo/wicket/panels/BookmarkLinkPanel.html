@@ -28,18 +28,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="input-group">
                     <a class="bookmark-link input-group-addon" wicket:id="link" href="#" 
                        title="Drag to bookmark area to bookmark"
-                       onclick="alert('Drag to bookmark area to bookmark'); return false;"
+                       onclick="$('#dragInstruction').slideDown(); return false;"
                        ><i class="fa fa-bookmark" aria-hidden="true"></i><span wicket:id="linkText"></span>
                     </a>
                     <input wicket:id="linkInput" id="bookmarkLinkInput" class="form-control" type="text" value="http://vlo.clarin.eu"/>
-                    <a class="copy-to-clipboard input-group-addon" title="Copy to clipboard" href="#">
+                    <a class="copy-to-clipboard input-group-addon" title="Copy to clipboard" href="#"
+                       onclick="copyLinkText() && $('#copyVerification').slideDown(); return false;"
+                       >
                         <i class="fa fa-clipboard" aria-hidden="true"></i>
                         <span>Copy to clipboard</span>
                     </a>
                 </div>
             </div>
-            <p>
-                To create a bookmark, either drag the small bookmark icon to your bookmarks area or right-click it and select the bookmark function from the menu.
+            <p id="dragInstruction" style="display: none; color: red;">
+                Right click or drag the bookmark icon <i class="fa fa-bookmark" aria-hidden="true"></i> to create a bookmark!
+            </p>
+            <p id="copyVerification" style="display: none; color: green;">
+                Link copied to the clipboard!
+            </p>
+            <p wicket:id="bookmarkInstructions">
+                To create a bookmark, either drag the bookmark icon <i class="fa fa-bookmark" aria-hidden="true"></i> to your bookmarks area or right-click it and select the bookmark function from the menu.
+            </p>
+            <p wicket:id="copyInstructions">
+                To copy the link to the clipboard, press the <i class="fa fa-clipboard" aria-hidden="true"></i> button or simply select the text in the input box and copy it manually.
             </p>
         </wicket:panel>
     </body>

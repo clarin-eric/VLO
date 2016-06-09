@@ -24,17 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <body>
         <wicket:panel>
             <div style="display: inline-block;" wicket:id="shareOptions">[options]</div>
-            <div style="display: none">
-                <wicket:enclosure child="linkRequest">
-                    <form id="permalink" wicket:id="linkRequest">
-                        <button wicket:id="linkRequestButton" type="submit" class="btn btn-default btn-sm" 
-                                title="Share or bookmark this page">
-                            <i class="fa fa-share-alt" aria-hidden="true"></i>
-                        </button>
-                    </form>
-                    <input wicket:id="linkfield" type="text" id="permalinkfield"></input>
-                </wicket:enclosure>
-            </div>
             <a target="_blank" wicket:id="feedback" id="feedbacklink" class="btn btn-default btn-sm" 
                title="Report an issue with this page or record">
                 <i class="fa fa-exclamation-circle" aria-hidden="true"></i>

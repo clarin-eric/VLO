@@ -15,14 +15,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-function permalinkShown() {
-    $("#permalinkfield").hide();
+function selectLinkText() {
+    var input = document.getElementById('bookmarkLinkInput');
+    if (input === null) {
+        return false;
+    } else {
+        input.focus();
+        input.setSelectionRange(0, input.value.length);
+        return true;
+    }
+}
 
-    $("#permalinkfield").focus(function() {
-        // Select input field contents
-        this.select();
-    });
-    
-    $("#permalinkfield").slideDown('fast');
-    $("#permalinkfield").select();
+function copyLinkText() {
+    if (selectLinkText()) {
+        try {
+            document.execCommand('copy');
+            return true;
+        } catch (e) {
+            console.log("Failed to copy!");
+            console.log(e);
+        }
+    } else {
+        console.log("Failed to select text");
+    }
+    //if we get here either text selection or copy action went wrong
+    alert('Could not copy to clipboard. Please copy the link manually.');
+    return false;
 }

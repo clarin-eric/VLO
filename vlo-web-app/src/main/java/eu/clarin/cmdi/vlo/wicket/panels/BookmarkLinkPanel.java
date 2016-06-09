@@ -16,6 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import eu.clarin.cmdi.vlo.JavaScriptResources;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -30,6 +34,8 @@ public class BookmarkLinkPanel extends Panel {
 
     private final IModel<String> linkModel;
     private final IModel<String> pageTitleModel;
+    private boolean bookmarkMode;
+    private boolean copyMode;
 
     public BookmarkLinkPanel(String id, IModel<String> linkModel, IModel<String> pageTitleModel) {
         super(id);
@@ -39,6 +45,21 @@ public class BookmarkLinkPanel extends Panel {
         add(new ExternalLink("link", linkModel)
                 .add(new Label("linkText", pageTitleModel)));
         add(new TextField("linkInput", linkModel));
+
+        add(new WebMarkupContainer("bookmarkInstructions") {
+            @Override
+            protected void onConfigure() {
+                setVisible(bookmarkMode);
+            }
+
+        });
+        add(new WebMarkupContainer("copyInstructions") {
+            @Override
+            protected void onConfigure() {
+                setVisible(copyMode);
+            }
+
+        });
     }
 
     @Override
@@ -50,6 +71,21 @@ public class BookmarkLinkPanel extends Panel {
         if (pageTitleModel != null) {
             pageTitleModel.detach();
         }
+    }
+
+    public void setBookmarkMode() {
+        this.bookmarkMode = true;
+        this.copyMode = false;
+    }
+
+    public void setCopyMode() {
+        this.copyMode = true;
+        this.bookmarkMode = false;
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloHeaderJS()));
     }
 
 }
