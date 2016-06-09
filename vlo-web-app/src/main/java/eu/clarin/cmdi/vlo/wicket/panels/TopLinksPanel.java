@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.Form;
@@ -58,6 +59,8 @@ public class TopLinksPanel extends Panel {
     private final Model<Boolean> linkVisibilityModel;
     private final IModel<String> linkModel;
     private final IModel<String> pageTitleModel;
+
+    private final BootstrapModal linkModal;
 
     public TopLinksPanel(String id, final IModel<String> linkModel, final IModel<String> pageTitleModel) {
         super(id);
@@ -97,6 +100,16 @@ public class TopLinksPanel extends Panel {
                 getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(feedbackUrl));
             }
         });
+
+        linkModal = new BootstrapModal("linkPanel") {
+            @Override
+            protected IModel<String> getTitle() {
+                return Model.of("Page link");
+            }
+        };
+        linkModal.add(new BookmarkLinkPanel(linkModal.getContentId(), linkModel, pageTitleModel));
+        add(linkModal);
+        //TODO: also add inline bookmark link panel that can be toggled for non-js
     }
 
     private List<DropdownMenuItem> getShareMenuOptions() {
@@ -104,20 +117,22 @@ public class TopLinksPanel extends Panel {
                 .newArrayList(new DropdownMenuItem("Bookmark this", "fa fa-bookmark fw") { //Bookmark
                     @Override
                     protected Link getLink(String id) {
-                        return new Link(id) {
+                        return new AjaxFallbackLink(id) {
+
                             @Override
-                            public void onClick() {
-                                //TODO
+                            public void onClick(AjaxRequestTarget target) {
+                                showLinkModal(target);
                             }
                         };
                     }
                 }, new DropdownMenuItem("Copy link", "fa fa-clipboard fw") { //Clipboard
                     @Override
                     protected Link getLink(String id) {
-                        return new Link(id) {
+                        return new AjaxFallbackLink(id) {
+
                             @Override
-                            public void onClick() {
-                                //TODO
+                            public void onClick(AjaxRequestTarget target) {
+                                showLinkModal(target);
                             }
                         };
                     }
@@ -228,6 +243,14 @@ public class TopLinksPanel extends Panel {
         return form;
     }
 
+    private void showLinkModal(AjaxRequestTarget target) {
+        if (target == null) {
+            //TODO
+        } else {
+            linkModal.show(target);
+        }
+    }
+
     private TextField<String> createLinkField(String id, final IModel<String> linkModel) {
         final TextField<String> linkField = new TextField<String>(id, linkModel) {
 
@@ -249,6 +272,17 @@ public class TopLinksPanel extends Panel {
     @Override
     protected void onConfigure() {
         LoggerFactory.getLogger(getClass()).debug("top links panel onconfigure");
+    }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        if (linkModel != null) {
+            linkModel.detach();
+        }
+        if (pageTitleModel != null) {
+            pageTitleModel.detach();
+        }
     }
 
     private static String encodeParam(String param) {
