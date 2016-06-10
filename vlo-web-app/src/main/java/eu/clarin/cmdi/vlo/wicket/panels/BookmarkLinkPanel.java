@@ -27,6 +27,9 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 /**
+ * A panel that allows the user to bookmark a page or copy the page link
+ * (depending on the mode, see {@link #setBookmarkMode() } and {@link #setCopyMode()
+ * }.
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */

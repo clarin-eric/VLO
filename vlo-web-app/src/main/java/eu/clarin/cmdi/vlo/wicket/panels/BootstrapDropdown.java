@@ -117,4 +117,8 @@ public class BootstrapDropdown extends GenericPanel<List<BootstrapDropdown.Dropd
         protected abstract Link getLink(String id);
     }
 
+    public void close() {
+        openStateModel.setObject(false);
+    }
+
 }

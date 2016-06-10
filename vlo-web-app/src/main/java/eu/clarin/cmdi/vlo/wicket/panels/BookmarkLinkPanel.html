@@ -34,6 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <input wicket:id="linkInput" id="bookmarkLinkInput" class="form-control" type="text" value="http://vlo.clarin.eu"/>
                     <a class="copy-to-clipboard input-group-addon" title="Copy to clipboard" href="#"
                        onclick="copyLinkText() && $('#copyVerification').slideDown(); return false;"
+                       style="display: none;"
                        >
                         <i class="fa fa-clipboard" aria-hidden="true"></i>
                         <span>Copy to clipboard</span>
@@ -50,7 +51,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 To create a bookmark, either drag the bookmark icon <i class="fa fa-bookmark" aria-hidden="true"></i> to your bookmarks area or right-click it and select the bookmark function from the menu.
             </p>
             <p wicket:id="copyInstructions">
-                To copy the link to the clipboard, press the <i class="fa fa-clipboard" aria-hidden="true"></i> button or simply select the text in the input box and copy it manually.
+                To copy the link to the clipboard,<span class="js-instructions" style="display: none;"> press the <i class="fa fa-clipboard" aria-hidden="true"></i> button or simply</span> select the text in the input box and copy it manually.
             </p>
         </wicket:panel>
     </body>

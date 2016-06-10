@@ -25,6 +25,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -37,11 +38,10 @@ import org.apache.wicket.util.encoding.UrlEncoder;
 import org.slf4j.LoggerFactory;
 
 /**
- * A panel with three links:
+ * A panel with two components:
  * <ul>
- * <li>A link to toggle a text input which shows a bookmarkable link to the
- * current page with parameters representing the current model (permalink)</li>
- * <li>A link to the help pages (/help)</li>
+ * <li>A dropdown menu with various share options, including two that trigger
+ * {@link BookmarkLinkPanel}</li>
  * <li>A feedback link for the current page (base URL taken from {@link VloConfig#getFeedbackFromUrl()
  * })</li>
  * </ul>
@@ -55,15 +55,18 @@ public class TopLinksPanel extends Panel {
 
     private final IModel<String> linkModel;
     private final IModel<String> pageTitleModel;
+    private final IModel<Boolean> inlineBookmarkLinkPanelVisibilityModel;
 
+    private final BookmarkLinkPanel modalBookmarkLinkPanel;
+    private final BookmarkLinkPanel inlineBookmarkLinkPanel;
     private final BootstrapModal linkModal;
+    private final BootstrapDropdown shareMenu;
 
     public TopLinksPanel(String id, final IModel<String> linkModel, final IModel<String> pageTitleModel) {
         super(id);
         this.linkModel = linkModel;
         this.pageTitleModel = pageTitleModel != null ? pageTitleModel : new Model<String>(null);
-
-        add(new BootstrapDropdown("shareOptions", new ListModel<>(getShareMenuOptions())) {
+        shareMenu = new BootstrapDropdown("shareOptions", new ListModel<>(getShareMenuOptions())) {
             @Override
             protected Component createDropDownLink(String id) {
 
@@ -76,8 +79,38 @@ public class TopLinksPanel extends Panel {
                 return "fa fa-share-alt";
             }
 
-        });
+        };
 
+        add(shareMenu);
+
+        // modal dialogue for bookmark/copy link
+        linkModal = new BootstrapModal("linkPanel") {
+            @Override
+            protected IModel<String> getTitle() {
+                return Model.of("Page link");
+            }
+        };
+        modalBookmarkLinkPanel = new BookmarkLinkPanel(linkModal.getContentId(), linkModel, pageTitleModel);
+        add(linkModal.add(modalBookmarkLinkPanel));
+
+        // inline 'dialogue' for bookmark/copy link (non-js alternative for modal)
+        inlineBookmarkLinkPanelVisibilityModel = Model.of(false);
+        add(new WebMarkupContainer("inlineBookmarkPanel") {
+            @Override
+            protected void onConfigure() {
+                setVisible(inlineBookmarkLinkPanelVisibilityModel.getObject());
+            }
+        }
+                .add(inlineBookmarkLinkPanel = new BookmarkLinkPanel("linkPanel", linkModel, pageTitleModel))
+                .add(new Link("close") {
+                    @Override
+                    public void onClick() {
+                        inlineBookmarkLinkPanelVisibilityModel.setObject(false);
+                    }
+                })
+        );
+
+        // feedback link
         add(new Link("feedback") {
 
             @Override
@@ -90,18 +123,7 @@ public class TopLinksPanel extends Panel {
                 getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(feedbackUrl));
             }
         });
-
-        linkModal = new BootstrapModal("linkPanel") {
-            @Override
-            protected IModel<String> getTitle() {
-                return Model.of("Page link");
-            }
-        };
-        modalBookmarkLinkPanel = new BookmarkLinkPanel(linkModal.getContentId(), linkModel, pageTitleModel);
-        add(linkModal.add(modalBookmarkLinkPanel));
-        //TODO: also add inline bookmark link panel that can be toggled for non-js
     }
-    private BookmarkLinkPanel modalBookmarkLinkPanel;
 
     private List<DropdownMenuItem> getShareMenuOptions() {
         return Lists
@@ -112,7 +134,9 @@ public class TopLinksPanel extends Panel {
 
                             @Override
                             public void onClick(AjaxRequestTarget target) {
+                                shareMenu.close();
                                 modalBookmarkLinkPanel.setBookmarkMode();
+                                inlineBookmarkLinkPanel.setBookmarkMode();
                                 showLinkModal(target);
                             }
                         };
@@ -124,7 +148,9 @@ public class TopLinksPanel extends Panel {
 
                             @Override
                             public void onClick(AjaxRequestTarget target) {
+                                shareMenu.close();
                                 modalBookmarkLinkPanel.setCopyMode();
+                                inlineBookmarkLinkPanel.setCopyMode();
                                 showLinkModal(target);
                             }
                         };
@@ -206,8 +232,9 @@ public class TopLinksPanel extends Panel {
 
     private void showLinkModal(AjaxRequestTarget target) {
         if (target == null) {
-            //TODO
+            inlineBookmarkLinkPanelVisibilityModel.setObject(Boolean.TRUE);
         } else {
+            target.appendJavaScript("onModalShown();");
             linkModal.show(target);
         }
     }

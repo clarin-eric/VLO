@@ -42,3 +42,10 @@ function copyLinkText() {
     alert('Could not copy to clipboard. Please copy the link manually.');
     return false;
 }
+
+function onModalShown() {
+    //copy to clipboard button and instructions are initially hidden because 
+    //this requires javascript and should not be shown unless JS is enabled
+    $('.copy-to-clipboard').show();
+    $('.js-instructions').show();
+}

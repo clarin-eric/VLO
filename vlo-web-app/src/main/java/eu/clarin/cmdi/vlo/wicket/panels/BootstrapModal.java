@@ -70,6 +70,10 @@ public abstract class BootstrapModal extends Panel {
         target.add(this);
         target.appendJavaScript(String.format("showModal($('#%s .modal'));", getMarkupId(true)));
     }
+    
+    public void show() {
+        visibilityModel.setObject(true);
+    }
 
     public String getContentId() {
         return "bodyContent";
