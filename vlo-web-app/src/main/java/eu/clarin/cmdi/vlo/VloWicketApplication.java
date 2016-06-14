@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo;
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.themes.bootstrap.BootstrapTheme;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
+import de.agilecoders.wicket.core.settings.NoopThemeProvider;
 import de.agilecoders.wicket.core.settings.SingleThemeProvider;
 import de.agilecoders.wicket.core.settings.Theme;
 import java.io.IOException;
@@ -42,6 +43,7 @@ import java.util.List;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
+import org.apache.wicket.request.resource.ContextRelativeResourceReference;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 /**
@@ -244,27 +246,11 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
 
     private void initBootstrap() {
         BootstrapSettings settings = new BootstrapSettings();
-        settings.setThemeProvider(new SingleThemeProvider(
-                //new ClarinBootstrapTheme()));
-                new BootstrapTheme()));
+        //clarin bootstrap
+        settings.setCssResourceReference(null);
+        //no additional theme
+        settings.setThemeProvider(new NoopThemeProvider());
         Bootstrap.install(this, settings);
-    }
-
-    static class ClarinBootstrapTheme extends Theme {
-
-        public ClarinBootstrapTheme() {
-            super("clarin-theme");
-        }
-
-        @Override
-        public List<HeaderItem> getDependencies() {
-            return Arrays.<HeaderItem>asList(
-                    //TODO: Make bundle?
-                    CssHeaderItem.forReference(Bootstrap.getSettings().getCssResourceReference()),
-                    CssHeaderItem.forReference(new CssResourceReference(VloBasePage.class, "css/clarin.css")),
-                    CssHeaderItem.forReference(new CssResourceReference(VloBasePage.class, "css/clarin-override.css"))
-            );
-        }
     }
 
 }
