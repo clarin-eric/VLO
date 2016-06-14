@@ -3,9 +3,8 @@ package eu.clarin.cmdi.vlo;
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.themes.bootstrap.BootstrapTheme;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
-import de.agilecoders.wicket.core.settings.NoopThemeProvider;
+import de.agilecoders.wicket.core.settings.ITheme;
 import de.agilecoders.wicket.core.settings.SingleThemeProvider;
-import de.agilecoders.wicket.core.settings.Theme;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -38,13 +37,11 @@ import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.apache.wicket.Page;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
-import org.apache.wicket.request.resource.ContextRelativeResourceReference;
-import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.markup.head.IHeaderResponse;
 
 /**
  * Application object for your web application. If you want to run this
@@ -245,12 +242,33 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     }
 
     private void initBootstrap() {
-        BootstrapSettings settings = new BootstrapSettings();
-        //clarin bootstrap
-        settings.setCssResourceReference(null);
-        //no additional theme
-        settings.setThemeProvider(new NoopThemeProvider());
-        Bootstrap.install(this, settings);
+        Bootstrap.install(this,
+                new BootstrapSettings()
+                //bootstrap CSS is provided via markup (CSS link in HTML head)
+                .setThemeProvider(new SingleThemeProvider(new ExtremeNoopTheme())));
+    }
+
+    private static class ExtremeNoopTheme implements ITheme {
+
+        @Override
+        public String name() {
+            return "noop-theme";
+        }
+
+        @Override
+        public List<HeaderItem> getDependencies() {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public void renderHead(IHeaderResponse response) {
+        }
+
+        @Override
+        public Iterable<String> getCdnUrls() {
+            return Collections.emptyList();
+        }
+
     }
 
 }
