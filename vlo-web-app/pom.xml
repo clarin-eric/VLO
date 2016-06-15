@@ -232,13 +232,13 @@
                 <artifactId>lesscss-maven-plugin</artifactId>
                 <version>1.7.0.1.1</version>
                 <configuration>
-                    <sourceDirectory>${project.basedir}/src/main/less</sourceDirectory>
-                    <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
+                    <sourceDirectory>${project.basedir}/src/main/less/eu/clarin/cmdi/vlo/wicket/pages/css</sourceDirectory>
+                    <outputDirectory>${project.build.directory}/${project.build.finalName}/css</outputDirectory>
                     <compress>true</compress>
                     <force>true</force>
                     <includes>
-                        <include>eu/clarin/cmdi/vlo/wicket/pages/css/vlo.less</include>
-                        <include>eu/clarin/cmdi/vlo/wicket/pages/css/bootstrap/less/bootstrap.less</include>
+                        <include>vlo.less</include>
+                        <include>bootstrap/less/bootstrap.less</include>
                     </includes>
                 </configuration>
                 <executions>
