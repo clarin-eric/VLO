@@ -232,7 +232,7 @@
                 <artifactId>lesscss-maven-plugin</artifactId>
                 <version>1.7.0.1.1</version>
                 <configuration>
-                    <sourceDirectory>${project.basedir}/src/main/less/eu/clarin/cmdi/vlo/wicket/pages/css</sourceDirectory>
+                    <sourceDirectory>${project.basedir}/src/main/less</sourceDirectory>
                     <outputDirectory>${project.build.directory}/${project.build.finalName}/css</outputDirectory>
                     <compress>true</compress>
                     <force>true</force>
