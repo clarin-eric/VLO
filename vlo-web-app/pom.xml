@@ -230,15 +230,16 @@
                 <!-- Compiles .less files into .css -->
                 <groupId>org.lesscss</groupId>
                 <artifactId>lesscss-maven-plugin</artifactId>
-                <version>1.3.3</version>
+                <version>1.7.0.1.1</version>
                 <configuration>
                     <sourceDirectory>${project.basedir}/src/main/less</sourceDirectory>
                     <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
                     <compress>true</compress>
                     <force>true</force>
-                    <excludes>
-                        <exclude>**/inc/**/*</exclude>
-                    </excludes>
+                    <includes>
+                        <include>eu/clarin/cmdi/vlo/wicket/pages/css/vlo.less</include>
+                        <include>eu/clarin/cmdi/vlo/wicket/pages/css/bootstrap/less/bootstrap.less</include>
+                    </includes>
                 </configuration>
                 <executions>
                     <execution>
