@@ -238,7 +238,6 @@
                     <force>true</force>
                     <includes>
                         <include>vlo.less</include>
-                        <include>bootstrap/less/bootstrap.less</include>
                     </includes>
                 </configuration>
                 <executions>
