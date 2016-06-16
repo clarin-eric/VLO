@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #topnavigation.row {
     // entire top navigation should get a uniform background colour
-    background: #f5f5f5; /* TODO: get from bootstrap/CLARIN css? */
+    background: @breadcrumb-bg;
 
     // we need to override some bootstrap behaviour to make this lign out nicely :(
     margin-left: 0px;
@@ -49,7 +49,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 .top-links {
-    padding: 8px;
+    padding-top: 3px;
+    padding-right: 3px;
 
     form#permalink {
         display: inline;
