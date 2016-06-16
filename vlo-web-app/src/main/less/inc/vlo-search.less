@@ -19,7 +19,7 @@
         .search-icon {
             display: none;
         }
-        
+
         .loading-indicator {
             display: initial;
         }
@@ -41,8 +41,28 @@
     }
 }
 
-#resultpagesizeform .form-group {
-    padding-right: 3px;
+.search-results-header {
+
+    .query-selection {
+        .query-item {
+            display: inline-block;
+            background-color: darken(@navbar-default-bg, 10%);
+
+            border: 1px solid;
+            border-radius: 8px;
+            padding: 0 .4em;
+            margin: 0 .2em;
+            
+            .query-item-label {
+                padding-right: .5em;
+            }
+        }
+    }
+
+    .resultpagesizeform .form-group {
+        padding-right: 3px;
+    }
+
 }
 
 

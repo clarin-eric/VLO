@@ -21,8 +21,11 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import static eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel.ITEMS_PER_PAGE_OPTIONS;
 import java.util.Map;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -50,7 +53,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         this.resultsView = resultsView;
 
         add(createSearchInfoLabel("searchInfo"));
-        //TODO: show selected facet values (move from breadcrumbs bar) 
+        add(createQuerySelectionItems("querySelection"));
 
         // form to select number of results per page
         add(createResultPageSizeForm("resultPageSizeForm", resultsView));
@@ -70,24 +73,52 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                 final long resultCount = solrDocumentProvider.size();
 
                 if (emptyQuery && emptyFacetSelection) {
-                    return String.format("Showing all %d records%s", resultCount,
-                            emptyFacetSelection ? "" : " within selection"
-                    );
+                    return String.format("Showing all %d records", resultCount);
                 } else {
                     final long firstShown = 1 + resultsView.getCurrentPage() * resultsView.getItemsPerPage();
                     final long lastShown = Math.min(resultsView.getItemCount(), firstShown + resultsView.getItemsPerPage() - 1);
-                    final String query = selection.getQuery();
                     return String.format(
-                            String.format("%s%s%s",
+                            String.format("%s%s",
                                     resultCount == 0 ? "No results"
                                             : String.format("Showing %s %d results",
                                                     (resultsView.getPageCount() <= 1) ? "" : String.format("%d to %d of ", firstShown, lastShown), resultCount),
-                                    emptyFacetSelection ? "" : " within selection",
-                                    emptyQuery ? "" : String.format(" for '%s'", query))
+                                    emptyFacetSelection ? "" : " within selection")
                     );
                 }
             }
         });
+    }
+
+    private Component createQuerySelectionItems(String id) {
+        final Component query = new WebMarkupContainer("query")
+                .add(new Label("label", new PropertyModel<String>(getModel(), "query")))
+                .add(new AjaxFallbackLink("remove") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    }
+                });
+
+        final Component facets = new WebMarkupContainer("facets");
+
+        return new WebMarkupContainer(id) {
+            {
+                add(query);
+                add(facets);
+            }
+
+            @Override
+            protected void onConfigure() {
+                final String queryString = getModelObject().getQuery();
+                final Map<String, FacetSelection> selection = getModelObject().getSelection();
+                final boolean hasQuery = queryString != null && !queryString.isEmpty();
+                final boolean hasSelection = selection != null && !selection.isEmpty();
+
+                setVisible(hasQuery || hasSelection);
+                query.setVisible(hasQuery);
+                facets.setVisible(hasSelection);
+            }
+        };
     }
 
     private Form createResultPageSizeForm(String id, final IPageableItems resultsView) {

@@ -23,9 +23,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <div role="navigation" class="navbar navbar-default">
-                <p class="navbar-text" wicket:id="searchInfo">Showing 1 to 25 of 604056 results for 'test'</p>
-                <form class="navbar-form navbar-right hidden-xs" wicket:id="resultPageSizeForm" id="resultpagesizeform">
+            <div role="navigation" class="search-results-header navbar navbar-default">
+                <p class="navbar-text">
+                    <span wicket:id="searchInfo">Showing 1 to 25 of 604056 results</span>
+                    <span class="query-selection" wicket:id="querySelection">for
+                        <span wicket:id="query" class="query-item">
+                            <span class="query-item-label" wicket:id="label">test</span>
+                            <a wicket:id="remove" class="close" aria-label="Remove"><span aria-hidden="true">&times;</span></a>
+                        </span>
+                        <wicket:container wicket:id="facets">
+                            <!--
+                            <span wicket:id="query" class="query-item">
+                                <span class="query-item-label" wicket:id="label">test</span>
+                                <a wicket:id="remove" class="close" aria-label="Remove"><span aria-hidden="true">&times;</span></a>
+                            </span>
+                            -->
+                        </wicket:container>
+                    </span>
+                </p>
+                <form class="resultpagesizeform navbar-form navbar-right hidden-xs" wicket:id="resultPageSizeForm">
                     <div class="form-group">
                         <label for="resultpagesize">Results per page:</label>
                         <select class="form-control" wicket:id="resultPageSize" id="resultpagesize">
