@@ -210,6 +210,12 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
                 updateSelection(target);
             }
 
+            @Override
+            protected void onSelectionChanged(QueryFacetsSelection selection, AjaxRequestTarget target) {
+                setModelObject(selection);
+                updateSelection(target);
+            }
+
         };
     }
 
