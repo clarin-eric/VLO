@@ -18,7 +18,10 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import static eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel.ITEMS_PER_PAGE_OPTIONS;
+import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.util.Map;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
@@ -36,12 +39,18 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection> {
+
+    @SpringBean(name = "queryParametersConverter")
+    private PageParametersConverter<QueryFacetsSelection> paramsConverter;
+    @SpringBean
+    private FieldValueConverterProvider fieldValueConverterProvider;
 
     private final IDataProvider<SolrDocument> solrDocumentProvider;
     private final AbstractPageableView<SolrDocument> resultsView;
@@ -92,10 +101,14 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
     private Component createQuerySelectionItems(String id) {
         final Component query = new WebMarkupContainer("query")
                 .add(new Label("label", new PropertyModel<String>(getModel(), "query")))
-                .add(new AjaxFallbackLink("remove") {
+                .add(new AjaxFallbackLink<QueryFacetsSelection>("remove", getModel()) {
+
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                        // get a copy of the current selection
+                        final QueryFacetsSelection newSelection = getModelObject().getCopy();
+                        newSelection.setQuery(null);
+                        onSelectionChanged(newSelection, target);
                     }
                 });
 
@@ -149,6 +162,18 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
 
     protected void onChange(AjaxRequestTarget target) {
         //noop - may be overridden
+    }
+    
+    /*
+     * Gets called if one of the links is clicked and the selection is changed.
+     * This implementation sets the response page to {@link FacetedSearchPage}
+     * with the new selection as its parameters
+     *
+     * @param selection new selection
+     * @param target AJAX target, may be null
+     */
+    protected void onSelectionChanged(QueryFacetsSelection selection, AjaxRequestTarget target) {
+        setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(selection));
     }
 
     /* from breadcrumb panel */
@@ -321,16 +346,6 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
     
     
 
-    //**
-     * Gets called if one of the links is clicked and the selection is changed.
-     * This implementation sets the response page to {@link FacetedSearchPage}
-     * with the new selection as its parameters
-     *
-     * @param selection new selection
-     * @param target AJAX target, may be null
-     *
-    protected void onSelectionChanged(QueryFacetsSelection selection, AjaxRequestTarget target) {
-        setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(selection));
-    }
+    
      */
 }
