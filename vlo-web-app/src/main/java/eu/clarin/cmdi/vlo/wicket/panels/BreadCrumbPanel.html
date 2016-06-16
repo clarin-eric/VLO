@@ -25,30 +25,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <wicket:panel>
             <li><a wicket:id="home">VLO</a></li>
             <li><a wicket:id="searchPage">Faceted search</a></li>
-            <wicket:container wicket:id="query">
-                <li><a wicket:id="leavequery">Search: &quot;<span wicket:id="content"></span>&quot;</a>
-                    <a wicket:id="removal" title="Remove query" class="breadcrumbunselect">
-                        <span class="glyphicon glyphicon-remove remove-facet" 
-                              aria-hidden="true"
-                              alt="Remove"
-                              title="Remove this facet value from the current selection to show more results"
-                              ></span>
-                    </a>
+            <wicket:container wicket:id="results">
+                <li>
+                    <a wicket:id="resultsLink">Search results</a>
                 </li>
             </wicket:container>
-            <wicket:container wicket:id="facets">
-                <li><a wicket:id="leaveselection">Selections</a>: 
-                    <wicket:container wicket:id="facet">
-                        <span class="breadcrumbfacet"><wicket:container wicket:id="value">[VALUE]</wicket:container>
-                            <a wicket:id="removal" title="Remove selection" class="breadcrumbunselect">
-                                <span class="glyphicon glyphicon-remove remove-facet"
-                                      aria-hidden="true"
-                                      alt="Remove"
-                                      title="Remove this facet value from the current selection to show more results">
-                                </span>
-                            </a>
-                        </span>
-                    </wicket:container>
+            <wicket:container wicket:id="document">
+                <li>
+                    <a wicket:id="documentLink">Record: <span wicket:id="documentTitle">[Title]</span></a>
                 </li>
             </wicket:container>
         </wicket:panel>

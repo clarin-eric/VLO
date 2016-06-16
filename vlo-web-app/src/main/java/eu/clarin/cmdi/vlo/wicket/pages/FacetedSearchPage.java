@@ -216,15 +216,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     private WebMarkupContainer createNavigation(String id) {
         final WebMarkupContainer container = new WebMarkupContainer(id);
         container.setOutputMarkupId(true);
-        container.add(new BreadCrumbPanel("breadcrumbs", getModel()) {
-
-            @Override
-            protected void onSelectionChanged(QueryFacetsSelection selection, AjaxRequestTarget target) {
-                setModelObject(selection);
-                updateSelection(target);
-            }
-
-        });
+        container.add(new BreadCrumbPanel("breadcrumbs", getModel()));
         container.add(new TopLinksPanel("permalink", new PermaLinkModel(getPageClass(), getModel()), getTitleModel()) {
 
             @Override

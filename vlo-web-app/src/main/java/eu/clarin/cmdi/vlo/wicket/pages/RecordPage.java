@@ -161,7 +161,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
         final WebMarkupContainer topNavigation = new WebMarkupContainer("navigation");
         add(topNavigation
-                .add(new BreadCrumbPanel("breadcrumbs", selectionModel))
+                .add(new BreadCrumbPanel("breadcrumbs", selectionModel, getModel()))
                 .add(createPermalink("permalink", topNavigation))
                 .add(new Link("backToSearch") {
                     @Override

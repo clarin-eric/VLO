@@ -68,7 +68,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                 final boolean emptyFacetSelection = facetSelection == null || facetSelection.isEmpty();
                 final boolean emptyQuery = selection.getQuery() == null || selection.getQuery().isEmpty();
                 final long resultCount = solrDocumentProvider.size();
-                
+
                 if (emptyQuery && emptyFacetSelection) {
                     return String.format("Showing all %d records%s", resultCount,
                             emptyFacetSelection ? "" : " within selection"
@@ -120,4 +120,186 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         //noop - may be overridden
     }
 
+    /* from breadcrumb panel */
+ /*
+    
+    
+
+    private WebMarkupContainer createQuery(final IModel<QueryFacetsSelection> selectionModel, String id) {
+        final WebMarkupContainer queryContainer = new WebMarkupContainer(id);
+        final Link link = new AjaxFallbackLink("leavequery") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                // make query object without selection
+                final QueryFacetsSelection newSelection = new QueryFacetsSelection(selectionModel.getObject().getQuery(), null);
+                onSelectionChanged(newSelection, target);
+            }
+        };
+        link.add(new Label("content", new PropertyModel(selectionModel, "query")));
+        queryContainer.add(link);
+
+        queryContainer.add(new AjaxFallbackLink("removal") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                // get a copy of the current selection
+                final QueryFacetsSelection newSelection = selectionModel.getObject().getCopy();
+                newSelection.setQuery(null);
+                onSelectionChanged(newSelection, target);
+            }
+        });
+        return queryContainer;
+    }
+    
+
+    private WebMarkupContainer createFacets(final IModel<QueryFacetsSelection> model, String id) {
+        final WebMarkupContainer facetsContainer = new WebMarkupContainer(id);
+        facetsContainer.add(new AjaxFallbackLink("leaveselection") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onSelectionChanged(model.getObject(), target);
+            }
+        });
+
+        // create a provider that lists the facet name -> values entries
+        final FacetSelectionProvider facetSelectionProvider = new FacetSelectionProvider(model);
+        facetsContainer.add(new DataView<Map.Entry<String, FacetSelection>>("facet", facetSelectionProvider) {
+
+            @Override
+            protected void populateItem(final Item<Map.Entry<String, FacetSelection>> item) {
+                final IModel<Map.Entry<String, FacetSelection>> selectionModel = item.getModel();
+                // add a label for the selected facet value(s)
+                final Label valueLabel = new Label("value", new PropertyModel(selectionModel, "value")) {
+
+                    @Override
+                    public <C> IConverter<C> getConverter(Class<C> type) {
+                        final String facet = item.getModelObject().getKey();
+                        // converter to render the value(s) nicely
+                        return (IConverter<C>) new SelectionConverter(facet, fieldValueConverterProvider.getConverter(facet));
+                    }
+
+                };
+                // add facet name as title attribute so that it becomes available through a tooltip
+                valueLabel.add(new AttributeModifier("title",
+                        new SolrFieldNameModel(new PropertyModel(selectionModel, "key"))));
+                item.add(valueLabel);
+
+                // add a link for removal of the facet value selection
+                item.add(new AjaxFallbackLink("removal") {
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        // get a copy of the current selection
+                        final QueryFacetsSelection newSelection = model.getObject().getCopy();
+                        final String facet = selectionModel.getObject().getKey();
+                        // unselect this facet
+                        newSelection.selectValues(facet, null);
+                        onSelectionChanged(newSelection, target);
+                    }
+                });
+            }
+        });
+
+        return facetsContainer;
+    }
+    
+    
+    // Converter for string collections, rendering depends on items in
+    // collection (if singleton, show its value; if multiple, comma separated)
+    private class SelectionConverter implements IConverter<FacetSelection> {
+
+        private final String facet;
+        private final IConverter<String> valueConverter;
+
+        public SelectionConverter(String facet, IConverter<String> valueConverter) {
+            this.facet = facet;
+            this.valueConverter = valueConverter;
+        }
+
+        @Override
+        public FacetSelection convertToObject(String value, Locale locale) throws ConversionException {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public String convertToString(FacetSelection selection, Locale locale) {
+            switch (selection.getSelectionType()) {
+                case AND:
+                    return getCollectionString(selection, " and ", locale);
+                case OR:
+                    return getCollectionString(selection, " or ", locale);
+                case NOT_EMPTY:
+                    return getAnyValueString();
+                default:
+                    return facet;
+            }
+
+        }
+
+        private String getAnyValueString() {
+            if (null != facet) {
+                switch (facet) {
+                    case FacetConstants.FIELD_SEARCH_SERVICE:
+                        return "Content searchable"; //TODO: make string property
+                    case FacetConstants.FIELD_HAS_PART_COUNT:
+                        return "Collection records"; //TODO: make string property
+                    default:
+                        return "any " + facet;
+                }
+            }
+            return "";
+        }
+
+        public String getCollectionString(FacetSelection selection, String valueSeparator, Locale locale) {
+            final Collection<String> value = selection.getValues();
+            //TODO: include selection type
+            if (value.isEmpty()) {
+                return "";
+            } else if (value.size() == 1) {
+                return getConvertedValueString(selection, value.iterator().next(), locale).toString();
+            } else {
+                final Iterator<String> iterator = value.iterator();
+                final StringBuilder sb = new StringBuilder(getConvertedValueString(selection, iterator.next(), locale));
+                while (iterator.hasNext()) {
+                    sb.append(valueSeparator).append(getConvertedValueString(selection, iterator.next(), locale));
+                }
+                return sb.toString();
+            }
+        }
+
+        private CharSequence getConvertedValueString(FacetSelection selection, String string, Locale locale) {
+            if (selection.getQualifier(string) == FacetSelectionValueQualifier.NOT) {
+                return new StringBuilder("NOT ").append(getConvertedValue(string, locale));
+            }
+            return getConvertedValue(string, locale);
+        }
+
+        private String getConvertedValue(String string, Locale locale) {
+            if (valueConverter != null) {
+                final String converted = valueConverter.convertToString(string, locale);
+                if (converted != null) {
+                    return converted;
+                }
+            }
+            return string;
+        }
+
+    };
+    
+    
+
+    //**
+     * Gets called if one of the links is clicked and the selection is changed.
+     * This implementation sets the response page to {@link FacetedSearchPage}
+     * with the new selection as its parameters
+     *
+     * @param selection new selection
+     * @param target AJAX target, may be null
+     *
+    protected void onSelectionChanged(QueryFacetsSelection selection, AjaxRequestTarget target) {
+        setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(selection));
+    }
+     */
 }
