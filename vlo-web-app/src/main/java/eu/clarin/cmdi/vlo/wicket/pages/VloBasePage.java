@@ -16,15 +16,22 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapExternalLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.ImmutableNavbarComponent;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar.ComponentPosition;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarExternalLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarText;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
-import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.GenericWebPage;
@@ -36,7 +43,6 @@ import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
@@ -173,10 +179,14 @@ public class VloBasePage<T> extends GenericWebPage<T> {
     }
 
     private void addComponents() {
+
         add(new FeedbackPanel("feedback"));
 
-        // add 'class' attribute to header indicating version qualifier (e.g. 'beta')
-        add(new WebMarkupContainer("header").add(new AttributeAppender("class", VloWicketApplication.get().getAppVersionQualifier(), " ")));
+        add(new WebMarkupContainer("header")
+                // navbar in header
+                .add(createHeaderMenu("menu"))
+                // add 'class' attribute to header indicating version qualifier (e.g. 'beta')
+                .add(new AttributeAppender("class", VloWicketApplication.get().getAppVersionQualifier(), " ")));
 
         add(new HideJavascriptFallbackControlsBehavior());
 
@@ -187,6 +197,32 @@ public class VloBasePage<T> extends GenericWebPage<T> {
             //empty placeholder
             add(new WebMarkupContainer("piwik"));
         }
+    }
+
+    private Component createHeaderMenu(String id) {
+        final Navbar navbar = new Navbar(id);
+        navbar.setBrandName(Model.of("Virtual Language Observatory"));
+
+        // link to CLARIN website
+        final Component clarinLink = new NavbarExternalLink(Model.of("http://www.clarin.eu/")).setLabel(Model.of("CLARIN"))
+                .add(new AttributeModifier("class", "hidden-xs"));
+
+        // badges for testing/beta versions
+        final Component testingBadge = new NavbarText(Navbar.componentId(), Model.of("TESTING"))
+                .add(new AttributeAppender("class", "qualifier snapshot", " "));
+        final Component betaBadge = new NavbarText(Navbar.componentId(), Model.of("BETA"))
+                .add(new AttributeAppender("class", "qualifier beta", " "));
+
+        //add all menu compoennts
+        navbar.addComponents(new ImmutableNavbarComponent(new NavbarButton(SimpleSearchPage.class, Model.of("Home")), ComponentPosition.LEFT),
+                new ImmutableNavbarComponent(new NavbarButton(FacetedSearchPage.class, Model.of("Search")), ComponentPosition.LEFT),
+                new ImmutableNavbarComponent(new NavbarButton(HelpPage.class, Model.of("Help")), ComponentPosition.LEFT),
+                new ImmutableNavbarComponent(new NavbarButton(AboutPage.class, Model.of("About")), ComponentPosition.LEFT),
+                new ImmutableNavbarComponent(clarinLink, ComponentPosition.RIGHT),
+                new ImmutableNavbarComponent(testingBadge, ComponentPosition.RIGHT),
+                new ImmutableNavbarComponent(betaBadge, ComponentPosition.RIGHT)
+        );
+        return navbar;
     }
 
 }

@@ -32,49 +32,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <link wicket:id="canonicalUrl" rel="canonical" />
     </head>
     <body>
-        <header wicket:id="header" class="navbar navbar-default navbar-static-top" id="header" role="banner"> 
-            <div class="container"> 
-                <nav> 
-                    <div class="navbar-header"> 
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <span class="navbar-brand">Virtual Language Observatory</span>
-                    </div>
-                    <div class="collapse navbar-collapse" id="navbar-collapse-1">
-                        <ul class="nav navbar-nav"> 
-
-                            <li>
-                                <wicket:link><a href="SimpleSearchPage.html"><span>Home</span></a></wicket:link>
-                            </li>
-
-                            <li>
-                                <wicket:link><a href="FacetedSearchPage.html"><span>Search</span></a></wicket:link>
-                            </li>
-                            <li>
-                                <wicket:link><a href="HelpPage.html"><span>Help</span></a></wicket:link>
-                            </li>
-                            <li>
-                                <wicket:link><a href="AboutPage.html"><span>About</span></a></wicket:link>
-                            </li>
-                        </ul> 
-                        <ul class="nav navbar-nav navbar-right">
-                            <li class="hidden-xs">
-                                <a href="http://www.clarin.eu/"><span>CLARIN</span></a>
-                            </li>
-                            <li class="qualifier snapshot">
-                                <span class="navbar-text">TESTING</span>
-                            </li>
-                            <li class="qualifier beta">
-                                <span class="navbar-text">BETA</span>
-                            </li>
-                        </ul> 
-                    </div>
-                </nav> 
-            </div> 
+        <header wicket:id="header" id="header" role="banner">
+            <div wicket:id="menu" class="navbar-static-top"  role="banner">[Navigation]</div>
         </header>
 
         <div class="container">
