@@ -27,17 +27,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <p class="navbar-text">
                     <span wicket:id="searchInfo">Showing 1 to 25 of 604056 results</span>
                     <span class="query-selection" wicket:id="querySelection">for
-                        <span wicket:id="query" class="query-item">
+                        <span wicket:id="query" class="query-item" title="Search term(s)">
                             <span class="query-item-label" wicket:id="label">test</span>
-                            <a wicket:id="remove" class="close" aria-label="Remove"><span aria-hidden="true">&times;</span></a>
+                            <a wicket:id="remove" class="close" title="Remove search term(s)"><span aria-hidden="true">&times;</span></a>
                         </span>
                         <wicket:container wicket:id="facets">
-                            <!--
-                            <span wicket:id="query" class="query-item">
+                            <span wicket:id="facet" class="query-item">
                                 <span class="query-item-label" wicket:id="label">test</span>
-                                <a wicket:id="remove" class="close" aria-label="Remove"><span aria-hidden="true">&times;</span></a>
+                                <a wicket:id="remove" class="close" title="Remove from selection"><span aria-hidden="true">&times;</span></a>
                             </span>
-                            -->
+                            
                         </wicket:container>
                     </span>
                 </p>

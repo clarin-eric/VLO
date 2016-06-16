@@ -16,14 +16,22 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import static eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel.ITEMS_PER_PAGE_OPTIONS;
+import eu.clarin.cmdi.vlo.wicket.provider.FacetSelectionProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -35,11 +43,15 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.navigation.paging.IPageableItems;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.AbstractPageableView;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.convert.ConversionException;
+import org.apache.wicket.util.convert.IConverter;
 
 /**
  *
@@ -99,27 +111,10 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
     }
 
     private Component createQuerySelectionItems(String id) {
-        final Component query = new WebMarkupContainer("query")
-                .add(new Label("label", new PropertyModel<String>(getModel(), "query")))
-                .add(new AjaxFallbackLink<QueryFacetsSelection>("remove", getModel()) {
+        final Component query = createQueryItem("query");
+        final Component facets = createFacetItems("facets");
 
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        // get a copy of the current selection
-                        final QueryFacetsSelection newSelection = getModelObject().getCopy();
-                        newSelection.setQuery(null);
-                        onSelectionChanged(newSelection, target);
-                    }
-                });
-
-        final Component facets = new WebMarkupContainer("facets");
-
-        return new WebMarkupContainer(id) {
-            {
-                add(query);
-                add(facets);
-            }
-
+        final WebMarkupContainer container = new WebMarkupContainer(id) {
             @Override
             protected void onConfigure() {
                 final String queryString = getModelObject().getQuery();
@@ -132,6 +127,69 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                 facets.setVisible(hasSelection);
             }
         };
+
+        return container
+                .add(query)
+                .add(facets);
+    }
+
+    private Component createQueryItem(String id) {
+        final Component query = new WebMarkupContainer(id)
+                .add(new Label("label", new PropertyModel<String>(getModel(), "query")))
+                .add(new AjaxFallbackLink<QueryFacetsSelection>("remove", getModel()) {
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        // get a copy of the current selection
+                        final QueryFacetsSelection newSelection = getModelObject().getCopy();
+                        newSelection.setQuery(null);
+                        onSelectionChanged(newSelection, target);
+                    }
+                });
+        return query;
+    }
+
+    private Component createFacetItems(String id) {
+        final WebMarkupContainer facets = new WebMarkupContainer(id);
+        // create a provider that lists the facet name -> values entries
+        final FacetSelectionProvider facetSelectionProvider = new FacetSelectionProvider(getModel());
+        facets.add(new DataView<Map.Entry<String, FacetSelection>>("facet", facetSelectionProvider) {
+
+            @Override
+            protected void populateItem(final Item<Map.Entry<String, FacetSelection>> item) {
+                final IModel<Map.Entry<String, FacetSelection>> selectionModel = item.getModel();
+                // add a label for the selected facet value(s)
+                final Label valueLabel = new Label("label", new PropertyModel(selectionModel, "value")) {
+
+                    @Override
+                    public <C> IConverter<C> getConverter(Class<C> type) {
+                        final String facet = item.getModelObject().getKey();
+                        // converter to render the value(s) nicely
+                        return (IConverter<C>) new SelectionConverter(facet, fieldValueConverterProvider.getConverter(facet));
+                    }
+
+                };
+                // add facet name as title attribute so that it becomes available through a tooltip
+                valueLabel.add(new AttributeModifier("title",
+                        new SolrFieldNameModel(new PropertyModel(selectionModel, "key"))));
+                item.add(valueLabel);
+
+                // add a link for removal of the facet value selection
+                item.add(new AjaxFallbackLink<QueryFacetsSelection>("remove", getModel()) {
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        // get a copy of the current selection
+                        final QueryFacetsSelection newSelection = getModelObject().getCopy();
+                        final String facet = selectionModel.getObject().getKey();
+                        // unselect this facet
+                        newSelection.selectValues(facet, null);
+                        onSelectionChanged(newSelection, target);
+                    }
+                });
+            }
+        });
+        return facets;
     }
 
     private Form createResultPageSizeForm(String id, final IPageableItems resultsView) {
@@ -163,7 +221,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
     protected void onChange(AjaxRequestTarget target) {
         //noop - may be overridden
     }
-    
+
     /*
      * Gets called if one of the links is clicked and the selection is changed.
      * This implementation sets the response page to {@link FacetedSearchPage}
@@ -176,92 +234,6 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(selection));
     }
 
-    /* from breadcrumb panel */
- /*
-    
-    
-
-    private WebMarkupContainer createQuery(final IModel<QueryFacetsSelection> selectionModel, String id) {
-        final WebMarkupContainer queryContainer = new WebMarkupContainer(id);
-        final Link link = new AjaxFallbackLink("leavequery") {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                // make query object without selection
-                final QueryFacetsSelection newSelection = new QueryFacetsSelection(selectionModel.getObject().getQuery(), null);
-                onSelectionChanged(newSelection, target);
-            }
-        };
-        link.add(new Label("content", new PropertyModel(selectionModel, "query")));
-        queryContainer.add(link);
-
-        queryContainer.add(new AjaxFallbackLink("removal") {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                // get a copy of the current selection
-                final QueryFacetsSelection newSelection = selectionModel.getObject().getCopy();
-                newSelection.setQuery(null);
-                onSelectionChanged(newSelection, target);
-            }
-        });
-        return queryContainer;
-    }
-    
-
-    private WebMarkupContainer createFacets(final IModel<QueryFacetsSelection> model, String id) {
-        final WebMarkupContainer facetsContainer = new WebMarkupContainer(id);
-        facetsContainer.add(new AjaxFallbackLink("leaveselection") {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                onSelectionChanged(model.getObject(), target);
-            }
-        });
-
-        // create a provider that lists the facet name -> values entries
-        final FacetSelectionProvider facetSelectionProvider = new FacetSelectionProvider(model);
-        facetsContainer.add(new DataView<Map.Entry<String, FacetSelection>>("facet", facetSelectionProvider) {
-
-            @Override
-            protected void populateItem(final Item<Map.Entry<String, FacetSelection>> item) {
-                final IModel<Map.Entry<String, FacetSelection>> selectionModel = item.getModel();
-                // add a label for the selected facet value(s)
-                final Label valueLabel = new Label("value", new PropertyModel(selectionModel, "value")) {
-
-                    @Override
-                    public <C> IConverter<C> getConverter(Class<C> type) {
-                        final String facet = item.getModelObject().getKey();
-                        // converter to render the value(s) nicely
-                        return (IConverter<C>) new SelectionConverter(facet, fieldValueConverterProvider.getConverter(facet));
-                    }
-
-                };
-                // add facet name as title attribute so that it becomes available through a tooltip
-                valueLabel.add(new AttributeModifier("title",
-                        new SolrFieldNameModel(new PropertyModel(selectionModel, "key"))));
-                item.add(valueLabel);
-
-                // add a link for removal of the facet value selection
-                item.add(new AjaxFallbackLink("removal") {
-
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        // get a copy of the current selection
-                        final QueryFacetsSelection newSelection = model.getObject().getCopy();
-                        final String facet = selectionModel.getObject().getKey();
-                        // unselect this facet
-                        newSelection.selectValues(facet, null);
-                        onSelectionChanged(newSelection, target);
-                    }
-                });
-            }
-        });
-
-        return facetsContainer;
-    }
-    
-    
     // Converter for string collections, rendering depends on items in
     // collection (if singleton, show its value; if multiple, comma separated)
     private class SelectionConverter implements IConverter<FacetSelection> {
@@ -343,9 +315,4 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         }
 
     };
-    
-    
-
-    
-     */
 }
