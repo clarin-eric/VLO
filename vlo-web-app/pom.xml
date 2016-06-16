@@ -282,7 +282,7 @@
                 <configuration>
                     <dotGitDirectory>${project.parent.basedir}/.git</dotGitDirectory>
                     <prefix>git</prefix>
-                    <dateFormat>yyyy-dd-MM HH:mm:ss z</dateFormat>
+                    <dateFormat>yyyy-MM-dd HH:mm:ss z</dateFormat>
 
                     <verbose>false</verbose>
                     <skip>false</skip>
