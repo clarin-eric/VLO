@@ -125,6 +125,37 @@ public class TopLinksPanel extends Panel {
         });
     }
 
+    private void showLinkModal(AjaxRequestTarget target) {
+        if (target == null) {
+            inlineBookmarkLinkPanelVisibilityModel.setObject(Boolean.TRUE);
+        } else {
+            target.appendJavaScript("onModalShown();");
+            linkModal.show(target);
+        }
+    }
+
+    protected void onChange(AjaxRequestTarget target) {
+        if (target != null) {
+            target.add(getPage());
+        }
+    }
+
+    @Override
+    protected void onConfigure() {
+        LoggerFactory.getLogger(getClass()).debug("top links panel onconfigure");
+    }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        if (linkModel != null) {
+            linkModel.detach();
+        }
+        if (pageTitleModel != null) {
+            pageTitleModel.detach();
+        }
+    }
+
     private List<DropdownMenuItem> getShareMenuOptions() {
         return Lists
                 .newArrayList(new DropdownMenuItem("Bookmark this", "fa fa-bookmark fw") { //Bookmark
@@ -171,99 +202,69 @@ public class TopLinksPanel extends Panel {
                             }
                         };
                     }
-                }, new DropdownMenuItem("Share this on Twitter", "fa fa-twitter-square fw") { //Twitter
-                    @Override
-                    protected Link getLink(String id) {
-                        return (Link) new Link(id) {
-                            @Override
-                            public void onClick() {
-                                final String url
-                                        = String.format("https://twitter.com/home?status=%s",
-                                                encodeParam(String.format("%s %s",
-                                                        pageTitleModel.getObject(),
-                                                        linkModel.getObject())));
-                                throw new RedirectToUrlException(url);
-                            }
-                        }.add(new AttributeAppender("target", "_blank"));
-                    }
-                }, new DropdownMenuItem("Share this on Facebook", "fa fa-facebook-square fw") { // Facebook
-                    @Override
-                    protected Link getLink(String id) {
-                        return (Link) new Link(id) {
-                            @Override
-                            public void onClick() {
-                                final String url
-                                        = String.format("http://www.facebook.com/sharer/sharer.php?u=%s",
-                                                encodeParam(linkModel.getObject()));
-                                throw new RedirectToUrlException(url);
-                            }
-                        }.add(new AttributeAppender("target", "_blank"));
-                    }
-                }, new DropdownMenuItem("Share this on Google+", "fa fa-google-plus-square fw") { // Google+
-                    @Override
-                    protected Link getLink(String id) {
-                        return (Link) new Link(id) {
-                            @Override
-                            public void onClick() {
-                                final String url
-                                        = String.format("https://plus.google.com/share?url=%s",
-                                                encodeParam(linkModel.getObject()));
-                                throw new RedirectToUrlException(url);
-                            }
-                        }.add(new AttributeAppender("target", "_blank"));
-                    }
-                }, new DropdownMenuItem("Share this on LinkedIn", "fa fa-linkedin-square fw") { // LinkedIn
-                    @Override
-                    protected Link getLink(String id) {
-                        return (Link) new Link(id) {
-                            @Override
-                            public void onClick() {
-                                final String url
-                                        = String.format("https://www.linkedin.com/shareArticle?url=%s&title=%s",
-                                                encodeParam(linkModel.getObject()),
-                                                encodeParam(pageTitleModel.getObject()));
-                                throw new RedirectToUrlException(url);
-                            }
-                        }.add(new AttributeAppender("target", "_blank"));
-                    }
                 }
+//              , new DropdownMenuItem("Share this on Twitter", "fa fa-twitter-square fw") { //Twitter
+//                    @Override
+//                    protected Link getLink(String id) {
+//                        return (Link) new Link(id) {
+//                            @Override
+//                            public void onClick() {
+//                                final String url
+//                                        = String.format("https://twitter.com/home?status=%s",
+//                                                encodeParam(String.format("%s %s",
+//                                                        pageTitleModel.getObject(),
+//                                                        linkModel.getObject())));
+//                                throw new RedirectToUrlException(url);
+//                            }
+//                        }.add(new AttributeAppender("target", "_blank"));
+//                    }
+//                }, new DropdownMenuItem("Share this on Facebook", "fa fa-facebook-square fw") { // Facebook
+//                    @Override
+//                    protected Link getLink(String id) {
+//                        return (Link) new Link(id) {
+//                            @Override
+//                            public void onClick() {
+//                                final String url
+//                                        = String.format("http://www.facebook.com/sharer/sharer.php?u=%s",
+//                                                encodeParam(linkModel.getObject()));
+//                                throw new RedirectToUrlException(url);
+//                            }
+//                        }.add(new AttributeAppender("target", "_blank"));
+//                    }
+//                }, new DropdownMenuItem("Share this on Google+", "fa fa-google-plus-square fw") { // Google+
+//                    @Override
+//                    protected Link getLink(String id) {
+//                        return (Link) new Link(id) {
+//                            @Override
+//                            public void onClick() {
+//                                final String url
+//                                        = String.format("https://plus.google.com/share?url=%s",
+//                                                encodeParam(linkModel.getObject()));
+//                                throw new RedirectToUrlException(url);
+//                            }
+//                        }.add(new AttributeAppender("target", "_blank"));
+//                    }
+//                }, new DropdownMenuItem("Share this on LinkedIn", "fa fa-linkedin-square fw") { // LinkedIn
+//                    @Override
+//                    protected Link getLink(String id) {
+//                        return (Link) new Link(id) {
+//                            @Override
+//                            public void onClick() {
+//                                final String url
+//                                        = String.format("https://www.linkedin.com/shareArticle?url=%s&title=%s",
+//                                                encodeParam(linkModel.getObject()),
+//                                                encodeParam(pageTitleModel.getObject()));
+//                                throw new RedirectToUrlException(url);
+//                            }
+//                        }.add(new AttributeAppender("target", "_blank"));
+//                    }
+//                }
                 );
     }
 
-    private void showLinkModal(AjaxRequestTarget target) {
-        if (target == null) {
-            inlineBookmarkLinkPanelVisibilityModel.setObject(Boolean.TRUE);
-        } else {
-            target.appendJavaScript("onModalShown();");
-            linkModal.show(target);
-        }
-    }
-
-    protected void onChange(AjaxRequestTarget target) {
-        if (target != null) {
-            target.add(getPage());
-        }
-    }
-
-    @Override
-    protected void onConfigure() {
-        LoggerFactory.getLogger(getClass()).debug("top links panel onconfigure");
-    }
-
-    @Override
-    public void detachModels() {
-        super.detachModels();
-        if (linkModel != null) {
-            linkModel.detach();
-        }
-        if (pageTitleModel != null) {
-            pageTitleModel.detach();
-        }
-    }
-
-    private static String encodeParam(String param) {
-        return UrlEncoder.QUERY_INSTANCE.encode(param, "UTF-8");
-    }
+//    private static String encodeParam(String param) {
+//        return UrlEncoder.QUERY_INSTANCE.encode(param, "UTF-8");
+//    }
 
     private static String encodePath(String param) {
         return UrlEncoder.PATH_INSTANCE.encode(param, "UTF-8");
