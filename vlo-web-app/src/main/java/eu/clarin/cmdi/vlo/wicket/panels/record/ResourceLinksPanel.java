@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
+import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
 import eu.clarin.cmdi.vlo.FacetConstants;
@@ -32,6 +33,8 @@ import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
+import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -57,6 +60,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -216,28 +220,38 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         }
 
         protected Component createOptionsDropdown(final ResourceInfoModel resourceInfoModel) {
-            //TODO: use new BootstrapDropdown class instead
-            final MarkupContainer dropDown = new WebMarkupContainer("dropdown");
-
-            //MENU OPTIONS
-            //Language Resource switchboard option 
-            dropDown.add(new ExternalLink("lrs", Model.of(getLanguageSwitchboardUrl(resourceInfoModel.getObject()))));
-
-            //TOGGLE STATE
-            //Make the Bootstrap dropdown menu work without javascript with the help of a toggle state....
-            
-            final IModel<Boolean> dropDownModel = Model.of(false);
-            //Toggle link - if javascript is enabled, this behaviour will be overridden by Bootstrap
-            return dropDown
-                    .add(new Link("dropdown-toggle") {
+            final ArrayList options = Lists.newArrayList(
+                    new BootstrapDropdown.DropdownMenuItem("Process with Language Resource Switchboard", "glyphicon glyphicon-open-file") {
+                @Override
+                protected Link getLink(String id) {
+                    return new Link(id) {
                         @Override
                         public void onClick() {
-                            //toggle state
-                            dropDownModel.setObject(!dropDownModel.getObject());
+                            throw new RedirectToUrlException(getLanguageSwitchboardUrl(resourceInfoModel.getObject()));
                         }
-                    })
-                    //set 'open' class if open (bootstrap)
-                    .add(new AttributeAppender("class", new BooleanOptionsModel(dropDownModel, Model.of("open"), Model.of("")), " "));
+
+                    };
+                }
+            }
+            );
+
+            return new BootstrapDropdown("dropdown", new ListModel(options)) {
+                @Override
+                protected Serializable getButtonClass() {
+                    return null; //render as link, not button
+                }
+
+                @Override
+                protected Serializable getButtonIconClass() {
+                    return "glyphicon glyphicon-option-horizontal";
+                }
+
+                @Override
+                protected boolean showCaret() {
+                    return false;
+                }
+
+            };
         }
 
         private String getLanguageSwitchboardUrl(ResourceInfo resourceInfo) {

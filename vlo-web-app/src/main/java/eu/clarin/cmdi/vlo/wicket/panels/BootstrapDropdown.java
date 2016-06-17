@@ -28,6 +28,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -56,25 +57,47 @@ public class BootstrapDropdown extends GenericPanel<List<BootstrapDropdown.Dropd
     }
 
     protected Component createDropDownLink(String id) {
+        //link that activates dropdown
         final Link<Boolean> link = new Link<Boolean>(id, openStateModel) {
             @Override
             public void onClick() {
                 getModel().setObject(!getModelObject());
             }
         };
+        final Serializable buttonClass = getButtonClass();
+        if (buttonClass != null) {
+            link.add(new AttributeAppender("class", buttonClass, " "));
+        }
 
-        //icon with optional icon
+        //optional icon
         final WebMarkupContainer icon = new WebMarkupContainer("buttonIcon");
         final Serializable iconClass = getButtonIconClass();
         if (iconClass != null) {
             icon.add(new AttributeModifier("class", iconClass));
         }
         link.add(icon);
+
+        //caret
+        final WebMarkupContainer caret = new WebMarkupContainer("caret");
+        caret.setVisible(showCaret());
+        link.add(caret);
         return link;
+    }
+
+    /**
+     *
+     * @return "btn btn-default" in default implementation
+     */
+    protected Serializable getButtonClass() {
+        return "btn btn-default";
     }
 
     protected Serializable getButtonIconClass() {
         return null;
+    }
+
+    protected boolean showCaret() {
+        return true;
     }
 
     protected Component createMenu(String id) {
