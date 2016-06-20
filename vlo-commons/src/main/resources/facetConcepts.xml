@@ -3,13 +3,13 @@
 	<facetConcept name="id" allowMultipleValues="false">
 		<concept>http://www.isocat.org/datcat/DC-2573</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2573_ae7c2548-8a86-ab6e-7099-e28b7697d1a2</concept>
-		<pattern>/c:CMD/c:Header/c:MdSelfLink/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Header/cmd:MdSelfLink/text()</pattern>
 	</facetConcept>
 	<facetConcept name="_selfLink" allowMultipleValues="false">
-		<pattern>/c:CMD/c:Header/c:MdSelfLink/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Header/cmd:MdSelfLink/text()</pattern>
 	</facetConcept>
 	<facetConcept name="collection" description="The collection to which the resource or tool belongs" definition="The collection to which a resource or tool belongs. A resource or tool can only belong to one collection. A collection is based on a specific (legacy) archive or a certain type of resource within such an archive or centre. The members of a collection share basic metadata vocabularies for the information displayed in the VLO.">
-		<pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Header/cmd:MdCollectionDisplayName/text()</pattern>
 	</facetConcept>
 	<facetConcept name="projectName" description="The project within which the resource or tool was created" definition="The name of the project(s) originally involved in the creation of the resource or tool, also if these projects no longer exist or are not the ones to be contacted regarding the resource/tool, which is often the case.">
 		<concept>http://www.isocat.org/datcat/DC-2536</concept>
@@ -20,11 +20,11 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-5414_55fd7a9e-edae-d8ad-a64f-c8e1058e7a6d</concept>
 
 
-		<pattern>/c:CMD/c:Components/c:teiHeader/c:fileDesc/c:publicationStmt/c:publisher/c:orgName/c:orgName[@role="project"]/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:publicationStmt/cmdp:publisher/cmdp:orgName/cmdp:orgName[@role="project"]/text()</pattern>
 		<!-- BBAW teiHeader -->
-		<pattern>/c:CMD/c:Components/c:media-session-profile/c:media-session/c:Corpus</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:media-session-profile/cmdp:media-session/cmdp:Corpus</pattern>
 		<!--  BAS media-session-profile-->
-		<pattern>/c:CMD/c:Components/c:media-corpus-profile/c:Collection/c:GeneralInfo/c:Title/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:media-corpus-profile/cmdp:Collection/cmdp:GeneralInfo/cmdp:Title/text()</pattern>
 		<!-- BAS media-corpus-profile -->
 	</facetConcept>
 	<facetConcept name="name" allowMultipleValues="false" description="The name of the resource or tool" definition="The full public name of the resource or tool.">
@@ -47,24 +47,24 @@
 		<concept>http://purl.org/dc/elements/1.1/title</concept>
 		<concept>http://www.isocat.org/datcat/DC-6119</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6119_ea4226b5-8d55-e71e-730f-2a02e3adbeb4</concept>
-		<pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceName/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:ResourceName/text()</pattern>
 		<!-- no concept in lrt schema -->
-		<pattern>/c:CMD/c:Components/c:mods/c:titleInfo/title/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:mods/cmdp:titleInfo/title/text()</pattern>
 
 
-		<pattern>/c:CMD/c:Components/c:teiHeader/c:fileDesc/c:sourceDesc/c:bibl/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:sourceDesc/cmdp:bibl/text()</pattern>
 		<!-- BBAW teiHeader -->
-		<pattern>/c:CMD/c:Components/c:IDSAGD_Event/c:Label/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Event/cmdp:Label/text()</pattern>
 		<!-- IDS IDSAGD_Event -->
-		<pattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:Label/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Speaker/cmdp:Label/text()</pattern>
 		<!-- IDS IDSAGD_Speaker -->
-		<pattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Publications/c:Publication</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:Publications/cmdp:Publication</pattern>
 		<!--  IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Publications/c:Publication</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:ToolProfile/cmdp:Publications/cmdp:Publication</blacklistPattern>
 		<!-- IMS ToolProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Publications/c:Publication/c:PublicationTitle/</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:LexicalResourceProfile/cmdp:Publications/cmdp:Publication/cmdp:PublicationTitle/</blacklistPattern>
 		<!-- IMS c:LexicalResourceProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Publications/c:Publication/c:PublicationTitle/</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:Publications/cmdp:Publication/cmdp:PublicationTitle/</blacklistPattern>
 		<!-- IMS c:MultimodalCorpus -->
 	</facetConcept>
         	<!-- test facets -->
@@ -87,22 +87,22 @@
 		<concept>http://www.isocat.org/datcat/DC-3655</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-3655_bc4c2656-2946-0be9-49f0-021a811e531b</concept>
 		<!-- End range. Described as “The end of a range.” used in the component TimeCoverage http://catalog.clarin.eu/ds/ComponentRegistry/?item=clarin.eu:cr1:c_1349361150714 -->
-		<pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:coverage/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:coverage/text()</pattern>
 		<!-- dc:coverage, also contains spatial coverage info -->
 
-		<pattern>/c:CMD/Components/c:teiHeader/c:fileDesc/c:sourceDesc/c:biblFull/c:publicationStmt/c:date[@type="publication"]/text()</pattern>
+		<pattern>/cmd:CMD/Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:sourceDesc/cmdp:biblFull/cmdp:publicationStmt/cmdp:date[@type="publication"]/text()</pattern>
 		<!-- BBAW teiHeader -->
-		<pattern>/c:CMD/c:Components/c:teiHeader/c:fileDesc/c:publicationStmt/c:date[@type="publication"]/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:publicationStmt/cmdp:date[@type="publication"]/text()</pattern>
 		<!-- BBAW teiHeader -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Project/c:Duration</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:Project/cmdp:Duration</blacklistPattern>
 		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Project/c:Duration</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:ToolProfile/cmdp:Project/cmdp:Duration</blacklistPattern>
 		<!-- IMS ToolProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Project/c:Duration/c:CompletionYear</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:LexicalResourceProfile/cmdp:Project/cmdp:Duration/cmdp:CompletionYear</blacklistPattern>
 		<!-- IMS c:LexicalResourceProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Project/c:Duration/c:CompletionYear</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:Project/cmdp:Duration/cmdp:CompletionYear</blacklistPattern>
 		<!-- c:MultimodalCorpus -->
-		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Publications/c:Publication/c:PublicationDate</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:Publications/cmdp:Publication/cmdp:PublicationDate</blacklistPattern>
 		<!-- c:MultimodalCorpus -->
 	</facetConcept>
 	<facetConcept name="continent" description="The continent of origin of the source material of the resource" definition="The continent of origin of the source material of the resource, i.e. not the continent in which the resource was created, but where e.g. original texts were written or speech recordings made.">
@@ -112,17 +112,17 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-3791_8f409aa8-2d57-5fc6-23f0-f490471807d8</concept>
 
 
-		<blacklistPattern>/c:HZSKCorpus/c:Collection/c:OriginLocation/c:Location/c:Continent</blacklistPattern>
+		<blacklistPattern>/cmdp:HZSKCorpus/cmdp:Collection/cmdp:OriginLocation/cmdp:Location/cmdp:Continent</blacklistPattern>
 		<!-- HZSK -->
-		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:PersonalBackground/c:BirthPlace/c:Location/c:Continent</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Speaker/cmdp:PersonalBackground/cmdp:BirthPlace/cmdp:Location/cmdp:Continent</blacklistPattern>
 		<!-- IDSAGD_Speaker -->
-		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:PersonalBackground/c:Residence/c:Location/c:Continent</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Speaker/cmdp:PersonalBackground/cmdp:Residence/cmdp:Location/cmdp:Continent</blacklistPattern>
 		<!-- IDSAGD_Speaker -->
-		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:ProfessionalBackground/c:Education/c:Place/c:Location/c:Continent</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Speaker/cmdp:ProfessionalBackground/cmdp:Education/cmdp:Place/cmdp:Location/cmdp:Continent</blacklistPattern>
 		<!-- IDSAGD_Speaker -->
-		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:ProfessionalBackground/c:Employment/c:Place/c:Location/c:Continent</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Speaker/cmdp:ProfessionalBackground/cmdp:Employment/cmdp:Place/cmdp:Location/cmdp:Continent</blacklistPattern>
 		<!-- IDSAGD_Speaker -->
-		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground/c:Competence/c:LanguageVariety/c:LanguageVarietyPlace/c:Location/c:Continent</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Speaker/cmdp:LinguisticBackground/cmdp:Competence/cmdp:LanguageVariety/cmdp:LanguageVarietyPlace/cmdp:Location/cmdp:Continent</blacklistPattern>
 		<!-- IDSAGD_Speaker -->
 	</facetConcept>
 	<facetConcept name="country" description="The country of origin of the source material of the resource" definition="The country of origin of the source material of the resource, i.e. not the country in which the resource was created, but where e.g. original texts were written or speech recordings made.">
@@ -130,27 +130,27 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-2532_d004b0a6-fd1d-3ca3-abf1-1e6aeb3e37b2</concept>
 		<concept>http://www.isocat.org/datcat/DC-3792</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-3792_68c770a4-d58c-46dd-d429-5609ce5f81c3</concept>
-		<pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:spatial[@dcterms-type="ISO3166"]/text()</pattern>
-		<pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:coverage[@dcterms-type="ISO3166"]/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:spatial[@dcterms-type="ISO3166"]/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:coverage[@dcterms-type="ISO3166"]/text()</pattern>
 
 		<concept>http://www.isocat.org/datcat/DC-2092</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2092_36cd7ca8-e412-9f29-7ea7-4a3ba4ba2c91</concept>
 		<!-- add? -->
 
 
-		<blacklistPattern>/c:HZSKCorpus/c:Collection/c:OriginLocation/c:Location/c:Country</blacklistPattern>
+		<blacklistPattern>/cmdp:HZSKCorpus/cmdp:Collection/cmdp:OriginLocation/cmdp:Location/cmdp:Country</blacklistPattern>
 		<!-- HZSK -->
-		<blacklistPattern>/c:Location/c:Country/c:CountryName</blacklistPattern>
+		<blacklistPattern>/cmdp:Location/cmdp:Country/cmdp:CountryName</blacklistPattern>
 		<!-- IMS ToolProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:PersonalBackground/c:BirthPlace/c:Location/c:Country</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Speaker/cmdp:PersonalBackground/cmdp:BirthPlace/cmdp:Location/cmdp:Country</blacklistPattern>
 		<!-- IDSAGD_Speaker -->
-		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:PersonalBackground/c:Residence/c:Location/c:Country</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Speaker/cmdp:PersonalBackground/cmdp:Residence/cmdp:Location/cmdp:Country</blacklistPattern>
 		<!-- IDSAGD_Speaker -->
-		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:ProfessionalBackground/c:Education/c:Place/c:Location/c:Country</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Speaker/cmdp:ProfessionalBackground/cmdp:Education/cmdp:Place/cmdp:Location/cmdp:Country</blacklistPattern>
 		<!-- IDSAGD_Speaker -->
-		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:ProfessionalBackground/c:Employment/c:Place/c:Location/c:Country</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Speaker/cmdp:ProfessionalBackground/cmdp:Employment/cmdp:Place/cmdp:Location/cmdp:Country</blacklistPattern>
 		<!-- IDSAGD_Speaker -->
-		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground/c:Competence/c:LanguageVariety/c:LanguageVarietyPlace/c:Location/c:Country</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Speaker/cmdp:LinguisticBackground/cmdp:Competence/cmdp:LanguageVariety/cmdp:LanguageVarietyPlace/cmdp:Location/cmdp:Country</blacklistPattern>
 		<!-- IDSAGD_Speaker -->
 	</facetConcept>
 	<facetConcept name="languageCode" description="The object language relevant for the resource or tool" definition="The object language relevant for the resource or tool, i.e. the language of the source material of a resource, the object language of a language description, or the language supported by a linguistic tool. If a tool is language independent, please use the ISO 639-3 'und' for 'undefined'.">
@@ -176,41 +176,41 @@
                 </rejectableContext>
 		
                 
-		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms/c:subject/@olac-language</pattern>
-		<pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:Languages/c:ISO639/c:iso-639-3-code/text()</pattern>
-		<pattern>/c:CMD/c:Components/c:mods/c:language/c:languageTerm/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components//cmdp:OLAC-DcmiTerms/cmdp:subject/@olac-language</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:Languages/cmdp:ISO639/cmdp:iso-639-3-code/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:mods/cmdp:language/cmdp:languageTerm/text()</pattern>
 
 
 		<!--  <concept>http://www.isocat.org/datcat/DC-2468</concept>
 		      <concept>http://hdl.handle.net/11459/CCR_C-2468_e4135e12-c272-171e-a8a2-48339228387b</concept> -->
 		<!-- BAS REMOVED because of component SubjectLanguages -->
 
-		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms-ref/c:language/@olac-language</pattern>
+		<pattern>/cmd:CMD/cmd:Components//cmdp:OLAC-DcmiTerms-ref/cmdp:language/@olac-language</pattern>
 		<!-- IDS OLAC-DcmiTerms-ref -->
-		<pattern>/c:CMD/c:Components//c:OLAC-DcmiTerms-ref-DWR/c:language/@olac-language</pattern>
+		<pattern>/cmd:CMD/cmd:Components//cmdp:OLAC-DcmiTerms-ref-DWR/cmdp:language/@olac-language</pattern>
 		<!-- IDS OLAC-DcmiTerms-ref-DWR -->
-		<!-- <pattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Operations/c:Operation/c:Input/c:ParameterGroup/c:Parameters/c:Parameter/c:Values/c:ParameterValue/c:Value/text()</pattern>-->
+		<!-- <pattern>/cmd:CMD/cmd:Components/cmdp:WebLichtWebService/cmdp:Service/cmdp:Operations/cmdp:Operation/cmdp:Input/cmdp:ParameterGroup/cmdp:Parameters/cmdp:Parameter/cmdp:Values/cmdp:ParameterValue/cmdp:Value/text()</pattern>-->
 		<!--  WeblichtWebservices, breaks Tübingen Resources (oai_sfs_uni_tuebingen_de_FID_15.xml)-->
-		<blacklistPattern>/c:Actor_Languages/c:Actor_Language/</blacklistPattern>
+		<blacklistPattern>/cmdp:Actor_Languages/cmdp:Actor_Language/</blacklistPattern>
 		<!-- MPI (JK), BAS - fixed by context blacklist -->
-		<!--<blacklistPattern>/c:ActorLanguage/c:Language/c:ISO639/c:iso-639-3-code</blacklistPattern>-->
-		<blacklistPattern>/c:LanguageName</blacklistPattern>
+		<!--<blacklistPattern>/cmdp:ActorLanguage/cmdp:Language/cmdp:ISO639/cmdp:iso-639-3-code</blacklistPattern>-->
+		<blacklistPattern>/cmdp:LanguageName</blacklistPattern>
 		<!-- general - fixed by context blacklist-->
-		<!--<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground</blacklistPattern>-->
+		<!--<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Speaker/cmdp:LinguisticBackground</blacklistPattern>-->
 		<!-- IDS IDSAGD_Speaker -->
-		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Collection/c:DocumentationLanguages</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Corpus/cmdp:Collection/cmdp:DocumentationLanguages</blacklistPattern>
 		<!-- IDS IDSAGD_Corpus -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Documentations</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:Documentations</blacklistPattern>
 		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:DocumentationLanguages</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:DocumentationLanguages</blacklistPattern>
 		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Documentations</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:ToolProfile/cmdp:Documentations</blacklistPattern>
 		<!-- IMS ToolProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:ToolContext/c:DocumentationLanguages</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:ToolProfile/cmdp:ToolContext/cmdp:DocumentationLanguages</blacklistPattern>
 		<!-- IMS ToolProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:DocumentationLanguages</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:LexicalResourceProfile/cmdp:DocumentationLanguages</blacklistPattern>
 		<!-- IMS c:LexicalResourceProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:DocumentationLanguages</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:DocumentationLanguages</blacklistPattern>
 		<!-- IMS c:MultimodalCorpus -->
                 <derivedFacet>_languageName</derivedFacet>
 	</facetConcept>
@@ -291,13 +291,13 @@
 		<!-- distribution rights holder -->
 
 
-		<pattern>/c:CMD/Components/c:WebLichtWebService/c:Service/c:Contact/c:Organisation/text()</pattern>
+		<pattern>/cmd:CMD/Components/cmdp:WebLichtWebService/cmdp:Service/cmdp:Contact/cmdp:Organisation/text()</pattern>
 		<!--  IDS WebLichtWebService -->
-		<pattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Creation/c:Source/c:MediaFiles/c:MediaFile/c:Access/c:Contact/c:Organisation/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:WebLichtWebService/cmdp:Service/cmdp:Creation/cmdp:Source/cmdp:MediaFiles/cmdp:MediaFile/cmdp:Access/cmdp:Contact/cmdp:Organisation/text()</pattern>
 		<!--  IDS WebLichtWebService -->
-		<pattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Creation/c:Source/c:Derivation/c:Organisation/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:WebLichtWebService/cmdp:Service/cmdp:Creation/cmdp:Source/cmdp:Derivation/cmdp:Organisation/text()</pattern>
 		<!--  IDS WebLichtWebService -->
-		<blacklistPattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Creation/c:Creators/c:Creator</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:WebLichtWebService/cmdp:Service/cmdp:Creation/cmdp:Creators/cmdp:Creator</blacklistPattern>
 		<!--  IDS WebLichtWebService -->
 	</facetConcept>
 	<facetConcept name="genre" isCaseInsensitive="true" allowMultipleValues="true" description="The genre of the content of the resource" definition="The conventionalized discourse or text type of the content of the resource, consistently applied within the collection.">
@@ -305,14 +305,14 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-2470_d191f2b2-6339-f031-b534-70d526b28357</concept>
 		<concept>http://www.isocat.org/datcat/DC-3899</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-3899_c6c608e7-cb2e-1832-09ff-aee36e1f2ed4</concept>
-		<pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/@olac-linguistic-type</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:type/@olac-linguistic-type</pattern>
 		<!-- Find concept and add attribute somehow -->
-		<pattern>/c:CMD/c:Components/c:mods/c:genre/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:mods/cmdp:genre/text()</pattern>
 
 
-		<pattern>/c:CMD/c:Components/c:media-corpus-profile/c:Corpus/c:Topic/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:media-corpus-profile/cmdp:Corpus/cmdp:Topic/text()</pattern>
 		<!--  BAS media-corpus-profile -->
-		<pattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Keyword/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Corpus/cmdp:Keyword/text()</pattern>
 		<!-- IDS IDSAGD_Corpus -->
 	</facetConcept>
 	<facetConcept name="modality" isCaseInsensitive="true" allowMultipleValues="true" description="The modality of the content of the resource or intended for the tool" definition="The channel by which the signs in the content of the resource were transmitted or the modality for which a tool is intended, e.g. to regonize speech, gestures or entities of a text.">
@@ -330,22 +330,22 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-5316_2c6244b4-4f10-5e8e-49b6-26fbf7004791</concept>
 		<concept>http://www.isocat.org/datcat/DC-6543</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6543_92dacb75-3098-0d5a-0665-94ddb6274f8c</concept>
-		<pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject/@olac-linguistic-field</pattern>
-		<pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:subject[@dcterms-type="LCSH"]/text()</pattern>
-		<pattern>/c:CMD/c:Components/c:mods/c:subject/c:Topic/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:subject/@olac-linguistic-field</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:subject[@dcterms-type="LCSH"]/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:mods/cmdp:subject/cmdp:Topic/text()</pattern>
 
 
-		<pattern>/c:CMD/c:Components/c:media-session-profile/c:media-session/c:Content/c:Topic/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:media-session-profile/cmdp:media-session/cmdp:Content/cmdp:Topic/text()</pattern>
 		<!--  BAS -->
-		<pattern>/c:CMD/c:Components/c:media-session-profile/c:media-session/c:Content/c:Task/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:media-session-profile/cmdp:media-session/cmdp:Content/cmdp:Task/text()</pattern>
 		<!--  BAS -->
-		<pattern>/c:CMD/c:Components/c:media-corpus-profile/c:Corpus/c:Topic/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:media-corpus-profile/cmdp:Corpus/cmdp:Topic/text()</pattern>
 		<!--  BAS media-corpus-profile -->
-		<pattern>/c:CMD/c:Components/c:IDSAGD_Event/c:IDSAGD_SpeechEvent/c:Topic/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Event/cmdp:IDSAGD_SpeechEvent/cmdp:Topic/text()</pattern>
 		<!-- IDS IDSAGD_Event -->
-		<pattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Corpus/c:Modality/c:Modality/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Corpus/cmdp:Corpus/cmdp:Modality/cmdp:Modality/text()</pattern>
 		<!-- IDS IDSAGD_Corpus -->
-		<blacklistPattern>/c:CMD/c:Components/c:teiHeader/c:profileDesc/c:textClass</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:profileDesc/cmdp:textClass</blacklistPattern>
 		<!-- BBAW -->
 	</facetConcept>
 	<facetConcept name="description" description="A general description of the resource or tool" definition="A general description of the resource or tool apropriate for the VLO context, i.e. for a specific language resource or tool.">
@@ -355,109 +355,109 @@
 		<concept>http://purl.org/dc/elements/1.1/description</concept>
 		<concept>http://www.isocat.org/datcat/DC-6124</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6124_2e45fdf9-ced2-89c9-a09d-b4769e9fede6</concept>
-		<pattern>/c:CMD/c:Components/c:mods/c:abstract/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:mods/cmdp:abstract/text()</pattern>
 
 
-		<pattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Collection/c:GeneralInfo/c:Description/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Corpus/cmdp:Collection/cmdp:GeneralInfo/cmdp:Description/text()</pattern>
 		<!-- IDS IDSAGD_Corpus -->
-		<pattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Collection/c:GeneralInfo/c:Description/c:Description/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Corpus/cmdp:Collection/cmdp:GeneralInfo/cmdp:Description/cmdp:Description/text()</pattern>
 		<!-- IDS IDSAGD_Corpus -->
-		<pattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Collection/c:Project/c:Description/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Corpus/cmdp:Collection/cmdp:Project/cmdp:Description/text()</pattern>
 		<!-- IDS IDSAGD_Corpus -->
-		<pattern>/c:CMD/c:Components/c:IDSAGD_Corpus/c:Collection/c:Project/c:Description/c:Description/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Corpus/cmdp:Collection/cmdp:Project/cmdp:Description/cmdp:Description/text()</pattern>
 		<!-- IDS IDSAGD_Corpus -->
 
-		<blacklistPattern>/c:HZSKAssociatedFile/c:Type</blacklistPattern>
+		<blacklistPattern>/cmdp:HZSKAssociatedFile/cmdp:Type</blacklistPattern>
 		<!--  HZSK -->
-		<blacklistPattern>/c:CMD/c:Components/c:IDSAGD_Speaker/c:LinguisticBackground</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Speaker/cmdp:LinguisticBackground</blacklistPattern>
 		<!-- IDS IDSAGD_Speaker -->
-		<blacklistPattern>/c:media-annotation-bundle/</blacklistPattern>
+		<blacklistPattern>/cmdp:media-annotation-bundle/</blacklistPattern>
 		<!-- BAS media-session-profile -->
-		<blacklistPattern>/c:media-corpus-profile/c:Corpus/</blacklistPattern>
+		<blacklistPattern>/cmdp:media-corpus-profile/cmdp:Corpus/</blacklistPattern>
 		<!-- BAS media-corpus-profile -->
-		<blacklistPattern>/c:Components/c:LCC_CorpusProfile/c:LCC_Corpus/c:LCC_DataProviderList</blacklistPattern>
+		<blacklistPattern>/cmd:Components/cmdp:LCC_CorpusProfile/cmdp:LCC_Corpus/cmdp:LCC_DataProviderList</blacklistPattern>
 		<!-- ASV -->
-		<blacklistPattern>/c:Components/c:LCC_DataProviderProfile/c:LCC_DataProvider/c:LCC_DataSourceList</blacklistPattern>
+		<blacklistPattern>/cmd:Components/cmdp:LCC_DataProviderProfile/cmdp:LCC_DataProvider/cmdp:LCC_DataSourceList</blacklistPattern>
 		<!-- ASV -->
-		<blacklistPattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Contact/</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:WebLichtWebService/cmdp:Service/cmdp:Contact/</blacklistPattern>
 		<!-- IMS WebLichtWebService -->
-		<blacklistPattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Creation/</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:WebLichtWebService/cmdp:Service/cmdp:Creation/</blacklistPattern>
 		<!-- IMS WebLichtWebService -->
-		<blacklistPattern>/c:CMD/c:Components/c:WebLichtWebService/c:Service/c:Operations</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:WebLichtWebService/cmdp:Service/cmdp:Operations</blacklistPattern>
 		<!-- IMS WebLichtWebService -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Project</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:Project</blacklistPattern>
 		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Publications</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:Publications</blacklistPattern>
 		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Documentations</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:Documentations</blacklistPattern>
 		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:CorpusContext</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:CorpusContext</blacklistPattern>
 		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Creation</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:Creation</blacklistPattern>
 		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Access</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:Access</blacklistPattern>
 		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:SubjectLanguages</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:SubjectLanguages</blacklistPattern>
 		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:DocumentationLanguages</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:DocumentationLanguages</blacklistPattern>
 		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:SizeInfo</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:SizeInfo</blacklistPattern>
 		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:ModalityInfo</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:ModalityInfo</blacklistPattern>
 		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:ValidationGrp</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:ValidationGrp</blacklistPattern>
 		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:TextTechnical</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:TextTechnical</blacklistPattern>
 		<!-- IMS TextCorpusProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Project</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:ToolProfile/cmdp:Project</blacklistPattern>
 		<!-- IMS ToolProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Publications</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:ToolProfile/cmdp:Publications</blacklistPattern>
 		<!-- IMS ToolProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Documentations</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:ToolProfile/cmdp:Documentations</blacklistPattern>
 		<!-- IMS ToolProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Creators</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:ToolProfile/cmdp:Creators</blacklistPattern>
 		<!-- IMS ToolProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Access</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:ToolProfile/cmdp:Access</blacklistPattern>
 		<!-- IMS ToolProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:Copyright</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:ToolProfile/cmdp:Copyright</blacklistPattern>
 		<!-- IMS ToolProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:ResourceContext</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:ToolProfile/cmdp:ResourceContext</blacklistPattern>
 		<!-- IMS ToolProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:ToolProfile/c:ToolContext</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:ToolProfile/cmdp:ToolContext</blacklistPattern>
 		<!-- IMS ToolProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Project</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:LexicalResourceProfile/cmdp:Project</blacklistPattern>
 		<!-- IMS LexicalResourceProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Publications</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:LexicalResourceProfile/cmdp:Publications</blacklistPattern>
 		<!-- IMS LexicalResourceProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Creation</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:LexicalResourceProfile/cmdp:Creation</blacklistPattern>
 		<!-- IMS LexicalResourceProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:DocumentationLanguages</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:LexicalResourceProfile/cmdp:DocumentationLanguages</blacklistPattern>
 		<!-- IMS LexicalResourceProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:Access</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:LexicalResourceProfile/cmdp:Access</blacklistPattern>
 		<!-- IMS LexicalResourceProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:LexiconContext</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:LexicalResourceProfile/cmdp:LexiconContext</blacklistPattern>
 		<!-- IMS LexicalResourceProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:SizeInfo</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:LexicalResourceProfile/cmdp:SizeInfo</blacklistPattern>
 		<!-- IMS LexicalResourceProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:LexicalResourceProfile/c:TextTechnical</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:LexicalResourceProfile/cmdp:TextTechnical</blacklistPattern>
 		<!-- IMS LexicalResourceProfile -->
-		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:GeneralInfo/c:ModalityInfo</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:GeneralInfo/cmdp:ModalityInfo</blacklistPattern>
 		<!-- IMS MultiModalCorpus -->
-		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Access</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:Access</blacklistPattern>
 		<!-- IMS MultiModalCorpus -->
-		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Creation</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:Creation</blacklistPattern>
 		<!-- IMS MultiModalCorpus -->
-		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Project</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:Project</blacklistPattern>
 		<!-- IMS MultiModalCorpus -->
-		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:Publications</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:Publications</blacklistPattern>
 		<!-- IMS MultiModalCorpus -->
-		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:SubjectLanguages</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:SubjectLanguages</blacklistPattern>
 		<!-- IMS MultiModalCorpus -->
-		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:DocumentationLanguages</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:DocumentationLanguages</blacklistPattern>
 		<!-- IMS MultiModalCorpus -->
-		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:MultimodalCorpusSpecific</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:MultimodalCorpusSpecific</blacklistPattern>
 		<!-- IMS MultiModalCorpus -->
-		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:TechnicalInfo</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:TechnicalInfo</blacklistPattern>
 		<!-- IMS MultiModalCorpus -->
 	</facetConcept>
 	<facetConcept name="resourceClass" description="The type of the resource or tool (e.g. corpus, lexicon, grammar, tool...)" definition="The type of the resource or tool (e.g. corpus, lexicon, grammar, tool...).">
@@ -470,12 +470,12 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-5424_3200a38b-344e-41de-e539-f71f80c38df8</concept>
 		<concept>http://www.isocat.org/datcat/DC-3786</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-3786_21c37142-994f-63a8-5a5b-a9fce07681a7</concept>
-		<pattern>/c:CMD/c:Components/c:LrtInventoryResource/c:LrtCommon/c:ResourceType/text()</pattern>
-		<pattern>/c:CMD/c:Components/c:OLAC-DcmiTerms/c:type/text()</pattern>
-		<pattern>/c:CMD/c:Components/c:mods/c:typeOfResource/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:ResourceType/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:type/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:mods/cmdp:typeOfResource/text()</pattern>
 
 
-		<blacklistPattern>/c:CMD/c:Components/c:TextCorpusProfile/c:Creation/c:Source/c:MediaFiles</blacklistPattern>
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:Creation/cmdp:Source/cmdp:MediaFiles</blacklistPattern>
 	</facetConcept>
 	<facetConcept name="format" description="The mime types used in the resource or by the tool" definition="The mime types of the files in the resource or consumed/produced by the tool.">
 		<concept>http://www.isocat.org/datcat/DC-2571</concept>
@@ -483,25 +483,25 @@
 		<concept>http://purl.org/dc/terms/format</concept>
 	</facetConcept>
 	<facetConcept name="nationalProject" description="The national CLARIN project providing the resource or tool" definition="The national CLARIN project providing the resource or tool.">
-		<pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Header/cmdp:MdCollectionDisplayName/text()</pattern>
 	</facetConcept>
 	<facetConcept name="text">
-		<pattern>/c:CMD/c:Header//text()</pattern>
-		<pattern>/c:CMD/c:Components//text()</pattern>
+		<pattern>/cmd:CMD/cmd:Header//text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components//text()</pattern>
 	</facetConcept>
 	<facetConcept name="_componentProfile" allowMultipleValues="false">
-		<pattern>/c:CMD/c:Header/c:MdProfile/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Header/cmd:MdProfile/text()</pattern>
 	</facetConcept>
 	<facetConcept name="keywords" description="Keywords describing the resource or tool" definition="Keywords containing relevant information on the resource or tool not stated in other VLO metadata facets, consistently applied within the collection.">
 		<concept>http://www.isocat.org/datcat/DC-5436</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5436_6ab57c2c-5f8d-3561-6db6-d75da23d2637</concept>
 		<!-- not an official ISOcat PID - added to support LrtInventoryResource, should be removed in the future -->
-		<pattern>/c:CMD/c:Components/c:mods/c:classification/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:mods/cmdp:classification/text()</pattern>
 
 
-		<pattern>/c:CMD/c:Components/c:media-session-profile/c:media-session/c:Corpus/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:media-session-profile/cmdp:media-session/cmdp:Corpus/text()</pattern>
 		<!--  BAS -->
-		<pattern>/c:CMD/c:Components/c:media-corpus-profile/c:Collection/c:Project/c:Title/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:media-corpus-profile/cmdp:Collection/cmdp:Project/cmdp:Title/text()</pattern>
 		<!--  BAS -->
 	</facetConcept>
 

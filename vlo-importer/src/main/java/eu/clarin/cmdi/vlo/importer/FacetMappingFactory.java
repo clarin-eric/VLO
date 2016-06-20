@@ -307,12 +307,9 @@ public class FacetMappingFactory {
      */
     private int getDatcatIndex(VTDNav vn) throws NavException {
         int result = -1;
-        result = vn.getAttrValNS("http://www.isocat.org/ns/dcr", "datcat");
+        result = vn.getAttrValNS("http://www.clarin.eu/cmd/1", "ConceptLink");
         if (result == -1) {
-            result = vn.getAttrValNS("http://www.isocat.org", "datcat");
-        }
-        if (result == -1) {
-            result = vn.getAttrVal("dcr:datcat");
+            result = vn.getAttrVal("cmd:ConceptLink");
         }
         return result;
     }
@@ -325,9 +322,9 @@ public class FacetMappingFactory {
      * @return
      */
     private String createXpath(Deque<Token> elementPath, String attributeName) {
-        StringBuilder xpath = new StringBuilder("/");
+        StringBuilder xpath = new StringBuilder("/cmd:CMD/cmd:Components/");
         for (Token token : elementPath) {
-            xpath.append("c:").append(token.name).append("/");
+            xpath.append("cmdp:").append(token.name).append("/");
         }
 
         if (attributeName != null) {

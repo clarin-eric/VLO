@@ -13,7 +13,7 @@ public class CMDIParserVTDXMLTest extends ImporterTestcase {
     public void testExtractXsdFromHeader() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\">\n";
         content += "   <Header>\n";
         content += "      <MdProfile>clarin.eu:cr1:p_1288172614026</MdProfile>\n";
         content += "   </Header>\n";
@@ -26,7 +26,7 @@ public class CMDIParserVTDXMLTest extends ImporterTestcase {
     public void testExtractXsdFromSchemaLocation() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \n";
         content += "     xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026/xsd\">\n";
         content += "</CMD>\n";
         String xsd = getXsd(content);
@@ -37,7 +37,7 @@ public class CMDIParserVTDXMLTest extends ImporterTestcase {
     public void testExtractXsdFromNoSchemaLocation() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \n";
         content += "     xsi:noNamespaceSchemaLocation=\"http://www.meertens.knaw.nl/oai/cmdi/diddd_sub_location_profile.xsd\">\n";
         content += "</CMD>\n";
         String xsd = getXsd(content);
@@ -48,7 +48,7 @@ public class CMDIParserVTDXMLTest extends ImporterTestcase {
     public void testNoXsd() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/\">\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\">\n";
         content += "</CMD>\n";
         String xsd = getXsd(content);
         assertNull(xsd);

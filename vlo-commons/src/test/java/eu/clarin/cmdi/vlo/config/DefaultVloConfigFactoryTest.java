@@ -427,7 +427,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("getComponentRegistryProfileSchema");
 
-        String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/someId/xsd";
+        String expResult = "http://alpha-vlo.clarin.eu/component-registry-rest/rest/registry/1.2/profiles/someId/xsd";
         String result = config.getComponentRegistryProfileSchema("someId");
 
         assertEquals(expResult, result);
@@ -441,7 +441,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("getComponentRegistryRESTURL");
 
-        String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/";
+        String expResult = "http://alpha-vlo.clarin.eu/component-registry-rest/rest/registry/1.2/profiles/";
         String result = config.getComponentRegistryRESTURL();
 
         assertEquals(expResult, result);
