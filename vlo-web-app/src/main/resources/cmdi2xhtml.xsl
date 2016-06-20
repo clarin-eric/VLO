@@ -128,9 +128,9 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="CMD">
+    <xsl:template match="*[local-name()='CMD']">
         <article class="cmdi-record">
-            <xsl:apply-templates select="/CMD/Components/*" mode="Component_Child"/>
+            <xsl:apply-templates select="/*[local-name()='CMD']/*[local-name()='Components']/*" mode="Component_Child"/>
         </article>
     </xsl:template>
 </xsl:stylesheet>
