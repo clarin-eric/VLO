@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.MetaDataHeaderItem;
@@ -33,11 +34,11 @@ public class ErrorPage extends VloBasePage {
 
     public final static String PAGE_PARAMETER_RESPONSE_CODE = "code";
 
-    private final int responseCode;
+    private final ErrorType errorType;
 
     public ErrorPage(PageParameters parameters) {
         super(parameters);
-        this.responseCode = parameters.get(PAGE_PARAMETER_RESPONSE_CODE).toInt(500);
+        this.errorType = getErrorType(parameters.get(PAGE_PARAMETER_RESPONSE_CODE).toString());
 
         final PageParameters queryParams = new PageParameters(parameters).remove(PAGE_PARAMETER_RESPONSE_CODE);
         final boolean hasQuery = !queryParams.get(VloWebAppParameters.QUERY).isEmpty() || !queryParams.get(VloWebAppParameters.FILTER_QUERY).isEmpty();
@@ -49,7 +50,7 @@ public class ErrorPage extends VloBasePage {
     @Override
     protected void configureResponse(WebResponse response) {
         super.configureResponse(response);
-        response.setStatus(responseCode);
+        response.setStatus(errorType.code());
     }
 
     @Override
@@ -69,11 +70,33 @@ public class ErrorPage extends VloBasePage {
         response.render(MetaDataHeaderItem.forMetaTag("robots", "noindex"));
     }
 
-    public static void triggerErrorPage(int statusCode) {
+    public static enum ErrorType {
+        PAGE_NOT_FOUND("PageNotFound", HttpServletResponse.SC_NOT_FOUND),
+        DOCUMENT_NOT_FOUND("DocumentNotFound", HttpServletResponse.SC_NOT_FOUND);
+
+        private final String path;
+        private final int code;
+
+        private ErrorType(String path, int code) {
+            this.path = path;
+            this.code = code;
+        }
+
+        public String path() {
+            return path;
+        }
+
+        public int code() {
+            return code;
+        }
+
+    }
+
+    public static void triggerErrorPage(ErrorType statusCode) {
         triggerErrorPage(statusCode, null);
     }
 
-    public static void triggerErrorPage(int statusCode, PageParameters pageParameters) {
+    public static void triggerErrorPage(ErrorType errorType, PageParameters pageParameters) {
         final PageParameters params;
         if (pageParameters == null) {
             params = new PageParameters();
@@ -81,7 +104,16 @@ public class ErrorPage extends VloBasePage {
             params = new PageParameters(pageParameters);
         }
 
-        throw new RestartResponseException(ErrorPage.class, params.add(PAGE_PARAMETER_RESPONSE_CODE, statusCode));
+        throw new RestartResponseException(ErrorPage.class, params.add(PAGE_PARAMETER_RESPONSE_CODE, errorType.path()));
+    }
+
+    public static ErrorType getErrorType(String path) {
+        for (ErrorType type : ErrorType.values()) {
+            if (type.path().equals(path)) {
+                return type;
+            }
+        }
+        return null;
     }
 
 }

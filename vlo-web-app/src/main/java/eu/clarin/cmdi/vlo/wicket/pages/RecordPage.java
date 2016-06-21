@@ -39,6 +39,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
+import eu.clarin.cmdi.vlo.wicket.pages.ErrorPage.ErrorType;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.CmdiContentPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.ContentSearchFormPanel;
@@ -52,10 +53,8 @@ import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
-import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
@@ -150,7 +149,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             Session.get().error(String.format("Document with ID %s could not be found", params.get(VloWebAppParameters.DOCUMENT_ID)));
             final PageParameters errorParams = new PageParameters(params)
                     .remove(VloWebAppParameters.DOCUMENT_ID);
-            ErrorPage.triggerErrorPage(HttpServletResponse.SC_NOT_FOUND, errorParams);
+            ErrorPage.triggerErrorPage(ErrorType.DOCUMENT_NOT_FOUND, errorParams);
         } else {
             setModel(new SolrDocumentModel(document));
         }
