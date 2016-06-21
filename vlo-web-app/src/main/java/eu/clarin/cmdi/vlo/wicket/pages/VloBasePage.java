@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapExternalLink;
+import eu.clarin.cmdi.vlo.wicket.panels.BootstrapFeedbackPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.ImmutableNavbarComponent;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar.ComponentPosition;
@@ -180,7 +180,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
     private void addComponents() {
 
-        add(new FeedbackPanel("feedback"));
+        add(new BootstrapFeedbackPanel("feedback"));
 
         add(new WebMarkupContainer("header")
                 // navbar in header
