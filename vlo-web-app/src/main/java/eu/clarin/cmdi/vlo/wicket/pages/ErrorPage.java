@@ -23,6 +23,8 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.MetaDataHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -35,7 +37,7 @@ public class ErrorPage extends VloBasePage {
     public final static String PAGE_PARAMETER_RESPONSE_CODE = "code";
 
     private final ErrorType errorType;
-    
+
     public ErrorPage(PageParameters parameters) {
         super(parameters);
         this.errorType = getErrorType(parameters.get(PAGE_PARAMETER_RESPONSE_CODE).toString());
@@ -45,6 +47,43 @@ public class ErrorPage extends VloBasePage {
         add(new BookmarkablePageLink("searchPage", FacetedSearchPage.class, queryParams)
                 .add(new Label("label", hasQuery ? "Return to query" : "Go to the search page"))
         );
+
+        final IModel<String> errorDescriptionModel = new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return getDescriptionForError(errorType);
+            }
+        };
+        add(new Label("description", errorDescriptionModel) {
+            @Override
+            protected void onConfigure() {
+                setVisible(errorDescriptionModel.getObject() != null);
+            }
+
+        }.setEscapeModelStrings(false));
+    }
+
+    private String getDescriptionForError(ErrorType type) {
+        switch (type) {
+            case PAGE_NOT_FOUND:
+                return "<p>The requested page does not exist in the VLO!</p>";
+            case DOCUMENT_NOT_FOUND:
+                return "<p>The requested record does not exist (anymore) in the VLO. "
+                        + "The provider may have removed it from its repository or the identifier "
+                        + "may have changed. Here's a number of things you may try to do:</p>"
+                        + "<ul>"
+                        + "<li>Try searching for the document by its name if you know it.</li>"
+                        + "<li>Select the appropriate value from the 'collection' facet if "
+                        + "you know what collection the record belongs to.</li>"
+                        + "<li>If you think the record should be present in the VLO but cannot find it, please "
+                        + "contact the maintainers of the VLO using the contact information in the 'About' page.</li>"
+                        + "</ul>";
+            case UNKNOWN_ERROR:
+                return "<p>An unknown error has occurred! If this keeps happening, please notify the maintainers "
+                        + "of the VLO using the contact information in the 'About' page.</p>";
+            default:
+                return null;
+        }
     }
 
     @Override
