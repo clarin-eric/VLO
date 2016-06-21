@@ -148,7 +148,9 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         final SolrDocument document = documentParamConverter.fromParameters(params);
         if (null == document) {
             Session.get().error(String.format("Document with ID %s could not be found", params.get(VloWebAppParameters.DOCUMENT_ID)));
-            throw new RestartResponseException(ErrorPage.class, new PageParameters().add(ErrorPage.PAGE_PARAMETER_RESPONSE_CODE, HttpServletResponse.SC_NOT_FOUND));
+            final PageParameters errorParams = new PageParameters(params)
+                    .remove(VloWebAppParameters.DOCUMENT_ID);
+            ErrorPage.triggerErrorPage(HttpServletResponse.SC_NOT_FOUND, errorParams);
         } else {
             setModel(new SolrDocumentModel(document));
         }

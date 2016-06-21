@@ -16,11 +16,12 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
-import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import org.apache.wicket.markup.head.HeaderItem;
+import eu.clarin.cmdi.vlo.VloWebAppParameters;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.MetaDataHeaderItem;
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -28,21 +29,21 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
-public class ErrorPage extends VloBasePage<QueryFacetsSelection> {
+public class ErrorPage extends VloBasePage {
 
     public final static String PAGE_PARAMETER_RESPONSE_CODE = "code";
 
     private final int responseCode;
 
-    public ErrorPage(IModel<QueryFacetsSelection> model, int responseCode) {
-        super(model);
-        this.responseCode = responseCode;
-    }
-
     public ErrorPage(PageParameters parameters) {
         super(parameters);
         this.responseCode = parameters.get(PAGE_PARAMETER_RESPONSE_CODE).toInt(500);
-        //TODO: convert params to query facet selection
+
+        final PageParameters queryParams = new PageParameters(parameters).remove(PAGE_PARAMETER_RESPONSE_CODE);
+        final boolean hasQuery = !queryParams.get(VloWebAppParameters.QUERY).isEmpty() || !queryParams.get(VloWebAppParameters.FILTER_QUERY).isEmpty();
+        add(new BookmarkablePageLink("searchPage", FacetedSearchPage.class, queryParams)
+                .add(new Label("label", hasQuery ? "Return to query" : "Go to the search page"))
+        );
     }
 
     @Override
@@ -66,6 +67,21 @@ public class ErrorPage extends VloBasePage<QueryFacetsSelection> {
         super.renderHead(response);
         //error page should not be indexed
         response.render(MetaDataHeaderItem.forMetaTag("robots", "noindex"));
+    }
+
+    public static void triggerErrorPage(int statusCode) {
+        triggerErrorPage(statusCode, null);
+    }
+
+    public static void triggerErrorPage(int statusCode, PageParameters pageParameters) {
+        final PageParameters params;
+        if (pageParameters == null) {
+            params = new PageParameters();
+        } else {
+            params = new PageParameters(pageParameters);
+        }
+
+        throw new RestartResponseException(ErrorPage.class, params.add(PAGE_PARAMETER_RESPONSE_CODE, statusCode));
     }
 
 }
