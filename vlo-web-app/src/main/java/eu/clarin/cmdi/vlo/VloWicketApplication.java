@@ -1,7 +1,6 @@
 package eu.clarin.cmdi.vlo;
 
 import de.agilecoders.wicket.core.Bootstrap;
-import de.agilecoders.wicket.core.markup.html.themes.bootstrap.BootstrapTheme;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
 import de.agilecoders.wicket.core.settings.ITheme;
 import de.agilecoders.wicket.core.settings.SingleThemeProvider;
@@ -31,6 +30,7 @@ import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.FragmentEncodingMountedMapper;
 import eu.clarin.cmdi.vlo.wicket.pages.AboutPage;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
+import eu.clarin.cmdi.vlo.wicket.pages.ErrorPage;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.HelpPage;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
@@ -136,6 +136,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         mountPage("/about", AboutPage.class);
         // Help page
         mountPage("/help", HelpPage.class);
+        // Help page
+        mountPage("/error/${" + ErrorPage.PAGE_PARAMETER_RESPONSE_CODE + "}", ErrorPage.class);
     }
 
     private void setupCache() {

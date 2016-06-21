@@ -52,6 +52,7 @@ import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
@@ -147,7 +148,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         final SolrDocument document = documentParamConverter.fromParameters(params);
         if (null == document) {
             Session.get().error(String.format("Document with ID %s could not be found", params.get(VloWebAppParameters.DOCUMENT_ID)));
-            throw new RestartResponseException(new FacetedSearchPage(selectionModel));
+            throw new RestartResponseException(ErrorPage.class, new PageParameters().add(ErrorPage.PAGE_PARAMETER_RESPONSE_CODE, HttpServletResponse.SC_NOT_FOUND));
         } else {
             setModel(new SolrDocumentModel(document));
         }
