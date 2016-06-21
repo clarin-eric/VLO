@@ -35,7 +35,7 @@ public class ErrorPage extends VloBasePage {
     public final static String PAGE_PARAMETER_RESPONSE_CODE = "code";
 
     private final ErrorType errorType;
-
+    
     public ErrorPage(PageParameters parameters) {
         super(parameters);
         this.errorType = getErrorType(parameters.get(PAGE_PARAMETER_RESPONSE_CODE).toString());
@@ -71,8 +71,9 @@ public class ErrorPage extends VloBasePage {
     }
 
     public static enum ErrorType {
-        PAGE_NOT_FOUND("PageNotFound", HttpServletResponse.SC_NOT_FOUND),
-        DOCUMENT_NOT_FOUND("DocumentNotFound", HttpServletResponse.SC_NOT_FOUND);
+        PAGE_NOT_FOUND("page-not-found", HttpServletResponse.SC_NOT_FOUND),
+        DOCUMENT_NOT_FOUND("document-not-found", HttpServletResponse.SC_NOT_FOUND),
+        UNKNOWN_ERROR("unknown", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
         private final String path;
         private final int code;
@@ -113,7 +114,7 @@ public class ErrorPage extends VloBasePage {
                 return type;
             }
         }
-        return null;
+        return ErrorType.UNKNOWN_ERROR;
     }
 
 }

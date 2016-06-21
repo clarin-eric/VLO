@@ -29,7 +29,14 @@
     <filter-mapping>
         <filter-name>wicket.vlo-web-app</filter-name>
         <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>ERROR</dispatcher>
     </filter-mapping>
+    
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/page-not-found</location>
+    </error-page>
         
     <!-- Wake up Spring when the web app starts -->
     <listener>
