@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cmd="http://www.clarin.eu/cmd/"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cmd="http://www.clarin.eu/cmd/" xmlns:cmd1="http://www.clarin.eu/cmd/1"
     xmlns:fn="http://www.w3.org/2005/xpath-functions" exclude-result-prefixes="xs" version="2.0"
     xpath-default-namespace="http://www.clarin.eu/cmd/">
     <!--    
@@ -60,7 +60,7 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="@ref">
+    <xsl:template match="@ref|@cmd1:ref">
         <xsl:variable name="resourceRef" select="//ResourceProxy[@id=current()]/ResourceRef"/>
         <xsl:if test="$resourceRef">
             <a class="node_resource_ref">
@@ -75,14 +75,22 @@
     </xsl:template>
 
     <xsl:template mode="attributes" match="*">
-        <xsl:if test="count(@*[name() != 'ref']) > 0">
+        <xsl:variable name="attrs">
+            <xsl:apply-templates mode="attribute" select="@*" />
+        </xsl:variable>
+        <xsl:if test="normalize-space($attrs) != ''">
             <div class="node_attributes">
-                <xsl:for-each select="@*">
-                    <span class="node_attribute">
-                        <xsl:value-of select="name()"/>="<xsl:value-of select="."/>" </span>
-                </xsl:for-each>
+                <xsl:sequence select="$attrs" />
             </div>
         </xsl:if>
+    </xsl:template>
+    
+    <xsl:template mode="attribute" match="@xml:lang|@ref|@cmd1:ref|@ComponentId|@cmd1:ComponentId">
+        <!-- skip -->
+    </xsl:template>
+        
+    <xsl:template mode="attribute" match="@*">
+        <span class="node_attribute"><xsl:value-of select="name()"/>="<xsl:value-of select="."/>" </span>
     </xsl:template>
 
     <xsl:template mode="leaf" match="*">
@@ -94,6 +102,9 @@
                     select="starts-with($leaf_value, 'http://') or starts-with($leaf_value, 'https://')"
                     as="xs:boolean"/>
                 <span class="node_value">
+                    <xsl:if test="@xml:lang">
+                        <xsl:attribute name="title" select="concat('Language: ', @xml:lang)" />
+                    </xsl:if>
                     <xsl:choose>
                         <xsl:when test="$is_URL">
                             <a href="{$leaf_value}">
