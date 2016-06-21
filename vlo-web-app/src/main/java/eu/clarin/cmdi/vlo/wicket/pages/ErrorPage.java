@@ -17,6 +17,9 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import org.apache.wicket.markup.head.HeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.MetaDataHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -26,15 +29,16 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 public class ErrorPage extends VloBasePage<QueryFacetsSelection> {
-            public final static String PAGE_PARAMETER_RESPONSE_CODE = "code";
+
+    public final static String PAGE_PARAMETER_RESPONSE_CODE = "code";
 
     private final int responseCode;
-    
+
     public ErrorPage(IModel<QueryFacetsSelection> model, int responseCode) {
         super(model);
         this.responseCode = responseCode;
     }
-    
+
     public ErrorPage(PageParameters parameters) {
         super(parameters);
         this.responseCode = parameters.get(PAGE_PARAMETER_RESPONSE_CODE).toInt(500);
@@ -46,15 +50,22 @@ public class ErrorPage extends VloBasePage<QueryFacetsSelection> {
         super.configureResponse(response);
         response.setStatus(responseCode);
     }
-    
+
     @Override
     public boolean isVersioned() {
         return false;
     }
- 
+
     @Override
     public boolean isErrorPage() {
         return true;
     }
-    
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        //error page should not be indexed
+        response.render(MetaDataHeaderItem.forMetaTag("robots", "noindex"));
+    }
+
 }
