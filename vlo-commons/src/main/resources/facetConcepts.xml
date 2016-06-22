@@ -493,8 +493,12 @@
 		<pattern>/cmd:CMD/cmd:Header/cmd:MdProfile/text()</pattern>
 	</facetConcept>
 	<facetConcept name="keywords" description="Keywords describing the resource or tool" definition="Keywords containing relevant information on the resource or tool not stated in other VLO metadata facets, consistently applied within the collection.">
-		<concept>http://www.isocat.org/datcat/DC-5436</concept>
+                <!-- concept 'metadata tag' -->
+                <concept>http://www.isocat.org/datcat/DC-5436</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5436_6ab57c2c-5f8d-3561-6db6-d75da23d2637</concept>
+                <!-- concept 'keyword' -->
+                <concept>http://www.isocat.org/datcat/DC-278</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-278_336dd81a-626b-713e-c74a-34fa2ca26a71"</concept>
 		<!-- not an official ISOcat PID - added to support LrtInventoryResource, should be removed in the future -->
 		<pattern>/cmd:CMD/cmd:Components/cmdp:mods/cmdp:classification/text()</pattern>
 
