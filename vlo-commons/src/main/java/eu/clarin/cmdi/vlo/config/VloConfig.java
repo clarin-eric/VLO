@@ -740,7 +740,7 @@ public class VloConfig {
      * @see #getFacetFields()
      * @see #getCollectionFacet()
      */
-    public List<String> getAllFacetFields() {
+    public List<String> getFacetsInSearch() {
         final ArrayList<String> allFacets = new ArrayList<String>(facetField);
         final String collection = getCollectionFacet();
         if (collection != null) {

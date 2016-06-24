@@ -16,9 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
-import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
@@ -45,15 +44,7 @@ public class QueryFacetsSelectionParametersConverterTest {
 
     @Before
     public void setUp() {
-        VloConfig config = new VloConfig() {
-
-            @Override
-            public List<String> getAllFacetFields() {
-                return ImmutableList.of("facet1", "facet2", "facet3", "facet4");
-            }
-
-        };
-        instance = new QueryFacetsSelectionParametersConverter(config);
+        instance = new QueryFacetsSelectionParametersConverter(ImmutableSet.of("facet1", "facet2", "facet3", "facet4"));
     }
 
     /**

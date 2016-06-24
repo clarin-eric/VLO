@@ -9,6 +9,7 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+import static org.hamcrest.CoreMatchers.hasItems;
 
 /**
  *
@@ -647,7 +648,7 @@ public class DefaultVloConfigFactoryTest {
     }
 
     @Test
-    public void testGetAllFacetsField() {
+    public void testGetFacetsInSearch() {
         final String[] expItems = new String[]{
             "languageCode",
             "collection",
@@ -662,7 +663,7 @@ public class DefaultVloConfigFactoryTest {
             "dataProvider",
             "nationalProject"
         };
-        List<String> result = config.getAllFacetFields();
+        List<String> result = config.getFacetsInSearch();
 
         //order is not important in this case
         assertThat(result, hasItems(expItems));

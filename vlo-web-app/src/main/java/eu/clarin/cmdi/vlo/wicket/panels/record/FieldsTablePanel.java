@@ -154,7 +154,7 @@ public class FieldsTablePanel extends Panel {
                 super.onConfigure();
                 // only show for facet fields
                 setVisible(isShowFacetSelectLinks()
-                        && vloConfig.getAllFacetFields().contains(facetNameModel.getObject()));
+                        && vloConfig.getFacetsInSearch().contains(facetNameModel.getObject()));
             }
 
         };

@@ -73,9 +73,8 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
 
         final String facet = facetParamMapper.getFacet(facetValue.toString());
 
-        if (vloConfig.getAllFacetFields().contains(facet)) {
+        if (vloConfig.getFacetsInSearch().contains(facet)) {
             // create a new model so that all values will be retrieved
-        	
             setModel(new FacetFieldModel(facet, facetFieldsService, selectionModel)); // gets all facet values
         }
         if (getModelObject() == null) {

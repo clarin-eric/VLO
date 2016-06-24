@@ -17,8 +17,8 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
+import eu.clarin.cmdi.vlo.FacetConstants;
 import static eu.clarin.cmdi.vlo.VloWebAppParameters.*;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
@@ -28,8 +28,6 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel;
-import static eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel.OPTIONS_FIELDS;
-import static eu.clarin.cmdi.vlo.wicket.panels.search.AvailabilityFacetPanel.AVAILABILITY_FIELD;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -60,28 +58,46 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
      * Fields that aren't true facets but can be queried by the user via the
      * {@link AdvancedSearchOptionsPanel}
      */
-    private final Set<String> facetsDefined;
+    private final Set<String> facetsAllowed;
     private final FacetParameterMapper facetParamMapper;
 
     /**
      * Constructs a converter that does not do any facet (value) mapping
      *
-     * @param config VLO configuration
      * @see FacetParameterMapper.IdentityMapper
      */
-    public QueryFacetsSelectionParametersConverter(VloConfig config) {
-        this(config, new FacetParameterMapper.IdentityMapper());
+    public QueryFacetsSelectionParametersConverter() {
+        this(new FacetParameterMapper.IdentityMapper());
+    }
+
+    /**
+     * Constructs a converter that does not do any facet (value) mapping
+     *
+     * @param facetsAllowed set of names of allowed facets
+     * @see FacetParameterMapper.IdentityMapper
+     */
+    public QueryFacetsSelectionParametersConverter(Set<String> facetsAllowed) {
+        this(new FacetParameterMapper.IdentityMapper(), facetsAllowed);
     }
 
     /**
      * Constructs a converter that applies the provided facet (value) mapping
      *
-     * @param config VLO configuration
      * @param facetParamMapper mapper to apply to facet names and values
      */
-    public QueryFacetsSelectionParametersConverter(VloConfig config, FacetParameterMapper facetParamMapper) {
-        this.facetsDefined = ImmutableSet.copyOf(config.getAllFacetFields());
+    public QueryFacetsSelectionParametersConverter(FacetParameterMapper facetParamMapper) {
+        this(facetParamMapper, FacetConstants.AVAILABLE_FACETS);
+    }
+
+    /**
+     * Constructs a converter that applies the provided facet (value) mapping
+     *
+     * @param facetParamMapper mapper to apply to facet names and values
+     * @param facetsAllowed set of names of allowed facets
+     */
+    public QueryFacetsSelectionParametersConverter(FacetParameterMapper facetParamMapper, Set<String> facetsAllowed) {
         this.facetParamMapper = facetParamMapper;
+        this.facetsAllowed = facetsAllowed;
     }
 
     @Override
@@ -115,7 +131,7 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
         if (fqType.size() == 2) {
             final String facet = facetParamMapper.getFacet(fqType.get(0));
             final String type = fqType.get(1).toUpperCase();
-            
+
             if (isAllowedFacetName(facet)) {
                 try {
                     final FacetSelectionType facetSelectionType = FacetSelectionType.valueOf(type);
@@ -133,12 +149,12 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
         final List<String> fq = FILTER_SPLITTER.splitToList(facetValue.toString());
         if (fq.size() == 2) {
             // we have a facet - value pair
-            
+
             //get facet name, may be a case of "not"
             final String facetString = fq.get(0);
             //check if negated
             final boolean negated = facetString.startsWith("-");
-            
+
             //get actual facet name
             final String requestedFacet;
             if (negated) {
@@ -148,7 +164,7 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
                 requestedFacet = facetString;
             }
             final String facet = facetParamMapper.getFacet(requestedFacet);
-            
+
             final String value = facetParamMapper.getValue(requestedFacet, fq.get(1));
             if (isAllowedFacetName(facet)) {
                 if (selection.containsKey(facet)) {
@@ -162,7 +178,7 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
                 }
             } else {
                 logger.debug("Undefined facet passed into query parameter {}: {}", FILTER_QUERY, facet);
-                
+
                 if (Session.exists()) {
                     // generate Wicket error message
                     Session.get().error("Unknown facet: " + facet);
@@ -174,7 +190,7 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
     }
 
     private boolean isAllowedFacetName(final String facet) {
-        return facetsDefined.contains(facet) || OPTIONS_FIELDS.contains(facet) || AVAILABILITY_FIELD.equals(facet);
+        return facetsAllowed.contains(facet);
     }
 
     @Override

@@ -1,33 +1,36 @@
 package eu.clarin.cmdi.vlo;
 
+import com.google.common.collect.ImmutableSet;
+import java.util.Set;
+
 /**
  * Definition of facet, resource type and URL constants.
  */
 public class FacetConstants {
 
-    public static final String FIELD_NAME = "name";
-    public static final String FIELD_ID = "id";
+    public static final String FIELD_ACCESS_INFO = "accessInfo";
+    public static final String FIELD_AVAILABILITY = "availability";
+    public static final String FIELD_COLLECTION = "collection";
+    public static final String FIELD_COMPLETE_METADATA = "metadataSource";
+    public static final String FIELD_CONTINENT = "continent";
+    public static final String FIELD_COUNTRY = "country";
     public static final String FIELD_DATA_PROVIDER = "dataProvider";
     public static final String FIELD_DESCRIPTION = "description";
-    public static final String FIELD_COLLECTION = "collection";
-    public static final String FIELD_COUNTRY = "country";
-    public static final String FIELD_CONTINENT = "continent";
-    public static final String FIELD_AVAILABILITY = "availability";
-    public static final String FIELD_LICENSE = "license";
-    public static final String FIELD_ACCESS_INFO = "accessInfo";
-    public static final String FIELD_LANGUAGE_CODE = "languageCode";
-    public static final String FIELD_TEMPORAL_COVERAGE = "temporalCoverage";
-    public static final String FIELD_GENRE = "genre";
-    public static final String FIELD_MODALITY = "modality";
-    public static final String FIELD_SUBJECT = "subject";
-    public static final String FIELD_ORGANISATION = "organisation";
-    public static final String FIELD_RESOURCE_CLASS = "resourceClass";
     public static final String FIELD_FORMAT = "format";
-    public static final String FIELD_PROJECT_NAME = "projectName";
-    public static final String FIELD_COMPLETE_METADATA = "metadataSource";
-    public static final String FIELD_NATIONAL_PROJECT = "nationalProject";
+    public static final String FIELD_GENRE = "genre";
+    public static final String FIELD_ID = "id";
     public static final String FIELD_KEYWORDS = "keywords";
+    public static final String FIELD_LANGUAGE_CODE = "languageCode";
+    public static final String FIELD_LICENSE = "license";
+    public static final String FIELD_MODALITY = "modality";
+    public static final String FIELD_NAME = "name";
+    public static final String FIELD_NATIONAL_PROJECT = "nationalProject";
+    public static final String FIELD_ORGANISATION = "organisation";
     public static final String FIELD_PROFILE = "profileName";
+    public static final String FIELD_PROJECT_NAME = "projectName";
+    public static final String FIELD_RESOURCE_CLASS = "resourceClass";
+    public static final String FIELD_SUBJECT = "subject";
+    public static final String FIELD_TEMPORAL_COVERAGE = "temporalCoverage";
 
     /**
      * Solr pseudo-field that reveals the ranking score
@@ -61,6 +64,37 @@ public class FacetConstants {
      * Facet constant associated with the search page type.
      */
     public static final String FIELD_SEARCHPAGE = "_searchPageRef";
+
+    /**
+     * Fields for which a selection (by the user) should be allowed
+     */
+    public static final Set<String> AVAILABLE_FACETS = ImmutableSet.of(
+            FIELD_ACCESS_INFO,
+            FIELD_AVAILABILITY,
+            FIELD_COLLECTION,
+            FIELD_COMPLETE_METADATA,
+            FIELD_CONTINENT,
+            FIELD_COUNTRY,
+            FIELD_DATA_PROVIDER,
+            FIELD_DESCRIPTION,
+            FIELD_FORMAT,
+            FIELD_GENRE,
+            FIELD_HAS_PART_COUNT,
+            FIELD_ID,
+            FIELD_KEYWORDS,
+            FIELD_LANGUAGE_CODE,
+            FIELD_LICENSE,
+            FIELD_MODALITY,
+            FIELD_NAME,
+            FIELD_NATIONAL_PROJECT,
+            FIELD_ORGANISATION,
+            FIELD_PROFILE,
+            FIELD_PROJECT_NAME,
+            FIELD_RESOURCE_CLASS,
+            FIELD_SUBJECT,
+            FIELD_TEMPORAL_COVERAGE,
+            FIELD_SEARCH_SERVICE
+    );
 
     //Deprecated fields
     public static final String DEPRECATED_FIELD_LANGUAGE = "language";

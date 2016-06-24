@@ -17,6 +17,7 @@
 package clarin.cmdi.vlo.statistics.collector;
 
 import clarin.cmdi.vlo.statistics.model.VloReport;
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,7 +44,7 @@ public class FacetValueCountsCollector implements VloStatisticsCollector {
         final SolrQuery query = new SolrQuery();
         query.setRows(0);
         query.setFacet(true);
-        config.getAllFacetFields().forEach((field) -> {
+        FacetConstants.AVAILABLE_FACETS.forEach((field) -> {
             query.addFacetField(field);
         });
         query.setFacetLimit(-1);

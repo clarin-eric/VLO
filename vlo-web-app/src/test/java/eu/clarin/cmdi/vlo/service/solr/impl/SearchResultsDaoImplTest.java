@@ -63,7 +63,7 @@ public class SearchResultsDaoImplTest extends AbstractSolrTestCase {
         instance = new SearchResultsDaoImpl(server, new VloConfig() {
 
             @Override
-            public List<String> getAllFacetFields() {
+            public List<String> getFacetsInSearch() {
                 return ImmutableList.of(FIELD_COLLECTION, FIELD_COUNTRY);
             }
 
