@@ -15,10 +15,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-@navbar-clarin-logo-ratio: (3294/1827);
+@clarin-logo-ratio: (3294/1827);
+@top-clarin-logo-height: 4em;
+@top-clarin-logo-width: @clarin-logo-ratio * @top-clarin-logo-height;
 @navbar-clarin-logo-margin: 2px;
 @navbar-clarin-logo-height: @navbar-height - (2 * @navbar-clarin-logo-margin);
-@navbar-clarin-logo-width: @navbar-clarin-logo-ratio * @navbar-clarin-logo-height;
+@navbar-clarin-logo-width: @clarin-logo-ratio * @navbar-clarin-logo-height;
 
 #header {
     .qualifier {
@@ -37,20 +39,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     &.snapshot .qualifier.snapshot,
     &.beta .qualifier.beta {
         display: block;
-        
+
         &:hover {
             background: inherit;
             opacity: .8;
         }
     }
 
+    //clarin logo above navbar
+    .clarin-top {
+        height: @top-clarin-logo-height;
+        background-color: @navbar-default-bg;
+        border-bottom: 1px solid @navbar-default-border; 
+        
+        .logo {
+            width: @top-clarin-logo-width;
+            height: @top-clarin-logo-height;
+            background-image: url('../images/clarin-logo-wide.png');
+            background-size: 100%;
+            background-repeat: no-repeat;
+        }
+    }
+
+    //clarin logo in navbar
     .navbar-nav {
         a.clarin-logo {
             min-height: @navbar-height;
             width: 7em;
             background-image: url('../images/clarin-logo-wide.png');
             background-size: @navbar-clarin-logo-width @navbar-clarin-logo-height;
-            background-position-x: @navbar-clarin-logo-ratio * @navbar-clarin-logo-margin;
+            background-position-x: @clarin-logo-ratio * @navbar-clarin-logo-margin;
             background-position-y: @navbar-clarin-logo-margin;
             background-repeat: no-repeat;
 
