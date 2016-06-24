@@ -200,8 +200,15 @@ public class VloBasePage<T> extends GenericWebPage<T> {
     }
 
     private Component createHeaderMenu(String id) {
-        final Navbar navbar = new Navbar(id);
-        navbar.setBrandName(Model.of("Virtual Language Observatory"));
+        final Navbar navbar = new Navbar(id) {
+            @Override
+            protected Label newBrandLabel(String markupId) {
+                //set label to not escape model strings to allow HTML
+                return (Label) super.newBrandLabel(markupId).setEscapeModelStrings(false);
+            }
+
+        };
+        navbar.setBrandName(Model.of("<i class=\"fa fa-globe\" aria-hidden=\"true\"></i> Virtual Language Observatory"));
 
         // link to CLARIN website
         final Component clarinLink = new NavbarExternalLink(Model.of("http://www.clarin.eu/")).setLabel(Model.of("CLARIN"))
