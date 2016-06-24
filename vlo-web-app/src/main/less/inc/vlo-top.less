@@ -26,6 +26,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     &.beta .qualifier.beta {
         display: initial;
     }
+
+    .navbar-nav {
+        a.clarin-logo {
+            min-height: @navbar-height;
+            width: 6em;
+            background-image: url('../images/clarin-logo-wide.png');
+            background-size: 100%;
+            background-repeat: no-repeat;
+
+            span {
+                display: none;
+            }
+            
+            &:hover {
+                background-color: inherit;
+            }
+        }
+    }
 }
 
 #topnavigation.row {
@@ -87,9 +105,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 ul.feedbackPanel {
-    
+
     padding-left: 0;
-    
+
     li {
         display: block;
         list-style-type: none;

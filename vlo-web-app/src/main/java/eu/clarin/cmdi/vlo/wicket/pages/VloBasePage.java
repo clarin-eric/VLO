@@ -211,8 +211,15 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         navbar.setBrandName(Model.of("<i class=\"fa fa-globe\" aria-hidden=\"true\"></i> Virtual Language Observatory"));
 
         // link to CLARIN website
-        final Component clarinLink = new NavbarExternalLink(Model.of("http://www.clarin.eu/")).setLabel(Model.of("CLARIN"))
-                .add(new AttributeModifier("class", "hidden-xs"));
+        final Component clarinLink = new NavbarExternalLink(Model.of("http://www.clarin.eu/")) {
+            @Override
+            protected Component newLabel(String markupId) {
+                return super.newLabel(markupId).setEscapeModelStrings(false);
+            }
+
+        }
+                .setLabel(Model.of("<span>CLARIN</span>"))
+                .add(new AttributeModifier("class", "clarin-logo hidden-xs"));
 
         // badges for testing/beta versions
         final Component testingBadge = new NavbarText(Navbar.componentId(), Model.of("TESTING"))
@@ -225,9 +232,9 @@ public class VloBasePage<T> extends GenericWebPage<T> {
                 new ImmutableNavbarComponent(new NavbarButton(FacetedSearchPage.class, Model.of("Search")), ComponentPosition.LEFT),
                 new ImmutableNavbarComponent(new NavbarButton(HelpPage.class, Model.of("Help")), ComponentPosition.LEFT),
                 new ImmutableNavbarComponent(new NavbarButton(AboutPage.class, Model.of("About")), ComponentPosition.LEFT),
-                new ImmutableNavbarComponent(clarinLink, ComponentPosition.RIGHT),
                 new ImmutableNavbarComponent(testingBadge, ComponentPosition.RIGHT),
-                new ImmutableNavbarComponent(betaBadge, ComponentPosition.RIGHT)
+                new ImmutableNavbarComponent(betaBadge, ComponentPosition.RIGHT),
+                new ImmutableNavbarComponent(clarinLink, ComponentPosition.RIGHT)
         );
         return navbar;
     }
