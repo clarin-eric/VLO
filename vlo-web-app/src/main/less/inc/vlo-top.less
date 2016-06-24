@@ -15,30 +15,49 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+@navbar-clarin-logo-ratio: (3294/1827);
+@navbar-clarin-logo-margin: 2px;
+@navbar-clarin-logo-height: @navbar-height - (2 * @navbar-clarin-logo-margin);
+@navbar-clarin-logo-width: @navbar-clarin-logo-ratio * @navbar-clarin-logo-height;
+
 #header {
     .qualifier {
         display: none; /* overridden depending on header class */
-        color: red;
+        color: #fff;
         font-weight: bold;
+        position: absolute;
+        top: 1em;
+        left: 1em;
+        background-color: #f00;
+        padding: .2em;
+        opacity: .8;
+        z-index: (@zindex-navbar + 1);
     }
     /* for snapshot and beta, make matching qualifier item visible */
     &.snapshot .qualifier.snapshot,
     &.beta .qualifier.beta {
-        display: initial;
+        display: block;
+        
+        &:hover {
+            background: inherit;
+            opacity: .8;
+        }
     }
 
     .navbar-nav {
         a.clarin-logo {
             min-height: @navbar-height;
-            width: 6em;
+            width: 7em;
             background-image: url('../images/clarin-logo-wide.png');
-            background-size: 100%;
+            background-size: @navbar-clarin-logo-width @navbar-clarin-logo-height;
+            background-position-x: @navbar-clarin-logo-ratio * @navbar-clarin-logo-margin;
+            background-position-y: @navbar-clarin-logo-margin;
             background-repeat: no-repeat;
 
             span {
                 display: none;
             }
-            
+
             &:hover {
                 background-color: inherit;
             }

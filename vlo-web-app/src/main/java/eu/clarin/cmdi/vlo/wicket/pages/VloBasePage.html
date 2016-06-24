@@ -33,6 +33,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <header wicket:id="header" id="header" role="banner">
+            <span class="qualifier snapshot">TESTING</span>
+            <span class="qualifier beta">BETA</span>
+<!--            
+        // badges for testing/beta versions
+        final Component testingBadge = new NavbarText(Navbar.componentId(), Model.of("TESTING"))
+                .add(new AttributeAppender("class", "qualifier snapshot", " "));
+        final Component betaBadge = new NavbarText(Navbar.componentId(), Model.of("BETA"))
+                .add(new AttributeAppender("class", "qualifier beta", " "));
+//                        new ImmutableNavbarComponent(testingBadge, ComponentPosition.RIGHT),
+//                new ImmutableNavbarComponent(betaBadge, ComponentPosition.RIGHT),-->
+
             <div wicket:id="menu" class="navbar-static-top"  role="banner">[Navigation]</div>
         </header>
 

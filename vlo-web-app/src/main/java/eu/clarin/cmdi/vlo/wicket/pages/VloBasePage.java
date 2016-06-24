@@ -221,19 +221,11 @@ public class VloBasePage<T> extends GenericWebPage<T> {
                 .setLabel(Model.of("<span>CLARIN</span>"))
                 .add(new AttributeModifier("class", "clarin-logo hidden-xs"));
 
-        // badges for testing/beta versions
-        final Component testingBadge = new NavbarText(Navbar.componentId(), Model.of("TESTING"))
-                .add(new AttributeAppender("class", "qualifier snapshot", " "));
-        final Component betaBadge = new NavbarText(Navbar.componentId(), Model.of("BETA"))
-                .add(new AttributeAppender("class", "qualifier beta", " "));
-
         //add all menu compoennts
         navbar.addComponents(new ImmutableNavbarComponent(new NavbarButton(SimpleSearchPage.class, Model.of("Home")), ComponentPosition.LEFT),
                 new ImmutableNavbarComponent(new NavbarButton(FacetedSearchPage.class, Model.of("Search")), ComponentPosition.LEFT),
                 new ImmutableNavbarComponent(new NavbarButton(HelpPage.class, Model.of("Help")), ComponentPosition.LEFT),
                 new ImmutableNavbarComponent(new NavbarButton(AboutPage.class, Model.of("About")), ComponentPosition.LEFT),
-                new ImmutableNavbarComponent(testingBadge, ComponentPosition.RIGHT),
-                new ImmutableNavbarComponent(betaBadge, ComponentPosition.RIGHT),
                 new ImmutableNavbarComponent(clarinLink, ComponentPosition.RIGHT)
         );
         return navbar;
