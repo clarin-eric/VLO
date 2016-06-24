@@ -1,8 +1,7 @@
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
-import com.google.common.collect.ImmutableSet;
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import java.util.Collection;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -18,12 +17,9 @@ public class SolrDaoImpl {
 
     private final static Logger logger = LoggerFactory.getLogger(SolrDaoImpl.class);
     private final SolrServer solrServer;
-    private final Collection<String> facetsDefined;
 
     public SolrDaoImpl(SolrServer solrServer, VloConfig config) {
         this.solrServer = solrServer;
-        //put facet names in a hashset for quick lookup
-        facetsDefined = ImmutableSet.copyOf(config.getAllFacetFields());
     }
 
     protected SolrServer getSolrserver() {
@@ -58,9 +54,10 @@ public class SolrDaoImpl {
             // check the filters in the query by name
             for (String filter : filtersInQuery) {
                 // split up a filter, look at the string preceeding the semicolon 
-                String facetInFilter = filter.split(":")[0];
-
-                if (facetsDefined.contains(facetInFilter)) {
+                String facetInFilter = filter.split(":")[0]
+                        .replaceFirst("^\\{!tag=.*\\}", ""); //strip out tag syntax (may be used for OR queries, see query factory implementation)
+                
+                if (FacetConstants.AVAILABLE_FACETS.contains(facetInFilter)) {
                     // facet in the filter is in the set that is defined by the config file
                 } else {
                     if (facetInFilter.startsWith("_")) {
