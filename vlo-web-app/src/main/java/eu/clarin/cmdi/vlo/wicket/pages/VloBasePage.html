@@ -38,14 +38,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </div>
             <span class="qualifier snapshot">TESTING</span>
             <span class="qualifier beta">BETA</span>
-<!--            
-        // badges for testing/beta versions
-        final Component testingBadge = new NavbarText(Navbar.componentId(), Model.of("TESTING"))
-                .add(new AttributeAppender("class", "qualifier snapshot", " "));
-        final Component betaBadge = new NavbarText(Navbar.componentId(), Model.of("BETA"))
-                .add(new AttributeAppender("class", "qualifier beta", " "));
-//                        new ImmutableNavbarComponent(testingBadge, ComponentPosition.RIGHT),
-//                new ImmutableNavbarComponent(betaBadge, ComponentPosition.RIGHT),-->
+            <!--            
+                    // badges for testing/beta versions
+                    final Component testingBadge = new NavbarText(Navbar.componentId(), Model.of("TESTING"))
+                            .add(new AttributeAppender("class", "qualifier snapshot", " "));
+                    final Component betaBadge = new NavbarText(Navbar.componentId(), Model.of("BETA"))
+                            .add(new AttributeAppender("class", "qualifier beta", " "));
+            //                        new ImmutableNavbarComponent(testingBadge, ComponentPosition.RIGHT),
+            //                new ImmutableNavbarComponent(betaBadge, ComponentPosition.RIGHT),-->
 
             <div wicket:id="menu" class="navbar-static-top"  role="banner">[Navigation]</div>
         </header>
@@ -63,13 +63,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </div>
 
 
-        <footer id="footer" class="navbar navbar-default">
+        <footer id="footer">
             <div class="container">
-                <div class="nav navbar-nav">
-                    <p>CLARIN VLO version <wicket:message key="vlo.version" /></p>
-                    <p class="footer-fineprint">
-                        Copyright (C) 2010-2016 CLARIN ERIC. All rights reserved.<br />
-                    </p>
+                <div class="row">
+                    <div class="col-md-3">
+                        <wicket:link><a href="AboutPage.html">About</a></wicket:link>
+                        <br />
+                        <span class="version-info">v<wicket:message key="vlo.version" /></span>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <a class="footer-logo-link" href="https://www.clarin.eu">
+                            <img src="images/clarin-logo-wide.png" alt="CLARIN" />
+                        </a>
+                        <span class="footer-fineprint">
+                            Copyright (C) 2010-2016 CLARIN ERIC. All rights reserved.
+                        </span>
+                    </div>
+                    <div class="col-md-3 text-right">
+                        <a href="mailto:vlo@clarin.eu">Contact</a>
+                    </div>
                 </div>
             </div>
         </footer>
