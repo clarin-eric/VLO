@@ -27,23 +27,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         display: none; /* overridden depending on header class */
         color: #fff;
         font-weight: bold;
-        position: absolute;
-        top: 1em;
+        position: fixed;
+        bottom: 1em;
         left: 1em;
-        background-color: #f00;
         padding: .2em;
         opacity: .8;
         z-index: (@zindex-navbar + 1);
+
+        &.snapshot {
+            background-color: #f00;
+        }
+        &.beta {
+            background-color: #333;            
+        }
+        &:hover {
+            background: inherit;
+            opacity: .8;
+        }
     }
     /* for snapshot and beta, make matching qualifier item visible */
     &.snapshot .qualifier.snapshot,
     &.beta .qualifier.beta {
         display: block;
-
-        &:hover {
-            background: inherit;
-            opacity: .8;
-        }
     }
 
     //clarin logo above navbar
@@ -51,7 +56,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         height: @top-clarin-logo-height;
         background-color: @navbar-default-bg;
         border-bottom: 1px solid @navbar-default-border; 
-        
+
         .logo {
             width: @top-clarin-logo-width;
             height: @top-clarin-logo-height;
