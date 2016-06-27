@@ -224,7 +224,6 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         //add all menu compoennts
         navbar.addComponents(new ImmutableNavbarComponent(new NavbarButton(FacetedSearchPage.class, Model.of("Search")), ComponentPosition.LEFT),
                 new ImmutableNavbarComponent(new NavbarButton(HelpPage.class, Model.of("Help")), ComponentPosition.LEFT),
-                new ImmutableNavbarComponent(new NavbarButton(AboutPage.class, Model.of("About")), ComponentPosition.LEFT),
                 new ImmutableNavbarComponent(clarinLink, ComponentPosition.RIGHT)
         );
         return navbar;
