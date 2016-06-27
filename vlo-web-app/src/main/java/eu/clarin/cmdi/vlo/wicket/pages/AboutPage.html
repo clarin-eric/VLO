@@ -33,15 +33,6 @@
 
         <wicket:extend>
 
-            <div id="topnavigation">
-                <div id="breadcrumbs">
-                    <a href="javascript: history.go(-1)">Back</a>
-                </div>
-                <div id="topnavigationlinks">
-                    <!--                    <wicket:container wicket:id="permalink">[permalink]</wicket:container>-->
-                </div>
-            </div>
-
             <div class="content" id="about">
 
                 <h1>About the CLARIN Virtual Language Observatory</h1>
@@ -72,9 +63,12 @@
                     &quot;report&quot; link that can be found on every page.
                 </p>
                 
-                <h2>References</h2>
+                <h2 id="References">References</h2>
                 <h3>Documentation</h3>
                 <ul>
+                    <li>
+                        <wicket:link><a href="HelpPage.html">VLO help</a></wicket:link>
+                    </li>
                     <li><a href="http://www.clarin.eu/file/1601">Short guide</a></li>
                     <li><a href="http://clarin.eu/content/component-metadata">Component Metadata</a></li>
                     <li><a href="http://www.clarin.eu/faq-page/275">Frequently Asked Questions</a></li>
@@ -144,6 +138,7 @@
                     <li><a href="http://tomcat.apache.org/">Apache Tomcat</a></li>
                     <li><a href="http://lucene.apache.org/solr/">Apache Solr</a> (version <wicket:message key="solr.version" />)</li>
                     <li><a href="http://wicket.apache.org/">Apache Wicket</a> (version <wicket:message key="wicket.version" />)</li>
+                    <li><a href="http://getbootstrap.com/">Bootstrap</a> (version 3.3.6)</li>
                     <li><a href="http://spring.io/">Spring Framework</a> (version <wicket:message key="spring.version" />)</li>
                     <li><a href="http://vtd-xml.sourceforge.net/">VTD-XML</a></li>
                 </ul>
