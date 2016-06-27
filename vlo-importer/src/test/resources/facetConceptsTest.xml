@@ -373,6 +373,9 @@
 		<pattern>/cmd:CMD/cmd:Components/cmdp:media-corpus-profile/cmdp:Collection/cmdp:Project/cmdp:Title/text()</pattern>
 		<!--  BAS -->
 	</facetConcept>
+	<facetConcept name="availability" description="The usage conditions for the resource or tool" definition="A rough description of the conditions under which the resource or tool can be used.">
+		<concept>http://hdl.handle.net/11459/CCR_C-5303_9afa7d0c-f292-8e89-24f8-997a3d2971ae</concept>
+	</facetConcept>
 
 	<!-- test facets -->
 <!--	<facetConcept name="temporalCoverage" description="The temporal coverage of the source material of the resource" definition="The temporal coverage of the source material of the resource, i.e. not the time within which the resource was created, but when e.g. original texts were written or speech recordings made.">

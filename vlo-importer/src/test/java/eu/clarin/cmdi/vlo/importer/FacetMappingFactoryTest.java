@@ -20,6 +20,7 @@ public class FacetMappingFactoryTest {
     private final static String LRT_PROFILE_ID = "clarin.eu:cr1:p_1289827960126";
     private final static String ID_PROFILE_ID = "clarin.eu:cr1:p_1290431694629";
     private final static String TEXTCORPUSPROFILE_PROFILE_ID = "clarin.eu:cr1:p_1290431694580";
+    private final static String TEIHEADER_PROFILE_ID = "clarin.eu:cr1:p_1380106710826";
 
     private final static Logger LOG = LoggerFactory.getLogger(FacetMappingFactoryTest.class);
 
@@ -465,5 +466,16 @@ public class FacetMappingFactoryTest {
         assertEquals(FacetConstants.FIELD_DESCRIPTION, facet.getName());
         assertEquals(1, facet.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:GeneralInfo/cmdp:Descriptions/cmdp:Description/text()", facet.getPatterns().get(0));
+    }
+
+    @Test
+    public void testConceptLinkAttributMapping() {
+        FacetMapping facetMapping = FacetMappingFactory
+                .getFacetMapping(FACETCONCEPTS_FILENAME, TEIHEADER_PROFILE_ID, true);
+        List<FacetConfiguration> facets = facetMapping.getFacets();
+
+        FacetConfiguration facet = facets.get(17);
+        assertEquals(FacetConstants.FIELD_AVAILABILITY, facet.getName());
+        assertEquals("/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:publicationStmt/cmdp:availability/@status", facet.getPatterns().get(0));
     }
 }
