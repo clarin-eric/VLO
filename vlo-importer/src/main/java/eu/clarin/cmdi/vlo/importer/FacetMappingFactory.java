@@ -270,7 +270,7 @@ public class FacetMappingFactory {
                 attributeAutopilot.declareXPathNameSpace("xs", "http://www.w3.org/2001/XMLSchema");
 
                 try {
-                    attributeAutopilot.selectXPath("./xs:complexType/xs:simpleContent/xs:extension/xs:attribute");
+                    attributeAutopilot.selectXPath("./xs:complexType/xs:simpleContent/xs:extension/xs:attribute | ./xs:complexType/xs:attribute");
                     while (attributeAutopilot.evalXPath() != -1) {
                         int attributeDatcatIndex = getDatcatIndex(vn);
                         int attributeNameIndex = vn.getAttrVal("name");

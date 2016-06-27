@@ -883,4 +883,39 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("{code:eng}written general; 95 mio words; TEI/SGML", doc.getFieldValue("description"));
         assertEquals("Written Corpus", doc.getFieldValue(FacetConstants.FIELD_RESOURCE_CLASS));
     }
+
+    @Test
+    public void testConceptLinkAttributMapping() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1380106710826\" ns0:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1380106710826/xsd\" xmlns:ns0=\"http://www.w3.org/2001/XMLSchema-instance\">\n";
+        content += "    <Header>\n";
+        content += "        <MdCreator>CLARIN-DK-UCPH</MdCreator>\n";
+        content += "        <MdCreationDate>2014-11-26</MdCreationDate>\n";
+        content += "        <MdSelfLink>hdl:11221/90D0-C024-81C4-3-8@md=cmdi</MdSelfLink>\n";
+        content += "        <MdProfile>clarin.eu:cr1:p_1380106710826</MdProfile>\n";
+        content += "    </Header>\n";
+        content += "    <Resources>\n";
+        content += "        <ResourceProxyList />\n";
+        content += "        <JournalFileProxyList />\n";
+        content += "        <ResourceRelationList />\n";
+        content += "    </Resources>\n";
+        content += "    <Components>\n";
+        content += "        <cmdp:teiHeader>\n";
+        content += "            <cmdp:fileDesc>\n";
+        content += "                <cmdp:publicationStmt>\n";
+        content += "                    <cmdp:availability status=\"restricted\">\n";
+        content += "                    </cmdp:availability>\n";
+        content += "                </cmdp:publicationStmt>\n";
+        content += "            </cmdp:fileDesc>\n";
+        content += "       </cmdp:teiHeader>\n";
+        content += "    </Components>\n";
+        content += "</CMD>\n";
+
+        File cmdiFile = createCmdiFile("testAttributeMapping", content);
+        CMDIDataProcessor processor = getDataParser();
+        CMDIData data = processor.process(cmdiFile);
+
+        assertEquals("Other", data.getSolrDocument().getFieldValue(FacetConstants.FIELD_AVAILABILITY));
+    }
 }
