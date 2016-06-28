@@ -32,13 +32,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <body>
 
         <wicket:extend>
-            <div id="topnavigation">
-                <div wicket:id="breadcrumbs" id="breadcrumbs">
-                    [BREADCRUMBS]
-                </div>
-            </div>
 
             <div class="content" id="record">
+
+                <div id="topnavigation" class="row">
+
+                    <!-- larger screens: full breadcrumbs -->
+                    <div class="col-md-10">
+                        <ul class="breadcrumb" wicket:id="breadcrumbs" id="breadcrumbs">[BREADCRUMBS]</ul>
+                    </div>
+
+                    <div class="col-md-2 col-xs-4">
+                        <div class="top-links padding pull-right">
+                            <!--TODO -->
+                            <!--<wicket:container wicket:id="permalink">[permalink]</wicket:container>-->
+                        </div>
+                    </div>
+
+                </div>
 
                 <h1 wicket:id="name">[NAME]</h1>
 
