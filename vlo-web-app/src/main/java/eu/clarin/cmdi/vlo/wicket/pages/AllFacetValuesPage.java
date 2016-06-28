@@ -78,8 +78,8 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
             setModel(new FacetFieldModel(facet, facetFieldsService, selectionModel)); // gets all facet values
         }
         if (getModelObject() == null) {
-            final String message = String.format("Facet '%s' could not be found", facet);
-            throw new AbortWithHttpErrorCodeException(404, message);
+            Session.get().error(String.format("Facet '%s' could not be found", facet));
+            ErrorPage.triggerErrorPage(ErrorPage.ErrorType.PAGE_NOT_FOUND, params);
         }
 
         addComponents();
