@@ -469,9 +469,11 @@
                 <!-- Clarino_B_center_Repository_University_of_Bergen cmdp:corpusProfile -->
                 <blacklistPattern>/cmd:CMD/cmd:Components/cmdp:corpusProfile/cmdp:resourceCommonInfo/cmdp:identificationInfo/cmdp:url</blacklistPattern>
                 <!-- Clarino_B_center_Repository_University_of_Bergen cmdp:corpusProfile -->
-                <blacklistPattern>/cmd:CMD/cmd:Components/cmdp:lexicalProfile/cmdp:resourceCommonInfo/cmdp:identificationInfo/cmdp:url/@description</blacklistPattern>
-                <!-- Clarino_B_center_Repository_University_of_Bergen cmdp:lexicalProfile -->
                 <blacklistPattern>/cmd:CMD/cmd:Components/cmdp:lexicalProfile/cmdp:resourceCommonInfo/cmdp:identificationInfo/cmdp:url</blacklistPattern>
+                <!-- Clarino_B_center_Repository_University_of_Bergen cmdp:lexicalProfile -->
+                <blacklistPattern>/cmd:CMD/cmd:Components/cmdp:lexicalProfile/cmdp:resourceCommonInfo/cmdp:identificationInfo/cmdp:PID</blacklistPattern>
+                <!-- Clarino_B_center_Repository_University_of_Bergen cmdp:lexicalProfile -->
+                <blacklistPattern>/cmd:CMD/cmd:Components/cmdp:lexicalProfile/cmdp:resourceCommonInfo/cmdp:distributionInfo/cmdp:licenceInfo/</blacklistPattern>
                 <!-- Clarino_B_center_Repository_University_of_Bergen cmdp:lexicalProfile -->
 	</facetConcept>
 	<facetConcept name="resourceClass" description="The type of the resource or tool (e.g. corpus, lexicon, grammar, tool...)" definition="The type of the resource or tool (e.g. corpus, lexicon, grammar, tool...).">
