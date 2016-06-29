@@ -26,15 +26,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     background-color: @navbar-default-bg;
     color: @navbar-default-color;
 
-    a.footer-logo-link {
-        display: block;
-        margin-top: -15px;
-        img {
-            max-width: 20%;
-        }
-    }
-    
     .version-info {
         color: lighten(@navbar-default-color, 15%);
     }
+
+    .footer-fineprint {
+        &, & a {
+            color: @navbar-default-color;
+        }
+    }
+
 }
