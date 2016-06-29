@@ -18,9 +18,12 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -74,32 +77,6 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
         add(new AttributeModifier("class", new ExpansionStateRepresentationModel(expansionModel, getExpandedClass(), getCollapsedClass(), getFallbackClass())));
         // aria-expended attribute for screenreaders
         add(new AttributeModifier("aria-expanded", new ExpansionStateRepresentationModel(expansionModel, "true", "false", "undefined")));
-
-        // add expansion link
-        add(new IndicatingAjaxFallbackLink("expand") {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                expansionModel.setObject(ExpansionState.EXPANDED);
-                onExpandCollapse(target);
-                if (target != null) {
-                    target.add(ExpandablePanel.this);
-                }
-            }
-        }.add(new AttributeModifier("aria-controls", ExpandablePanel.this.getMarkupId())));
-
-        // add collapse link
-        add(new IndicatingAjaxFallbackLink("collapse") {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                expansionModel.setObject(ExpansionState.COLLAPSED);
-                onExpandCollapse(target);
-                if (target != null) {
-                    target.add(ExpandablePanel.this);
-                }
-            }
-        }.add(new AttributeModifier("aria-controls", ExpandablePanel.this.getMarkupId())));
     }
 
     private void createTitleToggler() {
@@ -123,6 +100,19 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
         // Facet name becomes title
         titleLink.add(createTitleLabel("title"));
         titleLink.add(new AttributeModifier("aria-controls", ExpandablePanel.this.getMarkupId()));
+
+        titleLink.add(new WebMarkupContainer("expand"));
+        titleLink.add(new WebMarkupContainer("collapse"));
+        titleLink.add(new Behavior() {
+            @Override
+            public void onConfigure(Component component) {
+                final boolean expanded = expansionModel.getObject().equals(ExpansionState.EXPANDED);
+                component.get("expand").setVisible(!expanded);
+                component.get("collapse").setVisible(expanded);
+            }
+
+        });
+
         add(titleLink);
     }
 

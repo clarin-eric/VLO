@@ -203,3 +203,30 @@
         }
     }
 }
+
+.panel.panel-default.panel-expandable {
+    .panel-heading {
+        padding: 0;
+
+        a.expandable-panel-toggle {
+            display: block;
+            width: 100%;
+            padding: @panel-heading-padding;
+
+            .toggle-icon {
+                color: @gray-light;
+            }
+
+            &:hover, &:active, &:focus {
+                text-decoration: inherit;
+            }
+            &:hover, &:active {
+                background-color: darken(@panel-default-heading-bg, 10%);
+
+                .toggle-icon {
+                    color: @panel-default-text;
+                }
+            }
+        }
+    }
+}
