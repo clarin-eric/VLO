@@ -26,6 +26,15 @@
     }
 }
 
+/* disable search suggestions on mobile, this does not seem to work properly :( */
+/* TODO: fix this and re-enable this on narrow screens */
+@media (max-width: @screen-xs-max) {
+
+    .wicket-aa-container {
+        display: none !important;
+    }
+}
+
 /*******************
 /* SEARCH RESULTS LISTING
 /*******************/
@@ -52,11 +61,11 @@
             border-radius: 8px;
             padding: 0 .4em;
             margin: 0 .2em;
-            
+
             .query-item-label {
                 padding-right: .5em;
             }
-            
+
             &:hover {
                 border-color: @link-color;
                 color: @link-color;
