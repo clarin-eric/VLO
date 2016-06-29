@@ -15,7 +15,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-@clarin-logo-ratio: (332/184);
+@clarin-logo-ratio: (300/120);
 @top-clarin-logo-height: 4em;
 @top-clarin-logo-width: @clarin-logo-ratio * @top-clarin-logo-height;
 @navbar-clarin-logo-margin: 2px;
@@ -53,9 +53,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     //clarin logo above navbar
     .clarin-top {
-        height: @top-clarin-logo-height;
         background-color: @navbar-default-bg;
         border-bottom: 1px solid @navbar-default-border; 
+        padding: .5em 0;
 
         .logo {
             width: @top-clarin-logo-width;
@@ -70,7 +70,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     .navbar-nav {
         a.clarin-logo {
             min-height: @navbar-height;
-            width: 7em;
+            width: @navbar-clarin-logo-width;
             background-image: url('../images/clarin-logo-wide.png');
             background-size: @navbar-clarin-logo-width @navbar-clarin-logo-height;
             background-position-x: @clarin-logo-ratio * @navbar-clarin-logo-margin;
