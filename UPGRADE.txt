@@ -28,6 +28,25 @@ old configuration to the new one.
     ./vlo_solr_importer.sh -c ../config/VloConfig.xml
 
 -----------------------------
+Upgrading from 3.4.x to 4.0.0
+-----------------------------
+
+This version of the VLO is based on CMDI 1.2, and no longer processes
+CMDI 1.1. Therefore make sure that all metadata presented to the importer
+is CMDI 1.2.
+
+There are two additions to the VloConfig.xml file:
+    - "primaryFacetFields" has a number "primaryFacetField" values that define
+    which fields are shown at first in the front end.
+    - "lrSwitchboardBaseUrl" defines the base URL of the Language Resource
+    Switchboard, which is used to create a link in the resources section of the
+    record page.
+
+Normally the default values can be adopted for both of these.
+
+There are no changes in the Solr schema, so the existing index can be kept.
+
+-----------------------------
 Upgrading from 3.4.0 to 3.4.1
 -----------------------------
 

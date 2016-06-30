@@ -1,6 +1,26 @@
-Bug Fixes and Features
+Bug fixes and new features
+--------------------------
 
-VLO 3.4.1 (April 2015)
+VLO 4.0 (July 2016)
+* VLO importer supports CMDI 1.2 instead of CMDI 1.1
+    <https://trac.clarin.eu/ticket/900>
+* Field values can be extracted from attributes with concept link
+    <https://trac.clarin.eu/ticket/836>
+* Extended mapping of the 'keyword' and 'rightsHolder' facets
+    <https://trac.clarin.eu/ticket/931>
+    <https://trac.clarin.eu/ticket/936>
+
+* Redesigned front end using bootstrap and the common CLARIN style
+    <https://trac.clarin.eu/ticket/757>
+* Added a link to process resources via the Language Resource Switchboard
+    <https://trac.clarin.eu/ticket/939>
+* Fixed facet value count issues when selecting availability level(s)
+    <https://trac.clarin.eu/ticket/900>
+* Proper 404 response for records that do not exist (anymore)
+    <https://trac.clarin.eu/ticket/928>
+
+
+VLO 3.4.1 (April 2016)
 
 * Fixed a critical querying performance issue
 	<https://trac.clarin.eu/ticket/906>
@@ -8,7 +28,7 @@ VLO 3.4.1 (April 2015)
 * Small fixed in the icons
 * Included a report generator
 
-VLO 3.4 (March 2015)
+VLO 3.4 (March 2016)
 
 * Major revisions and improvements to the mapping of availability, licence and
 access information
