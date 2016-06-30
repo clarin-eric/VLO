@@ -200,27 +200,31 @@ public class VloBasePage<T> extends GenericWebPage<T> {
     }
 
     private Component createHeaderMenu(String id) {
-        final Navbar navbar = new Navbar(id);
-        navbar.setBrandName(Model.of("Virtual Language Observatory"));
+        final Navbar navbar = new Navbar(id) {
+            @Override
+            protected Label newBrandLabel(String markupId) {
+                //set label to not escape model strings to allow HTML
+                return (Label) super.newBrandLabel(markupId).setEscapeModelStrings(false);
+            }
+
+        };
+        navbar.setBrandName(Model.of("<i class=\"fa fa-globe\" aria-hidden=\"true\"></i> Virtual Language Observatory"));
 
         // link to CLARIN website
-        final Component clarinLink = new NavbarExternalLink(Model.of("http://www.clarin.eu/")).setLabel(Model.of("CLARIN"))
-                .add(new AttributeModifier("class", "hidden-xs"));
+        final Component clarinLink = new NavbarExternalLink(Model.of("http://www.clarin.eu/")) {
+            @Override
+            protected Component newLabel(String markupId) {
+                return super.newLabel(markupId).setEscapeModelStrings(false);
+            }
 
-        // badges for testing/beta versions
-        final Component testingBadge = new NavbarText(Navbar.componentId(), Model.of("TESTING"))
-                .add(new AttributeAppender("class", "qualifier snapshot", " "));
-        final Component betaBadge = new NavbarText(Navbar.componentId(), Model.of("BETA"))
-                .add(new AttributeAppender("class", "qualifier beta", " "));
+        }
+                .setLabel(Model.of("<span>CLARIN</span>"))
+                .add(new AttributeModifier("class", "clarin-logo hidden-xs"));
 
         //add all menu compoennts
-        navbar.addComponents(new ImmutableNavbarComponent(new NavbarButton(SimpleSearchPage.class, Model.of("Home")), ComponentPosition.LEFT),
-                new ImmutableNavbarComponent(new NavbarButton(FacetedSearchPage.class, Model.of("Search")), ComponentPosition.LEFT),
+        navbar.addComponents(new ImmutableNavbarComponent(new NavbarButton(FacetedSearchPage.class, Model.of("Search")), ComponentPosition.LEFT),
                 new ImmutableNavbarComponent(new NavbarButton(HelpPage.class, Model.of("Help")), ComponentPosition.LEFT),
-                new ImmutableNavbarComponent(new NavbarButton(AboutPage.class, Model.of("About")), ComponentPosition.LEFT),
-                new ImmutableNavbarComponent(clarinLink, ComponentPosition.RIGHT),
-                new ImmutableNavbarComponent(testingBadge, ComponentPosition.RIGHT),
-                new ImmutableNavbarComponent(betaBadge, ComponentPosition.RIGHT)
+                new ImmutableNavbarComponent(clarinLink, ComponentPosition.RIGHT)
         );
         return navbar;
     }

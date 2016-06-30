@@ -96,6 +96,9 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         // configure Wicket cache according to parameters set in VloConfig 
         setupCache();
 
+        // don't render comments from source in final markup
+        getMarkupSettings().setStripComments(true);
+
         // determine version qualifier (e.g. 'beta'), which can be used to visually mark the base page
         appVersionQualifier = determineVersionQualifier();
         logger.info("Version qualifier: {}", appVersionQualifier);

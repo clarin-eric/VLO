@@ -46,3 +46,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         display: none;
     }
 }
+
+@media (max-width: @screen-xs-max) {
+    .text-center-xs {
+        .text-center();
+    }
+}
+
+.row {
+    /* to fix a bug(?) in bootstrap that causes a horizontal scrollbar to appear on narrow screens */
+    overflow-x: hidden;
+}

@@ -33,6 +33,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <header wicket:id="header" id="header" role="banner">
+            <div class="clarin-top visible-xs">
+                <a class="logo center-block" href="http://www.clarin.eu"></a>
+            </div>
+            <span class="qualifier snapshot">TESTING</span>
+            <span class="qualifier beta">BETA</span>
             <div wicket:id="menu" class="navbar-static-top"  role="banner">[Navigation]</div>
         </header>
 
@@ -48,14 +53,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         </div>
 
-
-        <footer id="footer" class="navbar navbar-default">
+        <footer id="footer">
             <div class="container">
-                <div class="nav navbar-nav">
-                    <p>CLARIN VLO version <wicket:message key="vlo.version" /></p>
-                    <p class="footer-fineprint">
-                        Copyright (C) 2010-2016 CLARIN ERIC. All rights reserved.<br />
-                    </p>
+                <div class="row">
+                    <div class="col-sm-6 col-sm-push-3 col-xs-12">
+                        <!-- CLARIN logo and copyright (center column on larger screens) -->
+                        <div class="text-center">
+                            <span class="footer-fineprint">
+                                Copyright (C) 2010-2016 <a href="https://www.clarin.eu">CLARIN ERIC</a>. All rights reserved.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-sm-pull-6 col-xs-12">
+                        <div class="hidden-xs">
+                            <!-- On smaller screen, show about link with contact link -->
+                            <wicket:link><a href="AboutPage.html">About</a></wicket:link>
+                        </div>
+                        <div class="version-info text-center-xs">
+                            <!-- Center version on mobile -->
+                            v<wicket:message key="vlo.version" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3 hidden-xs text-right">
+                        <!-- Contact link in right column on larger screens -->
+                        <a href="mailto:vlo@clarin.eu">Contact</a>
+                    </div>
+                    <div class="visible-xs-block text-center">
+                        <!-- Both links in centered div on mobile -->
+                        <wicket:link><a href="AboutPage.html">About</a></wicket:link>
+                        &nbsp;<a href="mailto:vlo@clarin.eu">Contact</a>
+                    </div>
                 </div>
             </div>
         </footer>

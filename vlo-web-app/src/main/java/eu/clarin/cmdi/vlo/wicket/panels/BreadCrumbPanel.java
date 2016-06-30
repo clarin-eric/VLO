@@ -21,11 +21,13 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import java.util.Map;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -42,14 +44,22 @@ import org.apache.wicket.model.Model;
 public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
 
     private final IModel<SolrDocument> documentModel;
+    private final IModel<String> facetModel;
 
     public BreadCrumbPanel(String id, IModel<QueryFacetsSelection> model) {
         this(id, model, new Model<SolrDocument>(null));
     }
 
+    public BreadCrumbPanel(String id, IModel<QueryFacetsSelection> selectionModel, String facet) {
+        super(id, selectionModel);
+        this.facetModel = Model.of(facet);
+        this.documentModel = new Model<>(null);
+    }
+
     public BreadCrumbPanel(String id, IModel<QueryFacetsSelection> selectionModel, IModel<SolrDocument> documentModel) {
         super(id, selectionModel);
         this.documentModel = documentModel;
+        this.facetModel = new Model<>(null);
     }
 
     @Override
@@ -84,6 +94,15 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
         document.add(new ExternalLink("documentLink", new PermaLinkModel(RecordPage.class, getModel(), documentModel))
                 .add(new SolrFieldLabel("documentTitle", documentModel, FacetConstants.FIELD_NAME, getString("breadcrumbs.unnamedrecord"))));
         add(document);
+
+        final WebMarkupContainer facet = new WebMarkupContainer("facet") {
+            @Override
+            protected void onConfigure() {
+                setVisible(BreadCrumbPanel.this.facetModel.getObject() != null);
+            }
+        };
+        facet.add(new Label("facetName", new SolrFieldNameModel(facetModel)));
+        add(facet);
     }
 
     @Override

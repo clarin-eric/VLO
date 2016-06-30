@@ -20,16 +20,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #footer {
+    min-height: 10em;
+    padding-top: 30px;
+    border-top: 1px solid @navbar-default-border;
+    background-color: @navbar-default-bg;
+    color: @navbar-default-color;
 
-    margin-bottom: 0;
+    .version-info {
+        color: lighten(@navbar-default-color, 15%);
+    }
 
-    .nav {
-        width: 100%;
-        padding-top: 2em;
-        padding-bottom: 3em;
-
-        p {
-            text-align: center;
+    .footer-fineprint {
+        &, & a {
+            color: @navbar-default-color;
         }
     }
+
 }

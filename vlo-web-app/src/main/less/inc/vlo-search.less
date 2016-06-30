@@ -26,6 +26,15 @@
     }
 }
 
+/* disable search suggestions on mobile, this does not seem to work properly :( */
+/* TODO: fix this and re-enable this on narrow screens */
+@media (max-width: @screen-xs-max) {
+
+    .wicket-aa-container {
+        display: none !important;
+    }
+}
+
 /*******************
 /* SEARCH RESULTS LISTING
 /*******************/
@@ -35,9 +44,9 @@
         margin: 0;
     }
 
-    ul#searchresultitems {
-
+    #searchresultitems {
         padding: 0;
+        margin-bottom: 10px;
     }
 }
 
@@ -52,11 +61,11 @@
             border-radius: 8px;
             padding: 0 .4em;
             margin: 0 .2em;
-            
+
             .query-item-label {
                 padding-right: .5em;
             }
-            
+
             &:hover {
                 border-color: @link-color;
                 color: @link-color;
@@ -74,7 +83,7 @@
 /*******************
 /* SEARCH RESULT ITEM
 /*******************/
-#searchresults li.searchresultitem {
+#searchresults .searchresultitem {
     list-style-type: none;
     border-bottom: 1px solid #ccc;
     padding-bottom: 1em;
@@ -191,6 +200,33 @@
             font-size: large;
             text-align: center;
             color: @gray-light;
+        }
+    }
+}
+
+.panel.panel-default.panel-expandable {
+    .panel-heading {
+        padding: 0;
+
+        a.expandable-panel-toggle {
+            display: block;
+            width: 100%;
+            padding: @panel-heading-padding;
+
+            .toggle-icon {
+                color: @gray-light;
+            }
+
+            &:hover, &:active, &:focus {
+                text-decoration: inherit;
+            }
+            &:hover, &:active {
+                background-color: darken(@panel-default-heading-bg, 10%);
+
+                .toggle-icon {
+                    color: @panel-default-text;
+                }
+            }
         }
     }
 }

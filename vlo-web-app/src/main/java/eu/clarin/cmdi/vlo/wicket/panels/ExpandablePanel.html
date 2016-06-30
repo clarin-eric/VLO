@@ -23,17 +23,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <div class="panel panel-default">
+            <div class="panel panel-default panel-expandable">
                 <div class="panel-heading">
                     <h3 class="panel-title">
-                        <a title="Expand" wicket:id="expand" class="expandfacet"><span 
-                                class="glyphicon glyphicon-expand" aria-hidden="true"></span></a>
-                        <a title="Collapse" wicket:id="collapse" class="collapsefacet"><span 
-                                class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span></a>
-                        <a role="heading" wicket:id="titleToggle" href="#"><span 
-                                wicket:id="title"
-                                data-toggle="tooltip" data-placement="right" data-delay="200"
-                                >[TITLE]</span></a>
+                        <a role="heading" wicket:id="titleToggle" href="#" class="expandable-panel-toggle">
+                            <span wicket:id="title" data-toggle="tooltip" data-placement="right" data-delay="200">[TITLE]</span>
+                            <i wicket:id="expand" class="fa fa-angle-double-down pull-right toggle-icon" aria-hidden="true"></i>
+                            <i wicket:id="collapse" class="fa fa-angle-double-up pull-right toggle-icon" aria-hidden="true"></i>
+                        </a>
                     </h3>
                 </div>
                 <div class="panel-body">
