@@ -23,13 +23,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <ul wicket:id="pagingTop">[PAGING]</ul>
-            <ul id="searchresultitems">
-                <li wicket:id="resultItem" class="searchresultitem">
-                    <div class="container-fluid" wicket:id="resultItemDetails">details</div>
-                </li>
-            </ul>
-            <ul wicket:id="pagingBottom">[PAGING]</ul>
+            <div class="row">
+                <div class="col-xs-12">
+                    <ul wicket:id="pagingTop">[PAGING]</ul>
+                </div>
+            </div>
+
+            <div id="searchresultitems">
+                <div wicket:id="resultItem" class="searchresultitem">
+                    <div wicket:id="resultItemDetails">details</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <ul wicket:id="pagingBottom">[PAGING]</ul>
+                </div>
+            </div>
         </wicket:panel>
     </body>
 </html>
