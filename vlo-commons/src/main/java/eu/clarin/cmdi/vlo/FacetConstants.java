@@ -26,7 +26,6 @@ public class FacetConstants {
     public static final String FIELD_NAME = "name";
     public static final String FIELD_NATIONAL_PROJECT = "nationalProject";
     public static final String FIELD_ORGANISATION = "organisation";
-    public static final String FIELD_PROFILE = "profileName";
     public static final String FIELD_PROJECT_NAME = "projectName";
     public static final String FIELD_RESOURCE_CLASS = "resourceClass";
     public static final String FIELD_SUBJECT = "subject";
@@ -88,7 +87,6 @@ public class FacetConstants {
             FIELD_NAME,
             FIELD_NATIONAL_PROJECT,
             FIELD_ORGANISATION,
-            FIELD_PROFILE,
             FIELD_PROJECT_NAME,
             FIELD_RESOURCE_CLASS,
             FIELD_SUBJECT,
