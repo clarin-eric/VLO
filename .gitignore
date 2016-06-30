@@ -4,7 +4,6 @@
 /vlo-importer/target/
 /vlo-distribution/target/
 /vlo-web-app/target/
-/vlo-web-app/vlo-xslt.xpr
 /vlo-importer/nbactions*
 /vlo-web-app/nbactions*
 .DS_Store
