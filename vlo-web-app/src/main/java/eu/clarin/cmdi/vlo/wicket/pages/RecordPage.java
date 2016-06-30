@@ -94,7 +94,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     public final static String HIERARCHY_SECTION = "hierarchy";
 
     private final static List<String> TABS_ORDER
-            = ImmutableList.of(DETAILS_SECTION, AVAILABILITY_SECTION, RESOURCES_SECTION, ALL_METADATA_SECTION, TECHNICAL_DETAILS_SECTION, HIERARCHY_SECTION);
+            = ImmutableList.of(DETAILS_SECTION, RESOURCES_SECTION, AVAILABILITY_SECTION, ALL_METADATA_SECTION, TECHNICAL_DETAILS_SECTION, HIERARCHY_SECTION);
 
     private final static ResourceReference CMDI_HTML_CSS = new CssResourceReference(RecordPage.class, "cmdi.css");
 
@@ -221,19 +221,19 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 return fieldsTable;
             }
         });
-        tabs.set(TABS_ORDER.indexOf(RESOURCES_SECTION), new AbstractTab(new StringResourceModel("recordpage.tabs.resources", // model to include resource count in tab title
-                new SolrFieldStringModel(getModel(), FacetConstants.FIELD_RESOURCE_COUNT))) {
-            @Override
-            public Panel getPanel(String panelId) {
-                return (new ResourceLinksPanel(panelId, getModel()));
-            }
-        });
         tabs.set(TABS_ORDER.indexOf(AVAILABILITY_SECTION), new AbstractTab(Model.of("Availability")) {
             @Override
             public Panel getPanel(String panelId) {
                 final RecordLicenseInfoPanel availabilityPanel = new RecordLicenseInfoPanel(panelId, getModel());
                 availabilityPanel.setMarkupId(AVAILABILITY_SECTION); //TODO: make it possible to use this target to select license info
                 return availabilityPanel;
+            }
+        });
+        tabs.set(TABS_ORDER.indexOf(RESOURCES_SECTION), new AbstractTab(new StringResourceModel("recordpage.tabs.resources", // model to include resource count in tab title
+                new SolrFieldStringModel(getModel(), FacetConstants.FIELD_RESOURCE_COUNT))) {
+            @Override
+            public Panel getPanel(String panelId) {
+                return (new ResourceLinksPanel(panelId, getModel()));
             }
         });
         tabs.set(TABS_ORDER.indexOf(ALL_METADATA_SECTION), new AbstractTab(Model.of("All metadata")) {
