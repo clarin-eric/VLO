@@ -89,8 +89,11 @@ $(document).ready(function () {
         //subtle scroll hint
         $(".simple #simple-filler p").fadeIn(10000);
 
+        //store last scroll position
+        var lastScrollTop = 0;
         //show non-simple contents when user scrolls to its area
         $(window).scroll(function () {
+            var st = $(this).scrollTop();
             var filler = $(".simple #simple-filler");
             if (filler.is(":visible")) { // filler is only visible if the user has not scrolled yet
                 var windowBottom = $(window).scrollTop() + $(window).height();
@@ -99,14 +102,17 @@ $(document).ready(function () {
                     showSearchContent();
                 }
             } else {
-                //hide simple (mainly jumbotron) if scrolled beyond content top
-                if ($(".simple .jumbotron").is(":visible")) {
+                if (st < lastScrollTop //on scroll up
+                        && $(".simple .jumbotron").is(":visible")) { // and if jumbotron still visible
+                    //hide simple (mainly jumbotron) if scrolled beyond content top and scrolling up again
                     var contentPos = $('#search-content').offset().top;
-                    if ($(window).scrollTop() > contentPos) {
+                    if (st > contentPos) {
                         hideSimple();
                     }
+
                 }
             }
+            lastScrollTop = st;
         });
 
         //handle 'show all' button
