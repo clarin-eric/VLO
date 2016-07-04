@@ -15,8 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var interval;
-
 function startSearch() {
     $('form#search-form').addClass('loading');
     $('form#search-form button').attr("disabled", "disabled");
