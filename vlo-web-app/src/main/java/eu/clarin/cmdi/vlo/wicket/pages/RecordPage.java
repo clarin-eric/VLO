@@ -96,8 +96,6 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     private final static List<String> TABS_ORDER
             = ImmutableList.of(DETAILS_SECTION, RESOURCES_SECTION, AVAILABILITY_SECTION, ALL_METADATA_SECTION, TECHNICAL_DETAILS_SECTION, HIERARCHY_SECTION);
 
-    private final static ResourceReference CMDI_HTML_CSS = new CssResourceReference(RecordPage.class, "cmdi.css");
-
     @SpringBean(name = "documentParamsConverter")
     private PageParametersConverter<SolrDocument> documentParamConverter;
     @SpringBean(name = "queryParametersConverter")
@@ -400,13 +398,6 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         // omit query in link for canonical URL (record page gets same canonical
         // URL regardless of search term)
         return new PermaLinkModel(getPageClass(), null, getModel());
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        // add styling for CMDI to HTML transformation output
-        response.render(CssHeaderItem.forReference(CMDI_HTML_CSS));
     }
 
 }
