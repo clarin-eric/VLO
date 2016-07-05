@@ -147,7 +147,7 @@ public class LanguageCodeUtils {
     }
 
     private Map<String, String> createCodeMap(String url) {
-        LOG.debug("Creating language code map.");
+        LOG.info("Creating language code map from {}", url);
         try {
             Map<String, String> result = new ConcurrentHashMap<String, String>(CommonUtils.createCMDIComponentItemMap(url));
             return result;
@@ -184,6 +184,7 @@ public class LanguageCodeUtils {
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             domFactory.setNamespaceAware(true);
             URL url = new URL(urlString);
+            //TODO: Process XML as stream for much better performance (no need to build entire DOM)
             DocumentBuilder builder = domFactory.newDocumentBuilder();
             Document doc = builder.parse(url.openStream());
             XPath xpath = XPathFactory.newInstance().newXPath();

@@ -106,6 +106,7 @@ public final class CommonUtils {
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setNamespaceAware(true);
         URL url = new URL(urlToComponent);
+        //TODO: Process XML as stream for much better performance (no need to build entire DOM)
         DocumentBuilder builder = domFactory.newDocumentBuilder();
         Document doc = builder.parse(url.openStream());
         XPath xpath = XPathFactory.newInstance().newXPath();
@@ -137,6 +138,7 @@ public final class CommonUtils {
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setNamespaceAware(true);
         URL url = new URL(urlToComponent);
+        //TODO: Process XML as stream for much better performance (no need to build entire DOM)
         DocumentBuilder builder = domFactory.newDocumentBuilder();
         Document doc = builder.parse(url.openStream());
         XPath xpath = XPathFactory.newInstance().newXPath();
