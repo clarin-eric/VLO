@@ -51,15 +51,6 @@
     
     <licenseURIMapUrl>LicenseURIMap.xml</licenseURIMapUrl>
     
-    <!-- resourceAvailabilityMapUrl
-        Facet field used to populate collection selector on search page 
-        If disabled, the collection facet will not be shown (can be used to
-        move the collection facet in with the other facets).
-        
-        Uncomment to activate the separate collection facet display item.
-    -->
-    <!--<collectionFacet>collection</collectionFacet>-->
-    
     <!-- Fields shown as facets on the search page -->
     <facetFields>        
         <facetField>languageCode</facetField>

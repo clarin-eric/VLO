@@ -3,7 +3,7 @@ Bug fixes and new features
 
 VLO 4.0 (July 2016)
 * VLO importer supports CMDI 1.2 instead of CMDI 1.1
-    <https://trac.clarin.eu/ticket/900>
+    <https://trac.clarin.eu/ticket/897>
 * Field values can be extracted from attributes with concept link
     <https://trac.clarin.eu/ticket/836>
 * Extended mapping of the 'keyword' and 'rightsHolder' facets
