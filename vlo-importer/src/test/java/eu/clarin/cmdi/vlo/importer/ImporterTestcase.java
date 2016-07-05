@@ -39,7 +39,7 @@ public abstract class ImporterTestcase {
         MetadataImporter.config = configFactory.newConfig();
 
         // optionally, modify the configuration here
-        MetadataImporter.config.setComponentRegistryRESTURL("http://alpha-vlo.clarin.eu/component-registry-rest/rest/registry/1.2/profiles/");
+        MetadataImporter.config.setComponentRegistryRESTURL("http://alpha-vlo.clarin.eu/component-registry-rest/rest/registry/1.x/profiles/");
         config = MetadataImporter.config;
 
         MetadataImporter.languageCodeUtils = new LanguageCodeUtils(config);
