@@ -24,44 +24,47 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <body>
         <wicket:panel>
             <table wicket:id="resources" class="table resourcelist">
-                <tr class="header">
-                    <th class="recordresourcetypeicon"><!-- icon --></th>
-                    <th class="recordresourcename">Name</th>
-                    <th>Type</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-
-                <wicket:container wicket:id="resource">
-                    <tr wicket:id="itemColumns">
-                        <td class="recordresourcetypeicon">                            
-                            <span wicket:id="resourceTypeIcon"></span>
-                        </td>
-                        <td class="recordresourcename">
-                            <a wicket:id="showResource" class="resourcelink">
-                                <wicket:container wicket:id="fileName">resource.txt</wicket:container>
-                            </a>
-                        </td>
-                        <td wicket:id="resourceType">Text file</td>
-                        <td>
-                            <div wicket:id="dropdown" class="dropdown">[dropdown]</div>
-                        </td>
-                        <td>
-                            <a wicket:id="details" class="pull-right">
-                                <span wicket:id="show" class="glyphicon glyphicon-chevron-right" title="Show details"></span>
-                                <span wicket:id="hide" class="glyphicon glyphicon-chevron-down" title="Hide details"></span>
-                            </a>
-                        </td>
+                <thead>
+                    <tr class="header">
+                        <th class="recordresourcetypeicon"><!-- icon --></th>
+                        <th class="recordresourcename">Name</th>
+                        <th>Type</th>
+                        <th></th>
+                        <th></th>
                     </tr>
+                </thead>
+                <tbody>
+                    <wicket:container wicket:id="resource">
+                        <tr wicket:id="itemColumns">
+                            <td class="recordresourcetypeicon">                            
+                                <span wicket:id="resourceTypeIcon"></span>
+                            </td>
+                            <td class="recordresourcename">
+                                <a wicket:id="showResource" class="resourcelink">
+                                    <wicket:container wicket:id="fileName">resource.txt</wicket:container>
+                                </a>
+                            </td>
+                            <td wicket:id="resourceType">Text file</td>
+                            <td>
+                                <div wicket:id="dropdown" class="dropdown">[dropdown]</div>
+                            </td>
+                            <td>
+                                <a wicket:id="details" class="pull-right">
+                                    <span wicket:id="show" class="glyphicon glyphicon-chevron-right" title="Show details"></span>
+                                    <span wicket:id="hide" class="glyphicon glyphicon-chevron-down" title="Hide details"></span>
+                                </a>
+                            </td>
+                        </tr>
 
-                    <tr wicket:id="detailsColumns" class="details">
-                        <td></td>
-                        <td colspan="4">
-                            <p>Mime type: <span wicket:id="mimeType">application/msword</span></p>
-                            <p>Link: <span wicket:id="href">location</span></p>
-                        </td>
-                    </tr>
-                </wicket:container>
+                        <tr wicket:id="detailsColumns" class="details">
+                            <td></td>
+                            <td colspan="4">
+                                <p>Mime type: <span wicket:id="mimeType">application/msword</span></p>
+                                <p>Link: <span wicket:id="href">location</span></p>
+                            </td>
+                        </tr>
+                    </wicket:container>
+                </tbody>
 
             </table>
             <p wicket:id="noResources">
