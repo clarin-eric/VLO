@@ -176,7 +176,7 @@ public class FacetMappingFactory {
 
                 LinkedHashSet<String> linkedHashSet = new LinkedHashSet<>(xpaths);
                 if(xpaths.size() != linkedHashSet.size()) {
-                    LOG.error("Duplicate XPaths in : "+xpaths);
+                    LOG.error("Duplicate XPaths for facet {} in: {}.", facetConcept.getName(), xpaths);
                 }
                 config.setPatterns(new ArrayList<>(linkedHashSet));
                 config.setFallbackPatterns(facetConcept.getPatterns());
