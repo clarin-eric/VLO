@@ -34,6 +34,7 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-5127_f2721b23-921c-46ba-8d4d-88b46aef6976</concept>
 		<concept>http://www.isocat.org/datcat/DC-4160</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-4160_192be757-0d8f-f4fe-b10b-d3d50de92482</concept>
+		<concept>http://www.isocat.org/rest/dc/4160</concept>
 		<!-- CLARIN-D Webservices name -->
 		<concept>http://www.isocat.org/datcat/DC-4114</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-4114_747bf046-1208-940d-36ba-297e4de49e0c</concept>
@@ -41,8 +42,6 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-2544_3626545e-a21d-058c-ebfd-241c0464e7e5</concept>
 		<concept>http://www.isocat.org/datcat/DC-2545</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2545_d873f2ab-2a2f-29d6-a9ab-260cde57f227</concept>
-		<concept>http://www.isocat.org/rest/dc/4160</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-4160_192be757-0d8f-f4fe-b10b-d3d50de92482</concept>
 		<concept>http://purl.org/dc/terms/title</concept>
 		<concept>http://purl.org/dc/elements/1.1/title</concept>
 		<concept>http://www.isocat.org/datcat/DC-6119</concept>
