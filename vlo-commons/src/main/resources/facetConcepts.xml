@@ -499,7 +499,7 @@
 		<concept>http://purl.org/dc/terms/format</concept>
 	</facetConcept>
 	<facetConcept name="nationalProject" description="The national CLARIN project providing the resource or tool" definition="The national CLARIN project providing the resource or tool.">
-		<pattern>/cmd:CMD/cmd:Header/cmdp:MdCollectionDisplayName/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Header/cmd:MdCollectionDisplayName/text()</pattern>
 	</facetConcept>
 	<facetConcept name="text">
 		<pattern>/cmd:CMD/cmd:Header//text()</pattern>
