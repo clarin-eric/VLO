@@ -1,7 +1,13 @@
 Bug fixes and new features
 --------------------------
+VLO 4.0.1 (August 2016)
+* Fetching external fonts from https locations, preventing browser 
+warnings/issues
+* Fixed mapping of national project from collection display name
+* Removed redundant XPaths from mapping
+	<https://trac.clarin.eu/ticket/959>
 
-VLO 4.0 (July 2016)
+VLO 4.0.0 (July 2016)
 * VLO importer supports CMDI 1.2 instead of CMDI 1.1
     <https://trac.clarin.eu/ticket/897>
 * Field values can be extracted from attributes with concept link
