@@ -18,7 +18,7 @@ public class SOLRService {
 	public static final Logger _logger = LoggerFactory.getLogger(SOLRService.class);
 	
 	//to increase performances, should be increased in future
-	static final int MAX_NUM_OF_RECORDS = 1000000; //1M
+	static final int MAX_NUM_OF_RECORDS = 1500000; //1M
 	static final String GET_IDS = "fl=id&rows=";
 	
 	
@@ -32,10 +32,11 @@ public class SOLRService {
 
 		List<URL> ids = new ArrayList<URL>(MAX_NUM_OF_RECORDS);
 		
+                //TODO: paginate
 		boolean parseSuccess = vg.parseHttpUrl(Config.SOLR_QUERY_URL + GET_IDS + MAX_NUM_OF_RECORDS, false);
 		
 		if(!parseSuccess)
-			throw new RuntimeException("error parsing result from: " + Config.SOLR_QUERY_URL + GET_IDS + MAX_NUM_OF_RECORDS);
+			throw new RuntimeException("Error retrieving or parsing result from: " + Config.SOLR_QUERY_URL + GET_IDS + MAX_NUM_OF_RECORDS);
 		
 		VTDNav nav = vg.getNav();		
 		AutoPilot ap = new AutoPilot(nav);
