@@ -10,7 +10,7 @@
     <!-- When updating the version number here, also update the version number
          in each module's pom.xml
     -->
-    <version>4.0.1</version>
+    <version>4.1-SNAPSHOT</version>
     
     <description>Virtual Language Observatory (VLO) parent project</description>
     <organization>
