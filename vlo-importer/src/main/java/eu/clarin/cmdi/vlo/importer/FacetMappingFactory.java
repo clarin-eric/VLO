@@ -27,7 +27,7 @@ public class FacetMappingFactory {
 
     private final static Logger LOG = LoggerFactory.getLogger(FacetMappingFactory.class);
 
-    private Map<String, FacetMapping> mapping = new HashMap<String, FacetMapping>();
+    private final Map<String, FacetMapping> mapping = new HashMap<>();
 
     /**
      * Our one instance of the FMF.
@@ -94,7 +94,7 @@ public class FacetMappingFactory {
             // Below we put the stuff we found into the configuration class.
             for (FacetConcept facetConcept : conceptMapping.getFacetConcepts()) {
                 FacetConfiguration config = new FacetConfiguration();
-                List<String> xpaths = new ArrayList<String>();
+                List<String> xpaths = new ArrayList<>();
                 handleId(xpaths, facetConcept);
                 for (String concept : facetConcept.getConcepts()) {
                     List<String> paths = conceptLinkPathMapping.get(concept);
@@ -103,7 +103,7 @@ public class FacetMappingFactory {
                             for (String path : paths) {
                                 // lazily instantiate the reverse mapping, i.e., from concept to path
                                 if (pathConceptLinkMapping == null) {
-                                    pathConceptLinkMapping = new HashMap<String, String>();
+                                    pathConceptLinkMapping = new HashMap<>();
                                     for (String c : conceptLinkPathMapping.keySet()) {
                                         for (String p : conceptLinkPathMapping.get(c)) {
                                             pathConceptLinkMapping.put(p, c);
@@ -174,11 +174,11 @@ public class FacetMappingFactory {
                 config.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
                 config.setName(facetConcept.getName());
 
-                LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>(xpaths);
+                LinkedHashSet<String> linkedHashSet = new LinkedHashSet<>(xpaths);
                 if(xpaths.size() != linkedHashSet.size()) {
-                    LOG.error("Duplicate XPaths in : "+xpaths);
+                    LOG.error("Duplicate XPaths for facet {} in: {}.", facetConcept.getName(), xpaths);
                 }
-                config.setPatterns(new ArrayList<String>(linkedHashSet));
+                config.setPatterns(new ArrayList<>(linkedHashSet));
                 config.setFallbackPatterns(facetConcept.getPatterns());
                 config.setDerivedFacets(facetConcept.getDerivedFacets());
 
@@ -230,7 +230,7 @@ public class FacetMappingFactory {
      * @throws NavException
      */
     private Map<String, List<String>> createConceptLinkPathMapping(String xsd, Boolean useLocalXSDCache) throws NavException {
-        Map<String, List<String>> result = new HashMap<String, List<String>>();
+        Map<String, List<String>> result = new HashMap<>();
         VTDGen vg = new VTDGen();
         boolean parseSuccess;
         if(useLocalXSDCache) {
@@ -246,7 +246,7 @@ public class FacetMappingFactory {
         VTDNav vn = vg.getNav();
         AutoPilot ap = new AutoPilot(vn);
         ap.selectElement("xs:element");
-        Deque<Token> elementPath = new LinkedList<Token>();
+        Deque<Token> elementPath = new LinkedList<>();
         while (ap.iterate()) {
             int i = vn.getAttrVal("name");
             if (i != -1) {
@@ -258,7 +258,7 @@ public class FacetMappingFactory {
                     String xpath = createXpath(elementPath, null);
                     List<String> values = result.get(conceptLink);
                     if (values == null) {
-                        values = new ArrayList<String>();
+                        values = new ArrayList<>();
                         result.put(conceptLink, values);
                     }
                     values.add(xpath);
