@@ -48,14 +48,14 @@ can always be traced back to its sources!
 
 	````
 	git checkout development
-	git checkbout -b release-vlo-3.x
+	git checkbout -b release-vlo-4.a.b
 	```
 
 * Change the version number in the poms to match the release
   (should match the directory name and be non-snapshot!!):
 
 	```
-	mvn versions:set -DnewVersion=3.x
+	mvn versions:set -DnewVersion=4.a.b
 	```
 
   This will update the version numbers of the parent pom and all VLO
@@ -76,17 +76,17 @@ can always be traced back to its sources!
 	```
 	mvn versions:commit 		#cleans up POM backups
 	mvn clean			#cleans up build outpit
-	svn commit -m "Created tag for VLO version 3.x"
+	svn commit -m "Created tag for VLO version 4.a.b"
 	git commit
 	```
 * Merge into master and tag to finalise the release 
 
 	```
 	git checkout master
-	git merge --no-ff release-vlo-3.x	#maybe some conflicts needs to be resolved after this
+	git merge release-vlo-4.a.b	#maybe some conflicts needs to be resolved after this
 	git push
 	#tag
-	git tag -a 3.x
+	git tag -a 4.a.b
 	git push --tags
 	```
 	
@@ -94,8 +94,8 @@ can always be traced back to its sources!
 
 	```
 	git checkout development
-	git merge release-vlo-3.x		#maybe some conflicts needs to be resolved after this
-	mvn version:set -DnewVersion 3.y-SNAPSHOT
+	git merge release-vlo-4.a.b		#maybe some conflicts needs to be resolved after this
+	mvn version:set -DnewVersion 4.c-SNAPSHOT
 	mvn versions:commit
 	git commit
 	git push
