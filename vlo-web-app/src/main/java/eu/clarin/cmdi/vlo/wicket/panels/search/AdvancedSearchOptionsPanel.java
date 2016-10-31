@@ -39,6 +39,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -51,6 +53,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  * @author twagoo
  */
 public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFacetsSelection> implements IAjaxIndicatorAware{
+	
+	public static final String SELECTION_TYPE_ATTRIBUTE_NAME = "selectionType";
 
     @SpringBean
     private VloConfig config;
@@ -58,6 +62,8 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
     private final Form optionsForm;
 
     private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
+    
+    private boolean filterQuerySelectionType = false;
     /**
      * The fields that this panel provides options for
      */
@@ -68,6 +74,16 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
     public AdvancedSearchOptionsPanel(String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
         optionsForm = new Form("options");
+        
+        final CheckBox selectionType = new CheckBox("selectionType", new Model(filterQuerySelectionType));
+        selectionType.add(new OnChangeAjaxBehavior(){
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				filterQuerySelectionType = !filterQuerySelectionType;
+				WebSession.get().setAttribute(SELECTION_TYPE_ATTRIBUTE_NAME, filterQuerySelectionType);
+			}        	
+        });
+        optionsForm.add(selectionType);
 
         final CheckBox fcsCheck = createFieldNotEmptyOption("fcs", FacetConstants.FIELD_SEARCH_SERVICE);
         optionsForm.add(fcsCheck);
