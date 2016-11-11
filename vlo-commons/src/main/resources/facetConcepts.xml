@@ -199,6 +199,8 @@
 		<!-- IDS IDSAGD_Speaker -->
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Corpus/cmdp:Collection/cmdp:DocumentationLanguages</blacklistPattern>
 		<!-- IDS IDSAGD_Corpus -->
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:Collection/cmdp:DocumentationLanguages</blacklistPattern>
+		<!-- INL TextCorpusProfile -->
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:Documentations</blacklistPattern>
 		<!-- IMS TextCorpusProfile -->
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:DocumentationLanguages</blacklistPattern>
