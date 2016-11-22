@@ -1,12 +1,15 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.SolrInputField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import eu.clarin.cmdi.vlo.FacetConstants;
 
 /**
  * Represents a document of CMDI data.
@@ -74,7 +77,12 @@ public class CMDIData {
             }
             Collection<Object> fieldValues = doc.getFieldValues(name);
             if (fieldValues == null || !fieldValues.contains(value)) {
-                doc.addField(name, value);
+            	//if availability facet reduce tag to most restrictive
+            	if(name.equals(FacetConstants.FIELD_AVAILABILITY)){
+            		 reduceAvailability(value);
+            	}else{
+            		doc.addField(name, value);
+            	}
             } //ignore double values don't add them
         }
     }
@@ -145,5 +153,60 @@ public class CMDIData {
 
     public String getId() {
         return id;
+    }
+    
+    /*
+     * In case that Availability facet has more then one value use the most restrictive tag from PUB, ACA and RES 
+     */
+    
+    private void reduceAvailability(String value){
+    	Collection<Object> currentValues = doc.getFieldValues(FacetConstants.FIELD_AVAILABILITY);
+    	
+    	//the first value
+    	if(currentValues == null){
+    		doc.addField(FacetConstants.FIELD_AVAILABILITY, value);
+    		return;
+    	}
+    	
+    	int lvlNew = availabilityToLvl(value);
+    	if(lvlNew == -1){ //other tags, add them, uniqueness has already being checked
+    		doc.addField(FacetConstants.FIELD_AVAILABILITY, value);
+    		return;
+    	}
+    	
+    	//current level of availability
+    	int lvlCur = -1;
+    	for(Object val: currentValues){
+    		int rhs = availabilityToLvl(val.toString());
+    		if(lvlCur < rhs)
+    			lvlCur = rhs;    		
+    	}
+    	
+    	//if new values is more restrictive replace the old with new
+    	if(lvlNew > lvlCur){
+    		SolrInputField fOld = doc.get(FacetConstants.FIELD_AVAILABILITY);
+    		SolrInputField fNew = new SolrInputField(FacetConstants.FIELD_AVAILABILITY);
+    		
+    		fNew.addValue(value, 1.0f); //new, more restrictive value
+    		for(Object val: fOld.getValues()){ //copy other tags
+    			if(availabilityToLvl(val.toString()) == -1)
+    				fNew.addValue(val, 1.0f);
+    		}    		
+    		
+    		doc.replace(FacetConstants.FIELD_AVAILABILITY, fOld, fNew);
+    	}
+    	
+    }
+    
+    private int availabilityToLvl(String availabilty){
+    	if(availabilty == null)
+    		return 0;
+	    	
+    	switch (availabilty) {
+			case FacetConstants.AVAILABILITY_LEVEL_PUB: return 1;
+			case FacetConstants.AVAILABILITY_LEVEL_ACA: return 2;
+			case FacetConstants.AVAILABILITY_LEVEL_RES: return 3;
+			default: return -1; // other tags
+    	}
     }
 }
