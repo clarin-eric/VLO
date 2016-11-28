@@ -12,7 +12,6 @@ public class NationalProjectPostProcessorTest extends ImporterTestcase {
     public void testNationalProject() {
         NationalProjectPostProcessor processor = new NationalProjectPostProcessor();
         assertEquals("CLARIN-NL", processor.process("Meertens TEST COLLECTION").get(0));
-        assertEquals("CLARIN-D", processor.process("Berlin-Brandenburgische Akademie der Wissenschaften").get(0));
         assertEquals("CLARIN-DK-UCPH", processor.process("CLARIN-DK-UCPH Repository").get(0));
         assertEquals("CLARIN-D", processor.process("Universität des Saarlandes CLARIN-D-Zentrum, Saarbrücken").get(0));
     }
