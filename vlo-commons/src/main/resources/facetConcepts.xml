@@ -349,6 +349,9 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-5316_2c6244b4-4f10-5e8e-49b6-26fbf7004791</concept>
 		<concept>http://www.isocat.org/datcat/DC-6543</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6543_92dacb75-3098-0d5a-0665-94ddb6274f8c</concept>
+		<concept>http://www.isocat.org/datcat/DC-2503</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2503_72bd598f-4abf-e122-ed93-f2adf1ab8785</concept>
+
 		<pattern>/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:subject/@olac-linguistic-field</pattern>
 		<pattern>/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:subject[@dcterms-type="LCSH"]/text()</pattern>
 		<pattern>/cmd:CMD/cmd:Components/cmdp:mods/cmdp:subject/cmdp:Topic/text()</pattern>
