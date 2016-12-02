@@ -241,11 +241,17 @@
         <variant value="Creative Commons CC BY-NC 3.0 DE, http://creativecommons.org/licenses/by-nc/3.0/de/"/>
         <variant value="Dit werk is valt onder een Creative Commons Naamsvermelding-NietCommercieel 4.0 Internationaal-licentie(http://creativecommons.org/licenses/by-nc/4.0/)"/>
         <variant value="Dit werk is valt onder een Creative Commons Naamsvermelding-NietCommercieel 4.0 Internationaal-licentie.(http://creativecommons.org/licenses/by-nc/4.0/)"/>
-        <variant value="http://creativecommons.org/licenses/by-nc/3.0/"/>
+        <variant value="http://creativecommons.org/licenses/by-nc/3.0/"/> <!-- TODO: regex -->
+        <variant value="https://creativecommons.org/licenses/by-nc/3.0/"/>
+        <variant value="http://creativecommons.org/licenses/by-nc/4.0/"/>
+        <variant value="https://creativecommons.org/licenses/by-nc/4.0/"/>
     </mapping>
     <mapping>
         <normalizedValue value="PUB;BY;NC;ND"/>
         <variant value="CC-BY-NC-ND"/>
+        <variant value="http://creativecommons.org/licenses/by-nc-nd/3.0/"/> <!-- TODO: regex -->
+        <variant value="https://creativecommons.org/licenses/by-nc-nd/3.0/"/>
+        <variant value="http://creativecommons.org/licenses/by-nc-nd/4.0/"/>
         <variant value="https://creativecommons.org/licenses/by-nc-nd/4.0/"/>
     </mapping>
     <mapping>
@@ -254,7 +260,10 @@
         <variant value="CC-BY-NC-SA"/>
         <variant value="CC-by-nc-sa"/>
         <variant value="freely available for non-commercial research use (CC BY-NC-SA Licence)"/>
+        <variant value="http://creativecommons.org/licenses/by-nc-sa/3.0/"/> <!-- TODO: regex -->
+        <variant value="https://creativecommons.org/licenses/by-nc-sa/3.0/"/>
         <variant value="http://creativecommons.org/licenses/by-nc-sa/4.0/"/>
+        <variant value="https://creativecommons.org/licenses/by-nc-sa/4.0/"/>
     </mapping>
     <mapping>
         <normalizedValue value="PUB;BY;ND"/>
