@@ -19,6 +19,10 @@
 			value="Dit werk is valt onder een Creative Commons Naamsvermelding-NietCommercieel 4.0 Internationaal-licentie(http://creativecommons.org/licenses/by-nc/4.0/)" />
 	</mapping>
 	<mapping>
+		<normalizedValue value="https://creativecommons.org/licenses/by-nc-nd/4.0/" />
+		<variant value="http://creativecommons.org/licenses/by-nc-nd/4.0/" />
+	</mapping>
+	<mapping>
 		<normalizedValue value="http://www.apache.org/licenses/LICENSE-2.0" />
 		<variant value="ApacheLicence_2.0" />
 		<variant value="Apache Licence 2.0" />

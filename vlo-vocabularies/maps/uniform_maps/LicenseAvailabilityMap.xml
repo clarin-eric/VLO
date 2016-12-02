@@ -246,6 +246,7 @@
     <mapping>
         <normalizedValue value="PUB;BY;NC;ND"/>
         <variant value="CC-BY-NC-ND"/>
+        <variant value="https://creativecommons.org/licenses/by-nc-nd/4.0/"/>
     </mapping>
     <mapping>
         <normalizedValue value="PUB;BY;NC;SA"/>
