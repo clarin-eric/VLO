@@ -214,6 +214,8 @@
         <variant value="Open access"/>
         <variant value="Public"/>
         <variant value="This resource can be used online http://retro.dwds.de/?corpus=1&amp;cc=OSTWEST"/>
+        <variant value="http://creativecommons.org/publicdomain/mark/1.0/"/>
+        <variant value="https://creativecommons.org/publicdomain/mark/1.0/"/>
     </mapping>
     <mapping>
         <normalizedValue value="PUB;BY"/>

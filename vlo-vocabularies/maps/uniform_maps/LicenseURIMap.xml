@@ -84,6 +84,30 @@
 		<variant value="http://creativecommons.org/licenses/by-nc-sa/4.0/" />
 	</mapping>
 	<mapping>
+		<normalizedValue value="https://creativecommons.org/publicdomain/mark/1.0/" />
+		<variant value="http://creativecommons.org/publicdomain/mark/1.0/" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="https://creativecommons.org/licenses/by/4.0/" />
+		<variant value="http://creativecommons.org/licenses/by/4.0/" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="https://creativecommons.org/licenses/by-nc-sa/3.0/" />
+		<variant value="http://creativecommons.org/licenses/by-nc-sa/3.0/" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="https://www.europeana.eu/rights/rr-f/" />
+		<variant value="http://www.europeana.eu/rights/rr-f/" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="https://www.europeana.eu/rights/rr-r/" />
+		<variant value="http://www.europeana.eu/rights/rr-r/" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="https://www.europeana.eu/rights/rr-p/" />
+		<variant value="http://www.europeana.eu/rights/rr-p/" />
+	</mapping>
+        <mapping>
 		<normalizedValue
 			value="https://kitwiki.csc.fi/twiki/bin/view/FinCLARIN/ClarinEULA" />
 		<variant value="CLARIN_ACA" />
