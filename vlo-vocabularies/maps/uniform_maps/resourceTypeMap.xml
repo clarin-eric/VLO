@@ -56,6 +56,7 @@
         <variant value="Songs "/>
         <variant value="Sound "/>
         <variant value="Speech "/>
+        <variant value="SOUND"/>
     </mapping>
     <mapping>
         <normalizedValue value="collection"/>
@@ -88,6 +89,7 @@
         <normalizedValue value="image"/>
         <variant value="Image "/>
         <variant value="StillImage "/>
+        <variant value="IMAGE"/>
     </mapping>
     <mapping>
         <normalizedValue value="lexicalResource"/>
@@ -262,6 +264,7 @@
         <variant value="Travel literature "/>
         <variant value="Utopian literature "/>
         <variant value="Virtual_manuscript "/>
+        <variant value="TEXT"/>
     </mapping>
     <mapping>
         <normalizedValue value="software"/>
@@ -306,6 +309,7 @@
         <variant value="MovingImage "/>
         <variant value="Televisie "/>
         <variant value="Video "/>
+        <variant value="VIDEO"/>
     </mapping>
     <mapping>
         <normalizedValue value="webApplication"/>
