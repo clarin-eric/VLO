@@ -320,10 +320,6 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             }
 
             final List<String> values = postProcess(config.getName(), value);
-            //discard '--' values
-            if (values != null && !values.isEmpty() && values.get(0).equals("--")) {
-                return matchedPattern;
-            }
 
             insertFacetValues(config.getName(), values, cmdiData, languageCode, allowMultipleValues, config.isCaseInsensitive());
 

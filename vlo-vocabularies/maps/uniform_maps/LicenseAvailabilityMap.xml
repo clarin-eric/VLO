@@ -1,353 +1,764 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mappings field="availability">
+<mappings field="availability">    
     <mapping>
-        <normalizedValue value="--"/>
-        <variant value="Annotation derzeit nicht vollständig. Freigabe erst nach Auswertung möglich. Lizensierung zur Veröffentlichung im Web als Vereinbarung nötig."/>
-        <variant value="A special license is required because of the stem lexicon. SMOR (without a stem lexicon) comes with the SFST-tools (Stuttgart Finite State Transducer Tools) under the GNU Public License GPLv2."/>
-        <variant value="available-restrictedUse"/>
-        <variant value="commercial"/>
-        <variant value="commercialUse"/>
-        <variant value="no access"/>
-        <variant value="no available"/>
-        <variant value="Not available"/>
-        <variant value="Nor available"/>
-        <variant value="non available"/>
-		<variant value="No availability"/>
-		<variant value="No Availability"/>
-        <variant value="no recordings available due to the sensitivity of the material"/>
-        <variant value="no"/>
-        <variant value="No"/>
-        <variant value="not available to the public"/>
-        <variant value="other"/>
-        <variant value="proprietary"/>
-        <variant value="Recurso protegido - Protected resource"/>
-        <variant value="underNegotiation"/>
-        <variant value="1"/>
-        <variant value="2"/>
-        <variant value="3"/>
-        <variant value="4"/>
-        <variant value="[free; free for academic use; restricted use; request required; user license required; unknown]"/>
-        <variant value="__"/>
-        <variant value="476306KB"/>
-        <variant value="94408KB"/>
-        <variant value="archiving+dissemination"/>
-        <variant value="Available"/>
-        <variant value="available"/>
-        <variant value="BAS:aGender"/>
-        <variant value="BAS:ALC"/>
-        <variant value="BAS:ASICA"/>
-        <variant value="BAS:CI_1"/>
-		<variant value="BAS:CI_2_Vowels"/>		
-		<variant value="BAS:CI_2_VOT"/>
-		<variant value="BAS:CI_2_Sibilants"/>
-		<variant value="BAS:CI_2_Cluster"/>		
-        <variant value="BAS:CLIPS_MT_MANUAL"/>
-        <variant value="BAS:FORMTASK"/>
-        <variant value="BAS:HEMPEL"/>
-        <variant value="BAS:HOESI"/>
-        <variant value="BAS:NM-MoCap-Corpus"/>
-        <variant value="BAS:PD1"/>
-        <variant value="BAS:PD2"/>
-        <variant value="BAS:PHATTSESSIONZ"/>
-        <variant value="BAS:RVG1_CLARIN"/>
-        <variant value="BAS:RVG-J"/>
-        <variant value="BAS:SaGA"/>
-        <variant value="BAS:SC1"/>
-        <variant value="BAS:SC10"/>
-        <variant value="BAS:SHC"/>
-        <variant value="BAS:SIGNUM"/>
-        <variant value="BAS:SK"/>
-        <variant value="BAS:SMC"/>
-        <variant value="BAS:SVC"/>
-        <variant value="BAS:TAXI"/>
-        <variant value="BAS:VERIF1DE"/>
-        <variant value="BAS:VM1"/>
-        <variant value="BAS:VM2"/>
-        <variant value="BAS:VMEMO"/>
-        <variant value="BAS:ZIPTEL"/>
-        <variant value="CC-BY-..."/>
-        <variant value="nor available"/>
-        <variant value="not available"/>
-        <variant value="test"/>
-        <variant value="unknown"/>
-        <variant value="Unspecified"/>
-        <variant value="unspecified"/>
-        <variant value="yes"/>
+        <normalizedValue value="PUB" />
+		<variant value="Creative Commons Zero v1.0 Universal" /> <!-- full name -->
+		<variant value="CC0-1.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/publicdomain/zero/1\.0/*" isRegExp="true" />
+		<variant value="CC-ZERO" />
+		<variant value="CC0" />
+		
+		<variant value="http://creativecommons.org/publicdomain/mark/1.0/" />
+		
+        <variant value="Available to all" />
+        <variant value="Available to public" />
+        <variant value="CLARIN_PUB" />
+        <variant value="CLARIN-PUB" />
+        <variant value="Die Nutzung des Wörterbuchs ist online über eine kostenfreie Abfrage einzelner Artikel möglich." />
+        <variant value="Documentos  libremente comunicables. (Code du Patrimoine, art. L. 211-1, L. 211-4, L. 213-1)" />
+        <variant value="Documents freely communicated. (Code du Patrimoine, art. L. 211-1, L. 211-4, L. 213-1)" />
+        <variant value="Documents librement communicables. (Code du Patrimoine, art. L. 211-1, L. 211-4, L. 213-1)" />
+        <variant value="Domena publiczna (public domain)" />
+        <variant value="HZSK-PUB" />
+        <variant value="Individual lexical entries of this dictionary can be accessed freely online" />
+        <variant value="info:eu-repo/semantics/openAccess" />
+        <variant value="free; Distributed as a dissertation - &quot;Lexikalische Polygenese im Konzeptbereich KOPF&quot;" />
+        <variant value="free" />
+        <variant value="freely available" />
+        <variant value="freely usable" />
+        <variant value="Free" />
+        <variant value="free to use" />
+        <variant value="Free access" />
+        <variant value="frei verfügbar" />        
+        <variant value="http://www.europeana.eu/rights/orphan-work-eu/" />
+        <variant value="http://rightsstatements.org/vocab/InC-OW-EU/1.0/​" />
+        <variant value="https://lindat.mff.cuni.cz/repository/xmlui/page/licence-UD-1.3" />        
+        <variant value="Open" />
+        <variant value="open" />
+        <variant value="open 2009" />
+        <variant value="open access" />
+        <variant value="Open Access" />
+        <variant value="Open access" />
+        <variant value="Open aceess" />
+        <variant value="openly available" />
+        <variant value="open to all" />
+        <variant value="Princeton_Wordnet" />
+        <variant value="public" />
+        <variant value="Public" />
+        <variant value="PUC" />
+        <variant value="This resource can be used online http://retro.dwds.de/?corpus=1&amp;cc=OSTWEST" />       
+    </mapping>
+	
+	<mapping>
+        <normalizedValue value="PUB;BY" />
+        
+        <!-- Artistic License -->
+        <variant value="http://opensource.org/licenses/Artistic-Perl-1.0" />
+        <variant value="http://opensource.org/licenses/Artistic-Perl-2.0" />
+        
+		<!-- Apache License -->
+		<variant value="Apache" />
+        <variant value="Apache-Licence" />      
+		
+		<variant value="Apache License 2.0" /> <!-- full name -->
+		<variant value="Apache Licence 2.0" />
+		<variant value="Apache-2.0" /> <!-- ID -->
+		<variant value="Apache 2.0" />		
+		<variant value="Apache License, Version 2.0" />
+		<variant value="ApacheLicence_2.0" />
+		<variant value="http://opensource.org/licenses/Apache-2.0" />
+		<variant value="http://www.apache.org/licenses/LICENSE-2.0" /> <!-- official url -->
+		
+		<!-- BSD -->
+		<variant value="BSD-style" />
+        <variant value="BSD" />
+        <variant value="BSD or CC-BY-3.0" />
+		
+		<variant value="http://opensource.org/licenses/BSD-2-Clause" />
+		<variant value="BSD 2-clause &quot;Simplified&quot; License" /> <!-- full name -->
+		<variant value="BSD-2-Clause" /> <!-- ID -->
+		<variant value="http://www.opensource.org/licenses/BSD-2-Clause" />
+		<variant value="BSD 2-Clause" />		
+        <variant value="BSD 2" />
+		
+		<variant value="http://opensource.org/licenses/BSD-3-Clause" />
+		<variant value="BSD 3-clause &quot;New&quot; or &quot;Revised&quot; License" /> <!-- full name -->
+		<variant value="BSD-3-Clause" /> <!-- ID -->
+		<variant value="http://www.opensource.org/licenses/BSD-3-Clause" />		
+		
+		<!-- LGPL -->
+		<variant value="LGPL" />
+        <variant value="LGPL for Linguistic Resources" />
+		<variant value="Lesser General Public License For Linguistic Resources" />
+        <variant value="http://www.gnu.org/licenses/lgpl.html" />
+		
+		<variant value="GNU Lesser General Public License v3.0 only" /> <!-- full name -->
+		<variant value="LGPL-3.0" /> <!-- ID -->
+		<variant value="GNU LGPL 3.0" />
+		<variant value="GNU Library or &quot;Lesser&quot; General Public License 3.0 (LGPL-3.0)" />
+		
+		<!-- MIT -->
+		<variant value="MIT license" />
+		
+		<!-- CC-BY -->
+		
+		<variant value="Creative_Commons-BY" />
+		<variant value="CC-BY" />
+		
+		<variant value="Creative Commons Attribution 1.0" /> <!-- full name -->
+		<variant value="CC-BY-1.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by/1\.0/*" isRegExp="true" />
+		
+		<variant value="Creative Commons Attribution 2.0" /> <!-- full name -->
+		<variant value="CC-BY-2.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by/2\.0/*" isRegExp="true" />
+		<variant value="Creative Common License: http://creativecommons.org/licenses/by/2.0/" />
+		<variant value="Creative Common License:                         http://creativecommons.org/licenses/by/2.0/" />
+
+		<variant value="Creative Commons Attribution 2.5" /> <!-- full name -->
+		<variant value="CC-BY-2.5" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by/2\.5/*" isRegExp="true" />
+
+		<variant value="Creative Commons Attribution 3.0" /> <!-- full name -->
+		<variant value="CC-BY-3.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by/3\.0/*" isRegExp="true" />
+		<variant value="Creative Commons Attribution 3.0 Unported Licence" />
+		<variant value="This work is licensed under a Creative Commons Attribution 3.0 Unported License.   * CC-BY 3.0:   * You are free:   *     to Share — to copy, distribute and transmit the work   *     to Remix — to adapt the work   *     to make commercial use of the work   * Under the following conditions:   *     Attribution — You must attribute the work in the manner specified by the   *        author or licensor (but not in any way that suggests that they    *        endorse you or your use of the work).    *****************************************************************************   * Please cite this paper if you use the data:   * Wiltrud Kessler and Jonas Kuhn (2014)   * A Corpus of Comparisons in Product Reviews.    * In Proceedings of the 9th Language Resources and Evaluation Conference (LREC 2014),   * Reykjavik, Iceland, 28-30. May 2014." />
+		<variant value="***************************************************************************** * This work is licensed under a Creative Commons Attribution 3.0 Unported License. * CC-BY 3.0: * You are free: * to Share — to copy, distribute and transmit the work * to Remix — to adapt the work * to make commercial use of the work * Under the following conditions: * Attribution — You must attribute the work in the manner specified by the * author or licensor (but not in any way that suggests that they * endorse you or your use of the work). ***************************************************************************** * * Please cite this paper if you use these constructions: * Wiltrud Kessler and Hinrich Schütze (2012) * Classification of Inconsistent Sentiment Words Using Syntactic Constructions. * In Proceedings of the 24th International Conference on Computational Linguistics * (COLING 2012) * Mumbai, India, 10.-14. December 2012. * *****************************************************************************" />
+		<variant value="This work is licensed under a Creative Commons Attribution 3.0 Unported License. * CC-BY 3.0: * You are free: * to Share — to copy, distribute and transmit the work * to Remix — to adapt the work * to make commercial use of the work * Under the following conditions: * Attribution — You must attribute the work in the manner specified by the * author or licensor (but not in any way that suggests that they * endorse you or your use of the work). ***************************************************************************** * Please cite this paper if you use the data: * Wiltrud Kessler and Jonas Kuhn (2014) * A Corpus of Comparisons in Product Reviews. * In Proceedings of the 9th Language Resources and Evaluation Conference (LREC 2014), * Reykjavik, Iceland, 28-30. May 2014." />
+		<variant value="All the recipes of the SaCoCo Historical Corpus (but Knopf 1800, Franckfurt 1789 and Gräz 1686) are released under a Creative Commons Attribution 3.0 Unported License. (CC BY 3.0) http://creativecommons.org/licenses/by/3.0/" />
+		<variant value="This resource is licensed under a Creative Commons Attribution 3.0 Unported License (http://creativecommons.org/licenses/by/3.0/). The availability status of the resource is: 'available-unrestrictedUse'." />
+		<variant value="This resource is licensed under a Creative Commons Attribution 3.0 Unported License (http://creativecommons.org/licenses/by/3.0/). The availability status of the resource is: 'available-restrictedUse'." />
+		<variant value="Creative Commons - Attribution 3.0 Unported (CC BY 3.0)" />
+		<variant value="Creative Commons Attribution 3.0 Unported License" />	
+		<variant value="Creative Commons Attribution 3.0 Unported (CC BY 3.0) http://creativecommons.org/licenses/by/3.0/" />
+		<variant value="Rights holders of this corpus are: Thierry Chanier ; Ciara R Wigham                         ; licence = http://creativecommons.org/licenses/by/3.0/" />
+
+		<variant value="Creative Commons Attribution 4.0" /> <!-- full name -->
+		<variant value="CC-BY-4.0" /> <!-- ID -->
+		<variant value="CC-BY 4.0" />
+		<variant value="http(s?)://creativecommons\.org/licenses/by/4\.0/*" isRegExp="true" />
+		<variant value="CC BY 4.0; https://creativecommons.org/licenses/by/4.0/" />
+		<variant value="CreativeCommons Attribution 4.0 International (CC BY 4.0)" />
+		<variant value="freely available under the CC BY 4.0 licence, https://creativecommons.org/licenses/by/4.0/" />
+		<variant value="Free access under Attribution 4.0 International License" />		 
+    </mapping>
+	
+    <mapping>
+        <normalizedValue value="PUB;BY;SA" />
+		<variant value="Creative Commons Attribution Share Alike 1.0" /> <!-- full name -->
+		<variant value="CC-BY-SA-1.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-sa/1\.0/*" isRegExp="true" />
+		
+		<variant value="Creative Commons Attribution Share Alike 2.0" /> <!-- full name -->
+		<variant value="CC-BY-SA-2.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-sa/2\.0/*" isRegExp="true" />
+		
+		<variant value="Creative Commons Attribution Share Alike 2.5" /> <!-- full name -->
+		<variant value="CC-BY-SA-2.5" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-sa/2\.5/*" isRegExp="true" />
+		
+		<variant value="Creative Commons Attribution Share Alike 3.0" /> <!-- full name -->
+		<variant value="CC-BY-SA-3.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-sa/3\.0/*" isRegExp="true" />
+		<variant value="CC BY-SA 3.0" />
+		<variant value="Creative Commons Attribution-ShareAlike 3.0" />
+		<variant value="Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)" />
+		<variant value="Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)" />
+		<variant value="Namensnennung - Weitergabe unter gleichen Bedingungen 3.0 Deutschland (CC BY-SA 3.0 DE)" />
+		<variant value="The SaCoCo Contemporary Corpus is released under a Creative Commons Attribution - Share Alike 3.0 Unported License. (CC BY SA 3.0) http://creativecommons.org/licenses/by-sa/3.0/" />
+		<variant value="This resource is licensed under a Creative Commons Attribution-ShareAlike 3.0 Unported License (http://creativecommons.org/licenses/by-sa/3.0/). The availability status of the resource is: 'available-unrestrictedUse'." />
+		
+		<variant value="Creative Commons Attribution Share Alike 4.0" /> <!-- full name -->
+		<variant value="CC-BY-SA-4.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-sa/4\.0/*" isRegExp="true" />
+		<variant value="CC BY-SA 4.0" />
+		<variant value="Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)" />
+		<variant value="Free access under Attribution-ShareAlike 4.0 International License" />
+		<variant value="HZSK-ACA (Text) / CC-by-sa-4.0 (Annotation)" />		
+    </mapping>
+	
+    <mapping>
+        <normalizedValue value="PUB;ID" />
+        <variant value="REG" />
+        <variant value="PUB+ID" />
+    </mapping>	
+    <mapping>
+        <normalizedValue value="PUB;NC" />
+        <variant value="Freely available for non-commercial use" />
+        <variant value="http://rightsstatements.org/vocab/NoC-NC/1.0/" />
+        <variant value="http://www.europeana.eu/rights/out-of-copyright-non-commercial/" />
     </mapping>
     <mapping>
-        <normalizedValue value="ACA"/>
-        <variant value="free by CLARIN Service Provider federation"/>
-        <variant value="free; Free for academic use."/>
-        <variant value="free; Free for research purposes."/>
-        <variant value="academic access"/>
-        <variant value="academic"/>
-        <variant value="academic - available for academic use"/>
-        <variant value="ACA"/>
-        <variant value="available to researcher/annotator"/>
-        <variant value="Binnen de kaders van de Gedragscode voor gebruik van persoonsgegevens in wetenschappelijk onderzoek van de VSNU (Vereniging van Samenwerkende Nederlandse Universiteiten) vrij beschikbaar voor dialectologisch, fonetisch, historisch of ander onderzoek. Onderzoekers wordt gevraagd bij publicatie als bron deze website te vermelden. Neem voor andersoortig gebruik contact op met het Meertens Instituut."/>
-        <variant value="CLARIN ACA"/>
-        <variant value="CLARIN_ACA"/>
-        <variant value="CLARIN-ACA"/>
-        <variant value="disponible para indígenas e investigadores"/>
-        <variant value="disponible para indÃgenas e investigadores"/>
-        <variant value="free available for science"/>
-        <variant value="free available for scientific usage"/>
-        <variant value="Free for academic use"/>
-        <variant value="free for academic use"/>
-        <variant value="free for academic use (subcat frames)"/>		
-		<variant value="Free for use in research in teaching."/>		
-        <variant value="freely available for academic research and education"/>
-        <variant value="freely available for research and education"/>
-        <variant value="freely available for science"/>
-        <variant value="Free to use for research and teaching purposes."/>
-        <variant value="Free to use for research and teaching purposes"/>
-        <variant value="ree available for science"/>
-        <variant value="research use only"/>
-        <variant value="Vrij beschikbaar voor dialectologisch, fonetisch, historisch of ander onderzoek. Onderzoekers wordt gevraagd bij publicatie als bron deze website te vermelden. Neem voor andersoortig gebruik contact op met het Meertens Instituut"/>
-        <variant value="free; Use of text excerpts for scientific research."/>
-        <variant value="Free for academic use"/>
-        <variant value="Free for academic use.non applicable for commercial parties"/>
-        <variant value="free for science"/>
-        <variant value="Free, accessible through CLARIN Institutional login"/>
-        <variant value="HZSK-ACA"/>
-        <variant value="mit Benutzerlizenz (Formular online zum Download); für nicht akademischen Gebrauch auf Anfrage bei Erhard Hinrichs"/>
-        <variant value="mit Benutzerlizenz (Formular online zum Download); für nicht akademischen Gebrauch auf Anfrage bei Prof. Dr. Erhard Hinrichs"/>
-        <variant value="restricted; Free for academic use, copyright owned by Professor Svenka Savic, Novi Sad (Serbia)."/>
-		<variant value="Registrierung erforderlich, eingeschränkte Nutzung für nicht- akademische und kommerzielle Nutzung"/>
+        <normalizedValue value="PUB;BY;NC" />
+		
+		<variant value="CC-BY-NC" />
+        <variant value="CC - BY - NC" />
+        <variant value="CC BY-NC" />
+		
+		<!-- CC-BY-NC-->
+		<variant value="Creative Commons Attribution Non Commercial 1.0" /> <!-- full name -->
+		<variant value="CC-BY-NC-1.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nc/1\.0/*" isRegExp="true" />
+
+		<variant value="Creative Commons Attribution Non Commercial 2.0" /> <!-- full name -->
+		<variant value="CC-BY-NC-2.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nc/2\.0/*" isRegExp="true" />
+
+		<variant value="Creative Commons Attribution Non Commercial 2.5" /> <!-- full name -->
+		<variant value="CC-BY-NC-2.5" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nc/2\.5/*" isRegExp="true" />
+		
+
+		<variant value="Creative Commons Attribution Non Commercial 3.0" /> <!-- full name -->
+		<variant value="CC-BY-NC-3.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nc/3\.0/*" isRegExp="true" />
+		<variant value="Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0)" />
+		<variant value="Creative Commons CC BY-NC 3.0 DE, http://creativecommons.org/licenses/by-nc/3.0/de/" />
+		<variant value="CC BY-NC 3.0" />
+		<variant value="CC BY-NC 3.0 DE" />
+		<variant value="Creative Commons Attribution-NonCommercial 3.0 Unported License" />
+		<variant value="This resource is licensed under a Creative Commons Attribution-NonCommercial 3.0 Unported License (http://creativecommons.org/licenses/by-nc/3.0/). The availability status of the resource is: 'available-restrictedUse'." />
+		
+		<variant value="Creative Commons Attribution Non Commercial 4.0" /> <!-- full name -->
+		<variant value="CC-BY-NC-4.0" /> <!-- ID -->
+		<variant value="CC BY-NC 4.0" />
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nc/4\.0/*" isRegExp="true" />
+		<variant value="Dit werk is valt onder een Creative Commons Naamsvermelding-NietCommercieel 4.0 Internationaal-licentie.(http://creativecommons.org/licenses/by-nc/4.0/)" />
+		<variant value="Dit werk is valt onder een Creative Commons Naamsvermelding-NietCommercieel 4.0 Internationaal-licentie(http://creativecommons.org/licenses/by-nc/4.0/)" />
+		<variant value="Free access under Attribution-NonCommercial 4.0 International License" />
+		
+    </mapping>
+    
+	<mapping>
+        <normalizedValue value="PUB;BY;NC;ND" />
+        <variant value="CC-BY-NC-ND" />
+		
+		<variant value="Creative Commons Attribution Non Commercial No Derivatives 1.0" /> <!-- full name -->
+		<variant value="CC-BY-NC-ND-1.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nd-nc/1\.0/*" isRegExp="true" />
+
+		<variant value="Creative Commons Attribution Non Commercial No Derivatives 2.0" /> <!-- full name -->
+		<variant value="CC-BY-NC-ND-2.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-nd/2\.0/*" isRegExp="true" />
+		<variant value="Creative Commons Attribution-Noncommercial-No Derivative Works 2.0 Germany - http://creativecommons.org/licenses/by-nc-nd/2.0/de/deed.en" />
+
+		<variant value="Creative Commons Attribution Non Commercial No Derivatives 2.5" /> <!-- full name -->
+		<variant value="CC-BY-NC-ND-2.5" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-nd/2\.5/*" isRegExp="true" />
+		
+		<variant value="Creative Commons Attribution Non Commercial No Derivatives 3.0" /> <!-- full name -->
+		<variant value="CC-BY-NC-ND-3.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-nd/3\.0/*" isRegExp="true" />
+		<variant value="Attribution-NonCommercial-NoDerivs 3.0 Unported (CC BY-NC-ND 3.0)" />
+		
+		<variant value="Creative Commons Attribution Non Commercial No Derivatives 4.0" /> <!-- full name -->
+		<variant value="CC-BY-NC-ND-4.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-nd/4\.0/*" isRegExp="true" />
+		<variant value="Distributed by the University of Oxford under a Attribution-NonCommercial-NoDerivatives 4.0 International License." />
+    </mapping>
+	
+    <mapping>
+        <normalizedValue value="PUB;BY;NC;SA" />		
+		<!-- CC-BY-NC-SA -->
+		
+		<variant value="CC-BY-NC-SA" />
+        <variant value="CC-by-nc-sa" />
+		
+		<variant value="Creative Commons Attribution Non Commercial Share Alike 1.0" /> <!-- full name -->
+		<variant value="CC-BY-NC-SA-1.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-sa/1\.0/*" isRegExp="true" />
+
+		<variant value="Creative Commons Attribution Non Commercial Share Alike 2.0" /> <!-- full name -->
+		<variant value="CC-BY-NC-SA-2.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-sa/2\.0/*" isRegExp="true" />	
+		<variant value="Creative Common License: http://creativecommons.org/licenses/by-nc-sa/2.0/" />
+		<variant value="Creative Commons Attribution-NonCommercial-ShareAlike 2.0 Generic license." />
+		<variant value="Creative Common License:                         http://creativecommons.org/licenses/by-nc-sa/2.0/" />
+		<variant value="open access after registration ; rightsHolder = Thierry                         Chanier ; Christophe Reffay ; Marie-Laure betbeder ; Maud Ciekanski ;                         Marie-Noelle Lamy ;licence =                         http://creativecommons.org/licenses/by-nc-sa/2.0/" />
+		<variant value="Rights holders of this corpus are: Thierry Chanier ; Ciara R Wigham                         ; licence = http://creativecommons.org/licenses/by-nc-sa/2.0/" />
+		<variant value="open access after registration ; rightsHolder = Thierry                         Chanier ; Marie-Noelle Lamy ; Christophe Reffay ; Marie-Laure betbeder ;                         Maud Ciekanski ; licence =                         http://creativecommons.org/licenses/by-nc-sa/2.0/" />
+		<variant value="open access after registration ; rightsHolder = Thierry                         Chanier ; Christophe Reffay ; Marie-Laure Betbeder ; Maud Ciekanski ;                         Marie-Noelle Lamy ; licence =                         http://creativecommons.org/licenses/by-nc-sa/2.0/" />
+		<variant value="Rights holders of this corpus are: Thierry Chanier ; Dagmar                         Abendroth-Timmer; Maud Ciekanski ; Mark Bechtel ; Laurent Mario ; licence =                         http://creativecommons.org/licenses/by-nc-sa/2.0/" />
+
+		<variant value="Creative Commons Attribution Non Commercial Share Alike 2.5" /> <!-- full name -->
+		<variant value="CC-BY-NC-SA-2.5" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-sa/2\.5/*" isRegExp="true" />
+
+		<variant value="Creative Commons Attribution Non Commercial Share Alike 3.0" /> <!-- full name -->
+		<variant value="CC-BY-NC-SA-3.0" /> <!-- ID -->
+		<variant value="CC BY-NC-SA 3.0" />
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-sa/3\.0/*" isRegExp="true" />
+		<variant value="Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0)" />
+		<variant value="Attribution-NonCommercial-ShareAlike 3.0 Unported Licence" />
+		<variant value="Distributed by the University of Oxford under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License." />
+		<variant value="Distributed by the University of Oxford under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License. This is a very liberal license that grants certain rights for non-commercial use, especially your right to use GerManC for your own research, but also reserves certain rights for the original creators of GerManC." />
+		<variant value="Distributed by the University of Oxford under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License. This is a very liberal license that grants certain rights for non-commercial use, especially your right to use the French Oral Narrative Corpus for your own research, but also reserves certain rights for the original creators of the corpus." />
+		<variant value="Available under the conditions of the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0) License (http://creativecommons.org/licenses/by-nc-sa/3.0/). This is a very liberal license that grants certain rights for non-commercial use, especially your right to use VOICE for your own research, but also reserves certain rights for the original creators of VOICE. Please refer to the file COPYING for the details of this license and the extent of the rights granted.." />
+		<variant value="This resource is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License (http://creativecommons.org/licenses/by-nc-sa/3.0/). The availability status of the resource is: 'available-restrictedUse'." />
+		<variant value="This resource is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License (http://creativecommons.org/licenses/by-nc-sa/3.0/). The availability status of the resource is: 'available-unrestrictedUse'." />
+		<variant value="Creative Commons Attribution-NonCommercial-ShareAlike 3.0 (NFP, Non-Member): https://catalog.ldc.upenn.edu/license/creative-comons-attribution-noncommercial-sharealike-3-dot-0-unported.pdf" />
+		<variant value="Creative Commons Attribution-NonCommercial-ShareAlike 3.0 (FP): https://catalog.ldc.upenn.edu/license/creative-commons-attribution-noncommercial-sharealike-3-dot-0-fp.pdf" />
+		<variant value="Creative Commons BY-NC-SA 3.0 NL license" />
+		<variant value="The SaCoCo Diachronic Corpus as a whole is released under a Creative Commons Attribution - Non Commercial - Share Alike 3.0 Unported License. (CC BY NC SA 3.0) http://creativecommons.org/licenses/by-nc-sa/3.0/" />
+		<variant value="The recipes belonging to Knopf 1800, Franckfurt 1789 and Gräz 1686 contained in the SaCoCo Historical Corpus are released under a Creative Commons Attribution - Non Commercial - Share Alike 3.0 Unported License. (CC BY NC SA 3.0) http://creativecommons.org/licenses/by-nc-sa/3.0/" />
+
+		<variant value="Creative Commons Attribution Non Commercial Share Alike 4.0" /> <!-- full name -->
+		<variant value="CC-BY-NC-SA-4.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-sa/4\.0/*" isRegExp="true" />
+		<variant value="Distributed by the University of Oxford under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License." />
+		<variant value="Distributed by the University of Oxford under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 Unported License." />
+		<variant value="Free access under Attribution-NonCommercial-ShareAlike 4.0 International License" />
     </mapping>
     <mapping>
-        <normalizedValue value="ACA;META;NC;SA"/>
-        <variant value="MSCommons-BY-NC-SA"/>
+        <normalizedValue value="PUB;BY;ND" />
+		
+		<!-- CC-BY-ND -->
+        <variant value="CC-BY-ND" />
+		
+		<variant value="Creative Commons Attribution No Derivatives 1.0" /> <!-- full name -->
+		<variant value="CC-BY-ND-1.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nd/1\.0/*" isRegExp="true" />
+
+		<variant value="Creative Commons Attribution No Derivatives 2.0" /> <!-- full name -->
+		<variant value="CC-BY-ND-2.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nd/2\.0/*" isRegExp="true" />
+
+		<variant value="Creative Commons Attribution No Derivatives 2.5" /> <!-- full name -->
+		<variant value="CC-BY-ND-2.5" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nd/2\.5/*" isRegExp="true" />
+
+		<variant value="Creative Commons Attribution No Derivatives 3.0" /> <!-- full name -->
+		<variant value="CC-BY-ND-3.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nd/3\.0/*" isRegExp="true" />
+
+		<variant value="Creative Commons Attribution No Derivatives 4.0" /> <!-- full name -->
+		<variant value="CC-BY-ND-4.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-nd/4\.0/*" isRegExp="true" />
+		
     </mapping>
     <mapping>
-        <normalizedValue value="ACA;NC"/>
-        <variant value="academic-nonCommercialUse"/>
-        <variant value="CLARIN_ACA-NC"/>
-        <variant value="free for academic use; non applicable for commercial parties"/>
-        <variant value="free for academic use; non appliccable for commercial parties"/>
-        <variant value="Free for academic use. Non-applicable for commercial parties."/>
-        <variant value="License Agreement for the \Huge German Corpus (HGC)&quot; This agreement is made between - Universität Stuttgart Institut für maschinelle Sprachverarbeitung - Computerlinguistik - Pfaffenwaldring 5b D 70569 Stuttgart, Germany Contact: clarin@ims.uni-stuttgart.de Contact person: Dr. Heike Zinsmeister hereinafter referred to as the Licensor - Institute: Address: Represented by: Contact person: (email: ) duly authorised to sign this Agreement, hereinafter referred to as the User This agreement is made and enters into force as of ................................. (date). 1 Product This agreement relates to the \Huge German Corpus (HGC)&quot;, a collection of German Newspaper texts, hereinafter referred to as the Product. The corpus is partly based on data taken from the European Corpus Initiative Multilingual Corpus I (ECI/MCI). The HCG currently comprises approximately 204 million tokens. It is automatically preprocessed in terms of segmentation, lemmatization, and part-of-speech annotation. Furthermore, it is indexed for use in the IMS Corpus Workbench (CWB). 2 Academic Research License 1. Licensor grants User a non-exclusive license to use the Product for the purpose of non-commercial, non-profit research by User for any research project conducted on the premises of User. 2. User agrees to acknowledge the use of the Product in all publications reporting on results produced with the help of the Product by referring to the landing page of the Product or Fitschen (2004, p. 8): - HGC landing page: http://www.ims.uni-stuttgart.de/forschung/ressourcen/korpora/hgc.en.html - Fitschen, Arne. 2004. Ein Computerlinguistisches Lexikon als komplexes System. Doctoral Thesis. University of Stuttgart. Published as AIMS 10 3). 3. User agrees to quote at most individual sample sentences of the original texts. User may not cite longer sequences of sentences. 4. User agrees not to redistribute nor to sublicense the Product in whole nor in part. 3 Non-Disclosure 1. User will not make the Product available to any third party. 2. User will use all reasonable efforts to ensure that no persons or institutions other than persons that are in the institute of User will get access to the Product. Other persons or institutions desiring to use the Product should be directed to Licensor to obtain separate license agreements. 3. User will use all reasonable efforts, at least as great as the precautions it takes to protect its own information, to prevent inadvertent disclosure of the Product to any third party. 4 Disclaimer 1. Licensor hereby informs User that the distributed version of the Product is work in progress and that, despite care and effort spent by Licensor on the pre-processing of the Product, the Product may still contain errors. 2. The Product is provided to User as-is, without any warranty and without any guarantee of its usability. 3. Licensor shall not be held liable for any consequences that arise from defects in the Product. 5 Agreement 1. This Agreement constitutes the complete agreement between Licensor and User, and it supersedes any prior agreements between them that concern the the Product. 2. This Agreement shall be construed in accordance with German law; disputes shall be adjudicated or otherwise decided in the courts of Stuttgart, Germany. 3. If any provision of this Agreement is held by a court of competent jurisdiction to be unenforceable, all other provisions hereof shall remain in full force and effect, and be interpreted to the extent possible consistent with the intent of the parties expressed by this Agreement. 6 Termination 1. Licensor may terminate the agreement forthwith if the User commits any material breach of this agreement or if the copyright holder raises an objection against the terms of the license agreement. 2. User may terminate this agreement within 30 days of written notice. On termination howsoever caused, User shall erase all copies of the Product. 7 Fee This license is granted by Licensor to User free of charge. 8 Acknowledgement Part of the raw text as used in the Product is based on the European Corpus Initiative Multilingual Corpus I (ECI/MCI), which is copyrighted by the Association for Computational Linguistics (ACL) on behalf of the European Corpus Initiative (ECI): ELSNET/CLARIN Trans 10 3512 JK Utrecht The Netherlands URL: http://www.elsnet.org/eci.html Signatures For the Licensor: Done at Stuttgart, on .............................. By (name): Prof. Dr. Jonas Kuhn Title: Director IMS-GCL Signature: .............................. For the User: Done at ..................., on ................... By (name): .............................. Title: .............................. Signature: .............................."/>
-        <variant value="License Agreement for the TIGER Corpus for non-commercial use Universität Stuttgart, Institut für Maschinelle Sprachverarbeitung Prof. Dr. Jonas Kuhn Pfaffenwaldring 5b, D-70569 Stuttgart, Germany Universität Potsdam, Institut für Germanistik Postfach 601553, D-14415 Potsdam, Germany Universität des Saarlandes, FR 4.7 Computerlinguistik Lehrstuhl Prof. Dr. Hans Uszkoreit Postfach 151150, D-66041 Saarbrücken, Germany (&quot;Licenser&quot;) and &quot;Licensee&quot; agree as follows 1. Status of Licensee Licensee confirmes that Licensee is (part of) an academic or educational institution. 2. Product The TIGER Treebank, consists of approximately 900,000 tokens (50,000 sentences) of German newspaper text, taken from the Frankfurter Rundschau. The corpus was annotated with parts-of-speech and syntactic structures in the project TIGER (DFG) in Potsdam, Saarbrücken and Stuttgart. Copyright of different parts of the TIGER Treebank is to: Universität Potsdam, Institut für Germanistik Universität des Saarlandes, FR 4.7 Computerlinguistik Universität Stuttgart, Institut für Maschinelle Sprachverarbeitung for all part-of-speech and structural annotations, and corpus documentation. The TIGER Treebank includes third party data as listed in the Appendix. Licenser and Licensee recognize that the copyrights of these data belong to the respective organisation, as mentioned in the Appendix. 3. License Licenser grants Licensee a non-exclusive license to use the TIGER Treebank. Licensee agrees to use the corpus only for non-commercial, non-profit research purposes; to make no changes to the corpus; and to acknowledge the use of the corpus in all publications reporting on results produced with the help of the TIGER Treebank. Use of the corpus or use of data derived from the corpus for any commercial purposes requires explicit written agreement of Licenser. Licenser and Licensee recognize that the copyrights of the third party data belong to the respective organisation, as mentioned in the Appendix. 4. Non-Disclosure The TIGER Treebank and its documentation will be held in confidence by Licensee and will not be disclosed by Licensee to third parties, except for those parts of the corpus or its documentation that are explicitly marked for public use, and except for example sentences in scientific publications. Licensee shall and will employ all necessary precautions to ensure that no persons or institutions other than persons as are in the employ of Licensee or in the same research project as Licensee will get access to the TIGER Treebank or parts thereof. Other persons or institutions desiring access to the corpus should be directed to Licenser to obtain separate licence agreements. 5. Commencement and Duration This Agreement will take effect from the date of signature and will continue until terminated either by Licensee or Licenser in accordance with Clause 6 below. 6. Termination Licenser may terminate the agreement forthwith if the Licensee commits any material breach of this agreement or if the copyright holder raises an objection against the terms of the license agreement. Licensee may terminate this agreement within 30 days of written notice. On termination howsoever caused, the Licensee shall erase all copies of the TIGER Treebank. 7. Fee This license is granted by Licenser to Licensee free of charge. 8. Disclaimer This license is granted under the premise that the copyright holder of the raw data accepts the terms of the license agreement. If the copyright holder raises an objection against the terms of the license agreement, lincenser may terminate the agreement and Licensee shall then erase all copies of the TIGER Treebank. The TIGER Treebank and its documentation is provided on an ``as is'' basis, with no guarantee of its veracity or accuracy. No liability is accepted for any damage caused by its use. Licenser hereby informs Licensee that, although large efforts were spent on removing annotation errors, some of them still remain in the corpus. Appendix: Acknowledgements The raw text of the Frankfurter Rundschau as used in the corpus is copyrighted by the Frankfurter Rundschau: Druck- und Verlagshaus Frankfurt am Main GmbH Verlag der Frankfurter Rundschau Große Eschenheimer Straße 16-18 D-60313 Frankfurt am Main"/>
-        <variant value="restricted; free for academic, but not for commercial use."/>
-        <variant value="Free for academic use. Non-applicable for commercial parties."/>
+        <normalizedValue value="PUB;BY;SA" />
+		<variant value="by-sa" />
+		
+		<!-- CC-BY-SA-->        
+		<variant value="CC-BY-SA" />       
+		
+		<variant value="Creative Commons Attribution Share Alike 1.0" /> <!-- full name -->
+		<variant value="CC-BY-SA-1.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-sa/1\.0/*" isRegExp="true" />
+
+		<variant value="Creative Commons Attribution Share Alike 2.0" /> <!-- full name -->
+		<variant value="CC-BY-SA-2.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-sa/2\.0/*" isRegExp="true" />
+
+		<variant value="Creative Commons Attribution Share Alike 2.5" /> <!-- full name -->
+		<variant value="CC-BY-SA-2.5" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-sa/2\.5/*" isRegExp="true" />
+
+		<variant value="Creative Commons Attribution Share Alike 3.0" /> <!-- full name -->
+		<variant value="CC-BY-SA-3.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-sa/3\.0/*" isRegExp="true" />
+		<variant value="CC BY-SA 3.0" />
+		<variant value="Creative Commons Attribution-ShareAlike 3.0" />		
+		<variant value="Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)" />
+		<variant value="Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)" />
+		<variant value="Namensnennung - Weitergabe unter gleichen Bedingungen 3.0 Deutschland (CC BY-SA 3.0 DE)" />
+		<variant value="The SaCoCo Contemporary Corpus is released under a Creative Commons Attribution - Share Alike 3.0 Unported License. (CC BY SA 3.0) http://creativecommons.org/licenses/by-sa/3.0/" />
+		<variant value="This resource is licensed under a Creative Commons Attribution-ShareAlike 3.0 Unported License (http://creativecommons.org/licenses/by-sa/3.0/). The availability status of the resource is: 'available-unrestrictedUse'." />
+
+		<variant value="Creative Commons Attribution Share Alike 4.0" /> <!-- full name -->
+		<variant value="CC-BY-SA-4.0" /> <!-- ID -->
+		<variant value="http(s?)://creativecommons\.org/licenses/by-sa/4\.0/*" isRegExp="true" />
+		<variant value="CC BY-SA 4.0" />
+		<variant value="Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)" />
+		<variant value="Free access under Attribution-ShareAlike 4.0 International License" />
+		<variant value="HZSK-ACA (Text) / CC-by-sa-4.0 (Annotation)" />
+		
+		<!-- GPL -->
+        	
+        <variant value="GPL" />
+        <variant value="GNU GPL" />
+		<variant value="GNU Public License" />
+        <variant value="GNU General Public License" />
+        <variant value="GPLv3+" />
+		
+		<variant value="http://www.gnu.org/licenses/old-licenses/gpl-2.0-standalone.html" />
+		<variant value="GNU General Public License v2.0 only" /> <!-- full name -->
+		<variant value="GPL-2.0" /> <!-- ID -->
+		<variant value="http://www.gnu.org/licenses/gpl-2.0.html" />
+		<variant value="GNU General Public License, version 2" />
+		<variant value="GPL v2" />
+		<variant value="GNU GPL v2" />
+
+		<variant value="http://www.gnu.org/licenses/gpl-3.0-standalone.html" />
+		<variant value="GNU General Public License v3.0 only" /> <!-- full name -->
+		<variant value="GPL-3.0" /> <!-- ID -->
+		<variant value="GPL 3" />
+		<variant value="GNU GPL 3" />
+		<variant value="GNU GPL v3" />
+		<variant value="GNU General Public License 3 (GPL-3.0)" />
+		<variant value="GNU General Public License, version 3" />
+		<variant value="GNU General Public Licence, version 3" />
+		<variant value="GNU General Public License version 3" />
+		<variant value="http://opensource.org/licenses/GPL-3.0" />
+		<variant value="http://www.gnu.org/licenses/gpl-3.0.en.html" />
+		<variant value="This resource is licensed under a GNU General Public License version 3.0 (http://www.gnu.org/licenses/gpl.html). The availability status of the resource is: 'available-unrestrictedUse'." />		
+        
+		<variant value="GFDL" />
     </mapping>
     <mapping>
-        <normalizedValue value="ACA;NC;RES;FF"/>
-        <variant value="free for academic use by non-commercial organisation; 15.000 euro for commercial use and for use by commercial organisation; user licence required"/>
+        <normalizedValue value="PUB;ID" />
+        <variant value="available after registration" />
+        <variant value="free; online subscription for the digitalized newspaper texts." />
     </mapping>
     <mapping>
-        <normalizedValue value="ACA;Other"/>
-        <variant value="restricted; Free for academic use, but issues with the comic licenses may have to be dealt with."/>
+        <normalizedValue value="PUB;PRIV" />
+        <variant value="free; Corpus contains personal data, but person names have been changed." />
+    </mapping>
+    
+    <mapping>
+        <normalizedValue value="PUB;Other" />
+        <variant value="http://rightsstatements.org/vocab/NoC-OKLR/1.0/" />
+    </mapping>
+    
+    <mapping>
+        <normalizedValue value="ACA" />
+        <variant value="academic access" />
+        <variant value="academic" />
+        <variant value="academic - available for academic use" />
+        <variant value="Academics: free" />
+        <variant value="Access granted: scholars" />
+        <variant value="available to researcher/annotator" />
+        <variant value="Binnen de kaders van de Gedragscode voor gebruik van persoonsgegevens in wetenschappelijk onderzoek van de VSNU (Vereniging van Samenwerkende Nederlandse Universiteiten) vrij beschikbaar voor dialectologisch, fonetisch, historisch of ander onderzoek. Onderzoekers wordt gevraagd bij publicatie als bron deze website te vermelden. Neem voor andersoortig gebruik contact op met het Meertens Instituut." />        
+        <variant value="CLARIN ACA" />
+        <variant value="CLARIN_ACA" />
+        <variant value="CLARIN-ACA" />
+        <variant value="CSLU Agreement: https://catalog.ldc.upenn.edu/license/cslu-corpora-non-commercial-research-only.pdf" />
+        <variant value="disponible para indÃ­genas e investigadores" />
+        <variant value="disponible para indígenas e investigadores" />
+        <variant value="free available for science" />
+        <variant value="free available for scientific usage" />
+        <variant value="free by CLARIN Service Provider federation" />
+        <variant value="Free for academic use" />
+        <variant value="free for academic use" />
+        <variant value="free for academsic use" />
+        <variant value="free for academic use (subcat frames)" />
+        <variant value="freely available for academic research and education" />
+        <variant value="freely available for research and education" />
+        <variant value="freely available for science" />
+        <variant value="Free to use for research and teaching purposes." />
+        <variant value="Free to use for research and teaching purposes" />        
+        <variant value="free; Free for academic use." />        
+        <variant value="free; Free for research purposes." />
+        <variant value="http://rightsstatements.org/vocab/InC-EDU/1.0/​" />
+        <variant value="ree available for science" />
+        <variant value="research use only" />
+        <variant value="Vrij beschikbaar voor dialectologisch, fonetisch, historisch of ander onderzoek. Onderzoekers wordt gevraagd bij publicatie als bron deze website te vermelden. Neem voor andersoortig gebruik contact op met het Meertens Instituut" />
+        <variant value="free; Use of text excerpts for scientific research." />
+        <variant value="Free for academic use" />
+        <variant value="Free for academic use.non applicable for commercial parties" />
+        <variant value="free for science" />
+        <variant value="Free, accessible through CLARIN Institutional login" />
+        <variant value="HZSK-ACA" />
+        <variant value="mit Benutzerlizenz (Formular online zum Download); für nicht akademischen Gebrauch auf Anfrage bei Erhard Hinrichs" />
+        <variant value="mit Benutzerlizenz (Formular online zum Download); für nicht akademischen Gebrauch auf Anfrage bei Prof. Dr. Erhard Hinrichs" />
+        <variant value="restricted; Free for academic use, copyright owned by Professor Svenka Savic, Novi Sad (Serbia)." />
+        <variant value="Free for use in research in teaching." />
+        <variant value="Registrierung erforderlich, eingeschränkte Nutzung für nicht- akademische und kommerzielle Nutzung" />
+        <variant value="Vrij beschikbaar voor dialectologisch, fonetisch, historisch of ander onderzoek. Onderzoekers wordt gevraagd bij publicatie als bron deze website te vermelden. Neem voor andersoortig gebruik contact op met het Meertens Instituut" />
     </mapping>
     <mapping>
-        <normalizedValue value="ACA;RES;FF"/>
-        <variant value="free available for purely academic institutions; fees apply for commercial institutions"/>
-        <variant value="free for academic use; available to commercial parties, but not for free; user licence required for all parties; restricted use"/>
+        <normalizedValue value="ACA;META;NC;SA" />
+        <variant value="MSCommons-BY-NC-SA" />
     </mapping>
     <mapping>
-        <normalizedValue value="BY"/>
-        <variant value="attribution"/>
+        <normalizedValue value="ACA;NC" />
+        <variant value="academic-nonCommercialUse" />
+        <variant value="CLARIN_ACA-NC" />
+        <variant value="CLARIN-ACA-NC" />
+        <variant value="free for academic use; non applicable for commercial parties" />
+        <variant value="free for academic use; non appliccable for commercial parties" />
+        <variant value="Free for academic use. Non-applicable for commercial parties." />
+        <variant value="License Agreement for the \Huge German Corpus (HGC)&quot; This agreement is made between - Universität Stuttgart Institut für maschinelle Sprachverarbeitung - Computerlinguistik - Pfaffenwaldring 5b D 70569 Stuttgart, Germany Contact: clarin@ims.uni-stuttgart.de Contact person: Dr. Heike Zinsmeister hereinafter referred to as the Licensor - Institute: Address: Represented by: Contact person: (email: ) duly authorised to sign this Agreement, hereinafter referred to as the User This agreement is made and enters into force as of ................................. (date). 1 Product This agreement relates to the \Huge German Corpus (HGC)&quot;, a collection of German Newspaper texts, hereinafter referred to as the Product. The corpus is partly based on data taken from the European Corpus Initiative Multilingual Corpus I (ECI/MCI). The HCG currently comprises approximately 204 million tokens. It is automatically preprocessed in terms of segmentation, lemmatization, and part-of-speech annotation. Furthermore, it is indexed for use in the IMS Corpus Workbench (CWB). 2 Academic Research License 1. Licensor grants User a non-exclusive license to use the Product for the purpose of non-commercial, non-profit research by User for any research project conducted on the premises of User. 2. User agrees to acknowledge the use of the Product in all publications reporting on results produced with the help of the Product by referring to the landing page of the Product or Fitschen (2004, p. 8): - HGC landing page: http://www.ims.uni-stuttgart.de/forschung/ressourcen/korpora/hgc.en.html - Fitschen, Arne. 2004. Ein Computerlinguistisches Lexikon als komplexes System. Doctoral Thesis. University of Stuttgart. Published as AIMS 10 3). 3. User agrees to quote at most individual sample sentences of the original texts. User may not cite longer sequences of sentences. 4. User agrees not to redistribute nor to sublicense the Product in whole nor in part. 3 Non-Disclosure 1. User will not make the Product available to any third party. 2. User will use all reasonable efforts to ensure that no persons or institutions other than persons that are in the institute of User will get access to the Product. Other persons or institutions desiring to use the Product should be directed to Licensor to obtain separate license agreements. 3. User will use all reasonable efforts, at least as great as the precautions it takes to protect its own information, to prevent inadvertent disclosure of the Product to any third party. 4 Disclaimer 1. Licensor hereby informs User that the distributed version of the Product is work in progress and that, despite care and effort spent by Licensor on the pre-processing of the Product, the Product may still contain errors. 2. The Product is provided to User as-is, without any warranty and without any guarantee of its usability. 3. Licensor shall not be held liable for any consequences that arise from defects in the Product. 5 Agreement 1. This Agreement constitutes the complete agreement between Licensor and User, and it supersedes any prior agreements between them that concern the the Product. 2. This Agreement shall be construed in accordance with German law; disputes shall be adjudicated or otherwise decided in the courts of Stuttgart, Germany. 3. If any provision of this Agreement is held by a court of competent jurisdiction to be unenforceable, all other provisions hereof shall remain in full force and effect, and be interpreted to the extent possible consistent with the intent of the parties expressed by this Agreement. 6 Termination 1. Licensor may terminate the agreement forthwith if the User commits any material breach of this agreement or if the copyright holder raises an objection against the terms of the license agreement. 2. User may terminate this agreement within 30 days of written notice. On termination howsoever caused, User shall erase all copies of the Product. 7 Fee This license is granted by Licensor to User free of charge. 8 Acknowledgement Part of the raw text as used in the Product is based on the European Corpus Initiative Multilingual Corpus I (ECI/MCI), which is copyrighted by the Association for Computational Linguistics (ACL) on behalf of the European Corpus Initiative (ECI): ELSNET/CLARIN Trans 10 3512 JK Utrecht The Netherlands URL: http://www.elsnet.org/eci.html Signatures For the Licensor: Done at Stuttgart, on .............................. By (name): Prof. Dr. Jonas Kuhn Title: Director IMS-GCL Signature: .............................. For the User: Done at ..................., on ................... By (name): .............................. Title: .............................. Signature: .............................." />
+        <variant value="License Agreement for the TIGER Corpus for non-commercial use Universität Stuttgart, Institut für Maschinelle Sprachverarbeitung Prof. Dr. Jonas Kuhn Pfaffenwaldring 5b, D-70569 Stuttgart, Germany Universität Potsdam, Institut für Germanistik Postfach 601553, D-14415 Potsdam, Germany Universität des Saarlandes, FR 4.7 Computerlinguistik Lehrstuhl Prof. Dr. Hans Uszkoreit Postfach 151150, D-66041 Saarbrücken, Germany (&quot;Licenser&quot;) and &quot;Licensee&quot; agree as follows 1. Status of Licensee Licensee confirmes that Licensee is (part of) an academic or educational institution. 2. Product The TIGER Treebank, consists of approximately 900,000 tokens (50,000 sentences) of German newspaper text, taken from the Frankfurter Rundschau. The corpus was annotated with parts-of-speech and syntactic structures in the project TIGER (DFG) in Potsdam, Saarbrücken and Stuttgart. Copyright of different parts of the TIGER Treebank is to: Universität Potsdam, Institut für Germanistik Universität des Saarlandes, FR 4.7 Computerlinguistik Universität Stuttgart, Institut für Maschinelle Sprachverarbeitung for all part-of-speech and structural annotations, and corpus documentation. The TIGER Treebank includes third party data as listed in the Appendix. Licenser and Licensee recognize that the copyrights of these data belong to the respective organisation, as mentioned in the Appendix. 3. License Licenser grants Licensee a non-exclusive license to use the TIGER Treebank. Licensee agrees to use the corpus only for non-commercial, non-profit research purposes; to make no changes to the corpus; and to acknowledge the use of the corpus in all publications reporting on results produced with the help of the TIGER Treebank. Use of the corpus or use of data derived from the corpus for any commercial purposes requires explicit written agreement of Licenser. Licenser and Licensee recognize that the copyrights of the third party data belong to the respective organisation, as mentioned in the Appendix. 4. Non-Disclosure The TIGER Treebank and its documentation will be held in confidence by Licensee and will not be disclosed by Licensee to third parties, except for those parts of the corpus or its documentation that are explicitly marked for public use, and except for example sentences in scientific publications. Licensee shall and will employ all necessary precautions to ensure that no persons or institutions other than persons as are in the employ of Licensee or in the same research project as Licensee will get access to the TIGER Treebank or parts thereof. Other persons or institutions desiring access to the corpus should be directed to Licenser to obtain separate licence agreements. 5. Commencement and Duration This Agreement will take effect from the date of signature and will continue until terminated either by Licensee or Licenser in accordance with Clause 6 below. 6. Termination Licenser may terminate the agreement forthwith if the Licensee commits any material breach of this agreement or if the copyright holder raises an objection against the terms of the license agreement. Licensee may terminate this agreement within 30 days of written notice. On termination howsoever caused, the Licensee shall erase all copies of the TIGER Treebank. 7. Fee This license is granted by Licenser to Licensee free of charge. 8. Disclaimer This license is granted under the premise that the copyright holder of the raw data accepts the terms of the license agreement. If the copyright holder raises an objection against the terms of the license agreement, lincenser may terminate the agreement and Licensee shall then erase all copies of the TIGER Treebank. The TIGER Treebank and its documentation is provided on an ``as is'' basis, with no guarantee of its veracity or accuracy. No liability is accepted for any damage caused by its use. Licenser hereby informs Licensee that, although large efforts were spent on removing annotation errors, some of them still remain in the corpus. Appendix: Acknowledgements The raw text of the Frankfurter Rundschau as used in the corpus is copyrighted by the Frankfurter Rundschau: Druck- und Verlagshaus Frankfurt am Main GmbH Verlag der Frankfurter Rundschau Große Eschenheimer Straße 16-18 D-60313 Frankfurt am Main" />
+        <variant value="restricted; free for academic, but not for commercial use." />
+        <variant value="Free for academic use. Non-applicable for commercial parties." />
     </mapping>
     <mapping>
-        <normalizedValue value="DEP"/>
-        <variant value="redeposit"/>
+        <normalizedValue value="ACA;NC;RES;FF" />
+        <variant value="free for academic use by non-commercial organisation; 15.000 euro for commercial use and for use by commercial organisation; user licence required" />
     </mapping>
     <mapping>
-        <normalizedValue value="INF"/>
-        <variant value="informLicensor"/>
+        <normalizedValue value="ACA;Other" />
+        <variant value="restricted; Free for academic use, but issues with the comic licenses may have to be dealt with." />
     </mapping>
     <mapping>
-        <normalizedValue value="NC"/>
-        <variant value="free for non-commercial use"/>
-        <variant value="non-commercial use"/>
+        <normalizedValue value="ACA;RES;FF" />
+        <variant value="free available for purely academic institutions; fees apply for commercial institutions" />
+        <variant value="free for academic use; available to commercial parties, but not for free; user licence required for all parties; restricted use" />
     </mapping>
     <mapping>
-        <normalizedValue value="NC; INF"/>
-        <variant value="freely usable for non-commercial usage (inform resource creator)"/>
+        <normalizedValue value="RES" />
+        <variant value="Access is restricted. Permission can be obtained by contacting the owner or the MPI" />
+        <variant value="Access restricted (password protected)" />
+        <variant value="All data including audio is accessible for authorised researchers." />
+        <variant value="ATTENTIE: Het Sportnieuws valt buiten de Actualiteitenpool, het materiaal mag derhalve UITSLUITEND met toestemming van de zendgemachtigde hergebruikt worden." />
+        <variant value="Available on request" />
+        <variant value="Available upon request" />
+        <variant value="By permission of owner only" />
+        <variant value="CLARIN_RES" />
+        <variant value="closed" />
+        <variant value="Closed" />
+        <variant value="Closed." />
+        <variant value="Closed (subject to the access condition details)" />
+        <variant value="Closed (subject to the access condition details), Contact depositor." />
+        <variant value="Closed (subject to the access condition details), Free access to metadata only. No free access to files themselves. Contact depositor." />
+		<variant value="Closed (subject to the access condition details), Closed until the death of the depositor after which it will be openly available." />
+		<variant value="Closed (subject to the access condition details), Contact depositor for access." />
+		<variant value="Closed (subject to the access condition details), Access by permission of depositor only" />
+		<variant value="Closed (subject to the access condition details), Restricted, only acccessed by members of the families involved or by bona fide researchers with the permission of those members" />
+		<variant value="Closed (subject to the access condition details), By permission of depositor until 2027" />
+		<variant value="Closed (subject to the access condition details), Free access as per the PARADISEC conditions after 1/1/2018. Before that, by permission of depositor only." />
+        <variant value="Diverse, zie voor de juiste rechthebbende bij het betreffende item" />
+        <variant value="Formatrechten onder licentie van Woestijnvis België; T.T.T.I." />
+        <variant value="free for academic use, request required" />
+        <variant value="free; External users must prove they have licensed the original taz data." />
+        <variant value="http://www.europeana.eu/rights/rr-f/" />
+        <variant value="HZSK-RES" />
+        <variant value="info:eu-repo/semantics/embargoedAccess" />
+        <variant value="internal" />
+        <variant value="Items catalogued in the California Language Archive are the physical property of their respective physical repositories. Intellectual rights, including copyright, belong to item creators or their legal heirs and assigns." />
+        <variant value="Korpus nicht im endgültigem Zustand Generelle Freigabe kann erst erfolgen, wenn die erfassten Daten ausgewertet wurden. Vollständige Freigabe nur auf Anfrage." />
+        <variant value="Licensing Instructions for Subscription &amp; Standard Members, and Non-Members: http://www.ldc.upenn.edu/language-resources/data/obtaining" />
+        <variant value="on request, for academic use" />
+        <variant value="Open (subject to agreeing to PDSC access conditions)" />
+        <variant value="Open (subject to agreeing to PDSC access conditions), Depositor's permission required." />
+        <variant value="Open (subject to agreeing to PDSC access conditions), These recordings are of public performances." />
+        <variant value="Open (subject to agreeing to PDSC access conditions), Contact depositor." />
+        <variant value="Open (subject to agreeing to PDSC access conditions), Contact Depositor" />
+        <variant value="Please contact contact-person" />
+        <variant value="request required" />
+        <variant value="Registrierung erforderlich, eingeschränkte Nutzung für nicht-akademische und kommerzielle Nutzung" />
+        <variant value="Rights available for: Commercial Use" />        
+        <variant value="Rights available for: Commercial Use, Research Use" />
+        <variant value="Rights available for: Research Use, Commercial Use" />
+        <variant value="Upon Request" />
+        <variant value="upon request" />
+        <variant value="Use of this resource is restricted in some manner. Usually this means that it is available for non-commercial use only with prior permission of the depositor and on condition that this header is included in its entirety with any copy distributed." />
+        <variant value="with user license (license form online accessible); for non-academic use please contact Erhard Hinrichs" />
+        
     </mapping>
     <mapping>
-        <normalizedValue value="ND"/>
-        <variant value="noDerivatives"/>
+        <normalizedValue value="RES;BY;NC;PRIV" />
+        <variant value="The Conditions of Use for the IPROSLA data set specify among other things that no commercial use may be made of the data, that the creators of the data set should always be acknowledged in any publication on the data set, and that utmost care should be taken to protect the privacy of the families involved." />
     </mapping>
     <mapping>
-        <normalizedValue value="NORED"/>
-        <variant value="noRedistribution"/>
+        <normalizedValue value="RES;NC" />
+        <variant value="LDC User Agreement for Non-Members: https://catalog.ldc.upenn.edu/license/ldc-non-members-agreement.pdf" />
     </mapping>
     <mapping>
-        <normalizedValue value="Other"/>
-        <variant value="restricted"/>
-        <variant value="restricted 2009"/>
-        <variant value="Restricted"/>
-        <variant value="restricted - only available for licence owners"/>
-        <variant value="restringido/restricted"/>
-        <variant value="some concept definitions are open"/>
-        <variant value="special license"/>
-        <variant value="part is open"/>
-        <variant value="video not available, transcript only available"/>
+        <normalizedValue value="RES;PLAN" />
+        <variant value="restricted: available to researchers with legitimate interest 1" />
+        <variant value="restricted: available to researchers with legitimate interest 2" />
+        <variant value="restricted: available to researchers with legitimate interest" />
+    </mapping>
+     <mapping>
+        <normalizedValue value="RES;Other;" />
+        <variant value="http://www.europeana.eu/rights/rr-r/" />
     </mapping>
     <mapping>
-        <normalizedValue value="PUB"/>
-        <variant value="Available to all"/>
-        <variant value="Available to public"/>
-        <variant value="CC-ZERO"/>
-        <variant value="CLARIN_PUB"/>
-        <variant value="CLARIN-PUB"/>
-        <variant value="free; Distributed as a dissertation - &quot;Lexikalische Polygenese im Konzeptbereich KOPF&quot;"/>
-        <variant value="free"/>
-        <variant value="freely available"/>
-        <variant value="freely usable"/>
-        <variant value="Free"/>
-        <variant value="open 2009"/>
-        <variant value="open access"/>
-        <variant value="Open Access"/>
-        <variant value="Open aceess"/>
-        <variant value="open"/>
-        <variant value="openly available"/>
-        <variant value="open to all"/>
-        <variant value="Princeton_Wordnet"/>
-        <variant value="PUB"/>
-        <variant value="public"/>
-        <variant value="Die Nutzung des Wörterbuchs ist online über eine kostenfreie Abfrage einzelner Artikel möglich."/>
-        <variant value="HZSK-PUB"/>
-        <variant value="Individual lexical entries of this dictionary can be accessed freely online"/>
-        <variant value="Open"/>
-        <variant value="Open access"/>
-        <variant value="Public"/>
-        <variant value="This resource can be used online http://retro.dwds.de/?corpus=1&amp;cc=OSTWEST"/>
+        <normalizedValue value="RES;FF" />
+        <variant value="http://www.europeana.eu/rights/rr-p/" />
+        <variant value="Linguistic Data Consortium, The Trustees of the University of Pennsylvania." />
+        <variant value="Registrierung erforderlich, die Texte der taz müssen erworben werden" />
     </mapping>
     <mapping>
-        <normalizedValue value="PUB;BY"/>
-        <variant value="Apache 2.0"/>
-        <variant value="Apache"/>
-        <variant value="ApacheLicence_2.0"/>
-        <variant value="Apache Licence 2.0"/>
-        <variant value="Apache-Licence"/>
-        <variant value="BSD-style"/>
-        <variant value="BSD"/>
-        <variant value="BSD or CC-BY-3.0"/>
-        <variant value="CC-BY"/>
-        <variant value="LGPL for Linguistic Resources"/>
-        <variant value="LGPL"/>
-        <variant value="Creative_Commons-BY"/>
-        <variant value="Lesser General Public License For Linguistic Resources"/>
+        <normalizedValue value="RES;FF;LOC;LRT;Other" />
+        <variant value="ELRA_END_USER" />
     </mapping>
     <mapping>
-        <normalizedValue value="PUB;BY;NC"/>
-        <variant value="CC BY-NC 3.0 DE"/>
-        <variant value="CC BY-NC 3.0"/>
-        <variant value="CC BY-NC 4.0"/>
-        <variant value="CC-BY-NC"/>
-        <variant value="CC - BY - NC"/>
-        <variant value="Creative Commons CC BY-NC 3.0 DE, http://creativecommons.org/licenses/by-nc/3.0/de/"/>
-        <variant value="Dit werk is valt onder een Creative Commons Naamsvermelding-NietCommercieel 4.0 Internationaal-licentie(http://creativecommons.org/licenses/by-nc/4.0/)"/>
-        <variant value="Dit werk is valt onder een Creative Commons Naamsvermelding-NietCommercieel 4.0 Internationaal-licentie.(http://creativecommons.org/licenses/by-nc/4.0/)"/>
-        <variant value="http://creativecommons.org/licenses/by-nc/3.0/"/>
+        <normalizedValue value="RES;FF;LRT;" />
+        <variant value="MS-C-NoReD-ND-FF" />
     </mapping>
     <mapping>
-        <normalizedValue value="PUB;BY;NC;ND"/>
-        <variant value="CC-BY-NC-ND"/>
+        <normalizedValue value="RES;PLAN" />
+        <variant value="Free to use for research and teaching purposes approved by the rights holder." />
+        <variant value="Free to use for research and teaching purposes approved by the rights  holder." />
+        <variant value="Free to use for research and teaching purposes approved by the rights            holder." />
+        <variant value="Free to use for research purposes provided permission has been granted by rights holder." />
     </mapping>
     <mapping>
-        <normalizedValue value="PUB;BY;NC;SA"/>
-        <variant value="CC BY-NC-SA 3.0"/>
-        <variant value="CC-BY-NC-SA"/>
-        <variant value="CC-by-nc-sa"/>
-        <variant value="freely available for non-commercial research use (CC BY-NC-SA Licence)"/>
-        <variant value="http://creativecommons.org/licenses/by-nc-sa/4.0/"/>
+        <normalizedValue value="RES;PRIV" />
+        <variant value="Accès au document restreint jusqu'en 2061 en raison de la nature des informations qu'il contient. Documents dont la communication porte atteinte à la protection de la vie privée ou portant appréciation ou jugement de valeur sur une personne physique nommément désignée, ou facilement identifiable, ou qui font apparaître le comportement d'une personne dans des conditions susceptibles de lui porter préjudice. (Code du Patrimoine, art. L. 213-2, I, 3)" />
+        <variant value="free; Contains personal data - photos and recordings. Oral permission for displying the photos, as long as they don't depict nude people." />
     </mapping>
     <mapping>
-        <normalizedValue value="PUB;BY;ND"/>
-        <variant value="CC-BY-ND"/>
+        <normalizedValue value="RES;BY;NC;NORED" />
+        <variant value="CLARIN RES+BY+NC+NORED" />
     </mapping>
     <mapping>
-        <normalizedValue value="PUB;BY;SA"/>
-        <variant value="CC BY-SA 3.0"/>
-        <variant value="CC-BY-SA"/>
-        <variant value="GFDL"/>
-        <variant value="GNU GPL 3"/>
-        <variant value="GNU GPL"/>
-        <variant value="GNU GPL v2"/>
-        <variant value="GNU GPL v3"/>
-		<variant value="GPLv3+"/>
-        <variant value="GNU GPL"/>
-        <variant value="GPL"/>
-        <variant value="GPL v2"/>
-        <variant value="GNU Public License"/>
-        <variant value="Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)"/>
-        <variant value="Creative Commons Attribution-ShareAlike 3.0"/>
-        <variant value="GNU General Public License"/>
-        <variant value="GNU General Public License, version 3"/>
-		<variant value="Namensnennung - Weitergabe unter gleichen Bedingungen 3.0 Deutschland (CC BY-SA 3.0 DE)"/>
+        <normalizedValue value="Other" />        
+        <variant value="part is open" />
+        <variant value="restricted" />
+        <variant value="restricted 2009" />
+        <variant value="Restricted" />
+        <variant value="restricted - only available for licence owners" />
+        <variant value="restringido/restricted" />
+        <variant value="some concept definitions are open" />
+        <variant value="special license" />
+        <variant value="video not available, transcript only available" />
+    </mapping>    
+    <mapping>
+        <normalizedValue value="BY" />
+        <variant value="attribution" />
     </mapping>
     <mapping>
-        <normalizedValue value="PUB;ID"/>
-        <variant value="available after registration"/>
-        <variant value="free; online subscription for the digitalized newspaper texts."/>
-		<variant value="REG"/>
+        <normalizedValue value="DEP" />
+        <variant value="redeposit" />
     </mapping>
     <mapping>
-        <normalizedValue value="PUB;PRIV"/>
-        <variant value="free; Corpus contains personal data, but person names have been changed."/>
+        <normalizedValue value="INF" />
+        <variant value="informLicensor" />
     </mapping>
     <mapping>
-        <normalizedValue value="RES"/>
-        <variant value="Access is restricted. Permission can be obtained by contacting the owner or the MPI"/>
-        <variant value="All data including audio is accessible for authorised researchers."/>
-        <variant value="By permission of owner only"/>
-        <variant value="CLARIN_RES"/>
-        <variant value="closed"/>
-        <variant value="Closed"/>
-        <variant value="Closed."/>
-        <variant value="internal"/>
-        <variant value="Registrierung erforderlich, eingeschränkte Nutzung für nicht-akademische und kommerzielle Nutzung"/>
-        <variant value="RES"/>
-        <variant value="Available on request"/>
-        <variant value="Available upon request"/>
-        <variant value="free for academic use, request required"/>
-        <variant value="on request, for academic use"/>
-        <variant value="Please contact contact-person"/>
-        <variant value="request required"/>
-        <variant value="Upon Request"/>
-        <variant value="Free to use for research purposes provided permission has been granted by rights holder."/>
-        <variant value="free; External users must prove they have licensed the original taz data."/>
-        <variant value="HZSK-RES"/>
-        <variant value="Korpus nicht im endgültigem Zustand Generelle Freigabe kann erst erfolgen, wenn die erfassten Daten ausgewertet wurden. Vollständige Freigabe nur auf Anfrage."/>
-        <variant value="upon request"/>
-        <variant value="with user license (license form online accessible); for non-academic use please contact Erhard Hinrichs"/>
+        <normalizedValue value="NC" />
+        <variant value="free for non-commercial use" />
+        <variant value="non-commercial use" />
+		<variant value="non-commercial" />
+    </mapping>
+	<mapping>
+        <normalizedValue value="FF" />
+        <variant value="for-a-fee" />
+    </mapping>
+	<mapping>
+        <normalizedValue value="ID" />
+        <variant value="authentication required" />
+    </mapping>
+	<mapping>
+        <normalizedValue value="LOC" />
+        <variant value="local" />
+    </mapping>
+	<mapping>
+        <normalizedValue value="LRT" />
+        <variant value="only for LRT use" />
+    </mapping>
+	<mapping>
+        <normalizedValue value="ND" />
+        <variant value="noDerivatives" />
     </mapping>
     <mapping>
-        <normalizedValue value="RES; BY; NC; PRIV"/>
-        <variant value="The Conditions of Use for the IPROSLA data set specify among other things that no commercial use may be made of the data, that the creators of the data set should always be acknowledged in any publication on the data set, and that utmost care should be taken to protect the privacy of the families involved."/>
+        <normalizedValue value="NORED" />
+        <variant value="noRedistribution" />
     </mapping>
+	<mapping>
+        <normalizedValue value="PERM" />
+        <variant value="authorization required" />
+    </mapping>
+	<mapping>
+        <normalizedValue value="PLAN" />
+        <variant value="research plan required" />
+    </mapping>
+	<mapping>
+        <normalizedValue value="PRIV" />
+        <variant value="personal data" />
+    </mapping>
+	<mapping>
+        <normalizedValue value="SA" />
+        <variant value="shareAlike" />
+    </mapping> 
     <mapping>
-        <normalizedValue value="RES; PLAN"/>
-        <variant value="restricted: available to researchers with legitimate interest 1"/>
-        <variant value="restricted: available to researchers with legitimate interest 2"/>
-        <variant value="restricted: available to researchers with legitimate interest"/>
-    </mapping>
+    	<normalizedValue value="BY;INF;NORED" />
+    	<variant value="http://sldr.org/licence_v1/en" />
+    </mapping>  
     <mapping>
-        <normalizedValue value="RES;FF"/>
-        <variant value="Linguistic Data Consortium, The Trustees of the University of Pennsylvania."/>
-        <variant value="Registrierung erforderlich, die Texte der taz müssen erworben werden"/>
+        <normalizedValue value="NC; INF" />
+        <variant value="freely usable for non-commercial usage (inform resource creator)" />
     </mapping>
-    <mapping>
-        <normalizedValue value="RES;FF;LOC;LRT;Other"/>
-        <variant value="ELRA_END_USER"/>
-    </mapping>
-    <mapping>
-        <normalizedValue value="RES;FF;LRT;"/>
-        <variant value="MS-C-NoReD-ND-FF"/>
-    </mapping>
-    <mapping>
-        <normalizedValue value="RES;PLAN"/>
-        <variant value="Free to use for research and teaching purposes approved by the rights holder."/>
-    </mapping>
-    <mapping>
-        <normalizedValue value="RES;PRIV"/>
-        <variant value="free; Contains personal data - photos and recordings. Oral permission for displying the photos, as long as they don't depict nude people."/>
-    </mapping>
-    <mapping>
-        <normalizedValue value="SA"/>
-        <variant value="shareAlike"/>
-    </mapping>
+    
+<!-- Ignored values
+     <mapping>
+        <normalizedValue value="- -" /> when uncomment change the value back
+        <variant value="Annotation derzeit nicht vollständig. Freigabe erst nach Auswertung möglich. Lizensierung zur Veröffentlichung im Web als Vereinbarung nötig." />
+        <variant value="A special license is required because of the stem lexicon. SMOR (without a stem lexicon) comes with the SFST-tools (Stuttgart Finite State Transducer Tools) under the GNU Public License GPLv2." />
+        <variant value="available-restrictedUse" />
+        <variant value="commercial" />
+        <variant value="commercialUse" />
+        <variant value="no access" />
+        <variant value="no available" />
+        <variant value="Not available" />
+        <variant value="Nor available" />
+        <variant value="non available" />
+        <variant value="no recordings available due to the sensitivity of the material" />
+        <variant value="no" />
+        <variant value="No" />
+        <variant value="not available to the public" />
+        <variant value="other" />
+        <variant value="proprietary" />
+        <variant value="Recurso protegido - Protected resource" />
+        <variant value="underNegotiation" />
+        <variant value="1" />
+        <variant value="2" />
+        <variant value="3" />
+        <variant value="4" />
+        <variant value="[free; free for academic use; restricted use; request required; user license required; unknown]" />
+        <variant value="__" />
+        <variant value="476306KB" />
+        <variant value="94408KB" />
+        <variant value="archiving+dissemination" />
+        <variant value="Available" />
+        <variant value="available" />
+        <variant value="BAS:aGender" />
+        <variant value="BAS:ALC" />
+        <variant value="BAS:ASICA" />
+        <variant value="BAS:CI_1" />
+        <variant value="BAS:CLIPS_MT_MANUAL" />
+        <variant value="BAS:FORMTASK" />
+        <variant value="BAS:HEMPEL" />
+        <variant value="BAS:HOESI" />
+        <variant value="BAS:NM-MoCap-Corpus" />
+        <variant value="BAS:PD1" />
+        <variant value="BAS:PD2" />
+        <variant value="BAS:PHATTSESSIONZ" />
+        <variant value="BAS:RVG1_CLARIN" />
+        <variant value="BAS:RVG-J" />
+        <variant value="BAS:SaGA" />
+        <variant value="BAS:SC1" />
+        <variant value="BAS:SC10" />
+        <variant value="BAS:SHC" />
+        <variant value="BAS:SIGNUM" />
+        <variant value="BAS:SK" />
+        <variant value="BAS:SMC" />
+        <variant value="BAS:SVC" />
+        <variant value="BAS:TAXI" />
+        <variant value="BAS:VERIF1DE" />
+        <variant value="BAS:VM1" />
+        <variant value="BAS:VM2" />
+        <variant value="BAS:VMEMO" />
+        <variant value="BAS:ZIPTEL" />
+        <variant value="CC-BY-..." />
+        <variant value="nor available" />
+        <variant value="not available" />
+        <variant value="test" />
+        <variant value="unknown" />
+        <variant value="Unspecified" />
+        <variant value="unspecified" />
+        <variant value="yes" />
+        <variant value="No availability" />
+        <variant value="No Availability" />
+        <variant value="BAS:CI_2_Vowels" />
+        <variant value="BAS:CI_2_VOT" />
+        <variant value="BAS:CI_2_Sibilants" />
+        <variant value="BAS:CI_2_Cluster" />
+		<variant value="Copyright" />
+		<variant value="e-codices (cf. http://www.e-codices.unifr.ch/en/about/terms)" />
+		<variant value="open accessDOI: doi:10.21415/T5QW42" />
+		<variant value="geblokkeerd" />
+		<variant value="Diverse (zie draaiboek)." />
+		<variant value="Mixed (check individual items)" />
+		<variant value="Access granted: none" />
+		<variant value="http://rightsstatements.org/vocab/InC/1.0/" />
+		<variant value="http://rightsstatements.org/vocab/CNE/1.0/" />
+    </mapping>   
+-->
 </mappings>
