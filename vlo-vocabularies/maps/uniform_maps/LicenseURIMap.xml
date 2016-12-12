@@ -15,6 +15,10 @@
 		<variant value="http://www.opensource.org/licenses/BSD-3-Clause" />
 	</mapping>
 	<mapping>
+		<normalizedValue value="https://creativecommons.org/licenses/by-nc-nd/4.0/" />
+		<variant value="http://creativecommons.org/licenses/by-nc-nd/4.0/" />
+	</mapping>
+	<mapping>
 		<normalizedValue value="http://www.apache.org/licenses/LICENSE-2.0" />
 		<variant value="Apache License 2.0"/> <!-- full name -->
 		<variant value="Apache-2.0"/> <!-- ID -->
@@ -346,7 +350,7 @@
 		<variant value="Artistic License 2.0" />
 		<variant value="http://www.opensource.org/licenses/Artistic-Perl-2.0" />
 	</mapping>
-	<mapping>
+        <mapping>
 		<normalizedValue value="http://www.natcorp.ox.ac.uk/docs/licence.html" />
 		<variant value=" BNC User Licence" />
 		<variant value="Available for non-commercial use on condition that the terms of the BNC Licence are observed and that this header is included in its entirety with any copy distributed." />
@@ -823,4 +827,20 @@
 		<normalizedValue value="http://sldr.org/licence_v1"></normalizedValue>
 		<variant value="http://sldr.org/licence_v1/*" isRegExp="true" />
 	</mapping>
+	<mapping>
+		<normalizedValue value="https://creativecommons.org/publicdomain/mark/1.0/" />
+		<variant value="http://creativecommons.org/publicdomain/mark/1.0/" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="http://www.europeana.eu/rights/rr-f/" />
+		<variant value="https://www.europeana.eu/rights/rr-f/" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="http://www.europeana.eu/rights/rr-r/" />
+		<variant value="https://www.europeana.eu/rights/rr-r/" />
+	</mapping>
+	<mapping>
+		<normalizedValue value="http://www.europeana.eu/rights/rr-p/" />
+		<variant value="https://www.europeana.eu/rights/rr-p/" />
+	</mapping>        
 </mappings>
