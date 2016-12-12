@@ -43,6 +43,7 @@
                     
 		<concept>http://www.isocat.org/datcat/DC-4114</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-4114_747bf046-1208-940d-36ba-297e4de49e0c</concept>
+
                     <!-- book title -->
                     
                 <concept>http://www.isocat.org/datcat/DC-2545</concept>
@@ -254,7 +255,11 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-6586_2c79d86a-5a75-0890-d407-7d9cb86b9beb</concept>
 				
 		<!-- the DC is used in the distributionType facet -->
-		<!--<concept>http://purl.org/dc/terms/license</concept>-->		
+		<concept>http://purl.org/dc/terms/license</concept>
+		<concept>http://purl.org/dc/terms/rights</concept>
+		<concept>http://purl.org/dc/terms/accessRights</concept>
+		
+		<pattern>/cmd:CMD/cmd:Components/cmdp:corpusProfile/cmdp:resourceCommonInfo/cmdp:distributionInfo/cmdp:licenceInfo/cmdp:licence/cmdp:conditionsOfUse/text()</pattern>
 		
 	</facetConcept>
 	<facetConcept name="license" allowMultipleValues="true" description="The licensing conditions for the resource or tool" definition="The name of the license or a very brief description of the licensing conditions under which the resource or tool can be used.">
@@ -280,6 +285,22 @@
 		<concept>http://www.isocat.org/datcat/DC-3800</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-3800_12a79edd-0ffe-8d82-9831-45d125c54aee</concept>
 
+		<!-- DASISH from DC Rights -->
+		<concept>http://www.isocat.org/datcat/DC-5439</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-5439_98bb103d-476a-7f62-54b4-bf9de24d2229</concept>
+		
+				<!-- the DC is used in the distributionType facet -->
+		<concept>http://purl.org/dc/terms/license</concept>
+		<concept>http://purl.org/dc/terms/rights</concept>
+		<concept>http://purl.org/dc/terms/accessRights</concept>
+		
+		<!-- License URL - Institute_of_Computer_Science_NLP_Group_University_of_Leipzig - LCC_CorpusProfile -->
+		<pattern>/cmd:CMD/cmd:Components/cmdp:LCC_CorpusProfile/cmdp:LCC_Corpus/cmdp:License/cmdp:LicenseURL/text()</pattern>
+		
+		<!-- License URL - HZSK - SpokenCorpusProfile -->
+		<pattern>/cmd:CMD/cmd:Components/cmdp:SpokenCorpusProfile/cmdp:GeneralInfo/cmdp:License/cmdp:LicenseURL/text()</pattern>
+		
+		
 	</facetConcept>
 	<facetConcept name="accessInfo" allowMultipleValues="true" 
                       description="TODO..." definition="TODO...">
@@ -349,8 +370,12 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-5316_2c6244b4-4f10-5e8e-49b6-26fbf7004791</concept>
 		<concept>http://www.isocat.org/datcat/DC-6543</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6543_92dacb75-3098-0d5a-0665-94ddb6274f8c</concept>
+
 		<concept>http://www.isocat.org/datcat/DC-2503</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2503_72bd598f-4abf-e122-ed93-f2adf1ab8785</concept>
+
+
+
 
 		<pattern>/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:subject/@olac-linguistic-field</pattern>
 		<pattern>/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:subject[@dcterms-type="LCSH"]/text()</pattern>
