@@ -259,8 +259,6 @@
 		<concept>http://purl.org/dc/terms/rights</concept>
 		<concept>http://purl.org/dc/terms/accessRights</concept>
 		
-		<pattern>/cmd:CMD/cmd:Components/cmdp:corpusProfile/cmdp:resourceCommonInfo/cmdp:distributionInfo/cmdp:licenceInfo/cmdp:licence/cmdp:conditionsOfUse/text()</pattern>
-		
 	</facetConcept>
 	<facetConcept name="license" allowMultipleValues="true" description="The licensing conditions for the resource or tool" definition="The name of the license or a very brief description of the licensing conditions under which the resource or tool can be used.">
 		<!-- URL of the license -->
@@ -293,13 +291,6 @@
 		<concept>http://purl.org/dc/terms/license</concept>
 		<concept>http://purl.org/dc/terms/rights</concept>
 		<concept>http://purl.org/dc/terms/accessRights</concept>
-		
-		<!-- License URL - Institute_of_Computer_Science_NLP_Group_University_of_Leipzig - LCC_CorpusProfile -->
-		<pattern>/cmd:CMD/cmd:Components/cmdp:LCC_CorpusProfile/cmdp:LCC_Corpus/cmdp:License/cmdp:LicenseURL/text()</pattern>
-		
-		<!-- License URL - HZSK - SpokenCorpusProfile -->
-		<pattern>/cmd:CMD/cmd:Components/cmdp:SpokenCorpusProfile/cmdp:GeneralInfo/cmdp:License/cmdp:LicenseURL/text()</pattern>
-		
 		
 	</facetConcept>
 	<facetConcept name="accessInfo" allowMultipleValues="true" 
