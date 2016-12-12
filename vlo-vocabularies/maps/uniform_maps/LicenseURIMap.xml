@@ -83,13 +83,13 @@
 		<normalizedValue value="https://creativecommons.org/licenses/by/1.0/"/>
 		<variant value="Creative Commons Attribution 1.0"/> <!-- full name -->
 		<variant value="CC-BY-1.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by/1\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by\/1\.0\/*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by/2.0/" />
 		<variant value="Creative Commons Attribution 2.0"/> <!-- full name -->
 		<variant value="CC-BY-2.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by/2\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by\/2\.0\/*" isRegExp="true" />
 		<variant value="Creative Common License: http://creativecommons.org/licenses/by/2.0/" />
 		<variant value="Creative Common License:                         http://creativecommons.org/licenses/by/2.0/" />
 	</mapping>
@@ -97,13 +97,13 @@
 		<normalizedValue value="https://creativecommons.org/licenses/by/2.5/" />
 		<variant value="Creative Commons Attribution 2.5"/> <!-- full name -->
 		<variant value="CC-BY-2.5"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by/2\.5/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by\/2\.5\/*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by/3.0/" />
 		<variant value="Creative Commons Attribution 3.0"/> <!-- full name -->
 		<variant value="CC-BY-3.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by/3\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by\/3\.0\/*" isRegExp="true" />
 		<variant value="Creative Commons Attribution 3.0 Unported Licence" />
 		<variant value="This work is licensed under a Creative Commons Attribution 3.0 Unported License.   * CC-BY 3.0:   * You are free:   *     to Share — to copy, distribute and transmit the work   *     to Remix — to adapt the work   *     to make commercial use of the work   * Under the following conditions:   *     Attribution — You must attribute the work in the manner specified by the   *        author or licensor (but not in any way that suggests that they    *        endorse you or your use of the work).    *****************************************************************************   * Please cite this paper if you use the data:   * Wiltrud Kessler and Jonas Kuhn (2014)   * A Corpus of Comparisons in Product Reviews.    * In Proceedings of the 9th Language Resources and Evaluation Conference (LREC 2014),   * Reykjavik, Iceland, 28-30. May 2014." />
 		<variant value="***************************************************************************** * This work is licensed under a Creative Commons Attribution 3.0 Unported License. * CC-BY 3.0: * You are free: * to Share — to copy, distribute and transmit the work * to Remix — to adapt the work * to make commercial use of the work * Under the following conditions: * Attribution — You must attribute the work in the manner specified by the * author or licensor (but not in any way that suggests that they * endorse you or your use of the work). ***************************************************************************** * * Please cite this paper if you use these constructions: * Wiltrud Kessler and Hinrich Schütze (2012) * Classification of Inconsistent Sentiment Words Using Syntactic Constructions. * In Proceedings of the 24th International Conference on Computational Linguistics * (COLING 2012) * Mumbai, India, 10.-14. December 2012. * *****************************************************************************" />
@@ -121,7 +121,7 @@
 		<variant value="Creative Commons Attribution 4.0"/> <!-- full name -->
 		<variant value="CC-BY-4.0"/> <!-- ID -->
 		<variant value="CC-BY 4.0" />
-		<variant value="http(s?)://creativecommons\.org/licenses/by/4\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by\/4\.0\/*" isRegExp="true" />
 		<variant value="CC BY 4.0; https://creativecommons.org/licenses/by/4.0/" />
 		<varinat value="CreativeCommons Attribution 4.0 International (CC BY 4.0)" />
 		<variant value="freely available under the CC BY 4.0 licence, https://creativecommons.org/licenses/by/4.0/" />
@@ -131,55 +131,55 @@
 		<normalizedValue value="https://creativecommons.org/licenses/by-nd/1.0/"/>
 		<variant value="Creative Commons Attribution No Derivatives 1.0"/> <!-- full name -->
 		<variant value="CC-BY-ND-1.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nd/1\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nd\/1\.0\/*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-nd/2.0/"/>
 		<variant value="Creative Commons Attribution No Derivatives 2.0"/> <!-- full name -->
 		<variant value="CC-BY-ND-2.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nd/2\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nd\/2\.0\/*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-nd/2.5/"/>
 		<variant value="Creative Commons Attribution No Derivatives 2.5"/> <!-- full name -->
 		<variant value="CC-BY-ND-2.5"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nd/2\.5/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nd\/2\.5\/*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-nd/3.0/"/>
 		<variant value="Creative Commons Attribution No Derivatives 3.0"/> <!-- full name -->
 		<variant value="CC-BY-ND-3.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nd/3\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nd\/3\.0\/*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-nd/4.0/"/>
 		<variant value="Creative Commons Attribution No Derivatives 4.0"/> <!-- full name -->
 		<variant value="CC-BY-ND-4.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nd/4\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nd\/4\.0\/*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-nc/1.0/"/>
 		<variant value="Creative Commons Attribution Non Commercial 1.0"/> <!-- full name -->
 		<variant value="CC-BY-NC-1.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nc/1\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nc\/1\.0\/*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-nc/2.0/"/>
 		<variant value="Creative Commons Attribution Non Commercial 2.0"/> <!-- full name -->
 		<variant value="CC-BY-NC-2.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nc/2\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nc\/2\.0\/*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-nc/2.5/"/>
 		<variant value="Creative Commons Attribution Non Commercial 2.5"/> <!-- full name -->
 		<variant value="CC-BY-NC-2.5"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nc/2\.5/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nc\/2\.5\/\.*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-nc/3.0/"/>
 		<variant value="Creative Commons Attribution Non Commercial 3.0"/> <!-- full name -->
 		<variant value="CC-BY-NC-3.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nc/3\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nc\/3\.0\/*" isRegExp="true" />
 		<variant value="Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0)" />
 		<variant value="Creative Commons CC BY-NC 3.0 DE, http://creativecommons.org/licenses/by-nc/3.0/de/" />
 		<variant value="CC BY-NC 3.0"/>
@@ -193,7 +193,7 @@
 		<variant value="Creative Commons Attribution Non Commercial 4.0"/> <!-- full name -->
 		<variant value="CC-BY-NC-4.0"/> <!-- ID -->
 		<variant value="CC BY-NC 4.0"/>
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nc/4\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nc\/4\.0\/*" isRegExp="true" />
 		<variant value="Dit werk is valt onder een Creative Commons Naamsvermelding-NietCommercieel 4.0 Internationaal-licentie.(http://creativecommons.org/licenses/by-nc/4.0/)" />
 		<variant value="Dit werk is valt onder een Creative Commons Naamsvermelding-NietCommercieel 4.0 Internationaal-licentie(http://creativecommons.org/licenses/by-nc/4.0/)" />
 		<varinat value="Free access under Attribution-NonCommercial 4.0 International License" />
@@ -202,46 +202,46 @@
 		<normalizedValue value="https://creativecommons.org/licenses/by-nd-nc/1.0/"/>
 		<variant value="Creative Commons Attribution Non Commercial No Derivatives 1.0"/> <!-- full name -->
 		<variant value="CC-BY-NC-ND-1.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nd-nc/1\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nd-nc\/1\.0\/*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-nc-nd/2.0/"/>
 		<variant value="Creative Commons Attribution Non Commercial No Derivatives 2.0"/> <!-- full name -->
 		<variant value="CC-BY-NC-ND-2.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-nd/2\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nc-nd\/2\.0\/*" isRegExp="true" />
 		<variant value="Creative Commons Attribution-Noncommercial-No Derivative Works 2.0 Germany - http://creativecommons.org/licenses/by-nc-nd/2.0/de/deed.en" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-nc-nd/2.5/"/>
 		<variant value="Creative Commons Attribution Non Commercial No Derivatives 2.5"/> <!-- full name -->
 		<variant value="CC-BY-NC-ND-2.5"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-nd/2\.5/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nc-nd\/2\.5\/*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-nc-nd/3.0/"/>
 		<variant value="Creative Commons Attribution Non Commercial No Derivatives 3.0"/> <!-- full name -->
 		<variant value="CC-BY-NC-ND-3.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-nd/3\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nc-nd\/3\.0\/*" isRegExp="true" />
 		<variant value="Attribution-NonCommercial-NoDerivs 3.0 Unported (CC BY-NC-ND 3.0)" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-nc-nd/4.0/"/>
 		<variant value="Creative Commons Attribution Non Commercial No Derivatives 4.0"/> <!-- full name -->
 		<variant value="CC-BY-NC-ND-4.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-nd/4\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nc-nd\/4\.0\/*" isRegExp="true" />
 		<varinat value="Distributed by the University of Oxford under a Attribution-NonCommercial-NoDerivatives 4.0 International License." />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-nc-sa/1.0/"/>
 		<variant value="Creative Commons Attribution Non Commercial Share Alike 1.0"/> <!-- full name -->
 		<variant value="CC-BY-NC-SA-1.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-sa/1\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nc-sa\/1\.0\/*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-nc-sa/2.0/"/>
 		<variant value="Creative Commons Attribution Non Commercial Share Alike 2.0"/> <!-- full name -->
 		<variant value="CC-BY-NC-SA-2.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-sa/2\.0/*" isRegExp="true" />	
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nc-sa\/2\.0\/*" isRegExp="true" />	
 		<variant value="Creative Common License: http://creativecommons.org/licenses/by-nc-sa/2.0/" />
 		<variant value="Creative Commons Attribution-NonCommercial-ShareAlike 2.0 Generic license." />
 		<variant value="Creative Common License:                         http://creativecommons.org/licenses/by-nc-sa/2.0/"></variant>
@@ -255,14 +255,14 @@
 		<normalizedValue value="https://creativecommons.org/licenses/by-nc-sa/2.5/"/>
 		<variant value="Creative Commons Attribution Non Commercial Share Alike 2.5"/> <!-- full name -->
 		<variant value="CC-BY-NC-SA-2.5"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-sa/2\.5/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nc-sa\/2\.5\/*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-nc-sa/3.0/"/>
 		<variant value="Creative Commons Attribution Non Commercial Share Alike 3.0"/> <!-- full name -->
 		<variant value="CC-BY-NC-SA-3.0"/> <!-- ID -->
 		<variant value="CC BY-NC-SA 3.0"/>
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-sa/3\.0/*" isRegExp="true"/>
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nc-sa\/3\.0\/*" isRegExp="true"/>
 		<variant value="Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0)" />
 		<varinat value="Attribution-NonCommercial-ShareAlike 3.0 Unported Licence" />
 		<variant value="Distributed by the University of Oxford under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License." />
@@ -281,7 +281,7 @@
 		<normalizedValue value="https://creativecommons.org/licenses/by-nc-sa/4.0/"/>
 		<variant value="Creative Commons Attribution Non Commercial Share Alike 4.0"/> <!-- full name -->
 		<variant value="CC-BY-NC-SA-4.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-nc-sa/4\.0/*" isRegExp="true"/>
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-nc-sa\/4\.0\/*" isRegExp="true"/>
 		<variant value="Distributed by the University of Oxford under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License." />
 		<variant value="Distributed by the University of Oxford under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 Unported License." />
 		<variant value="Free access under Attribution-NonCommercial-ShareAlike 4.0 International License" />
@@ -290,25 +290,25 @@
 		<normalizedValue value="https://creativecommons.org/licenses/by-sa/1.0/"/>
 		<variant value="Creative Commons Attribution Share Alike 1.0"/> <!-- full name -->
 		<variant value="CC-BY-SA-1.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-sa/1\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-sa\/1\.0\/*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-sa/2.0/"/>
 		<variant value="Creative Commons Attribution Share Alike 2.0"/> <!-- full name -->
 		<variant value="CC-BY-SA-2.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-sa/2\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-sa\/2\.0\/*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-sa/2.5/"/>
 		<variant value="Creative Commons Attribution Share Alike 2.5"/> <!-- full name -->
 		<variant value="CC-BY-SA-2.5"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-sa/2\.5/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-sa\/2\.5\/*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/licenses/by-sa/3.0/"/>
 		<variant value="Creative Commons Attribution Share Alike 3.0"/> <!-- full name -->
 		<variant value="CC-BY-SA-3.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-sa/3\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-sa\/3\.0\/*" isRegExp="true" />
 		<varinat value="CC BY-SA 3.0" />
 		<variant value="Creative Commons Attribution-ShareAlike 3.0" />
 		<variant value="Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)" />
@@ -321,7 +321,7 @@
 		<normalizedValue value="https://creativecommons.org/licenses/by-sa/4.0/"/>
 		<variant value="Creative Commons Attribution Share Alike 4.0"/> <!-- full name -->
 		<variant value="CC-BY-SA-4.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/licenses/by-sa/4\.0/*" isRegExp="true" />
+		<variant value="http(s?):\/\/creativecommons\.org\/licenses\/by-sa\/4\.0\/*" isRegExp="true" />
 		<varinat value="CC BY-SA 4.0" />
 		<variant value="Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)" />
 		<variant value="Free access under Attribution-ShareAlike 4.0 International License" />
@@ -331,7 +331,7 @@
 		<normalizedValue value="https://creativecommons.org/publicdomain/zero/1.0/"/>
 		<variant value="Creative Commons Zero v1.0 Universal"/> <!-- full name -->
 		<variant value="CC0-1.0"/> <!-- ID -->
-		<variant value="http(s?)://creativecommons\.org/publicdomain/zero/1\.0/*" isRegExp="true" />
+		<variant value="http(s?)://creativecommons\.org/publicdomain/zero/1\.0\/*" isRegExp="true" />
 		<variant value="CC-ZERO" />
 		<variant value="CC0" />
 	</mapping>
@@ -821,7 +821,7 @@
 	</mapping>
 	<mapping>
 		<normalizedValue value="http://sldr.org/licence_v1"></normalizedValue>
-		<variant value="http://sldr.org/licence_v1/*" isRegExp="true" />
+		<variant value="http:\/\/sldr\.org\/licence_v1\/*" isRegExp="true" />
 	</mapping>
 	<mapping>
 		<normalizedValue value="https://creativecommons.org/publicdomain/mark/1.0/" />
