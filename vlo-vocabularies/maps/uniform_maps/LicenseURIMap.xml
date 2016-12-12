@@ -15,10 +15,6 @@
 		<variant value="http://www.opensource.org/licenses/BSD-3-Clause" />
 	</mapping>
 	<mapping>
-		<normalizedValue value="https://creativecommons.org/licenses/by-nc-nd/4.0/" />
-		<variant value="http://creativecommons.org/licenses/by-nc-nd/4.0/" />
-	</mapping>
-	<mapping>
 		<normalizedValue value="http://www.apache.org/licenses/LICENSE-2.0" />
 		<variant value="Apache License 2.0"/> <!-- full name -->
 		<variant value="Apache-2.0"/> <!-- ID -->
