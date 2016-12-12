@@ -308,6 +308,8 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-6134_72c22724-2615-fd70-2eff-8cd3cb59e91d</concept>
 		<concept>http://www.isocat.org/datcat/DC-6702</concept>
 		<!-- distribution rights holder -->
+                <concept>http://hdl.handle.net/11459/CCR_C-6837_8edd5107-ce2f-7f13-b8cd-1bd9750509b2</concept>
+                <!-- data provider -->
 
 
 		<pattern>/cmd:CMD/Components/cmdp:WebLichtWebService/cmdp:Service/cmdp:Contact/cmdp:Organisation/text()</pattern>
