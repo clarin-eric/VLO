@@ -46,7 +46,11 @@
 		<concept>http://purl.org/dc/elements/1.1/title</concept>
 		<concept>http://www.isocat.org/datcat/DC-6119</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6119_ea4226b5-8d55-e71e-730f-2a02e3adbeb4</concept>
-		<pattern>/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:ResourceName/text()</pattern>
+		<!-- title of work -->
+                    
+        <concept>http://www.loc.gov/standards/mods/userguide/titleinfo.html#title</concept>
+
+        <pattern>/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:ResourceName/text()</pattern>
 		<!-- no concept in lrt schema -->
 		<pattern>/cmd:CMD/cmd:Components/cmdp:mods/cmdp:titleInfo/title/text()</pattern>
 
@@ -167,6 +171,7 @@
 		<!--language (TEI) - MENZO: added for CLARIN-DK -->
 
 		<concept>http://purl.org/dc/terms/language</concept>
+		<concept>http://www.loc.gov/standards/mods/userguide/language.html#languageterm</concept>
 
                 <acceptableContext includeAny="true" includeEmpty="true"/>
                 <rejectableContext includeAny="false"  includeEmpty="false">
@@ -338,6 +343,7 @@
 		<concept>http://www.isocat.org/datcat/DC-2503</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2503_72bd598f-4abf-e122-ed93-f2adf1ab8785</concept>
 
+		<concept>http://www.loc.gov/standards/mods/userguide/subject.html#topic</concept>
 		<pattern>/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:subject/@olac-linguistic-field</pattern>
 		<pattern>/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:subject[@dcterms-type="LCSH"]/text()</pattern>
 		<pattern>/cmd:CMD/cmd:Components/cmdp:mods/cmdp:subject/cmdp:Topic/text()</pattern>
