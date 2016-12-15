@@ -75,7 +75,7 @@ can always be traced back to its sources!
 
 	```
 	mvn versions:commit 		#cleans up POM backups
-	mvn clean			#cleans up build outpit
+	mvn clean			#cleans up build output
 	svn commit -m "Created tag for VLO version 4.a.b"
 	git commit
 	```
@@ -106,6 +106,15 @@ After building the entire project, a deployment package will be present in the
 'target' directory of vlo-distribution. This includes WARs for both the Solr
 and the web app front end as well as the importer script and default configuration
 files.
+
+Be aware of the following build profiles that pre-configure the deployment packages
+for different environments:
+- `local-testing` for local development and testing purposes
+- `dev-vm` for the development host (alpha-vlo.clarin.eu)
+- `beta` for the staging host (beta-vlo.clarin.eu)
+- `production` for production (vlo.clarin.eu)
+
+To build using a profile, use e.g. `mvn clean install -Pproduction`.
 
 # Running the VLO 
 

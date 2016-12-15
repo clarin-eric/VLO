@@ -1,5 +1,17 @@
 Bug fixes and new features
 --------------------------
+VLO 4.0.2 (December 2016)
+* Updated mapping for licence and availability information
+	<https://github.com/clarin-eric/VLO/issues/21>
+* Updated national project mapping
+	<https://github.com/clarin-eric/VLO/issues/27>
+* Fixed occurence of multiple availability level 'tags' (PUB/ACA/RES)
+	<https://github.com/clarin-eric/VLO/issues/38>
+* 'Resource title' concept preferred over 'resource name' for 'name' field
+	<https://github.com/clarin-eric/VLO/issues/16>
+* Removed 'scoll down to see all records' behaviour
+	<https://github.com/clarin-eric/VLO/issues/20>
+
 VLO 4.0.1 (August 2016)
 * Fetching external fonts from https locations, preventing browser 
 warnings/issues
