@@ -69,6 +69,8 @@
 		<!-- IMS c:LexicalResourceProfile -->
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:Publications/cmdp:Publication/cmdp:PublicationTitle/</blacklistPattern>
 		<!-- IMS c:MultimodalCorpus -->
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:Song/cmdp:Source</blacklistPattern>
+		<!-- Song -->
 	</facetConcept>
         	<!-- test facets -->
 	<facetConcept name="temporalCoverage" description="The temporal coverage of the source material of the resource" definition="The temporal coverage of the source material of the resource, i.e. not the time within which the resource was created, but when e.g. original texts were written or speech recordings made.">
