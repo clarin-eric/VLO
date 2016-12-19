@@ -94,6 +94,7 @@ public class MetadataImporter {
         POST_PROCESSORS.put(FacetConstants.FIELD_CLARIN_PROFILE, new CMDIComponentProfileNamePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_RESOURCE_CLASS, new ResourceClassPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_LICENSE, new LicensePostProcessor());
+        POST_PROCESSORS.put(FacetConstants.FIELD_NAME, new NamePostProcessor());
     }
 
     /**
