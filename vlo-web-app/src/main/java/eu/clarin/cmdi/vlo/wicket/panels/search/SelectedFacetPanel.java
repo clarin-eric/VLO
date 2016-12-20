@@ -26,15 +26,14 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
-import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
  * A panel representing a single facet and its selected values, allowing for
@@ -55,10 +54,10 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
 
     private ListView<String> createSelectionRemovers(String id, String facetName) {
         // Model of the list of selected values in this facet
-        final IModel<List<String>> valuesModel = new AbstractReadOnlyModel<List<String>>() {
+        final IModel<List<String>> valuesModel = new LoadableDetachableModel<List<String>>() {
 
             @Override
-            public List<String> getObject() {
+            public List<String> load() {
                 return new ArrayList(SelectedFacetPanel.this.getModelObject().getValues());
             }
 

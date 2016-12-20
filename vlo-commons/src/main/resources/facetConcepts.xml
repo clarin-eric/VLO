@@ -30,21 +30,34 @@
 	<facetConcept name="name" allowMultipleValues="false" description="The name of the resource or tool" definition="The full public name of the resource or tool.">
 		<concept>http://www.isocat.org/datcat/DC-5428</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5428_65670fd6-3426-68ac-8f29-faef6ffd02ce</concept>
+                    <!-- title statement -->
+                    
 		<concept>http://www.isocat.org/datcat/DC-5127</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5127_f2721b23-921c-46ba-8d4d-88b46aef6976</concept>
+                    <!-- Original (descriptive or general heading as it appears in the resource) -->
+                    
 		<concept>http://www.isocat.org/datcat/DC-4160</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-4160_192be757-0d8f-f4fe-b10b-d3d50de92482</concept>
 		<concept>http://www.isocat.org/rest/dc/4160</concept>
-		<!-- CLARIN-D Webservices name -->
+                    <!-- CLARIN-D Webservices name -->	
+                    
 		<concept>http://www.isocat.org/datcat/DC-4114</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-4114_747bf046-1208-940d-36ba-297e4de49e0c</concept>
-		<concept>http://www.isocat.org/datcat/DC-2544</concept>
-		<concept>http://hdl.handle.net/11459/CCR_C-2544_3626545e-a21d-058c-ebfd-241c0464e7e5</concept>
-		<concept>http://www.isocat.org/datcat/DC-2545</concept>
+
+                    <!-- book title -->
+                    
+                <concept>http://www.isocat.org/datcat/DC-2545</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2545_d873f2ab-2a2f-29d6-a9ab-260cde57f227</concept>
-		<concept>http://purl.org/dc/terms/title</concept>
+                    <!-- resource title -->
+                 
+                <concept>http://www.isocat.org/datcat/DC-2544</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2544_3626545e-a21d-058c-ebfd-241c0464e7e5</concept>
+                    <!-- resource name -->
+                    
+                <concept>http://purl.org/dc/terms/title</concept>
 		<concept>http://purl.org/dc/elements/1.1/title</concept>
-		<concept>http://www.isocat.org/datcat/DC-6119</concept>
+
+                <concept>http://www.isocat.org/datcat/DC-6119</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6119_ea4226b5-8d55-e71e-730f-2a02e3adbeb4</concept>
 		<!-- title of work -->
                     
@@ -245,7 +258,9 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-6586_2c79d86a-5a75-0890-d407-7d9cb86b9beb</concept>
 				
 		<!-- the DC is used in the distributionType facet -->
-		<!--<concept>http://purl.org/dc/terms/license</concept>-->		
+		<concept>http://purl.org/dc/terms/license</concept>
+		<concept>http://purl.org/dc/terms/rights</concept>
+		<concept>http://purl.org/dc/terms/accessRights</concept>
 		
 	</facetConcept>
 	<facetConcept name="license" allowMultipleValues="true" description="The licensing conditions for the resource or tool" definition="The name of the license or a very brief description of the licensing conditions under which the resource or tool can be used.">
@@ -271,6 +286,15 @@
 		<concept>http://www.isocat.org/datcat/DC-3800</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-3800_12a79edd-0ffe-8d82-9831-45d125c54aee</concept>
 
+		<!-- DASISH from DC Rights -->
+		<concept>http://www.isocat.org/datcat/DC-5439</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-5439_98bb103d-476a-7f62-54b4-bf9de24d2229</concept>
+		
+				<!-- the DC is used in the distributionType facet -->
+		<concept>http://purl.org/dc/terms/license</concept>
+		<concept>http://purl.org/dc/terms/rights</concept>
+		<concept>http://purl.org/dc/terms/accessRights</concept>
+		
 	</facetConcept>
 	<facetConcept name="accessInfo" allowMultipleValues="true" 
                       description="TODO..." definition="TODO...">
@@ -299,6 +323,8 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-6134_72c22724-2615-fd70-2eff-8cd3cb59e91d</concept>
 		<concept>http://www.isocat.org/datcat/DC-6702</concept>
 		<!-- distribution rights holder -->
+                <concept>http://hdl.handle.net/11459/CCR_C-6837_8edd5107-ce2f-7f13-b8cd-1bd9750509b2</concept>
+                <!-- data provider -->
 
 
 		<pattern>/cmd:CMD/Components/cmdp:WebLichtWebService/cmdp:Service/cmdp:Contact/cmdp:Organisation/text()</pattern>
@@ -340,6 +366,7 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-5316_2c6244b4-4f10-5e8e-49b6-26fbf7004791</concept>
 		<concept>http://www.isocat.org/datcat/DC-6543</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6543_92dacb75-3098-0d5a-0665-94ddb6274f8c</concept>
+
 		<concept>http://www.isocat.org/datcat/DC-2503</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2503_72bd598f-4abf-e122-ed93-f2adf1ab8785</concept>
 

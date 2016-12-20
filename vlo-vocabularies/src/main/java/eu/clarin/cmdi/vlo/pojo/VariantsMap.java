@@ -1,7 +1,6 @@
 package eu.clarin.cmdi.vlo.pojo;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -72,7 +71,9 @@ public class VariantsMap{
 		
 		for(Mapping m: mappings)
 			if(m.getVariants() != null){
-				String normalizedValue = m.getValue();
+				String normalizedValue = m.getValue().trim();
+				//add one entry for normalised values
+				listOfEntries.add(new VocabularyEntry(normalizedValue.toLowerCase(), normalizedValue, false, null));
 				
 				for(Variant v: m.getVariants()){
 					if(!containsVocabularyEntry(listOfEntries, v.getValue().trim().toLowerCase()))
