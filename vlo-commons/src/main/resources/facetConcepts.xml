@@ -60,10 +60,13 @@
                 <concept>http://www.isocat.org/datcat/DC-6119</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6119_ea4226b5-8d55-e71e-730f-2a02e3adbeb4</concept>
 		<!-- title of work -->
-                    
-        <concept>http://www.loc.gov/standards/mods/userguide/titleinfo.html#title</concept>
+		<concept>http://www.loc.gov/standards/mods/userguide/titleinfo.html#title</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-5129_3243b897-d5b0-f5b0-a446-2e5de627b1e4</concept>
+		<!-- originalIncipit -->
+		<concept>http://hdl.handle.net/11459/CCR_C-5130_ea7bb8be-cb01-383d-fd94-0d72168411d2</concept>
+		<!-- normalizedIncipit -->
 
-        <pattern>/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:ResourceName/text()</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:ResourceName/text()</pattern>
 		<!-- no concept in lrt schema -->
 		<pattern>/cmd:CMD/cmd:Components/cmdp:mods/cmdp:titleInfo/title/text()</pattern>
 
@@ -82,6 +85,8 @@
 		<!-- IMS c:LexicalResourceProfile -->
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:Publications/cmdp:Publication/cmdp:PublicationTitle/</blacklistPattern>
 		<!-- IMS c:MultimodalCorpus -->
+		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:Song/cmdp:Source</blacklistPattern>
+		<!-- Song -->
 	</facetConcept>
         	<!-- test facets -->
 	<facetConcept name="temporalCoverage" description="The temporal coverage of the source material of the resource" definition="The temporal coverage of the source material of the resource, i.e. not the time within which the resource was created, but when e.g. original texts were written or speech recordings made.">
