@@ -26,8 +26,8 @@ import java.util.regex.Pattern;
  * @author Thomas Eckart
  */
 public class NamePostProcessor implements PostProcessor {
-    // omit leading and trailing quote characters
-    private static final Pattern OMIT_QUOTES_PATTERN = Pattern.compile("^[\"\'“»]*(.*?)[\"\'“«]*$");
+    // omit leading and trailing quote characters if they are equal
+    private static final Pattern OMIT_QUOTES_PATTERN = Pattern.compile("^([\"\'“])(.*)\\1$");
 
     @Override
     public List<String> process(String value) {
@@ -35,7 +35,7 @@ public class NamePostProcessor implements PostProcessor {
         List<String> resultList = new ArrayList<>();
         
         if(nameMatcher.matches())
-            resultList.add(nameMatcher.group(1));
+            resultList.add(nameMatcher.group(2));
         else
             resultList.add(value);
         
