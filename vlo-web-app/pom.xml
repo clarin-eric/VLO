@@ -21,6 +21,7 @@
         <wicket.version>7.6.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
         <spring.version>4.3.4.RELEASE</spring.version>
         <jetty.version>8.1.17.v20150415</jetty.version>
+        <clarin-basestyle.version>0.1.2-SNAPSHOT</clarin-basestyle.version>
         <!-- selects the appender for the log4j root logger -->
         <log4j.appender>File</log4j.appender>
         <vlo.logging.level>INFO</vlo.logging.level>
@@ -243,7 +244,7 @@
                                 <artifactItem>
                                     <groupId>eu.clarin.style</groupId>
                                     <artifactId>base-style</artifactId>
-                                    <version>0.1.2-SNAPSHOT</version>
+                                    <version>${clarin-basestyle.version}</version>
                                     <classifier>less-with-bootstrap</classifier>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
