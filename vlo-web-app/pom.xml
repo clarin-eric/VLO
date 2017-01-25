@@ -248,7 +248,7 @@
                                     <classifier>less-with-bootstrap</classifier>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/generated-sources/less/bootstrap</outputDirectory>
+                                    <outputDirectory>${project.build.directory}/generated-sources/bootstrap</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -256,12 +256,13 @@
                 </executions>
             </plugin>
             <plugin>
-                <!-- Copies 'local' less sources to same destination -->
+                <!-- Copies 'local' LESS sources and fonts to the right destination -->
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.0.2</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
+                        <!-- copy less sources -->
+                        <id>copy-less</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -275,10 +276,26 @@
                             </resources>              
                         </configuration>            
                     </execution>
+                    <execution>
+                        <!-- copy fonts from bootstrap distribution -->
+                        <id>copy-fonts</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/${project.build.finalName}/fonts</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/generated-sources/bootstrap/fonts</directory>
+                                </resource>
+                            </resources>              
+                        </configuration>            
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
-                <!-- Compiles combined .less files into .css -->
+                <!-- Compiles combined LESS files into .css -->
                 <groupId>org.lesscss</groupId>
                 <artifactId>lesscss-maven-plugin</artifactId>
                 <version>1.7.0.1.1</version>
