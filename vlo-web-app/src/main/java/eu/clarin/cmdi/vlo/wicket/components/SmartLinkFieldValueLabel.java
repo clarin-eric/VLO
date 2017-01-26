@@ -24,7 +24,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.model.IModel;
 
-import static org.apache.wicket.extensions.markup.html.basic.DefaultLinkParser.URL_RENDER_STRATEGY;
+import org.apache.wicket.extensions.markup.html.basic.ILinkRenderStrategy;
 
 /**
  * Clone of {@link SmartLinkLabel} from wicket-extensions by Juergen Donnerstag
@@ -79,10 +79,23 @@ public class SmartLinkFieldValueLabel extends FieldValueLabel {
          * the second part of the URI for cases like
          * {@code hdl.handle.net/abc-123@format=cmdi}.
          */
-        private static final String urlPattern = "([a-zA-Z]+://[\\w\\.\\-\\:\\/~]+)[\\w\\.:\\-/?&=%@]*";
+        private static final String URL_PATTERN = "([a-zA-Z]+:\\/\\/[\\w\\.\\-\\:\\/~]+)[\\w\\.:\\-\\/\\[\\]\\(\\)\\*\\+\\'\\\"?&=%@;,#!$]*";
 
         public VloLinkParser() {
-            addLinkRenderStrategy(urlPattern, URL_RENDER_STRATEGY);
+            addLinkRenderStrategy(URL_PATTERN, new ILinkRenderStrategy() {
+
+                /**
+                 * Like
+                 * {@link DefaultLinkParser#URL_RENDER_STRATEGY but not hiding the query string}
+                 *
+                 * @param linkTarget
+                 * @return the link target wrapped in a <code>&lt;a&gt;</code> tag
+                 */
+                @Override
+                public String buildLink(String linkTarget) {
+                    return "<a href=\"" + linkTarget + "\">" + linkTarget + "</a>";
+                }
+            });
         }
 
     }
