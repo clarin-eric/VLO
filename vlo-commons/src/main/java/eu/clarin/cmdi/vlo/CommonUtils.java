@@ -1,6 +1,8 @@
 package eu.clarin.cmdi.vlo;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,6 +18,7 @@ import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public final class CommonUtils {
@@ -102,20 +105,24 @@ public final class CommonUtils {
      */
     public static Map<String, String> createCMDIComponentItemMap(String urlToComponent) throws XPathExpressionException, SAXException,
             IOException, ParserConfigurationException {
-        Map<String, String> result = new HashMap<String, String>();
-        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+        final Map<String, String> result = new HashMap<>();
+        final DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setNamespaceAware(true);
-        URL url = new URL(urlToComponent);
+        final URL url = new URL(urlToComponent);
         //TODO: Process XML as stream for much better performance (no need to build entire DOM)
-        DocumentBuilder builder = domFactory.newDocumentBuilder();
-        Document doc = builder.parse(url.openStream());
-        XPath xpath = XPathFactory.newInstance().newXPath();
-        NodeList nodeList = (NodeList) xpath.evaluate("//item", doc, XPathConstants.NODESET);
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
-            String shortName = node.getTextContent();
-            String longName = node.getAttributes().getNamedItem("AppInfo").getNodeValue().replaceAll(" \\([a-zA-Z]+\\)$", "");
-            result.put(shortName.toUpperCase(), longName);
+        final DocumentBuilder builder = domFactory.newDocumentBuilder();
+        try (InputStream inputStream = url.openStream()) {
+            final InputSource inputSource = new InputSource(new InputStreamReader(inputStream, "UTF-8"));
+            inputSource.setEncoding("UTF-8");
+            final Document doc = builder.parse(inputSource);
+            final XPath xpath = XPathFactory.newInstance().newXPath();
+            final NodeList nodeList = (NodeList) xpath.evaluate("//item", doc, XPathConstants.NODESET);
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
+                String shortName = node.getTextContent();
+                String longName = node.getAttributes().getNamedItem("AppInfo").getNodeValue().replaceAll(" \\([a-zA-Z]+\\)$", "");
+                result.put(shortName.toUpperCase(), longName);
+            }
         }
         return result;
     }
@@ -134,20 +141,24 @@ public final class CommonUtils {
      */
     public static Map<String, String> createReverseCMDIComponentItemMap(String urlToComponent) throws XPathExpressionException, SAXException,
             IOException, ParserConfigurationException {
-        Map<String, String> result = new HashMap<String, String>();
-        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+        final Map<String, String> result = new HashMap<>();
+        final DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setNamespaceAware(true);
-        URL url = new URL(urlToComponent);
+        final URL url = new URL(urlToComponent);
         //TODO: Process XML as stream for much better performance (no need to build entire DOM)
-        DocumentBuilder builder = domFactory.newDocumentBuilder();
-        Document doc = builder.parse(url.openStream());
-        XPath xpath = XPathFactory.newInstance().newXPath();
-        NodeList nodeList = (NodeList) xpath.evaluate("//item", doc, XPathConstants.NODESET);
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
-            String shortName = node.getTextContent();
-            String longName = node.getAttributes().getNamedItem("AppInfo").getNodeValue().replaceAll(" \\([a-zA-Z]+\\)$", "");
-            result.put(longName, shortName);
+        final DocumentBuilder builder = domFactory.newDocumentBuilder();
+        try (InputStream inputStream = url.openStream()) {
+            final InputSource inputSource = new InputSource(new InputStreamReader(inputStream, "UTF-8"));
+            inputSource.setEncoding("UTF-8");
+            final Document doc = builder.parse(inputSource);
+            final XPath xpath = XPathFactory.newInstance().newXPath();
+            final NodeList nodeList = (NodeList) xpath.evaluate("//item", doc, XPathConstants.NODESET);
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
+                String shortName = node.getTextContent();
+                String longName = node.getAttributes().getNamedItem("AppInfo").getNodeValue().replaceAll(" \\([a-zA-Z]+\\)$", "");
+                result.put(longName, shortName);
+            }
         }
         return result;
     }
