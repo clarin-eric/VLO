@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo;
 
+import eu.clarin.cmdi.vlo.wicket.RobotAwareWebResponse;
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
 import de.agilecoders.wicket.core.settings.ITheme;
@@ -39,9 +40,13 @@ import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.util.Collections;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.http.WebRequest;
+import org.apache.wicket.request.http.WebResponse;
 
 /**
  * Application object for your web application. If you want to run this
@@ -196,6 +201,12 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         this.applicationContext = applicationContext;
     }
 
+    @Override
+    protected WebResponse newWebResponse(final WebRequest webRequest, HttpServletResponse httpServletResponse) {
+        //Search engine optimisation: prevent JSESSIONID in URL for web crawlers
+        return new RobotAwareWebResponse((ServletWebRequest) webRequest, httpServletResponse);
+    }
+
     /**
      *
      * @return a service that retrieves SolrDocuments from the attached index
@@ -249,8 +260,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     private void initBootstrap() {
         Bootstrap.install(this,
                 new BootstrapSettings()
-                //bootstrap CSS is provided via markup (CSS link in HTML head)
-                .setThemeProvider(new SingleThemeProvider(new ExtremeNoopTheme())));
+                        //bootstrap CSS is provided via markup (CSS link in HTML head)
+                        .setThemeProvider(new SingleThemeProvider(new ExtremeNoopTheme())));
     }
 
     private static class ExtremeNoopTheme implements ITheme {
@@ -275,5 +286,6 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         }
 
     }
+
 
 }
