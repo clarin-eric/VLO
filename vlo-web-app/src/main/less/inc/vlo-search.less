@@ -236,5 +236,9 @@
 /*******************/
 span.searchword {
     font-weight: bold;
-    background-color: #eee;
+    background-color: darken(@body-bg, 10%);
+    
+    .table-striped>tbody>tr:nth-of-type(odd) & {
+        background-color: darken(@table-bg-accent, 10%);
+    }
 }
