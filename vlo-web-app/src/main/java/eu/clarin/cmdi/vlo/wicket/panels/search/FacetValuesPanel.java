@@ -75,6 +75,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     private final IModel<FieldValuesFilter> filterModel;
     private final int subListSize;
     private final IModel<String> fieldNameModel;
+    private final IModel<FacetSelectionType> selectionTypeModeModel;
 
     @SpringBean
     private FieldValueConverterProvider fieldValueConverterProvider;
@@ -85,9 +86,10 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param id component id
      * @param model facet field model for this panel
      * @param selectionModel model holding the global query/facet selection
+     * @param selectionTypeModel model holding the current selection type
      */
-    public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel) {
-        this(id, model, selectionModel, 0);
+    public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModel) {
+        this(id, model, selectionModel, selectionTypeModel, 0);
     }
 
     /**
@@ -96,12 +98,14 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param id component id
      * @param model facet field model for this panel
      * @param selectionModel model holding the global query/facet selection
+     * @param selectionTypeModel model holding the current selection type
      * @param subListSize if large than 0, multiple lists will be generated each
      * with a maximum size of this value
      */
-    public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel, int subListSize) {
+    public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModel, int subListSize) {
         super(id, model);
         this.selectionModel = selectionModel;
+        this.selectionTypeModeModel = selectionTypeModel;
         this.subListSize = subListSize;
 
         // shared model that holds the string for filtering the values (quick search)
@@ -203,12 +207,10 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
                 // reset filter
                 ((NameAndCountFieldValuesFilter) filterModel.getObject()).setName(null);
 
-                FacetSelectionType selectionType = resolve(getSession().getAttribute(AdvancedSearchOptionsPanel.SELECTION_TYPE_ATTRIBUTE_NAME));
-                
                 // call callback
                 onValuesSelected(
                         //TODO: get type injected via model
-                        selectionType,
+                        selectionTypeModeModel.getObject(),
                         // for now only single values can be selected
                         Collections.singleton(item.getModelObject().getName()),
                         target);
@@ -220,13 +222,6 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         selectLink.add(new FieldValueLabel("name", fieldNameModel));
         // 'count' field from Count (document count for value)
         selectLink.add(new Label("count"));
-    }
-    
-    private static FacetSelectionType resolve(Serializable option){
-    	if(option == null)
-    		return FacetSelectionType.OR;
-    	else
-    		return (boolean)option? FacetSelectionType.AND : FacetSelectionType.OR;
     }
 
     /**
@@ -300,6 +295,10 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
         if (selectionModel != null) {
             selectionModel.detach();
+        }
+
+        if (selectionTypeModeModel != null) {
+            this.selectionTypeModeModel.detach();
         }
 
         if (filterModel != null) {

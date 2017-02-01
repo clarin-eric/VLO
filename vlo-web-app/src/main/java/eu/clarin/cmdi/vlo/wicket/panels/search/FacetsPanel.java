@@ -33,6 +33,7 @@ import org.apache.wicket.model.util.MapModel;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
@@ -74,7 +75,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
      * @param selectionModel model representing the current query/value
      * selection state
      */
-    public FacetsPanel(final String id, final IModel<List<String>> facetNamesModel, final FacetFieldsModel fieldsModel, final IModel<QueryFacetsSelection> selectionModel) {
+    public FacetsPanel(final String id, final IModel<List<String>> facetNamesModel, final FacetFieldsModel fieldsModel, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModeModel) {
         super(id, facetNamesModel);
 
         final Map<String, ExpansionState> expansionStateMap = new HashMap<>();
@@ -98,6 +99,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
                                 item.getModel(),
                                 new FacetFieldModel(item.getModelObject(), fieldsModel),
                                 selectionModel,
+                                selectionTypeModeModel,
                                 new FacetExpansionStateModel(item.getModel(), expansionModel)) {
 
                     @Override

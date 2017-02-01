@@ -49,13 +49,15 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
 
     private final SelectedFacetPanel selectedFacetPanel;
     private final FacetValuesPanel facetValuesPanel;
+    private final IModel<FacetSelectionType> selectionTypeModeModel;
 
-    public FacetPanel(String id, IModel<String> facetNameModel, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, IModel<ExpansionState> expansionState) {
-        this(id, facetNameModel, facetFieldModel, selectionModel, expansionState, 0);
+    public FacetPanel(String id, IModel<String> facetNameModel, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModeModel, IModel<ExpansionState> expansionState) {
+        this(id, facetNameModel, facetFieldModel, selectionModel, selectionTypeModeModel, expansionState, 0);
     }
 
-    public FacetPanel(String id, IModel<String> facetNameModel, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, IModel<ExpansionState> expansionState, int subListSize) {
+    public FacetPanel(String id, IModel<String> facetNameModel, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModeModel, IModel<ExpansionState> expansionState, int subListSize) {
         super(id, facetNameModel, expansionState);
+        this.selectionTypeModeModel = selectionTypeModeModel;
 
         // panel showing values for selection
         facetValuesPanel = createFacetValuesPanel("facetValues", facetNameModel.getObject(), facetFieldModel, selectionModel, subListSize);
@@ -104,7 +106,7 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
     }
 
     private FacetValuesPanel createFacetValuesPanel(String id, final String facetName, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, int subListSize) {
-        return new FacetValuesPanel(id, facetFieldModel, selectionModel, subListSize) {
+        return new FacetValuesPanel(id, facetFieldModel, selectionModel, selectionTypeModeModel, subListSize) {
             @Override
             public void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
                 // A value has been selected on this facet's panel, update the model!
@@ -143,6 +145,15 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
         super.onExpandCollapse(target);
         if (target != null) {
             target.appendJavaScript("applyFacetTooltips();");
+        }
+    }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        
+        if (selectionTypeModeModel != null) {
+            this.selectionTypeModeModel.detach();
         }
     }
 

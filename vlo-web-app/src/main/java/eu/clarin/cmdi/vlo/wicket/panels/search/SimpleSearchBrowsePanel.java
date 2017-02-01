@@ -125,7 +125,7 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
         @Override
         protected void populateItem(final ListItem<FacetField> item) {
             // add a panel showing the values for selection (constrained by the current model)
-            final FacetValuesPanel values = new FacetValuesPanel("values", item.getModel(), selectionModel) {
+            final FacetValuesPanel values = new FacetValuesPanel("values", item.getModel(), selectionModel, Model.of(FacetSelectionType.OR)) {
 
                 @Override
                 protected void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
