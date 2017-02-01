@@ -154,6 +154,7 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
             final String facetString = fq.get(0);
             //check if negated
             final boolean negated = facetString.startsWith("-");
+            //TODO:final boolean or = facetString.startsWith("|");
 
             //get actual facet name
             final String requestedFacet;
@@ -170,7 +171,8 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
                 if (selection.containsKey(facet)) {
                     selection.get(facet).getValues().add(value);
                 } else {
-                    selection.put(facet, new FacetSelection(Arrays.asList(value)));
+                    //TODO: support OR
+                    selection.put(facet, new FacetSelection(FacetSelectionType.AND, Arrays.asList(value)));
                 }
                 if (negated) {
                     //negate selection

@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.SelectionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
@@ -105,9 +106,9 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
     private FacetValuesPanel createFacetValuesPanel(String id, final String facetName, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, int subListSize) {
         return new FacetValuesPanel(id, facetFieldModel, selectionModel, subListSize) {
             @Override
-            public void onValuesSelected(Collection<String> values, AjaxRequestTarget target) {
+            public void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
                 // A value has been selected on this facet's panel, update the model!
-                selectionModel.getObject().addNewFacetValue(facetName, values);
+                selectionModel.getObject().addNewFacetValue(facetName, selectionType, values);
 
                 if (target != null) {
                     // reload entire page for now

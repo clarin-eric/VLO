@@ -33,6 +33,7 @@ import org.apache.wicket.util.string.StringValue;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
@@ -99,7 +100,7 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
         add(new AllFacetValuesPanel("values", getModel()) {
 
             @Override
-            protected void onValuesSelected(Collection<String> values, AjaxRequestTarget target) {
+            protected void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
                 // Create updated selection state
                 final QueryFacetsSelection newSelection;
                 if (selectionModel != null) {
@@ -107,7 +108,7 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
                 } else {
                     newSelection = new QueryFacetsSelection();
                 }
-                newSelection.selectValues(getModelObject().getName(), new FacetSelection(values));
+                newSelection.selectValues(getModelObject().getName(), new FacetSelection(selectionType, values));
 
                 // Redirect to search page with updated model
                 final FacetedSearchPage searchPage = new FacetedSearchPage(Model.of(newSelection));

@@ -41,25 +41,6 @@ public class FacetSelection implements Serializable {
     private final Map<String, FacetSelectionValueQualifier> qualifiers;
 
     /**
-     * Creates an {@link FacetSelectionType#AND} selection for the specified
-     * values
-     *
-     * @param values
-     */
-    public FacetSelection(Collection<String> values) {
-        //this(FacetSelectionType.AND, values);
-        this(resolve(WebSession.get().getAttribute(AdvancedSearchOptionsPanel.SELECTION_TYPE_ATTRIBUTE_NAME)), values);
-    }
-
-    private static FacetSelectionType resolve(Serializable option) {
-        if (option == null) {
-            return FacetSelectionType.OR;
-        } else {
-            return (boolean) option ? FacetSelectionType.AND : FacetSelectionType.OR;
-        }
-    }
-
-    /**
      * Creates an empty selection with the specified type
      *
      * @param type

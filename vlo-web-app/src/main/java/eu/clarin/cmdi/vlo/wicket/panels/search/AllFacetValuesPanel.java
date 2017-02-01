@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableList;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
@@ -144,8 +145,9 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
                     public void onClick(AjaxRequestTarget target) {
                         // call callback
                         onValuesSelected(
+                                FacetSelectionType.AND,
                                 // for now only single values can be selected
-                        		Collections.singleton(item.getModelObject().getName()),
+                                Collections.singleton(item.getModelObject().getName()),
                                 target);
                     }
                 };
@@ -260,6 +262,6 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
      * @param target Ajax target allowing for a partial update. May be null
      * (fallback)!
      */
-    protected abstract void onValuesSelected(Collection<String> values, AjaxRequestTarget target);
+    protected abstract void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target);
 
 }

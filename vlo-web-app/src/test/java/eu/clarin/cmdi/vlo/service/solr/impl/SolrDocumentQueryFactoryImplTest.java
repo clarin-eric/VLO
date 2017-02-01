@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.service.solr.impl;
 
 import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.Collection;
 import java.util.Collections;
@@ -47,7 +48,7 @@ public class SolrDocumentQueryFactoryImplTest {
      */
     @Test
     public void testCreateDocumentQueryForSelection() {
-        final Map<String, FacetSelection> selectionMap = Collections.<String, FacetSelection>singletonMap("field1", new FacetSelection(Collections.singleton("value 1")));
+        final Map<String, FacetSelection> selectionMap = Collections.<String, FacetSelection>singletonMap("field1", new FacetSelection(FacetSelectionType.AND, Collections.singleton("value 1")));
         final QueryFacetsSelection selection = new QueryFacetsSelection("query", selectionMap);
         final int first = 100;
         final int count = 15;

@@ -6,6 +6,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 
 /* Model for {@link SelectedFacetValues}
@@ -27,7 +28,7 @@ public class SelectionModel extends AbstractReadOnlyModel<FacetSelection>{
 	@Override
 	public FacetSelection getObject() {
 		FacetSelection facetSelection = selectionModel.getObject().getSelectionValues(facetName);		
-		return facetSelection != null ? facetSelection : new FacetSelection(Collections.EMPTY_LIST);
+		return facetSelection != null ? facetSelection : new FacetSelection(FacetSelectionType.AND, Collections.EMPTY_LIST);
 	}
 	
 	@Override

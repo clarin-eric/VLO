@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableSet;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
@@ -29,6 +30,7 @@ import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapModal;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -201,8 +203,12 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
                 // reset filter
                 ((NameAndCountFieldValuesFilter) filterModel.getObject()).setName(null);
 
+                FacetSelectionType selectionType = resolve(getSession().getAttribute(AdvancedSearchOptionsPanel.SELECTION_TYPE_ATTRIBUTE_NAME));
+                
                 // call callback
                 onValuesSelected(
+                        //TODO: get type injected via model
+                        selectionType,
                         // for now only single values can be selected
                         Collections.singleton(item.getModelObject().getName()),
                         target);
@@ -214,6 +220,13 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         selectLink.add(new FieldValueLabel("name", fieldNameModel));
         // 'count' field from Count (document count for value)
         selectLink.add(new Label("count"));
+    }
+    
+    private static FacetSelectionType resolve(Serializable option){
+    	if(option == null)
+    		return FacetSelectionType.OR;
+    	else
+    		return (boolean)option? FacetSelectionType.AND : FacetSelectionType.OR;
     }
 
     /**
@@ -268,12 +281,12 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), filterModel) {
 
             @Override
-            protected void onValuesSelected(Collection<String> values, AjaxRequestTarget target) {
+            protected void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
                 if (target != null) {
                     // target can be null if selection link was opened in a new tab
                     window.close(target);
                 }
-                FacetValuesPanel.this.onValuesSelected(values, target);
+                FacetValuesPanel.this.onValuesSelected(selectionType, values, target);
             }
         };
 
@@ -302,7 +315,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param target Ajax target allowing for a partial update. May be null
      * (fallback)!
      */
-    protected abstract void onValuesSelected(Collection<String> values, AjaxRequestTarget target);
+    protected abstract void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target);
 
     @Override
     protected void onBeforeRender() {
