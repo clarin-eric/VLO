@@ -64,8 +64,21 @@
         </plugins>
     </reporting>
     
-    <!-- TODO: get rid of dependency on MPI repository -->
     <repositories>
+        <repository>
+            <id>CLARIN</id>
+            <name>CLARIN Repository</name>
+            <url>https://nexus.clarin.eu/content/repositories/Clarin</url>
+        </repository>
+        <repository>
+            <id>CLARIN-Snapshot</id>
+            <name>CLARIN Snapshot Repository</name>
+            <url>https://nexus.clarin.eu/content/repositories/clarin-snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <!-- TODO: get rid of dependency on MPI repository -->
         <repository>
             <id>MPI</id>
             <name>MPI LAT Repository</name>
