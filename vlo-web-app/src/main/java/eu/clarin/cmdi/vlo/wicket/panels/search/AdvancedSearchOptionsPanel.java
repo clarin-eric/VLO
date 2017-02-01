@@ -52,9 +52,9 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  *
  * @author twagoo
  */
-public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFacetsSelection> implements IAjaxIndicatorAware{
-	
-	public static final String SELECTION_TYPE_ATTRIBUTE_NAME = "selectionType";
+public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFacetsSelection> implements IAjaxIndicatorAware {
+
+    public static final String SELECTION_TYPE_ATTRIBUTE_NAME = "selectionType";
 
     @SpringBean
     private VloConfig config;
@@ -62,7 +62,7 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
     private final Form optionsForm;
 
     private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
-    
+
     private boolean filterQuerySelectionType = false;
     /**
      * The fields that this panel provides options for
@@ -74,14 +74,14 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
     public AdvancedSearchOptionsPanel(String id, IModel<QueryFacetsSelection> model) {
         super(id, model);
         optionsForm = new Form("options");
-        
+
         final CheckBox selectionType = new CheckBox("selectionType", new Model(filterQuerySelectionType));
-        selectionType.add(new OnChangeAjaxBehavior(){
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				filterQuerySelectionType = !filterQuerySelectionType;
-				WebSession.get().setAttribute(SELECTION_TYPE_ATTRIBUTE_NAME, filterQuerySelectionType);
-			}        	
+        selectionType.add(new OnChangeAjaxBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                filterQuerySelectionType = !filterQuerySelectionType;
+                WebSession.get().setAttribute(SELECTION_TYPE_ATTRIBUTE_NAME, filterQuerySelectionType);
+            }
         });
         optionsForm.add(selectionType);
 
@@ -93,7 +93,7 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         collectionsSection.add(collectionCheck);
         collectionsSection.setVisible(config.isProcessHierarchies());
         optionsForm.add(collectionsSection);
-        
+
         optionsForm.add(indicatorAppender);
 
         add(optionsForm);

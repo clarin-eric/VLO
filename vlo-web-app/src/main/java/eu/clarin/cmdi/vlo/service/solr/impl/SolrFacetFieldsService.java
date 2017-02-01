@@ -50,40 +50,41 @@ public class SolrFacetFieldsService implements FacetFieldsService {
     }
 
     @Override
-    public List<FacetField> getFacetFields(QueryFacetsSelection selection, List<String> facets, int valueLimit) {    	
-    	return removeSelectedValsFromResponse(selection, searchResultsDao.getFacets(queryFatory.createFacetQuery(selection, facets, valueLimit)));
+    public List<FacetField> getFacetFields(QueryFacetsSelection selection, List<String> facets, int valueLimit) {
+        return removeSelectedValsFromResponse(selection, searchResultsDao.getFacets(queryFatory.createFacetQuery(selection, facets, valueLimit)));
     }
 
     @Override
     public long getFacetFieldCount(List<String> facets) {
         return (long) searchResultsDao.getFacets(queryFatory.createCountFacetsQuery(facets)).size();
     }
-    
-    private  List<FacetField> removeSelectedValsFromResponse(QueryFacetsSelection query, List<FacetField> response){
-    	List<FacetField> cleanedFacets = new ArrayList<>();
-    	
-    	//for each facet from response
-    	for(FacetField facet: response){
-    		FacetSelection facetSelection = query.getSelectionValues(facet.getName());
-    		
-    		if(facetSelection == null){
-    			cleanedFacets.add(facet);
-    			continue;
-    		}else{
-	    		Collection<String> selectedValues =  facetSelection.getValues();
-	    		
-	    		FacetField _newFacetField = new FacetField(facet.getName(), facet.getName(), facet.getEnd());
-	    		//for each value from facet check if is selected and if not add it to the new response
-	    		for(Count val: facet.getValues()){
-	    			if(!selectedValues.contains(val.getName()))
-	    				_newFacetField.add(val.getName(), val.getCount());
-	    		}
-	    		
-	    		cleanedFacets.add(_newFacetField);
-    		}
-    	}
-    	
-    	return cleanedFacets;
+
+    private List<FacetField> removeSelectedValsFromResponse(QueryFacetsSelection query, List<FacetField> response) {
+        List<FacetField> cleanedFacets = new ArrayList<>();
+
+        //for each facet from response
+        for (FacetField facet : response) {
+            FacetSelection facetSelection = query.getSelectionValues(facet.getName());
+
+            if (facetSelection == null) {
+                cleanedFacets.add(facet);
+                continue;
+            } else {
+                Collection<String> selectedValues = facetSelection.getValues();
+
+                FacetField _newFacetField = new FacetField(facet.getName(), facet.getName(), facet.getEnd());
+                //for each value from facet check if is selected and if not add it to the new response
+                for (Count val : facet.getValues()) {
+                    if (!selectedValues.contains(val.getName())) {
+                        _newFacetField.add(val.getName(), val.getCount());
+                    }
+                }
+
+                cleanedFacets.add(_newFacetField);
+            }
+        }
+
+        return cleanedFacets;
     }
 
 }

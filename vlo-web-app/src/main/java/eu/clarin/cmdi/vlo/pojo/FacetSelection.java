@@ -50,12 +50,13 @@ public class FacetSelection implements Serializable {
         //this(FacetSelectionType.AND, values);
         this(resolve(WebSession.get().getAttribute(AdvancedSearchOptionsPanel.SELECTION_TYPE_ATTRIBUTE_NAME)), values);
     }
-    
-    private static FacetSelectionType resolve(Serializable option){
-    	if(option == null)
-    		return FacetSelectionType.OR;
-    	else
-    		return (boolean)option? FacetSelectionType.AND : FacetSelectionType.OR;
+
+    private static FacetSelectionType resolve(Serializable option) {
+        if (option == null) {
+            return FacetSelectionType.OR;
+        } else {
+            return (boolean) option ? FacetSelectionType.AND : FacetSelectionType.OR;
+        }
     }
 
     /**
@@ -72,10 +73,10 @@ public class FacetSelection implements Serializable {
     }
 
     public FacetSelection(FacetSelectionType selectionType, Collection<String> values, Map<String, FacetSelectionValueQualifier> qualifiers) {
-        
-    	this.selectionType = selectionType;
-        
-    	// always store as array list, which is modifiable and serialisable
+
+        this.selectionType = selectionType;
+
+        // always store as array list, which is modifiable and serialisable
         if (values instanceof ArrayList) {
             this.values = values;
         } else {
@@ -108,7 +109,7 @@ public class FacetSelection implements Serializable {
 
     public void setValues(Collection<String> values) {
         //this.values = values;
-    	this.values.addAll(values);
+        this.values.addAll(values);
     }
 
     /**
