@@ -12,31 +12,26 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 /* Model for {@link SelectedFacetValues}
  * 
  */
+public class SelectionModel extends AbstractReadOnlyModel<FacetSelection> {
 
-public class SelectionModel extends AbstractReadOnlyModel<FacetSelection>{
-	
-	IModel<QueryFacetsSelection> selectionModel;
-	private transient String facetName;
-	
-	
-	public SelectionModel(String facetName, IModel<QueryFacetsSelection> selectionModel) {
-		this.selectionModel = selectionModel;
-		this.facetName = facetName;
-	}
+    private final IModel<QueryFacetsSelection> selectionModel;
+    private final String facetName;
 
+    public SelectionModel(String facetName, IModel<QueryFacetsSelection> selectionModel) {
+        this.selectionModel = selectionModel;
+        this.facetName = facetName;
+    }
 
-	@Override
-	public FacetSelection getObject() {
-		FacetSelection facetSelection = selectionModel.getObject().getSelectionValues(facetName);		
-		return facetSelection != null ? facetSelection : new FacetSelection(FacetSelectionType.AND, Collections.EMPTY_LIST);
-	}
-	
-	@Override
-	public void detach() {		
-		super.detach();
-		selectionModel.detach();
-	}
-	
-	
+    @Override
+    public FacetSelection getObject() {
+        final FacetSelection facetSelection = selectionModel.getObject().getSelectionValues(facetName);
+        return facetSelection != null ? facetSelection : new FacetSelection(FacetSelectionType.AND, Collections.EMPTY_LIST);
+    }
+
+    @Override
+    public void detach() {
+        super.detach();
+        selectionModel.detach();
+    }
 
 }

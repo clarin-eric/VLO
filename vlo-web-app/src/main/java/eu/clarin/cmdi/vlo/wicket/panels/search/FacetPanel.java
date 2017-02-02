@@ -87,13 +87,11 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
         super.onConfigure();
 
         final boolean valuesSelected = !selectedFacetPanel.getModelObject().isEmpty();
-        //facetValuesPanel.setVisible(!valuesSelected);
         selectedFacetPanel.setVisible(valuesSelected);
         facetValuesPanel.setVisible(expansionModel.getObject() != ExpansionState.COLLAPSED);
 
         // hide this entire panel if nothing is selected or there is nothing to be selected
-        //setVisible(!isHideIfNoValues() || valuesSelected || facetValuesPanel.getModelObject().getValueCount() > 0);
-        setVisible(!isHideIfNoValues() || !selectedFacetPanel.getModelObject().isEmpty() || facetValuesPanel.getModelObject().getValueCount() > 0);
+        setVisible(!isHideIfNoValues() || valuesSelected || facetValuesPanel.getModelObject().getValueCount() > 0);
     }
 
     /**

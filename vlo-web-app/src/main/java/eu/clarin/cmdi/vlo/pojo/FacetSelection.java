@@ -19,7 +19,6 @@ package eu.clarin.cmdi.vlo.pojo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.wicket.protocol.http.WebSession;
 
 /**
  * Represents the selection for a single facet
