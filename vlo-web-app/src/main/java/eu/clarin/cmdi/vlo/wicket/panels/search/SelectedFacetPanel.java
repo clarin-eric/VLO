@@ -29,6 +29,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import org.apache.wicket.markup.html.basic.Label;
@@ -54,7 +55,8 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
     private ListView<String> createSelectionRemovers(String id, String facetName) {
         // Model of the list of selected values in this facet
         final IModel<List<String>> valuesModel = new PropertyModel<>(getModel(), "values");
-        
+        final PropertyModel<FacetSelectionType> selectionTypeModel = new PropertyModel(getModel(), "selectionType");
+
         final IModel<String> fieldNameModel = Model.of(facetName);
 
         // Repeating container of value + unselection links
@@ -71,7 +73,16 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
 
                     @Override
                     protected void onConfigure() {
+                        super.onConfigure();
                         setVisible(SelectedFacetPanel.this.getModelObject().getQualifier(item.getModelObject()) == FacetSelectionValueQualifier.NOT);
+                    }
+
+                });
+                item.add(new Label("selectionType", selectionTypeModel) {
+                    @Override
+                    protected void onConfigure() {
+                        super.onConfigure();
+                        setVisible(item.getIndex() > 0);
                     }
 
                 });

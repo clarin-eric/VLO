@@ -23,7 +23,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
+            <!-- NOTE: the content of the "facetValueRemover" is mirrored in "selectedItem"! -->
             <div wicket:id="facetValueRemover" class="selectedvaluelabel">
+                <span wicket:id="selectionType" class="selectedfacetvalue">OR</span>
                 <span wicket:id="negator" class="selectedfacetvalue">-</span>
                 <wicket:container wicket:id="facetValue">value</wicket:container>
                 <a wicket:id="unselectValue" class="unselectfacetvalue" title="unselect value">
@@ -36,6 +38,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <div class="sbilinks facetvalues">
                 <ul>
                     <li wicket:id="selectedItem">                        
+                        <span wicket:id="selectionType" class="selectedfacetvalue selectiontype">OR</span>
                         <span wicket:id="negator" class="selectedfacetvalue">-</span>
                         <span wicket:id="facetValue" class="selectedfacetvalue">ITEM</span>
                         <a wicket:id="unselectValue" class="unselectfacetvalue" title="unselect value">
