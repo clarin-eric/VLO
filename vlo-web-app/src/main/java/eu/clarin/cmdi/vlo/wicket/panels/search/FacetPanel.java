@@ -125,13 +125,7 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
                 // Values have been removed, calculate remainder
                 selectionModel.getObject().removeFacetValue(facetName, valuesRemoved);
 
-                // collapse after removal
-                // TODO: should be removed, but then list of values
-                // does not seem to update correctly
-                expansionModel.setObject(ExpansionState.COLLAPSED);
-
                 if (target != null) {
-                    // reload entire page for now
                     selectionChanged(target);
                 }
             }
