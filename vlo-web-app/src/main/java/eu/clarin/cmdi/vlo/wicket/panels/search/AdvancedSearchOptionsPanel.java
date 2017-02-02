@@ -59,13 +59,10 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
     @SpringBean
     private VloConfig config;
 
-    private final IModel<FacetSelectionType> selectionTypeModeModel;
-
     private final Form optionsForm;
 
     private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
 
-    private final boolean filterQuerySelectionType = false;
     /**
      * The fields that this panel provides options for
      */
@@ -75,7 +72,6 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
 
     public AdvancedSearchOptionsPanel(String id, IModel<QueryFacetsSelection> model, IModel<FacetSelectionType> selectionTypeModeModel) {
         super(id, model);
-        this.selectionTypeModeModel = selectionTypeModeModel;
 
         optionsForm = new Form("options");
 
