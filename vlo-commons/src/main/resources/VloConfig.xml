@@ -156,15 +156,15 @@
     
     <facetOverviewLength>30</facetOverviewLength>
     
-    <countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
+    <countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
     
     <languageLinkTemplate>https://infra.clarin.eu/content/language_info/data/{}.html</languageLinkTemplate>
     
     <feedbackFromUrl>http://www.clarin.eu/node/3759?url=</feedbackFromUrl>
 
-    <language2LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438109/xml</language2LetterCodeComponentUrl>
+    <language2LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438109/xml</language2LetterCodeComponentUrl>
     
-    <language3LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438110/xml</language3LetterCodeComponentUrl>
+    <language3LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438110/xml</language3LetterCodeComponentUrl>
    
     <silToISO639CodesUrl>https://infra.clarin.eu/CMDI/1.1/xslt/sil_to_iso6393.xml</silToISO639CodesUrl>
     
