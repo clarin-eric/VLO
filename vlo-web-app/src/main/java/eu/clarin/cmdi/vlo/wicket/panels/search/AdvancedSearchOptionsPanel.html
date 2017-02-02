@@ -25,9 +25,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <wicket:extend>
             <div class="sbilinks facetvalues">
                 <form wicket:id="options" id="advancedoptions">
-                    <div class="checkbox">
+                    <div >
                         <label>
-                            <input wicket:id="selectionType" type="checkbox" id="selectionTypeOr"/>Switch multi-values selection type for a facet to AND 
+                            Multiple value selection behaviour: 
+                            <select wicket:id="selectionType">
+                                <option value="AND">And</option>
+                                <option value="OR">Or</option>
+                            </select>
                         </label>
                     </div>
                     <div class="checkbox">

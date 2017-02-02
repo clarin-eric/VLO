@@ -124,7 +124,15 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         fieldsModel = new FacetFieldsModel(facetFieldsService, allFields, getModel(), -1);
 
         final FacetSelectionType initialSelectionType = getFacetSelectionTypeModeFromSessionOrDefault();
-        facetSelectionTypeModeModel = new Model<>(initialSelectionType);
+        facetSelectionTypeModeModel = new Model<FacetSelectionType>(initialSelectionType) {
+            @Override
+            public void setObject(FacetSelectionType object) {
+                super.setObject(object);
+                //persist in session
+                getSession().setAttribute(AdvancedSearchOptionsPanel.SELECTION_TYPE_ATTRIBUTE_NAME, object);
+            }
+            
+        };
     }
 
     private FacetSelectionType getFacetSelectionTypeModeFromSessionOrDefault() {
@@ -252,7 +260,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private Panel createOptionsPanel(String id) {
-        final Panel panel = new AdvancedSearchOptionsPanel(id, getModel()) {
+        final Panel panel = new AdvancedSearchOptionsPanel(id, getModel(), facetSelectionTypeModeModel){
 
             @Override
             protected void selectionChanged(AjaxRequestTarget target) {
