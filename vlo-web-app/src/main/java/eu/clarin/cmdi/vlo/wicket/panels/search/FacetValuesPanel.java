@@ -238,7 +238,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             public void onClick(AjaxRequestTarget target) {
                 if (target == null) {
                     // no JavaScript, open a new page with values
-                    setResponsePage(new AllFacetValuesPage(getModel(), selectionModel));
+                    setResponsePage(new AllFacetValuesPage(getModel(), selectionModel, selectionTypeModeModel));
                 } else {
                     // JavaScript enabled, show values in a modal popup
                     valuesWindow.show(target);

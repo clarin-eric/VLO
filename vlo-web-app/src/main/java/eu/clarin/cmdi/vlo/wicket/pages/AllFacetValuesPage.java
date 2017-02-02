@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.http.flow.AbortWithHttpErrorCodeException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
@@ -41,7 +40,9 @@ import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.AllFacetValuesPanel;
+import java.io.Serializable;
 
 /**
  *
@@ -61,11 +62,18 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
     private VloConfig vloConfig;
 
     private final IModel<QueryFacetsSelection> selectionModel;
+    private final IModel<FacetSelectionType> selectionTypeModeModel;
 
     public AllFacetValuesPage(PageParameters params) {
         super(params);
 
         this.selectionModel = Model.of(parametersConverter.fromParameters(params));
+
+        final Serializable sessionSelectionType = getSession().getAttribute(AdvancedSearchOptionsPanel.SELECTION_TYPE_ATTRIBUTE_NAME);
+        this.selectionTypeModeModel = Model.of(
+                sessionSelectionType instanceof FacetSelectionType
+                        ? (FacetSelectionType) sessionSelectionType
+                        : FacetSelectionType.OR);
         final StringValue facetValue = params.get(SELECTED_FACET_PARAM);
         if (facetValue.isEmpty()) {
             Session.get().error("No facet provided for all values page");
@@ -86,9 +94,10 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
         addComponents();
     }
 
-    public AllFacetValuesPage(IModel<FacetField> fieldModel, final IModel<QueryFacetsSelection> selectionModel) {
+    public AllFacetValuesPage(IModel<FacetField> fieldModel, final IModel<QueryFacetsSelection> selectionModel, IModel<FacetSelectionType> selectionTypeModeModel) {
         super(fieldModel);
         this.selectionModel = selectionModel;
+        this.selectionTypeModeModel = selectionTypeModeModel;
         addComponents();
     }
 
@@ -97,7 +106,7 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
 
         add(new Label("name", new SolrFieldNameModel(new PropertyModel<String>(getModel(), "name"))));
 
-        add(new AllFacetValuesPanel("values", getModel()) {
+        add(new AllFacetValuesPanel("values", getModel(), selectionTypeModeModel) {
 
             @Override
             protected void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
@@ -108,7 +117,12 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
                 } else {
                     newSelection = new QueryFacetsSelection();
                 }
-                newSelection.selectValues(getModelObject().getName(), new FacetSelection(selectionType, values));
+                final FacetSelection facetSelection = newSelection.getSelectionValues(getModelObject().getName());
+                if (facetSelection != null) {
+                    facetSelection.getValues().addAll(values);
+                } else {
+                    newSelection.selectValues(getModelObject().getName(), new FacetSelection(selectionType, values));
+                }
 
                 // Redirect to search page with updated model
                 final FacetedSearchPage searchPage = new FacetedSearchPage(Model.of(newSelection));
@@ -121,6 +135,7 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
     public void detachModels() {
         super.detachModels();
         selectionModel.detach();
+        selectionTypeModeModel.detach();
     }
 
 }
