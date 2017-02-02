@@ -28,12 +28,19 @@ import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
+import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
+import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.SelectionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 
 /**
  * Panel that displays a single facet based on the current query/value
@@ -50,6 +57,7 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
     private final SelectedFacetPanel selectedFacetPanel;
     private final FacetValuesPanel facetValuesPanel;
     private final IModel<FacetSelectionType> selectionTypeModeModel;
+    private final IModel<FieldValuesFilter> filterModel;
 
     public FacetPanel(String id, IModel<String> facetNameModel, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModeModel, IModel<ExpansionState> expansionState) {
         this(id, facetNameModel, facetFieldModel, selectionModel, selectionTypeModeModel, expansionState, 0);
@@ -58,6 +66,11 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
     public FacetPanel(String id, IModel<String> facetNameModel, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModeModel, IModel<ExpansionState> expansionState, int subListSize) {
         super(id, facetNameModel, expansionState);
         this.selectionTypeModeModel = selectionTypeModeModel;
+
+        // shared model that holds the string for filtering the values (quick search)
+        filterModel = new Model<FieldValuesFilter>(new NameAndCountFieldValuesFilter());
+        // create a form with an input bound to the filter model
+        add(createFilterForm("filter"));
 
         // panel showing values for selection
         facetValuesPanel = createFacetValuesPanel("facetValues", facetNameModel.getObject(), facetFieldModel, selectionModel, subListSize);
@@ -82,6 +95,29 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
         return label;
     }
 
+    /**
+     * Creates a form with an input bound to the filter model
+     *
+     * @param id component id
+     * @return filter form
+     */
+    private Form createFilterForm(String id) {
+        final Form filterForm = new Form(id);
+        final TextField<String> filterField = new TextField<>("filterText",
+                new PropertyModel<String>(filterModel, "name"));
+        // make field update 
+        filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
+
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                //update values
+                target.add(facetValuesPanel);
+            }
+        });
+        filterForm.add(filterField);
+        return filterForm;
+    }
+
     @Override
     protected void onConfigure() {
         super.onConfigure();
@@ -104,7 +140,7 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
     }
 
     private FacetValuesPanel createFacetValuesPanel(String id, final String facetName, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, int subListSize) {
-        return new FacetValuesPanel(id, facetFieldModel, selectionModel, selectionTypeModeModel, subListSize) {
+        return new FacetValuesPanel(id, facetFieldModel, selectionModel, selectionTypeModeModel, filterModel, subListSize) {
             @Override
             public void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
                 // A value has been selected on this facet's panel, update the model!
@@ -146,6 +182,9 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
         
         if (selectionTypeModeModel != null) {
             this.selectionTypeModeModel.detach();
+        }
+        if (filterModel != null) {
+            filterModel.detach();
         }
     }
 

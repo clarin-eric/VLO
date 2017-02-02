@@ -87,8 +87,8 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param selectionModel model holding the global query/facet selection
      * @param selectionTypeModel model holding the current selection type
      */
-    public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModel) {
-        this(id, model, selectionModel, selectionTypeModel, 0);
+    public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModel, IModel<FieldValuesFilter> filterModel) {
+        this(id, model, selectionModel, selectionTypeModel, filterModel, 0);
     }
 
     /**
@@ -101,16 +101,12 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param subListSize if large than 0, multiple lists will be generated each
      * with a maximum size of this value
      */
-    public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModel, int subListSize) {
+    public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModel, IModel<FieldValuesFilter> filterModel, int subListSize) {
         super(id, model);
         this.selectionModel = selectionModel;
         this.selectionTypeModeModel = selectionTypeModel;
+        this.filterModel = filterModel;
         this.subListSize = subListSize;
-
-        // shared model that holds the string for filtering the values (quick search)
-        filterModel = new Model<FieldValuesFilter>(new NameAndCountFieldValuesFilter());
-        // create a form with an input bound to the filter model
-        add(createFilterForm("filter"));
 
         // create a container for values to allow for AJAX updates when filtering
         valuesContainer = new WebMarkupContainer("valuesContainer");
@@ -128,29 +124,6 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         add(valuesWindow);
 
         fieldNameModel = new PropertyModel<>(model, "name");
-    }
-
-    /**
-     * Creates a form with an input bound to the filter model
-     *
-     * @param id component id
-     * @return filter form
-     */
-    private Form createFilterForm(String id) {
-        final Form filterForm = new Form(id);
-        final TextField<String> filterField = new TextField<>("filterText",
-                new PropertyModel<String>(filterModel, "name"));
-        // make field update 
-        filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                //update values
-                target.add(valuesContainer);
-            }
-        });
-        filterForm.add(filterField);
-        return filterForm;
     }
 
     /**
@@ -308,7 +281,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     /**
      * Callback triggered when values have been selected on this facet
      *
-     * @param facet name of the facet this panel represents
+     * @param selectionType
      * @param values selected values
      * @param target Ajax target allowing for a partial update. May be null
      * (fallback)!
