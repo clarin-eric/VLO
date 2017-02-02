@@ -20,7 +20,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import static eu.clarin.cmdi.vlo.VloWebAppParameters.*;
-import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
@@ -154,7 +153,6 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
             final String facetString = fq.get(0);
             //check if negated
             final boolean negated = facetString.startsWith("-");
-            //TODO:final boolean or = facetString.startsWith("|");
 
             //get actual facet name
             final String requestedFacet;
@@ -171,8 +169,7 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
                 if (selection.containsKey(facet)) {
                     selection.get(facet).getValues().add(value);
                 } else {
-                    //TODO: support OR
-                    selection.put(facet, new FacetSelection(FacetSelectionType.AND, Arrays.asList(value)));
+                    selection.put(facet, new FacetSelection(FacetSelectionType.OR, Arrays.asList(value)));
                 }
                 if (negated) {
                     //negate selection
