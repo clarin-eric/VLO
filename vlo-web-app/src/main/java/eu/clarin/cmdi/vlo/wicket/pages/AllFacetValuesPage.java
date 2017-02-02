@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.VloWebSession;
 import java.util.Collection;
 
 import org.apache.solr.client.solrj.response.FacetField;
@@ -69,11 +70,11 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
 
         this.selectionModel = Model.of(parametersConverter.fromParameters(params));
 
-        final Serializable sessionSelectionType = getSession().getAttribute(AdvancedSearchOptionsPanel.SELECTION_TYPE_ATTRIBUTE_NAME);
+        final FacetSelectionType sessionSelectionType = VloWebSession.get().getFacetSelectionTypeMode();
         this.selectionTypeModeModel = Model.of(
-                sessionSelectionType instanceof FacetSelectionType
-                        ? (FacetSelectionType) sessionSelectionType
-                        : FacetSelectionType.OR);
+                sessionSelectionType == null
+                        ? FacetSelectionType.OR
+                        : sessionSelectionType);
         final StringValue facetValue = params.get(SELECTED_FACET_PARAM);
         if (facetValue.isEmpty()) {
             Session.get().error("No facet provided for all values page");

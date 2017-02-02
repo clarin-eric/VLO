@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.VloWebSession;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import java.util.List;
 
@@ -35,7 +36,6 @@ import eu.clarin.cmdi.vlo.wicket.panels.search.SearchFormPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsHeaderPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
-import java.io.Serializable;
 import java.util.Map;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
@@ -129,18 +129,18 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
             public void setObject(FacetSelectionType object) {
                 super.setObject(object);
                 //persist in session
-                getSession().setAttribute(AdvancedSearchOptionsPanel.SELECTION_TYPE_ATTRIBUTE_NAME, object);
+                VloWebSession.get().setFacetSelectionTypeMode(object);
             }
-            
+
         };
     }
 
     private FacetSelectionType getFacetSelectionTypeModeFromSessionOrDefault() {
-        final Serializable sessionValue = getSession().getAttribute(AdvancedSearchOptionsPanel.SELECTION_TYPE_ATTRIBUTE_NAME);
-        if (sessionValue instanceof FacetSelectionType) {
-            return (FacetSelectionType) sessionValue;
-        } else {
+        final FacetSelectionType sessionValue = VloWebSession.get().getFacetSelectionTypeMode();
+        if (sessionValue == null) {
             return FacetSelectionType.OR;
+        } else {
+            return (FacetSelectionType) sessionValue;
         }
     }
 
@@ -260,7 +260,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private Panel createOptionsPanel(String id) {
-        final Panel panel = new AdvancedSearchOptionsPanel(id, getModel(), facetSelectionTypeModeModel){
+        final Panel panel = new AdvancedSearchOptionsPanel(id, getModel(), facetSelectionTypeModeModel) {
 
             @Override
             protected void selectionChanged(AjaxRequestTarget target) {

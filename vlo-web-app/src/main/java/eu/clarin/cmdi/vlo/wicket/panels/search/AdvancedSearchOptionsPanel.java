@@ -54,8 +54,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFacetsSelection> implements IAjaxIndicatorAware {
 
-    public static final String SELECTION_TYPE_ATTRIBUTE_NAME = "selectionType";
-
     @SpringBean
     private VloConfig config;
 
