@@ -70,24 +70,29 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
     private final FacetFieldValuesProvider valuesProvider;
     private final WebMarkupContainer valuesContainer;
     private final IModel<FieldValuesFilter> filterModel;
+    private final IModel<FacetSelectionType> selectionTypeModeModel;
 
     /**
      *
      * @param id component id
      * @param model model for the facet field to show values for
+     * @param selectionTypeModeModel
      */
-    public AllFacetValuesPanel(String id, IModel<FacetField> model) {
-        this(id, model, null);
+    public AllFacetValuesPanel(String id, IModel<FacetField> model, IModel<FacetSelectionType> selectionTypeModeModel) {
+        this(id, model, selectionTypeModeModel, null);
     }
 
     /**
      *
      * @param id component id
      * @param model model for the facet field to show values for
+     * @param selectionTypeModeModel
      * @param filterModel model that holds a string to filter in (can be null)
      */
-    public AllFacetValuesPanel(String id, IModel<FacetField> model, IModel<FieldValuesFilter> filterModel) {
+    public AllFacetValuesPanel(String id, IModel<FacetField> model, IModel<FacetSelectionType> selectionTypeModeModel, IModel<FieldValuesFilter> filterModel) {
         super(id, model);
+
+        this.selectionTypeModeModel = selectionTypeModeModel;
 
         if (filterModel != null) {
             this.filterModel = filterModel;
@@ -145,7 +150,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
                     public void onClick(AjaxRequestTarget target) {
                         // call callback
                         onValuesSelected(
-                                FacetSelectionType.AND,
+                                selectionTypeModeModel.getObject(),
                                 // for now only single values can be selected
                                 Collections.singleton(item.getModelObject().getName()),
                                 target);
@@ -252,12 +257,18 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
     @Override
     public void detachModels() {
         super.detachModels();
-        filterModel.detach();
+        if (filterModel != null) {
+            filterModel.detach();
+        }
+        if (selectionTypeModeModel != null) {
+            selectionTypeModeModel.detach();
+        }
     }
 
     /**
      * Callback triggered when values have been selected on this facet
      *
+     * @param selectionType
      * @param values selected values
      * @param target Ajax target allowing for a partial update. May be null
      * (fallback)!

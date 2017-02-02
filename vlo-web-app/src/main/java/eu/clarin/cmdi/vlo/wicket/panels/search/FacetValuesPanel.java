@@ -30,7 +30,6 @@ import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapModal;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -273,7 +272,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             }
         };
 
-        final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), filterModel) {
+        final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), selectionTypeModeModel, filterModel) {
 
             @Override
             protected void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
