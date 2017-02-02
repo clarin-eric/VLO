@@ -38,6 +38,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
+import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
@@ -125,7 +126,7 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
         @Override
         protected void populateItem(final ListItem<FacetField> item) {
             // add a panel showing the values for selection (constrained by the current model)
-            final FacetValuesPanel values = new FacetValuesPanel("values", item.getModel(), selectionModel, Model.of(FacetSelectionType.OR)) {
+            final FacetValuesPanel values = new FacetValuesPanel("values", item.getModel(), selectionModel, Model.of(FacetSelectionType.OR), new Model<FieldValuesFilter>()) {
 
                 @Override
                 protected void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
