@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.DocumentField;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
@@ -145,7 +146,7 @@ public class FieldsTablePanel extends Panel {
 
             @Override
             public void onClick() {
-                final FacetSelection facetSelection = new FacetSelection(Collections.singleton(valueModel.getObject().toString()));
+                final FacetSelection facetSelection = new FacetSelection(FacetSelectionType.AND, Collections.singleton(valueModel.getObject().toString()));
                 final QueryFacetsSelection selection = new QueryFacetsSelection(Collections.singletonMap(facetNameModel.getObject(), facetSelection));
                 setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(selection));
             }

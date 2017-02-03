@@ -37,6 +37,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
+import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
@@ -124,13 +126,13 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
         @Override
         protected void populateItem(final ListItem<FacetField> item) {
             // add a panel showing the values for selection (constrained by the current model)
-            final FacetValuesPanel values = new FacetValuesPanel("values", item.getModel(), selectionModel) {
+            final FacetValuesPanel values = new FacetValuesPanel("values", item.getModel(), selectionModel, Model.of(FacetSelectionType.OR), new Model<FieldValuesFilter>()) {
 
                 @Override
-                protected void onValuesSelected(Collection<String> values, AjaxRequestTarget target) {
+                protected void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
                     // value selected, make a new selection (in this panel we do not want to change the existing selection)...
                     final QueryFacetsSelection newSelection = selectionModel.getObject().getCopy();
-                    newSelection.selectValues(getModelObject().getName(), new FacetSelection(values));
+                    newSelection.selectValues(getModelObject().getName(), new FacetSelection(selectionType, values));
                     // ...then submit to search page
                     setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(newSelection));
                 }
@@ -168,16 +170,16 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
                     }
                 }
             };
-            
+
             // add name label (with a description title attribute)
             final PropertyModel facetNameModel = new PropertyModel(item.getModel(), "name");
             // wrap in field name model to get a friendly facet name based on name in FacetField
             final Label name = new Label("name", new SolrFieldNameModel(facetNameModel));
             select.add(name);
-            
+
             // add title attribute to get the facet description in a tooltip
             select.add(new AttributeAppender("title", new SolrFieldDescriptionModel(facetNameModel)));
-            
+
             item.add(select);
 
             // show a separator except for the last item

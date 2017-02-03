@@ -77,16 +77,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         }
     }
 
-    /* reduce padding for facet with selection */
-    &.selected .panel-body {
-        padding: 0 10px;
-    }
-
     /* FACET VALUES */
     .facetvalues { 
         ul {
 
             padding-left: .5em;
+            margin-bottom: 0;
 
             li { 
                 list-style: none; 
@@ -97,6 +93,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     text-decoration: none; 
                     width: 149px;
                 } 
+                
+                .selectiontype {
+                    font-weight: bold;
+                }
             }
         }
     }

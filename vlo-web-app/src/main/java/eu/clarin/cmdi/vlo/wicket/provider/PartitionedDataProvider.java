@@ -69,7 +69,7 @@ public class PartitionedDataProvider<T, S> implements ISortableDataProvider<List
                 valuesList = ((ListProvider<T>) provider).getList();
             } else {
                 // put iterator values in list (get all, no pagination at this level)
-                valuesList = ImmutableList.copyOf(provider.iterator(0, Long.MAX_VALUE));
+                valuesList = ImmutableList.<T>copyOf(provider.iterator(0, Long.MAX_VALUE));
             }
             // wrap in iterator
             return Iterators.singletonIterator(valuesList);

@@ -121,25 +121,25 @@ public class QueryFacetsSelection implements Serializable {
             }
         }
     }
-    
-    public void addNewFacetValue(String facet, Collection<String> values){
-    	FacetSelection curSel = selection.get(facet);
-    	if(curSel != null){
-    		curSel.setValues(values);
-    	}else{
-    		curSel = new FacetSelection(values);    		
-    	}
-    		
-    	selectValues(facet, curSel);    	
+
+    public void addNewFacetValue(String facet, FacetSelectionType selectionType, Collection<String> values) {
+        FacetSelection curSel = selection.get(facet);
+        if (curSel != null) {
+            curSel.setValues(values);
+        } else {
+            curSel = new FacetSelection(selectionType, values);
+        }
+
+        selectValues(facet, curSel);
     }
-    
-    public void removeFacetValue(String facet, Collection<String> valuestoBeRemoved){
-    	FacetSelection curSel = selection.get(facet);
-    	if (curSel != null){
-    		curSel.removeValues(valuestoBeRemoved);    		 		
-    	}
-    	//to remove facet from map if does not have any value
-    	selectValues(facet, curSel);
+
+    public void removeFacetValue(String facet, Collection<String> valuestoBeRemoved) {
+        FacetSelection curSel = selection.get(facet);
+        if (curSel != null) {
+            curSel.removeValues(valuestoBeRemoved);
+        }
+        //to remove facet from map if does not have any value
+        selectValues(facet, curSel);
     }
 
     @Override

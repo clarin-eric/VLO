@@ -42,9 +42,12 @@ import java.util.Collections;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.wicket.Page;
+import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 
@@ -187,6 +190,11 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
      */
     public static VloWicketApplication get() {
         return (VloWicketApplication) Application.get();
+    }
+
+    @Override
+    public Session newSession(Request request, Response response) {
+        return new VloWebSession(request);
     }
 
     /**

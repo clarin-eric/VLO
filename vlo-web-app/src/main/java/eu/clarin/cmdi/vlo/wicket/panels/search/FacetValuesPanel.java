@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableSet;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
@@ -73,6 +74,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     private final IModel<FieldValuesFilter> filterModel;
     private final int subListSize;
     private final IModel<String> fieldNameModel;
+    private final IModel<FacetSelectionType> selectionTypeModeModel;
 
     @SpringBean
     private FieldValueConverterProvider fieldValueConverterProvider;
@@ -83,9 +85,10 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param id component id
      * @param model facet field model for this panel
      * @param selectionModel model holding the global query/facet selection
+     * @param selectionTypeModel model holding the current selection type
      */
-    public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel) {
-        this(id, model, selectionModel, 0);
+    public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModel, IModel<FieldValuesFilter> filterModel) {
+        this(id, model, selectionModel, selectionTypeModel, filterModel, 0);
     }
 
     /**
@@ -94,18 +97,16 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param id component id
      * @param model facet field model for this panel
      * @param selectionModel model holding the global query/facet selection
+     * @param selectionTypeModel model holding the current selection type
      * @param subListSize if large than 0, multiple lists will be generated each
      * with a maximum size of this value
      */
-    public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel, int subListSize) {
+    public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModel, IModel<FieldValuesFilter> filterModel, int subListSize) {
         super(id, model);
         this.selectionModel = selectionModel;
+        this.selectionTypeModeModel = selectionTypeModel;
+        this.filterModel = filterModel;
         this.subListSize = subListSize;
-
-        // shared model that holds the string for filtering the values (quick search)
-        filterModel = new Model<FieldValuesFilter>(new NameAndCountFieldValuesFilter());
-        // create a form with an input bound to the filter model
-        add(createFilterForm("filter"));
 
         // create a container for values to allow for AJAX updates when filtering
         valuesContainer = new WebMarkupContainer("valuesContainer");
@@ -123,29 +124,6 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         add(valuesWindow);
 
         fieldNameModel = new PropertyModel<>(model, "name");
-    }
-
-    /**
-     * Creates a form with an input bound to the filter model
-     *
-     * @param id component id
-     * @return filter form
-     */
-    private Form createFilterForm(String id) {
-        final Form filterForm = new Form(id);
-        final TextField<String> filterField = new TextField<>("filterText",
-                new PropertyModel<String>(filterModel, "name"));
-        // make field update 
-        filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                //update values
-                target.add(valuesContainer);
-            }
-        });
-        filterForm.add(filterField);
-        return filterForm;
     }
 
     /**
@@ -203,6 +181,8 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
                 // call callback
                 onValuesSelected(
+                        //TODO: get type injected via model
+                        selectionTypeModeModel.getObject(),
                         // for now only single values can be selected
                         Collections.singleton(item.getModelObject().getName()),
                         target);
@@ -231,7 +211,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             public void onClick(AjaxRequestTarget target) {
                 if (target == null) {
                     // no JavaScript, open a new page with values
-                    setResponsePage(new AllFacetValuesPage(getModel(), selectionModel));
+                    setResponsePage(new AllFacetValuesPage(getModel(), selectionModel, selectionTypeModeModel));
                 } else {
                     // JavaScript enabled, show values in a modal popup
                     valuesWindow.show(target);
@@ -265,15 +245,15 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             }
         };
 
-        final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), filterModel) {
+        final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), selectionTypeModeModel, filterModel) {
 
             @Override
-            protected void onValuesSelected(Collection<String> values, AjaxRequestTarget target) {
+            protected void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
                 if (target != null) {
                     // target can be null if selection link was opened in a new tab
                     window.close(target);
                 }
-                FacetValuesPanel.this.onValuesSelected(values, target);
+                FacetValuesPanel.this.onValuesSelected(selectionType, values, target);
             }
         };
 
@@ -289,6 +269,10 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             selectionModel.detach();
         }
 
+        if (selectionTypeModeModel != null) {
+            this.selectionTypeModeModel.detach();
+        }
+
         if (filterModel != null) {
             filterModel.detach();
         }
@@ -297,12 +281,12 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     /**
      * Callback triggered when values have been selected on this facet
      *
-     * @param facet name of the facet this panel represents
+     * @param selectionType
      * @param values selected values
      * @param target Ajax target allowing for a partial update. May be null
      * (fallback)!
      */
-    protected abstract void onValuesSelected(Collection<String> values, AjaxRequestTarget target);
+    protected abstract void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target);
 
     @Override
     protected void onBeforeRender() {

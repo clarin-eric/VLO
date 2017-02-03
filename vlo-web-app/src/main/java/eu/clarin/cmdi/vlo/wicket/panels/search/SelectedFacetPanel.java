@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -30,10 +29,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.PropertyModel;
 
 /**
  * A panel representing a single facet and its selected values, allowing for
@@ -54,15 +54,10 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
 
     private ListView<String> createSelectionRemovers(String id, String facetName) {
         // Model of the list of selected values in this facet
-        final IModel<List<String>> valuesModel = new LoadableDetachableModel<List<String>>() {
+        final IModel<List<String>> valuesModel = new PropertyModel<>(getModel(), "values");
+        final PropertyModel<FacetSelectionType> selectionTypeModel = new PropertyModel(getModel(), "selectionType");
 
-            @Override
-            public List<String> load() {
-                return new ArrayList(SelectedFacetPanel.this.getModelObject().getValues());
-            }
-
-        };
-        final IModel<String> fieldNameModel = new Model<>(facetName);
+        final IModel<String> fieldNameModel = Model.of(facetName);
 
         // Repeating container of value + unselection links
         final ListView<String> listView = new ListView<String>(id, valuesModel) {
@@ -78,7 +73,16 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
 
                     @Override
                     protected void onConfigure() {
+                        super.onConfigure();
                         setVisible(SelectedFacetPanel.this.getModelObject().getQualifier(item.getModelObject()) == FacetSelectionValueQualifier.NOT);
+                    }
+
+                });
+                item.add(new Label("selectionType", selectionTypeModel) {
+                    @Override
+                    protected void onConfigure() {
+                        super.onConfigure();
+                        setVisible(item.getIndex() > 0);
                     }
 
                 });
@@ -89,6 +93,7 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
             }
 
         };
+        listView.setReuseItems(false);
         return listView;
     }
 
