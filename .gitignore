@@ -5,7 +5,9 @@
 /vlo-distribution/target/
 /vlo-web-app/target/
 /vlo-importer/nbactions*
+vlo-importer/*.log*
 /vlo-web-app/nbactions*
 .DS_Store
+*~
 /vlo-sitemap/target/
 /vlo-statistics/target/
