@@ -23,6 +23,7 @@
         <packaging>jar</packaging>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <log4j.appender>File</log4j.appender>
+        <vlo.import.logging.level>INFO</vlo.import.logging.level>
     </properties>
     
     <profiles>
@@ -30,6 +31,7 @@
             <id>dev</id>
             <properties>
                 <log4j.appender>Stdout</log4j.appender>
+                <vlo.import.logging.level>DEBUG</vlo.import.logging.level>
             </properties>
         </profile>
     </profiles>

@@ -35,9 +35,10 @@ public class CMDIComponentProfileNamePostProcessor implements PostProcessor {
             }
             else {
                 setup();
+                LOG.debug("PARSING PROFILE: "+BASE_URL+profileId);
                 // get the name of the profile from the expanded xml in the component registry
                 if(vg.parseHttpUrl(BASE_URL + profileId + "/xml", true)){
-                    LOG.debug("PARSED: "+BASE_URL+profileId);
+                    LOG.debug("PARSED PROFILE: "+BASE_URL+profileId);
                     vn = vg.getNav();
                     ap.bind(vn);
                     int idx;
