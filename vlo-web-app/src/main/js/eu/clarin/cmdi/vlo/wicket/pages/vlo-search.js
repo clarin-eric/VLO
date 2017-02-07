@@ -116,7 +116,7 @@ $(document).ready(function () {
         });
 
         //handle 'show all' button
-        $(".simple a#switch-from-simple").click(function (evt) {
+        $(".simple a.switch-from-simple").click(function (evt) {
             evt.preventDefault();
             showSearchContent();
             $('body').animate({
