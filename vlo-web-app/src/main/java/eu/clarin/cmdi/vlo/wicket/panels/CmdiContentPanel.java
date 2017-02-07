@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.wicket.model.CompoundListModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.UrlFromStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.XsltModel;
@@ -37,7 +38,7 @@ public class CmdiContentPanel extends GenericPanel<SolrDocument> {
         final IModel<String> locationModel = new SolrFieldStringModel(model, FacetConstants.FIELD_FILENAME);
         final UrlFromStringModel locationUrlModel = new UrlFromStringModel(locationModel);
 
-        add(new Label("content", new XsltModel(locationUrlModel))
+        add(new Label("content", new XsltModel(new CompoundListModel(locationUrlModel)))
                 .setEscapeModelStrings(false));
 
     }
