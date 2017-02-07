@@ -174,7 +174,9 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        // Include JavaScript for header (e.g. permalink animation)
+        //render jQuery first, it is the most common dependency
+        response.render(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference()));
+        // Include other JavaScript for header (e.g. permalink animation)
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloHeaderJS()));
     }
 

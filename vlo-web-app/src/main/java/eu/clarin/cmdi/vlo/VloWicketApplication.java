@@ -94,12 +94,12 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     @Override
     public void init() {
         super.init();
-        
+
         initBootstrap();
 
         // register global resource bundles (from .properties files)
         registerResourceBundles();
-
+        
         // mount pages on URL paths
         mountPages();
 
