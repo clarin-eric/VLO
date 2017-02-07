@@ -18,9 +18,13 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.wicket.model.CompoundListModel;
+import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.UrlFromStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.XsltModel;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -32,15 +36,32 @@ import org.apache.wicket.model.IModel;
  */
 public class CmdiContentPanel extends GenericPanel<SolrDocument> {
 
+    private final CompoundListModel cmdiUrlsModel;
+
     public CmdiContentPanel(String id, IModel<SolrDocument> model) {
         super(id, model);
 
-        final IModel<String> locationModel = new SolrFieldStringModel(model, FacetConstants.FIELD_FILENAME);
-        final UrlFromStringModel locationUrlModel = new UrlFromStringModel(locationModel);
+        final List<IModel<URL>> locationModels = Arrays.<IModel<URL>>asList(
+                //local (harvested) copy of the record
+                new UrlFromStringModel(new SolrFieldStringModel(model, FacetConstants.FIELD_FILENAME)),
+                //self link as fallback
+                new UrlFromStringModel(new HandleLinkModel(new SolrFieldStringModel(model, FacetConstants.FIELD_SELF_LINK))));
 
-        add(new Label("content", new XsltModel(new CompoundListModel(locationUrlModel)))
+        this.cmdiUrlsModel = new CompoundListModel(locationModels);
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        add(new Label("content",
+                new XsltModel(cmdiUrlsModel))
                 .setEscapeModelStrings(false));
+    }
 
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        cmdiUrlsModel.detach();
     }
 
 }

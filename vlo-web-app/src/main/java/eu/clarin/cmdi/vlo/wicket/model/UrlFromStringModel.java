@@ -20,6 +20,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.regex.Pattern;
 import org.apache.wicket.model.IModel;
 
 /**
@@ -29,7 +30,8 @@ import org.apache.wicket.model.IModel;
  * @author twagoo
  */
 public class UrlFromStringModel implements IModel<URL> {
-
+    
+    private final static Pattern URL_PATTERN = Pattern.compile("^(https?:\\/\\/|file:\\/).*");
     private final IModel<String> model;
 
     /**
@@ -39,36 +41,46 @@ public class UrlFromStringModel implements IModel<URL> {
     public UrlFromStringModel(IModel<String> model) {
         this.model = model;
     }
-
+    
     @Override
     public URL getObject() {
-        if (model.getObject() == null) {
+        final String object = model.getObject();
+        if (object == null) {
             return null;
         } else {
             try {
-                return new File(model.getObject()).toURI().toURL();
+                if (URL_PATTERN.matcher(object).matches()) {
+                    return new URL(object);
+                } else {
+                    return new File(object).toURI().toURL();
+                }
             } catch (MalformedURLException ex) {
                 throw new RuntimeException(ex);
             }
         }
     }
-
+    
     @Override
     public void setObject(URL object) {
         if (object == null) {
             model.setObject(null);
         } else {
-            try {
-                model.setObject(new File(object.toURI()).getAbsolutePath());
-            } catch (URISyntaxException ex) {
-                throw new RuntimeException(ex);
+            final String scheme = object.getProtocol().toLowerCase();
+            if (scheme.equals("http") || scheme.equals("https")) {
+                model.setObject(object.toString());
+            } else {
+                try {
+                    model.setObject(new File(object.toURI()).getAbsolutePath());
+                } catch (URISyntaxException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         }
     }
-
+    
     @Override
     public void detach() {
         model.detach();
     }
-
+    
 }

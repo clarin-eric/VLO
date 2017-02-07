@@ -31,6 +31,10 @@ import org.slf4j.LoggerFactory;
  * discards the result of the transformation on detach to prevent large XHTML
  * content from being cached.
  *
+ * Multiple URLs can be provided. The model will provide the output of the first
+ * of the URLs that results in a successful transformation. This provides the
+ * basis for a fallback mechanism.
+ *
  * @author twagoo
  */
 public class XsltModel extends LoadableDetachableModel<String> {
@@ -40,8 +44,8 @@ public class XsltModel extends LoadableDetachableModel<String> {
 
     /**
      *
-     * @param metadataUrl Model of URL(s) that provide a transformation
-     * source location candidate (evaluated in order)
+     * @param metadataUrl Model of URL(s) that provide a transformation source
+     * location candidate (evaluated in order)
      */
     public XsltModel(IModel<List<URL>> metadataUrl) {
         this.metadataUrlsModel = metadataUrl;
@@ -58,11 +62,17 @@ public class XsltModel extends LoadableDetachableModel<String> {
         if (urls == null || urls.isEmpty()) {
             return "";
         }
+
+        //try the provided URLs in order
         for (URL url : urls) {
             try {
                 final String transformed = getTransformationService().transformXml(url);
                 if (transformed != null && !transformed.isEmpty()) {
-                    //transformation was successful
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Successful transformation using URL {} out of {}: {}", 1 + urls.indexOf(url), urls.size(), url);
+                    }
+
+                    //transformation was successful, ignore remaining items if any
                     return transformed;
                 }
             } catch (TransformerException ex) {
