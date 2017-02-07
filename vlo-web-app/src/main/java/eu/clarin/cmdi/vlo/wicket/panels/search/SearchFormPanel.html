@@ -25,7 +25,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <wicket:panel>
             <form id="search-form" wicket:id="search" role="search">
                 <div class="input-group">
-                    <input wicket:id="query" class="search-box form-control form-text" type="text" role="searchbox" placeholder="Search" />
+                    <input wicket:id="query" class="search-box form-control form-text" type="text" role="searchbox" placeholder="Search" 
+                           data-toggle="tooltip" data-trigger="hover" data-placement="bottom" data-container="body" data-delay='{"show": 1000, "hide": 100}'
+                           title="Enter one or more search terms or an advanced query, for example by using the keywords AND, OR and NOT. More information is available on the help page."
+                           />
                     <span class="input-group-btn">
                         <button type="submit" wicket:id="searchSubmit" class="search-button btn btn-primary">
                             <span class="search-icon glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -34,14 +37,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 <span class="sr-only">Searching...</span>
                             </span>
                         </button>
-                        <wicket:link>
-                            <a class="btn btn-default" id="syntax-help" href="HelpPage.html#syntax" 
-                               data-toggle="tooltip" data-placement="bottom"
-                               data-container="body"
-                               title="Enter one or more search terms or an advanced query, for example by using the keywords AND, OR and NOT. Click for more information.">
-                                <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
-                            </a>
-                        </wicket:link>
                     </span>
                 </div>
 
