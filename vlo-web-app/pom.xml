@@ -292,6 +292,22 @@
                             </resources>              
                         </configuration>            
                     </execution>
+                    <execution>
+                        <!-- copy fonts from bootstrap distribution -->
+                        <id>copy-script</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/${project.build.finalName}/script</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/generated-sources/bootstrap/js</directory>
+                                </resource>
+                            </resources>              
+                        </configuration>            
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
