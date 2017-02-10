@@ -107,7 +107,7 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                target.add(AdvancedSearchOptionsPanel.this);
+                selectionChanged(target);
             }
 
             @Override
