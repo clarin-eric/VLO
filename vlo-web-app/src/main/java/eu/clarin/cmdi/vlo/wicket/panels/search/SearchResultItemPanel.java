@@ -104,20 +104,31 @@ public class SearchResultItemPanel extends Panel {
         final SolrFieldModel<String> resourcesModel = new SolrFieldModel<>(documentModel, FacetConstants.FIELD_RESOURCE);
         // wrap with a count provider
         final ResouceTypeCountDataProvider countProvider = new ResouceTypeCountDataProvider(resourcesModel, countingService);
+        // part count model to determine whether a record is a collection record
+        final SolrFieldModel<String> partCountModel = new SolrFieldModel<>(documentModel, FacetConstants.FIELD_HAS_PART_COUNT);
 
         // add a container for the resource type counts (only visible if there are actual resources)
         add(new WebMarkupContainer("resources")
                 // view that shows provided counts
                 .add(new ResourceCountDataView("resourceCount", countProvider))
+                //badge for collection records
+                .add(new WebMarkupContainer("collectionRecord") {
+
+                    @Override
+                    protected void onConfigure() {
+                        super.onConfigure();
+                        setVisible(partCountModel.getObject() != null);
+                    }
+                }.add(new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.HIERARCHY_SECTION))) // collection, go to hierarchy instead of records
+                //badge for records without resources (resource count data view will not yield any badges)
                 .add(new WebMarkupContainer("noResources") {
 
                     @Override
                     protected void onConfigure() {
                         super.onConfigure();
-                        setVisible(countProvider.size() == 0);
+                        setVisible(countProvider.size() == 0 && partCountModel.getObject() == null);
                     }
-                }.add(new RecordPageLink("recordLink", documentModel, selectionModel)) //initial tab *not* resources as there are none...
-                )
+                }.add(new RecordPageLink("recordLink", documentModel, selectionModel))) //initial tab *not* resources as there are none...
         );
 
         add(new SearchResultItemLicensePanel("licenseInfo", documentModel, selectionModel, availabilityOrdering));
