@@ -27,12 +27,12 @@ import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeGlyphicon;
-import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
+import static eu.clarin.cmdi.vlo.wicket.pages.RecordPage.HIERARCHY_SECTION;
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -71,7 +71,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author twagoo
  */
-public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
+public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
     private final static Logger logger = LoggerFactory.getLogger(ResourceLinksPanel.class);
 
@@ -103,6 +103,8 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                 = new HandleLinkModel(
                         // get landing page from document
                         new SolrFieldStringModel(documentModel, FacetConstants.FIELD_LANDINGPAGE));
+        final SolrFieldModel<String> partCountModel
+                = new SolrFieldModel<>(documentModel, FacetConstants.FIELD_HAS_PART_COUNT);
 
         // create table of resources with optional details
         final ResourcesListView resourceListing = new ResourcesListView("resource", new CollectionListModel<>(resourcesModel));
@@ -125,13 +127,25 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                 setVisible(resourceListing.getPageCount() == 0);
             }
 
-        }.add(new WebMarkupContainer("landingPageContainer") {
-            @Override
-            protected void onConfigure() {
-                setVisible(landingPageModel.getObject() != null);
-            }
+        }
+                .add(new WebMarkupContainer("landingPageContainer") {
+                    @Override
+                    protected void onConfigure() {
+                        setVisible(landingPageModel.getObject() != null);
+                    }
 
-        }.add(new ExternalLink("landingPageLink", landingPageModel))));
+                }.add(new ExternalLink("landingPageLink", landingPageModel)))
+                .add(new WebMarkupContainer("hierarchyLinkContainer") {
+                    @Override
+                    protected void onConfigure() {
+                        setVisible(partCountModel.getObject() != null);
+                    }
+                }.add(new AjaxFallbackLink("hierarchyLink") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        switchToTab(HIERARCHY_SECTION, target);
+                    }
+                })));
 
         //For Ajax updating of resource listing when paging
         setOutputMarkupId(true);
@@ -322,5 +336,7 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         }
 
     }
+
+    protected abstract void switchToTab(String HIERARCHY_SECTION, AjaxRequestTarget target);
 
 }

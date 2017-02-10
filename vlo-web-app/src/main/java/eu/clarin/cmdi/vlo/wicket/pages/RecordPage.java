@@ -179,10 +179,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         tabs = createTabs("tabs");
         final StringValue initialTab = params.get(VloWebAppParameters.RECORD_PAGE_TAB);
         if (!initialTab.isEmpty()) {
-            final int tabIndex = TABS_ORDER.indexOf(initialTab.toString());
-            if (tabIndex >= 0) {
-                tabs.setSelectedTab(tabIndex);
-            }
+            switchToTab(initialTab.toString(), null);
         }
         add(tabs);
 
@@ -197,10 +194,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 return new AjaxFallbackLink(id) {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        tabs.setSelectedTab(TABS_ORDER.indexOf(AVAILABILITY_SECTION));
-                        if (target != null) {
-                            target.add(tabs);
-                        }
+                        switchToTab(AVAILABILITY_SECTION, target);
                     }
                 };
             }
@@ -231,7 +225,13 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 new SolrFieldStringModel(getModel(), FacetConstants.FIELD_RESOURCE_COUNT))) {
             @Override
             public Panel getPanel(String panelId) {
-                return (new ResourceLinksPanel(panelId, getModel()));
+                return (new ResourceLinksPanel(panelId, getModel()) {
+                    @Override
+                    protected void switchToTab(String tab, AjaxRequestTarget target) {
+                        RecordPage.this.switchToTab(tab, target);
+                    }
+
+                });
             }
         });
         tabs.set(TABS_ORDER.indexOf(ALL_METADATA_SECTION), new AbstractTab(Model.of("All metadata")) {
@@ -369,6 +369,16 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             }
 
         };
+    }
+
+    private void switchToTab(String tab, AjaxRequestTarget target) {
+        final int tabIndex = TABS_ORDER.indexOf(tab);
+        if (tabIndex >= 0) {
+            RecordPage.this.tabs.setSelectedTab(tabIndex);
+            if (target != null) {
+                target.add(RecordPage.this.tabs);
+            }
+        }
     }
 
     @Override
