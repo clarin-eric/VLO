@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
+import eu.clarin.cmdi.vlo.wicket.model.ResolvingLinkModel;
 import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
@@ -183,7 +184,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
             // add a link that will show the resource details panel when clicked
             // wrap href in model that transforms handle links
-            final IModel<String> linkModel = new HandleLinkModel(new PropertyModel(resourceInfoModel, "href"));
+            final IModel<String> linkModel = new ResolvingLinkModel(new HandleLinkModel(new PropertyModel(resourceInfoModel, "href")), new SolrFieldStringModel(ResourceLinksPanel.this.getModel(), FacetConstants.FIELD_SELF_LINK));
             final ExternalLink link = new ExternalLink("showResource", linkModel);
 
             final MarkupContainer columns = new WebMarkupContainer("itemColumns");
