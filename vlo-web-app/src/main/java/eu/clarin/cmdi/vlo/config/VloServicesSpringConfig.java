@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.config;
 
+import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.facets.FacetConceptsMarshaller;
@@ -24,6 +25,7 @@ import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
 import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
+import eu.clarin.cmdi.vlo.service.FieldValueOrderingsFactory;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.PermalinkService;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
@@ -34,6 +36,7 @@ import eu.clarin.cmdi.vlo.service.impl.DocumentParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
 import eu.clarin.cmdi.vlo.service.impl.FacetDescriptionServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.FacetParameterMapperImpl;
+import eu.clarin.cmdi.vlo.service.impl.FieldValueOrderingsFactoryImpl;
 import eu.clarin.cmdi.vlo.service.impl.InclusiveFieldFilter;
 import eu.clarin.cmdi.vlo.service.impl.PermalinkServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.QueryFacetsSelectionParametersConverter;
@@ -44,6 +47,7 @@ import eu.clarin.cmdi.vlo.service.impl.UriResolverImpl;
 import eu.clarin.cmdi.vlo.service.impl.XmlTransformationServiceImpl;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProviderImpl;
+import java.util.Map;
 import java.util.Properties;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
@@ -117,6 +121,16 @@ public class VloServicesSpringConfig {
     @Bean(name = "searchContextParamsConverter")
     public PageParametersConverter<SearchContext> searchContextParamsConverter() {
         return new SearchContextParametersConverter(queryParametersConverter());
+    }
+
+    @Bean(name = "fieldValueSorters")
+    public Map<String, Ordering<String>> fieldValueSorters() {
+        return fieldValueOrderingsFactory().createFieldValueOrderingMap();
+    }
+
+    @Bean
+    public FieldValueOrderingsFactory fieldValueOrderingsFactory() {
+        return new FieldValueOrderingsFactoryImpl();
     }
 
     @Bean
