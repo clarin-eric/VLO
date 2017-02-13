@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
+import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import java.util.Collection;
 import java.util.Iterator;
@@ -58,7 +59,15 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
     }
 
     private String getValueString(final Collection<Object> fieldValues) {
-        final Iterator<Object> iterator = fieldValues.iterator();
+        // apply ordering if available and applicable
+        final Ordering ordering = getFieldValueOrdering();
+        final Iterator<Object> iterator;
+        if (ordering == null || fieldValues.size() <= 1) {
+            iterator = fieldValues.iterator();
+        } else {
+            iterator = ordering.immutableSortedCopy(fieldValues).iterator();
+        }
+
         if (iterator.hasNext()) {
             final String firstValue = iterator.next().toString();
             if (iterator.hasNext()) {
@@ -101,6 +110,10 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
 
     private IConverter<String> getFieldValueConverter() {
         return VloWicketApplication.get().getFieldValueConverterProvider().getConverter(field);
+    }
+
+    private Ordering getFieldValueOrdering() {
+        return VloWicketApplication.get().getFieldValueOrderings().get(field);
     }
 
 }

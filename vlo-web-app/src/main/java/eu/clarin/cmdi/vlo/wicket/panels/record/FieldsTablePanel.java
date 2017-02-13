@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.record;
 
 import eu.clarin.cmdi.vlo.wicket.components.LanguageInfoLink;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.DocumentField;
@@ -28,12 +29,14 @@ import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.components.SmartLinkFieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.OrderedListModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -48,6 +51,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -82,6 +86,8 @@ public class FieldsTablePanel extends Panel {
     private VloConfig vloConfig;
     @SpringBean(name = "queryParametersConverter")
     private PageParametersConverter<QueryFacetsSelection> paramsConverter;
+    @SpringBean(name = "fieldValueSorters")
+    private Map<String, Ordering> fieldValueOrderingMap;
 
     public FieldsTablePanel(String id, IDataProvider<DocumentField> fieldProvider) {
         super(id);
@@ -90,13 +96,19 @@ public class FieldsTablePanel extends Panel {
             @Override
             protected void populateItem(final Item<DocumentField> item) {
                 final IModel<DocumentField> fieldModel = item.getModel();
-                final PropertyModel<String> fieldNameModel = new PropertyModel<String>(fieldModel, "fieldName");
+                final PropertyModel<String> fieldNameModel = new PropertyModel<>(fieldModel, "fieldName");
                 final SolrFieldNameModel friendlyFieldNameModel = new SolrFieldNameModel(fieldNameModel);
                 final Label fieldName = new Label("fieldName", friendlyFieldNameModel);
                 item.add(fieldName);
                 fieldName.add(new AttributeAppender("title", new SolrFieldDescriptionModel(fieldNameModel)));
-                final PropertyModel<List> valuesModel = new PropertyModel<List>(fieldModel, "values");
-                item.add(new ListView("values", valuesModel) {
+
+                //model of field values
+                final PropertyModel<List<String>> valuesModel = new PropertyModel<>(fieldModel, "values");
+
+                //wrapper for sorted model (if ordering is available)
+                final IModel<List<String>> sortedValuesModel = createOrderedFieldValuesModel(valuesModel, fieldNameModel);
+
+                item.add(new ListView("values", sortedValuesModel) {
 
                     @Override
                     protected void populateItem(final ListItem fieldValueItem) {
@@ -121,6 +133,18 @@ public class FieldsTablePanel extends Panel {
                 }));
             }
         });
+    }
+
+    private IModel<List<String>> createOrderedFieldValuesModel(final IModel<List<String>> valuesModel, final IModel<String> fieldNameModel) {
+
+        final IModel<Ordering<String>> orderingModel = new LoadableDetachableModel<Ordering<String>>() {
+            @Override
+            protected Ordering<String> load() {
+                return fieldValueOrderingMap.get(fieldNameModel.getObject());
+            }
+
+        };
+        return new OrderedListModel<>(valuesModel, orderingModel);
     }
 
     private Component createValueLabel(String id, final IModel<String> facetNameModel, final IModel<String> valueModel) {
@@ -165,7 +189,7 @@ public class FieldsTablePanel extends Panel {
     protected boolean isShowFacetSelectLinks() {
         return true;
     }
-    
+
 //    re-enable for 'fancy' popups for the field descriptions
 //    @Override
 //    public void renderHead(IHeaderResponse response) {
@@ -173,5 +197,4 @@ public class FieldsTablePanel extends Panel {
 //        response.render(CssHeaderItem.forReference(JavaScriptResources.getJQueryUICSS()));
 //        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getFieldsTableJS()));
 //    }
-
 }

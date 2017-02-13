@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo;
 
+import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.wicket.RobotAwareWebResponse;
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
@@ -40,6 +41,7 @@ import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
@@ -48,10 +50,8 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
-import org.apache.wicket.request.Url;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
-import org.apache.wicket.request.resource.UrlResourceReference;
 
 /**
  * Application object for your web application. If you want to run this
@@ -71,6 +71,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     private FieldValueConverterProvider fieldValueConverterProvider;
     @Inject
     private FacetDescriptionService facetDescriptionService;
+    @Inject
+    private Map<String, Ordering<String>> fieldValueOrderings;
     @Inject
     private PermalinkService permalinkService;
     @Inject
@@ -235,6 +237,10 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     
     public FieldValueConverterProvider getFieldValueConverterProvider() {
         return fieldValueConverterProvider;
+    }
+    
+    public Map<String, Ordering<String>> getFieldValueOrderings() {
+        return fieldValueOrderings;
     }
     
     public FacetDescriptionService getFacetDescriptionService() {
