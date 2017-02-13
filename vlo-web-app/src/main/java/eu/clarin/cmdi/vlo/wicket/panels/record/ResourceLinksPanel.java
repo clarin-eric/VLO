@@ -179,10 +179,18 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         protected void populateItem(ListItem<String> item) {
             final Model<Integer> itemIndexModel = Model.of(item.getIndex());
 
+            final MarkupContainer columns = new WebMarkupContainer("itemColumns");
+            columns.add(new EvenOddClassAppender(itemIndexModel));
+            item.add(columns);
+
             final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(resourceStringConverter, item.getModel());
             item.setDefaultModel(new CompoundPropertyModel<>(resourceInfoModel));
 
-            // add a link that will show the resource details panel when clicked
+            // Resource type icon
+            columns.add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel(resourceInfoModel, "resourceType")));
+
+            // Resource link (and/or link label)
+            // Create link that will show the resource details panel when clicked
             // wrap href in model that transforms handle links and another model
             // that resolves relative URIs (if possible)
             final IModel<String> linkModel = new ResolvingLinkModel(
@@ -190,13 +198,15 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                     new SolrFieldStringModel(ResourceLinksPanel.this.getModel(), FacetConstants.FIELD_SELF_LINK),
                     //URI of link to resolve (potentially)
                     new HandleLinkModel(new PropertyModel(resourceInfoModel, "href")));
-            final ExternalLink link = new ExternalLink("showResource", linkModel);
+            final ExternalLink link = new ExternalLink("showResource", linkModel) {
+                @Override
+                protected void onConfigure() {
+                    super.onConfigure();
+                    //hide if no absolute link could be resolved for the resource (see label below for fallback)
+                    setVisible(linkModel.getObject() != null);
+                }
 
-            final MarkupContainer columns = new WebMarkupContainer("itemColumns");
-            columns.add(new EvenOddClassAppender(itemIndexModel));
-            item.add(columns);
-
-            columns.add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel(resourceInfoModel, "resourceType")));;
+            };
 
             // set the file name as the link's text content
             link.add(new Label("fileName", new PropertyModel(resourceInfoModel, "fileName")));
@@ -211,6 +221,16 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
             link.setOutputMarkupId(true);
             columns.add(link);
+
+            // Fallback label if no absolute link could be determined
+            columns.add(new WebMarkupContainer("fileNameNotResolvable") {
+                @Override
+                protected void onConfigure() {
+                    super.onConfigure();
+                    setVisible(linkModel.getObject() == null);
+                }
+
+            }.add(new Label("fileName", new PropertyModel(resourceInfoModel, "fileName"))));
 
             // get the friendly name of the resource type dynamically from the resource bundle
             columns.add(new Label("resourceType", StringResourceModelMigration.of("resourcetype.${resourceType}.singular", resourceInfoModel, resourceInfoModel.getObject().getResourceType())));
