@@ -183,8 +183,13 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             item.setDefaultModel(new CompoundPropertyModel<>(resourceInfoModel));
 
             // add a link that will show the resource details panel when clicked
-            // wrap href in model that transforms handle links
-            final IModel<String> linkModel = new ResolvingLinkModel(new HandleLinkModel(new PropertyModel(resourceInfoModel, "href")), new SolrFieldStringModel(ResourceLinksPanel.this.getModel(), FacetConstants.FIELD_SELF_LINK));
+            // wrap href in model that transforms handle links and another model
+            // that resolves relative URIs (if possible)
+            final IModel<String> linkModel = new ResolvingLinkModel(
+                    //URI to resolve against
+                    new SolrFieldStringModel(ResourceLinksPanel.this.getModel(), FacetConstants.FIELD_SELF_LINK),
+                    //URI of link to resolve (potentially)
+                    new HandleLinkModel(new PropertyModel(resourceInfoModel, "href")));
             final ExternalLink link = new ExternalLink("showResource", linkModel);
 
             final MarkupContainer columns = new WebMarkupContainer("itemColumns");
