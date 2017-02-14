@@ -33,152 +33,164 @@
 
         <wicket:extend>
 
-            <div class="content" id="help">
+            <div class="container">
 
-                <h1>CLARIN Virtual Language Observatory: Help</h1>
+                <div class="row">
+                    <!-- sidebar, which will move to the top on a small screen -->
+                    <div class="col-sm-3 col-sm-push-9">
+                        <nav id="toc" data-spy="affix" data-toggle="toc" class="hidden-xs"></nav>
+                        <nav id="toc-xs" data-toggle="toc" class="visible-xs-block"></nav>
+                    </div>
+                    <!-- main content area -->
+                    <div class="col-sm-pull-3 col-sm-9 content" id="help">
+                        <h1>CLARIN Virtual Language Observatory: Help</h1>
 
-                <p>
-                    The Virtual Language Observatory (VLO) faceted browser was developed 
-                    within CLARIN as a means to explore linguistic resources, services 
-                    and tools available within CLARIN and related communities.
-                    Its aim is to provide an easy to use interface, allowing for a 
-                    uniform search and discovery process for a large number of resources
-                    from a wide variety of domains and providers.
-                </p>
-                
-                <p>
-                    More information can be found on the
-                    <a target="_blank" wicket:id="moreInfo" href="">VLO page on the CLARIN website</a>.
-                    For answers to common questions about the VLO, please consult the 
-                    <a href="http://www.clarin.eu/faq-page/275">FAQ</a>. 
-                    More documentation and other references are listed on the <wicket:link><a href="AboutPage.html#References">&quot;About&quot; page</a></wicket:link>.
-                </p>
-                
-                <h2>Faceted browsing</h2>
-                <p>
-                    The VLO search interface presents a number of <em>facets</em>, 
-                    for each of which a value can be selected in order to narrow down
-                    the selection of displayed records. For example, to only include
-                    records that relate to Spain as a country, open the facet <em>Country</em>
-                    and select the value <em>Spain</em>. Notice that next to each available value,
-                    a number is displayed that indicates the number of records within
-                    the current selection that contain that value, in other words the number
-                    of remaining records should that value be selected.
-                </p>
-                <p>
-                    Only the values that occur in the current selection (that is, the
-                    records that match the already selected values and the optional
-                    textual query (see <a href="#syntax">below</a>)) are shown. The VLO shows up to ten of the most 
-                    frequently occurring values for each facet when you click on the
-                    facet name. If there are more then ten available values, there
-                    is a link labeled <em>more...</em>, which leads to a pop-up showing
-                    all available values (given the current selections), than can be
-                    filtered textually and sorted either alphabetically or by number of
-                    matching records. It is also possible to search for facet values
-                    by typing (part of) a value in the filter box below the facet name 
-                    and above the facet values (<em>'Type to search for more'</em>)
-                    in the panel next to the search results.
-                </p>
-                <p>
-                    Facets that do not have any matching records given the current
-                    selection will not be displayed in the facets panel in the
-                    VLO search interface.
-                </p>
+                        <h2>Introduction</h2>
+                        <p>
+                            The Virtual Language Observatory (VLO) faceted browser was developed 
+                            within CLARIN as a means to explore linguistic resources, services 
+                            and tools available within CLARIN and related communities.
+                            Its aim is to provide an easy to use interface, allowing for a 
+                            uniform search and discovery process for a large number of resources
+                            from a wide variety of domains and providers.
+                        </p>
 
-                <h2 id="syntax">Search syntax</h2>
-                <p>
-                    In addition to navigating the resources by means of the selection
-                    of facet values, the VLO faceted browser also allows for searching
-                    by means of <strong>textual queries</strong>.
-                </p>
-                <p>
-                    Such queries are to be entered
-                    in the large <strong>text box</strong> at the top of the main page or faceted
-                    browsing page with the button labeled 'Search' next to it.
-                </p>
-                <p>
-                    In its simplest form, a search query consists of one or more
-                    terms, separated by a space character. Such queries result
-                    in the retrieval of all documents that have one or more occurrences
-                    of <em>all</em> of the included search terms. In other words,
-                    an <strong>AND</strong> operator is implied by default.
-                </p>
-                <h3>Advanced querying</h3>
-                <p>
-                    It is possible to construct a more specific query by means of
-                    a set of <strong>syntax features</strong> that can be processed 
-                    by the VLO. The supported syntax is that of the
-                    <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene Query Parser</a>
-                    <sup><a href="#noteedismax" id="refedismax">1</a></sup>
-                </p>
-                <p>
-                    The Lucene Query Parser syntax allows for the following
-                    <strong>boolean operators</strong>: 'AND', 'OR', 'NOT', '+'
-                    and '-'. It also allows for <strong>grouping</strong>
-                    of terms by means of parenthesis. 
-                    Terms can be combined into <strong>phrases</strong> by means
-                    of double quote characters.
-                </p>
+                        <p>
+                            More information can be found on the
+                            <a target="_blank" wicket:id="moreInfo" href="">VLO page on the CLARIN website</a>.
+                            For answers to common questions about the VLO, please consult the 
+                            <a href="http://www.clarin.eu/faq-page/275">FAQ</a>. 
+                            More documentation and other references are listed on the <wicket:link><a href="AboutPage.html#References">&quot;About&quot; page</a></wicket:link>.
+                        </p>
 
-                The following <strong>examples</strong> illustrate the usage of these operators.
-                Click any of the following examples to perform that query 
-                on the actual data currently in the VLO:
-                <ul>
-                    <li><a class="example-query" href="search/?q=German%20AND%20acquisition">German AND acquisition</a> (all records that match both terms)
+                        <h2>Faceted browsing</h2>
+                        <p>
+                            The VLO search interface presents a number of <em>facets</em>, 
+                            for each of which a value can be selected in order to narrow down
+                            the selection of displayed records. For example, to only include
+                            records that relate to Spain as a country, open the facet <em>Country</em>
+                            and select the value <em>Spain</em>. Notice that next to each available value,
+                            a number is displayed that indicates the number of records within
+                            the current selection that contain that value, in other words the number
+                            of remaining records should that value be selected.
+                        </p>
+                        <p>
+                            Only the values that occur in the current selection (that is, the
+                            records that match the already selected values and the optional
+                            textual query (see <a href="#syntax">below</a>)) are shown. The VLO shows up to ten of the most 
+                            frequently occurring values for each facet when you click on the
+                            facet name. If there are more then ten available values, there
+                            is a link labeled <em>more...</em>, which leads to a pop-up showing
+                            all available values (given the current selections), than can be
+                            filtered textually and sorted either alphabetically or by number of
+                            matching records. It is also possible to search for facet values
+                            by typing (part of) a value in the filter box below the facet name 
+                            and above the facet values (<em>'Type to search for more'</em>)
+                            in the panel next to the search results.
+                        </p>
+                        <p>
+                            Facets that do not have any matching records given the current
+                            selection will not be displayed in the facets panel in the
+                            VLO search interface.
+                        </p>
+
+                        <h2 id="syntax">Search syntax</h2>
+                        <p>
+                            In addition to navigating the resources by means of the selection
+                            of facet values, the VLO faceted browser also allows for searching
+                            by means of <strong>textual queries</strong>.
+                        </p>
+                        <p>
+                            Such queries are to be entered
+                            in the large <strong>text box</strong> at the top of the main page or faceted
+                            browsing page with the button labeled 'Search' next to it.
+                        </p>
+                        <p>
+                            In its simplest form, a search query consists of one or more
+                            terms, separated by a space character. Such queries result
+                            in the retrieval of all documents that have one or more occurrences
+                            of <em>all</em> of the included search terms. In other words,
+                            an <strong>AND</strong> operator is implied by default.
+                        </p>
+                        <h3>Advanced querying</h3>
+                        <p>
+                            It is possible to construct a more specific query by means of
+                            a set of <strong>syntax features</strong> that can be processed 
+                            by the VLO. The supported syntax is that of the
+                            <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene Query Parser</a>
+                            <sup><a href="#noteedismax" id="refedismax">1</a></sup>
+                        </p>
+                        <p>
+                            The Lucene Query Parser syntax allows for the following
+                            <strong>boolean operators</strong>: 'AND', 'OR', 'NOT', '+'
+                            and '-'. It also allows for <strong>grouping</strong>
+                            of terms by means of parenthesis. 
+                            Terms can be combined into <strong>phrases</strong> by means
+                            of double quote characters.
+                        </p>
+
+                        The following <strong>examples</strong> illustrate the usage of these operators.
+                        Click any of the following examples to perform that query 
+                        on the actual data currently in the VLO:
                         <ul>
-                            <li><a class="example-query" href="search/?q=German%20acquisition">German acquisition</a> is an equivalent query</li>
+                            <li><a class="example-query" href="search/?q=German%20AND%20acquisition">German AND acquisition</a> (all records that match both terms)
+                                <ul>
+                                    <li><a class="example-query" href="search/?q=German%20acquisition">German acquisition</a> is an equivalent query</li>
+                                </ul>
+                            </li>
+                            <li><a class="example-query" href="search/?q=Myanmar%20OR%20Birma%20OR%20Burma">Myanmar OR Birma OR Burma</a> (all records that match at least one of these terms)</li>
+                            <li><a class="example-query" href="search/?q=newspaper+AND+%28Czech+OR+Slovak%29">newspaper AND (Czech OR Slovak)</a> (all records that match the term 'newspaper' and at least one of the terms 'Czech' or 'Slovak')</li>
+                            <li><a class="example-query" href="search/?q=Portuguese+-Brazil">Portuguese -Brazil</a> (all records that match 'Portuguese' but do not have an occurrence of 'Brazil')
+                                <ul>
+                                    <li><a class="example-query" href="search/?q=Portuguese+NOT+Brazil">Portuguese NOT Brazil</a> is an equivalent query</li>
+                                </ul>
+                            </li>
+                            <li><a class="example-query" href="search/?q=%22sign+language%22+AND+%28Sweden+OR+Finland%29">&quot;sign language&quot; AND (Sweden OR Finland)</a> (all records that match the phrase 'sign language' and at least one of the terms 'Sweden' or 'Finland')</li>
+
                         </ul>
-                    </li>
-                    <li><a class="example-query" href="search/?q=Myanmar%20OR%20Birma%20OR%20Burma">Myanmar OR Birma OR Burma</a> (all records that match at least one of these terms)</li>
-                    <li><a class="example-query" href="search/?q=newspaper+AND+%28Czech+OR+Slovak%29">newspaper AND (Czech OR Slovak)</a> (all records that match the term 'newspaper' and at least one of the terms 'Czech' or 'Slovak')</li>
-                    <li><a class="example-query" href="search/?q=Portuguese+-Brazil">Portuguese -Brazil</a> (all records that match 'Portuguese' but do not have an occurrence of 'Brazil')
+                        <h3>Targeting fields</h3>
+                        <p>
+                            In addition to the logical operators, the syntax also allows
+                            for search for occurrences of a term within a <strong>specific field</strong>,
+                            such as language or modality. To do so, enter the name of the
+                            field and the term to search for, separated by a semicolon.
+                            The asterisk ('*') can be used to achieve partial matches.
+                            Quotes are required to match a term that contains spaces.
+                        </p>
+                        <p>
+                            The following <strong>field names</strong> are available: 
+                            language, country, continent, modality, genre, subject, format,
+                            organisation, resourcetype, keyword, resources.
+                            <br />
+                        </p>
+
+                        Click any of the following <strong>examples</strong> to perform that query 
+                        on the actual data currently in the VLO:
                         <ul>
-                            <li><a class="example-query" href="search/?q=Portuguese+NOT+Brazil">Portuguese NOT Brazil</a> is an equivalent query</li>
+                            <li><a class="example-query" href="search/?q=resourcetype:%22Linguistic+corpora%22">resourcetype:"Linguistic corpora"</a> (equivalent to selecting this value below the 'Resource Type' facet)</li>
+                            <li><a class="example-query" href="search/?q=language:Sign">language:Sign</a> (all records with a language name that contains the word 'sign')</li>
+                            <li><a class="example-query" href="search/?q=country:%28Belgium+-Netherlands%29">country:(Belgium -Netherlands)</a> (all records with Belgium as country but not also Netherlands)</li>
+                            <li><a class="example-query" href="search/?q=country:Finland+AND+language:Swedish+AND+NOT+language:Finnish">country:Finland AND language:Swedish AND NOT language:Finnish</a> (records in Finland with resources in the Swedish language but not in Finnish)</li>
+                            <li><a class="example-query" href="search/?q=format:video/*">format:video/*</a> (all records with video resources)</li>
+                            <li><a class="example-query" href="search/?q=resources:%5B5+TO+*%5D">resources:[5 TO *]</a> (all records with at least 5 resources)</li>
                         </ul>
-                    </li>
-                    <li><a class="example-query" href="search/?q=%22sign+language%22+AND+%28Sweden+OR+Finland%29">&quot;sign language&quot; AND (Sweden OR Finland)</a> (all records that match the phrase 'sign language' and at least one of the terms 'Sweden' or 'Finland')</li>
+                        <p> 
+                            A <strong>full overview</strong> of syntax features, including
+                            options for fuzzy search, ranges, and term boosting, can be found at the
+                            <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene syntax description page</a>.
+                        </p>
 
-                </ul>
-                <h3>Targeting fields</h3>
-                <p>
-                    In addition to the logical operators, the syntax also allows
-                    for search for occurrences of a term within a <strong>specific field</strong>,
-                    such as language or modality. To do so, enter the name of the
-                    field and the term to search for, separated by a semicolon.
-                    The asterisk ('*') can be used to achieve partial matches.
-                    Quotes are required to match a term that contains spaces.
-                </p>
-                <p>
-                    The following <strong>field names</strong> are available: 
-                    language, country, continent, modality, genre, subject, format,
-                    organisation, resourcetype, keyword, resources.
-                    <br />
-                </p>
+                        <h2>Notes</h2>
+                        <p>
+                            <sup><a href="#refedismax" id="noteedismax">1</a></sup>
+                            Support for the Lucene syntax was implemented by using the
+                            <a href="https://cwiki.apache.org/confluence/display/solr/The+Extended+DisMax+Query+Parser">Solr Extended DisMax Query Parser</a>.
+                        </p>
 
-                Click any of the following <strong>examples</strong> to perform that query 
-                on the actual data currently in the VLO:
-                <ul>
-                    <li><a class="example-query" href="search/?q=resourcetype:%22Linguistic+corpora%22">resourcetype:"Linguistic corpora"</a> (equivalent to selecting this value below the 'Resource Type' facet)</li>
-                    <li><a class="example-query" href="search/?q=language:Sign">language:Sign</a> (all records with a language name that contains the word 'sign')</li>
-                    <li><a class="example-query" href="search/?q=country:%28Belgium+-Netherlands%29">country:(Belgium -Netherlands)</a> (all records with Belgium as country but not also Netherlands)</li>
-                    <li><a class="example-query" href="search/?q=country:Finland+AND+language:Swedish+AND+NOT+language:Finnish">country:Finland AND language:Swedish AND NOT language:Finnish</a> (records in Finland with resources in the Swedish language but not in Finnish)</li>
-                    <li><a class="example-query" href="search/?q=format:video/*">format:video/*</a> (all records with video resources)</li>
-                    <li><a class="example-query" href="search/?q=resources:%5B5+TO+*%5D">resources:[5 TO *]</a> (all records with at least 5 resources)</li>
-                </ul>
-                <p> 
-                    A <strong>full overview</strong> of syntax features, including
-                    options for fuzzy search, ranges, and term boosting, can be found at the
-                    <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene syntax description page</a>.
-                </p>
-
-                <h2>Notes</h2>
-                <p>
-                    <sup><a href="#refedismax" id="noteedismax">1</a></sup>
-                    Support for the Lucene syntax was implemented by using the
-                    <a href="https://cwiki.apache.org/confluence/display/solr/The+Extended+DisMax+Query+Parser">Solr Extended DisMax Query Parser</a>.
-                </p>
-
+                    </div>
+                </div>
             </div>
+
         </wicket:extend>
     </body>
 </html>
