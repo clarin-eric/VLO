@@ -24,13 +24,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         padding: 1em;
     }
 
-    &.show-primary {
-        .secondary-facet {
-            display: none;
+    &.show-conditionally {
+        &.show-primary {
+            //only primary shown
+            .secondary-facet {
+                display: none; //hide secondary facets
+            }
         }
     }
 
+    //toggle link to show/hide secondary facets
     .show-all-facets-toggle {
+        display: none; //hidden unless 'show-conditionally' is on (see below)
+
         .button-text {
             display: none;
         }
@@ -38,6 +44,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             display: initial;
         }
     }
+
+    &.show-conditionally {
+        .show-all-facets-toggle {
+            display: initial;
+        }
+    }
+
 }
 
 .facet {

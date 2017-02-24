@@ -84,6 +84,9 @@
         <primaryFacetField>keywords</primaryFacetField>
     </primaryFacetFields>
     
+    <!-- If this many facets or more than this have values, hide non-primary facets -->
+    <hideSecondaryFacetsLimit>8</hideSecondaryFacetsLimit>
+    
     <!-- Fields shown in expanded search results on the search page -->
     <searchResultFields>
         <searchResultField>name</searchResultField>

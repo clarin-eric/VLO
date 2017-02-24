@@ -153,6 +153,8 @@ public class VloConfig {
     @XmlElementWrapper(name = "primaryFacetFields")
     private Set<String> primaryFacetField;
 
+    private int hideSecondaryFacetsLimit = 7;
+
     private String collectionFacet;
 
     // test related parameters
@@ -166,7 +168,7 @@ public class VloConfig {
     private String cqlEndpointAlternative = "";
 
     private URI configLocation;
-    
+
     private String lrSwitchboardBaseUrl = "http://weblicht.sfs.uni-tuebingen.de/clrs/";
 
     /**
@@ -1168,6 +1170,14 @@ public class VloConfig {
 
     public void setLrSwitchboardBaseUrl(String lrSwitchboardBaseUrl) {
         this.lrSwitchboardBaseUrl = lrSwitchboardBaseUrl;
+    }
+
+    public int getHideSecondaryFacetsLimit() {
+        return hideSecondaryFacetsLimit;
+    }
+
+    public void setHideSecondaryFacetsLimit(int hideSecondaryFacetsLimit) {
+        this.hideSecondaryFacetsLimit = hideSecondaryFacetsLimit;
     }
 
 }
