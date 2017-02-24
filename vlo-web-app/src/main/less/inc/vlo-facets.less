@@ -19,8 +19,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : Twan Goosen <twan.goosen@mpi.nl>
 */
 
-#facets.sidebaritem {
-    padding: 1em;
+#facets {
+    &.sidebaritem {
+        padding: 1em;
+    }
+
+    &.show-primary {
+        .secondary-facet {
+            display: none;
+        }
+    }
+
+    .show-all-facets-toggle {
+        .button-text {
+            display: none;
+        }
+        &:hover .button-text {
+            display: initial;
+        }
+    }
 }
 
 .facet {
@@ -94,7 +111,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     text-decoration: none; 
                     width: 149px;
                 } 
-                
+
                 .selectiontype {
                     font-weight: bold;
                 }
