@@ -89,15 +89,17 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
 
             @Override
             public Boolean getObject() {
-                return getNumberFacetsShown(facetNamesModel.getObject(), fieldsModel.getObject()) >= vloConfig.getHideSecondaryFacetsLimit();
+                //only enable show/hide secondary facets functionality if there are enoug (too many) available facets
+                return getNumberFacetsShown(facetNamesModel.getObject(), fieldsModel.getObject()) 
+                        >= vloConfig.getHideSecondaryFacetsLimit(); //configurable threshold
             }
         };
 
         final MarkupContainer container = new WebMarkupContainer("container");
         add(container
                 .setOutputMarkupId(true)
-                .add(new AttributeAppender("class", new BooleanOptionsModel<>(allFacetsShown, Model.of("show-all"), Model.of("show-primary")), " "))
                 .add(new AttributeAppender("class", new BooleanOptionsModel<>(conditionalFacetDisplayModel, Model.of("show-conditionally"), new Model<String>()), " "))
+                .add(new AttributeAppender("class", new BooleanOptionsModel<>(allFacetsShown, Model.of("show-all"), Model.of("show-primary")), " "))
         );
 
         final ListView<String> facetsView = new ListView<String>("facets", facetNamesModel) {
@@ -141,6 +143,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
         facetsView.setReuseItems(true);
         container.add(facetsView);
 
+        //toggler for showing/hiding secondary facets
         container.add(new AjaxFallbackLink("more") {
             @Override
             public void onClick(AjaxRequestTarget target) {
