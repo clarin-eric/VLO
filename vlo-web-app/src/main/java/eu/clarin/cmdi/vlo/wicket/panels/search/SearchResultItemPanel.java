@@ -24,6 +24,7 @@ import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermScriptFactory;
+import eu.clarin.cmdi.vlo.wicket.components.FacetSelectLink;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeGlyphicon;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
@@ -46,6 +47,7 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -88,6 +90,10 @@ public class SearchResultItemPanel extends Panel {
         final Link recordLink = new RecordPageLink("recordLink", documentModel, selectionModel);
         recordLink.add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME, "Unnamed record"));
         add(recordLink);
+
+        add(new FacetSelectLink("searchResultCollectionLink", new SolrFieldStringModel(documentModel, FacetConstants.FIELD_COLLECTION), Model.of(FacetConstants.FIELD_COLLECTION))
+                .add(new SolrFieldLabel("searchResultCollectionName", documentModel, FacetConstants.FIELD_COLLECTION, "none"))
+        );
 
         // add a link to toggle the expansion state
         add(createExpansionStateToggle("expansionStateToggle"));
