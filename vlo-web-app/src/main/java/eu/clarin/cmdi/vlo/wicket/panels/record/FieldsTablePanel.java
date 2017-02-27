@@ -22,17 +22,13 @@ import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.DocumentField;
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
-import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
-import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.wicket.components.FacetSelectLink;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.components.SmartLinkFieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.OrderedListModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
-import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -84,8 +80,6 @@ public class FieldsTablePanel extends Panel {
 
     @SpringBean
     private VloConfig vloConfig;
-    @SpringBean(name = "queryParametersConverter")
-    private PageParametersConverter<QueryFacetsSelection> paramsConverter;
     @SpringBean(name = "fieldValueSorters")
     private Map<String, Ordering> fieldValueOrderingMap;
 
@@ -166,14 +160,7 @@ public class FieldsTablePanel extends Panel {
     }
 
     private Link createFacetSelectLink(String id, final IModel<String> facetNameModel, final IModel valueModel) {
-        return new Link(id) {
-
-            @Override
-            public void onClick() {
-                final FacetSelection facetSelection = new FacetSelection(FacetSelectionType.AND, Collections.singleton(valueModel.getObject().toString()));
-                final QueryFacetsSelection selection = new QueryFacetsSelection(Collections.singletonMap(facetNameModel.getObject(), facetSelection));
-                setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(selection));
-            }
+        return new FacetSelectLink(id, valueModel, facetNameModel) {
 
             @Override
             protected void onConfigure() {
@@ -182,7 +169,6 @@ public class FieldsTablePanel extends Panel {
                 setVisible(isShowFacetSelectLinks()
                         && vloConfig.getFacetsInSearch().contains(facetNameModel.getObject()));
             }
-
         };
     }
 
