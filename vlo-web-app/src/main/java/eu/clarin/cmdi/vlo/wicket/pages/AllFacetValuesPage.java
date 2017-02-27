@@ -41,9 +41,7 @@ import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.AllFacetValuesPanel;
-import java.io.Serializable;
 
 /**
  *
