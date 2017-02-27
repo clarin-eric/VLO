@@ -46,6 +46,7 @@ import eu.clarin.cmdi.vlo.wicket.panels.ContentSearchFormPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.HierarchyPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.record.RecordDetailsPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordNavigationPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.ResourceLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultItemLicensePanel;
@@ -98,8 +99,6 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     private PageParametersConverter<QueryFacetsSelection> selectionParametersConverter;
     @SpringBean(name = "searchContextParamsConverter")
     private PageParametersConverter<SearchContext> contextParamConverter;
-    @SpringBean(name = "basicPropertiesFilter")
-    private FieldFilter basicPropertiesFilter;
     @SpringBean(name = "technicalPropertiesFilter")
     private FieldFilter technicalPropertiesFilter;
     @SpringBean(name = "documentFieldOrder")
@@ -204,9 +203,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         tabs.set(TABS_ORDER.indexOf(DETAILS_SECTION), new AbstractTab(Model.of("Record details")) {
             @Override
             public Panel getPanel(String panelId) {
-                final FieldsTablePanel fieldsTable = new FieldsTablePanel(panelId, new DocumentFieldsProvider(getModel(), basicPropertiesFilter, fieldOrder));
-                fieldsTable.add(new HighlightSearchTermBehavior());
-                return fieldsTable;
+                return new RecordDetailsPanel(panelId, getModel());
             }
         });
         tabs.set(TABS_ORDER.indexOf(AVAILABILITY_SECTION), new AbstractTab(Model.of("Availability")) {
