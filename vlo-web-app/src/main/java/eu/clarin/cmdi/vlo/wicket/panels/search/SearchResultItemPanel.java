@@ -87,9 +87,9 @@ public class SearchResultItemPanel extends Panel {
         this.selectionModel = selectionModel;
         this.documentModel = documentModel;
 
-        final Link recordLink = new RecordPageLink("recordLink", documentModel, selectionModel);
-        recordLink.add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME, "Unnamed record"));
-        add(recordLink);
+        add(new RecordPageLink("recordLink", documentModel, selectionModel)
+                .add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME, "Unnamed record"))
+        );
 
         add(new FacetSelectLink("searchResultCollectionLink", new SolrFieldStringModel(documentModel, FacetConstants.FIELD_COLLECTION), Model.of(FacetConstants.FIELD_COLLECTION))
                 .add(new SolrFieldLabel("searchResultCollectionName", documentModel, FacetConstants.FIELD_COLLECTION, "none"))
@@ -139,10 +139,10 @@ public class SearchResultItemPanel extends Panel {
 
         add(new SearchResultItemLicensePanel("licenseInfo", documentModel, selectionModel, availabilityOrdering));
 
-        final MarkupContainer scoreContainer = new WebMarkupContainer("scoreContainer");
-        scoreContainer.add(new Label("score", new SolrFieldStringModel(documentModel, FacetConstants.FIELD_SOLR_SCORE)));
-        scoreContainer.setVisible(config.isShowResultScores());
-        add(scoreContainer);
+        add(new WebMarkupContainer("scoreContainer")
+                .add(new Label("score", new SolrFieldStringModel(documentModel, FacetConstants.FIELD_SOLR_SCORE)))
+                .setVisible(config.isShowResultScores())
+        );
 
         setOutputMarkupId(true);
     }
