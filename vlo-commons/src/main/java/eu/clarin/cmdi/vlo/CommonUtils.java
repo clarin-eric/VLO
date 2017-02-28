@@ -12,42 +12,33 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.io.IOUtils;
 
 public final class CommonUtils {
 
-    private final static Set<String> ANNOTATION_MIMETYPES = new HashSet<>();
+    private final static Set<String> ANNOTATION_MIMETYPES = ImmutableSet.of(
+            "text/x-eaf+xml",
+            "text/x-shoebox-text",
+            "text/x-toolbox-text",
+            "text/x-chat",
+            "text/x-chat",
+            "application/mediatagger",
+            "mt",
+            "application/smil+xml");
 
-    static {
-        ANNOTATION_MIMETYPES.add("text/x-eaf+xml");
-        ANNOTATION_MIMETYPES.add("text/x-shoebox-text");
-        ANNOTATION_MIMETYPES.add("text/x-toolbox-text");
-        ANNOTATION_MIMETYPES.add("text/x-chat");
-        ANNOTATION_MIMETYPES.add("text/x-chat");
-        ANNOTATION_MIMETYPES.add("application/mediatagger");
-        ANNOTATION_MIMETYPES.add("mt");
-        ANNOTATION_MIMETYPES.add("application/smil+xml");
-    }
-    private final static Set<String> TEXT_MIMETYPES = new HashSet<>();
+    private final static Set<String> TEXT_MIMETYPES = ImmutableSet.of(
+            "application/pdf",
+            "txt");
 
-    static {
-        TEXT_MIMETYPES.add("application/pdf");
-        TEXT_MIMETYPES.add("txt");
-    }
-    private final static Set<String> VIDEO_MIMETYPES = new HashSet<>();
+    private final static Set<String> VIDEO_MIMETYPES = ImmutableSet.of(
+            "application/mxf");
 
-    static {
-        VIDEO_MIMETYPES.add("application/mxf");
-    }
-    private final static Set<String> AUDIO_MIMETYPES = new HashSet<>();
+    private final static Set<String> AUDIO_MIMETYPES = ImmutableSet.of(
+            "application/ogg",
+            "wav");
 
-    static {
-        AUDIO_MIMETYPES.add("application/ogg");
-        AUDIO_MIMETYPES.add("wav");
-    }
     private final static Set<String> ARCHIVE_MIMETYPES = ImmutableSet.of(
             "application/tar", "application/tar+gzip",
             "application/zip", "application/zip-compressed",
