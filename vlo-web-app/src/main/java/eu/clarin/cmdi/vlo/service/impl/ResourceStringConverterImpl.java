@@ -60,26 +60,30 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
 
     @Override
     public ResourceInfo getResourceInfo(String resourceString) {
-        // split resource string to find href and mime type
-        final String[] tokens = resourceString.split(SPLIT_PATTERN, 2);
-        final String mimeType = tokens[0];
-        final String href = tokens[1];
-
-        // if there is a resolver, get file name from resolved URL
-        final String fileName;
-        if (resolver == null) {
-            fileName = getFileName(href);
+        if (resourceString == null) {
+            return new ResourceInfo(null, null, null, ResourceType.OTHER);
         } else {
-            fileName = getFileName(resolver.resolve(href));
-        }
+            // split resource string to find href and mime type
+            final String[] tokens = resourceString.split(SPLIT_PATTERN, 2);
+            final String mimeType = tokens[0];
+            final String href = tokens[1];
 
-        // determine resource type based on mime type
-        final ResourceType resourceType = determineResourceType(mimeType);
-        return new ResourceInfo(
-                href,
-                (fileName == null || fileName.isEmpty()) ? href : fileName,
-                mimeType,
-                resourceType);
+            // if there is a resolver, get file name from resolved URL
+            final String fileName;
+            if (resolver == null) {
+                fileName = getFileName(href);
+            } else {
+                fileName = getFileName(resolver.resolve(href));
+            }
+
+            // determine resource type based on mime type
+            final ResourceType resourceType = determineResourceType(mimeType);
+            return new ResourceInfo(
+                    href,
+                    (fileName == null || fileName.isEmpty()) ? href : fileName,
+                    mimeType,
+                    resourceType);
+        }
     }
 
     private String getFileName(final String href) {
