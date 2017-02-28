@@ -26,7 +26,7 @@ import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermScriptFactory;
 import eu.clarin.cmdi.vlo.wicket.components.FacetSelectLink;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
-import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeGlyphicon;
+import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
@@ -219,7 +219,7 @@ public class SearchResultItemPanel extends Panel {
             final Link resourceLink = new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.RESOURCES_SECTION);
             item.add(resourceLink
                     .add(new Label("resourceCountLabel", new PropertyModel<String>(item.getModel(), "count")))
-                    .add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel<String>(item.getModel(), "resourceType")))
+                    .add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel<String>(item.getModel(), "resourceType")))
                     .add(new AttributeModifier("title", getResourceCountModel(item.getModel())))
             );
         }

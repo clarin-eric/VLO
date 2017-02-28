@@ -27,7 +27,7 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
-import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeGlyphicon;
+import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
@@ -187,7 +187,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             item.setDefaultModel(new CompoundPropertyModel<>(resourceInfoModel));
 
             // Resource type icon
-            columns.add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel(resourceInfoModel, "resourceType")));
+            columns.add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel(resourceInfoModel, "resourceType")));
 
             // Resource link (and/or link label)
             // Create link that will show the resource when clicked

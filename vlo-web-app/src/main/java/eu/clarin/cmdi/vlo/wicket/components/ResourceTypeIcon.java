@@ -26,14 +26,14 @@ import org.apache.wicket.model.IModel;
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
-public class ResourceTypeGlyphicon extends WebMarkupContainer {
+public class ResourceTypeIcon extends WebMarkupContainer {
 
     private final IModel<String> iconModel;
 
-    public ResourceTypeGlyphicon(String id, IModel<String> model) {
+    public ResourceTypeIcon(String id, IModel<String> model) {
         super(id, model);
 
-        iconModel = StringResourceModelMigration.of("resourcetype.${}.glyphiconclass", model, "glyphicon-question-sign");
+        iconModel = StringResourceModelMigration.of("resourcetype.${}.fonticonclass", model, "glyphicon-question-sign");
         add(new AttributeAppender("class", "glyphicon", " "));
         add(new AttributeAppender("class", iconModel, " "));
     }

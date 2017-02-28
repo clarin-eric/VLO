@@ -21,7 +21,7 @@ import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
-import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeGlyphicon;
+import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.model.ResolvingLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
@@ -109,7 +109,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
         // Resource info for single resource (should not appear if there are more or fewer resources)
         resourceInfo.add(new ExternalLink("resourceLink", linkModel)
                 //resource type icon
-                .add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel<String>(resourceInfoModel, "resourceType"))
+                .add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel<String>(resourceInfoModel, "resourceType"))
                         //with type name tooltip
                         .add(new AttributeModifier("title", new StringResourceModel("resourcetype.${resourceType}.singular", this, resourceInfoModel).setDefaultValue(new PropertyModel(resourceInfoModel, "resourceType")))))
                 //resource name below icon
