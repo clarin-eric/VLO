@@ -29,10 +29,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
                 <div class="col-sm-3" wicket:id="resourceInfo">
                     <div class="panel panel-default single-resource-info">
-                        <span class="resource-type-icon">                            
-                            <span wicket:id="resourceTypeIcon"></span>
-                        </span>
-                        <div wicket:id="resourceName">[Resource name]</div>
+                        <a wicket:id="showResources" class="pull-right detailslink"><span class="glyphicon glyphicon-info-sign"></span></a>
+                        <a wicket:id="resourceLink" class="resourcelink">
+                            <span class="resource-type-icon">                            
+                                <span wicket:id="resourceTypeIcon"></span>
+                            </span>
+                            <span wicket:id="resourceName">[Resource name]</span>
+                        </a>
                     </div>
                 </div>
             </div>

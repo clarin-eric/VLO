@@ -203,7 +203,13 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         tabs.set(TABS_ORDER.indexOf(DETAILS_SECTION), new AbstractTab(Model.of("Record details")) {
             @Override
             public Panel getPanel(String panelId) {
-                return new RecordDetailsPanel(panelId, getModel());
+                return new RecordDetailsPanel(panelId, getModel()) {
+                    @Override
+                    protected void switchToTab(String tab, AjaxRequestTarget target) {
+                        RecordPage.this.switchToTab(tab, target);
+                    }
+
+                };
             }
         });
         tabs.set(TABS_ORDER.indexOf(AVAILABILITY_SECTION), new AbstractTab(Model.of("Availability")) {

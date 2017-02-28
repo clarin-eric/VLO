@@ -72,10 +72,6 @@ h1#recordtitle {
     .tab-content {
         padding-top: @content-top-bottom-padding;
         padding-bottom: @content-top-bottom-padding;
-
-        & > table {
-            margin-top: -@content-top-bottom-padding; // counter tab content padding for table
-        }
     }
 
     .recorddetailstable {
@@ -141,10 +137,26 @@ h1#recordtitle {
         text-align: center;
         padding: 10px;
 
-        .resource-type-icon .glyphicon {
-            font-size: 80px;
-            border: 1px solid;
-            padding: 4px;
+        a:hover {
+            text-decoration: none;
+        }
+
+        a.resourcelink {
+
+            .resource-type-icon .glyphicon {
+                font-size: 100px;
+                border: 1px solid;
+                padding: 4px;
+                color: @text-color;
+
+                &:hover {
+                    color: @link-hover-color;
+                }
+            }
+
+            & > span {
+                display: block;
+            }
         }
     }
 
