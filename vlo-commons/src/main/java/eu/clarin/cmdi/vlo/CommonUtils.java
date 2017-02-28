@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo;
 
+import com.google.common.collect.ImmutableSet;
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
 import com.ximpleware.ParseException;
@@ -15,7 +16,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.io.IOUtils;
-
 
 public final class CommonUtils {
 
@@ -48,6 +48,19 @@ public final class CommonUtils {
         AUDIO_MIMETYPES.add("application/ogg");
         AUDIO_MIMETYPES.add("wav");
     }
+    private final static Set<String> ARCHIVE_MIMETYPES = ImmutableSet.of(
+            "application/tar", "application/tar+gzip",
+            "application/zip", "application/zip-compressed",
+            "application/gzip", "application/gzip-compressed",
+            "application/x-bzip", "application/x-bzip2", "application/x-bz2",
+            "application/x-compress", "application/x-compressed",
+            "application/x-rar-compressed",
+            "application/x-gtar",
+            "application/x-gzip",
+            "application/x-tar", "application/x-tar-gz",
+            "application/x-zip", "application/x-zip-compressed",
+            "application/x-7z-compressed", "application/x-7zip-compressed"
+    );
 
     /**
      * Set system property {@code vlo.swallowLookupErrors} to 'true' to make
@@ -83,6 +96,8 @@ public final class CommonUtils {
             result = FacetConstants.RESOURCE_TYPE_AUDIO;
         } else if (type.startsWith("text") || TEXT_MIMETYPES.contains(type)) {
             result = FacetConstants.RESOURCE_TYPE_TEXT;
+        } else if (ARCHIVE_MIMETYPES.contains(type)) {
+            result = FacetConstants.RESOURCE_TYPE_ARCHIVE;
         }
         return result;
     }

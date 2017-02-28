@@ -102,6 +102,7 @@ public class FacetConstants {
     public static final String RESOURCE_TYPE_VIDEO = "video";
     public static final String RESOURCE_TYPE_TEXT = "text";
     public static final String RESOURCE_TYPE_IMAGE = "image";
+    public static final String RESOURCE_TYPE_ARCHIVE = "archive";
     public static final String RESOURCE_TYPE_ANNOTATION = "annotation";
 
     /**
