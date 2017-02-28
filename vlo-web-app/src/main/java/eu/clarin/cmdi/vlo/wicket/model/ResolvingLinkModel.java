@@ -16,11 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY;
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY_HTTPS;
 import java.net.URI;
 import java.net.URISyntaxException;
+import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 
 /**
  * Model that resolves a URI string (object) against another URI string
@@ -78,6 +81,23 @@ public class ResolvingLinkModel implements IModel<String> {
                 }
             }
         }
+    }
+
+    /**
+     * Creates a resolving link model that takes the href out of a resource info
+     * model and wraps it in a {@link HandleLinkModel} so that 'hdl' links and
+     * relative URLs are resolved to actionable links (if possible)
+     *
+     * @param resourceInfoModel model for resource to create link for
+     * @param documentModel model of document to resolve any relative links to
+     * @return
+     */
+    public static ResolvingLinkModel modelFor(ResourceInfoModel resourceInfoModel, IModel<SolrDocument> documentModel) {
+        return new ResolvingLinkModel(
+                //URI to resolve against
+                new SolrFieldStringModel(documentModel, FacetConstants.FIELD_SELF_LINK),
+                //URI of link to resolve (potentially)
+                new HandleLinkModel(new PropertyModel(resourceInfoModel, "href")));
     }
 
     @Override

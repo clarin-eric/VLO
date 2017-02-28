@@ -190,14 +190,8 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             columns.add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel(resourceInfoModel, "resourceType")));
 
             // Resource link (and/or link label)
-            // Create link that will show the resource details panel when clicked
-            // wrap href in model that transforms handle links and another model
-            // that resolves relative URIs (if possible)
-            final IModel<String> linkModel = new ResolvingLinkModel(
-                    //URI to resolve against
-                    new SolrFieldStringModel(ResourceLinksPanel.this.getModel(), FacetConstants.FIELD_SELF_LINK),
-                    //URI of link to resolve (potentially)
-                    new HandleLinkModel(new PropertyModel(resourceInfoModel, "href")));
+            // Create link that will show the resource when clicked
+            final IModel<String> linkModel = ResolvingLinkModel.modelFor(resourceInfoModel, ResourceLinksPanel.this.getModel());
             final ExternalLink link = new ExternalLink("showResource", linkModel) {
                 @Override
                 protected void onConfigure() {
