@@ -357,6 +357,6 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
     }
 
-    protected abstract void switchToTab(String HIERARCHY_SECTION, AjaxRequestTarget target);
+    protected abstract void switchToTab(String tab, AjaxRequestTarget target);
 
 }
