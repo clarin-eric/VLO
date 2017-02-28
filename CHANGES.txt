@@ -1,5 +1,9 @@
 Bug fixes and new features
 --------------------------
+VLO 4.1
+* The icons for resource types were replaced with clearer icons from fontawesome.io,
+and 'compressed archive' was added as a resource class with its own icon
+
 VLO 4.0.2 (December 2016)
 * Updated mapping for licence and availability information
 	<https://github.com/clarin-eric/VLO/issues/21>
