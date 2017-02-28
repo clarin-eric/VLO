@@ -122,6 +122,8 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             return ResourceType.TEXT;
         } else if (normalizeMimeType.equals(FacetConstants.RESOURCE_TYPE_VIDEO)) {
             return ResourceType.VIDEO;
+        } else if (normalizeMimeType.equals(FacetConstants.RESOURCE_TYPE_ARCHIVE)) {
+            return ResourceType.ARCHIVE;
         } else {
             return ResourceType.OTHER;
         }

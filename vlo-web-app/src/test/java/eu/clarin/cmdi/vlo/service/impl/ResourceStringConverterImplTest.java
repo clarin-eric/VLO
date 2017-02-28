@@ -98,11 +98,23 @@ public class ResourceStringConverterImplTest {
      * Test of getResourceInfo method, of class ResourceStringConverterImpl.
      */
     @Test
-    public void testGetResourceInfoOther() {
+    public void testGetResourceInfoArchive() {
         String resourceString = "application/zip" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "href";
         ResourceInfo result = instance.getResourceInfo(resourceString);
         assertEquals("href", result.getHref());
         assertEquals("application/zip", result.getMimeType());
+        assertEquals(ResourceType.ARCHIVE, result.getResourceType());
+    }
+
+    /**
+     * Test of getResourceInfo method, of class ResourceStringConverterImpl.
+     */
+    @Test
+    public void testGetResourceInfoOther() {
+        String resourceString = "application/octet-stream" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "href";
+        ResourceInfo result = instance.getResourceInfo(resourceString);
+        assertEquals("href", result.getHref());
+        assertEquals("application/octet-stream", result.getMimeType());
         assertEquals(ResourceType.OTHER, result.getResourceType());
     }
     
