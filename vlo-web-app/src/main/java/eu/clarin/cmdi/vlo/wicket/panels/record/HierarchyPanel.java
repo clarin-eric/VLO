@@ -107,7 +107,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                     public void onClick(AjaxRequestTarget target) {
                         // tree root up one level, expand root for traceability by user
                         HierarchyPanel.this.setModel(item.getModel());
-                        tree.expand(new ModelWrapper<>(item.getModel()));
+                        tree.expand(new ModelWrapper<>("---parents---/" + String.valueOf(item.getModelObject().get(FacetConstants.FIELD_ID)), item.getModel()));
                         if (target != null) {
                             target.add(HierarchyPanel.this);
                         }
@@ -221,8 +221,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
         @Override
         public Iterator<? extends ModelWrapper<SolrDocument>> getRoots() {
             return Iterators.singletonIterator(
-                    new ModelWrapper<>(
-                            HierarchyPanel.this.getModel()));
+                    new ModelWrapper<>("", HierarchyPanel.this.getModel()));
         }
 
         @Override
@@ -236,7 +235,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
         }
 
         @Override
-        public Iterator<? extends ModelWrapper<SolrDocument>> getChildren(ModelWrapper<SolrDocument> node) {
+        public Iterator<? extends ModelWrapper<SolrDocument>> getChildren(final ModelWrapper<SolrDocument> node) {
             if (node.isLimit()) {
                 return Collections.emptyIterator();
             } else {
@@ -253,12 +252,14 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                     @Override
                     public ModelWrapper<SolrDocument> apply(Object childId) {
                         final SolrDocument document = documentService.getDocument(childId.toString());
-                        return new ModelWrapper<>(new SolrDocumentModel(document));
+                        final String path = node.getPath() + "/" + childId;
+                        return new ModelWrapper<>(path,  new SolrDocumentModel(document));
                     }
                 });
                 if (childrenShown != null && parts.size() > childrenShown) {
+                    final String path = node.getPath() + "/---more---";
                     return Iterators.concat(iterator, // add empty model wrapper to indicate "end of page"
-                            Iterators.singletonIterator(new ModelWrapper<SolrDocument>(parts.size())));
+                            Iterators.singletonIterator(new ModelWrapper<SolrDocument>(path, parts.size())));
                 } else {
                     return iterator;
                 }
@@ -328,6 +329,11 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
     private class ModelWrapper<T> extends AbstractReadOnlyModel<ModelWrapper<T>> implements Serializable {
 
         /**
+         * Path to distinguish between nodes with the same id (parallel hierarchies)
+         */
+        private final String path;
+
+        /**
          * Limit reached?
          */
         private final boolean limit;
@@ -342,13 +348,15 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
          */
         private final IModel<T> model;
 
-        public ModelWrapper(int count) {
+        public ModelWrapper(String path, int count) {
+            this.path = path;
             this.limit = true;
             this.count = count;
             this.model = null;
         }
 
-        public ModelWrapper(IModel<T> model) {
+        public ModelWrapper(String path, IModel<T> model) {
+            this.path = path;
             this.limit = false;
             this.count = -1;
             this.model = model;
@@ -388,16 +396,24 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
             return this;
         }
 
+        public String getPath() {
+            return path;
+        }
+
         @Override
         public int hashCode() {
-            int hash = 5;
-            hash = 41 * hash + (this.limit ? 1 : 0);
-            hash = 41 * hash + Objects.hashCode(this.model);
+            int hash = 3;
+            hash = 43 * hash + Objects.hashCode(this.path);
+            hash = 43 * hash + (this.limit ? 1 : 0);
+            hash = 43 * hash + Objects.hashCode(this.model);
             return hash;
         }
 
         @Override
         public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
             if (obj == null) {
                 return false;
             }
@@ -406,6 +422,9 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
             }
             final ModelWrapper<?> other = (ModelWrapper<?>) obj;
             if (this.limit != other.limit) {
+                return false;
+            }
+            if (!Objects.equals(this.path, other.path)) {
                 return false;
             }
             if (!Objects.equals(this.model, other.model)) {
