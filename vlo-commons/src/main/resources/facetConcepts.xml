@@ -242,7 +242,7 @@
                 <!-- Meertens cmdp:Soundbites -->
                 <derivedFacet>_languageName</derivedFacet>
 	</facetConcept>
-        <facetConcept name="availability" description="The usage conditions for the resource or tool" definition="A rough description of the conditions under which the resource or tool can be used.">
+    <facetConcept name="availability" description="The usage conditions for the resource or tool" definition="A rough description of the conditions under which the resource or tool can be used.">
 		<concept>http://www.isocat.org/datcat/DC-2457</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2457_45bbaa1a-7002-2ecd-ab9d-57a189f694a6</concept>
 		<!-- A description of the licensing conditions... -->
@@ -261,7 +261,12 @@
 		<!-- URL of the license -->
 		<concept>http://www.isocat.org/datcat/DC-6586</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6586_2c79d86a-5a75-0890-d407-7d9cb86b9beb</concept>
-				
+		
+		<!-- TEI header license -->
+		<concept>http://hdl.handle.net/11459/CCR_C-5362_8cffd964-f57e-09ed-daed-eeabbf2d22c0</concept>
+		<!-- TEI header availability -->
+		<concept>http://hdl.handle.net/11459/CCR_C-5302_8dfad601-5387-7317-57d1-1f0e65b75af2</concept>
+		
 		<!-- the DC is used in the distributionType facet -->
 		<concept>http://purl.org/dc/terms/license</concept>
 		<concept>http://purl.org/dc/terms/rights</concept>
@@ -294,6 +299,9 @@
 		<!-- DASISH from DC Rights -->
 		<concept>http://www.isocat.org/datcat/DC-5439</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5439_98bb103d-476a-7f62-54b4-bf9de24d2229</concept>
+		
+		<!-- TEI header -->
+		<concept>http://hdl.handle.net/11459/CCR_C-5362_8cffd964-f57e-09ed-daed-eeabbf2d22c0</concept>
 		
 				<!-- the DC is used in the distributionType facet -->
 		<concept>http://purl.org/dc/terms/license</concept>
