@@ -272,6 +272,10 @@
 		<concept>http://purl.org/dc/terms/rights</concept>
 		<concept>http://purl.org/dc/terms/accessRights</concept>
 		
+		<!-- TEI header availability attributes -->
+		<pattern>/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:publicationStmt/cmdp:availability/@status</pattern>
+		<pattern>/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:publicationStmt/cmdp:availability/cmdp:ab/@type</pattern>
+		
 	</facetConcept>
 	<facetConcept name="license" allowMultipleValues="true" description="The licensing conditions for the resource or tool" definition="The name of the license or a very brief description of the licensing conditions under which the resource or tool can be used.">
 		<!-- URL of the license -->
