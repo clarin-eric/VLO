@@ -1,6 +1,10 @@
 package eu.clarin.cmdi.vlo.config;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -37,19 +41,30 @@ public class DataRoot extends Object {
      * @param toStrip if you want to create the URL to the meta data, this is
      * the part to be removed from the rootFile
      * @param deleteFirst
+     * @param processHierarchyDirs list of directories for which a hierarchy graph
+     * will be created (comma separated) or "*" for including all directories
+     * @param ignoreHierarchyDirs String containing all directories that shouldn't be used for building a
+     * hierarchy graph (comma separated)
      */
-    public DataRoot(String originName, File rootFile, String prefix, String toStrip, Boolean deleteFirst) {
+    public DataRoot(String originName, File rootFile, String prefix, String toStrip, Boolean deleteFirst, String processHierarchyDirs, String ignoreHierarchyDirs) {
         this.originName = originName;
         this.rootFile = rootFile;
         this.prefix = prefix;
         this.toStrip = toStrip;
         this.deleteFirst = deleteFirst;
+        this.processHierarchyDirs = processHierarchyDirs;
+        this.ignoreHierarchyDirs = ignoreHierarchyDirs;
+    }
+
+    public DataRoot(String originName, File rootFile, String prefix, String toStrip, Boolean deleteFirst) {
+        // by default create structure graph for all directories
+        this(originName, rootFile, prefix, toStrip, deleteFirst, "*", "");
     }
 
     /**
      * Test for equality of the object itself and the object passed to it
      *
-     * @param dataRoot
+     * @param object
      * @return true if the object equals this, false otherwise
      */
     @Override
@@ -235,6 +250,48 @@ public class DataRoot extends Object {
      */
     public boolean deleteFirst() {
         return deleteFirst;
+    }
+
+    /**
+     * String containing all directories that should be used for building a
+     * hierarchy graph or '*' if all directories of this data root should
+     * be used.
+     */
+    @XmlAttribute
+    private String processHierarchyDirs;
+
+    public void setProcessHierarchyDirs(String processHierarchyDirs) {
+        this.processHierarchyDirs = processHierarchyDirs;
+    }
+
+    public List<String> getProcessHierarchyDirList() {
+        // by default: all directories ('*') will be used
+        if(processHierarchyDirs == null) {
+            List<String> defaultList = new ArrayList<>();
+            defaultList.add("*");
+            return defaultList;
+        } else {
+            return Arrays.asList(processHierarchyDirs.trim().split(","));
+        }
+    }
+
+    /**
+     * String containing all directories that shouldn't be used for building a
+     * hierarchy graph (comma separated)
+     */
+    @XmlAttribute
+    private String ignoreHierarchyDirs;
+
+    public void setIgnoreHierarchyDirs(String ignoreHierarchyDirs) {
+        this.ignoreHierarchyDirs = ignoreHierarchyDirs;
+    }
+
+    public List<String> getIgnoreHierarchyDirList() {
+        // by default: no directory will be ignored
+        if(ignoreHierarchyDirs == null)
+            return new ArrayList<>();
+        else
+            return Arrays.asList(ignoreHierarchyDirs.trim().split(","));
     }
 
     @Override
