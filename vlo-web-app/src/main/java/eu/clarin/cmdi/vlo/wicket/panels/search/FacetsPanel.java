@@ -18,7 +18,6 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +89,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
             @Override
             public Boolean getObject() {
                 //only enable show/hide secondary facets functionality if there are enoug (too many) available facets
-                return getNumberFacetsShown(facetNamesModel.getObject(), fieldsModel.getObject()) 
+                return getNumberFacetsShown(facetNamesModel.getObject(), fieldsModel.getObject())
                         >= vloConfig.getHideSecondaryFacetsLimit(); //configurable threshold
             }
         };
