@@ -31,7 +31,7 @@
     <printMapping>false</printMapping>
     
     <!-- leave empty to use default packaged definition -->
-    <facetConceptsFile><!-- use default packaged definition --></facetConceptsFile>
+    <facetConceptsFile>${vloconfig.facetConceptsFileLocation}</facetConceptsFile>
     
     <profileSchemaUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/{PROFILE_ID}/xsd</profileSchemaUrl>
     
@@ -39,17 +39,23 @@
     
     <handleServerUrl>http://hdl.handle.net/</handleServerUrl>
     
-    <nationalProjectMapping>nationalProjectsMapping.xml</nationalProjectMapping>
+    <!-- 
+        Mapping file locations.
+        These can be an absolute URL, absolute file path or packaged resource location.
+        Evaluated in the this order.
+    -->
     
-    <organisationNamesUrl>OrganisationControlledVocabulary.xml</organisationNamesUrl>
+    <nationalProjectMapping>${vloconfig.mappingFilesLocation}nationalProjectsMapping.xml</nationalProjectMapping>
     
-    <languageNameVariantsUrl>LanguageNameVariantsMap.xml</languageNameVariantsUrl>
+    <organisationNamesUrl>${vloconfig.mappingFilesLocation}OrganisationControlledVocabulary.xml</organisationNamesUrl>
     
-    <licenseAvailabilityMapUrl>LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl>
+    <languageNameVariantsUrl>${vloconfig.mappingFilesLocation}LanguageNameVariantsMap.xml</languageNameVariantsUrl>
     
-    <resourceClassMapUrl>resourceTypeMap.xml</resourceClassMapUrl>
+    <licenseAvailabilityMapUrl>${vloconfig.mappingFilesLocation}LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl>
     
-    <licenseURIMapUrl>LicenseURIMap.xml</licenseURIMapUrl>
+    <resourceClassMapUrl>${vloconfig.mappingFilesLocation}resourceTypeMap.xml</resourceClassMapUrl>
+    
+    <licenseURIMapUrl>${vloconfig.mappingFilesLocation}LicenseURIMap.xml</licenseURIMapUrl>
     
     <!-- Fields shown as facets on the search page -->
     <facetFields>        
