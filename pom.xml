@@ -30,9 +30,14 @@
     </modules>
 
     <properties>
+         <!-- VLO-mapping project version to obtain default mappings from at build time -->
+        <vlo.mapping.version>1.0-SNAPSHOT</vlo.mapping.version>
+        
+        <!-- Common runtime dependency versions -->
         <solr.version>4.10.4</solr.version>
         <slf4j.version>1.7.20</slf4j.version>
         <saxon.version>9.5.1-8</saxon.version>
+        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.hint.license>gpl30</netbeans.hint.license>
         <maven.compiler.source>1.7</maven.compiler.source>

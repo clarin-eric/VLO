@@ -35,6 +35,36 @@
                 <filtering>true</filtering>
             </testResource>
         </testResources>
+        
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>eu.clarin.cmdi</groupId>
+                                    <artifactId>vlo-mapping</artifactId>
+                                    <version>${vlo.mapping.version}</version>
+                                    <type>jar</type>
+                                </artifactItem>
+                            </artifactItems>
+<!--                            <includes>**/*.java</includes>
+                            <excludes>**/*.properties</excludes>-->
+                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
     
     <!-- Build profiles prepare VloConfig.xml for different deployment enviroments -->
@@ -48,9 +78,9 @@
             <properties>
                 <vloconfig.solrUrl>http://localhost:8080/vlo-solr/core0/</vloconfig.solrUrl>
                 <vloconfig.dataRootsFile>dataroots-local.xml</vloconfig.dataRootsFile>
-                <!-- empty location uses bundled mapping files -->
-                <vloconfig.mappingFilesLocation></vloconfig.mappingFilesLocation> 
-                <!-- empty location uses bundled default facet concepts file -->
+                <!-- bundled mapping files (package resources, from the VLO-mapping project) -->
+                <vloconfig.mappingFilesLocation>uniform-maps/</vloconfig.mappingFilesLocation> 
+                <!-- empty location uses bundled default facet concepts file (from the VLO-mapping project) -->
                 <vloconfig.facetConceptsFileLocation></vloconfig.facetConceptsFileLocation>
             </properties>
         </profile>
