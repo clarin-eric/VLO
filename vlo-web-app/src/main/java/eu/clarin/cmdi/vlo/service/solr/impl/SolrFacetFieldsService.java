@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
@@ -60,14 +61,14 @@ public class SolrFacetFieldsService implements FacetFieldsService {
     }
 
     private List<FacetField> removeSelectedValsFromResponse(QueryFacetsSelection query, List<FacetField> response) {
-        List<FacetField> cleanedFacets = new ArrayList<>();
+        List<FacetField> filteredFacets = new ArrayList<>();
 
         //for each facet from response
         for (FacetField facet : response) {
             FacetSelection facetSelection = query.getSelectionValues(facet.getName());
 
-            if (facetSelection == null) {
-                cleanedFacets.add(facet);
+            if (facetSelection == null || facet.getName().equals(FacetConstants.FIELD_AVAILABILITY)) {
+                filteredFacets.add(facet);
                 continue;
             } else {
                 Collection<String> selectedValues = facetSelection.getValues();
@@ -80,11 +81,11 @@ public class SolrFacetFieldsService implements FacetFieldsService {
                     }
                 }
 
-                cleanedFacets.add(_newFacetField);
+                filteredFacets.add(_newFacetField);
             }
         }
 
-        return cleanedFacets;
+        return filteredFacets;
     }
 
 }
