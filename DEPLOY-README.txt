@@ -105,8 +105,21 @@ xxx             - VLO version number
 	the description is left out of the rootFile part to create a http link
 	to the metadata; the links starts with the prefix.
 	
+5. Mapping configuration
+
+	Review the following configuration properties in VloConfig.xml:
+		facetConceptsFile, nationalProjectMapping, organisationNamesUrl, 
+		languageNameVariantsUrl, licenseAvailabilityMapUrl, resourceClassMapUrl,
+		licenseURIMapUrl
 	
-5. Importing data
+	These should either be set to the defaults to use bundled resources or configured
+	to be a URL pointing to the location of the corresponding mapping/normalisation
+	definition from a version of the VLO-mapping definition. 
+	
+	See <https://github.com/clarin-eric/VLO-mapping> and the comments in VloConfig.xml 
+	for more information.
+	
+6. Importing data
 	
 	importer can be found in $VLO/bin/ folder
 
