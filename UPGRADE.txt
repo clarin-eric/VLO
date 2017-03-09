@@ -46,7 +46,7 @@ local file URL, for example:
 	<facetConceptsFile>file:/srv/VLO-mapping/mapping/facetConcepts.xml</facetConceptsFile>
 	
 You can also use a remote location, e.g.:
-	<facetConceptsFile>https://raw.githubusercontent.com/clarin-eric/VLO-mapping/master/mapping/facetConcepts.xml</facetConceptsFile>
+	<facetConceptsFile>https://vlo.clarin.eu/mapping/facetConcepts.xml</facetConceptsFile>
 ...or also leave the property empty to use the bundled default definitions.
 
 Then there is a set of properties nationalProjectMapping, organisationNamesUrl,

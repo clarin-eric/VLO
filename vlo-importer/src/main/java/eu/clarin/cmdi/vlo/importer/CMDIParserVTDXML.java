@@ -116,15 +116,6 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
 
         String facetConceptsFile = MetadataImporter.config.getFacetConceptsFile();
 
-        //resolve against config location? (empty = default location)
-        if (facetConceptsFile != null && !facetConceptsFile.isEmpty()) {
-            URI configLocation = MetadataImporter.config.getConfigLocation();
-            if (configLocation != null && !configLocation.getScheme().equals("jar")) {
-                URI facetConceptsLocation = configLocation.resolve(facetConceptsFile);
-                facetConceptsFile = new File(facetConceptsLocation).getAbsolutePath();
-            }
-        }
-
         return FacetMappingFactory.getFacetMapping(facetConceptsFile, profileId, useLocalXSDCache);
     }
 

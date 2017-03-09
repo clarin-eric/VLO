@@ -1,9 +1,10 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 
@@ -26,22 +27,26 @@ public class VLOMarshaller {
      * @return the facet concept mapping
      */
     public static FacetConceptMapping getFacetConceptMapping(String facetConcepts) {
-    	
-    	FacetConceptMapping result;
-    	InputStream is = null;
+        final MappingDefinitionResolver mappingDefinitionResolver
+                = new MappingDefinitionResolver(VLOMarshaller.class);
 
-    	try {
-    		is = (facetConcepts == null || "".equals(facetConcepts))?
-    			VLOMarshaller.class.getResourceAsStream(VloConfig.DEFAULT_FACET_CONCEPTS_RESOURCE_FILE) :
-    			new FileInputStream(facetConcepts);
+        FacetConceptMapping result;
+        InputStream is = null;
+
+        try {
+            is = (facetConcepts == null || "".equals(facetConcepts))
+                    ? VLOMarshaller.class.getResourceAsStream(VloConfig.DEFAULT_FACET_CONCEPTS_RESOURCE_FILE)
+                    : mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(facetConcepts);
         } catch (FileNotFoundException e) {
-                logger.error("Could not find facets file: {}", facetConcepts);
-                return null;
+            logger.error("Could not find facets file: {}", facetConcepts);
+            return null;
+        } catch (IOException e) {
+            logger.error("Could not process facets file: {}", facetConcepts);
+            return null;
         }
-    	
-    	return unmarshal(is);
+
+        return unmarshal(is);
     }
-    
 
     /**
      * Get object from input stream
@@ -51,19 +56,18 @@ public class VLOMarshaller {
      */
     static FacetConceptMapping unmarshal(InputStream inputStream) {
         FacetConceptMapping result;
-        
-		try {			
-			JAXBContext jc = JAXBContext.newInstance(FacetConceptMapping.class);
-	        Unmarshaller u = jc.createUnmarshaller();
-	        result = (FacetConceptMapping) u.unmarshal(inputStream);        
-		} catch (JAXBException e) {
-			throw new RuntimeException();
-		}
-		
-		result.check();
-	    return result;
+
+        try {
+            JAXBContext jc = JAXBContext.newInstance(FacetConceptMapping.class);
+            Unmarshaller u = jc.createUnmarshaller();
+            result = (FacetConceptMapping) u.unmarshal(inputStream);
+        } catch (JAXBException e) {
+            throw new RuntimeException();
+        }
+
+        result.check();
+        return result;
     }
-    
 
     /**
      * Put facet mapping object in output file

@@ -45,17 +45,17 @@
         Evaluated in the this order.
     -->
     
-    <nationalProjectMapping>${vloconfig.mappingFilesLocation}nationalProjectsMapping.xml</nationalProjectMapping> <!-- bundled resource: uniform-maps/nationalProjectsMapping.xml -->
+    <nationalProjectMapping>${vloconfig.mappingFilesLocation}nationalProjectsMapping.xml</nationalProjectMapping> <!-- bundled resource: /uniform-maps/nationalProjectsMapping.xml -->
     
-    <organisationNamesUrl>${vloconfig.mappingFilesLocation}OrganisationControlledVocabulary.xml</organisationNamesUrl> <!-- bundled resource: uniform-maps/OrganisationControlledVocabulary.xml -->
+    <organisationNamesUrl>${vloconfig.mappingFilesLocation}OrganisationControlledVocabulary.xml</organisationNamesUrl> <!-- bundled resource: /uniform-maps/OrganisationControlledVocabulary.xml -->
     
-    <languageNameVariantsUrl>${vloconfig.mappingFilesLocation}LanguageNameVariantsMap.xml</languageNameVariantsUrl> <!-- bundled resource: uniform-maps/LanguageNameVariantsMap.xml -->
+    <languageNameVariantsUrl>${vloconfig.mappingFilesLocation}LanguageNameVariantsMap.xml</languageNameVariantsUrl> <!-- bundled resource: /uniform-maps/LanguageNameVariantsMap.xml -->
     
-    <licenseAvailabilityMapUrl>${vloconfig.mappingFilesLocation}LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl> <!-- bundled resource: uniform-maps/LicenseAvailabilityMap.xml -->
+    <licenseAvailabilityMapUrl>${vloconfig.mappingFilesLocation}LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl> <!-- bundled resource: /uniform-maps/LicenseAvailabilityMap.xml -->
     
-    <resourceClassMapUrl>${vloconfig.mappingFilesLocation}resourceTypeMap.xml</resourceClassMapUrl> <!-- bundled resource: uniform-maps/resourceTypeMap.xml -->
+    <resourceClassMapUrl>${vloconfig.mappingFilesLocation}resourceTypeMap.xml</resourceClassMapUrl> <!-- bundled resource: /uniform-maps/resourceTypeMap.xml -->
     
-    <licenseURIMapUrl>${vloconfig.mappingFilesLocation}LicenseURIMap.xml</licenseURIMapUrl> <!-- bundled resource: uniform-maps/LicenseURIMap.xml -->
+    <licenseURIMapUrl>${vloconfig.mappingFilesLocation}LicenseURIMap.xml</licenseURIMapUrl> <!-- bundled resource: /uniform-maps/LicenseURIMap.xml -->
     
     <!-- Fields shown as facets on the search page -->
     <facetFields>        
