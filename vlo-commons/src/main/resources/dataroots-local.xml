@@ -7,7 +7,7 @@
         <deleteFirst>false</deleteFirst>
     </DataRoot>
 
-    <DataRoot>
+    <DataRoot processHierarchyDirs="NONE">
         <originName>Other</originName>
         <rootFile>/lat/apache/htdocs/oai-harvester/others/results/cmdi</rootFile>            
         <prefix>http://catalog.clarin.eu/</prefix>

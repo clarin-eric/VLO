@@ -6,7 +6,8 @@
         <tostrip>/srv/vlo-data/</tostrip>
         <deleteFirst>false</deleteFirst>
     </DataRoot>
-    <DataRoot>
+    
+    <DataRoot processHierarchyDirs="NONE">
         <originName>Other</originName>
         <rootFile>/srv/vlo-data/others/results/cmdi</rootFile>
         <prefix>http://beta-vlo.clarin.eu/data/</prefix>
