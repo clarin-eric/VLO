@@ -1,27 +1,87 @@
 Bug fixes and new features
 --------------------------
-VLO 4.1
-* The icons for resource types were replaced with clearer icons from fontawesome.io,
-and 'compressed archive' was added as a resource class with its own icon
+VLO 4.1 (April 2017)
+
+## Web application enhancements and additions ##
+
+* Multiple values can be selected (OR/AND) for the facets
+    <https://github.com/clarin-eric/VLO/issues/32>
+* No facets are hidden if there are only a few left
+    <https://github.com/clarin-eric/VLO/issues/52>
+* The "Data provider" facet has been renamed to "Metadata source"
+    <https://github.com/clarin-eric/VLO/issues/17>
+* Collection names are shown below record titles in the search results
+    <https://github.com/clarin-eric/VLO/issues/60>
+* English descriptions are shown first in search results and the record page
+    <https://github.com/clarin-eric/VLO/issues/44>
+* Records with only one resource have this resource featured more prominently
+    <https://github.com/clarin-eric/VLO/issues/23>
+* The help page has been extended and updated, and made easier to find
+    <https://github.com/clarin-eric/VLO/issues/9>
+    <https://github.com/clarin-eric/VLO/issues/10>
+* Improved indexability by search engines
+    <https://github.com/clarin-eric/VLO/issues/4>
+* Base styling is imported from the CLARIN base style, making use of its
+distribution mechanism through Maven artifacts deployed to Nexus.
+    <https://github.com/clarin-eric/VLO/issues/30>
+    <https://github.com/clarin-eric/VLO/issues/65>
+* Added icons for public domain mark and "no copyright" right statements
+    <https://github.com/clarin-eric/VLO/issues/48>
+* The icons for resource types were replaced with clearer icons from
+fontawesome.io, and 'compressed archive' was added as a resource class with its
+own icon
+
+## Web application fixes ##
+
+* Fixed tree expanding issues in metadata hierarchy display
+    <https://github.com/clarin-eric/VLO/issues/56>
+* Fixed display issues for non-ASCII characters in facet values
+    <https://github.com/clarin-eric/VLO/issues/19>
+* Fixed parsing issues with links in descriptions and other fields 
+    <https://github.com/clarin-eric/VLO/issues/18>
+* Fixed highlighting of search terms in search results and on the record page
+    <https://github.com/clarin-eric/VLO/issues/49>
+* Relative links in records no longer lead to invalid resource links
+    <https://github.com/clarin-eric/VLO/issues/57>
+* Resource links on the record page always get a label
+    <https://github.com/clarin-eric/VLO/issues/6>
+
+## Import and mapping improvements ##
+
+* Facet mapping and normalisation definition can be sourced from an external
+location
+    <https://github.com/clarin-eric/VLO/issues/22>
+* Processing of hierarchies can be enabled and disabled for individual metadata
+sets
+    <https://github.com/clarin-eric/VLO/issues/62>
+* Mapping definitions have been extended & improved for licences/availability
+    <https://github.com/clarin-eric/VLO/issues/41>
+    <https://github.com/clarin-eric/VLO/pull/63>
+* Improved mapping for the "Song" profile (Meertens Liederenbank)
+    <https://github.com/clarin-eric/VLO/issues/43>
+* Reduced load on system storage when importing large collections
+    <https://github.com/clarin-eric/VLO/issues/58>
+* Improved importer performance
+    <https://github.com/clarin-eric/VLO/issues/2>
 
 VLO 4.0.2 (December 2016)
 * Updated mapping for licence and availability information
-	<https://github.com/clarin-eric/VLO/issues/21>
+    <https://github.com/clarin-eric/VLO/issues/21>
 * Updated national project mapping
-	<https://github.com/clarin-eric/VLO/issues/27>
+    <https://github.com/clarin-eric/VLO/issues/27>
 * Fixed occurence of multiple availability level 'tags' (PUB/ACA/RES)
-	<https://github.com/clarin-eric/VLO/issues/38>
+    <https://github.com/clarin-eric/VLO/issues/38>
 * 'Resource title' concept preferred over 'resource name' for 'name' field
-	<https://github.com/clarin-eric/VLO/issues/16>
+    <https://github.com/clarin-eric/VLO/issues/16>
 * Removed 'scoll down to see all records' behaviour
-	<https://github.com/clarin-eric/VLO/issues/20>
+    <https://github.com/clarin-eric/VLO/issues/20>
 
 VLO 4.0.1 (August 2016)
 * Fetching external fonts from https locations, preventing browser 
 warnings/issues
 * Fixed mapping of national project from collection display name
 * Removed redundant XPaths from mapping
-	<https://trac.clarin.eu/ticket/959>
+    <https://trac.clarin.eu/ticket/959>
 
 VLO 4.0.0 (July 2016)
 * VLO importer supports CMDI 1.2 instead of CMDI 1.1
