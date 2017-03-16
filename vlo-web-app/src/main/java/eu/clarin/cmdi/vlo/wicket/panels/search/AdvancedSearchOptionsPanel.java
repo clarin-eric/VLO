@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
@@ -37,6 +38,7 @@ import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -50,7 +52,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  *
  * @author twagoo
  */
-public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFacetsSelection> implements IAjaxIndicatorAware{
+public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFacetsSelection> implements IAjaxIndicatorAware {
 
     @SpringBean
     private VloConfig config;
@@ -58,6 +60,7 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
     private final Form optionsForm;
 
     private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
+
     /**
      * The fields that this panel provides options for
      */
@@ -65,9 +68,19 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
             FacetConstants.FIELD_HAS_PART_COUNT,
             FacetConstants.FIELD_SEARCH_SERVICE);
 
-    public AdvancedSearchOptionsPanel(String id, IModel<QueryFacetsSelection> model) {
+    public AdvancedSearchOptionsPanel(String id, IModel<QueryFacetsSelection> model, IModel<FacetSelectionType> selectionTypeModeModel) {
         super(id, model);
+
         optionsForm = new Form("options");
+
+        final DropDownChoice<FacetSelectionType> selectionType = new DropDownChoice<>("selectionType", selectionTypeModeModel, Lists.newArrayList(FacetSelectionType.AND, FacetSelectionType.OR));
+        selectionType.add(new OnChangeAjaxBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                selectionChanged(target);
+            }
+        });
+        optionsForm.add(selectionType);
 
         final CheckBox fcsCheck = createFieldNotEmptyOption("fcs", FacetConstants.FIELD_SEARCH_SERVICE);
         optionsForm.add(fcsCheck);
@@ -77,7 +90,7 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         collectionsSection.add(collectionCheck);
         collectionsSection.setVisible(config.isProcessHierarchies());
         optionsForm.add(collectionsSection);
-        
+
         optionsForm.add(indicatorAppender);
 
         add(optionsForm);

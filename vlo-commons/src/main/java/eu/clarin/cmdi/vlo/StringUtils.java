@@ -1,10 +1,7 @@
 package eu.clarin.cmdi.vlo;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import com.google.common.collect.ImmutableSet;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public final class StringUtils {
 	
@@ -49,8 +46,10 @@ public final class StringUtils {
         return result;
     }
     
-    private static final Set<Character> reservedCharacters = new HashSet<Character>(Arrays.asList('!', '*', '\'', '(',
-            ')', ';', ':', '@', '&', '=', '+', '$', ',', '/', '?', '#', '[', ']'));
+    private static final Set<Character> RESERVED_CHARACTERS = ImmutableSet.of(
+            '!', '*', '\'', '(', ')', ';', ':', '@', '&',
+            '=', '+','$', ',', '/', '?', '#', '[', ']'
+    );
         
     /**
      * Return normalized String where all reserved characters in URL encoding
@@ -64,7 +63,7 @@ public final class StringUtils {
         StringBuilder normalizedString = new StringBuilder();
         for (int i = 0; i < idString.length(); i++) {
             Character character = idString.charAt(i);
-            if (reservedCharacters.contains(character)) {
+            if (RESERVED_CHARACTERS.contains(character)) {
                 normalizedString.append("_").append((int) character).append("_");
             } else {
                 normalizedString.append(character);

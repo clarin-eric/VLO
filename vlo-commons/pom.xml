@@ -5,11 +5,11 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.0.2</version>
+        <version>4.1.0-beta1</version>
     </parent>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-commons</artifactId>
-    <version>4.0.2</version>
+    <version>4.1.0-beta1</version>
     <name>VLO Commons</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -35,6 +35,34 @@
                 <filtering>true</filtering>
             </testResource>
         </testResources>
+        
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>unpack-mapping</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>eu.clarin.cmdi</groupId>
+                                    <artifactId>vlo-mapping</artifactId>
+                                    <version>${vlo.mapping.version}</version>
+                                    <type>jar</type>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
     
     <!-- Build profiles prepare VloConfig.xml for different deployment enviroments -->
@@ -48,6 +76,10 @@
             <properties>
                 <vloconfig.solrUrl>http://localhost:8080/vlo-solr/core0/</vloconfig.solrUrl>
                 <vloconfig.dataRootsFile>dataroots-local.xml</vloconfig.dataRootsFile>
+                <!-- bundled mapping files (package resources, from the VLO-mapping project) -->
+                <vloconfig.mappingFilesLocation>/uniform-maps/</vloconfig.mappingFilesLocation> 
+                <!-- empty location uses bundled default facet concepts file (from the VLO-mapping project) -->
+                <vloconfig.facetConceptsFileLocation></vloconfig.facetConceptsFileLocation>
             </properties>
         </profile>
         
@@ -55,8 +87,11 @@
             <!-- For deployment to catalog-clarin.esc.rzg.mpg.de -->
             <id>dev-vm</id>
             <properties>
+                <maven.test.skip>true</maven.test.skip>
                 <vloconfig.solrUrl>http://localhost:8080/solr/core0/</vloconfig.solrUrl>
                 <vloconfig.dataRootsFile>file:/srv/webapps/vlo/dataroots-testvm.xml</vloconfig.dataRootsFile>
+                <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
+                <vloconfig.facetConceptsFileLocation>file:/srv/VLO-mapping/mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
             </properties>
         </profile>
         
@@ -69,6 +104,8 @@
                 <vloconfig.solrUrl>http://localhost:8080/solr/core0/</vloconfig.solrUrl>
                 <vloconfig.homeUrl>http://vlo.clarin.eu</vloconfig.homeUrl>
                 <vloconfig.dataRootsFile>dataroots-production.xml</vloconfig.dataRootsFile>
+                <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
+                <vloconfig.facetConceptsFileLocation>file:/srv/VLO-mapping/mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
             </properties>
         </profile>
         
@@ -81,6 +118,8 @@
                 <vloconfig.solrUrl>http://172.17.42.1:8080/solr/core0/</vloconfig.solrUrl>
                 <vloconfig.homeUrl>http://beta-vlo.clarin.eu</vloconfig.homeUrl>
                 <vloconfig.dataRootsFile>dataroots-beta.xml</vloconfig.dataRootsFile>
+                <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
+                <vloconfig.facetConceptsFileLocation>file:/srv/VLO-mapping/mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
             </properties>
         </profile>
     </profiles>
@@ -110,6 +149,16 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>19.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ximpleware</groupId>
+            <artifactId>vtd-xml</artifactId>
+            <version>2.11</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
         </dependency>
     </dependencies>
 </project>

@@ -1,54 +1,57 @@
 package eu.clarin.cmdi.vlo;
 
+import com.google.common.collect.ImmutableSet;
+import com.ximpleware.AutoPilot;
+import com.ximpleware.NavException;
+import com.ximpleware.ParseException;
+import com.ximpleware.VTDGen;
+import com.ximpleware.VTDNav;
+import com.ximpleware.XPathEvalException;
+import com.ximpleware.XPathParseException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.apache.commons.io.IOUtils;
 
 public final class CommonUtils {
 
-    private final static Set<String> ANNOTATION_MIMETYPES = new HashSet<String>();
+    private final static Set<String> ANNOTATION_MIMETYPES = ImmutableSet.of(
+            "text/x-eaf+xml",
+            "text/x-shoebox-text",
+            "text/x-toolbox-text",
+            "text/x-chat",
+            "text/x-chat",
+            "application/mediatagger",
+            "mt",
+            "application/smil+xml");
 
-    static {
-        ANNOTATION_MIMETYPES.add("text/x-eaf+xml");
-        ANNOTATION_MIMETYPES.add("text/x-shoebox-text");
-        ANNOTATION_MIMETYPES.add("text/x-toolbox-text");
-        ANNOTATION_MIMETYPES.add("text/x-chat");
-        ANNOTATION_MIMETYPES.add("text/x-chat");
-        ANNOTATION_MIMETYPES.add("application/mediatagger");
-        ANNOTATION_MIMETYPES.add("mt");
-        ANNOTATION_MIMETYPES.add("application/smil+xml");
-    }
-    private final static Set<String> TEXT_MIMETYPES = new HashSet<String>();
+    private final static Set<String> TEXT_MIMETYPES = ImmutableSet.of(
+            "application/pdf",
+            "txt");
 
-    static {
-        TEXT_MIMETYPES.add("application/pdf");
-        TEXT_MIMETYPES.add("txt");
-    }
-    private final static Set<String> VIDEO_MIMETYPES = new HashSet<String>();
+    private final static Set<String> VIDEO_MIMETYPES = ImmutableSet.of(
+            "application/mxf");
 
-    static {
-        VIDEO_MIMETYPES.add("application/mxf");
-    }
-    private final static Set<String> AUDIO_MIMETYPES = new HashSet<String>();
+    private final static Set<String> AUDIO_MIMETYPES = ImmutableSet.of(
+            "application/ogg",
+            "wav");
 
-    static {
-        AUDIO_MIMETYPES.add("application/ogg");
-        AUDIO_MIMETYPES.add("wav");
-    }
+    private final static Set<String> ARCHIVE_MIMETYPES = ImmutableSet.of(
+            "application/tar", "application/tar+gzip",
+            "application/zip", "application/zip-compressed",
+            "application/gzip", "application/gzip-compressed",
+            "application/x-bzip", "application/x-bzip2", "application/x-bz2",
+            "application/x-compress", "application/x-compressed",
+            "application/x-rar-compressed",
+            "application/x-gtar",
+            "application/x-gzip",
+            "application/x-tar", "application/x-tar-gz",
+            "application/x-zip", "application/x-zip-compressed",
+            "application/x-7z-compressed", "application/x-7zip-compressed"
+    );
 
     /**
      * Set system property {@code vlo.swallowLookupErrors} to 'true' to make
@@ -84,6 +87,8 @@ public final class CommonUtils {
             result = FacetConstants.RESOURCE_TYPE_AUDIO;
         } else if (type.startsWith("text") || TEXT_MIMETYPES.contains(type)) {
             result = FacetConstants.RESOURCE_TYPE_TEXT;
+        } else if (ARCHIVE_MIMETYPES.contains(type)) {
+            result = FacetConstants.RESOURCE_TYPE_ARCHIVE;
         }
         return result;
     }
@@ -95,28 +100,35 @@ public final class CommonUtils {
      *
      * @param urlToComponent
      * @return Map with item_value, AppInfo_value pairs
-     * @throws XPathExpressionException
-     * @throws IOException
-     * @throws SAXException
-     * @throws ParserConfigurationException
+     * @throws MalformedURLException
+     * @throws com.ximpleware.ParseException
+     * @throws com.ximpleware.NavException
+     * @throws com.ximpleware.XPathParseException
+     * @throws com.ximpleware.XPathEvalException
      */
-    public static Map<String, String> createCMDIComponentItemMap(String urlToComponent) throws XPathExpressionException, SAXException,
-            IOException, ParserConfigurationException {
-        Map<String, String> result = new HashMap<String, String>();
-        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-        domFactory.setNamespaceAware(true);
+    public static Map<String, String> createCMDIComponentItemMap(String urlToComponent) throws IOException, ParseException, NavException,
+            XPathParseException, XPathEvalException {
+        final Map<String, String> result = new HashMap<>();
+
         URL url = new URL(urlToComponent);
-        //TODO: Process XML as stream for much better performance (no need to build entire DOM)
-        DocumentBuilder builder = domFactory.newDocumentBuilder();
-        Document doc = builder.parse(url.openStream());
-        XPath xpath = XPathFactory.newInstance().newXPath();
-        NodeList nodeList = (NodeList) xpath.evaluate("//item", doc, XPathConstants.NODESET);
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
-            String shortName = node.getTextContent();
-            String longName = node.getAttributes().getNamedItem("AppInfo").getNodeValue().replaceAll(" \\([a-zA-Z]+\\)$", "");
-            result.put(shortName.toUpperCase(), longName);
+        VTDGen vg = new VTDGen();
+
+        vg.setDoc(IOUtils.toByteArray(url.openStream()));
+        vg.parse(true);
+        final VTDNav nav = vg.getNav();
+        nav.toElement(VTDNav.ROOT);
+        AutoPilot ap = new AutoPilot(nav);
+        ap.selectXPath("//item");
+
+        AutoPilot appInfoAttribute = new AutoPilot(nav);
+        appInfoAttribute.selectXPath("@AppInfo");
+
+        while (ap.evalXPath() != -1) {
+            String appInfoText = appInfoAttribute.evalXPathToString().replaceAll(" \\([a-zA-Z]+\\)$", "");
+            String itemContent = nav.toNormalizedString(nav.getText());
+            result.put(itemContent.toUpperCase(), appInfoText);
         }
+
         return result;
     }
 
@@ -127,28 +139,35 @@ public final class CommonUtils {
      *
      * @param urlToComponent
      * @return Map with item_value, AppInfo_value pairs
-     * @throws XPathExpressionException
-     * @throws IOException
-     * @throws SAXException
-     * @throws ParserConfigurationException
+     * @throws java.io.IOException
+     * @throws com.ximpleware.ParseException
+     * @throws com.ximpleware.NavException
+     * @throws com.ximpleware.XPathParseException
+     * @throws com.ximpleware.XPathEvalException
      */
-    public static Map<String, String> createReverseCMDIComponentItemMap(String urlToComponent) throws XPathExpressionException, SAXException,
-            IOException, ParserConfigurationException {
-        Map<String, String> result = new HashMap<String, String>();
-        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-        domFactory.setNamespaceAware(true);
+    public static Map<String, String> createReverseCMDIComponentItemMap(String urlToComponent) throws IOException, ParseException, NavException,
+            XPathParseException, XPathEvalException {
+        final Map<String, String> result = new HashMap<>();
+
         URL url = new URL(urlToComponent);
-        //TODO: Process XML as stream for much better performance (no need to build entire DOM)
-        DocumentBuilder builder = domFactory.newDocumentBuilder();
-        Document doc = builder.parse(url.openStream());
-        XPath xpath = XPathFactory.newInstance().newXPath();
-        NodeList nodeList = (NodeList) xpath.evaluate("//item", doc, XPathConstants.NODESET);
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
-            String shortName = node.getTextContent();
-            String longName = node.getAttributes().getNamedItem("AppInfo").getNodeValue().replaceAll(" \\([a-zA-Z]+\\)$", "");
-            result.put(longName, shortName);
+        VTDGen vg = new VTDGen();
+
+        vg.setDoc(IOUtils.toByteArray(url.openStream()));
+        vg.parse(true);
+        final VTDNav nav = vg.getNav();
+        nav.toElement(VTDNav.ROOT);
+        AutoPilot ap = new AutoPilot(nav);
+        ap.selectXPath("//item");
+
+        AutoPilot appInfoAttribute = new AutoPilot(nav);
+        appInfoAttribute.selectXPath("@AppInfo");
+
+        while (ap.evalXPath() != -1) {
+            String appInfoText = appInfoAttribute.evalXPathToString().replaceAll(" \\([a-zA-Z]+\\)$", "");
+            String itemContent = nav.toNormalizedString(nav.getText());
+            result.put(appInfoText, itemContent);
         }
+
         return result;
     }
 

@@ -19,8 +19,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : Twan Goosen <twan.goosen@mpi.nl>
 */
 
-#facets.sidebaritem {
-    padding: 1em;
+#facets {
+    &.sidebaritem {
+        padding: 1em;
+    }
+
+    &.show-conditionally {
+        &.show-primary {
+            //only primary shown
+            .secondary-facet {
+                display: none; //hide secondary facets
+            }
+        }
+    }
+
+    //toggle link to show/hide secondary facets
+    .show-all-facets-toggle {
+        display: none; //hidden unless 'show-conditionally' is on (see below)
+
+        .button-text {
+            display: none;
+        }
+        &:hover .button-text {
+            display: initial;
+        }
+    }
+
+    &.show-conditionally {
+        .show-all-facets-toggle {
+            display: initial;
+        }
+    }
+
 }
 
 .facet {
@@ -77,16 +107,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         }
     }
 
-    /* reduce padding for facet with selection */
-    &.selected .panel-body {
-        padding: 0 10px;
-    }
-
     /* FACET VALUES */
     .facetvalues { 
         ul {
 
             padding-left: .5em;
+            margin-bottom: 0;
+            border-bottom: 1px dotted @panel-default-border;
 
             li { 
                 list-style: none; 
@@ -97,6 +124,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     text-decoration: none; 
                     width: 149px;
                 } 
+
+                .selectiontype {
+                    font-weight: bold;
+                }
             }
         }
     }

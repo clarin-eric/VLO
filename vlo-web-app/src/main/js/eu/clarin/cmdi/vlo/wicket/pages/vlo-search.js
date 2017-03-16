@@ -15,7 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+$(function () {
+    //enable nicer bootstrap-style tooltip via plugin
+    //http://getbootstrap.com/javascript/#tooltips
+    $('form#search-form [data-toggle="tooltip"]').tooltip();
+});
+
 function startSearch() {
+    //hide tooltip if shown
+    $('form#search-form [data-toggle="tooltip"]').tooltip('hide');
     $('form#search-form').addClass('loading');
     $('form#search-form button').attr("disabled", "disabled");
 }
@@ -23,13 +31,9 @@ function startSearch() {
 function endSearch() {
     $('form#search-form').removeClass('loading');
     $('form#search-form button').removeAttr("disabled");
-}
-
-$(function () {
-    //enable nicer bootstrap-style tooltip via plugin
-    //http://getbootstrap.com/javascript/#tooltips
+    //re-enable tooltip
     $('form#search-form [data-toggle="tooltip"]').tooltip();
-});
+}
 
 function transitionFromSimple(cb) {
     console.log("transition animation..");
@@ -116,7 +120,7 @@ $(document).ready(function () {
         });
 
         //handle 'show all' button
-        $(".simple a#switch-from-simple").click(function (evt) {
+        $(".simple a.switch-from-simple").click(function (evt) {
             evt.preventDefault();
             showSearchContent();
             $('body').animate({

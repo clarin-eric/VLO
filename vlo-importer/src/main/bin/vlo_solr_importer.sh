@@ -3,7 +3,8 @@
 VMOPTS="-Xmx4G"
 
 # Get the script's source directory
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR="$(dirname "$0")"
+cd "${DIR}"
 
 # Filter of the Error stream from which to prevent the admins from getting daily
 #  "can't find java" emails

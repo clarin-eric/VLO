@@ -17,13 +17,11 @@
 package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.VloApplicationTestConfig;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
-import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
-import eu.clarin.cmdi.vlo.config.VloApplicationSpringConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloServicesSpringConfig;
 import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
-import java.io.IOException;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
 import org.apache.solr.common.SolrDocument;
@@ -97,19 +95,15 @@ public class ContentSearchFormPanelTest {
      * Overrides returned application configuration
      */
     @Configuration
-    static class VloApplicationTestConfig extends VloApplicationSpringConfig {
+    static class VloApplicationFcsTestConfig extends VloApplicationTestConfig {
 
         @Override
         public VloConfig vloConfig() {
-            try {
-                // override default config
-                final VloConfig config = new DefaultVloConfigFactory().newConfig();
-                // this globally configured URL should be the action target of the form
-                config.setFederatedContentSearchUrl("http://fcs.org/aggregator");
-                return config;
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            // override default config
+            final VloConfig config = super.vloConfig();
+            // this globally configured URL should be the action target of the form
+            config.setFederatedContentSearchUrl("http://fcs.org/aggregator");
+            return config;
         }
     }
 

@@ -263,7 +263,7 @@ public class MetadataImporterTest extends ImporterTestcase {
                                  * in a suitable way.
                                  */
                                 try {
-                                    processCmdi(file, dataRoot, processor);
+                                    processCmdi(file, dataRoot, processor, false);
                                 } catch (SolrServerException ex) {
                                     Logger.getLogger(MetadataImporterTest.class.getName()).log(Level.SEVERE, null, ex);
                                 }

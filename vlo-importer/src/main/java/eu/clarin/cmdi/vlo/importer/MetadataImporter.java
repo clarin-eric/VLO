@@ -94,6 +94,7 @@ public class MetadataImporter {
         POST_PROCESSORS.put(FacetConstants.FIELD_CLARIN_PROFILE, new CMDIComponentProfileNamePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_RESOURCE_CLASS, new ResourceClassPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_LICENSE, new LicensePostProcessor());
+        POST_PROCESSORS.put(FacetConstants.FIELD_NAME, new NamePostProcessor());
     }
 
     /**
@@ -158,18 +159,30 @@ public class MetadataImporter {
                 // import files from every endpoint
                 for (List<File> centreFiles : centreFilesList) {
                     LOG.info("Processing directory: {}", centreFiles.get(0).getParent());
+                    String centerDirName = centreFiles.get(0).getParentFile().getName();
+
+                    // decide if hierarchy graph will be created for this centre
+                    boolean createHierarchyGraph = false;
+                    if (!config.isProcessHierarchies()) {
+                        createHierarchyGraph = false;
+                    } else if (dataRoot.getProcessHierarchyDirList().contains(centerDirName)) {
+                        createHierarchyGraph = true;
+                    } else if (dataRoot.getProcessHierarchyDirList().contains("*") & !dataRoot.getIgnoreHierarchyDirList().contains(centerDirName)) {
+                        createHierarchyGraph = true;
+                    }
+                    LOG.info("Create structure graph: {}", createHierarchyGraph);
 
                     // identify mdSelfLinks and remove too large files from center file list
-                    LOG.info("Extracting mdSelfLinks");
+                    LOG.info("Checking file list...");
                     Set<String> mdSelfLinkSet = new HashSet<>();
                     Set<File> ignoredFileSet = new HashSet<>();
                     for (File file : centreFiles) {
                         if (config.getMaxFileSize() > 0
                                 && file.length() > config.getMaxFileSize()) {
-                            LOG.info("Skipping " + file.getAbsolutePath() + " because it is too large.");
+                            LOG.info("Skipping {} because it is too large.", file.getAbsolutePath());
                             nrOfFilesTooLarge++;
                             ignoredFileSet.add(file);
-                        } else {
+                        } else if(createHierarchyGraph) {
                             String mdSelfLink = null;
                             try {
                                 mdSelfLink = processor.extractMdSelfLink(file);
@@ -185,19 +198,21 @@ public class MetadataImporter {
                     centreFiles.removeAll(ignoredFileSet);
 
                     // inform structure graph about MdSelfLinks of all files in this collection
-                    ResourceStructureGraph.setOccurringMdSelfLinks(mdSelfLinkSet);
-                    LOG.info("...extracted {} mdSelfLinks", mdSelfLinkSet.size());
+                    if(createHierarchyGraph) {
+                        ResourceStructureGraph.setOccurringMdSelfLinks(mdSelfLinkSet);
+                        LOG.info("...extracted {} mdSelfLinks", mdSelfLinkSet.size());
+                    }
 
                     // process every file in this collection
                     for (File file : centreFiles) {
                         LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
-                        processCmdi(file, dataRoot, processor);
+                        processCmdi(file, dataRoot, processor, createHierarchyGraph);
                     }
                     if (!docs.isEmpty()) {
                         sendDocs();
                     }
                     solrServer.commit();
-                    if (config.isProcessHierarchies()) {
+                    if (createHierarchyGraph) {
                         updateDocumentHierarchy();
                     }
                 }
@@ -366,10 +381,11 @@ public class MetadataImporter {
      * @param file CMDI input file
      * @param dataOrigin
      * @param processor
+     * @param createHierarchyGraph
      * @throws SolrServerException
      * @throws IOException
      */
-    protected void processCmdi(File file, DataRoot dataOrigin, CMDIDataProcessor processor) throws SolrServerException, IOException {
+    protected void processCmdi(File file, DataRoot dataOrigin, CMDIDataProcessor processor, boolean createHierarchyGraph) throws SolrServerException, IOException {
         nrOfFilesAnalyzed++;
         CMDIData cmdiData = null;
         try {
@@ -387,7 +403,7 @@ public class MetadataImporter {
                 SolrInputDocument solrDocument = cmdiData.getSolrDocument();
                 if (solrDocument != null) {
                     updateDocument(solrDocument, cmdiData, file, dataOrigin);
-                    if (config.isProcessHierarchies() && ResourceStructureGraph.getVertex(cmdiData.getId()) != null) {
+                    if (createHierarchyGraph && ResourceStructureGraph.getVertex(cmdiData.getId()) != null) {
                         ResourceStructureGraph.getVertex(cmdiData.getId()).setWasImported(true);
                     }
                 }

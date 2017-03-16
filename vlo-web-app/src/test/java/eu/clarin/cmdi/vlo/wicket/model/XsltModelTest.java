@@ -16,11 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
+import com.carrotsearch.ant.tasks.junit4.dependencies.com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import javax.xml.transform.TransformerException;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.util.ListModel;
 import org.jmock.Expectations;
 import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
@@ -36,14 +39,14 @@ import static org.junit.Assert.*;
 public class XsltModelTest {
     
     private final Mockery context = new JUnit4Mockery();
-    private IModel<URL> urlModel;
+    private IModel<List<URL>> urlModel;
     private XsltModel instance;
     private XmlTransformationService service;
     
     @Before
     public void setUp() {
         service = context.mock(XmlTransformationService.class);
-        urlModel = new Model<URL>();
+        urlModel = new ListModel<>();
         instance = new XsltModel(urlModel) {
             
             @Override
@@ -72,7 +75,7 @@ public class XsltModelTest {
     @Test
     public void testLoad() throws Exception {
         final URL url = new URL("http://document/to/transform.xml");
-        urlModel.setObject(url);
+        urlModel.setObject(Arrays.asList(url));
         
         context.checking(new Expectations() {
             {
@@ -92,7 +95,7 @@ public class XsltModelTest {
     @Test
     public void testLoadTransformerException() throws Exception {
         final URL url = new URL("http://document/to/transform.xml");
-        urlModel.setObject(url);
+        urlModel.setObject(Arrays.asList(url));
         
         context.checking(new Expectations() {
             {

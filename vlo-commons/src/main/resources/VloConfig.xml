@@ -31,7 +31,7 @@
     <printMapping>false</printMapping>
     
     <!-- leave empty to use default packaged definition -->
-    <facetConceptsFile><!-- use default packaged definition --></facetConceptsFile>
+    <facetConceptsFile>${vloconfig.facetConceptsFileLocation}</facetConceptsFile>
     
     <profileSchemaUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/{PROFILE_ID}/xsd</profileSchemaUrl>
     
@@ -39,17 +39,23 @@
     
     <handleServerUrl>http://hdl.handle.net/</handleServerUrl>
     
-    <nationalProjectMapping>nationalProjectsMapping.xml</nationalProjectMapping>
+    <!-- 
+        Mapping file locations.
+        These can be an absolute URL, absolute file path or packaged resource location.
+        Evaluated in the this order.
+    -->
     
-    <organisationNamesUrl>OrganisationControlledVocabulary.xml</organisationNamesUrl>
+    <nationalProjectMapping>${vloconfig.mappingFilesLocation}nationalProjectsMapping.xml</nationalProjectMapping> <!-- bundled resource: /uniform-maps/nationalProjectsMapping.xml -->
     
-    <languageNameVariantsUrl>LanguageNameVariantsMap.xml</languageNameVariantsUrl>
+    <organisationNamesUrl>${vloconfig.mappingFilesLocation}OrganisationControlledVocabulary.xml</organisationNamesUrl> <!-- bundled resource: /uniform-maps/OrganisationControlledVocabulary.xml -->
     
-    <licenseAvailabilityMapUrl>LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl>
+    <languageNameVariantsUrl>${vloconfig.mappingFilesLocation}LanguageNameVariantsMap.xml</languageNameVariantsUrl> <!-- bundled resource: /uniform-maps/LanguageNameVariantsMap.xml -->
     
-    <resourceClassMapUrl>resourceTypeMap.xml</resourceClassMapUrl>
+    <licenseAvailabilityMapUrl>${vloconfig.mappingFilesLocation}LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl> <!-- bundled resource: /uniform-maps/LicenseAvailabilityMap.xml -->
     
-    <licenseURIMapUrl>LicenseURIMap.xml</licenseURIMapUrl>
+    <resourceClassMapUrl>${vloconfig.mappingFilesLocation}resourceTypeMap.xml</resourceClassMapUrl> <!-- bundled resource: /uniform-maps/resourceTypeMap.xml -->
+    
+    <licenseURIMapUrl>${vloconfig.mappingFilesLocation}LicenseURIMap.xml</licenseURIMapUrl> <!-- bundled resource: /uniform-maps/LicenseURIMap.xml -->
     
     <!-- Fields shown as facets on the search page -->
     <facetFields>        
@@ -83,6 +89,9 @@
         <primaryFacetField>format</primaryFacetField>
         <primaryFacetField>keywords</primaryFacetField>
     </primaryFacetFields>
+    
+    <!-- If this many facets or more than this have values, hide non-primary facets -->
+    <hideSecondaryFacetsLimit>8</hideSecondaryFacetsLimit>
     
     <!-- Fields shown in expanded search results on the search page -->
     <searchResultFields>
@@ -156,15 +165,15 @@
     
     <facetOverviewLength>30</facetOverviewLength>
     
-    <countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
+    <countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
     
     <languageLinkTemplate>https://infra.clarin.eu/content/language_info/data/{}.html</languageLinkTemplate>
     
     <feedbackFromUrl>http://www.clarin.eu/node/3759?url=</feedbackFromUrl>
 
-    <language2LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438109/xml</language2LetterCodeComponentUrl>
+    <language2LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438109/xml</language2LetterCodeComponentUrl>
     
-    <language3LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438110/xml</language3LetterCodeComponentUrl>
+    <language3LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438110/xml</language3LetterCodeComponentUrl>
    
     <silToISO639CodesUrl>https://infra.clarin.eu/CMDI/1.1/xslt/sil_to_iso6393.xml</silToISO639CodesUrl>
     

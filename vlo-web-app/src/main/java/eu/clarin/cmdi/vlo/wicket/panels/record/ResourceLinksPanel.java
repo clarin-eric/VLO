@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
+import eu.clarin.cmdi.vlo.wicket.model.ResolvingLinkModel;
 import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
@@ -26,13 +27,13 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
-import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeGlyphicon;
-import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
+import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
+import static eu.clarin.cmdi.vlo.wicket.pages.RecordPage.HIERARCHY_SECTION;
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -71,7 +72,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author twagoo
  */
-public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
+public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
     private final static Logger logger = LoggerFactory.getLogger(ResourceLinksPanel.class);
 
@@ -103,6 +104,8 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                 = new HandleLinkModel(
                         // get landing page from document
                         new SolrFieldStringModel(documentModel, FacetConstants.FIELD_LANDINGPAGE));
+        final SolrFieldModel<String> partCountModel
+                = new SolrFieldModel<>(documentModel, FacetConstants.FIELD_HAS_PART_COUNT);
 
         // create table of resources with optional details
         final ResourcesListView resourceListing = new ResourcesListView("resource", new CollectionListModel<>(resourcesModel));
@@ -125,13 +128,25 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                 setVisible(resourceListing.getPageCount() == 0);
             }
 
-        }.add(new WebMarkupContainer("landingPageContainer") {
-            @Override
-            protected void onConfigure() {
-                setVisible(landingPageModel.getObject() != null);
-            }
+        }
+                .add(new WebMarkupContainer("landingPageContainer") {
+                    @Override
+                    protected void onConfigure() {
+                        setVisible(landingPageModel.getObject() != null);
+                    }
 
-        }.add(new ExternalLink("landingPageLink", landingPageModel))));
+                }.add(new ExternalLink("landingPageLink", landingPageModel)))
+                .add(new WebMarkupContainer("hierarchyLinkContainer") {
+                    @Override
+                    protected void onConfigure() {
+                        setVisible(partCountModel.getObject() != null);
+                    }
+                }.add(new AjaxFallbackLink("hierarchyLink") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        switchToTab(HIERARCHY_SECTION, target);
+                    }
+                })));
 
         //For Ajax updating of resource listing when paging
         setOutputMarkupId(true);
@@ -164,19 +179,28 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         protected void populateItem(ListItem<String> item) {
             final Model<Integer> itemIndexModel = Model.of(item.getIndex());
 
-            final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(resourceStringConverter, item.getModel());
-            item.setDefaultModel(new CompoundPropertyModel<>(resourceInfoModel));
-
-            // add a link that will show the resource details panel when clicked
-            // wrap href in model that transforms handle links
-            final IModel<String> linkModel = new HandleLinkModel(new PropertyModel(resourceInfoModel, "href"));
-            final ExternalLink link = new ExternalLink("showResource", linkModel);
-
             final MarkupContainer columns = new WebMarkupContainer("itemColumns");
             columns.add(new EvenOddClassAppender(itemIndexModel));
             item.add(columns);
 
-            columns.add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel(resourceInfoModel, "resourceType")));;
+            final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(resourceStringConverter, item.getModel());
+            item.setDefaultModel(new CompoundPropertyModel<>(resourceInfoModel));
+
+            // Resource type icon
+            columns.add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel(resourceInfoModel, "resourceType")));
+
+            // Resource link (and/or link label)
+            // Create link that will show the resource when clicked
+            final IModel<String> linkModel = ResolvingLinkModel.modelFor(resourceInfoModel, ResourceLinksPanel.this.getModel());
+            final ExternalLink link = new ExternalLink("showResource", linkModel) {
+                @Override
+                protected void onConfigure() {
+                    super.onConfigure();
+                    //hide if no absolute link could be resolved for the resource (see label below for fallback)
+                    setVisible(linkModel.getObject() != null);
+                }
+
+            };
 
             // set the file name as the link's text content
             link.add(new Label("fileName", new PropertyModel(resourceInfoModel, "fileName")));
@@ -191,6 +215,16 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
             link.setOutputMarkupId(true);
             columns.add(link);
+
+            // Fallback label if no absolute link could be determined
+            columns.add(new WebMarkupContainer("fileNameNotResolvable") {
+                @Override
+                protected void onConfigure() {
+                    super.onConfigure();
+                    setVisible(linkModel.getObject() == null);
+                }
+
+            }.add(new Label("fileName", new PropertyModel(resourceInfoModel, "fileName"))));
 
             // get the friendly name of the resource type dynamically from the resource bundle
             columns.add(new Label("resourceType", StringResourceModelMigration.of("resourcetype.${resourceType}.singular", resourceInfoModel, resourceInfoModel.getObject().getResourceType())));
@@ -322,5 +356,7 @@ public class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         }
 
     }
+
+    protected abstract void switchToTab(String tab, AjaxRequestTarget target);
 
 }

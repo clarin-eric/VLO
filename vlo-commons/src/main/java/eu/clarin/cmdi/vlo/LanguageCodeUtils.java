@@ -16,6 +16,9 @@
  */
 package eu.clarin.cmdi.vlo;
 
+import com.ximpleware.AutoPilot;
+import com.ximpleware.VTDGen;
+import com.ximpleware.VTDNav;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.net.URL;
 import java.util.HashMap;
@@ -23,16 +26,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * Some helper methods for working with language codes, extracted from
@@ -120,7 +116,7 @@ public class LanguageCodeUtils {
      */
     public Map<String, String> getIso6392TToISO6393Map() {
         if (iso639_2TToISO639_3Map == null) {
-            iso639_2TToISO639_3Map = new ConcurrentHashMap<String, String>();
+            iso639_2TToISO639_3Map = new ConcurrentHashMap<>();
             iso639_2TToISO639_3Map.put("alb", "sqi");
             iso639_2TToISO639_3Map.put("arm", "hye");
             iso639_2TToISO639_3Map.put("baq", "eus");
@@ -149,12 +145,12 @@ public class LanguageCodeUtils {
     private Map<String, String> createCodeMap(String url) {
         LOG.info("Creating language code map from {}", url);
         try {
-            Map<String, String> result = new ConcurrentHashMap<String, String>(CommonUtils.createCMDIComponentItemMap(url));
+            Map<String, String> result = new ConcurrentHashMap<>(CommonUtils.createCMDIComponentItemMap(url));
             return result;
         } catch (Exception e) {
             if (CommonUtils.shouldSwallowLookupErrors()) {
                 LOG.warn("Ignoring exception", e);
-                return new HashMap<String, String>();
+                return new HashMap<>();
             } else {
                 throw new RuntimeException("Cannot instantiate postProcessor. URL: " + url, e);
             }
@@ -164,12 +160,12 @@ public class LanguageCodeUtils {
     private Map<String, String> createReverseCodeMap(String url) {
         LOG.debug("Creating language code map.");
         try {
-            Map<String, String> result = new ConcurrentHashMap<String, String>(CommonUtils.createReverseCMDIComponentItemMap(url));
+            Map<String, String> result = new ConcurrentHashMap<>(CommonUtils.createReverseCMDIComponentItemMap(url));
             return result;
         } catch (Exception e) {
             if (CommonUtils.shouldSwallowLookupErrors()) {
                 LOG.warn("Ignoring exception", e);
-                return new HashMap<String, String>();
+                return new HashMap<>();
             } else {
                 throw new RuntimeException("Cannot instantiate postProcessor. URL: " + url, e);
             }
@@ -178,32 +174,42 @@ public class LanguageCodeUtils {
 
     private Map<String, String> createSilToIsoCodeMap() {
         LOG.debug("Creating silToIso code map.");
+        Map<String, String> result = new ConcurrentHashMap<>();
         final String urlString = config.getSilToISO639CodesUrl();
+
         try {
-            Map<String, String> result = new ConcurrentHashMap<String, String>();
-            DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-            domFactory.setNamespaceAware(true);
             URL url = new URL(urlString);
-            //TODO: Process XML as stream for much better performance (no need to build entire DOM)
-            DocumentBuilder builder = domFactory.newDocumentBuilder();
-            Document doc = builder.parse(url.openStream());
-            XPath xpath = XPathFactory.newInstance().newXPath();
-            NodeList nodeList = (NodeList) xpath.evaluate("//lang", doc, XPathConstants.NODESET);
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
-                String silCode = node.getFirstChild().getTextContent();
-                String isoCode = node.getLastChild().getTextContent();
-                result.put(silCode, isoCode);
+            VTDGen vg = new VTDGen();
+
+            vg.setDoc(IOUtils.toByteArray(url.openStream()));
+            vg.parse(true);
+            final VTDNav nav = vg.getNav();
+            nav.toElement(VTDNav.ROOT);
+            AutoPilot ap = new AutoPilot(nav);
+            ap.selectXPath("//lang");
+
+            AutoPilot silAp = new AutoPilot(nav);
+            silAp.selectXPath("sil");
+
+            AutoPilot isoAp = new AutoPilot(nav);
+            isoAp.selectXPath("iso");
+
+            String silContent;
+            String isoContent;
+            while (ap.evalXPath() != -1) {
+                silContent = silAp.evalXPathToString();
+                isoContent = isoAp.evalXPathToString();
+                result.put(silContent, isoContent);
             }
-            return result;
-        } catch (Exception e) {
+        } catch(Exception e) {
             if (CommonUtils.shouldSwallowLookupErrors()) {
                 LOG.warn("Ignoring exception", e);
-                return new HashMap<String, String>();
+                result = new HashMap<>();
             } else {
                 throw new RuntimeException("Cannot instantiate postProcessor. URL: " + urlString, e);
             }
         }
+        return result;
     }
 
     public LanguageInfo decodeLanguageCodeString(String fieldValue) {

@@ -36,9 +36,10 @@ public abstract class ImporterTestcase {
     @Before
     public void setup() throws Exception {
         // read the configuration defined in the packaged configuration file
-        MetadataImporter.config = configFactory.newConfig();
-        config = MetadataImporter.config;
-
+        // and configure to use bundled mappings
+        config = DefaultVloConfigFactory.configureDefaultMappingLocations(configFactory.newConfig());
+       
+        MetadataImporter.config = config;
         MetadataImporter.languageCodeUtils = new LanguageCodeUtils(config);
     }
 

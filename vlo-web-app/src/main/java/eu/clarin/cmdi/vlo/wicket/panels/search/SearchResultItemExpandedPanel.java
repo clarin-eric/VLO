@@ -23,7 +23,7 @@ import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
-import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeGlyphicon;
+import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.components.SmartLinkFieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
@@ -160,7 +160,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
                         .add(resourceName));
 
                 item.add(new ExternalLink("downloadLink", new HandleLinkModel(new PropertyModel(resourceInfoModel, "href"))));
-                item.add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel<String>(resourceInfoModel, "resourceType")));
+                item.add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel<String>(resourceInfoModel, "resourceType")));
             }
         };
     }

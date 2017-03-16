@@ -18,13 +18,14 @@ package eu.clarin.cmdi.vlo.service.impl;
 
 import com.google.common.base.Strings;
 import com.sun.jersey.client.impl.CopyOnWriteHashMap;
+import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.facets.FacetConcept;
 import eu.clarin.cmdi.vlo.facets.FacetConcepts;
 import eu.clarin.cmdi.vlo.facets.FacetConceptsMarshaller;
 import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
-import java.io.File;
-import java.net.URI;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBException;
@@ -44,6 +45,7 @@ public class FacetDescriptionServiceImpl implements FacetDescriptionService {
     private final Map<String, String> descriptions = new CopyOnWriteHashMap<>();
     private final VloConfig config;
     private final FacetConceptsMarshaller marshaller;
+    private final MappingDefinitionResolver mappingDefinitionResolver = new MappingDefinitionResolver(FacetDescriptionServiceImpl.class);
 
     public FacetDescriptionServiceImpl(FacetConceptsMarshaller marshaller, VloConfig vloConfig) {
         this.marshaller = marshaller;
@@ -51,41 +53,35 @@ public class FacetDescriptionServiceImpl implements FacetDescriptionService {
     }
 
     @PostConstruct
-    protected void init() throws JAXBException {
-        final Source streamSource = getFacetConceptsSource();
-        final FacetConcepts facetConcepts = marshaller.unmarshal(streamSource);
-        for (FacetConcept concept : facetConcepts.getFacetConcept()) {
-            if (concept.getDescription() != null) {
-                logger.debug("Found facet definition '{}'", concept.getName());
-                descriptions.put(concept.getName(), concept.getDescription());
+    protected void init() {
+        try {
+            final Source streamSource = getFacetConceptsSource();
+            final FacetConcepts facetConcepts = marshaller.unmarshal(streamSource);
+            for (FacetConcept concept : facetConcepts.getFacetConcept()) {
+                if (concept.getDescription() != null) {
+                    logger.debug("Found facet definition '{}'", concept.getName());
+                    descriptions.put(concept.getName(), concept.getDescription());
+                }
             }
+        } catch (JAXBException | IOException ex) {
+            throw new RuntimeException("Failed to initialise the facet description provider!", ex);
         }
     }
 
-    private Source getFacetConceptsSource() {
+    private Source getFacetConceptsSource() throws IOException {
         final String facetConceptsFile = config.getFacetConceptsFile();
 
         if (Strings.isNullOrEmpty(facetConceptsFile)) {
             logger.info("No facet concepts file configured. Reading default definitions from packaged file.");
             return new StreamSource(getClass().getResourceAsStream(VloConfig.DEFAULT_FACET_CONCEPTS_RESOURCE_FILE));
         } else {
-            final URI facetsFile = resolveFacetsFile(facetConceptsFile);
-            logger.info("Reading facet definitions from {}", facetsFile);
-            return new StreamSource(facetsFile.toString());
-        }
-    }
-
-    private URI resolveFacetsFile(final String facetConceptsFile) {
-        final URI configLocation = config.getConfigLocation();
-        if (configLocation == null) {
-            return new File(facetConceptsFile).toURI();
-        } else if ("jar".equals(configLocation.getScheme())) {
-            // some trickery to replace URI pointing inside JAR (fingers crossed)
-            final String jarUri = configLocation.toString().replaceAll("!.*$", "!" + facetConceptsFile);
-            return URI.create(jarUri);
-        } else {
-            // resolve against config
-            return configLocation.resolve(facetConceptsFile);
+            final InputStream stream = mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(facetConceptsFile);
+            if (stream != null) {
+                logger.info("Reading facet definitions from {}", facetConceptsFile);
+                return new StreamSource(stream);
+            } else {
+                return null;
+            }
         }
     }
 

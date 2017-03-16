@@ -88,6 +88,11 @@
     border-bottom: 1px solid #ccc;
     padding-bottom: 1em;
 
+    .search-result-collection-label {
+        margin-top: -(@line-height-computed / 2) + 2;
+        margin-bottom: (@line-height-computed / 2) - 2;
+    }
+
     .searchresultmoreless {
         display: block;
         float: left;
@@ -150,26 +155,6 @@
 
 }
 
-/*******************
-/* FACETS AND OPTIONS
-/*******************/
-#facets {
-    &.show-primary {
-        .secondary-facet {
-            display: none;
-        }
-    }
-
-    .show-all-facets-toggle {
-        .button-text {
-            display: none;
-        }
-        &:hover .button-text {
-            display: initial;
-        }
-    }
-}
-
 // Simple search layout
 .simple-only {
     display: none;
@@ -228,5 +213,17 @@
                 }
             }
         }
+    }
+}
+
+/*******************
+/* SEARCH WORDS HIGHLIGHTING
+/*******************/
+span.searchword {
+    font-weight: bold;
+    background-color: darken(@body-bg, 10%);
+
+    .table-striped>tbody>tr:nth-of-type(odd) & {
+        background-color: darken(@table-bg-accent, 10%);
     }
 }

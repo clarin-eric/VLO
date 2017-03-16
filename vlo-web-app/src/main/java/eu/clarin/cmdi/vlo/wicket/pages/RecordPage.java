@@ -46,6 +46,7 @@ import eu.clarin.cmdi.vlo.wicket.panels.ContentSearchFormPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.HierarchyPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.record.RecordDetailsPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordNavigationPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.ResourceLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultItemLicensePanel;
@@ -61,8 +62,6 @@ import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -75,8 +74,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 
@@ -102,8 +99,6 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     private PageParametersConverter<QueryFacetsSelection> selectionParametersConverter;
     @SpringBean(name = "searchContextParamsConverter")
     private PageParametersConverter<SearchContext> contextParamConverter;
-    @SpringBean(name = "basicPropertiesFilter")
-    private FieldFilter basicPropertiesFilter;
     @SpringBean(name = "technicalPropertiesFilter")
     private FieldFilter technicalPropertiesFilter;
     @SpringBean(name = "documentFieldOrder")
@@ -179,10 +174,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         tabs = createTabs("tabs");
         final StringValue initialTab = params.get(VloWebAppParameters.RECORD_PAGE_TAB);
         if (!initialTab.isEmpty()) {
-            final int tabIndex = TABS_ORDER.indexOf(initialTab.toString());
-            if (tabIndex >= 0) {
-                tabs.setSelectedTab(tabIndex);
-            }
+            switchToTab(initialTab.toString(), null);
         }
         add(tabs);
 
@@ -197,10 +189,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 return new AjaxFallbackLink(id) {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        tabs.setSelectedTab(TABS_ORDER.indexOf(AVAILABILITY_SECTION));
-                        if (target != null) {
-                            target.add(tabs);
-                        }
+                        switchToTab(AVAILABILITY_SECTION, target);
                     }
                 };
             }
@@ -214,9 +203,13 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         tabs.set(TABS_ORDER.indexOf(DETAILS_SECTION), new AbstractTab(Model.of("Record details")) {
             @Override
             public Panel getPanel(String panelId) {
-                final FieldsTablePanel fieldsTable = new FieldsTablePanel(panelId, new DocumentFieldsProvider(getModel(), basicPropertiesFilter, fieldOrder));
-                fieldsTable.add(new HighlightSearchTermBehavior());
-                return fieldsTable;
+                return new RecordDetailsPanel(panelId, getModel()) {
+                    @Override
+                    protected void switchToTab(String tab, AjaxRequestTarget target) {
+                        RecordPage.this.switchToTab(tab, target);
+                    }
+
+                };
             }
         });
         tabs.set(TABS_ORDER.indexOf(AVAILABILITY_SECTION), new AbstractTab(Model.of("Availability")) {
@@ -231,7 +224,13 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 new SolrFieldStringModel(getModel(), FacetConstants.FIELD_RESOURCE_COUNT))) {
             @Override
             public Panel getPanel(String panelId) {
-                return (new ResourceLinksPanel(panelId, getModel()));
+                return (new ResourceLinksPanel(panelId, getModel()) {
+                    @Override
+                    protected void switchToTab(String tab, AjaxRequestTarget target) {
+                        RecordPage.this.switchToTab(tab, target);
+                    }
+
+                });
             }
         });
         tabs.set(TABS_ORDER.indexOf(ALL_METADATA_SECTION), new AbstractTab(Model.of("All metadata")) {
@@ -369,6 +368,16 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             }
 
         };
+    }
+
+    private void switchToTab(String tab, AjaxRequestTarget target) {
+        final int tabIndex = TABS_ORDER.indexOf(tab);
+        if (tabIndex >= 0) {
+            RecordPage.this.tabs.setSelectedTab(tabIndex);
+            if (target != null) {
+                target.add(RecordPage.this.tabs);
+            }
+        }
     }
 
     @Override

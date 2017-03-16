@@ -24,8 +24,9 @@ import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermScriptFactory;
+import eu.clarin.cmdi.vlo.wicket.components.FacetSelectLink;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
-import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeGlyphicon;
+import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
@@ -46,6 +47,7 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -85,9 +87,13 @@ public class SearchResultItemPanel extends Panel {
         this.selectionModel = selectionModel;
         this.documentModel = documentModel;
 
-        final Link recordLink = new RecordPageLink("recordLink", documentModel, selectionModel);
-        recordLink.add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME, "Unnamed record"));
-        add(recordLink);
+        add(new RecordPageLink("recordLink", documentModel, selectionModel)
+                .add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME, "Unnamed record"))
+        );
+
+        add(new FacetSelectLink("searchResultCollectionLink", new SolrFieldStringModel(documentModel, FacetConstants.FIELD_COLLECTION), Model.of(FacetConstants.FIELD_COLLECTION))
+                .add(new SolrFieldLabel("searchResultCollectionName", documentModel, FacetConstants.FIELD_COLLECTION, "none"))
+        );
 
         // add a link to toggle the expansion state
         add(createExpansionStateToggle("expansionStateToggle"));
@@ -104,28 +110,39 @@ public class SearchResultItemPanel extends Panel {
         final SolrFieldModel<String> resourcesModel = new SolrFieldModel<>(documentModel, FacetConstants.FIELD_RESOURCE);
         // wrap with a count provider
         final ResouceTypeCountDataProvider countProvider = new ResouceTypeCountDataProvider(resourcesModel, countingService);
+        // part count model to determine whether a record is a collection record
+        final SolrFieldModel<String> partCountModel = new SolrFieldModel<>(documentModel, FacetConstants.FIELD_HAS_PART_COUNT);
 
         // add a container for the resource type counts (only visible if there are actual resources)
         add(new WebMarkupContainer("resources")
                 // view that shows provided counts
                 .add(new ResourceCountDataView("resourceCount", countProvider))
+                //badge for collection records
+                .add(new WebMarkupContainer("collectionRecord") {
+
+                    @Override
+                    protected void onConfigure() {
+                        super.onConfigure();
+                        setVisible(partCountModel.getObject() != null);
+                    }
+                }.add(new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.HIERARCHY_SECTION))) // collection, go to hierarchy instead of records
+                //badge for records without resources (resource count data view will not yield any badges)
                 .add(new WebMarkupContainer("noResources") {
 
                     @Override
                     protected void onConfigure() {
                         super.onConfigure();
-                        setVisible(countProvider.size() == 0);
+                        setVisible(countProvider.size() == 0 && partCountModel.getObject() == null);
                     }
-                }.add(new RecordPageLink("recordLink", documentModel, selectionModel)) //initial tab *not* resources as there are none...
-                )
+                }.add(new RecordPageLink("recordLink", documentModel, selectionModel))) //initial tab *not* resources as there are none...
         );
 
         add(new SearchResultItemLicensePanel("licenseInfo", documentModel, selectionModel, availabilityOrdering));
 
-        final MarkupContainer scoreContainer = new WebMarkupContainer("scoreContainer");
-        scoreContainer.add(new Label("score", new SolrFieldStringModel(documentModel, FacetConstants.FIELD_SOLR_SCORE)));
-        scoreContainer.setVisible(config.isShowResultScores());
-        add(scoreContainer);
+        add(new WebMarkupContainer("scoreContainer")
+                .add(new Label("score", new SolrFieldStringModel(documentModel, FacetConstants.FIELD_SOLR_SCORE)))
+                .setVisible(config.isShowResultScores())
+        );
 
         setOutputMarkupId(true);
     }
@@ -202,7 +219,7 @@ public class SearchResultItemPanel extends Panel {
             final Link resourceLink = new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.RESOURCES_SECTION);
             item.add(resourceLink
                     .add(new Label("resourceCountLabel", new PropertyModel<String>(item.getModel(), "count")))
-                    .add(new ResourceTypeGlyphicon("resourceTypeIcon", new PropertyModel<String>(item.getModel(), "resourceType")))
+                    .add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel<String>(item.getModel(), "resourceType")))
                     .add(new AttributeModifier("title", getResourceCountModel(item.getModel())))
             );
         }

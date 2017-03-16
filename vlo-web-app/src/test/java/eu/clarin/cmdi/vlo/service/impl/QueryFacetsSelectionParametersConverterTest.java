@@ -63,7 +63,7 @@ public class QueryFacetsSelectionParametersConverterTest {
         params.add("fq", "facet5:valueD"); //not in list, should get ignored
         params.add("fq", ""); // not a valid facet selection
         params.add("fq", "invalid"); // not a valid facet selection
-        params.add("fqType", "facet1:or");
+        params.add("fqType", "facet1:and");
         params.add("fqType", "facet3:not_empty");
         params.add("fqType", "facet4:illegaltype"); //should get ignored
         params.add("fqType", "illegal-no-colon"); //should get ignored
@@ -76,10 +76,10 @@ public class QueryFacetsSelectionParametersConverterTest {
         assertThat(result.getSelectionValues("facet1").getValues(), hasItem("valueA"));
         assertThat(result.getSelectionValues("facet1").getValues(), hasItem("valueB"));
         assertThat(result.getSelectionValues("facet2").getValues(), hasItem("value:C"));
-        // OR explicitly set
-        assertEquals(FacetSelectionType.OR, result.getSelectionValues("facet1").getSelectionType());
-        // AND is default
-        assertEquals(FacetSelectionType.AND, result.getSelectionValues("facet2").getSelectionType());
+        // AND explicitly set
+        assertEquals(FacetSelectionType.AND, result.getSelectionValues("facet1").getSelectionType());
+        // OR is default
+        assertEquals(FacetSelectionType.OR, result.getSelectionValues("facet2").getSelectionType());
         // NOT_EMPTY explicitly set
         assertEquals(FacetSelectionType.NOT_EMPTY, result.getSelectionValues("facet3").getSelectionType());
     }

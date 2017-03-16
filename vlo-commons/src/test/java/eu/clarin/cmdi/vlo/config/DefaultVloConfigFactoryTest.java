@@ -590,20 +590,6 @@ public class DefaultVloConfigFactoryTest {
     }
 
     /**
-     * Test the getNationalProjectMapping method
-     */
-    @Test
-    public void testGetNationalProjectMapping() {
-
-        System.out.println("getNationalProjectMapping");
-
-        String expResult = "nationalProjectsMapping.xml";
-        String result = config.getNationalProjectMapping();
-
-        assertEquals(expResult, result);
-    }
-
-    /**
      * Test the setNationalProjectMapping method
      */
     @Test
@@ -702,7 +688,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("getCountryComponentUrl");
 
-        String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml";
+        String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438104/xml";
         String result = config.getCountryComponentUrl();
 
         assertEquals(expResult, result);
@@ -716,7 +702,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("setCountryComponentUrl");
 
-        String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438104/xml";
+        String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438104/xml";
 
         config.setCountryComponentUrl(param);
 
@@ -733,7 +719,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("getLanguage2LetterCodeComponentUrl");
 
-        String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438109/xml";
+        String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438109/xml";
         String result = config.getLanguage2LetterCodeComponentUrl();
 
         assertEquals(expResult, result);
@@ -747,7 +733,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("setLanguage2LetterCodeComponentUrl");
 
-        String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438109/xml";
+        String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438109/xml";
 
         config.setLanguage2LetterCodeComponentUrl(param);
 
@@ -764,7 +750,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("getLanguage3LetterCodeComponentUrl");
 
-        String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438110/xml";
+        String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438110/xml";
         String result = config.getLanguage3LetterCodeComponentUrl();
 
         assertEquals(expResult, result);
@@ -778,7 +764,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("setLanguage3LetterCodeComponentUrl");
 
-        String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/components/clarin.eu:cr1:c_1271859438110/xml";
+        String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438110/xml";
 
         config.setLanguage3LetterCodeComponentUrl(param);
 

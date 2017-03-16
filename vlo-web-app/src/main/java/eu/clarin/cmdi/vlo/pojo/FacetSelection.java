@@ -18,11 +18,14 @@ package eu.clarin.cmdi.vlo.pojo;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
 
 /**
  * Represents the selection for a single facet
@@ -34,16 +37,6 @@ public class FacetSelection implements Serializable {
     private final FacetSelectionType selectionType;
     private Collection<String> values;
     private final Map<String, FacetSelectionValueQualifier> qualifiers;
-
-    /**
-     * Creates an {@link FacetSelectionType#AND} selection for the specified
-     * values
-     *
-     * @param values
-     */
-    public FacetSelection(Collection<String> values) {
-        this(FacetSelectionType.AND, values);
-    }
 
     /**
      * Creates an empty selection with the specified type
@@ -59,7 +52,9 @@ public class FacetSelection implements Serializable {
     }
 
     public FacetSelection(FacetSelectionType selectionType, Collection<String> values, Map<String, FacetSelectionValueQualifier> qualifiers) {
+
         this.selectionType = selectionType;
+
         // always store as array list, which is modifiable and serialisable
         if (values instanceof ArrayList) {
             this.values = values;
@@ -92,7 +87,8 @@ public class FacetSelection implements Serializable {
     }
 
     public void setValues(Collection<String> values) {
-        this.values = values;
+        //this.values = values;
+        this.values.addAll(values);
     }
 
     /**

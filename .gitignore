@@ -4,8 +4,10 @@
 /vlo-importer/target/
 /vlo-distribution/target/
 /vlo-web-app/target/
-/vlo-importer/nbactions*
-/vlo-web-app/nbactions*
+*.log*
+nbactions*
+nbproject*
 .DS_Store
+*~
 /vlo-sitemap/target/
 /vlo-statistics/target/

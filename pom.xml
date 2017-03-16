@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                                                     http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
@@ -10,7 +12,7 @@
     <!-- When updating the version number here, also update the version number
          in each module's pom.xml
     -->
-    <version>4.0.2</version>
+    <version>4.1.0-beta1</version>
     
     <description>Virtual Language Observatory (VLO) parent project</description>
     <organization>
@@ -30,9 +32,14 @@
     </modules>
 
     <properties>
+        <!-- VLO-mapping project version to obtain default mappings from at build time -->
+        <vlo.mapping.version>1.0-beta1</vlo.mapping.version>
+        
+        <!-- Common runtime dependency versions -->
         <solr.version>4.10.4</solr.version>
         <slf4j.version>1.7.20</slf4j.version>
         <saxon.version>9.5.1-8</saxon.version>
+        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.hint.license>gpl30</netbeans.hint.license>
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -64,8 +71,21 @@
         </plugins>
     </reporting>
     
-    <!-- TODO: get rid of dependency on MPI repository -->
     <repositories>
+        <repository>
+            <id>CLARIN</id>
+            <name>CLARIN Repository</name>
+            <url>https://nexus.clarin.eu/content/repositories/Clarin</url>
+        </repository>
+        <repository>
+            <id>CLARIN-Snapshot</id>
+            <name>CLARIN Snapshot Repository</name>
+            <url>https://nexus.clarin.eu/content/repositories/clarin-snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <!-- TODO: get rid of dependency on MPI repository -->
         <repository>
             <id>MPI</id>
             <name>MPI LAT Repository</name>

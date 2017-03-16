@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.VloWebSession;
 import java.util.Collection;
 
 import org.apache.solr.client.solrj.response.FacetField;
@@ -26,13 +27,13 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.http.flow.AbortWithHttpErrorCodeException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
@@ -60,11 +61,18 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
     private VloConfig vloConfig;
 
     private final IModel<QueryFacetsSelection> selectionModel;
+    private final IModel<FacetSelectionType> selectionTypeModeModel;
 
     public AllFacetValuesPage(PageParameters params) {
         super(params);
 
         this.selectionModel = Model.of(parametersConverter.fromParameters(params));
+
+        final FacetSelectionType sessionSelectionType = VloWebSession.get().getFacetSelectionTypeMode();
+        this.selectionTypeModeModel = Model.of(
+                sessionSelectionType == null
+                        ? FacetSelectionType.OR
+                        : sessionSelectionType);
         final StringValue facetValue = params.get(SELECTED_FACET_PARAM);
         if (facetValue.isEmpty()) {
             Session.get().error("No facet provided for all values page");
@@ -85,9 +93,10 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
         addComponents();
     }
 
-    public AllFacetValuesPage(IModel<FacetField> fieldModel, final IModel<QueryFacetsSelection> selectionModel) {
+    public AllFacetValuesPage(IModel<FacetField> fieldModel, final IModel<QueryFacetsSelection> selectionModel, IModel<FacetSelectionType> selectionTypeModeModel) {
         super(fieldModel);
         this.selectionModel = selectionModel;
+        this.selectionTypeModeModel = selectionTypeModeModel;
         addComponents();
     }
 
@@ -96,10 +105,10 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
 
         add(new Label("name", new SolrFieldNameModel(new PropertyModel<String>(getModel(), "name"))));
 
-        add(new AllFacetValuesPanel("values", getModel()) {
+        add(new AllFacetValuesPanel("values", getModel(), selectionTypeModeModel) {
 
             @Override
-            protected void onValuesSelected(Collection<String> values, AjaxRequestTarget target) {
+            protected void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
                 // Create updated selection state
                 final QueryFacetsSelection newSelection;
                 if (selectionModel != null) {
@@ -107,7 +116,12 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
                 } else {
                     newSelection = new QueryFacetsSelection();
                 }
-                newSelection.selectValues(getModelObject().getName(), new FacetSelection(values));
+                final FacetSelection facetSelection = newSelection.getSelectionValues(getModelObject().getName());
+                if (facetSelection != null) {
+                    facetSelection.getValues().addAll(values);
+                } else {
+                    newSelection.selectValues(getModelObject().getName(), new FacetSelection(selectionType, values));
+                }
 
                 // Redirect to search page with updated model
                 final FacetedSearchPage searchPage = new FacetedSearchPage(Model.of(newSelection));
@@ -120,6 +134,7 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
     public void detachModels() {
         super.detachModels();
         selectionModel.detach();
+        selectionTypeModeModel.detach();
     }
 
 }

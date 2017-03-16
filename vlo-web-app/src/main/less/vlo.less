@@ -23,10 +23,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* global settings */
 @license-icons-dir: "../images/license/";
 
-@import "bootstrap/less/bootstrap";
+/* CLARIN flavoured bootstrap from the base_style project, included build time
+ * usign the maven-dependency-plugin (unpack goal) and maven-resources-plugin
+ * (copy-resources goal)
+ *
+ * See pom.xml and https://github.com/clarin-eric/base_style
+ */
+@import "../bootstrap/less/clarin-bootstrap";
 
-/* vlo styling */
+/* VLO styling */
 @import "inc/vlo-common";
-
-
-

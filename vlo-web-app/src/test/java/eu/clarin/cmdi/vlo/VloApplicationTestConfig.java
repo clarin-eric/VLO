@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo;
 
 import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
 import eu.clarin.cmdi.vlo.config.VloApplicationSpringConfig;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloConfigFactory;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,5 +34,10 @@ public class VloApplicationTestConfig extends VloApplicationSpringConfig {
     @Override
     public VloConfigFactory vloConfigFactory() {
         return new DefaultVloConfigFactory();
+    }
+
+    @Override
+    public VloConfig vloConfig() {
+        return DefaultVloConfigFactory.configureDefaultMappingLocations(super.vloConfig());
     }
 }

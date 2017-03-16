@@ -1,5 +1,7 @@
 package eu.clarin.cmdi.vlo;
 
+import com.google.common.collect.Ordering;
+import eu.clarin.cmdi.vlo.wicket.RobotAwareWebResponse;
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
 import de.agilecoders.wicket.core.settings.ITheme;
@@ -39,9 +41,17 @@ import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.wicket.Page;
+import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
+import org.apache.wicket.request.http.WebRequest;
+import org.apache.wicket.request.http.WebResponse;
 
 /**
  * Application object for your web application. If you want to run this
@@ -50,9 +60,9 @@ import org.apache.wicket.markup.head.IHeaderResponse;
  * @see eu.clarin.cmdi.Start#main(String[])
  */
 public class VloWicketApplication extends WebApplication implements ApplicationContextAware {
-
+    
     private final static Logger logger = LoggerFactory.getLogger(VloWicketApplication.class);
-
+    
     @Inject
     private SolrDocumentService documentService;
     @Inject
@@ -62,10 +72,12 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     @Inject
     private FacetDescriptionService facetDescriptionService;
     @Inject
+    private Map<String, Ordering<String>> fieldValueOrderings;
+    @Inject
     private PermalinkService permalinkService;
     @Inject
     private VloConfig vloConfig;
-
+    
     private ApplicationContext applicationContext;
     private String appVersionQualifier;
 
@@ -89,7 +101,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
 
         // register global resource bundles (from .properties files)
         registerResourceBundles();
-
+        
         // mount pages on URL paths
         mountPages();
 
@@ -103,7 +115,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         appVersionQualifier = determineVersionQualifier();
         logger.info("Version qualifier: {}", appVersionQualifier);
     }
-
+    
     private void registerResourceBundles() {
         // this listener will inject any spring beans that need to be autowired
         getComponentInstantiationListeners().add(new SpringComponentInjector(this, applicationContext));
@@ -124,7 +136,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
                 JavaScriptResources.getJQueryWatermarkJS()
         );
     }
-
+    
     private void mountPages() {
         // Faceted search page (simple search is on root)
         mountPage("/search", FacetedSearchPage.class);
@@ -142,13 +154,13 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         // Help page
         mountPage("/error/${" + ErrorPage.PAGE_PARAMETER_RESPONSE_CODE + "}", ErrorPage.class);
     }
-
+    
     private void setupCache() {
         // configure cache by applying the vlo configuration settings to it
         final int pagesInApplicationCache = vloConfig.getPagesInApplicationCache();
         logger.info("Setting Wicket in-memory cache size to {}", pagesInApplicationCache);
         this.getStoreSettings().setInmemoryCacheSize(pagesInApplicationCache);
-
+        
         final Bytes sessionCacheSize = Bytes.kilobytes((long) vloConfig.getSessionCacheSize());
         logger.info("Setting Wicket max size per session to {}", sessionCacheSize);
         this.getStoreSettings().setMaxSizePerSession(sessionCacheSize);
@@ -183,6 +195,11 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     public static VloWicketApplication get() {
         return (VloWicketApplication) Application.get();
     }
+    
+    @Override
+    public Session newSession(Request request, Response response) {
+        return new VloWebSession(request);
+    }
 
     /**
      * Method needed for dynamic injection of application context (as happens in
@@ -194,6 +211,12 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+    
+    @Override
+    protected WebResponse newWebResponse(final WebRequest webRequest, HttpServletResponse httpServletResponse) {
+        //Search engine optimisation: prevent JSESSIONID in URL for web crawlers
+        return new RobotAwareWebResponse((ServletWebRequest) webRequest, httpServletResponse);
     }
 
     /**
@@ -211,19 +234,23 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     public XmlTransformationService getCmdiTransformationService() {
         return cmdiTransformationService;
     }
-
+    
     public FieldValueConverterProvider getFieldValueConverterProvider() {
         return fieldValueConverterProvider;
     }
-
+    
+    public Map<String, Ordering<String>> getFieldValueOrderings() {
+        return fieldValueOrderings;
+    }
+    
     public FacetDescriptionService getFacetDescriptionService() {
         return facetDescriptionService;
     }
-
+    
     public PermalinkService getPermalinkService() {
         return permalinkService;
     }
-
+    
     public String getAppVersionQualifier() {
         return appVersionQualifier;
     }
@@ -245,35 +272,36 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         mount(mapper);
         return mapper;
     }
-
+    
     private void initBootstrap() {
         Bootstrap.install(this,
                 new BootstrapSettings()
-                //bootstrap CSS is provided via markup (CSS link in HTML head)
-                .setThemeProvider(new SingleThemeProvider(new ExtremeNoopTheme())));
+                        //bootstrap CSS is provided via markup (CSS link in HTML head)
+                        .setThemeProvider(new SingleThemeProvider(new ExtremeNoopTheme()))
+                        .setJsResourceReference(JavaScriptResources.getBootstrapJS()));
     }
-
+    
     private static class ExtremeNoopTheme implements ITheme {
-
+        
         @Override
         public String name() {
             return "noop-theme";
         }
-
+        
         @Override
         public List<HeaderItem> getDependencies() {
             return Collections.emptyList();
         }
-
+        
         @Override
         public void renderHead(IHeaderResponse response) {
         }
-
+        
         @Override
         public Iterable<String> getCdnUrls() {
             return Collections.emptyList();
         }
-
+        
     }
-
+    
 }

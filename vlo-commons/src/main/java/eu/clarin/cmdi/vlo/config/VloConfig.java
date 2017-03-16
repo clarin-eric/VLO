@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class VloConfig {
 
     public static final String LANGUAGE_LINK_TEMPLATE_LANGUAGE_CODE_PLACEHOLDER = "{}";
-    public static final String DEFAULT_FACET_CONCEPTS_RESOURCE_FILE = "/facetConcepts.xml";
+    public static final String DEFAULT_FACET_CONCEPTS_RESOURCE_FILE = "/mapping/facetConcepts.xml"; //resource included into vlo-commons during build from vlo-mapping project
 
     /*
      * VLO application parameter members<br><br>
@@ -153,6 +153,8 @@ public class VloConfig {
     @XmlElementWrapper(name = "primaryFacetFields")
     private Set<String> primaryFacetField;
 
+    private int hideSecondaryFacetsLimit = 7;
+
     private String collectionFacet;
 
     // test related parameters
@@ -166,7 +168,7 @@ public class VloConfig {
     private String cqlEndpointAlternative = "";
 
     private URI configLocation;
-    
+
     private String lrSwitchboardBaseUrl = "http://weblicht.sfs.uni-tuebingen.de/clrs/";
 
     /**
@@ -1168,6 +1170,14 @@ public class VloConfig {
 
     public void setLrSwitchboardBaseUrl(String lrSwitchboardBaseUrl) {
         this.lrSwitchboardBaseUrl = lrSwitchboardBaseUrl;
+    }
+
+    public int getHideSecondaryFacetsLimit() {
+        return hideSecondaryFacetsLimit;
+    }
+
+    public void setHideSecondaryFacetsLimit(int hideSecondaryFacetsLimit) {
+        this.hideSecondaryFacetsLimit = hideSecondaryFacetsLimit;
     }
 
 }

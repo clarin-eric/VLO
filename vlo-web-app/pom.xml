@@ -6,21 +6,22 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.0.2</version>
+        <version>4.1.0-beta1</version>
     </parent>
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-web-app</artifactId>
     <packaging>war</packaging>
-    <version>4.0.2</version>
+    <version>4.1.0-beta1</version>
     <name>VLO Web Application</name>
     <description></description>
 
     <properties>
-        <wicket.version>7.5.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
-        <spring.version>4.2.5.RELEASE</spring.version>
+        <wicket.version>7.6.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
+        <spring.version>4.3.4.RELEASE</spring.version>
         <jetty.version>8.1.17.v20150415</jetty.version>
+        <clarin-basestyle.version>0.2.0</clarin-basestyle.version>
         <!-- selects the appender for the log4j root logger -->
         <log4j.appender>File</log4j.appender>
         <vlo.logging.level>INFO</vlo.logging.level>
@@ -227,12 +228,95 @@
                 </configuration>
             </plugin>
             <plugin>
-                <!-- Compiles .less files into .css -->
+                <!-- Unpacks CLARIN flavoured bootstrap LESS sources -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>eu.clarin.style</groupId>
+                                    <artifactId>base-style</artifactId>
+                                    <version>${clarin-basestyle.version}</version>
+                                    <classifier>less-with-bootstrap</classifier>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/generated-sources/bootstrap</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!-- Copies 'local' LESS sources and fonts to the right destination -->
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <!-- copy less sources -->
+                        <id>copy-less</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/generated-sources/less</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/src/main/less</directory>
+                                </resource>
+                            </resources>              
+                        </configuration>            
+                    </execution>
+                    <execution>
+                        <!-- copy fonts from bootstrap distribution -->
+                        <id>copy-fonts</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/${project.build.finalName}/fonts</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/generated-sources/bootstrap/fonts</directory>
+                                </resource>
+                            </resources>              
+                        </configuration>            
+                    </execution>
+                    <execution>
+                        <!-- copy fonts from bootstrap distribution -->
+                        <id>copy-script</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/${project.build.finalName}/script</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/generated-sources/bootstrap/js</directory>
+                                </resource>
+                            </resources>              
+                        </configuration>            
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!-- Compiles combined LESS files into .css -->
                 <groupId>org.lesscss</groupId>
                 <artifactId>lesscss-maven-plugin</artifactId>
                 <version>1.7.0.1.1</version>
                 <configuration>
-                    <sourceDirectory>${project.basedir}/src/main/less</sourceDirectory>
+                    <sourceDirectory>${project.build.directory}/generated-sources/less</sourceDirectory>
                     <outputDirectory>${project.build.directory}/${project.build.finalName}/css</outputDirectory>
                     <compress>true</compress>
                     <force>true</force>
@@ -271,12 +355,12 @@
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
-                <version>2.2.0</version>
+                <version>2.2.2</version>
                 <executions>
                     <execution>
                         <goals>
                             <goal>revision</goal>
-                         </goals>
+                        </goals>
                     </execution>
                 </executions>
                 <configuration>

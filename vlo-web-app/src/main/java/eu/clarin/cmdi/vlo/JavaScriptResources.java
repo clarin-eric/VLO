@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo;
 
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
+import org.apache.wicket.request.resource.ContextRelativeResourceReference;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
@@ -28,16 +29,22 @@ import org.apache.wicket.request.resource.ResourceReference;
  */
 public final class JavaScriptResources {
 
+    private final static ResourceReference BOOTSTRAP = new ContextRelativeResourceReference("script/bootstrap.js"); //bootstrap scripts are extracted from CLARIN's base style bootstrap package
+    private final static JavaScriptResourceReference JQUERY_WATERMARK = new JavaScriptResourceReference(VloBasePage.class, "jquery.watermark-3.1.4/jquery.watermark.min.js");
+    private final static JavaScriptResourceReference HIGHLIGHT = new JavaScriptResourceReference(RecordPage.class, "jquery.highlight.js");
+    private final static CssResourceReference JQUERY_UI_CSS = new CssResourceReference(VloBasePage.class, "jquery-ui-1.11.4.custom/jquery-ui.min.css");
+
     private final static JavaScriptResourceReference VLO_FRONT = new JavaScriptResourceReference(VloBasePage.class, "vlo-front.js");
     private final static JavaScriptResourceReference VLO_HEADER = new JavaScriptResourceReference(VloBasePage.class, "vlo-header.js");
     private final static JavaScriptResourceReference VLO_SYNTAX_HELP = new JavaScriptResourceReference(VloBasePage.class, "vlo-syntax-help.js");
     private final static JavaScriptResourceReference VLO_FACETS = new JavaScriptResourceReference(VloBasePage.class, "vlo-facets.js");
     private final static JavaScriptResourceReference SEARCH = new JavaScriptResourceReference(VloBasePage.class, "vlo-search.js");
     private final static JavaScriptResourceReference FIELDS_TABLE = new JavaScriptResourceReference(RecordPage.class, "vlo-fields-table.js");
-    private final static CssResourceReference JQUERY_UI_CSS = new CssResourceReference(VloBasePage.class, "jquery-ui-1.11.4.custom/jquery-ui.min.css");
-    private final static JavaScriptResourceReference JQUERY_WATERMARK = new JavaScriptResourceReference(VloBasePage.class, "jquery.watermark-3.1.4/jquery.watermark.min.js");
-    private final static JavaScriptResourceReference HIGHLIGHT = new JavaScriptResourceReference(RecordPage.class, "jquery.highlight.js");
 
+    public static ResourceReference getBootstrapJS() {
+        return BOOTSTRAP;
+    }
+    
     public static JavaScriptResourceReference getVloFrontJS() {
         return VLO_FRONT;
     }

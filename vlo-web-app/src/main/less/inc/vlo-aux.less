@@ -21,8 +21,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* "Help" page */
 
-.example-query {
-    font-style: italic;   
+
+#help {
+
+    .help-section {
+        padding-bottom: 1em;
+        clear: both;
+
+        h2 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: .2em;
+        }
+    }
+
+    .example-query {
+        font-style: italic;   
+    }
+
+    img {
+        padding: 4px;
+        margin: 4px;
+        border: 1px solid #ccc;
+    }
 }
 
 /* "About" page */
@@ -43,5 +63,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 .version-info-table {
     td {
         padding: 0 .5em;
+    }
+}
+
+/* Utils */
+.row.no-gutter {
+    margin-right: 0;
+    margin-left: 0;
+    
+    &  > [class*='col-'] {
+        padding-right:0;
+        padding-left:0;
     }
 }

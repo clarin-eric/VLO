@@ -1,8 +1,7 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -10,8 +9,11 @@ import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.normalization.NormalizationService;
 import eu.clarin.cmdi.vlo.normalization.NormalizationVocabulary;
+import eu.clarin.cmdi.vlo.normalization.VocabularyEntry;
 import eu.clarin.cmdi.vlo.pojo.VariantsMap;
 import eu.clarin.cmdi.vlo.transformers.VariantsMapMarshaller;
+import java.io.IOException;
+import javax.xml.bind.JAXBException;
 
 /* 
  * abstract class that encapsulates common map creation from mapping files
@@ -22,66 +24,73 @@ import eu.clarin.cmdi.vlo.transformers.VariantsMapMarshaller;
  * @author dostojic
  * 
  */
-
 public abstract class PostProcessorsWithVocabularyMap implements PostProcessor, NormalizationService {
 
-	private final static Logger _logger = LoggerFactory.getLogger(PostProcessorsWithVocabularyMap.class);
+    private final static Logger LOG = LoggerFactory.getLogger(PostProcessorsWithVocabularyMap.class);
 
-	private NormalizationVocabulary vocabulary;
+    private final MappingDefinitionResolver mappingDefinitionResolver = new MappingDefinitionResolver(PostProcessorsWithVocabularyMap.class);
 
-	public String normalize(String value) {
-		if (vocabulary == null)
-			initVocabulary();
+    private NormalizationVocabulary vocabulary;
 
-		//all variant values are kept in lower case
-		return vocabulary.normalize(value.toLowerCase());
-	}
+    @Override
+    public String normalize(String value) {
+        if (vocabulary == null) {
+            initVocabulary();
+        }
 
-	public String normalize(String value, String fallBackValue) {
-		String normalizedVals = normalize(value);
-		return normalizedVals != null ? normalizedVals : fallBackValue;
-	}
+        //all variant values are kept in lower case
+        return vocabulary.normalize(value.toLowerCase());
+    }
 
-	public Map<String, String> getCrossMappings(String value) {
-		if (vocabulary == null)
-			initVocabulary();
+    public String normalize(String value, String fallBackValue) {
+        String normalizedVals = normalize(value);
+        return normalizedVals != null ? normalizedVals : fallBackValue;
+    }
 
-		return vocabulary.getCrossMappings(value);
-	}
+    @Override
+    public Map<String, String> getCrossMappings(String value) {
+        if (vocabulary == null) {
+            initVocabulary();
+        }
 
-	public abstract String getNormalizationMapURL();
+        return vocabulary.getCrossMappings(value);
+    }
 
-	private void initVocabulary() {
-		VariantsMap varinatsRawMap = getMappingFromFile(getNormalizationMapURL());
-		vocabulary = varinatsRawMap.getMap();
+    public abstract String getNormalizationMapURL();
 
-		//printMap();
-	}
+    private void initVocabulary() {
+        VariantsMap varinatsRawMap = getMappingFromFile(getNormalizationMapURL());
+        vocabulary = varinatsRawMap.getMap();
+    }
 
-	protected VariantsMap getMappingFromFile(String mapUrl) {
+    protected VariantsMap getMappingFromFile(String mapUrl) {
 
-		_logger.info("Reading vocabulary file from: {}", mapUrl);
-		// load records from file
-		// in the future this should be loaded from CLAVAS directly and the
-		// file only used as fallback
+        LOG.info("Reading vocabulary file from: {}", mapUrl);
 
-		InputStream is = PostProcessorsWithVocabularyMap.class.getClassLoader().getResourceAsStream(mapUrl);
-		if (is == null)
-			throw new RuntimeException("Cannot instantiate postProcessor, " + mapUrl + " is not on the classpath");
+        final InputStream stream;
+        try {
+            stream = mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(mapUrl);
 
-		try {
-			return VariantsMapMarshaller.unmarshal(is);
-		} catch (Exception e) {
-			throw new RuntimeException("Cannot instantiate postProcessor: ", e);
-		}
+            if (stream == null) {
+                throw new RuntimeException("Cannot instantiate postProcessor, " + mapUrl + " is not an absolute URL, file path or packaged resource location");
+            } else {
+                try {
+                    return VariantsMapMarshaller.unmarshal(stream);
+                } catch (JAXBException ex) {
+                    throw new RuntimeException("Cannot instantiate postProcessor: ", ex);
+                }
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException("Cannot instantiate postProcessor, failed to read input stream for " + mapUrl);
+        }
+    }
 
-	}
+    // for debug
+    public static void printMap(PostProcessorsWithVocabularyMap processor) {
+        LOG.info("map contains {} entries", processor.vocabulary.getEntries().length);
+        for (VocabularyEntry entry : processor.vocabulary.getEntries()) {
+            LOG.info(entry.toString());
+        }
 
-	// for debug
-	public void printMap() {
-		_logger.info("map contains {} entries", vocabulary.getEntries().length);
-		for (int i = 0; i < vocabulary.getEntries().length; i++)
-			_logger.info(vocabulary.getEntries()[i].toString());
-
-	}
+    }
 }

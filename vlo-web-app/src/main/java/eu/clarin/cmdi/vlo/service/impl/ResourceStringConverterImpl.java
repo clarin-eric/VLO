@@ -19,6 +19,8 @@ package eu.clarin.cmdi.vlo.service.impl;
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PREFIX;
+import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY;
+import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY_HTTPS;
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.pojo.ResourceType;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
@@ -58,32 +60,44 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
 
     @Override
     public ResourceInfo getResourceInfo(String resourceString) {
-        // split resource string to find href and mime type
-        final String[] tokens = resourceString.split(SPLIT_PATTERN, 2);
-        final String mimeType = tokens[0];
-        final String href = tokens[1];
-
-        // if there is a resolver, get file name from resolved URL
-        final String fileName;
-        if (resolver == null) {
-            fileName = getFileName(href);
+        if (resourceString == null) {
+            return new ResourceInfo(null, null, null, ResourceType.OTHER);
         } else {
-            fileName = getFileName(resolver.resolve(href));
-        }
+            // split resource string to find href and mime type
+            final String[] tokens = resourceString.split(SPLIT_PATTERN, 2);
+            final String mimeType = tokens[0];
+            final String href = tokens[1];
 
-        // determine resource type based on mime type
-        final ResourceType resourceType = determineResourceType(mimeType);
-        return new ResourceInfo(href, fileName, mimeType, resourceType);
+            // if there is a resolver, get file name from resolved URL
+            final String fileName;
+            if (resolver == null) {
+                fileName = getFileName(href);
+            } else {
+                fileName = getFileName(resolver.resolve(href));
+            }
+
+            // determine resource type based on mime type
+            final ResourceType resourceType = determineResourceType(mimeType);
+            return new ResourceInfo(
+                    href,
+                    (fileName == null || fileName.isEmpty()) ? href : fileName,
+                    mimeType,
+                    resourceType);
+        }
     }
 
     private String getFileName(final String href) {
         try {
+            if (href.startsWith(HANDLE_PROXY) || href.startsWith(HANDLE_PROXY_HTTPS)) {
+                return href;
+            }
+
             //analyse URI
             final URI uri = new URI(href);
             final String scheme = uri.getScheme();
             final String path = uri.getPath();
             // in case of path information or handle, return original href
-            if (path == null || path.isEmpty() || (scheme != null && scheme.equals(HANDLE_PREFIX))) {
+            if (path == null || path.isEmpty() || path.equals("/") || (scheme != null && scheme.equals(HANDLE_PREFIX))) {
                 return href;
             } else {
                 //strip trailing slash, then get name
@@ -108,6 +122,8 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             return ResourceType.TEXT;
         } else if (normalizeMimeType.equals(FacetConstants.RESOURCE_TYPE_VIDEO)) {
             return ResourceType.VIDEO;
+        } else if (normalizeMimeType.equals(FacetConstants.RESOURCE_TYPE_ARCHIVE)) {
+            return ResourceType.ARCHIVE;
         } else {
             return ResourceType.OTHER;
         }

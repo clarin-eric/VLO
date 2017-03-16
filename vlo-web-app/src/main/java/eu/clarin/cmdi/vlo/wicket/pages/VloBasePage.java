@@ -22,7 +22,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar.ComponentPosition;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarExternalLink;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarText;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
@@ -174,7 +173,9 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        // Include JavaScript for header (e.g. permalink animation)
+        //render jQuery first, it is the most common dependency
+        response.render(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference()));
+        // Include other JavaScript for header (e.g. permalink animation)
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloHeaderJS()));
     }
 

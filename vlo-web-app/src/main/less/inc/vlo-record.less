@@ -72,10 +72,6 @@ h1#recordtitle {
     .tab-content {
         padding-top: @content-top-bottom-padding;
         padding-bottom: @content-top-bottom-padding;
-
-        & > table {
-            margin-top: -@content-top-bottom-padding; // counter tab content padding for table
-        }
     }
 
     .recorddetailstable {
@@ -132,6 +128,33 @@ h1#recordtitle {
 
             &:hover {
                 text-decoration: none;
+            }
+        }
+    }
+
+    .single-resource-info {
+        margin-left: 10px;
+        text-align: center;
+        padding: 10px;
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        a.resourcelink {
+
+            .resource-type-icon > span {
+                font-size: 100px;
+                padding: 4px;
+                color: @text-color;
+
+                &:hover {
+                    color: @link-hover-color;
+                }
+            }
+
+            & > span {
+                display: block;
             }
         }
     }
@@ -218,7 +241,7 @@ h1#recordtitle {
     .tree {
         .current {
             font-weight: bold;
-            
+
             a:hover {
                 text-decoration: none;
             }

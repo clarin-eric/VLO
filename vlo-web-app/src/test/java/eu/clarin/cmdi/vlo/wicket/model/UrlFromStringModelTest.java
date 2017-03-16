@@ -44,8 +44,15 @@ public class UrlFromStringModelTest {
 
         innerModel.setObject(null);
         assertNull(instance.getObject());
+        
         innerModel.setObject("/my/file/location");
         assertEquals(new URL("file:/my/file/location"), instance.getObject());
+        
+        innerModel.setObject("http://my/external/location");
+        assertEquals(new URL("http://my/external/location"), instance.getObject());
+        
+        innerModel.setObject("https://my/secure/location");
+        assertEquals(new URL("https://my/secure/location"), instance.getObject());
     }
 
     /**
@@ -61,6 +68,9 @@ public class UrlFromStringModelTest {
 
         instance.setObject(new URL("file:/my/file/location"));
         assertEquals("/my/file/location", innerModel.getObject());
+
+        instance.setObject(new URL("http://my/external/location"));
+        assertEquals("http://my/external/location", innerModel.getObject());
     }
 
     /**

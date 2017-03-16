@@ -28,6 +28,41 @@ old configuration to the new one.
     ./vlo_solr_importer.sh -c ../config/VloConfig.xml
 
 -----------------------------
+Upgrading from 4.0.x to 4.1.0
+-----------------------------
+
+* The facet-concept mapping file and uniformed mapping/normalisation files can now be
+sourced from an external location (remote URL or local file system). This is the 
+recommended way of setting up the VLO in any deployed environment. The required VLO mapping
+definitions can be obtained from <https://github.com/clarin-eric/VLO-mapping> by cloning
+the repository or downloading and unpacking the sources or distribution. Choose a fork
+and/or branch that matches your environment (dev, beta, production...) and needs.
+
+The VloConfig.xml defines the locations of these mapping files. Note that the bundled 
+VloConfig.xml may already be preconfigured for your specific environment.
+
+First, there is the 'facetConceptsFile'. The recommended way to configure it is using a
+local file URL, for example:
+	<facetConceptsFile>file:/srv/VLO-mapping/mapping/facetConcepts.xml</facetConceptsFile>
+	
+You can also use a remote location, e.g.:
+	<facetConceptsFile>https://vlo.clarin.eu/mapping/facetConcepts.xml</facetConceptsFile>
+...or also leave the property empty to use the bundled default definitions.
+
+Then there is a set of properties nationalProjectMapping, organisationNamesUrl,
+languageNameVariantsUrl, licenseAvailabilityMapUrl, resourceClassMapUrl, licenseURIMapUrl.
+These too are ideally configured through a URL to a local file, for example:
+    <nationalProjectMapping>file:/srv/VLO-mapping/uniform-maps/nationalProjectsMapping.xml</nationalProjectMapping>
+    <organisationNamesUrl>file:/srv/VLO-mapping/uniform-maps/OrganisationControlledVocabulary.xml</organisationNamesUrl>
+	....
+	
+To use bundled default mapping files, use relative paths such as
+    <nationalProjectMapping>uniform-maps/nationalProjectsMapping.xml</nationalProjectMapping>
+    <organisationNamesUrl>uniform-maps/OrganisationControlledVocabulary.xml</organisationNamesUrl>
+	...
+
+
+-----------------------------
 Upgrading from 3.4.x to 4.0.0
 -----------------------------
 

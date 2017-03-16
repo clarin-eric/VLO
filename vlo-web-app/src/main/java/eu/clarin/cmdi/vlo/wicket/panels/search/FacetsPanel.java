@@ -16,6 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +36,7 @@ import org.apache.wicket.model.util.MapModel;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
@@ -40,6 +44,7 @@ import eu.clarin.cmdi.vlo.wicket.model.FacetExpansionStateModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import java.util.Collection;
+import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -73,16 +78,27 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
      * models
      * @param selectionModel model representing the current query/value
      * selection state
+     * @param selectionTypeModeModel
      */
-    public FacetsPanel(final String id, final IModel<List<String>> facetNamesModel, final FacetFieldsModel fieldsModel, final IModel<QueryFacetsSelection> selectionModel) {
+    public FacetsPanel(final String id, final IModel<List<String>> facetNamesModel, final FacetFieldsModel fieldsModel, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModeModel) {
         super(id, facetNamesModel);
 
         final Map<String, ExpansionState> expansionStateMap = new HashMap<>();
         expansionModel = new MapModel<>(expansionStateMap);
+        final IModel<Boolean> conditionalFacetDisplayModel = new AbstractReadOnlyModel<Boolean>() {
+
+            @Override
+            public Boolean getObject() {
+                //only enable show/hide secondary facets functionality if there are enoug (too many) available facets
+                return getNumberFacetsShown(facetNamesModel.getObject(), fieldsModel.getObject()) 
+                        >= vloConfig.getHideSecondaryFacetsLimit(); //configurable threshold
+            }
+        };
 
         final MarkupContainer container = new WebMarkupContainer("container");
         add(container
                 .setOutputMarkupId(true)
+                .add(new AttributeAppender("class", new BooleanOptionsModel<>(conditionalFacetDisplayModel, Model.of("show-conditionally"), new Model<String>()), " "))
                 .add(new AttributeAppender("class", new BooleanOptionsModel<>(allFacetsShown, Model.of("show-all"), Model.of("show-primary")), " "))
         );
 
@@ -98,13 +114,14 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
                                 item.getModel(),
                                 new FacetFieldModel(item.getModelObject(), fieldsModel),
                                 selectionModel,
+                                selectionTypeModeModel,
                                 new FacetExpansionStateModel(item.getModel(), expansionModel)) {
 
-                    @Override
-                    protected void selectionChanged(AjaxRequestTarget target) {
-                        FacetsPanel.this.selectionChanged(target);
-                    }
-                }.add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
+                            @Override
+                            protected void selectionChanged(AjaxRequestTarget target) {
+                                FacetsPanel.this.selectionChanged(target);
+                            }
+                        }.add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
                             //class appender that differentiates between primary and secondary facets (based on configuration)
                             @Override
                             public String getObject() {
@@ -126,6 +143,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
         facetsView.setReuseItems(true);
         container.add(facetsView);
 
+        //toggler for showing/hiding secondary facets
         container.add(new AjaxFallbackLink("more") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -146,6 +164,22 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
                 }
             }
         }.add(BooleanVisibilityBehavior.visibleOnTrue(allFacetsShown)));
+    }
+
+    /**
+     *
+     * @param visibleFacets superset of facet fields that may be shown
+     * @param actualFacetFields facet fields currently available
+     * @return
+     */
+    private int getNumberFacetsShown(final List<String> visibleFacets, final List<FacetField> actualFacetFields) {
+        final Predicate<FacetField> shownFieldHasValues = new Predicate<FacetField>() {
+            @Override
+            public boolean apply(FacetField input) {
+                return input.getValueCount() > 0 && visibleFacets.contains(input.getName());
+            }
+        };
+        return Iterables.size(Iterables.filter(actualFacetFields, shownFieldHasValues));
     }
 
     @Override

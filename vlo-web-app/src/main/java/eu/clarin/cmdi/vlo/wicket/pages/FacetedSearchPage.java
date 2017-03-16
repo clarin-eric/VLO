@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.VloWebSession;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
@@ -77,7 +79,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private IModel<List<String>> facetNamesModel;
     private FacetFieldsModel fieldsModel;
-    private final IModel<Boolean> simpleModeModel;
+    private IModel<FacetSelectionType> facetSelectionTypeModeModel;
+    private IModel<Boolean> simpleModeModel;
 
     public FacetedSearchPage(IModel<QueryFacetsSelection> queryModel) {
         this(queryModel, Model.of(false));
@@ -119,6 +122,26 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         final List<String> allFields = ImmutableList.copyOf(Iterables.concat(facetFields, ADDITIONAL_FACETS));
         facetNamesModel = new FacetNamesModel(facetFields);
         fieldsModel = new FacetFieldsModel(facetFieldsService, allFields, getModel(), -1);
+
+        final FacetSelectionType initialSelectionType = getFacetSelectionTypeModeFromSessionOrDefault();
+        facetSelectionTypeModeModel = new Model<FacetSelectionType>(initialSelectionType) {
+            @Override
+            public void setObject(FacetSelectionType object) {
+                super.setObject(object);
+                //persist in session
+                VloWebSession.get().setFacetSelectionTypeMode(object);
+            }
+
+        };
+    }
+
+    private FacetSelectionType getFacetSelectionTypeModeFromSessionOrDefault() {
+        final FacetSelectionType sessionValue = VloWebSession.get().getFacetSelectionTypeMode();
+        if (sessionValue == null) {
+            return FacetSelectionType.OR;
+        } else {
+            return (FacetSelectionType) sessionValue;
+        }
     }
 
     private void addComponents() {
@@ -237,7 +260,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private Panel createOptionsPanel(String id) {
-        final Panel panel = new AdvancedSearchOptionsPanel(id, getModel()) {
+        final Panel panel = new AdvancedSearchOptionsPanel(id, getModel(), facetSelectionTypeModeModel) {
 
             @Override
             protected void selectionChanged(AjaxRequestTarget target) {
@@ -287,7 +310,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private Panel createFacetsPanel(final String id) {
 
-        final FacetsPanel panel = new FacetsPanel(id, facetNamesModel, fieldsModel, getModel()) {
+        final FacetsPanel panel = new FacetsPanel(id, facetNamesModel, fieldsModel, getModel(), facetSelectionTypeModeModel) {
 
             @Override
             protected void selectionChanged(AjaxRequestTarget target) {
@@ -319,4 +342,13 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     public IModel<String> getCanonicalUrlModel() {
         return new PermaLinkModel(getPageClass(), getModel());
     }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        if (facetSelectionTypeModeModel != null) {
+            facetSelectionTypeModeModel.detach();
+        }
+    }
+
 }

@@ -21,8 +21,6 @@
     <!--
         Created on : Jan 23, 2014, 5:10:53 PM
         Author     : twagoo
-    
-        Based on "business one" template: http://www.opendesigns.org/design/business_one/
     -->
 
     <head>
@@ -33,152 +31,309 @@
 
         <wicket:extend>
 
-            <div class="content" id="help">
+            <div class="container">
 
-                <h1>CLARIN Virtual Language Observatory: Help</h1>
+                <div class="row">
+                    <!-- sidebar, which will move to the top on a small screen -->
+                    <div class="col-sm-3 col-sm-push-9">
+                        <!-- table of content generated using bootstrap-toc <https://afeld.github.io/bootstrap-toc/> -->
+                        <nav id="toc" data-spy="affix" data-toggle="toc" class="hidden-xs"></nav>
+                        <nav id="toc-xs" data-toggle="toc" class="visible-xs-block"></nav>
+                    </div>
+                    <!-- main content area -->
+                    <div class="col-sm-pull-3 col-sm-9 content" id="help">
+                        <h1>CLARIN Virtual Language Observatory: Help</h1>
 
-                <p>
-                    The Virtual Language Observatory (VLO) faceted browser was developed 
-                    within CLARIN as a means to explore linguistic resources, services 
-                    and tools available within CLARIN and related communities.
-                    Its aim is to provide an easy to use interface, allowing for a 
-                    uniform search and discovery process for a large number of resources
-                    from a wide variety of domains and providers.
-                </p>
-                
-                <p>
-                    More information can be found on the
-                    <a target="_blank" wicket:id="moreInfo" href="">VLO page on the CLARIN website</a>.
-                    For answers to common questions about the VLO, please consult the 
-                    <a href="http://www.clarin.eu/faq-page/275">FAQ</a>. 
-                    More documentation and other references are listed on the <wicket:link><a href="AboutPage.html#References">&quot;About&quot; page</a></wicket:link>.
-                </p>
-                
-                <h2>Faceted browsing</h2>
-                <p>
-                    The VLO search interface presents a number of <em>facets</em>, 
-                    for each of which a value can be selected in order to narrow down
-                    the selection of displayed records. For example, to only include
-                    records that relate to Spain as a country, open the facet <em>Country</em>
-                    and select the value <em>Spain</em>. Notice that next to each available value,
-                    a number is displayed that indicates the number of records within
-                    the current selection that contain that value, in other words the number
-                    of remaining records should that value be selected.
-                </p>
-                <p>
-                    Only the values that occur in the current selection (that is, the
-                    records that match the already selected values and the optional
-                    textual query (see <a href="#syntax">below</a>)) are shown. The VLO shows up to ten of the most 
-                    frequently occurring values for each facet when you click on the
-                    facet name. If there are more then ten available values, there
-                    is a link labeled <em>more...</em>, which leads to a pop-up showing
-                    all available values (given the current selections), than can be
-                    filtered textually and sorted either alphabetically or by number of
-                    matching records. It is also possible to search for facet values
-                    by typing (part of) a value in the filter box below the facet name 
-                    and above the facet values (<em>'Type to search for more'</em>)
-                    in the panel next to the search results.
-                </p>
-                <p>
-                    Facets that do not have any matching records given the current
-                    selection will not be displayed in the facets panel in the
-                    VLO search interface.
-                </p>
+                        <div class="help-section">
+                            <h2>Introduction</h2>
+                            <p>
+                                The Virtual Language Observatory (VLO) faceted browser was developed within <a href="https://wwww.clarin.eu">CLARIN</a> 
+                                as a means to explore linguistic resources, services and tools available within CLARIN and related communities.
+                                Its aim is to provide an easy to use interface, allowing for a uniform search and discovery process for a large number of 
+                                resources from a wide variety of domains and providers.
+                            </p>
+                        </div>
 
-                <h2 id="syntax">Search syntax</h2>
-                <p>
-                    In addition to navigating the resources by means of the selection
-                    of facet values, the VLO faceted browser also allows for searching
-                    by means of <strong>textual queries</strong>.
-                </p>
-                <p>
-                    Such queries are to be entered
-                    in the large <strong>text box</strong> at the top of the main page or faceted
-                    browsing page with the button labeled 'Search' next to it.
-                </p>
-                <p>
-                    In its simplest form, a search query consists of one or more
-                    terms, separated by a space character. Such queries result
-                    in the retrieval of all documents that have one or more occurrences
-                    of <em>all</em> of the included search terms. In other words,
-                    an <strong>AND</strong> operator is implied by default.
-                </p>
-                <h3>Advanced querying</h3>
-                <p>
-                    It is possible to construct a more specific query by means of
-                    a set of <strong>syntax features</strong> that can be processed 
-                    by the VLO. The supported syntax is that of the
-                    <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene Query Parser</a>
-                    <sup><a href="#noteedismax" id="refedismax">1</a></sup>
-                </p>
-                <p>
-                    The Lucene Query Parser syntax allows for the following
-                    <strong>boolean operators</strong>: 'AND', 'OR', 'NOT', '+'
-                    and '-'. It also allows for <strong>grouping</strong>
-                    of terms by means of parenthesis. 
-                    Terms can be combined into <strong>phrases</strong> by means
-                    of double quote characters.
-                </p>
+                        <div class="help-section">
+                            <h2>Faceted browsing</h2>
+                            <p>
+                                The VLO search interface presents a number of <strong>facets</strong>,  for each of which one or more values can be selected in order to <strong>narrow down</strong>
+                                the selection of displayed records. For example, to only include records that relate to the French language, open the facet <em>Language</em>
+                                and select the value <em>French</em>. Notice that next to each available value, a number is displayed that indicates the number of records within
+                                the current selection that contain that value, in other words the number of remaining records should that value be selected.
+                            </p>
+                            <p>
+                                Only the values that occur in the current selection (that is, the records that match the already selected values and the optional
+                                textual query (see <a href="#syntax">below</a>)) are shown. The VLO shows up to ten of the <strong>most frequently occurring values</strong> for each facet 
+                                when you click on the name of any facet. If there are more then ten available values, there is a link labeled <em>more...</em>, which leads 
+                                to a pop-up showing all available values (given the current selections), than can be filtered textually and sorted either alphabetically or 
+                                by number of matching records. It is also possible to search for facet values by typing (part of) a value in the filter box below the facet name 
+                                and above the facet values (<em>'Type to search for more'</em>) in the panel next to the search results.
+                            </p>
+                            <p>
+                                <wicket:link><img src="res/images/facet-selection.png" class="img-responsive pull-right" alt="Facet selection" /></wicket:link>
+                                <strong>Multiple values</strong> can be selected within the same facet, thus <strong>broadening</strong> the selection. For example,
+                                to broaden the results to also include Occitan after having selected <em>French</em>, type that word or its first few letters in the filter box
+                                of the language facet. As soon as the option <em>Occitan; Provençal</em> appears, you can select it and consequently the search results will be
+                                updated. Notice that in this example <em>Occitan; Provençal</em> appears as an option only because there are records within the existing selection 
+                                that relate to this value. Values that do not occur in the present selection are excluded from the list of available facet values.
+                            </p>
+                            <p>
+                                It is also possible to <strong>narrow down</strong> on values within a facet, for example to search for multi-lingual corpora that
+                                cover a number of specific languages. To do this, go to the <strong><em>Search options</em></strong> box (below the facets) and set the
+                                <em>Multiple value selection behaviour</em> to <em>AND</em>. Do this <em>before making your selection</em> as it will not affect
+                                existing (partial) selections. In the <em>Search options</em> box you will also find a number of other advanced controls to tweak
+                                your query.
+                            </p>
+                            <p>
+                                Facets that do not have any matching records given the current selection will not be displayed in the facets panel in the VLO search interface.
+                            </p>
+                        </div>
 
-                The following <strong>examples</strong> illustrate the usage of these operators.
-                Click any of the following examples to perform that query 
-                on the actual data currently in the VLO:
-                <ul>
-                    <li><a class="example-query" href="search/?q=German%20AND%20acquisition">German AND acquisition</a> (all records that match both terms)
-                        <ul>
-                            <li><a class="example-query" href="search/?q=German%20acquisition">German acquisition</a> is an equivalent query</li>
-                        </ul>
-                    </li>
-                    <li><a class="example-query" href="search/?q=Myanmar%20OR%20Birma%20OR%20Burma">Myanmar OR Birma OR Burma</a> (all records that match at least one of these terms)</li>
-                    <li><a class="example-query" href="search/?q=newspaper+AND+%28Czech+OR+Slovak%29">newspaper AND (Czech OR Slovak)</a> (all records that match the term 'newspaper' and at least one of the terms 'Czech' or 'Slovak')</li>
-                    <li><a class="example-query" href="search/?q=Portuguese+-Brazil">Portuguese -Brazil</a> (all records that match 'Portuguese' but do not have an occurrence of 'Brazil')
-                        <ul>
-                            <li><a class="example-query" href="search/?q=Portuguese+NOT+Brazil">Portuguese NOT Brazil</a> is an equivalent query</li>
-                        </ul>
-                    </li>
-                    <li><a class="example-query" href="search/?q=%22sign+language%22+AND+%28Sweden+OR+Finland%29">&quot;sign language&quot; AND (Sweden OR Finland)</a> (all records that match the phrase 'sign language' and at least one of the terms 'Sweden' or 'Finland')</li>
+                        <div class="help-section">
+                            <h2 id="syntax">Search syntax</h2>
+                            
+                            <p>
+                                In addition to navigating the resources by means of the selection of facet values, the VLO faceted browser also allows for searching
+                                by means of <strong>textual queries</strong>.
+                            </p>
+                            <p>
+                                Such queries are to be entered in the large <strong>text box</strong> at the top of the main page or faceted browsing page with the 
+                                button labeled 'Search' next to it.
+                            </p>
+                            <p>
+                                In its simplest form, a search query consists of one or more terms, separated by whitespace. Such queries result
+                                in the retrieval of all documents that have one or more occurrences of <em>all</em> of the included search terms. In other words,
+                                an <strong>AND</strong> operator is implied by default.
+                            </p>
+                            <h3>Advanced querying</h3>
 
-                </ul>
-                <h3>Targeting fields</h3>
-                <p>
-                    In addition to the logical operators, the syntax also allows
-                    for search for occurrences of a term within a <strong>specific field</strong>,
-                    such as language or modality. To do so, enter the name of the
-                    field and the term to search for, separated by a semicolon.
-                    The asterisk ('*') can be used to achieve partial matches.
-                    Quotes are required to match a term that contains spaces.
-                </p>
-                <p>
-                    The following <strong>field names</strong> are available: 
-                    language, country, continent, modality, genre, subject, format,
-                    organisation, resourcetype, keyword, resources.
-                    <br />
-                </p>
+                            <p>
+                                It is possible to construct a more specific query by utilising the advanced <strong>syntax features</strong> that the VLO supports.
+                                The supported syntax is that of the <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene Query Parser</a>
+                                <sup><a href="#noteedismax" id="refedismax">1</a></sup>.
+                            </p>
+                            
+                            <p>
+                                The Lucene Query Parser syntax allows for the following <strong>boolean operators</strong>: 'AND', 'OR', 'NOT', '+'
+                                and '-'. It also allows for <strong>grouping</strong> of terms by means of parenthesis. 
+                                Terms can be combined into <strong>phrases</strong> by means of double quote characters.
+                                <strong>Ranges</strong> can be specified using square brackets and the word 'TO' (see below for examples).
+                            </p>
+                            
+                            <wicket:link><img src="res/images/advanced-search-syntax.png" class="img-responsive center-block" alt="Using the advanced search syntax" /></wicket:link>
+                            
+                            The following <strong>examples</strong> illustrate the usage of these operators.
+                            Click any of the following examples to perform that query  on the actual data currently in the VLO:
+                            <ul>
+                                <li><a class="example-query" href="search/?q=German%20AND%20acquisition">German AND acquisition</a> (all records that match both terms)
+                                    <ul>
+                                        <li><a class="example-query" href="search/?q=German%20acquisition">German acquisition</a> is an equivalent query</li>
+                                    </ul>
+                                </li>
+                                <li><a class="example-query" href="search/?q=Myanmar%20OR%20Birma%20OR%20Burma">Myanmar OR Birma OR Burma</a> (all records that match at least one of these terms)</li>
+                                <li><a class="example-query" href="search/?q=newspaper+AND+%28Czech+OR+Slovak%29">newspaper AND (Czech OR Slovak)</a> (all records that match the term 'newspaper' and at least one of the terms 'Czech' or 'Slovak')</li>
+                                <li><a class="example-query" href="search/?q=Portuguese+-Brazil">Portuguese -Brazil</a> (all records that match 'Portuguese' but do not have an occurrence of 'Brazil')
+                                    <ul>
+                                        <li><a class="example-query" href="search/?q=Portuguese+NOT+Brazil">Portuguese NOT Brazil</a> is an equivalent query</li>
+                                    </ul>
+                                </li>
+                                <li><a class="example-query" href="search/?q=%22sign+language%22+AND+%28Sweden+OR+Finland%29">&quot;sign language&quot; AND (Sweden OR Finland)</a> (all records that match the phrase 'sign language' and at least one of the terms 'Sweden' or 'Finland')</li>
 
-                Click any of the following <strong>examples</strong> to perform that query 
-                on the actual data currently in the VLO:
-                <ul>
-                    <li><a class="example-query" href="search/?q=resourcetype:%22Linguistic+corpora%22">resourcetype:"Linguistic corpora"</a> (equivalent to selecting this value below the 'Resource Type' facet)</li>
-                    <li><a class="example-query" href="search/?q=language:Sign">language:Sign</a> (all records with a language name that contains the word 'sign')</li>
-                    <li><a class="example-query" href="search/?q=country:%28Belgium+-Netherlands%29">country:(Belgium -Netherlands)</a> (all records with Belgium as country but not also Netherlands)</li>
-                    <li><a class="example-query" href="search/?q=country:Finland+AND+language:Swedish+AND+NOT+language:Finnish">country:Finland AND language:Swedish AND NOT language:Finnish</a> (records in Finland with resources in the Swedish language but not in Finnish)</li>
-                    <li><a class="example-query" href="search/?q=format:video/*">format:video/*</a> (all records with video resources)</li>
-                    <li><a class="example-query" href="search/?q=resources:%5B5+TO+*%5D">resources:[5 TO *]</a> (all records with at least 5 resources)</li>
-                </ul>
-                <p> 
-                    A <strong>full overview</strong> of syntax features, including
-                    options for fuzzy search, ranges, and term boosting, can be found at the
-                    <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene syntax description page</a>.
-                </p>
+                            </ul>
 
-                <h2>Notes</h2>
-                <p>
-                    <sup><a href="#refedismax" id="noteedismax">1</a></sup>
-                    Support for the Lucene syntax was implemented by using the
-                    <a href="https://cwiki.apache.org/confluence/display/solr/The+Extended+DisMax+Query+Parser">Solr Extended DisMax Query Parser</a>.
-                </p>
+                            <h3>Targeting fields</h3>
+                            <p>
+                                In addition to the logical operators, the syntax also allows for search for occurrences of a term within a <strong>specific field</strong>,
+                                such as language or modality. To do so, enter the name of the field and the term to search for, separated by a semicolon.
+                                The asterisk ('*') can be used to achieve partial matches. Quotes are required to match a term that contains spaces.
+                            </p>
+                            <p>
+                                The following <strong>field names</strong> are available: 
+                                language, country, continent, modality, genre, subject, format, organisation, resourcetype, keyword, resources.
+                                <br />
+                            </p>
 
+                            Click any of the following <strong>examples</strong> to perform that query  on the actual data currently in the VLO:
+                            <ul>
+                                <li><a class="example-query" href="search/?q=resourcetype:%22Linguistic+corpora%22">resourcetype:"Linguistic corpora"</a> (equivalent to selecting this value below the 'Resource Type' facet)</li>
+                                <li><a class="example-query" href="search/?q=language:Sign">language:Sign</a> (all records with a language name that contains the word 'sign')</li>
+                                <li><a class="example-query" href="search/?q=country:%28Belgium+-Netherlands%29">country:(Belgium -Netherlands)</a> (all records with Belgium as country but not also Netherlands)</li>
+                                <li><a class="example-query" href="search/?q=country:Finland+AND+language:Swedish+AND+NOT+language:Finnish">country:Finland AND language:Swedish AND NOT language:Finnish</a> (records in Finland with resources in the Swedish language but not in Finnish)</li>
+                                <li><a class="example-query" href="search/?q=format:video/*">format:video/*</a> (all records with video resources)</li>
+                                <li><a class="example-query" href="search/?q=resources:%5B5+TO+*%5D">resources:[5 TO *]</a> (all records with at least 5 resources)</li>
+                            </ul>
+                            <p> 
+                                A <strong>full overview</strong> of syntax features, including options for fuzzy search, ranges, and term boosting, can be found at the
+                                <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene syntax description page</a>.
+                            </p>
+                        </div>
+
+                        <div class="help-section">
+                            <h2 id="understanding-search-results">Understanding search results</h2>
+                            <p>
+                                After you have submitted a query, selected one or more facet values, or a combination of these, the search results get updated.
+                                By default, for each item in the search result, the <strong>record</strong>'s title and a snippet of its description are shown
+                                (if available). In addition, a number of <strong>icons</strong> are shown that indicate the number and type of resource(s) available within the record,
+                                and which availability level (public, academic or restricted), licence and/or usage conditions apply. Hover over the icons to discover the meaning of 
+                                each of the icons. Some of this information may not be present for all records. 
+                            </p>
+                            <wicket:link><img src="res/images/search-term-highlighting.png" class="img-responsive center-block" alt="Search term highlighting" /></wicket:link>
+                            <p>
+                                You can <strong>expand</strong> a search result item (by pressing the <i aria-hidden="true" class="fa fa-plus-square-o"></i> icon) to see more 
+                                details. In addition to the full description in case it was truncated in the original view, a number of additional record properties
+                                such as collection, language and organisation are shown (if available) as well as a list of up to ten resources linked to by the record.
+                                You can click through to the record page or immediately access any of the listed resources. Be sure to take notice of the
+                                <strong>licence and availability information</strong> provided in the record or at the provider's pages (see 
+                                <a href="#accessing-resources">Accessing Resources</a> for more information).
+                            </p>
+                            <p>
+                                The search results are shown in an <strong>order</strong> reflecting relevance with respect to the query. Matches in the title
+                                or description lead to the highest rankings. In addition, certain types of records get a higher default ranking: collection records,
+                                or records that are at a relatively high level in a hierarchy, get a 'boost'; the same goes for records with "public" or "academic" 
+                                availability. The availability of a title, description or one or more linked resources within a record also contributes to the 
+                                ranking.
+                            </p>
+                            <p>
+                                Your search terms will be <strong>highlighted</strong> wherever they appear in the search results to help you quickly understand
+                                the relevance of individual items with respect to your query.
+                            </p>
+
+
+                        </div>
+
+                        <div class="help-section">
+                            <h2 id="accessing-resources">Accessing resources</h2>
+                            <p>
+                                <wicket:link><img src="res/images/record-availability.png" class="img-responsive pull-right" alt="Availability information" /></wicket:link>
+                                Clicking the title of a search result (or <em>record</em>) brings you to a new page that can we will refer to as the <strong>record page</strong>.
+                                The page is organised into a number of <em>tabs</em>, showing different types of information relating to the record. If you are interested in
+                                obtaining or processing the resources provided by a record in any way, first have a look at the information under the <strong><em>Availability</em> tab</strong>.
+                                This information will tell you what conditions apply to the usage of the resource(s). Some records may not provide clear and complete information. When in doubt,
+                                it is strongly recommended to contact and ask the provider of the resource(s). Use the contact information provided in the <em>All metadata</em> section
+                                of the record page, or navigate to the provider's pages via the <em>Show the original provider's page for this record</em> link if present. If you
+                                need to know more and no contact information whatsoever is available in relation to a record, please <a href="mailto:vlo@clarin.eu">contact CLARIN</a>.
+                            </p>
+                            <p>
+                                <wicket:link><img src="res/images/record-resources.png" class="img-responsive pull-right" alt="Resources table" /></wicket:link>
+                                A list of the actual resource(s) can be found by selecting the <strong><em>Resources</em> tab</strong>. This list is presented as a table, which shows the 
+                                <strong>file names</strong> of all resources along with their <strong>type</strong>. Additional <strong>details</strong> for an individual resource can 
+                                be found by expanding a row (by clicking <span class="glyphicon glyphicon-chevron-right"></span>). Click a <strong>file name</strong> of a resource to access it
+                                directly. You may be presented with a request to authenticate depending on the accessibility of the file. Be aware that not all files within a record may have 
+                                the same level of accessibility, and different licences may apply.
+                            </p>
+                            <p>
+                                Some records have no resources listed under the <em>Resources</em> tab, for example because the record does not represent individually accessible files
+                                but rather an online tool, service or website. In these cases generally there should be one or more of the following <strong>links</strong> below the title of 
+                                the record (above the tabs):
+                                <ul>
+                                    <li><em>Show the original provider's page for this record</em></li>
+                                    <li><em>Search page for this record</em></li>
+                                    <li><em>Plain text search via Federated Content Search</em></li>
+                                </ul>
+                                Using these, you will be able to access or use the described resource.
+                            </p>
+                            <p>
+                                <wicket:link><img src="res/images/record-hierarchy.png" class="img-responsive pull-right" alt="Record hierarchy ('Hierarchy' tab)" /></wicket:link>
+                                In some cases, you will find resources nor links to related pages. This is often the case for <strong>collection records</strong> that do not point to
+                                resources themselves, but instead are part of a <em>hierarchy</em>. If this is the case, a <strong><em>Hierarchy</em> tab</strong> is available, which 
+                                contains a tree that allows you to browse through this hierarchy and discover underlying records that may contain links to concrete resources or pages.
+                            </p>
+                            <p>
+                                If you encounter a record that contains no listed resources, no links to pages and is not part of a hierarchy either you can have a look at the content
+                                under the <strong><em>All metadata</em> tab</strong> to see if the metadata contains any pointers to resources. If this is not the case either, you may
+                                want to report the page (using the <i class="fa fa-exclamation-circle" aria-hidden="true" title="Report an issue"></i> button) or send a report by e-mail
+                                to <a href="mailto:vlo@clarin.eu">vlo@clarin.eu</a>.
+                            </p>
+                        </div>
+
+                        <div class="help-section">
+                            <h2 id="processing-resources" data-toc-text="Processing resources with tools">Processing resources with CLARIN tools</h2>
+                            <p>
+                                Many of the resources that can be discovered through the VLO are fit for processing using one or more of many specialised
+                                tools. The <em>Language Resource Inventory</em> provides an 
+                                <a href="https://lindat.mff.cuni.cz/repository/xmlui/discover?filtertype=type&filter_relational_operator=equals&filter=toolService">overview </a>
+                                of tools an services available in or collected by CLARIN. You can obtain (handles to) the resources that you are interested in from the record's page in the 
+                                VLO or from the original provider (see <a href="#accessing-resources">Accessing resources</a>) and then manually use them as input for the tool or service
+                                provided that you are granted access to both the resources and the tool or service, and that the former supports the exact type of resource at hand.
+                            </p>
+                            <p>
+                                CLARIN has streamlined this process for a number of tools and a specific set of resource types, allowing you to easily discover tools that can be applied
+                                to a specific resource, and in case of a match immediately proceed to apply one or more tools to the selected resource. The following section describes
+                                how to use this feature right from a record's page in the VLO.
+                            </p>
+                            <h3 id="lrs">The Language Resource Switchboard</h3>
+                            <p>
+                                <wicket:link><img src="res/images/resources-lrs.png" class="img-responsive pull-right" alt="Connecting to the Language Resource Switchboard" /></wicket:link>
+                                The <em>Resources</em> of a record page (the page to which the title of a search results links) shows a table of individual resources collectively described
+                                by a record's metadata. All resources in this table have an 'options' menu (triggered by clicking the "<span class="glyphicon glyphicon-option-horizontal"></span>" area).
+                                From this menu, select the option <em>Process with Language Resource Switchboard</em>. This will take you to the <strong>Language Resource Switchboard (LRS)</strong>. Here you can
+                                either adjust the file type and content language values or go with the values detected by the LRS. Then click <em>Show Tools</em>, and if any tools supporting the
+                                chosen file type and language are known to the LRS, they will appear on the page in a categorised list. For each tool a description and some general information 
+                                is shown (including whether usage of the tool involves authentication or authorisation), along with a button that opens the tool with the selected resource. From
+                                there, follow the instructions provided by the tool or service.
+                            </p>
+                            <p>
+                                Not all tools available within CLARIN have been connected to the LRS, but additional tools get added frequently. If you think a tool is missing that could be added,
+                                please contact the tool's maintainers and/or the LRS contact person (see the <a href="http://weblicht.sfs.uni-tuebingen.de/clrs">About page of the LRS</a>).
+                            </p>
+                            <p>
+                                Detailed information about the LRS can be found in its <a href="https://office.clarin.eu/v/CE-2016-0881-CLARINPLUS-D2_5.pdf">CLARIN-PLUS deliverable document</a>.
+                            </p>
+                        </div>
+
+                        <div class="help-section">
+                            <h2 id="providing">Providing data to the VLO</h2>
+                            <p>
+                                You may have tools or data relevant to CLARIN's community: digitally accessible language-related resources, or tools/services that either process or 
+                                produce such resources. We have a standardised procedure to 'harvest' (retrieve and aggregate) metadata describing resources, for which we use the 
+                                <a href="https://www.openarchives.org/pmh/">OAI-PMH</a> protocol. If you are already offering metadata in the <a href="http://dublincore.org">Dublin Core</a>, 
+                                <a href="http://www.language-archives.org/OLAC/metadata.html">OLAC</a> or <a href="https://www.clarin.eu/cmdi">CMDI</a> format, please send the details
+                                to <a href="mailto:vlo@clarin.eu">vlo@clarin.eu</a>. CLARIN centres that provide metadata over OAI-PMH are harvested automatically.
+                                If you have relevant resources but either do not have metadata yet or are not making metadata available over OAI-PMH, CLARIN may be able to help you as well.
+                            </p>
+                            <p>
+                                The best place to start learning about the way metadata is integrated into the VLO is the <a href="https://www.clarin.eu/faq-page/275">harvesting and VLO section</a>
+                                of the CLARIN metadata FAQs. These provide details and links regarding the publication of metadata, CLARIN's processing pipeline and how to get integrated. If you 
+                                cannot find the information you are look for there, don't hesitate to contact us at <a href="mailto:vlo@clarin.eu">vlo@clarin.eu</a>.
+                            </p>
+                        </div>
+
+                        <div class="help-section">
+                            <h2 id="more-info">More information</h2>
+                            <p>
+                                A good <strong>starting point</strong> for general information about the VLO and related applications is the
+                                <a wicket:id="moreInfo" href="">VLO page on the CLARIN website</a>.
+                            </p>
+                            <p>
+                                A number of <strong>references</strong> as well as <strong>technical information</strong> about the application can be found on the 
+                                <wicket:link><a href="AboutPage.html">&quot;About&quot; page</a></wicket:link>.
+                            </p>
+                            <p>
+                                CLARIN  has collected a number of <strong>answers to common questions</strong> about CLARIN's metadata infrastructure,
+                                which includes the VLO, in <a href="https://www.clarin.eu/faq-page/267">CLARIN metadata FAQ</a>.
+                            </p>
+                            <p>
+                                If you would like to get a <strong>guided tour</strong> of the VLO, have a look at this 
+                                <a href="https://www.clarin.eu/content/clarin-plus-supplemental-material">screencast</a>
+                                that demonstrates the VLO's main features.
+                                <!-- TODO: direct link? embed? -->
+                            </p>
+                        </div>
+
+                        <div class="help-section">
+                            <h2 id="notes" data-toc-skip>Notes</h2>
+                            <p>
+                                <sup><a href="#refedismax" id="noteedismax">1</a></sup>
+                                Support for the Lucene syntax was implemented by using the
+                                <a href="https://cwiki.apache.org/confluence/display/solr/The+Extended+DisMax+Query+Parser">Solr Extended DisMax Query Parser</a>.
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
             </div>
+
         </wicket:extend>
     </body>
 </html>
