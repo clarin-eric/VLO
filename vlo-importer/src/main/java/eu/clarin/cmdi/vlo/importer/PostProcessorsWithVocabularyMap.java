@@ -64,7 +64,7 @@ public abstract class PostProcessorsWithVocabularyMap implements PostProcessor, 
     }
 
     protected VariantsMap getMappingFromFile(String mapUrl) {
-
+        //TODO: cache unmarshalled map https://github.com/clarin-eric/VLO/issues/68
         LOG.info("Reading vocabulary file from: {}", mapUrl);
 
         final InputStream stream;
