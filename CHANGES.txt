@@ -1,6 +1,6 @@
 Bug fixes and new features
 --------------------------
-VLO 4.1 (April 2017)
+VLO 4.1.0 (April 2017)
 
 ## Web application enhancements and additions ##
 
