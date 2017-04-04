@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableList;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
@@ -28,7 +29,6 @@ import eu.clarin.cmdi.vlo.wicket.model.BridgeModel;
 import eu.clarin.cmdi.vlo.wicket.model.BridgeOuterModel;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
-
 import java.util.Collection;
 import java.util.Collections;
 import org.apache.solr.client.solrj.response.FacetField;
@@ -36,7 +36,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -118,15 +117,8 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
         // create the view of the actual values
         final DataView<FacetField.Count> valuesView = createValuesView("facetValue");
-        valuesContainer.add(new AjaxPagingNavigator("navigator", valuesView) {
-
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(valuesView.getPageCount() > 1);
-            }
-
-        });
+        valuesContainer.add(new AllValuesNavigator("navigator", valuesView));
+        valuesContainer.add(new AllValuesNavigator("navigator2", valuesView));
         valuesContainer.add(valuesView);
 
         // create the form for selection sort option and entering filter string
@@ -166,7 +158,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
             }
         };
     }
-    private static final int ITEMS_PER_PAGE = 250;
+    private static final int ITEMS_PER_PAGE = 50;
 
     private Form createOptionsForm(String id) {
         final Form options = new AjaxIndicatingForm(id);
@@ -274,5 +266,21 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
      * (fallback)!
      */
     protected abstract void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target);
+
+    private static class AllValuesNavigator extends BootstrapAjaxPagingNavigator {
+
+        private final DataView<FacetField.Count> valuesView;
+
+        public AllValuesNavigator(String id, DataView<FacetField.Count> valuesView) {
+            super(id, valuesView);
+            this.valuesView = valuesView;
+        }
+
+        @Override
+        protected void onConfigure() {
+            super.onConfigure();
+            setVisible(valuesView.getPageCount() > 1);
+        }
+    }
 
 }

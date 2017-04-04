@@ -47,17 +47,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <hr />
             <div wicket:id="facetValuesContainer" class="sortedFacet">
                 <wicket:enclosure>
-                    <div class="allfacetvaluespaging" wicket:id="navigator">[paging]</div>
-                    <hr />
+                    <ul class="allfacetvaluespaging" wicket:id="navigator">[paging]</ul>
                 </wicket:enclosure>
-                <!--                
-                    <div>
-                        <div class="anchorpanel"><a href=""></a><span>A</span></div>
-                    </div>
-                -->
+                
                 <div wicket:id="facetValue">
                     <div class="facetLinkPanel"><a wicket:id="facetSelect" href=""><span wicket:id="name">A Corpus</span></a> <span dir="ltr">(<span wicket:id="count">1</span>)</span></div>
                 </div>
+
+                <wicket:enclosure>
+                    <ul class="allfacetvaluespaging" wicket:id="navigator2">[paging]</ul>
+                </wicket:enclosure>
             </div>
         </wicket:panel>
     </body>
