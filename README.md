@@ -41,34 +41,40 @@ set the required Java system property for the Solr data location (solr.data.dir)
 
 These instructions apply to any kind of release, whether it's a stable
 version, or for beta or alpha deployment. Always increase the version number
-and keep the trunk in -SNAPSHOT but not the tags so that a deployed version
-can always be traced back to its sources!
+and keep the development in -SNAPSHOT but not the tags so that a deployed version
+can always be traced back to its sources easily!
 
-* Make a tag of the version to release:
+* Make sure to use stable dependencies. In particular, check the CLARIN base style
+and VLO-mapping versions as these are often developed in parallel to the VLO.
 
-	````
+* Make a release branch
+
+	```
 	git checkout development
 	git checkbout -b release-vlo-4.a.b
 	```
 
 * Change the version number in the poms to match the release
-  (should match the directory name and be non-snapshot!!):
+  (should match the branch name and be non-snapshot!)
 
 	```
 	mvn versions:set -DnewVersion=4.a.b
 	```
 
   This will update the version numbers of the parent pom and all VLO
-  modules in one go!
+  modules in one go! Alpha and beta releases should be named accordingly,
+  for example `4.a.b-beta1`.
 
 * Build the tag and inspect the output of vlo-distribution
 
-	`mvn clean install 		#do not skip unit tests ;)`
-
+	```
+	mvn clean install 		#do not skip unit tests ;)
+	```
+	
   Unpack the tarball in vlo-distribution/target somehwere and check its
   contents on version numbers, config files etc.
 
-  You may also want to do a 'svn diff' to check the change of the version
+  You may also want to do a `git diff` to check the change of the version
   numbers.
 
 * Clean up and commit
@@ -76,14 +82,13 @@ can always be traced back to its sources!
 	```
 	mvn versions:commit 		#cleans up POM backups
 	mvn clean			#cleans up build output
-	svn commit -m "Created tag for VLO version 4.a.b"
-	git commit
+	git commit -m "Created tag for VLO version 4.a.b"
 	```
 * Merge into master and tag to finalise the release 
 
 	```
 	git checkout master
-	git merge release-vlo-4.a.b	#maybe some conflicts needs to be resolved after this
+	git merge release-vlo-4.a.b	#usually no conflicts need to be resolved after this
 	git push
 	#tag
 	git tag -a 4.a.b
@@ -103,7 +108,7 @@ can always be traced back to its sources!
 * Done!
 
 After building the entire project, a deployment package will be present in the
-'target' directory of vlo-distribution. This includes WARs for both the Solr
+`target` directory of `vlo-distribution`. This includes WARs for both the Solr
 and the web app front end as well as the importer script and default configuration
 files.
 
@@ -114,7 +119,13 @@ for different environments:
 - `beta` for the staging host (beta-vlo.clarin.eu)
 - `production` for production (vlo.clarin.eu)
 
-To build using a profile, use e.g. `mvn clean install -Pproduction`.
+To build using a profile, use e.g. `mvn clean install -Pproduction`. Please do this
+when making a deployment package for beta (`beta`) or production (`production`)!
+
+It's good practice to turn your tag into a "release" on GitHub and attach the deployment
+package for the target environment (beta, production). Share this link with the 
+administrators or, if you want to be friendly, make a pull request for the docker project
+if applicable. Your admin can show you the way :)
 
 # Running the VLO 
 
@@ -125,19 +136,19 @@ If the VLO is empty, you will need to run an import first.
 
 ## Running an import 
 
-To run an import, go the 'bin' child directory of the VLO application directory 
+To run an import, go the `bin` child directory of the VLO application directory 
 and run
 
 `./vlo_solr_importer.sh`
 	
-as the appropriate user (e.g. 'vlouser'). 
+as the appropriate user (e.g. `vlouser`). 
 
 It's advisable to run this in a detached background process (for example using 
-"screen") because an import can take quite a long time depending on the amount
+`screen`) because an import can take quite a long time depending on the amount
 of records to be imported. Also make sure that enough memory is available. 
 Some VM parameters are configured inside the script.
 
-Some progress information is logged to a file 'log/vlo-importer.log'. It gets
+Some progress information is logged to a file `log/vlo-importer.log`. It gets
 rotated automatically by the import process.
 
 For a __fresh import__, even when the VLO is not configured to delete all documents

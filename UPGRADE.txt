@@ -60,7 +60,10 @@ To use bundled default mapping files, use relative paths such as
     <nationalProjectMapping>uniform-maps/nationalProjectsMapping.xml</nationalProjectMapping>
     <organisationNamesUrl>uniform-maps/OrganisationControlledVocabulary.xml</organisationNamesUrl>
 	...
-
+	
+Both the web application and the importer make use of the files configured at these 
+locations, so make sure that the content is available when starting the front end
+or importer!
 
 -----------------------------
 Upgrading from 3.4.x to 4.0.0

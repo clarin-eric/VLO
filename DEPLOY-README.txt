@@ -116,6 +116,10 @@ xxx             - VLO version number
 	to be a URL pointing to the location of the corresponding mapping/normalisation
 	definition from a version of the VLO-mapping definition. 
 	
+	Both the web application and the importer make use of the files at the configured
+	locations, so make sure that the content is available when starting the front end
+	or importer!
+	
 	See <https://github.com/clarin-eric/VLO-mapping> and the comments in VloConfig.xml 
 	for more information.
 	
