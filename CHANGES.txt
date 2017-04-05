@@ -16,6 +16,8 @@ VLO 4.1.0 (April 2017)
     <https://github.com/clarin-eric/VLO/issues/44>
 * Records with only one resource have this resource featured more prominently
     <https://github.com/clarin-eric/VLO/issues/23>
+* Better pagination in the 'all facet values' view
+	<https://github.com/clarin-eric/VLO/issues/70>
 * The help page has been extended and updated, and made easier to find
     <https://github.com/clarin-eric/VLO/issues/9>
     <https://github.com/clarin-eric/VLO/issues/10>
