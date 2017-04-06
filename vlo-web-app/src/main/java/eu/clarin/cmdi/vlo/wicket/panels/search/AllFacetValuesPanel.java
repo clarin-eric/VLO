@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableList;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
@@ -28,15 +29,14 @@ import eu.clarin.cmdi.vlo.wicket.model.BridgeModel;
 import eu.clarin.cmdi.vlo.wicket.model.BridgeOuterModel;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
-
 import java.util.Collection;
 import java.util.Collections;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -48,6 +48,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -118,16 +119,11 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
         // create the view of the actual values
         final DataView<FacetField.Count> valuesView = createValuesView("facetValue");
-        valuesContainer.add(new AjaxPagingNavigator("navigator", valuesView) {
-
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(valuesView.getPageCount() > 1);
-            }
-
-        });
+        valuesContainer.add(new AllValuesNavigator("navigator", valuesView));
+        valuesContainer.add(new AllValuesNavigator("navigator2", valuesView));
+        valuesContainer.add(createValuesInfo("valuesInfo", valuesView));
         valuesContainer.add(valuesView);
+
 
         // create the form for selection sort option and entering filter string
         final Form optionsForm = createOptionsForm("options");
@@ -166,7 +162,24 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
             }
         };
     }
-    private static final int ITEMS_PER_PAGE = 250;
+    private static final int ITEMS_PER_PAGE = 50;
+
+    private Component createValuesInfo(String id, final DataView<FacetField.Count> view) {
+        return new Label(id, new AbstractReadOnlyModel<String>() {
+            @Override
+            public String getObject() {
+                if(view.getItemCount() == 0) {
+                    return "No matching values available.";
+                }
+                else if (view.getPageCount() <= 1) {
+                    return String.format("Showing %d available values:", view.getItemCount());
+                } else {
+                    final long offset = view.getFirstItemOffset();
+                    return String.format("Showing items %d - %d of %d matching values:", offset + 1, offset + view.getViewSize(), view.getItemCount());
+                }
+            }
+        });
+    }
 
     private Form createOptionsForm(String id) {
         final Form options = new AjaxIndicatingForm(id);
@@ -274,5 +287,21 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
      * (fallback)!
      */
     protected abstract void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target);
+
+    private static class AllValuesNavigator extends BootstrapAjaxPagingNavigator {
+
+        private final DataView<FacetField.Count> valuesView;
+
+        public AllValuesNavigator(String id, DataView<FacetField.Count> valuesView) {
+            super(id, valuesView);
+            this.valuesView = valuesView;
+        }
+
+        @Override
+        protected void onConfigure() {
+            super.onConfigure();
+            setVisible(valuesView.getPageCount() > 1);
+        }
+    }
 
 }

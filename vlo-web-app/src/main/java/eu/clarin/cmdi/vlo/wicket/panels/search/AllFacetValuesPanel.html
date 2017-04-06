@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <p>All values in this facet</p>
+            <p>All available values in this facet</p>
             <form wicket:id="options">
                 <div>
                     Search: <input wicket:id="filter" type="text" size="60"/>
@@ -47,17 +47,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <hr />
             <div wicket:id="facetValuesContainer" class="sortedFacet">
                 <wicket:enclosure>
-                    <div class="allfacetvaluespaging" wicket:id="navigator">[paging]</div>
-                    <hr />
+                    <ul class="allfacetvaluespaging" wicket:id="navigator">[paging]</ul>
                 </wicket:enclosure>
-                <!--                
-                    <div>
-                        <div class="anchorpanel"><a href=""></a><span>A</span></div>
-                    </div>
-                -->
+                
+                <div wicket:id="valuesInfo" class="allFacetValuesInfo">Showing 1 to 25 of 604056 values</div>
+                
                 <div wicket:id="facetValue">
                     <div class="facetLinkPanel"><a wicket:id="facetSelect" href=""><span wicket:id="name">A Corpus</span></a> <span dir="ltr">(<span wicket:id="count">1</span>)</span></div>
                 </div>
+
+                <wicket:enclosure>
+                    <ul class="allfacetvaluespaging" wicket:id="navigator2">[paging]</ul>
+                </wicket:enclosure>
             </div>
         </wicket:panel>
     </body>

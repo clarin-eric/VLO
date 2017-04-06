@@ -5,11 +5,11 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.1-SNAPSHOT</version>
+        <version>4.1.0</version>
     </parent>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-commons</artifactId>
-    <version>4.1-SNAPSHOT</version>
+    <version>4.1.0</version>
     <name>VLO Commons</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -115,7 +115,7 @@
             <properties>
                 <vloconfig.deleteAllFirst>false</vloconfig.deleteAllFirst>
                 <vloconfig.maxDaysInSolr>7</vloconfig.maxDaysInSolr>
-                <vloconfig.solrUrl>http://172.17.42.1:8080/solr/core0/</vloconfig.solrUrl>
+                <vloconfig.solrUrl>http://localhost:8080/solr/core0/</vloconfig.solrUrl>
                 <vloconfig.homeUrl>http://beta-vlo.clarin.eu</vloconfig.homeUrl>
                 <vloconfig.dataRootsFile>dataroots-beta.xml</vloconfig.dataRootsFile>
                 <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>

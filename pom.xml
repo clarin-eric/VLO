@@ -12,7 +12,7 @@
     <!-- When updating the version number here, also update the version number
          in each module's pom.xml
     -->
-    <version>4.1-SNAPSHOT</version>
+    <version>4.1.0</version>
     
     <description>Virtual Language Observatory (VLO) parent project</description>
     <organization>
@@ -33,7 +33,7 @@
 
     <properties>
         <!-- VLO-mapping project version to obtain default mappings from at build time -->
-        <vlo.mapping.version>1.0-beta1</vlo.mapping.version>
+        <vlo.mapping.version>1.0.0</vlo.mapping.version>
         
         <!-- Common runtime dependency versions -->
         <solr.version>4.10.4</solr.version>
