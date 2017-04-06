@@ -53,8 +53,6 @@
     
     <licenseAvailabilityMapUrl>${vloconfig.mappingFilesLocation}LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl> <!-- bundled resource: /uniform-maps/LicenseAvailabilityMap.xml -->
     
-    <resourceClassMapUrl>${vloconfig.mappingFilesLocation}resourceTypeMap.xml</resourceClassMapUrl> <!-- bundled resource: /uniform-maps/resourceTypeMap.xml -->
-    
     <licenseURIMapUrl>${vloconfig.mappingFilesLocation}LicenseURIMap.xml</licenseURIMapUrl> <!-- bundled resource: /uniform-maps/LicenseURIMap.xml -->
     
     <!-- Fields shown as facets on the search page -->
