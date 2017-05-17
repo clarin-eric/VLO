@@ -96,7 +96,7 @@ public final class CommonUtils {
     /**
      * Create a mapping out of simple CMDI components for instance: lists of
      * items: <item AppInfo="Tigrinya (ti)">ti</item> Will become key (after
-     * removal of trailing 2 or 3 letter codes), values: ti, Tigrinya
+     * removal of trailing 2 or 3 letter codes if value is unique), values: ti, Tigrinya
      *
      * @param urlToComponent
      * @return Map with item_value, AppInfo_value pairs
@@ -109,6 +109,8 @@ public final class CommonUtils {
     public static Map<String, String> createCMDIComponentItemMap(String urlToComponent) throws IOException, ParseException, NavException,
             XPathParseException, XPathEvalException {
         final Map<String, String> result = new HashMap<>();
+        final Map<String, Integer> tmpCount = new HashMap<>();
+        final String replacementString = " \\([a-zA-Z]+\\)$";
 
         URL url = new URL(urlToComponent);
         VTDGen vg = new VTDGen();
@@ -124,9 +126,24 @@ public final class CommonUtils {
         appInfoAttribute.selectXPath("@AppInfo");
 
         while (ap.evalXPath() != -1) {
-            String appInfoText = appInfoAttribute.evalXPathToString().replaceAll(" \\([a-zA-Z]+\\)$", "");
+            String appInfoText = appInfoAttribute.evalXPathToString();
             String itemContent = nav.toNormalizedString(nav.getText());
             result.put(itemContent.toUpperCase(), appInfoText);
+
+            // count how often appInfoText String (without extension in parentheses) occurs
+            String reducedAppInfoText = appInfoText.replaceAll(replacementString, "");
+            if(!tmpCount.containsKey(reducedAppInfoText))
+                tmpCount.put(reducedAppInfoText, 1);
+            else
+                tmpCount.put(reducedAppInfoText, tmpCount.get(reducedAppInfoText)+1);
+        }
+
+        // postprocessing: 2 or 3 letter codes will only be removed if name (e.g. language name) is unique
+        for(String key : result.keySet()) {
+            String value = result.get(key);
+            String reducedValue = value.replaceAll(replacementString, "");
+            if(tmpCount.get(reducedValue) == 1)
+                result.put(key, reducedValue);
         }
 
         return result;

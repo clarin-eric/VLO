@@ -588,7 +588,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(null, doc.getFieldValue("continent"));
         assertEquals(2, doc.getFieldValues("languageCode").size());
         assertTrue(doc.getFieldValues("languageCode").contains("code:zho"));
-        assertTrue(doc.getFieldValues("languageCode").contains("name:x-sil-CHN"));
+        assertTrue(doc.getFieldValues("languageCode").contains("name:X-sil-CHN"));
         assertEquals(null, doc.getFieldValue("country"));
         assertEquals(null, doc.getFieldValue("organisation"));
         assertEquals("transcription", doc.getFieldValue("genre"));
@@ -641,8 +641,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertTrue(doc.getFieldValues(FacetConstants.FIELD_COUNTRY).contains("testCountry1"));
         assertTrue(doc.getFieldValues(FacetConstants.FIELD_COUNTRY).contains("testCountry2"));
         assertEquals(2, doc.getFieldValues(FacetConstants.FIELD_LANGUAGE_CODE).size());
-        assertTrue(doc.getFieldValues(FacetConstants.FIELD_LANGUAGE_CODE).contains("name:test1"));
-        assertTrue(doc.getFieldValues(FacetConstants.FIELD_LANGUAGE_CODE).contains("name:language1"));
+        assertTrue(doc.getFieldValues(FacetConstants.FIELD_LANGUAGE_CODE).contains("name:Test1"));
+        assertTrue(doc.getFieldValues(FacetConstants.FIELD_LANGUAGE_CODE).contains("name:Language1"));
 
         content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -669,8 +669,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(1, doc.getFieldValues(FacetConstants.FIELD_COUNTRY).size());
         assertEquals("testCountry2", doc.getFieldValue(FacetConstants.FIELD_COUNTRY));
         assertEquals(2, doc.getFieldValues(FacetConstants.FIELD_LANGUAGE_CODE).size());
-        assertTrue(doc.getFieldValues(FacetConstants.FIELD_LANGUAGE_CODE).contains("name:test1"));
-        assertTrue(doc.getFieldValues(FacetConstants.FIELD_LANGUAGE_CODE).contains("name:language1"));
+        assertTrue(doc.getFieldValues(FacetConstants.FIELD_LANGUAGE_CODE).contains("name:Test1"));
+        assertTrue(doc.getFieldValues(FacetConstants.FIELD_LANGUAGE_CODE).contains("name:Language1"));
 
         content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -700,7 +700,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertTrue(doc.getFieldValues(FacetConstants.FIELD_COUNTRY).contains("testCountry1"));
         assertTrue(doc.getFieldValues(FacetConstants.FIELD_COUNTRY).contains("testCountry2"));
         assertEquals(2, doc.getFieldValues(FacetConstants.FIELD_LANGUAGE_CODE).size());
-        assertTrue(doc.getFieldValues(FacetConstants.FIELD_LANGUAGE_CODE).contains("name:test1"));
+        assertTrue(doc.getFieldValues(FacetConstants.FIELD_LANGUAGE_CODE).contains("name:Test1"));
     }
 
     @Test

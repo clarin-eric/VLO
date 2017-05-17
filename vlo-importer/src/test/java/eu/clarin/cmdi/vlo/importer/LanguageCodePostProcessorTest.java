@@ -22,7 +22,7 @@ public class LanguageCodePostProcessorTest extends ImporterTestcase {
         assertEquals("code:nld", processor.process("NL").get(0));
         assertEquals("code:eng", processor.process("en").get(0));
         assertEquals("code:fry", processor.process("fry").get(0));
-        assertEquals("name:test", processor.process("test").get(0));
+        assertEquals("name:Test", processor.process("test").get(0));
         assertEquals("", processor.process("").get(0));
         assertEquals(null, processor.process(null).get(0));
         assertEquals("code:fra", processor.process("ISO639-3:fra").get(0));

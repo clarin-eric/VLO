@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
+import org.apache.commons.lang.WordUtils;
 
 public class LanguageCodePostProcessor extends PostProcessorsWithVocabularyMap{
 
@@ -63,8 +64,8 @@ public class LanguageCodePostProcessor extends PostProcessorsWithVocabularyMap{
             return CODE_PREFIX + languageCodeUtils.getSilToIso639Map().get(result.toLowerCase());
         }
 
-        if(languageCodeUtils.getLanguageNameToIso639Map().containsKey(result)) { // (english) language name?
-            return CODE_PREFIX + languageCodeUtils.getLanguageNameToIso639Map().get(result);
+        if(languageCodeUtils.getLanguageNameToIso639Map().containsKey(WordUtils.capitalize(result))) { // (english) language name?
+            return CODE_PREFIX + languageCodeUtils.getLanguageNameToIso639Map().get(WordUtils.capitalize(result));
         }
 
         // convert ISO 639-2/T codes to ISO 639-3
@@ -79,7 +80,7 @@ public class LanguageCodePostProcessor extends PostProcessorsWithVocabularyMap{
             
         // language code not identified? -> language name
         if(!result.equals(""))
-            result = LANG_NAME_PREFIX + result;
+            result = LANG_NAME_PREFIX + WordUtils.capitalize(result);
         return result;
     }
 
