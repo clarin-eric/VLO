@@ -18,7 +18,7 @@
     <description></description>
 
     <properties>
-        <wicket.version>7.6.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
+        <wicket.version>7.7.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
         <spring.version>4.3.4.RELEASE</spring.version>
         <jetty.version>8.1.17.v20150415</jetty.version>
         <clarin-basestyle.version>0.2.0</clarin-basestyle.version>
@@ -162,7 +162,7 @@
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-core</artifactId>
-            <version>0.10.11</version>
+            <version>0.10.12</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.wicket</groupId>
