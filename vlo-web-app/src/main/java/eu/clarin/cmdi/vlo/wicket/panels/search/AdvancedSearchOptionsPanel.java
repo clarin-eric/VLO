@@ -26,8 +26,10 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.model.ToggleModel;
+import eu.clarin.cmdi.vlo.wicket.pages.VirtualCollectionSubmissionPage;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import java.util.Collection;
+import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
@@ -40,6 +42,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -57,6 +61,8 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
     @SpringBean
     private VloConfig config;
 
+    private final IDataProvider<SolrDocument> documentProvider;
+
     private final Form optionsForm;
 
     private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
@@ -68,8 +74,9 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
             FacetConstants.FIELD_HAS_PART_COUNT,
             FacetConstants.FIELD_SEARCH_SERVICE);
 
-    public AdvancedSearchOptionsPanel(String id, IModel<QueryFacetsSelection> model, IModel<FacetSelectionType> selectionTypeModeModel) {
+    public AdvancedSearchOptionsPanel(String id, final IModel<QueryFacetsSelection> model, IModel<FacetSelectionType> selectionTypeModeModel, final IDataProvider<SolrDocument> documentProvider) {
         super(id, model);
+        this.documentProvider = documentProvider;
 
         optionsForm = new Form("options");
 
@@ -92,6 +99,22 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         optionsForm.add(collectionsSection);
 
         optionsForm.add(indicatorAppender);
+
+        optionsForm.add(new Link("vcrSubmitTrigger") {
+
+            @Override
+            protected void onConfigure() {
+                // hide if there are no documents to create collection from
+                // or number of items is too high (according to configuration)
+                final long documentCount = documentProvider.size();
+                setVisible(documentCount > 0 && documentCount <= config.getVcrMaximumItemsCount());
+            }
+
+            @Override
+            public void onClick() {
+                setResponsePage(new VirtualCollectionSubmissionPage(model, documentProvider));
+            }
+        });
 
         add(optionsForm);
     }
@@ -120,6 +143,7 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
                         .onDone("$('form#advancedoptions input').prop('disabled', false);"));
             }
         });
+
         // should initially be epxanded if one of the options was selected
         if (toggleModel.getObject()) {
             getExpansionModel().setObject(ExpansionState.EXPANDED);
@@ -135,6 +159,12 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
     @Override
     public String getAjaxIndicatorMarkupId() {
         return indicatorAppender.getMarkupId();
+    }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        documentProvider.detach();
     }
 
     protected abstract void selectionChanged(AjaxRequestTarget target);

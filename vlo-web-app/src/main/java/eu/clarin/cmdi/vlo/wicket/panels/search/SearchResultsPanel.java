@@ -44,6 +44,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.wicket.model.PropertyModel;
 
 /**
  * Panel that has a data view on the current search results

@@ -94,8 +94,7 @@ public class VloConfig {
 
     private String handleServerUrl = "";
 
-    @XmlElement
-    private String imdiBrowserUrl = "";
+    private String languageLinkPrefix = "";
 
     private String languageLinkTemplate = "";
 
@@ -108,6 +107,10 @@ public class VloConfig {
 
     private String feedbackFromUrl = "";
 
+    private String vcrSubmitEndpoint;
+    
+    private Long vcrMaximumItemsCount = 0L;
+    
     private boolean showResultScores = false;
 
     private boolean processHierarchies = true;
@@ -654,6 +657,22 @@ public class VloConfig {
      */
     public void setFeedbackFromUrl(String param) {
         feedbackFromUrl = param;
+    }
+
+    public String getVcrSubmitEndpoint() {
+        return vcrSubmitEndpoint;
+    }
+
+    public void setVcrSubmitEndpoint(String vcrSubmitEndpoint) {
+        this.vcrSubmitEndpoint = vcrSubmitEndpoint;
+    }
+
+    public Long getVcrMaximumItemsCount() {
+        return vcrMaximumItemsCount;
+    }
+
+    public void setVcrMaximumItemsCount(Long vcrMaximumItemsCount) {
+        this.vcrMaximumItemsCount = vcrMaximumItemsCount;
     }
 
     /**

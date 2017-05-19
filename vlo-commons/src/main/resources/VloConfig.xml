@@ -183,6 +183,11 @@
     
     <cqlEndpointAlternative>http://cqlservlet.mpi.nl/</cqlEndpointAlternative>
     
+    <!-- Set to -1 to disable virtual collection creation from VLO -->
+    <vcrMaximumItemsCount>1000</vcrMaximumItemsCount>
+
+    <vcrSubmitEndpoint>clarin.ids-mannheim.de/vcr/service/submit</vcrSubmitEndpoint>
+
     <lrSwitchboardBaseUrl>http://weblicht.sfs.uni-tuebingen.de/clrs/</lrSwitchboardBaseUrl>
     
     <!-- makes the score for the result ranking visible in the search results -->

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+    <!--
+    Copyright (C) 2014 CLARIN
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for expands.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    -->
+
+    <head>
+        <title>CLARIN VLO</title>
+    </head>
+
+    <body>
+
+        <wicket:extend>
+            <div class="content" id="about">
+
+                <h1>Submit search results to the Virtual Collection Registry</h1>
+                <p>
+                    Provide a name for the collection and click the button below
+                    to create a new Virtual Collection of the current search
+                    results (<span wicket:id="itemCount">999</span> metadata 
+                    records).
+                    <br />
+                    After submission you will be taken to the editor of the Virtual 
+                    Collection where you will be able to further edit the
+                    newly created collection. You may be prompted to login
+                    to the Virtual Collection Registry first.
+                </p>
+
+                <hr />
+
+                <form id="virtualCollectionForm" wicket:id="vcrForm" method="post" name="vcrForm" action="[VCR endpoint]"> 
+                    <input type="hidden" name="type" value="EXTENSIONAL" />
+
+                    <p>
+                        <label for="collectionName">
+                            Collection name:
+                            <input wicket:id="collectionName" type="text" name="name" value="[Collection name]" size="40" />  
+                        </label>
+                    </p>
+
+                    <wicket:enclosure child="keywords">
+                        <div>
+                            <label for="keywords">Keywords:</label>
+                            <ul wicket:id="keywords" id="keywords">
+                                <li class="keywordwrapper" wicket:id="keyword">
+                                    <input wicket:id="keywordField" type="hidden" name="keyword" value="keyword" />
+                                    <span wicket:id="keywordValue">[keyword]</span>
+                                    <a wicket:id="remove" class="removekeyword"><span>[Remove]</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </wicket:enclosure>
+
+                    <wicket:container wicket:id="metadataUris">
+                        <input wicket:id="metadataUri" type="hidden" name="metadataUri" value="http://md1" />
+                    </wicket:container>
+                    <input type="submit" value="Create collection" />
+                </form> 
+
+            </div>
+        </wicket:extend>
+    </body>
+</html>

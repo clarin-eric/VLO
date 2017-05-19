@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -919,6 +918,16 @@ public class DefaultVloConfigFactoryTest {
     public void testGetSimpleSearchFacetFields() {
         List<String> result = config.getSimpleSearchFacetFields();
         assertEquals(5, result.size());
+    }
+
+    @Test
+    public void testGetVcrSubmitEndpoint() {
+        assertEquals("http://catalog-clarin.esc.rzg.mpg.de/vcr/service/submit", config.getVcrSubmitEndpoint());
+    }
+
+    @Test
+    public void testGetVcrMaximumItemsCount() {
+        assertEquals(Long.valueOf(1000), config.getVcrMaximumItemsCount());
     }
     
     @Test 
