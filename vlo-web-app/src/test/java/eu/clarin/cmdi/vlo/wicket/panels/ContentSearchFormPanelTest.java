@@ -70,7 +70,12 @@ public class ContentSearchFormPanelTest {
         tester.assertContains("action=\"http://fcs.org/aggregator\"");
 
         // json hidden input should have the CQL endpoint and document handle, and should be encoded into entities
-        tester.assertContains(Pattern.quote("name=\"x-aggregation-context\" value=\"{&quot;http://cqlEndPoint/&quot;: [&quot;hdl:1234/selflink&quot;]}\""));
+        tester.assertContains(Pattern.quote("name=\"x-aggregation-context\" "
+                + "value=\"{\n"
+                + "  &quot;http://cqlEndPoint/&quot;: [\n"
+                + "    &quot;hdl:1234/selflink&quot;\n"
+                + "  ]\n"
+                + "}\""));
     }
 
     /**
