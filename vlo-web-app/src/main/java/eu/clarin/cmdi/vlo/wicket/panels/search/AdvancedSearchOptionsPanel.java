@@ -100,7 +100,9 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
 
         optionsForm.add(indicatorAppender);
 
-        optionsForm.add(new Link("vcrSubmitTrigger") {
+        add(optionsForm);
+
+        add(new Link("vcrSubmitTrigger") {
 
             @Override
             protected void onConfigure() {
@@ -115,8 +117,6 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
                 setResponsePage(new VirtualCollectionSubmissionPage(model, documentProvider));
             }
         });
-
-        add(optionsForm);
     }
 
     private CheckBox createFieldNotEmptyOption(String id, String fieldName) {
