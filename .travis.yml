@@ -1,13 +1,15 @@
 sudo: false
 language: java
-
 jdk:
-  - oraclejdk8
-
+- oraclejdk8
 before_install:
-  - echo "MAVEN_OPTS='-Xmx2g -XX:MaxPermSize=512m'" > ~/.mavenrc
-
+- echo "MAVEN_OPTS='-Xmx2g -XX:MaxPermSize=512m'" > ~/.mavenrc
 notifications:
   email:
     on_success: change
     on_failure: always
+  slack:
+    rooms:
+      secure: DkniT09qHva8zB74U5cRoobMplSZXHT11X7UKecrJ8+aqtWv95QvgJnpEMB+p0+44Sb+8Rtei6kFq3G9RrMd3KjHWBW5eaTatTeB46EJAXYkspDqdEsRR1OK100zgfDMym0TcphLjyPetY3YjvoipYm9PQd9ed/pIOQLmC3SDK8mcE0KD+bWVm8r3hGygpX/P8vQiGxjxKGUZpcsk2JCuUigTnMvGoqtO282u5k+P6pxALg4WcA0NUv2983IzD4qqTjl9NDk+i7kzksA5FY3PTh1Hpw7Ypp1cwWB30Fr99mCRl+lvGFvST6GfPy3Vrxp9/kcqnybm2k35Fv7nxmbRmh4cz0EdVl7MT7vlKSskYOMSndDq6rDaH1KggPDPHdZr9a6wPNrIWanG1fTI4WzGR8ZR7QfgmxWLVE7QwfxXeb05sVIjK7Idru47dojhYKEImflWMUTGtir7ydN0oVgp2cdHwX1ysco/kZe0VBsF2iyYsXCJh+MefOiJiAptGspfRQffb9mh2ukRkHVlGa71DC+XscKRJS8seukqVLd52RSJK08qVjwPXytJilWgV7TZXDdPpc0H1XAD8/ShtC4ogjGOgrGEIMBS3E8F5Q5fwNhDEyMXqQt2Pnrc983KA6VYTto24MT8SUxojEeY8Hx7hiTTUdQxT4+89BNLf+y0KM=
+    on_success: change # default: always
+    on_failure: always # default: always
