@@ -109,12 +109,6 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         if (profileId == null) {
             throw new RuntimeException("Cannot get xsd schema so cannot get a proper mapping. Parse failed!");
         }
-//        final VloConfig config = MetadataImporter.config;
-//        final URI facetConceptsFile
-//                = FacetConceptsMarshaller.resolveFacetsFile(config.getConfigLocation(), config.getFacetConceptsFile());
-//        final String facetConceptsFilePath = new File(facetConceptsFile).getAbsolutePath();
-//        return FacetMappingFactory.getFacetMapping(facetConceptsFilePath, profileId, useLocalXSDCache);
-
         String facetConceptsFile = MetadataImporter.config.getFacetConceptsFile();
 
         return FacetMappingFactory.getFacetMapping(facetConceptsFile, profileId, useLocalXSDCache);
@@ -394,7 +388,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * if no PostProcessor was registered for the facet
      */
     private List<String> postProcess(String facetName, String extractedValue) {
-        List<String> resultList = new ArrayList<String>();
+        List<String> resultList = new ArrayList<>();
         if (postProcessors.containsKey(facetName)) {
             PostProcessor processor = postProcessors.get(facetName);
             resultList = processor.process(extractedValue);
