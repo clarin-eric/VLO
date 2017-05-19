@@ -36,11 +36,11 @@ public class CMDIData {
     private SolrInputDocument doc;
 
     // Lists for different types of resources.
-    private final List<Resource> metaDataResources = new ArrayList<Resource>();
-    private final List<Resource> dataResources = new ArrayList<Resource>();
-    private final List<Resource> searchResources = new ArrayList<Resource>();
-    private final List<Resource> landingPageResources = new ArrayList<Resource>();
-    private final List<Resource> searchPageResources = new ArrayList<Resource>();
+    private final List<Resource> metaDataResources = new ArrayList<>();
+    private final List<Resource> dataResources = new ArrayList<>();
+    private final List<Resource> searchResources = new ArrayList<>();
+    private final List<Resource> landingPageResources = new ArrayList<>();
+    private final List<Resource> searchPageResources = new ArrayList<>();
 
     public SolrInputDocument getSolrDocument() {
         return doc;
@@ -141,7 +141,11 @@ public class CMDIData {
         } else if (SEARCH_SERVICE_TYPE.equals(type)) {
             searchResources.add(new Resource(resource, type, mimeType));
         } else if (LANDING_PAGE_TYPE.equals(type)) {
-            landingPageResources.add(new Resource(resource, type, mimeType));
+            // omit multiple LandingPages
+            if(landingPageResources.isEmpty())
+                landingPageResources.add(new Resource(resource, type, mimeType));
+            else
+                LOG.warn("Ignoring surplus landingpage: {}", resource);
         } else if (SEARCH_PAGE_TYPE.equals(type)) {
             searchPageResources.add(new Resource(resource, type, mimeType));
         } else {
