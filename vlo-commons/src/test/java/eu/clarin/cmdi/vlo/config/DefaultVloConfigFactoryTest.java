@@ -922,7 +922,7 @@ public class DefaultVloConfigFactoryTest {
 
     @Test
     public void testGetVcrSubmitEndpoint() {
-        assertEquals("http://catalog-clarin.esc.rzg.mpg.de/vcr/service/submit", config.getVcrSubmitEndpoint());
+        assertEquals("https://clarin.ids-mannheim.de/vcr/service/submit", config.getVcrSubmitEndpoint());
     }
 
     @Test
