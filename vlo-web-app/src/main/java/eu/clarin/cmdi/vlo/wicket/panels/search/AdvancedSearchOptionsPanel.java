@@ -24,18 +24,21 @@ import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.model.ToggleModel;
 import eu.clarin.cmdi.vlo.wicket.pages.VirtualCollectionSubmissionPage;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import java.util.Collection;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -45,6 +48,8 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -102,21 +107,39 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
 
         add(optionsForm);
 
-        add(new Link("vcrSubmitTrigger") {
-
+        final IModel<Boolean> vcrSubmitEnabledModel = new LoadableDetachableModel<Boolean>() {
             @Override
-            protected void onConfigure() {
-                // hide if there are no documents to create collection from
-                // or number of items is too high (according to configuration)
+            protected Boolean load() {
                 final long documentCount = documentProvider.size();
-                setVisible(documentCount > 0 && documentCount <= config.getVcrMaximumItemsCount());
+                return (documentCount > 0 && documentCount <= config.getVcrMaximumItemsCount());
             }
+        };
+
+        add(new Link("vcrSubmitTrigger", vcrSubmitEnabledModel) {
 
             @Override
             public void onClick() {
-                setResponsePage(new VirtualCollectionSubmissionPage(model, documentProvider));
+                if (vcrSubmitEnabledModel.getObject()) {
+                    setResponsePage(new VirtualCollectionSubmissionPage(model, documentProvider));
+                }
             }
-        });
+
+            @Override
+            public boolean isEnabled() {
+                return vcrSubmitEnabledModel.getObject();
+            }
+        }
+                .add(new AttributeAppender("class", new BooleanOptionsModel(vcrSubmitEnabledModel,
+                        new Model<String>(null), //enabled
+                        Model.of("disabled")),
+                        " "))
+                .add(new AttributeModifier("target", new BooleanOptionsModel(vcrSubmitEnabledModel,
+                        Model.of("_blank"),
+                        new Model<String>(null))))
+                .add(new AttributeModifier("title", new BooleanOptionsModel(vcrSubmitEnabledModel,
+                        Model.of("Create a new collection in the Virtual Collection Registry containing the records included in the current search result"),
+                        Model.of(String.format("Only available for search results containing %s items or less", config.getVcrMaximumItemsCount())))))
+        );
     }
 
     private CheckBox createFieldNotEmptyOption(String id, String fieldName) {
