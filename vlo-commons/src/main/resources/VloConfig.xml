@@ -24,7 +24,7 @@
     
     <solrTimeOut>300</solrTimeOut>
     
-    <maxFileSize>10000000</maxFileSize>
+    <maxFileSize>15000000</maxFileSize>
     
     <useHandleResolver>false</useHandleResolver>
     
