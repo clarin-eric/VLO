@@ -21,7 +21,6 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
-import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
@@ -57,7 +56,7 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
         this.documentProvider = documentProvider;
 
         // add a label with the number of URI's for the description
-        add(new Label("itemCount", new PropertyModel<Long>(documentProvider, "size")));
+        add(new Label("itemCount", new PropertyModel<>(documentProvider, "size")));
 
         // the form is a container, not a wicket Form because it submits to an
         // external service
@@ -111,7 +110,7 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
 
     private WebMarkupContainer addKeywords(IModel<QueryFacetsSelection> model, String id) {
         //create initial keywords list
-        final ArrayList<String> keywordsList = new ArrayList<String>();
+        final ArrayList<String> keywordsList = new ArrayList<>();
         if (model.getObject().getQuery() != null) {
             keywordsList.add(model.getObject().getQuery());
         }
@@ -134,7 +133,7 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
         keywords.setOutputMarkupId(true);
 
         // create keywords list
-        final IModel<List<String>> keywordsModel = new ListModel<String>(keywordsList);
+        final IModel<List<String>> keywordsModel = new ListModel<>(keywordsList);
         keywords.add(new ListView<String>("keyword", keywordsModel) {
 
             @Override

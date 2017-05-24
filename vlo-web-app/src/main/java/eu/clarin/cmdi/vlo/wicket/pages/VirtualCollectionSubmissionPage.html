@@ -25,53 +25,51 @@
     <body>
 
         <wicket:extend>
-            <div class="content" id="about">
+            <h1>Submit search results to the Virtual Collection Registry</h1>
+            <p>
+                Provide a name for the collection and click the button below
+                to create a new Virtual Collection of the current search
+                results (<span wicket:id="itemCount">999</span> metadata 
+                records).
+                <br />
+                After submission you will be taken to the editor of the Virtual 
+                Collection where you will be able to further edit the
+                newly created collection. You may be prompted to login
+                to the Virtual Collection Registry first.
+            </p>
 
-                <h1>Submit search results to the Virtual Collection Registry</h1>
+            <hr />
+
+            <form id="virtualCollectionForm" wicket:id="vcrForm" method="post" name="vcrForm" action="[VCR endpoint]"> 
+                <input type="hidden" name="type" value="EXTENSIONAL" />
+
+                <div class="form-group">
+                    <label for="collectionName">Collection name:</label>
+                    <input wicket:id="collectionName" id="collectionName" type="text" class="form-control" name="name" placeholder="Collection name"/>
+                </div>
+
+                <wicket:enclosure child="keywords">
+                    <div class="form-group">
+                        <label for="keywords">Keywords:</label>
+                        <ul wicket:id="keywords" id="keywords">
+                            <li class="keywordwrapper" wicket:id="keyword">
+                                <input wicket:id="keywordField" type="hidden" name="keyword" value="keyword" />
+                                <span wicket:id="keywordValue">[keyword]</span>
+                                <a wicket:id="remove" class="removekeyword"><span>[Remove]</span></a>
+                            </li>
+                        </ul>
+                        <p class="help-block">The virtual collection registry editor will allow you to add or remove additional keywords.</p>
+                    </div>
+                </wicket:enclosure>
+
+                <wicket:container wicket:id="metadataUris">
+                    <input wicket:id="metadataUri" type="hidden" name="metadataUri" value="http://md1" />
+                </wicket:container>
+
                 <p>
-                    Provide a name for the collection and click the button below
-                    to create a new Virtual Collection of the current search
-                    results (<span wicket:id="itemCount">999</span> metadata 
-                    records).
-                    <br />
-                    After submission you will be taken to the editor of the Virtual 
-                    Collection where you will be able to further edit the
-                    newly created collection. You may be prompted to login
-                    to the Virtual Collection Registry first.
+                    <input type="submit" class="btn btn-primary" value="Create collection" />
                 </p>
-
-                <hr />
-
-                <form id="virtualCollectionForm" wicket:id="vcrForm" method="post" name="vcrForm" action="[VCR endpoint]"> 
-                    <input type="hidden" name="type" value="EXTENSIONAL" />
-
-                    <p>
-                        <label for="collectionName">
-                            Collection name:
-                            <input wicket:id="collectionName" type="text" name="name" value="[Collection name]" size="40" />  
-                        </label>
-                    </p>
-
-                    <wicket:enclosure child="keywords">
-                        <div>
-                            <label for="keywords">Keywords:</label>
-                            <ul wicket:id="keywords" id="keywords">
-                                <li class="keywordwrapper" wicket:id="keyword">
-                                    <input wicket:id="keywordField" type="hidden" name="keyword" value="keyword" />
-                                    <span wicket:id="keywordValue">[keyword]</span>
-                                    <a wicket:id="remove" class="removekeyword"><span>[Remove]</span></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </wicket:enclosure>
-
-                    <wicket:container wicket:id="metadataUris">
-                        <input wicket:id="metadataUri" type="hidden" name="metadataUri" value="http://md1" />
-                    </wicket:container>
-                    <input type="submit" value="Create collection" />
-                </form> 
-
-            </div>
+            </form> 
         </wicket:extend>
     </body>
 </html>
