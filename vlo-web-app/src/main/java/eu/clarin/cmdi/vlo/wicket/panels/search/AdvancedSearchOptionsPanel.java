@@ -32,6 +32,7 @@ import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import java.util.Collection;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
@@ -107,6 +108,11 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
 
         add(optionsForm);
 
+        add(createVcrSubmitTrigger("vcrSubmitTrigger"));
+    }
+
+    private Component createVcrSubmitTrigger(String id) {
+
         final IModel<Boolean> vcrSubmitEnabledModel = new LoadableDetachableModel<Boolean>() {
             @Override
             protected Boolean load() {
@@ -115,31 +121,31 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
             }
         };
 
-        add(new Link("vcrSubmitTrigger", vcrSubmitEnabledModel) {
-
+        final Link submitLink = new Link(id, vcrSubmitEnabledModel) {
             @Override
             public void onClick() {
-                if (vcrSubmitEnabledModel.getObject()) {
-                    setResponsePage(new VirtualCollectionSubmissionPage(model, documentProvider));
-                }
+                setResponsePage(new VirtualCollectionSubmissionPage(AdvancedSearchOptionsPanel.this.getModel(), documentProvider));
             }
 
             @Override
             public boolean isEnabled() {
                 return vcrSubmitEnabledModel.getObject();
             }
-        }
-                .add(new AttributeAppender("class", new BooleanOptionsModel(vcrSubmitEnabledModel,
-                        new Model<String>(null), //enabled
-                        Model.of("disabled")),
-                        " "))
-                .add(new AttributeModifier("target", new BooleanOptionsModel(vcrSubmitEnabledModel,
-                        Model.of("_blank"),
-                        new Model<String>(null))))
-                .add(new AttributeModifier("title", new BooleanOptionsModel(vcrSubmitEnabledModel,
-                        Model.of("Create a new collection in the Virtual Collection Registry containing the records included in the current search result"),
-                        Model.of(String.format("Only available for search results containing %s items or less", config.getVcrMaximumItemsCount())))))
-        );
+        };
+
+        return submitLink
+                .add(new AttributeAppender("class",
+                        new BooleanOptionsModel(vcrSubmitEnabledModel,
+                                new Model<String>(null), //enabled
+                                Model.of("disabled")), " "))
+                .add(new AttributeModifier("target",
+                        new BooleanOptionsModel(vcrSubmitEnabledModel,
+                                Model.of("_blank"),
+                                new Model<String>(null))))
+                .add(new AttributeModifier("title",
+                        new BooleanOptionsModel(vcrSubmitEnabledModel,
+                                Model.of("Create a new collection in the Virtual Collection Registry containing the records included in the current search result"),
+                                Model.of(String.format("Only available for search results containing %s items or less", config.getVcrMaximumItemsCount())))));
     }
 
     private CheckBox createFieldNotEmptyOption(String id, String fieldName) {
