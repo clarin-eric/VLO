@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableList;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
@@ -28,6 +29,7 @@ import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueOrderSelector;
 import eu.clarin.cmdi.vlo.wicket.model.BridgeModel;
 import eu.clarin.cmdi.vlo.wicket.model.BridgeOuterModel;
+import eu.clarin.cmdi.vlo.wicket.model.SelectionModel;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.util.Collection;
@@ -74,6 +76,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
     private final IModel<FieldValuesFilter> filterModel;
     private final IModel<FacetSelectionType> selectionTypeModeModel;
     private final IModel<QueryFacetsSelection> selectionModel;
+    private final IModel<String> fieldNameModel;
 
     /**
      *
@@ -99,6 +102,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
         this.selectionModel = selectionModel;
         this.selectionTypeModeModel = selectionTypeModeModel;
+        this.fieldNameModel = new PropertyModel<>(getModel(), "name");
 
         if (filterModel != null) {
             this.filterModel = filterModel;
@@ -122,7 +126,10 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         valuesContainer.setOutputMarkupId(true);
         add(valuesContainer);
 
-        // create the view of the actual values
+        // create the view of selected values
+        valuesContainer.add(createSelectedValuesView("selectedValues"));
+
+        // create the view of the available values
         final DataView<FacetField.Count> valuesView = createValuesView("facetValue");
         valuesContainer.add(new AllValuesNavigator("navigator", valuesView));
         valuesContainer.add(new AllValuesNavigator("navigator2", valuesView));
@@ -135,8 +142,29 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         add(optionsForm);
     }
 
+    private SelectedFacetPanel createSelectedValuesView(String id) {
+        final String facet = fieldNameModel.getObject();
+        return new SelectedFacetPanel(id, facet, new SelectionModel(facet, selectionModel)) {
+            @Override
+            protected void onValuesUnselected(Collection<String> valuesRemoved, AjaxRequestTarget target) {
+                // Values have been removed, calculate remainder
+                selectionModel.getObject().removeFacetValue(facet, valuesRemoved);
+                if (target != null) {
+                    target.add(valuesContainer);
+                }
+            }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                final FacetSelection selectionValues = selectionModel.getObject().getSelectionValues(facet);
+                setVisible(selectionValues != null && !selectionValues.isEmpty());
+            }
+
+        };
+    }
+
     private DataView<FacetField.Count> createValuesView(final String id) {
-        final IModel<String> fieldNameModel = new PropertyModel<>(getModel(), "name");
         return new DataView<FacetField.Count>(id, valuesProvider, ITEMS_PER_PAGE) {
 
             @Override
@@ -151,7 +179,9 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
                         selectionModel.getObject().addNewFacetValue(fieldNameModel.getObject(), selectionTypeModeModel.getObject(), Collections.singleton(item.getModelObject().getName()));
                         //detach models to make sure that facet field values get re-evaluated upon rendering
                         AllFacetValuesPanel.this.detachModels();
-                        target.add(valuesContainer);
+                        if (target != null) {
+                            target.add(valuesContainer);
+                        }
                         // call callback
 //                        onValuesSelected(
 //                                selectionTypeModeModel.getObject(),
@@ -279,6 +309,9 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         super.detachModels();
         if (filterModel != null) {
             filterModel.detach();
+        }
+        if (fieldNameModel != null) {
+            fieldNameModel.detach();
         }
         if (selectionModel != null) {
             selectionModel.detach();
