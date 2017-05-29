@@ -37,14 +37,11 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -53,7 +50,6 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -86,6 +82,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param model facet field model for this panel
      * @param selectionModel model holding the global query/facet selection
      * @param selectionTypeModel model holding the current selection type
+     * @param filterModel model for facet value filter/search text
      */
     public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModel, IModel<FieldValuesFilter> filterModel) {
         this(id, model, selectionModel, selectionTypeModel, filterModel, 0);
@@ -98,6 +95,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param model facet field model for this panel
      * @param selectionModel model holding the global query/facet selection
      * @param selectionTypeModel model holding the current selection type
+     * @param filterModel model for facet value filter/search text
      * @param subListSize if large than 0, multiple lists will be generated each
      * with a maximum size of this value
      */
