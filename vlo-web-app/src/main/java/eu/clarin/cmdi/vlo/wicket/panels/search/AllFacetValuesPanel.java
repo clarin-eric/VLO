@@ -129,7 +129,6 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         valuesContainer.add(createValuesInfo("valuesInfo", valuesView));
         valuesContainer.add(valuesView);
 
-
         // create the form for selection sort option and entering filter string
         final Form optionsForm = createOptionsForm("options");
         optionsForm.setOutputMarkupId(true);
@@ -150,6 +149,8 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         selectionModel.getObject().addNewFacetValue(fieldNameModel.getObject(), selectionTypeModeModel.getObject(), Collections.singleton(item.getModelObject().getName()));
+                        //detach models to make sure that facet field values get re-evaluated upon rendering
+                        AllFacetValuesPanel.this.detachModels();
                         target.add(valuesContainer);
                         // call callback
 //                        onValuesSelected(
@@ -175,10 +176,9 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         return new Label(id, new AbstractReadOnlyModel<String>() {
             @Override
             public String getObject() {
-                if(view.getItemCount() == 0) {
+                if (view.getItemCount() == 0) {
                     return "No matching values available.";
-                }
-                else if (view.getPageCount() <= 1) {
+                } else if (view.getPageCount() <= 1) {
                     return String.format("Showing %d available values:", view.getItemCount());
                 } else {
                     final long offset = view.getFirstItemOffset();
@@ -280,7 +280,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         if (filterModel != null) {
             filterModel.detach();
         }
-        if(selectionModel != null) {
+        if (selectionModel != null) {
             selectionModel.detach();
         }
         if (selectionTypeModeModel != null) {

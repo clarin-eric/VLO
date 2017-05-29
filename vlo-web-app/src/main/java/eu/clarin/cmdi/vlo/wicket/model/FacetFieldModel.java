@@ -40,8 +40,7 @@ public class FacetFieldModel extends AbstractReadOnlyModel<FacetField> {
 
     private final FacetFieldsModel fieldsModel;
     private final String facetName;
-    
-    
+
     /**
      *
      * @param service service to use for facet field retrieval
@@ -49,12 +48,12 @@ public class FacetFieldModel extends AbstractReadOnlyModel<FacetField> {
      * @param selectionModel model that provides current query/selection
      */
     public FacetFieldModel(String facet, FacetFieldsService service, IModel<QueryFacetsSelection> selectionModel) {
-    	this(facet, new FacetFieldsModel(service, Collections.singletonList(facet), selectionModel, -1));
+        this(facet, new FacetFieldsModel(service, Collections.singletonList(facet), selectionModel, -1));
     }
-    
-    public FacetFieldModel(String facetName, FacetFieldsModel fieldsModel){
-    	this.fieldsModel = fieldsModel;
-    	this.facetName = facetName;
+
+    public FacetFieldModel(String facetName, FacetFieldsModel fieldsModel) {
+        this.fieldsModel = fieldsModel;
+        this.facetName = facetName;
     }
 
     @Override
@@ -62,10 +61,9 @@ public class FacetFieldModel extends AbstractReadOnlyModel<FacetField> {
         return fieldsModel.getFacetField(facetName);
     }
 
-    
-    public void detachFacetFieldsModel(){
-    	fieldsModel.detach();
+    @Override
+    public void detach() {
+        fieldsModel.detach();
     }
-
 
 }
