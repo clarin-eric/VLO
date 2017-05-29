@@ -243,7 +243,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             }
         };
 
-        final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), selectionTypeModeModel, filterModel) {
+        final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), selectionTypeModeModel, selectionModel, filterModel) {
 
             @Override
             protected void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {

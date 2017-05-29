@@ -105,7 +105,7 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
 
         add(new Label("name", new SolrFieldNameModel(new PropertyModel<String>(getModel(), "name"))));
 
-        add(new AllFacetValuesPanel("values", getModel(), selectionTypeModeModel) {
+        add(new AllFacetValuesPanel("values", getModel(), selectionTypeModeModel, selectionModel) {
 
             @Override
             protected void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {

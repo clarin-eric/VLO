@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.components.AjaxIndicatingForm;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueOrderSelector;
@@ -72,27 +73,31 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
     private final WebMarkupContainer valuesContainer;
     private final IModel<FieldValuesFilter> filterModel;
     private final IModel<FacetSelectionType> selectionTypeModeModel;
+    private final IModel<QueryFacetsSelection> selectionModel;
 
     /**
      *
      * @param id component id
      * @param model model for the facet field to show values for
-     * @param selectionTypeModeModel
+     * @param selectionTypeModeModel model for selection type mode (and/or/...)
+     * @param selectionModel selection model
      */
-    public AllFacetValuesPanel(String id, IModel<FacetField> model, IModel<FacetSelectionType> selectionTypeModeModel) {
-        this(id, model, selectionTypeModeModel, null);
+    public AllFacetValuesPanel(String id, IModel<FacetField> model, IModel<FacetSelectionType> selectionTypeModeModel, final IModel<QueryFacetsSelection> selectionModel) {
+        this(id, model, selectionTypeModeModel, selectionModel, null);
     }
 
     /**
      *
      * @param id component id
      * @param model model for the facet field to show values for
-     * @param selectionTypeModeModel
+     * @param selectionTypeModeModel model for selection type mode (and/or/...)
+     * @param selectionModel selection model
      * @param filterModel model that holds a string to filter in (can be null)
      */
-    public AllFacetValuesPanel(String id, IModel<FacetField> model, IModel<FacetSelectionType> selectionTypeModeModel, IModel<FieldValuesFilter> filterModel) {
+    public AllFacetValuesPanel(String id, IModel<FacetField> model, IModel<FacetSelectionType> selectionTypeModeModel, final IModel<QueryFacetsSelection> selectionModel, IModel<FieldValuesFilter> filterModel) {
         super(id, model);
 
+        this.selectionModel = selectionModel;
         this.selectionTypeModeModel = selectionTypeModeModel;
 
         if (filterModel != null) {
@@ -131,7 +136,7 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         add(optionsForm);
     }
 
-    private DataView<FacetField.Count> createValuesView(String id) {
+    private DataView<FacetField.Count> createValuesView(final String id) {
         final IModel<String> fieldNameModel = new PropertyModel<>(getModel(), "name");
         return new DataView<FacetField.Count>(id, valuesProvider, ITEMS_PER_PAGE) {
 
@@ -144,12 +149,14 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
+                        selectionModel.getObject().addNewFacetValue(fieldNameModel.getObject(), selectionTypeModeModel.getObject(), Collections.singleton(item.getModelObject().getName()));
+                        target.add(valuesContainer);
                         // call callback
-                        onValuesSelected(
-                                selectionTypeModeModel.getObject(),
-                                // for now only single values can be selected
-                                Collections.singleton(item.getModelObject().getName()),
-                                target);
+//                        onValuesSelected(
+//                                selectionTypeModeModel.getObject(),
+//                                // for now only single values can be selected
+//                                Collections.singleton(item.getModelObject().getName()),
+//                                target);
                     }
                 };
                 item.add(selectLink);
@@ -272,6 +279,9 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
         super.detachModels();
         if (filterModel != null) {
             filterModel.detach();
+        }
+        if(selectionModel != null) {
+            selectionModel.detach();
         }
         if (selectionTypeModeModel != null) {
             selectionTypeModeModel.detach();
