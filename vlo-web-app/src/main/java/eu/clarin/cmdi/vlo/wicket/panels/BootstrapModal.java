@@ -16,11 +16,16 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import java.io.Serializable;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -48,6 +53,18 @@ public abstract class BootstrapModal extends Panel {
     protected void onInitialize() {
         super.onInitialize();
         add(new Label("title", getTitle()));
+        add(new AjaxLink("closeCross") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onDismiss(target);
+            }
+        });
+        add(new AjaxLink("closeButton") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onClose(target);
+            }
+        }.add(new Label("closeButtonLabel", getCloseButtonLabelModel())));
         setOutputMarkupId(true);
     }
 
@@ -60,17 +77,21 @@ public abstract class BootstrapModal extends Panel {
     protected abstract IModel<String> getTitle();
 
     public void close(AjaxRequestTarget target) {
-        visibilityModel.setObject(false);
-        target.add(this);
-        target.prependJavaScript(String.format("cb|hideModal($('#%s .modal'), cb);", getMarkupId(true)));
+        if (visibilityModel.getObject()) {
+            visibilityModel.setObject(false);
+            target.add(this);
+            target.prependJavaScript(String.format("cb|hideModal($('#%s .modal'), cb);", getMarkupId(true)));
+        }
     }
 
     public void show(AjaxRequestTarget target) {
-        visibilityModel.setObject(true);
-        target.add(this);
-        target.appendJavaScript(String.format("showModal($('#%s .modal'));", getMarkupId(true)));
+        if (!visibilityModel.getObject()) {
+            visibilityModel.setObject(true);
+            target.add(this);
+            target.appendJavaScript(String.format("showModal($('#%s .modal'));", getMarkupId(true)));
+        }
     }
-    
+
     public void show() {
         visibilityModel.setObject(true);
     }
@@ -82,6 +103,32 @@ public abstract class BootstrapModal extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(BootstrapModal.class, "bootstrap-modal.js")));
+    }
+
+    /**
+     * Called if the user dismisses the dialogue by clicking the 'cross'. If
+     * overriding, {@link #close(org.apache.wicket.ajax.AjaxRequestTarget) }
+     * needs to be called in order to close the dialogue
+     *
+     * @param target
+     */
+    protected void onDismiss(AjaxRequestTarget target) {
+        close(target);
+    }
+
+    /**
+     * Called if the user closes the dialogue by clicking the close button. If
+     * overriding, {@link #close(org.apache.wicket.ajax.AjaxRequestTarget) }
+     * needs to be called in order to close the dialogue
+     *
+     * @param target
+     */
+    protected void onClose(AjaxRequestTarget target) {
+        close(target);
+    }
+
+    protected IModel<?> getCloseButtonLabelModel() {
+        return Model.of("Close");
     }
 
 }

@@ -27,14 +27,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <button wicket:id="closeCross" type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" wicket:id="title">Modal title</h4>
                     </div>
                     <div class="modal-body">
                         <wicket:container wicket:id="bodyContent"></wicket:container>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button wicket:id="closeButton" type="button" class="btn btn-default"><span wicket:id="closeButtonLabel">Close</span></button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
