@@ -40,6 +40,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -127,7 +128,16 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         add(valuesContainer);
 
         // create the view of selected values
-        valuesContainer.add(createSelectedValuesView("selectedValues"));
+        valuesContainer.add(
+                new WebMarkupContainer("selectedValuesContainer")
+                        .add(createSelectedValuesView("selectedValues"))
+                        .add(new Behavior() {
+                            @Override
+                            public void onConfigure(Component component) {
+                                final FacetSelection selectionValues = selectionModel.getObject().getSelectionValues(fieldNameModel.getObject());
+                                component.setVisible(selectionValues != null && !selectionValues.isEmpty());
+                            }
+                        }));
 
         // create the view of the available values
         final DataView<FacetField.Count> valuesView = createValuesView("facetValue");
@@ -152,13 +162,6 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
                 if (target != null) {
                     target.add(valuesContainer);
                 }
-            }
-
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                final FacetSelection selectionValues = selectionModel.getObject().getSelectionValues(facet);
-                setVisible(selectionValues != null && !selectionValues.isEmpty());
             }
 
         }.setRenderForCollapsed(false);
