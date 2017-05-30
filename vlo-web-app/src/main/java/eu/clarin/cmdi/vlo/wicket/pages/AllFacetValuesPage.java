@@ -105,30 +105,28 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
 
         add(new Label("name", new SolrFieldNameModel(new PropertyModel<String>(getModel(), "name"))));
 
-        add(new AllFacetValuesPanel("values", getModel(), selectionTypeModeModel, selectionModel) {
-
-            @Override
-            protected void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
-                // Create updated selection state
-                final QueryFacetsSelection newSelection;
-                if (selectionModel != null) {
-                    newSelection = selectionModel.getObject().getCopy();
-                } else {
-                    newSelection = new QueryFacetsSelection();
-                }
-                final FacetSelection facetSelection = newSelection.getSelectionValues(getModelObject().getName());
-                if (facetSelection != null) {
-                    facetSelection.getValues().addAll(values);
-                } else {
-                    newSelection.selectValues(getModelObject().getName(), new FacetSelection(selectionType, values));
-                }
-
-                // Redirect to search page with updated model
-                final FacetedSearchPage searchPage = new FacetedSearchPage(Model.of(newSelection));
-                setResponsePage(searchPage);
-            }
-        });
+        add(new AllFacetValuesPanel("values", getModel(), selectionTypeModeModel, selectionModel));
     }
+
+//    protected void onComplete(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
+//        // Create updated selection state
+//        final QueryFacetsSelection newSelection;
+//        if (selectionModel != null) {
+//            newSelection = selectionModel.getObject().getCopy();
+//        } else {
+//            newSelection = new QueryFacetsSelection();
+//        }
+//        final FacetSelection facetSelection = newSelection.getSelectionValues(getModelObject().getName());
+//        if (facetSelection != null) {
+//            facetSelection.getValues().addAll(values);
+//        } else {
+//            newSelection.selectValues(getModelObject().getName(), new FacetSelection(selectionType, values));
+//        }
+//
+//        // Redirect to search page with updated model
+//        final FacetedSearchPage searchPage = new FacetedSearchPage(Model.of(newSelection));
+//        setResponsePage(searchPage);
+//    }
 
     @Override
     public void detachModels() {

@@ -66,7 +66,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  *
  * @author twagoo
  */
-public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
+public class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
     @SpringBean
     private FieldValueConverterProvider fieldValueConverterProvider;
@@ -182,12 +182,6 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
                         if (target != null) {
                             target.add(valuesContainer);
                         }
-                        // call callback
-//                        onValuesSelected(
-//                                selectionTypeModeModel.getObject(),
-//                                // for now only single values can be selected
-//                                Collections.singleton(item.getModelObject().getName()),
-//                                target);
                     }
                 };
                 item.add(selectLink);
@@ -320,16 +314,6 @@ public abstract class AllFacetValuesPanel extends GenericPanel<FacetField> {
             selectionTypeModeModel.detach();
         }
     }
-
-    /**
-     * Callback triggered when values have been selected on this facet
-     *
-     * @param selectionType
-     * @param values selected values
-     * @param target Ajax target allowing for a partial update. May be null
-     * (fallback)!
-     */
-    protected abstract void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target);
 
     private static class AllValuesNavigator extends BootstrapAjaxPagingNavigator {
 

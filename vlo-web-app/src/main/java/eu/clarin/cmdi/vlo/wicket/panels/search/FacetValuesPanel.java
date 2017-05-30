@@ -243,21 +243,19 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             }
         };
 
-        final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), selectionTypeModeModel, selectionModel, filterModel) {
-
-            @Override
-            protected void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
-                if (target != null) {
-                    // target can be null if selection link was opened in a new tab
-                    window.close(target);
-                }
-                FacetValuesPanel.this.onValuesSelected(selectionType, values, target);
-            }
-        };
+        final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), selectionTypeModeModel, selectionModel, filterModel);
 
         window.addOrReplace(modalContent);
         return window;
     }
+
+//    protected void onComplete(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
+//        if (target != null) {
+//            // target can be null if selection link was opened in a new tab
+//            window.close(target);
+//        }
+//        FacetValuesPanel.this.onValuesSelected(selectionType, values, target);
+//    }
 
     @Override
     public void detachModels() {
