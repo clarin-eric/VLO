@@ -17,12 +17,10 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.VloWebSession;
-import java.util.Collection;
 
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -32,7 +30,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
@@ -42,6 +39,8 @@ import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.AllFacetValuesPanel;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
 
 /**
  *
@@ -106,27 +105,17 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
         add(new Label("name", new SolrFieldNameModel(new PropertyModel<String>(getModel(), "name"))));
 
         add(new AllFacetValuesPanel("values", getModel(), selectionTypeModeModel, selectionModel));
-    }
 
-//    protected void onComplete(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
-//        // Create updated selection state
-//        final QueryFacetsSelection newSelection;
-//        if (selectionModel != null) {
-//            newSelection = selectionModel.getObject().getCopy();
-//        } else {
-//            newSelection = new QueryFacetsSelection();
-//        }
-//        final FacetSelection facetSelection = newSelection.getSelectionValues(getModelObject().getName());
-//        if (facetSelection != null) {
-//            facetSelection.getValues().addAll(values);
-//        } else {
-//            newSelection.selectValues(getModelObject().getName(), new FacetSelection(selectionType, values));
-//        }
-//
-//        // Redirect to search page with updated model
-//        final FacetedSearchPage searchPage = new FacetedSearchPage(Model.of(newSelection));
-//        setResponsePage(searchPage);
-//    }
+        add(new Form("submit") {
+            @Override
+            public void onSubmit() {
+                // Redirect to search page with updated model
+                final FacetedSearchPage searchPage = new FacetedSearchPage(parametersConverter.toParameters(selectionModel.getObject()));
+                setResponsePage(searchPage);
+            }
+
+        });
+    }
 
     @Override
     public void detachModels() {
