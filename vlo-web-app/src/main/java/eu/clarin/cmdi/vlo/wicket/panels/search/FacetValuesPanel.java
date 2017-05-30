@@ -72,6 +72,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     private final int subListSize;
     private final IModel<String> fieldNameModel;
     private final IModel<FacetSelectionType> selectionTypeModeModel;
+    private IModel<QueryFacetsSelection> beforeAllValuesSelection = new Model<>();
 
     @SpringBean
     private FieldValueConverterProvider fieldValueConverterProvider;
@@ -212,7 +213,8 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
                     // no JavaScript, open a new page with values
                     setResponsePage(new AllFacetValuesPage(getModel(), selectionModel, selectionTypeModeModel));
                 } else {
-                    // JavaScript enabled, show values in a modal popup
+                    // JavaScript enabled, show values in a modal popup. First store copy of current selection to allow the user to cancel.
+                    beforeAllValuesSelection.setObject(selectionModel.getObject().getCopy());
                     valuesWindow.show(target);
                 }
             }
@@ -254,7 +256,10 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
             @Override
             protected void onDismiss(AjaxRequestTarget target) {
-                //TODO: tell panel to reset selection
+                final QueryFacetsSelection previousSelection = beforeAllValuesSelection.getObject();
+                if (previousSelection != null) {
+                    selectionModel.setObject(previousSelection);
+                }
                 close(target);
                 updateAfterClose(target);
             }
@@ -272,7 +277,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         window.addOrReplace(modalContent);
         return window;
     }
-    
+
     @Override
     public void detachModels() {
         super.detachModels();

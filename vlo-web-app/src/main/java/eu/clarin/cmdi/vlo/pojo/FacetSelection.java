@@ -142,7 +142,7 @@ public class FacetSelection implements Serializable {
     }
 
     public FacetSelection getCopy() {
-        return new FacetSelection(selectionType, values, qualifiers);
+        return new FacetSelection(selectionType, new ArrayList<>(values), new HashMap<>(qualifiers));
     }
 
     @Override
