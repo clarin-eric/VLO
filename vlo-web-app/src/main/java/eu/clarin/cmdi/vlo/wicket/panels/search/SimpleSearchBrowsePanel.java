@@ -130,11 +130,16 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
 
                 @Override
                 protected void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
-                    // value selected, make a new selection (in this panel we do not want to change the existing selection)...
-                    final QueryFacetsSelection newSelection = selectionModel.getObject().getCopy();
-                    newSelection.selectValues(getModelObject().getName(), new FacetSelection(selectionType, values));
-                    // ...then submit to search page
-                    setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(newSelection));
+                    if (selectionType != null && values != null) {
+                        // value selected, make a new selection (in this panel we do not want to change the existing selection)...
+                        final QueryFacetsSelection newSelection = selectionModel.getObject().getCopy();
+                        newSelection.selectValues(getModelObject().getName(), new FacetSelection(selectionType, values));
+                        // ...then submit to search page
+                        setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(newSelection));
+                    } else {
+                        //no (new) values selected, return with existing selection
+                        setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(selectionModel.getObject()));
+                    }
                 }
 
             };

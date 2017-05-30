@@ -50,6 +50,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -241,6 +242,29 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             public IModel<String> getTitle() {
                 return new SolrFieldNameModel(getModel(), "name");
             }
+
+            @Override
+            protected IModel<?> getCloseButtonLabelModel() {
+                return Model.of("Ok");
+            }
+
+            private void updateAfterClose(AjaxRequestTarget target) {
+                onValuesSelected(null, null, target);
+            }
+
+            @Override
+            protected void onDismiss(AjaxRequestTarget target) {
+                //TODO: tell panel to reset selection
+                close(target);
+                updateAfterClose(target);
+            }
+
+            @Override
+            protected void onClose(AjaxRequestTarget target) {
+                close(target);
+                updateAfterClose(target);
+            }
+
         };
 
         final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), selectionTypeModeModel, selectionModel, filterModel);
@@ -248,15 +272,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         window.addOrReplace(modalContent);
         return window;
     }
-
-//    protected void onComplete(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
-//        if (target != null) {
-//            // target can be null if selection link was opened in a new tab
-//            window.close(target);
-//        }
-//        FacetValuesPanel.this.onValuesSelected(selectionType, values, target);
-//    }
-
+    
     @Override
     public void detachModels() {
         super.detachModels();

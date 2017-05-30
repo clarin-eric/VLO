@@ -143,8 +143,10 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
         return new FacetValuesPanel(id, facetFieldModel, selectionModel, selectionTypeModeModel, filterModel, subListSize) {
             @Override
             public void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
-                // A value has been selected on this facet's panel, update the model!
-                selectionModel.getObject().addNewFacetValue(facetName, selectionType, values);
+                if (selectionType != null && values != null) {
+                    // A value has been selected on this facet's panel, update the model!
+                    selectionModel.getObject().addNewFacetValue(facetName, selectionType, values);
+                }
 
                 if (target != null) {
                     // reload entire page for now
@@ -179,7 +181,7 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
     @Override
     public void detachModels() {
         super.detachModels();
-        
+
         if (selectionTypeModeModel != null) {
             this.selectionTypeModeModel.detach();
         }
