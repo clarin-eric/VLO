@@ -247,7 +247,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
             @Override
             protected IModel<?> getCloseButtonLabelModel() {
-                return Model.of("Ok");
+                return Model.of("Done");
             }
 
             private void updateAfterClose(AjaxRequestTarget target) {

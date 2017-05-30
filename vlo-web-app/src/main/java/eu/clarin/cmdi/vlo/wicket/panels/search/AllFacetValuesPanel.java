@@ -201,12 +201,17 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
             @Override
             public String getObject() {
                 if (view.getItemCount() == 0) {
-                    return "No matching values available.";
+                    final FacetSelection selectionValues = selectionModel.getObject().getSelectionValues(AllFacetValuesPanel.this.getModelObject().getName());
+                    if (selectionValues.isEmpty()) {
+                        return "No matching values available.";
+                    } else {
+                        return "No matching values remaining. Click \"Done\" to apply the current selection.";
+                    }
                 } else if (view.getPageCount() <= 1) {
-                    return String.format("Showing %d available values:", view.getItemCount());
+                    return String.format("Showing %d available values. Select one or more and click \"Done\":", view.getItemCount());
                 } else {
                     final long offset = view.getFirstItemOffset();
-                    return String.format("Showing items %d - %d of %d matching values:", offset + 1, offset + view.getViewSize(), view.getItemCount());
+                    return String.format("Showing items %d - %d of %d matching values. Select one or more and click \"Done\":", offset + 1, offset + view.getViewSize(), view.getItemCount());
                 }
             }
         });
