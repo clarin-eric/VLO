@@ -43,16 +43,18 @@ import org.apache.wicket.model.PropertyModel;
  */
 public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
 
+    private final IModel<Boolean> renderForCollapsed = Model.of(true);
+
     public SelectedFacetPanel(String id, String facetName, final IModel<FacetSelection> model) {
         super(id, model);
 
-        // Add removers for all selected values for collapsed state
-        add(createSelectionRemovers("facetValueRemover", facetName));
-        // Add selected items to expanded state
-        add(createSelectionRemovers("selectedItem", facetName));
+        // Add removers for all selected values for collapsed state (hidden unless also rendering for collapsed)
+        add(createSelectionRemovers("facetValueRemover", facetName, renderForCollapsed));
+        // Add selected items to expanded state (always shown)
+        add(createSelectionRemovers("selectedItem", facetName, Model.of(true)));
     }
 
-    private ListView<String> createSelectionRemovers(String id, String facetName) {
+    private ListView<String> createSelectionRemovers(String id, String facetName, final IModel<Boolean> visibilityModel) {
         // Model of the list of selected values in this facet
         final IModel<List<String>> valuesModel = new PropertyModel<>(getModel(), "values");
         final PropertyModel<FacetSelectionType> selectionTypeModel = new PropertyModel(getModel(), "selectionType");
@@ -92,6 +94,12 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
                 item.add(new RemoveLink("unselectValue", item.getModel()));
             }
 
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(visibilityModel.getObject());
+            }
+
         };
         listView.setReuseItems(false);
         return listView;
@@ -123,4 +131,10 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
         }
 
     }
+
+    public SelectedFacetPanel setRenderForCollapsed(boolean renderForCollapsed) {
+        this.renderForCollapsed.setObject(renderForCollapsed);
+        return this;
+    }
+
 }

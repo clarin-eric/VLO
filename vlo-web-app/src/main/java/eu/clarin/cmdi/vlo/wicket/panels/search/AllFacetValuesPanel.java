@@ -161,7 +161,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
                 setVisible(selectionValues != null && !selectionValues.isEmpty());
             }
 
-        };
+        }.setRenderForCollapsed(false);
     }
 
     private DataView<FacetField.Count> createValuesView(final String id) {
