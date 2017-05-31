@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Set;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.Item;
@@ -112,7 +113,19 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
         // pagination navigators
         navigatorTop = new BootstrapAjaxPagingNavigator("pagingTop", resultsView);
         add(navigatorTop);
-        navigatorBottom = new BootstrapAjaxPagingNavigator("pagingBottom", resultsView);
+        navigatorBottom = new BootstrapAjaxPagingNavigator("pagingBottom", resultsView) {
+
+            @Override
+            protected void onAjaxEvent(AjaxRequestTarget target) {
+                super.onAjaxEvent(target);
+                //bottom navigator action should trigger scroll to top navigator
+                target.appendJavaScript(String.format("$('html, body')"
+                        + ".animate({"
+                        + " scrollTop: $('#%s').offset().top"
+                        + "});", navigatorTop.getMarkupId()));
+            }
+
+        };
         add(navigatorBottom);
 
         // add Piwik tracking behavior
