@@ -250,10 +250,10 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                     .add(new EvenOddClassAppender(itemIndexModel))
             );
 
-            columns.add(createOptionsDropdown(resourceInfoModel));
+            columns.add(createOptionsDropdown(linkModel, resourceInfoModel));
         }
 
-        protected Component createOptionsDropdown(final ResourceInfoModel resourceInfoModel) {
+        protected Component createOptionsDropdown(final IModel<String> linkModel, final ResourceInfoModel resourceInfoModel) {
             final ArrayList options = Lists.newArrayList(
                     new BootstrapDropdown.DropdownMenuItem("Process with Language Resource Switchboard", "glyphicon glyphicon-open-file") {
                 @Override
@@ -261,7 +261,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                     return new Link(id) {
                         @Override
                         public void onClick() {
-                            throw new RedirectToUrlException(getLanguageSwitchboardUrl(resourceInfoModel.getObject()));
+                            throw new RedirectToUrlException(getLanguageSwitchboardUrl(linkModel, resourceInfoModel.getObject()));
                         }
 
                     };
@@ -288,10 +288,10 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             };
         }
 
-        private String getLanguageSwitchboardUrl(ResourceInfo resourceInfo) {
+        private String getLanguageSwitchboardUrl(IModel<String> linkModel, ResourceInfo resourceInfo) {
             try {
                 //create link for this resource to the language resource switchboard
-                final String href = resourceInfo.getHref();
+                final String href = linkModel.getObject();
                 final String mimeType = resourceInfo.getMimeType();
                 final String languageCode = getResourceLanguageCode();
                 return String.format("%s#/vlo/%s/%s/%s",
