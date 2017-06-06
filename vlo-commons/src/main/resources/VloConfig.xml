@@ -69,6 +69,7 @@
         <facetField>organisation</facetField>
         <facetField>nationalProject</facetField>
         <facetField>dataProvider</facetField>
+        <facetField>licenseType</facetField>
     </facetFields>
         
     <simpleSearchFacetFields>

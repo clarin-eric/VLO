@@ -74,7 +74,8 @@ public class TestFacetedSearchPage {
                         new FacetField("availability"),
                         new FacetField("nationalProject"),
                         new FacetField("keywords"),
-                        new FacetField("dataProvider")
+                        new FacetField("dataProvider"),
+                        new FacetField("licenseType")
                 )));
 
                 // mock search results
