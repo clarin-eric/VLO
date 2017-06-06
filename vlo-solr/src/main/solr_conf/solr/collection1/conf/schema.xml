@@ -419,6 +419,7 @@
    <field name="country" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="languageCode" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="availability" type="string" indexed="true" stored="true" multiValued="true" default="UNSPECIFIED"/>
+   <field name="licenseType" type="string" indexed="true" stored="true" multiValued="true" default="UNSPECIFIED"/>
    <field name="license" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="accessInfo" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="organisation"  type="string" indexed="true" stored="true" multiValued="true"/>
