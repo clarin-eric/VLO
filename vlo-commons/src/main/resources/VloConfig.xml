@@ -69,7 +69,6 @@
         <facetField>organisation</facetField>
         <facetField>nationalProject</facetField>
         <facetField>dataProvider</facetField>
-        <facetField>licenseType</facetField>
     </facetFields>
         
     <simpleSearchFacetFields>
@@ -111,6 +110,7 @@
         <ignoredField>score</ignoredField>
         <ignoredField>license</ignoredField>
         <ignoredField>availability</ignoredField>
+        <ignoredField>licenseType</ignoredField>
         <ignoredField>accessInfo</ignoredField>
     </ignoredFields>
     
