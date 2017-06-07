@@ -30,6 +30,7 @@ public class FacetConstants {
     public static final String FIELD_RESOURCE_CLASS = "resourceClass";
     public static final String FIELD_SUBJECT = "subject";
     public static final String FIELD_TEMPORAL_COVERAGE = "temporalCoverage";
+    public static final String FIELD_LICENSE_TYPE = "licenseType";
 
     /**
      * Solr pseudo-field that reveals the ranking score
