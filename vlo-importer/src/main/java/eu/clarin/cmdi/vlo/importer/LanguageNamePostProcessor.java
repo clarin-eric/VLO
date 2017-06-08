@@ -32,7 +32,7 @@ import java.util.List;
 class LanguageNamePostProcessor implements PostProcessor {
 
     @Override
-    public List<String> process(String value) {
+    public List<String> process(String value, CMDIData cmdiData) {
         if (value.startsWith(LANG_NAME_PREFIX)) {
             return returnName(value);
         } else if (value.startsWith(CODE_PREFIX)) {

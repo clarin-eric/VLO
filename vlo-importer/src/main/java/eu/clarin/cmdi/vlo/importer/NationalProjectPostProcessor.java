@@ -25,7 +25,7 @@ public class NationalProjectPostProcessor extends PostProcessorsWithVocabularyMa
      * @return
      */
     @Override
-    public List<String> process(String value) {
+    public List<String> process(String value, CMDIData cmdiData) {
     	return Arrays.asList(normalize(value.trim(), ""));
     }
     

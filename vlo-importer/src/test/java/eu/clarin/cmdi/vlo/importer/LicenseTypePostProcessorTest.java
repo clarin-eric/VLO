@@ -28,7 +28,7 @@ public class LicenseTypePostProcessorTest extends ImporterTestcase {
 
     private void assertMapping(String value, String... target) {
         List<String> normalizedVals;
-        normalizedVals = processor.process(value);
+        normalizedVals = processor.process(value, null);
         assertEquals(target.length, normalizedVals.size());
         for (int i = 0; i < target.length; i++) {
             assertEquals(target[i], normalizedVals.get(i));

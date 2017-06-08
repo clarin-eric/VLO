@@ -10,7 +10,7 @@ public class ResourceClassPostProcessor implements PostProcessor {
      * @return Value with upper case first letter and some value normalisation
      */
     @Override
-    public List<String> process(String value) {
+    public List<String> process(String value, CMDIData cmdiData) {
         String result = value;
         
         // replace DCMI URLs with DCMI type

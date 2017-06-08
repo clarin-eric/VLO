@@ -30,7 +30,7 @@ public class NamePostProcessor implements PostProcessor {
     private static final Pattern OMIT_QUOTES_PATTERN = Pattern.compile("^([\"\'“])(.*)\\1$");
 
     @Override
-    public List<String> process(String value) {
+    public List<String> process(String value, CMDIData cmdiData) {
         Matcher nameMatcher = OMIT_QUOTES_PATTERN.matcher(value);
         List<String> resultList = new ArrayList<>();
         

@@ -31,7 +31,7 @@ public class LanguageCodePostProcessor extends PostProcessorsWithVocabularyMap{
      * @return ISO 639-3 code
      */
     @Override
-    public List<String> process(String value) {
+    public List<String> process(String value, CMDIData cmdiData) {
         List<String> resultList = new ArrayList<String>();
         
         if (value != null)

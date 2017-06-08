@@ -12,6 +12,6 @@ import java.util.List;
 
 public interface PostProcessor {
 
-    public List<String> process(String value);
+    public List<String> process(String value, CMDIData cmdiData);
 
 }

@@ -15,7 +15,7 @@ public class FormatPostProcessor implements PostProcessor {
      * @return value if it is a valid MIMEtype or UNKNOWN_STRING otherwise
      */
     @Override
-    public List<String> process(String value) {
+    public List<String> process(String value, CMDIData cmdiData) {
         Matcher mimeTypeMatcher = MIMETYPE_PATTERN.matcher(value);
         List<String> resultList = new ArrayList<String>();
         

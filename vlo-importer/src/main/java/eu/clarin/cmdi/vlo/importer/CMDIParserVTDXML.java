@@ -301,7 +301,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             final String value = nav.toString(index);
             final String languageCode = extractLanguageCode(nav);
 
-            for(String postprocessedValue : postProcess(config.getName(), value)) {
+            for(String postprocessedValue : postProcess(config.getName(), value, cmdiData)) {
                 // ignore non-English language names for facet LANGUAGE_CODE
                 if (config.getName().equals(FacetConstants.FIELD_LANGUAGE_CODE) && !languageCode.equals("code:eng") && !languageCode.equals(DEFAULT_LANGUAGE)) {
                     continue;
@@ -343,7 +343,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         for (String derivedFacet : config.getDerivedFacets()) {
             final List<Pair<String, String>> derivedValueLangPairList = new ArrayList<>();
             for (Pair<String, String> valueLangPair : finalValueLangPairList) {
-                for (String derivedValue : postProcess(derivedFacet, valueLangPair.getLeft())) {
+                for (String derivedValue : postProcess(derivedFacet, valueLangPair.getLeft(), null)) {
                     derivedValueLangPairList.add(new ImmutablePair<>(derivedValue, valueLangPair.getRight()));
                 }
             }
@@ -363,7 +363,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             return DEFAULT_LANGUAGE;
         }
 
-        return postProcessors.get(FacetConstants.FIELD_LANGUAGE_CODE).process(languageCode).get(0);
+        return postProcessors.get(FacetConstants.FIELD_LANGUAGE_CODE).process(languageCode, null).get(0);
     }
 
     private void insertFacetValues(String name, List<Pair<String, String>> valueLangPairList, CMDIData cmdiData, boolean allowMultipleValues, boolean caseInsensitive) {
@@ -387,11 +387,11 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @return value after applying matching PostProcessor or the original value
      * if no PostProcessor was registered for the facet
      */
-    private List<String> postProcess(String facetName, String extractedValue) {
+    private List<String> postProcess(String facetName, String extractedValue, CMDIData cmdiData) {
         List<String> resultList = new ArrayList<>();
         if (postProcessors.containsKey(facetName)) {
             PostProcessor processor = postProcessors.get(facetName);
-            resultList = processor.process(extractedValue);
+            resultList = processor.process(extractedValue, cmdiData);
         } else {
             resultList.add(extractedValue);
         }

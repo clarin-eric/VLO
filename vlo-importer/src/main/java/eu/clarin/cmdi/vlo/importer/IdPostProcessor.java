@@ -13,7 +13,7 @@ public class IdPostProcessor implements PostProcessor {
      * @return normalized version of value
      */
     @Override
-    public List<String> process(String value) {
+    public List<String> process(String value, CMDIData cmdiData) {
         List<String> resultList = new ArrayList<String>();
         resultList.add(StringUtils.normalizeIdString(value));
         return resultList;

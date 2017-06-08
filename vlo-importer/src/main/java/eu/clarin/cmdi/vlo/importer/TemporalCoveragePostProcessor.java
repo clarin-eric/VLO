@@ -19,7 +19,7 @@ public class TemporalCoveragePostProcessor implements PostProcessor {
      * @return List of accepted values
      */
     @Override
-    public List<String> process(final String value) {
+    public List<String> process(final String value, CMDIData cmdiData) {
         String coverageString = value.trim();
         
         Matcher odrfMatcher = ODRF_PATTERN.matcher(coverageString);

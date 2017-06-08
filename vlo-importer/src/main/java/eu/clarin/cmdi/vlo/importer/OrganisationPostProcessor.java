@@ -15,7 +15,7 @@ public class OrganisationPostProcessor extends PostProcessorsWithVocabularyMap {
      * replaced with controlled vocabulary
      */
     @Override
-    public List<String> process(String value) {
+    public List<String> process(String value, CMDIData cmdiData) {
 
         String[] splitArray = normalizeInputString(value).split(";");
         for (int i = 0; i < splitArray.length; i++) {

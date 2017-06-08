@@ -89,6 +89,14 @@ public class CMDIData {
             } //ignore double values don't add them
         }
     }
+    
+    public Collection<Object> getDocField(String name) {
+        if (doc == null) {
+            return null;
+        } else {
+            return doc.getFieldValues(name);
+        }
+    }
 
     public List<Resource> getDataResources() {
         return dataResources;

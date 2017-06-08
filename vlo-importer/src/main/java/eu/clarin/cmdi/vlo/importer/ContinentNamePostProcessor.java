@@ -23,7 +23,7 @@ public class ContinentNamePostProcessor implements PostProcessor {
 	 * Replaces two-letter continent codes with continent names
 	 */
 	@Override
-	public List<String> process(final String value) {
+	public List<String> process(final String value, CMDIData cmdiData) {
             List<String> resultList = new ArrayList<String>();
             if(value != null && continentCodeMap.keySet().contains(value)) {
                 resultList.add(continentCodeMap.get(value));

@@ -11,7 +11,7 @@ import java.util.List;
 public class LicenseTypePostProcessor extends PostProcessorsWithVocabularyMap {
 
     @Override
-    public List<String> process(final String value) {
+    public List<String> process(final String value, CMDIData cmdiData) {
         String normalizedVal = normalize(value);
         //Availability variants can be normalized with multiple values, in vocabulary they are separated with ;
         if (normalizedVal != null) {
