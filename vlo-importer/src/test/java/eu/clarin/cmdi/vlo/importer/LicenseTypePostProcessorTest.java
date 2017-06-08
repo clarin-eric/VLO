@@ -3,23 +3,35 @@ package eu.clarin.cmdi.vlo.importer;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
+import org.junit.Before;
 
 import org.junit.Test;
 
 public class LicenseTypePostProcessorTest extends ImporterTestcase {
-    
+
+    private LicenseTypePostProcessor processor;
+
+    @Before
+    public void setUp() {
+        processor = new LicenseTypePostProcessor();
+    }
 
     @Test
     public void testLanguageCode() {
-        PostProcessor processor = new LicenseTypePostProcessor();    
+        assertMapping("public", "PUB");
+        assertMapping("CLARIN-PUB", "PUB");
+        assertMapping("academic", "ACA");
+        assertMapping("CLARIN-ACA", "ACA");
+        assertMapping("restricted", "RES");
+        assertMapping("CLARIN-RES", "RES");
+    }
+
+    private void assertMapping(String value, String... target) {
         List<String> normalizedVals;
-        
-        normalizedVals = processor.process("public");
-        assertEquals(1, normalizedVals.size());
-        assertEquals("PUB", normalizedVals.get(0));
-     
-        normalizedVals = processor.process("academic");
-        assertEquals(1, normalizedVals.size());
-        assertEquals("ACA", normalizedVals.get(0));
+        normalizedVals = processor.process(value);
+        assertEquals(target.length, normalizedVals.size());
+        for (int i = 0; i < target.length; i++) {
+            assertEquals(target[i], normalizedVals.get(i));
+        }
     }
 }
