@@ -14,7 +14,12 @@ public class LicenseTypePostProcessor extends PostProcessorsWithVocabularyMap {
     public List<String> process(final String value) {
         String normalizedVal = normalize(value);
         //Availability variants can be normalized with multiple values, in vocabulary they are separated with ;
-        return normalizedVal != null ? Arrays.asList(normalizedVal.split(";")) : new ArrayList<>();
+        if (normalizedVal != null) {
+            return Arrays.asList(normalizedVal.split(";"));
+        } else {
+            //TODO: take values from availability facet
+            return new ArrayList<>();
+        }
     }
 
     @Override
