@@ -18,4 +18,9 @@ public class IdPostProcessor implements PostProcessor {
         resultList.add(StringUtils.normalizeIdString(value));
         return resultList;
     }
+
+    @Override
+    public boolean doesProcessNoValue() {
+        return false;
+    }
 }

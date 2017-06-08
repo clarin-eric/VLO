@@ -43,6 +43,11 @@ class LanguageNamePostProcessor implements PostProcessor {
         }
     }
 
+    @Override
+    public boolean doesProcessNoValue() {
+        return false;
+    }
+
     /**
      *
      * @param value original value string with <em>code</em> prefix

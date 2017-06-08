@@ -74,6 +74,11 @@ public class CMDIComponentProfileNamePostProcessor implements PostProcessor {
         return resultList;
     }
 
+    @Override
+    public boolean doesProcessNoValue() {
+        return false;
+    }
+
     private void setup() {
         ap = new AutoPilot();
         try {

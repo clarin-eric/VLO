@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
  * @author Thomas Eckart
  */
 public class NamePostProcessor implements PostProcessor {
+
     // omit leading and trailing quote characters if they are equal
     private static final Pattern OMIT_QUOTES_PATTERN = Pattern.compile("^([\"\'“])(.*)\\1$");
 
@@ -33,13 +34,19 @@ public class NamePostProcessor implements PostProcessor {
     public List<String> process(String value, CMDIData cmdiData) {
         Matcher nameMatcher = OMIT_QUOTES_PATTERN.matcher(value);
         List<String> resultList = new ArrayList<>();
-        
-        if(nameMatcher.matches())
+
+        if (nameMatcher.matches()) {
             resultList.add(nameMatcher.group(2));
-        else
+        } else {
             resultList.add(value);
-        
+        }
+
         return resultList;
     }
-    
+
+    @Override
+    public boolean doesProcessNoValue() {
+        return false;
+    }
+
 }

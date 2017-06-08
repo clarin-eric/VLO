@@ -6,11 +6,13 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 public class FormatPostProcessor implements PostProcessor {
+
     private static final Pattern MIMETYPE_PATTERN = Pattern.compile("^(application|audio|example|image|message|model|multipart|text|video)/.*");
     private static final String UNKNOWN_STRING = "unknown type";
 
     /**
      * Returns value if it is a valid MIMEtype or UNKNOWN_STRING otherwise
+     *
      * @param value potential MIMEType value
      * @return value if it is a valid MIMEtype or UNKNOWN_STRING otherwise
      */
@@ -18,12 +20,17 @@ public class FormatPostProcessor implements PostProcessor {
     public List<String> process(String value, CMDIData cmdiData) {
         Matcher mimeTypeMatcher = MIMETYPE_PATTERN.matcher(value);
         List<String> resultList = new ArrayList<String>();
-        
+
         if (mimeTypeMatcher.matches()) {
             resultList.add(value);
         } else {
             resultList.add(UNKNOWN_STRING);
         }
         return resultList;
+    }
+
+    @Override
+    public boolean doesProcessNoValue() {
+        return false;
     }
 }

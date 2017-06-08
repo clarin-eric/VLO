@@ -21,4 +21,9 @@ public class AvailabilityPostProcessor extends PostProcessorsWithVocabularyMap {
     public String getNormalizationMapURL() {
         return MetadataImporter.config.getLicenseAvailabilityMapUrl();
     }
+
+    @Override
+    public boolean doesProcessNoValue() {
+        return false;
+    }
 }

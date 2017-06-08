@@ -39,4 +39,9 @@ public class OrganisationPostProcessor extends PostProcessorsWithVocabularyMap {
     private String normalizeVariant(String key) {
         return key.toLowerCase().replaceAll("-", " ");
     }
+
+    @Override
+    public boolean doesProcessNoValue() {
+        return false;
+    }
 }

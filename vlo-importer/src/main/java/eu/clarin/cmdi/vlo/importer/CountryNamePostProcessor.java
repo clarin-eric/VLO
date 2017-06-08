@@ -59,4 +59,9 @@ public class CountryNamePostProcessor implements PostProcessor {
         }
     }
 
+    @Override
+    public boolean doesProcessNoValue() {
+        return false;
+    }
+
 }

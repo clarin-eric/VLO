@@ -16,4 +16,9 @@ public class LicensePostProcessor extends PostProcessorsWithVocabularyMap {
     public String getNormalizationMapURL() {
         return MetadataImporter.config.getLicenseURIMapUrl();
     }
+
+    @Override
+    public boolean doesProcessNoValue() {
+        return false;
+    }
 }

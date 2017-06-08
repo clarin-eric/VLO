@@ -21,7 +21,7 @@ public class TemporalCoveragePostProcessor implements PostProcessor {
     @Override
     public List<String> process(final String value, CMDIData cmdiData) {
         String coverageString = value.trim();
-        
+
         Matcher odrfMatcher = ODRF_PATTERN.matcher(coverageString);
         Matcher yearMatcher = DATETIME_PATTERN.matcher(coverageString);
         List<String> resultList = new ArrayList<String>();
@@ -33,5 +33,10 @@ public class TemporalCoveragePostProcessor implements PostProcessor {
         }
 
         return resultList;
+    }
+
+    @Override
+    public boolean doesProcessNoValue() {
+        return false;
     }
 }

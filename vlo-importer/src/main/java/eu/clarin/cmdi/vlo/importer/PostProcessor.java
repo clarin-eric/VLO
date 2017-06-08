@@ -13,5 +13,11 @@ import java.util.List;
 public interface PostProcessor {
 
     public List<String> process(String value, CMDIData cmdiData);
-
+    
+    /**
+     * 
+     * @return whether the postprocessor should also be called in case
+     * no matching value was found (with <pre>value == null</pre>)
+     */
+    public boolean doesProcessNoValue();
 }
