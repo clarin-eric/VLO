@@ -73,6 +73,8 @@ public class VloConfig {
     private String licenseAvailabilityMapUrl;
     
     private String licenseURIMapUrl;
+    
+    private String licenseTypeMapUrl;
 
     private String countryComponentUrl = "";
 
@@ -1068,6 +1070,13 @@ public class VloConfig {
 
     public void setLicenseURIMapUrl(String licenseURIMapUrl) {
         this.licenseURIMapUrl = licenseURIMapUrl;
+    }
+    public String getLicenseTypeMapUrl() {
+        return licenseTypeMapUrl;
+    }
+
+    public void setLicenseTypeMapUrl(String licenseURIMapUrl) {
+        this.licenseTypeMapUrl = licenseURIMapUrl;
     }
 
     /**
