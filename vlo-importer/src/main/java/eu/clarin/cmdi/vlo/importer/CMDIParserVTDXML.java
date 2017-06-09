@@ -246,8 +246,10 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @throws VTDException
      */
     private void processFacets(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException {
-        List<FacetConfiguration> facetList = facetMapping.getFacets();
+        final List<FacetConfiguration> facetList = facetMapping.getFacets();
+        final List<String> processedFacets = new ArrayList<>(facetList.size());
         for (FacetConfiguration config : facetList) {
+            processedFacets.add(config.getName());
             boolean matchedPattern = false;
             List<String> patterns = config.getPatterns();
             for (String pattern : patterns) {
@@ -258,13 +260,57 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             }
 
             // using fallback patterns if extraction failed
-            if (matchedPattern == false) {
+            if (!matchedPattern) {
                 for (String pattern : config.getFallbackPatterns()) {
                     matchedPattern = matchPattern(cmdiData, nav, config, pattern, config.getAllowMultipleValues());
                     if (matchedPattern && !config.getAllowMultipleValues()) {
                         break;
                     }
                 }
+            }
+
+            if (!matchedPattern) {
+                //no matching value
+                processNoMatch(config.getName(), config.getAllowMultipleValues(), config.isCaseInsensitive(), cmdiData);
+            }
+        }
+
+        handleUnprocessedFields(processedFacets, cmdiData);
+    }
+
+    private void handleUnprocessedFields(final List<String> processedFields, CMDIData cmdiData) {
+        // check for unprocessed facets that allow 'no value' post processing
+        Map<String, FacetConceptMapping.FacetConcept> facetConceptMap = null;
+        for (String fieldWithPostProcessor : postProcessors.keySet()) {
+            if (!processedFields.contains(fieldWithPostProcessor)) {
+                if (postProcessors.get(fieldWithPostProcessor).doesProcessNoValue()) {
+                    //get properties from facet concept definition
+                    if (facetConceptMap == null) {
+                        FacetConceptMapping facetConceptMapping = VLOMarshaller.getFacetConceptMapping(MetadataImporter.config.getFacetConceptsFile());
+                        facetConceptMap = facetConceptMapping.getFacetConceptMap();
+                    }
+                    FacetConceptMapping.FacetConcept facetConcept = facetConceptMap.get(fieldWithPostProcessor);
+                    processNoMatch(fieldWithPostProcessor, facetConcept.isAllowMultipleValues(), facetConcept.isCaseInsensitive(), cmdiData);
+                }
+            }
+        }
+    }
+
+    /**
+     * Performs post processing in case no value was found for a specific facet
+     * @param facetName facet
+     * @param allowMultipleValues allow multiple values?
+     * @param caseInsensitive case insensitive?
+     * @param cmdiData current CMDI data object
+     */
+    private void processNoMatch(String facetName, boolean allowMultipleValues, boolean caseInsensitive, CMDIData cmdiData) {
+        if (postProcessors.containsKey(facetName) && postProcessors.get(facetName).doesProcessNoValue()) {
+            //post process 'no value'
+            final List<String> postProcessed = postProcess(facetName, null, cmdiData);
+            if (postProcessed != null && !postProcessed.isEmpty()) {
+                final ArrayList<Pair<String, String>> valueLangPairList = new ArrayList<>();
+                addValuesToList(facetName, postProcessed, valueLangPairList, DEFAULT_LANGUAGE);
+                insertFacetValues(facetName, valueLangPairList, cmdiData, allowMultipleValues, caseInsensitive);
             }
         }
     }

@@ -27,6 +27,7 @@ public class VLOMarshaller {
      * @return the facet concept mapping
      */
     public static FacetConceptMapping getFacetConceptMapping(String facetConcepts) {
+        //TODO: cache results
         final MappingDefinitionResolver mappingDefinitionResolver
                 = new MappingDefinitionResolver(VLOMarshaller.class);
 
