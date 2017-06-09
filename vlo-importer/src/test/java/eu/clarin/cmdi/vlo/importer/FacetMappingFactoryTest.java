@@ -30,7 +30,7 @@ public class FacetMappingFactoryTest {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, IMDI_PROFILE_ID, true);
 
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(20, facets.size());
+        assertEquals(21, facets.size());
 
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
@@ -165,6 +165,13 @@ public class FacetMappingFactoryTest {
         assertEquals("/cmd:CMD/cmd:Components/cmdp:mods/cmdp:classification/text()",
                 mapping.getFallbackPatterns().get(0));
         assertEquals(3, mapping.getFallbackPatterns().size());
+        mapping = facets.get(index++);
+
+        // test license facet mapping
+        assertEquals(FacetConstants.FIELD_LICENSE, mapping.getName());
+        assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:Resources/cmdp:MediaFile/cmdp:Access/cmdp:Availability/text()",
+                mapping.getPatterns().get(0));
+        assertEquals(4, mapping.getPatterns().size());
 
         assertEquals("check to see we tested them all", facets.size(), index);
     }
@@ -175,7 +182,7 @@ public class FacetMappingFactoryTest {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, OLAC_PROFILE_ID, true);
 
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(18, facets.size());
+        assertEquals(19, facets.size());
 
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
@@ -288,7 +295,14 @@ public class FacetMappingFactoryTest {
         assertEquals("/cmd:CMD/cmd:Components/cmdp:mods/cmdp:classification/text()",
                 mapping.getFallbackPatterns().get(0));
         assertEquals(3, mapping.getFallbackPatterns().size());
+        mapping = facets.get(index++);
 
+        // test license facet mapping
+        assertEquals(FacetConstants.FIELD_LICENSE, mapping.getName());
+        assertEquals("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:license/text()",
+                mapping.getPatterns().get(0));
+        assertEquals(3, mapping.getPatterns().size());
+        
         assertEquals("check to see we tested them all", facets.size(), index);
     }
 
@@ -298,7 +312,7 @@ public class FacetMappingFactoryTest {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, LRT_PROFILE_ID, true);
 
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(17, facets.size());
+        assertEquals(19, facets.size());
 
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
@@ -415,6 +429,21 @@ public class FacetMappingFactoryTest {
                 mapping.getPatterns().get(0));
         assertEquals("/cmd:CMD/cmd:Components/cmdp:mods/cmdp:classification/text()",
                 mapping.getFallbackPatterns().get(0));
+        
+        mapping = facets.get(index++);
+        // test license type facet mapping
+        assertEquals(FacetConstants.FIELD_LICENSE_TYPE, mapping.getName());
+        assertEquals("/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtDistributionClassification/cmdp:DistributionType/text()",
+                mapping.getPatterns().get(0));
+        assertEquals(1, mapping.getPatterns().size());
+        
+        mapping = facets.get(index++);
+        // test license facet mapping
+        assertEquals(FacetConstants.FIELD_LICENSE, mapping.getName());
+        assertEquals("/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtIPR/cmdp:LicenseType/text()",
+                mapping.getPatterns().get(0));
+        assertEquals(2, mapping.getPatterns().size());
+        
         assertEquals("check to see we tested them all", facets.size(), index);
     }
 
