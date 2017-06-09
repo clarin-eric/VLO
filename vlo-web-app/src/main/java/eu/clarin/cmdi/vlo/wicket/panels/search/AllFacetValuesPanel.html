@@ -46,18 +46,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </form>
             <hr />
             <div wicket:id="facetValuesContainer" class="sortedFacet">
-                <div wicket:id="selectedValuesContainer">
-                    <span>Selection:</span>
-                    <div wicket:id="selectedValues">[selected]</div>
-                </div>
 
                 <wicket:enclosure>
                     <ul class="allfacetvaluespaging" wicket:id="navigator">[paging]</ul>
                 </wicket:enclosure>
-                
-                <div wicket:id="valuesInfo" class="allFacetValuesInfo">Showing 1 to 25 of 604056 values</div>
-                                
+
+                <div wicket:id="valuesInfo" class="allFacetValuesInfo">Showing 1 to 25 of 604056 values</div>                              
+
                 <div class="allfacetvalueslisting">
+                    <div wicket:id="selectedValuesContainer">
+                        <div wicket:id="selectedValues">[selected]</div>
+                    </div>  
                     <div wicket:id="facetValue">
                         <a wicket:id="facetSelect" href=""><span wicket:id="name">A Corpus</span></a> <span dir="ltr">(<span wicket:id="count">1</span>)</span>
                     </div>
