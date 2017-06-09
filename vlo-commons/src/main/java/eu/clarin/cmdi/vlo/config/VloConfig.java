@@ -109,10 +109,8 @@ public class VloConfig {
     private String helpUrl = "";
 
     private String feedbackFromUrl = "";
-    
-    private String mappingFilesLocation;
 
-	private boolean showResultScores = false;
+    private boolean showResultScores = false;
 
     private boolean processHierarchies = true;
 
@@ -1181,11 +1179,5 @@ public class VloConfig {
     public void setHideSecondaryFacetsLimit(int hideSecondaryFacetsLimit) {
         this.hideSecondaryFacetsLimit = hideSecondaryFacetsLimit;
     }
-    public String getMappingFilesLocation() {
-		return mappingFilesLocation;
-	}
 
-	public void setMappingFilesLocation(String mappingFilesLocation) {
-		this.mappingFilesLocation = mappingFilesLocation;
-	}
 }
