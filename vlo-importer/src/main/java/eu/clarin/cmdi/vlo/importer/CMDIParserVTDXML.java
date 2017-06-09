@@ -92,8 +92,8 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      */
     private void setNameSpace(AutoPilot ap, String profileId) {
         ap.declareXPathNameSpace("cmd", "http://www.clarin.eu/cmd/1");
-        if(profileId != null) {
-            ap.declareXPathNameSpace("cmdp", "http://www.clarin.eu/cmd/1/profiles/"+profileId);
+        if (profileId != null) {
+            ap.declareXPathNameSpace("cmdp", "http://www.clarin.eu/cmd/1/profiles/" + profileId);
         }
     }
 
@@ -170,7 +170,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         if (index != -1) {
             String schemaLocation = nav.toNormalizedString(index);
             String[] schemaLocationArray = schemaLocation.split(" ");
-            result = schemaLocationArray[schemaLocationArray.length-1];
+            result = schemaLocationArray[schemaLocationArray.length - 1];
         } else {
             index = nav.getAttrValNS("http://www.w3.org/2001/XMLSchema-instance", "noNamespaceSchemaLocation");
             if (index != -1) {
@@ -300,15 +300,16 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             }
             final String value = nav.toString(index);
             final String languageCode = extractLanguageCode(nav);
-            
+
             final List<String> postProcessed = postProcess(config.getName(), value, cmdiData);
             addValuesToList(config.getName(), postProcessed, valueLangPairList, languageCode);
             index = ap.evalXPath();
         }
 
         // return if no result was found or accepted
-        if(!matchedPattern || valueLangPairList.isEmpty())
+        if (!matchedPattern || valueLangPairList.isEmpty()) {
             return matchedPattern;
+        }
 
         // decide what extracted values should be taken
         List<Pair<String, String>> finalValueLangPairList = valueLangPairList;
@@ -317,9 +318,9 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             finalValueLangPairList = new ArrayList<>();
             if (config.getName().equals(FacetConstants.FIELD_NAME)) {
                 int counter = 0;
-                for(int i = 0; i < valueLangPairList.size(); i++) {
+                for (int i = 0; i < valueLangPairList.size(); i++) {
                     Pair<String, String> valueLangPair = valueLangPairList.get(i);
-                    if(valueLangPair.getRight().equals("code:eng")){
+                    if (valueLangPair.getRight().equals("code:eng")) {
                         counter = i;
                         break;
                     }
