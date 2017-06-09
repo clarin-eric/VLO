@@ -85,6 +85,7 @@ public class FacetConstants {
             FIELD_KEYWORDS,
             FIELD_LANGUAGE_CODE,
             FIELD_LICENSE,
+            FIELD_LICENSE_TYPE,
             FIELD_MODALITY,
             FIELD_NAME,
             FIELD_NATIONAL_PROJECT,
