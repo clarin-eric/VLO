@@ -300,15 +300,9 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             }
             final String value = nav.toString(index);
             final String languageCode = extractLanguageCode(nav);
-
-            for(String postprocessedValue : postProcess(config.getName(), value, cmdiData)) {
-                // ignore non-English language names for facet LANGUAGE_CODE
-                if (config.getName().equals(FacetConstants.FIELD_LANGUAGE_CODE) && !languageCode.equals("code:eng") && !languageCode.equals(DEFAULT_LANGUAGE)) {
-                    continue;
-                }
-
-                valueLangPairList.add(new ImmutablePair<>(postprocessedValue, languageCode));
-            }
+            
+            final List<String> postProcessed = postProcess(config.getName(), value, cmdiData);
+            addValuesToList(config.getName(), postProcessed, valueLangPairList, languageCode);
             index = ap.evalXPath();
         }
 
@@ -364,6 +358,16 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         }
 
         return postProcessors.get(FacetConstants.FIELD_LANGUAGE_CODE).process(languageCode, null).get(0);
+    }
+
+    private void addValuesToList(String facetName, final List<String> values, List<Pair<String, String>> valueLangPairList, final String languageCode) {
+        for (String value : values) {
+            // ignore non-English language names for facet LANGUAGE_CODE
+            if (facetName.equals(FacetConstants.FIELD_LANGUAGE_CODE) && !languageCode.equals("code:eng") && !languageCode.equals(DEFAULT_LANGUAGE)) {
+                continue;
+            }
+            valueLangPairList.add(new ImmutablePair<>(value, languageCode));
+        }
     }
 
     private void insertFacetValues(String name, List<Pair<String, String>> valueLangPairList, CMDIData cmdiData, boolean allowMultipleValues, boolean caseInsensitive) {
