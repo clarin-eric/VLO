@@ -89,7 +89,7 @@ public class CMDIData {
             } //ignore double values don't add them
         }
     }
-    
+
     public Collection<Object> getDocField(String name) {
         if (doc == null) {
             return null;
@@ -150,10 +150,11 @@ public class CMDIData {
             searchResources.add(new Resource(resource, type, mimeType));
         } else if (LANDING_PAGE_TYPE.equals(type)) {
             // omit multiple LandingPages
-            if(landingPageResources.isEmpty())
+            if (landingPageResources.isEmpty()) {
                 landingPageResources.add(new Resource(resource, type, mimeType));
-            else
+            } else {
                 LOG.warn("Ignoring surplus landingpage: {}", resource);
+            }
         } else if (SEARCH_PAGE_TYPE.equals(type)) {
             searchPageResources.add(new Resource(resource, type, mimeType));
         } else {
@@ -170,8 +171,12 @@ public class CMDIData {
         return id;
     }
 
-    /*
-     * In case that Availability facet has more then one value use the most restrictive tag from PUB, ACA and RES 
+    /**
+     * In case that Availability facet has more then one value use the most
+     * restrictive tag from PUB, ACA and RES. TODO: Move this to post processor
+     *
+     * @param field field to reduce availability values in
+     * @param value value to insert (add or replace)
      */
     private void reduceAvailability(String field, String value) {
         Collection<Object> currentValues = doc.getFieldValues(field);
