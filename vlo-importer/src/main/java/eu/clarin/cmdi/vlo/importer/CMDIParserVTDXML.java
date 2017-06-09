@@ -286,10 +286,10 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                 if (postProcessors.get(fieldWithPostProcessor).doesProcessNoValue()) {
                     //get properties from facet concept definition
                     if (facetConceptMap == null) {
-                        FacetConceptMapping facetConceptMapping = VLOMarshaller.getFacetConceptMapping(MetadataImporter.config.getFacetConceptsFile());
+                        final FacetConceptMapping facetConceptMapping = VLOMarshaller.getFacetConceptMapping(config.getFacetConceptsFile());
                         facetConceptMap = facetConceptMapping.getFacetConceptMap();
                     }
-                    FacetConceptMapping.FacetConcept facetConcept = facetConceptMap.get(fieldWithPostProcessor);
+                    final FacetConceptMapping.FacetConcept facetConcept = facetConceptMap.get(fieldWithPostProcessor);
                     processNoMatch(fieldWithPostProcessor, facetConcept.isAllowMultipleValues(), facetConcept.isCaseInsensitive(), cmdiData);
                 }
             }
