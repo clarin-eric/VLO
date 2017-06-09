@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 
@@ -155,5 +156,11 @@ public class FacetConstants {
      * @see #FIELD_AVAILABILITY
      */
     public static final String AVAILABILITY_LEVEL_RES = "RES";
+
+    public static final ImmutableList<String> LICENSE_TYPE_VALUES = ImmutableList.of(
+            FacetConstants.AVAILABILITY_LEVEL_PUB,
+            FacetConstants.AVAILABILITY_LEVEL_ACA,
+            FacetConstants.AVAILABILITY_LEVEL_RES
+    );
 
 }

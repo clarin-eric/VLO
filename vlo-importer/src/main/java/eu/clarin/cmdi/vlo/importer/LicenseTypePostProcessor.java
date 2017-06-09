@@ -19,11 +19,6 @@ import java.util.List;
  */
 public class LicenseTypePostProcessor extends PostProcessorsWithVocabularyMap {
 
-    public static final ImmutableList<String> LICENSE_TYPE_VALUES = ImmutableList.of(
-            FacetConstants.AVAILABILITY_LEVEL_PUB,
-            FacetConstants.AVAILABILITY_LEVEL_ACA,
-            FacetConstants.AVAILABILITY_LEVEL_RES);
-
     @Override
     public List<String> process(final String value, CMDIData cmdiData) {
         if (value != null) {
@@ -54,7 +49,7 @@ public class LicenseTypePostProcessor extends PostProcessorsWithVocabularyMap {
                     }
                 }));
                 //only transfer 'valid' license type values (pub, aca, res)
-                values.retainAll(LICENSE_TYPE_VALUES);
+                values.retainAll(FacetConstants.LICENSE_TYPE_VALUES);
                 return values;
             }
         }
