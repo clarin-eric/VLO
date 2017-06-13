@@ -346,7 +346,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
 
                     @Override
                     protected void populateItem(ListItem item) {
-                        item.add(new ExternalLink("searchLink", item.getModel()));
+                        item.add(new ExternalLink("searchLink", new HandleLinkModel(item.getModel())));
                     }
                 });
 
