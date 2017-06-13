@@ -25,6 +25,7 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -65,7 +66,7 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
         this.expansionModel = expansionStateModel;
 
         // title annex expansion toggler
-        createTitleToggler();
+        add(createTitleToggler());
         // expand/collapse controls
         addExpandCollapse();
 
@@ -79,7 +80,7 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
         add(new AttributeModifier("aria-expanded", new ExpansionStateRepresentationModel(expansionModel, "true", "false", "undefined")));
     }
 
-    private void createTitleToggler() {
+    protected Link createTitleToggler() {
         // title is also a link that toggles expansion state
         final AjaxFallbackLink titleLink = new IndicatingAjaxFallbackLink("titleToggle") {
 
@@ -113,7 +114,7 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
 
         });
 
-        add(titleLink);
+        return titleLink;
     }
 
     @Override

@@ -16,6 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import eu.clarin.cmdi.vlo.PiwikEventConstants;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import java.util.Collection;
 
 import org.apache.solr.client.solrj.response.FacetField;
@@ -31,6 +33,7 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.model.SelectionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
@@ -38,9 +41,11 @@ import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  * Panel that displays a single facet based on the current query/value
@@ -53,6 +58,9 @@ import org.apache.wicket.model.PropertyModel;
 public abstract class FacetPanel extends ExpandablePanel<String> {
 
     private final static Logger logger = LoggerFactory.getLogger(FacetPanel.class);
+
+    @SpringBean
+    private PiwikConfig piwikConfig;
 
     private final SelectedFacetPanel selectedFacetPanel;
     private final FacetValuesPanel facetValuesPanel;
@@ -93,6 +101,26 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
         final Label label = new Label(id, new SolrFieldNameModel(getModel()));
         label.add(new AttributeAppender("title", new SolrFieldDescriptionModel(getModel())));
         return label;
+    }
+
+    @Override
+    protected Link createTitleToggler() {
+        final Link link = super.createTitleToggler();
+        if (piwikConfig.isEnabled()) {
+            link.add(new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_FACET, PiwikEventConstants.PIWIK_EVENT_ACTION_FACET_EXPANDCOLLAPSE) {
+                @Override
+                protected String getName(AjaxRequestTarget target) {
+                    return FacetPanel.this.getModelObject();
+                }
+
+                @Override
+                protected String getValue(AjaxRequestTarget target) {
+                    return getExpansionModel().getObject().toString().toLowerCase();
+                }
+
+            });
+        }
+        return link;
     }
 
     /**
