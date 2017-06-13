@@ -130,8 +130,8 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
 
         // add Piwik tracking behavior
         if (piwikConfig.isEnabled()) {
-            navigatorTop.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior(TRACKING_EVENT_TITLE));
-            navigatorBottom.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior(TRACKING_EVENT_TITLE));
+            navigatorTop.add(AjaxPiwikTrackingBehavior.newPageViewTrackingBehavior(TRACKING_EVENT_TITLE));
+            navigatorBottom.add(AjaxPiwikTrackingBehavior.newPageViewTrackingBehavior(TRACKING_EVENT_TITLE));
         }
     }
 

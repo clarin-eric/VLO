@@ -71,12 +71,12 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
      * @param pageTitle
      * @return
      */
-    public static Behavior newEventTrackingBehavior(String event, final String pageTitle) {
+    public static Behavior newPageViewTrackingBehavior(String event, final String pageTitle) {
         return new AjaxPiwikTrackingBehavior(event, "trackPageView('" + pageTitle + "')");
     }
 
-    public static Behavior newEventTrackingBehavior(final String pageTitle) {
-        return newEventTrackingBehavior(DEFAULT_EVENT, pageTitle);
+    public static Behavior newPageViewTrackingBehavior(final String pageTitle) {
+        return AjaxPiwikTrackingBehavior.newPageViewTrackingBehavior(DEFAULT_EVENT, pageTitle);
     }
 
     public static abstract class SearchTrackingBehavior extends AjaxPiwikTrackingBehavior {

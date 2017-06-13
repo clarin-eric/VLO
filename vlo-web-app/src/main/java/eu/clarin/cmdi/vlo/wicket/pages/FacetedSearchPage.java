@@ -115,7 +115,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
         // add Piwik tracking behavior
         if (piwikConfig.isEnabled()) {
-            resultsHeader.add(AjaxPiwikTrackingBehavior.newEventTrackingBehavior(TRACKING_EVENT_TITLE));
+            resultsHeader.add(AjaxPiwikTrackingBehavior.newPageViewTrackingBehavior(TRACKING_EVENT_TITLE));
         }
     }
 
