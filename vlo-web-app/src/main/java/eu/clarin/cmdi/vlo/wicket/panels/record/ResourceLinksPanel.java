@@ -23,6 +23,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.Bootstra
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils.LanguageInfo;
+import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
@@ -258,8 +259,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         }
 
         protected Component createOptionsDropdown(final IModel<String> linkModel, final ResourceInfoModel resourceInfoModel) {
-            final ArrayList options = Lists.newArrayList(
-                    new BootstrapDropdown.DropdownMenuItem("Process with Language Resource Switchboard", "glyphicon glyphicon-open-file") {
+            final ArrayList options = Lists.newArrayList(new BootstrapDropdown.DropdownMenuItem("Process with Language Resource Switchboard", "glyphicon glyphicon-open-file") {
                 @Override
                 protected Link getLink(String id) {
                     final Link link = new Link(id) {
@@ -270,7 +270,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
                     };
                     if (piwikConfig.isEnabled()) {
-                        final AjaxPiwikTrackingBehavior.EventTrackingBehavior eventBehavior = new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", "LRS", "ProcessResource") {
+                        final AjaxPiwikTrackingBehavior.EventTrackingBehavior eventBehavior = new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_LRS, PiwikEventConstants.PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE) {
                             @Override
                             protected String getName(AjaxRequestTarget target) {
                                 return "ResourceDropdown";

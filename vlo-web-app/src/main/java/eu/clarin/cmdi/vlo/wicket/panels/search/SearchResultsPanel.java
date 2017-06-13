@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.Ordering;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
+import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -27,7 +28,6 @@ import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchResultExpansionStateModel;
-import static eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage.TRACKING_EVENT_TITLE;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -130,8 +130,8 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
 
         // add Piwik tracking behavior
         if (piwikConfig.isEnabled()) {
-            navigatorTop.add(AjaxPiwikTrackingBehavior.newPageViewTrackingBehavior(TRACKING_EVENT_TITLE));
-            navigatorBottom.add(AjaxPiwikTrackingBehavior.newPageViewTrackingBehavior(TRACKING_EVENT_TITLE));
+            navigatorTop.add(AjaxPiwikTrackingBehavior.newPageViewTrackingBehavior(PiwikEventConstants.PIWIK_PAGEVIEW_SEARCH));
+            navigatorBottom.add(AjaxPiwikTrackingBehavior.newPageViewTrackingBehavior(PiwikEventConstants.PIWIK_PAGEVIEW_SEARCH));
         }
     }
 

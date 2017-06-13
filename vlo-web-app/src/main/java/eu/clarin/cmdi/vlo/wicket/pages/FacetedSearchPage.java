@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.VloWebSession;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import java.util.List;
@@ -56,7 +57,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private static final long serialVersionUID = 1L;
     private final static List<String> ADDITIONAL_FACETS = ImmutableList.of(FacetConstants.FIELD_LICENSE_TYPE);
-    public static final String TRACKING_EVENT_TITLE = "Search page";
 
     @SpringBean
     private FacetFieldsService facetFieldsService;
@@ -115,7 +115,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
         // add Piwik tracking behavior
         if (piwikConfig.isEnabled()) {
-            resultsHeader.add(AjaxPiwikTrackingBehavior.newPageViewTrackingBehavior(TRACKING_EVENT_TITLE));
+            resultsHeader.add(AjaxPiwikTrackingBehavior.newPageViewTrackingBehavior(PiwikEventConstants.PIWIK_PAGEVIEW_SEARCH));
         }
     }
 

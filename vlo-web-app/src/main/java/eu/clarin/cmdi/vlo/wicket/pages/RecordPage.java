@@ -22,6 +22,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbed
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordLicenseInfoPanel;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
@@ -281,7 +282,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             protected WebMarkupContainer newLink(String linkId, final int index) {
                 final WebMarkupContainer link = super.newLink(linkId, index);
                 if (piwikConfig.isEnabled()) {
-                    link.add(new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", "RecordPageTab", "Switch") {
+                    link.add(new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_RECORDPAGE, PiwikEventConstants.PIWIK_EVENT_ACTION_RECORDPAGE_TABSWITCH) {
                         @Override
                         protected String getName(AjaxRequestTarget target) {
                             return TABS_ORDER.get(index);
