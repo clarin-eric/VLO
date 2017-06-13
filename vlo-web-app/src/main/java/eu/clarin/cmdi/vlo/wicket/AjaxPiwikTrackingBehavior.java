@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +73,7 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
      * @return
      */
     public static Behavior newPageViewTrackingBehavior(String event, final String pageTitle) {
-        return new AjaxPiwikTrackingBehavior(event, "trackPageView('" + pageTitle + "')");
+        return new AjaxPiwikTrackingBehavior(event, "trackPageView('" + JavaScriptUtils.escapeQuotes(pageTitle) + "')");
     }
 
     public static Behavior newPageViewTrackingBehavior(final String pageTitle) {
@@ -87,7 +88,7 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
 
         @Override
         protected String getTrackerCommand(AjaxRequestTarget target) {
-            return "trackSiteSearch('" + getKeywords(target) + "')";
+            return "trackSiteSearch('" + JavaScriptUtils.escapeQuotes(getKeywords(target)) + "')";
         }
 
         protected abstract String getKeywords(AjaxRequestTarget target);
@@ -112,13 +113,13 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
             final String value = getValue(target);
             final StringBuilder command
                     = new StringBuilder("trackEvent(")
-                            .append("'").append(category).append("'")
-                            .append(", '").append(action).append("'");
+                            .append("'").append(JavaScriptUtils.escapeQuotes(category)).append("'")
+                            .append(", '").append(JavaScriptUtils.escapeQuotes(action)).append("'");
             if (name != null) {
-                command.append(", '").append(name).append("'");
+                command.append(", '").append(JavaScriptUtils.escapeQuotes(name)).append("'");
             }
             if (value != null) {
-                command.append(", '").append(value).append("'");
+                command.append(", '").append(JavaScriptUtils.escapeQuotes(value)).append("'");
             }
             command.append(")");
             return command.toString();
