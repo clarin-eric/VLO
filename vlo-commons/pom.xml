@@ -115,11 +115,11 @@
             <properties>
                 <vloconfig.deleteAllFirst>false</vloconfig.deleteAllFirst>
                 <vloconfig.maxDaysInSolr>7</vloconfig.maxDaysInSolr>
-                <vloconfig.solrUrl>http://localhost:8080/solr/core0/</vloconfig.solrUrl>
-                <vloconfig.homeUrl>http://beta-vlo.clarin.eu</vloconfig.homeUrl>
+                <vloconfig.solrUrl>${VLO_DOCKER_SOLR_URL}</vloconfig.solrUrl>
+                <vloconfig.homeUrl>${VLO_DOCKER_PUBLIC_HOME_URL}</vloconfig.homeUrl>
                 <vloconfig.dataRootsFile>dataroots-beta.xml</vloconfig.dataRootsFile>
-                <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
-                <vloconfig.facetConceptsFileLocation>file:/srv/VLO-mapping/mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
+                <vloconfig.mappingFilesLocation>${VLO_DOCKER_MAPPING_BASE_URI}uniform-maps/</vloconfig.mappingFilesLocation>
+                <vloconfig.facetConceptsFileLocation>${VLO_DOCKER_MAPPING_BASE_URI}mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
             </properties>
         </profile>
     </profiles>
