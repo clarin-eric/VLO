@@ -211,7 +211,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("getMaxFileSize");
 
-        int expResult = 15000000;
+        int expResult = 50*1000*1000;
         int result = config.getMaxFileSize();
 
         assertEquals(expResult, result);

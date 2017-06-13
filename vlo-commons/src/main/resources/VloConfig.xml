@@ -12,10 +12,10 @@
     
     <xi:include href="${vloconfig.dataRootsFile}" xmlns:xi="http://www.w3.org/2001/XInclude"></xi:include>
     
-    <!-- Sets the maximum number of page instances which will be stored in the application scoped second level cache for faster retrieval -->
+    <!-- Wicket: the maximum number of page instances which will be stored in the application scoped second level cache for faster retrieval -->
     <pagesInApplicationCache>40</pagesInApplicationCache>
     
-    <!-- Sets the maximum size (in KILOBYTES) of the File where page instances per session are stored. -->
+    <!-- Wicket: the maximum size (in KILOBYTES) of the File where page instances per session are stored. -->
     <sessionCacheSize>10000</sessionCacheSize>
    
     <maxDocsInList>128</maxDocsInList>
@@ -24,7 +24,8 @@
     
     <solrTimeOut>300</solrTimeOut>
     
-    <maxFileSize>15000000</maxFileSize>
+    <!-- Max record file size to accept in bytes -->
+    <maxFileSize>50000000</maxFileSize>
     
     <useHandleResolver>false</useHandleResolver>
     
