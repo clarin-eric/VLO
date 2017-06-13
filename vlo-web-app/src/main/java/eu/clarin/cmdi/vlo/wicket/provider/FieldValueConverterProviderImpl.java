@@ -61,6 +61,8 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
                 return descriptionConverter;
             case FacetConstants.FIELD_AVAILABILITY:
                 return availabilityConverter;
+            case FacetConstants.FIELD_LICENSE_TYPE:
+                return availabilityConverter;
             case FacetConstants.FIELD_LICENSE:
                 return licenseConverter;
             default:

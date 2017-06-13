@@ -24,6 +24,7 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
 import eu.clarin.cmdi.vlo.wicket.components.ToggleLink;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
+import eu.clarin.cmdi.vlo.wicket.model.CombinedLicenseTypeAvailabilityModel;
 import eu.clarin.cmdi.vlo.wicket.model.ConvertedFieldValueModel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.MapValueModel;
@@ -63,12 +64,14 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
     @SpringBean
     private VloConfig vloConfig;
 
+    private final IModel<Collection<String>> licenseTypeModel;
     private final IModel<Collection<String>> availabilityModel;
     private final IModel<Collection<String>> accessInfoModel;
     private final IModel<Collection<String>> licensesModel;
-    
+
     public RecordLicenseInfoPanel(String id, IModel<SolrDocument> model) {
         super(id, model);
+        this.licenseTypeModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_LICENSE_TYPE);
         this.availabilityModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_AVAILABILITY);
         this.accessInfoModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_ACCESS_INFO);
         this.licensesModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_LICENSE);
@@ -144,8 +147,8 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
         final Ordering<String> availabilityOrder = new PreferredExplicitOrdering(
                 //extract the 'primary' availability values from the configuration
                 FieldValueDescriptor.valuesList(vloConfig.getAvailabilityValues()));
-        
-        return new ListView<String>(id, new CollectionListModel<>(availabilityModel, availabilityOrder)) {
+
+        return new ListView<String>(id, new CollectionListModel<>(new CombinedLicenseTypeAvailabilityModel(licenseTypeModel, availabilityModel), availabilityOrder)) {
             @Override
             protected void populateItem(ListItem<String> item) {
 

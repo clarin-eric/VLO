@@ -7,29 +7,35 @@ import java.util.Map;
 
 public class ContinentNamePostProcessor implements PostProcessor {
 
-	private static Map<String, String> continentCodeMap;
-	static {
-		continentCodeMap = new HashMap<String, String>();
-		continentCodeMap.put("AF", "Africa");
-		continentCodeMap.put("AS", "Asia");
-		continentCodeMap.put("EU", "Europe");
-		continentCodeMap.put("NA", "North America");
-		continentCodeMap.put("SA", "South America");
-		continentCodeMap.put("OC", "Oceania");
-		continentCodeMap.put("AN", "Antarctica");
-	}
+    private static Map<String, String> continentCodeMap;
 
-	/**
-	 * Replaces two-letter continent codes with continent names
-	 */
-	@Override
-	public List<String> process(final String value) {
-            List<String> resultList = new ArrayList<String>();
-            if(value != null && continentCodeMap.keySet().contains(value)) {
-                resultList.add(continentCodeMap.get(value));
-            } else {
-                resultList.add(value);
-            }
-            return resultList;
-	}
+    static {
+        continentCodeMap = new HashMap<String, String>();
+        continentCodeMap.put("AF", "Africa");
+        continentCodeMap.put("AS", "Asia");
+        continentCodeMap.put("EU", "Europe");
+        continentCodeMap.put("NA", "North America");
+        continentCodeMap.put("SA", "South America");
+        continentCodeMap.put("OC", "Oceania");
+        continentCodeMap.put("AN", "Antarctica");
+    }
+
+    /**
+     * Replaces two-letter continent codes with continent names
+     */
+    @Override
+    public List<String> process(final String value, CMDIData cmdiData) {
+        List<String> resultList = new ArrayList<String>();
+        if (value != null && continentCodeMap.keySet().contains(value)) {
+            resultList.add(continentCodeMap.get(value));
+        } else {
+            resultList.add(value);
+        }
+        return resultList;
+    }
+
+    @Override
+    public boolean doesProcessNoValue() {
+        return false;
+    }
 }

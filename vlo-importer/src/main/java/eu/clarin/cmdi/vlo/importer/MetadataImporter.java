@@ -88,6 +88,7 @@ public class MetadataImporter {
         POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGE_CODE, new LanguageCodePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGE_NAME, new LanguageNamePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_AVAILABILITY, new AvailabilityPostProcessor());
+        POST_PROCESSORS.put(FacetConstants.FIELD_LICENSE_TYPE, new LicenseTypePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_ORGANISATION, new OrganisationPostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_TEMPORAL_COVERAGE, new TemporalCoveragePostProcessor());
         POST_PROCESSORS.put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostProcessor());
@@ -508,7 +509,7 @@ public class MetadataImporter {
             }
 
             FormatPostProcessor processor = new FormatPostProcessor();
-            mimeType = processor.process(mimeType).get(0);
+            mimeType = processor.process(mimeType, null).get(0);
 
             // TODO check should probably be moved into Solr (by using some minimum length filter)
             if (!mimeType.equals("")) {

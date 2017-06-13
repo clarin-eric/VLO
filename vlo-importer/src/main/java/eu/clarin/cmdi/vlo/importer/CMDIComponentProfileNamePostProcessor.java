@@ -27,7 +27,7 @@ public class CMDIComponentProfileNamePostProcessor implements PostProcessor {
     private final HashMap<String, String> cache = new HashMap<String, String>();
 
     @Override
-    public List<String> process(String profileId) {
+    public List<String> process(String profileId, CMDIData cmdiData) {
         String result = _EMPTY_STRING;
         if(profileId != null){
             if(cache.containsKey(profileId)){
@@ -72,6 +72,11 @@ public class CMDIComponentProfileNamePostProcessor implements PostProcessor {
         List<String> resultList = new ArrayList<String>();
         resultList.add(result);
         return resultList;
+    }
+
+    @Override
+    public boolean doesProcessNoValue() {
+        return false;
     }
 
     private void setup() {

@@ -71,7 +71,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacetsSelection> implements IAjaxIndicatorAware {
 
-    public static final String AVAILABILITY_FIELD = FacetConstants.FIELD_AVAILABILITY;
+    public static final String AVAILABILITY_FIELD = FacetConstants.FIELD_LICENSE_TYPE;
     private final List<String> availabilityLevels;
 
     @SpringBean
@@ -155,7 +155,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
                     //child label
                     .add(new FieldValueLabel("name", valueModel, fieldNameModel))
                     //count label
-                    .add(new Label("count", new PropertyModel<String>(item.getModel(), "count")))
+                    .add(new Label("count", new PropertyModel<>(item.getModel(), "count")))
                     //reference to checkbox
                     .add(new AttributeModifier("for", selector.getMarkupId()))
                     .add(new AttributeAppender("class", valueModel, " "))

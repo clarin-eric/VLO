@@ -15,7 +15,7 @@ public class OrganisationPostProcessor extends PostProcessorsWithVocabularyMap {
      * replaced with controlled vocabulary
      */
     @Override
-    public List<String> process(String value) {
+    public List<String> process(String value, CMDIData cmdiData) {
 
         String[] splitArray = normalizeInputString(value).split(";");
         for (int i = 0; i < splitArray.length; i++) {
@@ -38,5 +38,10 @@ public class OrganisationPostProcessor extends PostProcessorsWithVocabularyMap {
 
     private String normalizeVariant(String key) {
         return key.toLowerCase().replaceAll("-", " ");
+    }
+
+    @Override
+    public boolean doesProcessNoValue() {
+        return false;
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 public class LicensePostProcessor extends PostProcessorsWithVocabularyMap {
 
     @Override
-    public List<String> process(String value) {
+    public List<String> process(String value, CMDIData cmdiData) {
         String normalizedVal = normalize(value);
         return normalizedVal != null ? Arrays.asList(normalizedVal) : new ArrayList<>();
     }
@@ -15,5 +15,10 @@ public class LicensePostProcessor extends PostProcessorsWithVocabularyMap {
     @Override
     public String getNormalizationMapURL() {
         return MetadataImporter.config.getLicenseURIMapUrl();
+    }
+
+    @Override
+    public boolean doesProcessNoValue() {
+        return false;
     }
 }

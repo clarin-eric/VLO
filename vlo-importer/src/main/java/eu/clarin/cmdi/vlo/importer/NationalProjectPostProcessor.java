@@ -25,14 +25,18 @@ public class NationalProjectPostProcessor extends PostProcessorsWithVocabularyMa
      * @return
      */
     @Override
-    public List<String> process(String value) {
-    	return Arrays.asList(normalize(value.trim(), ""));
+    public List<String> process(String value, CMDIData cmdiData) {
+        return Arrays.asList(normalize(value.trim(), ""));
     }
-    
 
-	@Override
-	public String getNormalizationMapURL() {
-		return MetadataImporter.config.getNationalProjectMapping();
-	}
-    
+    @Override
+    public String getNormalizationMapURL() {
+        return MetadataImporter.config.getNationalProjectMapping();
+    }
+
+    @Override
+    public boolean doesProcessNoValue() {
+        return false;
+    }
+
 }

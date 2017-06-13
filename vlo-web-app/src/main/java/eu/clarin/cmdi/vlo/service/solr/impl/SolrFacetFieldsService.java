@@ -67,7 +67,7 @@ public class SolrFacetFieldsService implements FacetFieldsService {
         for (FacetField facet : response) {
             FacetSelection facetSelection = query.getSelectionValues(facet.getName());
 
-            if (facetSelection == null || facet.getName().equals(FacetConstants.FIELD_AVAILABILITY)) {
+            if (facetSelection == null || facet.getName().equals(FacetConstants.FIELD_LICENSE_TYPE)) {
                 filteredFacets.add(facet);
                 continue;
             } else {

@@ -21,6 +21,7 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
+import eu.clarin.cmdi.vlo.wicket.model.CombinedLicenseTypeAvailabilityModel;
 import eu.clarin.cmdi.vlo.wicket.model.ConvertedFieldValueModel;
 import eu.clarin.cmdi.vlo.wicket.model.FormattedStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
@@ -50,8 +51,9 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
         this.searchContextModel = searchContextModel;
 
         //add 'tags' for all availability values
+        final SolrFieldModel<String> licenseTypeModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_LICENSE_TYPE);
         final SolrFieldModel<String> availabilityModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_AVAILABILITY);
-        add(new ListView<String>("availabilityTag", new CollectionListModel<>(availabilityModel, availabilityOrder)) {
+        add(new ListView<String>("availabilityTag", new CollectionListModel<>(new CombinedLicenseTypeAvailabilityModel(licenseTypeModel, availabilityModel), availabilityOrder)) {
             @Override
             protected void populateItem(ListItem<String> item) {
                 // add link to record

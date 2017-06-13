@@ -71,7 +71,7 @@ public class TestFacetedSearchPage {
                         new FacetField("subject"),
                         new FacetField("format"),
                         new FacetField("organisation"),
-                        new FacetField("availability"),
+                        new FacetField("licenseType"),
                         new FacetField("nationalProject"),
                         new FacetField("keywords"),
                         new FacetField("dataProvider")

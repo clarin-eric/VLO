@@ -81,12 +81,20 @@ public class CMDIData {
             Collection<Object> fieldValues = doc.getFieldValues(name);
             if (fieldValues == null || !fieldValues.contains(value)) {
                 //if availability facet reduce tag to most restrictive
-                if (name.equals(FacetConstants.FIELD_AVAILABILITY)) {
-                    reduceAvailability(value);
+                if (name.equals(FacetConstants.FIELD_AVAILABILITY) || name.equals(FacetConstants.FIELD_LICENSE_TYPE)) {
+                    reduceAvailability(name, value);
                 } else {
                     doc.addField(name, value);
                 }
             } //ignore double values don't add them
+        }
+    }
+
+    public Collection<Object> getDocField(String name) {
+        if (doc == null) {
+            return null;
+        } else {
+            return doc.getFieldValues(name);
         }
     }
 
@@ -142,10 +150,11 @@ public class CMDIData {
             searchResources.add(new Resource(resource, type, mimeType));
         } else if (LANDING_PAGE_TYPE.equals(type)) {
             // omit multiple LandingPages
-            if(landingPageResources.isEmpty())
+            if (landingPageResources.isEmpty()) {
                 landingPageResources.add(new Resource(resource, type, mimeType));
-            else
+            } else {
                 LOG.warn("Ignoring surplus landingpage: {}", resource);
+            }
         } else if (SEARCH_PAGE_TYPE.equals(type)) {
             searchPageResources.add(new Resource(resource, type, mimeType));
         } else {
@@ -162,21 +171,25 @@ public class CMDIData {
         return id;
     }
 
-    /*
-     * In case that Availability facet has more then one value use the most restrictive tag from PUB, ACA and RES 
+    /**
+     * In case that Availability facet has more then one value use the most
+     * restrictive tag from PUB, ACA and RES. TODO: Move this to post processor
+     *
+     * @param field field to reduce availability values in
+     * @param value value to insert (add or replace)
      */
-    private void reduceAvailability(String value) {
-        Collection<Object> currentValues = doc.getFieldValues(FacetConstants.FIELD_AVAILABILITY);
+    private void reduceAvailability(String field, String value) {
+        Collection<Object> currentValues = doc.getFieldValues(field);
 
         //the first value
         if (currentValues == null) {
-            doc.addField(FacetConstants.FIELD_AVAILABILITY, value);
+            doc.addField(field, value);
             return;
         }
 
         int lvlNew = availabilityToLvl(value);
         if (lvlNew == -1) { //other tags, add them, uniqueness has already being checked
-            doc.addField(FacetConstants.FIELD_AVAILABILITY, value);
+            doc.addField(field, value);
             return;
         }
 
@@ -191,8 +204,8 @@ public class CMDIData {
 
         //if new values is more restrictive replace the old with new
         if (lvlNew > lvlCur) {
-            SolrInputField fOld = doc.get(FacetConstants.FIELD_AVAILABILITY);
-            SolrInputField fNew = new SolrInputField(FacetConstants.FIELD_AVAILABILITY);
+            SolrInputField fOld = doc.get(field);
+            SolrInputField fNew = new SolrInputField(field);
 
             fNew.addValue(value, 1.0f); //new, more restrictive value
             for (Object val : fOld.getValues()) { //copy other tags
@@ -201,7 +214,7 @@ public class CMDIData {
                 }
             }
 
-            doc.replace(FacetConstants.FIELD_AVAILABILITY, fOld, fNew);
+            doc.replace(field, fOld, fNew);
         }
 
     }

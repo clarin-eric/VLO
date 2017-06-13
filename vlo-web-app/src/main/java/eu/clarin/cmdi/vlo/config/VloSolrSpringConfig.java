@@ -103,6 +103,7 @@ public class VloSolrSpringConfig {
             FacetConstants.FIELD_SUBJECT,
             FacetConstants.FIELD_ORGANISATION,
             FacetConstants.FIELD_LICENSE,
+            FacetConstants.FIELD_LICENSE_TYPE,
             FacetConstants.FIELD_AVAILABILITY,
             FacetConstants.FIELD_ACCESS_INFO,
             FacetConstants.FIELD_KEYWORDS,

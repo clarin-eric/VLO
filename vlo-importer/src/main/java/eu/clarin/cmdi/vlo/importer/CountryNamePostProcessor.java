@@ -24,7 +24,7 @@ public class CountryNamePostProcessor implements PostProcessor {
      * @return List of country names
      */
     @Override
-    public List<String> process(String value) {
+    public List<String> process(String value, CMDIData cmdiData) {
         String result = value;
         if (result != null) {
             String name = getCountryCodeMap().get(value.toUpperCase());
@@ -57,6 +57,11 @@ public class CountryNamePostProcessor implements PostProcessor {
                 throw new RuntimeException("Cannot instantiate postProcessor:", e);
             }
         }
+    }
+
+    @Override
+    public boolean doesProcessNoValue() {
+        return false;
     }
 
 }

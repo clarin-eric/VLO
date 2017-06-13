@@ -55,7 +55,9 @@
     <licenseAvailabilityMapUrl>${vloconfig.mappingFilesLocation}LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl> <!-- bundled resource: /uniform-maps/LicenseAvailabilityMap.xml -->
     
     <licenseURIMapUrl>${vloconfig.mappingFilesLocation}LicenseURIMap.xml</licenseURIMapUrl> <!-- bundled resource: /uniform-maps/LicenseURIMap.xml -->
-    
+
+    <licenseTypeMapUrl>${vloconfig.mappingFilesLocation}LicenseTypeMap.xml</licenseTypeMapUrl> <!-- bundled resource: /uniform-maps/LicenseAvailabilityMap.xml -->
+            
     <!-- Fields shown as facets on the search page -->
     <facetFields>        
         <facetField>languageCode</facetField>
@@ -111,6 +113,7 @@
         <ignoredField>score</ignoredField>
         <ignoredField>license</ignoredField>
         <ignoredField>availability</ignoredField>
+        <ignoredField>licenseType</ignoredField>
         <ignoredField>accessInfo</ignoredField>
     </ignoredFields>
     

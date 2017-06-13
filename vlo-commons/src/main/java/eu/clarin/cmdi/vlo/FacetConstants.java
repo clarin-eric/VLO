@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 
@@ -30,6 +31,7 @@ public class FacetConstants {
     public static final String FIELD_RESOURCE_CLASS = "resourceClass";
     public static final String FIELD_SUBJECT = "subject";
     public static final String FIELD_TEMPORAL_COVERAGE = "temporalCoverage";
+    public static final String FIELD_LICENSE_TYPE = "licenseType";
 
     /**
      * Solr pseudo-field that reveals the ranking score
@@ -83,6 +85,7 @@ public class FacetConstants {
             FIELD_KEYWORDS,
             FIELD_LANGUAGE_CODE,
             FIELD_LICENSE,
+            FIELD_LICENSE_TYPE,
             FIELD_MODALITY,
             FIELD_NAME,
             FIELD_NATIONAL_PROJECT,
@@ -154,5 +157,11 @@ public class FacetConstants {
      * @see #FIELD_AVAILABILITY
      */
     public static final String AVAILABILITY_LEVEL_RES = "RES";
+
+    public static final ImmutableList<String> LICENSE_TYPE_VALUES = ImmutableList.of(
+            FacetConstants.AVAILABILITY_LEVEL_PUB,
+            FacetConstants.AVAILABILITY_LEVEL_ACA,
+            FacetConstants.AVAILABILITY_LEVEL_RES
+    );
 
 }
