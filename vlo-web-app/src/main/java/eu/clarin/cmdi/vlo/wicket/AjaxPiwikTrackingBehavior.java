@@ -33,9 +33,10 @@ import org.slf4j.LoggerFactory;
 public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
 
     public static final Logger log = LoggerFactory.getLogger(AjaxPiwikTrackingBehavior.class);
-    
+
     public static final String DEFAULT_EVENT = "click";
     private final String trackerCommand;
+    private boolean async = true;
 
     protected AjaxPiwikTrackingBehavior(String event, String trackerCommand) {
         super(event);
@@ -44,9 +45,13 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
 
     @Override
     protected void onEvent(AjaxRequestTarget target) {
-        final String js = "if(Piwik != null) { "
-                + "var tracker = Piwik.getAsyncTracker(); if(tracker != null) { tracker." + getTrackerCommand(target)
-                + ";}}";
+        String js = "if(Piwik != null) { ";
+        if (async) {
+            js += "var tracker = Piwik.getAsyncTracker(); ";
+        } else {
+            js += "var tracker = Piwik.getTracker(); ";
+        }
+        js += "if(tracker != null) { tracker." + getTrackerCommand(target) + ";}}";
         log.debug("Calling Piwik API: {}", js);
         target.appendJavaScript(js);
     }
@@ -55,19 +60,23 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
         return trackerCommand;
     }
 
+    public void setAsync(boolean async) {
+        this.async = async;
+    }
+
     /**
      * Tracking of an action with a custom name
      *
      * @param event
-     * @param actionTitle
+     * @param pageTitle
      * @return
      */
-    public static Behavior newEventTrackingBehavior(String event, final String actionTitle) {
-        return new AjaxPiwikTrackingBehavior(event, "trackPageView('" + actionTitle + "')");
+    public static Behavior newEventTrackingBehavior(String event, final String pageTitle) {
+        return new AjaxPiwikTrackingBehavior(event, "trackPageView('" + pageTitle + "')");
     }
 
-    public static Behavior newEventTrackingBehavior(final String actionTitle) {
-        return newEventTrackingBehavior(DEFAULT_EVENT, actionTitle);
+    public static Behavior newEventTrackingBehavior(final String pageTitle) {
+        return newEventTrackingBehavior(DEFAULT_EVENT, pageTitle);
     }
 
     public static abstract class SearchTrackingBehavior extends AjaxPiwikTrackingBehavior {
@@ -82,6 +91,46 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
         }
 
         protected abstract String getKeywords(AjaxRequestTarget target);
+
+    }
+
+    public static class EventTrackingBehavior extends AjaxPiwikTrackingBehavior {
+
+        private final String category;
+        private final String action;
+
+        public EventTrackingBehavior(String event, String category, String action) {
+            super(event, null);
+            this.category = category;
+            this.action = action;
+        }
+
+        @Override
+        protected String getTrackerCommand(AjaxRequestTarget target) {
+            //trackEvent(category, action, [name], [value])
+            final String name = getName(target);
+            final String value = getValue(target);
+            final StringBuilder command
+                    = new StringBuilder("trackEvent(")
+                            .append("'").append(category).append("'")
+                            .append(", '").append(action).append("'");
+            if (name != null) {
+                command.append(", '").append(name).append("'");
+            }
+            if (value != null) {
+                command.append(", '").append(value).append("'");
+            }
+            command.append(")");
+            return command.toString();
+        }
+
+        protected String getName(AjaxRequestTarget target) {
+            return null;
+        }
+
+        protected String getValue(AjaxRequestTarget target) {
+            return null;
+        }
 
     }
 }

@@ -23,9 +23,11 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.Bootstra
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils.LanguageInfo;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
@@ -80,6 +82,8 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
     @SpringBean
     private VloConfig vloConfig;
+    @SpringBean
+    private PiwikConfig piwikConfig;
     @SpringBean
     private LanguageCodeUtils languageCodeUtils;
     @SpringBean(name = "resourceStringConverter")
@@ -258,13 +262,30 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                     new BootstrapDropdown.DropdownMenuItem("Process with Language Resource Switchboard", "glyphicon glyphicon-open-file") {
                 @Override
                 protected Link getLink(String id) {
-                    return new Link(id) {
+                    final Link link = new Link(id) {
                         @Override
                         public void onClick() {
                             throw new RedirectToUrlException(getLanguageSwitchboardUrl(linkModel, resourceInfoModel.getObject()));
                         }
 
                     };
+                    if (piwikConfig.isEnabled()) {
+                        final AjaxPiwikTrackingBehavior.EventTrackingBehavior eventBehavior = new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", "LRS", "ProcessResource") {
+                            @Override
+                            protected String getName(AjaxRequestTarget target) {
+                                return "ResourceDropdown";
+                            }
+
+                            @Override
+                            protected String getValue(AjaxRequestTarget target) {
+                                return resourceInfoModel.getObject().getHref();
+                            }
+                            
+                        };
+                        eventBehavior.setAsync(false);
+                        link.add(eventBehavior);
+                    }
+                    return link;
                 }
             }
             );
