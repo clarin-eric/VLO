@@ -24,11 +24,13 @@ import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
@@ -105,6 +107,8 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     private List<String> fieldOrder;
     @SpringBean
     private VloConfig config;
+    @SpringBean
+    private PiwikConfig piwikConfig;
 
     private final IModel<SearchContext> navigationModel;
     private final IModel<QueryFacetsSelection> selectionModel;
@@ -272,7 +276,22 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             tabs.remove(TABS_ORDER.indexOf(HIERARCHY_SECTION));
         }
 
-        return new AjaxBootstrapTabbedPanel(id, tabs);
+        return new AjaxBootstrapTabbedPanel(id, tabs) {
+            @Override
+            protected WebMarkupContainer newLink(String linkId, final int index) {
+                final WebMarkupContainer link = super.newLink(linkId, index);
+                if (piwikConfig.isEnabled()) {
+                    link.add(new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", "RecordPageTab", "Switch") {
+                        @Override
+                        protected String getName(AjaxRequestTarget target) {
+                            return TABS_ORDER.get(index);
+                        }
+                    });
+                }
+                return link;
+            }
+
+        };
     }
 
     private Component createNavigation(final String id) {
