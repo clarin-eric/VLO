@@ -288,7 +288,11 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                         facetConceptMap = facetConceptMapping.getFacetConceptMap();
                     }
                     final FacetConceptMapping.FacetConcept facetConcept = facetConceptMap.get(fieldWithPostProcessor);
-                    processNoMatch(fieldWithPostProcessor, facetConcept.isAllowMultipleValues(), facetConcept.isCaseInsensitive(), cmdiData);
+                    if (facetConcept == null) {
+                        LOG.warn("Postprocessor defined for field not defined in facet concepts definition: {}. Skipping processing of unmapped field.", fieldWithPostProcessor);
+                    } else {
+                        processNoMatch(fieldWithPostProcessor, facetConcept.isAllowMultipleValues(), facetConcept.isCaseInsensitive(), cmdiData);
+                    }
                 }
             }
         }
@@ -296,6 +300,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
 
     /**
      * Performs post processing in case no value was found for a specific facet
+     *
      * @param facetName facet
      * @param allowMultipleValues allow multiple values?
      * @param caseInsensitive case insensitive?
@@ -361,10 +366,11 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         List<Integer> nonEnglishContentIndices = new ArrayList<>();
         for (int i = 0; i < valueLangPairList.size(); i++) {
             Pair<String, String> valueLangPair = valueLangPairList.get(i);
-            if (valueLangPair.getRight().equals(ENGLISH_LANGUAGE))
+            if (valueLangPair.getRight().equals(ENGLISH_LANGUAGE)) {
                 englishContentIndices.add(i);
-            else
+            } else {
                 nonEnglishContentIndices.add(i);
+            }
         }
         englishContentIndices.stream().forEach((i) -> {
             reorderedValueLangPairList.add(new ImmutablePair<>(valueLangPairList.get(i).getLeft(), valueLangPairList.get(i).getRight()));
