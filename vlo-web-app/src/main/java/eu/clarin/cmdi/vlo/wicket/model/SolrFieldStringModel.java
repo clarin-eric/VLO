@@ -36,6 +36,7 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
 
     private final IModel<Collection<Object>> fieldModel;
     private final String field;
+    private boolean forceSingleValue = false;
 
     /**
      * Wraps the document model and specified field name into a
@@ -70,7 +71,7 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
 
         if (iterator.hasNext()) {
             final String firstValue = iterator.next().toString();
-            if (iterator.hasNext()) {
+            if (iterator.hasNext() && !forceSingleValue) {
                 return getMultipleValuesString(firstValue, iterator);
             } else {
                 return postprocessValue(firstValue);
@@ -114,6 +115,11 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
 
     private Ordering getFieldValueOrdering() {
         return VloWicketApplication.get().getFieldValueOrderings().get(field);
+    }
+
+    public SolrFieldStringModel setForceSingleValue(boolean forceSingleValue) {
+        this.forceSingleValue = forceSingleValue;
+        return this;
     }
 
 }

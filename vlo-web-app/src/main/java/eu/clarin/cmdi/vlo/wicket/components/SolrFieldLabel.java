@@ -37,7 +37,11 @@ public class SolrFieldLabel extends Label {
      * @param nullFallback string to show if actual value is null
      */
     public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, String nullFallback) {
-        super(id, new NullFallbackModel(new SolrFieldStringModel(documentModel, fieldName), nullFallback));
+        this(id, documentModel, fieldName, nullFallback, false);
+    }
+
+    public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, String nullFallback, boolean forceSingleValue) {
+        super(id, new NullFallbackModel(new SolrFieldStringModel(documentModel, fieldName).setForceSingleValue(forceSingleValue), nullFallback));
     }
     
     public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, IModel<String> nullFallback) {
