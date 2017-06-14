@@ -30,6 +30,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private static final Pattern PROFILE_ID_PATTERN = Pattern.compile(".*(clarin.eu:cr1:p_[0-9]+).*");
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
 
+    private static final String ENGLISH_LANGUAGE = "code:eng";
     private static final String DEFAULT_LANGUAGE = "code:und";
     private final VloConfig config;
 
@@ -43,12 +44,9 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     public CMDIData process(File file) throws VTDException, IOException {
         final CMDIData cmdiData = new CMDIData();
         final VTDGen vg = new VTDGen();
-        final FileInputStream fileInputStream = new FileInputStream(file);
-        try {
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
             vg.setDoc(IOUtils.toByteArray(fileInputStream));
             vg.parse(true);
-        } finally {
-            fileInputStream.close();
         }
 
         final VTDNav nav = vg.getNav();
@@ -303,7 +301,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
 
             for(String postprocessedValue : postProcess(config.getName(), value)) {
                 // ignore non-English language names for facet LANGUAGE_CODE
-                if (config.getName().equals(FacetConstants.FIELD_LANGUAGE_CODE) && !languageCode.equals("code:eng") && !languageCode.equals(DEFAULT_LANGUAGE)) {
+                if (config.getName().equals(FacetConstants.FIELD_LANGUAGE_CODE) && !languageCode.equals(ENGLISH_LANGUAGE) && !languageCode.equals(DEFAULT_LANGUAGE)) {
                     continue;
                 }
 
@@ -316,33 +314,31 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         if(!matchedPattern || valueLangPairList.isEmpty())
             return matchedPattern;
 
-        // decide what extracted values should be taken
-        List<Pair<String, String>> finalValueLangPairList = valueLangPairList;
-        if (!allowMultipleValues) {
-            // for facet 'name' prefer English values, for all other facets just take the first
-            finalValueLangPairList = new ArrayList<>();
-            if (config.getName().equals(FacetConstants.FIELD_NAME)) {
-                int counter = 0;
-                for(int i = 0; i < valueLangPairList.size(); i++) {
-                    Pair<String, String> valueLangPair = valueLangPairList.get(i);
-                    if(valueLangPair.getRight().equals("code:eng")){
-                        counter = i;
-                        break;
-                    }
-                }
-                finalValueLangPairList.add(new ImmutablePair<>(valueLangPairList.get(counter).getLeft(), valueLangPairList.get(counter).getRight()));
-            } else {
-                finalValueLangPairList.add(new ImmutablePair<>(valueLangPairList.get(0).getLeft(), valueLangPairList.get(0).getRight()));
-            }
+        // reordering result pairs: prefer English content
+        List<Pair<String, String>> reorderedValueLangPairList = new ArrayList<>();
+        List<Integer> englishContentIndices = new ArrayList<>();
+        List<Integer> nonEnglishContentIndices = new ArrayList<>();
+        for (int i = 0; i < valueLangPairList.size(); i++) {
+            Pair<String, String> valueLangPair = valueLangPairList.get(i);
+            if (valueLangPair.getRight().equals(ENGLISH_LANGUAGE))
+                englishContentIndices.add(i);
+            else
+                nonEnglishContentIndices.add(i);
         }
+        englishContentIndices.stream().forEach((i) -> {
+            reorderedValueLangPairList.add(new ImmutablePair<>(valueLangPairList.get(i).getLeft(), valueLangPairList.get(i).getRight()));
+        });
+        nonEnglishContentIndices.stream().forEach((i) -> {
+            reorderedValueLangPairList.add(new ImmutablePair<>(valueLangPairList.get(i).getLeft(), valueLangPairList.get(i).getRight()));
+        });
 
         // insert values into original facet
-        insertFacetValues(config.getName(), finalValueLangPairList, cmdiData, allowMultipleValues, config.isCaseInsensitive());
+        insertFacetValues(config.getName(), reorderedValueLangPairList, cmdiData, allowMultipleValues, config.isCaseInsensitive());
 
         // insert post-processed values into derived facet(s) if configured
         for (String derivedFacet : config.getDerivedFacets()) {
             final List<Pair<String, String>> derivedValueLangPairList = new ArrayList<>();
-            for (Pair<String, String> valueLangPair : finalValueLangPairList) {
+            for (Pair<String, String> valueLangPair : reorderedValueLangPairList) {
                 for (String derivedValue : postProcess(derivedFacet, valueLangPair.getLeft())) {
                     derivedValueLangPairList.add(new ImmutablePair<>(derivedValue, valueLangPair.getRight()));
                 }
