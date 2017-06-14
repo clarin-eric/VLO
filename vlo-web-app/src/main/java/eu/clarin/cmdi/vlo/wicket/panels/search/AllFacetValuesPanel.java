@@ -205,7 +205,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
             public String getObject() {
                 if (view.getItemCount() == 0) {
                     final FacetSelection selectionValues = selectionModel.getObject().getSelectionValues(AllFacetValuesPanel.this.getModelObject().getName());
-                    if (selectionValues.isEmpty()) {
+                    if (selectionValues == null || selectionValues.isEmpty()) {
                         return "No matching values available.";
                     } else {
                         return "No matching values remaining. Click \"Done\" to apply the current selection.";
