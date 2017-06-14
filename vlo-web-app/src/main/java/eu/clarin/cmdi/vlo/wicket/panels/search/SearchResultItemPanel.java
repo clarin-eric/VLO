@@ -34,7 +34,6 @@ import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -88,7 +87,7 @@ public class SearchResultItemPanel extends Panel {
         this.documentModel = documentModel;
 
         add(new RecordPageLink("recordLink", documentModel, selectionModel)
-                .add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME, "Unnamed record"))
+                .add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME, "Unnamed record", true))
         );
 
         add(new FacetSelectLink("searchResultCollectionLink", new SolrFieldStringModel(documentModel, FacetConstants.FIELD_COLLECTION), Model.of(FacetConstants.FIELD_COLLECTION))

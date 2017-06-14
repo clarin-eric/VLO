@@ -173,7 +173,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         );
 
         // General information section
-        add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, getString("recordpage.unnamedrecord")));
+        add(new SolrFieldLabel("name", getModel(), FacetConstants.FIELD_NAME, getString("recordpage.unnamedrecord"), true));
         add(createLandingPageLink("landingPageLink"));
 
         tabs = createTabs("tabs");
