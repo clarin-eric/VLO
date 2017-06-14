@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
@@ -92,7 +93,7 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
 
         };
         document.add(new ExternalLink("documentLink", new PermaLinkModel(RecordPage.class, getModel(), documentModel))
-                .add(new SolrFieldLabel("documentTitle", documentModel, FacetConstants.FIELD_NAME, getString("breadcrumbs.unnamedrecord"))));
+                .add(new SingleValueSolrFieldLabel("documentTitle", documentModel, FacetConstants.FIELD_NAME, getString("breadcrumbs.unnamedrecord"))));
         add(document);
 
         final WebMarkupContainer facet = new WebMarkupContainer("facet") {
