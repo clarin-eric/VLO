@@ -172,6 +172,7 @@ public class FacetMappingFactory {
 
                 config.setCaseInsensitive(facetConcept.isCaseInsensitive());
                 config.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
+                config.setMultilingual(facetConcept.isMultilingual());
                 config.setName(facetConcept.getName());
 
                 LinkedHashSet<String> linkedHashSet = new LinkedHashSet<>(xpaths);

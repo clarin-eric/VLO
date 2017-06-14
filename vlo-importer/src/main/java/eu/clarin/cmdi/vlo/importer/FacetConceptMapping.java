@@ -92,13 +92,16 @@ public class FacetConceptMapping {
         private boolean allowMultipleValues = true;
 
         @XmlAttribute
+        private boolean multilingual = false;
+
+        @XmlAttribute
         private String description = "";
 
         @XmlAttribute
         private String definition = "";
 
         @XmlElement(name = "concept")
-        private List<String> concepts = new ArrayList<String>();
+        private List<String> concepts = new ArrayList<>();
 
         @XmlElement(name = "acceptableContext")
         private AcceptableContext acceptableContext;
@@ -107,13 +110,13 @@ public class FacetConceptMapping {
         private RejectableContext rejectableContext;
 
         @XmlElement(name = "pattern")
-        private List<String> patterns = new ArrayList<String>();
+        private List<String> patterns = new ArrayList<>();
 
         @XmlElement(name = "blacklistPattern")
-        private List<String> blacklistPatterns = new ArrayList<String>();
+        private List<String> blacklistPatterns = new ArrayList<>();
 
         @XmlElement(name = "derivedFacet")
-        private List<String> derivedFacets = new ArrayList<String>();
+        private List<String> derivedFacets = new ArrayList<>();
 
         public void setConcepts(List<String> concepts) {
             this.concepts = concepts;
@@ -173,6 +176,14 @@ public class FacetConceptMapping {
 
         public boolean isAllowMultipleValues() {
             return allowMultipleValues;
+        }
+
+        public void setMultilingual(boolean multilingual) {
+            this.multilingual = multilingual;
+        }
+
+        public boolean isMultilingual() {
+            return multilingual;
         }
 
         public void setDescription(String description) {

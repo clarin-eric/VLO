@@ -12,10 +12,13 @@ public class FacetConfiguration {
 
     private String name;
     private boolean caseInsensitive = false;
-    private List<String> patterns = new ArrayList<String>();
-    private List<String> fallbackPatterns = new ArrayList<String>();
-    private List<String> derivedFacets = new ArrayList<String>();
+    private List<String> patterns = new ArrayList<>();
+    private List<String> fallbackPatterns = new ArrayList<>();
+    private List<String> derivedFacets = new ArrayList<>();
     private boolean allowMultipleValues = true;
+    // allow multiple values for the same XPath, even if allowMultipleValues == false
+    // (for example for CMD elements with multilingual == yes)
+    private boolean multilingual = false;
 
     public void setCaseInsensitive(boolean caseValue) {
         this.caseInsensitive = caseValue;
@@ -71,6 +74,14 @@ public class FacetConfiguration {
 
     public void setAllowMultipleValues(boolean allowMultipleValues) {
         this.allowMultipleValues = allowMultipleValues;
+    }
+
+    public boolean getMultilingual() {
+        return multilingual;
+    }
+
+    public void setMultilingual(boolean multilingual) {
+        this.multilingual = multilingual;
     }
 
     public List<String> getDerivedFacets() {

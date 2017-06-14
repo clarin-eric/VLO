@@ -251,7 +251,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             boolean matchedPattern = false;
             List<String> patterns = config.getPatterns();
             for (String pattern : patterns) {
-                matchedPattern = matchPattern(cmdiData, nav, config, pattern, config.getAllowMultipleValues());
+                matchedPattern = matchPattern(cmdiData, nav, config, pattern, config.getAllowMultipleValues() || config.getMultilingual());
                 if (matchedPattern && !config.getAllowMultipleValues()) {
                     break;
                 }
@@ -260,7 +260,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             // using fallback patterns if extraction failed
             if (!matchedPattern) {
                 for (String pattern : config.getFallbackPatterns()) {
-                    matchedPattern = matchPattern(cmdiData, nav, config, pattern, config.getAllowMultipleValues());
+                    matchedPattern = matchPattern(cmdiData, nav, config, pattern, config.getAllowMultipleValues() || config.getMultilingual());
                     if (matchedPattern && !config.getAllowMultipleValues()) {
                         break;
                     }
