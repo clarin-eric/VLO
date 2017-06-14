@@ -36,7 +36,19 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
 
     private final IModel<Collection<Object>> fieldModel;
     private final String field;
-    private boolean forceSingleValue = false;
+    private final boolean forceSingleValue;
+
+    /**
+     * Wraps the document model and specified field name into a
+     * {@link SolrFieldModel} to obtain field values. Single value will not be
+     * forced.
+     *
+     * @param documentModel model of document that holds the field values
+     * @param fieldName name of the field to take value from
+     */
+    public SolrFieldStringModel(IModel<SolrDocument> documentModel, String fieldName) {
+        this(documentModel, fieldName, false);
+    }
 
     /**
      * Wraps the document model and specified field name into a
@@ -44,10 +56,12 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
      *
      * @param documentModel model of document that holds the field values
      * @param fieldName name of the field to take value from
+     * @param forceSingleValue if set to true, only the first encountered value will be considered
      */
-    public SolrFieldStringModel(IModel<SolrDocument> documentModel, String fieldName) {
+    public SolrFieldStringModel(IModel<SolrDocument> documentModel, String fieldName, boolean forceSingleValue) {
         fieldModel = new SolrFieldModel<>(documentModel, fieldName);
         field = fieldName;
+        this.forceSingleValue = forceSingleValue;
     }
 
     @Override
@@ -115,11 +129,6 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
 
     private Ordering getFieldValueOrdering() {
         return VloWicketApplication.get().getFieldValueOrderings().get(field);
-    }
-
-    public SolrFieldStringModel setForceSingleValue(boolean forceSingleValue) {
-        this.forceSingleValue = forceSingleValue;
-        return this;
     }
 
 }

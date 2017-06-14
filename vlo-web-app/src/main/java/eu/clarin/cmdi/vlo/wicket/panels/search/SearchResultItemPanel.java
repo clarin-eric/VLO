@@ -27,6 +27,7 @@ import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermScriptFactory;
 import eu.clarin.cmdi.vlo.wicket.components.FacetSelectLink;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
+import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
@@ -87,7 +88,7 @@ public class SearchResultItemPanel extends Panel {
         this.documentModel = documentModel;
 
         add(new RecordPageLink("recordLink", documentModel, selectionModel)
-                .add(new SolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME, "Unnamed record", true))
+                .add(new SingleValueSolrFieldLabel("title", documentModel, FacetConstants.FIELD_NAME, "Unnamed record"))
         );
 
         add(new FacetSelectLink("searchResultCollectionLink", new SolrFieldStringModel(documentModel, FacetConstants.FIELD_COLLECTION), Model.of(FacetConstants.FIELD_COLLECTION))

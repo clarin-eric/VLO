@@ -40,12 +40,12 @@ public class SolrFieldLabel extends Label {
         this(id, documentModel, fieldName, nullFallback, false);
     }
 
-    public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, String nullFallback, boolean forceSingleValue) {
-        super(id, new NullFallbackModel(new SolrFieldStringModel(documentModel, fieldName).setForceSingleValue(forceSingleValue), nullFallback));
-    }
-    
     public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, IModel<String> nullFallback) {
         super(id, new NullFallbackModel(new SolrFieldStringModel(documentModel, fieldName), nullFallback));
+    }
+
+    protected SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, String nullFallback, boolean forceSingleValue) {
+        super(id, new NullFallbackModel(new SolrFieldStringModel(documentModel, fieldName, forceSingleValue), nullFallback));
     }
 
     /**
