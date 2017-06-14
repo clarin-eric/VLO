@@ -21,11 +21,13 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.IModel;
 
 /**
- * {@link SolrFieldLabel} extension that forces only a single value (the first value) of
- * the field to be shown.
+ * {@link SolrFieldLabel} extension that forces only a single value (the first
+ * value) of the field to be shown.
  *
  * @author twagoo
- * @see SolrFieldStringModel#SolrFieldStringModel(org.apache.wicket.model.IModel, java.lang.String, boolean) 
+ * @see
+ * SolrFieldStringModel#SolrFieldStringModel(org.apache.wicket.model.IModel,
+ * java.lang.String, boolean)
  */
 public class SingleValueSolrFieldLabel extends SolrFieldLabel {
 
@@ -37,6 +39,10 @@ public class SingleValueSolrFieldLabel extends SolrFieldLabel {
      * @param nullFallback string to show if actual value is null
      */
     public SingleValueSolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, String nullFallback) {
+        super(id, documentModel, fieldName, nullFallback, true);
+    }
+
+    public SingleValueSolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, IModel<String> nullFallback) {
         super(id, documentModel, fieldName, nullFallback, true);
     }
 }

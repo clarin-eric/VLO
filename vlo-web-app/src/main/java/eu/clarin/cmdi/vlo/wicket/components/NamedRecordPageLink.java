@@ -35,7 +35,7 @@ public class NamedRecordPageLink extends GenericPanel<SolrDocument> {
     public NamedRecordPageLink(String id, IModel<SolrDocument> model, String initialTab) {
         super(id, model);
         final RecordPageLink link = new RecordPageLink("link", model, null, initialTab);
-        link.add(new SolrFieldLabel("name", model, FacetConstants.FIELD_NAME, new StringResourceModel("recordpage.unnamedrecord", this, null)));
+        link.add(new SingleValueSolrFieldLabel("name", model, FacetConstants.FIELD_NAME, new StringResourceModel("recordpage.unnamedrecord", this, null)));
         add(link);
     }
 

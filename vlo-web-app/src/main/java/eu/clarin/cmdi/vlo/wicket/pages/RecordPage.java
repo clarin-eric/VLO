@@ -413,7 +413,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     public IModel<String> getTitleModel() {
         // Put the name of the record in the page title
         return new StringResourceModel("recordpage.title",
-                new NullFallbackModel(new SolrFieldStringModel(getModel(), FacetConstants.FIELD_NAME), getString("recordpage.unnamedrecord")))
+                new NullFallbackModel(new SolrFieldStringModel(getModel(), FacetConstants.FIELD_NAME, true), getString("recordpage.unnamedrecord")))
                 .setDefaultValue(DEFAULT_PAGE_TITLE);
     }
 
