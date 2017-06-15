@@ -916,6 +916,6 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         CMDIDataProcessor processor = getDataParser();
         CMDIData data = processor.process(cmdiFile);
 
-        assertEquals("Other", data.getSolrDocument().getFieldValue(FacetConstants.FIELD_AVAILABILITY));
+        assertEquals("RES", data.getSolrDocument().getFieldValue(FacetConstants.FIELD_AVAILABILITY));
     }
 }
