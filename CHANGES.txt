@@ -1,5 +1,69 @@
 Bug fixes and new features
 --------------------------
+VLO 4.2.0 (June 2017)
+
+* Separate licenseType field (#39/#55)
+    <https://github.com/clarin-eric/VLO/pull/86>
+* "Search page for this record" broken for 'hdl:' URIs
+    <https://github.com/clarin-eric/VLO/issues/85>
+* Allow multiple values in single-valued fields (restricted to same XPath)
+    <https://github.com/clarin-eric/VLO/issues/83>
+* Bumped max file size to 50MB. Fixes #81
+    <https://github.com/clarin-eric/VLO/pull/82>
+* Increase maximum file size limit for records
+    <https://github.com/clarin-eric/VLO/issues/81>
+* Do not concatenate landing pages if multiple found
+    <https://github.com/clarin-eric/VLO/issues/79>
+* Send canonical page URLs to piwik
+    <https://github.com/clarin-eric/VLO/issues/78>
+* Unresolved URL is sent to LRS
+    <https://github.com/clarin-eric/VLO/issues/76>
+* Multi-value selection in the 'all facet values' dialogue
+    <https://github.com/clarin-eric/VLO/issues/74>
+* Mapping of different languages that have the same label
+    <https://github.com/clarin-eric/VLO/issues/73>
+* Placeholders in VloConfig.xml for dockerised environments
+    <https://github.com/clarin-eric/VLO/issues/67>
+* Index names/titles in all provided languages, and prefer English
+    <https://github.com/clarin-eric/VLO/issues/59>
+* An explicit distribution type/availability level in the metadata should override any inferred values
+    <https://github.com/clarin-eric/VLO/issues/55>
+* Make PUB/ACA/RES a separate field from other availability info (laundry tags)
+    <https://github.com/clarin-eric/VLO/issues/39>
+* Integration of Virtual Collection Registry with the VLO
+    <https://github.com/clarin-eric/VLO/issues/37>
+* Scroll to top of search results when navigating to next or previous page
+    <https://github.com/clarin-eric/VLO/issues/12>
+* Add a favicon
+    <https://github.com/clarin-eric/VLO/issues/8>
+* Piwik tracking of events within page
+    <https://github.com/clarin-eric/VLO/issues/75>
+
+## pending (todo: check)
+* Mapping based on vocabulary or concept URI
+    <https://github.com/clarin-eric/VLO/issues/47>
+* Parallelised import
+    <https://github.com/clarin-eric/VLO/issues/29>
+
+## open (todo: remove)
+
+* Browse 'all facet values' per letter
+    <https://github.com/clarin-eric/VLO/issues/71>
+* Cache vocabulary map in PostProcessorsWithVocabularyMap
+    <https://github.com/clarin-eric/VLO/issues/68>
+* Show similar records ('more like this')
+    <https://github.com/clarin-eric/VLO/issues/61>
+* Compounds and phrases in suggester
+    <https://github.com/clarin-eric/VLO/issues/51>
+* standalone facet extractor
+    <https://github.com/clarin-eric/VLO/issues/50>
+* Mapping of collections to availability
+    <https://github.com/clarin-eric/VLO/issues/46>
+* Incremental importing
+    <https://github.com/clarin-eric/VLO/issues/34>
+* Reflect order of selection in overview of selected facets
+    <https://github.com/clarin-eric/VLO/issues/14>
+
 VLO 4.1.0 (April 2017)
 
 ## Web application enhancements and additions ##
