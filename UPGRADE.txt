@@ -28,6 +28,34 @@ old configuration to the new one.
     ./vlo_solr_importer.sh -c ../config/VloConfig.xml
 
 -----------------------------
+Upgrading from 4.1.x to 4.2.0
+-----------------------------
+
+* There are several new configuration parameters in VloConfig.xml:
+
+- licenseTypeMapUrl
+- vcrMaximumItemsCount
+- vcrSubmitEndpoint
+
+Also notice that a new entry has been added to the 'ignoreFields' list in the same file.
+
+The values set in the bundled VloConfig.xml files should be suitable for production and
+testing environments.
+
+* This release requires VLO-mapping version 1.1.0 or higher. Make sure to source that
+you are sourcing the mapping definitions from an up-to-date location (see VloConfig.xml)
+before running an import or starting the web application. See <https://github.com/clarin-eric/VLO-mapping>.
+
+* The Solr schema has been updated for this release, so an existing index from a previous
+version of the VLO can NOT be used. Make sure to create or use a fresh import started with
+a clean index (for instruction, see above).
+
+* For the 'beta' build profile, the VloConfig.xml now contains placeholders for several
+environment specific parameters. These need to be filtered before the application
+processes the configuration. See <https://gitlab.com/CLARIN-ERIC/docker-vlo-beta/issues/1>
+for details. Note that this does not apply to other build profiles (including production)!
+
+-----------------------------
 Upgrading from 4.0.x to 4.1.0
 -----------------------------
 
