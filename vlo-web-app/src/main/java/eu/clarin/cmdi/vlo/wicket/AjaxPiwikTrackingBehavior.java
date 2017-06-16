@@ -16,10 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.wicket;
 
+import eu.clarin.cmdi.vlo.PiwikEventConstants;
+import org.apache.solr.client.solrj.response.FacetField.Count;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.core.util.string.JavaScriptUtils;
+import org.apache.wicket.model.IModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +50,12 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
 
     @Override
     protected void onEvent(AjaxRequestTarget target) {
+        String js = generatePiwikJs(target);
+        log.debug("Calling Piwik API: {}", js);
+        target.appendJavaScript(js);
+    }
+
+    public final String generatePiwikJs(AjaxRequestTarget target) {
         String js = "if(Piwik != null) { ";
         if (async) {
             js += "var tracker = Piwik.getAsyncTracker(); ";
@@ -53,8 +63,7 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
             js += "var tracker = Piwik.getTracker(); ";
         }
         js += "if(tracker != null) { tracker." + getTrackerCommand(target) + ";}}";
-        log.debug("Calling Piwik API: {}", js);
-        target.appendJavaScript(js);
+        return js;
     }
 
     protected String getTrackerCommand(AjaxRequestTarget target) {
@@ -131,6 +140,36 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
 
         protected String getValue(AjaxRequestTarget target) {
             return null;
+        }
+
+    }
+
+    public static class FacetValueSelectionTrackingBehaviour extends AjaxPiwikTrackingBehavior.EventTrackingBehavior {
+
+        private final IModel<String> facetNameModel;
+        private final IModel<String> valueModel;
+
+        public FacetValueSelectionTrackingBehaviour(String action, IModel<String> facetNameModel, IModel<String> valueModel) {
+            super("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_FACET, action);
+            this.facetNameModel = facetNameModel;
+            this.valueModel = valueModel;
+        }
+
+        @Override
+        protected String getName(AjaxRequestTarget target) {
+            return facetNameModel.getObject();
+        }
+
+        @Override
+        protected String getValue(AjaxRequestTarget target) {
+            return valueModel.getObject();
+        }
+
+        @Override
+        public void detach(Component component) {
+            super.detach(component);
+            facetNameModel.detach();
+            valueModel.detach();
         }
 
     }

@@ -18,11 +18,15 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableSet;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
+import eu.clarin.cmdi.vlo.PiwikEventConstants;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior.EventTrackingBehavior;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior.FacetValueSelectionTrackingBehaviour;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.provider.PartitionedDataProvider;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
@@ -61,10 +65,10 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  * @author twagoo
  */
 public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
-
+    
     public final static int MAX_NUMBER_OF_FACETS_TO_SHOW = 10; //TODO: get from config
     public final static Collection<String> LOW_PRIORITY_VALUES = ImmutableSet.of("unknown", "unspecified", "");
-
+    
     private final BootstrapModal valuesWindow;
     private final IModel<QueryFacetsSelection> selectionModel;
     private final WebMarkupContainer valuesContainer;
@@ -73,9 +77,12 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     private final IModel<String> fieldNameModel;
     private final IModel<FacetSelectionType> selectionTypeModeModel;
     private IModel<QueryFacetsSelection> beforeAllValuesSelection = new Model<>();
-
+    
     @SpringBean
     private FieldValueConverterProvider fieldValueConverterProvider;
+    
+    @SpringBean
+    private PiwikConfig piwikConfig;
 
     /**
      * Creates a new panel with selectable values for a single facet
@@ -122,7 +129,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         // create a popup window for all facet values
         valuesWindow = createAllValuesWindow("allValues");
         add(valuesWindow);
-
+        
         fieldNameModel = new PropertyModel<>(model, "name");
     }
 
@@ -134,24 +141,24 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      */
     private DataView createValuesView(String id) {
         final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(getModel(), MAX_NUMBER_OF_FACETS_TO_SHOW, LOW_PRIORITY_VALUES, fieldValueConverterProvider) {
-
+            
             @Override
             protected IModel<FieldValuesFilter> getFilterModel() {
                 return filterModel;
             }
-
+            
         };
         // partition the values according to the specified partition size
         final PartitionedDataProvider<Count, FieldValuesOrder> partitionedValuesProvider = new PartitionedDataProvider<>(valuesProvider, subListSize);
 
         // create the view for the partitions
         final DataView<List<Count>> valuesView = new DataView<List<Count>>(id, partitionedValuesProvider) {
-
+            
             @Override
             protected void populateItem(Item<List<Count>> item) {
                 // create a list view for the values in this partition
                 item.add(new ListView("facetValues", item.getModel()) {
-
+                    
                     @Override
                     protected void populateItem(ListItem item) {
                         addFacetValue("facetSelect", item);
@@ -170,10 +177,17 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      */
     private void addFacetValue(String id, final ListItem<Count> item) {
         item.setDefaultModel(new CompoundPropertyModel<>(item.getModel()));
+        
+        final FacetValueSelectionTrackingBehaviour selectionTrackingBehavior;
+        if (piwikConfig.isEnabled()) {
+            selectionTrackingBehavior = new FacetValueSelectionTrackingBehaviour(PiwikEventConstants.PIWIK_EVENT_ACTION_FACET_SELECT, fieldNameModel, new PropertyModel<String>(item.getModel(), "name"));
+        } else {
+            selectionTrackingBehavior = null;
+        }
 
         // link to select an individual facet value
         final Link selectLink = new IndicatingAjaxFallbackLink(id) {
-
+            
             @Override
             public void onClick(AjaxRequestTarget target) {
                 // reset filter
@@ -186,6 +200,10 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
                         // for now only single values can be selected
                         Collections.singleton(item.getModelObject().getName()),
                         target);
+                
+                if (target != null && selectionTrackingBehavior != null) {
+                    target.appendJavaScript(selectionTrackingBehavior.generatePiwikJs(target));
+                }
             }
         };
         item.add(selectLink);
@@ -205,8 +223,21 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @return 'show all values' link
      */
     private Link createAllValuesLink(String id) {
+        final EventTrackingBehavior allValuesTrackingBehaviour;
+        if (piwikConfig.isEnabled()) {
+            allValuesTrackingBehaviour = new EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_FACET, PiwikEventConstants.PIWIK_EVENT_ACTION_FACET_ALLVALUES) {
+                @Override
+                protected String getName(AjaxRequestTarget target) {
+                    return getModel().getObject().getName();
+                }
+                
+            };
+        } else {
+            allValuesTrackingBehaviour = null;
+        }
+        
         final Link link = new IndicatingAjaxFallbackLink<FacetField>(id, getModel()) {
-
+            
             @Override
             public void onClick(AjaxRequestTarget target) {
                 if (target == null) {
@@ -216,16 +247,19 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
                     // JavaScript enabled, show values in a modal popup. First store copy of current selection to allow the user to cancel.
                     beforeAllValuesSelection.setObject(selectionModel.getObject().getCopy());
                     valuesWindow.show(target);
+                    if (allValuesTrackingBehaviour != null) {
+                        target.appendJavaScript(allValuesTrackingBehaviour.generatePiwikJs(target));
+                    }
                 }
             }
-
+            
             @Override
             protected void onConfigure() {
                 super.onConfigure();
                 // only show if there actually are more values!
                 setVisible(getModelObject().getValueCount() > MAX_NUMBER_OF_FACETS_TO_SHOW);
             }
-
+            
         };
         return link;
     }
@@ -239,21 +273,21 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      */
     private BootstrapModal createAllValuesWindow(String id) {
         final BootstrapModal window = new BootstrapModal(id) {
-
+            
             @Override
             public IModel<String> getTitle() {
                 return new SolrFieldNameModel(getModel(), "name");
             }
-
+            
             @Override
             protected IModel<?> getCloseButtonLabelModel() {
                 return Model.of("Done");
             }
-
+            
             private void updateAfterClose(AjaxRequestTarget target) {
                 onValuesSelected(null, null, target);
             }
-
+            
             @Override
             protected void onDismiss(AjaxRequestTarget target) {
                 final QueryFacetsSelection previousSelection = beforeAllValuesSelection.getObject();
@@ -263,33 +297,33 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
                 close(target);
                 updateAfterClose(target);
             }
-
+            
             @Override
             protected void onClose(AjaxRequestTarget target) {
                 close(target);
                 updateAfterClose(target);
             }
-
+            
         };
-
+        
         final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), selectionTypeModeModel, selectionModel, filterModel);
-
+        
         window.addOrReplace(modalContent);
         return window;
     }
-
+    
     @Override
     public void detachModels() {
         super.detachModels();
-
+        
         if (selectionModel != null) {
             selectionModel.detach();
         }
-
+        
         if (selectionTypeModeModel != null) {
             this.selectionTypeModeModel.detach();
         }
-
+        
         if (filterModel != null) {
             filterModel.detach();
         }
@@ -304,7 +338,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * (fallback)!
      */
     protected abstract void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target);
-
+    
     @Override
     protected void onBeforeRender() {
         super.onBeforeRender();
@@ -315,11 +349,11 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             // focus? better only when expanded. jQuery('#%1$s input').focus()
         }
     }
-
+    
     @Override
     public void renderHead(IHeaderResponse response) {
         // include watermark JQuery extension sources
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getJQueryWatermarkJS()));
     }
-
+    
 }

@@ -16,6 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import eu.clarin.cmdi.vlo.PiwikEventConstants;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -31,9 +33,12 @@ import org.apache.wicket.model.Model;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior.FacetValueSelectionTrackingBehaviour;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  * A panel representing a single facet and its selected values, allowing for
@@ -42,6 +47,9 @@ import org.apache.wicket.model.PropertyModel;
  * @author twagoo
  */
 public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
+
+    @SpringBean
+    private PiwikConfig piwikConfig;
 
     private final IModel<Boolean> renderForCollapsed = Model.of(true);
 
@@ -54,7 +62,7 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
         add(createSelectionRemovers("selectedItem", facetName, Model.of(true)));
     }
 
-    private ListView<String> createSelectionRemovers(String id, String facetName, final IModel<Boolean> visibilityModel) {
+    private ListView<String> createSelectionRemovers(String id, final String facetName, final IModel<Boolean> visibilityModel) {
         // Model of the list of selected values in this facet
         final IModel<List<String>> valuesModel = new PropertyModel<>(getModel(), "values");
         final PropertyModel<FacetSelectionType> selectionTypeModel = new PropertyModel(getModel(), "selectionType");
@@ -91,7 +99,7 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
                 // A label showing the name of the facet
                 item.add(new FieldValueLabel("facetValue", item.getModel(), fieldNameModel));
                 // A link to remove the value selection from this facet
-                item.add(new RemoveLink("unselectValue", item.getModel()));
+                item.add(new RemoveLink("unselectValue", facetName, item.getModel()));
             }
 
             @Override
@@ -117,10 +125,17 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
     public class RemoveLink extends IndicatingAjaxFallbackLink {
 
         private final IModel<String> valueModel;
+        private final FacetValueSelectionTrackingBehaviour selectionTrackingBehavior;
 
-        public RemoveLink(String id, IModel<String> valueModel) {
+        public RemoveLink(String id, String facetName, IModel<String> valueModel) {
             super(id);
             this.valueModel = valueModel;
+
+            if (piwikConfig.isEnabled()) {
+                selectionTrackingBehavior = new AjaxPiwikTrackingBehavior.FacetValueSelectionTrackingBehaviour(PiwikEventConstants.PIWIK_EVENT_ACTION_FACET_UNSELECT, Model.of(facetName), Model.of(valueModel.getObject()));
+            } else {
+                selectionTrackingBehavior = null;
+            }
         }
 
         @Override
@@ -128,6 +143,9 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
             // Remove a single value
             // Call callback
             onValuesUnselected(Collections.singleton(valueModel.getObject()), target);
+            if (target != null && selectionTrackingBehavior != null) {
+                target.appendJavaScript(selectionTrackingBehavior.generatePiwikJs(target));
+            }
         }
 
     }
