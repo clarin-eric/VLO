@@ -18,12 +18,15 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableList;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
+import eu.clarin.cmdi.vlo.PiwikEventConstants;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.AjaxIndicatingForm;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueOrderSelector;
@@ -71,6 +74,8 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
     @SpringBean
     private FieldValueConverterProvider fieldValueConverterProvider;
+    @SpringBean
+    private PiwikConfig piwikConfig;
 
     private final FacetFieldValuesProvider valuesProvider;
     private final WebMarkupContainer valuesContainer;
@@ -174,6 +179,13 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
             protected void populateItem(final Item<FacetField.Count> item) {
                 item.setDefaultModel(new CompoundPropertyModel<>(item.getModel()));
 
+                final AjaxPiwikTrackingBehavior.FacetValueSelectionTrackingBehaviour selectionTrackingBehavior;
+                if (piwikConfig.isEnabled()) {
+                    selectionTrackingBehavior = new AjaxPiwikTrackingBehavior.FacetValueSelectionTrackingBehaviour(PiwikEventConstants.PIWIK_EVENT_ACTION_FACET_SELECT, fieldNameModel, new PropertyModel<String>(item.getModel(), "name"));
+                } else {
+                    selectionTrackingBehavior = null;
+                }
+
                 // link to select an individual facet value
                 final Link selectLink = new AjaxFallbackLink("facetSelect") {
 
@@ -184,6 +196,9 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
                         AllFacetValuesPanel.this.detachModels();
                         if (target != null) {
                             target.add(valuesContainer);
+                            if (selectionTrackingBehavior != null) {
+                                target.appendJavaScript(selectionTrackingBehavior.generatePiwikJs(target));
+                            }
                         }
                     }
                 };
