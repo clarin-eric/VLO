@@ -146,27 +146,30 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
 
     public static class FacetValueSelectionTrackingBehaviour extends AjaxPiwikTrackingBehavior.EventTrackingBehavior {
 
-        private final IModel<Count> model;
+        private final IModel<String> facetNameModel;
+        private final IModel<String> valueModel;
 
-        public FacetValueSelectionTrackingBehaviour(String action, IModel<Count> model) {
+        public FacetValueSelectionTrackingBehaviour(String action, IModel<String> facetNameModel, IModel<String> valueModel) {
             super("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_FACET, action);
-            this.model = model;
+            this.facetNameModel = facetNameModel;
+            this.valueModel = valueModel;
         }
 
         @Override
         protected String getName(AjaxRequestTarget target) {
-            return model.getObject().getFacetField().getName();
+            return facetNameModel.getObject();
         }
 
         @Override
         protected String getValue(AjaxRequestTarget target) {
-            return model.getObject().getName();
+            return valueModel.getObject();
         }
 
         @Override
         public void detach(Component component) {
             super.detach(component);
-            model.detach();
+            facetNameModel.detach();
+            valueModel.detach();
         }
 
     }

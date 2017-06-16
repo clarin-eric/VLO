@@ -180,7 +180,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         
         final FacetValueSelectionTrackingBehaviour selectionTrackingBehavior;
         if (piwikConfig.isEnabled()) {
-            selectionTrackingBehavior = new FacetValueSelectionTrackingBehaviour(PiwikEventConstants.PIWIK_EVENT_ACTION_FACET_SELECT, item.getModel());
+            selectionTrackingBehavior = new FacetValueSelectionTrackingBehaviour(PiwikEventConstants.PIWIK_EVENT_ACTION_FACET_SELECT, fieldNameModel, new PropertyModel<String>(item.getModel(), "name"));
         } else {
             selectionTrackingBehavior = null;
         }
