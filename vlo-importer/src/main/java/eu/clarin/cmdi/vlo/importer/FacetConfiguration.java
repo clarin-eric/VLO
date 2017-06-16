@@ -12,9 +12,9 @@ public class FacetConfiguration {
 
     private String name;
     private boolean caseInsensitive = false;
-    private List<String> patterns = new ArrayList<>();
-    private List<String> fallbackPatterns = new ArrayList<>();
-    private List<String> derivedFacets = new ArrayList<>();
+    private List<Pattern> patterns = new ArrayList<>();
+    private List<Pattern> fallbackPatterns = new ArrayList<>();
+    private List<String> derivedFacets = new ArrayList<String>();
     private boolean allowMultipleValues = true;
     // allow multiple values for the same XPath, even if allowMultipleValues == false
     // (for example for CMD elements with multilingual == yes)
@@ -28,30 +28,30 @@ public class FacetConfiguration {
         return caseInsensitive;
     }
 
-    public void setPatterns(List<String> patterns) {
+    public void setPatterns(List<Pattern> patterns) {
         this.patterns = patterns;
     }
 
-    public void setFallbackPatterns(List<String> fallbackPatterns) {
+    public void setFallbackPatterns(List<Pattern> fallbackPatterns) {
         this.fallbackPatterns = fallbackPatterns;
     }
 
-    public void setPattern(String pattern) {
+    public void setPattern(Pattern pattern) {
         this.patterns = Collections.singletonList(pattern);
     }
 
-    public void setFallbackPattern(String fallbackPattern) {
+    public void setFallbackPattern(Pattern fallbackPattern) {
         this.fallbackPatterns = Collections.singletonList(fallbackPattern);
     }
 
     /**
      * @return List of Strings which are xpaths expressions.
      */
-    public List<String> getPatterns() {
+    public List<Pattern> getPatterns() {
         return patterns;
     }
 
-    public List<String> getFallbackPatterns() {
+    public List<Pattern> getFallbackPatterns() {
         return fallbackPatterns;
     }
 

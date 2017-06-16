@@ -206,16 +206,22 @@ public class FacetConceptMapping {
             this.patterns = patterns;
         }
 
-        public List<String> getPatterns() {
-            return patterns;
+        public List<Pattern> getPatterns() {
+            List<Pattern> res = new ArrayList<>();
+            for (String pattern:patterns)
+                res.add(new Pattern(pattern));
+            return res;
         }
 
         public void setBlacklistPatterns(List<String> blacklistPatterns) {
             this.blacklistPatterns = blacklistPatterns;
         }
 
-        public List<String> getBlacklistPatterns() {
-            return blacklistPatterns;
+        public List<Pattern> getBlacklistPatterns() {
+            List<Pattern> res = new ArrayList<>();
+            for (String pattern:blacklistPatterns)
+                res.add(new Pattern(pattern));
+            return res;
         }
 
         public List<String> getDerivedFacets() {

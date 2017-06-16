@@ -12,11 +12,14 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+//import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -27,13 +30,13 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
 
     private final Map<String, PostProcessor> postProcessors;
     private final Boolean useLocalXSDCache;
-    private static final Pattern PROFILE_ID_PATTERN = Pattern.compile(".*(clarin.eu:cr1:p_[0-9]+).*");
+    private static final java.util.regex.Pattern PROFILE_ID_PATTERN = java.util.regex.Pattern.compile(".*(clarin.eu:cr1:p_[0-9]+).*");
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
 
     private static final String ENGLISH_LANGUAGE = "code:eng";
     private static final String DEFAULT_LANGUAGE = "code:und";
     private final VloConfig config;
-
+    
     public CMDIParserVTDXML(Map<String, PostProcessor> postProcessors, VloConfig config, Boolean useLocalXSDCache) {
         this.postProcessors = postProcessors;
         this.useLocalXSDCache = useLocalXSDCache;
@@ -41,7 +44,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     }
 
     @Override
-    public CMDIData process(File file) throws VTDException, IOException {
+    public CMDIData process(File file) throws VTDException, IOException, URISyntaxException {
         final CMDIData cmdiData = new CMDIData();
         final VTDGen vg = new VTDGen();
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
@@ -243,14 +246,14 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @param facetMapping the facet mapping used to map meta data to facets
      * @throws VTDException
      */
-    private void processFacets(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException {
+    private void processFacets(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
         final List<FacetConfiguration> facetList = facetMapping.getFacets();
         final List<String> processedFacets = new ArrayList<>(facetList.size());
         for (FacetConfiguration config : facetList) {
             processedFacets.add(config.getName());
             boolean matchedPattern = false;
-            List<String> patterns = config.getPatterns();
-            for (String pattern : patterns) {
+            List<Pattern> patterns = config.getPatterns();
+            for (Pattern pattern : patterns) {
                 matchedPattern = matchPattern(cmdiData, nav, config, pattern, config.getAllowMultipleValues() || config.getMultilingual());
                 if (matchedPattern && !config.getAllowMultipleValues()) {
                     break;
@@ -259,7 +262,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
 
             // using fallback patterns if extraction failed
             if (!matchedPattern) {
-                for (String pattern : config.getFallbackPatterns()) {
+                for (Pattern pattern : config.getFallbackPatterns()) {
                     matchedPattern = matchPattern(cmdiData, nav, config, pattern, config.getAllowMultipleValues() || config.getMultilingual());
                     if (matchedPattern && !config.getAllowMultipleValues()) {
                         break;
@@ -331,10 +334,10 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @return pattern matched a node in the CMDI file?
      * @throws VTDException
      */
-    private boolean matchPattern(CMDIData cmdiData, VTDNav nav, FacetConfiguration config, String pattern, Boolean allowMultipleValues) throws VTDException {
+    private boolean matchPattern(CMDIData cmdiData, VTDNav nav, FacetConfiguration config, Pattern pattern, Boolean allowMultipleValues) throws VTDException, URISyntaxException, UnsupportedEncodingException {
         final AutoPilot ap = new AutoPilot(nav);
         setNameSpace(ap, extractXsd(nav));
-        ap.selectXPath(pattern);
+        ap.selectXPath(pattern.getPattern());
 
         boolean matchedPattern = false;
         int index = ap.evalXPath();
@@ -352,9 +355,20 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
 
             final List<String> postProcessed = postProcess(config.getName(), value, cmdiData);
             addValuesToList(config.getName(), postProcessed, valueLangPairList, languageCode);
+
+            String vcl = extractValueConceptLink(nav);
+            if (vcl!=null && pattern.hasVocabulary()) {
+                ImmutablePair vp = pattern.getVocabulary().getValue(new URI(vcl));
+                final String v = (String)vp.getLeft();
+                final String l = (vp.getRight()!=null?postProcessors.get(FacetConstants.FIELD_LANGUAGE_CODE).process((String)vp.getRight(),cmdiData).get(0):DEFAULT_LANGUAGE);
+                for(String pv : postProcess(config.getName(),v,cmdiData)) {
+                    valueLangPairList.add(new ImmutablePair<>(pv,l));
+                }
+            }
+            
             index = ap.evalXPath();
         }
-
+        
         // return if no result was found or accepted
         if (!matchedPattern || valueLangPairList.isEmpty()) {
             return matchedPattern;
@@ -417,6 +431,16 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             }
             valueLangPairList.add(new ImmutablePair<>(value, languageCode));
         }
+    }
+
+    private String extractValueConceptLink(VTDNav nav) throws NavException {
+        // extract english for ValueConceptLink if available
+        Integer vclAttrIndex = nav.getAttrVal("cmd:ValueConceptLink");
+        String vcl = null;
+        if (vclAttrIndex != -1) {
+            vcl = nav.toString(vclAttrIndex).trim();
+        }
+        return vcl;
     }
 
     private void insertFacetValues(String name, List<Pair<String, String>> valueLangPairList, CMDIData cmdiData, boolean allowMultipleValues, boolean caseInsensitive) {
