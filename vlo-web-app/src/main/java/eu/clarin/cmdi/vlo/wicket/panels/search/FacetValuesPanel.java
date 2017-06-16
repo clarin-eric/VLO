@@ -18,11 +18,14 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableSet;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
+import eu.clarin.cmdi.vlo.PiwikEventConstants;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior.FacetValueSelectionTrackingBehaviour;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.provider.PartitionedDataProvider;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
@@ -76,6 +79,9 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
     @SpringBean
     private FieldValueConverterProvider fieldValueConverterProvider;
+
+    @SpringBean
+    private PiwikConfig piwikConfig;
 
     /**
      * Creates a new panel with selectable values for a single facet
@@ -171,6 +177,13 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     private void addFacetValue(String id, final ListItem<Count> item) {
         item.setDefaultModel(new CompoundPropertyModel<>(item.getModel()));
 
+        final FacetValueSelectionTrackingBehaviour selectionTrackingBehavior;
+        if (piwikConfig.isEnabled()) {
+            selectionTrackingBehavior = new FacetValueSelectionTrackingBehaviour(PiwikEventConstants.PIWIK_EVENT_ACTION_FACET_SELECT, item.getModel());
+        } else {
+            selectionTrackingBehavior = null;
+        }
+
         // link to select an individual facet value
         final Link selectLink = new IndicatingAjaxFallbackLink(id) {
 
@@ -186,6 +199,10 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
                         // for now only single values can be selected
                         Collections.singleton(item.getModelObject().getName()),
                         target);
+                
+                if (target != null && selectionTrackingBehavior != null) {
+                    target.appendJavaScript(selectionTrackingBehavior.generatePiwikJs(target));
+                }
             }
         };
         item.add(selectLink);
