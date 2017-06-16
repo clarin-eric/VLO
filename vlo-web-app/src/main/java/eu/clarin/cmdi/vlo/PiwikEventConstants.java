@@ -33,6 +33,7 @@ public class PiwikEventConstants {
 
     //Actions
     public static final String PIWIK_EVENT_ACTION_FACET_EXPANDCOLLAPSE = "ExpandCollapse";
+    public static final String PIWIK_EVENT_ACTION_FACET_ALLVALUES = "AllValues";
     public static final String PIWIK_EVENT_ACTION_FACET_SELECT = "Select";
     public static final String PIWIK_EVENT_ACTION_FACET_UNSELECT = "Select";
     public static final String PIWIK_EVENT_ACTION_RECORDPAGE_TABSWITCH = "Switch";
