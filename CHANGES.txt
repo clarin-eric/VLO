@@ -38,31 +38,8 @@ VLO 4.2.0 (June 2017)
     <https://github.com/clarin-eric/VLO/issues/8>
 * Piwik tracking of events within page
     <https://github.com/clarin-eric/VLO/issues/75>
-
-## pending (todo: check)
 * Mapping based on vocabulary or concept URI
     <https://github.com/clarin-eric/VLO/issues/47>
-* Parallelised import
-    <https://github.com/clarin-eric/VLO/issues/29>
-
-## open (todo: remove)
-
-* Browse 'all facet values' per letter
-    <https://github.com/clarin-eric/VLO/issues/71>
-* Cache vocabulary map in PostProcessorsWithVocabularyMap
-    <https://github.com/clarin-eric/VLO/issues/68>
-* Show similar records ('more like this')
-    <https://github.com/clarin-eric/VLO/issues/61>
-* Compounds and phrases in suggester
-    <https://github.com/clarin-eric/VLO/issues/51>
-* standalone facet extractor
-    <https://github.com/clarin-eric/VLO/issues/50>
-* Mapping of collections to availability
-    <https://github.com/clarin-eric/VLO/issues/46>
-* Incremental importing
-    <https://github.com/clarin-eric/VLO/issues/34>
-* Reflect order of selection in overview of selected facets
-    <https://github.com/clarin-eric/VLO/issues/14>
 
 VLO 4.1.0 (April 2017)
 
