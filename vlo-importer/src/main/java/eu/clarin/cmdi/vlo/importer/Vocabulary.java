@@ -48,7 +48,6 @@ public class Vocabulary {
     
     public Vocabulary(String endpoint, URI uri) {
         this.endpoint = endpoint;
-        System.err.println("!MENZO: endpoint["+this.endpoint+"]=["+endpoint+"]");
         this.uri = uri;
     }
     
@@ -101,7 +100,6 @@ public class Vocabulary {
         String cst = (hasURI()?String.format("&conceptScheme=%s",URLEncoder.encode(this.getURI().toString(),"UTF-8")):"");
         URI lookup = new URI(String.format(getEndpoint()+"?fl=%s&q=uri:%s%s",this.getProperty(),URLEncoder.encode(item.toString().replace(":","\\:"),"UTF-8"),cst));
         VTDGen g = new VTDGen();
-        System.err.println("!MENZO: lookup URI["+lookup+"]");
         if (g.parseHttpUrl(lookup.toString(), true)) {
             VTDNav n = g.getNav();
             AutoPilot p = new AutoPilot(n);

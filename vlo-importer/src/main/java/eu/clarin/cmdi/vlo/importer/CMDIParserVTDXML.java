@@ -363,7 +363,6 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                 ImmutablePair vp = null;
                 if (vcl.contains("CCR_")) {
                     vp = CCR.getValue(new URI(vcl));
-                    System.err.println("!MENZO: looked up CCR concept["+vcl+"] -> "+vp);
                 } else if (pattern.hasVocabulary()) {
                     vp = pattern.getVocabulary().getValue(new URI(vcl));
                 }
