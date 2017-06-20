@@ -270,7 +270,7 @@ public class FacetMappingFactory {
                     int vocabIndex = getVocabIndex(vn);
                     if (vocabIndex != -1) {
                         String uri = vn.toNormalizedString(vocabIndex);
-                        Vocabulary vocab = new Vocabulary(new URI(uri));
+                        Vocabulary vocab = new Vocabulary(MetadataImporter.config.getVocabularyRegistryUrl(),new URI(uri));
                         xpath.setVocabulary(vocab);
                         int propIndex = getVocabPropIndex(vn);
                         if (propIndex != -1) {
@@ -310,7 +310,7 @@ public class FacetMappingFactory {
                             int vocabIndex = getVocabIndex(vn);
                             if (vocabIndex != -1) {
                                 String uri = vn.toNormalizedString(vocabIndex);
-                                Vocabulary vocab = new Vocabulary(new URI(uri));
+                                Vocabulary vocab = new Vocabulary(MetadataImporter.config.getVocabularyRegistryUrl(),new URI(uri));
                                 xpath.setVocabulary(vocab);
                                 int propIndex = getVocabPropIndex(vn);
                                 if (propIndex != -1) {

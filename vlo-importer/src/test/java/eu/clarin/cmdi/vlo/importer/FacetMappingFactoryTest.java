@@ -10,6 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.config.VloConfigFactory;
+import java.io.IOException;
 
 public class FacetMappingFactoryTest {
 
@@ -510,7 +514,12 @@ public class FacetMappingFactoryTest {
     }
 
     @Test
-    public void testCLAVASMapping() {
+    public void testCLAVASMapping() throws IOException {
+        // get a config
+        VloConfigFactory configFactory = new DefaultVloConfigFactory();
+        VloConfig config = DefaultVloConfigFactory.configureDefaultMappingLocations(configFactory.newConfig());       
+        MetadataImporter.config = config;
+        
         FacetMapping facetMapping = FacetMappingFactory
                 .getFacetMapping(FACETCONCEPTS_FILENAME, CLAVAS_PROFILE_ID, true);
         List<FacetConfiguration> facets = facetMapping.getFacets();

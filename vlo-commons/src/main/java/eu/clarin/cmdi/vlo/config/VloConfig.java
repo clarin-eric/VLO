@@ -100,6 +100,10 @@ public class VloConfig {
 
     private String languageLinkTemplate = "";
 
+    private String conceptRegistryUrl = "";
+
+    private String vocabularyRegistryUrl = "";
+
     // web application user interface 
     private int facetOverviewLength = 0;
 
@@ -609,6 +613,54 @@ public class VloConfig {
      */
     public void setHandleServerUrl(String param) {
         handleServerUrl = param;
+    }
+
+    /**
+     * Set the value of the ConceptRegistryUrl parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value
+     */
+    public void setConceptRegistryUrl(String param) {
+        conceptRegistryUrl = param;
+    }
+
+    /**
+     * Get the value of the ConceptRegistryUrl parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public String getConceptRegistryUrl() {
+        return conceptRegistryUrl;
+    }
+
+    /**
+     * Set the value of the VocabularyRegistryUrl parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @param param the value
+     */
+    public void setVocabularyRegistryUrl(String param) {
+        vocabularyRegistryUrl = param;
+    }
+
+    /**
+     * Get the value of the VocabularyRegistryUrl parameter<br><br>
+     *
+     * For a description of the parameter, refer to the general VLO
+     * documentation.
+     *
+     * @return the value
+     */
+    public String getVocabularyRegistryUrl() {
+        return vocabularyRegistryUrl;
     }
 
     /**

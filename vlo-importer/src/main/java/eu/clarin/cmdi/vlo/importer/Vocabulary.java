@@ -38,21 +38,34 @@ public class Vocabulary {
     
     private final static Logger LOG = LoggerFactory.getLogger(Vocabulary.class);
 
-    private final String DEFAULT_ENDPOINT = "http://clavas.clarin.eu/clavas/public/api/find-concepts";
-
     static final String DEFAULT_PROP = "prefLabel";
     static final String DEFAULT_LANG = "en";
     
+    private String endpoint = null;
     private URI uri;
     private String prop;
     private String lang;
     
-    public Vocabulary(URI uri) {
+    public Vocabulary(String endpoint, URI uri) {
+        this.endpoint = endpoint;
+        System.err.println("!MENZO: endpoint["+this.endpoint+"]=["+endpoint+"]");
         this.uri = uri;
-    } 
+    }
+    
+    public Vocabulary(String endpoint) {
+        this(endpoint,null);
+    }
+    
+    public boolean hasURI() {
+        return (this.uri != null);
+    }
     
     public URI getURI() {
         return this.uri;
+    }
+    
+    public String getEndpoint() {
+        return this.endpoint;
     }
     
     public void setProperty(String prop) {
@@ -85,8 +98,10 @@ public class Vocabulary {
     
     public ImmutablePair getValue(URI item) throws URISyntaxException, XPathParseException, XPathEvalException, NavException, UnsupportedEncodingException {
         ImmutablePair res = null;
-        URI lookup = new URI(String.format(this.DEFAULT_ENDPOINT+"?fl=%s&q=uri:%s&conceptScheme=%s",this.getProperty(),URLEncoder.encode(item.toString().replace(":","\\:"),"UTF-8"),URLEncoder.encode(this.getURI().toString(),"UTF-8")));
+        String cst = (hasURI()?String.format("&conceptScheme=%s",URLEncoder.encode(this.getURI().toString(),"UTF-8")):"");
+        URI lookup = new URI(String.format(getEndpoint()+"?fl=%s&q=uri:%s%s",this.getProperty(),URLEncoder.encode(item.toString().replace(":","\\:"),"UTF-8"),cst));
         VTDGen g = new VTDGen();
+        System.err.println("!MENZO: lookup URI["+lookup+"]");
         if (g.parseHttpUrl(lookup.toString(), true)) {
             VTDNav n = g.getNav();
             AutoPilot p = new AutoPilot(n);
@@ -105,5 +120,5 @@ public class Vocabulary {
             LOG.warn("Cannot lookup value ConceptLink: " + lookup + ".");
         return res;
     }
-
+    
 }

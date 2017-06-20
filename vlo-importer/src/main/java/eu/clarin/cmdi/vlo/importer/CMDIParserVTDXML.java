@@ -36,11 +36,13 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private static final String ENGLISH_LANGUAGE = "code:eng";
     private static final String DEFAULT_LANGUAGE = "code:und";
     private final VloConfig config;
+    private final Vocabulary CCR;
     
     public CMDIParserVTDXML(Map<String, PostProcessor> postProcessors, VloConfig config, Boolean useLocalXSDCache) {
         this.postProcessors = postProcessors;
         this.useLocalXSDCache = useLocalXSDCache;
         this.config = config;
+        this.CCR = new Vocabulary(config.getConceptRegistryUrl());
     }
 
     @Override
@@ -357,12 +359,20 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             addValuesToList(config.getName(), postProcessed, valueLangPairList, languageCode);
 
             String vcl = extractValueConceptLink(nav);
-            if (vcl!=null && pattern.hasVocabulary()) {
-                ImmutablePair vp = pattern.getVocabulary().getValue(new URI(vcl));
-                final String v = (String)vp.getLeft();
-                final String l = (vp.getRight()!=null?postProcessors.get(FacetConstants.FIELD_LANGUAGE_CODE).process((String)vp.getRight(),cmdiData).get(0):DEFAULT_LANGUAGE);
-                for(String pv : postProcess(config.getName(),v,cmdiData)) {
-                    valueLangPairList.add(new ImmutablePair<>(pv,l));
+            if (vcl!=null) {
+                ImmutablePair vp = null;
+                if (vcl.contains("CCR_")) {
+                    vp = CCR.getValue(new URI(vcl));
+                    System.err.println("!MENZO: looked up CCR concept["+vcl+"] -> "+vp);
+                } else if (pattern.hasVocabulary()) {
+                    vp = pattern.getVocabulary().getValue(new URI(vcl));
+                }
+                if (vp!=null) {
+                    final String v = (String)vp.getLeft();
+                    final String l = (vp.getRight()!=null?postProcessors.get(FacetConstants.FIELD_LANGUAGE_CODE).process((String)vp.getRight(),cmdiData).get(0):DEFAULT_LANGUAGE);
+                    for(String pv : postProcess(config.getName(),v,cmdiData)) {
+                        valueLangPairList.add(new ImmutablePair<>(pv,l));
+                    }
                 }
             }
             
