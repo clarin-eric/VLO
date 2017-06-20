@@ -39,7 +39,7 @@ public class FacetConceptMappingTest {
         assertEquals(2, concepts.size());
         assertEquals("http://www.isocat.org/datcat/DC-2544", concepts.get(0));
         assertEquals("conceptLink2", concepts.get(1));
-        List<String> patterns = facetConcept.getPatterns();
+        List<Pattern> patterns = facetConcept.getPatterns();
         assertEquals(0, patterns.size());
         
         facetConcept = facetConcepts.get(1);
@@ -51,7 +51,7 @@ public class FacetConceptMappingTest {
         assertEquals("conceptLink1", concepts.get(0));
         patterns = facetConcept.getPatterns();
         assertEquals(1, patterns.size());
-        assertEquals("/xpath/pattern/text()", patterns.get(0));
+        assertEquals("/xpath/pattern/text()", patterns.get(0).getPattern());
     }
 
 }

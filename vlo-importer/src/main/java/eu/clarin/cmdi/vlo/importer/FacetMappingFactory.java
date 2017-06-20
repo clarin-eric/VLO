@@ -16,8 +16,12 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * Creates facet-mappings (xpaths) from a configuration. As they say "this is
@@ -89,23 +93,23 @@ public class FacetMappingFactory {
         FacetConceptMapping conceptMapping = VLOMarshaller.getFacetConceptMapping(facetConcepts);
         try {
             //The magic
-            Map<String, List<String>> conceptLinkPathMapping = createConceptLinkPathMapping(xsd, useLocalXSDCache);
-            Map<String, String> pathConceptLinkMapping = null;
+            Map<String, List<Pattern>> conceptLinkPathMapping = createConceptLinkPathMapping(xsd, useLocalXSDCache);
+            Map<Pattern, String> pathConceptLinkMapping = null;
             // Below we put the stuff we found into the configuration class.
             for (FacetConcept facetConcept : conceptMapping.getFacetConcepts()) {
                 FacetConfiguration config = new FacetConfiguration();
-                List<String> xpaths = new ArrayList<>();
+                List<Pattern> xpaths = new ArrayList<>();
                 handleId(xpaths, facetConcept);
                 for (String concept : facetConcept.getConcepts()) {
-                    List<String> paths = conceptLinkPathMapping.get(concept);
+                    List<Pattern> paths = conceptLinkPathMapping.get(concept);
                     if (paths != null) {
                         if (facetConcept.hasContext()) {
-                            for (String path : paths) {
-                                // lazily instantiate the reverse mapping, i.e., from concept to path
+                            for (Pattern path : paths) {
+                                // lazily instantiate the reverse mapping, i.e., from path to concept
                                 if (pathConceptLinkMapping == null) {
                                     pathConceptLinkMapping = new HashMap<>();
                                     for (String c : conceptLinkPathMapping.keySet()) {
-                                        for (String p : conceptLinkPathMapping.get(c)) {
+                                        for (Pattern p : conceptLinkPathMapping.get(c)) {
                                             pathConceptLinkMapping.put(p, c);
                                         }
                                     }
@@ -159,11 +163,11 @@ public class FacetMappingFactory {
                 // pattern-based blacklisting: remove all XPath expressions that contain a blacklisted substring;
                 // this is basically a hack to enhance the quality of the visualised information in the VLO;
                 // should be replaced by a more intelligent approach in the future
-                for (String blacklistPattern : facetConcept.getBlacklistPatterns()) {
-                    Iterator<String> xpathIterator = xpaths.iterator();
+                for (Pattern blacklistPattern : facetConcept.getBlacklistPatterns()) {
+                    Iterator<Pattern> xpathIterator = xpaths.iterator();
                     while (xpathIterator.hasNext()) {
-                        String xpath = xpathIterator.next();
-                        if (xpath.contains(blacklistPattern)) {
+                        Pattern xpath = xpathIterator.next();
+                        if (xpath.getPattern().contains(blacklistPattern.getPattern())) {
                             LOG.debug("Rejecting {} because of blacklisted substring {}", xpath, blacklistPattern);
                             xpathIterator.remove();
                         }
@@ -175,7 +179,7 @@ public class FacetMappingFactory {
                 config.setMultilingual(facetConcept.isMultilingual());
                 config.setName(facetConcept.getName());
 
-                LinkedHashSet<String> linkedHashSet = new LinkedHashSet<>(xpaths);
+                LinkedHashSet<Pattern> linkedHashSet = new LinkedHashSet<>(xpaths);
                 if(xpaths.size() != linkedHashSet.size()) {
                     LOG.error("Duplicate XPaths for facet {} in: {}.", facetConcept.getName(), xpaths);
                 }
@@ -187,7 +191,7 @@ public class FacetMappingFactory {
                     result.addFacet(config);
                 }
             }
-        } catch (NavException e) {
+        } catch (NavException|URISyntaxException e) {
             LOG.error("Error creating facetMapping from xsd: {}", xsd, e);
         }
         return result;
@@ -197,9 +201,9 @@ public class FacetMappingFactory {
      * Look if there is a contextual (container) data category associated with
      * an ancestor by walking back.
      */
-    private String getContext(String path, Map<String, String> pathConceptLinkMapping) {
+    private String getContext(Pattern path, Map<Pattern, String> pathConceptLinkMapping) {
         String context = null;
-        String cpath = path;
+        String cpath = path.getPattern();
         while (context == null && !cpath.equals("/text()")) {
             cpath = cpath.replaceAll("/[^/]*/text\\(\\)", "/text()");
             context = pathConceptLinkMapping.get(cpath);
@@ -214,7 +218,7 @@ public class FacetMappingFactory {
      * the exact opposite of other facets where the concept match is probably
      * better then the 'hardcoded' pattern).
      */
-    private void handleId(List<String> xpaths, FacetConcept facetConcept) {
+    private void handleId(List<Pattern> xpaths, FacetConcept facetConcept) {
         if (FacetConstants.FIELD_ID.equals(facetConcept.getName())) {
             xpaths.addAll(facetConcept.getPatterns());
         }
@@ -230,8 +234,8 @@ public class FacetMappingFactory {
      * data category which can be found in CMDI files with this schema)
      * @throws NavException
      */
-    private Map<String, List<String>> createConceptLinkPathMapping(String xsd, Boolean useLocalXSDCache) throws NavException {
-        Map<String, List<String>> result = new HashMap<>();
+    private Map<String, List<Pattern>> createConceptLinkPathMapping(String xsd, Boolean useLocalXSDCache) throws NavException, URISyntaxException {
+        Map<String, List<Pattern>> result = new HashMap<>();
         VTDGen vg = new VTDGen();
         boolean parseSuccess;
         if(useLocalXSDCache) {
@@ -256,13 +260,29 @@ public class FacetMappingFactory {
                 int datcatIndex = getDatcatIndex(vn);
                 if (datcatIndex != -1) {
                     String conceptLink = vn.toNormalizedString(datcatIndex);
-                    String xpath = createXpath(elementPath, null);
-                    List<String> values = result.get(conceptLink);
-                    if (values == null) {
-                        values = new ArrayList<>();
-                        result.put(conceptLink, values);
+                    Pattern xpath = createXpath(elementPath, null);
+                    List<Pattern> paths = result.get(conceptLink);
+                    if (paths == null) {
+                        paths = new ArrayList<>();
+                        result.put(conceptLink, paths);
                     }
-                    values.add(xpath);
+                    paths.add(xpath);
+                    int vocabIndex = getVocabIndex(vn);
+                    if (vocabIndex != -1) {
+                        String uri = vn.toNormalizedString(vocabIndex);
+                        Vocabulary vocab = new Vocabulary(MetadataImporter.config.getVocabularyRegistryUrl(),new URI(uri));
+                        xpath.setVocabulary(vocab);
+                        int propIndex = getVocabPropIndex(vn);
+                        if (propIndex != -1) {
+                            String prop = vn.toNormalizedString(propIndex);
+                            vocab.setProperty(prop);
+                        }
+                        int langIndex = getVocabLangIndex(vn);
+                        if (langIndex != -1) {
+                            String lang = vn.toNormalizedString(langIndex);
+                            vocab.setLanguage(lang);
+                        }
+                    }
                 }
 
                 // look for associated attributes with concept links
@@ -280,13 +300,29 @@ public class FacetMappingFactory {
                             String attributeName = vn.toNormalizedString(attributeNameIndex);
                             String conceptLink = vn.toNormalizedString(attributeDatcatIndex);
 
-                            String xpath = createXpath(elementPath, attributeName);
-                            List<String> values = result.get(conceptLink);
+                            Pattern xpath = createXpath(elementPath, attributeName);
+                            List<Pattern> values = result.get(conceptLink);
                             if (values == null) {
                                 values = new ArrayList<>();
                                 result.put(conceptLink, values);
                             }
                             values.add(xpath);
+                            int vocabIndex = getVocabIndex(vn);
+                            if (vocabIndex != -1) {
+                                String uri = vn.toNormalizedString(vocabIndex);
+                                Vocabulary vocab = new Vocabulary(MetadataImporter.config.getVocabularyRegistryUrl(),new URI(uri));
+                                xpath.setVocabulary(vocab);
+                                int propIndex = getVocabPropIndex(vn);
+                                if (propIndex != -1) {
+                                    String prop = vn.toNormalizedString(propIndex);
+                                    vocab.setProperty(prop);
+                                }
+                                int langIndex = getVocabLangIndex(vn);
+                                if (langIndex != -1) {
+                                    String lang = vn.toNormalizedString(langIndex);
+                                    vocab.setLanguage(lang);
+                                }
+                            }
                         }
                     }
                 } catch (XPathParseException | XPathEvalException | NavException e) {
@@ -316,22 +352,67 @@ public class FacetMappingFactory {
     }
 
     /**
+     * Goal is to get the "Vocabulary URI" attribute. Tries a number of different favors
+     * that were found in the xsd's.
+     *
+     * @return -1 if index is not found.
+     */
+    private int getVocabIndex(VTDNav vn) throws NavException {
+        int result = -1;
+        result = vn.getAttrValNS("http://www.clarin.eu/cmd/1", "Vocabulary");
+        if (result == -1) {
+            result = vn.getAttrVal("cmd:Vocabulary");
+        }
+        return result;
+    }
+
+    /**
+     * Goal is to get the "Vocabulary Property" attribute. Tries a number of different favors
+     * that were found in the xsd's.
+     *
+     * @return -1 if index is not found.
+     */
+    private int getVocabPropIndex(VTDNav vn) throws NavException {
+        int result = -1;
+        result = vn.getAttrValNS("http://www.clarin.eu/cmd/1", "ValueProperty");
+        if (result == -1) {
+            result = vn.getAttrVal("cmd:ValueProperty");
+        }
+        return result;
+    }
+
+    /**
+     * Goal is to get the "Vocabulary Language" attribute. Tries a number of different favors
+     * that were found in the xsd's.
+     *
+     * @return -1 if index is not found.
+     */
+    private int getVocabLangIndex(VTDNav vn) throws NavException {
+        int result = -1;
+        result = vn.getAttrValNS("http://www.clarin.eu/cmd/1", "ValueLanguage");
+        if (result == -1) {
+            result = vn.getAttrVal("cmd:ValueLanguage");
+        }
+        return result;
+    }
+
+    /**
      * Given an xml-token path thingy create an xpath.
      *
      * @param elementPath
      * @param attributeName will be appended as attribute to XPath expression if not null
      * @return
      */
-    private String createXpath(Deque<Token> elementPath, String attributeName) {
+    private Pattern createXpath(Deque<Token> elementPath, String attributeName) {
         StringBuilder xpath = new StringBuilder("/cmd:CMD/cmd:Components/");
         for (Token token : elementPath) {
             xpath.append("cmdp:").append(token.name).append("/");
         }
 
         if (attributeName != null) {
-            return xpath.append("@").append(attributeName).toString();
+            return new Pattern(xpath.append("@").append(attributeName).toString());
         } else {
-            return xpath.append("text()").toString();
+            return new Pattern(xpath.append("text()").toString());
         }
     }
 
@@ -386,7 +467,7 @@ public class FacetMappingFactory {
             for (FacetConfiguration config : facetMapping.getFacets()) {
                 fileWriter.append("FacetName:" + config.getName() + "\n");
                 fileWriter.append("Mappings:\n");
-                for (String pattern : config.getPatterns()) {
+                for (Pattern pattern : config.getPatterns()) {
                     fileWriter.append("    " + pattern + "\n");
                 }
             }

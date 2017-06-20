@@ -40,6 +40,10 @@
     
     <handleServerUrl>http://hdl.handle.net/</handleServerUrl>
     
+    <conceptRegistryUrl>https://openskos.meertens.knaw.nl/ccr/api/find-concepts</conceptRegistryUrl>
+    
+    <vocabularyRegistryUrl>http://clavas.clarin.eu/clavas/public/api/find-concepts</vocabularyRegistryUrl>
+    
     <!-- 
         Mapping file locations.
         These can be an absolute URL, absolute file path or packaged resource location.

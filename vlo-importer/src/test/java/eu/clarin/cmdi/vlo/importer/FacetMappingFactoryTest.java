@@ -10,6 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.config.VloConfigFactory;
+import java.io.IOException;
 
 public class FacetMappingFactoryTest {
 
@@ -21,6 +25,7 @@ public class FacetMappingFactoryTest {
     private final static String ID_PROFILE_ID = "clarin.eu:cr1:p_1290431694629";
     private final static String TEXTCORPUSPROFILE_PROFILE_ID = "clarin.eu:cr1:p_1290431694580";
     private final static String TEIHEADER_PROFILE_ID = "clarin.eu:cr1:p_1380106710826";
+    private final static String CLAVAS_PROFILE_ID = "clarin.eu:cr1:p_1493735943959";
 
     private final static Logger LOG = LoggerFactory.getLogger(FacetMappingFactoryTest.class);
 
@@ -38,14 +43,14 @@ public class FacetMappingFactoryTest {
         assertEquals(FacetConstants.FIELD_ID, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Header/cmd:MdSelfLink/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_SELF_LINK, mapping.getName());
         assertEquals(0, mapping.getPatterns().size());
         assertEquals(1, mapping.getFallbackPatterns().size());
         assertEquals("/cmd:CMD/cmd:Header/cmd:MdSelfLink/text()",
-                mapping.getFallbackPatterns().get(0));
+                mapping.getFallbackPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_COLLECTION, mapping.getName());
@@ -55,87 +60,87 @@ public class FacetMappingFactoryTest {
         assertEquals(FacetConstants.FIELD_PROJECT_NAME, mapping.getName());
         assertEquals(2, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:MDGroup/cmdp:Project/cmdp:Name/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:MDGroup/cmdp:Project/cmdp:Title/text()",
-                mapping.getPatterns().get(1));
+                mapping.getPatterns().get(1).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_NAME, mapping.getName());
         assertEquals(2, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:Name/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:Title/text()",
-                mapping.getPatterns().get(1));
+                mapping.getPatterns().get(1).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_TEMPORAL_COVERAGE, mapping.getName());
         assertEquals(2, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:Date/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_CONTINENT, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:MDGroup/cmdp:Location/cmdp:Continent/text()",
                 mapping.getPatterns()
-                .get(0));
+                .get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_COUNTRY, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:MDGroup/cmdp:Location/cmdp:Country/text()",
                 mapping.getPatterns()
-                .get(0));
+                .get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_LANGUAGE_CODE, mapping.getName());
         assertEquals(2, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:MDGroup/cmdp:Content/cmdp:Content_Languages/cmdp:Content_Language/cmdp:Id/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         // removed because of container data categories
         // assertEquals("/cmd:CMD/cmd:Components/c:Session/c:MDGroup/c:Actors/c:Actor/c:Actor_Languages/c:Actor_Language/c:Id/text()",
         // mapping.getPatterns().get(1));
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:Resources/cmdp:WrittenResource/cmdp:LanguageId/text()",
-                mapping.getPatterns().get(1));
+                mapping.getPatterns().get(1).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_ORGANISATION, mapping.getName());
         assertEquals(6, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:MDGroup/cmdp:Project/cmdp:Contact/cmdp:Organisation/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:MDGroup/cmdp:Actors/cmdp:Actor/cmdp:Contact/cmdp:Organisation/text()",
-                mapping.getPatterns().get(1));
+                mapping.getPatterns().get(1).getPattern());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:Resources/cmdp:MediaFile/cmdp:Access/cmdp:Contact/cmdp:Organisation/text()",
-                mapping.getPatterns().get(2));
+                mapping.getPatterns().get(2).getPattern());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:Resources/cmdp:WrittenResource/cmdp:Access/cmdp:Contact/cmdp:Organisation/text()",
-                mapping.getPatterns().get(3));
+                mapping.getPatterns().get(3).getPattern());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:Resources/cmdp:Source/cmdp:Access/cmdp:Contact/cmdp:Organisation/text()",
-                mapping.getPatterns().get(4));
+                mapping.getPatterns().get(4).getPattern());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:Resources/cmdp:Anonyms/cmdp:Access/cmdp:Contact/cmdp:Organisation/text()",
-                mapping.getPatterns().get(5));
+                mapping.getPatterns().get(5).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_GENRE, mapping.getName());
         assertEquals(2, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:MDGroup/cmdp:Content/cmdp:Genre/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_MODALITY, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
-        assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:MDGroup/cmdp:Content/cmdp:Modalities/text()", mapping.getPatterns().get(0));
+        assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:MDGroup/cmdp:Content/cmdp:Modalities/text()", mapping.getPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_SUBJECT, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:MDGroup/cmdp:Content/cmdp:Subject/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_DESCRIPTION, mapping.getName());
         assertEquals(18, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:descriptions/cmdp:Description/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_RESOURCE_CLASS, mapping.getName());
@@ -147,30 +152,30 @@ public class FacetMappingFactoryTest {
         mapping = facets.get(index++);
 
         assertEquals("/cmd:CMD/cmd:Header/cmd:MdCollectionDisplayName/text()",
-                mapping.getFallbackPatterns().get(0));
+                mapping.getFallbackPatterns().get(0).getPattern());
         assertEquals(1, mapping.getFallbackPatterns().size());
         mapping = facets.get(index++);
 
-        assertEquals("/cmd:CMD/cmd:Header//text()", mapping.getFallbackPatterns().get(0));
-        assertEquals("/cmd:CMD/cmd:Components//text()", mapping.getFallbackPatterns().get(1));
+        assertEquals("/cmd:CMD/cmd:Header//text()", mapping.getFallbackPatterns().get(0).getPattern());
+        assertEquals("/cmd:CMD/cmd:Components//text()", mapping.getFallbackPatterns().get(1).getPattern());
         assertEquals(2, mapping.getFallbackPatterns().size());
         mapping = facets.get(index++);
 
-        assertEquals("/cmd:CMD/cmd:Header/cmd:MdProfile/text()", mapping.getFallbackPatterns().get(0));
+        assertEquals("/cmd:CMD/cmd:Header/cmd:MdProfile/text()", mapping.getFallbackPatterns().get(0).getPattern());
         assertEquals(1, mapping.getFallbackPatterns().size());
         mapping = facets.get(index++);
 
         // test keywords facet mapping
         assertEquals(FacetConstants.FIELD_KEYWORDS, mapping.getName());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:mods/cmdp:classification/text()",
-                mapping.getFallbackPatterns().get(0));
+                mapping.getFallbackPatterns().get(0).getPattern());
         assertEquals(3, mapping.getFallbackPatterns().size());
         mapping = facets.get(index++);
 
         // test license facet mapping
         assertEquals(FacetConstants.FIELD_LICENSE, mapping.getName());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:Session/cmdp:Resources/cmdp:MediaFile/cmdp:Access/cmdp:Availability/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         assertEquals(4, mapping.getPatterns().size());
 
         assertEquals("check to see we tested them all", facets.size(), index);
@@ -190,38 +195,38 @@ public class FacetMappingFactoryTest {
         assertEquals(FacetConstants.FIELD_ID, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Header/cmd:MdSelfLink/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_SELF_LINK, mapping.getName());
         assertEquals(0, mapping.getPatterns().size());
         assertEquals(1, mapping.getFallbackPatterns().size());
         assertEquals("/cmd:CMD/cmd:Header/cmd:MdSelfLink/text()",
-                mapping.getFallbackPatterns().get(0));
+                mapping.getFallbackPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_COLLECTION, mapping.getName());
         assertEquals(1, mapping.getFallbackPatterns().size());
         assertEquals("/cmd:CMD/cmd:Header/cmd:MdCollectionDisplayName/text()",
-                mapping.getFallbackPatterns().get(0));
+                mapping.getFallbackPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_PROJECT_NAME, mapping.getName());
         assertEquals(3, mapping.getFallbackPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:publicationStmt/cmdp:publisher/cmdp:orgName/cmdp:orgName[@role=\"project\"]/text()",
-                mapping.getFallbackPatterns().get(0));
+                mapping.getFallbackPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_NAME, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:title/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_TEMPORAL_COVERAGE, mapping.getName());
         assertEquals(3, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:created/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_COUNTRY, mapping.getName());
@@ -229,43 +234,43 @@ public class FacetMappingFactoryTest {
         assertEquals(2, mapping.getFallbackPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:spatial[@dcterms-type=\"ISO3166\"]/text()",
                 mapping
-                .getFallbackPatterns().get(0));
+                .getFallbackPatterns().get(0).getPattern());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:coverage[@dcterms-type=\"ISO3166\"]/text()",
                 mapping
-                .getFallbackPatterns().get(1));
+                .getFallbackPatterns().get(1).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_LANGUAGE_CODE, mapping.getName());
         assertEquals(2, mapping.getPatterns().size());
-        assertTrue(mapping.getPatterns().contains("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:language/text()"));
-        assertTrue(mapping.getPatterns().contains("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:language/@olac-language"));
+        assertTrue(mapping.getPatterns().contains(new Pattern("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:language/text()")));
+        assertTrue(mapping.getPatterns().contains(new Pattern("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:language/@olac-language")));
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_ORGANISATION, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:publisher/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_GENRE, mapping.getName());
         assertEquals(4, mapping.getFallbackPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:type/@olac-linguistic-type",
-                mapping.getFallbackPatterns().get(0));
+                mapping.getFallbackPatterns().get(0).getPattern());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:mods/cmdp:genre/text()",
-                mapping.getFallbackPatterns().get(1));
+                mapping.getFallbackPatterns().get(1).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_SUBJECT, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:subject/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         // assertEquals("/cmd:CMD/cmd:Components/c:OLAC-DcmiTerms/c:subject[@dcterms-type=\"LCSH\"]/text()", mapping.getPatterns().get(1));
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_DESCRIPTION, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:description/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_RESOURCE_CLASS, mapping.getName());
@@ -274,7 +279,7 @@ public class FacetMappingFactoryTest {
 
         assertEquals(FacetConstants.FIELD_FORMAT, mapping.getName());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:format/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
 
@@ -282,25 +287,25 @@ public class FacetMappingFactoryTest {
         assertEquals(1, mapping.getFallbackPatterns().size());
         mapping = facets.get(index++);
 
-        assertEquals("/cmd:CMD/cmd:Header//text()", mapping.getFallbackPatterns().get(0));
-        assertEquals("/cmd:CMD/cmd:Components//text()", mapping.getFallbackPatterns().get(1));
+        assertEquals("/cmd:CMD/cmd:Header//text()", mapping.getFallbackPatterns().get(0).getPattern());
+        assertEquals("/cmd:CMD/cmd:Components//text()", mapping.getFallbackPatterns().get(1).getPattern());
         assertEquals(2, mapping.getFallbackPatterns().size());
         mapping = facets.get(index++);
 
-        assertEquals("/cmd:CMD/cmd:Header/cmd:MdProfile/text()", mapping.getFallbackPatterns().get(0));
+        assertEquals("/cmd:CMD/cmd:Header/cmd:MdProfile/text()", mapping.getFallbackPatterns().get(0).getPattern());
         assertEquals(1, mapping.getFallbackPatterns().size());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_KEYWORDS, mapping.getName());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:mods/cmdp:classification/text()",
-                mapping.getFallbackPatterns().get(0));
+                mapping.getFallbackPatterns().get(0).getPattern());
         assertEquals(3, mapping.getFallbackPatterns().size());
         mapping = facets.get(index++);
 
         // test license facet mapping
         assertEquals(FacetConstants.FIELD_LICENSE, mapping.getName());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:license/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         assertEquals(3, mapping.getPatterns().size());
         
         assertEquals("check to see we tested them all", facets.size(), index);
@@ -321,14 +326,14 @@ public class FacetMappingFactoryTest {
         assertEquals(1, mapping.getPatterns().size());
 
         assertEquals("/cmd:CMD/cmd:Header/cmd:MdSelfLink/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_SELF_LINK, mapping.getName());
         assertEquals(0, mapping.getPatterns().size());
         assertEquals(1, mapping.getFallbackPatterns().size());
         assertEquals("/cmd:CMD/cmd:Header/cmd:MdSelfLink/text()",
-                mapping.getFallbackPatterns().get(0));
+                mapping.getFallbackPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_COLLECTION, mapping.getName());
@@ -337,34 +342,34 @@ public class FacetMappingFactoryTest {
 
         assertEquals(FacetConstants.FIELD_PROJECT_NAME, mapping.getName());
         assertEquals(3, mapping.getFallbackPatterns().size());
-        assertEquals("/cmd:CMD/cmd:Components/cmdp:media-session-profile/cmdp:media-session/cmdp:Corpus", mapping.getFallbackPatterns().get(1));
+        assertEquals("/cmd:CMD/cmd:Components/cmdp:media-session-profile/cmdp:media-session/cmdp:Corpus", mapping.getFallbackPatterns().get(1).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_NAME, mapping.getName());
         assertEquals(6, mapping.getFallbackPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:ResourceName/text()",
-                mapping.getFallbackPatterns().get(0));
+                mapping.getFallbackPatterns().get(0).getPattern());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:mods/cmdp:titleInfo/title/text()",
-                mapping.getFallbackPatterns().get(1));
+                mapping.getFallbackPatterns().get(1).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_TEMPORAL_COVERAGE, mapping.getName());
         assertEquals(3, mapping.getPatterns().size());
         assertEquals(
                 "/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:FinalizationYearResourceCreation/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtLexiconDetails/cmdp:Date/text()",
-                mapping.getPatterns().get(1));
+                mapping.getPatterns().get(1).getPattern());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtServiceDetails/cmdp:Date/text()",
-                mapping.getPatterns().get(2));
+                mapping.getPatterns().get(2).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_COUNTRY, mapping.getName());
         assertEquals(2, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:Countries/cmdp:Country/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:Countries/cmdp:Country/cmdp:Code/text()",
-                mapping.getPatterns().get(1));
+                mapping.getPatterns().get(1).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_LANGUAGE_CODE, mapping.getName());
@@ -375,14 +380,14 @@ public class FacetMappingFactoryTest {
         // assertEquals("/cmd:CMD/cmd:Components/c:OLAC-DcmiTerms/c:subject/@olac-language", mapping.getPatterns().get(1));
         assertEquals(
                 "/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:Languages/cmdp:ISO639/cmdp:iso-639-3-code/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_ORGANISATION, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:Institute/text()",
                 mapping.getPatterns()
-                .get(0));
+                .get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_GENRE, mapping.getName());
@@ -397,28 +402,28 @@ public class FacetMappingFactoryTest {
         assertEquals(2, mapping.getPatterns().size());
         assertEquals(5, mapping.getFallbackPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:Description/text()",
-                mapping.getPatterns().get(0));
-        assertEquals("/cmd:CMD/cmd:Components/cmdp:mods/cmdp:abstract/text()", mapping.getFallbackPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
+        assertEquals("/cmd:CMD/cmd:Components/cmdp:mods/cmdp:abstract/text()", mapping.getFallbackPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_RESOURCE_CLASS, mapping.getName());
         assertEquals(1, mapping.getPatterns().size());
         assertEquals(3, mapping.getFallbackPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:ResourceType/text()",
-                mapping.getFallbackPatterns().get(0));
+                mapping.getFallbackPatterns().get(0).getPattern());
         mapping = facets.get(index++);
 
         assertEquals("/cmd:CMD/cmd:Header/cmd:MdCollectionDisplayName/text()",
-                mapping.getFallbackPatterns().get(0));
+                mapping.getFallbackPatterns().get(0).getPattern());
         assertEquals(1, mapping.getFallbackPatterns().size());
         mapping = facets.get(index++);
 
-        assertEquals("/cmd:CMD/cmd:Header//text()", mapping.getFallbackPatterns().get(0));
-        assertEquals("/cmd:CMD/cmd:Components//text()", mapping.getFallbackPatterns().get(1));
+        assertEquals("/cmd:CMD/cmd:Header//text()", mapping.getFallbackPatterns().get(0).getPattern());
+        assertEquals("/cmd:CMD/cmd:Components//text()", mapping.getFallbackPatterns().get(1).getPattern());
         assertEquals(2, mapping.getFallbackPatterns().size());
         mapping = facets.get(index++);
 
-        assertEquals("/cmd:CMD/cmd:Header/cmd:MdProfile/text()", mapping.getFallbackPatterns().get(0));
+        assertEquals("/cmd:CMD/cmd:Header/cmd:MdProfile/text()", mapping.getFallbackPatterns().get(0).getPattern());
         assertEquals(1, mapping.getFallbackPatterns().size());
         mapping = facets.get(index++);
 
@@ -426,22 +431,22 @@ public class FacetMappingFactoryTest {
         assertEquals(1, mapping.getPatterns().size());
         assertEquals(3, mapping.getFallbackPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:tags/cmdp:tag/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:mods/cmdp:classification/text()",
-                mapping.getFallbackPatterns().get(0));
+                mapping.getFallbackPatterns().get(0).getPattern());
         
         mapping = facets.get(index++);
         // test license type facet mapping
         assertEquals(FacetConstants.FIELD_LICENSE_TYPE, mapping.getName());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtDistributionClassification/cmdp:DistributionType/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         assertEquals(1, mapping.getPatterns().size());
         
         mapping = facets.get(index++);
         // test license facet mapping
         assertEquals(FacetConstants.FIELD_LICENSE, mapping.getName());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtIPR/cmdp:LicenseType/text()",
-                mapping.getPatterns().get(0));
+                mapping.getPatterns().get(0).getPattern());
         assertEquals(2, mapping.getPatterns().size());
         
         assertEquals("check to see we tested them all", facets.size(), index);
@@ -459,9 +464,9 @@ public class FacetMappingFactoryTest {
 
         assertEquals(FacetConstants.FIELD_ID, facet.getName());
         assertEquals(2, facet.getPatterns().size());
-        assertEquals("/cmd:CMD/cmd:Header/cmd:MdSelfLink/text()", facet.getPatterns().get(0));
+        assertEquals("/cmd:CMD/cmd:Header/cmd:MdSelfLink/text()", facet.getPatterns().get(0).getPattern());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:EastRepublican/cmdp:GeneralInformation/cmdp:Identifier/text()",
-                facet.getPatterns().get(1));
+                facet.getPatterns().get(1).getPattern());
     }
 
     /**
@@ -488,13 +493,13 @@ public class FacetMappingFactoryTest {
         FacetConfiguration facet = facets.get(5);
         assertEquals(FacetConstants.FIELD_TEMPORAL_COVERAGE, facet.getName());
         assertEquals(2, facet.getPatterns().size());
-        assertEquals("/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:GeneralInfo/cmdp:CompletionYear/text()", facet.getPatterns().get(0));
-        assertEquals("/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:GeneralInfo/cmdp:PublicationDate/text()", facet.getPatterns().get(1));
+        assertEquals("/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:GeneralInfo/cmdp:CompletionYear/text()", facet.getPatterns().get(0).getPattern());
+        assertEquals("/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:GeneralInfo/cmdp:PublicationDate/text()", facet.getPatterns().get(1).getPattern());
 
         facet = facets.get(13);
         assertEquals(FacetConstants.FIELD_DESCRIPTION, facet.getName());
         assertEquals(1, facet.getPatterns().size());
-        assertEquals("/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:GeneralInfo/cmdp:Descriptions/cmdp:Description/text()", facet.getPatterns().get(0));
+        assertEquals("/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:GeneralInfo/cmdp:Descriptions/cmdp:Description/text()", facet.getPatterns().get(0).getPattern());
     }
 
     @Test
@@ -505,6 +510,24 @@ public class FacetMappingFactoryTest {
 
         FacetConfiguration facet = facets.get(17);
         assertEquals(FacetConstants.FIELD_AVAILABILITY, facet.getName());
-        assertEquals("/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:publicationStmt/cmdp:availability/@status", facet.getPatterns().get(0));
+        assertEquals("/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:publicationStmt/cmdp:availability/@status", facet.getPatterns().get(0).getPattern());
     }
+
+    @Test
+    public void testCLAVASMapping() throws IOException {
+        // get a config
+        VloConfigFactory configFactory = new DefaultVloConfigFactory();
+        VloConfig config = DefaultVloConfigFactory.configureDefaultMappingLocations(configFactory.newConfig());       
+        MetadataImporter.config = config;
+        
+        FacetMapping facetMapping = FacetMappingFactory
+                .getFacetMapping(FACETCONCEPTS_FILENAME, CLAVAS_PROFILE_ID, true);
+        List<FacetConfiguration> facets = facetMapping.getFacets();
+
+        FacetConfiguration facet = facets.get(7);
+        assertEquals(FacetConstants.FIELD_LANGUAGE_CODE, facet.getName());
+        assertEquals("/cmd:CMD/cmd:Components/cmdp:TestCLAVAS/cmdp:ISO639/cmdp:iso-639-3-code/text()", facet.getPatterns().get(0).getPattern());
+        assertEquals("http://hdl.handle.net/11459/CLAVAS_810f8d2a-6723-3ba6-2e57-41d6d3844816", facet.getPatterns().get(0).getVocabulary().getURI().toString());
+    }
+
 }
