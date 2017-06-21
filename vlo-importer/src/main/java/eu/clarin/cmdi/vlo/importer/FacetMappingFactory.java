@@ -87,7 +87,7 @@ public class FacetMappingFactory {
      * @return the facet mapping used to map meta data to facets
      */
     private FacetMapping createMapping(String facetConcepts, String xsd, Boolean useLocalXSDCache) {
-
+        LOG.debug("Creating mapping for {} using {} (useLocalXSDCache: {})", xsd, facetConcepts, useLocalXSDCache);
         FacetMapping result = new FacetMapping();
         // Gets the configuration. VLOMarshaller only reads in the facetconceptmapping.xml file and returns the result (though the reading in is implicit).
         FacetConceptMapping conceptMapping = VLOMarshaller.getFacetConceptMapping(facetConcepts);
@@ -97,14 +97,17 @@ public class FacetMappingFactory {
             Map<Pattern, String> pathConceptLinkMapping = null;
             // Below we put the stuff we found into the configuration class.
             for (FacetConcept facetConcept : conceptMapping.getFacetConcepts()) {
+                LOG.trace("-- Facet concept {}", facetConcept);
                 FacetConfiguration config = new FacetConfiguration();
                 List<Pattern> xpaths = new ArrayList<>();
                 handleId(xpaths, facetConcept);
                 for (String concept : facetConcept.getConcepts()) {
+                    LOG.trace("-- -- Concept {}", concept);
                     List<Pattern> paths = conceptLinkPathMapping.get(concept);
                     if (paths != null) {
                         if (facetConcept.hasContext()) {
                             for (Pattern path : paths) {
+                                LOG.trace("-- -- -- Concept path {}", path);
                                 // lazily instantiate the reverse mapping, i.e., from path to concept
                                 if (pathConceptLinkMapping == null) {
                                     pathConceptLinkMapping = new HashMap<>();
@@ -206,7 +209,7 @@ public class FacetMappingFactory {
         String cpath = path.getPattern();
         while (context == null && !cpath.equals("/text()")) {
             cpath = cpath.replaceAll("/[^/]*/text\\(\\)", "/text()");
-            context = pathConceptLinkMapping.get(cpath);
+            context = pathConceptLinkMapping.get(new Pattern(cpath));
         }
         return context;
     }
