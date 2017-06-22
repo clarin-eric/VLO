@@ -2,44 +2,48 @@ Bug fixes and new features
 --------------------------
 VLO 4.2.0 (June 2017)
 
-* Separate licenseType field (#39/#55)
-    <https://github.com/clarin-eric/VLO/pull/86>
-* "Search page for this record" broken for 'hdl:' URIs
-    <https://github.com/clarin-eric/VLO/issues/85>
-* Allow multiple values in single-valued fields (restricted to same XPath)
-    <https://github.com/clarin-eric/VLO/issues/83>
-* Bumped max file size to 50MB. Fixes #81
-    <https://github.com/clarin-eric/VLO/pull/82>
-* Increase maximum file size limit for records
-    <https://github.com/clarin-eric/VLO/issues/81>
-* Do not concatenate landing pages if multiple found
-    <https://github.com/clarin-eric/VLO/issues/79>
-* Send canonical page URLs to piwik
-    <https://github.com/clarin-eric/VLO/issues/78>
-* Unresolved URL is sent to LRS
-    <https://github.com/clarin-eric/VLO/issues/76>
-* Multi-value selection in the 'all facet values' dialogue
+## New and improved features ##
+
+* The 'all facet values' dialogue now supports multi-value selection
     <https://github.com/clarin-eric/VLO/issues/74>
-* Mapping of different languages that have the same label
-    <https://github.com/clarin-eric/VLO/issues/73>
-* Placeholders in VloConfig.xml for dockerised environments
-    <https://github.com/clarin-eric/VLO/issues/67>
-* Index names/titles in all provided languages, and prefer English
-    <https://github.com/clarin-eric/VLO/issues/59>
-* An explicit distribution type/availability level in the metadata should override any inferred values
-    <https://github.com/clarin-eric/VLO/issues/55>
-* Make PUB/ACA/RES a separate field from other availability info (laundry tags)
-    <https://github.com/clarin-eric/VLO/issues/39>
-* Integration of Virtual Collection Registry with the VLO
+* Integration of the Virtual Collection Registry with the VLO
     <https://github.com/clarin-eric/VLO/issues/37>
+* Better support for multilingual values, with priority for English content. This is
+used to display English record titles in headers, but show alternative values in other
+languages in the details.
+    <https://github.com/clarin-eric/VLO/issues/59>
+    <https://github.com/clarin-eric/VLO/issues/83>
 * Scroll to top of search results when navigating to next or previous page
     <https://github.com/clarin-eric/VLO/issues/12>
-* Add a favicon
-    <https://github.com/clarin-eric/VLO/issues/8>
-* Piwik tracking of events within page
-    <https://github.com/clarin-eric/VLO/issues/75>
-* Mapping based on vocabulary or concept URI
+* "License type" (PUB/ACA/RES) is stored separately from other availability information,
+and any explicit values linked to this concept in metadata override any derived values
+    <https://github.com/clarin-eric/VLO/issues/39>
+    <https://github.com/clarin-eric/VLO/issues/55>
+    <https://github.com/clarin-eric/VLO/pull/86>
+* Support for mapping based on vocabulary value URIs from the CLARIN vocabulary service
     <https://github.com/clarin-eric/VLO/issues/47>
+* The maximum file size for processed CMDI records has been increased to 50MB
+    <https://github.com/clarin-eric/VLO/issues/81>
+    <https://github.com/clarin-eric/VLO/pull/82>
+* Piwik improvements: tracking of in-page events and registering canonical page URLs
+    <https://github.com/clarin-eric/VLO/issues/75>
+    <https://github.com/clarin-eric/VLO/issues/78>    
+* A 'favicon' was added
+    <https://github.com/clarin-eric/VLO/issues/8>
+* System administration: placeholders in VloConfig.xml for dockerised environments
+    <https://github.com/clarin-eric/VLO/issues/67>
+
+## Bug fixes ##
+
+* Mapping of different languages that have the same label
+    <https://github.com/clarin-eric/VLO/issues/73>
+* "Search page for this record" broken for 'hdl:' URIs
+    <https://github.com/clarin-eric/VLO/issues/85>
+* Do not concatenate landing pages if multiple found
+    <https://github.com/clarin-eric/VLO/issues/79>
+* Unresolved URLs are sent to LRS with resolution attempt
+    <https://github.com/clarin-eric/VLO/issues/76>
+
 
 VLO 4.1.0 (April 2017)
 
