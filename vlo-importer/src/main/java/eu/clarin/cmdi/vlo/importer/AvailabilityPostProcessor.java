@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +11,10 @@ import java.util.List;
  */
 public class AvailabilityPostProcessor extends PostProcessorsWithVocabularyMap {
 
+    public AvailabilityPostProcessor(VloConfig config) {
+        super(config);
+    }
+
     @Override
     public List<String> process(final String value, CMDIData cmdiData) {
         String normalizedVal = normalize(value);
@@ -19,7 +24,7 @@ public class AvailabilityPostProcessor extends PostProcessorsWithVocabularyMap {
 
     @Override
     public String getNormalizationMapURL() {
-        return MetadataImporter.config.getLicenseAvailabilityMapUrl();
+        return getConfig().getLicenseAvailabilityMapUrl();
     }
 
     @Override

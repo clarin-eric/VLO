@@ -6,6 +6,7 @@ import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +16,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Takes the value of the componentprofileid and uses the componentregistry REST service to transform this to the name of the componentprofile.
  */
-public class CMDIComponentProfileNamePostProcessor implements PostProcessor {
+public class CMDIComponentProfileNamePostProcessor extends AbstractPostProcessor {
     private static final String XPATH = "/ComponentSpec/Header/Name/text()";
     private String BASE_URL = null;
     private AutoPilot ap = null;
@@ -25,6 +26,10 @@ public class CMDIComponentProfileNamePostProcessor implements PostProcessor {
     private static final String _EMPTY_STRING = "";
     private final static Logger LOG = LoggerFactory.getLogger(CMDIComponentProfileNamePostProcessor.class);
     private final HashMap<String, String> cache = new HashMap<String, String>();
+
+    public CMDIComponentProfileNamePostProcessor(VloConfig config) {
+        super(config);
+    }
 
     @Override
     public List<String> process(String profileId, CMDIData cmdiData) {
@@ -88,6 +93,6 @@ public class CMDIComponentProfileNamePostProcessor implements PostProcessor {
             ap = null;
         }
         vg = new VTDGen();
-        BASE_URL = MetadataImporter.config.getComponentRegistryRESTURL();
+        BASE_URL = getConfig().getComponentRegistryRESTURL();
     }
 }

@@ -13,7 +13,7 @@ public class LicenseTypePostProcessorTest extends ImporterTestcase {
 
     @Before
     public void setUp() {
-        processor = new LicenseTypePostProcessor();
+        processor = new LicenseTypePostProcessor(config);
     }
 
     @Test

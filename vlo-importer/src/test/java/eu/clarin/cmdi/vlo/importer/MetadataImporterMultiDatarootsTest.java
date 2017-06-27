@@ -76,7 +76,7 @@ public class MetadataImporterMultiDatarootsTest extends ImporterTestcase {
                 
         modifyConfig_multi_dataroots(roots);
         
-        MetadataImporter importer = new MetadataImporter();
+        MetadataImporter importer = new MetadataImporter(config, languageCodeUtils);
         
         List<DataRoot> dataRoots = importer.checkDataRoots();
         

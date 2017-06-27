@@ -59,7 +59,9 @@ public class CMDIParserVTDXMLTest extends ImporterTestcase {
         vg.setDoc(content.getBytes());
         vg.parse(true);
         VTDNav nav = vg.getNav();
-        CMDIParserVTDXML parser = new CMDIParserVTDXML(null, new VloConfig(), true);
+        final VloConfig newVloConfig = new VloConfig();
+        final FacetMappingFactory facetMappingFactory = new FacetMappingFactory(newVloConfig);
+        CMDIParserVTDXML parser = new CMDIParserVTDXML(null, newVloConfig, facetMappingFactory, true);
         String xsd = parser.extractXsd(nav);
         return xsd;
     }

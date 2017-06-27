@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import org.apache.commons.lang.WordUtils;
 
 public class LanguageCodePostProcessor extends PostProcessorsWithVocabularyMap {
@@ -23,6 +24,12 @@ public class LanguageCodePostProcessor extends PostProcessorsWithVocabularyMap {
     protected static final String SIL_CODE_PREFIX_alt = "RFC-1766:x-sil-";
 
     private static final Pattern RFC1766_Pattern = Pattern.compile("^([a-z]{2,3})[-_][a-zA-Z]{2}$");
+    private final LanguageCodeUtils languageCodeUtils;
+
+    public LanguageCodePostProcessor(VloConfig config, LanguageCodeUtils languageCodeUtils) {
+        super(config);
+        this.languageCodeUtils = languageCodeUtils;
+    }
 
     /**
      * Returns the language code based on the mapping defined in the CMDI
@@ -47,7 +54,7 @@ public class LanguageCodePostProcessor extends PostProcessorsWithVocabularyMap {
 
     @Override
     public String getNormalizationMapURL() {
-        return MetadataImporter.config.getLanguageNameVariantsUrl();
+        return getConfig().getLanguageNameVariantsUrl();
     }
 
     @Override
@@ -56,7 +63,6 @@ public class LanguageCodePostProcessor extends PostProcessorsWithVocabularyMap {
     }
 
     protected String extractLanguageCode(String value) {
-        final LanguageCodeUtils languageCodeUtils = MetadataImporter.languageCodeUtils;
         String result = value;
 
         result = result.replaceFirst(ISO639_2_PREFIX, "").replaceFirst(ISO639_3_PREFIX, "").replaceFirst(SIL_CODE_PREFIX, "").replaceFirst(SIL_CODE_PREFIX_alt, "");

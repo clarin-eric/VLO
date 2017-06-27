@@ -37,11 +37,13 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private static final String DEFAULT_LANGUAGE = "code:und";
     private final VloConfig config;
     private final Vocabulary CCR;
+    private final FacetMappingFactory facetMappingFactory;
     
-    public CMDIParserVTDXML(Map<String, PostProcessor> postProcessors, VloConfig config, Boolean useLocalXSDCache) {
+    public CMDIParserVTDXML(Map<String, PostProcessor> postProcessors, VloConfig config, FacetMappingFactory facetMappingFactory, Boolean useLocalXSDCache) {
         this.postProcessors = postProcessors;
         this.useLocalXSDCache = useLocalXSDCache;
         this.config = config;
+        this.facetMappingFactory = facetMappingFactory;
         this.CCR = new Vocabulary(config.getConceptRegistryUrl());
     }
 
@@ -108,13 +110,13 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @throws VTDException
      */
     private FacetMapping getFacetMapping(VTDNav nav) throws VTDException {
-        String profileId = extractXsd(nav);
+        final String profileId = extractXsd(nav);
         if (profileId == null) {
             throw new RuntimeException("Cannot get xsd schema so cannot get a proper mapping. Parse failed!");
         }
-        String facetConceptsFile = MetadataImporter.config.getFacetConceptsFile();
-
-        return FacetMappingFactory.getFacetMapping(facetConceptsFile, profileId, useLocalXSDCache);
+        
+        final String facetConceptsFile = config.getFacetConceptsFile();
+        return facetMappingFactory.getFacetMapping(facetConceptsFile, profileId, useLocalXSDCache);
     }
 
     /**

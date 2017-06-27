@@ -7,6 +7,7 @@ import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.AcceptableContext;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.RejectableContext;
@@ -18,10 +19,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.util.*;
-import java.util.logging.Level;
 
 /**
  * Creates facet-mappings (xpaths) from a configuration. As they say "this is
@@ -36,9 +35,10 @@ public class FacetMappingFactory {
     /**
      * Our one instance of the FMF.
      */
-    private final static FacetMappingFactory INSTANCE = new FacetMappingFactory();
+    private final VloConfig config;
 
-    private FacetMappingFactory() {
+    public FacetMappingFactory(VloConfig config) {
+        this.config = config;
     }
     
     /**
@@ -48,8 +48,8 @@ public class FacetMappingFactory {
      * @param useLocalXSDCache
      * @return 
      */
-    public static FacetMapping getFacetMapping(String facetConceptsFile, String xsd, Boolean useLocalXSDCache) {
-        return INSTANCE.getOrCreateMapping(facetConceptsFile, xsd, useLocalXSDCache);
+    public FacetMapping getFacetMapping(String facetConceptsFile, String xsd, Boolean useLocalXSDCache) {
+        return getOrCreateMapping(facetConceptsFile, xsd, useLocalXSDCache);
     }
 
     /**
@@ -244,7 +244,7 @@ public class FacetMappingFactory {
         if(useLocalXSDCache) {
             parseSuccess = vg.parseFile(Thread.currentThread().getContextClassLoader().getResource("testProfiles/"+xsd+".xsd").getPath(), true);
         } else {
-            parseSuccess = vg.parseHttpUrl(MetadataImporter.config.getComponentRegistryProfileSchema(xsd), true);
+            parseSuccess = vg.parseHttpUrl(config.getComponentRegistryProfileSchema(xsd), true);
         }
             
         if (!parseSuccess) {
@@ -273,7 +273,7 @@ public class FacetMappingFactory {
                     int vocabIndex = getVocabIndex(vn);
                     if (vocabIndex != -1) {
                         String uri = vn.toNormalizedString(vocabIndex);
-                        Vocabulary vocab = new Vocabulary(MetadataImporter.config.getVocabularyRegistryUrl(),new URI(uri));
+                        Vocabulary vocab = new Vocabulary(config.getVocabularyRegistryUrl(),new URI(uri));
                         xpath.setVocabulary(vocab);
                         int propIndex = getVocabPropIndex(vn);
                         if (propIndex != -1) {
@@ -313,7 +313,7 @@ public class FacetMappingFactory {
                             int vocabIndex = getVocabIndex(vn);
                             if (vocabIndex != -1) {
                                 String uri = vn.toNormalizedString(vocabIndex);
-                                Vocabulary vocab = new Vocabulary(MetadataImporter.config.getVocabularyRegistryUrl(),new URI(uri));
+                                Vocabulary vocab = new Vocabulary(config.getVocabularyRegistryUrl(),new URI(uri));
                                 xpath.setVocabulary(vocab);
                                 int propIndex = getVocabPropIndex(vn);
                                 if (propIndex != -1) {
@@ -456,8 +456,8 @@ public class FacetMappingFactory {
         }
     }
 
-    public static void printMapping(File file) throws IOException {
-        Set<String> xsdNames = INSTANCE.mapping.keySet();
+    public void printMapping(File file) throws IOException {
+        Set<String> xsdNames = mapping.keySet();
         FileWriter fileWriter = new FileWriter(file);
         fileWriter.append("This file is generated on " + DateFormat.getDateTimeInstance().format(new Date())
                 + " and only used to document the mapping.\n");
@@ -465,7 +465,7 @@ public class FacetMappingFactory {
         fileWriter.append("---------------------\n");
         fileWriter.flush();
         for (String xsd : xsdNames) {
-            FacetMapping facetMapping = INSTANCE.mapping.get(xsd);
+            FacetMapping facetMapping = mapping.get(xsd);
             fileWriter.append(xsd + "\n");
             for (FacetConfiguration config : facetMapping.getFacets()) {
                 fileWriter.append("FacetName:" + config.getName() + "\n");

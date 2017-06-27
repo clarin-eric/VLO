@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -49,9 +50,8 @@ import org.apache.solr.common.SolrDocument;
 public class MetadataImporter {
 
 
-    public static VloConfig config;
-
-    public static LanguageCodeUtils languageCodeUtils;
+    private final VloConfig config;
+    private final FacetMappingFactory mappingFactory;
 
     //data roots passed from command line    
     private final String clDatarootsList;
@@ -81,35 +81,7 @@ public class MetadataImporter {
      * _type_ are applied to the value before storing the new value in the solr
      * document.
      */
-    final static Map<String, PostProcessor> POST_PROCESSORS = new HashMap<>();
-
-    static {
-        POST_PROCESSORS.put(FacetConstants.FIELD_ID, new IdPostProcessor());
-        POST_PROCESSORS.put(FacetConstants.FIELD_CONTINENT, new ContinentNamePostProcessor());
-        POST_PROCESSORS.put(FacetConstants.FIELD_COUNTRY, new CountryNamePostProcessor());
-        POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGE_CODE, new LanguageCodePostProcessor());
-        POST_PROCESSORS.put(FacetConstants.FIELD_LANGUAGE_NAME, new LanguageNamePostProcessor());
-        POST_PROCESSORS.put(FacetConstants.FIELD_AVAILABILITY, new AvailabilityPostProcessor());
-        POST_PROCESSORS.put(FacetConstants.FIELD_LICENSE_TYPE, new LicenseTypePostProcessor());
-        POST_PROCESSORS.put(FacetConstants.FIELD_ORGANISATION, new OrganisationPostProcessor());
-        POST_PROCESSORS.put(FacetConstants.FIELD_TEMPORAL_COVERAGE, new TemporalCoveragePostProcessor());
-        POST_PROCESSORS.put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostProcessor());
-        POST_PROCESSORS.put(FacetConstants.FIELD_CLARIN_PROFILE, new CMDIComponentProfileNamePostProcessor());
-        POST_PROCESSORS.put(FacetConstants.FIELD_RESOURCE_CLASS, new ResourceClassPostProcessor());
-        POST_PROCESSORS.put(FacetConstants.FIELD_LICENSE, new LicensePostProcessor());
-        POST_PROCESSORS.put(FacetConstants.FIELD_NAME, new NamePostProcessor());
-    }
-
-    /**
-     * Constructor
-     */
-    protected MetadataImporter() {
-        this(null);
-    }
-
-    public MetadataImporter(String clDatarootsList) {
-        this.clDatarootsList = clDatarootsList;
-    }
+    protected final Map<String, PostProcessor> postProcessors;
 
     /**
      * Contains MDSelflinks (usually). Just to know what we have already done.
@@ -127,6 +99,42 @@ public class MetadataImporter {
     protected int nrOfFilesWithoutId = 0;
     protected int nrOfFilesWithError = 0;
     protected int nrOfFilesTooLarge = 0;
+
+    
+    /**
+     * Constructor
+     * @param config
+     * @param languageCodeUtils
+     */
+    protected MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils) {
+        this(config, languageCodeUtils, new FacetMappingFactory(config), null);
+    }
+
+    public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, String clDatarootsList) {
+        this.config = config;
+        this.clDatarootsList = clDatarootsList;
+        this.mappingFactory = mappingFactory;
+        this.postProcessors = registerPostProcessors(config, languageCodeUtils);
+    }
+
+    protected static Map<String, PostProcessor> registerPostProcessors(VloConfig config, LanguageCodeUtils languageCodeUtils) {
+        return ImmutableMap.<String, PostProcessor>builder()
+        .put(FacetConstants.FIELD_ID, new IdPostProcessor())
+        .put(FacetConstants.FIELD_CONTINENT, new ContinentNamePostProcessor())
+        .put(FacetConstants.FIELD_COUNTRY, new CountryNamePostProcessor(config))
+        .put(FacetConstants.FIELD_LANGUAGE_CODE, new LanguageCodePostProcessor(config, languageCodeUtils))
+        .put(FacetConstants.FIELD_LANGUAGE_NAME, new LanguageNamePostProcessor(languageCodeUtils))
+        .put(FacetConstants.FIELD_AVAILABILITY, new AvailabilityPostProcessor(config))
+        .put(FacetConstants.FIELD_LICENSE_TYPE, new LicenseTypePostProcessor(config))
+        .put(FacetConstants.FIELD_ORGANISATION, new OrganisationPostProcessor(config))
+        .put(FacetConstants.FIELD_TEMPORAL_COVERAGE, new TemporalCoveragePostProcessor())
+        .put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostProcessor(config))
+        .put(FacetConstants.FIELD_CLARIN_PROFILE, new CMDIComponentProfileNamePostProcessor(config))
+        .put(FacetConstants.FIELD_RESOURCE_CLASS, new ResourceClassPostProcessor())
+        .put(FacetConstants.FIELD_LICENSE, new LicensePostProcessor(config))
+        .put(FacetConstants.FIELD_NAME, new NamePostProcessor())
+                .build();
+    }   
 
     /**
      * Retrieve all files with VALID_CMDI_EXTENSIONS from all DataRoot entries
@@ -158,7 +166,7 @@ public class MetadataImporter {
                     solrServer.deleteByQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
                     LOG.info("Deleting data of provider done.");
                 }
-                CMDIDataProcessor processor = new CMDIParserVTDXML(POST_PROCESSORS, config, false);
+                final CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, false);
                 List<List<File>> centreFilesList = getFilesFromDataRoot(dataRoot.getRootFile());
                 // import files from every endpoint
                 for (List<File> centreFiles : centreFilesList) {

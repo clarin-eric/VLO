@@ -11,7 +11,7 @@ public class AvailabilityPostProcessorTest extends ImporterTestcase {
 
     @Test
     public void testLanguageCode() {
-        PostProcessor processor = new AvailabilityPostProcessor();    
+        PostProcessor processor = new AvailabilityPostProcessor(config);    
         List<String> normalizedVals;
         
         //"Apache Licence 2.0" -> "PUB;BY"

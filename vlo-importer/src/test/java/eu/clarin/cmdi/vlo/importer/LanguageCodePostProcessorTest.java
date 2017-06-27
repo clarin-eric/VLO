@@ -18,7 +18,7 @@ public class LanguageCodePostProcessorTest extends ImporterTestcase {
 
     @Test
     public void testLanguageCode() {
-        PostProcessor processor = new LanguageCodePostProcessor();
+        PostProcessor processor = new LanguageCodePostProcessor(config, languageCodeUtils);
         assertEquals("code:nld", processor.process("NL", null).get(0));
         assertEquals("code:eng", processor.process("en", null).get(0));
         assertEquals("code:fry", processor.process("fry", null).get(0));

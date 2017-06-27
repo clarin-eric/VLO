@@ -220,7 +220,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         modifyConfig(rootFile);
         
         MetadataImporter importer;
-        importer = new MetadataImporter() {
+        importer = new MetadataImporter(config, languageCodeUtils) {
             /*
              * Because in the test, the solr server is not assumed to be 
              * available, override the importer's class startImport method by
@@ -246,7 +246,7 @@ public class MetadataImporterTest extends ImporterTestcase {
                         LOG.info("Start of processing: " + 
                                 dataRoot.getOriginName());
                         CMDIDataProcessor processor = new 
-                                CMDIParserVTDXML(POST_PROCESSORS, config, true);
+                                CMDIParserVTDXML(postProcessors, config, new FacetMappingFactory(config), true);
                         List<File> files = 
                                 getFilesFromDataRoot(dataRoot.getRootFile()).get(0);
                         for (File file : files) {
@@ -312,6 +312,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         dataRoot.setTostrip("");
         dataRoot.setPrefix("http://example.com");
         config.setDataRoots(Collections.singletonList(dataRoot));
+        config.setFacetConceptsFile(ImporterTestcase.getTestFacetConceptFilePath());
     }
 
 }

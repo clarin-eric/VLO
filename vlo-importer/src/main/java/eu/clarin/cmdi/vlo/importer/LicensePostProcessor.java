@@ -1,10 +1,15 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class LicensePostProcessor extends PostProcessorsWithVocabularyMap {
+
+    public LicensePostProcessor(VloConfig config) {
+        super(config);
+    }
 
     @Override
     public List<String> process(String value, CMDIData cmdiData) {
@@ -14,7 +19,7 @@ public class LicensePostProcessor extends PostProcessorsWithVocabularyMap {
 
     @Override
     public String getNormalizationMapURL() {
-        return MetadataImporter.config.getLicenseURIMapUrl();
+        return getConfig().getLicenseURIMapUrl();
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -18,6 +19,10 @@ import java.util.List;
  * @author Twan Goosen
  */
 public class LicenseTypePostProcessor extends PostProcessorsWithVocabularyMap {
+
+    public LicenseTypePostProcessor(VloConfig config) {
+        super(config);
+    }
 
     @Override
     public List<String> process(final String value, CMDIData cmdiData) {
@@ -58,7 +63,7 @@ public class LicenseTypePostProcessor extends PostProcessorsWithVocabularyMap {
 
     @Override
     public String getNormalizationMapURL() {
-        return MetadataImporter.config.getLicenseTypeMapUrl();
+        return getConfig().getLicenseTypeMapUrl();
     }
 
     @Override

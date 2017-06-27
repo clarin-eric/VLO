@@ -30,6 +30,12 @@ import java.util.List;
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 class LanguageNamePostProcessor implements PostProcessor {
+    
+    private final LanguageCodeUtils languageCodeUtils;
+
+    public LanguageNamePostProcessor(LanguageCodeUtils languageCodeutils) {
+        this.languageCodeUtils = languageCodeutils;
+    }
 
     @Override
     public List<String> process(String value, CMDIData cmdiData) {
@@ -55,7 +61,6 @@ class LanguageNamePostProcessor implements PostProcessor {
      * }
      */
     private List<String> returnNameForCode(String value) {
-        final LanguageCodeUtils languageCodeUtils = MetadataImporter.languageCodeUtils;
         final String code = value.substring(CODE_PREFIX.length());
         final String languageName = languageCodeUtils.getLanguageNameForLanguageCode(code.toUpperCase());
         return Collections.singletonList(languageName);

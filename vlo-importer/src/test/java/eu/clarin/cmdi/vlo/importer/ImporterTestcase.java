@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import org.apache.commons.io.FileUtils;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
@@ -17,6 +16,7 @@ public abstract class ImporterTestcase {
 
     private final VloConfigFactory configFactory = new DefaultVloConfigFactory();
     protected VloConfig config;
+    protected LanguageCodeUtils languageCodeUtils;
     private char ch = 'a';
 
     @Rule
@@ -28,19 +28,12 @@ public abstract class ImporterTestcase {
         return file;
     }
 
-    @After
-    public void cleanup() {
-        MetadataImporter.config = null;
-    }
-
     @Before
     public void setup() throws Exception {
         // read the configuration defined in the packaged configuration file
         // and configure to use bundled mappings
         config = DefaultVloConfigFactory.configureDefaultMappingLocations(configFactory.newConfig());
-       
-        MetadataImporter.config = config;
-        MetadataImporter.languageCodeUtils = new LanguageCodeUtils(config);
+        languageCodeUtils = new LanguageCodeUtils(config);
     }
 
     public static String getTestFacetConceptFilePath() {

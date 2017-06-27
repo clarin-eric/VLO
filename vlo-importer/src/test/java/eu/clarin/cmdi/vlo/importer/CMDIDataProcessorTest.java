@@ -2,7 +2,6 @@ package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,8 +16,10 @@ import org.junit.Test;
 
 public class CMDIDataProcessorTest extends ImporterTestcase {
 
+    protected FacetMappingFactory facetMappingFactory;
+
     private CMDIDataProcessor getDataParser() {
-        return new CMDIParserVTDXML(MetadataImporter.POST_PROCESSORS, config, true);
+        return new CMDIParserVTDXML(MetadataImporter.registerPostProcessors(config, languageCodeUtils), config, facetMappingFactory, true);
     }
 
     @Before
@@ -27,6 +28,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         super.setup();
         // make sure the mapping file for testing is used
         config.setFacetConceptsFile(getTestFacetConceptFilePath());
+        facetMappingFactory = new FacetMappingFactory(config);
     }
 
     @Test

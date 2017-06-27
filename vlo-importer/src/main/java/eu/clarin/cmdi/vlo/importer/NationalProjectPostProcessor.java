@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,6 +18,10 @@ public class NationalProjectPostProcessor extends PostProcessorsWithVocabularyMa
 
     private final static Logger LOG = LoggerFactory.getLogger(NationalProjectPostProcessor.class);
 
+    public NationalProjectPostProcessor(VloConfig config) {
+        super(config);
+    }
+
     /**
      * Returns the national project based on the mapping in
      * Configuration.getNationalProjectMapUrl() If no mapping was found empty
@@ -31,7 +36,7 @@ public class NationalProjectPostProcessor extends PostProcessorsWithVocabularyMa
 
     @Override
     public String getNormalizationMapURL() {
-        return MetadataImporter.config.getNationalProjectMapping();
+        return getConfig().getNationalProjectMapping();
     }
 
     @Override

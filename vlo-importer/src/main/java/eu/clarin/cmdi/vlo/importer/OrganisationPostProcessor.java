@@ -1,9 +1,14 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.Arrays;
 import java.util.List;
 
 public class OrganisationPostProcessor extends PostProcessorsWithVocabularyMap {
+
+    public OrganisationPostProcessor(VloConfig config) {
+        super(config);
+    }
 
     /**
      * Splits values for organisation facet at delimiter ';' and replaces
@@ -29,7 +34,7 @@ public class OrganisationPostProcessor extends PostProcessorsWithVocabularyMap {
 
     @Override
     public String getNormalizationMapURL() {
-        return MetadataImporter.config.getOrganisationNamesUrl();
+        return getConfig().getOrganisationNamesUrl();
     }
 
     private String normalizeInputString(String value) {

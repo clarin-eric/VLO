@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.CommonUtils;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,11 +9,15 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CountryNamePostProcessor implements PostProcessor {
+public class CountryNamePostProcessor extends AbstractPostProcessor {
 
     private final static Logger LOG = LoggerFactory.getLogger(CountryNamePostProcessor.class);
 
     private Map<String, String> countryCodeMap;
+
+    public CountryNamePostProcessor(VloConfig config) {
+        super(config);
+    }
 
     /**
      * Returns the country name based on the mapping defined in the CMDI
@@ -45,7 +50,7 @@ public class CountryNamePostProcessor implements PostProcessor {
     }
 
     private Map<String, String> createCountryCodeMap() {
-        final String countryComponentUrl = MetadataImporter.config.getCountryComponentUrl();
+        final String countryComponentUrl = getConfig().getCountryComponentUrl();
         LOG.info("Creating country code map from {}", countryComponentUrl);
         try {
             Map<String, String> result = CommonUtils.createCMDIComponentItemMap(countryComponentUrl);

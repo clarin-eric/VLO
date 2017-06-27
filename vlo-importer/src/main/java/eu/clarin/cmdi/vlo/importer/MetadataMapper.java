@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
 
 public class MetadataMapper {
@@ -91,11 +92,12 @@ public class MetadataMapper {
             LOG.info("Reading configuration from " + configUrl.toString());
             
             final XmlVloConfigFactory configFactory = new XmlVloConfigFactory(configUrl);
-            MetadataImporter.config = configFactory.newConfig();
-            MetadataImporter.config.setPrintMapping(true);
-            MetadataImporter.languageCodeUtils = new LanguageCodeUtils(MetadataImporter.config);
+            final VloConfig config = configFactory.newConfig();
+            config.setPrintMapping(true);
+            final LanguageCodeUtils languageCodeUtils = new LanguageCodeUtils(config);
+            final FacetMappingFactory facetMappingFactory = new FacetMappingFactory(config);
             
-            CMDIDataProcessor processor = new CMDIParserVTDXML(MetadataImporter.POST_PROCESSORS, MetadataImporter.config, false);
+            CMDIDataProcessor processor = new CMDIParserVTDXML(MetadataImporter.registerPostProcessors(config, languageCodeUtils), config, facetMappingFactory, false);
             
             if (recordFile == null) {
                 String message = "Could not get record filename - stopping.";
@@ -111,9 +113,9 @@ public class MetadataMapper {
                 System.out.println(cmdiData.getSolrDocument().getField(field));
             
             // finished importing
-            if (MetadataImporter.config.printMapping()) {
+            if (config.printMapping()) {
                 File file = new File("xsdMapping.txt");
-                FacetMappingFactory.printMapping(file);
+                facetMappingFactory.printMapping(file);
                 LOG.info("Printed facetMapping in " + file);
             }
         } catch (Exception ex) {

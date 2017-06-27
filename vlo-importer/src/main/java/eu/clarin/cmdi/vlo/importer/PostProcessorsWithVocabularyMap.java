@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.InputStream;
 import java.util.Map;
 
@@ -24,13 +25,17 @@ import javax.xml.bind.JAXBException;
  * @author dostojic
  * 
  */
-public abstract class PostProcessorsWithVocabularyMap implements PostProcessor, NormalizationService {
+public abstract class PostProcessorsWithVocabularyMap extends AbstractPostProcessor implements NormalizationService {
 
     private final static Logger LOG = LoggerFactory.getLogger(PostProcessorsWithVocabularyMap.class);
 
     private final MappingDefinitionResolver mappingDefinitionResolver = new MappingDefinitionResolver(PostProcessorsWithVocabularyMap.class);
 
     private NormalizationVocabulary vocabulary;
+
+    public PostProcessorsWithVocabularyMap(VloConfig config) {
+        super(config);
+    }
 
     @Override
     public String normalize(String value) {
