@@ -19,8 +19,6 @@ package eu.clarin.cmdi.vlo.importer;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
-import eu.clarin.cmdi.vlo.importer.FacetMappingFactory;
-import eu.clarin.cmdi.vlo.importer.MetadataImporter;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -123,11 +121,12 @@ public class MetadataImporterRunner {
         final XmlVloConfigFactory configFactory = new XmlVloConfigFactory(configUrl);
         final VloConfig config = configFactory.newConfig();
         final LanguageCodeUtils languageCodeUtils = new LanguageCodeUtils(config);
-        final FacetMappingFactory facetMappingFactory = new FacetMappingFactory(config);
+        final VLOMarshaller marshaller = new VLOMarshaller();
+        final FacetMappingFactory facetMappingFactory = new FacetMappingFactory(config, marshaller);
 
         // optionally, modify the configuration here
         // create and start the importer
-        final MetadataImporter importer = new MetadataImporter(config, languageCodeUtils, facetMappingFactory, cldrList);
+        final MetadataImporter importer = new MetadataImporter(config, languageCodeUtils, facetMappingFactory, marshaller, cldrList);
         importer.startImport();
 
         // finished importing

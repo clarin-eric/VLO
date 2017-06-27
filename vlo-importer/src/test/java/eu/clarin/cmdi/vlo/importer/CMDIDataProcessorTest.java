@@ -19,7 +19,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     protected FacetMappingFactory facetMappingFactory;
 
     private CMDIDataProcessor getDataParser() {
-        return new CMDIParserVTDXML(MetadataImporter.registerPostProcessors(config, languageCodeUtils), config, facetMappingFactory, true);
+        return new CMDIParserVTDXML(MetadataImporter.registerPostProcessors(config, languageCodeUtils), config, facetMappingFactory, marshaller, true);
     }
 
     @Before
@@ -28,7 +28,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         super.setup();
         // make sure the mapping file for testing is used
         config.setFacetConceptsFile(getTestFacetConceptFilePath());
-        facetMappingFactory = new FacetMappingFactory(config);
+        facetMappingFactory = new FacetMappingFactory(config, marshaller);
     }
 
     @Test

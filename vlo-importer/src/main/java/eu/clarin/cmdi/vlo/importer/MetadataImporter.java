@@ -49,13 +49,13 @@ import org.apache.solr.common.SolrDocument;
  */
 public class MetadataImporter {
 
-
     private final VloConfig config;
     private final FacetMappingFactory mappingFactory;
+    private final VLOMarshaller marshaller;
 
     //data roots passed from command line    
     private final String clDatarootsList;
-    
+
     private static final int SOLR_SERVER_THREAD_COUNT = 2;
     /**
      * Defines which files to try and parse. In this case all files ending in
@@ -100,41 +100,32 @@ public class MetadataImporter {
     protected int nrOfFilesWithError = 0;
     protected int nrOfFilesTooLarge = 0;
 
-    
-    /**
-     * Constructor
-     * @param config
-     * @param languageCodeUtils
-     */
-    protected MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils) {
-        this(config, languageCodeUtils, new FacetMappingFactory(config), null);
-    }
-
-    public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, String clDatarootsList) {
+    public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList) {
         this.config = config;
         this.clDatarootsList = clDatarootsList;
         this.mappingFactory = mappingFactory;
         this.postProcessors = registerPostProcessors(config, languageCodeUtils);
+        this.marshaller = marshaller;
     }
 
     protected static Map<String, PostProcessor> registerPostProcessors(VloConfig config, LanguageCodeUtils languageCodeUtils) {
         return ImmutableMap.<String, PostProcessor>builder()
-        .put(FacetConstants.FIELD_ID, new IdPostProcessor())
-        .put(FacetConstants.FIELD_CONTINENT, new ContinentNamePostProcessor())
-        .put(FacetConstants.FIELD_COUNTRY, new CountryNamePostProcessor(config))
-        .put(FacetConstants.FIELD_LANGUAGE_CODE, new LanguageCodePostProcessor(config, languageCodeUtils))
-        .put(FacetConstants.FIELD_LANGUAGE_NAME, new LanguageNamePostProcessor(languageCodeUtils))
-        .put(FacetConstants.FIELD_AVAILABILITY, new AvailabilityPostProcessor(config))
-        .put(FacetConstants.FIELD_LICENSE_TYPE, new LicenseTypePostProcessor(config))
-        .put(FacetConstants.FIELD_ORGANISATION, new OrganisationPostProcessor(config))
-        .put(FacetConstants.FIELD_TEMPORAL_COVERAGE, new TemporalCoveragePostProcessor())
-        .put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostProcessor(config))
-        .put(FacetConstants.FIELD_CLARIN_PROFILE, new CMDIComponentProfileNamePostProcessor(config))
-        .put(FacetConstants.FIELD_RESOURCE_CLASS, new ResourceClassPostProcessor())
-        .put(FacetConstants.FIELD_LICENSE, new LicensePostProcessor(config))
-        .put(FacetConstants.FIELD_NAME, new NamePostProcessor())
+                .put(FacetConstants.FIELD_ID, new IdPostProcessor())
+                .put(FacetConstants.FIELD_CONTINENT, new ContinentNamePostProcessor())
+                .put(FacetConstants.FIELD_COUNTRY, new CountryNamePostProcessor(config))
+                .put(FacetConstants.FIELD_LANGUAGE_CODE, new LanguageCodePostProcessor(config, languageCodeUtils))
+                .put(FacetConstants.FIELD_LANGUAGE_NAME, new LanguageNamePostProcessor(languageCodeUtils))
+                .put(FacetConstants.FIELD_AVAILABILITY, new AvailabilityPostProcessor(config))
+                .put(FacetConstants.FIELD_LICENSE_TYPE, new LicenseTypePostProcessor(config))
+                .put(FacetConstants.FIELD_ORGANISATION, new OrganisationPostProcessor(config))
+                .put(FacetConstants.FIELD_TEMPORAL_COVERAGE, new TemporalCoveragePostProcessor())
+                .put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostProcessor(config))
+                .put(FacetConstants.FIELD_CLARIN_PROFILE, new CMDIComponentProfileNamePostProcessor(config))
+                .put(FacetConstants.FIELD_RESOURCE_CLASS, new ResourceClassPostProcessor())
+                .put(FacetConstants.FIELD_LICENSE, new LicensePostProcessor(config))
+                .put(FacetConstants.FIELD_NAME, new NamePostProcessor())
                 .build();
-    }   
+    }
 
     /**
      * Retrieve all files with VALID_CMDI_EXTENSIONS from all DataRoot entries
@@ -166,7 +157,7 @@ public class MetadataImporter {
                     solrServer.deleteByQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
                     LOG.info("Deleting data of provider done.");
                 }
-                final CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, false);
+                final CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
                 List<List<File>> centreFilesList = getFilesFromDataRoot(dataRoot.getRootFile());
                 // import files from every endpoint
                 for (List<File> centreFiles : centreFilesList) {
@@ -194,7 +185,7 @@ public class MetadataImporter {
                             LOG.info("Skipping {} because it is too large.", file.getAbsolutePath());
                             nrOfFilesTooLarge++;
                             ignoredFileSet.add(file);
-                        } else if(createHierarchyGraph) {
+                        } else if (createHierarchyGraph) {
                             String mdSelfLink = null;
                             try {
                                 mdSelfLink = processor.extractMdSelfLink(file);
@@ -210,7 +201,7 @@ public class MetadataImporter {
                     centreFiles.removeAll(ignoredFileSet);
 
                     // inform structure graph about MdSelfLinks of all files in this collection
-                    if(createHierarchyGraph) {
+                    if (createHierarchyGraph) {
                         ResourceStructureGraph.setOccurringMdSelfLinks(mdSelfLinkSet);
                         LOG.info("...extracted {} mdSelfLinks", mdSelfLinkSet.size());
                     }
@@ -658,7 +649,7 @@ public class MetadataImporter {
     /**
      * Update "days since last import" field for all Solr records of dataRoot.
      * Notice that it will not touch records that have a "last seen" value newer
-     * than today. Therefore this should be called <em>after</em> normal 
+     * than today. Therefore this should be called <em>after</em> normal
      * processing of data root!
      *
      * @param dataRoot
@@ -735,6 +726,19 @@ public class MetadataImporter {
         }
 
         LOG.info("Updating \"days since last import\" done.");
+    }
+    
+    /**
+     * test constructor
+     * @param config
+     * @param languageCodeUtils 
+     */
+    protected MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils) {
+        this(config, languageCodeUtils, new VLOMarshaller());
+    }
+
+    private MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, VLOMarshaller marshaller) {
+        this(config, languageCodeUtils, new FacetMappingFactory(config, marshaller), marshaller, null);
     }
 
 }

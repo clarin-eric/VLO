@@ -22,7 +22,10 @@ public class VLOMarshaller {
 
     private final static Logger logger = LoggerFactory.getLogger(VLOMarshaller.class);
 
-    private final static Map<String, FacetConceptMapping> MAPPING_CACHE = new ConcurrentHashMap<>();
+    private final Map<String, FacetConceptMapping> mappingCache = new ConcurrentHashMap<>();
+
+    public VLOMarshaller() {
+    }
 
     /**
      * Get facet concepts mapping from a facet concept mapping file. Unmarshalled
@@ -31,8 +34,8 @@ public class VLOMarshaller {
      * @param facetConcepts name of the facet concepts file
      * @return the facet concept mapping
      */
-    public static FacetConceptMapping getFacetConceptMapping(String facetConcepts) {
-        if (!MAPPING_CACHE.containsKey(facetConcepts)) {
+    public final FacetConceptMapping getFacetConceptMapping(String facetConcepts) {
+        if (!mappingCache.containsKey(facetConcepts)) {
             // unmarshall map for file
             final MappingDefinitionResolver mappingDefinitionResolver
                     = new MappingDefinitionResolver(VLOMarshaller.class);
@@ -51,9 +54,9 @@ public class VLOMarshaller {
                 logger.error("Could not process facets file: {}", facetConcepts);
                 return null;
             }
-            MAPPING_CACHE.put(facetConcepts, unmarshal(is));
+            mappingCache.put(facetConcepts, unmarshal(is));
         }
-        return MAPPING_CACHE.get(facetConcepts);
+        return mappingCache.get(facetConcepts);
     }
 
     /**
@@ -62,7 +65,7 @@ public class VLOMarshaller {
      * @param inputStream
      * @return
      */
-    static FacetConceptMapping unmarshal(InputStream inputStream) {
+    public final FacetConceptMapping unmarshal(InputStream inputStream) {
         FacetConceptMapping result;
 
         try {
@@ -83,7 +86,7 @@ public class VLOMarshaller {
      * @param outputFile
      * @return
      */
-    static String marshal(FacetConceptMapping outputFile) {
+    public final String marshal(FacetConceptMapping outputFile) {
         try {
             JAXBContext jc = JAXBContext.newInstance(FacetConceptMapping.class);
             Marshaller marshaller = jc.createMarshaller();

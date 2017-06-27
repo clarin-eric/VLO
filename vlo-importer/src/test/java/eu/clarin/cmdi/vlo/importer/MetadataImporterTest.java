@@ -211,14 +211,13 @@ public class MetadataImporterTest extends ImporterTestcase {
 
     private List<SolrInputDocument> importData(File rootFile) throws MalformedURLException {
         final List<SolrInputDocument> result = new ArrayList<SolrInputDocument>();
-                
+
         /*
          * Read configuration in ImporterTestCase.setup and change the setup to
          * suit the test.
          */
-        
         modifyConfig(rootFile);
-        
+
         MetadataImporter importer;
         importer = new MetadataImporter(config, languageCodeUtils) {
             /*
@@ -234,29 +233,28 @@ public class MetadataImporterTest extends ImporterTestcase {
              */
             @Override
             void startImport() throws MalformedURLException {
-                
+
                 // make sure the mapping file for testing is used
                 config.setFacetConceptsFile(getTestFacetConceptFilePath());
-                
+
                 List<DataRoot> dataRoots = checkDataRoots();
                 long start = System.currentTimeMillis();
                 try {
 
                     for (DataRoot dataRoot : dataRoots) {
-                        LOG.info("Start of processing: " + 
-                                dataRoot.getOriginName());
-                        CMDIDataProcessor processor = new 
-                                CMDIParserVTDXML(postProcessors, config, new FacetMappingFactory(config), true);
-                        List<File> files = 
-                                getFilesFromDataRoot(dataRoot.getRootFile()).get(0);
+                        LOG.info("Start of processing: "
+                                + dataRoot.getOriginName());
+                        CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, new FacetMappingFactory(config, marshaller), marshaller, true);
+                        List<File> files
+                                = getFilesFromDataRoot(dataRoot.getRootFile()).get(0);
                         for (File file : files) {
-                            if (config.getMaxFileSize () > 0
-                                    && file.length() > 
-                                    config.getMaxFileSize()) {
-                                LOG.info("Skipping " + file.getAbsolutePath() + 
-                                        " because it is too large.");
+                            if (config.getMaxFileSize() > 0
+                                    && file.length()
+                                    > config.getMaxFileSize()) {
+                                LOG.info("Skipping " + file.getAbsolutePath()
+                                        + " because it is too large.");
                             } else {
-                                LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());                
+                                LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
                                 /*
                                  * Anticipate on the solr exception that will
                                  * never by raised because sendDocs is overriden
@@ -272,22 +270,22 @@ public class MetadataImporterTest extends ImporterTestcase {
                         if (!docs.isEmpty()) {
                             sendDocs();
                         }
-                        LOG.info("End of processing: " + 
-                                dataRoot.getOriginName());
+                        LOG.info("End of processing: "
+                                + dataRoot.getOriginName());
                     }
-                    
+
                 } catch (IOException e) {
                     LOG.error("error updating files:\n", e);
                 } finally {
 
                 }
                 long took = (System.currentTimeMillis() - start) / 1000;
-                LOG.info("Found " + nrOfFilesWithoutId + 
-                        " file(s) without an id. (id is generated based on fileName but that may not be unique)");
-                LOG.info("Found " + nrOfFilesWithError + 
-                        " file(s) with errors.");
-                LOG.info("Update of " + nrOFDocumentsSend + " took " + took + 
-                        " secs. Total nr of files analyzed " + nrOfFilesAnalyzed);
+                LOG.info("Found " + nrOfFilesWithoutId
+                        + " file(s) without an id. (id is generated based on fileName but that may not be unique)");
+                LOG.info("Found " + nrOfFilesWithError
+                        + " file(s) with errors.");
+                LOG.info("Update of " + nrOFDocumentsSend + " took " + took
+                        + " secs. Total nr of files analyzed " + nrOfFilesAnalyzed);
             }
 
             /*
@@ -295,7 +293,7 @@ public class MetadataImporterTest extends ImporterTestcase {
              */
             @Override
             protected void sendDocs() throws IOException {
-                
+
                 result.addAll(this.docs);
                 docs = new ArrayList<SolrInputDocument>();
             }

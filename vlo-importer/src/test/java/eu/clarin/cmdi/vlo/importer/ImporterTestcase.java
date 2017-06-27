@@ -17,6 +17,7 @@ public abstract class ImporterTestcase {
     private final VloConfigFactory configFactory = new DefaultVloConfigFactory();
     protected VloConfig config;
     protected LanguageCodeUtils languageCodeUtils;
+    protected VLOMarshaller marshaller;
     private char ch = 'a';
 
     @Rule
@@ -34,6 +35,7 @@ public abstract class ImporterTestcase {
         // and configure to use bundled mappings
         config = DefaultVloConfigFactory.configureDefaultMappingLocations(configFactory.newConfig());
         languageCodeUtils = new LanguageCodeUtils(config);
+        marshaller = new VLOMarshaller();
     }
 
     public static String getTestFacetConceptFilePath() {

@@ -28,7 +28,7 @@ public class FacetConceptMappingTest {
         content += "    </facetConcept>\n";
         content += "</facetConcepts>\n";
 
-        FacetConceptMapping conceptMapping = VLOMarshaller.unmarshal(new ByteArrayInputStream(content.getBytes()));
+        FacetConceptMapping conceptMapping = new VLOMarshaller().unmarshal(new ByteArrayInputStream(content.getBytes()));
         List<FacetConcept> facetConcepts = conceptMapping.getFacetConcepts();
         assertEquals(2, facetConcepts.size());
         FacetConcept facetConcept = facetConcepts.get(0);

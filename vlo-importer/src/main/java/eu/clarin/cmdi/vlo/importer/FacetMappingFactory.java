@@ -36,9 +36,11 @@ public class FacetMappingFactory {
      * Our one instance of the FMF.
      */
     private final VloConfig config;
+    private final VLOMarshaller marshaller;
 
-    public FacetMappingFactory(VloConfig config) {
+    public FacetMappingFactory(VloConfig config, VLOMarshaller marshaller) {
         this.config = config;
+        this.marshaller = marshaller;
     }
     
     /**
@@ -90,7 +92,7 @@ public class FacetMappingFactory {
         LOG.debug("Creating mapping for {} using {} (useLocalXSDCache: {})", xsd, facetConcepts, useLocalXSDCache);
         FacetMapping result = new FacetMapping();
         // Gets the configuration. VLOMarshaller only reads in the facetconceptmapping.xml file and returns the result (though the reading in is implicit).
-        FacetConceptMapping conceptMapping = VLOMarshaller.getFacetConceptMapping(facetConcepts);
+        FacetConceptMapping conceptMapping = marshaller.getFacetConceptMapping(facetConcepts);
         try {
             //The magic
             Map<String, List<Pattern>> conceptLinkPathMapping = createConceptLinkPathMapping(xsd, useLocalXSDCache);

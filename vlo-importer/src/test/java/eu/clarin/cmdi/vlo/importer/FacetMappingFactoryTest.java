@@ -30,7 +30,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
     public void setup() throws Exception {
         super.setup();
         config.setFacetConceptsFile(FACETCONCEPTS_FILENAME);
-        facetMappingFactory = new FacetMappingFactory(config);
+        facetMappingFactory = new FacetMappingFactory(config, marshaller);
     }
 
     @Test

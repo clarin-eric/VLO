@@ -38,12 +38,14 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private final VloConfig config;
     private final Vocabulary CCR;
     private final FacetMappingFactory facetMappingFactory;
+    private final VLOMarshaller marshaller;
     
-    public CMDIParserVTDXML(Map<String, PostProcessor> postProcessors, VloConfig config, FacetMappingFactory facetMappingFactory, Boolean useLocalXSDCache) {
+    public CMDIParserVTDXML(Map<String, PostProcessor> postProcessors, VloConfig config, FacetMappingFactory facetMappingFactory, VLOMarshaller marshaller, Boolean useLocalXSDCache) {
         this.postProcessors = postProcessors;
         this.useLocalXSDCache = useLocalXSDCache;
         this.config = config;
         this.facetMappingFactory = facetMappingFactory;
+        this.marshaller = marshaller;
         this.CCR = new Vocabulary(config.getConceptRegistryUrl());
     }
 
@@ -291,7 +293,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                 if (postProcessors.get(fieldWithPostProcessor).doesProcessNoValue()) {
                     //get properties from facet concept definition
                     if (facetConceptMap == null) {
-                        final FacetConceptMapping facetConceptMapping = VLOMarshaller.getFacetConceptMapping(config.getFacetConceptsFile());
+                        final FacetConceptMapping facetConceptMapping = marshaller.getFacetConceptMapping(config.getFacetConceptsFile());
                         facetConceptMap = facetConceptMapping.getFacetConceptMap();
                     }
                     final FacetConceptMapping.FacetConcept facetConcept = facetConceptMap.get(fieldWithPostProcessor);
