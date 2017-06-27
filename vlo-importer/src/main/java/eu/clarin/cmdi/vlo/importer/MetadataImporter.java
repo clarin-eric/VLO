@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -35,6 +36,11 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import static java.time.temporal.ChronoUnit.DAYS;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -52,6 +58,7 @@ public class MetadataImporter {
     private final VloConfig config;
     private final FacetMappingFactory mappingFactory;
     private final VLOMarshaller marshaller;
+    private ExecutorService fileProcessingPool;
 
     //data roots passed from command line    
     private final String clDatarootsList;
@@ -145,6 +152,9 @@ public class MetadataImporter {
                 if (config.getDeleteAllFirst()) {
                     deleteAll();
                 }
+
+                fileProcessingPool = Executors.newFixedThreadPool(fileProcessingThreads);
+
                 // Import the specified data roots
                 for (DataRoot dataRoot : dataRoots) {
                     processDataRoot(dataRoot);
@@ -158,6 +168,8 @@ public class MetadataImporter {
                 LOG.error("Also see vlo_solr server logs for more information");
             } catch (IOException e) {
                 LOG.error("error updating files:\n", e);
+            } catch (InterruptedException ex) {
+                LOG.error("Interrupted while importing", ex);
             } finally {
                 try {
                     if (solrServer != null) {
@@ -170,6 +182,9 @@ public class MetadataImporter {
             }
             logStatistics(start);
         } finally {
+            if (fileProcessingPool != null) {
+                fileProcessingPool.shutdown();
+            }
             solrServer.shutdown();
         }
     }
@@ -181,7 +196,7 @@ public class MetadataImporter {
         LOG.info("Deleting original data done.");
     }
 
-    protected void processDataRoot(DataRoot dataRoot) throws SolrServerException, IOException {
+    protected void processDataRoot(DataRoot dataRoot) throws SolrServerException, IOException, InterruptedException {
         LOG.info("Start of processing: " + dataRoot.getOriginName());
         if (dataRoot.deleteFirst()) {
             LOG.info("Deleting data for data provider: " + dataRoot.getOriginName());
@@ -197,28 +212,38 @@ public class MetadataImporter {
         LOG.info("End of processing: " + dataRoot.getOriginName());
     }
 
-    protected void processCentreFiles(final CMDIDataProcessor processor, List<File> centreFiles, DataRoot dataRoot) throws IOException, SolrServerException {
+    protected void processCentreFiles(final CMDIDataProcessor processor, final List<File> centreFiles, final DataRoot dataRoot) throws IOException, SolrServerException, InterruptedException {
         LOG.info("Processing directory: {}", centreFiles.get(0).getParent());
         String centerDirName = centreFiles.get(0).getParentFile().getName();
 
         // decide if hierarchy graph will be created for this centre
-        boolean createHierarchyGraph = false;
+        final boolean createHierarchyGraph;
         if (!config.isProcessHierarchies()) {
             createHierarchyGraph = false;
         } else if (dataRoot.getProcessHierarchyDirList().contains(centerDirName)) {
             createHierarchyGraph = true;
         } else if (dataRoot.getProcessHierarchyDirList().contains("*") & !dataRoot.getIgnoreHierarchyDirList().contains(centerDirName)) {
             createHierarchyGraph = true;
+        } else {
+            createHierarchyGraph = false;
         }
         LOG.info("Create structure graph: {}", createHierarchyGraph);
 
-        // identify mdSelfLinks and remove too large files from center file list
+        // pre-process: identify mdSelfLinks and remove too large files from center file list
         LOG.info("Checking file list...");
-        Set<String> mdSelfLinkSet = new HashSet<>();
-        Set<File> ignoredFileSet = new HashSet<>();
-        for (File file : centreFiles) {
-            processFile(processor, file, createHierarchyGraph, ignoredFileSet, mdSelfLinkSet);
-        }
+        final Set<String> mdSelfLinkSet = Sets.newConcurrentHashSet();
+        final Set<File> ignoredFileSet = Sets.newConcurrentHashSet();
+
+        //(perform in thread pool)
+        final Stream<Callable> preProcessors = centreFiles.stream().map((File file) -> {
+            return (Callable) () -> {
+                preProcessFile(processor, file, createHierarchyGraph, ignoredFileSet, mdSelfLinkSet);
+                return null;
+            };
+        });
+        fileProcessingPool.invokeAll(preProcessors.collect(Collectors.toSet()));
+
+        //remove ignored files
         centreFiles.removeAll(ignoredFileSet);
 
         // inform structure graph about MdSelfLinks of all files in this collection
@@ -240,8 +265,9 @@ public class MetadataImporter {
             updateDocumentHierarchy();
         }
     }
+    protected int fileProcessingThreads = 6;
 
-    protected void processFile(final CMDIDataProcessor processor, File file, boolean createHierarchyGraph, Set<File> ignoredFileSet, Set<String> mdSelfLinkSet) {
+    protected void preProcessFile(final CMDIDataProcessor processor, File file, boolean createHierarchyGraph, Set<File> ignoredFileSet, Set<String> mdSelfLinkSet) {
         if (config.getMaxFileSize() > 0
                 && file.length() > config.getMaxFileSize()) {
             LOG.info("Skipping {} because it is too large.", file.getAbsolutePath());
