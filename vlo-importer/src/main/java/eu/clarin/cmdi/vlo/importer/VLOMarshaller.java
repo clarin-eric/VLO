@@ -28,14 +28,14 @@ public class VLOMarshaller {
     }
 
     /**
-     * Get facet concepts mapping from a facet concept mapping file. Unmarshalled
-     * mappings are cached statically for this class.
+     * Get facet concepts mapping from a facet concept mapping file.
+     * Unmarshalled mappings are cached statically for this class.
      *
      * @param facetConcepts name of the facet concepts file
      * @return the facet concept mapping
      */
     public final FacetConceptMapping getFacetConceptMapping(String facetConcepts) {
-        if (!mappingCache.containsKey(facetConcepts)) {
+        return mappingCache.computeIfAbsent(facetConcepts, (key) -> {
             // unmarshall map for file
             final MappingDefinitionResolver mappingDefinitionResolver
                     = new MappingDefinitionResolver(VLOMarshaller.class);
@@ -54,9 +54,8 @@ public class VLOMarshaller {
                 logger.error("Could not process facets file: {}", facetConcepts);
                 return null;
             }
-            mappingCache.put(facetConcepts, unmarshal(is));
-        }
-        return mappingCache.get(facetConcepts);
+            return unmarshal(is);
+        });
     }
 
     /**
