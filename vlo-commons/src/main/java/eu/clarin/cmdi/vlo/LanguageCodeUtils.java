@@ -70,35 +70,35 @@ public class LanguageCodeUtils {
         return result;
     }
 
-    public Map<String, String> getSilToIso639Map() {
+    public synchronized Map<String, String> getSilToIso639Map() {
         if (silToIso639Map == null) {
             silToIso639Map = createSilToIsoCodeMap();
         }
         return silToIso639Map;
     }
 
-    public Map<String, String> getTwoLetterCountryCodeMap() {
+    public synchronized Map<String, String> getTwoLetterCountryCodeMap() {
         if (twoLetterCodesMap == null) {
             twoLetterCodesMap = createCodeMap(config.getLanguage2LetterCodeComponentUrl());
         }
         return twoLetterCodesMap;
     }
 
-    public Map<String, String> getThreeLetterCountryCodeMap() {
+    public synchronized Map<String, String> getThreeLetterCountryCodeMap() {
         if (threeLetterCodesMap == null) {
             threeLetterCodesMap = createCodeMap(config.getLanguage3LetterCodeComponentUrl());
         }
         return threeLetterCodesMap;
     }
 
-    public Map<String, String> getLanguageNameToIso639Map() {
+    public synchronized Map<String, String> getLanguageNameToIso639Map() {
         if (languageNameToIso639Map == null) {
             languageNameToIso639Map = createReverseCodeMap(config.getLanguage3LetterCodeComponentUrl());
         }
         return languageNameToIso639Map;
     }
 
-    public Map<String, String> getIso639ToLanguageNameMap() {
+    public synchronized Map<String, String> getIso639ToLanguageNameMap() {
         if (iso639ToLanguageNameMap == null) {
             iso639ToLanguageNameMap = createCodeMap(config.getLanguage3LetterCodeComponentUrl());
         }
@@ -114,7 +114,7 @@ public class LanguageCodeUtils {
      *
      * @return map of ISO 639-2/B codes to ISO 639-3
      */
-    public Map<String, String> getIso6392TToISO6393Map() {
+    public synchronized Map<String, String> getIso6392TToISO6393Map() {
         if (iso639_2TToISO639_3Map == null) {
             iso639_2TToISO639_3Map = new ConcurrentHashMap<>();
             iso639_2TToISO639_3Map.put("alb", "sqi");
@@ -201,7 +201,7 @@ public class LanguageCodeUtils {
                 isoContent = isoAp.evalXPathToString();
                 result.put(silContent, isoContent);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             if (CommonUtils.shouldSwallowLookupErrors()) {
                 LOG.warn("Ignoring exception", e);
                 result = new HashMap<>();
@@ -254,7 +254,7 @@ public class LanguageCodeUtils {
         }
 
     }
-    
+
     protected LanguageCodeUtils() {
         //for proxying
         this(null);

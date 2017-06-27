@@ -14,9 +14,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Takes the value of the componentprofileid and uses the componentregistry REST service to transform this to the name of the componentprofile.
+ * Takes the value of the componentprofileid and uses the componentregistry REST
+ * service to transform this to the name of the componentprofile.
  */
 public class CMDIComponentProfileNamePostProcessor extends AbstractPostProcessor {
+
     private static final String XPATH = "/ComponentSpec/Header/Name/text()";
     private String BASE_URL = null;
     private AutoPilot ap = null;
@@ -32,25 +34,24 @@ public class CMDIComponentProfileNamePostProcessor extends AbstractPostProcessor
     }
 
     @Override
-    public List<String> process(String profileId, CMDIData cmdiData) {
+    public synchronized List<String> process(String profileId, CMDIData cmdiData) {
         String result = _EMPTY_STRING;
-        if(profileId != null){
-            if(cache.containsKey(profileId)){
+        if (profileId != null) {
+            if (cache.containsKey(profileId)) {
                 result = cache.get(profileId);
-            }
-            else {
+            } else {
                 setup();
-                LOG.debug("PARSING PROFILE: "+BASE_URL+profileId);
+                LOG.debug("PARSING PROFILE: " + BASE_URL + profileId);
                 // get the name of the profile from the expanded xml in the component registry
-                if(vg.parseHttpUrl(BASE_URL + profileId + "/xml", true)){
-                    LOG.debug("PARSED PROFILE: "+BASE_URL+profileId);
+                if (vg.parseHttpUrl(BASE_URL + profileId + "/xml", true)) {
+                    LOG.debug("PARSED PROFILE: " + BASE_URL + profileId);
                     vn = vg.getNav();
                     ap.bind(vn);
                     int idx;
-                    try { 
+                    try {
                         idx = ap.evalXPath();
-                        LOG.debug("EVALUATED XPATH: "+XPATH+ " found idx: "+idx);
-                        if(idx == -1){ // idx represent the nodeId in the xml file, if -1 the xpath evaluates to nothing.
+                        LOG.debug("EVALUATED XPATH: " + XPATH + " found idx: " + idx);
+                        if (idx == -1) { // idx represent the nodeId in the xml file, if -1 the xpath evaluates to nothing.
                             List<String> resultList = new ArrayList<String>();
                             resultList.add(result);
                             return resultList;
@@ -68,8 +69,7 @@ public class CMDIComponentProfileNamePostProcessor extends AbstractPostProcessor
                         resultList.add(result);
                         return resultList;
                     }
-                }
-                else {
+                } else {
                     LOG.error("Cannot open and/or parse XML Schema: {}.", BASE_URL + profileId);
                 }
             }
