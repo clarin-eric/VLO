@@ -20,7 +20,17 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Creates facet-mappings (xpaths) from a configuration. As they say "this is
@@ -30,7 +40,7 @@ public class FacetMappingFactory {
 
     private final static Logger LOG = LoggerFactory.getLogger(FacetMappingFactory.class);
 
-    private final Map<String, FacetMapping> mapping = new HashMap<>();
+    private final Map<String, FacetMapping> mapping = new ConcurrentHashMap<>();
 
     /**
      * Our one instance of the FMF.
