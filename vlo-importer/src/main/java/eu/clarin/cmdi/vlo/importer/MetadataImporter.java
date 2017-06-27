@@ -236,14 +236,15 @@ public class MetadataImporter {
         final Set<File> ignoredFileSet = Sets.newConcurrentHashSet();
 
         //(perform in thread pool)
-        final Stream<Callable> preProcessors = centreFiles.stream().map((File file) -> {
+        final Stream<Callable<Void>> preProcessors = centreFiles.stream().map((File file) -> {
             return (Callable) () -> {
                 final CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
                 preProcessFile(processor, file, createHierarchyGraph, ignoredFileSet, mdSelfLinkSet);
                 return null;
             };
         });
-        fileProcessingPool.invokeAll(preProcessors.collect(Collectors.toSet()));
+        final Set<Callable<Void>> preProcessorsCollection = preProcessors.collect(Collectors.toSet());
+        fileProcessingPool.invokeAll(preProcessorsCollection);
 
         //remove ignored files
         centreFiles.removeAll(ignoredFileSet);
@@ -255,7 +256,7 @@ public class MetadataImporter {
         }
 
         // process every file in this collection
-        final Stream<Callable> processors = centreFiles.stream().map((File file) -> {
+        final Stream<Callable<Void>> processors = centreFiles.stream().map((File file) -> {
             return (Callable) () -> {
                 LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
                 final CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
@@ -263,7 +264,8 @@ public class MetadataImporter {
                 return null;
             };
         });
-        fileProcessingPool.invokeAll(processors.collect(Collectors.toSet()));
+        final Set<Callable<Void>> processorsCollection = processors.collect(Collectors.toSet());
+        fileProcessingPool.invokeAll(processorsCollection);
 
         if (!docs.isEmpty()) {
             sendDocs();
