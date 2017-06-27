@@ -62,6 +62,8 @@ public class MetadataImporter {
 
     //data roots passed from command line    
     private final String clDatarootsList;
+    
+    private int fileProcessingThreads = 6;
 
     private static final int SOLR_SERVER_THREAD_COUNT = 2;
     /**
@@ -203,16 +205,15 @@ public class MetadataImporter {
             solrServer.deleteByQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
             LOG.info("Deleting data of provider done.");
         }
-        final CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
         // import files from every centre/endpoint within the data root
         for (List<File> centreFiles : getFilesFromDataRoot(dataRoot.getRootFile())) {
-            processCentreFiles(processor, centreFiles, dataRoot);
+            processCentreFiles(centreFiles, dataRoot);
         }
         updateDaysSinceLastImport(dataRoot);
         LOG.info("End of processing: " + dataRoot.getOriginName());
     }
 
-    protected void processCentreFiles(final CMDIDataProcessor processor, final List<File> centreFiles, final DataRoot dataRoot) throws IOException, SolrServerException, InterruptedException {
+    protected void processCentreFiles(final List<File> centreFiles, final DataRoot dataRoot) throws IOException, SolrServerException, InterruptedException {
         LOG.info("Processing directory: {}", centreFiles.get(0).getParent());
         String centerDirName = centreFiles.get(0).getParentFile().getName();
 
@@ -237,6 +238,7 @@ public class MetadataImporter {
         //(perform in thread pool)
         final Stream<Callable> preProcessors = centreFiles.stream().map((File file) -> {
             return (Callable) () -> {
+                final CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
                 preProcessFile(processor, file, createHierarchyGraph, ignoredFileSet, mdSelfLinkSet);
                 return null;
             };
@@ -253,10 +255,16 @@ public class MetadataImporter {
         }
 
         // process every file in this collection
-        for (File file : centreFiles) {
-            LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
-            processCmdi(file, dataRoot, processor, createHierarchyGraph);
-        }
+        final Stream<Callable> processors = centreFiles.stream().map((File file) -> {
+            return (Callable) () -> {
+                LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
+                final CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
+                processCmdi(file, dataRoot, processor, createHierarchyGraph);
+                return null;
+            };
+        });
+        fileProcessingPool.invokeAll(processors.collect(Collectors.toSet()));
+
         if (!docs.isEmpty()) {
             sendDocs();
         }
@@ -265,7 +273,6 @@ public class MetadataImporter {
             updateDocumentHierarchy();
         }
     }
-    protected int fileProcessingThreads = 6;
 
     protected void preProcessFile(final CMDIDataProcessor processor, File file, boolean createHierarchyGraph, Set<File> ignoredFileSet, Set<String> mdSelfLinkSet) {
         if (config.getMaxFileSize() > 0
