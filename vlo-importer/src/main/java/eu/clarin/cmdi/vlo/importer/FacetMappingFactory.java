@@ -40,7 +40,7 @@ public class FacetMappingFactory {
 
     private final static Logger LOG = LoggerFactory.getLogger(FacetMappingFactory.class);
 
-    private final Map<String, FacetMapping> mapping = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, FacetMapping> mapping = new ConcurrentHashMap<>();
 
     /**
      * Our one instance of the FMF.
@@ -52,13 +52,14 @@ public class FacetMappingFactory {
         this.config = config;
         this.marshaller = marshaller;
     }
-    
+
     /**
-     * 
-     * @param facetConceptsFile path to facet concepts file, leave null or empty to use default
+     *
+     * @param facetConceptsFile path to facet concepts file, leave null or empty
+     * to use default
      * @param xsd
      * @param useLocalXSDCache
-     * @return 
+     * @return
      */
     public FacetMapping getFacetMapping(String facetConceptsFile, String xsd, Boolean useLocalXSDCache) {
         return getOrCreateMapping(facetConceptsFile, xsd, useLocalXSDCache);
@@ -72,18 +73,15 @@ public class FacetMappingFactory {
      *
      * @param facetConcepts name of the facet concepts file
      * @param xsd url of xml schema of cmdi profile
-     * @param useLocalXSDCache use local XML schema files instead of accessing the component registry 
+     * @param useLocalXSDCache use local XML schema files instead of accessing
+     * the component registry
      *
      * @return facet concept mapping
      */
     private FacetMapping getOrCreateMapping(String facetConcepts, String xsd, Boolean useLocalXSDCache) {
-        // check if concept mapping has already been created
-        FacetMapping result = mapping.get(xsd);
-        if (result == null) {
-            result = createMapping(facetConcepts, xsd, useLocalXSDCache);
-            mapping.put(xsd, result);
-        }
-        return result;
+        return mapping.computeIfAbsent(xsd, (key) -> {
+            return createMapping(facetConcepts, xsd, useLocalXSDCache);
+        });
     }
 
     /**
@@ -94,7 +92,8 @@ public class FacetMappingFactory {
      *
      * @param facetConcepts name of the facet concepts file
      * @param xsd url of xml schema of cmdi profile
-     * @param useLocalXSDCache use local XML schema files instead of accessing the component registry 
+     * @param useLocalXSDCache use local XML schema files instead of accessing
+     * the component registry
      *
      * @return the facet mapping used to map meta data to facets
      */
@@ -195,7 +194,7 @@ public class FacetMappingFactory {
                 config.setName(facetConcept.getName());
 
                 LinkedHashSet<Pattern> linkedHashSet = new LinkedHashSet<>(xpaths);
-                if(xpaths.size() != linkedHashSet.size()) {
+                if (xpaths.size() != linkedHashSet.size()) {
                     LOG.error("Duplicate XPaths for facet {} in: {}.", facetConcept.getName(), xpaths);
                 }
                 config.setPatterns(new ArrayList<>(linkedHashSet));
@@ -206,7 +205,7 @@ public class FacetMappingFactory {
                     result.addFacet(config);
                 }
             }
-        } catch (NavException|URISyntaxException e) {
+        } catch (NavException | URISyntaxException e) {
             LOG.error("Error creating facetMapping from xsd: {}", xsd, e);
         }
         return result;
@@ -244,7 +243,8 @@ public class FacetMappingFactory {
      * (isocat data catagories).
      *
      * @param xsd URL of XML Schema of some CMDI profile
-     * @param useLocalXSDCache use local XML schema files instead of accessing the component registry 
+     * @param useLocalXSDCache use local XML schema files instead of accessing
+     * the component registry
      * @return Map (Data Category -> List of XPath expressions linked to the key
      * data category which can be found in CMDI files with this schema)
      * @throws NavException
@@ -253,12 +253,12 @@ public class FacetMappingFactory {
         Map<String, List<Pattern>> result = new HashMap<>();
         VTDGen vg = new VTDGen();
         boolean parseSuccess;
-        if(useLocalXSDCache) {
-            parseSuccess = vg.parseFile(Thread.currentThread().getContextClassLoader().getResource("testProfiles/"+xsd+".xsd").getPath(), true);
+        if (useLocalXSDCache) {
+            parseSuccess = vg.parseFile(Thread.currentThread().getContextClassLoader().getResource("testProfiles/" + xsd + ".xsd").getPath(), true);
         } else {
             parseSuccess = vg.parseHttpUrl(config.getComponentRegistryProfileSchema(xsd), true);
         }
-            
+
         if (!parseSuccess) {
             LOG.error("Cannot create ConceptLink Map from xsd (xsd is probably not reachable): " + xsd + ". All metadata instances that use this xsd will not be imported correctly.");
             return result; //return empty map, so the incorrect xsd is not tried for all metadata instances that specify it.
@@ -285,7 +285,7 @@ public class FacetMappingFactory {
                     int vocabIndex = getVocabIndex(vn);
                     if (vocabIndex != -1) {
                         String uri = vn.toNormalizedString(vocabIndex);
-                        Vocabulary vocab = new Vocabulary(config.getVocabularyRegistryUrl(),new URI(uri));
+                        Vocabulary vocab = new Vocabulary(config.getVocabularyRegistryUrl(), new URI(uri));
                         xpath.setVocabulary(vocab);
                         int propIndex = getVocabPropIndex(vn);
                         if (propIndex != -1) {
@@ -325,7 +325,7 @@ public class FacetMappingFactory {
                             int vocabIndex = getVocabIndex(vn);
                             if (vocabIndex != -1) {
                                 String uri = vn.toNormalizedString(vocabIndex);
-                                Vocabulary vocab = new Vocabulary(config.getVocabularyRegistryUrl(),new URI(uri));
+                                Vocabulary vocab = new Vocabulary(config.getVocabularyRegistryUrl(), new URI(uri));
                                 xpath.setVocabulary(vocab);
                                 int propIndex = getVocabPropIndex(vn);
                                 if (propIndex != -1) {
@@ -341,7 +341,7 @@ public class FacetMappingFactory {
                         }
                     }
                 } catch (XPathParseException | XPathEvalException | NavException e) {
-                    LOG.error("Cannot extract attributes for element "+elementName+". Will continue anyway...", e);
+                    LOG.error("Cannot extract attributes for element " + elementName + ". Will continue anyway...", e);
                 }
 
                 // returning to normal element-based workflow
@@ -367,8 +367,8 @@ public class FacetMappingFactory {
     }
 
     /**
-     * Goal is to get the "Vocabulary URI" attribute. Tries a number of different favors
-     * that were found in the xsd's.
+     * Goal is to get the "Vocabulary URI" attribute. Tries a number of
+     * different favors that were found in the xsd's.
      *
      * @return -1 if index is not found.
      */
@@ -382,8 +382,8 @@ public class FacetMappingFactory {
     }
 
     /**
-     * Goal is to get the "Vocabulary Property" attribute. Tries a number of different favors
-     * that were found in the xsd's.
+     * Goal is to get the "Vocabulary Property" attribute. Tries a number of
+     * different favors that were found in the xsd's.
      *
      * @return -1 if index is not found.
      */
@@ -397,8 +397,8 @@ public class FacetMappingFactory {
     }
 
     /**
-     * Goal is to get the "Vocabulary Language" attribute. Tries a number of different favors
-     * that were found in the xsd's.
+     * Goal is to get the "Vocabulary Language" attribute. Tries a number of
+     * different favors that were found in the xsd's.
      *
      * @return -1 if index is not found.
      */
@@ -415,7 +415,8 @@ public class FacetMappingFactory {
      * Given an xml-token path thingy create an xpath.
      *
      * @param elementPath
-     * @param attributeName will be appended as attribute to XPath expression if not null
+     * @param attributeName will be appended as attribute to XPath expression if
+     * not null
      * @return
      */
     private Pattern createXpath(Deque<Token> elementPath, String attributeName) {
