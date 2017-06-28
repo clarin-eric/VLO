@@ -44,6 +44,8 @@ public class MetadataImporterRunner {
      * @throws IOException
      */
     public static void main(String[] args) throws MalformedURLException, IOException {
+        
+        Thread.currentThread().setName("Importer main");
 
         // path to the configuration file
         String configFile = null;

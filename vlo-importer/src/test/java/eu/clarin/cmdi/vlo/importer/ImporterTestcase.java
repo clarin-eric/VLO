@@ -31,6 +31,10 @@ public abstract class ImporterTestcase {
 
     @Before
     public void setup() throws Exception {
+        if (Thread.currentThread().getName().equals("main")) {
+            Thread.currentThread().setName("test-main");
+        }
+
         // read the configuration defined in the packaged configuration file
         // and configure to use bundled mappings
         config = DefaultVloConfigFactory.configureDefaultMappingLocations(configFactory.newConfig());
