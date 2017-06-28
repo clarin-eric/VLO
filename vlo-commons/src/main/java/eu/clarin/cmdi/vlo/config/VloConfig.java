@@ -71,9 +71,9 @@ public class VloConfig {
     private String languageNameVariantsUrl;
 
     private String licenseAvailabilityMapUrl;
-    
+
     private String licenseURIMapUrl;
-    
+
     private String licenseTypeMapUrl;
 
     private String countryComponentUrl = "";
@@ -114,12 +114,16 @@ public class VloConfig {
     private String feedbackFromUrl = "";
 
     private String vcrSubmitEndpoint;
-    
+
     private Long vcrMaximumItemsCount = 0L;
-    
+
     private boolean showResultScores = false;
 
     private boolean processHierarchies = true;
+
+    private int fileProcessingThreads = 2;
+
+    private int solrThreads = 2;
 
     /**
      * A set of fields to be excluded from display<br><br>
@@ -1123,6 +1127,7 @@ public class VloConfig {
     public void setLicenseURIMapUrl(String licenseURIMapUrl) {
         this.licenseURIMapUrl = licenseURIMapUrl;
     }
+
     public String getLicenseTypeMapUrl() {
         return licenseTypeMapUrl;
     }
@@ -1248,6 +1253,22 @@ public class VloConfig {
 
     public void setHideSecondaryFacetsLimit(int hideSecondaryFacetsLimit) {
         this.hideSecondaryFacetsLimit = hideSecondaryFacetsLimit;
+    }
+
+    public int getFileProcessingThreads() {
+        return fileProcessingThreads;
+    }
+
+    public void setFileProcessingThreads(int fileProcessingThreads) {
+        this.fileProcessingThreads = fileProcessingThreads;
+    }
+
+    public int getSolrThreads() {
+        return solrThreads;
+    }
+
+    public void setSolrThreads(int solrThreads) {
+        this.solrThreads = solrThreads;
     }
 
 }

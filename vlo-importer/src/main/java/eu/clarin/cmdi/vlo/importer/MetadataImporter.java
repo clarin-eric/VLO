@@ -63,9 +63,6 @@ public class MetadataImporter {
     //data roots passed from command line    
     private final String clDatarootsList;
     
-    private int fileProcessingThreads = 6;
-
-    private static final int SOLR_SERVER_THREAD_COUNT = 2;
     /**
      * Defines which files to try and parse. In this case all files ending in
      * "xml" or "cmdi".
@@ -155,7 +152,8 @@ public class MetadataImporter {
                     deleteAll();
                 }
 
-                fileProcessingPool = Executors.newFixedThreadPool(fileProcessingThreads);
+                LOG.info("Initiating processing pool with {} threads", config.getFileProcessingThreads());
+                fileProcessingPool = Executors.newFixedThreadPool(config.getFileProcessingThreads());
 
                 // Import the specified data roots
                 for (DataRoot dataRoot : dataRoots) {
@@ -416,13 +414,13 @@ public class MetadataImporter {
      */
     protected void initSolrServer() throws MalformedURLException {
         String solrUrl = config.getSolrUrl();
-        LOG.info("Initializing concurrent Solr Server on {} with {} threads", solrUrl, SOLR_SERVER_THREAD_COUNT);
+        LOG.info("Initializing concurrent Solr Server on {} with {} threads", solrUrl, config.getSolrThreads());
 
         /* Specify the number of documents in the queue that will trigger the
          * threads, two of them, emptying it.
          */
         solrServer = new ConcurrentUpdateSolrServer(solrUrl,
-                config.getMinDocsInSolrQueue(), SOLR_SERVER_THREAD_COUNT) {
+                config.getMinDocsInSolrQueue(), config.getSolrThreads()) {
             /*
                      * Let the super class method handle exceptions. Make the
                      * exception available to the importer in the form of the

@@ -12,6 +12,10 @@
     
     <xi:include href="${vloconfig.dataRootsFile}" xmlns:xi="http://www.w3.org/2001/XInclude"></xi:include>
     
+    <fileProcessingThreads>2</fileProcessingThreads>
+    
+    <solrThreads>2</solrThreads>
+    
     <!-- Wicket: the maximum number of page instances which will be stored in the application scoped second level cache for faster retrieval -->
     <pagesInApplicationCache>40</pagesInApplicationCache>
     
