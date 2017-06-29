@@ -283,7 +283,7 @@ public class MetadataImporter {
                 mdSelfLink = processor.extractMdSelfLink(file);
             } catch (Exception e) {
                 LOG.error("error in file: {}", file, e);
-                nrOfFilesTooLarge.incrementAndGet();
+                nrOfFilesWithError.incrementAndGet();
             }
             if (mdSelfLink != null) {
                 mdSelfLinkSet.add(StringUtils.normalizeIdString(mdSelfLink));
@@ -410,17 +410,17 @@ public class MetadataImporter {
      * @throws IOException
      */
     protected void processCmdi(File file, DataRoot dataOrigin, CMDIDataProcessor processor, boolean createHierarchyGraph) throws SolrServerException, IOException {
-        nrOfFilesTooLarge.incrementAndGet();
+        nrOfFilesAnalyzed.incrementAndGet();
         CMDIData cmdiData = null;
         try {
             cmdiData = processor.process(file);
             if (!idOk(cmdiData.getId())) {
                 cmdiData.setId(dataOrigin.getOriginName() + "/" + file.getName()); //No id found in the metadata file so making one up based on the file name. Not quaranteed to be unique, but we have to set something.
-                nrOfFilesTooLarge.incrementAndGet();
+                nrOfFilesWithoutId.incrementAndGet();
             }
         } catch (Exception e) {
             LOG.error("error in file: {}", file, e);
-            nrOfFilesTooLarge.incrementAndGet();
+            nrOfFilesWithError.incrementAndGet();
         }
         if (cmdiData != null) {
             if (processedIds.add(cmdiData.getId())) {
