@@ -29,15 +29,16 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Simple Solr bridge that adds documents directly to the SolrServer instance
+ *
  * @author twagoo
  */
 public class SolrBridgeImpl implements SolrBridge {
 
     private final static Logger LOG = LoggerFactory.getLogger(SolrBridgeImpl.class);
-    
+
     private final VloConfig config;
     private final ThreadLocal<Throwable> serverError = new ThreadLocal<>();
-    
+
     private SolrServer solrServer;
 
     public SolrBridgeImpl(VloConfig config) {
@@ -99,9 +100,9 @@ public class SolrBridgeImpl implements SolrBridge {
         serverError.remove();
         return error;
     }
-    
+
     @Override
-    public void shutdownServer() {
+    public void shutdownServer() throws SolrServerException, IOException {
         solrServer.shutdown();
     }
 
