@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * Simple Solr bridge that adds documents directly to the SolrServer instance
  * @author twagoo
  */
 public class SolrBridgeImpl implements SolrBridge {
@@ -37,7 +37,7 @@ public class SolrBridgeImpl implements SolrBridge {
     
     private final VloConfig config;
     private final ThreadLocal<Throwable> serverError = new ThreadLocal<>();
-
+    
     private SolrServer solrServer;
 
     public SolrBridgeImpl(VloConfig config) {

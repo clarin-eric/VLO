@@ -104,7 +104,7 @@ public class MetadataImporter {
     protected final AtomicInteger nrOfFilesTooLarge = new AtomicInteger();
     
     public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList) {
-        this(config, languageCodeUtils, mappingFactory, marshaller, clDatarootsList, new SolrBridgeImpl(config));
+        this(config, languageCodeUtils, mappingFactory, marshaller, clDatarootsList, new BufferingSolrBridgeImpl(config));
     }
     
     public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList, SolrBridge solrBrdige) {
@@ -714,7 +714,7 @@ public class MetadataImporter {
      * @param languageCodeUtils
      */
     protected MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils) {
-        this(config, languageCodeUtils, new VLOMarshaller(), new SolrBridgeImpl(config));
+        this(config, languageCodeUtils, new VLOMarshaller(), new BufferingSolrBridgeImpl(config));
     }
 
     /**
