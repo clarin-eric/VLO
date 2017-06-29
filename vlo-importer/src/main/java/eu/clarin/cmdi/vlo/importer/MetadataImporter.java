@@ -39,6 +39,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -62,7 +63,7 @@ public class MetadataImporter {
 
     //data roots passed from command line    
     private final String clDatarootsList;
-    
+
     /**
      * Defines which files to try and parse. In this case all files ending in
      * "xml" or "cmdi".
@@ -97,7 +98,7 @@ public class MetadataImporter {
      * Some caching for solr documents (we are more efficient if we ram a whole
      * bunch to the solr server at once.
      */
-    protected List<SolrInputDocument> docs = new ArrayList<>();
+    //protected List<SolrInputDocument> docs = new ArrayList<>();
 
     // SOME STATS
     protected int nrOFDocumentsSend;
@@ -265,9 +266,6 @@ public class MetadataImporter {
         final Set<Callable<Void>> processorsCollection = processors.collect(Collectors.toSet());
         fileProcessingPool.invokeAll(processorsCollection);
 
-        if (!docs.isEmpty()) {
-            sendDocs();
-        }
         solrServer.commit();
         if (createHierarchyGraph) {
             updateDocumentHierarchy();
@@ -535,11 +533,14 @@ public class MetadataImporter {
         addResourceData(solrDocument, cmdiData);
 
         LOG.debug("Adding document for submission to SOLR: {}", file);
-        docs.add(solrDocument);
-        if (docs.size() == config.getMaxDocsInList()) {
-            sendDocs();
+
+        solrServer.add(solrDocument);
+        if (sendCount.incrementAndGet() % 100 == 0) {
+            LOG.info("Submitted {} documents", sendCount);
         }
     }
+
+    private final AtomicInteger sendCount = new AtomicInteger(0);
 
     /**
      * Adds two fields FIELD_FORMAT and FIELD_RESOURCE. The Type can be
@@ -580,23 +581,6 @@ public class MetadataImporter {
     }
 
     /**
-     * Send current list of SolrImputDocuments to SolrServer and clears list
-     * afterwards
-     *
-     * @throws SolrServerException
-     * @throws IOException
-     */
-    protected void sendDocs() throws SolrServerException, IOException {
-        LOG.info("Sending " + docs.size() + " docs to solr server. Total number of docs updated till now: " + nrOFDocumentsSend);
-        nrOFDocumentsSend += docs.size();
-        solrServer.add(docs);
-        if (serverError != null) {
-            throw new SolrServerException(serverError);
-        }
-        docs = new ArrayList<>();
-    }
-
-    /**
      * Builds suggester index for autocompletion
      *
      * @throws SolrServerException
@@ -621,7 +605,6 @@ public class MetadataImporter {
     private void updateDocumentHierarchy() throws SolrServerException, MalformedURLException, IOException {
         LOG.info(ResourceStructureGraph.printStatistics(0));
         Boolean updatedDocs = false;
-        List<SolrInputDocument> updateDocs = new ArrayList<>();
         Iterator<CmdiVertex> vertexIter = ResourceStructureGraph.getFoundVertices().iterator();
         while (vertexIter.hasNext()) {
             CmdiVertex vertex = vertexIter.next();
@@ -677,21 +660,7 @@ public class MetadataImporter {
                     partialUpdateMap.put("set", outgoingVertexNames);
                     doc.setField(FacetConstants.FIELD_IS_PART_OF, partialUpdateMap);
                 }
-                updateDocs.add(doc);
-            }
-
-            if (updateDocs.size() == config.getMaxDocsInList()) {
-                solrServer.add(updateDocs);
-                if (serverError != null) {
-                    throw new SolrServerException(serverError);
-                }
-                updateDocs = new ArrayList<>();
-            }
-        }
-        if (!updateDocs.isEmpty()) {
-            solrServer.add(updateDocs);
-            if (serverError != null) {
-                throw new SolrServerException(serverError);
+                solrServer.add(doc);
             }
         }
 
