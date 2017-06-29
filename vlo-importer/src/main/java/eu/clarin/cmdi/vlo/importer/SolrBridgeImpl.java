@@ -41,6 +41,8 @@ public class SolrBridgeImpl implements SolrBridge {
 
     private SolrServer solrServer;
 
+    private boolean commit = true;
+
     public SolrBridgeImpl(VloConfig config) {
         this.config = config;
     }
@@ -91,7 +93,11 @@ public class SolrBridgeImpl implements SolrBridge {
 
     @Override
     public void commit() throws SolrServerException, IOException {
-        solrServer.commit();
+        if (commit) {
+            solrServer.commit();
+        } else {
+            LOG.debug("Commit requested but skipping because commit == false");
+        }
     }
 
     @Override
@@ -103,12 +109,18 @@ public class SolrBridgeImpl implements SolrBridge {
 
     @Override
     public void shutdownServer() throws SolrServerException, IOException {
+        //commit before shutdown
+        solrServer.commit();
         solrServer.shutdown();
     }
 
     @Override
     public SolrServer getServer() {
         return solrServer;
+    }
+
+    public void setCommit(boolean commit) {
+        this.commit = commit;
     }
 
 }

@@ -75,9 +75,19 @@ public class MetadataImporter {
     protected final static Logger LOG = LoggerFactory.getLogger(MetadataImporter.class);
 
     /**
-     * the solr server.
+     * interface to the solr server
      */
     private final SolrBridge solrBridge;
+
+    private static class DefaultSolrBridgeFactory {
+
+        static SolrBridge createDefaultSolrBridge(VloConfig config) {
+            final BufferingSolrBridgeImpl solrBridge = new BufferingSolrBridgeImpl(config);
+            solrBridge.setCommit(false);
+            return solrBridge;
+        }
+    }
+
     /**
      * Defines the post-processor associations. At import, for each facet value,
      * this map is checked and all postprocessors associated with the facet
@@ -104,7 +114,7 @@ public class MetadataImporter {
     protected final AtomicInteger nrOfFilesTooLarge = new AtomicInteger();
 
     public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList) {
-        this(config, languageCodeUtils, mappingFactory, marshaller, clDatarootsList, new BufferingSolrBridgeImpl(config));
+        this(config, languageCodeUtils, mappingFactory, marshaller, clDatarootsList, DefaultSolrBridgeFactory.createDefaultSolrBridge(config));
     }
 
     public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList, SolrBridge solrBrdige) {
@@ -144,7 +154,7 @@ public class MetadataImporter {
     void startImport() throws MalformedURLException {
         solrBridge.init();
 
-        long start = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
         try {
             final List<DataRoot> dataRoots = filterDataRootsWithCLArgs(checkDataRoots());
 
@@ -718,7 +728,7 @@ public class MetadataImporter {
      * @param languageCodeUtils
      */
     protected MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils) {
-        this(config, languageCodeUtils, new VLOMarshaller(), new BufferingSolrBridgeImpl(config));
+        this(config, languageCodeUtils, new VLOMarshaller(), DefaultSolrBridgeFactory.createDefaultSolrBridge(config));
     }
 
     /**
