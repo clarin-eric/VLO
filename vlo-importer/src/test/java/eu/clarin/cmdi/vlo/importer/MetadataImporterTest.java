@@ -11,13 +11,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.solr.client.solrj.SolrRequest;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.util.NamedList;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 public class MetadataImporterTest extends ImporterTestcase {
+
+    protected final static org.slf4j.Logger LOG = LoggerFactory.getLogger(MetadataImporterTest.class);
 
     @Test
     public void testImporterSimple() throws Exception {
@@ -211,16 +216,14 @@ public class MetadataImporterTest extends ImporterTestcase {
     }
 
     private List<SolrInputDocument> importData(File rootFile) throws MalformedURLException {
-        final List<SolrInputDocument> result = new ArrayList<SolrInputDocument>();
-
         /*
          * Read configuration in ImporterTestCase.setup and change the setup to
          * suit the test.
          */
         modifyConfig(rootFile);
-
-        MetadataImporter importer;
-        importer = new MetadataImporter(config, languageCodeUtils) {
+        
+        final DummySolrBridgeImpl solrBridge = new DummySolrBridgeImpl();
+        MetadataImporter importer = new MetadataImporter(config, languageCodeUtils, solrBridge) {
             /*
              * Because in the test, the solr server is not assumed to be 
              * available, override the importer's class startImport method by
@@ -285,14 +288,9 @@ public class MetadataImporterTest extends ImporterTestcase {
                 LOG.info("Update of " + nrOFDocumentsSent + " took " + took
                         + " secs. Total nr of files analyzed " + nrOfFilesAnalyzed);
             }
-
-            @Override
-            protected void addToServer(SolrInputDocument solrDocument) throws SolrServerException, IOException {
-                result.add(solrDocument);
-            }
         };
         importer.startImport();
-        return result;
+        return solrBridge.getDocuments();
     }
 
     private void modifyConfig(File rootFile) {
@@ -304,6 +302,64 @@ public class MetadataImporterTest extends ImporterTestcase {
         dataRoot.setPrefix("http://example.com");
         config.setDataRoots(Collections.singletonList(dataRoot));
         config.setFacetConceptsFile(ImporterTestcase.getTestFacetConceptFilePath());
+    }
+
+    private class DummySolrBridgeImpl implements SolrBridge {
+
+        public DummySolrBridgeImpl() {
+        }
+        private final List<SolrInputDocument> result = new ArrayList<>();
+
+        public List<SolrInputDocument> getDocuments() {
+            return result;
+        }
+
+        @Override
+        public SolrServer getServer() {
+            return new SolrServer() {
+                @Override
+                public NamedList<Object> request(SolrRequest request) throws SolrServerException, IOException {
+                    //do nothing
+                    LOG.debug("SolrRequest to dummy server: {}", request);
+                    return new NamedList<>();
+                }
+                
+                @Override
+                public void shutdown() {
+                    LOG.debug("Dummy solr server shutdown");
+                }
+            };
+        }
+
+        @Override
+        public void init() throws MalformedURLException {
+            LOG.debug("Dummy solr bridge init");
+        }
+
+        @Override
+        public void shutdownServer() {
+            LOG.debug("Dummy solr bridge shutdown");
+        }
+
+        @Override
+        public void addDocument(SolrInputDocument doc) throws SolrServerException, IOException {
+            result.add(doc);
+        }
+
+        @Override
+        public void addDocuments(Collection<SolrInputDocument> docs) throws SolrServerException, IOException {
+            result.addAll(docs);
+        }
+
+        @Override
+        public void commit() throws SolrServerException, IOException {
+            LOG.debug("Dummy solr bridge commit");
+        }
+
+        @Override
+        public Throwable popError() {
+            return null;
+        }
     }
 
 }

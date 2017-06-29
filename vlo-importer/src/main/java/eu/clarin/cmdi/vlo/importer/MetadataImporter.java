@@ -19,7 +19,6 @@ import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.MapSolrParams;
@@ -55,7 +54,7 @@ import org.apache.solr.common.SolrDocument;
  * and so on.
  */
 public class MetadataImporter {
-
+    
     private final VloConfig config;
     private final FacetMappingFactory mappingFactory;
     private final VLOMarshaller marshaller;
@@ -74,14 +73,11 @@ public class MetadataImporter {
      * Log log log log
      */
     protected final static Logger LOG = LoggerFactory.getLogger(MetadataImporter.class);
-    /**
-     * Some place to store errors.
-     */
-    private static Throwable serverError;
+
     /**
      * the solr server.
      */
-    private ConcurrentUpdateSolrServer solrServer;
+    private final SolrBridge solrBridge;
     /**
      * Defines the post-processor associations. At import, for each facet value,
      * this map is checked and all postprocessors associated with the facet
@@ -106,15 +102,20 @@ public class MetadataImporter {
     protected final AtomicInteger nrOfFilesWithoutId = new AtomicInteger();
     protected final AtomicInteger nrOfFilesWithError = new AtomicInteger();
     protected final AtomicInteger nrOfFilesTooLarge = new AtomicInteger();
-
+    
     public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList) {
+        this(config, languageCodeUtils, mappingFactory, marshaller, clDatarootsList, new SolrBridgeImpl(config));
+    }
+    
+    public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList, SolrBridge solrBrdige) {
         this.config = config;
         this.clDatarootsList = clDatarootsList;
         this.mappingFactory = mappingFactory;
         this.postProcessors = registerPostProcessors(config, languageCodeUtils);
         this.marshaller = marshaller;
+        this.solrBridge = solrBrdige;
     }
-
+    
     protected static Map<String, PostProcessor> registerPostProcessors(VloConfig config, LanguageCodeUtils languageCodeUtils) {
         return ImmutableMap.<String, PostProcessor>builder()
                 .put(FacetConstants.FIELD_ID, new IdPostProcessor())
@@ -141,18 +142,18 @@ public class MetadataImporter {
      * @throws MalformedURLException
      */
     void startImport() throws MalformedURLException {
-
-        initSolrServer();
+        solrBridge.init();
+        
         try {
             final List<DataRoot> dataRoots = filterDataRootsWithCLArgs(checkDataRoots());
-
+            
             long start = System.currentTimeMillis();
             try {
                 // Delete the whole Solr db
                 if (config.getDeleteAllFirst()) {
                     deleteAll();
                 }
-
+                
                 LOG.info("Initiating processing pool with {} threads", config.getFileProcessingThreads());
                 fileProcessingPool = Executors.newFixedThreadPool(config.getFileProcessingThreads());
 
@@ -173,10 +174,8 @@ public class MetadataImporter {
                 LOG.error("Interrupted while importing", ex);
             } finally {
                 try {
-                    if (solrServer != null) {
-                        solrServer.commit();
-                        buildSuggesterIndex();
-                    }
+                    solrBridge.commit();
+                    buildSuggesterIndex();
                 } catch (SolrServerException | IOException e) {
                     LOG.error("cannot commit:\n", e);
                 }
@@ -186,22 +185,22 @@ public class MetadataImporter {
             if (fileProcessingPool != null) {
                 fileProcessingPool.shutdown();
             }
-            solrServer.shutdown();
+            solrBridge.shutdownServer();
         }
     }
-
+    
     protected void deleteAll() throws IOException, SolrServerException {
         LOG.info("Deleting original data...");
-        solrServer.deleteByQuery("*:*");
-        solrServer.commit();
+        solrBridge.getServer().deleteByQuery("*:*");
+        solrBridge.commit();
         LOG.info("Deleting original data done.");
     }
-
+    
     protected void processDataRoot(DataRoot dataRoot) throws SolrServerException, IOException, InterruptedException {
         LOG.info("Start of processing: " + dataRoot.getOriginName());
         if (dataRoot.deleteFirst()) {
             LOG.info("Deleting data for data provider: " + dataRoot.getOriginName());
-            solrServer.deleteByQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
+            solrBridge.getServer().deleteByQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
             LOG.info("Deleting data of provider done.");
         }
         // import files from every centre/endpoint within the data root
@@ -211,7 +210,7 @@ public class MetadataImporter {
         updateDaysSinceLastImport(dataRoot);
         LOG.info("End of processing: " + dataRoot.getOriginName());
     }
-
+    
     protected void processCentreFiles(final List<File> centreFiles, final DataRoot dataRoot) throws IOException, SolrServerException, InterruptedException {
         LOG.info("Processing directory: {}", centreFiles.get(0).getParent());
         String centerDirName = centreFiles.get(0).getParentFile().getName();
@@ -265,15 +264,13 @@ public class MetadataImporter {
         });
         final Set<Callable<Void>> processorsCollection = processors.collect(Collectors.toSet());
         fileProcessingPool.invokeAll(processorsCollection);
-
-        if (solrServer != null) {
-            solrServer.commit();
-        }
+        
+        solrBridge.commit();
         if (createHierarchyGraph) {
             updateDocumentHierarchy();
         }
     }
-
+    
     protected void preProcessFile(final CMDIDataProcessor processor, File file, boolean createHierarchyGraph, Set<File> ignoredFileSet, Set<String> mdSelfLinkSet) {
         if (config.getMaxFileSize() > 0
                 && file.length() > config.getMaxFileSize()) {
@@ -293,13 +290,13 @@ public class MetadataImporter {
             }
         }
     }
-
+    
     protected void purgeOldDocs() throws SolrServerException, IOException {
         LOG.info("Deleting old files that were not seen for more than " + config.getMaxDaysInSolr() + " days...");
-        solrServer.deleteByQuery(FacetConstants.FIELD_LAST_SEEN + ":[* TO NOW-" + config.getMaxDaysInSolr() + "DAYS]");
+        solrBridge.getServer().deleteByQuery(FacetConstants.FIELD_LAST_SEEN + ":[* TO NOW-" + config.getMaxDaysInSolr() + "DAYS]");
         LOG.info("Deleting old files done.");
     }
-
+    
     protected void logStatistics(long start) {
         final long took = (System.currentTimeMillis() - start) / 1000;
         LOG.info("Found {} file(s) without an id. (id is generated based on fileName but that may not be unique)", nrOfFilesWithoutId);
@@ -323,7 +320,7 @@ public class MetadataImporter {
             } else {
                 existingDataRoots.add(dataRoot);
             }
-
+            
         }
         return existingDataRoots;
     }
@@ -339,18 +336,18 @@ public class MetadataImporter {
         if (clDatarootsList == null) {
             return dataRoots;
         }
-
+        
         LOG.info("Filtering configured data root files with command line arguments: \"" + clDatarootsList + "\"");
-
+        
         LinkedList<File> fsDataRoots = new LinkedList<>();
-
+        
         List<String> paths = Arrays.asList((clDatarootsList.split("\\s+")));
 
         //Convert String paths to File objects for comparison
         for (String path : paths) {
             fsDataRoots.add(new File(path));
         }
-
+        
         List<DataRoot> filteredDataRoots = new LinkedList<>();
         try {
             //filter data
@@ -368,7 +365,7 @@ public class MetadataImporter {
         } catch (IOException e) {
             filteredDataRoots = dataRoots;
         }
-
+        
         return filteredDataRoots;
     }
 
@@ -393,45 +390,13 @@ public class MetadataImporter {
                 if (centerDir.isDirectory()) {
                     centerFileList.addAll(FileUtils.listFiles(centerDir, VALID_CMDI_EXTENSIONS, true));
                 }
-
+                
                 if (!centerFileList.isEmpty()) {
                     result.add(centerFileList);
                 }
             }
         }
         return result;
-    }
-
-    /**
-     * Create an interface to the SOLR server.
-     *
-     * After the interface has been created the importer can send documents to
-     * the server. Sending documents involves a queue. The importer adds
-     * documents to a queue, and dedicated threads will empty it, and
-     * effectively store store the documents.
-     *
-     * @throws MalformedURLException
-     */
-    protected void initSolrServer() throws MalformedURLException {
-        String solrUrl = config.getSolrUrl();
-        LOG.info("Initializing concurrent Solr Server on {} with {} threads", solrUrl, config.getSolrThreads());
-
-        /* Specify the number of documents in the queue that will trigger the
-         * threads, two of them, emptying it.
-         */
-        solrServer = new ConcurrentUpdateSolrServer(solrUrl,
-                config.getMinDocsInSolrQueue(), config.getSolrThreads()) {
-            /*
-                     * Let the super class method handle exceptions. Make the
-                     * exception available to the importer in the form of the
-                     * serverError variable.
-             */
-            @Override
-            public void handleError(Throwable exception) {
-                super.handleError(exception);
-                serverError = exception;
-            }
-        };
     }
 
     /**
@@ -502,10 +467,10 @@ public class MetadataImporter {
         solrDocument.addField(FacetConstants.FIELD_DATA_PROVIDER, dataOrigin.getOriginName());
         solrDocument.addField(FacetConstants.FIELD_ID, cmdiData.getId());
         solrDocument.addField(FacetConstants.FIELD_FILENAME, file.getAbsolutePath());
-
+        
         String metadataSourceUrl = dataOrigin.getPrefix();
         metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getToStrip().length());
-
+        
         solrDocument.addField(FacetConstants.FIELD_COMPLETE_METADATA, metadataSourceUrl);
 
         // add SearchServices (should be CQL endpoint)
@@ -533,18 +498,13 @@ public class MetadataImporter {
 
         // add resource proxys      
         addResourceData(solrDocument, cmdiData);
-
+        
         LOG.debug("Adding document for submission to SOLR: {}", file);
-
-        addToServer(solrDocument);
+        
+        solrBridge.addDocument(solrDocument);
         if (nrOFDocumentsSent.incrementAndGet() % 100 == 0) {
             LOG.info("Number of documents sent thus far: {}", nrOFDocumentsSent);
         }
-    }
-
-    protected void addToServer(SolrInputDocument solrDocument) throws SolrServerException, IOException {
-        //TODO: buffer?
-        solrServer.add(solrDocument);
     }
 
     /**
@@ -571,7 +531,7 @@ public class MetadataImporter {
                     mimeType = CommonUtils.normalizeMimeType("");
                 }
             }
-
+            
             FormatPostProcessor processor = new FormatPostProcessor();
             mimeType = processor.process(mimeType, null).get(0);
 
@@ -597,7 +557,7 @@ public class MetadataImporter {
         paramMap.put("qt", "/suggest");
         paramMap.put("spellcheck.build", "true");
         SolrParams params = new MapSolrParams(paramMap);
-        solrServer.query(params);
+        solrBridge.getServer().query(params);
     }
 
     /**
@@ -621,7 +581,7 @@ public class MetadataImporter {
                 updatedDocs = true;
                 SolrInputDocument doc = new SolrInputDocument();
                 doc.setField(FacetConstants.FIELD_ID, Arrays.asList(vertex.getId()));
-
+                
                 if (vertex.getHierarchyWeight() != 0) {
                     Map<String, Integer> partialUpdateMap = new HashMap<>();
                     partialUpdateMap.put("set", Math.abs(vertex.getHierarchyWeight()));
@@ -643,12 +603,12 @@ public class MetadataImporter {
                         outgoingVertexIter.remove();
                     }
                 }
-
+                
                 if (!incomingVertexNames.isEmpty()) {
                     Map<String, List<String>> partialUpdateMap = new HashMap<>();
                     partialUpdateMap.put("set", incomingVertexNames);
                     doc.setField(FacetConstants.FIELD_HAS_PART, partialUpdateMap);
-
+                    
                     Map<String, Integer> partialUpdateMapCount = new HashMap<>();
                     partialUpdateMapCount.put("set", incomingVertexNames.size());
                     doc.setField(FacetConstants.FIELD_HAS_PART_COUNT, partialUpdateMapCount);
@@ -659,20 +619,20 @@ public class MetadataImporter {
                     partialUpdateMapCountWeight.put("set", hasPartCountWeight);
                     doc.setField(FacetConstants.FIELD_HAS_PART_COUNT_WEIGHT, partialUpdateMapCountWeight);
                 }
-
+                
                 if (!outgoingVertexNames.isEmpty()) {
                     Map<String, List<String>> partialUpdateMap = new HashMap<>();
                     partialUpdateMap.put("set", outgoingVertexNames);
                     doc.setField(FacetConstants.FIELD_IS_PART_OF, partialUpdateMap);
                 }
-                addToServer(doc);
+                solrBridge.addDocument(doc);
             }
         }
-
+        
         if (updatedDocs) {
-            solrServer.commit();
+            solrBridge.commit();
         }
-
+        
         ResourceStructureGraph.clearResourceGraph();
     }
 
@@ -688,7 +648,7 @@ public class MetadataImporter {
      */
     private void updateDaysSinceLastImport(DataRoot dataRoot) throws SolrServerException, IOException {
         LOG.info("Updating \"days since last import\" in Solr for: {}", dataRoot.getOriginName());
-
+        
         SolrQuery query = new SolrQuery();
         query.setQuery(
                 //we're going to process all records in the current data root...
@@ -700,61 +660,50 @@ public class MetadataImporter {
         query.setFields(FacetConstants.FIELD_ID, FacetConstants.FIELD_LAST_SEEN);
         int fetchSize = 1000;
         query.setRows(fetchSize);
-        QueryResponse rsp = solrServer.query(query);
-
+        QueryResponse rsp = solrBridge.getServer().query(query);
+        
         final long totalResults = rsp.getResults().getNumFound();
         final LocalDate nowDate = LocalDate.now();
-
+        
         final int docsListSize = config.getMaxDocsInList();
         List<SolrInputDocument> updateDocs = new ArrayList<>(docsListSize);
-
+        
         Boolean updatedDocs = false;
         int offset = 0;
-
+        
         while (offset < totalResults) {
             query.setStart(offset);
             query.setRows(fetchSize);
-
-            for (SolrDocument doc : solrServer.query(query).getResults()) {
+            
+            for (SolrDocument doc : solrBridge.getServer().query(query).getResults()) {
                 updatedDocs = true;
-
+                
                 String recordId = (String) doc.getFieldValue(FacetConstants.FIELD_ID);
                 Date lastImportDate = (Date) doc.getFieldValue(FacetConstants.FIELD_LAST_SEEN);
                 LocalDate oldDate = lastImportDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 long daysSinceLastSeen = DAYS.between(oldDate, nowDate);
-
+                
                 SolrInputDocument updateDoc = new SolrInputDocument();
                 updateDoc.setField(FacetConstants.FIELD_ID, recordId);
-
+                
                 Map<String, Long> partialUpdateMap = new HashMap<>();
                 partialUpdateMap.put("set", daysSinceLastSeen);
                 updateDoc.setField(FacetConstants.FIELD_DAYS_SINCE_LAST_SEEN, partialUpdateMap);
-
-                updateDocs.add(updateDoc);
-
-                if (updateDocs.size() == docsListSize) {
-                    solrServer.add(updateDocs);
-                    if (serverError != null) {
-                        throw new SolrServerException(serverError);
-                    }
-                    updateDocs = new ArrayList<>(docsListSize);
+                
+                solrBridge.addDocument(updateDoc);
+                final Throwable error = solrBridge.popError();
+                if (error != null) {
+                    throw new SolrServerException(error);
                 }
             }
             offset += fetchSize;
             LOG.info("Updating \"days since last import\": {} out of {} records updated", offset, totalResults);
         }
-
-        if (!updateDocs.isEmpty()) {
-            solrServer.add(updateDocs);
-            if (serverError != null) {
-                throw new SolrServerException(serverError);
-            }
-        }
-
+        
         if (updatedDocs) {
-            solrServer.commit();
+            solrBridge.commit();
         }
-
+        
         LOG.info("Updating \"days since last import\" done.");
     }
 
@@ -765,11 +714,22 @@ public class MetadataImporter {
      * @param languageCodeUtils
      */
     protected MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils) {
-        this(config, languageCodeUtils, new VLOMarshaller());
+        this(config, languageCodeUtils, new VLOMarshaller(), new SolrBridgeImpl(config));
     }
 
-    private MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, VLOMarshaller marshaller) {
-        this(config, languageCodeUtils, new FacetMappingFactory(config, marshaller), marshaller, null);
+    /**
+     * test constructor
+     *
+     * @param config
+     * @param languageCodeUtils
+     * @param solrBridge
+     */
+    protected MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, SolrBridge solrBridge) {
+        this(config, languageCodeUtils, new VLOMarshaller(), solrBridge);
     }
-
+    
+    private MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, VLOMarshaller marshaller, SolrBridge solrBridge) {
+        this(config, languageCodeUtils, new FacetMappingFactory(config, marshaller), marshaller, null, solrBridge);
+    }
+    
 }
