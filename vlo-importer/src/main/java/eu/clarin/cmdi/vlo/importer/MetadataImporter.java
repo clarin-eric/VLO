@@ -82,7 +82,7 @@ public class MetadataImporter {
     private static class DefaultSolrBridgeFactory {
 
         static SolrBridge createDefaultSolrBridge(VloConfig config) {
-            final BufferingSolrBridgeImpl solrBridge = new BufferingSolrBridgeImpl(config);
+            final SolrBridgeImpl solrBridge = new BufferingSolrBridgeImpl(config);
             solrBridge.setCommit(false);
             return solrBridge;
         }
