@@ -52,7 +52,7 @@ public class ResourceStructureGraph {
      *
      * @param mdSelfLink extracted MdSelfLink from CMDI file
      */
-    public static void addResource(String mdSelfLink) {
+    public static synchronized void addResource(String mdSelfLink) {
         String normalizedMdSelfLink = StringUtils.normalizeIdString(mdSelfLink);
         if (!vertexIdMap.containsKey(normalizedMdSelfLink)) {
             CmdiVertex newVertex = new CmdiVertex(normalizedMdSelfLink);
@@ -73,7 +73,7 @@ public class ResourceStructureGraph {
      * @param sourceVertexId source vertex ID (=isPart)
      * @param targetVertexId target vertex ID (=hasPart)
      */
-    public static void addEdge(String sourceVertexId, String targetVertexId) {
+    public static synchronized void addEdge(String sourceVertexId, String targetVertexId) {
         String normalizedSourceVertexId = StringUtils.normalizeIdString(sourceVertexId);
         String normalizedTargetVertexId = StringUtils.normalizeIdString(targetVertexId);
 
@@ -164,19 +164,19 @@ public class ResourceStructureGraph {
         }
     }
 
-    public static DirectedAcyclicGraph<CmdiVertex, DefaultEdge> getResourceGraph() {
+    public static synchronized DirectedAcyclicGraph<CmdiVertex, DefaultEdge> getResourceGraph() {
         return graph;
     }
 
-    public static Set<CmdiVertex> getFoundVertices() {
+    public static synchronized Set<CmdiVertex> getFoundVertices() {
         return foundVerticesSet;
     }
     
-    public static CmdiVertex getVertex(String vertexId) {
+    public static synchronized CmdiVertex getVertex(String vertexId) {
         return vertexIdMap.get(vertexId);        
     }
     
-    public static Map<String, CmdiVertex> getVertexIdMap() {
+    public static synchronized Map<String, CmdiVertex> getVertexIdMap() {
         return vertexIdMap;
     }
 
@@ -188,7 +188,7 @@ public class ResourceStructureGraph {
      * @return List of vertices that are source of an edge where targetVertex is
      * target
      */
-    public static List<String> getIncomingVertexNames(CmdiVertex targetVertex) {
+    public static synchronized List<String> getIncomingVertexNames(CmdiVertex targetVertex) {
         List<String> vertexNamesList = new ArrayList<>();
         Set<DefaultEdge> incomingEdges = graph.incomingEdgesOf(targetVertex);
         Iterator<DefaultEdge> edgeIter = incomingEdges.iterator();
@@ -210,7 +210,7 @@ public class ResourceStructureGraph {
      * @return List of vertices that are target of an edge where sourceVertex is
      * source
      */
-    public static List<String> getOutgoingVertexNames(CmdiVertex sourceVertex) {
+    public static synchronized List<String> getOutgoingVertexNames(CmdiVertex sourceVertex) {
         List<String> vertexNamesList = new ArrayList<>();
         Set<DefaultEdge> outgoingEdges = graph.outgoingEdgesOf(sourceVertex);
         Iterator<DefaultEdge> edgeIter = outgoingEdges.iterator();
@@ -227,7 +227,7 @@ public class ResourceStructureGraph {
     /**
      * Reset resource hierarchy graph (= deleting vertices + edges + supporting data structures)
      */
-    public static void clearResourceGraph() {
+    public static synchronized void clearResourceGraph() {
         vertexIdMap = new HashMap<>();
         foundVerticesSet = new HashSet<>();
         graph = new DirectedAcyclicGraph<>(DefaultEdge.class);
@@ -238,7 +238,7 @@ public class ResourceStructureGraph {
      * Set set of all MdSelfLinks that actually occur in the processed collection. Will be used to omit the creation of edges to non-existing nodes.
      * @param occurringMdSelfLinks 
      */
-    public static void setOccurringMdSelfLinks(Set<String> occurringMdSelfLinks) {
+    public static synchronized void setOccurringMdSelfLinks(Set<String> occurringMdSelfLinks) {
         ResourceStructureGraph.occurringMdSelfLinks = occurringMdSelfLinks;
     }
 

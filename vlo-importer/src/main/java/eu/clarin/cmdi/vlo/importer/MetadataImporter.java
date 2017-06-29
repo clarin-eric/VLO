@@ -567,7 +567,7 @@ public class MetadataImporter {
      * @throws SolrServerException
      * @throws MalformedURLException
      */
-    private void updateDocumentHierarchy() throws SolrServerException, MalformedURLException, IOException {
+    private synchronized void updateDocumentHierarchy() throws SolrServerException, MalformedURLException, IOException {
         LOG.info(ResourceStructureGraph.printStatistics(0));
         Boolean updatedDocs = false;
         Iterator<CmdiVertex> vertexIter = ResourceStructureGraph.getFoundVertices().iterator();
