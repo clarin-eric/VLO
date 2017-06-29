@@ -94,6 +94,7 @@ public class SolrBridgeImpl implements SolrBridge {
     @Override
     public void commit() throws SolrServerException, IOException {
         if (commit) {
+            LOG.info("Manual commit");
             solrServer.commit();
         } else {
             LOG.debug("Commit requested but skipping because commit == false");

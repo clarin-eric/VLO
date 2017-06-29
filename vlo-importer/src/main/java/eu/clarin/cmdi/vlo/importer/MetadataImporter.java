@@ -83,7 +83,7 @@ public class MetadataImporter {
 
         static SolrBridge createDefaultSolrBridge(VloConfig config) {
             final SolrBridgeImpl solrBridge = new BufferingSolrBridgeImpl(config);
-            solrBridge.setCommit(false);
+            solrBridge.setCommit(true);
             return solrBridge;
         }
     }
@@ -680,7 +680,6 @@ public class MetadataImporter {
         final LocalDate nowDate = LocalDate.now();
 
         final int docsListSize = config.getMaxDocsInList();
-        List<SolrInputDocument> updateDocs = new ArrayList<>(docsListSize);
 
         Boolean updatedDocs = false;
         int offset = 0;
