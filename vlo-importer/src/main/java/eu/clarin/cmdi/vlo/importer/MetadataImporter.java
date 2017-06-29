@@ -101,11 +101,11 @@ public class MetadataImporter {
     //protected List<SolrInputDocument> docs = new ArrayList<>();
 
     // SOME STATS
-    protected int nrOFDocumentsSend;
-    protected int nrOfFilesAnalyzed = 0;
-    protected int nrOfFilesWithoutId = 0;
-    protected int nrOfFilesWithError = 0;
-    protected int nrOfFilesTooLarge = 0;
+    protected final AtomicInteger nrOFDocumentsSent = new AtomicInteger();
+    protected final AtomicInteger nrOfFilesAnalyzed = new AtomicInteger();
+    protected final AtomicInteger nrOfFilesWithoutId = new AtomicInteger();
+    protected final AtomicInteger nrOfFilesWithError = new AtomicInteger();
+    protected final AtomicInteger nrOfFilesTooLarge = new AtomicInteger();
 
     public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList) {
         this.config = config;
@@ -266,7 +266,9 @@ public class MetadataImporter {
         final Set<Callable<Void>> processorsCollection = processors.collect(Collectors.toSet());
         fileProcessingPool.invokeAll(processorsCollection);
 
-        solrServer.commit();
+        if (solrServer != null) {
+            solrServer.commit();
+        }
         if (createHierarchyGraph) {
             updateDocumentHierarchy();
         }
@@ -276,7 +278,7 @@ public class MetadataImporter {
         if (config.getMaxFileSize() > 0
                 && file.length() > config.getMaxFileSize()) {
             LOG.info("Skipping {} because it is too large.", file.getAbsolutePath());
-            nrOfFilesTooLarge++;
+            nrOfFilesTooLarge.incrementAndGet();
             ignoredFileSet.add(file);
         } else if (createHierarchyGraph) {
             String mdSelfLink = null;
@@ -284,7 +286,7 @@ public class MetadataImporter {
                 mdSelfLink = processor.extractMdSelfLink(file);
             } catch (Exception e) {
                 LOG.error("error in file: {}", file, e);
-                nrOfFilesWithError++;
+                nrOfFilesTooLarge.incrementAndGet();
             }
             if (mdSelfLink != null) {
                 mdSelfLinkSet.add(StringUtils.normalizeIdString(mdSelfLink));
@@ -299,11 +301,11 @@ public class MetadataImporter {
     }
 
     protected void logStatistics(long start) {
-        long took = (System.currentTimeMillis() - start) / 1000;
-        LOG.info("Found " + nrOfFilesWithoutId + " file(s) without an id. (id is generated based on fileName but that may not be unique)");
-        LOG.info("Found " + nrOfFilesWithError + " file(s) with errors.");
-        LOG.info("Found " + nrOfFilesTooLarge + " file(s) too large.");
-        LOG.info("Update of " + nrOFDocumentsSend + " took " + took + " secs. Total nr of files analyzed " + nrOfFilesAnalyzed);
+        final long took = (System.currentTimeMillis() - start) / 1000;
+        LOG.info("Found {} file(s) without an id. (id is generated based on fileName but that may not be unique)", nrOfFilesWithoutId);
+        LOG.info("Found {} file(s) with errors.", nrOfFilesWithError);
+        LOG.info("Found {} file(s) too large.", nrOfFilesTooLarge);
+        LOG.info("Update of {} took {} secs. Total nr of files analyzed {}", nrOFDocumentsSent, took, nrOfFilesAnalyzed);
     }
 
     /**
@@ -443,17 +445,17 @@ public class MetadataImporter {
      * @throws IOException
      */
     protected void processCmdi(File file, DataRoot dataOrigin, CMDIDataProcessor processor, boolean createHierarchyGraph) throws SolrServerException, IOException {
-        nrOfFilesAnalyzed++;
+        nrOfFilesTooLarge.incrementAndGet();
         CMDIData cmdiData = null;
         try {
             cmdiData = processor.process(file);
             if (!idOk(cmdiData.getId())) {
                 cmdiData.setId(dataOrigin.getOriginName() + "/" + file.getName()); //No id found in the metadata file so making one up based on the file name. Not quaranteed to be unique, but we have to set something.
-                nrOfFilesWithoutId++;
+                nrOfFilesTooLarge.incrementAndGet();
             }
         } catch (Exception e) {
             LOG.error("error in file: {}", file, e);
-            nrOfFilesWithError++;
+            nrOfFilesTooLarge.incrementAndGet();
         }
         if (cmdiData != null) {
             if (processedIds.add(cmdiData.getId())) {
@@ -534,13 +536,16 @@ public class MetadataImporter {
 
         LOG.debug("Adding document for submission to SOLR: {}", file);
 
-        solrServer.add(solrDocument);
-        if (sendCount.incrementAndGet() % 100 == 0) {
-            LOG.info("Submitted {} documents", sendCount);
+        addToServer(solrDocument);
+        if (nrOFDocumentsSent.incrementAndGet() % 100 == 0) {
+            LOG.info("Number of documents sent thus far: {}", nrOFDocumentsSent);
         }
     }
 
-    private final AtomicInteger sendCount = new AtomicInteger(0);
+    protected void addToServer(SolrInputDocument solrDocument) throws SolrServerException, IOException {
+        //TODO: buffer?
+        solrServer.add(solrDocument);
+    }
 
     /**
      * Adds two fields FIELD_FORMAT and FIELD_RESOURCE. The Type can be
@@ -660,7 +665,7 @@ public class MetadataImporter {
                     partialUpdateMap.put("set", outgoingVertexNames);
                     doc.setField(FacetConstants.FIELD_IS_PART_OF, partialUpdateMap);
                 }
-                solrServer.add(doc);
+                addToServer(doc);
             }
         }
 

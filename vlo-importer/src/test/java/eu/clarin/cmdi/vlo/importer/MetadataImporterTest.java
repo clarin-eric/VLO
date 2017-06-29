@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -267,9 +268,6 @@ public class MetadataImporterTest extends ImporterTestcase {
                                 }
                             }
                         }
-                        if (!docs.isEmpty()) {
-                            sendDocs();
-                        }
                         LOG.info("End of processing: "
                                 + dataRoot.getOriginName());
                     }
@@ -284,18 +282,13 @@ public class MetadataImporterTest extends ImporterTestcase {
                         + " file(s) without an id. (id is generated based on fileName but that may not be unique)");
                 LOG.info("Found " + nrOfFilesWithError
                         + " file(s) with errors.");
-                LOG.info("Update of " + nrOFDocumentsSend + " took " + took
+                LOG.info("Update of " + nrOFDocumentsSent + " took " + took
                         + " secs. Total nr of files analyzed " + nrOfFilesAnalyzed);
             }
 
-            /*
-             * Replace the server's database by a document array
-             */
             @Override
-            protected void sendDocs() throws IOException {
-
-                result.addAll(this.docs);
-                docs = new ArrayList<SolrInputDocument>();
+            protected void addToServer(SolrInputDocument solrDocument) throws SolrServerException, IOException {
+                result.add(solrDocument);
             }
         };
         importer.startImport();
