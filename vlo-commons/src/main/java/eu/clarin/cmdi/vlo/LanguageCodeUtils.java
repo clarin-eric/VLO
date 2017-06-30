@@ -16,14 +16,15 @@
  */
 package eu.clarin.cmdi.vlo;
 
+import com.google.common.collect.ImmutableMap;
 import com.ximpleware.AutoPilot;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
@@ -116,27 +117,27 @@ public class LanguageCodeUtils {
      */
     public synchronized Map<String, String> getIso6392TToISO6393Map() {
         if (iso639_2TToISO639_3Map == null) {
-            iso639_2TToISO639_3Map = new ConcurrentHashMap<>();
-            iso639_2TToISO639_3Map.put("alb", "sqi");
-            iso639_2TToISO639_3Map.put("arm", "hye");
-            iso639_2TToISO639_3Map.put("baq", "eus");
-            iso639_2TToISO639_3Map.put("bur", "mya");
-            iso639_2TToISO639_3Map.put("cze", "ces");
-            iso639_2TToISO639_3Map.put("chi", "zho");
-            iso639_2TToISO639_3Map.put("dut", "nld");
-            iso639_2TToISO639_3Map.put("fre", "fra");
-            iso639_2TToISO639_3Map.put("geo", "kat");
-            iso639_2TToISO639_3Map.put("ger", "deu");
-            iso639_2TToISO639_3Map.put("gre", "ell");
-            iso639_2TToISO639_3Map.put("ice", "isl");
-            iso639_2TToISO639_3Map.put("max", "mkd");
-            iso639_2TToISO639_3Map.put("mao", "mri");
-            iso639_2TToISO639_3Map.put("may", "msa");
-            iso639_2TToISO639_3Map.put("per", "fas");
-            iso639_2TToISO639_3Map.put("rum", "ron");
-            iso639_2TToISO639_3Map.put("slo", "slk");
-            iso639_2TToISO639_3Map.put("tib", "bod");
-            iso639_2TToISO639_3Map.put("wel", "cym");
+            iso639_2TToISO639_3Map = ImmutableMap.<String,String>builder()
+            .put("alb", "sqi")
+            .put("arm", "hye")
+            .put("baq", "eus")
+            .put("bur", "mya")
+            .put("cze", "ces")
+            .put("chi", "zho")
+            .put("dut", "nld")
+            .put("fre", "fra")
+            .put("geo", "kat")
+            .put("ger", "deu")
+            .put("gre", "ell")
+            .put("ice", "isl")
+            .put("max", "mkd")
+            .put("mao", "mri")
+            .put("may", "msa")
+            .put("per", "fas")
+            .put("rum", "ron")
+            .put("slo", "slk")
+            .put("tib", "bod")
+            .put("wel", "cym").build();
         }
 
         return iso639_2TToISO639_3Map;
@@ -145,12 +146,12 @@ public class LanguageCodeUtils {
     private Map<String, String> createCodeMap(String url) {
         LOG.info("Creating language code map from {}", url);
         try {
-            Map<String, String> result = new ConcurrentHashMap<>(CommonUtils.createCMDIComponentItemMap(url));
+            Map<String, String> result = ImmutableMap.copyOf(CommonUtils.createCMDIComponentItemMap(url));
             return result;
         } catch (Exception e) {
             if (CommonUtils.shouldSwallowLookupErrors()) {
                 LOG.warn("Ignoring exception", e);
-                return new HashMap<>();
+                return Collections.emptyMap();
             } else {
                 throw new RuntimeException("Cannot instantiate postProcessor. URL: " + url, e);
             }
@@ -160,12 +161,12 @@ public class LanguageCodeUtils {
     private Map<String, String> createReverseCodeMap(String url) {
         LOG.debug("Creating language code map.");
         try {
-            Map<String, String> result = new ConcurrentHashMap<>(CommonUtils.createReverseCMDIComponentItemMap(url));
+            Map<String, String> result = ImmutableMap.copyOf(CommonUtils.createReverseCMDIComponentItemMap(url));
             return result;
         } catch (Exception e) {
             if (CommonUtils.shouldSwallowLookupErrors()) {
                 LOG.warn("Ignoring exception", e);
-                return new HashMap<>();
+                return Collections.emptyMap();
             } else {
                 throw new RuntimeException("Cannot instantiate postProcessor. URL: " + url, e);
             }
@@ -174,7 +175,7 @@ public class LanguageCodeUtils {
 
     private Map<String, String> createSilToIsoCodeMap() {
         LOG.debug("Creating silToIso code map.");
-        Map<String, String> result = new ConcurrentHashMap<>();
+        final Map<String, String> result = new HashMap<>();
         final String urlString = config.getSilToISO639CodesUrl();
 
         try {
@@ -204,12 +205,12 @@ public class LanguageCodeUtils {
         } catch (Exception e) {
             if (CommonUtils.shouldSwallowLookupErrors()) {
                 LOG.warn("Ignoring exception", e);
-                result = new HashMap<>();
+                return Collections.emptyMap();
             } else {
                 throw new RuntimeException("Cannot instantiate postProcessor. URL: " + urlString, e);
             }
         }
-        return result;
+        return ImmutableMap.copyOf(result);
     }
 
     public LanguageInfo decodeLanguageCodeString(String fieldValue) {
