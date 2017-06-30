@@ -57,6 +57,20 @@ public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
         submitIfBufferFull();
     }
 
+    @Override
+    public synchronized void commit() throws SolrServerException, IOException {
+        submitAllInBuffer();
+        super.commit();
+    }
+
+    @Override
+    public void shutdownServer() throws SolrServerException, IOException {
+        LOG.info("Shutdown requested");
+        submitAllInBuffer();
+        commit();
+        super.shutdownServer();
+    }
+
     private synchronized void submitIfBufferFull() throws SolrServerException, IOException {
         if (buffer.size() >= config.getMaxDocsInList()) {
             LOG.info("Buffer saturated. Sending {} documents to Solr", buffer.size());
@@ -64,14 +78,11 @@ public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
         }
     }
 
-    @Override
-    public void shutdownServer() throws SolrServerException, IOException {
+    protected void submitAllInBuffer() throws IOException, SolrServerException {
         if (buffer.size() > 0) {
-            LOG.info("Shutdown requested. Sending {} remaining documents to Solr", buffer.size());
+            LOG.info("Sending {} remaining documents to Solr", buffer.size());
             submitBuffer();
-            commit();
         }
-        super.shutdownServer();
     }
 
     protected synchronized void submitBuffer() throws IOException, SolrServerException {
