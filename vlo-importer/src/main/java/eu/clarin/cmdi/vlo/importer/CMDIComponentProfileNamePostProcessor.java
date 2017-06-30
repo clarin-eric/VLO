@@ -8,8 +8,10 @@ import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,26 +23,35 @@ public class CMDIComponentProfileNamePostProcessor extends AbstractPostProcessor
 
     private static final String XPATH = "/ComponentSpec/Header/Name/text()";
     private String BASE_URL = null;
-    private AutoPilot ap = null;
-    private VTDGen vg = null;
-    private VTDNav vn = null;
 
-    private static final String _EMPTY_STRING = "";
+    private static final String EMPTY_STRING = "";
     private final static Logger LOG = LoggerFactory.getLogger(CMDIComponentProfileNamePostProcessor.class);
-    private final HashMap<String, String> cache = new HashMap<String, String>();
+    private final Map<String, String> cache = new ConcurrentHashMap<>();
 
     public CMDIComponentProfileNamePostProcessor(VloConfig config) {
         super(config);
     }
 
     @Override
-    public synchronized List<String> process(String profileId, CMDIData cmdiData) {
-        String result = _EMPTY_STRING;
+    public List<String> process(String profileId, CMDIData cmdiData) {
+        String result = EMPTY_STRING;
         if (profileId != null) {
             if (cache.containsKey(profileId)) {
                 result = cache.get(profileId);
             } else {
-                setup();
+                VTDGen vg;
+                VTDNav vn;
+
+                final AutoPilot ap= new AutoPilot();
+                try {
+                    ap.selectXPath(XPATH);
+                } catch (XPathParseException e) {
+                    LOG.error(e.getLocalizedMessage());
+                    return Collections.singletonList(result);
+                }
+                vg = new VTDGen();
+                BASE_URL = getConfig().getComponentRegistryRESTURL();
+
                 LOG.debug("PARSING PROFILE: " + BASE_URL + profileId);
                 // get the name of the profile from the expanded xml in the component registry
                 if (vg.parseHttpUrl(BASE_URL + profileId + "/xml", true)) {
@@ -52,47 +63,24 @@ public class CMDIComponentProfileNamePostProcessor extends AbstractPostProcessor
                         idx = ap.evalXPath();
                         LOG.debug("EVALUATED XPATH: " + XPATH + " found idx: " + idx);
                         if (idx == -1) { // idx represent the nodeId in the xml file, if -1 the xpath evaluates to nothing.
-                            List<String> resultList = new ArrayList<String>();
-                            resultList.add(result);
-                            return resultList;
+                            Collections.singletonList(result);
                         }
                         result = vn.toString(idx);
                         cache.put(profileId, result);
-                    } catch (NavException e) {
+                    } catch (NavException | XPathEvalException e) {
                         LOG.error(e.getLocalizedMessage());
-                        List<String> resultList = new ArrayList<String>();
-                        resultList.add(result);
-                        return resultList;
-                    } catch (XPathEvalException e) {
-                        LOG.error(e.getLocalizedMessage());
-                        List<String> resultList = new ArrayList<String>();
-                        resultList.add(result);
-                        return resultList;
+                        Collections.singletonList(result);
                     }
                 } else {
                     LOG.error("Cannot open and/or parse XML Schema: {}.", BASE_URL + profileId);
                 }
             }
         }
-        List<String> resultList = new ArrayList<String>();
-        resultList.add(result);
-        return resultList;
+        return Collections.singletonList(result);
     }
 
     @Override
     public boolean doesProcessNoValue() {
         return false;
-    }
-
-    private void setup() {
-        ap = new AutoPilot();
-        try {
-            ap.selectXPath(XPATH);
-        } catch (XPathParseException e) {
-            LOG.error(e.getLocalizedMessage());
-            ap = null;
-        }
-        vg = new VTDGen();
-        BASE_URL = getConfig().getComponentRegistryRESTURL();
     }
 }
