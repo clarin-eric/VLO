@@ -40,19 +40,18 @@ public class ResourceStructureGraph {
 
     protected final static Logger LOG = LoggerFactory.getLogger(ResourceStructureGraph.class);
 
-    private static DirectedAcyclicGraph<CmdiVertex, DefaultEdge> graph = new DirectedAcyclicGraph<>(
-            DefaultEdge.class);
-    private static Map<String, CmdiVertex> vertexIdMap = new HashMap<>();
-    private static Set<CmdiVertex> foundVerticesSet = new HashSet<>();
-    private static Set<String> occurringMdSelfLinks = new HashSet<>();
-    
+    private final DirectedAcyclicGraph<CmdiVertex, DefaultEdge> graph = new DirectedAcyclicGraph<>(DefaultEdge.class);
+    private final Map<String, CmdiVertex> vertexIdMap = new HashMap<>();
+    private final Set<CmdiVertex> foundVerticesSet = new HashSet<>();
+    private Set<String> occurringMdSelfLinks = new HashSet<>();
+
     /**
      * Adds new vertex to graph, used to remember all CMDI files that were
      * actually seen
      *
      * @param mdSelfLink extracted MdSelfLink from CMDI file
      */
-    public static synchronized void addResource(String mdSelfLink) {
+    public synchronized void addResource(String mdSelfLink) {
         String normalizedMdSelfLink = StringUtils.normalizeIdString(mdSelfLink);
         if (!vertexIdMap.containsKey(normalizedMdSelfLink)) {
             CmdiVertex newVertex = new CmdiVertex(normalizedMdSelfLink);
@@ -73,15 +72,15 @@ public class ResourceStructureGraph {
      * @param sourceVertexId source vertex ID (=isPart)
      * @param targetVertexId target vertex ID (=hasPart)
      */
-    public static synchronized void addEdge(String sourceVertexId, String targetVertexId) {
+    public synchronized void addEdge(String sourceVertexId, String targetVertexId) {
         String normalizedSourceVertexId = StringUtils.normalizeIdString(sourceVertexId);
         String normalizedTargetVertexId = StringUtils.normalizeIdString(targetVertexId);
 
         // Omit adding edges to nodes that do not occur in the harvester set
-        if(!occurringMdSelfLinks.contains(normalizedSourceVertexId)) {
+        if (!occurringMdSelfLinks.contains(normalizedSourceVertexId)) {
             return;
         }
-        
+
         // add vertices
         if (!vertexIdMap.containsKey(normalizedSourceVertexId)) {
             CmdiVertex sourceVertex = new CmdiVertex(normalizedSourceVertexId);
@@ -113,7 +112,7 @@ public class ResourceStructureGraph {
      * @param alreadySeenVerticesSet set of already seen vertices to avoid
      * infinite loops for cycles
      */
-    private static void updateDepthValues(CmdiVertex startVertex, Set<CmdiVertex> alreadySeenVerticesSet) {
+    private void updateDepthValues(CmdiVertex startVertex, Set<CmdiVertex> alreadySeenVerticesSet) {
         alreadySeenVerticesSet = new HashSet<>();
         alreadySeenVerticesSet.add(startVertex);
 
@@ -147,7 +146,7 @@ public class ResourceStructureGraph {
         }
     }
 
-    private static void backwardUpdate(CmdiVertex updateVertex, int newDepth, Set<CmdiVertex> alreadySeenVerticesSet) {
+    private void backwardUpdate(CmdiVertex updateVertex, int newDepth, Set<CmdiVertex> alreadySeenVerticesSet) {
         if (!alreadySeenVerticesSet.contains(updateVertex) && updateVertex.getHierarchyWeight() > newDepth) {
             alreadySeenVerticesSet.add(updateVertex);
             LOG.debug("DOWN UPDATE\t" + updateVertex.getId() + "\t" + updateVertex.getHierarchyWeight() + " --> "
@@ -164,31 +163,32 @@ public class ResourceStructureGraph {
         }
     }
 
-    public static synchronized DirectedAcyclicGraph<CmdiVertex, DefaultEdge> getResourceGraph() {
+    public synchronized DirectedAcyclicGraph<CmdiVertex, DefaultEdge> getResourceGraph() {
         return graph;
     }
 
-    public static synchronized Set<CmdiVertex> getFoundVertices() {
+    public synchronized Set<CmdiVertex> getFoundVertices() {
         return foundVerticesSet;
     }
-    
-    public static synchronized CmdiVertex getVertex(String vertexId) {
-        return vertexIdMap.get(vertexId);        
+
+    public synchronized CmdiVertex getVertex(String vertexId) {
+        return vertexIdMap.get(vertexId);
     }
-    
-    public static synchronized Map<String, CmdiVertex> getVertexIdMap() {
+
+    public synchronized Map<String, CmdiVertex> getVertexIdMap() {
         return vertexIdMap;
     }
 
     /**
      * Get all vertices that are source of an edge where targetVertex is target.
-     * In other words get all resource vertices that are part of resource targetVertex.
+     * In other words get all resource vertices that are part of resource
+     * targetVertex.
      *
      * @param targetVertex
      * @return List of vertices that are source of an edge where targetVertex is
      * target
      */
-    public static synchronized List<String> getIncomingVertexNames(CmdiVertex targetVertex) {
+    public synchronized List<String> getIncomingVertexNames(CmdiVertex targetVertex) {
         List<String> vertexNamesList = new ArrayList<>();
         Set<DefaultEdge> incomingEdges = graph.incomingEdgesOf(targetVertex);
         Iterator<DefaultEdge> edgeIter = incomingEdges.iterator();
@@ -204,13 +204,14 @@ public class ResourceStructureGraph {
 
     /**
      * Get all vertices that are target of an edge where sourceVertex is source.
-     * In other words get all resource vertices of which resource sourceVertex is part of.
+     * In other words get all resource vertices of which resource sourceVertex
+     * is part of.
      *
      * @param sourceVertex
      * @return List of vertices that are target of an edge where sourceVertex is
      * source
      */
-    public static synchronized List<String> getOutgoingVertexNames(CmdiVertex sourceVertex) {
+    public synchronized List<String> getOutgoingVertexNames(CmdiVertex sourceVertex) {
         List<String> vertexNamesList = new ArrayList<>();
         Set<DefaultEdge> outgoingEdges = graph.outgoingEdgesOf(sourceVertex);
         Iterator<DefaultEdge> edgeIter = outgoingEdges.iterator();
@@ -225,21 +226,14 @@ public class ResourceStructureGraph {
     }
 
     /**
-     * Reset resource hierarchy graph (= deleting vertices + edges + supporting data structures)
+     * Set set of all MdSelfLinks that actually occur in the processed
+     * collection. Will be used to omit the creation of edges to non-existing
+     * nodes.
+     *
+     * @param occurringMdSelfLinks
      */
-    public static synchronized void clearResourceGraph() {
-        vertexIdMap = new HashMap<>();
-        foundVerticesSet = new HashSet<>();
-        graph = new DirectedAcyclicGraph<>(DefaultEdge.class);
-        occurringMdSelfLinks = new HashSet<>();
-    }
-
-    /**
-     * Set set of all MdSelfLinks that actually occur in the processed collection. Will be used to omit the creation of edges to non-existing nodes.
-     * @param occurringMdSelfLinks 
-     */
-    public static synchronized void setOccurringMdSelfLinks(Set<String> occurringMdSelfLinks) {
-        ResourceStructureGraph.occurringMdSelfLinks = occurringMdSelfLinks;
+    public synchronized void setOccurringMdSelfLinks(Set<String> occurringMdSelfLinks) {
+        this.occurringMdSelfLinks = occurringMdSelfLinks;
     }
 
     /**
@@ -249,7 +243,7 @@ public class ResourceStructureGraph {
      * or target vertex is missing) included in the output
      * @return some statistics about the resource hierarchy graph
      */
-    public static String printStatistics(int maxBrokenEdges) {
+    public String printStatistics(int maxBrokenEdges) {
         StringBuilder sb = new StringBuilder();
 
         // vertex + edge sets size
@@ -288,71 +282,73 @@ public class ResourceStructureGraph {
         sb.append(", valid edges: ").append(count);
         return sb.toString();
     }
-}
 
-/**
- * Stores all information of a vertex (=CMDI file) in the CMDI hierarchy graph
- *
- * @author Thomas Eckart
- */
-class CmdiVertex {
+    /**
+     * Stores all information of a vertex (=CMDI file) in the CMDI hierarchy
+     * graph
+     *
+     * @author Thomas Eckart
+     */
+    public static class CmdiVertex {
 
-    private final String id;
-    private int hierarchyWeight = 0;
-    private boolean wasImported = false;
+        private final String id;
+        private int hierarchyWeight = 0;
+        private boolean wasImported = false;
 
-    public CmdiVertex(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setHierarchyWeight(int hierarchyWeight) {
-        this.hierarchyWeight = hierarchyWeight;
-    }
-
-    public int getHierarchyWeight() {
-        return hierarchyWeight;
-    }
-    
-    public void setWasImported(boolean wasImported) {
-        this.wasImported = wasImported;
-    }
-    
-    public boolean getWasImported() {
-        return wasImported;
-    }
-
-    @Override
-    public String toString() {
-        return id + " (" + hierarchyWeight + ")";
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
+        public CmdiVertex(String id) {
+            this.id = id;
         }
-        if (obj == null) {
-            return false;
+
+        public String getId() {
+            return id;
         }
-        if (!(obj instanceof CmdiVertex)) {
-            return false;
+
+        public void setHierarchyWeight(int hierarchyWeight) {
+            this.hierarchyWeight = hierarchyWeight;
         }
-        CmdiVertex other = (CmdiVertex) obj;
-        if (this.id.equals(other.id)) {
-            return true;
+
+        public int getHierarchyWeight() {
+            return hierarchyWeight;
         }
-        if (this.id == null && other.id != null) {
-            return false;
+
+        public void setWasImported(boolean wasImported) {
+            this.wasImported = wasImported;
         }
-        return this.id.equals(other.id);
+
+        public boolean getWasImported() {
+            return wasImported;
+        }
+
+        @Override
+        public String toString() {
+            return id + " (" + hierarchyWeight + ")";
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (!(obj instanceof CmdiVertex)) {
+                return false;
+            }
+            CmdiVertex other = (CmdiVertex) obj;
+            if (this.id.equals(other.id)) {
+                return true;
+            }
+            if (this.id == null && other.id != null) {
+                return false;
+            }
+            return this.id.equals(other.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return id.hashCode();
+        }
     }
 
-    @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
 }

@@ -50,7 +50,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     }
 
     @Override
-    public CMDIData process(File file) throws VTDException, IOException, URISyntaxException {
+    public CMDIData process(File file, ResourceStructureGraph resourceStructureGraph) throws VTDException, IOException, URISyntaxException {
         final CMDIData cmdiData = new CMDIData();
         final VTDGen vg = new VTDGen();
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
@@ -66,7 +66,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         }
 
         nav.toElement(VTDNav.ROOT);
-        processResources(cmdiData, nav);
+        processResources(cmdiData, nav, resourceStructureGraph);
         processFacets(cmdiData, nav, facetMapping);
         return cmdiData;
     }
@@ -202,13 +202,13 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @param nav VTD Navigator
      * @throws VTDException
      */
-    private void processResources(CMDIData cmdiData, VTDNav nav) throws VTDException {
+    private void processResources(CMDIData cmdiData, VTDNav nav, ResourceStructureGraph resourceStructureGraph) throws VTDException {
         AutoPilot mdSelfLink = new AutoPilot(nav);
         setNameSpace(mdSelfLink, null);
         mdSelfLink.selectXPath("/cmd:CMD/cmd:Header/cmd:MdSelfLink");
         String mdSelfLinkString = mdSelfLink.evalXPathToString();
-        if (config.isProcessHierarchies()) {
-            ResourceStructureGraph.addResource(mdSelfLinkString);
+        if (resourceStructureGraph != null) {
+            resourceStructureGraph.addResource(mdSelfLinkString);
         }
 
         AutoPilot resourceProxy = new AutoPilot(nav);
@@ -238,8 +238,8 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             }
 
             // resource hierarchy information?
-            if (config.isProcessHierarchies() && type.toLowerCase().equals("metadata")) {
-                ResourceStructureGraph.addEdge(ref, mdSelfLinkString);
+            if (resourceStructureGraph != null && type.toLowerCase().equals("metadata")) {
+                resourceStructureGraph.addEdge(ref, mdSelfLinkString);
             }
         }
     }

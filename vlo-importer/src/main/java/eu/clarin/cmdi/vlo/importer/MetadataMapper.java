@@ -109,7 +109,7 @@ public class MetadataMapper {
 
             File record = new File(recordFile);
 
-            CMDIData cmdiData = processor.process(record);
+            CMDIData cmdiData = processor.process(record, new ResourceStructureGraph());
 
             for (String field : cmdiData.getSolrDocument().getFieldNames()) {
                 System.out.println(cmdiData.getSolrDocument().getField(field));

@@ -32,6 +32,7 @@ import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph.CmdiVertex;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -231,7 +232,58 @@ public class MetadataImporter {
         LOG.info("Processing directory: {}", centreFiles.get(0).getParent());
         String centerDirName = centreFiles.get(0).getParentFile().getName();
 
-        // decide if hierarchy graph will be created for this centre
+        final ResourceStructureGraph resourceStructureGraph = instantiateResourceStructureGraph(dataRoot, centerDirName);
+
+        // pre-process: identify mdSelfLinks and remove too large files from center file list
+        LOG.info("Checking file list...");
+        final Set<String> mdSelfLinkSet = Sets.newConcurrentHashSet();
+        final Set<File> ignoredFileSet = Sets.newConcurrentHashSet();
+
+        //(perform in thread pool)
+        final Stream<Callable<Void>> preProcessors = centreFiles.stream().map((File file) -> {
+            return (Callable) () -> {
+                final CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
+                preProcessFile(processor, file, (resourceStructureGraph != null), ignoredFileSet, mdSelfLinkSet);
+                return null;
+            };
+        });
+        final Set<Callable<Void>> preProcessorsCollection = preProcessors.collect(Collectors.toSet());
+        fileProcessingPool.invokeAll(preProcessorsCollection);
+
+        //remove ignored files
+        centreFiles.removeAll(ignoredFileSet);
+
+        // inform structure graph about MdSelfLinks of all files in this collection
+        if (resourceStructureGraph != null) {
+            resourceStructureGraph.setOccurringMdSelfLinks(mdSelfLinkSet);
+            LOG.info("...extracted {} mdSelfLinks", mdSelfLinkSet.size());
+        }
+
+        // process every file in this collection
+        final Stream<Callable<Void>> processors = centreFiles.stream().map((File file) -> {
+            return (Callable) () -> {
+                LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
+                final CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
+                processCmdi(file, dataRoot, processor, resourceStructureGraph);
+                return null;
+            };
+        });
+        final Set<Callable<Void>> processorsCollection = processors.collect(Collectors.toSet());
+        fileProcessingPool.invokeAll(processorsCollection);
+
+        solrBridge.commit();
+        if (resourceStructureGraph != null) {
+            updateDocumentHierarchy(resourceStructureGraph);
+        }
+    }
+
+    /**
+     * decide if hierarchy graph will be created for this centre
+     * @param dataRoot
+     * @param centerDirName
+     * @return null if no graph should be kept, otherwise a fresh resource structure graph object
+     */
+    protected ResourceStructureGraph instantiateResourceStructureGraph(final DataRoot dataRoot, String centerDirName) {
         final boolean createHierarchyGraph;
         if (!config.isProcessHierarchies()) {
             createHierarchyGraph = false;
@@ -243,47 +295,10 @@ public class MetadataImporter {
             createHierarchyGraph = false;
         }
         LOG.info("Create structure graph: {}", createHierarchyGraph);
-
-        // pre-process: identify mdSelfLinks and remove too large files from center file list
-        LOG.info("Checking file list...");
-        final Set<String> mdSelfLinkSet = Sets.newConcurrentHashSet();
-        final Set<File> ignoredFileSet = Sets.newConcurrentHashSet();
-
-        //(perform in thread pool)
-        final Stream<Callable<Void>> preProcessors = centreFiles.stream().map((File file) -> {
-            return (Callable) () -> {
-                final CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
-                preProcessFile(processor, file, createHierarchyGraph, ignoredFileSet, mdSelfLinkSet);
-                return null;
-            };
-        });
-        final Set<Callable<Void>> preProcessorsCollection = preProcessors.collect(Collectors.toSet());
-        fileProcessingPool.invokeAll(preProcessorsCollection);
-
-        //remove ignored files
-        centreFiles.removeAll(ignoredFileSet);
-
-        // inform structure graph about MdSelfLinks of all files in this collection
         if (createHierarchyGraph) {
-            ResourceStructureGraph.setOccurringMdSelfLinks(mdSelfLinkSet);
-            LOG.info("...extracted {} mdSelfLinks", mdSelfLinkSet.size());
-        }
-
-        // process every file in this collection
-        final Stream<Callable<Void>> processors = centreFiles.stream().map((File file) -> {
-            return (Callable) () -> {
-                LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
-                final CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
-                processCmdi(file, dataRoot, processor, createHierarchyGraph);
-                return null;
-            };
-        });
-        final Set<Callable<Void>> processorsCollection = processors.collect(Collectors.toSet());
-        fileProcessingPool.invokeAll(processorsCollection);
-
-        solrBridge.commit();
-        if (createHierarchyGraph) {
-            updateDocumentHierarchy();
+            return new ResourceStructureGraph();
+        } else {
+            return null;
         }
     }
 
@@ -420,15 +435,15 @@ public class MetadataImporter {
      * @param file CMDI input file
      * @param dataOrigin
      * @param processor
-     * @param createHierarchyGraph
+     * @param resourceStructureGraph null to skip hierarchy processing
      * @throws SolrServerException
      * @throws IOException
      */
-    protected void processCmdi(File file, DataRoot dataOrigin, CMDIDataProcessor processor, boolean createHierarchyGraph) throws SolrServerException, IOException {
+    protected void processCmdi(File file, DataRoot dataOrigin, CMDIDataProcessor processor, ResourceStructureGraph resourceStructureGraph) throws SolrServerException, IOException {
         nrOfFilesAnalyzed.incrementAndGet();
         CMDIData cmdiData = null;
         try {
-            cmdiData = processor.process(file);
+            cmdiData = processor.process(file, resourceStructureGraph);
             if (!idOk(cmdiData.getId())) {
                 cmdiData.setId(dataOrigin.getOriginName() + "/" + file.getName()); //No id found in the metadata file so making one up based on the file name. Not quaranteed to be unique, but we have to set something.
                 nrOfFilesWithoutId.incrementAndGet();
@@ -442,8 +457,8 @@ public class MetadataImporter {
                 SolrInputDocument solrDocument = cmdiData.getSolrDocument();
                 if (solrDocument != null) {
                     updateDocument(solrDocument, cmdiData, file, dataOrigin);
-                    if (createHierarchyGraph && ResourceStructureGraph.getVertex(cmdiData.getId()) != null) {
-                        ResourceStructureGraph.getVertex(cmdiData.getId()).setWasImported(true);
+                    if (resourceStructureGraph != null && resourceStructureGraph.getVertex(cmdiData.getId()) != null) {
+                        resourceStructureGraph.getVertex(cmdiData.getId()).setWasImported(true);
                     }
                 }
             } else {
@@ -582,14 +597,14 @@ public class MetadataImporter {
      * @throws SolrServerException
      * @throws MalformedURLException
      */
-    private synchronized void updateDocumentHierarchy() throws SolrServerException, MalformedURLException, IOException {
-        LOG.info(ResourceStructureGraph.printStatistics(0));
+    private synchronized void updateDocumentHierarchy(ResourceStructureGraph resourceStructureGraph) throws SolrServerException, MalformedURLException, IOException {
+        LOG.info(resourceStructureGraph.printStatistics(0));
         Boolean updatedDocs = false;
-        Iterator<CmdiVertex> vertexIter = ResourceStructureGraph.getFoundVertices().iterator();
+        Iterator<CmdiVertex> vertexIter = resourceStructureGraph.getFoundVertices().iterator();
         while (vertexIter.hasNext()) {
             CmdiVertex vertex = vertexIter.next();
-            List<String> incomingVertexNames = ResourceStructureGraph.getIncomingVertexNames(vertex);
-            List<String> outgoingVertexNames = ResourceStructureGraph.getOutgoingVertexNames(vertex);
+            List<String> incomingVertexNames = resourceStructureGraph.getIncomingVertexNames(vertex);
+            List<String> outgoingVertexNames = resourceStructureGraph.getOutgoingVertexNames(vertex);
 
             // update vertex if changes are necessary (necessary if non-default weight or edges to other resources)
             if (vertex.getHierarchyWeight() != 0 || !incomingVertexNames.isEmpty() || !outgoingVertexNames.isEmpty()) {
@@ -607,14 +622,14 @@ public class MetadataImporter {
                 Iterator<String> incomingVertexIter = incomingVertexNames.iterator();
                 while (incomingVertexIter.hasNext()) {
                     String vertexId = incomingVertexIter.next();
-                    if (ResourceStructureGraph.getVertex(vertexId) == null || !ResourceStructureGraph.getVertex(vertexId).getWasImported()) {
+                    if (resourceStructureGraph.getVertex(vertexId) == null || !resourceStructureGraph.getVertex(vertexId).getWasImported()) {
                         incomingVertexIter.remove();
                     }
                 }
                 Iterator<String> outgoingVertexIter = outgoingVertexNames.iterator();
                 while (outgoingVertexIter.hasNext()) {
                     String vertexId = outgoingVertexIter.next();
-                    if (ResourceStructureGraph.getVertex(vertexId) == null || !ResourceStructureGraph.getVertex(vertexId).getWasImported()) {
+                    if (resourceStructureGraph.getVertex(vertexId) == null || !resourceStructureGraph.getVertex(vertexId).getWasImported()) {
                         outgoingVertexIter.remove();
                     }
                 }
@@ -647,8 +662,6 @@ public class MetadataImporter {
         if (updatedDocs) {
             solrBridge.commit();
         }
-
-        ResourceStructureGraph.clearResourceGraph();
     }
 
     /**
@@ -722,7 +735,7 @@ public class MetadataImporter {
     }
 
     /**
-     * 
+     *
      * @return time last completed import took; may be null
      */
     public Long getTime() {

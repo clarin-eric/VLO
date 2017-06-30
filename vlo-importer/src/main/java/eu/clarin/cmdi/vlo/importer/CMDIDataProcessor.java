@@ -10,7 +10,7 @@ public interface CMDIDataProcessor {
      * @return
      * @throws Exception 
      */
-    public CMDIData process(File file) throws Exception ;
+    public CMDIData process(File file, ResourceStructureGraph resourceStructureGraph) throws Exception ;
 
     /**
      * Extract mdSelfLink from CMDI file (stored in /CMD/Header/MdSelfLink)
