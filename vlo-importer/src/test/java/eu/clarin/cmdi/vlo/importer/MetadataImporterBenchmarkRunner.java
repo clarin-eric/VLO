@@ -28,6 +28,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import org.apache.log4j.lf5.util.StreamUtils;
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
 
 /**
  *
@@ -46,7 +49,6 @@ public class MetadataImporterBenchmarkRunner extends MetadataImporterRunner {
         final VloConfig config = configFactory.newConfig();
 
         final List<Long> times = new ArrayList<>(RUNS);
-
         try (PrintStream out = new PrintStream(outFile)) {
             out.printf("Date/time: %s\n", Calendar.getInstance().getTime().toString());
             out.printf("File processing threads: %d\n", config.getFileProcessingThreads());
@@ -55,6 +57,7 @@ public class MetadataImporterBenchmarkRunner extends MetadataImporterRunner {
             out.printf("Max docs in list: %d\n", config.getMaxDocsInList());
 
             for (int i = 0; i < RUNS; i++) {
+                requestSolrOptimization(config);
                 final MetadataImporter importer = MetadataImporterRunner.runImporter(config, null);
                 out.printf("Run %d: %d ms (%d documents)\n", i, importer.getTime(), importer.nrOFDocumentsSent.get());
 
@@ -72,6 +75,24 @@ public class MetadataImporterBenchmarkRunner extends MetadataImporterRunner {
         System.out.println(outFile.getAbsolutePath());
         try (FileInputStream fileInputStream = new FileInputStream(outFile)) {
             StreamUtils.copy(fileInputStream, System.out);
+        }
+    }
+
+    protected static void requestSolrOptimization(final VloConfig config) {
+        LOG.info("Triggering Solr index optimization");
+        //optimise solr server for a fair assessment
+        try {
+            SolrServer s = new HttpSolrServer(config.getSolrUrl());
+            s.optimize();
+            s.shutdown();
+        } catch (IOException | SolrServerException e) {
+            LOG.error("error while optimizing", e);
+        }
+        
+        try {
+            LOG.info("Starting in 5 seconds...");
+            Thread.sleep(5000);
+        } catch (InterruptedException ex) {
         }
     }
 }
