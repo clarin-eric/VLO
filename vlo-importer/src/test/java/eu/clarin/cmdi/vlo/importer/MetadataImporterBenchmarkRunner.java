@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import org.apache.log4j.lf5.util.StreamUtils;
 
@@ -47,6 +48,7 @@ public class MetadataImporterBenchmarkRunner extends MetadataImporterRunner {
         final List<Long> times = new ArrayList<>(RUNS);
 
         try (PrintStream out = new PrintStream(outFile)) {
+            out.printf("Date/time: %s\n", Calendar.getInstance().getTime().toString());
             out.printf("File processing threads: %d\n", config.getFileProcessingThreads());
             out.printf("Solr threads: %d\n", config.getSolrThreads());
             out.printf("Min docs in Solr queue: %d\n", config.getMinDocsInSolrQueue());
