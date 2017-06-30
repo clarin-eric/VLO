@@ -36,13 +36,14 @@ public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
 
     private final static Logger LOG = LoggerFactory.getLogger(BufferingSolrBridgeImpl.class);
 
-    private final VloConfig config;
-
     private final Collection<SolrInputDocument> buffer = new ArrayList<>();
+    private final int flushSize;
 
     public BufferingSolrBridgeImpl(VloConfig config) {
         super(config);
-        this.config = config;
+        this.flushSize = config.getMaxDocsInList();
+        
+        LOG.info("Buffered will be submitted to the Solr server if it contains {} or more documents", flushSize);
     }
 
     @Override
@@ -72,15 +73,15 @@ public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
     }
 
     private synchronized void submitIfBufferFull() throws SolrServerException, IOException {
-        if (buffer.size() >= config.getMaxDocsInList()) {
-            LOG.info("Buffer saturated. Sending {} documents to Solr", buffer.size());
+        if (buffer.size() >= flushSize) {
+            LOG.debug("Buffer saturated. Sending {} documents to Solr", buffer.size());
             submitBuffer();
         }
     }
 
     protected void submitAllInBuffer() throws IOException, SolrServerException {
-        if (buffer.size() > 0) {
-            LOG.info("Sending {} remaining documents to Solr", buffer.size());
+        if (!buffer.isEmpty()) {
+            LOG.debug("Sending {} remaining documents to Solr", buffer.size());
             submitBuffer();
         }
     }

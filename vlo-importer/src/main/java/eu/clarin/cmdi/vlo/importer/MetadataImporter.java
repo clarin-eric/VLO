@@ -532,7 +532,7 @@ public class MetadataImporter {
         LOG.debug("Adding document for submission to SOLR: {}", file);
 
         solrBridge.addDocument(solrDocument);
-        if (nrOFDocumentsSent.incrementAndGet() % 100 == 0) {
+        if (nrOFDocumentsSent.incrementAndGet() % 250 == 0) {
             LOG.info("Number of documents sent thus far: {}", nrOFDocumentsSent);
         }
     }
