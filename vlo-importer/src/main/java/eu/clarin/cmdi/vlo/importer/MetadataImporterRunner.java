@@ -109,7 +109,7 @@ public class MetadataImporterRunner {
         return options;
     }
 
-    protected static void runImporter(String configFile, String cldrList) throws IOException, MalformedURLException {
+    protected static MetadataImporter runImporter(String configFile, String datarootsList) throws IOException, MalformedURLException {
         // read the configuration from the externally supplied file
         final URL configUrl;
         if (configFile.startsWith("file:")) {
@@ -122,13 +122,17 @@ public class MetadataImporterRunner {
         
         final XmlVloConfigFactory configFactory = new XmlVloConfigFactory(configUrl);
         final VloConfig config = configFactory.newConfig();
+        return runImporter(config, datarootsList);
+    }
+
+    protected static MetadataImporter runImporter(final VloConfig config, String datarootsList) throws MalformedURLException, IOException {
         final LanguageCodeUtils languageCodeUtils = new LanguageCodeUtils(config);
         final VLOMarshaller marshaller = new VLOMarshaller();
         final FacetMappingFactory facetMappingFactory = new FacetMappingFactory(config, marshaller);
 
         // optionally, modify the configuration here
         // create and start the importer
-        final MetadataImporter importer = new MetadataImporter(config, languageCodeUtils, facetMappingFactory, marshaller, cldrList);
+        final MetadataImporter importer = new MetadataImporter(config, languageCodeUtils, facetMappingFactory, marshaller, datarootsList);
         importer.startImport();
 
         // finished importing
@@ -137,5 +141,7 @@ public class MetadataImporterRunner {
             facetMappingFactory.printMapping(file);
             LOG.info("Printed facetMapping in " + file);
         }
+        
+        return importer;
     }
 }

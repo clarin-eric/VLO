@@ -112,6 +112,7 @@ public class MetadataImporter {
     protected final AtomicInteger nrOfFilesWithoutId = new AtomicInteger();
     protected final AtomicInteger nrOfFilesWithError = new AtomicInteger();
     protected final AtomicInteger nrOfFilesTooLarge = new AtomicInteger();
+    private Long time;
 
     public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList) {
         this(config, languageCodeUtils, mappingFactory, marshaller, clDatarootsList, DefaultSolrBridgeFactory.createDefaultSolrBridge(config));
@@ -200,7 +201,8 @@ public class MetadataImporter {
                 LOG.error("Failed to shutdown Solr server", ex);
             }
         }
-        logStatistics(start);
+        time = (System.currentTimeMillis() - start);
+        logStatistics();
     }
 
     protected void deleteAll() throws IOException, SolrServerException {
@@ -311,12 +313,11 @@ public class MetadataImporter {
         LOG.info("Deleting old files done.");
     }
 
-    protected void logStatistics(long start) {
-        final long took = (System.currentTimeMillis() - start) / 1000;
+    protected void logStatistics() {
         LOG.info("Found {} file(s) without an id. (id is generated based on fileName but that may not be unique)", nrOfFilesWithoutId);
         LOG.info("Found {} file(s) with errors.", nrOfFilesWithError);
         LOG.info("Found {} file(s) too large.", nrOfFilesTooLarge);
-        LOG.info("Update of {} took {} secs. Total nr of files analyzed {}", nrOFDocumentsSent, took, nrOfFilesAnalyzed);
+        LOG.info("Update of {} took {} secs. Total nr of files analyzed {}", nrOFDocumentsSent, time / 1000, nrOfFilesAnalyzed);
     }
 
     /**
@@ -718,6 +719,14 @@ public class MetadataImporter {
         }
 
         LOG.info("Updating \"days since last import\" done.");
+    }
+
+    /**
+     * 
+     * @return time last completed import took; may be null
+     */
+    public Long getTime() {
+        return time;
     }
 
     /**
