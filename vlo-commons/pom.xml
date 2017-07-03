@@ -94,7 +94,8 @@
                 <vloconfig.dataRootsFile>file:/srv/webapps/vlo/dataroots-testvm.xml</vloconfig.dataRootsFile>
                 <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
                 <vloconfig.facetConceptsFileLocation>file:/srv/VLO-mapping/mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
-                <vloconfig.fileProcessingThreads>4</vloconfig.fileProcessingThreads>
+                <!-- File processing threads; 0 or lower lets JVM determine based on number of cores present -->
+                <vloconfig.fileProcessingThreads>-1</vloconfig.fileProcessingThreads>
                 <vloconfig.solrThreads>2</vloconfig.solrThreads>
             </properties>
         </profile>
@@ -110,7 +111,6 @@
                 <vloconfig.dataRootsFile>dataroots-production.xml</vloconfig.dataRootsFile>
                 <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
                 <vloconfig.facetConceptsFileLocation>file:/srv/VLO-mapping/mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
-                <vloconfig.fileProcessingThreads>4</vloconfig.fileProcessingThreads> <!-- TODO: assess performance -->
                 <vloconfig.solrThreads>4</vloconfig.solrThreads> <!-- TODO: assess performance -->
             </properties>
         </profile>
