@@ -39,6 +39,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -167,8 +168,15 @@ public class MetadataImporter {
                     deleteAll();
                 }
 
-                LOG.info("Initiating processing pool with {} threads", config.getFileProcessingThreads());
-                fileProcessingPool = Executors.newFixedThreadPool(config.getFileProcessingThreads());
+                final int nProcessingThreads = config.getFileProcessingThreads();
+                if (nProcessingThreads > 0) {
+                    LOG.info("Initiating processing pool with {} threads", nProcessingThreads);
+                    fileProcessingPool = Executors.newFixedThreadPool(config.getFileProcessingThreads());
+                } else {
+                    LOG.info("Initiating work stealing pool (0 >= file processing threads in configuration)");
+                    fileProcessingPool = Executors.newWorkStealingPool();
+                    LOG.info("Pool was created with parallelism level {}", ((ForkJoinPool) fileProcessingPool).getParallelism());
+                }
 
                 // Import the specified data roots
                 for (DataRoot dataRoot : dataRoots) {
