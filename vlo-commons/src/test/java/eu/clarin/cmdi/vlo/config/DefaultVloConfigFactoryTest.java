@@ -149,7 +149,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("getMaxDocsInList");
 
-        int expResult = 128;
+        int expResult = 1024;
         int result = config.getMaxDocsInList();
 
         assertEquals(expResult, result);
@@ -180,7 +180,7 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("getMaxDocsInSolrQueue");
 
-        int expResult = 128;
+        int expResult = 1024;
         int result = config.getMaxDocsInList();
 
         assertEquals(expResult, result);
