@@ -110,6 +110,7 @@ public class MetadataImporter {
     // SOME STATS
     protected final AtomicInteger nrOFDocumentsSent = new AtomicInteger();
     protected final AtomicInteger nrOfFilesAnalyzed = new AtomicInteger();
+    protected final AtomicInteger nrOfFilesSkipped = new AtomicInteger();
     protected final AtomicInteger nrOfFilesWithoutId = new AtomicInteger();
     protected final AtomicInteger nrOfFilesWithError = new AtomicInteger();
     protected final AtomicInteger nrOfFilesTooLarge = new AtomicInteger();
@@ -335,6 +336,7 @@ public class MetadataImporter {
         LOG.info("Found {} file(s) without an id. (id is generated based on fileName but that may not be unique)", nrOfFilesWithoutId);
         LOG.info("Found {} file(s) with errors.", nrOfFilesWithError);
         LOG.info("Found {} file(s) too large.", nrOfFilesTooLarge);
+        LOG.info("Skipped {} file(s) due to duplicate id.", nrOfFilesSkipped);
         LOG.info("Update of {} took {} secs. Total nr of files analyzed {}", nrOFDocumentsSent, time / 1000, nrOfFilesAnalyzed);
     }
 
@@ -465,6 +467,7 @@ public class MetadataImporter {
                     }
                 }
             } else {
+                nrOfFilesSkipped.incrementAndGet();
                 LOG.warn("Skipping {}, already processed id: {}", file, cmdiData.getId());
             }
         }
