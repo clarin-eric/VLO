@@ -271,6 +271,7 @@ public class MetadataImporter {
         final Set<Callable<Void>> processorsCollection = processors.collect(Collectors.toSet());
         fileProcessingPool.invokeAll(processorsCollection);
 
+        LOG.info("Number of documents sent thus far: {}", nrOFDocumentsSent);
         solrBridge.commit();
         if (resourceStructureGraph != null) {
             updateDocumentHierarchy(resourceStructureGraph);
@@ -279,9 +280,11 @@ public class MetadataImporter {
 
     /**
      * decide if hierarchy graph will be created for this centre
+     *
      * @param dataRoot
      * @param centerDirName
-     * @return null if no graph should be kept, otherwise a fresh resource structure graph object
+     * @return null if no graph should be kept, otherwise a fresh resource
+     * structure graph object
      */
     protected ResourceStructureGraph instantiateResourceStructureGraph(final DataRoot dataRoot, String centerDirName) {
         final boolean createHierarchyGraph;
@@ -599,67 +602,59 @@ public class MetadataImporter {
      */
     private synchronized void updateDocumentHierarchy(ResourceStructureGraph resourceStructureGraph) throws SolrServerException, MalformedURLException, IOException {
         LOG.info(resourceStructureGraph.printStatistics(0));
-        Boolean updatedDocs = false;
-        Iterator<CmdiVertex> vertexIter = resourceStructureGraph.getFoundVertices().iterator();
+        final AtomicInteger updateCount = new AtomicInteger();
+        final Iterator<CmdiVertex> vertexIter = resourceStructureGraph.getFoundVertices().iterator();
         while (vertexIter.hasNext()) {
-            CmdiVertex vertex = vertexIter.next();
-            List<String> incomingVertexNames = resourceStructureGraph.getIncomingVertexNames(vertex);
-            List<String> outgoingVertexNames = resourceStructureGraph.getOutgoingVertexNames(vertex);
+            final CmdiVertex vertex = vertexIter.next();
+            final List<String> incomingVertexNames = resourceStructureGraph.getIncomingVertexNames(vertex);
+            final List<String> outgoingVertexNames = resourceStructureGraph.getOutgoingVertexNames(vertex);
 
             // update vertex if changes are necessary (necessary if non-default weight or edges to other resources)
             if (vertex.getHierarchyWeight() != 0 || !incomingVertexNames.isEmpty() || !outgoingVertexNames.isEmpty()) {
-                updatedDocs = true;
-                SolrInputDocument doc = new SolrInputDocument();
+                updateCount.incrementAndGet();
+                final SolrInputDocument doc = new SolrInputDocument();
                 doc.setField(FacetConstants.FIELD_ID, Arrays.asList(vertex.getId()));
 
                 if (vertex.getHierarchyWeight() != 0) {
-                    Map<String, Integer> partialUpdateMap = new HashMap<>();
+                    final Map<String, Integer> partialUpdateMap = new HashMap<>();
                     partialUpdateMap.put("set", Math.abs(vertex.getHierarchyWeight()));
                     doc.setField(FacetConstants.FIELD_HIERARCHY_WEIGHT, partialUpdateMap);
                 }
 
                 // remove vertices that were not imported
-                Iterator<String> incomingVertexIter = incomingVertexNames.iterator();
+                final Iterator<String> incomingVertexIter = incomingVertexNames.iterator();
                 while (incomingVertexIter.hasNext()) {
                     String vertexId = incomingVertexIter.next();
                     if (resourceStructureGraph.getVertex(vertexId) == null || !resourceStructureGraph.getVertex(vertexId).getWasImported()) {
                         incomingVertexIter.remove();
                     }
                 }
-                Iterator<String> outgoingVertexIter = outgoingVertexNames.iterator();
+                final Iterator<String> outgoingVertexIter = outgoingVertexNames.iterator();
                 while (outgoingVertexIter.hasNext()) {
-                    String vertexId = outgoingVertexIter.next();
+                    final String vertexId = outgoingVertexIter.next();
                     if (resourceStructureGraph.getVertex(vertexId) == null || !resourceStructureGraph.getVertex(vertexId).getWasImported()) {
                         outgoingVertexIter.remove();
                     }
                 }
 
                 if (!incomingVertexNames.isEmpty()) {
-                    Map<String, List<String>> partialUpdateMap = new HashMap<>();
-                    partialUpdateMap.put("set", incomingVertexNames);
-                    doc.setField(FacetConstants.FIELD_HAS_PART, partialUpdateMap);
-
-                    Map<String, Integer> partialUpdateMapCount = new HashMap<>();
-                    partialUpdateMapCount.put("set", incomingVertexNames.size());
-                    doc.setField(FacetConstants.FIELD_HAS_PART_COUNT, partialUpdateMapCount);
+                    doc.setField(FacetConstants.FIELD_HAS_PART, ImmutableMap.of("set", incomingVertexNames));
+                    doc.setField(FacetConstants.FIELD_HAS_PART_COUNT, ImmutableMap.of("set", incomingVertexNames.size()));
 
                     // add hasPartCount weight
-                    Double hasPartCountWeight = Math.log10(1 + Math.min(50, incomingVertexNames.size()));
-                    Map<String, Double> partialUpdateMapCountWeight = new HashMap<>();
-                    partialUpdateMapCountWeight.put("set", hasPartCountWeight);
-                    doc.setField(FacetConstants.FIELD_HAS_PART_COUNT_WEIGHT, partialUpdateMapCountWeight);
+                    final Double hasPartCountWeight = Math.log10(1 + Math.min(50, incomingVertexNames.size()));
+                    doc.setField(FacetConstants.FIELD_HAS_PART_COUNT_WEIGHT, ImmutableMap.of("set", hasPartCountWeight));
                 }
 
                 if (!outgoingVertexNames.isEmpty()) {
-                    Map<String, List<String>> partialUpdateMap = new HashMap<>();
-                    partialUpdateMap.put("set", outgoingVertexNames);
-                    doc.setField(FacetConstants.FIELD_IS_PART_OF, partialUpdateMap);
+                    doc.setField(FacetConstants.FIELD_IS_PART_OF, ImmutableMap.of("set", outgoingVertexNames));
                 }
                 solrBridge.addDocument(doc);
             }
+            LOG.info("Updated {} documents in graph", updateCount.get());
         }
 
-        if (updatedDocs) {
+        if (updateCount.get() > 0) {
             solrBridge.commit();
         }
     }
