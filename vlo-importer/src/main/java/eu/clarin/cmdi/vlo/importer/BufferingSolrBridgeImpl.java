@@ -18,8 +18,10 @@ package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
@@ -38,12 +40,19 @@ public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
 
     private final Collection<SolrInputDocument> buffer = new ArrayList<>();
     private final int flushSize;
+    private final AtomicInteger submitCount = new AtomicInteger();
 
     public BufferingSolrBridgeImpl(VloConfig config) {
         super(config);
         this.flushSize = config.getMaxDocsInList();
-        
+
         LOG.info("Buffered will be submitted to the Solr server if it contains {} or more documents", flushSize);
+    }
+
+    @Override
+    public void init() throws MalformedURLException {
+        super.init();
+        submitCount.set(0);
     }
 
     @Override
@@ -69,6 +78,7 @@ public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
         LOG.info("Shutdown requested");
         submitAllInBuffer();
         commit();
+        LOG.info("{} committed submits in lifespan", submitCount.get());
         super.shutdownServer();
     }
 
@@ -88,6 +98,7 @@ public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
 
     protected synchronized void submitBuffer() throws IOException, SolrServerException {
         getServer().add(buffer);
+        LOG.trace("Submit count total: {}", submitCount.addAndGet(buffer.size()));
         buffer.clear();
     }
 
