@@ -20,6 +20,8 @@
         <vloconfig.maxDaysInSolr>0</vloconfig.maxDaysInSolr>
         <vloconfig.homeUrl>http://www.clarin.eu/vlo</vloconfig.homeUrl>
         <vloconfig.helpUrl>http://www.clarin.eu/vlo</vloconfig.helpUrl>
+        <vloconfig.fileProcessingThreads>2</vloconfig.fileProcessingThreads>
+        <vloconfig.solrThreads>2</vloconfig.solrThreads>
     </properties>
     
     <build>
@@ -92,6 +94,8 @@
                 <vloconfig.dataRootsFile>file:/srv/webapps/vlo/dataroots-testvm.xml</vloconfig.dataRootsFile>
                 <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
                 <vloconfig.facetConceptsFileLocation>file:/srv/VLO-mapping/mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
+                <vloconfig.fileProcessingThreads>4</vloconfig.fileProcessingThreads>
+                <vloconfig.solrThreads>2</vloconfig.solrThreads>
             </properties>
         </profile>
         
@@ -106,6 +110,8 @@
                 <vloconfig.dataRootsFile>dataroots-production.xml</vloconfig.dataRootsFile>
                 <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
                 <vloconfig.facetConceptsFileLocation>file:/srv/VLO-mapping/mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
+                <vloconfig.fileProcessingThreads>4</vloconfig.fileProcessingThreads> <!-- TODO: assess performance -->
+                <vloconfig.solrThreads>4</vloconfig.solrThreads> <!-- TODO: assess performance -->
             </properties>
         </profile>
         
@@ -120,6 +126,8 @@
                 <vloconfig.dataRootsFile>dataroots-beta.xml</vloconfig.dataRootsFile>
                 <vloconfig.mappingFilesLocation>${VLO_DOCKER_MAPPING_BASE_URI}uniform-maps/</vloconfig.mappingFilesLocation>
                 <vloconfig.facetConceptsFileLocation>${VLO_DOCKER_MAPPING_BASE_URI}mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
+                <vloconfig.fileProcessingThreads>${VLO_DOCKER_FILE_PROCESSING_THREADS}</vloconfig.fileProcessingThreads>
+                <vloconfig.solrThreads>${VLO_DOCKER_SOLR_THREADS}</vloconfig.solrThreads>
             </properties>
         </profile>
     </profiles>
