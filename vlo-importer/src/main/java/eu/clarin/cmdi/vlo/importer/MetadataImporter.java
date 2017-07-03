@@ -662,8 +662,8 @@ public class MetadataImporter {
                 }
                 solrBridge.addDocument(doc);
             }
-            LOG.info("Updated {} documents in graph", updateCount.get());
         }
+        LOG.info("Updated {} documents in graph", updateCount.get());
 
         if (updateCount.get() > 0) {
             solrBridge.commit();
