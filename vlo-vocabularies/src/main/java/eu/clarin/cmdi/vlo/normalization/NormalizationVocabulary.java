@@ -1,5 +1,8 @@
 package eu.clarin.cmdi.vlo.normalization;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,73 +15,68 @@ import java.util.regex.Pattern;
  */
 public class NormalizationVocabulary implements NormalizationService {
 
-	private Map<String, Integer> normalizationMap = null;
-	private List<Integer> regExEntries = null;
-	private VocabularyEntry[] entries = null;
+    private ImmutableMap<String, Integer> normalizationMap = null;
+    private ImmutableList<Integer> regExEntries = null;
+    private ImmutableList<VocabularyEntry> entries = null;
 
-	// false is default because it is a special case when patterns are used in maps
-	private boolean searchInRegExes = false; 
+    // false is default because it is a special case when patterns are used in maps
+    private boolean searchInRegExes = false;
 
-	public NormalizationVocabulary(VocabularyEntry[] entries, boolean searchInRegExes) {
-		this(entries);
-		this.searchInRegExes = searchInRegExes;
-	}
+    public NormalizationVocabulary(List<VocabularyEntry> entries, boolean searchInRegExes) {
+        this(entries);
+        this.searchInRegExes = searchInRegExes;
+    }
 
-	public NormalizationVocabulary(VocabularyEntry[] entries) {
-		this.entries = entries;
+    public NormalizationVocabulary(List<VocabularyEntry> entries) {
+        // collect regex and mapping entries
+        final Map<String, Integer> map = new HashMap<>();
+        final List<Integer> list = new LinkedList<>();
 
-		for (int i = 0; i < entries.length; i++) {
-			if (entries[i].isRegEx()) {
-				if (regExEntries == null)
-					regExEntries = new LinkedList<Integer>();
-				regExEntries.add(i);
-			} else {
-				if (normalizationMap == null)
-					normalizationMap = new HashMap<String, Integer>();
-				normalizationMap.put(entries[i].getOriginalVal(), i);
-			}
-		}
-	}
-	
-	public String normalize(String value) {
-		VocabularyEntry hit = getEntry(value);
-		return (hit != null) ? hit.getNormalizedValue() : null;
-	}
+        for (int i = 0; i < entries.size(); i++) {
+            final VocabularyEntry entry = entries.get(i);
+            if (entry.isRegEx()) {
+                list.add(i);
+            } else {
+                map.put(entry.getOriginalVal(), i++);
+            }
+        }
+        
+        // store as immutable copies
+        this.entries = ImmutableList.copyOf(entries);
+        this.regExEntries = ImmutableList.copyOf(list);
+        this.normalizationMap = ImmutableMap.copyOf(map);
+    }
 
-	public Map<String, String> getCrossMappings(String value) {
-		VocabularyEntry hit = getEntry(value);
-		return (hit != null) ? hit.getCrossMap() : null;
-	}
+    @Override
+    public String normalize(String value) {
+        VocabularyEntry hit = getEntry(value);
+        return (hit != null) ? hit.getNormalizedValue() : null;
+    }
 
-	public VocabularyEntry getEntry(String value) {
-		Integer index = null;
+    @Override
+    public Map<String, String> getCrossMappings(String value) {
+        VocabularyEntry hit = getEntry(value);
+        return (hit != null) ? hit.getCrossMap() : null;
+    }
 
-		index = normalizationMap.get(value);
+    public VocabularyEntry getEntry(String value) {
+        Integer index = normalizationMap.get(value);
 
-		// no hit -> check in patterns if option set
-		if (index == null && searchInRegExes)
-			for (Integer regExIndex : regExEntries) {
-				if (Pattern.compile(entries[regExIndex].getOriginalVal()).matcher(value).find()) {
-					index = regExIndex;
-					break;
-				}
-			}
+        // no hit -> check in patterns if option set
+        if (index == null && searchInRegExes) {
+            for (int regExIndex : regExEntries) {
+                if (Pattern.compile(entries.get(regExIndex).getOriginalVal()).matcher(value).find()) {
+                    index = regExIndex;
+                    break;
+                }
+            }
+        }
 
-		return (index != null) ? entries[index] : null;
-	}
+        return (index != null) ? entries.get(index) : null;
+    }
 
-	private boolean exists(VocabularyEntry entry) {
-		for (int i = 0; i < entries.length; i++) {
-			if (entries[i].getOriginalVal().equals(entry.getOriginalVal()))
-				return true;
-		}
-
-		return false;
-	}
-	
-
-	public VocabularyEntry[] getEntries(){
-		return entries;
-	}
+    public Collection<VocabularyEntry> getEntries() {
+        return entries;
+    }
 
 }

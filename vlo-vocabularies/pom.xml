@@ -61,5 +61,10 @@
 			<artifactId>poi</artifactId>
 			<version>3.7</version>
 		</dependency>
+	 <dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>vlo-commons</artifactId>
+	  <version>${project.version}</version>
+	 </dependency>
 	</dependencies>
 </project>

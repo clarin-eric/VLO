@@ -48,7 +48,7 @@ public abstract class PostProcessorsWithVocabularyMap extends AbstractPostProces
     }
 
     public String normalize(String value, String fallBackValue) {
-        String normalizedVals = normalize(value);
+        final String normalizedVals = normalize(value);
         return normalizedVals != null ? normalizedVals : fallBackValue;
     }
 
@@ -63,9 +63,11 @@ public abstract class PostProcessorsWithVocabularyMap extends AbstractPostProces
 
     public abstract String getNormalizationMapURL();
 
-    private void initVocabulary() {
-        VariantsMap varinatsRawMap = getMappingFromFile(getNormalizationMapURL());
-        vocabulary = varinatsRawMap.getMap();
+    private synchronized void initVocabulary() {
+        if (vocabulary == null) {
+            VariantsMap varinatsRawMap = getMappingFromFile(getNormalizationMapURL());
+            vocabulary = varinatsRawMap.getMap();
+        }
     }
 
     protected VariantsMap getMappingFromFile(String mapUrl) {
@@ -92,7 +94,7 @@ public abstract class PostProcessorsWithVocabularyMap extends AbstractPostProces
 
     // for debug
     public static void printMap(PostProcessorsWithVocabularyMap processor) {
-        LOG.info("map contains {} entries", processor.vocabulary.getEntries().length);
+        LOG.info("map contains {} entries", processor.vocabulary.getEntries().size());
         for (VocabularyEntry entry : processor.vocabulary.getEntries()) {
             LOG.info(entry.toString());
         }
