@@ -37,7 +37,7 @@ public class NormalizationVocabulary implements NormalizationService {
             if (entry.isRegEx()) {
                 list.add(i);
             } else {
-                map.put(entry.getOriginalVal(), i++);
+                map.put(entry.getOriginalVal(), i);
             }
         }
         
