@@ -19,17 +19,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Mapping{
 			
 	@XmlElement(name = "normalizedValue")
-	private NormalizedValue normalizedVlalue;
+	private NormalizedValue normalizedValue;
 	
 	@XmlElement(name = "variant")
 	private List<Variant> variants = new ArrayList<Variant>();
 
 	public NormalizedValue getNormalizedVlalue() {
-		return normalizedVlalue;
+		return normalizedValue;
 	}
 
 	public void setNormalizedVlalue(NormalizedValue normalizedVlalue) {
-		this.normalizedVlalue = normalizedVlalue;
+		this.normalizedValue = normalizedVlalue;
 	}
 
 	public List<Variant> getVariants() {
@@ -52,7 +52,7 @@ public class Mapping{
 	
 	@Override
 	public String toString() {
-		return normalizedVlalue + " variants[" + variants + "]";
+		return String.format("%s variants[%s]", normalizedValue, variants);
 	}
 	
 	

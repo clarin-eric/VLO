@@ -1,7 +1,9 @@
 package eu.clarin.cmdi.vlo.normalization;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -40,7 +42,7 @@ public class NormalizationVocabulary implements NormalizationService {
                 map.put(entry.getOriginalVal(), i);
             }
         }
-        
+
         // store as immutable copies
         this.entries = ImmutableList.copyOf(entries);
         this.regExEntries = ImmutableList.copyOf(list);
@@ -64,11 +66,11 @@ public class NormalizationVocabulary implements NormalizationService {
 
         // no hit -> check in patterns if option set
         if (index == null && searchInRegExes) {
-            for (int regExIndex : regExEntries) {
-                if (Pattern.compile(entries.get(regExIndex).getOriginalVal()).matcher(value).find()) {
-                    index = regExIndex;
-                    break;
-                }
+            final Optional<Integer> regexIndex = Iterables.tryFind(regExEntries, (regExIndex) -> {
+                return Pattern.compile(entries.get(regExIndex).getOriginalVal()).matcher(value).find();
+            });
+            if (regexIndex.isPresent()) {
+                index = regexIndex.get();
             }
         }
 
