@@ -54,6 +54,7 @@ public class VLOMarshaller {
                 logger.error("Could not process facets file: {}", facetConcepts);
                 return null;
             }
+            logger.info("Unmarshalling facet concepts definition from file {}", facetConcepts);
             return unmarshal(is);
         });
     }
