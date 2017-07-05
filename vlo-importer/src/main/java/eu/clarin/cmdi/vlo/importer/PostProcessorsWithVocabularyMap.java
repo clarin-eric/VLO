@@ -4,7 +4,6 @@ import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.InputStream;
 import java.util.Map;
-import java.util.Hashtable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +14,7 @@ import eu.clarin.cmdi.vlo.normalization.VocabularyEntry;
 import eu.clarin.cmdi.vlo.pojo.VariantsMap;
 import eu.clarin.cmdi.vlo.transformers.VariantsMapMarshaller;
 import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.bind.JAXBException;
 
 /* 
@@ -35,7 +35,7 @@ public abstract class PostProcessorsWithVocabularyMap extends AbstractPostProces
     private NormalizationVocabulary vocabulary;
 
     //caches mappings to prevent reading the file each time (according to #68)
-    private static final Hashtable<String, VariantsMap> _mappings = new Hashtable<String, VariantsMap>();
+    private static final Map<String, VariantsMap> MAPPING_CACHE = new ConcurrentHashMap<String, VariantsMap>();
 
     public PostProcessorsWithVocabularyMap(VloConfig config) {
         super(config);
@@ -75,10 +75,7 @@ public abstract class PostProcessorsWithVocabularyMap extends AbstractPostProces
     }
 
     protected VariantsMap getMappingFromFile(String mapUrl) {
-        VariantsMap mapping = null;
-
-        if ((mapping = _mappings.get(mapUrl)) == null) {
-
+        return MAPPING_CACHE.computeIfAbsent(mapUrl, (key) -> {
             LOG.info("Reading vocabulary file from: {}", mapUrl);
 
             final InputStream stream;
@@ -89,8 +86,7 @@ public abstract class PostProcessorsWithVocabularyMap extends AbstractPostProces
                     throw new RuntimeException("Cannot instantiate postProcessor, " + mapUrl + " is not an absolute URL, file path or packaged resource location");
                 } else {
                     try {
-                        mapping = VariantsMapMarshaller.unmarshal(stream);
-                        _mappings.put(mapUrl, mapping);
+                        return VariantsMapMarshaller.unmarshal(stream);
                     } catch (JAXBException ex) {
                         throw new RuntimeException("Cannot instantiate postProcessor: ", ex);
                     }
@@ -98,8 +94,7 @@ public abstract class PostProcessorsWithVocabularyMap extends AbstractPostProces
             } catch (IOException ex) {
                 throw new RuntimeException("Cannot instantiate postProcessor, failed to read input stream for " + mapUrl);
             }
-        }
-        return mapping;
+        });
     }
 
     // for debug
