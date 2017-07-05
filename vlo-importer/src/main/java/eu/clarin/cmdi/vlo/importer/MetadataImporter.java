@@ -40,6 +40,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -202,9 +203,18 @@ public class MetadataImporter {
                 }
             }
         } finally {
+            //wait for processing pool to finish
             if (fileProcessingPool != null) {
                 fileProcessingPool.shutdown();
+                try {
+                    while (!fileProcessingPool.isTerminated() && !fileProcessingPool.awaitTermination(20, TimeUnit.SECONDS)) {
+                        LOG.info("Waiting for processing pool to terminate...");
+                    }
+                } catch (InterruptedException ex) {
+                    LOG.warn("Interrupted while waiting for termination in processing pool");
+                }
             }
+            //shut down Solr client
             try {
                 solrBridge.shutdownServer();
             } catch (SolrServerException | IOException ex) {
@@ -283,7 +293,13 @@ public class MetadataImporter {
         LOG.info("Number of documents sent thus far: {}", nrOFDocumentsSent);
         solrBridge.commit();
         if (resourceStructureGraph != null) {
-            updateDocumentHierarchy(resourceStructureGraph);
+            fileProcessingPool.submit(() -> {
+                try {
+                    updateDocumentHierarchy(resourceStructureGraph);
+                } catch (IOException | SolrServerException ex) {
+                    throw new RuntimeException("An exception occurred while updating a document hierarchy for a centre in the '" + dataRoot.getOriginName() + "' data root", ex);
+                }
+            });
         }
     }
 
@@ -664,10 +680,6 @@ public class MetadataImporter {
             }
         }
         LOG.info("Updated {} documents in graph", updateCount.get());
-
-        if (updateCount.get() > 0) {
-            solrBridge.commit();
-        }
     }
 
     /**
