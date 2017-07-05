@@ -163,63 +163,44 @@ public class MetadataImporter {
         try {
             final List<DataRoot> dataRoots = filterDataRootsWithCLArgs(checkDataRoots());
 
-            try {
-                // Delete the whole Solr db
-                if (config.getDeleteAllFirst()) {
-                    deleteAll();
-                }
-
-                final int nProcessingThreads = config.getFileProcessingThreads();
-                if (nProcessingThreads > 0) {
-                    LOG.info("Initiating processing pool with {} threads", nProcessingThreads);
-                    fileProcessingPool = Executors.newFixedThreadPool(config.getFileProcessingThreads());
-                } else {
-                    LOG.info("Initiating work stealing pool (0 >= file processing threads in configuration)");
-                    fileProcessingPool = Executors.newWorkStealingPool();
-                    LOG.info("Pool was created with parallelism level {}", ((ForkJoinPool) fileProcessingPool).getParallelism());
-                }
-
-                // Import the specified data roots
-                for (DataRoot dataRoot : dataRoots) {
-                    processDataRoot(dataRoot);
-                }
-                // Delete outdated entries (based on maxDaysInSolr parameter)
-                if (config.getMaxDaysInSolr() > 0 && config.getDeleteAllFirst() == false) {
-                    purgeOldDocs();
-                }
-            } catch (SolrServerException e) {
-                LOG.error("error updating files:\n", e);
-                LOG.error("Also see vlo_solr server logs for more information");
-            } catch (IOException e) {
-                LOG.error("error updating files:\n", e);
-            } catch (InterruptedException ex) {
-                LOG.error("Interrupted while importing", ex);
-            } finally {
-                try {
-                    solrBridge.commit();
-                    buildSuggesterIndex();
-                } catch (SolrServerException | IOException e) {
-                    LOG.error("cannot commit:\n", e);
-                }
+            // Delete the whole Solr db
+            if (config.getDeleteAllFirst()) {
+                deleteAll();
             }
+
+            final int nProcessingThreads = config.getFileProcessingThreads();
+            if (nProcessingThreads > 0) {
+                LOG.info("Initiating processing pool with {} threads", nProcessingThreads);
+                fileProcessingPool = Executors.newFixedThreadPool(config.getFileProcessingThreads());
+            } else {
+                LOG.info("Initiating work stealing pool (0 >= file processing threads in configuration)");
+                fileProcessingPool = Executors.newWorkStealingPool();
+                LOG.info("Pool was created with parallelism level {}", ((ForkJoinPool) fileProcessingPool).getParallelism());
+            }
+
+            // Import the specified data roots
+            for (DataRoot dataRoot : dataRoots) {
+                processDataRoot(dataRoot);
+            }
+            // Delete outdated entries (based on maxDaysInSolr parameter)
+            if (config.getMaxDaysInSolr() > 0 && config.getDeleteAllFirst() == false) {
+                purgeOldDocs();
+            }
+        } catch (SolrServerException e) {
+            LOG.error("error updating files:\n", e);
+            LOG.error("Also see vlo_solr server logs for more information");
+        } catch (IOException e) {
+            LOG.error("error updating files:\n", e);
+        } catch (InterruptedException ex) {
+            LOG.error("Interrupted while importing", ex);
         } finally {
-            //wait for processing pool to finish
-            if (fileProcessingPool != null) {
-                fileProcessingPool.shutdown();
-                try {
-                    while (!fileProcessingPool.isTerminated() && !fileProcessingPool.awaitTermination(20, TimeUnit.SECONDS)) {
-                        LOG.info("Waiting for processing pool to terminate...");
-                    }
-                } catch (InterruptedException ex) {
-                    LOG.warn("Interrupted while waiting for termination in processing pool");
-                }
-            }
-            //shut down Solr client
             try {
-                solrBridge.shutdownServer();
-            } catch (SolrServerException | IOException ex) {
-                LOG.error("Failed to shutdown Solr server", ex);
+                solrBridge.commit();
+                buildSuggesterIndex();
+            } catch (SolrServerException | IOException e) {
+                LOG.error("cannot commit:\n", e);
             }
+            shutdown();
         }
         time = (System.currentTimeMillis() - start);
         logStatistics();
@@ -750,6 +731,26 @@ public class MetadataImporter {
         }
 
         LOG.info("Updating \"days since last import\" done.");
+    }
+
+    private void shutdown() {
+        //wait for processing pool to finish
+        if (fileProcessingPool != null) {
+            fileProcessingPool.shutdown();
+            try {
+                while (!fileProcessingPool.isTerminated() && !fileProcessingPool.awaitTermination(20, TimeUnit.SECONDS)) {
+                    LOG.info("Waiting for processing pool to terminate...");
+                }
+            } catch (InterruptedException ex) {
+                LOG.warn("Interrupted while waiting for termination in processing pool");
+            }
+        }
+        //shut down Solr client
+        try {
+            solrBridge.shutdownServer();
+        } catch (SolrServerException | IOException ex) {
+            LOG.error("Failed to shutdown Solr server", ex);
+        }
     }
 
     /**
