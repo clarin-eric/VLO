@@ -4,6 +4,7 @@ import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.Hashtable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,9 @@ public abstract class PostProcessorsWithVocabularyMap extends AbstractPostProces
     private final MappingDefinitionResolver mappingDefinitionResolver = new MappingDefinitionResolver(PostProcessorsWithVocabularyMap.class);
 
     private NormalizationVocabulary vocabulary;
+
+    //caches mappings to prevent reading the file each time (according to #68)
+    private static final Hashtable<String, VariantsMap> _mappings = new Hashtable<String, VariantsMap>();
 
     public PostProcessorsWithVocabularyMap(VloConfig config) {
         super(config);
@@ -71,25 +75,31 @@ public abstract class PostProcessorsWithVocabularyMap extends AbstractPostProces
     }
 
     protected VariantsMap getMappingFromFile(String mapUrl) {
-        //TODO: cache unmarshalled map https://github.com/clarin-eric/VLO/issues/68
-        LOG.info("Reading vocabulary file from: {}", mapUrl);
+        VariantsMap mapping = null;
 
-        final InputStream stream;
-        try {
-            stream = mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(mapUrl);
+        if ((mapping = _mappings.get(mapUrl)) == null) {
 
-            if (stream == null) {
-                throw new RuntimeException("Cannot instantiate postProcessor, " + mapUrl + " is not an absolute URL, file path or packaged resource location");
-            } else {
-                try {
-                    return VariantsMapMarshaller.unmarshal(stream);
-                } catch (JAXBException ex) {
-                    throw new RuntimeException("Cannot instantiate postProcessor: ", ex);
+            LOG.info("Reading vocabulary file from: {}", mapUrl);
+
+            final InputStream stream;
+            try {
+                stream = mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(mapUrl);
+
+                if (stream == null) {
+                    throw new RuntimeException("Cannot instantiate postProcessor, " + mapUrl + " is not an absolute URL, file path or packaged resource location");
+                } else {
+                    try {
+                        mapping = VariantsMapMarshaller.unmarshal(stream);
+                        _mappings.put(mapUrl, mapping);
+                    } catch (JAXBException ex) {
+                        throw new RuntimeException("Cannot instantiate postProcessor: ", ex);
+                    }
                 }
+            } catch (IOException ex) {
+                throw new RuntimeException("Cannot instantiate postProcessor, failed to read input stream for " + mapUrl);
             }
-        } catch (IOException ex) {
-            throw new RuntimeException("Cannot instantiate postProcessor, failed to read input stream for " + mapUrl);
         }
+        return mapping;
     }
 
     // for debug
