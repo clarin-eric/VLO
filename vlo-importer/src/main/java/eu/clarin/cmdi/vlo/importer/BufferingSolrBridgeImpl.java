@@ -76,8 +76,7 @@ public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
     @Override
     public void shutdownServer() throws SolrServerException, IOException {
         LOG.info("Shutdown requested");
-        submitAllInBuffer();
-        commit();
+        this.commit();
         LOG.info("{} committed submits in lifespan", submitCount.get());
         super.shutdownServer();
     }
