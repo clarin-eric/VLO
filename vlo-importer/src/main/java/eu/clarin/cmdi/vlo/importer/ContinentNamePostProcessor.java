@@ -1,37 +1,34 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import com.google.common.collect.ImmutableMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 public class ContinentNamePostProcessor implements PostProcessor {
 
-    private static Map<String, String> continentCodeMap;
-
-    static {
-        continentCodeMap = new HashMap<String, String>();
-        continentCodeMap.put("AF", "Africa");
-        continentCodeMap.put("AS", "Asia");
-        continentCodeMap.put("EU", "Europe");
-        continentCodeMap.put("NA", "North America");
-        continentCodeMap.put("SA", "South America");
-        continentCodeMap.put("OC", "Oceania");
-        continentCodeMap.put("AN", "Antarctica");
-    }
+    private final static Map<String, String> CONTINENT_CODE_MAP
+            = ImmutableMap.<String, String>builder()
+                    .put("AF", "Africa")
+                    .put("AS", "Asia")
+                    .put("EU", "Europe")
+                    .put("NA", "North America")
+                    .put("SA", "South America")
+                    .put("OC", "Oceania")
+                    .put("AN", "Antarctica")
+                    .build();
 
     /**
      * Replaces two-letter continent codes with continent names
      */
     @Override
     public List<String> process(final String value, CMDIData cmdiData) {
-        List<String> resultList = new ArrayList<String>();
-        if (value != null && continentCodeMap.keySet().contains(value)) {
-            resultList.add(continentCodeMap.get(value));
+        if (value == null) {
+            return Collections.emptyList();
         } else {
-            resultList.add(value);
+            final String normalized = CONTINENT_CODE_MAP.getOrDefault(value, value);
+            return Collections.singletonList(normalized);
         }
-        return resultList;
     }
 
     @Override

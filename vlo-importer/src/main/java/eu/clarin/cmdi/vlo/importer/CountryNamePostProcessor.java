@@ -1,9 +1,16 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import com.google.common.collect.ImmutableMap;
+import com.ximpleware.NavException;
+import com.ximpleware.ParseException;
+import com.ximpleware.VTDException;
+import com.ximpleware.XPathEvalException;
+import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -12,11 +19,12 @@ import org.slf4j.LoggerFactory;
 public class CountryNamePostProcessor extends AbstractPostProcessor {
 
     private final static Logger LOG = LoggerFactory.getLogger(CountryNamePostProcessor.class);
-
+    private final String countryComponentUrl;
     private Map<String, String> countryCodeMap;
 
     public CountryNamePostProcessor(VloConfig config) {
         super(config);
+        countryComponentUrl = getConfig().getCountryComponentUrl();
     }
 
     /**
@@ -30,19 +38,15 @@ public class CountryNamePostProcessor extends AbstractPostProcessor {
      */
     @Override
     public List<String> process(String value, CMDIData cmdiData) {
-        String result = value;
-        if (result != null) {
-            String name = getCountryCodeMap().get(value.toUpperCase());
-            if (name != null) {
-                result = name;
-            }
+        if (value == null) {
+            return Collections.emptyList();
+        } else {
+            final String normalized = getCountryCodeMap().getOrDefault(value, value);
+            return Collections.singletonList(normalized);
         }
-        List<String> resultList = new ArrayList<String>();
-        resultList.add(result);
-        return resultList;
     }
 
-    private Map<String, String> getCountryCodeMap() {
+    private synchronized Map<String, String> getCountryCodeMap() {
         if (countryCodeMap == null) {
             countryCodeMap = createCountryCodeMap();
         }
@@ -50,14 +54,12 @@ public class CountryNamePostProcessor extends AbstractPostProcessor {
     }
 
     private Map<String, String> createCountryCodeMap() {
-        final String countryComponentUrl = getConfig().getCountryComponentUrl();
         LOG.info("Creating country code map from {}", countryComponentUrl);
         try {
-            Map<String, String> result = CommonUtils.createCMDIComponentItemMap(countryComponentUrl);
-            return result;
-        } catch (Exception e) {
+            return ImmutableMap.copyOf(CommonUtils.createCMDIComponentItemMap(countryComponentUrl));
+        } catch (VTDException | IOException e) {
             if (CommonUtils.shouldSwallowLookupErrors()) {
-                return new HashMap<String, String>();
+                return Collections.emptyMap();
             } else {
                 throw new RuntimeException("Cannot instantiate postProcessor:", e);
             }
