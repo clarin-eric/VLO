@@ -19,13 +19,14 @@ import org.slf4j.LoggerFactory;
 public class CMDIComponentProfileNamePostProcessor extends AbstractPostProcessor {
 
     private static final String XPATH = "/ComponentSpec/Header/Name/text()";
-    private String BASE_URL = null;
+    private final String registryBaseURl;
 
     private final static Logger LOG = LoggerFactory.getLogger(CMDIComponentProfileNamePostProcessor.class);
     private final ConcurrentMap<String, List<String>> cache = new ConcurrentHashMap<>();
 
     public CMDIComponentProfileNamePostProcessor(VloConfig config) {
         super(config);
+        registryBaseURl = config.getComponentRegistryRESTURL();
     }
 
     @Override
@@ -44,20 +45,27 @@ public class CMDIComponentProfileNamePostProcessor extends AbstractPostProcessor
         }
     }
 
+    /**
+     * Gets the name of the profile from the expanded xml in the component
+     * registry
+     *
+     * @param profileId
+     * @return
+     * @throws VTDException
+     */
     private String calculate(String profileId) throws VTDException {
-        final AutoPilot ap = new AutoPilot();
-        ap.selectXPath(XPATH);
-        final VTDGen vg = new VTDGen();
-        BASE_URL = getConfig().getComponentRegistryRESTURL();
+        LOG.debug("PARSING PROFILE: " + registryBaseURl + profileId);
 
-        LOG.debug("PARSING PROFILE: " + BASE_URL + profileId);
-        // get the name of the profile from the expanded xml in the component registry
-        if (vg.parseHttpUrl(BASE_URL + profileId + "/xml", true)) {
-            LOG.debug("PARSED PROFILE: " + BASE_URL + profileId);
+        final VTDGen vg = new VTDGen();
+        if (vg.parseHttpUrl(registryBaseURl + profileId + "/xml", true)) {
+            LOG.debug("PARSED PROFILE: " + registryBaseURl + profileId);
             final VTDNav vn = vg.getNav();
+
+            final AutoPilot ap = new AutoPilot();
+            ap.selectXPath(XPATH);
             ap.bind(vn);
-            int idx;
-            idx = ap.evalXPath();
+
+            final int idx = ap.evalXPath();
             LOG.debug("EVALUATED XPATH: " + XPATH + " found idx: " + idx);
             if (idx == -1) { // idx represent the nodeId in the xml file, if -1 the xpath evaluates to nothing.
                 LOG.warn("No profile name in definition for {}", profileId);
@@ -65,7 +73,7 @@ public class CMDIComponentProfileNamePostProcessor extends AbstractPostProcessor
             }
             return vn.toString(idx);
         } else {
-            LOG.error("Cannot open and/or parse XML Schema: {}.", BASE_URL + profileId);
+            LOG.error("Cannot open and/or parse XML Schema: {}.", registryBaseURl + profileId);
             throw new VTDException("Cannot open and/or parse XML Schema");
         }
     }
