@@ -39,9 +39,9 @@ public class CountryNamePostProcessor extends AbstractPostProcessor {
     @Override
     public List<String> process(String value, CMDIData cmdiData) {
         if (value == null) {
-            return Collections.emptyList();
+            return Collections.singletonList(null);
         } else {
-            final String normalized = getCountryCodeMap().getOrDefault(value, value);
+            final String normalized = getCountryCodeMap().getOrDefault(value.toUpperCase(), value);
             return Collections.singletonList(normalized);
         }
     }

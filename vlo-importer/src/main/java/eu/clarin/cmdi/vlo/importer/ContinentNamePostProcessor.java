@@ -24,7 +24,7 @@ public class ContinentNamePostProcessor implements PostProcessor {
     @Override
     public List<String> process(final String value, CMDIData cmdiData) {
         if (value == null) {
-            return Collections.emptyList();
+            return Collections.singletonList(null);
         } else {
             final String normalized = CONTINENT_CODE_MAP.getOrDefault(value, value);
             return Collections.singletonList(normalized);
