@@ -59,8 +59,6 @@ import org.apache.solr.common.SolrDocument;
 public class MetadataImporter {
 
     private final VloConfig config;
-    private final FacetMappingFactory mappingFactory;
-    private final VLOMarshaller marshaller;
     private ExecutorService fileProcessingPool;
 
     //data roots passed from command line    
@@ -81,6 +79,8 @@ public class MetadataImporter {
      * interface to the solr server
      */
     private final SolrBridge solrBridge;
+    
+    private final CMDIDataProcessor processor;
 
     private static class DefaultSolrBridgeFactory {
 
@@ -125,10 +125,10 @@ public class MetadataImporter {
     public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList, SolrBridge solrBrdige) {
         this.config = config;
         this.clDatarootsList = clDatarootsList;
-        this.mappingFactory = mappingFactory;
         this.postProcessors = registerPostProcessors(config, languageCodeUtils);
-        this.marshaller = marshaller;
         this.solrBridge = solrBrdige;
+        this.processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
+
     }
 
     protected static Map<String, PostProcessor> registerPostProcessors(VloConfig config, LanguageCodeUtils languageCodeUtils) {
@@ -242,8 +242,8 @@ public class MetadataImporter {
         //(perform in thread pool)
         final Stream<Callable<Void>> preProcessors = centreFiles.stream().map((File file) -> {
             return (Callable) () -> {
-                final CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
-                preProcessFile(processor, file, (resourceStructureGraph != null), ignoredFileSet, mdSelfLinkSet);
+                final boolean createHierarchyGraph = resourceStructureGraph != null;
+                preProcessFile(file, createHierarchyGraph, ignoredFileSet, mdSelfLinkSet);
                 return null;
             };
         });
@@ -263,8 +263,7 @@ public class MetadataImporter {
         final Stream<Callable<Void>> processors = centreFiles.stream().map((File file) -> {
             return (Callable) () -> {
                 LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
-                final CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
-                processCmdi(file, dataRoot, processor, resourceStructureGraph);
+                processCmdi(file, dataRoot, resourceStructureGraph);
                 return null;
             };
         });
@@ -311,7 +310,7 @@ public class MetadataImporter {
         }
     }
 
-    protected void preProcessFile(final CMDIDataProcessor processor, File file, boolean createHierarchyGraph, Set<File> ignoredFileSet, Set<String> mdSelfLinkSet) {
+    protected void preProcessFile(File file, boolean createHierarchyGraph, Set<File> ignoredFileSet, Set<String> mdSelfLinkSet) {
         if (config.getMaxFileSize() > 0
                 && file.length() > config.getMaxFileSize()) {
             LOG.info("Skipping {} because it is too large.", file.getAbsolutePath());
@@ -449,7 +448,7 @@ public class MetadataImporter {
      * @throws SolrServerException
      * @throws IOException
      */
-    protected void processCmdi(File file, DataRoot dataOrigin, CMDIDataProcessor processor, ResourceStructureGraph resourceStructureGraph) throws SolrServerException, IOException {
+    protected void processCmdi(File file, DataRoot dataOrigin, ResourceStructureGraph resourceStructureGraph) throws SolrServerException, IOException {
         nrOfFilesAnalyzed.incrementAndGet();
         CMDIData cmdiData = null;
         try {

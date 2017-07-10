@@ -248,7 +248,6 @@ public class MetadataImporterTest extends ImporterTestcase {
                     for (DataRoot dataRoot : dataRoots) {
                         LOG.info("Start of processing: "
                                 + dataRoot.getOriginName());
-                        CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, new FacetMappingFactory(config, marshaller), marshaller, true);
                         List<File> files
                                 = getFilesFromDataRoot(dataRoot.getRootFile()).get(0);
                         for (File file : files) {
@@ -265,7 +264,7 @@ public class MetadataImporterTest extends ImporterTestcase {
                                  * in a suitable way.
                                  */
                                 try {
-                                    processCmdi(file, dataRoot, processor, null);
+                                    processCmdi(file, dataRoot, null);
                                 } catch (SolrServerException ex) {
                                     Logger.getLogger(MetadataImporterTest.class.getName()).log(Level.SEVERE, null, ex);
                                 }
