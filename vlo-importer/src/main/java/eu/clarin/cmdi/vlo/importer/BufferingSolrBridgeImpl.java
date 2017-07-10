@@ -37,14 +37,21 @@ import org.slf4j.LoggerFactory;
 public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
 
     private final static Logger LOG = LoggerFactory.getLogger(BufferingSolrBridgeImpl.class);
+    
+    private static final double BUFFER_SIZE_FACTOR = 1.2;
 
-    private final Collection<SolrInputDocument> buffer = new ArrayList<>();
+    private final Collection<SolrInputDocument> buffer;
     private final int flushSize;
     private final AtomicInteger submitCount = new AtomicInteger();
 
     public BufferingSolrBridgeImpl(VloConfig config) {
         super(config);
+        
+        //flush size determines how often the buffered is submitted to Solr
         this.flushSize = config.getMaxDocsInList();
+        
+        //initialize buffer with capacity based on flush size
+        this.buffer = new ArrayList<>((int)(BUFFER_SIZE_FACTOR * flushSize));
 
         LOG.info("Buffered will be submitted to the Solr server if it contains {} or more documents", flushSize);
     }
