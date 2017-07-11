@@ -127,14 +127,15 @@
 		<concept>http://www.isocat.org/datcat/DC-5358</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5358_3cd089fe-ad03-6181-b20c-635ea41ed818</concept>
 		<!--language (TEI) - MENZO: added for CLARIN-DK -->
+                <concept>http://purl.org/dc/terms/language</concept>
 
-    <concept>http://purl.org/dc/terms/language</concept>
-		<!-- Had to be removed due to IDSAGD_Speaker  <acceptableContext includeAny="false" includeEmpty="true"/>
-    <rejectableContext includeAny="true"  includeEmpty="false">
-      <concept>http://www.isocat.org/datcat/DC-4146</concept>
-      <concept>http://hdl.handle.net/11459/CCR_C-4146_5ccc45c8-d729-c180-2bf1-fccc56dde24d</concept>
-    </rejectableContext> -->
-		<pattern>/cmd:CMD/cmd:Components//cmdp:OLAC-DcmiTerms/cmdp:subject/@olac-language</pattern>
+                <acceptableContext includeAny="true" includeEmpty="true"/>
+                <rejectableContext includeAny="false"  includeEmpty="false">
+                    <concept>http://www.isocat.org/datcat/DC-4146</concept>
+                    <concept>http://hdl.handle.net/11459/CCR_C-4146_5ccc45c8-d729-c180-2bf1-fccc56dde24d</concept>
+                </rejectableContext>
+
+                <pattern>/cmd:CMD/cmd:Components//cmdp:OLAC-DcmiTerms/cmdp:subject/@olac-language</pattern>
 		<pattern>/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:Languages/cmdp:ISO639/cmdp:iso-639-3-code/text()</pattern>
 		<pattern>/cmd:CMD/cmd:Components/cmdp:mods/cmdp:language/cmdp:languageTerm/text()</pattern>
 
