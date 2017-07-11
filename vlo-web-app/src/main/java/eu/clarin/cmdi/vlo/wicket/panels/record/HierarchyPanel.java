@@ -51,6 +51,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -58,6 +60,9 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
+    private final static Logger logger = LoggerFactory.getLogger(HierarchyPanel.class);
+
+    protected static final String PARENTS_ROOT_PATH = "---parents---";
     /**
      * Number of parent nodes shown initially (before 'show all' expansion)
      */
@@ -105,9 +110,16 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        // tree root up one level, expand root for traceability by user
+                        logger.debug("Expand up: {}", item.getModelObject().get(FacetConstants.FIELD_ID));
+
+                        // tree root up one level, expand root for traceability by user                        
                         HierarchyPanel.this.setModel(item.getModel());
-                        tree.expand(new ModelWrapper<>("---parents---/" + String.valueOf(item.getModelObject().get(FacetConstants.FIELD_ID)), item.getModel()));
+                        tree.expand(new ModelWrapper<>(PARENTS_ROOT_PATH, item.getModel()));
+
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Expand {} -> {}", PARENTS_ROOT_PATH, item.getModel().getObject().getFieldValue(FacetConstants.FIELD_NAME));
+                        }
+
                         if (target != null) {
                             target.add(HierarchyPanel.this);
                         }
@@ -220,8 +232,10 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
         @Override
         public Iterator<? extends ModelWrapper<SolrDocument>> getRoots() {
-            return Iterators.singletonIterator(
-                    new ModelWrapper<>("", HierarchyPanel.this.getModel()));
+            if (logger.isDebugEnabled()) {
+                logger.debug("Root: {} -> {}", PARENTS_ROOT_PATH, HierarchyPanel.this.getModel().getObject().getFieldValue(FacetConstants.FIELD_NAME));
+            }
+            return Iterators.singletonIterator(new ModelWrapper<>(PARENTS_ROOT_PATH, HierarchyPanel.this.getModel()));
         }
 
         @Override
@@ -253,7 +267,8 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                     public ModelWrapper<SolrDocument> apply(Object childId) {
                         final SolrDocument document = documentService.getDocument(childId.toString());
                         final String path = node.getPath() + "/" + childId;
-                        return new ModelWrapper<>(path,  new SolrDocumentModel(document));
+                        logger.debug("Child node path: {}", path);
+                        return new ModelWrapper<>(path, new SolrDocumentModel(document));
                     }
                 });
                 if (childrenShown != null && parts.size() > childrenShown) {
@@ -329,7 +344,8 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
     private class ModelWrapper<T> extends AbstractReadOnlyModel<ModelWrapper<T>> implements Serializable {
 
         /**
-         * Path to distinguish between nodes with the same id (parallel hierarchies)
+         * Path to distinguish between nodes with the same id (parallel
+         * hierarchies)
          */
         private final String path;
 
