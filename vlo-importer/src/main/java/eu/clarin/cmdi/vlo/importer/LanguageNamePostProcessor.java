@@ -27,7 +27,7 @@ import java.util.List;
  * {@link LanguageCodePostProcessor}) into a languageName value as it should be
  * display in the front end application
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 class LanguageNamePostProcessor implements PostProcessor {
 
