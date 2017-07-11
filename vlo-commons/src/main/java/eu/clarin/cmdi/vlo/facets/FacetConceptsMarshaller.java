@@ -26,7 +26,7 @@ import javax.xml.transform.stream.StreamResult;
 
 /**
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan.goosen@mpi.nl&gt;
  */
 public class FacetConceptsMarshaller {
 

@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Some helper methods for working with language codes, extracted from
- * {@link LanguageCodePostProcessor}
+ * the <em>LanguageCodePostProcessor</em> of vlo-importer.
  *
  * @author Thomas Eckart
  */
