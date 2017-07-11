@@ -35,7 +35,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
  * Drop-in replacement for {@link ModalWindow} that uses bootstrap classes and
  * JavaScript.
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public abstract class BootstrapModal extends Panel {
 

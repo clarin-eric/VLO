@@ -17,8 +17,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Corresponds to the facet concepts file.
  *
- * This class holds the mapping of facet name -> facetConcepts/patterns A
- * facetConcept is a ISOcat conceptLink e.g.:
+ * This class holds the mapping of facet name - facetConcepts/patterns. A
+ * facetConcept is a CCR conceptLink e.g.:
  * http://www.isocat.org/datcat/DC-2544 the conceptLink will be analysed and
  * translated into a valid Xpath expression to extract data out of the metadata.
  * Valid xpath expression e.g. /c:CMD/c:Header/c:MdSelfLink/text(), the 'c'

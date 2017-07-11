@@ -34,10 +34,8 @@ public class FacetConstants {
     public static final String FIELD_LICENSE_TYPE = "licenseType";
 
     /**
-     * Solr pseudo-field that reveals the ranking score
-     *
-     * @see
-     * https://wiki.apache.org/solr/SolrRelevancyFAQ#How_can_I_see_the_relevancy_scores_for_search_results
+     * Solr pseudo-field that reveals the ranking score.
+     * @see <a href="https://wiki.apache.org/solr/SolrRelevancyFAQ#How_can_I_see_the_relevancy_scores_for_search_results">FAQ</a>
      */
     public static final String FIELD_SOLR_SCORE = "score";
 

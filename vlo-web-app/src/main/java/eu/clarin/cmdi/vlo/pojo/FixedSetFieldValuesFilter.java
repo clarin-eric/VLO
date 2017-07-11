@@ -26,7 +26,7 @@ import org.apache.wicket.util.convert.IConverter;
 /**
  * Values filter that only lets through values from a provided fixed set
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class FixedSetFieldValuesFilter implements FieldValuesFilter, Serializable {
 

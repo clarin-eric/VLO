@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 /**
  * Configuration for communication with the Piwik instance
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  * @see https://piwik.org
  * @see https://stats.clarin.eu
  */

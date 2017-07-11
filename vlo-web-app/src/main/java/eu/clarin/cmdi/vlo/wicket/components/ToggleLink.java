@@ -26,7 +26,7 @@ import org.apache.wicket.model.IModel;
 
 /**
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public abstract class ToggleLink extends GenericPanel<Boolean> {
 

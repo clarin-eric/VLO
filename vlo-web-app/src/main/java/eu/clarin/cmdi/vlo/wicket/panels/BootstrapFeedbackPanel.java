@@ -21,7 +21,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
 /**
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class BootstrapFeedbackPanel extends FeedbackPanel {
 

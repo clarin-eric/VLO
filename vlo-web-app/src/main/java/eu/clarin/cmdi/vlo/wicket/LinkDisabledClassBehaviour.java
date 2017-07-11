@@ -28,7 +28,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
  * "disabled" attribute to "disabled" iff a (provided) check indicates that the
  * component is not enabled. Useful with bootstrap link buttons.
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class LinkDisabledClassBehaviour extends Behavior {
 

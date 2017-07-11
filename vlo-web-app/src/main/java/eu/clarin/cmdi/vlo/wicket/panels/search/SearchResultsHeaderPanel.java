@@ -55,7 +55,7 @@ import org.apache.wicket.util.convert.IConverter;
 
 /**
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection> {
 

@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * {@link HandleResolver} and the result of {@link HandleResolver#resolve(java.net.URI) 
  * } is returned (as String); otherwise the original URI is returned.
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class UriResolverImpl implements UriResolver {
 

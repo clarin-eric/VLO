@@ -20,7 +20,7 @@ import org.apache.wicket.markup.html.WebComponent;
 
 /**
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 class PiwikTracker extends WebComponent {
 

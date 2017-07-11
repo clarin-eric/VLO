@@ -25,7 +25,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 
 /**
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class RecordCountCollector implements VloStatisticsCollector {
 

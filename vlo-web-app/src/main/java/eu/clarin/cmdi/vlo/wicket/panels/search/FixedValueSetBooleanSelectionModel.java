@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * To be used on checkboxes in facet selectors that have a fixed set of values
  * available for selection
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class FixedValueSetBooleanSelectionModel implements IModel<Boolean> {
 

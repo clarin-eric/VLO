@@ -95,7 +95,7 @@ public final class CommonUtils {
 
     /**
      * Create a mapping out of simple CMDI components for instance: lists of
-     * items: <item AppInfo="Tigrinya (ti)">ti</item> Will become key (after
+     * items: <code>&lt;item AppInfo="Tigrinya (ti)"&gt;ti&lt;/item&gt;</code> Will become key (after
      * removal of trailing 2 or 3 letter codes if value is unique), values: ti, Tigrinya
      *
      * @param urlToComponent
@@ -151,7 +151,7 @@ public final class CommonUtils {
 
     /**
      * Create a mapping out of simple CMDI components for instance: lists of
-     * items: <item AppInfo="Tigrinya">ti</item> Will become key (after removal
+     * items: <code>&lt;item AppInfo="Tigrinya"&gt;ti&lt;/item&gt;</code> Will become key (after removal
      * of trailing 2 or 3 letter codes), values: Tigrinya, ti
      *
      * @param urlToComponent

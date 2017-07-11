@@ -20,7 +20,7 @@ import clarin.cmdi.vlo.statistics.model.VloReport;
 
 /**
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public interface VloReportHandler {
     void handleReport(VloReport report);

@@ -28,7 +28,7 @@ import org.apache.wicket.model.IModel;
  * {@link VloWicketApplication} on the specified page combined with the facet
  * selection and document available through the wrapped models (both optional)
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class PermaLinkModel extends AbstractReadOnlyModel<String> {
 

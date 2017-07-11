@@ -26,7 +26,7 @@ import org.apache.wicket.model.IModel;
  *
  * @see String#format(java.lang.String, java.lang.Object...)
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class FormattedStringModel extends AbstractReadOnlyModel<String> {
 

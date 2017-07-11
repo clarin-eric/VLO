@@ -25,7 +25,7 @@ import javax.xml.transform.stream.StreamSource;
 
 /**
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class VloReportMarshaller {
 

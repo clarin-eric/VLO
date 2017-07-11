@@ -28,8 +28,11 @@ import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.Set;
+import static java.util.concurrent.ThreadLocalRandom.current;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -51,13 +54,18 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
+    private final static Logger logger = LoggerFactory.getLogger(HierarchyPanel.class);
+
+    protected static final String PARENTS_ROOT_PATH = "---parents---";
     /**
      * Number of parent nodes shown initially (before 'show all' expansion)
      */
@@ -105,11 +113,36 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        // tree root up one level, expand root for traceability by user
+                        logger.debug("Expand up: {}", item.getModelObject().get(FacetConstants.FIELD_ID));
+
+                        // tree root up one level, expand root for traceability by user                        
                         HierarchyPanel.this.setModel(item.getModel());
-                        tree.expand(new ModelWrapper<>("---parents---/" + String.valueOf(item.getModelObject().get(FacetConstants.FIELD_ID)), item.getModel()));
+
+                        // update current expansion
+                        updateCurrentExpansion();
+                        // add original root node to expansion
+                        tree.expand(new ModelWrapper<>(PARENTS_ROOT_PATH, item.getModel()));
+
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Expand {} -> {}", PARENTS_ROOT_PATH, item.getModelObject().getFieldValue(FacetConstants.FIELD_NAME));
+                        }
+
                         if (target != null) {
                             target.add(HierarchyPanel.this);
+                        }
+                    }
+
+                    protected void updateCurrentExpansion() {
+                        // copy to a new set using the iterator;
+                        // alas this is necessary because the internal collection does not implement toArray() :(
+                        final ModelWrapper[] currentExpansion = Iterators.toArray(tree.getModelObject().iterator(), ModelWrapper.class);
+
+                        // the actual updating of the expansion set...
+                        for (ModelWrapper<SolrDocument> item : currentExpansion) {
+                            // append the node id of the new parent to the root path for each path
+                            final String newPath = item.getPath().replaceFirst(PARENTS_ROOT_PATH, PARENTS_ROOT_PATH + "/" + item.getModelObject().getFieldValue(FacetConstants.FIELD_ID));
+                            tree.collapse(item);
+                            tree.expand(new ModelWrapper<>(newPath, item.getModel()));
                         }
                     }
                 });
@@ -220,8 +253,10 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
         @Override
         public Iterator<? extends ModelWrapper<SolrDocument>> getRoots() {
-            return Iterators.singletonIterator(
-                    new ModelWrapper<>("", HierarchyPanel.this.getModel()));
+            if (logger.isDebugEnabled()) {
+                logger.debug("Root: {} -> {}", PARENTS_ROOT_PATH, HierarchyPanel.this.getModel().getObject().getFieldValue(FacetConstants.FIELD_NAME));
+            }
+            return Iterators.singletonIterator(new ModelWrapper<>(PARENTS_ROOT_PATH, HierarchyPanel.this.getModel()));
         }
 
         @Override
@@ -253,7 +288,8 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                     public ModelWrapper<SolrDocument> apply(Object childId) {
                         final SolrDocument document = documentService.getDocument(childId.toString());
                         final String path = node.getPath() + "/" + childId;
-                        return new ModelWrapper<>(path,  new SolrDocumentModel(document));
+                        logger.debug("Child node path: {}", path);
+                        return new ModelWrapper<>(path, new SolrDocumentModel(document));
                     }
                 });
                 if (childrenShown != null && parts.size() > childrenShown) {
@@ -329,7 +365,8 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
     private class ModelWrapper<T> extends AbstractReadOnlyModel<ModelWrapper<T>> implements Serializable {
 
         /**
-         * Path to distinguish between nodes with the same id (parallel hierarchies)
+         * Path to distinguish between nodes with the same id (parallel
+         * hierarchies)
          */
         private final String path;
 

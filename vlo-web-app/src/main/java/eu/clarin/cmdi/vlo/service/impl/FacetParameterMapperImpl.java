@@ -29,7 +29,7 @@ import eu.clarin.cmdi.vlo.service.FacetParameterMapper.IdentityMapper;
  * <li>language -> languageCode</li>
  * </ul>
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class FacetParameterMapperImpl extends IdentityMapper {
 

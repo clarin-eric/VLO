@@ -778,8 +778,8 @@ public class VloConfig {
      *
      * @param nationalProjectMapping the value
      */
-    public void setNationalProjectMapping(String param) {
-        nationalProjectMapping = param;
+    public void setNationalProjectMapping(String nationalProjectMapping) {
+        this.nationalProjectMapping = nationalProjectMapping;
     }
 
     /**

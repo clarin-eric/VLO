@@ -34,7 +34,7 @@ import org.apache.wicket.model.Model;
 /**
  * Bootstrap drop down menu component that also works without javascript
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class BootstrapDropdown extends GenericPanel<List<BootstrapDropdown.DropdownMenuItem>> {
 

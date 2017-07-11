@@ -33,7 +33,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  * request cycle to compute a permanent link for a given page and selection
  * state
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class PermalinkServiceImpl implements PermalinkService {
 

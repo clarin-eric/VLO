@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author Menzo Windhouwer <menzo.windhouwer@meertens.knaw.nl>
+ * @author Menzo Windhouwer &lt;menzo.windhouwer@meertens.knaw.nl&gt;
  */
 public class Vocabulary {
     

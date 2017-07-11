@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 /**
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan.goosen@mpi.nl&gt;
  */
 public class FieldValueDescriptor implements Serializable {
 
@@ -101,7 +101,7 @@ public class FieldValueDescriptor implements Serializable {
     }
 
     /**
-     * Creates a map value => descriptor
+     * Creates a value to descriptor map
      *
      * @param descriptor
      * @return {@link FieldValueDescriptor} map with keys taken from {@link FieldValueDescriptor#getValue()

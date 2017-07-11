@@ -29,24 +29,24 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * this class.
  *
  * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;choice maxOccurs="unbounded">
- *           &lt;element ref="{}concept"/>
- *           &lt;element ref="{}pattern"/>
- *         &lt;/choice>
- *         &lt;element ref="{}blacklistPattern" maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;attribute name="allowMultipleValues" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="definition" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" />
- *       &lt;attribute name="description" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" />
- *       &lt;attribute name="isCaseInsensitive" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}NCName" />
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;choice maxOccurs="unbounded"&gt;
+ *           &lt;element ref="{}concept"/&gt;
+ *           &lt;element ref="{}pattern"/&gt;
+ *         &lt;/choice&gt;
+ *         &lt;element ref="{}blacklistPattern" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *       &lt;attribute name="allowMultipleValues" type="{http://www.w3.org/2001/XMLSchema}boolean" /&gt;
+ *       &lt;attribute name="definition" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" /&gt;
+ *       &lt;attribute name="description" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" /&gt;
+ *       &lt;attribute name="isCaseInsensitive" type="{http://www.w3.org/2001/XMLSchema}boolean" /&gt;
+ *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}NCName" /&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  *
  *

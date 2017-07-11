@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * {@link FieldValueConverterProvider} registered on
  * {@link VloWicketApplication}
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class ConvertedFieldValueModel extends AbstractReadOnlyModel<String> {
     

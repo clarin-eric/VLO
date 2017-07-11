@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  * tracker to be loaded (usually by means of the tracking code included in the
  * parent page).
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
 

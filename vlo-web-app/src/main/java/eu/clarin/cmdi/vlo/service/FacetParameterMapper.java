@@ -23,7 +23,7 @@ package eu.clarin.cmdi.vlo.service;
  * behaviour, {@literal i.e.} returning the input in case no other mapping is
  * defined.
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public interface FacetParameterMapper {
 
