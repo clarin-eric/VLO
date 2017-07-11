@@ -28,8 +28,11 @@ import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.Set;
+import static java.util.concurrent.ThreadLocalRandom.current;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -114,14 +117,32 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
                         // tree root up one level, expand root for traceability by user                        
                         HierarchyPanel.this.setModel(item.getModel());
+
+                        // update current expansion
+                        updateCurrentExpansion();
+                        // add original root node to expansion
                         tree.expand(new ModelWrapper<>(PARENTS_ROOT_PATH, item.getModel()));
 
                         if (logger.isDebugEnabled()) {
-                            logger.debug("Expand {} -> {}", PARENTS_ROOT_PATH, item.getModel().getObject().getFieldValue(FacetConstants.FIELD_NAME));
+                            logger.debug("Expand {} -> {}", PARENTS_ROOT_PATH, item.getModelObject().getFieldValue(FacetConstants.FIELD_NAME));
                         }
 
                         if (target != null) {
                             target.add(HierarchyPanel.this);
+                        }
+                    }
+
+                    protected void updateCurrentExpansion() {
+                        // copy to a new set using the iterator;
+                        // alas this is necessary because the internal collection does not implement toArray() :(
+                        final ModelWrapper[] currentExpansion = Iterators.toArray(tree.getModelObject().iterator(), ModelWrapper.class);
+
+                        // the actual updating of the expansion set...
+                        for (ModelWrapper<SolrDocument> item : currentExpansion) {
+                            // append the node id of the new parent to the root path for each path
+                            final String newPath = item.getPath().replaceFirst(PARENTS_ROOT_PATH, PARENTS_ROOT_PATH + "/" + item.getModelObject().getFieldValue(FacetConstants.FIELD_ID));
+                            tree.collapse(item);
+                            tree.expand(new ModelWrapper<>(newPath, item.getModel()));
                         }
                     }
                 });
