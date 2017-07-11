@@ -2,7 +2,6 @@ package eu.clarin.cmdi.vlo.importer;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import java.util.Arrays;
@@ -14,7 +13,8 @@ import java.util.List;
  * Vocabulary map based post processing with a fallback that transfers values
  * from the availability facet.
  * 
- * See {@link  https://github.com/clarin-eric/VLO/issues/39} and {@link https://github.com/clarin-eric/VLO/issues/55}
+ * @see <a href="https://github.com/clarin-eric/VLO/issues/39">#39</a>
+ * @see <a href="https://github.com/clarin-eric/VLO/issues/55">#55</a>
  * @author Twan Goosen
  */
 public class LicenseTypePostProcessor extends PostProcessorsWithVocabularyMap {
