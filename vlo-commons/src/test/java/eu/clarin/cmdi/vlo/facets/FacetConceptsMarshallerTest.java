@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class FacetConceptsMarshallerTest {
 

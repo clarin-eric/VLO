@@ -27,7 +27,7 @@ import org.apache.wicket.util.convert.IConverter;
  * Label to be used for facet fields. It will apply the appropriate converter
  * from {@link FieldValueConverterProviderImpl} based on the field name.
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class FieldValueLabel extends Label {
 

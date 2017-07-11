@@ -31,7 +31,7 @@ import org.apache.wicket.model.IModel;
  * (depending on the mode, see {@link #setBookmarkMode() } and {@link #setCopyMode()
  * }.
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class BookmarkLinkPanel extends Panel {
 

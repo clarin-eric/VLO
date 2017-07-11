@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class PreferredExplicitOrdering<T> extends Ordering<T> implements Serializable {
 

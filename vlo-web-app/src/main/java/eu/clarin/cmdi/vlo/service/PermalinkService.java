@@ -24,7 +24,7 @@ import org.apache.wicket.Page;
  * Interface for a service that produces a URL given a page class and optionally
  * a facet selection and document object
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public interface PermalinkService {
 

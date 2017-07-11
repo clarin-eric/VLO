@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.pojo;
 
 /**
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public enum FacetSelectionValueQualifier {
     /**

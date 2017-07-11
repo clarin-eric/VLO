@@ -67,7 +67,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  * allows for 'OR' selection on a number of preconfigured values. It also
  * assumes that every document has a value for this field.
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacetsSelection> implements IAjaxIndicatorAware {
 

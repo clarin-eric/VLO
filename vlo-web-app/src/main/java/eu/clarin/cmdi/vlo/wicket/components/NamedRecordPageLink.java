@@ -24,7 +24,7 @@ import org.apache.wicket.model.StringResourceModel;
 
 /**
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class NamedRecordPageLink extends GenericPanel<SolrDocument> {
 

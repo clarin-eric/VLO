@@ -37,7 +37,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  * {@link FieldValueLabel} to show the language name. In other cases, it falls
  * back to a plain FieldValueLabel without a link.
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  * @see FacetConstants#FIELD_LANGUAGE_CODE
  * @see VloConfig#getLanguageLinkTemplate()
  */

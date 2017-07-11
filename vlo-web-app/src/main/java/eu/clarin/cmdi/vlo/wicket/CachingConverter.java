@@ -30,7 +30,7 @@ import org.apache.wicket.util.convert.IConverter;
  * so that each conversion in a certain direction given a set of a value and
  * locale or string representation and locale happens only once.
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  * @param <C> The object to convert from and to String
  * @see Cache
  */

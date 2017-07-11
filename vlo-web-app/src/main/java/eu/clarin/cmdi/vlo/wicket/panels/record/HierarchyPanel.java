@@ -54,7 +54,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class HierarchyPanel extends GenericPanel<SolrDocument> {
 

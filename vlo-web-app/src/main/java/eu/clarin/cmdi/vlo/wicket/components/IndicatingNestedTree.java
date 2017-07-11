@@ -30,7 +30,7 @@ import org.apache.wicket.model.IModel;
  * Nesting tree that has {@link IndicatingAjaxFallbackLink} instances for
  * junction links so that an indicator is shown when a user expands a node.
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  * @param <T>
  */
 public abstract class IndicatingNestedTree<T> extends DefaultNestedTree<T> {

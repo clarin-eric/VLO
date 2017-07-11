@@ -31,7 +31,7 @@ import org.apache.wicket.extensions.markup.html.basic.ILinkRenderStrategy;
  * that extends FieldValueLabel so that it undergoes the same conversion
  * processing as its super class
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  * @see SmartLinkLabel
  */
 public class SmartLinkFieldValueLabel extends FieldValueLabel {

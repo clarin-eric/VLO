@@ -24,7 +24,7 @@ import org.apache.wicket.model.IModel;
 /**
  * Attach to a &lt;span&gt; element
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class ResourceTypeIcon extends WebMarkupContainer {
 

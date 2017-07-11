@@ -40,7 +40,7 @@ import org.apache.wicket.model.Model;
 
 /**
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
 

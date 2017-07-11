@@ -29,7 +29,7 @@ import org.apache.wicket.util.string.StringValue;
  * parameter {@link #FRAGMENT_PAGE_PARAMETER #} that translates into a fragment
  * in the URL rather than a query parameter
  *
- * @author Twan Goosen <twan.goosen@mpi.nl>
+ * @author Twan Goosen &lt;twan@clarin.eu&gt;
  * @see PageParameters
  * @see
  * https://cwiki.apache.org/confluence/display/WICKET/FAQs#FAQs-Howtoadd#-anchor(opaque)topageurl?
