@@ -219,7 +219,13 @@ public class FacetMappingFactory {
         String context = null;
         String cpath = path.getPattern();
         while (context == null && !cpath.equals("/text()")) {
-            cpath = cpath.replaceAll("/[^/]*/text\\(\\)", "/text()");
+            if (cpath.contains("@")) {
+                // go to the parent element of the attribute
+                cpath = cpath.replaceAll("/@.*", "/text()");
+            } else {
+                // go to the parent element of the element
+                cpath = cpath.replaceAll("/[^/]*/text\\(\\)", "/text()");
+            }
             context = pathConceptLinkMapping.get(new Pattern(cpath));
         }
         return context;
