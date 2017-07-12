@@ -1,6 +1,6 @@
 Bug fixes and new features
 --------------------------
-VLO 4.2.0 (June 2017)
+VLO 4.2.0 (July 2017)
 
 ## New and improved features ##
 
