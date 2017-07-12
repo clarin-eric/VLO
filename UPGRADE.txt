@@ -50,8 +50,8 @@ before running an import or starting the web application. See <https://github.co
 version of the VLO can NOT be used. Make sure to create or use a fresh import started with
 a clean index (for instruction, see above).
 
-* For the 'beta' build profile, the VloConfig.xml now contains placeholders for several
-environment specific parameters. These need to be filtered before the application
+* For the 'beta' build profile, the bundled VloConfig.xml now contains placeholders for
+several environment specific parameters. These need to be filtered before the application
 processes the configuration. See <https://gitlab.com/CLARIN-ERIC/docker-vlo-beta/issues/1>
 for details. Note that this does not apply to other build profiles (including production)!
 

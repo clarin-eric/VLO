@@ -110,11 +110,11 @@ xxx             - VLO version number
 	Review the following configuration properties in VloConfig.xml:
 		facetConceptsFile, nationalProjectMapping, organisationNamesUrl, 
 		languageNameVariantsUrl, licenseAvailabilityMapUrl, resourceClassMapUrl,
-		licenseURIMapUrl
+		licenseURIMapUrl, licenseTypeMapUrl
 	
 	These should either be set to the defaults to use bundled resources or configured
-	to be a URL pointing to the location of the corresponding mapping/normalisation
-	definition from a version of the VLO-mapping definition. 
+	to be a (file) URL pointing to the location of the corresponding
+	mapping/normalisation definition from a version of the VLO-mapping definition. 
 	
 	Both the web application and the importer make use of the files at the configured
 	locations, so make sure that the content is available when starting the front end
@@ -125,7 +125,7 @@ xxx             - VLO version number
 	
 6. Importing data
 	
-	importer can be found in $VLO/bin/ folder
+	importer can be found in the $VLO/bin/ folder
 
 	Before starting data import, first start the Tomcat server:
 
@@ -145,4 +145,4 @@ xxx             - VLO version number
 	
 	Because meta data is not static, it is recommended to run the importer a
 	couple of times a week. Please note that, for the tar file with metadata
-        of 270 MB run approximately takes 2h.
+	of 270 MB run approximately takes 2h.
