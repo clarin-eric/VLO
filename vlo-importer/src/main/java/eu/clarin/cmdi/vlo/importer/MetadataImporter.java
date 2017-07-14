@@ -36,6 +36,8 @@ import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph.CmdiVertex;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import static java.time.temporal.ChronoUnit.DAYS;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -79,7 +81,7 @@ public class MetadataImporter {
      * interface to the solr server
      */
     private final SolrBridge solrBridge;
-    
+
     private final CMDIDataProcessor processor;
 
     private static class DefaultSolrBridgeFactory {
@@ -672,10 +674,80 @@ public class MetadataImporter {
      * @throws SolrServerException
      * @throws IOException
      */
-    private void updateDaysSinceLastImport(DataRoot dataRoot) throws SolrServerException, IOException {
-        LOG.info("Updating \"days since last import\" in Solr for: {}", dataRoot.getOriginName());
+    private void updateDaysSinceLastImport(final DataRoot dataRoot) throws SolrServerException, IOException {
+        LOG.info("Updating \"days since last seen\" in Solr for: {}", dataRoot.getOriginName());
+        final int fetchSize = 1000;
 
-        SolrQuery query = new SolrQuery();
+        final SolrQuery countQuery = createOldRecordsQuery(dataRoot);
+        countQuery.setRows(0);
+
+        final QueryResponse rsp = solrBridge.getServer().query(countQuery);
+        final long totalResults = rsp.getResults().getNumFound();
+        final LocalDate nowDate = LocalDate.now();
+
+        final AtomicInteger updatedDocs = new AtomicInteger();
+        int offset = 0;
+
+        //create processors for updating days since last seen
+        final Collection<Callable<Void>> processors = new ArrayList<>((int) Math.ceil(totalResults / fetchSize));
+        while (offset < totalResults) {
+            final int batchOffset = offset;
+            processors.add(() -> {
+                try {
+                    performUpdateDaysSinceLastImportBatch(dataRoot, fetchSize, batchOffset, updatedDocs, nowDate);
+                } catch (SolrServerException | IOException ex) {
+                    LOG.error("Error while updating 'days since last seen' property for old records", ex);
+                }
+                return null;
+            });
+            offset += fetchSize;
+        }
+
+        //wait for processing to finish
+        try {
+            fileProcessingPool.invokeAll(processors);
+        } catch (InterruptedException ex) {
+            LOG.warn("Interrupted while waiting for termination of updating 'days since last seen' properties");
+        }
+
+        if (updatedDocs.get() > 0) {
+            solrBridge.commit();
+        }
+
+        LOG.info("Updated \"days since last seen\" value in {} records.", updatedDocs.get());
+    }
+
+    private void performUpdateDaysSinceLastImportBatch(DataRoot dataRoot, final int fetchSize, int offset, AtomicInteger updatedDocs, final LocalDate nowDate) throws SolrServerException, IOException {
+        int updatedInBatch = 0;
+        final SolrQuery query = createOldRecordsQuery(dataRoot);
+        query.setStart(offset);
+        query.setRows(fetchSize);
+        for (SolrDocument doc : solrBridge.getServer().query(query).getResults()) {
+            updatedInBatch++;
+
+            String recordId = (String) doc.getFieldValue(FacetConstants.FIELD_ID);
+            Date lastImportDate = (Date) doc.getFieldValue(FacetConstants.FIELD_LAST_SEEN);
+            LocalDate oldDate = lastImportDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            long daysSinceLastSeen = DAYS.between(oldDate, nowDate);
+
+            SolrInputDocument updateDoc = new SolrInputDocument();
+            updateDoc.setField(FacetConstants.FIELD_ID, recordId);
+
+            final Map<String, Long> partialUpdateMap = Collections.singletonMap("set", daysSinceLastSeen);
+            updateDoc.setField(FacetConstants.FIELD_DAYS_SINCE_LAST_SEEN, partialUpdateMap);
+
+            solrBridge.addDocument(updateDoc);
+            final Throwable error = solrBridge.popError();
+            if (error != null) {
+                throw new SolrServerException(error);
+            }
+        }
+        final int totalUpdated = updatedDocs.addAndGet(updatedInBatch);
+        LOG.info("Updating \"days since last seen\": {} updated in batch - {} records updated thus far", updatedInBatch, totalUpdated);
+    }
+
+    private SolrQuery createOldRecordsQuery(DataRoot dataRoot) {
+        final SolrQuery query = new SolrQuery();
         query.setQuery(
                 //we're going to process all records in the current data root...
                 FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName())
@@ -684,52 +756,7 @@ public class MetadataImporter {
                 + FacetConstants.FIELD_LAST_SEEN + ":[* TO NOW-1DAY]"
         );
         query.setFields(FacetConstants.FIELD_ID, FacetConstants.FIELD_LAST_SEEN);
-        int fetchSize = 1000;
-        query.setRows(fetchSize);
-        QueryResponse rsp = solrBridge.getServer().query(query);
-
-        final long totalResults = rsp.getResults().getNumFound();
-        final LocalDate nowDate = LocalDate.now();
-
-        final int docsListSize = config.getMaxDocsInList();
-
-        Boolean updatedDocs = false;
-        int offset = 0;
-
-        while (offset < totalResults) {
-            query.setStart(offset);
-            query.setRows(fetchSize);
-
-            for (SolrDocument doc : solrBridge.getServer().query(query).getResults()) {
-                updatedDocs = true;
-
-                String recordId = (String) doc.getFieldValue(FacetConstants.FIELD_ID);
-                Date lastImportDate = (Date) doc.getFieldValue(FacetConstants.FIELD_LAST_SEEN);
-                LocalDate oldDate = lastImportDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                long daysSinceLastSeen = DAYS.between(oldDate, nowDate);
-
-                SolrInputDocument updateDoc = new SolrInputDocument();
-                updateDoc.setField(FacetConstants.FIELD_ID, recordId);
-
-                Map<String, Long> partialUpdateMap = new HashMap<>();
-                partialUpdateMap.put("set", daysSinceLastSeen);
-                updateDoc.setField(FacetConstants.FIELD_DAYS_SINCE_LAST_SEEN, partialUpdateMap);
-
-                solrBridge.addDocument(updateDoc);
-                final Throwable error = solrBridge.popError();
-                if (error != null) {
-                    throw new SolrServerException(error);
-                }
-            }
-            offset += fetchSize;
-            LOG.info("Updating \"days since last import\": {} out of {} records updated", offset, totalResults);
-        }
-
-        if (updatedDocs) {
-            solrBridge.commit();
-        }
-
-        LOG.info("Updating \"days since last import\" done.");
+        return query;
     }
 
     private void shutdown() {
