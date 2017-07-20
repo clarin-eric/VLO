@@ -242,10 +242,11 @@ public class MetadataImporter {
         final Set<File> ignoredFileSet = Sets.newConcurrentHashSet();
 
         //(perform in thread pool)
+        final AtomicInteger preProcessCount = new AtomicInteger();
         final Stream<Callable<Void>> preProcessors = centreFiles.stream().map((File file) -> {
             return (Callable) () -> {
                 final boolean createHierarchyGraph = resourceStructureGraph != null;
-                preProcessFile(file, createHierarchyGraph, ignoredFileSet, mdSelfLinkSet);
+                preProcessFile(file, createHierarchyGraph, ignoredFileSet, mdSelfLinkSet, preProcessCount);
                 return null;
             };
         });
@@ -312,7 +313,7 @@ public class MetadataImporter {
         }
     }
 
-    protected void preProcessFile(File file, boolean createHierarchyGraph, Set<File> ignoredFileSet, Set<String> mdSelfLinkSet) {
+    protected void preProcessFile(File file, boolean createHierarchyGraph, Set<File> ignoredFileSet, Set<String> mdSelfLinkSet, AtomicInteger progress) {
         if (config.getMaxFileSize() > 0
                 && file.length() > config.getMaxFileSize()) {
             LOG.info("Skipping {} because it is too large.", file.getAbsolutePath());
@@ -329,6 +330,10 @@ public class MetadataImporter {
             if (mdSelfLink != null) {
                 mdSelfLinkSet.add(StringUtils.normalizeIdString(mdSelfLink));
             }
+        }
+        //some logging to indicate progress for large sets
+        if(progress.incrementAndGet() % 10000 == 0) {
+            LOG.info("Pre-processed {} files in set...", progress);
         }
     }
 
