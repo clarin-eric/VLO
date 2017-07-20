@@ -32,9 +32,10 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private final Boolean useLocalXSDCache;
     private static final java.util.regex.Pattern PROFILE_ID_PATTERN = java.util.regex.Pattern.compile(".*(clarin.eu:cr1:p_[0-9]+).*");
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
-
+    
     private static final String ENGLISH_LANGUAGE = "code:eng";
     private static final String DEFAULT_LANGUAGE = "code:und";
+    private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
     private final VloConfig config;
     private final Vocabulary CCR;
     private final FacetMappingFactory facetMappingFactory;
@@ -72,24 +73,8 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     }
 
     @Override
-    public String extractMdSelfLink(File file) throws VTDException, IOException {
-        final VTDGen vg = new VTDGen();
-        try (FileInputStream fileInputStream = new FileInputStream(file)) {
-            vg.setDoc(IOUtils.toByteArray(fileInputStream));
-            vg.parse(true);
-        }
-        final VTDNav nav = vg.getNav();
-        nav.toElement(VTDNav.ROOT);
-        AutoPilot ap = new AutoPilot(nav);
-        setNameSpace(ap, null);
-        ap.selectXPath("/cmd:CMD/cmd:Header/cmd:MdSelfLink/text()");
-        int index = ap.evalXPath();
-
-        String mdSelfLink = null;
-        if (index != -1) {
-            mdSelfLink = nav.toString(index).trim();
-        }
-        return mdSelfLink;
+    public String extractMdSelfLink(File file) throws IOException {
+        return selfLinkExtractor.extractMdSelfLink(file);
     }
 
     /**
