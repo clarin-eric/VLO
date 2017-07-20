@@ -331,9 +331,11 @@ public class MetadataImporter {
                 mdSelfLinkSet.add(StringUtils.normalizeIdString(mdSelfLink));
             }
         }
-        //some logging to indicate progress for large sets
-        if(progress.incrementAndGet() % 10000 == 0) {
-            LOG.info("Pre-processed {} files in set...", progress);
+        
+        //some counting and logging to indicate progress, especially helpful for large sets
+        final int progressNow = progress.incrementAndGet();
+        if(progressNow % 10000 == 0) {
+            LOG.info("Pre-processed {} files in set...", progressNow);
         }
     }
 
