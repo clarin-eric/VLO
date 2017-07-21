@@ -18,6 +18,8 @@ package eu.clarin.cmdi.vlo.importer;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import eu.clarin.cmdi.vlo.CmdConstants;
+import static eu.clarin.cmdi.vlo.CmdConstants.CMD_NAMESPACE;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -42,17 +44,17 @@ public class SelfLinkExtractorImpl implements SelfLinkExtractor {
      * Target path in XML document: /cmd:CMD/cmd:Header/cmd:MdSelfLink/text()
      */
     private final static List<QName> TARGET_PATH = ImmutableList.of(
-            new QName("http://www.clarin.eu/cmd/1", "CMD"),
-            new QName("http://www.clarin.eu/cmd/1", "Header"),
-            new QName("http://www.clarin.eu/cmd/1", "MdSelfLink")
+            new QName(CMD_NAMESPACE, "CMD"),
+            new QName(CMD_NAMESPACE, "Header"),
+            new QName(CMD_NAMESPACE, "MdSelfLink")
     ).reverse();
 
     /**
      * Halting path. No self link past Header section...
      */
     private final static List<QName> HALT_PATH = ImmutableList.of(
-            new QName("http://www.clarin.eu/cmd/1", "CMD"),
-            new QName("http://www.clarin.eu/cmd/1", "Resources")
+            new QName(CmdConstants.CMD_NAMESPACE, "CMD"),
+            new QName(CmdConstants.CMD_NAMESPACE, "Resources")
     ).reverse();
 
     private final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();

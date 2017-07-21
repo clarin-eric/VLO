@@ -7,6 +7,7 @@ import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
+import eu.clarin.cmdi.vlo.CmdConstants;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.File;
@@ -83,7 +84,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @param ap
      */
     private void setNameSpace(AutoPilot ap, String profileId) {
-        ap.declareXPathNameSpace("cmd", "http://www.clarin.eu/cmd/1");
+        ap.declareXPathNameSpace("cmd", CmdConstants.CMD_NAMESPACE);
         if (profileId != null) {
             ap.declareXPathNameSpace("cmdp", "http://www.clarin.eu/cmd/1/profiles/" + profileId);
         }
