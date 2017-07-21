@@ -6,6 +6,7 @@ import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
+import static eu.clarin.cmdi.vlo.CmdConstants.CMD_NAMESPACE;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
@@ -365,7 +366,7 @@ public class FacetMappingFactory {
      */
     private int getDatcatIndex(VTDNav vn) throws NavException {
         int result = -1;
-        result = vn.getAttrValNS("http://www.clarin.eu/cmd/1", "ConceptLink");
+        result = vn.getAttrValNS(CMD_NAMESPACE, "ConceptLink");
         if (result == -1) {
             result = vn.getAttrVal("cmd:ConceptLink");
         }
@@ -380,7 +381,7 @@ public class FacetMappingFactory {
      */
     private int getVocabIndex(VTDNav vn) throws NavException {
         int result = -1;
-        result = vn.getAttrValNS("http://www.clarin.eu/cmd/1", "Vocabulary");
+        result = vn.getAttrValNS(CMD_NAMESPACE, "Vocabulary");
         if (result == -1) {
             result = vn.getAttrVal("cmd:Vocabulary");
         }
@@ -395,7 +396,7 @@ public class FacetMappingFactory {
      */
     private int getVocabPropIndex(VTDNav vn) throws NavException {
         int result = -1;
-        result = vn.getAttrValNS("http://www.clarin.eu/cmd/1", "ValueProperty");
+        result = vn.getAttrValNS(CMD_NAMESPACE, "ValueProperty");
         if (result == -1) {
             result = vn.getAttrVal("cmd:ValueProperty");
         }
@@ -410,7 +411,7 @@ public class FacetMappingFactory {
      */
     private int getVocabLangIndex(VTDNav vn) throws NavException {
         int result = -1;
-        result = vn.getAttrValNS("http://www.clarin.eu/cmd/1", "ValueLanguage");
+        result = vn.getAttrValNS(CMD_NAMESPACE, "ValueLanguage");
         if (result == -1) {
             result = vn.getAttrVal("cmd:ValueLanguage");
         }

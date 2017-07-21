@@ -1,5 +1,13 @@
 Bug fixes and new features
 --------------------------
+VLO 4.2.1 (August 2017)
+
+* Parallel processing during import and caching improvements
+	<https://github.com/clarin-eric/VLO/issues/29>
+	<https://github.com/clarin-eric/VLO/issues/68>
+* Fixed detecting (conceptLink) context for attribute XPaths 
+	<https://github.com/clarin-eric/VLO/issues/91>
+
 VLO 4.2.0 (July 2017)
 
 ## New and improved features ##

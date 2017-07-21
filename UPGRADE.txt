@@ -28,6 +28,23 @@ old configuration to the new one.
     ./vlo_solr_importer.sh -c ../config/VloConfig.xml
 
 -----------------------------
+Upgrading from 4.2.0 to 4.2.1
+-----------------------------
+* Two new configuration settings have been added related to parallel processing:
+- fileProcessingThreads
+- solrThreads
+
+These need to be tweaked depending on the environment in order to get the best processing
+while keeping the load accessible. The parameter `fileProcessingThreads` can be set to
+`-1` to instruct the importer to initialise a "work-stealing thread pool" with a
+parallelism level automatically determined by the JVM based on the number of available
+cores. This is often a good choice.
+
+For the 'beta' build profile, there are two new placeholders corresponding to the above
+parameters. See <https://gitlab.com/CLARIN-ERIC/docker-vlo-beta/merge_requests/4> for
+details. Note that this does not apply to other build profiles (including production)!
+
+-----------------------------
 Upgrading from 4.1.x to 4.2.0
 -----------------------------
 

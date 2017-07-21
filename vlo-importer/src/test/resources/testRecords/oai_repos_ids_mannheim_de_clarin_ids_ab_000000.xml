@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cmd:CMD xmlns:cmd="http://www.clarin.eu/cmd/1"
+         xmlns:cmdp="http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1366895758244"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         CMDVersion="1.2"
+         xsi:schemaLocation="http://www.clarin.eu/cmd/1 https://infra.clarin.eu/CMDI/1.x/xsd/cmd-envelop.xsd http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1366895758244 http://alpha-vlo.clarin.eu/component-registry-rest/rest/registry/1.x/profiles/clarin.eu:cr1:p_1366895758244/xsd">
+   <cmd:Header>
+      <cmd:MdCreator>PF</cmd:MdCreator>
+      <cmd:MdCreationDate>2015-02-18</cmd:MdCreationDate>
+      <cmd:MdSelfLink>http://hdl.handle.net/10932/00-027B-9E8A-9300-0B01-E</cmd:MdSelfLink>
+      <cmd:MdProfile>clarin.eu:cr1:p_1366895758244</cmd:MdProfile>
+      <cmd:MdCollectionDisplayName>Institut für Deutsche Sprache, CLARIN-D Zentrum, Mannheim</cmd:MdCollectionDisplayName>
+   </cmd:Header>
+   <cmd:Resources>
+      <cmd:ResourceProxyList>
+			      <cmd:ResourceProxy id="clarind_ids_ab_05">
+				        <cmd:ResourceType mimetype="text/html">LandingPage</cmd:ResourceType>
+				        <cmd:ResourceRef>http://doi.org/10.1093/llc/fqt024</cmd:ResourceRef>
+			      </cmd:ResourceProxy>
+			      <cmd:ResourceProxy id="clarind_ids_ab_01">
+				        <cmd:ResourceType mimetype="application/zip">Resource</cmd:ResourceType>
+				        <cmd:ResourceRef>http://hdl.handle.net/10932/00-027B-9E8A-F810-0C01-2</cmd:ResourceRef>
+			      </cmd:ResourceProxy>
+			      <cmd:ResourceProxy id="clarind_ids_ab_02">
+				        <cmd:ResourceType mimetype="application/zip">Resource</cmd:ResourceType>
+				        <cmd:ResourceRef>http://hdl.handle.net/10932/00-027B-9E8B-0C40-0D01-D</cmd:ResourceRef>
+			      </cmd:ResourceProxy>
+			      <cmd:ResourceProxy id="clarind_ids_ab_03">
+				        <cmd:ResourceType mimetype="application/zip">Resource</cmd:ResourceType>
+				        <cmd:ResourceRef>http://hdl.handle.net/10932/00-027B-9E8B-1FA0-0E01-1</cmd:ResourceRef>
+			      </cmd:ResourceProxy>
+			      <cmd:ResourceProxy id="clarind_ids_ab_04">
+				        <cmd:ResourceType mimetype="application/pdf">Resource</cmd:ResourceType>
+				        <cmd:ResourceRef>http://hdl.handle.net/10932/00-027B-9E8B-33B0-0F01-9</cmd:ResourceRef>
+			      </cmd:ResourceProxy>
+		    </cmd:ResourceProxyList>
+      <cmd:JournalFileProxyList/>
+      <cmd:ResourceRelationList/>
+   </cmd:Resources>
+   <cmd:IsPartOfList/>
+   <cmd:Components>
+		    <cmdp:OLAC-DcmiTerms-ref>
+			      <cmdp:creator>Annelen Brunner</cmdp:creator>
+			      <cmdp:description xml:lang="de">Diese Ressource umfasst die Zusatzmaterialien zu: Annelen Brunner: "Automatische Erkennung von Redewiedergabe in literarischen Texten" (Dissertation, Würzburg 2013). Die Studie untersucht die manuelle und automatische Annotation von Redewiedergabe anhand eines Korpus deutschsprachiger Erzähltexte (ca. 57 000 Tokens, Zeitraum 1787-1913). Verfügbar sind: das annotierte Korpus im GATE-XML-Format (Corpus: corpus.zip), Werkzeuge (GATE-Module und R-Scripte) zur automatischen Erkennung (Tools: tools.zip), Frequenz- und Modelldaten für das maschinelle Lernen (Data&amp;Models: ml.zip). Eine ausführliche Beschreibung findet sich in Dokumentation.pdf. Bitte beachten Sie auch die Zusatzressourcen (Annelen Brunner 2013).</cmdp:description>
+			      <cmdp:description xml:lang="en">This resource contains the supplementary material for Annelen Brunner: "Automatische Erkennung von Redewiedergabe in literarischen Texten" (PhD thesis, Würzburg 2013). The study deals with the manual and automatic annotation of speech, thought and writing representation based on a corpus of German narrative texts (about 57 000 tokens, time period 1787-1913). Available are: the annotated corpus in the GATE XML format (Corpus: corpus.zip), tools (GATE modules and R scripts) for automatic recognition (Tools: tools.zip), Frequency data and models for machine learning (Data&amp;Models: ml.zip). A detailed description can be found in Dokumentation.pdf. Please also note the additional materials (Annelen Brunner 2013).</cmdp:description>
+			      <cmdp:format>application/zip</cmdp:format>
+			      <cmdp:format>application/pdf</cmdp:format>
+			      <cmdp:hasPart ref="clarind_ids_ab_01">Corpus (zip, 8.097 KB)</cmdp:hasPart>
+			      <cmdp:hasPart ref="clarind_ids_ab_02">Data &amp; Models (zip, 35.377 KB)</cmdp:hasPart>
+			      <cmdp:hasPart ref="clarind_ids_ab_03">Tools (zip, 327 KB)</cmdp:hasPart>
+			      <cmdp:hasPart ref="clarind_ids_ab_04">Dokumentation (pdf, German)</cmdp:hasPart>
+			      <cmdp:identifier>http://hdl.handle.net/10932/00-027B-9E8A-9300-0B01-E</cmdp:identifier>
+			      <cmdp:language olac-language="DEU">deu</cmdp:language>
+			      <cmdp:publisher>Institut für Deutsche Sprache</cmdp:publisher>
+			      <cmdp:relation ref="clarind_ids_ab_05">Annelen Brunner (2013): "Automatic recognition of speech, thought, and writing representation in German narrative texts". In: Literary and Linguistic Computing, 2013</cmdp:relation>
+			      <cmdp:title xml:lang="de">Zusatzmaterialien der Dissertation "Automatische Erkennung von Redewiedergabe in literarischen Texten"</cmdp:title>
+			      <cmdp:type>collection</cmdp:type>
+			      <cmdp:type>tools</cmdp:type>
+		    </cmdp:OLAC-DcmiTerms-ref>
+	  </cmd:Components>
+</cmd:CMD>
