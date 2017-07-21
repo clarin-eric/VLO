@@ -235,6 +235,7 @@ public class MetadataImporter {
         String centerDirName = centreFiles.get(0).getParentFile().getName();
 
         final ResourceStructureGraph resourceStructureGraph = instantiateResourceStructureGraph(dataRoot, centerDirName);
+        final boolean createHierarchyGraph = resourceStructureGraph != null;
 
         // pre-process: identify mdSelfLinks and remove too large files from center file list
         LOG.info("Checking file list...");
@@ -245,7 +246,6 @@ public class MetadataImporter {
         final AtomicInteger preProcessCount = new AtomicInteger();
         final Stream<Callable<Void>> preProcessors = centreFiles.stream().map((File file) -> {
             return (Callable) () -> {
-                final boolean createHierarchyGraph = resourceStructureGraph != null;
                 preProcessFile(file, createHierarchyGraph, ignoredFileSet, mdSelfLinkSet, preProcessCount);
                 return null;
             };
@@ -331,10 +331,10 @@ public class MetadataImporter {
                 mdSelfLinkSet.add(StringUtils.normalizeIdString(mdSelfLink));
             }
         }
-        
+
         //some counting and logging to indicate progress, especially helpful for large sets
         final int progressNow = progress.incrementAndGet();
-        if(progressNow % 10000 == 0) {
+        if (progressNow % 10000 == 0) {
             LOG.info("Pre-processed {} files in set...", progressNow);
         }
     }
