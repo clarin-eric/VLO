@@ -1,13 +1,11 @@
 <dataRoots>
-
-    <DataRoot>
+    <DataRoot ignoreHierarchyDirs="COllections_de_COrpus_Oraux_Numeriques_CoCoON_ex_CRDO_,Oxford_Text_Archive,Berlin_Brandenburg_Academy_of_Sciences_and_Humanities_BBAW_,Nederands_Instituut_voor_Beeld_en_Geluid_OAI_PMH_repository,LINDAT_CLARIN_digital_library_at_the_Institute_of_Formal_and_Applied_Linguistics_Charles_University_in_Prague">
         <originName>CLARIN Centres</originName>
         <rootFile>/srv/vlo-data/clarin/results/cmdi/</rootFile>            
         <prefix>http://alpha-vlo.clarin.eu/cmdi/</prefix>
         <tostrip>/srv/vlo-data/</tostrip>
         <deleteFirst>false</deleteFirst>
     </DataRoot>
-
     <DataRoot processHierarchyDirs="NONE">
         <originName>Others</originName>
         <rootFile>/srv/vlo-data/others/results/cmdi/</rootFile>            
