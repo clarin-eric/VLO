@@ -33,7 +33,7 @@
 
     <properties>
         <!-- VLO-mapping project version to obtain default mappings from at build time -->
-        <vlo.mapping.version>1.1.0</vlo.mapping.version>
+        <vlo.mapping.version>1.1.1</vlo.mapping.version>
         
         <!-- Common runtime dependency versions -->
         <solr.version>4.10.4</solr.version>
