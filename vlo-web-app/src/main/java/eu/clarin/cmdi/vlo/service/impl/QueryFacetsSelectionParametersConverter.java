@@ -106,7 +106,7 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
 
         final List<StringValue> facetSelectionTypes = params.getValues(FILTER_QUERY_TYPE);
         final List<StringValue> facetValues = params.getValues(FILTER_QUERY);
-        final HashMap<String, FacetSelection> selection = Maps.newHashMapWithExpectedSize(facetValues.size());
+        final HashMap<String, FacetSelection> selection = Maps.newLinkedHashMapWithExpectedSize(facetValues.size());
 
         // Get selection type from params
         for (StringValue selectionType : facetSelectionTypes) {
