@@ -23,10 +23,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <div>Similar records:</div>
-            <div wicket:id="document">
-                <span wicket:id="name">name</span>
-            </div>
+            <ul class="similar-records">
+                <li wicket:id="document">
+                    <a wicket:id="record"><span wicket:id="name">name</span></a>
+                </li>
+            </ul>
         </wicket:panel>
     </body>
 </html>

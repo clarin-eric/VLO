@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.record;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.service.solr.SimilarDocumentsService;
+import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +37,9 @@ import org.slf4j.LoggerFactory;
  * @author twagoo
  */
 public class SimilarDocumentsPanel extends GenericPanel<SolrDocument> {
+
+    private static final int MAX_DESCRIPTION_LENGTH = 200;
+    private static final int LONG_DESCRIPTION_TRUNCATE_POINT = 180;
 
     private final static Logger logger = LoggerFactory.getLogger(SimilarDocumentsPanel.class);
 
@@ -60,7 +64,9 @@ public class SimilarDocumentsPanel extends GenericPanel<SolrDocument> {
         add(new ListView<SolrDocument>("document", similarDocumentsModel) {
             @Override
             protected void populateItem(ListItem<SolrDocument> item) {
-                item.add(new SolrFieldLabel("name", item.getModel(), FacetConstants.FIELD_NAME, "Unnamed record"));
+                item.add(new RecordPageLink("record", item.getModel())
+                        .add(new SolrFieldLabel("name", item.getModel(), FacetConstants.FIELD_NAME, "Unnamed record", MAX_DESCRIPTION_LENGTH, LONG_DESCRIPTION_TRUNCATE_POINT))
+                );
             }
 
         });
