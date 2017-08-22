@@ -69,9 +69,9 @@ public class SimilarDocumentsPanel extends GenericPanel<SolrDocument> {
             protected void populateItem(ListItem<SolrDocument> item) {
                 item
                         .add(new RecordPageLink("record", item.getModel())
-                                .add(new SolrFieldLabel("name", item.getModel(), FacetConstants.FIELD_NAME, "Unnamed record", MAX_TITLE_LENGTH, LONG_TITLE_TRUNCATE_POINT))
+                                .add(new SolrFieldLabel("name", item.getModel(), FacetConstants.FIELD_NAME, "Unnamed record", MAX_TITLE_LENGTH, LONG_TITLE_TRUNCATE_POINT, true))
                         )
-                        .add(new SolrFieldLabel("description", item.getModel(), FacetConstants.FIELD_DESCRIPTION, "No description", MAX_DESCRIPTION_LENGTH, LONG_DESCRIPTION_TRUNCATE_POINT));
+                        .add(new SolrFieldLabel("description", item.getModel(), FacetConstants.FIELD_DESCRIPTION, "No description", MAX_DESCRIPTION_LENGTH, LONG_DESCRIPTION_TRUNCATE_POINT, true));
             }
 
             @Override
