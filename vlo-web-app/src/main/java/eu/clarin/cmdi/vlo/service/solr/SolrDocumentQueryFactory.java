@@ -47,5 +47,13 @@ public interface SolrDocumentQueryFactory {
      * @see FacetConstants#FIELD_ID
      */
     SolrQuery createDocumentQuery(String docId);
+    
+    /**
+     * Creates a query to retrieve documents similar to the identified one
+     * 
+     * @param docId identifier of document to retrieve similar alternatives to
+     * @return a query set up to retrieve the configured number of similar documents
+     */
+    SolrQuery createSimilarDocumentsQuery(String docId);
 
 }

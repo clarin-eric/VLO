@@ -21,10 +21,12 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
+import eu.clarin.cmdi.vlo.service.solr.SimilarDocumentsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.service.solr.SolrFacetQueryFactory;
 import eu.clarin.cmdi.vlo.service.solr.impl.AutoCompleteServiceImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SearchResultsDaoImpl;
+import eu.clarin.cmdi.vlo.service.solr.impl.SimilarDocumentsServiceImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentQueryFactoryImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentServiceImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrFacetFieldsService;
@@ -60,6 +62,11 @@ public class VloSolrSpringConfig {
     @Bean
     public SolrDocumentService documentService() {
         return new SolrDocumentServiceImpl(searchResultsDao(), documentQueryFactory());
+    }
+
+    @Bean
+    public SimilarDocumentsService similarDocumentsService() {
+        return new SimilarDocumentsServiceImpl(searchResultsDao(), documentQueryFactory());
     }
 
     @Bean

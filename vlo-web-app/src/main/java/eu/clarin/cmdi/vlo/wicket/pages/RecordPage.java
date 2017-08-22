@@ -52,6 +52,7 @@ import eu.clarin.cmdi.vlo.wicket.panels.record.HierarchyPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordDetailsPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordNavigationPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.ResourceLinksPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.record.SimilarDocumentsPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultItemLicensePanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import java.util.ArrayList;
@@ -200,6 +201,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             }
 
         });
+        add(new SimilarDocumentsPanel("similar", getModel()));
     }
     private TabbedPanel tabs;
 
