@@ -23,6 +23,7 @@ import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import java.util.Collections;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -50,7 +51,7 @@ public class SimilarDocumentsPanel extends GenericPanel<SolrDocument> {
 
     public SimilarDocumentsPanel(String id, final IModel<SolrDocument> model) {
         super(id, model);
-        IModel<List<SolrDocument>> similarDocumentsModel = new LoadableDetachableModel<List<SolrDocument>>() {
+        final IModel<List<SolrDocument>> similarDocumentsModel = new LoadableDetachableModel<List<SolrDocument>>() {
             @Override
             public List<SolrDocument> load() {
                 final Object docId = model.getObject().getFieldValue(FacetConstants.FIELD_ID);
@@ -71,6 +72,21 @@ public class SimilarDocumentsPanel extends GenericPanel<SolrDocument> {
                                 .add(new SolrFieldLabel("name", item.getModel(), FacetConstants.FIELD_NAME, "Unnamed record", MAX_TITLE_LENGTH, LONG_TITLE_TRUNCATE_POINT))
                         )
                         .add(new SolrFieldLabel("description", item.getModel(), FacetConstants.FIELD_DESCRIPTION, "No description", MAX_DESCRIPTION_LENGTH, LONG_DESCRIPTION_TRUNCATE_POINT));
+            }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(!similarDocumentsModel.getObject().isEmpty());
+            }
+
+        });
+
+        add(new WebMarkupContainer("noSimilarRecords") {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(similarDocumentsModel.getObject().isEmpty());
             }
 
         });
