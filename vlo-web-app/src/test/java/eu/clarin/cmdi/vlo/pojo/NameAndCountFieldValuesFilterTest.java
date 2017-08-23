@@ -49,16 +49,19 @@ public class NameAndCountFieldValuesFilterTest {
         assertTrue(filter.matches(count, null));
 
         filter.setName("v");
-        assertTrue(filter.matches(count, null));
+        assertTrue("Partial left match", filter.matches(count, null));
 
         filter.setName("val");
-        assertTrue(filter.matches(count, null));
+        assertTrue("Partial left match", filter.matches(count, null));
 
         filter.setName("value");
-        assertTrue(filter.matches(count, null));
+        assertTrue("Complete match", filter.matches(count, null));
+
+        filter.setName("alue");
+        assertTrue("Partial middle match", filter.matches(count, null));
 
         filter.setName("values");
-        assertFalse(filter.matches(count, null));
+        assertFalse("Complete match", filter.matches(count, null));
     }
 
     /**
@@ -113,10 +116,19 @@ public class NameAndCountFieldValuesFilterTest {
      */
     @Test
     public void testMatchesOtherCharacter() {
-        filter.setFirstCharacter('*');
+        filter.setFirstCharacter(NameAndCountFieldValuesFilter.NON_ALPHABETICAL_CHARACTER_SYMBOL);
         assertFalse(filter.matches(count, null));
-        
+
+        count.setName("abc");
+        assertFalse(filter.matches(count, null));
+
         count.setName("???");
+        assertTrue(filter.matches(count, null));
+
+        count.setName("543");
+        assertTrue(filter.matches(count, null));
+
+        count.setName("_other");
         assertTrue(filter.matches(count, null));
     }
 

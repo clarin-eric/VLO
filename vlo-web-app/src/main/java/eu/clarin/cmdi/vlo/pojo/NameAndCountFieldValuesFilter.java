@@ -30,7 +30,10 @@ import org.apache.wicket.util.convert.IConverter;
  */
 public class NameAndCountFieldValuesFilter implements FieldValuesFilter, Serializable {
 
+    public static final char NON_ALPHABETICAL_CHARACTER_SYMBOL = '*';
+
     private String name;
+    private Character firstCharacter;
     private Pattern namePattern;
     private Integer minimalOccurence;
 
@@ -59,6 +62,14 @@ public class NameAndCountFieldValuesFilter implements FieldValuesFilter, Seriali
         this.minimalOccurence = minimalOccurence;
     }
 
+    public Character getFirstCharacter() {
+        return firstCharacter;
+    }
+
+    public void setFirstCharacter(Character firstCharacter) {
+        this.firstCharacter = firstCharacter;
+    }
+
     /**
      *
      * @param count count (name + count) to check
@@ -69,24 +80,45 @@ public class NameAndCountFieldValuesFilter implements FieldValuesFilter, Seriali
      */
     @Override
     public boolean matches(Count count, IConverter<String> converter) {
-        if (minimalOccurence == null || count.getCount() >= minimalOccurence) {
-            if (namePattern == null) {
-                // no pattern to compare to, always matches
+        if (minimalOccurence == null || matchesOccurrences(count)) {
+            if (firstCharacter == null && namePattern == null) {
                 return true;
             } else {
                 // convert value if converter is provided
-                final String value;
+                final String convertedValue;
                 if (converter == null) {
-                    value = count.getName();
+                    convertedValue = count.getName();
                 } else {
-                    value = converter.convertToString(count.getName(), null);
+                    convertedValue = converter.convertToString(count.getName(), null);
                 }
-                return namePattern.matcher(value).find();
+                if (firstCharacter == null || matchesFirstCharacter(convertedValue)) {
+                    return (namePattern == null || matchesName(convertedValue));
+                }
             }
-        } else {
-            // too few occurences, no match
-            return false;
         }
+        // no match
+        return false;
+    }
+
+    private boolean matchesOccurrences(Count count) {
+        return count.getCount() >= minimalOccurence;
+    }
+
+    private boolean matchesFirstCharacter(String value) {
+        if (value.isEmpty()) {
+            return firstCharacter == null;
+        } else {
+            final Character valueFirstChar = value.charAt(0);
+            if (firstCharacter.equals(NON_ALPHABETICAL_CHARACTER_SYMBOL)) {
+                return !Character.isAlphabetic(valueFirstChar);
+            } else {
+                return Character.valueOf(Character.toUpperCase(firstCharacter)).equals(Character.toUpperCase(valueFirstChar));
+            }
+        }
+    }
+
+    private boolean matchesName(String value) {
+        return namePattern.matcher(value).find();
     }
 
     @Override
