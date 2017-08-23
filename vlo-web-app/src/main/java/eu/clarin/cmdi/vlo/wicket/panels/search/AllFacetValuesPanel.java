@@ -30,8 +30,6 @@ import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.AjaxIndicatingForm;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueOrderSelector;
-import eu.clarin.cmdi.vlo.wicket.model.BridgeModel;
-import eu.clarin.cmdi.vlo.wicket.model.BridgeOuterModel;
 import eu.clarin.cmdi.vlo.wicket.model.SelectionModel;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
@@ -47,7 +45,6 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -261,47 +258,24 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
     /**
      * Creates form controls for minimal occurrences options.
      *
-     * This requires a 'bridge' construct to combine a checkbox to
-     * enable/disable filtering by occurence altogether (which actually sets the
-     * min occurence to 0) and a dropdown for the minimal number of occurences,
-     * which only gets applied if the checkbox is ticket.
-     *
-     * The checkbox opens/closes a bridge between the minimal occurences in the
-     * filter model and the model that holds the selected option (modulated via
-     * the dropdown).
-     *
      * @param options options form
      */
     private void addOccurenceOptions(final Form options) {
-
-        // Model that holds the actual number of occurences filtered on
-        final IModel<Integer> minOccurenceModel = new PropertyModel<>(filterModel, "minimalOccurence");
-        // Model that represents the filter state ('bridge' between filter and selection)
-        final IModel<Boolean> bridgeStateModel = Model.of(false);
         // Model that represents the *selected* number of minimal occurences (passes it on if not decoupled)
-        final IModel<Integer> minOccurenceSelectModel = new BridgeOuterModel<>(minOccurenceModel, bridgeStateModel, 2);
-        // Model that links the actual filter, selection and bridge (object opens and closes it)
-        final IModel<Boolean> minOccurenceCheckBoxModel = new BridgeModel<>(minOccurenceModel, minOccurenceSelectModel, bridgeStateModel, 0);
-
-        // checkbox to open and close the 'bridge'
-        final CheckBox minOccurenceToggle = new CheckBox("minOccurrencesToggle", minOccurenceCheckBoxModel);
-        minOccurenceToggle.add(new UpdateOptionsFormBehavior(options));
-        options.add(minOccurenceToggle);
+        final IModel<Integer> minOccurenceSelectModel = new PropertyModel<>(filterModel, "minimalOccurence");
 
         // Dropdown to select a value (which is applied to the filter if the 'bridge' is open)
-        final DropDownChoice<Integer> minOccurence = new DropDownChoice<>("minOccurences", minOccurenceSelectModel, ImmutableList.of(2, 5, 10, 100, 1000));
-        minOccurence.add(new UpdateOptionsFormBehavior(options) {
+        final Component minOccurence
+                = new DropDownChoice<>("minOccurences", minOccurenceSelectModel, ImmutableList.of(2, 5, 10, 100, 1000))
+                        .setNullValid(true)
+                        .add(new UpdateOptionsFormBehavior(options) {
 
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                super.onUpdate(target);
-                // on change, apply to inner model ('open bridge')
-                if (!minOccurenceCheckBoxModel.getObject()) {
-                    minOccurenceCheckBoxModel.setObject(true);
-                }
-            }
+                            @Override
+                            protected void onUpdate(AjaxRequestTarget target) {
+                                super.onUpdate(target);
+                            }
 
-        });
+                        });
         options.add(minOccurence);
     }
 

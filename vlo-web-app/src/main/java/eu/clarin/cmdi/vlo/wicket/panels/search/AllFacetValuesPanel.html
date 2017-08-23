@@ -26,23 +26,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <div id="all-facet-values">
                 <div>All available values in this facet</div>
                 <form wicket:id="options">
-                    <div>
-                        Search: <input wicket:id="filter" type="text" size="60"/>
-                    </div>
-                    <hr />
-                    <div>
-                        Sort by <select wicket:id="sort"><option>name</option><option>count</option></select>
-                        <input wicket:id="minOccurrencesToggle" type="checkbox" /> 
-                        Only show values that occur at least 
-                        <select wicket:id="minOccurences">
-                            <option>2</option>
-                            <option>5</option>
-                            <option>10</option>
-                            <option>100</option>
-                            <option>1000</option>
-                        </select>
-                        times
-                        <input type="submit" class="nonjsfallback" />
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div>
+                                Search: <input wicket:id="filter" type="text" size="60"/>
+                            </div>
+                            <div>
+                                <select wicket:id="minOccurences">
+                                    <option>2</option>
+                                    <option>5</option>
+                                    <option>10</option>
+                                    <option>100</option>
+                                    <option>1000</option>
+                                </select>
+                                <input type="submit" class="nonjsfallback" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            Sort by <select wicket:id="sort"><option>name</option><option>count</option></select>
+                        </div>
                     </div>
                 </form>
 

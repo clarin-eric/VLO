@@ -32,7 +32,7 @@ public class NameAndCountFieldValuesFilter implements FieldValuesFilter, Seriali
 
     private String name;
     private Pattern namePattern;
-    private int minimalOccurence;
+    private Integer minimalOccurence;
 
     public String getName() {
         return name;
@@ -47,7 +47,7 @@ public class NameAndCountFieldValuesFilter implements FieldValuesFilter, Seriali
         this.namePattern = createNamePattern(name);
     }
 
-    public int getMinimalOccurence() {
+    public Integer getMinimalOccurence() {
         return minimalOccurence;
     }
 
@@ -55,7 +55,7 @@ public class NameAndCountFieldValuesFilter implements FieldValuesFilter, Seriali
      *
      * @param minimalOccurence minimal number of occurrences matches should have
      */
-    public void setMinimalOccurence(int minimalOccurence) {
+    public void setMinimalOccurence(Integer minimalOccurence) {
         this.minimalOccurence = minimalOccurence;
     }
 
@@ -89,8 +89,9 @@ public class NameAndCountFieldValuesFilter implements FieldValuesFilter, Seriali
         }
     }
 
+    @Override
     public boolean isEmpty() {
-        return minimalOccurence == 0 && (name == null || name.isEmpty());
+        return (minimalOccurence == null || minimalOccurence == 0) && (name == null || name.isEmpty());
     }
 
     private Pattern createNamePattern(String name) {
