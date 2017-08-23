@@ -25,26 +25,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <wicket:panel>
             <div id="all-facet-values">
                 <div>All available values in this facet</div>
-                <form wicket:id="options">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div>
-                                Search: <input wicket:id="filter" type="text" size="60"/>
-                            </div>
-                            <div>
-                                <select wicket:id="minOccurences">
-                                    <option>2</option>
-                                    <option>5</option>
-                                    <option>10</option>
-                                    <option>100</option>
-                                    <option>1000</option>
-                                </select>
-                                <input type="submit" class="nonjsfallback" />
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            Sort by <select wicket:id="sort"><option>name</option><option>count</option></select>
-                        </div>
+                <form wicket:id="options" class="form-inline">
+                    <div class="form-group">
+                        <label for="text-filter">Search:</label>
+                        <input id="text-filter" wicket:id="filter" class="form-control" placeholder="Type to filter"/>
+                    </div>
+                    <div class="form-group pull-right">
+                        Sort by <select wicket:id="sort" class="form-control"><option>name</option><option>count</option></select>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label for="count-filter">Filter by</label>
+                        <select id="count-filter" wicket:id="minOccurences" class="form-control">
+                            <option>Occurrence count...</option>
+                            <option>2</option>
+                            <option>5</option>
+                            <option>10</option>
+                            <option>100</option>
+                            <option>1000</option>
+                        </select>
+                        <label for="name-filter" class="sr-only">Filter by</label>
+                        <select id="name-filter" class="form-control">
+                            <option>Values starting with...</option>
+                            <option>Any character</option>
+                            <option>A</option>
+                            <option>B</option>
+                            <option>C</option>
+                            <option>D</option>
+                            <option>Other</option>
+                        </select>
+                        <input type="submit" class="nonjsfallback" />
                     </div>
                 </form>
 
