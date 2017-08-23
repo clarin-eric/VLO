@@ -23,14 +23,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <div class="row similar-records">
-                <div class="col-md-2" wicket:id="document">
-                    <div class="similar-record">
-                        <a class="similar-record-title" wicket:id="record"><span wicket:id="name">name</span></a>
-                        <div wicket:id="description">[descr]</div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Similar records</h3>
+                </div>
+                <div class="panel-body">
+                    The following records may also interest you:
+                    <div class="row similar-records">
+                        <div class="col-md-2" wicket:id="document">
+                            <div class="similar-record">
+                                <a class="similar-record-title" wicket:id="record"><span wicket:id="name">name</span></a>
+                                <div wicket:id="description">[descr]</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-12" wicket:id="noSimilarRecords">No related records could be found.</div>
             </div>
         </wicket:panel>
     </body>

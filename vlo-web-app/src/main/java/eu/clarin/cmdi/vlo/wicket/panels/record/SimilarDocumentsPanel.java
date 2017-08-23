@@ -49,9 +49,11 @@ public class SimilarDocumentsPanel extends GenericPanel<SolrDocument> {
     @SpringBean
     private SimilarDocumentsService similarDocumentsService;
 
+    private final IModel<List<SolrDocument>> similarDocumentsModel;
+
     public SimilarDocumentsPanel(String id, final IModel<SolrDocument> model) {
         super(id, model);
-        final IModel<List<SolrDocument>> similarDocumentsModel = new LoadableDetachableModel<List<SolrDocument>>() {
+        similarDocumentsModel = new LoadableDetachableModel<List<SolrDocument>>() {
             @Override
             public List<SolrDocument> load() {
                 final Object docId = model.getObject().getFieldValue(FacetConstants.FIELD_ID);
@@ -73,23 +75,13 @@ public class SimilarDocumentsPanel extends GenericPanel<SolrDocument> {
                         )
                         .add(new SolrFieldLabel("description", item.getModel(), FacetConstants.FIELD_DESCRIPTION, "No description", MAX_DESCRIPTION_LENGTH, LONG_DESCRIPTION_TRUNCATE_POINT, true));
             }
-
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(!similarDocumentsModel.getObject().isEmpty());
-            }
-
         });
+    }
 
-        add(new WebMarkupContainer("noSimilarRecords") {
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(similarDocumentsModel.getObject().isEmpty());
-            }
-
-        });
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        setVisible(!similarDocumentsModel.getObject().isEmpty());
     }
 
 }
