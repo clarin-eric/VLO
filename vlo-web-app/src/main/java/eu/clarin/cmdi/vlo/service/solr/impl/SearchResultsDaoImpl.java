@@ -38,8 +38,13 @@ public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDa
     public SolrDocumentList getDocuments(SolrQuery query) {
         QueryResponse queryResponse = fireQuery(query);
         final SolrDocumentList documents = queryResponse.getResults();
-        logger.debug("Found {} documents", documents.getNumFound());
-        return documents;
+        if (documents != null) {
+            logger.debug("Found {} documents", documents.getNumFound());
+            return documents;
+        } else {
+            logger.warn("Null result for query {}", query);
+            return new SolrDocumentList();
+        }
     }
 
 }
