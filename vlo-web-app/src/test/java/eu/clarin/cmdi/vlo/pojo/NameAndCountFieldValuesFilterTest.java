@@ -45,6 +45,9 @@ public class NameAndCountFieldValuesFilterTest {
         //initial state should match
         assertTrue(filter.matches(count, null));
 
+        filter.setName(null);
+        assertTrue(filter.matches(count, null));
+
         filter.setName("v");
         assertTrue(filter.matches(count, null));
 
@@ -79,6 +82,42 @@ public class NameAndCountFieldValuesFilterTest {
 
         filter.setMinimalOccurence(11);
         assertFalse(filter.matches(count, null));
+    }
+
+    /**
+     * Test of matches method, of class NameAndCountFieldValuesFilter.
+     */
+    @Test
+    public void testMatchesCharacter() {
+        //initial state should match
+        assertTrue(filter.matches(count, null));
+
+        filter.setFirstCharacter(null);
+        assertTrue(filter.matches(count, null));
+
+        filter.setFirstCharacter('v');
+        assertTrue(filter.matches(count, null));
+
+        filter.setFirstCharacter('V');
+        assertTrue(filter.matches(count, null));
+
+        filter.setFirstCharacter('A');
+        assertFalse(filter.matches(count, null));
+
+        filter.setFirstCharacter('*');
+        assertFalse(filter.matches(count, null));
+    }
+
+    /**
+     * Test of matches method, of class NameAndCountFieldValuesFilter.
+     */
+    @Test
+    public void testMatchesOtherCharacter() {
+        filter.setFirstCharacter('*');
+        assertFalse(filter.matches(count, null));
+        
+        count.setName("???");
+        assertTrue(filter.matches(count, null));
     }
 
     /**
