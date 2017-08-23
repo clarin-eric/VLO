@@ -35,6 +35,7 @@ import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -47,6 +48,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -264,9 +266,35 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         // Model that represents the *selected* number of minimal occurences (passes it on if not decoupled)
         final IModel<Integer> minOccurenceSelectModel = new PropertyModel<>(filterModel, "minimalOccurence");
 
+        final IChoiceRenderer<Integer> renderer = new IChoiceRenderer<Integer>() {
+            @Override
+            public Object getDisplayValue(Integer object) {
+                if (Integer.valueOf(0).equals(object)) {
+                    return "Any value count";
+                } else {
+                    return String.format("At least %d occurrences", object);
+                }
+            }
+
+            @Override
+            public String getIdValue(Integer object, int index) {
+                return object.toString();
+            }
+
+            @Override
+            public Integer getObject(String id, IModel<? extends List<? extends Integer>> choices) {
+                if (id.isEmpty()) {
+                    return null;
+                } else {
+                    return Integer.valueOf(id);
+                }
+            }
+
+        };
+
         // Dropdown to select a value (which is applied to the filter if the 'bridge' is open)
         final Component minOccurence
-                = new DropDownChoice<>("minOccurences", minOccurenceSelectModel, ImmutableList.of(2, 5, 10, 100, 1000))
+                = new DropDownChoice<>("minOccurences", minOccurenceSelectModel, ImmutableList.of(0, 2, 5, 10, 100, 1000), renderer)
                         .setNullValid(true)
                         .add(new UpdateOptionsFormBehavior(options) {
 

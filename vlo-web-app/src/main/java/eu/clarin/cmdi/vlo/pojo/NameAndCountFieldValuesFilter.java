@@ -69,7 +69,7 @@ public class NameAndCountFieldValuesFilter implements FieldValuesFilter, Seriali
      */
     @Override
     public boolean matches(Count count, IConverter<String> converter) {
-        if (count.getCount() >= minimalOccurence) {
+        if (minimalOccurence == null || count.getCount() >= minimalOccurence) {
             if (namePattern == null) {
                 // no pattern to compare to, always matches
                 return true;
