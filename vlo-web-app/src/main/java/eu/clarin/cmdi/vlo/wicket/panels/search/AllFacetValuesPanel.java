@@ -253,6 +253,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         options.add(filterField);
 
         addOccurenceOptions(options);
+        addStartsWithOptions(options);
 
         return options;
     }
@@ -263,7 +264,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
      * @param options options form
      */
     private void addOccurenceOptions(final Form options) {
-        // Model that represents the *selected* number of minimal occurences (passes it on if not decoupled)
+        // Model that represents the *selected* number of minimal occurences
         final IModel<Integer> minOccurenceSelectModel = new PropertyModel<>(filterModel, "minimalOccurence");
 
         final IChoiceRenderer<Integer> renderer = new IChoiceRenderer<Integer>() {
@@ -292,7 +293,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
         };
 
-        // Dropdown to select a value (which is applied to the filter if the 'bridge' is open)
+        // Dropdown to select a (non) value
         final Component minOccurence
                 = new DropDownChoice<>("minOccurences", minOccurenceSelectModel, ImmutableList.of(0, 2, 5, 10, 100, 1000), renderer)
                         .setNullValid(true)
@@ -305,6 +306,57 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
                         });
         options.add(minOccurence);
+    }
+
+    /**
+     * Creates form controls for filtering by first character.
+     *
+     * @param form options form
+     */
+    private void addStartsWithOptions(final Form form) {
+        // Model that represents the *selected* number of minimal occurences (passes it on if not decoupled)
+        final IModel<Character> startsWithModel = new PropertyModel<>(filterModel, "firstCharacter");
+//
+//        final IChoiceRenderer<Integer> renderer = new IChoiceRenderer<Integer>() {
+//            @Override
+//            public Object getDisplayValue(Integer object) {
+//                if (Integer.valueOf(0).equals(object)) {
+//                    return "Any value count";
+//                } else {
+//                    return String.format("At least %d occurrences", object);
+//                }
+//            }
+//
+//            @Override
+//            public String getIdValue(Integer object, int index) {
+//                return object.toString();
+//            }
+//
+//            @Override
+//            public Integer getObject(String id, IModel<? extends List<? extends Integer>> choices) {
+//                if (id.isEmpty()) {
+//                    return null;
+//                } else {
+//                    return Integer.valueOf(id);
+//                }
+//            }
+//
+//        };
+        final ImmutableList<Character> optionsList = ImmutableList.of('A', 'B', '*');
+
+        // Dropdown to select a value
+        final Component startsWith
+                = new DropDownChoice<>("startsWith", startsWithModel, optionsList)//, renderer)
+                        .setNullValid(true)
+                        .add(new UpdateOptionsFormBehavior(form) {
+
+                            @Override
+                            protected void onUpdate(AjaxRequestTarget target) {
+                                super.onUpdate(target);
+                            }
+
+                        });
+        form.add(startsWith);
     }
 
     private class UpdateOptionsFormBehavior extends OnChangeAjaxBehavior {
