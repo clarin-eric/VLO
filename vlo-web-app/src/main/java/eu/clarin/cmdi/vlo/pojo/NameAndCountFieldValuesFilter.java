@@ -30,7 +30,8 @@ import org.apache.wicket.util.convert.IConverter;
  */
 public class NameAndCountFieldValuesFilter implements FieldValuesFilter, Serializable {
 
-    public static final char NON_ALPHABETICAL_CHARACTER_SYMBOL = '*';
+    public static final char ANY_CHARACTER_SYMBOL = '*';
+    public static final char NON_ALPHABETICAL_CHARACTER_SYMBOL = '?';
 
     private String name;
     private Character firstCharacter;
@@ -107,6 +108,8 @@ public class NameAndCountFieldValuesFilter implements FieldValuesFilter, Seriali
     private boolean matchesFirstCharacter(String value) {
         if (value.isEmpty()) {
             return firstCharacter == null;
+        } else if (firstCharacter.equals(ANY_CHARACTER_SYMBOL)) {
+            return true;
         } else {
             final Character valueFirstChar = value.charAt(0);
             if (firstCharacter.equals(NON_ALPHABETICAL_CHARACTER_SYMBOL)) {

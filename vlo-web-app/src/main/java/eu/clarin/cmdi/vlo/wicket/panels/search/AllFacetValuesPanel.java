@@ -77,10 +77,11 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
     private PiwikConfig piwikConfig;
 
     private final static ImmutableList<Character> CHARACTER_OPTIONS_LIST = ImmutableList.of(
+            NameAndCountFieldValuesFilter.ANY_CHARACTER_SYMBOL,
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
             NameAndCountFieldValuesFilter.NON_ALPHABETICAL_CHARACTER_SYMBOL
     );
-    
+
     private final static ImmutableList<Integer> OCCURENCES_OPTIONS_LIST = ImmutableList.of(0, 2, 5, 10, 100, 1000);
 
     private final FacetFieldValuesProvider valuesProvider;
@@ -327,10 +328,13 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         final IChoiceRenderer<Character> renderer = new IChoiceRenderer<Character>() {
             @Override
             public Object getDisplayValue(Character object) {
-                if (object.equals(NameAndCountFieldValuesFilter.NON_ALPHABETICAL_CHARACTER_SYMBOL)) {
-                    return "Other character";
-                } else {
-                    return Character.toString(object);
+                switch (object) {
+                    case NameAndCountFieldValuesFilter.ANY_CHARACTER_SYMBOL:
+                        return "Any character";
+                    case NameAndCountFieldValuesFilter.NON_ALPHABETICAL_CHARACTER_SYMBOL:
+                        return "Other character";
+                    default:
+                        return Character.toString(object);
                 }
             }
 

@@ -99,16 +99,21 @@ public class NameAndCountFieldValuesFilterTest {
         assertTrue(filter.matches(count, null));
 
         filter.setFirstCharacter('v');
-        assertTrue(filter.matches(count, null));
+        assertTrue("Lower case", filter.matches(count, null));
 
         filter.setFirstCharacter('V');
-        assertTrue(filter.matches(count, null));
+        assertTrue("Upper case", filter.matches(count, null));
 
         filter.setFirstCharacter('A');
-        assertFalse(filter.matches(count, null));
+        assertFalse("Mismatch (alphabetical)", filter.matches(count, null));
 
-        filter.setFirstCharacter('*');
-        assertFalse(filter.matches(count, null));
+        filter.setFirstCharacter('?');
+        assertFalse("Mismatch (other char)", filter.matches(count, null));
+
+        filter.setFirstCharacter(NameAndCountFieldValuesFilter.ANY_CHARACTER_SYMBOL);
+        assertTrue("Any character for non-empty string", filter.matches(count, null));
+        count.setName("");
+        assertFalse("Any character for empty string", filter.matches(count, null));
     }
 
     /**
