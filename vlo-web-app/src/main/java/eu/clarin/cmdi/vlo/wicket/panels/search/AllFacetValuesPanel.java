@@ -76,6 +76,13 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
     @SpringBean
     private PiwikConfig piwikConfig;
 
+    private final static ImmutableList<Character> CHARACTER_OPTIONS_LIST = ImmutableList.of(
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            NameAndCountFieldValuesFilter.NON_ALPHABETICAL_CHARACTER_SYMBOL
+    );
+    
+    private final static ImmutableList<Integer> OCCURENCES_OPTIONS_LIST = ImmutableList.of(0, 2, 5, 10, 100, 1000);
+
     private final FacetFieldValuesProvider valuesProvider;
     private final WebMarkupContainer valuesContainer;
     private final IModel<FieldValuesFilter> filterModel;
@@ -295,7 +302,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
         // Dropdown to select a (non) value
         final Component minOccurence
-                = new DropDownChoice<>("minOccurences", minOccurenceSelectModel, ImmutableList.of(0, 2, 5, 10, 100, 1000), renderer)
+                = new DropDownChoice<>("minOccurences", minOccurenceSelectModel, OCCURENCES_OPTIONS_LIST, renderer)
                         .setNullValid(true)
                         .add(new UpdateOptionsFormBehavior(options) {
 
@@ -316,37 +323,40 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
     private void addStartsWithOptions(final Form form) {
         // Model that represents the *selected* number of minimal occurences (passes it on if not decoupled)
         final IModel<Character> startsWithModel = new PropertyModel<>(filterModel, "firstCharacter");
-//
-//        final IChoiceRenderer<Integer> renderer = new IChoiceRenderer<Integer>() {
-//            @Override
-//            public Object getDisplayValue(Integer object) {
-//                if (Integer.valueOf(0).equals(object)) {
-//                    return "Any value count";
-//                } else {
-//                    return String.format("At least %d occurrences", object);
-//                }
-//            }
-//
-//            @Override
-//            public String getIdValue(Integer object, int index) {
-//                return object.toString();
-//            }
-//
-//            @Override
-//            public Integer getObject(String id, IModel<? extends List<? extends Integer>> choices) {
-//                if (id.isEmpty()) {
-//                    return null;
-//                } else {
-//                    return Integer.valueOf(id);
-//                }
-//            }
-//
-//        };
-        final ImmutableList<Character> optionsList = ImmutableList.of('A', 'B', '*');
+
+        final IChoiceRenderer<Character> renderer = new IChoiceRenderer<Character>() {
+            @Override
+            public Object getDisplayValue(Character object) {
+                if (object.equals(NameAndCountFieldValuesFilter.NON_ALPHABETICAL_CHARACTER_SYMBOL)) {
+                    return "Other character";
+                } else {
+                    return Character.toString(object);
+                }
+            }
+
+            @Override
+            public String getIdValue(Character object, int index) {
+                if (object == null) {
+                    return "";
+                } else {
+                    return Character.toString(object);
+                }
+            }
+
+            @Override
+            public Character getObject(String id, IModel<? extends List<? extends Character>> choices) {
+                if (id.isEmpty()) {
+                    return null;
+                } else {
+                    return id.charAt(0);
+                }
+            }
+
+        };
 
         // Dropdown to select a value
         final Component startsWith
-                = new DropDownChoice<>("startsWith", startsWithModel, optionsList)//, renderer)
+                = new DropDownChoice<>("startsWith", startsWithModel, CHARACTER_OPTIONS_LIST, renderer)
                         .setNullValid(true)
                         .add(new UpdateOptionsFormBehavior(form) {
 
