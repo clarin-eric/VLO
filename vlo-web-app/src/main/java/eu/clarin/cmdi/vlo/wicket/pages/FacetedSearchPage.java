@@ -148,7 +148,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private void addComponents() {
         documentsProvider = new SolrDocumentProvider(getModel());
-        
+
         searchContainer = new WebMarkupContainer("searchContainer");
         searchContainer.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
             @Override
@@ -264,7 +264,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private Panel createOptionsPanel(String id) {
-        final Panel panel = new AdvancedSearchOptionsPanel(id, getModel(), facetSelectionTypeModeModel, documentsProvider){
+        final Panel panel = new AdvancedSearchOptionsPanel(id, getModel(), facetSelectionTypeModeModel, documentsProvider) {
 
             @Override
             protected void selectionChanged(AjaxRequestTarget target) {
@@ -327,7 +327,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private void updateSelection(AjaxRequestTarget target) {
-
         //detach facetFieldsModel when selection is changed
         fieldsModel.detach();
 
@@ -353,6 +352,19 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         if (facetSelectionTypeModeModel != null) {
             facetSelectionTypeModeModel.detach();
         }
+    }
+
+    @Override
+    protected void onAfterRender() {
+        super.onAfterRender();
+
+        // Once the page has been rendered once, the simple mode can be disabled so that reloads of
+        // the *same instance* will be shown as the full versions. New instances of the page
+        // that are constructed with the simple model enabled will still render in simple mode
+        // (once).
+        //
+        // see https://github.com/clarin-eric/VLO/issues/95
+        simpleModeModel.setObject(false);
     }
 
 }
