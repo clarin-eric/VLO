@@ -82,7 +82,12 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
             NameAndCountFieldValuesFilter.NON_ALPHABETICAL_CHARACTER_SYMBOL
     );
 
-    private final static ImmutableList<Integer> OCCURENCES_OPTIONS_LIST = ImmutableList.of(0, 2, 5, 10, 100, 1000);
+    private final static ImmutableList<Integer> OCCURENCES_OPTIONS_LIST = ImmutableList.of(
+            0, 2, 5, 10, 100, 1000
+    );
+
+    private static final StartsWithOptionsRenderer STARTS_WITH_OPTIONS_RENDERER = new StartsWithOptionsRenderer();
+    private static final OccurenceOptionsRenderer OCCURENCE_OPTIONS_RENDERER = new OccurenceOptionsRenderer();
 
     private final FacetFieldValuesProvider valuesProvider;
     private final WebMarkupContainer valuesContainer;
@@ -275,35 +280,9 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         // Model that represents the *selected* number of minimal occurences
         final IModel<Integer> minOccurenceSelectModel = new PropertyModel<>(filterModel, "minimalOccurence");
 
-        final IChoiceRenderer<Integer> renderer = new IChoiceRenderer<Integer>() {
-            @Override
-            public Object getDisplayValue(Integer object) {
-                if (Integer.valueOf(0).equals(object)) {
-                    return "Any value count";
-                } else {
-                    return String.format("At least %d occurrences", object);
-                }
-            }
-
-            @Override
-            public String getIdValue(Integer object, int index) {
-                return object.toString();
-            }
-
-            @Override
-            public Integer getObject(String id, IModel<? extends List<? extends Integer>> choices) {
-                if (id.isEmpty()) {
-                    return null;
-                } else {
-                    return Integer.valueOf(id);
-                }
-            }
-
-        };
-
         // Dropdown to select a (non) value
         final Component minOccurence
-                = new DropDownChoice<>("minOccurences", minOccurenceSelectModel, OCCURENCES_OPTIONS_LIST, renderer)
+                = new DropDownChoice<>("minOccurences", minOccurenceSelectModel, OCCURENCES_OPTIONS_LIST, OCCURENCE_OPTIONS_RENDERER)
                         .setNullValid(true)
                         .add(new UpdateOptionsFormBehavior(options) {
 
@@ -325,42 +304,9 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         // Model that represents the *selected* number of minimal occurences (passes it on if not decoupled)
         final IModel<Character> startsWithModel = new PropertyModel<>(filterModel, "firstCharacter");
 
-        final IChoiceRenderer<Character> renderer = new IChoiceRenderer<Character>() {
-            @Override
-            public Object getDisplayValue(Character object) {
-                switch (object) {
-                    case NameAndCountFieldValuesFilter.ANY_CHARACTER_SYMBOL:
-                        return "Any character";
-                    case NameAndCountFieldValuesFilter.NON_ALPHABETICAL_CHARACTER_SYMBOL:
-                        return "Other character";
-                    default:
-                        return Character.toString(object);
-                }
-            }
-
-            @Override
-            public String getIdValue(Character object, int index) {
-                if (object == null) {
-                    return "";
-                } else {
-                    return Character.toString(object);
-                }
-            }
-
-            @Override
-            public Character getObject(String id, IModel<? extends List<? extends Character>> choices) {
-                if (id.isEmpty()) {
-                    return null;
-                } else {
-                    return id.charAt(0);
-                }
-            }
-
-        };
-
         // Dropdown to select a value
         final Component startsWith
-                = new DropDownChoice<>("startsWith", startsWithModel, CHARACTER_OPTIONS_LIST, renderer)
+                = new DropDownChoice<>("startsWith", startsWithModel, CHARACTER_OPTIONS_LIST, STARTS_WITH_OPTIONS_RENDERER)
                         .setNullValid(true)
                         .add(new UpdateOptionsFormBehavior(form) {
 
@@ -419,6 +365,65 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         protected void onConfigure() {
             super.onConfigure();
             setVisible(valuesView.getPageCount() > 1);
+        }
+    }
+
+    private static class StartsWithOptionsRenderer implements IChoiceRenderer<Character> {
+
+        @Override
+        public Object getDisplayValue(Character object) {
+            switch (object) {
+                case NameAndCountFieldValuesFilter.ANY_CHARACTER_SYMBOL:
+                    return "Any character";
+                case NameAndCountFieldValuesFilter.NON_ALPHABETICAL_CHARACTER_SYMBOL:
+                    return "Other character";
+                default:
+                    return Character.toString(object);
+            }
+        }
+
+        @Override
+        public String getIdValue(Character object, int index) {
+            if (object == null) {
+                return "";
+            } else {
+                return Character.toString(object);
+            }
+        }
+
+        @Override
+        public Character getObject(String id, IModel<? extends List<? extends Character>> choices) {
+            if (id.isEmpty()) {
+                return null;
+            } else {
+                return id.charAt(0);
+            }
+        }
+    }
+
+    private static class OccurenceOptionsRenderer implements IChoiceRenderer<Integer> {
+
+        @Override
+        public Object getDisplayValue(Integer object) {
+            if (Integer.valueOf(0).equals(object)) {
+                return "Any value count";
+            } else {
+                return String.format("At least %d occurrences", object);
+            }
+        }
+
+        @Override
+        public String getIdValue(Integer object, int index) {
+            return object.toString();
+        }
+
+        @Override
+        public Integer getObject(String id, IModel<? extends List<? extends Integer>> choices) {
+            if (id.isEmpty()) {
+                return null;
+            } else {
+                return Integer.valueOf(id);
+            }
         }
     }
 
