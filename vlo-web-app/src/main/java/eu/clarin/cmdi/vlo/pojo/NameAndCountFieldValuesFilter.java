@@ -123,7 +123,7 @@ public class NameAndCountFieldValuesFilter implements FieldValuesFilter, Seriali
 
     @Override
     public boolean isEmpty() {
-        return (minimalOccurence == null || minimalOccurence == 0) && (name == null || name.isEmpty());
+        return (minimalOccurence == null || minimalOccurence == 0) && (name == null || name.isEmpty()) && firstCharacter == null;
     }
 
     private Pattern createNamePattern(String name) {

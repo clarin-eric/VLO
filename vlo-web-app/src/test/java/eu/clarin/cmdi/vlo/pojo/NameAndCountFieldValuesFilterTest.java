@@ -140,9 +140,21 @@ public class NameAndCountFieldValuesFilterTest {
         assertTrue(filter.isEmpty());
 
         filter.setName("value");
-        assertFalse(filter.isEmpty());
+        assertFalse("Name filter", filter.isEmpty());
 
         filter.setName(null);
+        assertTrue(filter.isEmpty());
+
+        filter.setMinimalOccurence(10);
+        assertFalse("Count filter", filter.isEmpty());
+
+        filter.setMinimalOccurence(null);
+        assertTrue(filter.isEmpty());
+
+        filter.setFirstCharacter('c');
+        assertFalse("Character filter", filter.isEmpty());
+
+        filter.setFirstCharacter(null);
         assertTrue(filter.isEmpty());
     }
 
