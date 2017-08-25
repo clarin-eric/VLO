@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!--
+Copyright (C) 2014 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+    <head>
+        <title>facet panel</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <wicket:panel>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Similar records</h3>
+                </div>
+                <div class="panel-body">
+                    The following records may also interest you:
+                    <div class="row similar-records">
+                        <div class="col-md-2" wicket:id="document">
+                            <div class="similar-record">
+                                <a class="similar-record-title" wicket:id="record"><span wicket:id="name">name</span></a>
+                                <div wicket:id="description">[descr]</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </wicket:panel>
+    </body>
+</html>

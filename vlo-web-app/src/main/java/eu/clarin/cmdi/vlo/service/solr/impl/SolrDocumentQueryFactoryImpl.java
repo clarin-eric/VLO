@@ -78,7 +78,13 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
         // one result max
         query.setRows(1);
         return query;
+    }
 
+    @Override
+    public SolrQuery createSimilarDocumentsQuery(String docId) {
+        final SolrQuery query = new SolrQuery("id:" + docId);
+        query.setRequestHandler("/mlt");
+        return query;
     }
 
     private SolrQuery getDefaultDocumentQuery() {
