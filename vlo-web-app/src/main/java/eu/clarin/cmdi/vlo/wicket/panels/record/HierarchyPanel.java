@@ -19,7 +19,10 @@ package eu.clarin.cmdi.vlo.wicket.panels.record;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.PiwikEventConstants;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.AjaxFallbackLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.components.IndicatingNestedTree;
 import eu.clarin.cmdi.vlo.wicket.components.NamedRecordPageLink;
@@ -28,11 +31,8 @@ import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
-import java.util.Set;
-import static java.util.concurrent.ThreadLocalRandom.current;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -41,6 +41,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.repeater.tree.AbstractTree;
+import org.apache.wicket.extensions.markup.html.repeater.tree.Node;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableTreeProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -74,6 +75,8 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
     @SpringBean
     private SolrDocumentService documentService;
+    @SpringBean
+    private PiwikConfig piwikConfig;
 
     private final IDataProvider<SolrDocument> parentsProvider;
     private final MarkupContainer treeContainer;
@@ -109,7 +112,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
             @Override
             protected void populateItem(final Item<SolrDocument> item) {
                 item.add(new NamedRecordPageLink("link", item.getModel(), RecordPage.DETAILS_SECTION));
-                item.add(new IndicatingAjaxFallbackLink("up") {
+                final IndicatingAjaxFallbackLink upLink = new IndicatingAjaxFallbackLink("up") {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -145,7 +148,11 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                             tree.expand(new ModelWrapper<>(newPath, item.getModel()));
                         }
                     }
-                });
+                };
+                if (piwikConfig.isEnabled()) {
+                    upLink.add(new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_RECORDPAGE, PiwikEventConstants.PIWIK_EVENT_ACTION_HIERARCHY_UP));
+                }
+                item.add(upLink);
 
                 item.add(new Behavior() {
 
@@ -183,7 +190,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
             }
         };
         // show how many ndoes can be loaded
-        showAllLink.add(new Label("itemCount", new PropertyModel<Integer>(parentsProvider, "size")));
+        showAllLink.add(new Label("itemCount", new PropertyModel<>(parentsProvider, "size")));
 
         return container
                 .add(parentsView)
@@ -194,31 +201,44 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
     private AbstractTree createTree(String id) {
         final HierarchyTreeProvider treeProvider = new HierarchyTreeProvider();
         final AbstractTree<ModelWrapper<SolrDocument>> result = new IndicatingNestedTree<ModelWrapper<SolrDocument>>(id, treeProvider) {
-
             @Override
-            protected Component newContentComponent(String id, final IModel<ModelWrapper<SolrDocument>> node) {
-                if (node.getObject().isLimit()) {
-                    return new AjaxFallbackLinkLabel(id, node, Model.of("Show all... (" + node.getObject().getCount() + ")")) {
-
-                        @Override
-                        public void onClick(AjaxRequestTarget target) {
-                            treeProvider.setChildrenShown(null);
-                            target.add(treeContainer);
+            public Component newNodeComponent(String id, IModel<ModelWrapper<SolrDocument>> model) {
+                return new Node<ModelWrapper<SolrDocument>>(id, this, model) {
+                    @Override
+                    protected MarkupContainer createJunctionComponent(String id) {
+                        final MarkupContainer junction = super.createJunctionComponent(id);
+                        if (piwikConfig.isEnabled()) {
+                            junction.add(new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_RECORDPAGE, PiwikEventConstants.PIWIK_EVENT_ACTION_HIERARCHY_CHILD));
                         }
+                        return junction;
+                    }
 
-                    };
-                } else {
+                    @Override
+                    protected Component createContent(String id, final IModel<ModelWrapper<SolrDocument>> node) {
+                        if (node.getObject().isLimit()) {
+                            return new AjaxFallbackLinkLabel(id, node, Model.of("Show all... (" + node.getObject().getCount() + ")")) {
 
-                    return new NamedRecordPageLink(id, node.getObject().getModel(), RecordPage.DETAILS_SECTION)
-                            .add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
                                 @Override
-                                public String getObject() {
-                                    final boolean isCurrent = node.getObject().getModelObject().getFieldValue(FacetConstants.FIELD_ID)
-                                            .equals(pageDocumentModel.getObject().getFieldValue(FacetConstants.FIELD_ID));
-                                    return isCurrent ? "current" : "";
+                                public void onClick(AjaxRequestTarget target) {
+                                    treeProvider.setChildrenShown(null);
+                                    target.add(treeContainer);
                                 }
-                            }, " "));
-                }
+
+                            };
+                        } else {
+
+                            return new NamedRecordPageLink(id, node.getObject().getModel(), RecordPage.DETAILS_SECTION)
+                                    .add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
+                                        @Override
+                                        public String getObject() {
+                                            final boolean isCurrent = node.getObject().getModelObject().getFieldValue(FacetConstants.FIELD_ID)
+                                                    .equals(pageDocumentModel.getObject().getFieldValue(FacetConstants.FIELD_ID));
+                                            return isCurrent ? "current" : "";
+                                        }
+                                    }, " "));
+                        }
+                    }
+                };
             }
 
         };
