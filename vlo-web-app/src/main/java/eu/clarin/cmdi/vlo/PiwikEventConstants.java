@@ -38,6 +38,8 @@ public class PiwikEventConstants {
     public static final String PIWIK_EVENT_ACTION_FACET_UNSELECT = "Unselect";
     public static final String PIWIK_EVENT_ACTION_RECORDPAGE_TABSWITCH = "Switch";
     public static final String PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE = "ProcessResource";
+    public static final String PIWIK_EVENT_ACTION_HIERARCHY_UP = "HierarchyNavigateUp";
+    public static final String PIWIK_EVENT_ACTION_HIERARCHY_CHILD = "HierarchyToggleChild";
     
     //Page views
     public static final String PIWIK_PAGEVIEW_SEARCH = "Search page";
