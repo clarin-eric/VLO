@@ -1,9 +1,11 @@
-package eu.clarin.cmdi.vlo.importer;
+package eu.clarin.cmdi.vlo.importer.processor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import eu.clarin.cmdi.vlo.importer.CMDIData;
 
 public class TemporalCoveragePostProcessor implements PostProcessor {
 

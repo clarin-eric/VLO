@@ -1,6 +1,9 @@
-package eu.clarin.cmdi.vlo.importer;
+package eu.clarin.cmdi.vlo.importer.processor;
 
 import com.google.common.collect.ImmutableMap;
+
+import eu.clarin.cmdi.vlo.importer.CMDIData;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;

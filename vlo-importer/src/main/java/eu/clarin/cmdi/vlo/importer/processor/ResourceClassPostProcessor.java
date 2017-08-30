@@ -1,7 +1,9 @@
-package eu.clarin.cmdi.vlo.importer;
+package eu.clarin.cmdi.vlo.importer.processor;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import eu.clarin.cmdi.vlo.importer.CMDIData;
 
 public class ResourceClassPostProcessor implements PostProcessor {
 

@@ -109,6 +109,13 @@ public class MetadataImporterRunner {
         return options;
     }
 
+    /**
+     * @param configFile name of the VLO configuration file
+     * @param datarootsList list of directories, containing the CMDI files to import
+     * @return returns the MetadataImporter although the return-value isn't used
+     * @throws IOException
+     * @throws MalformedURLException
+     */
     protected static MetadataImporter runImporter(String configFile, String datarootsList) throws IOException, MalformedURLException {
         // read the configuration from the externally supplied file
         final URL configUrl;

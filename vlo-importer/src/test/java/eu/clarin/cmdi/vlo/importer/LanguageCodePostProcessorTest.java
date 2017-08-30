@@ -1,6 +1,9 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
+import eu.clarin.cmdi.vlo.importer.processor.LanguageCodePostProcessor;
+import eu.clarin.cmdi.vlo.importer.processor.PostProcessor;
+
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;

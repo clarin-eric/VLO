@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer;
+package eu.clarin.cmdi.vlo.importer.processor;
 
 import com.google.common.collect.ImmutableMap;
 import com.ximpleware.NavException;
@@ -8,6 +8,8 @@ import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.importer.CMDIData;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;

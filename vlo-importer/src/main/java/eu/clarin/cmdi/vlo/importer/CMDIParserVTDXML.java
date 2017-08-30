@@ -10,6 +10,9 @@ import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.CmdConstants;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.importer.processor.CMDIDataProcessor;
+import eu.clarin.cmdi.vlo.importer.processor.PostProcessor;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer;
+package eu.clarin.cmdi.vlo.importer.processor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.importer.CMDIData;
+
 import org.apache.commons.lang.WordUtils;
 
 public class LanguageCodePostProcessor extends PostProcessorsWithVocabularyMap {

@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import eu.clarin.cmdi.vlo.importer.processor.AvailabilityPostProcessor;
+import eu.clarin.cmdi.vlo.importer.processor.PostProcessor;
+
 public class AvailabilityPostProcessorTest extends ImporterTestcase {
     
 

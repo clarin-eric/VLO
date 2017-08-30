@@ -1,6 +1,10 @@
-package eu.clarin.cmdi.vlo.importer;
+package eu.clarin.cmdi.vlo.importer.processor;
 
 import java.io.File;
+
+import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
+import eu.clarin.cmdi.vlo.importer.SelfLinkExtractor;
 
 public interface CMDIDataProcessor extends SelfLinkExtractor {
 

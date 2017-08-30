@@ -3,6 +3,8 @@ package eu.clarin.cmdi.vlo.importer;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
+import eu.clarin.cmdi.vlo.importer.processor.CountryNamePostProcessor;
+
 public class CountryNamePostProcessorTest extends ImporterTestcase {
 
     @Test

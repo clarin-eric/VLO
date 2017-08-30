@@ -7,6 +7,8 @@ import org.junit.Before;
 
 import org.junit.Test;
 
+import eu.clarin.cmdi.vlo.importer.processor.LicenseTypePostProcessor;
+
 public class LicenseTypePostProcessorTest extends ImporterTestcase {
 
     private LicenseTypePostProcessor processor;

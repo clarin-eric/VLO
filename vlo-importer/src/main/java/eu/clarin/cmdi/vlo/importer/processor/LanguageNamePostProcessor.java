@@ -14,11 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.importer;
+package eu.clarin.cmdi.vlo.importer.processor;
 
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
-import static eu.clarin.cmdi.vlo.importer.LanguageCodePostProcessor.CODE_PREFIX;
-import static eu.clarin.cmdi.vlo.importer.LanguageCodePostProcessor.LANG_NAME_PREFIX;
+import eu.clarin.cmdi.vlo.importer.CMDIData;
+
+import static eu.clarin.cmdi.vlo.importer.processor.LanguageCodePostProcessor.CODE_PREFIX;
+import static eu.clarin.cmdi.vlo.importer.processor.LanguageCodePostProcessor.LANG_NAME_PREFIX;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -29,7 +32,7 @@ import java.util.List;
  *
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
-class LanguageNamePostProcessor implements PostProcessor {
+public class LanguageNamePostProcessor implements PostProcessor {
     
     private final LanguageCodeUtils languageCodeUtils;
 

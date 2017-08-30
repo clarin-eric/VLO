@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
+import eu.clarin.cmdi.vlo.importer.processor.CMDIDataProcessor;
 
 public class MetadataMapper {
 

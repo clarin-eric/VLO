@@ -1,8 +1,11 @@
-package eu.clarin.cmdi.vlo.importer;
+package eu.clarin.cmdi.vlo.importer.processor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import eu.clarin.cmdi.vlo.importer.CMDIData;
+
 import java.util.regex.Matcher;
 
 public class FormatPostProcessor implements PostProcessor {
