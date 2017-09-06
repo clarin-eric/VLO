@@ -212,7 +212,7 @@ public class MetadataImporter {
 
     protected void deleteAll() throws IOException, SolrServerException {
         LOG.info("Deleting original data...");
-        solrBridge.getServer().deleteByQuery("*:*");
+        solrBridge.getClient().deleteByQuery("*:*");
         solrBridge.commit();
         LOG.info("Deleting original data done.");
     }
@@ -221,7 +221,7 @@ public class MetadataImporter {
         LOG.info("Start of processing: " + dataRoot.getOriginName());
         if (dataRoot.deleteFirst()) {
             LOG.info("Deleting data for data provider: " + dataRoot.getOriginName());
-            solrBridge.getServer().deleteByQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
+            solrBridge.getClient().deleteByQuery(FacetConstants.FIELD_DATA_PROVIDER + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
             LOG.info("Deleting data of provider done.");
         }
         // import files from every centre/endpoint within the data root
@@ -343,7 +343,7 @@ public class MetadataImporter {
 
     protected void purgeOldDocs() throws SolrServerException, IOException {
         LOG.info("Deleting old files that were not seen for more than " + config.getMaxDaysInSolr() + " days...");
-        solrBridge.getServer().deleteByQuery(FacetConstants.FIELD_LAST_SEEN + ":[* TO NOW-" + config.getMaxDaysInSolr() + "DAYS]");
+        solrBridge.getClient().deleteByQuery(FacetConstants.FIELD_LAST_SEEN + ":[* TO NOW-" + config.getMaxDaysInSolr() + "DAYS]");
         LOG.info("Deleting old files done.");
     }
 
@@ -608,7 +608,7 @@ public class MetadataImporter {
         paramMap.put("qt", "/suggest");
         paramMap.put("suggest.build", "true");
         SolrParams params = new MapSolrParams(paramMap);
-        solrBridge.getServer().query(params);
+        solrBridge.getClient().query(params);
     }
 
     /**
@@ -690,7 +690,7 @@ public class MetadataImporter {
         final SolrQuery countQuery = createOldRecordsQuery(dataRoot);
         countQuery.setRows(0);
 
-        final QueryResponse rsp = solrBridge.getServer().query(countQuery);
+        final QueryResponse rsp = solrBridge.getClient().query(countQuery);
         final long totalResults = rsp.getResults().getNumFound();
         final LocalDate nowDate = LocalDate.now();
 
@@ -731,7 +731,7 @@ public class MetadataImporter {
         final SolrQuery query = createOldRecordsQuery(dataRoot);
         query.setStart(offset);
         query.setRows(fetchSize);
-        for (SolrDocument doc : solrBridge.getServer().query(query).getResults()) {
+        for (SolrDocument doc : solrBridge.getClient().query(query).getResults()) {
             updatedInBatch++;
 
             String recordId = (String) doc.getFieldValue(FacetConstants.FIELD_ID);
@@ -782,7 +782,7 @@ public class MetadataImporter {
         }
         //shut down Solr client
         try {
-            solrBridge.shutdownServer();
+            solrBridge.shutdown();
         } catch (SolrServerException | IOException ex) {
             LOG.error("Failed to shutdown Solr server", ex);
         }

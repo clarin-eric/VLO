@@ -29,11 +29,11 @@ import org.apache.solr.common.SolrInputDocument;
  */
 public interface SolrBridge {
 
-    SolrClient getServer();
+    SolrClient getClient();
 
     void init() throws MalformedURLException;
 
-    void shutdownServer() throws SolrServerException, IOException;
+    void shutdown() throws SolrServerException, IOException;
 
     void addDocument(SolrInputDocument doc) throws SolrServerException, IOException;
 

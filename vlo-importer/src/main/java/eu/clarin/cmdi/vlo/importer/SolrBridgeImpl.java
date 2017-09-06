@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Simple Solr bridge that adds documents directly to the SolrServer instance
+ * Simple Solr bridge that adds documents directly to the SolrClient instance
  *
  * @author twagoo
  */
@@ -39,7 +39,7 @@ public class SolrBridgeImpl implements SolrBridge {
     private final VloConfig config;
     private final ThreadLocal<Throwable> serverError = new ThreadLocal<>();
 
-    private SolrClient solrServer;
+    private SolrClient solrClient;
 
     private boolean commit = true;
 
@@ -66,7 +66,7 @@ public class SolrBridgeImpl implements SolrBridge {
         /* Specify the number of documents in the queue that will trigger the
          * threads, two of them, emptying it.
          */
-        solrServer = new ConcurrentUpdateSolrClient(solrUrl,
+        solrClient = new ConcurrentUpdateSolrClient(solrUrl,
                 config.getMinDocsInSolrQueue(), nThreads) {
             /*
                      * Let the super class method handle exceptions. Make the
@@ -83,19 +83,19 @@ public class SolrBridgeImpl implements SolrBridge {
 
     @Override
     public void addDocument(SolrInputDocument doc) throws SolrServerException, IOException {
-        solrServer.add(doc);
+        solrClient.add(doc);
     }
 
     @Override
     public void addDocuments(Collection<SolrInputDocument> docs) throws SolrServerException, IOException {
-        solrServer.add(docs);
+        solrClient.add(docs);
     }
 
     @Override
     public void commit() throws SolrServerException, IOException {
         if (commit) {
             LOG.info("Manual commit");
-            solrServer.commit();
+            solrClient.commit();
         } else {
             LOG.debug("Commit requested but skipping because commit == false");
         }
@@ -109,15 +109,15 @@ public class SolrBridgeImpl implements SolrBridge {
     }
 
     @Override
-    public void shutdownServer() throws SolrServerException, IOException {
+    public void shutdown() throws SolrServerException, IOException {
         //commit before shutdown
-        solrServer.commit();
-        solrServer.close();
+        solrClient.commit();
+        solrClient.close();
     }
 
     @Override
-    public SolrClient getServer() {
-        return solrServer;
+    public SolrClient getClient() {
+        return solrClient;
     }
 
     public void setCommit(boolean commit) {

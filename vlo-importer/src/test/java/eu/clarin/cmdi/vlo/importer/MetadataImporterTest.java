@@ -314,7 +314,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         }
 
         @Override
-        public SolrClient getServer() {
+        public SolrClient getClient() {
             return new SolrClient() {
                 @Override
                 public NamedList<Object> request(SolrRequest request, String string) throws SolrServerException, IOException {
@@ -325,7 +325,7 @@ public class MetadataImporterTest extends ImporterTestcase {
                 
                 @Override
                 public void close() {
-                    LOG.debug("Dummy solr server shutdown");
+                    LOG.debug("Dummy solr client shutdown");
                 }
             };
         }
@@ -336,7 +336,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         }
 
         @Override
-        public void shutdownServer() {
+        public void shutdown() {
             LOG.debug("Dummy solr bridge shutdown");
         }
 
