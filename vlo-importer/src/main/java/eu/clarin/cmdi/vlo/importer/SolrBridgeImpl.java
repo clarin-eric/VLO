@@ -20,9 +20,9 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer;
+import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +39,7 @@ public class SolrBridgeImpl implements SolrBridge {
     private final VloConfig config;
     private final ThreadLocal<Throwable> serverError = new ThreadLocal<>();
 
-    private SolrServer solrServer;
+    private SolrClient solrServer;
 
     private boolean commit = true;
 
@@ -66,7 +66,7 @@ public class SolrBridgeImpl implements SolrBridge {
         /* Specify the number of documents in the queue that will trigger the
          * threads, two of them, emptying it.
          */
-        solrServer = new ConcurrentUpdateSolrServer(solrUrl,
+        solrServer = new ConcurrentUpdateSolrClient(solrUrl,
                 config.getMinDocsInSolrQueue(), nThreads) {
             /*
                      * Let the super class method handle exceptions. Make the
@@ -112,11 +112,11 @@ public class SolrBridgeImpl implements SolrBridge {
     public void shutdownServer() throws SolrServerException, IOException {
         //commit before shutdown
         solrServer.commit();
-        solrServer.shutdown();
+        solrServer.close();
     }
 
     @Override
-    public SolrServer getServer() {
+    public SolrClient getServer() {
         return solrServer;
     }
 

@@ -28,9 +28,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import org.apache.log4j.lf5.util.StreamUtils;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 
 /**
  *
@@ -82,9 +82,9 @@ public class MetadataImporterBenchmarkRunner extends MetadataImporterRunner {
         LOG.info("Triggering Solr index optimization");
         //optimise solr server for a fair assessment
         try {
-            SolrServer s = new HttpSolrServer(config.getSolrUrl());
+            SolrClient s = new HttpSolrClient.Builder(config.getSolrUrl()).build();
             s.optimize();
-            s.shutdown();
+            s.close();
         } catch (IOException | SolrServerException e) {
             LOG.error("error while optimizing", e);
         }

@@ -602,11 +602,11 @@ public class MetadataImporter {
      * @throws SolrServerException
      * @throws MalformedURLException
      */
-    private void buildSuggesterIndex() throws SolrServerException, MalformedURLException {
+    private void buildSuggesterIndex() throws SolrServerException, MalformedURLException, IOException {
         LOG.info("Building index for autocompletion.");
         HashMap<String, String> paramMap = new HashMap<>();
         paramMap.put("qt", "/suggest");
-        paramMap.put("spellcheck.build", "true");
+        paramMap.put("suggest.build", "true");
         SolrParams params = new MapSolrParams(paramMap);
         solrBridge.getServer().query(params);
     }
