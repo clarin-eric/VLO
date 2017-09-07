@@ -17,7 +17,6 @@
 package eu.clarin.cmdi.vlo.wicket;
 
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
-import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;

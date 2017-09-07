@@ -44,6 +44,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -301,6 +302,12 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             @Override
             protected String getValue(AjaxRequestTarget target) {
                 return resourceInfoModel.getObject().getHref();
+            }
+
+            @Override
+            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                attributes.setAsynchronous(false);
+                super.updateAjaxAttributes(attributes);
             }
 
         };
