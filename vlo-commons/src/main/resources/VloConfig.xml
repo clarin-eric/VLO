@@ -208,4 +208,6 @@
     <showResultScores>false</showResultScores>
     
     <processHierarchies>true</processHierarchies>
+    
+    <useCrossMapping>false</useCrossMapping>
 </VloConfig>

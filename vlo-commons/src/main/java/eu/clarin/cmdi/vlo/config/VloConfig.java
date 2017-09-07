@@ -128,6 +128,8 @@ public class VloConfig {
     private int fileProcessingThreads = 2;
 
     private int solrThreads = 2;
+    
+    private boolean useCrossMapping = false;
 
     /**
      * A set of fields to be excluded from display<br><br>
@@ -1274,6 +1276,14 @@ public class VloConfig {
     public void setSolrThreads(int solrThreads) {
         this.solrThreads = solrThreads;
     }
+    
+    public boolean isUseCrossMapping() {
+		return useCrossMapping;
+	}
+
+	public void setUseCrossMapping(boolean useCrossMapping) {
+		this.useCrossMapping = useCrossMapping;
+	}
     
     public String getCrossFacetMapUrl() {
     	return this.crossFacetMapUrl;
