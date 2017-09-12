@@ -8,7 +8,14 @@
     </DataRoot>
     <DataRoot processHierarchyDirs="NONE">
         <originName>Other</originName>
-        <rootFile>/srv/vlo-data/others/results/cmdi</rootFile>
+        <rootFile>/srv/vlo-data/others/results/cmdi/</rootFile>
+        <prefix>http://beta-vlo.clarin.eu/data/</prefix>
+        <tostrip>/srv/vlo-data/</tostrip>
+        <deleteFirst>false</deleteFirst>
+    </DataRoot>
+    <DataRoot processHierarchyDirs="NONE">
+        <originName>Europeana</originName>
+        <rootFile>/srv/vlo-data/europeana/results/cmdi/</rootFile>
         <prefix>http://beta-vlo.clarin.eu/data/</prefix>
         <tostrip>/srv/vlo-data/</tostrip>
         <deleteFirst>false</deleteFirst>
