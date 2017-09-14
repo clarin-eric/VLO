@@ -21,6 +21,7 @@
         <wicket.version>7.8.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
         <spring.version>4.3.8.RELEASE</spring.version>
         <jetty.version>8.1.17.v20150415</jetty.version>
+        <jackson.version>2.9.1</jackson.version>
         <clarin-basestyle.version>0.2.0</clarin-basestyle.version>
         <!-- selects the appender for the log4j root logger -->
         <log4j.appender>File</log4j.appender>
@@ -173,6 +174,21 @@
                     <artifactId>wicket-util</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+	    <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+	    <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+	    <version>${jackson.version}</version>
         </dependency>
     </dependencies>
     
