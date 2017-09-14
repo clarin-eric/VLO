@@ -4,7 +4,7 @@ import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
@@ -15,8 +15,8 @@ public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDa
 
     private final static Logger logger = LoggerFactory.getLogger(SearchResultsDaoImpl.class);
 
-    public SearchResultsDaoImpl(SolrServer solrServer, VloConfig config) {
-        super(solrServer, config);
+    public SearchResultsDaoImpl(SolrClient solrClient, VloConfig config) {
+        super(solrClient, config);
     }
 
     @Override

@@ -93,7 +93,7 @@ public class SearchResultsDaoImplTest extends AbstractSolrTestCase {
     public void tearDown() throws Exception {
         super.tearDown();
         if (server != null) {
-            server.shutdown();
+            server.close();
         }
     }
 

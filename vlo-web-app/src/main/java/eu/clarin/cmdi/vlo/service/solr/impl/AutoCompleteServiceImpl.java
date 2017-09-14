@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Suggestion;
 
@@ -20,8 +20,8 @@ import org.apache.solr.client.solrj.response.SpellCheckResponse.Suggestion;
  */
 public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoCompleteService {
 
-    public AutoCompleteServiceImpl(SolrServer solrServer, VloConfig config) {
-        super(solrServer, config);
+    public AutoCompleteServiceImpl(SolrClient solrClient, VloConfig config) {
+        super(solrClient, config);
     }
     
     /**

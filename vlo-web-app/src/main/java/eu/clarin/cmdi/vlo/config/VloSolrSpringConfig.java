@@ -33,8 +33,8 @@ import eu.clarin.cmdi.vlo.service.solr.impl.SolrFacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrFacetQueryFactoryImpl;
 import java.util.List;
 import javax.inject.Inject;
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -71,7 +71,7 @@ public class VloSolrSpringConfig {
 
     @Bean
     public SearchResultsDao searchResultsDao() {
-        return new SearchResultsDaoImpl(solrServer(), vloConfig);
+        return new SearchResultsDaoImpl(solrClient(), vloConfig);
     }
 
     @Bean
@@ -81,12 +81,12 @@ public class VloSolrSpringConfig {
 
     @Bean
     public AutoCompleteService autoCompleteService() {
-        return new AutoCompleteServiceImpl(solrServer(), vloConfig);
+        return new AutoCompleteServiceImpl(solrClient(), vloConfig);
     }
 
     @Bean
-    public SolrServer solrServer() {
-        return new HttpSolrServer(vloConfig.getSolrUrl());
+    public SolrClient solrClient() {
+        return new HttpSolrClient.Builder(vloConfig.getSolrUrl()).build();
     }
 
     @Bean(name = "documentFieldOrder")
