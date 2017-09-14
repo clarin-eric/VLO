@@ -21,8 +21,9 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.io.IOException;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -38,18 +39,18 @@ public class CollectionsCollector implements VloStatisticsCollector {
     private final static Logger logger = LoggerFactory.getLogger(CollectionsCollector.class);
 
     @Override
-    public void collect(VloReport report, VloConfig config, SolrServer solrServer) throws SolrServerException {
-        report.setCollections(obtainCollectionCounts(solrServer));
+    public void collect(VloReport report, VloConfig config, SolrClient solrClient) throws SolrServerException, IOException {
+        report.setCollections(obtainCollectionCounts(solrClient));
     }
 
-    private List<VloReport.CollectionCount> obtainCollectionCounts(SolrServer solrServer) throws SolrServerException {
+    private List<VloReport.CollectionCount> obtainCollectionCounts(SolrClient solrClient) throws SolrServerException, IOException {
         final SolrQuery query = new SolrQuery();
         query.setRows(0);
         query.setFacet(true);
         query.addFacetField(FacetConstants.FIELD_COLLECTION);
         query.setFacetLimit(Integer.MAX_VALUE);
 
-        final QueryResponse result = solrServer.query(query);
+        final QueryResponse result = solrClient.query(query);
         final FacetField collectionField = result.getFacetField(FacetConstants.FIELD_COLLECTION);
         logger.debug("Collection field: {}", collectionField.getValues());
 
