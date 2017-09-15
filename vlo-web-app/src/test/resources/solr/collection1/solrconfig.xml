@@ -1035,11 +1035,12 @@
   <searchComponent name="suggest" class="solr.SuggestComponent">
       <lst name="suggester">
           <str name="name">mySuggester</str>
-          <str name="lookupImpl">FuzzyLookupFactory</str>      
+          <str name="lookupImpl">FreeTextLookupFactory</str>
           <str name="dictionaryImpl">DocumentDictionaryFactory</str>
           <str name="field">_suggester</str>
           <str name="suggestAnalyzerFieldType">textSuggest</str>
           <str name="buildOnStartup">false</str>
+          <str name="suggestFreeTextAnalyzerFieldType">textSuggest</str>
     </lst>
   </searchComponent>
 

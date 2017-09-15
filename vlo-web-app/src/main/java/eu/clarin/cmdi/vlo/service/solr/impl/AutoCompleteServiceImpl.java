@@ -2,14 +2,15 @@ package eu.clarin.cmdi.vlo.service.solr.impl;
 
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.response.SpellCheckResponse.Suggestion;
 
 /**
  * DAO that delivers suggestions for incomplete terms (autocomplete function)
@@ -41,10 +42,10 @@ public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoComplete
             
             final QueryResponse response = fireQuery(sanitise(query));
             
-            if (response.getSpellCheckResponse() != null) {
-                final List<Suggestion> suggestions = response.getSpellCheckResponse().getSuggestions();
-                if (suggestions.size() > 0) {
-                    return suggestions.get(0).getAlternatives().iterator();
+            if (response.getSuggesterResponse()!= null) {
+                final Map<String, List<String>> suggestions = response.getSuggesterResponse().getSuggestedTerms();
+                if (!suggestions.isEmpty()) {
+                    return suggestions.get(new ArrayList<>(suggestions.keySet()).get(0)).iterator();
                 }
             }
         }
