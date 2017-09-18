@@ -211,8 +211,12 @@ public class MetadataImporterTest extends ImporterTestcase {
     }
 
     private Object getValue(SolrInputDocument doc, String field) {
-        assertEquals(1, doc.getFieldValues(field).size());
-        return doc.getFieldValue(field);
+    	if(doc.getFieldValues(field) != null){
+	        assertEquals(1, doc.getFieldValues(field).size());
+	        return doc.getFieldValue(field);
+    	}
+    	else
+    		return null;
     }
 
     private List<SolrInputDocument> importData(File rootFile) throws MalformedURLException {

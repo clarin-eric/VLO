@@ -10,6 +10,7 @@ import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.CmdConstants;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.importer.CFMCondition.FacetValuePair;
 import eu.clarin.cmdi.vlo.importer.processor.CMDIDataProcessor;
 import eu.clarin.cmdi.vlo.importer.processor.PostProcessor;
 
@@ -311,7 +312,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             if (postProcessed != null && !postProcessed.isEmpty()) {
                 final ArrayList<Pair<String, String>> valueLangPairList = new ArrayList<>();
                 addValuesToList(facetName, postProcessed, valueLangPairList, DEFAULT_LANGUAGE);
-                insertFacetValues(facetName, valueLangPairList, cmdiData, allowMultipleValues, caseInsensitive);
+                insertFacetValues(facetName, valueLangPairList, cmdiData, allowMultipleValues, caseInsensitive, false);
             }
         }
     }
@@ -347,13 +348,34 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             }
             final String value = nav.toString(index);
             final String languageCode = extractLanguageCode(nav);
+            
+            
+            //implementation of cross facet mapping (cfm)
+            if(!config.getConditions().isEmpty()){
+            	
+            	for(CFMCondition condition : config.getConditions()){
+            		if(condition.getIfValue().equals(value)){ //the value matches the condition-value
+            			for(FacetValuePair fvp : condition.getFacetValuePairs()){
+            				ArrayList<Pair<String,String>> cfmList = new ArrayList<Pair<String,String>>();
+            				cfmList.add(new ImmutablePair<String,String>(fvp.getValue(), languageCode));
+            				
+            				insertFacetValues(fvp.getFacetConfiguration().getName(), cfmList, cmdiData, fvp.getFacetConfiguration().getAllowMultipleValues(), fvp.getFacetConfiguration().isCaseInsensitive(), false);
+
+            			}
+            		}
+            	}
+            	
+            	return true;
+            }
+            
+            //end of cfm implementation
 
             final List<String> postProcessed = postProcess(config.getName(), value, cmdiData);
             addValuesToList(config.getName(), postProcessed, valueLangPairList, languageCode);
 
             String vcl = extractValueConceptLink(nav);
             if (vcl!=null) {
-                ImmutablePair vp = null;
+                ImmutablePair<String,String> vp = null;
                 if (vcl.contains("CCR_")) {
                     vp = CCR.getValue(new URI(vcl));
                 } else if (pattern.hasVocabulary()) {
@@ -396,17 +418,17 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         });
 
         // insert values into original facet
-        insertFacetValues(config.getName(), reorderedValueLangPairList, cmdiData, allowMultipleValues, config.isCaseInsensitive());
+        insertFacetValues(config.getName(), reorderedValueLangPairList, cmdiData, allowMultipleValues, config.isCaseInsensitive(), true);
 
         // insert post-processed values into derived facet(s) if configured
-        for (String derivedFacet : config.getDerivedFacets()) {
+        for (FacetConfiguration derivedFacet : config.getDerivedFacets()) {
             final List<Pair<String, String>> derivedValueLangPairList = new ArrayList<>();
             for (Pair<String, String> valueLangPair : reorderedValueLangPairList) {
-                for (String derivedValue : postProcess(derivedFacet, valueLangPair.getLeft(), cmdiData)) {
+                for (String derivedValue : postProcess(derivedFacet.getName(), valueLangPair.getLeft(), cmdiData)) {
                     derivedValueLangPairList.add(new ImmutablePair<>(derivedValue, valueLangPair.getRight()));
                 }
             }
-            insertFacetValues(derivedFacet, derivedValueLangPairList, cmdiData, allowMultipleValues, config.isCaseInsensitive());
+            insertFacetValues(derivedFacet.getName(), derivedValueLangPairList, cmdiData, derivedFacet.getAllowMultipleValues(), derivedFacet.isCaseInsensitive(), false);
         }
 
         return matchedPattern;
@@ -445,14 +467,22 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         return vcl;
     }
 
-    private void insertFacetValues(String name, List<Pair<String, String>> valueLangPairList, CMDIData cmdiData, boolean allowMultipleValues, boolean caseInsensitive) {
+    private void insertFacetValues(String name, List<Pair<String, String>> valueLangPairList, CMDIData cmdiData, boolean allowMultipleValues, boolean caseInsensitive, boolean hasPriority) {
+
         for (int i = 0; i < valueLangPairList.size(); i++) {
-            if (!allowMultipleValues && i > 0) {
-                break;
-            }
+//            if (!allowMultipleValues && i > 0) {
+//                break;
+//            }
             String fieldValue = valueLangPairList.get(i).getLeft().trim();
             if (name.equals(FacetConstants.FIELD_DESCRIPTION)) {
                 fieldValue = "{" + valueLangPairList.get(i).getRight() + "}" + fieldValue;
+            }
+            if(!allowMultipleValues){
+            	if(hasPriority)
+            		cmdiData.replaceDocField(name, fieldValue, caseInsensitive);
+            	else
+            		cmdiData.addDocFieldIfNull(name, fieldValue, caseInsensitive);
+            	break;
             }
             cmdiData.addDocField(name, fieldValue, caseInsensitive);
         }
