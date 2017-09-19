@@ -65,8 +65,8 @@ public class CMDIData {
     public void replaceDocField(String name, String value, boolean caseInsensitive){
     	if(this.doc != null){
     		this.doc.removeField(name);
-    		this.addDocField(name, value, caseInsensitive);
     	}
+    	this.addDocField(name, value, caseInsensitive);
     }
     
     public void addDocFieldIfNull(String name, String value, boolean caseInsensitive){
