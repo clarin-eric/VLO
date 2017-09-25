@@ -18,7 +18,7 @@
     <description></description>
 
     <properties>
-        <wicket.version>7.8.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
+        <wicket.version>7.9.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
         <spring.version>4.3.8.RELEASE</spring.version>
         <jetty.version>8.1.17.v20150415</jetty.version>
         <clarin-basestyle.version>0.2.0</clarin-basestyle.version>
