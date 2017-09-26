@@ -55,6 +55,13 @@
             <version>${wicket.version}</version>
         </dependency>
         
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        
         <!-- SPRING FRAMEWORK -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -96,13 +103,6 @@
             <version>${slf4j.version}</version>
         </dependency>
 
-        <!--  JETTY DEPENDENCIES FOR TESTING  -->
-        <dependency>
-            <groupId>org.eclipse.jetty.aggregate</groupId>
-            <artifactId>jetty-all-server</artifactId>
-            <version>${jetty.version}</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-solrj</artifactId>
