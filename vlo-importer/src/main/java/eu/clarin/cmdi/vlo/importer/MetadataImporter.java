@@ -33,7 +33,26 @@ import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph.CmdiVertex;
+import eu.clarin.cmdi.vlo.importer.correction.AbstractPostCorrection;
+import eu.clarin.cmdi.vlo.importer.correction.AvailabilityPostCorrection;
+import eu.clarin.cmdi.vlo.importer.correction.CMDIComponentProfileNamePostCorrection;
+import eu.clarin.cmdi.vlo.importer.correction.ContinentNamePostCorrection;
+import eu.clarin.cmdi.vlo.importer.correction.CountryNamePostCorrection;
+import eu.clarin.cmdi.vlo.importer.correction.FormatPostCorrection;
+import eu.clarin.cmdi.vlo.importer.correction.IdPostCorrection;
+import eu.clarin.cmdi.vlo.importer.correction.LanguageCodePostCorrection;
+import eu.clarin.cmdi.vlo.importer.correction.LanguageNamePostCorrection;
+import eu.clarin.cmdi.vlo.importer.correction.LicensePostCorrection;
+import eu.clarin.cmdi.vlo.importer.correction.LicenseTypePostCorrection;
+import eu.clarin.cmdi.vlo.importer.correction.NamePostCorrection;
+import eu.clarin.cmdi.vlo.importer.correction.NationalProjectPostCorrection;
+import eu.clarin.cmdi.vlo.importer.correction.OrganisationPostCorrection;
+import eu.clarin.cmdi.vlo.importer.correction.ResourceClassPostCorrection;
+import eu.clarin.cmdi.vlo.importer.correction.TemporalCoveragePostCorrection;
 import eu.clarin.cmdi.vlo.importer.processor.*;
+import eu.clarin.cmdi.vlo.importer.solr.BufferingSolrBridgeImpl;
+import eu.clarin.cmdi.vlo.importer.solr.SolrBridge;
+import eu.clarin.cmdi.vlo.importer.solr.SolrBridgeImpl;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -101,7 +120,7 @@ public class MetadataImporter {
      * _type_ are applied to the value before storing the new value in the solr
      * document.
      */
-    protected final Map<String, PostProcessor> postProcessors;
+    protected final Map<String, AbstractPostCorrection> postProcessors;
 
     /**
      * Contains MDSelflinks (usually). Just to know what we have already done.
@@ -135,22 +154,22 @@ public class MetadataImporter {
 
     }
 
-    protected static Map<String, PostProcessor> registerPostProcessors(VloConfig config, LanguageCodeUtils languageCodeUtils) {
-        return ImmutableMap.<String, PostProcessor>builder()
-                .put(FacetConstants.FIELD_ID, new IdPostProcessor())
-                .put(FacetConstants.FIELD_CONTINENT, new ContinentNamePostProcessor())
-                .put(FacetConstants.FIELD_COUNTRY, new CountryNamePostProcessor(config))
-                .put(FacetConstants.FIELD_LANGUAGE_CODE, new LanguageCodePostProcessor(config, languageCodeUtils))
-                .put(FacetConstants.FIELD_LANGUAGE_NAME, new LanguageNamePostProcessor(languageCodeUtils))
-                .put(FacetConstants.FIELD_AVAILABILITY, new AvailabilityPostProcessor(config))
-                .put(FacetConstants.FIELD_LICENSE_TYPE, new LicenseTypePostProcessor(config))
-                .put(FacetConstants.FIELD_ORGANISATION, new OrganisationPostProcessor(config))
-                .put(FacetConstants.FIELD_TEMPORAL_COVERAGE, new TemporalCoveragePostProcessor())
-                .put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostProcessor(config))
-                .put(FacetConstants.FIELD_CLARIN_PROFILE, new CMDIComponentProfileNamePostProcessor(config))
-                .put(FacetConstants.FIELD_RESOURCE_CLASS, new ResourceClassPostProcessor())
-                .put(FacetConstants.FIELD_LICENSE, new LicensePostProcessor(config))
-                .put(FacetConstants.FIELD_NAME, new NamePostProcessor())
+    protected static Map<String, AbstractPostCorrection> registerPostProcessors(VloConfig config, LanguageCodeUtils languageCodeUtils) {
+        return ImmutableMap.<String, AbstractPostCorrection>builder()
+                .put(FacetConstants.FIELD_ID, new IdPostCorrection())
+                .put(FacetConstants.FIELD_CONTINENT, new ContinentNamePostCorrection())
+                .put(FacetConstants.FIELD_COUNTRY, new CountryNamePostCorrection(config))
+                .put(FacetConstants.FIELD_LANGUAGE_CODE, new LanguageCodePostCorrection(config, languageCodeUtils))
+                .put(FacetConstants.FIELD_LANGUAGE_NAME, new LanguageNamePostCorrection(languageCodeUtils))
+                .put(FacetConstants.FIELD_AVAILABILITY, new AvailabilityPostCorrection(config))
+                .put(FacetConstants.FIELD_LICENSE_TYPE, new LicenseTypePostCorrection(config))
+                .put(FacetConstants.FIELD_ORGANISATION, new OrganisationPostCorrection(config))
+                .put(FacetConstants.FIELD_TEMPORAL_COVERAGE, new TemporalCoveragePostCorrection())
+                .put(FacetConstants.FIELD_NATIONAL_PROJECT, new NationalProjectPostCorrection(config))
+                .put(FacetConstants.FIELD_CLARIN_PROFILE, new CMDIComponentProfileNamePostCorrection(config))
+                .put(FacetConstants.FIELD_RESOURCE_CLASS, new ResourceClassPostCorrection())
+                .put(FacetConstants.FIELD_LICENSE, new LicensePostCorrection(config))
+                .put(FacetConstants.FIELD_NAME, new NamePostCorrection())
                 .build();
     }
 
@@ -583,7 +602,7 @@ public class MetadataImporter {
                 }
             }
 
-            FormatPostProcessor processor = new FormatPostProcessor();
+            FormatPostCorrection processor = new FormatPostCorrection();
             mimeType = processor.process(mimeType, null).get(0);
 
             // TODO check should probably be moved into Solr (by using some minimum length filter)

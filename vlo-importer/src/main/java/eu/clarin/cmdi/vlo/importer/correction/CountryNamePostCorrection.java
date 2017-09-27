@@ -1,30 +1,26 @@
-package eu.clarin.cmdi.vlo.importer.processor;
+package eu.clarin.cmdi.vlo.importer.correction;
 
 import com.google.common.collect.ImmutableMap;
-import com.ximpleware.NavException;
-import com.ximpleware.ParseException;
+
 import com.ximpleware.VTDException;
-import com.ximpleware.XPathEvalException;
-import com.ximpleware.XPathParseException;
+
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
 
 import java.io.IOException;
-import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class CountryNamePostProcessor extends AbstractPostProcessor {
 
-    private final static Logger LOG = LoggerFactory.getLogger(CountryNamePostProcessor.class);
+public class CountryNamePostCorrection extends AbstractPostCorrection {
+
     private final String countryComponentUrl;
     private Map<String, String> countryCodeMap;
 
-    public CountryNamePostProcessor(VloConfig config) {
+    public CountryNamePostCorrection(VloConfig config) {
         super(config);
         countryComponentUrl = getConfig().getCountryComponentUrl();
     }

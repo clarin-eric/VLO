@@ -4,15 +4,16 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import eu.clarin.cmdi.vlo.importer.processor.OrganisationPostProcessor;
-import eu.clarin.cmdi.vlo.importer.processor.PostProcessor;
+import eu.clarin.cmdi.vlo.importer.correction.AbstractPostCorrection;
+import eu.clarin.cmdi.vlo.importer.correction.OrganisationPostCorrection;
 
-public class OrganizationPostProcessorTest extends ImporterTestcase {
+
+public class OrganizationPostCorrectionTest extends ImporterTestcase {
 
 
     @Test
     public void testLanguageCode() {
-        PostProcessor processor = new OrganisationPostProcessor(config);
+        AbstractPostCorrection processor = new OrganisationPostCorrection(config);
         assertEquals("Department of Psychology, Ohio State University", processor.process("http://buckeyecorpus.osu.edu", null).get(0));
         assertEquals("s.n.", processor.process("s.n", null).get(0));
         assertEquals("SELAF", processor.process("Société des Etudes Linguistiques et Anthropologiques de France", null).get(0));

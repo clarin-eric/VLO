@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer;
+package eu.clarin.cmdi.vlo.importer.processor;
 
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
@@ -10,9 +10,19 @@ import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.CmdConstants;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.importer.CFMCondition;
+import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.FacetConceptMapping;
+import eu.clarin.cmdi.vlo.importer.FacetConfiguration;
+import eu.clarin.cmdi.vlo.importer.FacetMapping;
+import eu.clarin.cmdi.vlo.importer.FacetMappingFactory;
+import eu.clarin.cmdi.vlo.importer.Pattern;
+import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
+import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
+import eu.clarin.cmdi.vlo.importer.Vocabulary;
 import eu.clarin.cmdi.vlo.importer.CFMCondition.FacetValuePair;
-import eu.clarin.cmdi.vlo.importer.processor.CMDIDataProcessor;
-import eu.clarin.cmdi.vlo.importer.processor.PostProcessor;
+import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
+import eu.clarin.cmdi.vlo.importer.correction.AbstractPostCorrection;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,7 +43,7 @@ import org.slf4j.LoggerFactory;
 
 public class CMDIParserVTDXML implements CMDIDataProcessor {
 
-    private final Map<String, PostProcessor> postProcessors;
+    private final Map<String, AbstractPostCorrection> postProcessors;
     private final Boolean useLocalXSDCache;
     private static final java.util.regex.Pattern PROFILE_ID_PATTERN = java.util.regex.Pattern.compile(".*(clarin.eu:cr1:p_[0-9]+).*");
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
@@ -46,7 +56,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private final FacetMappingFactory facetMappingFactory;
     private final VLOMarshaller marshaller;
     
-    public CMDIParserVTDXML(Map<String, PostProcessor> postProcessors, VloConfig config, FacetMappingFactory facetMappingFactory, VLOMarshaller marshaller, Boolean useLocalXSDCache) {
+    public CMDIParserVTDXML(Map<String, AbstractPostCorrection> postProcessors, VloConfig config, FacetMappingFactory facetMappingFactory, VLOMarshaller marshaller, Boolean useLocalXSDCache) {
         this.postProcessors = postProcessors;
         this.useLocalXSDCache = useLocalXSDCache;
         this.config = config;
@@ -120,7 +130,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * XMLSchema-instance's attributes contained the information
      * @throws VTDException
      */
-    String extractXsd(VTDNav nav) throws VTDException {
+    public String extractXsd(VTDNav nav) throws VTDException {
         String profileID = getProfileIdFromHeader(nav);
         if (profileID == null) {
             profileID = getProfileIdFromSchemaLocation(nav);
@@ -499,7 +509,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private List<String> postProcess(String facetName, String extractedValue, CMDIData cmdiData) {
         List<String> resultList = new ArrayList<>();
         if (postProcessors.containsKey(facetName)) {
-            PostProcessor processor = postProcessors.get(facetName);
+            AbstractPostCorrection processor = postProcessors.get(facetName);
             resultList = processor.process(extractedValue, cmdiData);
         } else {
             resultList.add(extractedValue);

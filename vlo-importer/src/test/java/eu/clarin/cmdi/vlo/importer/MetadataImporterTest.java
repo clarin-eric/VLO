@@ -2,6 +2,8 @@ package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.DataRoot;
+import eu.clarin.cmdi.vlo.importer.solr.SolrBridge;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -208,6 +210,14 @@ public class MetadataImporterTest extends ImporterTestcase {
         SolrInputDocument doc = docs.get(0);
         assertEquals("testRoot", getValue(doc, FacetConstants.FIELD_COLLECTION));
         assertEquals("DiDDD-project", getValue(doc, FacetConstants.FIELD_PROJECT_NAME));
+    }
+    
+    public void testCrossFacetMapping(){
+    	
+    }
+    
+    public void testCrossFacetMappingWithPriority() {
+    	
     }
 
     private Object getValue(SolrInputDocument doc, String field) {

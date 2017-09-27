@@ -20,6 +20,10 @@ import com.ximpleware.AutoPilot;
 import com.ximpleware.VTDException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
+
+import eu.clarin.cmdi.vlo.importer.processor.SelfLinkExtractor;
+import eu.clarin.cmdi.vlo.importer.processor.SelfLinkExtractorImpl;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;

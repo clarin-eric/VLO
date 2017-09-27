@@ -7,15 +7,15 @@ import org.junit.Before;
 
 import org.junit.Test;
 
-import eu.clarin.cmdi.vlo.importer.processor.LicenseTypePostProcessor;
+import eu.clarin.cmdi.vlo.importer.correction.LicenseTypePostCorrection;
 
-public class LicenseTypePostProcessorTest extends ImporterTestcase {
+public class LicenseTypePostCorrectionTest extends ImporterTestcase {
 
-    private LicenseTypePostProcessor processor;
+    private LicenseTypePostCorrection processor;
 
     @Before
     public void setUp() {
-        processor = new LicenseTypePostProcessor(config);
+        processor = new LicenseTypePostCorrection(config);
     }
 
     @Test

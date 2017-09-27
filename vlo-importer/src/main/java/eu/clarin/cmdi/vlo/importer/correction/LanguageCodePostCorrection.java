@@ -1,12 +1,9 @@
-package eu.clarin.cmdi.vlo.importer.processor;
+package eu.clarin.cmdi.vlo.importer.correction;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -14,9 +11,7 @@ import eu.clarin.cmdi.vlo.importer.CMDIData;
 
 import org.apache.commons.lang.WordUtils;
 
-public class LanguageCodePostProcessor extends PostProcessorsWithVocabularyMap {
-
-    private final static Logger LOG = LoggerFactory.getLogger(LanguageCodePostProcessor.class);
+public class LanguageCodePostCorrection extends AbstractPostCorrectionWithVocabularyMap {
 
     protected static final String CODE_PREFIX = "code:";
     protected static final String LANG_NAME_PREFIX = "name:";
@@ -28,7 +23,7 @@ public class LanguageCodePostProcessor extends PostProcessorsWithVocabularyMap {
     private static final Pattern RFC1766_Pattern = Pattern.compile("^([a-z]{2,3})[-_][a-zA-Z]{2}$");
     private final LanguageCodeUtils languageCodeUtils;
 
-    public LanguageCodePostProcessor(VloConfig config, LanguageCodeUtils languageCodeUtils) {
+    public LanguageCodePostCorrection(VloConfig config, LanguageCodeUtils languageCodeUtils) {
         super(config);
         this.languageCodeUtils = languageCodeUtils;
     }

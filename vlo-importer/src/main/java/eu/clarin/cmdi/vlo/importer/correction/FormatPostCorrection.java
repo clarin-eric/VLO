@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer.processor;
+package eu.clarin.cmdi.vlo.importer.correction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import eu.clarin.cmdi.vlo.importer.CMDIData;
 
 import java.util.regex.Matcher;
 
-public class FormatPostProcessor implements PostProcessor {
+public class FormatPostCorrection extends AbstractPostCorrection {
 
     private static final Pattern MIMETYPE_PATTERN = Pattern.compile("^(application|audio|example|image|message|model|multipart|text|video)/.*");
     private static final String UNKNOWN_STRING = "unknown type";

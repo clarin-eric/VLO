@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer.processor;
+package eu.clarin.cmdi.vlo.importer.correction;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
@@ -11,9 +11,9 @@ import java.util.List;
  *
  * @author teckart
  */
-public class AvailabilityPostProcessor extends PostProcessorsWithVocabularyMap {
+public class AvailabilityPostCorrection extends AbstractPostCorrectionWithVocabularyMap {
 
-    public AvailabilityPostProcessor(VloConfig config) {
+    public AvailabilityPostCorrection(VloConfig config) {
         super(config);
     }
 

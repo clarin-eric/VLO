@@ -6,15 +6,16 @@ import java.util.List;
 
 import org.junit.Test;
 
-import eu.clarin.cmdi.vlo.importer.processor.AvailabilityPostProcessor;
-import eu.clarin.cmdi.vlo.importer.processor.PostProcessor;
+import eu.clarin.cmdi.vlo.importer.correction.AbstractPostCorrection;
+import eu.clarin.cmdi.vlo.importer.correction.AvailabilityPostCorrection;
 
-public class AvailabilityPostProcessorTest extends ImporterTestcase {
+
+public class AvailabilityPostCorrectionTest extends ImporterTestcase {
     
 
     @Test
     public void testLanguageCode() {
-        PostProcessor processor = new AvailabilityPostProcessor(config);    
+        AbstractPostCorrection processor = new AvailabilityPostCorrection(config);    
         List<String> normalizedVals;
         
         //"Apache Licence 2.0" -> "PUB;BY"

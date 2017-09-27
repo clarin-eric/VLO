@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer.processor;
+package eu.clarin.cmdi.vlo.importer.correction;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
@@ -6,8 +6,6 @@ import eu.clarin.cmdi.vlo.importer.CMDIData;
 import java.util.Arrays;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Adds information about the affiliation of a metadata file to a national
@@ -16,11 +14,10 @@ import org.slf4j.LoggerFactory;
  * @author Thomas Eckart
  *
  */
-public class NationalProjectPostProcessor extends PostProcessorsWithVocabularyMap {
+public class NationalProjectPostCorrection extends AbstractPostCorrectionWithVocabularyMap {
 
-    private final static Logger LOG = LoggerFactory.getLogger(NationalProjectPostProcessor.class);
 
-    public NationalProjectPostProcessor(VloConfig config) {
+    public NationalProjectPostCorrection(VloConfig config) {
         super(config);
     }
 

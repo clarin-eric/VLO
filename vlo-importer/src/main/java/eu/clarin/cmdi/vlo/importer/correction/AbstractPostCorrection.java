@@ -14,21 +14,52 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.importer.processor;
+package eu.clarin.cmdi.vlo.importer.correction;
+
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+
+import org.slf4j.Logger;
+
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.importer.CMDIData;
 
 /**
  *
  * @author twagoo
  */
-public abstract class AbstractPostProcessor implements PostProcessor {
+public abstract class AbstractPostCorrection{
 
     private final VloConfig config;
-
-    public AbstractPostProcessor(VloConfig config) {
-        this.config = config;
+    
+    protected final Logger LOG; 
+    
+    public AbstractPostCorrection() {
+    	this.config = null;
+    	this.LOG = LoggerFactory.getLogger(this.getClass());
     }
+
+    public AbstractPostCorrection(VloConfig config) {
+        this.config = config;
+        this.LOG = LoggerFactory.getLogger(this.getClass());
+    }
+    
+    /**
+    *
+    * @param value value to post-process; can be null
+    * @param cmdiData processing context, can be null or incomplete
+    * @return list of post-processed values
+    */
+   public abstract List<String> process(String value, CMDIData cmdiData);
+
+   /**
+    *
+    * @return whether the postprocessor should also be called in case no
+    * matching value was found (with <pre>value == null</pre>)
+    */
+   public abstract boolean doesProcessNoValue();
 
     public VloConfig getConfig() {
         return config;

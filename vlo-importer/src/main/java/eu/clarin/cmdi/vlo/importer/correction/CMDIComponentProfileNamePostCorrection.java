@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer.processor;
+package eu.clarin.cmdi.vlo.importer.correction;
 
 import com.ximpleware.AutoPilot;
 import com.ximpleware.VTDException;
@@ -18,15 +18,15 @@ import org.slf4j.LoggerFactory;
  * Takes the value of the componentprofileid and uses the componentregistry REST
  * service to transform this to the name of the componentprofile.
  */
-public class CMDIComponentProfileNamePostProcessor extends AbstractPostProcessor {
+public class CMDIComponentProfileNamePostCorrection extends AbstractPostCorrection {
 
     private static final String XPATH = "/ComponentSpec/Header/Name/text()";
     private final String registryBaseURl;
 
-    private final static Logger LOG = LoggerFactory.getLogger(CMDIComponentProfileNamePostProcessor.class);
+    private final static Logger LOG = LoggerFactory.getLogger(CMDIComponentProfileNamePostCorrection.class);
     private final ConcurrentMap<String, List<String>> cache = new ConcurrentHashMap<>();
 
-    public CMDIComponentProfileNamePostProcessor(VloConfig config) {
+    public CMDIComponentProfileNamePostCorrection(VloConfig config) {
         super(config);
         registryBaseURl = config.getComponentRegistryRESTURL();
     }

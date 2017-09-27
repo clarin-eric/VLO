@@ -1,11 +1,11 @@
-package eu.clarin.cmdi.vlo.importer.processor;
+package eu.clarin.cmdi.vlo.importer.correction;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import eu.clarin.cmdi.vlo.importer.CMDIData;
 
-public class ResourceClassPostProcessor implements PostProcessor {
+public class ResourceClassPostCorrection extends AbstractPostCorrection {
 
     /**
      * Postprocess ResourceClass values

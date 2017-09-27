@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer.processor;
+package eu.clarin.cmdi.vlo.importer.correction;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
@@ -20,9 +20,9 @@ import java.util.List;
  * @see <a href="https://github.com/clarin-eric/VLO/issues/55">#55</a>
  * @author Twan Goosen
  */
-public class LicenseTypePostProcessor extends PostProcessorsWithVocabularyMap {
+public class LicenseTypePostCorrection extends AbstractPostCorrectionWithVocabularyMap {
 
-    public LicenseTypePostProcessor(VloConfig config) {
+    public LicenseTypePostCorrection(VloConfig config) {
         super(config);
     }
 

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.importer.processor;
+package eu.clarin.cmdi.vlo.importer.correction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ import eu.clarin.cmdi.vlo.importer.CMDIData;
  *
  * @author Thomas Eckart
  */
-public class NamePostProcessor implements PostProcessor {
+public class NamePostCorrection extends AbstractPostCorrection {
 
     // omit leading and trailing quote characters if they are equal
     private static final Pattern OMIT_QUOTES_PATTERN = Pattern.compile("^([\"\'“])(.*)\\1$");

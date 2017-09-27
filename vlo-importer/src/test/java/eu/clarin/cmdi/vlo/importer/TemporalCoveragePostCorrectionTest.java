@@ -3,12 +3,12 @@ package eu.clarin.cmdi.vlo.importer;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-import eu.clarin.cmdi.vlo.importer.processor.TemporalCoveragePostProcessor;
+import eu.clarin.cmdi.vlo.importer.correction.TemporalCoveragePostCorrection;
 
-public class TemporalCoveragePostProcessorTest extends ImporterTestcase {
+public class TemporalCoveragePostCorrectionTest extends ImporterTestcase {
     @Test
     public void testNationalProject() {
-        TemporalCoveragePostProcessor processor = new TemporalCoveragePostProcessor();
+        TemporalCoveragePostCorrection processor = new TemporalCoveragePostCorrection();
         assertEquals("2012-12-01/", processor.process("2012-12-01/", null).get(0));
         assertEquals("/2012", processor.process("/2012", null).get(0));
         assertEquals("2012-02", processor.process("2012-02", null).get(0));

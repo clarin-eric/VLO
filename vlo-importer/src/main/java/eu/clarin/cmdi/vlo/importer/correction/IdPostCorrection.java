@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer.processor;
+package eu.clarin.cmdi.vlo.importer.correction;
 
 import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
@@ -6,7 +6,7 @@ import eu.clarin.cmdi.vlo.importer.CMDIData;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IdPostProcessor implements PostProcessor {
+public class IdPostCorrection extends AbstractPostCorrection {
 
     /**
      * Return normalized String

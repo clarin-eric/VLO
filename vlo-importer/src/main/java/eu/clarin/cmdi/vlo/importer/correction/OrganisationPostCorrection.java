@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer.processor;
+package eu.clarin.cmdi.vlo.importer.correction;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
@@ -6,9 +6,9 @@ import eu.clarin.cmdi.vlo.importer.CMDIData;
 import java.util.Arrays;
 import java.util.List;
 
-public class OrganisationPostProcessor extends PostProcessorsWithVocabularyMap {
+public class OrganisationPostCorrection extends AbstractPostCorrectionWithVocabularyMap {
 
-    public OrganisationPostProcessor(VloConfig config) {
+    public OrganisationPostCorrection(VloConfig config) {
         super(config);
     }
 
