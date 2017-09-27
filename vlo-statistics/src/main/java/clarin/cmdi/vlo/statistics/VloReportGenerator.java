@@ -66,7 +66,7 @@ public class VloReportGenerator {
         this.config = config;
         this.collectors = collectors;
         this.resultHandlers = resultHandlers;
-        this.solrClient = new HttpSolrClient(config.getSolrUrl());
+        this.solrClient = new HttpSolrClient.Builder(config.getSolrUrl()).build();
     }
 
     public void run() throws SolrServerException, IOException, JAXBException {

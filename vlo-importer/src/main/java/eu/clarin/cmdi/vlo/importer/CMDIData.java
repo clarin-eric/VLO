@@ -207,10 +207,10 @@ public class CMDIData {
             SolrInputField fOld = doc.get(field);
             SolrInputField fNew = new SolrInputField(field);
 
-            fNew.addValue(value, 1.0f); //new, more restrictive value
+            fNew.addValue(value); //new, more restrictive value
             for (Object val : fOld.getValues()) { //copy other tags
                 if (availabilityToLvl(val.toString()) == -1) {
-                    fNew.addValue(val, 1.0f);
+                    fNew.addValue(val);
                 }
             }
 

@@ -66,8 +66,8 @@ public class SolrBridgeImpl implements SolrBridge {
         /* Specify the number of documents in the queue that will trigger the
          * threads, two of them, emptying it.
          */
-        solrClient = new ConcurrentUpdateSolrClient(solrUrl,
-                config.getMinDocsInSolrQueue(), nThreads) {
+        solrClient = new ConcurrentUpdateSolrClient(new ConcurrentUpdateSolrClient.Builder(solrUrl)
+                .withQueueSize(config.getMinDocsInSolrQueue()).withThreadCount(nThreads)) {
             /*
                      * Let the super class method handle exceptions. Make the
                      * exception available to the importer in the form of the
