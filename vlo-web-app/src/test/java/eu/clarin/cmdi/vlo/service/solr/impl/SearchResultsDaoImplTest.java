@@ -160,11 +160,11 @@ public class SearchResultsDaoImplTest extends AbstractSolrTestCase {
     }
 
     public static String getSchemaString() {
-        return "/solr/collection1/conf/schema.xml";
+        return "/solr/collection1/conf/managed-schema";
     }
 
     public static String getConfigString() {
-        return "/solr/collection1/conf/solrconfig.xml";
+        return "/solr/collection1/solrconfig.xml";
     }
 
     public static String getResourcePath(String resource) throws Exception {
