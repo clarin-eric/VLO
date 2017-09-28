@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer.correction;
+package eu.clarin.cmdi.vlo.importer.normalizer;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class ContinentNamePostCorrection extends AbstractPostCorrection {
+public class ContinentNamePostNormalizer extends AbstractPostNormalizer {
 
     private final static Map<String, String> CONTINENT_CODE_MAP
             = ImmutableMap.<String, String>builder()

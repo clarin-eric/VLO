@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer.correction;
+package eu.clarin.cmdi.vlo.importer.normalizer;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
@@ -14,10 +14,10 @@ import java.util.List;
  * @author Thomas Eckart
  *
  */
-public class NationalProjectPostCorrection extends AbstractPostCorrectionWithVocabularyMap {
+public class NationalProjectPostNormalizer extends AbstractPostNormalizerWithVocabularyMap {
 
 
-    public NationalProjectPostCorrection(VloConfig config) {
+    public NationalProjectPostNormalizer(VloConfig config) {
         super(config);
     }
 

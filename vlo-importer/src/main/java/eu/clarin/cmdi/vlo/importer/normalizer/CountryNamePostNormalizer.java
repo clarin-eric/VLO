@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer.correction;
+package eu.clarin.cmdi.vlo.importer.normalizer;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 
-public class CountryNamePostCorrection extends AbstractPostCorrection {
+public class CountryNamePostNormalizer extends AbstractPostNormalizer {
 
     private final String countryComponentUrl;
     private Map<String, String> countryCodeMap;
 
-    public CountryNamePostCorrection(VloConfig config) {
+    public CountryNamePostNormalizer(VloConfig config) {
         super(config);
         countryComponentUrl = getConfig().getCountryComponentUrl();
     }

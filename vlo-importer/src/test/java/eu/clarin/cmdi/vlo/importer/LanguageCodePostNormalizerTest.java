@@ -1,15 +1,15 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
-import eu.clarin.cmdi.vlo.importer.correction.AbstractPostCorrection;
-import eu.clarin.cmdi.vlo.importer.correction.LanguageCodePostCorrection;
+import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
+import eu.clarin.cmdi.vlo.importer.normalizer.LanguageCodePostNormalizer;
 
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-public class LanguageCodePostCorrectionTest extends ImporterTestcase {
+public class LanguageCodePostNormalizerTest extends ImporterTestcase {
 
     @Before
     public void setUp() throws Exception {
@@ -22,7 +22,7 @@ public class LanguageCodePostCorrectionTest extends ImporterTestcase {
 
     @Test
     public void testLanguageCode() {
-        AbstractPostCorrection processor = new LanguageCodePostCorrection(config, languageCodeUtils);
+        AbstractPostNormalizer processor = new LanguageCodePostNormalizer(config, languageCodeUtils);
         assertEquals("code:nld", processor.process("NL", null).get(0));
         assertEquals("code:eng", processor.process("en", null).get(0));
         assertEquals("code:fry", processor.process("fry", null).get(0));

@@ -3,13 +3,13 @@ package eu.clarin.cmdi.vlo.importer;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-import eu.clarin.cmdi.vlo.importer.correction.CountryNamePostCorrection;
+import eu.clarin.cmdi.vlo.importer.normalizer.CountryNamePostNormalizer;
 
-public class CountryNamePostCorrectionTest extends ImporterTestcase {
+public class CountryNamePostNormalizerTest extends ImporterTestcase {
 
     @Test
     public void testCountryCode() {
-        CountryNamePostCorrection processor = new CountryNamePostCorrection(config);
+        CountryNamePostNormalizer processor = new CountryNamePostNormalizer(config);
         assertEquals("Netherlands", processor.process("NL", null).get(0));
         assertEquals("United Kingdom", processor.process("GB", null).get(0));
         assertEquals("Netherlands", processor.process("nl", null).get(0));

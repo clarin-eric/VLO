@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer.correction;
+package eu.clarin.cmdi.vlo.importer.normalizer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import eu.clarin.cmdi.vlo.importer.CMDIData;
 
 import org.apache.commons.lang.WordUtils;
 
-public class LanguageCodePostCorrection extends AbstractPostCorrectionWithVocabularyMap {
+public class LanguageCodePostNormalizer extends AbstractPostNormalizerWithVocabularyMap {
 
     protected static final String CODE_PREFIX = "code:";
     protected static final String LANG_NAME_PREFIX = "name:";
@@ -23,7 +23,7 @@ public class LanguageCodePostCorrection extends AbstractPostCorrectionWithVocabu
     private static final Pattern RFC1766_Pattern = Pattern.compile("^([a-z]{2,3})[-_][a-zA-Z]{2}$");
     private final LanguageCodeUtils languageCodeUtils;
 
-    public LanguageCodePostCorrection(VloConfig config, LanguageCodeUtils languageCodeUtils) {
+    public LanguageCodePostNormalizer(VloConfig config, LanguageCodeUtils languageCodeUtils) {
         super(config);
         this.languageCodeUtils = languageCodeUtils;
     }

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.importer.correction;
+package eu.clarin.cmdi.vlo.importer.normalizer;
 
 import org.slf4j.LoggerFactory;
 
@@ -30,18 +30,18 @@ import eu.clarin.cmdi.vlo.importer.CMDIData;
  *
  * @author twagoo
  */
-public abstract class AbstractPostCorrection{
+public abstract class AbstractPostNormalizer{
 
     private final VloConfig config;
     
     protected final Logger LOG; 
     
-    public AbstractPostCorrection() {
+    public AbstractPostNormalizer() {
     	this.config = null;
     	this.LOG = LoggerFactory.getLogger(this.getClass());
     }
 
-    public AbstractPostCorrection(VloConfig config) {
+    public AbstractPostNormalizer(VloConfig config) {
         this.config = config;
         this.LOG = LoggerFactory.getLogger(this.getClass());
     }

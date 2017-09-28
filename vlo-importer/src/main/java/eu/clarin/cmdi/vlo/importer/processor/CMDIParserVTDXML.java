@@ -22,7 +22,7 @@ import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
 import eu.clarin.cmdi.vlo.importer.Vocabulary;
 import eu.clarin.cmdi.vlo.importer.CFMCondition.FacetValuePair;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
-import eu.clarin.cmdi.vlo.importer.correction.AbstractPostCorrection;
+import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 
 public class CMDIParserVTDXML implements CMDIDataProcessor {
 
-    private final Map<String, AbstractPostCorrection> postProcessors;
+    private final Map<String, AbstractPostNormalizer> postProcessors;
     private final Boolean useLocalXSDCache;
     private static final java.util.regex.Pattern PROFILE_ID_PATTERN = java.util.regex.Pattern.compile(".*(clarin.eu:cr1:p_[0-9]+).*");
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
@@ -56,7 +56,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private final FacetMappingFactory facetMappingFactory;
     private final VLOMarshaller marshaller;
     
-    public CMDIParserVTDXML(Map<String, AbstractPostCorrection> postProcessors, VloConfig config, FacetMappingFactory facetMappingFactory, VLOMarshaller marshaller, Boolean useLocalXSDCache) {
+    public CMDIParserVTDXML(Map<String, AbstractPostNormalizer> postProcessors, VloConfig config, FacetMappingFactory facetMappingFactory, VLOMarshaller marshaller, Boolean useLocalXSDCache) {
         this.postProcessors = postProcessors;
         this.useLocalXSDCache = useLocalXSDCache;
         this.config = config;
@@ -509,7 +509,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private List<String> postProcess(String facetName, String extractedValue, CMDIData cmdiData) {
         List<String> resultList = new ArrayList<>();
         if (postProcessors.containsKey(facetName)) {
-            AbstractPostCorrection processor = postProcessors.get(facetName);
+            AbstractPostNormalizer processor = postProcessors.get(facetName);
             resultList = processor.process(extractedValue, cmdiData);
         } else {
             resultList.add(extractedValue);

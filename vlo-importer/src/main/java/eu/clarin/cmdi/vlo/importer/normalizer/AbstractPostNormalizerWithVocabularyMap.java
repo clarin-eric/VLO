@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer.correction;
+package eu.clarin.cmdi.vlo.importer.normalizer;
 
 import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -27,16 +27,16 @@ import javax.xml.bind.JAXBException;
  * @author dostojic
  * 
  */
-public abstract class AbstractPostCorrectionWithVocabularyMap extends AbstractPostCorrection implements NormalizationService {
+public abstract class AbstractPostNormalizerWithVocabularyMap extends AbstractPostNormalizer implements NormalizationService {
 
-    private final MappingDefinitionResolver mappingDefinitionResolver = new MappingDefinitionResolver(AbstractPostCorrectionWithVocabularyMap.class);
+    private final MappingDefinitionResolver mappingDefinitionResolver = new MappingDefinitionResolver(AbstractPostNormalizerWithVocabularyMap.class);
 
     private NormalizationVocabulary vocabulary;
 
     //caches mappings to prevent reading the file each time (according to #68)
     private static final Map<String, VariantsMap> MAPPING_CACHE = new ConcurrentHashMap<String, VariantsMap>();
 
-    public AbstractPostCorrectionWithVocabularyMap(VloConfig config) {
+    public AbstractPostNormalizerWithVocabularyMap(VloConfig config) {
         super(config);
     }
 
@@ -97,7 +97,7 @@ public abstract class AbstractPostCorrectionWithVocabularyMap extends AbstractPo
     }
 
     // for debug
-    public void printMap(AbstractPostCorrectionWithVocabularyMap processor) {
+    public void printMap(AbstractPostNormalizerWithVocabularyMap processor) {
         LOG.info("map contains {} entries", processor.vocabulary.getEntries().size());
         for (VocabularyEntry entry : processor.vocabulary.getEntries()) {
             LOG.info(entry.toString());

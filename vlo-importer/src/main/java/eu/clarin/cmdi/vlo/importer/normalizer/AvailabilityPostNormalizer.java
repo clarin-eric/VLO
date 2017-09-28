@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer.correction;
+package eu.clarin.cmdi.vlo.importer.normalizer;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
@@ -11,9 +11,9 @@ import java.util.List;
  *
  * @author teckart
  */
-public class AvailabilityPostCorrection extends AbstractPostCorrectionWithVocabularyMap {
+public class AvailabilityPostNormalizer extends AbstractPostNormalizerWithVocabularyMap {
 
-    public AvailabilityPostCorrection(VloConfig config) {
+    public AvailabilityPostNormalizer(VloConfig config) {
         super(config);
     }
 
