@@ -39,7 +39,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, IMDI_PROFILE_ID, true);
 
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(21, facets.size());
+        assertEquals(23, facets.size());
 
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
@@ -175,6 +175,10 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
                 mapping.getFallbackPatterns().get(0).getPattern());
         assertEquals(3, mapping.getFallbackPatterns().size());
         mapping = facets.get(index++);
+        
+        mapping = facets.get(index++);
+        
+        mapping = facets.get(index++);
 
         // test license facet mapping
         assertEquals(FacetConstants.FIELD_LICENSE, mapping.getName());
@@ -191,7 +195,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, OLAC_PROFILE_ID, true);
 
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(19, facets.size());
+        assertEquals(23, facets.size());
 
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
@@ -232,6 +236,8 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
         assertEquals("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:created/text()",
                 mapping.getPatterns().get(0).getPattern());
         mapping = facets.get(index++);
+        
+        mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_COUNTRY, mapping.getName());
         assertEquals(0, mapping.getPatterns().size());
@@ -262,6 +268,8 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
                 mapping.getFallbackPatterns().get(0).getPattern());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:mods/cmdp:genre/text()",
                 mapping.getFallbackPatterns().get(1).getPattern());
+        mapping = facets.get(index++);
+        
         mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_SUBJECT, mapping.getName());
@@ -305,6 +313,9 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
                 mapping.getFallbackPatterns().get(0).getPattern());
         assertEquals(3, mapping.getFallbackPatterns().size());
         mapping = facets.get(index++);
+        
+        mapping = facets.get(index++);
+        mapping = facets.get(index++);
 
         // test license facet mapping
         assertEquals(FacetConstants.FIELD_LICENSE, mapping.getName());
@@ -321,7 +332,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, LRT_PROFILE_ID, true);
 
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(19, facets.size());
+        assertEquals(23, facets.size());
 
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
@@ -367,6 +378,8 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
         assertEquals("/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtServiceDetails/cmdp:Date/text()",
                 mapping.getPatterns().get(2).getPattern());
         mapping = facets.get(index++);
+        
+        mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_COUNTRY, mapping.getName());
         assertEquals(2, mapping.getPatterns().size());
@@ -397,6 +410,8 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
         assertEquals(FacetConstants.FIELD_GENRE, mapping.getName());
         assertEquals(4, mapping.getFallbackPatterns().size());
         mapping = facets.get(index++);
+        
+        mapping = facets.get(index++);
 
         assertEquals(FacetConstants.FIELD_SUBJECT, mapping.getName());
         assertEquals(8, mapping.getFallbackPatterns().size());
@@ -415,6 +430,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
         assertEquals(3, mapping.getFallbackPatterns().size());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:ResourceType/text()",
                 mapping.getFallbackPatterns().get(0).getPattern());
+        mapping = facets.get(index++);
         mapping = facets.get(index++);
 
         assertEquals("/cmd:CMD/cmd:Header/cmd:MdCollectionDisplayName/text()",
@@ -439,6 +455,8 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
         assertEquals("/cmd:CMD/cmd:Components/cmdp:mods/cmdp:classification/text()",
                 mapping.getFallbackPatterns().get(0).getPattern());
 
+        mapping = facets.get(index++);
+        
         mapping = facets.get(index++);
         // test license type facet mapping
         assertEquals(FacetConstants.FIELD_LICENSE_TYPE, mapping.getName());
@@ -512,7 +530,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, TEIHEADER_PROFILE_ID, true);
         List<FacetConfiguration> facets = facetMapping.getFacets();
 
-        FacetConfiguration facet = facets.get(17);
+        FacetConfiguration facet = facets.get(20);
         assertEquals(FacetConstants.FIELD_AVAILABILITY, facet.getName());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:publicationStmt/cmdp:availability/@status", facet.getPatterns().get(0).getPattern());
     }
@@ -523,7 +541,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, CLAVAS_PROFILE_ID, true);
         List<FacetConfiguration> facets = facetMapping.getFacets();
 
-        FacetConfiguration facet = facets.get(7);
+        FacetConfiguration facet = facets.get(8);
         assertEquals(FacetConstants.FIELD_LANGUAGE_CODE, facet.getName());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:TestCLAVAS/cmdp:ISO639/cmdp:iso-639-3-code/text()", facet.getPatterns().get(0).getPattern());
         assertEquals("http://hdl.handle.net/11459/CLAVAS_810f8d2a-6723-3ba6-2e57-41d6d3844816", facet.getPatterns().get(0).getVocabulary().getURI().toString());

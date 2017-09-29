@@ -209,22 +209,30 @@ public class FacetMappingFactory {
                 }
                 config.setPatterns(new ArrayList<>(linkedHashSet));
                 config.setFallbackPatterns(facetConcept.getPatterns());
+
 //                config.setDerivedFacets(facetConcept.getDerivedFacets());
                 
                 
                 
 
-                if (!config.getPatterns().isEmpty() || !config.getFallbackPatterns().isEmpty()) {
+/*                if (!config.getPatterns().isEmpty() || !config.getFallbackPatterns().isEmpty()) {
                     result.addFacet(config);
-                }
+                }*/
+                result.addFacet(config);
             }
             
             //now where all FacetConfigurations are created we can build references for derived facets
+            FacetConfiguration derivedFacet;
+            
             for (FacetConcept facetConcept : conceptMapping.getFacetConcepts()) {
             	FacetConfiguration fc = result.getFacetConfiguration(facetConcept.getName());
             	
-            	for(String derivedFacet : facetConcept.getDerivedFacets()){
-            		fc.addDerivedFacet(result.getFacetConfiguration(derivedFacet));
+            	for(String derivedFacetName : facetConcept.getDerivedFacets()){
+            		if((derivedFacet = result.getFacetConfiguration(derivedFacetName)) == null) {
+            			LOG.warn("derived facet " + derivedFacetName + " can't be processed since there is NO valid facetConcept defined for this facet");
+            		}
+            		else
+            			fc.addDerivedFacet(derivedFacet);
             	}
             }
         //... and crossfacets

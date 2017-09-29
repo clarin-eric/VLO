@@ -14,12 +14,13 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  */
 public class CFMHandler extends DefaultHandler {
-	private final static Logger LOG = LoggerFactory.getLogger(CFMHandler.class);
+	private final Logger LOG; 
 	private FacetMapping mapping;
 	private FacetConfiguration orginFacet;
 
 	public CFMHandler(FacetMapping mapping) {
 		super();
+		this.LOG = LoggerFactory.getLogger(this.getClass());
 		this.mapping = mapping;
 	}
 
@@ -34,7 +35,7 @@ public class CFMHandler extends DefaultHandler {
 		if("origin-facet".equals(qName)){
 			this.orginFacet = this.mapping.getFacetConfiguration(attributes.getValue("name"));
 			if(this.orginFacet == null)
-				LOG.error("no facet definition found for orgin-facet " + attributes.getValue("name"));
+				LOG.warn("origin facet " + attributes.getValue("name") + " can't be processed since there is NO valid facetConcept defined for this facet");
 			return;
 		}	
 		else if(this.orginFacet != null && "condition".equals(qName)){
@@ -43,11 +44,11 @@ public class CFMHandler extends DefaultHandler {
 		}
 		else if(this.orginFacet != null && "cross-facet".equals(qName)){
 
-			FacetConfiguration crossFacet = this.mapping.getFacetConfiguration(attributes.getValue("name"));
-			this.orginFacet.getConditions().get(this.orginFacet.getConditions().size() -1).addFacetValuePair(crossFacet, attributes.getValue("setvalue"));;
-
-
+			FacetConfiguration crossFacet;
+			if((crossFacet = this.mapping.getFacetConfiguration(attributes.getValue("name"))) == null)
+				LOG.warn("cross facet " + attributes.getValue("name") + " can't be processed since there is NO valid facetConcept defined for this facet");
+			else
+				this.orginFacet.getConditions().get(this.orginFacet.getConditions().size() -1).addFacetValuePair(crossFacet, attributes.getValue("setvalue"));;
 		}
-		
 	}
 }
