@@ -4,21 +4,29 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
 /**
  * Once created contains the information about the facets and such. Just a
  * container for some information, doesn't do processing.
  */
 public class FacetConfiguration {
+	
+	private FacetMapping mapping;
 
     private String name;
     private boolean caseInsensitive = false;
     private List<Pattern> patterns = new ArrayList<>();
     private List<Pattern> fallbackPatterns = new ArrayList<>();
-    private List<String> derivedFacets = new ArrayList<String>();
+    private List<FacetConfiguration> derivedFacets = new ArrayList<FacetConfiguration>();
+    private List<CFMCondition> conditions = new ArrayList<CFMCondition>();
     private boolean allowMultipleValues = true;
     // allow multiple values for the same XPath, even if allowMultipleValues == false
     // (for example for CMD elements with multilingual == yes)
     private boolean multilingual = false;
+    
+    public FacetConfiguration(FacetMapping mapping){
+    	this.mapping = mapping;
+    }
 
     public void setCaseInsensitive(boolean caseValue) {
         this.caseInsensitive = caseValue;
@@ -62,6 +70,14 @@ public class FacetConfiguration {
     public String getName() {
         return name;
     }
+    
+    public List<CFMCondition> getConditions(){
+    	return this.conditions;
+    }
+    
+    public void addCondition(CFMCondition condition){
+    	this.conditions.add(condition);
+    }
 
     @Override
     public String toString() {
@@ -84,12 +100,20 @@ public class FacetConfiguration {
         this.multilingual = multilingual;
     }
 
-    public List<String> getDerivedFacets() {
+    public List<FacetConfiguration> getDerivedFacets() {
         return derivedFacets;
     }
 
-    public void setDerivedFacets(List<String> derivedFacets) {
-        this.derivedFacets = derivedFacets;
+    public void addDerivedFacet(FacetConfiguration derivedFacet) {
+        this.derivedFacets.add(derivedFacet);
+    }
+    
+    public FacetMapping getFacetMapping(){
+    	return this.mapping;
+    }
+    
+    public void setFacetMapping(FacetMapping mapping){
+    	this.mapping = mapping;
     }
 
 }

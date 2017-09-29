@@ -18,5 +18,9 @@ public class FacetMapping {
     public void addFacet(FacetConfiguration facetConfiguration) {
         facets.add(facetConfiguration);
     }
+    
+    public FacetConfiguration getFacetConfiguration(String facetName){
+    	return this.facets.stream().filter(fc -> fc.getName().equalsIgnoreCase(facetName)).findFirst().orElse(null);
+    }
 
 }

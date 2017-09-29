@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<crossfacet-mappings>
+	<origin-facet name="collection">
+		<condition ifvalue="CollectionName">
+			<cross-facet name="subject" setvalue="blabla" />
+			<cross-facet name="name" setvalue="cfmvalue" />
+			<cross-facet name="temporalCoverage" setvalue="cfmvalue" />
+		</condition>
+	</origin-facet>
+</crossfacet-mappings>
