@@ -65,6 +65,8 @@
     <licenseURIMapUrl>${vloconfig.mappingFilesLocation}LicenseURIMap.xml</licenseURIMapUrl> <!-- bundled resource: /uniform-maps/LicenseURIMap.xml -->
 
     <licenseTypeMapUrl>${vloconfig.mappingFilesLocation}LicenseTypeMap.xml</licenseTypeMapUrl> <!-- bundled resource: /uniform-maps/LicenseAvailabilityMap.xml -->
+    
+    <crossFacetMapUrl>${vloconfig.mappingFilesLocation}CrossFacetMap.xml</crossFacetMapUrl> <!-- bundled resource: /uniform-maps/CrossFacetMap.xml -->
             
     <!-- Fields shown as facets on the search page -->
     <facetFields>        
@@ -206,4 +208,6 @@
     <showResultScores>false</showResultScores>
     
     <processHierarchies>true</processHierarchies>
+    
+    <useCrossMapping>false</useCrossMapping>
 </VloConfig>

@@ -1,6 +1,9 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.importer.processor.CMDIDataProcessor;
+import eu.clarin.cmdi.vlo.importer.processor.CMDIParserVTDXML;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;

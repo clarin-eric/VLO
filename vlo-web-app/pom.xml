@@ -6,19 +6,19 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.2.1</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-web-app</artifactId>
     <packaging>war</packaging>
-    <version>4.2.1</version>
+    <version>4.3-SNAPSHOT</version>
     <name>VLO Web Application</name>
     <description></description>
 
     <properties>
-        <wicket.version>7.7.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
+        <wicket.version>7.8.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
         <spring.version>4.3.8.RELEASE</spring.version>
         <jetty.version>8.1.17.v20150415</jetty.version>
         <clarin-basestyle.version>0.2.0</clarin-basestyle.version>
@@ -162,7 +162,7 @@
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-core</artifactId>
-            <version>0.10.12</version>
+            <version>0.10.16</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.wicket</groupId>
@@ -220,8 +220,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.5.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <encoding>UTF-8</encoding>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>

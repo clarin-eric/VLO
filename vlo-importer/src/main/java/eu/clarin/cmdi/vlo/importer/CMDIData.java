@@ -61,6 +61,18 @@ public class CMDIData {
             handleDocField(name, value, caseInsensitive);
         }
     }
+    
+    public void replaceDocField(String name, String value, boolean caseInsensitive){
+    	if(this.doc != null){
+    		this.doc.removeField(name);
+    	}
+    	this.addDocField(name, value, caseInsensitive);
+    }
+    
+    public void addDocFieldIfNull(String name, String value, boolean caseInsensitive){
+    	if(this.getDocField(name) == null)
+    		this.addDocField(name, value, caseInsensitive);
+    }
 
     /**
      * Sets a field in the doc to a certain value. Before adding checks for

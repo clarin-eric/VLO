@@ -30,13 +30,12 @@ import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.AjaxIndicatingForm;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueOrderSelector;
-import eu.clarin.cmdi.vlo.wicket.model.BridgeModel;
-import eu.clarin.cmdi.vlo.wicket.model.BridgeOuterModel;
 import eu.clarin.cmdi.vlo.wicket.model.SelectionModel;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -47,9 +46,9 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -76,6 +75,19 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
     private FieldValueConverterProvider fieldValueConverterProvider;
     @SpringBean
     private PiwikConfig piwikConfig;
+
+    private final static ImmutableList<Character> CHARACTER_OPTIONS_LIST = ImmutableList.of(
+            NameAndCountFieldValuesFilter.ANY_CHARACTER_SYMBOL,
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            NameAndCountFieldValuesFilter.NON_ALPHABETICAL_CHARACTER_SYMBOL
+    );
+
+    private final static ImmutableList<Integer> OCCURENCES_OPTIONS_LIST = ImmutableList.of(
+            0, 2, 5, 10, 100, 1000
+    );
+
+    private static final StartsWithOptionsRenderer STARTS_WITH_OPTIONS_RENDERER = new StartsWithOptionsRenderer();
+    private static final OccurenceOptionsRenderer OCCURENCE_OPTIONS_RENDERER = new OccurenceOptionsRenderer();
 
     private final FacetFieldValuesProvider valuesProvider;
     private final WebMarkupContainer valuesContainer;
@@ -254,6 +266,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         options.add(filterField);
 
         addOccurenceOptions(options);
+        addStartsWithOptions(options);
 
         return options;
     }
@@ -261,48 +274,49 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
     /**
      * Creates form controls for minimal occurrences options.
      *
-     * This requires a 'bridge' construct to combine a checkbox to
-     * enable/disable filtering by occurence altogether (which actually sets the
-     * min occurence to 0) and a dropdown for the minimal number of occurences,
-     * which only gets applied if the checkbox is ticket.
-     *
-     * The checkbox opens/closes a bridge between the minimal occurences in the
-     * filter model and the model that holds the selected option (modulated via
-     * the dropdown).
-     *
      * @param options options form
      */
     private void addOccurenceOptions(final Form options) {
+        // Model that represents the *selected* number of minimal occurences
+        final IModel<Integer> minOccurenceSelectModel = new PropertyModel<>(filterModel, "minimalOccurence");
 
-        // Model that holds the actual number of occurences filtered on
-        final IModel<Integer> minOccurenceModel = new PropertyModel<>(filterModel, "minimalOccurence");
-        // Model that represents the filter state ('bridge' between filter and selection)
-        final IModel<Boolean> bridgeStateModel = Model.of(false);
-        // Model that represents the *selected* number of minimal occurences (passes it on if not decoupled)
-        final IModel<Integer> minOccurenceSelectModel = new BridgeOuterModel<>(minOccurenceModel, bridgeStateModel, 2);
-        // Model that links the actual filter, selection and bridge (object opens and closes it)
-        final IModel<Boolean> minOccurenceCheckBoxModel = new BridgeModel<>(minOccurenceModel, minOccurenceSelectModel, bridgeStateModel, 0);
+        // Dropdown to select a (non) value
+        final Component minOccurence
+                = new DropDownChoice<>("minOccurences", minOccurenceSelectModel, OCCURENCES_OPTIONS_LIST, OCCURENCE_OPTIONS_RENDERER)
+                        .setNullValid(true)
+                        .add(new UpdateOptionsFormBehavior(options) {
 
-        // checkbox to open and close the 'bridge'
-        final CheckBox minOccurenceToggle = new CheckBox("minOccurrencesToggle", minOccurenceCheckBoxModel);
-        minOccurenceToggle.add(new UpdateOptionsFormBehavior(options));
-        options.add(minOccurenceToggle);
+                            @Override
+                            protected void onUpdate(AjaxRequestTarget target) {
+                                super.onUpdate(target);
+                            }
 
-        // Dropdown to select a value (which is applied to the filter if the 'bridge' is open)
-        final DropDownChoice<Integer> minOccurence = new DropDownChoice<>("minOccurences", minOccurenceSelectModel, ImmutableList.of(2, 5, 10, 100, 1000));
-        minOccurence.add(new UpdateOptionsFormBehavior(options) {
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                super.onUpdate(target);
-                // on change, apply to inner model ('open bridge')
-                if (!minOccurenceCheckBoxModel.getObject()) {
-                    minOccurenceCheckBoxModel.setObject(true);
-                }
-            }
-
-        });
+                        });
         options.add(minOccurence);
+    }
+
+    /**
+     * Creates form controls for filtering by first character.
+     *
+     * @param form options form
+     */
+    private void addStartsWithOptions(final Form form) {
+        // Model that represents the *selected* number of minimal occurences (passes it on if not decoupled)
+        final IModel<Character> startsWithModel = new PropertyModel<>(filterModel, "firstCharacter");
+
+        // Dropdown to select a value
+        final Component startsWith
+                = new DropDownChoice<>("startsWith", startsWithModel, CHARACTER_OPTIONS_LIST, STARTS_WITH_OPTIONS_RENDERER)
+                        .setNullValid(true)
+                        .add(new UpdateOptionsFormBehavior(form) {
+
+                            @Override
+                            protected void onUpdate(AjaxRequestTarget target) {
+                                super.onUpdate(target);
+                            }
+
+                        });
+        form.add(startsWith);
     }
 
     private class UpdateOptionsFormBehavior extends OnChangeAjaxBehavior {
@@ -351,6 +365,65 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         protected void onConfigure() {
             super.onConfigure();
             setVisible(valuesView.getPageCount() > 1);
+        }
+    }
+
+    private static class StartsWithOptionsRenderer implements IChoiceRenderer<Character> {
+
+        @Override
+        public Object getDisplayValue(Character object) {
+            switch (object) {
+                case NameAndCountFieldValuesFilter.ANY_CHARACTER_SYMBOL:
+                    return "Any character";
+                case NameAndCountFieldValuesFilter.NON_ALPHABETICAL_CHARACTER_SYMBOL:
+                    return "Other character";
+                default:
+                    return Character.toString(object);
+            }
+        }
+
+        @Override
+        public String getIdValue(Character object, int index) {
+            if (object == null) {
+                return "";
+            } else {
+                return Character.toString(object);
+            }
+        }
+
+        @Override
+        public Character getObject(String id, IModel<? extends List<? extends Character>> choices) {
+            if (id.isEmpty()) {
+                return null;
+            } else {
+                return id.charAt(0);
+            }
+        }
+    }
+
+    private static class OccurenceOptionsRenderer implements IChoiceRenderer<Integer> {
+
+        @Override
+        public Object getDisplayValue(Integer object) {
+            if (Integer.valueOf(0).equals(object)) {
+                return "Any value count";
+            } else {
+                return String.format("At least %d occurrences", object);
+            }
+        }
+
+        @Override
+        public String getIdValue(Integer object, int index) {
+            return object.toString();
+        }
+
+        @Override
+        public Integer getObject(String id, IModel<? extends List<? extends Integer>> choices) {
+            if (id.isEmpty()) {
+                return null;
+            } else {
+                return Integer.valueOf(id);
+            }
         }
     }
 

@@ -12,8 +12,11 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.AcceptableContext;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.RejectableContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
+
 
 import java.io.File;
 import java.io.FileWriter;
@@ -33,6 +36,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 /**
  * Creates facet-mappings (xpaths) from a configuration. As they say "this is
  * where the magic happens". Also does some caching.
@@ -40,6 +47,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class FacetMappingFactory {
 
     private final static Logger LOG = LoggerFactory.getLogger(FacetMappingFactory.class);
+    
 
     private final ConcurrentHashMap<String, FacetMapping> mapping = new ConcurrentHashMap<>();
 
@@ -52,6 +60,7 @@ public class FacetMappingFactory {
     public FacetMappingFactory(VloConfig config, VLOMarshaller marshaller) {
         this.config = config;
         this.marshaller = marshaller;
+        
     }
 
     /**
@@ -110,7 +119,7 @@ public class FacetMappingFactory {
             // Below we put the stuff we found into the configuration class.
             for (FacetConcept facetConcept : conceptMapping.getFacetConcepts()) {
                 LOG.trace("-- Facet concept {}", facetConcept);
-                FacetConfiguration config = new FacetConfiguration();
+                FacetConfiguration config = new FacetConfiguration(result);
                 List<Pattern> xpaths = new ArrayList<>();
                 handleId(xpaths, facetConcept);
                 for (String concept : facetConcept.getConcepts()) {
@@ -200,16 +209,62 @@ public class FacetMappingFactory {
                 }
                 config.setPatterns(new ArrayList<>(linkedHashSet));
                 config.setFallbackPatterns(facetConcept.getPatterns());
-                config.setDerivedFacets(facetConcept.getDerivedFacets());
 
-                if (!config.getPatterns().isEmpty() || !config.getFallbackPatterns().isEmpty()) {
+//                config.setDerivedFacets(facetConcept.getDerivedFacets());
+                
+                
+                
+
+/*                if (!config.getPatterns().isEmpty() || !config.getFallbackPatterns().isEmpty()) {
                     result.addFacet(config);
-                }
+                }*/
+                result.addFacet(config);
             }
-        } catch (NavException | URISyntaxException e) {
+            
+            //now where all FacetConfigurations are created we can build references for derived facets
+            FacetConfiguration derivedFacet;
+            
+            for (FacetConcept facetConcept : conceptMapping.getFacetConcepts()) {
+            	FacetConfiguration fc = result.getFacetConfiguration(facetConcept.getName());
+            	
+            	for(String derivedFacetName : facetConcept.getDerivedFacets()){
+            		if((derivedFacet = result.getFacetConfiguration(derivedFacetName)) == null) {
+            			LOG.warn("derived facet " + derivedFacetName + " can't be processed since there is NO valid facetConcept defined for this facet");
+            		}
+            		else
+            			fc.addDerivedFacet(derivedFacet);
+            	}
+            }
+        //... and crossfacets
+            if(this.config.isUseCrossMapping()){
+            	setCrossMapping(result);
+            }
+            
+        } 
+        catch (NavException | URISyntaxException e) {
             LOG.error("Error creating facetMapping from xsd: {}", xsd, e);
         }
         return result;
+    }
+    
+    
+    private void setCrossMapping(FacetMapping mapping){
+
+    		try {
+				SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+  	
+				parser.parse(config.getCrossFacetMapUrl(), new CFMHandler(mapping));
+			} catch (ParserConfigurationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
     }
 
     /**

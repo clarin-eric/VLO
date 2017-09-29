@@ -95,8 +95,8 @@ public class Vocabulary {
         return DEFAULT_LANG;
     }
     
-    public ImmutablePair getValue(URI item) throws URISyntaxException, XPathParseException, XPathEvalException, NavException, UnsupportedEncodingException {
-        ImmutablePair res = null;
+    public ImmutablePair<String,String> getValue(URI item) throws URISyntaxException, XPathParseException, XPathEvalException, NavException, UnsupportedEncodingException {
+        ImmutablePair<String,String> res = null;
         String cst = (hasURI()?String.format("&conceptScheme=%s",URLEncoder.encode(this.getURI().toString(),"UTF-8")):"");
         URI lookup = new URI(String.format(getEndpoint()+"?fl=%s&q=uri:%s%s",this.getProperty(),URLEncoder.encode(item.toString().replace(":","\\:"),"UTF-8"),cst));
         VTDGen g = new VTDGen();
@@ -112,7 +112,7 @@ public class Vocabulary {
             int i = p.evalXPath();
             if (i != -1) {
                 final String v = n.toString(i);
-                res = new ImmutablePair<>(v,(this.hasLanguage()?this.getLanguage():null));
+                res = new ImmutablePair<String,String>(v,(this.hasLanguage()?this.getLanguage():null));
             }
         } else
             LOG.warn("Cannot lookup value ConceptLink: " + lookup + ".");

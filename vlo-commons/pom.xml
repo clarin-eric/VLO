@@ -5,11 +5,11 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.2.1</version>
+        <version>4.3-SNAPSHOT</version>
     </parent>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-commons</artifactId>
-    <version>4.2.1</version>
+    <version>4.3-SNAPSHOT</version>
     <name>VLO Commons</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -20,7 +20,7 @@
         <vloconfig.maxDaysInSolr>0</vloconfig.maxDaysInSolr>
         <vloconfig.homeUrl>http://www.clarin.eu/vlo</vloconfig.homeUrl>
         <vloconfig.helpUrl>http://www.clarin.eu/vlo</vloconfig.helpUrl>
-        <vloconfig.fileProcessingThreads>-1</vloconfig.fileProcessingThreads>
+        <vloconfig.fileProcessingThreads>2</vloconfig.fileProcessingThreads>
         <vloconfig.solrThreads>2</vloconfig.solrThreads>
     </properties>
     
@@ -95,6 +95,7 @@
                 <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
                 <vloconfig.facetConceptsFileLocation>file:/srv/VLO-mapping/mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
                 <!-- File processing threads; 0 or lower lets JVM determine based on number of cores present -->
+                <vloconfig.fileProcessingThreads>-1</vloconfig.fileProcessingThreads>
                 <vloconfig.solrThreads>2</vloconfig.solrThreads>
             </properties>
         </profile>
@@ -110,7 +111,7 @@
                 <vloconfig.dataRootsFile>dataroots-production.xml</vloconfig.dataRootsFile>
                 <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
                 <vloconfig.facetConceptsFileLocation>file:/srv/VLO-mapping/mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
-                <vloconfig.solrThreads>4</vloconfig.solrThreads>
+                <vloconfig.solrThreads>4</vloconfig.solrThreads> <!-- TODO: assess performance -->
             </properties>
         </profile>
         

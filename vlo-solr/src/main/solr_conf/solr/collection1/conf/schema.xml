@@ -413,26 +413,26 @@
  <fields>
    <field name="id" type="string" indexed="true" stored="true" required="true"/>
    <field name="collection" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="name" type="text" indexed="true" stored="true" multiValued="true"/>
+   <field name="name" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="projectName" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="continent" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="country" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="languageCode" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="availability" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="licenseType" type="string" indexed="true" stored="true" multiValued="true" default="UNSPECIFIED"/>
+   <field name="continent" type="string" indexed="true" stored="true" multiValued="true" termVectors="true" />
+   <field name="country" type="string" indexed="true" stored="true" multiValued="true" termVectors="true" />
+   <field name="languageCode" type="string" indexed="true" stored="true" multiValued="true" termVectors="true"/>
+   <field name="availability" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="licenseType" type="string" indexed="true" stored="true" multiValued="true" default="UNSPECIFIED" termVectors="true"/>
    <field name="license" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="accessInfo" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="organisation"  type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="genre"  type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="modality"  type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="subject"  type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="description" type="text" indexed="true" stored="true" multiValued="true" />
-   <field name="resourceClass" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="format" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="organisation"  type="string" indexed="true" stored="true" multiValued="true" termVectors="true" />
+   <field name="genre"  type="string" indexed="true" stored="true" multiValued="true" termVectors="true" />
+   <field name="modality"  type="string" indexed="true" stored="true" multiValued="true" termVectors="true" />
+   <field name="subject"  type="string" indexed="true" stored="true" multiValued="true" termVectors="true" />
+   <field name="description" type="text" indexed="true" stored="true" multiValued="true" termVectors="true" />
+   <field name="resourceClass" type="string" indexed="true" stored="true" multiValued="true" termVectors="true" />
+   <field name="format" type="string" indexed="true" stored="true" multiValued="true" termVectors="true" />
    <field name="dataProvider" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="nationalProject" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="keywords" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="temporalCoverage" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="keywords" type="string" indexed="true" stored="true" multiValued="true" termVectors="true" />
+   <field name="temporalCoverage" type="string" indexed="true" stored="true" multiValued="true" termVectors="true" />
    <field name="lifeCycleStatus" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="distributionType" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="rightsHolder" type="string" indexed="true" stored="true" multiValued="true"/>

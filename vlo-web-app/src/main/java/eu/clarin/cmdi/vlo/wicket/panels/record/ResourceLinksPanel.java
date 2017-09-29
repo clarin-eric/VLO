@@ -16,17 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
+import eu.clarin.cmdi.vlo.wicket.components.LanguageResourceSwitchboardLink;
 import eu.clarin.cmdi.vlo.wicket.model.ResolvingLinkModel;
 import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.LanguageCodeUtils;
-import eu.clarin.cmdi.vlo.LanguageCodeUtils.LanguageInfo;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
-import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
@@ -38,9 +35,8 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import static eu.clarin.cmdi.vlo.wicket.pages.RecordPage.HIERARCHY_SECTION;
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown;
+import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown.DropdownMenuItem;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -48,6 +44,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -64,7 +61,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.ListModel;
-import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,11 +78,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
     private static final int ITEMS_PER_PAGE = 12;
 
     @SpringBean
-    private VloConfig vloConfig;
-    @SpringBean
     private PiwikConfig piwikConfig;
-    @SpringBean
-    private LanguageCodeUtils languageCodeUtils;
     @SpringBean(name = "resourceStringConverter")
     private ResourceStringConverter resourceStringConverter;
     @SpringBean(name = "resolvingResourceStringConverter")
@@ -259,36 +251,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         }
 
         protected Component createOptionsDropdown(final IModel<String> linkModel, final ResourceInfoModel resourceInfoModel) {
-            final ArrayList options = Lists.newArrayList(new BootstrapDropdown.DropdownMenuItem("Process with Language Resource Switchboard", "glyphicon glyphicon-open-file") {
-                @Override
-                protected Link getLink(String id) {
-                    final Link link = new Link(id) {
-                        @Override
-                        public void onClick() {
-                            throw new RedirectToUrlException(getLanguageSwitchboardUrl(linkModel, resourceInfoModel.getObject()));
-                        }
-
-                    };
-                    if (piwikConfig.isEnabled()) {
-                        final AjaxPiwikTrackingBehavior.EventTrackingBehavior eventBehavior = new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_LRS, PiwikEventConstants.PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE) {
-                            @Override
-                            protected String getName(AjaxRequestTarget target) {
-                                return "ResourceDropdown";
-                            }
-
-                            @Override
-                            protected String getValue(AjaxRequestTarget target) {
-                                return resourceInfoModel.getObject().getHref();
-                            }
-                            
-                        };
-                        eventBehavior.setAsync(false);
-                        link.add(eventBehavior);
-                    }
-                    return link;
-                }
-            }
-            );
+            final List<DropdownMenuItem> options = createDropDownOptions(linkModel, resourceInfoModel);
 
             return new BootstrapDropdown("dropdown", new ListModel(options)) {
                 @Override
@@ -309,36 +272,47 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             };
         }
 
-        private String getLanguageSwitchboardUrl(IModel<String> linkModel, ResourceInfo resourceInfo) {
-            try {
-                //create link for this resource to the language resource switchboard
-                final String href = linkModel.getObject();
-                final String mimeType = resourceInfo.getMimeType();
-                final String languageCode = getResourceLanguageCode();
-                return String.format("%s#/vlo/%s/%s/%s",
-                        vloConfig.getLrSwitchboardBaseUrl(),
-                        URLEncoder.encode(href, "UTF-8"),
-                        URLEncoder.encode(mimeType, "UTF-8"), languageCode);
-            } catch (UnsupportedEncodingException ex) {
-                logger.error("Error while creating switchboard link", ex);
-                return null;
-            }
-        }
+        private List<DropdownMenuItem> createDropDownOptions(final IModel<String> linkModel, final ResourceInfoModel resourceInfoModel) {
+            return Lists.newArrayList(new DropdownMenuItem("Process with Language Resource Switchboard", "glyphicon glyphicon-open-file") {
+                @Override
+                protected Link getLink(String id) {
+                    final IModel<Collection<Object>> languageValuesModel
+                            = new SolrFieldModel<>(ResourceLinksPanel.this.getModel(), FacetConstants.FIELD_LANGUAGE_CODE);
 
-        private String getResourceLanguageCode() {
-            final Collection<Object> languageValues = ResourceLinksPanel.this.getModelObject().getFieldValues(FacetConstants.FIELD_LANGUAGE_CODE);
-            if (languageValues != null && languageValues.size() == 1) {
-                //if not exactly one language, so cannot be determined for this resource
-                final String languageFieldValue = languageValues.iterator().next().toString();
-                final LanguageInfo languageInfo = languageCodeUtils.decodeLanguageCodeString(languageFieldValue);
-                if (languageInfo.getType() == LanguageInfo.Type.CODE) {
-                    //LRS only accepts language codes
-                    return languageInfo.getValue().toLowerCase();
+                    final Link link = new LanguageResourceSwitchboardLink(id, linkModel, languageValuesModel, resourceInfoModel);
+
+                    if (piwikConfig.isEnabled()) {
+                        link.add(createLrsActionTrackingBehavior(resourceInfoModel));
+                    }
+                    return link;
                 }
             }
-            //all other cases: no info
-            return "";
+            );
         }
+
+    }
+
+    private AjaxPiwikTrackingBehavior.EventTrackingBehavior createLrsActionTrackingBehavior(final ResourceInfoModel resourceInfoModel) {
+        final AjaxPiwikTrackingBehavior.EventTrackingBehavior eventBehavior = new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_LRS, PiwikEventConstants.PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE) {
+            @Override
+            protected String getName(AjaxRequestTarget target) {
+                return "ResourceDropdown";
+            }
+
+            @Override
+            protected String getValue(AjaxRequestTarget target) {
+                return resourceInfoModel.getObject().getHref();
+            }
+
+            @Override
+            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                attributes.setAsynchronous(false);
+                super.updateAjaxAttributes(attributes);
+            }
+
+        };
+        eventBehavior.setAsync(false);
+        return eventBehavior;
     }
 
     public static class EvenOddClassAppender extends AttributeAppender {

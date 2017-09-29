@@ -23,12 +23,15 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import java.util.List;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FixedSetFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
@@ -78,6 +81,8 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
     private FieldValueConverterProvider fieldValueConverterProvider;
     @SpringBean
     private VloConfig vloConfig;
+    @SpringBean
+    private PiwikConfig piwikConfig;
 
     private final FacetFieldsModel facetFieldsModel;
 
@@ -149,6 +154,10 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
             //checkbox
             final Component selector = createValueCheckbox("selector", valueModel.getObject());
             item.add(selector);
+
+            if (piwikConfig.isEnabled()) {
+                selector.add(new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_FACET, PiwikEventConstants.PIWIK_EVENT_ACTION_AVAILABILITY));
+            }
 
             //label
             item.add(new WebMarkupContainer("label")

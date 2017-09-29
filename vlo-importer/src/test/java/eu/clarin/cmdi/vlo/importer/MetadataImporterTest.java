@@ -2,9 +2,12 @@ package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.DataRoot;
+import eu.clarin.cmdi.vlo.importer.solr.SolrBridge;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -211,11 +214,15 @@ public class MetadataImporterTest extends ImporterTestcase {
     }
 
     private Object getValue(SolrInputDocument doc, String field) {
-        assertEquals(1, doc.getFieldValues(field).size());
-        return doc.getFieldValue(field);
+    	if(doc.getFieldValues(field) != null){
+	        assertEquals(1, doc.getFieldValues(field).size());
+	        return doc.getFieldValue(field);
+    	}
+    	else
+    		return null;
     }
 
-    private List<SolrInputDocument> importData(File rootFile) throws MalformedURLException {
+    private List<SolrInputDocument> importData(File rootFile) throws Exception {
         /*
          * Read configuration in ImporterTestCase.setup and change the setup to
          * suit the test.
@@ -292,7 +299,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         return solrBridge.getDocuments();
     }
 
-    private void modifyConfig(File rootFile) {
+    private void modifyConfig(File rootFile) throws URISyntaxException {
         DataRoot dataRoot = new DataRoot();
         dataRoot.setDeleteFirst(false); // cannot delete becanot using real solrServer
         dataRoot.setOriginName("testRoot");
@@ -301,6 +308,9 @@ public class MetadataImporterTest extends ImporterTestcase {
         dataRoot.setPrefix("http://example.com");
         config.setDataRoots(Collections.singletonList(dataRoot));
         config.setFacetConceptsFile(ImporterTestcase.getTestFacetConceptFilePath());
+        
+
+
     }
 
     private class DummySolrBridgeImpl implements SolrBridge {

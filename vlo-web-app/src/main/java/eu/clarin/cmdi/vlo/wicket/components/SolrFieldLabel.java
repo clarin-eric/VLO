@@ -62,9 +62,13 @@ public class SolrFieldLabel extends Label {
      * @param truncatePoint point to truncate if string is too long
      */
     public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, String nullFallback, int maxLength, int truncatePoint) {
+        this(id, documentModel, fieldName, nullFallback, maxLength, truncatePoint, false);
+    }
+
+    public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, String nullFallback, int maxLength, int truncatePoint, boolean forceSingleValue) {
         super(id, new NullFallbackModel(
                 new TruncatingStringModel(
-                        new SolrFieldStringModel(documentModel, fieldName), maxLength, truncatePoint), nullFallback));
+                        new SolrFieldStringModel(documentModel, fieldName, forceSingleValue), maxLength, truncatePoint), nullFallback));
     }
 
 }

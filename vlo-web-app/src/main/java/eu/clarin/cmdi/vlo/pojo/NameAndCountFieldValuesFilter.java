@@ -30,9 +30,13 @@ import org.apache.wicket.util.convert.IConverter;
  */
 public class NameAndCountFieldValuesFilter implements FieldValuesFilter, Serializable {
 
+    public static final char ANY_CHARACTER_SYMBOL = '*';
+    public static final char NON_ALPHABETICAL_CHARACTER_SYMBOL = '?';
+
     private String name;
+    private Character firstCharacter;
     private Pattern namePattern;
-    private int minimalOccurence;
+    private Integer minimalOccurence;
 
     public String getName() {
         return name;
@@ -47,7 +51,7 @@ public class NameAndCountFieldValuesFilter implements FieldValuesFilter, Seriali
         this.namePattern = createNamePattern(name);
     }
 
-    public int getMinimalOccurence() {
+    public Integer getMinimalOccurence() {
         return minimalOccurence;
     }
 
@@ -55,8 +59,16 @@ public class NameAndCountFieldValuesFilter implements FieldValuesFilter, Seriali
      *
      * @param minimalOccurence minimal number of occurrences matches should have
      */
-    public void setMinimalOccurence(int minimalOccurence) {
+    public void setMinimalOccurence(Integer minimalOccurence) {
         this.minimalOccurence = minimalOccurence;
+    }
+
+    public Character getFirstCharacter() {
+        return firstCharacter;
+    }
+
+    public void setFirstCharacter(Character firstCharacter) {
+        this.firstCharacter = firstCharacter;
     }
 
     /**
@@ -69,28 +81,52 @@ public class NameAndCountFieldValuesFilter implements FieldValuesFilter, Seriali
      */
     @Override
     public boolean matches(Count count, IConverter<String> converter) {
-        if (count.getCount() >= minimalOccurence) {
-            if (namePattern == null) {
-                // no pattern to compare to, always matches
+        if (minimalOccurence == null || matchesOccurrences(count)) {
+            if (firstCharacter == null && namePattern == null) {
                 return true;
             } else {
                 // convert value if converter is provided
-                final String value;
+                final String convertedValue;
                 if (converter == null) {
-                    value = count.getName();
+                    convertedValue = count.getName();
                 } else {
-                    value = converter.convertToString(count.getName(), null);
+                    convertedValue = converter.convertToString(count.getName(), null);
                 }
-                return namePattern.matcher(value).find();
+                if (firstCharacter == null || matchesFirstCharacter(convertedValue)) {
+                    return (namePattern == null || matchesName(convertedValue));
+                }
             }
+        }
+        // no match
+        return false;
+    }
+
+    private boolean matchesOccurrences(Count count) {
+        return count.getCount() >= minimalOccurence;
+    }
+
+    private boolean matchesFirstCharacter(String value) {
+        if (value.isEmpty()) {
+            return firstCharacter == null;
+        } else if (firstCharacter.equals(ANY_CHARACTER_SYMBOL)) {
+            return true;
         } else {
-            // too few occurences, no match
-            return false;
+            final Character valueFirstChar = value.charAt(0);
+            if (firstCharacter.equals(NON_ALPHABETICAL_CHARACTER_SYMBOL)) {
+                return !Character.isAlphabetic(valueFirstChar);
+            } else {
+                return Character.valueOf(Character.toUpperCase(firstCharacter)).equals(Character.toUpperCase(valueFirstChar));
+            }
         }
     }
 
+    private boolean matchesName(String value) {
+        return namePattern.matcher(value).find();
+    }
+
+    @Override
     public boolean isEmpty() {
-        return minimalOccurence == 0 && (name == null || name.isEmpty());
+        return (minimalOccurence == null || minimalOccurence == 0) && (name == null || name.isEmpty()) && firstCharacter == null;
     }
 
     private Pattern createNamePattern(String name) {

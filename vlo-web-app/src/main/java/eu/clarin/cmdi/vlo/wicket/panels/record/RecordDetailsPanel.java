@@ -89,6 +89,8 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
         );
         
         add(createSingleResourceInfo("resourceInfo"));
+        
+        add(new SimilarDocumentsPanel("similar", getModel()));
     }
     
     private Component createSingleResourceInfo(String id) {

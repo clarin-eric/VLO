@@ -75,6 +75,8 @@ public class VloConfig {
     private String licenseURIMapUrl;
 
     private String licenseTypeMapUrl;
+    
+    private String crossFacetMapUrl = "";
 
     private String countryComponentUrl = "";
 
@@ -83,6 +85,8 @@ public class VloConfig {
     private String language3LetterCodeComponentUrl = "";
 
     private String silToISO639CodesUrl = "";
+    
+
 
     // services
     private String federatedContentSearchUrl = "";
@@ -124,6 +128,8 @@ public class VloConfig {
     private int fileProcessingThreads = 2;
 
     private int solrThreads = 2;
+    
+    private boolean useCrossMapping = false;
 
     /**
      * A set of fields to be excluded from display<br><br>
@@ -1269,6 +1275,22 @@ public class VloConfig {
 
     public void setSolrThreads(int solrThreads) {
         this.solrThreads = solrThreads;
+    }
+    
+    public boolean isUseCrossMapping() {
+		return useCrossMapping;
+	}
+
+	public void setUseCrossMapping(boolean useCrossMapping) {
+		this.useCrossMapping = useCrossMapping;
+	}
+    
+    public String getCrossFacetMapUrl() {
+    	return this.crossFacetMapUrl;
+    }
+    
+    public void setCrossFacetMapUrl(String crossFacetMapUrl){
+    	this.crossFacetMapUrl = crossFacetMapUrl;
     }
 
 }

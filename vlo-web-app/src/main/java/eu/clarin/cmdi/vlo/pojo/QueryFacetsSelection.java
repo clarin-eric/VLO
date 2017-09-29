@@ -20,6 +20,7 @@ import com.google.common.collect.Maps;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -37,7 +38,7 @@ public class QueryFacetsSelection implements Serializable {
      * Creates an empty selection (no string, no facet values)
      */
     public QueryFacetsSelection() {
-        this(null, Maps.<String, FacetSelection>newHashMap());
+        this(null, new LinkedHashMap<String, FacetSelection>());
     }
 
     /**
@@ -46,7 +47,7 @@ public class QueryFacetsSelection implements Serializable {
      * @param query query string
      */
     public QueryFacetsSelection(String query) {
-        this(query, Maps.<String, FacetSelection>newHashMap());
+        this(query, new LinkedHashMap<String, FacetSelection>());
     }
 
     /**
@@ -67,7 +68,7 @@ public class QueryFacetsSelection implements Serializable {
     public QueryFacetsSelection(String query, Map<String, FacetSelection> selection) {
         this.queryString = query;
         if (selection == null) {
-            this.selection = new HashMap<String, FacetSelection>();
+            this.selection = new LinkedHashMap<>();
         } else {
             this.selection = selection;
         }
@@ -148,7 +149,7 @@ public class QueryFacetsSelection implements Serializable {
     }
 
     public QueryFacetsSelection getCopy() {
-        final Map<String, FacetSelection> selectionClone = new HashMap<String, FacetSelection>(selection.size());
+        final Map<String, FacetSelection> selectionClone = new LinkedHashMap<>(selection.size());
         for (Entry<String, FacetSelection> entry : selection.entrySet()) {
             selectionClone.put(entry.getKey(), entry.getValue().getCopy());
         }

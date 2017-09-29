@@ -6,7 +6,9 @@ import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.VloServicesSpringConfig;
 import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
+import eu.clarin.cmdi.vlo.service.solr.SimilarDocumentsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import java.util.Collections;
 import javax.inject.Inject;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -44,6 +46,8 @@ public class TestRecordPage {
     private Mockery mockery;
     @Inject
     private SolrDocumentService documentService;
+    @Inject
+    private SimilarDocumentsService similarDocumentsService;
 
     private WicketTester tester;
     private SolrDocument document;
@@ -66,6 +70,8 @@ public class TestRecordPage {
             {
                 oneOf(documentService).getDocument("documentId");
                 will(returnValue(document));
+                oneOf(similarDocumentsService).getDocuments("documentId");
+                will(returnValue(Collections.<SolrDocument>emptyList()));
             }
         });
         tester.startPage(RecordPage.class, params);
@@ -79,6 +85,8 @@ public class TestRecordPage {
             {
                 oneOf(documentService).getDocument("documentId");
                 will(returnValue(document));
+                oneOf(similarDocumentsService).getDocuments("documentId");
+                will(returnValue(Collections.<SolrDocument>emptyList()));
             }
         });
         tester.startPage(RecordPage.class, params);
@@ -94,6 +102,8 @@ public class TestRecordPage {
             {
                 oneOf(documentService).getDocument("documentId");
                 will(returnValue(document));
+                oneOf(similarDocumentsService).getDocuments("documentId");
+                will(returnValue(Collections.<SolrDocument>emptyList()));
             }
         });
         tester.startPage(RecordPage.class, params);
@@ -137,6 +147,12 @@ public class TestRecordPage {
         public SolrDocumentService documentService() {
             return mockery.mock(SolrDocumentService.class);
         }
+
+        @Override
+        public SimilarDocumentsService similarDocumentsService() {
+            return mockery.mock(SimilarDocumentsService.class);
+        }
+
     }
 
 }

@@ -469,7 +469,16 @@
         -->
      </lst>
   </requestHandler>
-
+  
+  <requestHandler name="/mlt" class="solr.MoreLikeThisHandler">
+      <lst name="defaults">
+        <str name="mlt.fl">name,description,subject,keyword,languageCode,resourceClass,country,continent,format,modality,genre,licenseType</str>
+        <str name="mlt.mindf">1</str>
+        <str name="mlt.mintf">5</str>
+        <str name="mlt.count">10</str>
+        <str name="rows">5</str>
+      </lst>
+  </requestHandler>
 
  <!-- <requestHandler name="/dataimport"
    	class="org.apache.solr.handler.dataimport.DataImportHandler">
