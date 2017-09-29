@@ -85,12 +85,6 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
-        <!-- TODO: get rid of dependency on MPI repository -->
-        <repository>
-            <id>MPI</id>
-            <name>MPI LAT Repository</name>
-            <url>http://lux15.mpi.nl/nexus/content/groups/public</url>
-        </repository>
     </repositories>
     	
 </project>
