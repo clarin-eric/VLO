@@ -200,6 +200,51 @@ public class CrossfacetMappingTest extends ImporterTestcase {
 
     	
     }
+    @Test
+    public void testValueSplit() throws Exception {
+        String session = "";
+        session += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        session += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1271859438204\">\n";
+        session += "   <Header>\n";
+        session += "      <MdCreationDate>2008-05-27</MdCreationDate>\n";
+        session += "      <MdSelfLink> testID1Session</MdSelfLink>\n";
+        session += "      <MdCollectionDisplayName>MYName</MdCollectionDisplayName>\n";
+        session += "      <MdProfile>clarin.eu:cr1:p_1271859438204</MdProfile>\n";
+        session += "   </Header>\n";
+        session += "   <Resources>\n";
+        session += "      <ResourceProxyList>\n";
+        session += "         <ResourceProxy id=\"d314e408\">\n";
+        session += "            <ResourceType mimetype=\"video/x-mpeg1\" >Resource</ResourceType>\n";
+        session += "            <ResourceRef>../Media/elan-example1.mpg</ResourceRef>\n";
+        session += "         </ResourceProxy>\n";
+        session += "      </ResourceProxyList>\n";
+        session += "   </Resources>\n";
+        session += "   <Components>\n";
+        session += "      <cmdp:Session>\n";
+        session += "         <cmdp:Name>kleve-route</cmdp:Name>\n";
+        session += "         <cmdp:Title>kleve-route-title</cmdp:Title>\n";
+        session += "      </cmdp:Session>\n";
+        session += "   </Components>\n";
+        session += "</CMD>\n";
+        File sessionFile = createCmdiFile("testSession", session);
+        
+        this.config.setUseCrossMapping(true);
+        this.config.setCrossFacetMapUrl(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
+        
+
+        List<SolrInputDocument> docs = importData(sessionFile);
+
+        SolrInputDocument doc = docs.get(0);
+        
+        Object[] values = getMultipleValues(doc, FacetConstants.FIELD_COLLECTION).toArray();
+
+        //three values set
+        assertEquals(3, values.length); 
+        //to be sure that it works for a facet where no value is set
+        assertEquals("collection1", values[0]); 
+        assertEquals("collection2", values[1]); 
+        assertEquals("collection3", values[2]); 
+    }
 
 
 

@@ -6,5 +6,10 @@
 			<cross-facet name="name" setvalue="cfmvalue" />
 			<cross-facet name="temporalCoverage" setvalue="cfmvalue" />
 		</condition>
+		<condition ifvalue="MYName">
+         <cross-facet name="collection" setvalue="collection1" />
+         <cross-facet name="collection" setvalue="collection2" />
+         <cross-facet name="collection" setvalue="collection3" />
+      </condition>
 	</origin-facet>
 </crossfacet-mappings>
