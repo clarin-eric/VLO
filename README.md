@@ -124,8 +124,9 @@ when making a deployment package for beta (`beta`) or production (`production`)!
 
 It's good practice to turn your tag into a "release" on GitHub and attach the deployment
 package for the target environment (beta, production). Share this link with the 
-administrators or, if you want to be friendly, make a pull request for the docker project
-if applicable. Your admin can show you the way :)
+administrators or, if you want to be friendly, make a pull request for the applicable 
+docker project if available - see [CLARIN on GitLab](https://gitlab.com/CLARIN-ERIC). Your
+admin can tell you more :)
 
 # Running the VLO 
 
