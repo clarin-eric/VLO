@@ -45,7 +45,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class VloSolrSpringConfig {
-    private static HttpSolrClient solrClient = null;
 
     @Inject
     private VloConfig vloConfig;
@@ -87,10 +86,7 @@ public class VloSolrSpringConfig {
 
     @Bean
     public SolrClient solrClient() {
-        if (solrClient == null) {
-            solrClient = new HttpSolrClient.Builder(vloConfig.getSolrUrl()).build();
-        }
-        return solrClient;
+        return new HttpSolrClient.Builder(vloConfig.getSolrUrl()).build();
     }
 
     @Bean(name = "documentFieldOrder")
