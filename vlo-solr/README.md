@@ -27,3 +27,5 @@ For example, if starting the Solr instance using the "solr start" command, do as
 
 	${SOLR_BIN_DIR}/solr start -Dsolr.data.dir=/var/solr-data
 
+Or add the setting of the property to `SOLR_OPTS` variable in the `solr.in.sh` file (see 
+the official Solr documentation instructions for details).
