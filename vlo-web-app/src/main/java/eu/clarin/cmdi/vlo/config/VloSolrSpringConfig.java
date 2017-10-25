@@ -84,7 +84,7 @@ public class VloSolrSpringConfig {
         return new AutoCompleteServiceImpl(solrClient(), vloConfig);
     }
 
-    @Bean
+    @Bean(destroyMethod = "close")
     public SolrClient solrClient() {
         return new HttpSolrClient.Builder(vloConfig.getSolrUrl()).build();
     }
