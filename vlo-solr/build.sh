@@ -1,6 +1,7 @@
 #!/bin/sh
 SOLR_DIST_URL="http://ftp.tudelft.nl/apache/lucene/solr/6.6.2/solr-6.6.2.tgz"
 SOLR_TARGET_DIR="target/solr"
+SOLR_TARGET_DIST="target/vlo-solr.tar.gz"
 SOLR_COLLECTION_NAME="collection1"
 SOLR_CONFIGURATION_SOURCE_DIR="`pwd`/../vlo-web-app/src/test/resources/solr/collection1"
 
@@ -11,8 +12,8 @@ then
 	# Clean build output
 	if [ -d "${SOLR_TARGET_DIR}" ]
 	then
-		echo "Removing ${SOLR_TARGET_DIR}"
-		rm -rf "${SOLR_TARGET_DIR}"
+		echo "Removing ${SOLR_TARGET_DIR} and ${SOLR_TARGET_DIST}"
+		rm -rf "${SOLR_TARGET_DIR}" "${SOLR_TARGET_DIST}"
 	else
 		echo "Nothing to do"
 	fi
@@ -59,6 +60,12 @@ fi
 	)	
 )
 
+# Make tarball
+echo "\n====\nPackaging VLO Solr instance... \n====\n"
+(cd target && tar zc solr) > ${SOLR_TARGET_DIST}
+
 echo "Completed building pre-configured VLO Solr instance in ${SOLR_TARGET_DIR}
 
-You can start it by running '${SOLR_TARGET_DIR}/bin/solr start'"
+Created '${SOLR_TARGET_DIST}' for distribution
+
+You can also start the server by running '${SOLR_TARGET_DIR}/bin/solr start'"
