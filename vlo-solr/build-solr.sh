@@ -1,5 +1,6 @@
 #!/bin/sh
-SOLR_DIST_URL="http://ftp.tudelft.nl/apache/lucene/solr/6.6.2/solr-6.6.2.tgz"
+SOLR_VERSION="7.1.0"
+SOLR_DIST_URL="http://ftp.tudelft.nl/apache/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz"
 SOLR_TARGET_DIR="target/solr"
 SOLR_TARGET_DIST="target/vlo-solr.tar.gz"
 SOLR_COLLECTION_NAME="collection1"
@@ -43,9 +44,9 @@ fi
 
 	#create collection
 	echo "\n====\nCreating Solr collection '${SOLR_COLLECTION_NAME}'... \n====\n"
-	bin/solr start
+	bin/solr start -p 8989
 	bin/solr create -c "${SOLR_COLLECTION_NAME}"
-	bin/solr stop
+	bin/solr stop -p 8989
 
 	echo "\n====\nApply VLO Solr configuration... \n====\n"
 	(
