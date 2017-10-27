@@ -22,9 +22,9 @@
             <directory>${project.parent.basedir}</directory>
             <includes>
                 <include>CHANGES.txt</include>
-                <include>DEPLOY-README.txt</include>
-                <include>LICENSE.txt</include>
-                <include>README.txt</include>
+                <include>DEPLOYMENT.md</include>
+                <include>LICENSE.md</include>
+                <include>README.md</include>
                 <include>UPGRADE.txt</include>
             </includes>
             <outputDirectory>doc</outputDirectory>

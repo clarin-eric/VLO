@@ -18,7 +18,7 @@ For more information, see the [wiki page](https://trac.clarin.eu/wiki/CmdiVirtua
 
 - [README](README.md)
 	This file; a general introduction and development information
-- [DEPLOY-README](DEPLOY-README.txt)
+- [DEPLOYMENT](DEPLOYMENT.md)
 	Instructions on how to deploy a fresh VLO installation
 - [UPGRADE](UPGRADE.txt)
 	Instructions on how to upgrade an existing VLO installation
