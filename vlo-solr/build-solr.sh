@@ -47,17 +47,14 @@ then
 	exit 1
 fi
 
-(
-	cd "${SOLR_TARGET_DIR}"
-	echo "====\nDownloading and extracting Solr...\n====\n"
-	curl -\# -L "${SOLR_DIST_URL}" | tar zxf - --strip-components 1
-)
+echo "====\nDownloading and extracting Solr...\n====\n"
+curl -\# -L "${SOLR_DIST_URL}" | tar -C "${SOLR_TARGET_DIR}" -zxf - --strip-components 1
 
 # Make solr home and apply configuration	
 cp -r "${SOLR_HOME_TEMPLATE_DIR}" "${SOLR_HOME_TARGET_DIR}"
 
 # Make tarball
-echo "\n====\nPackaging VLO Solr instance... \n====\n"
+echo "\n====\nPackaging VLO Solr and home directory... \n====\n"
 (cd target && tar zc solr solr-home-vlo) > ${SOLR_TARGET_DIST}
 
 echo "Completed building VLO Solr instance in ${SOLR_TARGET_DIR} with configured
