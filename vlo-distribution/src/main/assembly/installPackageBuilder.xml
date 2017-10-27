@@ -103,24 +103,6 @@
             <outputDirectory>config</outputDirectory>
         </fileSet> 
 
-        <!-- solr server files to be packaged -->
-        <!-- war file -->
-        <fileSet>
-            <directory>${project.parent.basedir}/vlo-solr/target</directory>
-            <includes>
-                <include>*.war</include>
-            </includes>
-            <outputDirectory>war</outputDirectory>
-        </fileSet>
-        <!-- make an empty 'solr' child directory -->
-        <fileSet>
-            <directory>src/main/assembly</directory>
-            <excludes>
-                <exclude>*</exclude>
-            </excludes>
-            <outputDirectory>war/solr</outputDirectory>
-        </fileSet>
-
         <!-- make an empty 'vlo' child directory -->
         <fileSet>
             <directory>src/main/assembly</directory>
@@ -130,21 +112,12 @@
             <outputDirectory>war/vlo</outputDirectory>
         </fileSet>
 
-        <!-- solr configuration files -->
+        <!-- solr home directory -->
         <fileSet>
-            <directory>${project.parent.basedir}/vlo-solr/target/vlo-solr-${project.version}-vlo_solr_conf</directory>
-            <includes>
-                <include>**/*</include>
-            </includes>
-            <outputDirectory>config/</outputDirectory>
+            <directory>${project.parent.basedir}/vlo-solr/target/vlo-solr-${project.version}-vlo-solr-home/vlo-solr-home</directory>
+            <outputDirectory>solr/vlo-solr-home</outputDirectory>
         </fileSet>
-        <fileSet>
-            <directory>${project.parent.basedir}/vlo-solr/target/vlo-solr-${project.version}</directory>
-            <includes>
-                <include>vlo_solr.xml</include>
-            </includes>
-            <outputDirectory>config</outputDirectory>
-        </fileSet>        
+         
         <!-- sitemap -->
         <fileSet>
             <directory>${project.parent.basedir}/vlo-sitemap/target/sitemap-dist/sitemap-dist</directory>
