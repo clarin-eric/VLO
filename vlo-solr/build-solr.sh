@@ -1,6 +1,8 @@
 #!/bin/sh
 SOLR_VERSION="7.1.0"
 SOLR_DIST_URL="http://ftp.tudelft.nl/apache/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz"
+SOLR_DIST_SIGNATURE_URL="http://www-eu.apache.org/dist/lucene/solr/7.1.0/solr-7.1.0.tgz.asc"
+SOLR_DIST_KEYS_URL="http://www-eu.apache.org/dist/lucene/solr/7.1.0/KEYS"
 
 SOLR_TARGET_DIR="target/solr"
 
@@ -48,7 +50,22 @@ then
 fi
 
 echo "====\nDownloading and extracting Solr...\n====\n"
-curl -\# -L "${SOLR_DIST_URL}" | tar -C "${SOLR_TARGET_DIR}" -zxf - --strip-components 1
+(
+	cd "${SOLR_TARGET_DIR}"
+	mkdir tmp
+	curl -\# -L "${SOLR_DIST_URL}" > "tmp/solr.tgz"
+	
+	echo "====== Verifying integrity ======"
+	curl -L "${SOLR_DIST_KEYS_URL}" > "tmp/KEYS" 2>/dev/null
+	curl -L "${SOLR_DIST_SIGNATURE_URL}" > "tmp/solr.tgz.asc" 2>/dev/null
+	
+	gpg --import "tmp/KEYS" 2> /dev/null
+	gpg --verify "tmp/solr.tgz.asc" "tmp/solr.tgz"
+	
+	tar -zxf "tmp/solr.tgz" --strip-components 1
+	
+	rm -rf tmp
+)
 
 # Make solr home and apply configuration	
 cp -r "${SOLR_HOME_TEMPLATE_DIR}" "${SOLR_HOME_TARGET_DIR}"
