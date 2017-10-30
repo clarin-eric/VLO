@@ -10,7 +10,7 @@
   <fieldType name="double" class="solr.DoublePointField" positionIncrementGap="0"/>
   <fieldType name="float" class="solr.FloatPointField" positionIncrementGap="0"/>
   <fieldType name="ignored" class="solr.StrField" indexed="false" stored="false" multiValued="true"/>
-  <fieldType name="int" class="solr.IntPointField" positionIncrementGap="0"/>
+  <fieldType name="int" class="solr.TrieIntField" positionIncrementGap="0" precisionStep="0"/>
   <fieldType name="long" class="solr.LongPointField" positionIncrementGap="0"/>
   <fieldType name="lowercase" class="solr.TextField" positionIncrementGap="100">
     <analyzer>
