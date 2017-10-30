@@ -54,7 +54,7 @@ following command:
 ```
 docker run -it \
 	-v ${HOST_SOLR_HOME}:/solr-home-vlo \
-	-v ${HOST_SOLR_DATA_HOME}:/solr-home-vlo/collection1/data \
+	-v ${HOST_SOLR_DATA_HOME}:/solr-home-vlo/vlo-index/data \
 	-e SOLR_HOME=/solr-home-vlo \
 	-p 8983:8983 \
 	solr:7.1-alpine`
