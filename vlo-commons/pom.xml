@@ -76,7 +76,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <vloconfig.solrUrl>http://localhost:8080/vlo-solr/core0/</vloconfig.solrUrl>
+                <vloconfig.solrUrl>http://localhost:8983/solr/vlo-index/</vloconfig.solrUrl>
                 <vloconfig.dataRootsFile>dataroots-local.xml</vloconfig.dataRootsFile>
                 <!-- bundled mapping files (package resources, from the VLO-mapping project) -->
                 <vloconfig.mappingFilesLocation>/uniform-maps/</vloconfig.mappingFilesLocation> 
@@ -90,7 +90,7 @@
             <id>dev-vm</id>
             <properties>
                 <maven.test.skip>true</maven.test.skip>
-                <vloconfig.solrUrl>http://localhost:8080/solr/core0/</vloconfig.solrUrl>
+                <vloconfig.solrUrl>http://localhost:8983/solr/vlo-index/</vloconfig.solrUrl>
                 <vloconfig.dataRootsFile>file:/srv/webapps/vlo/dataroots-testvm.xml</vloconfig.dataRootsFile>
                 <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
                 <vloconfig.facetConceptsFileLocation>file:/srv/VLO-mapping/mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
@@ -106,7 +106,7 @@
             <properties>
                 <vloconfig.deleteAllFirst>false</vloconfig.deleteAllFirst>
                 <vloconfig.maxDaysInSolr>7</vloconfig.maxDaysInSolr>
-                <vloconfig.solrUrl>http://localhost:8080/solr/core0/</vloconfig.solrUrl>
+                <vloconfig.solrUrl>http://localhost:8983/solr/vlo-index/</vloconfig.solrUrl>
                 <vloconfig.homeUrl>http://vlo.clarin.eu</vloconfig.homeUrl>
                 <vloconfig.dataRootsFile>dataroots-production.xml</vloconfig.dataRootsFile>
                 <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>

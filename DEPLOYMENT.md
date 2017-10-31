@@ -77,7 +77,7 @@ Modify (if needed):
 	- parameter `eu.carlin.cmdi.vlo.config.location`
 		- should point to VloConfig.xml, e.g. `$VLO/config/VloConfig.xml`
 	- parameter `eu.carlin.cmdi.vlo.solr.serverUrl`
-		- should be set to Solr server base URL (see [above](#solr)), e.g. `http://localhost:8983/vlo_solr/core0/`
+		- should be set to Solr server base URL (see [above](#solr)), e.g. `http://localhost:8983/solr/vlo-index/`
 			- leave commented out for the default
 	
 and copy it to `$CATALINA_HOME/conf/Catalina/localhost/` as `vlo.xml`

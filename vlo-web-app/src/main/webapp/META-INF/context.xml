@@ -15,7 +15,7 @@
 
     <Parameter 
         name="eu.carlin.cmdi.vlo.solr.serverUrl" 
-        value="http://localhost:8080/vlo_solr/core0/"/>
+        value="http://localhost:8983/solr/vlo-index/"/>
     -->
   <!-- Piwik configuration, see https://piwik.org and https://stats.clarin.eu -->
   <!-- 
