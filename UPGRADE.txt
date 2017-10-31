@@ -28,6 +28,20 @@ old configuration to the new one.
     ./vlo_solr_importer.sh -c ../config/VloConfig.xml
 
 -----------------------------
+Upgrading from 4.2.x to 4.3.0
+-----------------------------
+
+- Install and configure detached Solr instance (outside Tomcat)
+	- Set Solr home
+	- Set Solr data directory
+	- See DEPLOYMENT.md
+- Configure Solr URL for importer and web app
+	- different port than before
+	- core name 'collection1' has become 'vlo-index'
+	- make sure to adapt importer (VloConfig.xml) AND web app configuration (context.xml)!
+	- typically "http://localhost:8983/solr/vlo-index"
+
+-----------------------------
 Upgrading from 4.2.0 to 4.2.1
 -----------------------------
 * Two new configuration settings have been added related to parallel processing:

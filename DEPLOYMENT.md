@@ -5,8 +5,9 @@ for browsing: the VLO web application, the Solr server, and the meta data
 importer.
 
 - `$VLO`:  installation folder for VLO e.g.: /opt/vlo/
-- `$CATALINA_HOME`:  tomcat’s installation folder
-- `$SOLR_DATA`:  SOLR location for storing indexed data 
+- `$CATALINA_HOME`:  Tomcat’s installation folder (for the web app)
+- `$SOLR_HOME`:  SOLR location for configuration and definitions
+- `$SOLR_DATA_HOME`:  SOLR location for storing indexed data 
 - `xxx`:  VLO version number
 
 ## The archive
@@ -29,10 +30,10 @@ Deploying the VLO application means:
 - `service tomcat6 stop` 
 	- (or `$CATALINA_HOME/bin/shutdown.sh` if tomcat is 
 not installed as a service)
-- `mkdir $VLO`
-- `tar -C $VLO --strip-components=1 -zxvf vlo-xxx-Distribution.tar.gz`
+- `mkdir ${VLO}`
+- `tar -C ${VLO} --strip-components=1 -zxvf vlo-xxx-Distribution.tar.gz`
 
-In the tree starting in $VLO, the configuration of the application is stored under subfolder config.
+In the tree starting in `$VLO`, the configuration of the application is stored under subfolder config.
 
 ## Solr
 
@@ -43,12 +44,13 @@ Note: you may find some useful information in the documentation of the
 
 Follow the instructions of your operating system and/or the official 
 [Solr documentation](https://lucene.apache.org/solr/resources.html) on installing or
-upgrading Solr on your system. 
+upgrading Solr on your system, in particular the section
+["Taking Solr to Production"](https://lucene.apache.org/solr/guide/7_1/taking-solr-to-production.html).
 
 If you have a **docker-based setup**, you can also use the
-[official docker image](https://github.com/docker-solr) or use the
+[official docker image](https://github.com/docker-solr), or use the
 [version maintained by CLARIN](https://gitlab.com/CLARIN-ERIC/docker-solr) if working in
-CLARIN's central infrastructure. 
+CLARIN's central infrastructure. For configuration hints, see the next section.
 
 In any case, make sure to **always use a matching version of Solr**. Find out which version
 to use by looking for the `solr.version` property in the project's [POM file](pom.xml), or
@@ -56,7 +58,42 @@ checking the [upgrade instructions](UPGRADE.txt).
 
 ### Configuration
 
-`TODO: setting Solr home and Solr data`
+Solr allows you to configure (i.e. override the default settings for) the location of
+both the [Solr home directory](https://lucene.apache.org/solr/guide/7_1/solr-configuration-files.html#solr-home)
+and the location where the index data is stored (by default the latter is a subdirectory
+of the former). The way to configure these is by setting the properties ``solr.solr.home`
+and/or `solr.data.home`. When running Solr as a service in the host, these properties
+are best configured by setting the matching variables in the `solr.in.sh` file.
+
+To make the Solr instance work with the VLO, set the `solr.solr.home` property to:
+```sh
+${VLO}/solr/vlo-solr-home
+```
+
+It is a good idea to configure a **separate** directory for Solr to store its **data**
+(index and transaction log), as the above location will be replaced when updating the VLO,
+and the contents of this directory can grow rather large.
+To do this, create a `solr-data` directory somewhere outside the `${VLO}` 
+directory (e.g. `/srv/solr-data`) and set `solr.data.home` to its absolute path. The VLO
+specific data will then be stored by Solr in `${solr.data.home}/${CORE_NAME}/data`.
+Note: as of version 4.3 of the VLO, `CORE_NAME=vlo-index`.
+
+#### Docker
+
+In a container based setup (i.e. using Docker (Compose)), you may want to use 
+**volumes and/or mounts** to make sure that the right Solr configuration is loaded, and to
+ensure the persistence of the Solr index. 
+
+When using the official Solr image for Docker, or CLARIN's derivation of it, the Solr 
+*home directory* can be configured when starting the container by setting the environment 
+variable `SOLR_HOME`. The *data directory* can be set using the environment variable
+`SOLR_DATA_HOME`. For a usage example, see the 
+[documentation of the vlo-solr subproject](vlo-solr/README.md). 
+
+Note: making use of the default configuration in which a core's data directory is found
+in `${solr.data.home}/${CORE_NAME}/data`, one *could ommit* setting `solr.data.home`
+and just mount a persistent (core specific!) storage directory in that location. This is
+**not recommended** for production.
 
 ## Web-app
 
@@ -64,20 +101,21 @@ checking the [upgrade instructions](UPGRADE.txt).
 
 Deploy the war:
 
-	unzip -d $CATALINA_HOME/webapps/vlo  $VLO/war/vlo-web-app-xxx.war
+	unzip -d "$CATALINA_HOME/webapps/vlo"  "${VLO}/war/vlo-web-app-xxx.war"
 
-OR, if your Tomcat application's docBase is pointed to `$VLO/war/vlo`:
+OR, if your Tomcat application's docBase is pointed to `${VLO}/war/vlo`:
 
-	(cd $VLO/war && ./unpack-wars.sh)
+	(cd "${VLO}/war" && ./unpack-wars.sh)
 
 ### Configuration
 
 Modify (if needed):
 - `$CATALINA_HOME/webapps/vlo/META-INF/context.xml`
 	- parameter `eu.carlin.cmdi.vlo.config.location`
-		- should point to VloConfig.xml, e.g. `$VLO/config/VloConfig.xml`
+		- should point to `VloConfig.xml`, e.g. `${VLO}/config/VloConfig.xml`
 	- parameter `eu.carlin.cmdi.vlo.solr.serverUrl`
-		- should be set to Solr server base URL (see [above](#solr)), e.g. `http://localhost:8983/solr/vlo-index/`
+		- to override the URL defined in `VloConfig.xml`, should be set to Solr server 
+		base URL (see [above](#solr)), e.g. `http://localhost:8983/solr/vlo-index/`
 			- leave commented out for the default
 	
 and copy it to `$CATALINA_HOME/conf/Catalina/localhost/` as `vlo.xml`
@@ -100,31 +138,34 @@ Piwik access statistics can be configured by setting the  following context para
 - `eu.clarin.cmdi.vlo.piwik.domains` (defaults to production value)
 See packaged context.xml for details and examples.
 
-## Importer configuration
+## Importerer
 
-Modify `DataRoot` for importer directly in `$VLO/config/VloConfig.xml` or in
+### Data roots configuration
+
+Modify `DataRoot` for importer directly in `${VLO}/config/VloConfig.xml` or in
 the file that is included into that file via XInclude
 
 ```xml
 <DataRoot>
-	<originName>MPI self harvest</originName>
+	<originName>Descriptive name of data origin</originName>
 	<rootFile>path to the metada root folder</rootFile>           
-	<prefix>http://m12404423/vlomd/</prefix>
-	<tostrip>/var/www/vlomd/</tostrip>
+	<prefix>http://vlo.clarin.eu/cmdi/</prefix>
+	<tostrip>/var/www/cmdi/</tostrip>
 	<deleteFirst>false</deleteFirst>
 </DataRoot>
 ```
 
-A dataRoot element describes the meta data files. The toStrip part of
-the description is left out of the rootFile part to create a http link
-to the metadata; the links starts with the prefix.
+A `DataRoot` element describes sets of metadata files. The `toStrip` part of
+the description is left out of the `rootFile` part to create an absolute, public URL
+to the metadata; the links starts with the `prefix`. Set `deleteFirst` to `true` to ensure
+that all existing records from this set are removed from the index before importing.
 	
-## Mapping configuration
+### Mapping configuration
 
-Review the following configuration properties in VloConfig.xml:
-- facetConceptsFile, nationalProjectMapping, organisationNamesUrl, 
-languageNameVariantsUrl, licenseAvailabilityMapUrl, resourceClassMapUrl,
-licenseURIMapUrl, licenseTypeMapUrl
+Review the following configuration properties in `VloConfig.xml`:
+- `facetConceptsFile`, `nationalProjectMapping`, `organisationNamesUrl`, 
+`languageNameVariantsUrl`, `licenseAvailabilityMapUrl`, `resourceClassMapUrl`,
+`licenseURIMapUrl`, `licenseTypeMapUrl`
 
 These should either be set to the defaults to use bundled resources or configured
 to be a (file) URL pointing to the location of the corresponding
@@ -137,18 +178,18 @@ or importer!
 See <https://github.com/clarin-eric/VLO-mapping> and the comments in VloConfig.xml 
 for more information.
 
-## Importing data
+### Importing data
 
-The importer can be found in the `$VLO/bin/` folder.
+The importer can be found in the `${VLO}/bin/` folder.
 
 - Before starting data import, first start the Tomcat server:
 	- `service tomcat6 start`
 		- or `$CATALINA_HOME/bin/startup.sh` if tomcat is not installed as a service
 - Run the importer:
-	- `$VLO/bin/vlo_solr_importer.sh `
-		- optionally pass the path to a custom `VloConfig.xml` using the `-c` option (the default is in `$VLO/config`)
+	- `${VLO}/bin/vlo_solr_importer.sh `
+		- optionally pass the path to a custom `VloConfig.xml` using the `-c` option (the default is in `${VLO}/config`)
 
-The importer logs information in `$VLO/log`
+The importer logs information in `${VLO}/log`
 
 Because metadata is not static, it is recommended to run the importer a
 couple of times a week.
