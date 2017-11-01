@@ -1,24 +1,20 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.importer.solr.DummySolrBridgeImpl;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.DataRoot;
-import eu.clarin.cmdi.vlo.importer.solr.SolrBridge;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.solr.client.solrj.SolrRequest;
-import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.util.NamedList;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
@@ -26,9 +22,9 @@ import org.slf4j.LoggerFactory;
 public class CrossfacetMappingTest extends ImporterTestcase {
 
     protected final static org.slf4j.Logger LOG = LoggerFactory.getLogger(CrossfacetMappingTest.class);
-    
+
     @Test
-    public void testSimple() throws Exception{
+    public void testSimple() throws Exception {
         String session = "";
         session += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         session += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1271859438204\">\n";
@@ -54,10 +50,9 @@ public class CrossfacetMappingTest extends ImporterTestcase {
         session += "   </Components>\n";
         session += "</CMD>\n";
         File sessionFile = createCmdiFile("testSession", session);
-        
+
         this.config.setUseCrossMapping(true);
         this.config.setCrossFacetMapUrl(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
-        
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
@@ -65,10 +60,8 @@ public class CrossfacetMappingTest extends ImporterTestcase {
 
         assertEquals("blabla", getValue(doc, FacetConstants.FIELD_SUBJECT));
 
-
-    	
     }
-    
+
     @Test
     public void testSingleValueWithOrigin() throws Exception {
         String session = "";
@@ -96,21 +89,20 @@ public class CrossfacetMappingTest extends ImporterTestcase {
         session += "   </Components>\n";
         session += "</CMD>\n";
         File sessionFile = createCmdiFile("testSession", session);
-        
+
         this.config.setUseCrossMapping(true);
         this.config.setCrossFacetMapUrl(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
-        
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
         SolrInputDocument doc = docs.get(0);
 
         //since this facet permits only one value the value from the cmdi-file should be taken and hence those from the cfm be ignored
-        assertEquals("kleve-route", getValue(doc, FacetConstants.FIELD_NAME)); 
+        assertEquals("kleve-route", getValue(doc, FacetConstants.FIELD_NAME));
         //to be sure that it works for a facet where no value is set
         assertEquals("cfmvalue", getValue(doc, FacetConstants.FIELD_TEMPORAL_COVERAGE));
     }
-    
+
     @Test
     public void testSingleValueWithNoOrigin() throws Exception {
         String session = "";
@@ -134,23 +126,22 @@ public class CrossfacetMappingTest extends ImporterTestcase {
         session += "   </Components>\n";
         session += "</CMD>\n";
         File sessionFile = createCmdiFile("testSession", session);
-        
+
         this.config.setUseCrossMapping(true);
         this.config.setCrossFacetMapUrl(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
-        
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
         SolrInputDocument doc = docs.get(0);
 
         //since this facet permits only one value the value from the cmdi-file should be taken and hence those from the cfm be ignored
-        assertEquals("cfmvalue", getValue(doc, FacetConstants.FIELD_NAME)); 
+        assertEquals("cfmvalue", getValue(doc, FacetConstants.FIELD_NAME));
 
     }
-    
+
     @Test
-    public void testMultipleValues() throws Exception{
-    	String session = "";
+    public void testMultipleValues() throws Exception {
+        String session = "";
         session += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         session += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1271859438204\">\n";
         session += "   <Header>\n";
@@ -178,18 +169,17 @@ public class CrossfacetMappingTest extends ImporterTestcase {
         session += "         <cmdp:Title>kleve-route-title</cmdp:Title>\n";
         session += "      </cmdp:Session>\n";
         session += "   </Components>\n";
-        session += "</CMD>\n"; 
+        session += "</CMD>\n";
 
         File sessionFile = createCmdiFile("testSession", session);
-        
+
         this.config.setUseCrossMapping(true);
         this.config.setCrossFacetMapUrl(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
-        
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
         SolrInputDocument doc = docs.get(0);
-        
+
         Object[] values = getMultipleValues(doc, FacetConstants.FIELD_SUBJECT).toArray();
 
         assertEquals(2, values.length);
@@ -197,9 +187,8 @@ public class CrossfacetMappingTest extends ImporterTestcase {
         assertEquals("blabla", values[0]);
         assertEquals("mysubject", values[1]);
 
-
-    	
     }
+
     @Test
     public void testValueSplit() throws Exception {
         String session = "";
@@ -227,39 +216,36 @@ public class CrossfacetMappingTest extends ImporterTestcase {
         session += "   </Components>\n";
         session += "</CMD>\n";
         File sessionFile = createCmdiFile("testSession", session);
-        
+
         this.config.setUseCrossMapping(true);
         this.config.setCrossFacetMapUrl(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
-        
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
         SolrInputDocument doc = docs.get(0);
-        
+
         Object[] values = getMultipleValues(doc, FacetConstants.FIELD_COLLECTION).toArray();
 
         //three values set
-        assertEquals(3, values.length); 
+        assertEquals(3, values.length);
         //to be sure that it works for a facet where no value is set
-        assertEquals("collection1", values[0]); 
-        assertEquals("collection2", values[1]); 
-        assertEquals("collection3", values[2]); 
+        assertEquals("collection1", values[0]);
+        assertEquals("collection2", values[1]);
+        assertEquals("collection3", values[2]);
     }
-
-
 
     private Object getValue(SolrInputDocument doc, String field) {
-    	if(doc.getFieldValues(field) != null){
-	        assertEquals(1, doc.getFieldValues(field).size());
-	        return doc.getFieldValue(field);
-    	}
-    	else
-    		return null;
+        if (doc.getFieldValues(field) != null) {
+            assertEquals(1, doc.getFieldValues(field).size());
+            return doc.getFieldValue(field);
+        } else {
+            return null;
+        }
     }
-    
+
     private Collection<Object> getMultipleValues(SolrInputDocument doc, String field) {
 
-	        return doc.getFieldValues(field);
+        return doc.getFieldValues(field);
 
     }
 
@@ -269,7 +255,7 @@ public class CrossfacetMappingTest extends ImporterTestcase {
          * suit the test.
          */
         modifyConfig(rootFile);
-        
+
         final DummySolrBridgeImpl solrBridge = new DummySolrBridgeImpl();
         MetadataImporter importer = new MetadataImporter(config, languageCodeUtils, solrBridge) {
             /*
@@ -349,67 +335,6 @@ public class CrossfacetMappingTest extends ImporterTestcase {
         dataRoot.setPrefix("http://example.com");
         config.setDataRoots(Collections.singletonList(dataRoot));
         config.setFacetConceptsFile(ImporterTestcase.getTestFacetConceptFilePath());
-        
-
-
-    }
-
-    private class DummySolrBridgeImpl implements SolrBridge {
-
-        public DummySolrBridgeImpl() {
-        }
-        private final List<SolrInputDocument> result = new ArrayList<>();
-
-        public List<SolrInputDocument> getDocuments() {
-            return result;
-        }
-
-        @Override
-        public SolrClient getClient() {
-            return new SolrClient() {
-                @Override
-                public NamedList<Object> request(SolrRequest request, String collection) throws SolrServerException, IOException {
-                    //do nothing
-                    LOG.debug("SolrRequest to dummy server on collection '{}': {}", collection, request);
-                    return new NamedList<>();
-                }
-
-                @Override
-                public void close() throws IOException {
-                    LOG.debug("Dummy solr server shutdown");
-                }
-            };
-        }
-
-        @Override
-        public void init() throws MalformedURLException {
-            LOG.debug("Dummy solr bridge init");
-        }
-
-        @Override
-        public void shutdown() {
-            LOG.debug("Dummy solr bridge shutdown");
-        }
-
-        @Override
-        public void addDocument(SolrInputDocument doc) throws SolrServerException, IOException {
-            result.add(doc);
-        }
-
-        @Override
-        public void addDocuments(Collection<SolrInputDocument> docs) throws SolrServerException, IOException {
-            result.addAll(docs);
-        }
-
-        @Override
-        public void commit() throws SolrServerException, IOException {
-            LOG.debug("Dummy solr bridge commit");
-        }
-
-        @Override
-        public Throwable popError() {
-            return null;
-        }
     }
 
 }

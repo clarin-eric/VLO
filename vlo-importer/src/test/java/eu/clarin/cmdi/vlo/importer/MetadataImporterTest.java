@@ -1,8 +1,8 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.importer.solr.DummySolrBridgeImpl;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.DataRoot;
-import eu.clarin.cmdi.vlo.importer.solr.SolrBridge;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,11 +14,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.solr.client.solrj.SolrRequest;
-import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.util.NamedList;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
@@ -313,62 +310,5 @@ public class MetadataImporterTest extends ImporterTestcase {
 
     }
 
-    private class DummySolrBridgeImpl implements SolrBridge {
-
-        public DummySolrBridgeImpl() {
-        }
-        private final List<SolrInputDocument> result = new ArrayList<>();
-
-        public List<SolrInputDocument> getDocuments() {
-            return result;
-        }
-
-        @Override
-        public SolrClient getClient() {
-            return new SolrClient() {
-                @Override
-                public NamedList<Object> request(SolrRequest request, String string) throws SolrServerException, IOException {
-                    //do nothing
-                    LOG.debug("SolrRequest to dummy server: {}", request);
-                    return new NamedList<>();
-                }
-                
-                @Override
-                public void close() {
-                    LOG.debug("Dummy solr client shutdown");
-                }
-            };
-        }
-
-        @Override
-        public void init() throws MalformedURLException {
-            LOG.debug("Dummy solr bridge init");
-        }
-
-        @Override
-        public void shutdown() {
-            LOG.debug("Dummy solr bridge shutdown");
-        }
-
-        @Override
-        public void addDocument(SolrInputDocument doc) throws SolrServerException, IOException {
-            result.add(doc);
-        }
-
-        @Override
-        public void addDocuments(Collection<SolrInputDocument> docs) throws SolrServerException, IOException {
-            result.addAll(docs);
-        }
-
-        @Override
-        public void commit() throws SolrServerException, IOException {
-            LOG.debug("Dummy solr bridge commit");
-        }
-
-        @Override
-        public Throwable popError() {
-            return null;
-        }
-    }
 
 }
