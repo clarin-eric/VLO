@@ -19,7 +19,7 @@ package eu.clarin.cmdi.vlo.importer.solr;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -29,11 +29,11 @@ import org.apache.solr.common.SolrInputDocument;
  */
 public interface SolrBridge {
 
-    SolrServer getServer();
+    SolrClient getClient();
 
     void init() throws MalformedURLException;
 
-    void shutdownServer() throws SolrServerException, IOException;
+    void shutdown() throws SolrServerException, IOException;
 
     void addDocument(SolrInputDocument doc) throws SolrServerException, IOException;
 

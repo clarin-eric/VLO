@@ -16,10 +16,11 @@
  */
 package clarin.cmdi.vlo.statistics.collector;
 
+import java.io.IOException;
 import clarin.cmdi.vlo.statistics.model.VloReport;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
@@ -30,11 +31,11 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 public class RecordCountCollector implements VloStatisticsCollector {
 
     @Override
-    public void collect(VloReport report, VloConfig config, SolrServer solrServer) throws SolrServerException {
+    public void collect(VloReport report, VloConfig config, SolrClient solrClient) throws SolrServerException, IOException {
         final SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
         query.setRows(0);
-        final QueryResponse result = solrServer.query(query);
+        final QueryResponse result = solrClient.query(query);
         final long recordCount = result.getResults().getNumFound();
 
         report.setRecordCount(recordCount);

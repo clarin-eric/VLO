@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBException;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +42,7 @@ public class VloReportGenerator {
     private final static Logger logger = LoggerFactory.getLogger(VloReportGenerator.class);
 
     private final VloConfig config;
-    private final HttpSolrServer solrServer;
+    private final HttpSolrClient solrClient;
     private final List<VloStatisticsCollector> collectors;
     private final List<VloReportHandler> resultHandlers;
 
@@ -66,7 +66,7 @@ public class VloReportGenerator {
         this.config = config;
         this.collectors = collectors;
         this.resultHandlers = resultHandlers;
-        this.solrServer = new HttpSolrServer(config.getSolrUrl());
+        this.solrClient = new HttpSolrClient.Builder(config.getSolrUrl()).build();
     }
 
     public void run() throws SolrServerException, IOException, JAXBException {
@@ -77,10 +77,10 @@ public class VloReportGenerator {
         try {
             for (VloStatisticsCollector collector : collectors) {
                 logger.info("Running {}", collector.getClass().getSimpleName());
-                collector.collect(report, config, solrServer);
+                collector.collect(report, config, solrClient);
             }
         } finally {
-            solrServer.shutdown();
+            solrClient.close();
         }
 
         // Handle results (write output etc)

@@ -21,8 +21,9 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.io.IOException;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -34,13 +35,13 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 public class FacetValueCountsCollector implements VloStatisticsCollector {
 
     @Override
-    public void collect(VloReport report, VloConfig config, SolrServer solrServer) throws SolrServerException {
-        report.setFacets(obtainFacetStats(config, solrServer));
+    public void collect(VloReport report, VloConfig config, SolrClient solrClient) throws SolrServerException, IOException {
+        report.setFacets(obtainFacetStats(config, solrClient));
     }
     
     
 
-    private List<VloReport.Facet> obtainFacetStats(VloConfig config, SolrServer solrServer) throws SolrServerException {
+    private List<VloReport.Facet> obtainFacetStats(VloConfig config, SolrClient solrClient) throws SolrServerException, IOException {
         final SolrQuery query = new SolrQuery();
         query.setRows(0);
         query.setFacet(true);
@@ -49,7 +50,7 @@ public class FacetValueCountsCollector implements VloStatisticsCollector {
         });
         query.setFacetLimit(-1);
 
-        final QueryResponse result = solrServer.query(query);
+        final QueryResponse result = solrClient.query(query);
         final List<FacetField> facetFields = result.getFacetFields();
 
         final List<VloReport.Facet> facets

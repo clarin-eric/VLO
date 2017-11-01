@@ -20,15 +20,15 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer;
+import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Simple Solr bridge that adds documents directly to the SolrServer instance
+ * Simple Solr bridge that adds documents directly to the SolrClient instance
  *
  * @author twagoo
  */
@@ -39,7 +39,7 @@ public class SolrBridgeImpl implements SolrBridge {
     private final VloConfig config;
     private final ThreadLocal<Throwable> serverError = new ThreadLocal<>();
 
-    private SolrServer solrServer;
+    private SolrClient solrClient;
 
     private boolean commit = true;
 
@@ -66,8 +66,8 @@ public class SolrBridgeImpl implements SolrBridge {
         /* Specify the number of documents in the queue that will trigger the
          * threads, two of them, emptying it.
          */
-        solrServer = new ConcurrentUpdateSolrServer(solrUrl,
-                config.getMinDocsInSolrQueue(), nThreads) {
+        solrClient = new ConcurrentUpdateSolrClient(new ConcurrentUpdateSolrClient.Builder(solrUrl)
+                .withQueueSize(config.getMinDocsInSolrQueue()).withThreadCount(nThreads)) {
             /*
                      * Let the super class method handle exceptions. Make the
                      * exception available to the importer in the form of the
@@ -83,19 +83,19 @@ public class SolrBridgeImpl implements SolrBridge {
 
     @Override
     public void addDocument(SolrInputDocument doc) throws SolrServerException, IOException {
-        solrServer.add(doc);
+        solrClient.add(doc);
     }
 
     @Override
     public void addDocuments(Collection<SolrInputDocument> docs) throws SolrServerException, IOException {
-        solrServer.add(docs);
+        solrClient.add(docs);
     }
 
     @Override
     public void commit() throws SolrServerException, IOException {
         if (commit) {
             LOG.info("Manual commit");
-            solrServer.commit();
+            solrClient.commit();
         } else {
             LOG.debug("Commit requested but skipping because commit == false");
         }
@@ -109,15 +109,15 @@ public class SolrBridgeImpl implements SolrBridge {
     }
 
     @Override
-    public void shutdownServer() throws SolrServerException, IOException {
+    public void shutdown() throws SolrServerException, IOException {
         //commit before shutdown
-        solrServer.commit();
-        solrServer.shutdown();
+        solrClient.commit();
+        solrClient.close();
     }
 
     @Override
-    public SolrServer getServer() {
-        return solrServer;
+    public SolrClient getClient() {
+        return solrClient;
     }
 
     public void setCommit(boolean commit) {

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrRequest;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.util.NamedList;
@@ -324,18 +324,18 @@ public class MetadataImporterTest extends ImporterTestcase {
         }
 
         @Override
-        public SolrServer getServer() {
-            return new SolrServer() {
+        public SolrClient getClient() {
+            return new SolrClient() {
                 @Override
-                public NamedList<Object> request(SolrRequest request) throws SolrServerException, IOException {
+                public NamedList<Object> request(SolrRequest request, String string) throws SolrServerException, IOException {
                     //do nothing
                     LOG.debug("SolrRequest to dummy server: {}", request);
                     return new NamedList<>();
                 }
                 
                 @Override
-                public void shutdown() {
-                    LOG.debug("Dummy solr server shutdown");
+                public void close() {
+                    LOG.debug("Dummy solr client shutdown");
                 }
             };
         }
@@ -346,7 +346,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         }
 
         @Override
-        public void shutdownServer() {
+        public void shutdown() {
             LOG.debug("Dummy solr bridge shutdown");
         }
 

@@ -16,9 +16,10 @@
  */
 package clarin.cmdi.vlo.statistics.collector;
 
+import java.io.IOException;
 import clarin.cmdi.vlo.statistics.model.VloReport;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 
 /**
@@ -27,5 +28,5 @@ import org.apache.solr.client.solrj.SolrServerException;
  */
 public interface VloStatisticsCollector {
 
-    void collect(VloReport report, VloConfig config, SolrServer solrServer) throws SolrServerException;
+    void collect(VloReport report, VloConfig config, SolrClient solrClient) throws SolrServerException, IOException;
 }

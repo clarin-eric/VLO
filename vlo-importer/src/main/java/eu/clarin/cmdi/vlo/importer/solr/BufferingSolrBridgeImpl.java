@@ -81,11 +81,11 @@ public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
     }
 
     @Override
-    public void shutdownServer() throws SolrServerException, IOException {
+    public void shutdown() throws SolrServerException, IOException {
         LOG.info("Shutdown requested");
         this.commit();
         LOG.info("{} committed submits in lifespan", submitCount.get());
-        super.shutdownServer();
+        super.shutdown();
     }
 
     private synchronized void submitIfBufferFull() throws SolrServerException, IOException {
@@ -103,7 +103,7 @@ public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
     }
 
     protected synchronized void submitBuffer() throws IOException, SolrServerException {
-        getServer().add(buffer);
+        getClient().add(buffer);
         LOG.trace("Submit count total: {}", submitCount.addAndGet(buffer.size()));
         buffer.clear();
     }

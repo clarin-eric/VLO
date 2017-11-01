@@ -31,7 +31,6 @@ import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.util.AbstractSolrTestCase;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
@@ -41,6 +40,11 @@ import com.google.common.collect.ImmutableList;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
+import org.apache.solr.SolrTestCaseJ4;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import org.junit.BeforeClass;
 
 /**
  * Example taken from
@@ -48,17 +52,21 @@ import eu.clarin.cmdi.vlo.importer.CMDIData;
  *
  * @author twagoo
  */
-public class SearchResultsDaoImplTest extends AbstractSolrTestCase {
+public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
 
     private EmbeddedSolrServer server;
     private SearchResultsDaoImpl instance;
+
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+        SolrTestCaseJ4.initCore(getResourcePath(getConfigString()), getResourcePath(getSchemaString()));
+    }
 
     @Before
     @Override
     public void setUp() throws Exception {
         // set up an embedded solr server
         super.setUp();
-        initCore(getResourcePath(getConfigString()), getResourcePath(getSchemaString()));
         server = new EmbeddedSolrServer(h.getCoreContainer(), h.getCore().getName());
         instance = new SearchResultsDaoImpl(server, new VloConfig() {
 
@@ -86,15 +94,16 @@ public class SearchResultsDaoImplTest extends AbstractSolrTestCase {
         server.add(document);
 
         server.commit();
+
+        super.postSetUp();
     }
 
     @After
     @Override
     public void tearDown() throws Exception {
+        super.preTearDown();
+        super.clearIndex();
         super.tearDown();
-        if (server != null) {
-            server.shutdown();
-        }
     }
 
     /**
@@ -160,11 +169,11 @@ public class SearchResultsDaoImplTest extends AbstractSolrTestCase {
     }
 
     public static String getSchemaString() {
-        return "/solr/collection1/conf/schema.xml";
+        return "/solr/collection1/conf/managed-schema";
     }
 
     public static String getConfigString() {
-        return "/solr/collection1/conf/solrconfig.xml";
+        return "/solr/collection1/solrconfig.xml";
     }
 
     public static String getResourcePath(String resource) throws Exception {

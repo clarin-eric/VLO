@@ -73,7 +73,7 @@ public class SolrFacetFieldsService implements FacetFieldsService {
             } else {
                 Collection<String> selectedValues = facetSelection.getValues();
 
-                FacetField _newFacetField = new FacetField(facet.getName(), facet.getName(), facet.getEnd());
+                FacetField _newFacetField = new FacetField(facet.getName());
                 //for each value from facet check if is selected and if not add it to the new response
                 for (Count val : facet.getValues()) {
                     if (!selectedValues.contains(val.getName())) {

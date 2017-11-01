@@ -2,8 +2,9 @@ package eu.clarin.cmdi.vlo.service.solr.impl;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import java.io.IOException;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
@@ -16,14 +17,14 @@ import org.slf4j.LoggerFactory;
 public class SolrDaoImpl {
 
     private final static Logger logger = LoggerFactory.getLogger(SolrDaoImpl.class);
-    private final SolrServer solrServer;
+    private final SolrClient solrClient;
 
-    public SolrDaoImpl(SolrServer solrServer, VloConfig config) {
-        this.solrServer = solrServer;
+    public SolrDaoImpl(SolrClient solrClient, VloConfig config) {
+        this.solrClient = solrClient;
     }
 
-    protected SolrServer getSolrserver() {
-        return solrServer;
+    protected SolrClient getSolrClient() {
+        return solrClient;
     }
 
     /**
@@ -77,14 +78,14 @@ public class SolrDaoImpl {
     protected QueryResponse fireQuery(SolrQuery query) {
         try {
             logger.debug("Executing query: {}", query);
-            final QueryResponse response = solrServer.query(query);
+            final QueryResponse response = solrClient.query(query);
             logger.trace("Response: {}", response);
             return response;
-        } catch(SolrException e) {
+        } catch(SolrException | SolrServerException e) {
             logger.error("Error getting data:", e);
             throw new RuntimeException(e);
-        } catch (SolrServerException e) {
-            logger.error("Error getting data:", e);
+        } catch(IOException e) {
+            logger.error("IO error:", e);
             throw new RuntimeException(e);
         }
     }

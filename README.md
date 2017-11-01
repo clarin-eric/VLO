@@ -18,7 +18,7 @@ For more information, see the [wiki page](https://trac.clarin.eu/wiki/CmdiVirtua
 
 - [README](README.md)
 	This file; a general introduction and development information
-- [DEPLOY-README](DEPLOY-README.txt)
+- [DEPLOYMENT](DEPLOYMENT.md)
 	Instructions on how to deploy a fresh VLO installation
 - [UPGRADE](UPGRADE.txt)
 	Instructions on how to upgrade an existing VLO installation
@@ -108,9 +108,9 @@ and VLO-mapping versions as these are often developed in parallel to the VLO.
 * Done!
 
 After building the entire project, a deployment package will be present in the
-`target` directory of `vlo-distribution`. This includes WARs for both the Solr
-and the web app front end as well as the importer script and default configuration
-files.
+`target` directory of `vlo-distribution`. This includes a WAR for
+the web app front end, a prepared configuraiton for Solr, the importer script, and default
+configuration files.
 
 Be aware of the following build profiles that pre-configure the deployment packages
 for different environments:
@@ -130,8 +130,8 @@ admin can tell you more :)
 
 # Running the VLO 
 
-After a successful deployment and configuration, you should be able to browse to
-the VLO web app and browse the imported records.
+After a successful [deployment](DEPLOYMENT.md) and configuration, you should be able to
+browse to the VLO web app and browse the imported records.
 
 If the VLO is empty, you will need to run an import first. 
 
