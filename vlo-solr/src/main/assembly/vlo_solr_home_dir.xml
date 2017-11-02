@@ -10,7 +10,7 @@
         <fileSet>
             <directory>solr-home</directory>
             <filtered>false</filtered>
- 		    <outputDirectory>vlo-solr-home</outputDirectory>
+            <outputDirectory>vlo-solr-home</outputDirectory>
         </fileSet>
     </fileSets>
 </assembly>

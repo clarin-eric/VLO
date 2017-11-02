@@ -79,4 +79,6 @@ Solr home in ${SOLR_HOME_TARGET_DIR}
 
 Created '${SOLR_TARGET_DIST}' for distribution
 
-You can also start the server by running '${SOLR_TARGET_DIR}/bin/solr start -s ${SOLR_HOME_TARGET_DIR} [-t /my/solr/data/directory]'"
+You can also start the server by running '${SOLR_TARGET_DIR}/bin/solr start -s ${SOLR_HOME_TARGET_DIR} [-t /my/solr/data/directory]'
+
+OR install Solr on your os by using the installation script in '${SOLR_TARGET_DIR}/bin."

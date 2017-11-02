@@ -117,6 +117,15 @@
             <directory>${project.parent.basedir}/vlo-solr/target/vlo-solr-${project.version}-vlo-solr-home/vlo-solr-home</directory>
             <outputDirectory>solr/vlo-solr-home</outputDirectory>
         </fileSet>
+        
+        <!-- solr distribution -->
+        <fileSet>
+            <directory>${project.parent.basedir}/vlo-solr/target</directory>
+            <includes>
+                <include>vlo-solr-${project.version}-dist.tar.gz</include>
+            </includes>
+            <outputDirectory>solr</outputDirectory>
+        </fileSet>
          
         <!-- sitemap -->
         <fileSet>
