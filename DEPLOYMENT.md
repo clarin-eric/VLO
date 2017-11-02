@@ -47,9 +47,26 @@ Follow the instructions of your operating system and/or the official
 upgrading Solr on your system, in particular the section
 ["Taking Solr to Production"](https://lucene.apache.org/solr/guide/7_1/taking-solr-to-production.html).
 
+A script to obtain a runnable/installable version of Solr can be found inside
+`${VLO}/solr/vlo-solr-xxx-dist.tar.gz`. Unpack this, then run the `build-solr.sh` script
+inside the unpaked `solr` directory and the script will retrieve and prepare everything 
+you need to run or install Solr.  For example:
+
+```sh
+$ cd ${VLO}/solr
+$ tar zxvf vlo-solr-xxx-dist.tar.gz
+$ cd solr
+$ ./build-solr.sh
+[Build script output omitted]
+$ target/solr/bin/solr start -s ${VLO}/solr/vlo-solr-home # this starts a Solr instance in the foreground right away (port 8983)
+$ curl -L http://localhost:8983/solr/vlo-index/select?rows=10
+[Solr response omitted]
+$ target/solr/bin/solr stop # after this, install Solr poperly ;)
+```
+
 If you have a **docker-based setup**, you can also use the
 [official docker image](https://github.com/docker-solr), or use the
-[version maintained by CLARIN](https://gitlab.com/CLARIN-ERIC/docker-solr) if working in
+[version maintained by CLARIN](https://gitlab.com/CLARIN-ERIC/docker-solr/container_registry) if working in
 CLARIN's central infrastructure. For configuration hints, see the next section.
 
 In any case, make sure to **always use a matching version of Solr**. Find out which version
@@ -94,6 +111,9 @@ Note: making use of the default configuration in which a core's data directory i
 in `${solr.data.home}/${CORE_NAME}/data`, one *could ommit* setting `solr.data.home`
 and just mount a persistent (core specific!) storage directory in that location. This is
 **not recommended** for production.
+
+The [VLO Docker Compose configuration](https://gitlab.com/CLARIN-ERIC/compose_vlo) may
+be helpful to get started.
 
 ## Web-app
 
