@@ -122,7 +122,7 @@
         <fileSet>
             <directory>${project.parent.basedir}/vlo-solr/target</directory>
             <includes>
-                <include>vlo-solr-${project.version}-dist.tar.gz</include>
+                <include>vlo-${project.version}-solr.tar.gz</include>
             </includes>
             <outputDirectory>solr</outputDirectory>
         </fileSet>

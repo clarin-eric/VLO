@@ -48,7 +48,7 @@ upgrading Solr on your system, in particular the section
 ["Taking Solr to Production"](https://lucene.apache.org/solr/guide/7_1/taking-solr-to-production.html).
 
 A script to obtain a runnable/installable version of Solr can be found inside
-`${VLO}/solr/vlo-solr-xxx-dist.tar.gz`. Unpack this, then run the `build-solr.sh` script
+`${VLO}/solr/vlo-xxx-solr.tar.gz`. Unpack this, then run the `build-solr.sh` script
 inside the unpaked `solr` directory and the script will retrieve and prepare everything 
 you need to run or install Solr.  For example:
 

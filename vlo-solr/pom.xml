@@ -51,6 +51,8 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
+                            <finalName>${project.parent.artifactId}-${project.parent.version}-solr</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
                             <descriptors>
                                 <descriptor>src/main/assembly/vlo_solr_dist.xml</descriptor>
                             </descriptors>
