@@ -10,10 +10,13 @@
             <directory>.</directory>
             <includes>
                 <include>build-solr.sh</include>
-                <include>solr-home</include>
                 <include>README.md</include>
             </includes>
             <outputDirectory>solr</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>solr-home</directory>
+            <outputDirectory>solr/solr-home</outputDirectory>
         </fileSet>
     </fileSets>
 </assembly>
