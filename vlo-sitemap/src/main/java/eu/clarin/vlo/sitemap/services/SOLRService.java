@@ -19,7 +19,7 @@ public class SOLRService {
 	
 	//to increase performances, should be increased in future
 	static final int MAX_NUM_OF_RECORDS = 1500000; //1M
-	static final String GET_IDS = "fl=id&rows=";
+	static final String GET_IDS = "wt=xml&fl=id&rows=";
 	
 	
 	private VTDGen vg;
