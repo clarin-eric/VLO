@@ -20,6 +20,9 @@
         files for the Solr and web app servlets, as well as the binaries and 
         scripts to run the importer.
     </description>
+    <properties>
+        <distribution.nameAppendix>unspecified</distribution.nameAppendix>
+    </properties>
     
     <build>
         <plugins>
@@ -27,7 +30,8 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
-                    <finalName>${project.parent.artifactId}-${project.parent.version}</finalName>
+                    <finalName>${project.parent.artifactId}-${project.parent.version}-${distribution.nameAppendix}</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
                     <descriptors>
                         <descriptor>src/main/assembly/installPackageBuilder.xml</descriptor>
                     </descriptors>
@@ -44,5 +48,32 @@
             </plugin>
         </plugins>
     </build>
-
+    
+    <profiles>
+        <profile>
+            <id>local-testing</id>
+            <properties>
+                <distribution.nameAppendix>testing</distribution.nameAppendix>
+            </properties>
+        </profile>
+        <profile>
+            <id>dev-vm</id>
+            <properties>
+                <distribution.nameAppendix>dev</distribution.nameAppendix>
+            </properties>
+        </profile>
+        <profile>
+            <id>production</id>
+            <properties>
+                <distribution.nameAppendix>production</distribution.nameAppendix>
+            </properties>
+        </profile>
+        <profile>
+            <id>docker</id>
+            <properties>
+                <distribution.nameAppendix>docker</distribution.nameAppendix>
+            </properties>
+        </profile>
+    </profiles>
+    
 </project>
