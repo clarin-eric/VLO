@@ -116,14 +116,14 @@
         </profile>
         
         <profile>
-            <!--  For deployment to beta-vlo.clarin.eu -->
-            <id>beta</id>
+            <!--  For use in docker images (see https://gitlab.com/CLARIN-ERIC) -->
+            <id>docker</id>
             <properties>
-                <vloconfig.deleteAllFirst>false</vloconfig.deleteAllFirst>
-                <vloconfig.maxDaysInSolr>7</vloconfig.maxDaysInSolr>
+                <vloconfig.deleteAllFirst>${VLO_DOCKER_DELETE_ALL_FIRST}</vloconfig.deleteAllFirst>
+                <vloconfig.maxDaysInSolr>${VLO_DOCKER_MAX_DAYS_IN_SOLR}</vloconfig.maxDaysInSolr>
                 <vloconfig.solrUrl>${VLO_DOCKER_SOLR_URL}</vloconfig.solrUrl>
                 <vloconfig.homeUrl>${VLO_DOCKER_PUBLIC_HOME_URL}</vloconfig.homeUrl>
-                <vloconfig.dataRootsFile>dataroots-beta.xml</vloconfig.dataRootsFile>
+                <vloconfig.dataRootsFile>${VLO_DOCKER_DATAROOTS_FILE}</vloconfig.dataRootsFile>
                 <vloconfig.mappingFilesLocation>${VLO_DOCKER_MAPPING_BASE_URI}uniform-maps/</vloconfig.mappingFilesLocation>
                 <vloconfig.facetConceptsFileLocation>${VLO_DOCKER_MAPPING_BASE_URI}mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
                 <vloconfig.fileProcessingThreads>${VLO_DOCKER_FILE_PROCESSING_THREADS}</vloconfig.fileProcessingThreads>
