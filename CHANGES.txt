@@ -1,12 +1,33 @@
 Bug fixes and new features
 --------------------------
+VLO-4.3.0 (November 2017)
+
+* Solved issue of going to simplified search page when going back from a record page
+    <https://github.com/clarin-eric/VLO/issues/95>
+* The order of selection is reflected in the facets listed in the 'breadcrumbs'
+    <https://github.com/clarin-eric/VLO/issues/14>
+* The record page shows "similar records"
+    <https://github.com/clarin-eric/VLO/issues/61>
+* The 'all facet values' dialogue now has an option to filter by first letter and a
+redesigned layout
+    <https://github.com/clarin-eric/VLO/issues/71>
+* Additional events are tracked with Piwik
+    <https://github.com/clarin-eric/VLO/issues/84>
+    <https://github.com/clarin-eric/VLO/issues/89>
+* Solr client and backend upgraded to version 7.1
+    <https://github.com/clarin-eric/VLO/issues/87>
+* Solr index size reduced by not storing full text content for retrieval
+    <https://github.com/clarin-eric/VLO/issues/99>
+* The 'beta' build profile has been renamed to 'docker' and contains more VloConfig 
+properties for (runtime) filtering
+
 VLO 4.2.1 (August 2017)
 
 * Parallel processing during import and caching improvements
-	<https://github.com/clarin-eric/VLO/issues/29>
-	<https://github.com/clarin-eric/VLO/issues/68>
+    <https://github.com/clarin-eric/VLO/issues/29>
+    <https://github.com/clarin-eric/VLO/issues/68>
 * Fixed detecting (conceptLink) context for attribute XPaths 
-	<https://github.com/clarin-eric/VLO/issues/91>
+    <https://github.com/clarin-eric/VLO/issues/91>
 * Improved performance when reading self links from files (for hierarchy processing)
 
 VLO 4.2.0 (July 2017)
