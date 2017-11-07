@@ -54,14 +54,18 @@ you need to run or install Solr.  For example:
 
 ```sh
 $ cd ${VLO}/solr
-$ tar zxvf vlo-solr-xxx-dist.tar.gz
+$ tar zxvf vlo-xxx-solr.tar.gz
 $ cd solr
 $ ./build-solr.sh
 [Build script output omitted]
-$ target/solr/bin/solr start -s ${VLO}/solr/vlo-solr-home # this starts a Solr instance in the foreground right away (port 8983)
+$ target/solr/bin/solr start -s ${VLO}/solr/vlo-solr-home # This starts a Solr instance in the foreground right away (port 8983)
+[Output omitted]
 $ curl -L http://localhost:8983/solr/vlo-index/select?rows=10
 [Solr response omitted]
-$ target/solr/bin/solr stop # after this, install Solr poperly ;)
+$ target/solr/bin/solr stop 
+[Output omitted]
+$ # Note: the next step will (attempt to) properly install Solr on your system!
+$ sudo target/solr/bin/install_solr_service.sh target/solr-?.?.?.tgz
 ```
 
 If you have a **docker-based setup**, you can also use the
