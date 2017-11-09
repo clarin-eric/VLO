@@ -447,14 +447,17 @@ public class MetadataImporter {
      * a directory or rootFile if it is a File
      */
     protected List<List<File>> getFilesFromDataRoot(File rootFile) {
+        LOG.info("Collecting files in data root {}", rootFile);
         List<List<File>> result = new ArrayList<>();
         if (rootFile.isFile()) {
+            LOG.info("Data root {} is a singleton dataroot", rootFile);
             List<File> singleFileList = new ArrayList<>();
             singleFileList.add(rootFile);
             result.add(singleFileList);
         } else {
             File[] centerDirs = rootFile.listFiles();
             for (File centerDir : centerDirs) {
+                LOG.info("Collecting files from centre directory {}", centerDir);
                 List<File> centerFileList = new ArrayList<>();
                 if (centerDir.isDirectory()) {
                     centerFileList.addAll(FileUtils.listFiles(centerDir, VALID_CMDI_EXTENSIONS, true));
