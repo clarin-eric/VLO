@@ -464,6 +464,7 @@ public class MetadataImporter {
                 }
 
                 if (!centerFileList.isEmpty()) {
+                    LOG.info("Found {} candidates for import in {}", centerFileList.size(), centerDir);
                     result.add(centerFileList);
                 }
             }
