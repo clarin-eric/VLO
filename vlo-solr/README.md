@@ -63,6 +63,7 @@ docker run --rm \
 	solr:7.1-alpine`
 ```
 
-In a CLARIN (staging or production) environment you may want to use CLARIN's version
-of the Solr image, which can be found via
-[CLARIN's GitLab pages](https://gitlab.com/CLARIN-ERIC).
+In a CLARIN (staging or production) environment you may want to use 
+[CLARIN's version of the Solr image](https://gitlab.com/CLARIN-ERIC/docker-solr). You
+may also want to have a look at the 
+[Docker compose configuration](https://gitlab.com/CLARIN-ERIC/compose_vlo).
