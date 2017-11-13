@@ -5,8 +5,62 @@ Some general development notes.
 ## Setting up 
 
 Follow the instructions in DEPLOY-README to set up a development environment.
-You may deploy the Solr instance and the web app from your IDE. Make sure to
-set the required Java system property for the Solr data location (solr.data.dir)!
+You may deploy the *web app* to a Tomcat instance from your IDE. You can run (and
+optionally install) *Solr* using the [script in `vlo-solr`](vlo-solr/build-solr.sh). For
+instruction on the latter, see the [`vlo-solr` documentation](vlo-solr/README.md).
+
+### Docker based workflow
+
+You can also use the Docker images available for the VLO and Solr in your development
+workflow:
+
+- [docker-vlo](https://gitlab.com/CLARIN-ERIC/docker-vlo-beta)
+- A Solr image
+  - [hub.docker.com/_/solr](https://hub.docker.com/_/solr/): the official Solr image
+  - [CLARIN-ERIC/docker-solr](https://gitlab.com/CLARIN-ERIC/docker-solr): CLARIN's
+  adaptation of the Solr image that better works in the CLARIN infrastructure
+
+For development you can choose either of the two Solr images, as long as you configure
+it right. See their respective documentation files for details. You can also use the
+configurations provided in [compose_vlo](https://gitlab.com/CLARIN-ERIC/compose_vlo).
+
+#### Example
+
+```sh
+VLO_VERSION="4.3-SNAPSHOT"
+SOLR_IMAGE_VERSION="1.0.0-beta1"
+VLO_IMAGE_VERSION="1.3.0-beta1"
+VLO_GIT_CHECKOUT="${HOME}/git/VLO"
+
+docker run --rm -d --name vlo_dev_solr \
+	-v ${VLO_GIT_CHECKOUT}/vlo-solr/solr-home:/solr-home \
+	-e SOLR_HOME=/solr-home \
+	-v ${HOME}/vlo-dev-solr-data:/solr-data \
+	-e SOLR_DATA_HOME=/solr-data \
+	-p 8983:8983 \
+	registry.gitlab.com/clarin-eric/docker-solr:${SOLR_IMAGE_VERSION}
+
+docker run --rm -d --name vlo_dev_web \
+	--link vlo_dev_solr \
+	-e VLO_DOCKER_SOLR_URL=http://vlo_dev_solr:8983/solr/vlo-index/ \
+	-v ${VLO_GIT_CHECKOUT}/vlo-web-app/target/vlo-web-app-${VLO_VERSION}:/opt/vlo/war/vlo \
+	-p 8080:8080 \
+	registry.gitlab.com/clarin-eric/docker-vlo-beta:${VLO_IMAGE_VERSION}
+```
+
+The mounts and environment variables in `vlo_dev_solr` ensure that the right Solr
+configuration is loaded (directly from the VLO source tree) and that the Solr data is
+persisted (in the user's home directory in this example).
+
+The mount in `vlo_dev_web` causes an override of the web application directory by the
+build output of the `vlo-web-app` project, which means that the effects of a change to the
+web app can be seen inside the container by simply doing a (partial) rebuild of the 
+project.
+
+The first time you start the Solr container it would not contain data. You can simply
+run an importer against `http://localhost:8983/solr/vlo-index` with some local data or
+copy some existing sample data (TODO: link to sample data project) into the Solr data
+directory on your host.
 
 ## Preparing for release 
 
@@ -86,15 +140,15 @@ configuration files.
 Be aware of the following build profiles that pre-configure the deployment packages
 for different environments:
 - `local-testing` for local development and testing purposes
+- `docker` for use in the [docker-vlo](https://gitlab.com/CLARIN-ERIC/docker-vlo-beta) project
 - `dev-vm` for the development host (alpha-vlo.clarin.eu)
-- `beta` for the staging host (beta-vlo.clarin.eu)
 - `production` for production (vlo.clarin.eu)
 
 To build using a profile, use e.g. `mvn clean install -Pproduction`. Please do this
 when making a deployment package for beta (`beta`) or production (`production`)!
 
 It's good practice to turn your tag into a "release" on GitHub and attach the deployment
-package for the target environment (beta, production). Share this link with the 
+package for the target environment (docker, production). Share this link with the 
 administrators or, if you want to be friendly, make a pull request for the applicable 
 docker project if available - see [CLARIN on GitLab](https://gitlab.com/CLARIN-ERIC). Your
 admin can tell you more :)
