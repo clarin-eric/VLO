@@ -15,7 +15,7 @@ You can also use the Docker images available for the VLO and Solr in your develo
 workflow:
 
 - [docker-vlo](https://gitlab.com/CLARIN-ERIC/docker-vlo-beta)
-- A Solr image
+- A Solr image:
   - [hub.docker.com/_/solr](https://hub.docker.com/_/solr/): the official Solr image
   - [CLARIN-ERIC/docker-solr](https://gitlab.com/CLARIN-ERIC/docker-solr): CLARIN's
   adaptation of the Solr image that better works in the CLARIN infrastructure
@@ -48,6 +48,12 @@ docker run --rm -d --name vlo_dev_web \
 	registry.gitlab.com/clarin-eric/docker-vlo-beta:${VLO_IMAGE_VERSION}
 ```
 
+See the [docker-solr registry](https://gitlab.com/CLARIN-ERIC/docker-solr/container_registry)
+and [docker-vlo registry](https://gitlab.com/CLARIN-ERIC/docker-vlo-beta/container_registry)
+to find out what versions of the images are available.
+Make sure that `VLO_VERSION` matches the version of the VLO checked out in your
+`VLO_GIT_CHECKOUT` directory.
+
 The mounts and environment variables in `vlo_dev_solr` ensure that the right Solr
 configuration is loaded (directly from the VLO source tree) and that the Solr data is
 persisted (in the user's home directory in this example).
@@ -56,6 +62,9 @@ The mount in `vlo_dev_web` causes an override of the web application directory b
 build output of the `vlo-web-app` project, which means that the effects of a change to the
 web app can be seen inside the container by simply doing a (partial) rebuild of the 
 project.
+
+After this you will should able to visit `http://localhost:8080` (VLO web app) and 
+`http://localhost:8983/solr` (Solr's administration interface).
 
 The first time you start the Solr container it would not contain data. You can simply
 run an importer against `http://localhost:8983/solr/vlo-index` with some local data or
