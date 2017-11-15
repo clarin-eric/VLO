@@ -53,6 +53,7 @@ import eu.clarin.cmdi.vlo.importer.processor.*;
 import eu.clarin.cmdi.vlo.importer.solr.BufferingSolrBridgeImpl;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridge;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridgeImpl;
+import java.net.SocketTimeoutException;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -220,8 +221,13 @@ public class MetadataImporter {
             try {
                 solrBridge.commit();
                 buildSuggesterIndex();
+                solrBridge.commit();
             } catch (SolrServerException | IOException e) {
-                LOG.error("cannot commit:\n", e);
+                if (e instanceof SocketTimeoutException || e.getCause() instanceof SocketTimeoutException) {
+                    LOG.warn("Retrieved a timeout while waiting for building of autocompletion index to complete.", e);
+                } else {
+                    LOG.error("cannot commit:\n", e);
+                }
             }
             shutdown();
         }

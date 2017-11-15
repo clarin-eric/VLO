@@ -1049,6 +1049,8 @@
           <str name="suggest">true</str>
 	  <str name="suggest.count">10</str>
 	  <str name="suggest.dictionary">mySuggester</str>
+          <!-- 3,600,000ms = 1h; suggest building can take a long time -->
+          <int name="timeAllowed">3600000</int>
      </lst>
      <arr name="components">
           <str>suggest</str>
