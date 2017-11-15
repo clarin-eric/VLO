@@ -27,19 +27,21 @@ configurations provided in [compose_vlo](https://gitlab.com/CLARIN-ERIC/compose_
 #### Example
 
 ```sh
+# Make sure to set these right!
 VLO_VERSION="4.3-SNAPSHOT"
-SOLR_IMAGE_VERSION="1.0.0-beta1"
+SOLR_IMAGE_VERSION="1.0.0-beta2"
 VLO_IMAGE_VERSION="1.3.0-beta1"
 VLO_GIT_CHECKOUT="${HOME}/git/VLO"
 
+# Start the Solr server
 docker run --rm -d --name vlo_dev_solr \
-	-v ${VLO_GIT_CHECKOUT}/vlo-solr/solr-home:/solr-home \
-	-e SOLR_HOME=/solr-home \
+	-v ${VLO_GIT_CHECKOUT}/vlo-solr/solr-home:/docker-entrypoint-initsolr.d/solr_home:ro \
 	-v ${HOME}/vlo-dev-solr-data:/solr-data \
 	-e SOLR_DATA_HOME=/solr-data \
 	-p 8983:8983 \
 	registry.gitlab.com/clarin-eric/docker-solr:${SOLR_IMAGE_VERSION}
 
+# Start the web app
 docker run --rm -d --name vlo_dev_web \
 	--link vlo_dev_solr \
 	-e VLO_DOCKER_SOLR_URL=http://vlo_dev_solr:8983/solr/vlo-index/ \
@@ -55,8 +57,13 @@ Make sure that `VLO_VERSION` matches the version of the VLO checked out in your
 `VLO_GIT_CHECKOUT` directory.
 
 The mounts and environment variables in `vlo_dev_solr` ensure that the right Solr
-configuration is loaded (directly from the VLO source tree) and that the Solr data is
-persisted (in the user's home directory in this example).
+configuration is provisioned (from the VLO source tree) and that the Solr data is
+persisted (in the user's home directory in this example). Note that you can also mount
+the `solr-home` directory directly onto a location to serve as `SOLR_HOME` (e.g.
+`-v ${VLO_GIT_CHECKOUT}/vlo-solr/solr-home:/my-solr-home -e SOLR_HOME=/my-solr-home`)
+but only do this if you want to capture any changes made by Solr to apply them to the
+configuration in the sources. See the 
+[docker-solr](https://gitlab.com/CLARIN-ERIC/docker-solr) project for more information.
 
 The mount in `vlo_dev_web` causes an override of the web application directory by the
 build output of the `vlo-web-app` project, which means that the effects of a change to the
