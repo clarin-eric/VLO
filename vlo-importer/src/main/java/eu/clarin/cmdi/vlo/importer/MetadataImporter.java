@@ -53,6 +53,7 @@ import eu.clarin.cmdi.vlo.importer.processor.*;
 import eu.clarin.cmdi.vlo.importer.solr.BufferingSolrBridgeImpl;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridge;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridgeImpl;
+import java.net.SocketTimeoutException;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -631,7 +632,12 @@ public class MetadataImporter {
         paramMap.put("qt", "/suggest");
         paramMap.put("suggest.build", "true");
         SolrParams params = new MapSolrParams(paramMap);
-        solrBridge.getClient().query(params);
+        try {
+            solrBridge.getClient().query(params);
+        } catch (SocketTimeoutException ex) {
+            // We are swallowing this because it's a non-fatal error, building will still continue in the back end
+            LOG.warn("Retrieved a timeout while waiting for building of autocompletion index to complete.", ex);
+        }
     }
 
     /**
