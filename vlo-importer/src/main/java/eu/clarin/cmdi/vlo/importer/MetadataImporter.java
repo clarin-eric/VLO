@@ -221,8 +221,13 @@ public class MetadataImporter {
             try {
                 solrBridge.commit();
                 buildSuggesterIndex();
+                solrBridge.commit();
             } catch (SolrServerException | IOException e) {
-                LOG.error("cannot commit:\n", e);
+                if (e instanceof SocketTimeoutException || e.getCause() instanceof SocketTimeoutException) {
+                    LOG.warn("Retrieved a timeout while waiting for building of autocompletion index to complete.", e);
+                } else {
+                    LOG.error("cannot commit:\n", e);
+                }
             }
             shutdown();
         }
@@ -632,12 +637,7 @@ public class MetadataImporter {
         paramMap.put("qt", "/suggest");
         paramMap.put("suggest.build", "true");
         SolrParams params = new MapSolrParams(paramMap);
-        try {
-            solrBridge.getClient().query(params);
-        } catch (SocketTimeoutException ex) {
-            // We are swallowing this because it's a non-fatal error, building will still continue in the back end
-            LOG.warn("Retrieved a timeout while waiting for building of autocompletion index to complete.", ex);
-        }
+        solrBridge.getClient().query(params);
     }
 
     /**
