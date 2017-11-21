@@ -29,8 +29,8 @@ configurations provided in [compose_vlo](https://gitlab.com/CLARIN-ERIC/compose_
 ```sh
 # Make sure to set these right!
 VLO_VERSION="4.3-SNAPSHOT"
-SOLR_IMAGE_VERSION="1.0.0-beta2"
-VLO_IMAGE_VERSION="1.3.0-beta1"
+SOLR_IMAGE_VERSION="1.0.0-beta3"
+VLO_IMAGE_VERSION="1.3.0-beta2"
 VLO_GIT_CHECKOUT="${HOME}/git/VLO"
 
 # Start the Solr server
