@@ -76,7 +76,7 @@ public class VloSolrSpringConfig {
 
     @Bean
     public SolrDocumentQueryFactoryImpl documentQueryFactory() {
-        return new SolrDocumentQueryFactoryImpl(DOCUMENT_FIELDS);
+        return new SolrDocumentQueryFactoryImpl(getDocumentFields());
     }
 
     @Bean
@@ -91,15 +91,53 @@ public class VloSolrSpringConfig {
 
     @Bean(name = "documentFieldOrder")
     public List<String> documentFieldOrder() {
-        return DOCUMENT_FIELDS;
+        return getDocumentFields();
     }
 
     /**
      * Fields to request for documents. TODO: Make configurable?
      *
      */
-    public static final List<String> DOCUMENT_FIELDS = ImmutableList.of(
-            FacetConstants.FIELD_NAME,
+    //public List<String> DOCUMENT_FIELDS = ImmutableList.of(
+    public List<String> getDocumentFields(){ 
+    	return ImmutableList.of(
+    		vloConfig.getFields().get("FIELD_NAME"), 
+    		vloConfig.getFields().get("FIELD_DESCRIPTION"),
+    		vloConfig.getFields().get("FIELD_COLLECTION"),
+    		vloConfig.getFields().get("FIELD_LANGUAGE_CODE"),
+    		vloConfig.getFields().get("FIELD_MODALITY"),
+    		vloConfig.getFields().get("FIELD_CONTINENT"),
+    		vloConfig.getFields().get("FIELD_COUNTRY"),
+    		vloConfig.getFields().get("FIELD_GENRE"),
+    		vloConfig.getFields().get("FIELD_SUBJECT"),
+    		vloConfig.getFields().get("FIELD_ORGANISATION"),
+    		vloConfig.getFields().get("FIELD_LICENSE"),
+    		vloConfig.getFields().get("FIELD_LICENSE_TYPE"),
+    		vloConfig.getFields().get("FIELD_AVAILABILITY"),
+    		vloConfig.getFields().get("FIELD_ACCESS_INFO"),
+    		vloConfig.getFields().get("FIELD_KEYWORDS"),
+    		vloConfig.getFields().get("FIELD_NATIONAL_PROJECT"),
+    		vloConfig.getFields().get("FIELD_RESOURCE_CLASS"),
+    		vloConfig.getFields().get("FIELD_RESOURCE"),
+    		vloConfig.getFields().get("FIELD_SELF_LINK"),
+    		vloConfig.getFields().get("FIELD_ID"),
+    		vloConfig.getFields().get("FIELD_DATA_PROVIDER"),
+    		vloConfig.getFields().get("FIELD_FILENAME"),
+    		vloConfig.getFields().get("FIELD_FORMAT"),
+    		vloConfig.getFields().get("FIELD_LANDINGPAGE"),
+    		vloConfig.getFields().get("FIELD_SEARCHPAGE"),
+    		vloConfig.getFields().get("FIELD_SEARCH_SERVICE"),
+    		vloConfig.getFields().get("FIELD_LAST_SEEN"),
+    		vloConfig.getFields().get("FIELD_CLARIN_PROFILE"),
+    		vloConfig.getFields().get("FIELD_COMPLETE_METADATA"),
+    		vloConfig.getFields().get("FIELD_HIERARCHY_WEIGHT"),
+    		vloConfig.getFields().get("FIELD_HAS_PART"),
+    		vloConfig.getFields().get("FIELD_HAS_PART_COUNT"),
+    		vloConfig.getFields().get("FIELD_RESOURCE_COUNT"),
+    		vloConfig.getFields().get("FIELD_IS_PART_OF"),
+    		vloConfig.getFields().get("FIELD_SOLR_SCORE")
+    		
+    		/*FacetConstants.FIELD_NAME,
             FacetConstants.FIELD_DESCRIPTION,
             FacetConstants.FIELD_COLLECTION,
             FacetConstants.FIELD_LANGUAGE_CODE,
@@ -133,6 +171,7 @@ public class VloSolrSpringConfig {
             FacetConstants.FIELD_HAS_PART_COUNT,
             FacetConstants.FIELD_RESOURCE_COUNT,
             FacetConstants.FIELD_IS_PART_OF,
-            FacetConstants.FIELD_SOLR_SCORE
+            FacetConstants.FIELD_SOLR_SCORE*/
     );
+    }
 }
