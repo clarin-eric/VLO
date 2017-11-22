@@ -67,6 +67,44 @@
     <licenseTypeMapUrl>${vloconfig.mappingFilesLocation}LicenseTypeMap.xml</licenseTypeMapUrl> <!-- bundled resource: /uniform-maps/LicenseAvailabilityMap.xml -->
     
     <crossFacetMapUrl>${vloconfig.mappingFilesLocation}CrossFacetMap.xml</crossFacetMapUrl> <!-- bundled resource: /uniform-maps/CrossFacetMap.xml -->
+    
+	  <fields>
+		  <field key="FIELD_NAME">name</field>
+		  <field key="FIELD_DESCRIPTION">description</field>
+		  <field key="FIELD_COLLECTION">collection</field>
+        <field key="FIELD_LANGUAGE_CODE">languageCode</field>
+        <field key="FIELD_MODALITY">modality</field>
+        <field key="FIELD_CONTINENT">continent</field>
+        <field key="FIELD_COUNTRY">country</field>
+        <field key="FIELD_GENRE">genre</field>
+        <field key="FIELD_SUBJECT">subject</field>
+        <field key="FIELD_ORGANISATION">organisation</field>
+        <field key="FIELD_LICENSE">license</field>
+        <field key="FIELD_LICENSE_TYPE">licenseType</field>
+        <field key="FIELD_AVAILABILITY">availability</field>
+        <field key="FIELD_ACCESS_INFO">accessInfo</field>
+        <field key="FIELD_KEYWORDS">keywords</field>
+        <field key="FIELD_NATIONAL_PROJECT">nationalProject</field>
+        <field key="FIELD_RESOURCE_CLASS">resourceClass</field>
+        <field key="FIELD_RESOURCE">_resourceRef</field>
+        <field key="FIELD_SELF_LINK">_selfLink</field>
+        <field key="FIELD_ID">id</field>
+        <field key="FIELD_DATA_PROVIDER">dataProvider</field>
+        <field key="FIELD_FILENAME">_fileName</field>
+        <field key="FIELD_FORMAT">format</field>
+        <field key="FIELD_LANDINGPAGE">_landingPageRef</field>
+        <field key="FIELD_SEARCHPAGE">_searchPageRef</field>
+        <field key="FIELD_SEARCH_SERVICE">_contentSearchRef</field>
+        <field key="FIELD_LAST_SEEN">_lastSeen</field>
+        <field key="FIELD_CLARIN_PROFILE">_componentProfile</field>
+        <field key="FIELD_COMPLETE_METADATA">metadataSource</field>
+        <field key="FIELD_HIERARCHY_WEIGHT">_hierarchyWeight</field>
+        <field key="FIELD_HAS_PART">_hasPart</field>
+        <field key="FIELD_HAS_PART_COUNT">_hasPartCount</field>
+        <field key="FIELD_RESOURCE_COUNT">_resourceRefCount</field>
+        <field key="FIELD_IS_PART_OF">_isPartOf</field>
+        <field key="FIELD_SOLR_SCORE">score</field>
+	</fields>
             
     <!-- Fields shown as facets on the search page -->
     <facetFields>        
