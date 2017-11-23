@@ -44,7 +44,7 @@
     
     <handleServerUrl>http://hdl.handle.net/</handleServerUrl>
     
-    <conceptRegistryUrl>https://openskos.meertens.knaw.nl/ccr/api/find-concepts</conceptRegistryUrl>
+    <conceptRegistryUrl>https://concepts.clarin.eu/ccr/api/find-concepts</conceptRegistryUrl>
     
     <vocabularyRegistryUrl>http://clavas.clarin.eu/clavas/public/api/find-concepts</vocabularyRegistryUrl>
     
