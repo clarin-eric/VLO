@@ -17,7 +17,6 @@
 package eu.clarin.cmdi.vlo.config;
 
 import com.google.common.collect.ImmutableList;
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
@@ -95,51 +94,11 @@ public class VloSolrSpringConfig {
    }
 
    /**
-    * Fields to request for documents. TODO: Make configurable?
+    * Fields to request for documents. 
     *
     */
    // public List<String> DOCUMENT_FIELDS = ImmutableList.of(
    public List<String> getDocumentFields() {
-      return ImmutableList.of(vloConfig.getFields().get("FIELD_NAME"), vloConfig.getFields().get("FIELD_DESCRIPTION"),
-            vloConfig.getFields().get("FIELD_COLLECTION"), vloConfig.getFields().get("FIELD_LANGUAGE_CODE"),
-            vloConfig.getFields().get("FIELD_MODALITY"), vloConfig.getFields().get("FIELD_CONTINENT"),
-            vloConfig.getFields().get("FIELD_COUNTRY"), vloConfig.getFields().get("FIELD_GENRE"),
-            vloConfig.getFields().get("FIELD_SUBJECT"), vloConfig.getFields().get("FIELD_ORGANISATION"),
-            vloConfig.getFields().get("FIELD_LICENSE"), vloConfig.getFields().get("FIELD_LICENSE_TYPE"),
-            vloConfig.getFields().get("FIELD_AVAILABILITY"), vloConfig.getFields().get("FIELD_ACCESS_INFO"),
-            vloConfig.getFields().get("FIELD_KEYWORDS"), vloConfig.getFields().get("FIELD_NATIONAL_PROJECT"),
-            vloConfig.getFields().get("FIELD_RESOURCE_CLASS"), vloConfig.getFields().get("FIELD_RESOURCE"),
-            vloConfig.getFields().get("FIELD_SELF_LINK"), vloConfig.getFields().get("FIELD_ID"),
-            vloConfig.getFields().get("FIELD_DATA_PROVIDER"), vloConfig.getFields().get("FIELD_FILENAME"),
-            vloConfig.getFields().get("FIELD_FORMAT"), vloConfig.getFields().get("FIELD_LANDINGPAGE"),
-            vloConfig.getFields().get("FIELD_SEARCHPAGE"), vloConfig.getFields().get("FIELD_SEARCH_SERVICE"),
-            vloConfig.getFields().get("FIELD_LAST_SEEN"), vloConfig.getFields().get("FIELD_CLARIN_PROFILE"),
-            vloConfig.getFields().get("FIELD_COMPLETE_METADATA"), vloConfig.getFields().get("FIELD_HIERARCHY_WEIGHT"),
-            vloConfig.getFields().get("FIELD_HAS_PART"), vloConfig.getFields().get("FIELD_HAS_PART_COUNT"),
-            vloConfig.getFields().get("FIELD_RESOURCE_COUNT"), vloConfig.getFields().get("FIELD_IS_PART_OF"),
-            vloConfig.getFields().get("FIELD_SOLR_SCORE")
-
-      /*
-       * FacetConstants.FIELD_NAME, FacetConstants.FIELD_DESCRIPTION,
-       * FacetConstants.FIELD_COLLECTION, FacetConstants.FIELD_LANGUAGE_CODE,
-       * FacetConstants.FIELD_MODALITY, FacetConstants.FIELD_CONTINENT,
-       * FacetConstants.FIELD_COUNTRY, FacetConstants.FIELD_GENRE,
-       * FacetConstants.FIELD_SUBJECT, FacetConstants.FIELD_ORGANISATION,
-       * FacetConstants.FIELD_LICENSE, FacetConstants.FIELD_LICENSE_TYPE,
-       * FacetConstants.FIELD_AVAILABILITY, FacetConstants.FIELD_ACCESS_INFO,
-       * FacetConstants.FIELD_KEYWORDS, FacetConstants.FIELD_NATIONAL_PROJECT,
-       * FacetConstants.FIELD_RESOURCE_CLASS, FacetConstants.FIELD_RESOURCE,
-       * FacetConstants.FIELD_SELF_LINK, FacetConstants.FIELD_ID,
-       * FacetConstants.FIELD_DATA_PROVIDER, FacetConstants.FIELD_FILENAME,
-       * FacetConstants.FIELD_FORMAT, FacetConstants.FIELD_LANDINGPAGE,
-       * FacetConstants.FIELD_SEARCHPAGE, FacetConstants.FIELD_SEARCH_SERVICE,
-       * FacetConstants.FIELD_LAST_SEEN, FacetConstants.FIELD_CLARIN_PROFILE,
-       * FacetConstants.FIELD_COMPLETE_METADATA,
-       * FacetConstants.FIELD_HIERARCHY_WEIGHT, FacetConstants.FIELD_HAS_PART,
-       * FacetConstants.FIELD_HAS_PART_COUNT,
-       * FacetConstants.FIELD_RESOURCE_COUNT, FacetConstants.FIELD_IS_PART_OF,
-       * FacetConstants.FIELD_SOLR_SCORE
-       */
-      );
+      return  ImmutableList.copyOf(vloConfig.getFields().values());
    }
 }

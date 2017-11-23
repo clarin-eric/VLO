@@ -3,7 +3,7 @@
  */
 package eu.clarin.cmdi.vlo.config;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
@@ -39,7 +39,7 @@ public class XmlFieldAdapter extends XmlAdapter<Fields, Map<String, String>> {
     */
    @Override
    public Map<String, String> unmarshal(Fields fields) throws Exception {
-      HashMap<String, String> hashMap = new HashMap<>();
+      LinkedHashMap<String, String> hashMap = new LinkedHashMap<>();
       if (fields != null) {
          for (Field field : fields.entries()) {
             hashMap.put(field.getKey(), field.getValue());
