@@ -9,20 +9,19 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 
-
 /**
  * @author Wolfgang Walter SAUER (wowasa) &lt;wolfgang.sauer@oeaw.ac.at&gt;
  *
  */
 public class Fields {
-	@XmlElement(name = "field")
-	private List<Field> entries = new ArrayList<Field>();
-	
-	List<Field> entries() {
-	    return Collections.unmodifiableList(entries);
-	  }
+   @XmlElement(name = "field")
+   private List<Field> entries = new ArrayList<Field>();
 
-	  void addEntry(Field entry) {
-	    entries.add(entry);
-	}
+   List<Field> entries() {
+      return Collections.unmodifiableList(entries);
+   }
+
+   void addEntry(Field entry) {
+      entries.add(entry);
+   }
 }
