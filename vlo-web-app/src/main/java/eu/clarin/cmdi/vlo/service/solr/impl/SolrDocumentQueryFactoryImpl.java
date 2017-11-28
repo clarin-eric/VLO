@@ -18,16 +18,23 @@ package eu.clarin.cmdi.vlo.service.solr.impl;
 
 import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentQueryFactory;
 import java.util.Collection;
+
+import javax.inject.Inject;
+
 import org.apache.solr.client.solrj.SolrQuery;
+import eu.clarin.cmdi.vlo.FacetConstants.KEY;
 
 /**
  *
  * @author twagoo
  */
 public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrDocumentQueryFactory {
+    @Inject
+    FieldNameService fieldNameService;
 
     /**
      * Template query for new document queries
@@ -70,8 +77,8 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
         // be unique and self link use to be ID in old VLO, so this should keep old
         // URL's valid with a minimal likelihood of clashes
         final ImmutableMap<String, String> idOrQueryMap = ImmutableMap.<String, String>builder()
-                .put(FacetConstants.FIELD_ID, docId)
-                .put(FacetConstants.FIELD_SELF_LINK, docId)
+                .put(fieldNameService.getFieldName(KEY.FIELD_ID), docId)
+                .put(fieldNameService.getFieldName(KEY.FIELD_SELF_LINK), docId)
                 .build();
         query.addFilterQuery(createFilterOrQuery(idOrQueryMap));
 

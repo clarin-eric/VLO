@@ -17,9 +17,11 @@
 package eu.clarin.cmdi.vlo.wicket.provider;
 
 import com.google.common.collect.ImmutableMap;
+import eu.clarin.cmdi.vlo.FacetConstants.KEY;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils.LanguageInfo;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
@@ -27,6 +29,10 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+
+import javax.inject.Inject;
+
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 
@@ -41,6 +47,9 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
     private final LanguageCodeUtils languageCodeUtils;
     private final FieldValueConverter availabilityConverter;
     private final FieldValueConverter licenseConverter;
+    
+    @Inject
+    private FieldNameService fieldNameService;
 
     public FieldValueConverterProviderImpl(LanguageCodeUtils languageCodeUtils, VloConfig vloConfig) {
         try {
@@ -54,20 +63,14 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
 
     @Override
     public IConverter<String> getConverter(String fieldName) {
-        switch (fieldName) {
-            case FacetConstants.FIELD_LANGUAGE_CODE:
-                return languageCodeConverter;
-            case FacetConstants.FIELD_DESCRIPTION:
-                return descriptionConverter;
-            case FacetConstants.FIELD_AVAILABILITY:
+        if(fieldName.equals(fieldNameService.getFieldName(KEY.FIELD_LANGUAGE_CODE)))
+            return languageCodeConverter;
+        if(fieldName.equals(fieldNameService.getFieldName(KEY.FIELD_DESCRIPTION)))
+            return descriptionConverter;
+        if(fieldName.equals(fieldNameService.getFieldName(KEY.FIELD_AVAILABILITY)) || 
+            fieldName.equals(fieldNameService.getFieldName(KEY.FIELD_LICENSE_TYPE)))
                 return availabilityConverter;
-            case FacetConstants.FIELD_LICENSE_TYPE:
-                return availabilityConverter;
-            case FacetConstants.FIELD_LICENSE:
-                return licenseConverter;
-            default:
-                return null;
-        }
+        return null;
     }
 
     /**

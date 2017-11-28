@@ -8,6 +8,49 @@ import java.util.Set;
  * Definition of facet, resource type and URL constants.
  */
 public class FacetConstants {
+    public static enum KEY{
+        FIELD_ACCESS_INFO,
+        FIELD_AVAILABILITY,
+        FIELD_COLLECTION,
+        FIELD_COMPLETE_METADATA,
+        FIELD_CONTINENT,
+        FIELD_COUNTRY,
+        FIELD_DATA_PROVIDER,
+        FIELD_DESCRIPTION,
+        FIELD_FORMAT,
+        FIELD_GENRE,
+        FIELD_ID,
+        FIELD_KEYWORDS,
+        FIELD_LANGUAGE_CODE,
+        FIELD_LICENSE,
+        FIELD_MODALITY,
+        FIELD_NAME,
+        FIELD_NATIONAL_PROJECT,
+        FIELD_ORGANISATION,
+        FIELD_PROJECT_NAME,
+        FIELD_RESOURCE_CLASS,
+        FIELD_SUBJECT,
+        FIELD_TEMPORAL_COVERAGE,
+        FIELD_LICENSE_TYPE,
+        FIELD_SOLR_SCORE,
+        FIELD_SELF_LINK,
+        FIELD_FILENAME,
+        FIELD_RESOURCE,
+        FIELD_RESOURCE_COUNT,
+        FIELD_CLARIN_PROFILE,
+        FIELD_SEARCH_SERVICE,
+        FIELD_LAST_SEEN,
+        FIELD_DAYS_SINCE_LAST_SEEN,
+        FIELD_HIERARCHY_WEIGHT,
+        FIELD_IS_PART_OF,
+        FIELD_HAS_PART,
+        FIELD_HAS_PART_COUNT,
+        FIELD_HAS_PART_COUNT_WEIGHT,
+        FIELD_LANGUAGE_NAME,
+        FIELD_LANDINGPAGE,
+        FIELD_SEARCHPAGE,
+        DEPRECATED_FIELD_LANGUAGE        
+    }
 
     public static final String FIELD_ACCESS_INFO = "accessInfo";
     public static final String FIELD_AVAILABILITY = "availability";

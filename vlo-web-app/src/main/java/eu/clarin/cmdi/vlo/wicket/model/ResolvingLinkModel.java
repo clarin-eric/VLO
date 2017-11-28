@@ -17,6 +17,8 @@
 package eu.clarin.cmdi.vlo.wicket.model;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
+
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY;
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY_HTTPS;
 import java.net.URI;
@@ -24,6 +26,8 @@ import java.net.URISyntaxException;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import eu.clarin.cmdi.vlo.FacetConstants.KEY;
 
 /**
  * Model that resolves a URI string (object) against another URI string
@@ -36,6 +40,11 @@ public class ResolvingLinkModel implements IModel<String> {
 
     private final IModel<String> resolveObjectModel;
     private final IModel<String> resolveSubjectModel;
+    
+    @SpringBean
+    private static FieldNameService fieldNameService;
+    
+
 
     /**
      *
@@ -95,7 +104,7 @@ public class ResolvingLinkModel implements IModel<String> {
     public static ResolvingLinkModel modelFor(ResourceInfoModel resourceInfoModel, IModel<SolrDocument> documentModel) {
         return new ResolvingLinkModel(
                 //URI to resolve against
-                new SolrFieldStringModel(documentModel, FacetConstants.FIELD_SELF_LINK),
+                new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(KEY.FIELD_SELF_LINK)),
                 //URI of link to resolve (potentially)
                 new HandleLinkModel(new PropertyModel(resourceInfoModel, "href")));
     }

@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
@@ -34,6 +34,8 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import eu.clarin.cmdi.vlo.FacetConstants.KEY;
 
 /**
  * A panel representing the action trail that has lead to the current page in
@@ -43,6 +45,8 @@ import org.apache.wicket.model.Model;
  * @author twagoo
  */
 public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
+    @SpringBean
+    private FieldNameService fieldNameService;
 
     private final IModel<SolrDocument> documentModel;
     private final IModel<String> facetModel;
@@ -93,7 +97,7 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
 
         };
         document.add(new ExternalLink("documentLink", new PermaLinkModel(RecordPage.class, getModel(), documentModel))
-                .add(new SingleValueSolrFieldLabel("documentTitle", documentModel, FacetConstants.FIELD_NAME, getString("breadcrumbs.unnamedrecord"))));
+                .add(new SingleValueSolrFieldLabel("documentTitle", documentModel, fieldNameService.getFieldName(KEY.FIELD_NAME), getString("breadcrumbs.unnamedrecord"))));
         add(document);
 
         final WebMarkupContainer facet = new WebMarkupContainer("facet") {
