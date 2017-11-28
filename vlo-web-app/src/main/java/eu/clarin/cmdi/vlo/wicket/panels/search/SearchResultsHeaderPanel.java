@@ -141,7 +141,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         // get a copy of the current selection
-                        final QueryFacetsSelection newSelection = getModelObject().getCopy();
+                        final QueryFacetsSelection newSelection = getModelObject().copy();
                         newSelection.setQuery(null);
                         onSelectionChanged(newSelection, target);
                     }
@@ -180,7 +180,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         // get a copy of the current selection
-                        final QueryFacetsSelection newSelection = getModelObject().getCopy();
+                        final QueryFacetsSelection newSelection = getModelObject().copy();
                         final String facet = selectionModel.getObject().getKey();
                         // unselect this facet
                         newSelection.selectValues(facet, null);

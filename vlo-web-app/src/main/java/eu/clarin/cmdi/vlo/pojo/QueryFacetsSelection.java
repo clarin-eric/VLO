@@ -16,10 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.pojo;
 
-import com.google.common.collect.Maps;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -148,7 +146,7 @@ public class QueryFacetsSelection implements Serializable {
         return String.format("[QueryFacetSelection queryString = %s, selection = %s]", queryString, selection);
     }
 
-    public QueryFacetsSelection getCopy() {
+    public QueryFacetsSelection copy() {
         final Map<String, FacetSelection> selectionClone = new LinkedHashMap<>(selection.size());
         for (Entry<String, FacetSelection> entry : selection.entrySet()) {
             selectionClone.put(entry.getKey(), entry.getValue().getCopy());
