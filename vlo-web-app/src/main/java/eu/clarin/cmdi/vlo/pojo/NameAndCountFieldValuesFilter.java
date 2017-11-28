@@ -137,4 +137,14 @@ public class NameAndCountFieldValuesFilter implements FieldValuesFilter, Seriali
             return Pattern.compile(name, Pattern.LITERAL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
         }
     }
+
+    @Override
+    public NameAndCountFieldValuesFilter copy() {
+        final NameAndCountFieldValuesFilter copy = new NameAndCountFieldValuesFilter();
+        copy.setFirstCharacter(firstCharacter);
+        copy.setMinimalOccurence(minimalOccurence);
+        copy.setName(name);
+        return copy;
+    }
+
 }

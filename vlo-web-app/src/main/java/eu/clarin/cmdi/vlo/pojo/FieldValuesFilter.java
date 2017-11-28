@@ -39,4 +39,6 @@ public interface FieldValuesFilter extends Serializable {
     
     boolean isEmpty();
     
+    FieldValuesFilter copy();
+    
 }

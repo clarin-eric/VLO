@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.pojo;
 
+import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,6 +50,11 @@ public class FixedSetFieldValuesFilter implements FieldValuesFilter, Serializabl
     @Override
     public boolean isEmpty() {
         return values.isEmpty();
+    }
+
+    @Override
+    public FieldValuesFilter copy() {
+        return new FixedSetFieldValuesFilter(Lists.newArrayList(values));
     }
 
 }

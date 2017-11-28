@@ -163,4 +163,19 @@ public class NameAndCountFieldValuesFilterTest {
         assertTrue(filter.isEmpty());
     }
 
+    @Test
+    public void testCopy() {
+        filter.setName("origName");
+        filter.setMinimalOccurence(999);
+        filter.setFirstCharacter('a');
+        final NameAndCountFieldValuesFilter copy = filter.copy();
+        filter.setName("newName");
+        filter.setMinimalOccurence(null);
+        filter.setFirstCharacter(null);
+
+        assertEquals("origName", copy.getName());
+        assertEquals(Integer.valueOf(999), copy.getMinimalOccurence());
+        assertEquals(Character.valueOf('a'), copy.getFirstCharacter());
+    }
+
 }
