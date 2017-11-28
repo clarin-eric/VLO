@@ -104,6 +104,11 @@
         <field key="FIELD_RESOURCE_COUNT">_resourceRefCount</field>
         <field key="FIELD_IS_PART_OF">_isPartOf</field>
         <field key="FIELD_SOLR_SCORE">score</field>
+        <!-- field key="FIELD_COMPLETE_METADATA">metadataSource</field>
+        <field key="FIELD_PROJECT_NAME">projectName</field>
+        <field key="FIELD_TEMPORAL_COVERAGE">temporalCoverage</field>
+        <field key="FIELD_DAYS_SINCE_LAST_SEEN">_daysSinceLastSeen</field>
+        <field key="FIELD_HAS_PART_COUNT_WEIGHT">_hasPartCountWeight</field-->   
 	</fields>
             
     <!-- Fields shown as facets on the search page -->

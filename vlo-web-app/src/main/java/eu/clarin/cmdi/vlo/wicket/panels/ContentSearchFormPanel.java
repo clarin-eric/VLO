@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
@@ -30,6 +30,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import eu.clarin.cmdi.vlo.FacetConstants.KEY;
 
 /**
  * A panel with an HTML form (not a Wicket form!) with a submit link that posts
@@ -45,6 +46,8 @@ public class ContentSearchFormPanel extends GenericPanel<String> {
 
     @SpringBean
     private VloConfig vloConfig;
+    @SpringBean
+    private FieldNameService fieldNameService;
 
     public ContentSearchFormPanel(String id, final IModel<SolrDocument> documentModel, final IModel<String> endpointModel) {
         super(id);
@@ -73,7 +76,7 @@ public class ContentSearchFormPanel extends GenericPanel<String> {
             @Override
             public String getObject() {
                 final String endPoint = endpointModel.getObject();
-                final Object selfLink = model.getObject().getFirstValue(FacetConstants.FIELD_SELF_LINK);
+                final Object selfLink = model.getObject().getFirstValue(fieldNameService.getFieldName(KEY.FIELD_SELF_LINK));
                 try {
                     final JSONObject json = new JSONObject();
                     json.put(endPoint, new JSONArray(new Object[]{selfLink}));

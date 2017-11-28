@@ -1318,7 +1318,4 @@ public class VloConfig {
 	public void setFields(Map<String, String> fields) {
 		this.fields = fields;
 	}
-
-
-
 }

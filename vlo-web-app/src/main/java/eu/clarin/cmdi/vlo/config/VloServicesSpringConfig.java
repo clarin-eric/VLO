@@ -191,5 +191,9 @@ public class VloServicesSpringConfig {
     public PiwikConfig piwikConfig() {
         return new PiwikConfig();
     }
+    @Bean
+    public FieldNameService fieldNameService() {
+        return new FieldNameServiceImpl(vloConfig);
+    }
 
 }
