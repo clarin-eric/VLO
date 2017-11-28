@@ -18,7 +18,8 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
@@ -66,6 +67,8 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
 
     @SpringBean
     private VloConfig config;
+    @SpringBean
+    private FieldNameService fieldNameService;
 
     private final IDataProvider<SolrDocument> documentProvider;
 
@@ -76,9 +79,9 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
     /**
      * The fields that this panel provides options for
      */
-    public final static Collection<String> OPTIONS_FIELDS = ImmutableSet.of(
-            FacetConstants.FIELD_HAS_PART_COUNT,
-            FacetConstants.FIELD_SEARCH_SERVICE);
+    public final static Collection<KEY> OPTIONS_FIELDS = ImmutableSet.of(
+            KEY.FIELD_HAS_PART_COUNT,
+            KEY.FIELD_SEARCH_SERVICE);
 
     public AdvancedSearchOptionsPanel(String id, final IModel<QueryFacetsSelection> model, IModel<FacetSelectionType> selectionTypeModeModel, final IDataProvider<SolrDocument> documentProvider) {
         super(id, model);
@@ -95,11 +98,11 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         });
         optionsForm.add(selectionType);
 
-        final CheckBox fcsCheck = createFieldNotEmptyOption("fcs", FacetConstants.FIELD_SEARCH_SERVICE);
+        final CheckBox fcsCheck = createFieldNotEmptyOption("fcs", fieldNameService.getFieldName(KEY.FIELD_SEARCH_SERVICE));
         optionsForm.add(fcsCheck);
 
         final MarkupContainer collectionsSection = new WebMarkupContainer("collectionsSection");
-        final CheckBox collectionCheck = createFieldNotEmptyOption("collection", FacetConstants.FIELD_HAS_PART_COUNT);
+        final CheckBox collectionCheck = createFieldNotEmptyOption("collection", fieldNameService.getFieldName(KEY.FIELD_HAS_PART_COUNT));
         collectionsSection.add(collectionCheck);
         collectionsSection.setVisible(config.isProcessHierarchies());
         optionsForm.add(collectionsSection);

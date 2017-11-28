@@ -16,14 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
+
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import java.util.Set;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.VloWicketApplication;
 
 /**
  * Model for the expansion state of an individual document in a search result
@@ -37,8 +37,8 @@ public class SearchResultExpansionStateModel implements IModel<ExpansionState> {
     private final IModel<Set<Object>> expandedItemsModel;
     private final IModel<SolrDocument> documentModel;
     
-    @SpringBean
-    FieldNameService fieldNameService;
+
+    private final FieldNameService fieldNameService = VloWicketApplication.get().getFieldNameService();
 
     /**
      *
