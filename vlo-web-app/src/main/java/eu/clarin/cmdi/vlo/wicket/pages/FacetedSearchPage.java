@@ -2,9 +2,10 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.FacetConstants.KEY;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.VloWebSession;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import java.util.List;
 
@@ -56,7 +57,8 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private static final long serialVersionUID = 1L;
-    private final static List<String> ADDITIONAL_FACETS = ImmutableList.of(FacetConstants.FIELD_LICENSE_TYPE);
+    //private final static List<String> ADDITIONAL_FACETS = ImmutableList.of(FacetConstants.FIELD_LICENSE_TYPE);
+    private final static KEY ADDITIONAL_FACETS = KEY.FIELD_LICENSE_TYPE;
 
     @SpringBean
     private FacetFieldsService facetFieldsService;
@@ -66,6 +68,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     private PiwikConfig piwikConfig;
     @SpringBean(name = "queryParametersConverter")
     private PageParametersConverter<QueryFacetsSelection> paramsConverter;
+    @SpringBean
+    private FieldNameService fieldNameService;
 
     private IDataProvider<SolrDocument> documentsProvider;
 
@@ -121,7 +125,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private void createModels() {
         final List<String> facetFields = vloConfig.getFacetFields();
-        final List<String> allFields = ImmutableList.copyOf(Iterables.concat(facetFields, ADDITIONAL_FACETS));
+        final List<String> allFields = ImmutableList.copyOf(Iterables.concat(facetFields, ImmutableList.of(fieldNameService.getFieldName(ADDITIONAL_FACETS))));
         facetNamesModel = new FacetNamesModel(facetFields);
         fieldsModel = new FacetFieldsModel(facetFieldsService, allFields, getModel(), -1);
 
@@ -365,6 +369,15 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         //
         // see https://github.com/clarin-eric/VLO/issues/95
         simpleModeModel.setObject(false);
+    }
+
+    /* (non-Javadoc)
+     * @see eu.clarin.cmdi.vlo.wicket.pages.VloBasePage#onInitialize()
+     */
+    @Override
+    protected void onInitialize() {
+        // TODO Auto-generated method stub
+        super.onInitialize();
     }
 
 }
