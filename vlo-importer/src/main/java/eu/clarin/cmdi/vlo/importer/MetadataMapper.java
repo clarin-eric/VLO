@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
+import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
 import eu.clarin.cmdi.vlo.importer.processor.CMDIDataProcessor;
@@ -101,7 +102,7 @@ public class MetadataMapper {
             final VLOMarshaller marshaller = new VLOMarshaller();
             final FacetMappingFactory facetMappingFactory = new FacetMappingFactory(config, marshaller);
 
-            CMDIDataProcessor processor = new CMDIParserVTDXML(MetadataImporter.registerPostProcessors(config, languageCodeUtils), config, facetMappingFactory, marshaller, false);
+            CMDIDataProcessor processor = new CMDIParserVTDXML(MetadataImporter.registerPostProcessors(config,  new FieldNameServiceImpl(config), languageCodeUtils), config, facetMappingFactory, marshaller, false);
 
             if (recordFile == null) {
                 String message = "Could not get record filename - stopping.";

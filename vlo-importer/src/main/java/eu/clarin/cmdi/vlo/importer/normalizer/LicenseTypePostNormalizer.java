@@ -4,6 +4,9 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
 
@@ -21,9 +24,11 @@ import java.util.List;
  * @author Twan Goosen
  */
 public class LicenseTypePostNormalizer extends AbstractPostNormalizerWithVocabularyMap {
+    private FieldNameService fieldNameService;
 
     public LicenseTypePostNormalizer(VloConfig config) {
         super(config);
+        this.fieldNameService = new FieldNameServiceImpl(config);
     }
 
     @Override
@@ -46,7 +51,7 @@ public class LicenseTypePostNormalizer extends AbstractPostNormalizerWithVocabul
      */
     private List<String> transferValuesFromAvailability(CMDIData cmdiData) {
         if (cmdiData != null) {
-            final Collection<Object> availabilityValues = cmdiData.getDocField(FacetConstants.FIELD_AVAILABILITY);
+            final Collection<Object> availabilityValues = cmdiData.getDocField(fieldNameService.getFieldName(KEY.FIELD_AVAILABILITY));
             if (availabilityValues != null) {
                 //turn into string list
                 final List<String> values = Lists.newArrayList(Collections2.transform(availabilityValues, new Function<Object, String>() {

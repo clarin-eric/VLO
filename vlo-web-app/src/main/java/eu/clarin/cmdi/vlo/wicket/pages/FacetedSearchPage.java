@@ -368,14 +368,4 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         // see https://github.com/clarin-eric/VLO/issues/95
         simpleModeModel.setObject(false);
     }
-
-    /* (non-Javadoc)
-     * @see eu.clarin.cmdi.vlo.wicket.pages.VloBasePage#onInitialize()
-     */
-    @Override
-    protected void onInitialize() {
-        // TODO Auto-generated method stub
-        super.onInitialize();
-    }
-
 }

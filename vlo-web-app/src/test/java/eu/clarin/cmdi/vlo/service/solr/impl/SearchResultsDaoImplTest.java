@@ -38,6 +38,7 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
 import org.apache.solr.SolrTestCaseJ4;
@@ -65,28 +66,31 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
     @Before
     @Override
     public void setUp() throws Exception {
-        // set up an embedded solr server
-        super.setUp();
-        server = new EmbeddedSolrServer(h.getCoreContainer(), h.getCore().getName());
-        instance = new SearchResultsDaoImpl(server, new VloConfig() {
+        VloConfig vloConfig = new VloConfig() {
 
             @Override
             public List<String> getFacetsInSearch() {
                 return ImmutableList.of(FIELD_COLLECTION, FIELD_COUNTRY);
             }
 
-        });
+        };
+        
+        FieldNameServiceImpl fieldNameService = new FieldNameServiceImpl(vloConfig);
+        // set up an embedded solr server
+        super.setUp();
+        server = new EmbeddedSolrServer(h.getCoreContainer(), h.getCore().getName());
+        instance = new SearchResultsDaoImpl(server, vloConfig);
 
         // add some documents
         int id = 1;
-        CMDIData cmdiData = new CMDIData();
+        CMDIData cmdiData = new CMDIData(fieldNameService);
         cmdiData.addDocField(FIELD_COLLECTION, "Collection1", false);
         cmdiData.addDocField(FIELD_COUNTRY, "Country1", false);
         SolrInputDocument document = cmdiData.getSolrDocument();
         document.addField("id", Integer.toString(id++));
         server.add(document);
 
-        cmdiData = new CMDIData();
+        cmdiData = new CMDIData(fieldNameService);
         cmdiData.addDocField(FIELD_COLLECTION, "Collection1", false);
         cmdiData.addDocField(FIELD_COUNTRY, "Country2", false);
         document = cmdiData.getSolrDocument();
