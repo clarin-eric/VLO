@@ -10,11 +10,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 
 /**
  * Represents a document of CMDI data.
  */
 public class CMDIData {
+    private FieldNameService fieldNameService;
+    
+
 
     private final static Logger LOG = LoggerFactory.getLogger(CMDIData.class);
     private static final String METADATA_TYPE = "Metadata";
@@ -41,6 +45,10 @@ public class CMDIData {
     private final List<Resource> searchResources = new ArrayList<>();
     private final List<Resource> landingPageResources = new ArrayList<>();
     private final List<Resource> searchPageResources = new ArrayList<>();
+    
+    public CMDIData(FieldNameService fieldNameService) {
+        this.fieldNameService = fieldNameService;
+    }
 
     public SolrInputDocument getSolrDocument() {
         return doc;

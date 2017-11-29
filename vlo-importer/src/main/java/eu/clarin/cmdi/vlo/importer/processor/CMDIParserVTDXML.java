@@ -8,7 +8,8 @@ import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.CmdConstants;
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CFMCondition;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
@@ -21,7 +22,6 @@ import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
 import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
 import eu.clarin.cmdi.vlo.importer.Vocabulary;
 import eu.clarin.cmdi.vlo.importer.CFMCondition.FacetValuePair;
-import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
 
 import java.io.File;
@@ -55,6 +55,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private final Vocabulary CCR;
     private final FacetMappingFactory facetMappingFactory;
     private final VLOMarshaller marshaller;
+    private final FieldNameServiceImpl fieldNameService;
     
     public CMDIParserVTDXML(Map<String, AbstractPostNormalizer> postProcessors, VloConfig config, FacetMappingFactory facetMappingFactory, VLOMarshaller marshaller, Boolean useLocalXSDCache) {
         this.postProcessors = postProcessors;
@@ -63,11 +64,12 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         this.facetMappingFactory = facetMappingFactory;
         this.marshaller = marshaller;
         this.CCR = new Vocabulary(config.getConceptRegistryUrl());
+        this.fieldNameService = new FieldNameServiceImpl(config);
     }
 
     @Override
     public CMDIData process(File file, ResourceStructureGraph resourceStructureGraph) throws VTDException, IOException, URISyntaxException {
-        final CMDIData cmdiData = new CMDIData();
+        final CMDIData cmdiData = new CMDIData(this.fieldNameService);
         final VTDGen vg = new VTDGen();
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
             vg.setDoc(IOUtils.toByteArray(fileInputStream));
@@ -393,7 +395,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                 }
                 if (vp!=null) {
                     final String v = (String)vp.getLeft();
-                    final String l = (vp.getRight()!=null?postProcessors.get(FacetConstants.FIELD_LANGUAGE_CODE).process((String)vp.getRight(),cmdiData).get(0):DEFAULT_LANGUAGE);
+                    final String l = (vp.getRight()!=null?postProcessors.get(fieldNameService.getFieldName(KEY.FIELD_LANGUAGE_CODE)).process((String)vp.getRight(),cmdiData).get(0):DEFAULT_LANGUAGE);
                     for(String pv : postProcess(config.getName(),v,cmdiData)) {
                         valueLangPairList.add(new ImmutablePair<>(pv,l));
                     }
@@ -454,13 +456,13 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             return DEFAULT_LANGUAGE;
         }
 
-        return postProcessors.get(FacetConstants.FIELD_LANGUAGE_CODE).process(languageCode, null).get(0);
+        return postProcessors.get(fieldNameService.getFieldName(KEY.FIELD_LANGUAGE_CODE)).process(languageCode, null).get(0);
     }
 
     private void addValuesToList(String facetName, final List<String> values, List<Pair<String, String>> valueLangPairList, final String languageCode) {
         for (String value : values) {
             // ignore non-English language names for facet LANGUAGE_CODE
-            if (facetName.equals(FacetConstants.FIELD_LANGUAGE_CODE) && !languageCode.equals(ENGLISH_LANGUAGE) && !languageCode.equals(DEFAULT_LANGUAGE)) {
+            if (facetName.equals(fieldNameService.getFieldName(KEY.FIELD_LANGUAGE_CODE)) && !languageCode.equals(ENGLISH_LANGUAGE) && !languageCode.equals(DEFAULT_LANGUAGE)) {
                 continue;
             }
             valueLangPairList.add(new ImmutablePair<>(value, languageCode));
@@ -484,7 +486,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
 //                break;
 //            }
             String fieldValue = valueLangPairList.get(i).getLeft().trim();
-            if (name.equals(FacetConstants.FIELD_DESCRIPTION)) {
+            if (name.equals(fieldNameService.getFieldName(KEY.FIELD_DESCRIPTION))) {
                 fieldValue = "{" + valueLangPairList.get(i).getRight() + "}" + fieldValue;
             }
             if(!allowMultipleValues){

@@ -14,15 +14,6 @@ public class FieldNameServiceImpl implements FieldNameService{
     private VloConfig vloConfig;
     
 
-    public FieldNameServiceImpl() {
-        try {
-            this.vloConfig = new DefaultVloConfigFactory().newConfig();
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
     public FieldNameServiceImpl(VloConfig vloConfig) {
         this.vloConfig = vloConfig;
     }
