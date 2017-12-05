@@ -1,7 +1,7 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.importer.solr.DummySolrBridgeImpl;
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.FacetConstants.KEY;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 
 import java.io.File;
@@ -58,7 +58,7 @@ public class CrossfacetMappingTest extends ImporterTestcase {
 
         SolrInputDocument doc = docs.get(0);
 
-        assertEquals("blabla", getValue(doc, FacetConstants.FIELD_SUBJECT));
+        assertEquals("blabla", getValue(doc, fieldNameService.getFieldName(KEY.FIELD_SUBJECT)));
 
     }
 
@@ -98,9 +98,9 @@ public class CrossfacetMappingTest extends ImporterTestcase {
         SolrInputDocument doc = docs.get(0);
 
         //since this facet permits only one value the value from the cmdi-file should be taken and hence those from the cfm be ignored
-        assertEquals("kleve-route", getValue(doc, FacetConstants.FIELD_NAME));
+        assertEquals("kleve-route", getValue(doc, fieldNameService.getFieldName(KEY.FIELD_NAME)));
         //to be sure that it works for a facet where no value is set
-        assertEquals("cfmvalue", getValue(doc, FacetConstants.FIELD_TEMPORAL_COVERAGE));
+        assertEquals("cfmvalue", getValue(doc, fieldNameService.getFieldName(KEY.FIELD_TEMPORAL_COVERAGE)));
     }
 
     @Test
@@ -135,7 +135,7 @@ public class CrossfacetMappingTest extends ImporterTestcase {
         SolrInputDocument doc = docs.get(0);
 
         //since this facet permits only one value the value from the cmdi-file should be taken and hence those from the cfm be ignored
-        assertEquals("cfmvalue", getValue(doc, FacetConstants.FIELD_NAME));
+        assertEquals("cfmvalue", getValue(doc, fieldNameService.getFieldName(KEY.FIELD_NAME)));
 
     }
 
@@ -180,7 +180,7 @@ public class CrossfacetMappingTest extends ImporterTestcase {
 
         SolrInputDocument doc = docs.get(0);
 
-        Object[] values = getMultipleValues(doc, FacetConstants.FIELD_SUBJECT).toArray();
+        Object[] values = getMultipleValues(doc, fieldNameService.getFieldName(KEY.FIELD_SUBJECT)).toArray();
 
         assertEquals(2, values.length);
         //assertEquals("", getMultipleValues(doc, FacetConstants.FIELD_SUBJECT).);
@@ -224,7 +224,7 @@ public class CrossfacetMappingTest extends ImporterTestcase {
 
         SolrInputDocument doc = docs.get(0);
 
-        Object[] values = getMultipleValues(doc, FacetConstants.FIELD_COLLECTION).toArray();
+        Object[] values = getMultipleValues(doc, fieldNameService.getFieldName(KEY.FIELD_COLLECTION)).toArray();
 
         //three values set
         assertEquals(3, values.length);
