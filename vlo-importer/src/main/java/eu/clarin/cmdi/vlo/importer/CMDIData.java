@@ -9,6 +9,7 @@ import org.apache.solr.common.SolrInputField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.clarin.cmdi.vlo.FacetConstants.KEY;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 
@@ -63,7 +64,7 @@ public class CMDIData {
      * @param caseInsensitive
      */
     public void addDocField(String name, String value, boolean caseInsensitive) {
-        if (FacetConstants.FIELD_ID.equals(name)) {
+        if (fieldNameService.getFieldName(KEY.FIELD_ID).equals(name)) {
             setId(value.trim());
         } else {
             handleDocField(name, value, caseInsensitive);
@@ -101,7 +102,7 @@ public class CMDIData {
             Collection<Object> fieldValues = doc.getFieldValues(name);
             if (fieldValues == null || !fieldValues.contains(value)) {
                 //if availability facet reduce tag to most restrictive
-                if (name.equals(FacetConstants.FIELD_AVAILABILITY) || name.equals(FacetConstants.FIELD_LICENSE_TYPE)) {
+                if (name.equals(fieldNameService.getFieldName(KEY.FIELD_AVAILABILITY)) || name.equals(fieldNameService.getFieldName(KEY.FIELD_LICENSE_TYPE))) {
                     reduceAvailability(name, value);
                 } else {
                     doc.addField(name, value);

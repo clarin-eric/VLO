@@ -32,6 +32,7 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.config.DataRoot;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph.CmdiVertex;
@@ -159,7 +160,7 @@ public class MetadataImporter {
 
     }
 
-    protected static Map<String, AbstractPostNormalizer> registerPostProcessors(VloConfig config, FieldNameServiceImpl fieldNameService, LanguageCodeUtils languageCodeUtils) {
+    protected static Map<String, AbstractPostNormalizer> registerPostProcessors(VloConfig config, FieldNameService fieldNameService, LanguageCodeUtils languageCodeUtils) {
         return ImmutableMap.<String, AbstractPostNormalizer>builder()
                 .put(fieldNameService.getFieldName(KEY.FIELD_ID), new IdPostNormalizer())
                 .put(fieldNameService.getFieldName(KEY.FIELD_CONTINENT), new ContinentNamePostNormalizer())

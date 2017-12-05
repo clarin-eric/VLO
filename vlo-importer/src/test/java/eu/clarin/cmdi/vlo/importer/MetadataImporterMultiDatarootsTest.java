@@ -18,7 +18,6 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 import org.junit.Test;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 
 public class MetadataImporterMultiDatarootsTest extends ImporterTestcase {

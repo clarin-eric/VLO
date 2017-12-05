@@ -1,7 +1,7 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.importer.solr.DummySolrBridgeImpl;
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.FacetConstants.KEY;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 
 import java.io.File;
@@ -55,13 +55,13 @@ public class MetadataImporterTest extends ImporterTestcase {
         List<SolrInputDocument> docs = importData(sessionFile);
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
-        assertEquals("testID1Session", getValue(doc, FacetConstants.FIELD_ID));
-        assertEquals("CollectionName", getValue(doc, FacetConstants.FIELD_COLLECTION));
-        assertEquals("testRoot", getValue(doc, FacetConstants.FIELD_DATA_PROVIDER));
-        assertEquals("kleve-route", getValue(doc, FacetConstants.FIELD_NAME));
-        assertEquals(sessionFile.getAbsolutePath(), getValue(doc, FacetConstants.FIELD_FILENAME));
-        assertEquals("video/x-mpeg1", getValue(doc, FacetConstants.FIELD_FORMAT));
-        assertEquals("video/x-mpeg1|../Media/elan-example1.mpg", getValue(doc, FacetConstants.FIELD_RESOURCE));
+        assertEquals("testID1Session", getValue(doc, fieldNameService.getFieldName(KEY.FIELD_ID)));
+        assertEquals("CollectionName", getValue(doc, fieldNameService.getFieldName(KEY.FIELD_COLLECTION)));
+        assertEquals("testRoot", getValue(doc, fieldNameService.getFieldName(KEY.FIELD_DATA_PROVIDER)));
+        assertEquals("kleve-route", getValue(doc, fieldNameService.getFieldName(KEY.FIELD_NAME)));
+        assertEquals(sessionFile.getAbsolutePath(), getValue(doc, fieldNameService.getFieldName(KEY.FIELD_FILENAME)));
+        assertEquals("video/x-mpeg1", getValue(doc, fieldNameService.getFieldName(KEY.FIELD_FORMAT)));
+        assertEquals("video/x-mpeg1|../Media/elan-example1.mpg", getValue(doc, fieldNameService.getFieldName(KEY.FIELD_RESOURCE)));
     }
 
     @Test
@@ -100,14 +100,14 @@ public class MetadataImporterTest extends ImporterTestcase {
         List<SolrInputDocument> docs = importData(rootFile);
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
-        assertEquals("PALIC", getValue(doc, FacetConstants.FIELD_NAME));
-        Collection<Object> fieldValues = doc.getFieldValues(FacetConstants.FIELD_RESOURCE_CLASS);
+        assertEquals("PALIC", getValue(doc, fieldNameService.getFieldName(KEY.FIELD_NAME)));
+        Collection<Object> fieldValues = doc.getFieldValues(fieldNameService.getFieldName(KEY.FIELD_RESOURCE_CLASS));
         assertEquals(2, fieldValues.size());
         List<String> values = new ArrayList(fieldValues);
         Collections.sort(values);
         assertEquals("Application / Tool", values.get(0));
         assertEquals("Text", values.get(1));
-        fieldValues = doc.getFieldValues(FacetConstants.FIELD_RESOURCE);
+        fieldValues = doc.getFieldValues(fieldNameService.getFieldName(KEY.FIELD_RESOURCE));
         assertEquals(2, fieldValues.size());
         values = new ArrayList(fieldValues);
         Collections.sort(values);
@@ -146,10 +146,10 @@ public class MetadataImporterTest extends ImporterTestcase {
         List<SolrInputDocument> docs = importData(rootFile);
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
-        assertEquals("hdl_58_11858_47_00-175C-0000-0000-E180-8", getValue(doc, FacetConstants.FIELD_ID));
-        assertEquals("L'Est R\u00e9publicain : \u00e9dition du 17 mai 1999", getValue(doc, FacetConstants.FIELD_NAME));
+        assertEquals("hdl_58_11858_47_00-175C-0000-0000-E180-8", getValue(doc, fieldNameService.getFieldName(KEY.FIELD_ID)));
+        assertEquals("L'Est R\u00e9publicain : \u00e9dition du 17 mai 1999", getValue(doc, fieldNameService.getFieldName(KEY.FIELD_NAME)));
         assertEquals("unknown type|http://hdl.handle.net/11858/00-175C-0000-0000-E180-8?urlappend=/TEI", getValue(doc,
-                FacetConstants.FIELD_RESOURCE));
+                fieldNameService.getFieldName(KEY.FIELD_RESOURCE)));
     }
 
     @Test
@@ -174,7 +174,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         List<SolrInputDocument> docs = importData(sessionFile);
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
-        assertEquals("testRoot/" + sessionFile.getName(), getValue(doc, FacetConstants.FIELD_ID));
+        assertEquals("testRoot/" + sessionFile.getName(), getValue(doc, fieldNameService.getFieldName(KEY.FIELD_ID)));
     }
 
     @Test
@@ -206,8 +206,8 @@ public class MetadataImporterTest extends ImporterTestcase {
         List<SolrInputDocument> docs = importData(sessionFile);
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
-        assertEquals("testRoot", getValue(doc, FacetConstants.FIELD_COLLECTION));
-        assertEquals("DiDDD-project", getValue(doc, FacetConstants.FIELD_PROJECT_NAME));
+        assertEquals("testRoot", getValue(doc, fieldNameService.getFieldName(KEY.FIELD_COLLECTION)));
+        assertEquals("DiDDD-project", getValue(doc, fieldNameService.getFieldName(KEY.FIELD_PROJECT_NAME)));
     }
 
     private Object getValue(SolrInputDocument doc, String field) {
