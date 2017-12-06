@@ -296,12 +296,10 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
                 searchResultsPanel.resetExpansion();
 
                 //transition from simple
-                if (simpleModeModel.getObject()) {
-                    simpleModeModel.setObject(false);
-                    if (target != null) {
-                        target.prependJavaScript("cb|transitionFromSimple(cb);");
-                        target.add(searchContainer); //update everything within container
-                    }
+                simpleModeModel.setObject(false);
+                if (target != null) {
+                    target.prependJavaScript("cb|transitionFromSimple(cb);");
+                    target.add(searchContainer); //update everything within container
                 }
 
                 updateSelection(target);
