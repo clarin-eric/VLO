@@ -26,6 +26,9 @@ import java.util.Map;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import static org.junit.Assert.*;
 
 /**
@@ -39,6 +42,7 @@ public class SolrDocumentQueryFactoryImplTest {
 
     @Before
     public void setUp() {
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(eu.clarin.cmdi.vlo.config.VloSpringConfig.class);
         instance = new SolrDocumentQueryFactoryImpl(docFields);
     }
 

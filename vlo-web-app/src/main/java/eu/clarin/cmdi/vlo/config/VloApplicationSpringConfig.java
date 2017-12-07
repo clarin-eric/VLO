@@ -29,13 +29,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class VloApplicationSpringConfig {
 
-    /**
-     *
-     * @return the web application object that represents the Wicket application
-     */
+
+    
     @Bean
-    public VloWicketApplication webApplication() {
-        return new VloWicketApplication();
+    public FieldNameService fieldNameService() {
+        return new FieldNameServiceImpl(vloConfig());
     }
 
     @Bean
@@ -51,5 +49,14 @@ public class VloApplicationSpringConfig {
     public VloConfigFactory vloConfigFactory() {
         return new ServletVloConfigFactory();
     }
+    
+    /**
+    *
+    * @return the web application object that represents the Wicket application
+    */
+   @Bean
+   public VloWicketApplication webApplication() {
+       return new VloWicketApplication();
+   }
 
 }

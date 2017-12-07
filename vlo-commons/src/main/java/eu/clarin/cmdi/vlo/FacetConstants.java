@@ -2,6 +2,10 @@ package eu.clarin.cmdi.vlo;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+
+import eu.clarin.cmdi.vlo.config.FieldNameService;
+
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -52,7 +56,7 @@ public class FacetConstants {
         DEPRECATED_FIELD_LANGUAGE        
     }
 
-    public static final String FIELD_ACCESS_INFO = "accessInfo";
+/*    public static final String FIELD_ACCESS_INFO = "accessInfo";
     public static final String FIELD_AVAILABILITY = "availability";
     public static final String FIELD_COLLECTION = "collection";
     public static final String FIELD_COMPLETE_METADATA = "metadataSource";
@@ -76,10 +80,10 @@ public class FacetConstants {
     public static final String FIELD_TEMPORAL_COVERAGE = "temporalCoverage";
     public static final String FIELD_LICENSE_TYPE = "licenseType";
 
-    /**
+    *//**
      * Solr pseudo-field that reveals the ranking score.
      * @see <a href="https://wiki.apache.org/solr/SolrRelevancyFAQ#How_can_I_see_the_relevancy_scores_for_search_results">FAQ</a>
-     */
+     *//*
     public static final String FIELD_SOLR_SCORE = "score";
 
     //The _ facets are not meant to be shown to users.
@@ -98,18 +102,18 @@ public class FacetConstants {
     public static final String FIELD_HAS_PART_COUNT_WEIGHT = "_hasPartCountWeight";
     public static final String FIELD_LANGUAGE_NAME = "_languageName";
 
-    /**
+    *//**
      * Facet constant associated with the landing page type.
-     */
+     *//*
     public static final String FIELD_LANDINGPAGE = "_landingPageRef";
-    /**
+    *//**
      * Facet constant associated with the search page type.
-     */
+     *//*
     public static final String FIELD_SEARCHPAGE = "_searchPageRef";
 
-    /**
+    *//**
      * Fields for which a selection (by the user) should be allowed
-     */
+     *//*
     public static final Set<String> AVAILABLE_FACETS = ImmutableSet.of(
             FIELD_ACCESS_INFO,
             FIELD_AVAILABILITY,
@@ -137,9 +141,49 @@ public class FacetConstants {
             FIELD_TEMPORAL_COVERAGE,
             FIELD_SEARCH_SERVICE
     );
+*/    
+    public static final Set<String> getFieldList(FieldNameService fieldNameService, KEY... keys){
+        ArrayList<String> list = new ArrayList<String>();
+        for(KEY key: keys) {
+            list.add(fieldNameService.getFieldName(key));
+        }
+        return ImmutableSet.copyOf(list);
+    }
+    
+    public static final Set<String> getAvailableFacets(FieldNameService fieldNameService){
+        return getFieldList(
+            fieldNameService,
+            KEY.FIELD_ACCESS_INFO,
+            KEY.FIELD_AVAILABILITY,
+            KEY.FIELD_COLLECTION,
+            KEY.FIELD_COMPLETE_METADATA,
+            KEY.FIELD_CONTINENT,
+            KEY.FIELD_COUNTRY,
+            KEY.FIELD_DATA_PROVIDER,
+            KEY.FIELD_DESCRIPTION,
+            KEY.FIELD_FORMAT,
+            KEY.FIELD_GENRE,
+            KEY.FIELD_HAS_PART_COUNT,
+            KEY.FIELD_ID,
+            KEY.FIELD_KEYWORDS,
+            KEY.FIELD_LANGUAGE_CODE,
+            KEY.FIELD_LICENSE,
+            KEY.FIELD_LICENSE_TYPE,
+            KEY.FIELD_MODALITY,
+            KEY.FIELD_NAME,
+            KEY.FIELD_NATIONAL_PROJECT,
+            KEY.FIELD_ORGANISATION,
+            KEY.FIELD_PROJECT_NAME,
+            KEY.FIELD_RESOURCE_CLASS,
+            KEY.FIELD_SUBJECT,
+            KEY.FIELD_TEMPORAL_COVERAGE,
+            KEY.FIELD_SEARCH_SERVICE
+        );
+                
+    }
 
     //Deprecated fields
-    public static final String DEPRECATED_FIELD_LANGUAGE = "language";
+//    public static final String DEPRECATED_FIELD_LANGUAGE = "language";
 
     //Normalized mimeTypes
     public static final String RESOURCE_TYPE_AUDIO = "audio";

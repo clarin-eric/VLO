@@ -19,6 +19,9 @@ package eu.clarin.cmdi.vlo.service.impl;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
+
 import static eu.clarin.cmdi.vlo.VloWebAppParameters.*;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
@@ -32,6 +35,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import javax.inject.Inject;
+
 import org.apache.wicket.Session;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
@@ -46,6 +52,9 @@ import org.slf4j.LoggerFactory;
 public class QueryFacetsSelectionParametersConverter implements PageParametersConverter<QueryFacetsSelection> {
 
     public final static Logger logger = LoggerFactory.getLogger(QueryFacetsSelectionParametersConverter.class);
+    
+    @Inject
+    private FieldNameService fieldNameService;
     /**
      * Splitter for facet query strings like "language:Dutch". Because it is
      * limited to two tokens, will also work for strings with a colon in their
@@ -85,7 +94,7 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
      * @param facetParamMapper mapper to apply to facet names and values
      */
     public QueryFacetsSelectionParametersConverter(FacetParameterMapper facetParamMapper) {
-        this(facetParamMapper, FacetConstants.AVAILABLE_FACETS);
+        this(facetParamMapper, FacetConstants.getAvailableFacets(VloWicketApplication.get().getFieldNameService()));
     }
 
     /**

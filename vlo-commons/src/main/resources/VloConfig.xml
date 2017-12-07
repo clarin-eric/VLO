@@ -108,7 +108,8 @@
         <field key="FIELD_PROJECT_NAME">projectName</field>
         <field key="FIELD_TEMPORAL_COVERAGE">temporalCoverage</field>
         <field key="FIELD_DAYS_SINCE_LAST_SEEN">_daysSinceLastSeen</field>
-        <field key="FIELD_HAS_PART_COUNT_WEIGHT">_hasPartCountWeight</field>   
+        <field key="FIELD_HAS_PART_COUNT_WEIGHT">_hasPartCountWeight</field>
+        <field key="FIELD_LANGUAGE_NAME">_languageName</field>   
 	</fields>
             
     <!-- Fields shown as facets on the search page -->
