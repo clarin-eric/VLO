@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -58,7 +59,7 @@ public class SolrDaoImpl {
                 String facetInFilter = filter.split(":")[0]
                         .replaceFirst("^\\{!tag=.*\\}", ""); //strip out tag syntax (may be used for OR queries, see query factory implementation)
                 
-                if (FacetConstants.AVAILABLE_FACETS.contains(facetInFilter)) {
+                if (FacetConstants.getAvailableFacets(VloWicketApplication.get().getFieldNameService()).contains(facetInFilter)) {
                     // facet in the filter is in the set that is defined by the config file
                 } else {
                     if (facetInFilter.startsWith("_")) {

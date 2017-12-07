@@ -16,14 +16,16 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import org.apache.solr.common.SolrDocument;
 import org.jmock.Expectations;
-import static org.jmock.Expectations.returnValue;
+
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
+
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -38,11 +40,12 @@ public class SolrDocumentModelTest {
 
     private SolrDocumentService service;
     private SolrDocument expected;
+    private FieldNameService fieldNameService = VloWicketApplication.get().getFieldNameService();
 
     @Before
     public void setUp() {
         expected = new SolrDocument();
-        expected.setField(FacetConstants.FIELD_ID, "id");
+        expected.setField(fieldNameService.getFieldName(KEY.FIELD_ID), "id");
         service = context.mock(SolrDocumentService.class);
     }
 
@@ -53,6 +56,11 @@ public class SolrDocumentModelTest {
     public void testGetObject() {
         // construct with a document id (lazy loading)
         final SolrDocumentModel instance = new SolrDocumentModel("id") {
+
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 1L;
 
             @Override
             protected SolrDocumentService getDocumentService() {
@@ -85,6 +93,11 @@ public class SolrDocumentModelTest {
     public void testGetObjectInitialised() {
         // construct with an existing solr document
         final SolrDocumentModel instance = new SolrDocumentModel(expected) {
+
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 1L;
 
             @Override
             protected SolrDocumentService getDocumentService() {

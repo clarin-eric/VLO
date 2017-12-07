@@ -28,13 +28,14 @@ import javax.inject.Inject;
 import org.apache.solr.client.solrj.SolrQuery;
 import eu.clarin.cmdi.vlo.FacetConstants.KEY;
 
+
 /**
  *
  * @author twagoo
  */
 public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrDocumentQueryFactory {
     @Inject
-    FieldNameService fieldNameService;
+    private FieldNameService fieldNameService;
 
     /**
      * Template query for new document queries

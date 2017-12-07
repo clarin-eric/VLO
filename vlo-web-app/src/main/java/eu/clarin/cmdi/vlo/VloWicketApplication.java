@@ -75,11 +75,11 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     @Inject
     private Map<String, Ordering<String>> fieldValueOrderings;
     @Inject
-    private PermalinkService permalinkService;
-    @Inject
     private VloConfig vloConfig;
     @Inject
     private FieldNameService fieldNameService;
+    @Inject
+    private PermalinkService permalinkService;
     
     private ApplicationContext applicationContext;
     private String appVersionQualifier;

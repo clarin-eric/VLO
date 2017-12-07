@@ -78,6 +78,7 @@ public class VloServicesSpringConfig {
 
     @Inject
     VloConfig vloConfig;
+    
 
     @Bean
     public ResourceTypeCountingService resourceTypeCountingService() {
@@ -191,9 +192,6 @@ public class VloServicesSpringConfig {
     public PiwikConfig piwikConfig() {
         return new PiwikConfig();
     }
-    @Bean
-    public FieldNameService fieldNameService() {
-        return new FieldNameServiceImpl(vloConfig);
-    }
+
 
 }

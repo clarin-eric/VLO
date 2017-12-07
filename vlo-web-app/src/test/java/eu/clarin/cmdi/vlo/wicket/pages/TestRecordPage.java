@@ -1,9 +1,10 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.FacetConstants.KEY;
 import eu.clarin.cmdi.vlo.VloApplicationTestConfig;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloServicesSpringConfig;
 import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
 import eu.clarin.cmdi.vlo.service.solr.SimilarDocumentsService;
@@ -14,7 +15,6 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
 import org.jmock.Expectations;
-import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
@@ -48,6 +48,8 @@ public class TestRecordPage {
     private SolrDocumentService documentService;
     @Inject
     private SimilarDocumentsService similarDocumentsService;
+    @Inject
+    private FieldNameService fieldNameService;
 
     private WicketTester tester;
     private SolrDocument document;
@@ -58,7 +60,7 @@ public class TestRecordPage {
         tester = new WicketTester(application);
 
         document = new SolrDocument();
-        document.setField(FacetConstants.FIELD_ID, "documentId");
+        document.setField(fieldNameService.getFieldName(KEY.FIELD_ID), "documentId");
 
         params = new PageParameters();
         params.set(VloWebAppParameters.DOCUMENT_ID, "documentId");
@@ -96,7 +98,7 @@ public class TestRecordPage {
 
     @Test
     public void testLandingPageLinkVisible() {
-        document.addField(FacetConstants.FIELD_LANDINGPAGE, "http://www.landingpage.com");
+        document.addField(fieldNameService.getFieldName(KEY.FIELD_LANDINGPAGE), "http://www.landingpage.com");
 
         mockery.checking(new Expectations() {
             {

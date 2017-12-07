@@ -18,6 +18,8 @@ package clarin.cmdi.vlo.statistics.collector;
 
 import clarin.cmdi.vlo.statistics.model.VloReport;
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,14 +30,18 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
+
 /**
  *
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class FacetValueCountsCollector implements VloStatisticsCollector {
+    private FieldNameService fieldNameService;
 
     @Override
     public void collect(VloReport report, VloConfig config, SolrClient solrClient) throws SolrServerException, IOException {
+        if(this.fieldNameService == null)
+            this.fieldNameService = new FieldNameServiceImpl(config);
         report.setFacets(obtainFacetStats(config, solrClient));
     }
     
@@ -45,7 +51,7 @@ public class FacetValueCountsCollector implements VloStatisticsCollector {
         final SolrQuery query = new SolrQuery();
         query.setRows(0);
         query.setFacet(true);
-        FacetConstants.AVAILABLE_FACETS.forEach((field) -> {
+        FacetConstants.getAvailableFacets(fieldNameService).forEach((field) -> {
             query.addFacetField(field);
         });
         query.setFacetLimit(-1);
