@@ -1,6 +1,6 @@
 Bug fixes and new features
 --------------------------
-VLO-4.3.0 (November 2017)
+VLO-4.3.0 (December 2017)
 
 * Solved issue of going to simplified search page when going back from a record page
     <https://github.com/clarin-eric/VLO/issues/95>
