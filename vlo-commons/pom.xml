@@ -111,7 +111,8 @@
                 <vloconfig.dataRootsFile>dataroots-production.xml</vloconfig.dataRootsFile>
                 <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
                 <vloconfig.facetConceptsFileLocation>file:/srv/VLO-mapping/mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
-                <vloconfig.solrThreads>4</vloconfig.solrThreads> <!-- TODO: assess performance -->
+                <vloconfig.fileProcessingThreads>-1</vloconfig.fileProcessingThreads>
+                <vloconfig.solrThreads>4</vloconfig.solrThreads>
             </properties>
         </profile>
         
