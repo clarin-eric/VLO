@@ -27,10 +27,9 @@ Deploying the VLO application means:
    
 ## Archive unpacking
 
-- `service tomcat6 stop` 
-	- (or `$CATALINA_HOME/bin/shutdown.sh` if tomcat is 
-not installed as a service)
-- `mkdir ${VLO}`
+- `service tomcat stop` 
+- `service solr stop`
+- `mkdir ${VLO} # you may have to move an old VLO version first` 
 - `tar -C ${VLO} --strip-components=1 -zxvf vlo-xxx-Distribution.tar.gz`
 
 In the tree starting in `$VLO`, the configuration of the application is stored under subfolder config.
@@ -82,11 +81,12 @@ checking the [upgrade instructions](UPGRADE.txt).
 Solr allows you to configure (i.e. override the default settings for) the location of
 both the [Solr home directory](https://lucene.apache.org/solr/guide/7_1/solr-configuration-files.html#solr-home)
 and the location where the index data is stored (by default the latter is a subdirectory
-of the former). The way to configure these is by setting the properties ``solr.solr.home`
+of the former). The way to configure these is by setting the properties `solr.solr.home`
 and/or `solr.data.home`. When running Solr as a service in the host, these properties
 are best configured by setting the matching variables in the `solr.in.sh` file.
 
-To make the Solr instance work with the VLO, set the `solr.solr.home` property to:
+To make the Solr instance work with the VLO, set the `solr.solr.home` property
+(`SOLR_HOME` variable) to:
 ```sh
 ${VLO}/solr/vlo-solr-home
 ```
@@ -95,9 +95,10 @@ It is a good idea to configure a **separate** directory for Solr to store its **
 (index and transaction log), as the above location will be replaced when updating the VLO,
 and the contents of this directory can grow rather large.
 To do this, create a `solr-data` directory somewhere outside the `${VLO}` 
-directory (e.g. `/srv/solr-data`) and set `solr.data.home` to its absolute path. The VLO
-specific data will then be stored by Solr in `${solr.data.home}/${CORE_NAME}/data`.
-Note: as of version 4.3 of the VLO, `CORE_NAME=vlo-index`.
+directory (e.g. `/srv/solr-data`) and set `solr.data.home` (`SOLR_DATA_HOME` variable)
+to its absolute path. The VLO specific data will then be stored by Solr in
+`${solr.data.home}/${CORE_NAME}/data`. Note: as of version 4.3 of the VLO,
+`CORE_NAME=vlo-index`.
 
 #### Docker
 
