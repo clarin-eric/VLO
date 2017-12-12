@@ -26,8 +26,11 @@ import java.util.Map;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.junit.runner.RunWith;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import static org.junit.Assert.*;
 
@@ -35,6 +38,9 @@ import static org.junit.Assert.*;
  *
  * @author twagoo
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD) // gives us a fresh context for each test
 public class SolrDocumentQueryFactoryImplTest {
 
     private final Collection<String> docFields = ImmutableList.of("field1", "field2", "field3");
@@ -42,7 +48,6 @@ public class SolrDocumentQueryFactoryImplTest {
 
     @Before
     public void setUp() {
-        ApplicationContext ctx = new AnnotationConfigApplicationContext(eu.clarin.cmdi.vlo.config.VloSpringConfig.class);
         instance = new SolrDocumentQueryFactoryImpl(docFields);
     }
 
