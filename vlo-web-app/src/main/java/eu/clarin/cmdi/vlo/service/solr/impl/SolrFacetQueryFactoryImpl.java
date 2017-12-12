@@ -27,6 +27,7 @@ import org.apache.solr.client.solrj.SolrQuery;
  *
  * @author twagoo
  */
+
 public class SolrFacetQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrFacetQueryFactory {
 
     private final SolrQuery baseQuery;

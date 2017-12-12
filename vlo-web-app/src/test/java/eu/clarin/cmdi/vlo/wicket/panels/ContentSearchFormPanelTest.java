@@ -74,7 +74,7 @@ public class ContentSearchFormPanelTest {
 
         // form action should be aggregator search page
         tester.assertContains("action=\"http://fcs.org/aggregator\"");
-
+        //tester.assertContains("action=\"http://weblicht.sfs.uni-tuebingen.de/Aggregator/\"");
         // json hidden input should have the CQL endpoint and document handle, and should be encoded into entities
         tester.assertContains(Pattern.quote("name=\"x-aggregation-context\" "
                 + "value=\"{\n"

@@ -87,6 +87,10 @@ import eu.clarin.cmdi.vlo.FacetConstants.KEY;
  */
 public class RecordPage extends VloBasePage<SolrDocument> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     public final static String DETAILS_SECTION = "details";
     public final static String AVAILABILITY_SECTION = "availability";
     public final static String RESOURCES_SECTION = "resources";

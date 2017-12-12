@@ -38,6 +38,7 @@ import static org.junit.Assert.*;
  *
  * @author twagoo
  */
+
 public class QueryFacetsSelectionParametersConverterTest {
 
     private QueryFacetsSelectionParametersConverter instance;

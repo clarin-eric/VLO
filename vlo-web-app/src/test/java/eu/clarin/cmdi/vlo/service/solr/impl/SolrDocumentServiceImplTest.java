@@ -21,24 +21,27 @@ import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentServiceImpl;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentQueryFactory;
-import java.util.Collection;
+
 import java.util.Collections;
 import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.jmock.Expectations;
-import static org.jmock.Expectations.returnValue;
+
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
+
+
 import static org.junit.Assert.*;
 
 /**
  *
  * @author twagoo
  */
+
 public class SolrDocumentServiceImplTest {
 
     private final Mockery context = new JUnit4Mockery();

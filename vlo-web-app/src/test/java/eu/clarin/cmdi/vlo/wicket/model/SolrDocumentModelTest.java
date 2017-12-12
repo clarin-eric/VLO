@@ -28,19 +28,31 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+
 import static org.junit.Assert.*;
+
+import javax.inject.Inject;
 
 /**
  *
  * @author twagoo
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD) // gives us a fresh context for each test
 public class SolrDocumentModelTest {
 
     private final Mockery context = new JUnit4Mockery();
 
     private SolrDocumentService service;
     private SolrDocument expected;
-    private FieldNameService fieldNameService = VloWicketApplication.get().getFieldNameService();
+    @Inject
+    private FieldNameService fieldNameService;
 
     @Before
     public void setUp() {
