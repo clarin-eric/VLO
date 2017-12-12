@@ -36,16 +36,20 @@ function endSearch() {
 }
 
 function transitionFromSimple(cb) {
-    $('.simple-only:visible').slideUp({
-        duration: 'fast',
-        start: function () {
-            console.log("transition animation..");
-            $('.hide-simple').slideDown('fast');
-        },
-        done: function () {
-            cb();
-        }
-    });
+    if($('.simple-only:visible').length > 0) {
+        $('.simple-only:visible').slideUp({
+            duration: 'fast',
+            start: function () {
+                console.log("transition animation..");
+                $('.hide-simple').slideDown('fast');
+            },
+            done: function () {
+                cb();
+            }
+        });
+    } else {
+        cb();
+    }
 }
 
 function showSearchContent() {
