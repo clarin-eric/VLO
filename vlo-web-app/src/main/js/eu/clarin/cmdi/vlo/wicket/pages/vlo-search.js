@@ -36,8 +36,9 @@ function endSearch() {
 }
 
 function transitionFromSimple(cb) {
-    if($('.simple-only:visible').length > 0) {
-        $('.simple-only:visible').slideUp({
+    var simpleBox = $('.simple-only:visible');
+    if(simpleBox.length > 0) {
+        simpleBox.slideUp({
             duration: 'fast',
             start: function () {
                 console.log("transition animation..");
