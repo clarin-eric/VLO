@@ -89,6 +89,11 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
                         return ("endSearch();");
                     }
 
+                    @Override
+                    public CharSequence getFailureHandler(Component component) {
+                        return "handleSearchFailure(errorMessage, textStatus);";
+                    }
+
                 };
                 attributes.getAjaxCallListeners().add(listener);
             }

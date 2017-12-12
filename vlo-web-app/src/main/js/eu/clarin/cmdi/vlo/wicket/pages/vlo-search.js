@@ -35,17 +35,27 @@ function endSearch() {
     $('form#search-form [data-toggle="tooltip"]').tooltip();
 }
 
+function handleSearchFailure(message, status) {
+    console.log("Search failure. Status: " + status + ", message:" + message);
+    endSearch();
+}
+
 function transitionFromSimple(cb) {
-    $('.simple-only:visible').slideUp({
-        duration: 'fast',
-        start: function () {
-            console.log("transition animation..");
-            $('.hide-simple').slideDown('fast');
-        },
-        done: function () {
-            cb();
-        }
-    });
+    var simpleBox = $('.simple-only:visible');
+    if(simpleBox.length > 0) {
+        simpleBox.slideUp({
+            duration: 'fast',
+            start: function () {
+                console.log("transition animation..");
+                $('.hide-simple').slideDown('fast');
+            },
+            done: function () {
+                cb();
+            }
+        });
+    } else {
+        cb();
+    }
 }
 
 function showSearchContent() {
