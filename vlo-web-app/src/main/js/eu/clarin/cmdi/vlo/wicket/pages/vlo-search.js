@@ -35,6 +35,11 @@ function endSearch() {
     $('form#search-form [data-toggle="tooltip"]').tooltip();
 }
 
+function handleSearchFailure(message, status) {
+    console.log("Search failure. Status: " + status + ", message:" + message);
+    endSearch();
+}
+
 function transitionFromSimple(cb) {
     var simpleBox = $('.simple-only:visible');
     if(simpleBox.length > 0) {
