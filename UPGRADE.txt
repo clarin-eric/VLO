@@ -32,6 +32,12 @@ required.
 
 - In 'bin', run the importer using the updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
+
+-----------------------------
+Upgrading from 4.3.0 to 4.3.1
+-----------------------------
+Maintenance release, no actions required (Solr index can be kept).
+
 -----------------------------
 Upgrading from 4.2.x to 4.3.0
 -----------------------------
