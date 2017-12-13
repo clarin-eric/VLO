@@ -21,6 +21,8 @@ import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -37,13 +39,12 @@ import eu.clarin.cmdi.vlo.FacetConstants.KEY;
  */
 public class SolrDocumentModel extends LoadableDetachableModel<SolrDocument> {
 
-    private final FieldNameService fieldNameService = VloWicketApplication.get().getFieldNameService();
     
     private final IModel<String> docId;
     
 
 
-    public SolrDocumentModel(SolrDocument document) {
+    public SolrDocumentModel(SolrDocument document, FieldNameService fieldNameService) {
         super(document);
         if (document == null) {
             this.docId = null;

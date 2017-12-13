@@ -156,7 +156,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                     .remove(VloWebAppParameters.DOCUMENT_ID);
             ErrorPage.triggerErrorPage(ErrorType.DOCUMENT_NOT_FOUND, errorParams);
         } else {
-            setModel(new SolrDocumentModel(document));
+            setModel(new SolrDocumentModel(document, fieldNameService));
         }
 
         addComponents(params);

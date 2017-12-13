@@ -312,7 +312,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                         final SolrDocument document = documentService.getDocument(childId.toString());
                         final String path = node.getPath() + "/" + childId;
                         logger.debug("Child node path: {}", path);
-                        return new ModelWrapper<>(path, new SolrDocumentModel(document));
+                        return new ModelWrapper<>(path, new SolrDocumentModel(document, fieldNameService));
                     }
                 });
                 if (childrenShown != null && parts.size() > childrenShown) {
@@ -375,7 +375,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                 // dangling hasPart references can happen...
                 return new Model<>();
             } else {
-                return new SolrDocumentModel(object);
+                return new SolrDocumentModel(object, fieldNameService);
             }
         }
 

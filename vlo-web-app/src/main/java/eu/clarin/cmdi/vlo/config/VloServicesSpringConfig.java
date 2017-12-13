@@ -79,6 +79,9 @@ public class VloServicesSpringConfig {
     @Inject
     VloConfig vloConfig;
     
+    @Inject
+    FieldNameService fieldNameService;
+    
 
     @Bean
     public ResourceTypeCountingService resourceTypeCountingService() {
@@ -111,7 +114,7 @@ public class VloServicesSpringConfig {
 
     @Bean(name = "queryParametersConverter")
     public PageParametersConverter<QueryFacetsSelection> queryParametersConverter() {
-        return new QueryFacetsSelectionParametersConverter(facetParameterMapper());
+        return new QueryFacetsSelectionParametersConverter(facetParameterMapper(), fieldNameService);
     }
 
     @Bean(name = "documentParamsConverter")

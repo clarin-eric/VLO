@@ -151,7 +151,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private void addComponents() {
-        documentsProvider = new SolrDocumentProvider(getModel());
+        documentsProvider = new SolrDocumentProvider(getModel(), fieldNameService);
 
         searchContainer = new WebMarkupContainer("searchContainer");
         searchContainer.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
@@ -164,7 +164,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         searchContainer.setOutputMarkupId(true);
         add(searchContainer);
 
-        final IDataProvider<SolrDocument> solrDocumentProvider = new SolrDocumentProvider(getModel());
+        final IDataProvider<SolrDocument> solrDocumentProvider = new SolrDocumentProvider(getModel(), fieldNameService);
 
         navigation = createNavigation("navigation");
         searchContainer.add(navigation);
