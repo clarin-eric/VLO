@@ -18,30 +18,62 @@ package eu.clarin.cmdi.vlo.service.impl;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
+
+import eu.clarin.cmdi.vlo.VloApplicationTestConfig;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.config.VloServicesSpringConfig;
+import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.solr.SimilarDocumentsService;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+//import eu.clarin.cmdi.vlo.wicket.pages.TestRecordPage.VloSolrSpringTestConfig;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
+
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+
 import static org.junit.Assert.*;
 
 /**
  *
  * @author twagoo
  */
-
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD) // gives us a fresh context for each test
 public class QueryFacetsSelectionParametersConverterTest {
 
     private QueryFacetsSelectionParametersConverter instance;
+    
+    @Inject
+    FieldNameService fieldNameService;
 
     @Before
     public void setUp() {
@@ -131,6 +163,49 @@ public class QueryFacetsSelectionParametersConverterTest {
         assertThat(fqType, hasItem(StringValue.valueOf("facet1:or")));
         //facet 2 is AND, which is default and should not be encoded
         assertThat(fqType, hasItem(StringValue.valueOf("facet3:not_empty")));
+    }
+    //TODO: Add test for display of resources
+    /**
+     * Custom configuration injected into web app for testing
+     */
+    @Configuration
+    @PropertySource(value = "classpath:/config.default.properties", ignoreResourceNotFound = false)
+    @Import({
+        VloSolrSpringTestConfig.class,
+        VloApplicationTestConfig.class,
+        VloServicesSpringConfig.class})
+    static class ContextConfiguration {
+
+        @Bean
+        public Mockery mockery() {
+            return new JUnit4Mockery();
+        }
+
+        @Bean
+        public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+            return new PropertySourcesPlaceholderConfigurer();
+        }
+    }
+
+    /**
+     * Provides some mock Solr services
+     */
+    @Configuration
+    static class VloSolrSpringTestConfig extends VloSolrSpringConfig {
+
+        @Inject
+        private Mockery mockery;
+
+        @Override
+        public SolrDocumentService documentService() {
+            return mockery.mock(SolrDocumentService.class);
+        }
+
+        @Override
+        public SimilarDocumentsService similarDocumentsService() {
+            return mockery.mock(SimilarDocumentsService.class);
+        }
+
     }
 
 }

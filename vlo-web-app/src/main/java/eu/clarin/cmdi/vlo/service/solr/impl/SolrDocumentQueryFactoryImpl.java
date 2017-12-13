@@ -34,7 +34,7 @@ import eu.clarin.cmdi.vlo.FacetConstants.KEY;
  * @author twagoo
  */
 public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrDocumentQueryFactory {
-    @Inject
+
     private FieldNameService fieldNameService;
 
     /**
@@ -46,7 +46,8 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
      *
      * @param documentFields fields that should be included in document queries
      */
-    public SolrDocumentQueryFactoryImpl(Collection<String> documentFields) {
+    public SolrDocumentQueryFactoryImpl(Collection<String> documentFields, FieldNameService fieldNameService) {
+        this.fieldNameService = fieldNameService;
         defaultQueryTemplate = new SolrQuery();
         defaultQueryTemplate.setFields(documentFields.toArray(new String[]{}));
 //        //TODO: qf (all fields with weights - make configurable (later)

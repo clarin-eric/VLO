@@ -47,6 +47,8 @@ public class VloSolrSpringConfig {
 
    @Inject
    private VloConfig vloConfig;
+   @Inject
+   FieldNameService fieldNameService;
 
    @Bean
    public FacetFieldsService facetFieldsService() {
@@ -75,7 +77,7 @@ public class VloSolrSpringConfig {
 
    @Bean
    public SolrDocumentQueryFactoryImpl documentQueryFactory() {
-      return new SolrDocumentQueryFactoryImpl(getDocumentFields());
+      return new SolrDocumentQueryFactoryImpl(getDocumentFields(), fieldNameService);
    }
 
    @Bean

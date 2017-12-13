@@ -54,8 +54,7 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
 
     public final static Logger logger = LoggerFactory.getLogger(QueryFacetsSelectionParametersConverter.class);
     
-    @Inject
-    private FieldNameService fieldNameService;
+
     /**
      * Splitter for facet query strings like "language:Dutch". Because it is
      * limited to two tokens, will also work for strings with a colon in their
@@ -67,17 +66,17 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
      * Fields that aren't true facets but can be queried by the user via the
      * {@link AdvancedSearchOptionsPanel}
      */
-    private Set<String> facetsAllowed;
-    private FacetParameterMapper facetParamMapper;
+    private final Set<String> facetsAllowed;
+    private final FacetParameterMapper facetParamMapper;
 
     /**
      * Constructs a converter that does not do any facet (value) mapping
      *
      * @see FacetParameterMapper.IdentityMapper
      */
-    public QueryFacetsSelectionParametersConverter() {
+/*    public QueryFacetsSelectionParametersConverter() {
         //this(new FacetParameterMapper.IdentityMapper());
-    }
+    }*/
 
     /**
      * Constructs a converter that does not do any facet (value) mapping
@@ -86,8 +85,7 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
      * @see FacetParameterMapper.IdentityMapper
      */
     public QueryFacetsSelectionParametersConverter(Set<String> facetsAllowed) {
-        //this(new FacetParameterMapper.IdentityMapper(), facetsAllowed);
-        this.facetsAllowed = facetsAllowed;
+        this(new FacetParameterMapper.IdentityMapper(), facetsAllowed);
     }
 
     /**
@@ -95,9 +93,8 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
      *
      * @param facetParamMapper mapper to apply to facet names and values
      */
-    public QueryFacetsSelectionParametersConverter(FacetParameterMapper facetParamMapper) {
-        //this(facetParamMapper, FacetConstants.getAvailableFacets(VloWicketApplication.get().getFieldNameService()));
-        this.facetParamMapper = facetParamMapper;
+    public QueryFacetsSelectionParametersConverter(FacetParameterMapper facetParamMapper, FieldNameService fieldNameService) {
+        this(facetParamMapper, FacetConstants.getAvailableFacets(fieldNameService));
     }
 
     /**
@@ -111,13 +108,6 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
         this.facetsAllowed = facetsAllowed;
     }
     
-    @PostConstruct
-    public void init() {
-        if(this.facetsAllowed == null)
-            this.facetParamMapper = new FacetParameterMapper.IdentityMapper();
-        if(this.facetsAllowed == null)
-            this.facetsAllowed = FacetConstants.getAvailableFacets(this.fieldNameService);
-    }
 
     @Override
     public QueryFacetsSelection fromParameters(PageParameters params) {
