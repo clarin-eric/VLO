@@ -140,6 +140,11 @@ public class VloConfig {
     
     @XmlJavaTypeAdapter(XmlFieldAdapter.class)
     private Map<String,String> fields;
+    
+    @XmlJavaTypeAdapter(XmlFieldAdapter.class)
+    @XmlElement(name="deprecatedFields")
+    private Map<String,String> dFields;
+
 
     /**
      * A set of fields to be excluded from display<br><br>
@@ -1318,4 +1323,18 @@ public class VloConfig {
 	public void setFields(Map<String, String> fields) {
 		this.fields = fields;
 	}
+
+    /**
+     * @return the dFields
+     */
+    public Map<String, String> getDFields() {
+        return dFields;
+    }
+
+    /**
+     * @param dFields the dFields to set
+     */
+    public void setDFields(Map<String, String> dFields) {
+        this.dFields = dFields;
+    }
 }
