@@ -114,7 +114,7 @@ public class VloServicesSpringConfig {
 
     @Bean(name = "queryParametersConverter")
     public PageParametersConverter<QueryFacetsSelection> queryParametersConverter() {
-        return new QueryFacetsSelectionParametersConverter(facetParameterMapper(), fieldNameService);
+        return new QueryFacetsSelectionParametersConverter(facetParameterMapper(), vloConfig.getFields().values());
     }
 
     @Bean(name = "documentParamsConverter")

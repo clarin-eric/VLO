@@ -17,7 +17,10 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
@@ -31,6 +34,7 @@ import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -93,8 +97,8 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
      *
      * @param facetParamMapper mapper to apply to facet names and values
      */
-    public QueryFacetsSelectionParametersConverter(FacetParameterMapper facetParamMapper, FieldNameService fieldNameService) {
-        this(facetParamMapper, FacetConstants.getAvailableFacets(fieldNameService));
+    public QueryFacetsSelectionParametersConverter(FacetParameterMapper facetParamMapper, Collection<String> facetsAllowed) {
+        this(facetParamMapper, ImmutableSet.copyOf(facetsAllowed));
     }
 
     /**

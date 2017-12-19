@@ -13,48 +13,7 @@ import java.util.Set;
  * Definition of facet, resource type and URL constants.
  */
 public class FacetConstants {
-    public static final Set<String> getFieldList(FieldNameService fieldNameService, FieldKey... keys){
-        ArrayList<String> list = new ArrayList<String>();
-        for(FieldKey key: keys) {
-            list.add(fieldNameService.getFieldName(key));
-        }
-        return ImmutableSet.copyOf(list);
-    }
-    
-    public static final Set<String> getAvailableFacets(FieldNameService fieldNameService){
-        return getFieldList(
-            fieldNameService,
-            FieldKey.ACCESS_INFO,
-            FieldKey.AVAILABILITY,
-            FieldKey.COLLECTION,
-            FieldKey.COMPLETE_METADATA,
-            FieldKey.CONTINENT,
-            FieldKey.COUNTRY,
-            FieldKey.DATA_PROVIDER,
-            FieldKey.DESCRIPTION,
-            FieldKey.FORMAT,
-            FieldKey.GENRE,
-            FieldKey.HAS_PART_COUNT,
-            FieldKey.ID,
-            FieldKey.KEYWORDS,
-            FieldKey.LANGUAGE_CODE,
-            FieldKey.LICENSE,
-            FieldKey.LICENSE_TYPE,
-            FieldKey.MODALITY,
-            FieldKey.NAME,
-            FieldKey.NATIONAL_PROJECT,
-            FieldKey.ORGANISATION,
-            FieldKey.PROJECT_NAME,
-            FieldKey.RESOURCE_CLASS,
-            FieldKey.SUBJECT,
-            FieldKey.TEMPORAL_COVERAGE,
-            FieldKey.SEARCH_SERVICE
-        );
-                
-    }
 
-    //Deprecated fields
-//    public static final String DEPRECATED_FIELD_LANGUAGE = "language";
 
     //Normalized mimeTypes
     public static final String RESOURCE_TYPE_AUDIO = "audio";

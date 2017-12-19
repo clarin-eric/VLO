@@ -18,10 +18,13 @@ import org.slf4j.LoggerFactory;
 public class SolrDaoImpl {
 
     private final static Logger logger = LoggerFactory.getLogger(SolrDaoImpl.class);
+   
     private final SolrClient solrClient;
+    private final VloConfig vloConfig;
 
-    public SolrDaoImpl(SolrClient solrClient, VloConfig config) {
+    public SolrDaoImpl(SolrClient solrClient, VloConfig vloConfig) {
         this.solrClient = solrClient;
+        this.vloConfig = vloConfig;
     }
 
     protected SolrClient getSolrClient() {
@@ -59,7 +62,7 @@ public class SolrDaoImpl {
                 String facetInFilter = filter.split(":")[0]
                         .replaceFirst("^\\{!tag=.*\\}", ""); //strip out tag syntax (may be used for OR queries, see query factory implementation)
                 
-                if (FacetConstants.getAvailableFacets(VloWicketApplication.get().getFieldNameService()).contains(facetInFilter)) {
+                if (vloConfig.getFields().values().contains(facetInFilter)) {
                     // facet in the filter is in the set that is defined by the config file
                 } else {
                     if (facetInFilter.startsWith("_")) {

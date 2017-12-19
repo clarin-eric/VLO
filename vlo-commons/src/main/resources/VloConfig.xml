@@ -111,6 +111,10 @@
         <field key="HAS_PART_COUNT_WEIGHT">_hasPartCountWeight</field>
         <field key="LANGUAGE_NAME">_languageName</field>   
 	</fields>
+	  
+	<deprecatedFields>
+	  <field key="DEPRECATED_LANGUAGE">language</field>
+	</deprecatedFields>
             
     <!-- Fields shown as facets on the search page -->
     <facetFields>        
