@@ -26,7 +26,7 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;;
 
 
 /**
@@ -35,7 +35,7 @@ import eu.clarin.cmdi.vlo.FacetConstants.KEY;
  */
 public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrDocumentQueryFactory {
 
-    private FieldNameService fieldNameService;
+    private final FieldNameService fieldNameService;
 
     /**
      * Template query for new document queries
@@ -79,8 +79,8 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
         // be unique and self link use to be ID in old VLO, so this should keep old
         // URL's valid with a minimal likelihood of clashes
         final ImmutableMap<String, String> idOrQueryMap = ImmutableMap.<String, String>builder()
-                .put(fieldNameService.getFieldName(KEY.FIELD_ID), docId)
-                .put(fieldNameService.getFieldName(KEY.FIELD_SELF_LINK), docId)
+                .put(fieldNameService.getFieldName(FieldKey.ID), docId)
+                .put(fieldNameService.getFieldName(FieldKey.SELF_LINK), docId)
                 .build();
         query.addFilterQuery(createFilterOrQuery(idOrQueryMap));
 

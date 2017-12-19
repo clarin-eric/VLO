@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.VloApplicationTestConfig;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
@@ -68,7 +68,7 @@ public class SolrDocumentModelTest {
     @Before
     public void setUp() {
         expected = new SolrDocument();
-        expected.setField(fieldNameService.getFieldName(KEY.FIELD_ID), "id");
+        expected.setField(fieldNameService.getFieldName(FieldKey.ID), "id");
         service = context.mock(SolrDocumentService.class);
     }
 

@@ -1,6 +1,6 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.VloApplicationTestConfig;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
@@ -60,7 +60,7 @@ public class TestRecordPage {
         tester = new WicketTester(application);
 
         document = new SolrDocument();
-        document.setField(fieldNameService.getFieldName(KEY.FIELD_ID), "documentId");
+        document.setField(fieldNameService.getFieldName(FieldKey.ID), "documentId");
 
         params = new PageParameters();
         params.set(VloWebAppParameters.DOCUMENT_ID, "documentId");
@@ -98,7 +98,7 @@ public class TestRecordPage {
 
     @Test
     public void testLandingPageLinkVisible() {
-        document.addField(fieldNameService.getFieldName(KEY.FIELD_LANDINGPAGE), "http://www.landingpage.com");
+        document.addField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), "http://www.landingpage.com");
 
         mockery.checking(new Expectations() {
             {

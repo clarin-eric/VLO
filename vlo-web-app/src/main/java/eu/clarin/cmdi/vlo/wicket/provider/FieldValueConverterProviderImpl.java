@@ -17,7 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.provider;
 
 import com.google.common.collect.ImmutableMap;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils.LanguageInfo;
@@ -63,12 +63,12 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
 
     @Override
     public IConverter<String> getConverter(String fieldName) {
-        if(fieldName.equals(fieldNameService.getFieldName(KEY.FIELD_LANGUAGE_CODE)))
+        if(fieldName.equals(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)))
             return languageCodeConverter;
-        if(fieldName.equals(fieldNameService.getFieldName(KEY.FIELD_DESCRIPTION)))
+        if(fieldName.equals(fieldNameService.getFieldName(FieldKey.DESCRIPTION)))
             return descriptionConverter;
-        if(fieldName.equals(fieldNameService.getFieldName(KEY.FIELD_AVAILABILITY)) || 
-            fieldName.equals(fieldNameService.getFieldName(KEY.FIELD_LICENSE_TYPE)))
+        if(fieldName.equals(fieldNameService.getFieldName(FieldKey.AVAILABILITY)) || 
+            fieldName.equals(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE)))
                 return availabilityConverter;
         return null;
     }

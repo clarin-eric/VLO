@@ -2,7 +2,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.VloWebSession;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
@@ -58,7 +58,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
 
     private static final long serialVersionUID = 1L;
     //private final static List<String> ADDITIONAL_FACETS = ImmutableList.of(FacetConstants.FIELD_LICENSE_TYPE);
-    private final static KEY ADDITIONAL_FACETS = KEY.FIELD_LICENSE_TYPE;
+    private final static FieldKey ADDITIONAL_FACETS = FieldKey.LICENSE_TYPE;
 
     @SpringBean
     private FacetFieldsService facetFieldsService;

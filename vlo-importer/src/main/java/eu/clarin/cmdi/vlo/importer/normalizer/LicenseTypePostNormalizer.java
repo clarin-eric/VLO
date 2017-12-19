@@ -4,7 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -51,7 +51,7 @@ public class LicenseTypePostNormalizer extends AbstractPostNormalizerWithVocabul
      */
     private List<String> transferValuesFromAvailability(CMDIData cmdiData) {
         if (cmdiData != null) {
-            final Collection<Object> availabilityValues = cmdiData.getDocField(fieldNameService.getFieldName(KEY.FIELD_AVAILABILITY));
+            final Collection<Object> availabilityValues = cmdiData.getDocField(fieldNameService.getFieldName(FieldKey.AVAILABILITY));
             if (availabilityValues != null) {
                 //turn into string list
                 final List<String> values = Lists.newArrayList(Collections2.transform(availabilityValues, new Function<Object, String>() {

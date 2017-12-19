@@ -8,7 +8,7 @@ import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.CmdConstants;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CFMCondition;
@@ -395,7 +395,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                 }
                 if (vp!=null) {
                     final String v = (String)vp.getLeft();
-                    final String l = (vp.getRight()!=null?postProcessors.get(fieldNameService.getFieldName(KEY.FIELD_LANGUAGE_CODE)).process((String)vp.getRight(),cmdiData).get(0):DEFAULT_LANGUAGE);
+                    final String l = (vp.getRight()!=null?postProcessors.get(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)).process((String)vp.getRight(),cmdiData).get(0):DEFAULT_LANGUAGE);
                     for(String pv : postProcess(config.getName(),v,cmdiData)) {
                         valueLangPairList.add(new ImmutablePair<>(pv,l));
                     }
@@ -456,13 +456,13 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             return DEFAULT_LANGUAGE;
         }
 
-        return postProcessors.get(fieldNameService.getFieldName(KEY.FIELD_LANGUAGE_CODE)).process(languageCode, null).get(0);
+        return postProcessors.get(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)).process(languageCode, null).get(0);
     }
 
     private void addValuesToList(String facetName, final List<String> values, List<Pair<String, String>> valueLangPairList, final String languageCode) {
         for (String value : values) {
             // ignore non-English language names for facet LANGUAGE_CODE
-            if (facetName.equals(fieldNameService.getFieldName(KEY.FIELD_LANGUAGE_CODE)) && !languageCode.equals(ENGLISH_LANGUAGE) && !languageCode.equals(DEFAULT_LANGUAGE)) {
+            if (facetName.equals(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)) && !languageCode.equals(ENGLISH_LANGUAGE) && !languageCode.equals(DEFAULT_LANGUAGE)) {
                 continue;
             }
             valueLangPairList.add(new ImmutablePair<>(value, languageCode));
@@ -486,7 +486,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
 //                break;
 //            }
             String fieldValue = valueLangPairList.get(i).getLeft().trim();
-            if (name.equals(fieldNameService.getFieldName(KEY.FIELD_DESCRIPTION))) {
+            if (name.equals(fieldNameService.getFieldName(FieldKey.DESCRIPTION))) {
                 fieldValue = "{" + valueLangPairList.get(i).getRight() + "}" + fieldValue;
             }
             if(!allowMultipleValues){

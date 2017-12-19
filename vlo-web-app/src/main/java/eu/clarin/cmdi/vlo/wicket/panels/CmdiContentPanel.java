@@ -30,7 +30,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  *
@@ -47,9 +47,9 @@ public class CmdiContentPanel extends GenericPanel<SolrDocument> {
 
         final List<IModel<URL>> locationModels = Arrays.<IModel<URL>>asList(
                 //local (harvested) copy of the record
-                new UrlFromStringModel(new SolrFieldStringModel(model, fieldNameService.getFieldName(KEY.FIELD_FILENAME))),
+                new UrlFromStringModel(new SolrFieldStringModel(model, fieldNameService.getFieldName(FieldKey.FILENAME))),
                 //self link as fallback
-                new UrlFromStringModel(new HandleLinkModel(new SolrFieldStringModel(model, fieldNameService.getFieldName(KEY.FIELD_SELF_LINK)))));
+                new UrlFromStringModel(new HandleLinkModel(new SolrFieldStringModel(model, fieldNameService.getFieldName(FieldKey.SELF_LINK)))));
 
         this.cmdiUrlsModel = new CompoundListModel(locationModels);
     }

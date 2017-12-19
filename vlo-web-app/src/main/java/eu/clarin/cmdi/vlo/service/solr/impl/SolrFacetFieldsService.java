@@ -31,7 +31,7 @@ import javax.inject.Inject;
 
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  * Gets FacetFields from SOLR based on a selection and the queries constructed
@@ -72,7 +72,7 @@ public class SolrFacetFieldsService implements FacetFieldsService {
         for (FacetField facet : response) {
             FacetSelection facetSelection = query.getSelectionValues(facet.getName());
 
-            if (facetSelection == null || facet.getName().equals(fieldNameService.getFieldName(KEY.FIELD_LICENSE_TYPE))) {
+            if (facetSelection == null || facet.getName().equals(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE))) {
                 filteredFacets.add(facet);
                 continue;
             } else {

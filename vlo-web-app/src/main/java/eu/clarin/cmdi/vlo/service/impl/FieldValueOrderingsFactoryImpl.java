@@ -26,7 +26,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import eu.clarin.cmdi.vlo.service.FieldValueOrderingsFactory;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  *
@@ -41,7 +41,7 @@ public class FieldValueOrderingsFactoryImpl implements FieldValueOrderingsFactor
     @Override
     public Map<String, Ordering<String>> createFieldValueOrderingMap() {
         return ImmutableMap.of(
-            fieldNameService.getFieldName(KEY.FIELD_DESCRIPTION), createDescriptionFieldOrdering()
+            fieldNameService.getFieldName(FieldKey.DESCRIPTION), createDescriptionFieldOrdering()
         );
     }
 

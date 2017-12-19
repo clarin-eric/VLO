@@ -79,7 +79,7 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  *
@@ -180,7 +180,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         );
 
         // General information section
-        add(new SingleValueSolrFieldLabel("name", getModel(), fieldNameService.getFieldName(KEY.FIELD_NAME), getString("recordpage.unnamedrecord")));
+        add(new SingleValueSolrFieldLabel("name", getModel(), fieldNameService.getFieldName(FieldKey.NAME), getString("recordpage.unnamedrecord")));
         add(createLandingPageLink("landingPageLink"));
 
         tabs = createTabs("tabs");
@@ -233,7 +233,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
             }
         });
         tabs.set(TABS_ORDER.indexOf(RESOURCES_SECTION), new AbstractTab(new StringResourceModel("recordpage.tabs.resources", // model to include resource count in tab title
-                new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(KEY.FIELD_RESOURCE_COUNT)))) {
+                new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT)))) {
             @Override
             public Panel getPanel(String panelId) {
                 return (new ResourceLinksPanel(panelId, getModel()) {
@@ -272,9 +272,9 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 public boolean isVisible() {
                     // only show hierarchy panel if there's anything to show
                     final SolrDocument document = getModel().getObject();
-                    final Object partCount = document.getFieldValue(fieldNameService.getFieldName(KEY.FIELD_HAS_PART_COUNT));
+                    final Object partCount = document.getFieldValue(fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT));
                     final boolean hasHierarchy // has known parent or children
-                            = null != document.getFieldValue(fieldNameService.getFieldName(KEY.FIELD_IS_PART_OF)) // has parent
+                            = null != document.getFieldValue(fieldNameService.getFieldName(FieldKey.IS_PART_OF)) // has parent
                             || (null != partCount && !Integer.valueOf(0).equals(partCount)); // children count != 0
                     return hasHierarchy;
                 }
@@ -349,7 +349,7 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 // wrap in model that transforms handle links
                 = new HandleLinkModel(
                         // get landing page from document
-                        new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(KEY.FIELD_LANDINGPAGE)));
+                        new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
         // add landing page link
         final ExternalLink landingPageLink = new ExternalLink(id, landingPageHrefModel) {
 
@@ -364,8 +364,8 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     }
 
     private Component createSearchLinks(String id) {
-        final SolrFieldModel<String> searchPageModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(KEY.FIELD_SEARCHPAGE));
-        final SolrFieldModel<String> searchServiceModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(KEY.FIELD_SEARCH_SERVICE));
+        final SolrFieldModel<String> searchPageModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.SEARCHPAGE));
+        final SolrFieldModel<String> searchServiceModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE));
         return new WebMarkupContainer(id) {
             {
                 //Add search page links (can be multiple)
@@ -420,13 +420,13 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     public IModel<String> getTitleModel() {
         // Put the name of the record in the page title
         return new StringResourceModel("recordpage.title",
-                new NullFallbackModel(new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(KEY.FIELD_NAME), true), getString("recordpage.unnamedrecord")))
+                new NullFallbackModel(new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.NAME), true), getString("recordpage.unnamedrecord")))
                 .setDefaultValue(DEFAULT_PAGE_TITLE);
     }
 
     @Override
     public IModel<String> getPageDescriptionModel() {
-        return new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(KEY.FIELD_DESCRIPTION));
+        return new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.DESCRIPTION));
     }
 
     @Override

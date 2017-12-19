@@ -35,7 +35,7 @@ import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  * A panel representing the action trail that has lead to the current page in
@@ -97,7 +97,7 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
 
         };
         document.add(new ExternalLink("documentLink", new PermaLinkModel(RecordPage.class, getModel(), documentModel))
-                .add(new SingleValueSolrFieldLabel("documentTitle", documentModel, fieldNameService.getFieldName(KEY.FIELD_NAME), getString("breadcrumbs.unnamedrecord"))));
+                .add(new SingleValueSolrFieldLabel("documentTitle", documentModel, fieldNameService.getFieldName(FieldKey.NAME), getString("breadcrumbs.unnamedrecord"))));
         add(document);
 
         final WebMarkupContainer facet = new WebMarkupContainer("facet") {

@@ -17,7 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
@@ -273,9 +273,9 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         private String getAnyValueString() {
             if (null != facet) {
 
-                if(facet.equals(fieldNameService.getFieldName(KEY.FIELD_SEARCH_SERVICE)))
+                if(facet.equals(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE)))
                     return "Content searchable"; //TODO: make string property
-                if(facet.equals(fieldNameService.getFieldName(KEY.FIELD_HAS_PART_COUNT)))
+                if(facet.equals(fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT)))
                     return "Collection records"; //TODO: make string property
 
                 return "any " + facet;

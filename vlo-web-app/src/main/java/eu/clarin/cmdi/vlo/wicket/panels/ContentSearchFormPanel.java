@@ -30,7 +30,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  * A panel with an HTML form (not a Wicket form!) with a submit link that posts
@@ -76,7 +76,7 @@ public class ContentSearchFormPanel extends GenericPanel<String> {
             @Override
             public String getObject() {
                 final String endPoint = endpointModel.getObject();
-                final Object selfLink = model.getObject().getFirstValue(fieldNameService.getFieldName(KEY.FIELD_SELF_LINK));
+                final Object selfLink = model.getObject().getFirstValue(fieldNameService.getFieldName(FieldKey.SELF_LINK));
                 try {
                     final JSONObject json = new JSONObject();
                     json.put(endPoint, new JSONArray(new Object[]{selfLink}));

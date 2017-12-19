@@ -44,7 +44,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  * Panel that shows the "basic" (non-technical) property fields of a document
@@ -73,8 +73,8 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
     public RecordDetailsPanel(String id, IModel<SolrDocument> model) {
         super(id, model);
         
-        resourcesModel = new SolrFieldModel<>(model, fieldNameService.getFieldName(KEY.FIELD_RESOURCE));
-        resourceInfoModel = new ResourceInfoModel(resourceStringConverter, new SolrFieldStringModel(model, fieldNameService.getFieldName(KEY.FIELD_RESOURCE)));
+        resourcesModel = new SolrFieldModel<>(model, fieldNameService.getFieldName(FieldKey.RESOURCE));
+        resourceInfoModel = new ResourceInfoModel(resourceStringConverter, new SolrFieldStringModel(model, fieldNameService.getFieldName(FieldKey.RESOURCE)));
 
         // Fields table
         add(new FieldsTablePanel("fieldsTable", new DocumentFieldsProvider(getModel(), basicPropertiesFilter, fieldOrder))

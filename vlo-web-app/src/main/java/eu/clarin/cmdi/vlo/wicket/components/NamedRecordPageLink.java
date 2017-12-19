@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  *
@@ -45,7 +45,7 @@ public class NamedRecordPageLink extends GenericPanel<SolrDocument> {
         link.add(new SingleValueSolrFieldLabel(
                 "name", 
                 model, 
-                fieldNameService.getFieldName(KEY.FIELD_NAME),
+                fieldNameService.getFieldName(FieldKey.NAME),
                 new StringResourceModel("recordpage.unnamedrecord", this, null)));
         add(link);
     }

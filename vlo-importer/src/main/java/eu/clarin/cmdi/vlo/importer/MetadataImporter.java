@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.CommonUtils;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.StringUtils;
@@ -144,7 +144,7 @@ public class MetadataImporter {
     protected final AtomicInteger nrOfFilesWithError = new AtomicInteger();
     protected final AtomicInteger nrOfFilesTooLarge = new AtomicInteger();
     private Long time;
-    private FieldNameServiceImpl fieldNameService;
+    private final FieldNameServiceImpl fieldNameService;
 
     public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList) {
         this(config, languageCodeUtils, mappingFactory, marshaller, clDatarootsList, DefaultSolrBridgeFactory.createDefaultSolrBridge(config));
@@ -162,20 +162,20 @@ public class MetadataImporter {
 
     protected static Map<String, AbstractPostNormalizer> registerPostProcessors(VloConfig config, FieldNameService fieldNameService, LanguageCodeUtils languageCodeUtils) {
         return ImmutableMap.<String, AbstractPostNormalizer>builder()
-                .put(fieldNameService.getFieldName(KEY.FIELD_ID), new IdPostNormalizer())
-                .put(fieldNameService.getFieldName(KEY.FIELD_CONTINENT), new ContinentNamePostNormalizer())
-                .put(fieldNameService.getFieldName(KEY.FIELD_COUNTRY), new CountryNamePostNormalizer(config))
-                .put(fieldNameService.getFieldName(KEY.FIELD_LANGUAGE_CODE), new LanguageCodePostNormalizer(config, languageCodeUtils))
-                .put(fieldNameService.getFieldName(KEY.FIELD_LANGUAGE_NAME), new LanguageNamePostNormalizer(languageCodeUtils))
-                .put(fieldNameService.getFieldName(KEY.FIELD_AVAILABILITY), new AvailabilityPostNormalizer(config))
-                .put(fieldNameService.getFieldName(KEY.FIELD_LICENSE_TYPE), new LicenseTypePostNormalizer(config))
-                .put(fieldNameService.getFieldName(KEY.FIELD_ORGANISATION), new OrganisationPostNormalizer(config))
-                .put(fieldNameService.getFieldName(KEY.FIELD_TEMPORAL_COVERAGE), new TemporalCoveragePostNormalizer())
-                .put(fieldNameService.getFieldName(KEY.FIELD_NATIONAL_PROJECT), new NationalProjectPostNormalizer(config))
-                .put(fieldNameService.getFieldName(KEY.FIELD_CLARIN_PROFILE), new CMDIComponentProfileNamePostNormalizer(config))
-                .put(fieldNameService.getFieldName(KEY.FIELD_RESOURCE_CLASS), new ResourceClassPostNormalizer())
-                .put(fieldNameService.getFieldName(KEY.FIELD_LICENSE), new LicensePostNormalizer(config))
-                .put(fieldNameService.getFieldName(KEY.FIELD_NAME), new NamePostNormalizer())
+                .put(fieldNameService.getFieldName(FieldKey.ID), new IdPostNormalizer())
+                .put(fieldNameService.getFieldName(FieldKey.CONTINENT), new ContinentNamePostNormalizer())
+                .put(fieldNameService.getFieldName(FieldKey.COUNTRY), new CountryNamePostNormalizer(config))
+                .put(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE), new LanguageCodePostNormalizer(config, languageCodeUtils))
+                .put(fieldNameService.getFieldName(FieldKey.LANGUAGE_NAME), new LanguageNamePostNormalizer(languageCodeUtils))
+                .put(fieldNameService.getFieldName(FieldKey.AVAILABILITY), new AvailabilityPostNormalizer(config))
+                .put(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE), new LicenseTypePostNormalizer(config))
+                .put(fieldNameService.getFieldName(FieldKey.ORGANISATION), new OrganisationPostNormalizer(config))
+                .put(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE), new TemporalCoveragePostNormalizer())
+                .put(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT), new NationalProjectPostNormalizer(config))
+                .put(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE), new CMDIComponentProfileNamePostNormalizer(config))
+                .put(fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS), new ResourceClassPostNormalizer())
+                .put(fieldNameService.getFieldName(FieldKey.LICENSE), new LicensePostNormalizer(config))
+                .put(fieldNameService.getFieldName(FieldKey.NAME), new NamePostNormalizer())
                 .build();
     }
 
@@ -251,7 +251,7 @@ public class MetadataImporter {
         LOG.info("Start of processing: " + dataRoot.getOriginName());
         if (dataRoot.deleteFirst()) {
             LOG.info("Deleting data for data provider: " + dataRoot.getOriginName());
-            solrBridge.getClient().deleteByQuery(fieldNameService.getFieldName(KEY.FIELD_DATA_PROVIDER) + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
+            solrBridge.getClient().deleteByQuery(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER) + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
             LOG.info("Deleting data of provider done.");
         }
         // import files from every centre/endpoint within the data root
@@ -373,7 +373,7 @@ public class MetadataImporter {
 
     protected void purgeOldDocs() throws SolrServerException, IOException {
         LOG.info("Deleting old files that were not seen for more than " + config.getMaxDaysInSolr() + " days...");
-        solrBridge.getClient().deleteByQuery(fieldNameService.getFieldName(KEY.FIELD_LAST_SEEN) + ":[* TO NOW-" + config.getMaxDaysInSolr() + "DAYS]");
+        solrBridge.getClient().deleteByQuery(fieldNameService.getFieldName(FieldKey.LAST_SEEN) + ":[* TO NOW-" + config.getMaxDaysInSolr() + "DAYS]");
         LOG.info("Deleting old files done.");
     }
 
@@ -546,40 +546,40 @@ public class MetadataImporter {
      */
     protected void updateDocument(SolrInputDocument solrDocument, CMDIData cmdiData, File file, DataRoot dataOrigin) throws SolrServerException,
             IOException {
-        if (!solrDocument.containsKey(fieldNameService.getFieldName(KEY.FIELD_COLLECTION))) {
-            solrDocument.addField(fieldNameService.getFieldName(KEY.FIELD_COLLECTION), dataOrigin.getOriginName());
+        if (!solrDocument.containsKey(fieldNameService.getFieldName(FieldKey.COLLECTION))) {
+            solrDocument.addField(fieldNameService.getFieldName(FieldKey.COLLECTION), dataOrigin.getOriginName());
         }
-        solrDocument.addField(fieldNameService.getFieldName(KEY.FIELD_DATA_PROVIDER), dataOrigin.getOriginName());
-        solrDocument.addField(fieldNameService.getFieldName(KEY.FIELD_ID), cmdiData.getId());
-        solrDocument.addField(fieldNameService.getFieldName(KEY.FIELD_FILENAME), file.getAbsolutePath());
+        solrDocument.addField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER), dataOrigin.getOriginName());
+        solrDocument.addField(fieldNameService.getFieldName(FieldKey.ID), cmdiData.getId());
+        solrDocument.addField(fieldNameService.getFieldName(FieldKey.FILENAME), file.getAbsolutePath());
 
         String metadataSourceUrl = dataOrigin.getPrefix();
         metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getToStrip().length());
 
-        solrDocument.addField(fieldNameService.getFieldName(KEY.FIELD_COMPLETE_METADATA), metadataSourceUrl);
+        solrDocument.addField(fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA), metadataSourceUrl);
 
         // add SearchServices (should be CQL endpoint)
         for (Resource resource : cmdiData.getSearchResources()) {
-            solrDocument.addField(fieldNameService.getFieldName(KEY.FIELD_SEARCH_SERVICE), resource.getResourceName());
+            solrDocument.addField(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE), resource.getResourceName());
         }
 
         // add landing page resource
         for (Resource resource : cmdiData.getLandingPageResources()) {
-            solrDocument.addField(fieldNameService.getFieldName(KEY.FIELD_LANDINGPAGE), resource.getResourceName());
+            solrDocument.addField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), resource.getResourceName());
         }
 
         // add search page resource
         for (Resource resource : cmdiData.getSearchPageResources()) {
-            solrDocument.addField(fieldNameService.getFieldName(KEY.FIELD_SEARCHPAGE), resource.getResourceName());
+            solrDocument.addField(fieldNameService.getFieldName(FieldKey.SEARCHPAGE), resource.getResourceName());
         }
 
         // add timestamp
         Date dt = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        solrDocument.addField(fieldNameService.getFieldName(KEY.FIELD_LAST_SEEN), df.format(dt));
+        solrDocument.addField(fieldNameService.getFieldName(FieldKey.LAST_SEEN), df.format(dt));
 
         // set number of days since last import to '0'
-        solrDocument.addField(fieldNameService.getFieldName(KEY.FIELD_DAYS_SINCE_LAST_SEEN), 0);
+        solrDocument.addField(fieldNameService.getFieldName(FieldKey.DAYS_SINCE_LAST_SEEN), 0);
 
         // add resource proxys      
         addResourceData(solrDocument, cmdiData);
@@ -602,9 +602,9 @@ public class MetadataImporter {
      * @param cmdiData
      */
     protected void addResourceData(SolrInputDocument solrDocument, CMDIData cmdiData) {
-        List<Object> fieldValues = solrDocument.containsKey(fieldNameService.getFieldName(KEY.FIELD_FORMAT)) ? new ArrayList<>(solrDocument
-                .getFieldValues(fieldNameService.getFieldName(KEY.FIELD_FORMAT))) : null;
-        solrDocument.removeField(fieldNameService.getFieldName(KEY.FIELD_FORMAT)); //Remove old values they might be overwritten.
+        List<Object> fieldValues = solrDocument.containsKey(fieldNameService.getFieldName(FieldKey.FORMAT)) ? new ArrayList<>(solrDocument
+                .getFieldValues(fieldNameService.getFieldName(FieldKey.FORMAT))) : null;
+        solrDocument.removeField(fieldNameService.getFieldName(FieldKey.FORMAT)); //Remove old values they might be overwritten.
         List<Resource> resources = cmdiData.getDataResources();
         for (int i = 0; i < resources.size(); i++) {
             Resource resource = resources.get(i);
@@ -622,12 +622,12 @@ public class MetadataImporter {
 
             // TODO check should probably be moved into Solr (by using some minimum length filter)
             if (!mimeType.equals("")) {
-                solrDocument.addField(fieldNameService.getFieldName(KEY.FIELD_FORMAT), mimeType);
+                solrDocument.addField(fieldNameService.getFieldName(FieldKey.FORMAT), mimeType);
             }
-            solrDocument.addField(fieldNameService.getFieldName(KEY.FIELD_RESOURCE), mimeType + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR
+            solrDocument.addField(fieldNameService.getFieldName(FieldKey.RESOURCE), mimeType + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR
                     + resource.getResourceName());
         }
-        solrDocument.addField(fieldNameService.getFieldName(KEY.FIELD_RESOURCE_COUNT), resources.size());
+        solrDocument.addField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size());
     }
 
     /**
@@ -665,12 +665,12 @@ public class MetadataImporter {
             if (vertex.getHierarchyWeight() != 0 || !incomingVertexNames.isEmpty() || !outgoingVertexNames.isEmpty()) {
                 updateCount.incrementAndGet();
                 final SolrInputDocument doc = new SolrInputDocument();
-                doc.setField(fieldNameService.getFieldName(KEY.FIELD_ID), Arrays.asList(vertex.getId()));
+                doc.setField(fieldNameService.getFieldName(FieldKey.ID), Arrays.asList(vertex.getId()));
 
                 if (vertex.getHierarchyWeight() != 0) {
                     final Map<String, Integer> partialUpdateMap = new HashMap<>();
                     partialUpdateMap.put("set", Math.abs(vertex.getHierarchyWeight()));
-                    doc.setField(fieldNameService.getFieldName(KEY.FIELD_HIERARCHY_WEIGHT), partialUpdateMap);
+                    doc.setField(fieldNameService.getFieldName(FieldKey.HIERARCHY_WEIGHT), partialUpdateMap);
                 }
 
                 // remove vertices that were not imported
@@ -690,16 +690,16 @@ public class MetadataImporter {
                 }
 
                 if (!incomingVertexNames.isEmpty()) {
-                    doc.setField(fieldNameService.getFieldName(KEY.FIELD_HAS_PART), ImmutableMap.of("set", incomingVertexNames));
-                    doc.setField(fieldNameService.getFieldName(KEY.FIELD_HAS_PART_COUNT), ImmutableMap.of("set", incomingVertexNames.size()));
+                    doc.setField(fieldNameService.getFieldName(FieldKey.HAS_PART), ImmutableMap.of("set", incomingVertexNames));
+                    doc.setField(fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT), ImmutableMap.of("set", incomingVertexNames.size()));
 
                     // add hasPartCount weight
                     final Double hasPartCountWeight = Math.log10(1 + Math.min(50, incomingVertexNames.size()));
-                    doc.setField(fieldNameService.getFieldName(KEY.FIELD_HAS_PART_COUNT_WEIGHT), ImmutableMap.of("set", hasPartCountWeight));
+                    doc.setField(fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT_WEIGHT), ImmutableMap.of("set", hasPartCountWeight));
                 }
 
                 if (!outgoingVertexNames.isEmpty()) {
-                    doc.setField(fieldNameService.getFieldName(KEY.FIELD_IS_PART_OF), ImmutableMap.of("set", outgoingVertexNames));
+                    doc.setField(fieldNameService.getFieldName(FieldKey.IS_PART_OF), ImmutableMap.of("set", outgoingVertexNames));
                 }
                 solrBridge.addDocument(doc);
             }
@@ -768,16 +768,16 @@ public class MetadataImporter {
         for (SolrDocument doc : solrBridge.getClient().query(query).getResults()) {
             updatedInBatch++;
 
-            String recordId = (String) doc.getFieldValue(fieldNameService.getFieldName(KEY.FIELD_ID));
-            Date lastImportDate = (Date) doc.getFieldValue(fieldNameService.getFieldName(KEY.FIELD_LAST_SEEN));
+            String recordId = (String) doc.getFieldValue(fieldNameService.getFieldName(FieldKey.ID));
+            Date lastImportDate = (Date) doc.getFieldValue(fieldNameService.getFieldName(FieldKey.LAST_SEEN));
             LocalDate oldDate = lastImportDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             long daysSinceLastSeen = DAYS.between(oldDate, nowDate);
 
             SolrInputDocument updateDoc = new SolrInputDocument();
-            updateDoc.setField(fieldNameService.getFieldName(KEY.FIELD_ID), recordId);
+            updateDoc.setField(fieldNameService.getFieldName(FieldKey.ID), recordId);
 
             final Map<String, Long> partialUpdateMap = Collections.singletonMap("set", daysSinceLastSeen);
-            updateDoc.setField(fieldNameService.getFieldName(KEY.FIELD_DAYS_SINCE_LAST_SEEN), partialUpdateMap);
+            updateDoc.setField(fieldNameService.getFieldName(FieldKey.DAYS_SINCE_LAST_SEEN), partialUpdateMap);
 
             solrBridge.addDocument(updateDoc);
             final Throwable error = solrBridge.popError();
@@ -793,12 +793,12 @@ public class MetadataImporter {
         final SolrQuery query = new SolrQuery();
         query.setQuery(
                 //we're going to process all records in the current data root...
-                fieldNameService.getFieldName(KEY.FIELD_DATA_PROVIDER) + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName())
+                fieldNameService.getFieldName(FieldKey.DATA_PROVIDER) + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName())
                 + " AND "
                 // ...that have a "last seen" value _older_ than today (on update/initialisation all records get 0 so we can skip the rest)
-                + fieldNameService.getFieldName(KEY.FIELD_LAST_SEEN) + ":[* TO NOW-1DAY]"
+                + fieldNameService.getFieldName(FieldKey.LAST_SEEN) + ":[* TO NOW-1DAY]"
         );
-        query.setFields(fieldNameService.getFieldName(KEY.FIELD_ID), fieldNameService.getFieldName(KEY.FIELD_LAST_SEEN));
+        query.setFields(fieldNameService.getFieldName(FieldKey.ID), fieldNameService.getFieldName(FieldKey.LAST_SEEN));
         return query;
     }
 

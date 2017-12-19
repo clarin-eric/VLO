@@ -32,7 +32,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  *
@@ -59,7 +59,7 @@ public class SimilarDocumentsPanel extends GenericPanel<SolrDocument> {
         similarDocumentsModel = new LoadableDetachableModel<List<SolrDocument>>() {
             @Override
             public List<SolrDocument> load() {
-                final Object docId = model.getObject().getFieldValue(fieldNameService.getFieldName(KEY.FIELD_ID));
+                final Object docId = model.getObject().getFieldValue(fieldNameService.getFieldName(FieldKey.ID));
                 if (docId instanceof String) {
                     return similarDocumentsService.getDocuments((String) docId);
                 } else {
@@ -74,9 +74,9 @@ public class SimilarDocumentsPanel extends GenericPanel<SolrDocument> {
             protected void populateItem(ListItem<SolrDocument> item) {
                 item
                         .add(new RecordPageLink("record", item.getModel())
-                                .add(new SolrFieldLabel("name", item.getModel(), fieldNameService.getFieldName(KEY.FIELD_NAME), "Unnamed record", MAX_TITLE_LENGTH, LONG_TITLE_TRUNCATE_POINT, true))
+                                .add(new SolrFieldLabel("name", item.getModel(), fieldNameService.getFieldName(FieldKey.NAME), "Unnamed record", MAX_TITLE_LENGTH, LONG_TITLE_TRUNCATE_POINT, true))
                         )
-                        .add(new SolrFieldLabel("description", item.getModel(), fieldNameService.getFieldName(KEY.FIELD_DESCRIPTION), "No description", MAX_DESCRIPTION_LENGTH, LONG_DESCRIPTION_TRUNCATE_POINT, true));
+                        .add(new SolrFieldLabel("description", item.getModel(), fieldNameService.getFieldName(FieldKey.DESCRIPTION), "No description", MAX_DESCRIPTION_LENGTH, LONG_DESCRIPTION_TRUNCATE_POINT, true));
             }
         });
     }

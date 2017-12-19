@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.FieldKey;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -12,139 +13,9 @@ import java.util.Set;
  * Definition of facet, resource type and URL constants.
  */
 public class FacetConstants {
-    public static enum KEY{
-        FIELD_ACCESS_INFO,
-        FIELD_AVAILABILITY,
-        FIELD_COLLECTION,
-        FIELD_COMPLETE_METADATA,
-        FIELD_CONTINENT,
-        FIELD_COUNTRY,
-        FIELD_DATA_PROVIDER,
-        FIELD_DESCRIPTION,
-        FIELD_FORMAT,
-        FIELD_GENRE,
-        FIELD_ID,
-        FIELD_KEYWORDS,
-        FIELD_LANGUAGE_CODE,
-        FIELD_LICENSE,
-        FIELD_MODALITY,
-        FIELD_NAME,
-        FIELD_NATIONAL_PROJECT,
-        FIELD_ORGANISATION,
-        FIELD_PROJECT_NAME,
-        FIELD_RESOURCE_CLASS,
-        FIELD_SUBJECT,
-        FIELD_TEMPORAL_COVERAGE,
-        FIELD_LICENSE_TYPE,
-        FIELD_SOLR_SCORE,
-        FIELD_SELF_LINK,
-        FIELD_FILENAME,
-        FIELD_RESOURCE,
-        FIELD_RESOURCE_COUNT,
-        FIELD_CLARIN_PROFILE,
-        FIELD_SEARCH_SERVICE,
-        FIELD_LAST_SEEN,
-        FIELD_DAYS_SINCE_LAST_SEEN,
-        FIELD_HIERARCHY_WEIGHT,
-        FIELD_IS_PART_OF,
-        FIELD_HAS_PART,
-        FIELD_HAS_PART_COUNT,
-        FIELD_HAS_PART_COUNT_WEIGHT,
-        FIELD_LANGUAGE_NAME,
-        FIELD_LANDINGPAGE,
-        FIELD_SEARCHPAGE,
-        DEPRECATED_FIELD_LANGUAGE        
-    }
-
-/*    public static final String FIELD_ACCESS_INFO = "accessInfo";
-    public static final String FIELD_AVAILABILITY = "availability";
-    public static final String FIELD_COLLECTION = "collection";
-    public static final String FIELD_COMPLETE_METADATA = "metadataSource";
-    public static final String FIELD_CONTINENT = "continent";
-    public static final String FIELD_COUNTRY = "country";
-    public static final String FIELD_DATA_PROVIDER = "dataProvider";
-    public static final String FIELD_DESCRIPTION = "description";
-    public static final String FIELD_FORMAT = "format";
-    public static final String FIELD_GENRE = "genre";
-    public static final String FIELD_ID = "id";
-    public static final String FIELD_KEYWORDS = "keywords";
-    public static final String FIELD_LANGUAGE_CODE = "languageCode";
-    public static final String FIELD_LICENSE = "license";
-    public static final String FIELD_MODALITY = "modality";
-    public static final String FIELD_NAME = "name";
-    public static final String FIELD_NATIONAL_PROJECT = "nationalProject";
-    public static final String FIELD_ORGANISATION = "organisation";
-    public static final String FIELD_PROJECT_NAME = "projectName";
-    public static final String FIELD_RESOURCE_CLASS = "resourceClass";
-    public static final String FIELD_SUBJECT = "subject";
-    public static final String FIELD_TEMPORAL_COVERAGE = "temporalCoverage";
-    public static final String FIELD_LICENSE_TYPE = "licenseType";
-
-    *//**
-     * Solr pseudo-field that reveals the ranking score.
-     * @see <a href="https://wiki.apache.org/solr/SolrRelevancyFAQ#How_can_I_see_the_relevancy_scores_for_search_results">FAQ</a>
-     *//*
-    public static final String FIELD_SOLR_SCORE = "score";
-
-    //The _ facets are not meant to be shown to users.
-    public static final String FIELD_SELF_LINK = "_selfLink";
-    public static final String FIELD_FILENAME = "_fileName";
-    public static final String FIELD_RESOURCE = "_resourceRef";
-    public static final String FIELD_RESOURCE_COUNT = "_resourceRefCount";
-    public static final String FIELD_CLARIN_PROFILE = "_componentProfile";
-    public static final String FIELD_SEARCH_SERVICE = "_contentSearchRef";
-    public static final String FIELD_LAST_SEEN = "_lastSeen";
-    public static final String FIELD_DAYS_SINCE_LAST_SEEN = "_daysSinceLastSeen";
-    public static final String FIELD_HIERARCHY_WEIGHT = "_hierarchyWeight";
-    public static final String FIELD_IS_PART_OF = "_isPartOf";
-    public static final String FIELD_HAS_PART = "_hasPart";
-    public static final String FIELD_HAS_PART_COUNT = "_hasPartCount";
-    public static final String FIELD_HAS_PART_COUNT_WEIGHT = "_hasPartCountWeight";
-    public static final String FIELD_LANGUAGE_NAME = "_languageName";
-
-    *//**
-     * Facet constant associated with the landing page type.
-     *//*
-    public static final String FIELD_LANDINGPAGE = "_landingPageRef";
-    *//**
-     * Facet constant associated with the search page type.
-     *//*
-    public static final String FIELD_SEARCHPAGE = "_searchPageRef";
-
-    *//**
-     * Fields for which a selection (by the user) should be allowed
-     *//*
-    public static final Set<String> AVAILABLE_FACETS = ImmutableSet.of(
-            FIELD_ACCESS_INFO,
-            FIELD_AVAILABILITY,
-            FIELD_COLLECTION,
-            FIELD_COMPLETE_METADATA,
-            FIELD_CONTINENT,
-            FIELD_COUNTRY,
-            FIELD_DATA_PROVIDER,
-            FIELD_DESCRIPTION,
-            FIELD_FORMAT,
-            FIELD_GENRE,
-            FIELD_HAS_PART_COUNT,
-            FIELD_ID,
-            FIELD_KEYWORDS,
-            FIELD_LANGUAGE_CODE,
-            FIELD_LICENSE,
-            FIELD_LICENSE_TYPE,
-            FIELD_MODALITY,
-            FIELD_NAME,
-            FIELD_NATIONAL_PROJECT,
-            FIELD_ORGANISATION,
-            FIELD_PROJECT_NAME,
-            FIELD_RESOURCE_CLASS,
-            FIELD_SUBJECT,
-            FIELD_TEMPORAL_COVERAGE,
-            FIELD_SEARCH_SERVICE
-    );
-*/    
-    public static final Set<String> getFieldList(FieldNameService fieldNameService, KEY... keys){
+    public static final Set<String> getFieldList(FieldNameService fieldNameService, FieldKey... keys){
         ArrayList<String> list = new ArrayList<String>();
-        for(KEY key: keys) {
+        for(FieldKey key: keys) {
             list.add(fieldNameService.getFieldName(key));
         }
         return ImmutableSet.copyOf(list);
@@ -153,31 +24,31 @@ public class FacetConstants {
     public static final Set<String> getAvailableFacets(FieldNameService fieldNameService){
         return getFieldList(
             fieldNameService,
-            KEY.FIELD_ACCESS_INFO,
-            KEY.FIELD_AVAILABILITY,
-            KEY.FIELD_COLLECTION,
-            KEY.FIELD_COMPLETE_METADATA,
-            KEY.FIELD_CONTINENT,
-            KEY.FIELD_COUNTRY,
-            KEY.FIELD_DATA_PROVIDER,
-            KEY.FIELD_DESCRIPTION,
-            KEY.FIELD_FORMAT,
-            KEY.FIELD_GENRE,
-            KEY.FIELD_HAS_PART_COUNT,
-            KEY.FIELD_ID,
-            KEY.FIELD_KEYWORDS,
-            KEY.FIELD_LANGUAGE_CODE,
-            KEY.FIELD_LICENSE,
-            KEY.FIELD_LICENSE_TYPE,
-            KEY.FIELD_MODALITY,
-            KEY.FIELD_NAME,
-            KEY.FIELD_NATIONAL_PROJECT,
-            KEY.FIELD_ORGANISATION,
-            KEY.FIELD_PROJECT_NAME,
-            KEY.FIELD_RESOURCE_CLASS,
-            KEY.FIELD_SUBJECT,
-            KEY.FIELD_TEMPORAL_COVERAGE,
-            KEY.FIELD_SEARCH_SERVICE
+            FieldKey.ACCESS_INFO,
+            FieldKey.AVAILABILITY,
+            FieldKey.COLLECTION,
+            FieldKey.COMPLETE_METADATA,
+            FieldKey.CONTINENT,
+            FieldKey.COUNTRY,
+            FieldKey.DATA_PROVIDER,
+            FieldKey.DESCRIPTION,
+            FieldKey.FORMAT,
+            FieldKey.GENRE,
+            FieldKey.HAS_PART_COUNT,
+            FieldKey.ID,
+            FieldKey.KEYWORDS,
+            FieldKey.LANGUAGE_CODE,
+            FieldKey.LICENSE,
+            FieldKey.LICENSE_TYPE,
+            FieldKey.MODALITY,
+            FieldKey.NAME,
+            FieldKey.NATIONAL_PROJECT,
+            FieldKey.ORGANISATION,
+            FieldKey.PROJECT_NAME,
+            FieldKey.RESOURCE_CLASS,
+            FieldKey.SUBJECT,
+            FieldKey.TEMPORAL_COVERAGE,
+            FieldKey.SEARCH_SERVICE
         );
                 
     }

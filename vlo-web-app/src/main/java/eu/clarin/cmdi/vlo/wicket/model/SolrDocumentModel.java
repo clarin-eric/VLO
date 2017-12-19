@@ -28,7 +28,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  * Detachable model for Solr documents that uses the {@link SolrDocumentService}
@@ -49,7 +49,7 @@ public class SolrDocumentModel extends LoadableDetachableModel<SolrDocument> {
         if (document == null) {
             this.docId = null;
         } else {
-            this.docId = Model.of((String) document.getFieldValue(fieldNameService.getFieldName(KEY.FIELD_ID)));
+            this.docId = Model.of((String) document.getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
         }
     }
 

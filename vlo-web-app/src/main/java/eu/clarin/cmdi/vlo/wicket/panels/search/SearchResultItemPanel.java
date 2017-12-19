@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
@@ -92,11 +92,11 @@ public class SearchResultItemPanel extends Panel {
         this.documentModel = documentModel;
 
         add(new RecordPageLink("recordLink", documentModel, selectionModel)
-                .add(new SingleValueSolrFieldLabel("title", documentModel, fieldNameService.getFieldName(KEY.FIELD_NAME), "Unnamed record"))
+                .add(new SingleValueSolrFieldLabel("title", documentModel, fieldNameService.getFieldName(FieldKey.NAME), "Unnamed record"))
         );
 
-        add(new FacetSelectLink("searchResultCollectionLink", new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(KEY.FIELD_COLLECTION)), Model.of(fieldNameService.getFieldName(KEY.FIELD_COLLECTION)))
-                .add(new SolrFieldLabel("searchResultCollectionName", documentModel, fieldNameService.getFieldName(KEY.FIELD_COLLECTION), "none"))
+        add(new FacetSelectLink("searchResultCollectionLink", new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.COLLECTION)), Model.of(fieldNameService.getFieldName(FieldKey.COLLECTION)))
+                .add(new SolrFieldLabel("searchResultCollectionName", documentModel, fieldNameService.getFieldName(FieldKey.COLLECTION), "none"))
         );
 
         // add a link to toggle the expansion state
@@ -111,11 +111,11 @@ public class SearchResultItemPanel extends Panel {
         add(expandedDetails);
 
         // get model for resources
-        final SolrFieldModel<String> resourcesModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(KEY.FIELD_RESOURCE));
+        final SolrFieldModel<String> resourcesModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE));
         // wrap with a count provider
         final ResouceTypeCountDataProvider countProvider = new ResouceTypeCountDataProvider(resourcesModel, countingService);
         // part count model to determine whether a record is a collection record
-        final SolrFieldModel<String> partCountModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(KEY.FIELD_HAS_PART_COUNT));
+        final SolrFieldModel<String> partCountModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT));
 
         // add a container for the resource type counts (only visible if there are actual resources)
         add(new WebMarkupContainer("resources")
@@ -144,7 +144,7 @@ public class SearchResultItemPanel extends Panel {
         add(new SearchResultItemLicensePanel("licenseInfo", documentModel, selectionModel, availabilityOrdering));
 
         add(new WebMarkupContainer("scoreContainer")
-                .add(new Label("score", new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(KEY.FIELD_SOLR_SCORE))))
+                .add(new Label("score", new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.SOLR_SCORE))))
                 .setVisible(config.isShowResultScores())
         );
 
