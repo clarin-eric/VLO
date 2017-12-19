@@ -22,7 +22,7 @@ import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import java.util.Set;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.IModel;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 
 /**
@@ -80,7 +80,7 @@ public class SearchResultExpansionStateModel implements IModel<ExpansionState> {
 
     private Object getDocumentId() {
         //return documentModel.getObject().getFieldValue(FacetConstants.FIELD_ID);
-        return documentModel.getObject().getFieldValue(fieldNameService.getFieldName(KEY.FIELD_ID));
+        return documentModel.getObject().getFieldValue(fieldNameService.getFieldName(FieldKey.ID));
     }
 
 }

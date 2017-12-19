@@ -30,7 +30,7 @@ import org.apache.wicket.Session;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  * Permalink service that uses a parameter converter and the current wicket
@@ -57,7 +57,7 @@ public class PermalinkServiceImpl implements PermalinkService {
         }
         
         if (document != null) {
-            params.add(VloWebAppParameters.DOCUMENT_ID, document.getFirstValue(fieldNameService.getFieldName(KEY.FIELD_ID)));
+            params.add(VloWebAppParameters.DOCUMENT_ID, document.getFirstValue(fieldNameService.getFieldName(FieldKey.ID)));
         }
 
         final String style = Session.get().getStyle();

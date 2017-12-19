@@ -7,7 +7,7 @@ import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 import static eu.clarin.cmdi.vlo.CmdConstants.CMD_NAMESPACE;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
@@ -57,7 +57,7 @@ public class FacetMappingFactory {
      */
     private final VloConfig config;
     private final VLOMarshaller marshaller;
-    private FieldNameServiceImpl fieldNameService;
+    private final FieldNameServiceImpl fieldNameService;
 
     public FacetMappingFactory(VloConfig config, VLOMarshaller marshaller) {
         this.config = config;
@@ -298,7 +298,7 @@ public class FacetMappingFactory {
      * better then the 'hardcoded' pattern).
      */
     private void handleId(List<Pattern> xpaths, FacetConcept facetConcept) {
-        if (fieldNameService.getFieldName(KEY.FIELD_ID).equals(facetConcept.getName())) {
+        if (fieldNameService.getFieldName(FieldKey.ID).equals(facetConcept.getName())) {
             xpaths.addAll(facetConcept.getPatterns());
         }
     }

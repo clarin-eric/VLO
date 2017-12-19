@@ -17,7 +17,7 @@
 package clarin.cmdi.vlo.statistics.collector;
 
 import clarin.cmdi.vlo.statistics.model.VloReport;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -54,11 +54,11 @@ public class CollectionsCollector implements VloStatisticsCollector {
         final SolrQuery query = new SolrQuery();
         query.setRows(0);
         query.setFacet(true);
-        query.addFacetField(fieldNameService.getFieldName(KEY.FIELD_COLLECTION));
+        query.addFacetField(fieldNameService.getFieldName(FieldKey.COLLECTION));
         query.setFacetLimit(Integer.MAX_VALUE);
 
         final QueryResponse result = solrClient.query(query);
-        final FacetField collectionField = result.getFacetField(fieldNameService.getFieldName(KEY.FIELD_COLLECTION));
+        final FacetField collectionField = result.getFacetField(fieldNameService.getFieldName(FieldKey.COLLECTION));
         logger.debug("Collection field: {}", collectionField.getValues());
 
         final List<VloReport.CollectionCount> counts

@@ -20,7 +20,7 @@ import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 
 import javax.inject.Inject;
 
@@ -51,7 +51,7 @@ public class DocumentParametersConverter implements PageParametersConverter<Solr
         final PageParameters params = new PageParameters();
         if (document != null) {
             params.add(VloWebAppParameters.DOCUMENT_ID,
-                document.getFieldValue(fieldNameService.getFieldName(KEY.FIELD_ID)));
+                document.getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
         }
         return params;
     }

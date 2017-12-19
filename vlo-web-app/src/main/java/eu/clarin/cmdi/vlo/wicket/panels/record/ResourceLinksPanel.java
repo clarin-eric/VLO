@@ -64,7 +64,7 @@ import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  * Panel that shows all resources represented by a collection of resource
@@ -98,14 +98,14 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         super(id, documentModel);
 
         final SolrFieldModel<String> resourcesModel
-                = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(KEY.FIELD_RESOURCE));
+                = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE));
         final IModel<String> landingPageModel
                 // wrap in model that transforms handle links
                 = new HandleLinkModel(
                         // get landing page from document
-                        new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(KEY.FIELD_LANDINGPAGE)));
+                        new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
         final SolrFieldModel<String> partCountModel
-                = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(KEY.FIELD_HAS_PART_COUNT));
+                = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT));
 
         // create table of resources with optional details
         final ResourcesListView resourceListing = new ResourcesListView("resource", new CollectionListModel<>(resourcesModel));
@@ -280,7 +280,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                 @Override
                 protected Link getLink(String id) {
                     final IModel<Collection<Object>> languageValuesModel
-                            = new SolrFieldModel<>(ResourceLinksPanel.this.getModel(), fieldNameService.getFieldName(KEY.FIELD_LANGUAGE_CODE));
+                            = new SolrFieldModel<>(ResourceLinksPanel.this.getModel(), fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE));
 
                     final Link link = new LanguageResourceSwitchboardLink(id, linkModel, languageValuesModel, resourceInfoModel);
 

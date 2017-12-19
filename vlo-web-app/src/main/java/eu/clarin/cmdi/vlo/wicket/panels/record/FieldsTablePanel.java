@@ -19,7 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.record;
 import eu.clarin.cmdi.vlo.wicket.components.LanguageInfoLink;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.DocumentField;
@@ -81,11 +81,11 @@ public class FieldsTablePanel extends Panel {
     
     private final Collection<String> SMART_LINK_FIELDS
     = ImmutableSet.of(
-            fieldNameService.getFieldName(KEY.FIELD_DESCRIPTION),
-            fieldNameService.getFieldName(KEY.FIELD_LANDINGPAGE),
-            fieldNameService.getFieldName(KEY.FIELD_SEARCHPAGE),
-            fieldNameService.getFieldName(KEY.FIELD_COMPLETE_METADATA),
-            fieldNameService.getFieldName(KEY.FIELD_SELF_LINK)
+            fieldNameService.getFieldName(FieldKey.DESCRIPTION),
+            fieldNameService.getFieldName(FieldKey.LANDINGPAGE),
+            fieldNameService.getFieldName(FieldKey.SEARCHPAGE),
+            fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA),
+            fieldNameService.getFieldName(FieldKey.SELF_LINK)
     );
     
     private IDataProvider<DocumentField> fieldProvider;
@@ -111,7 +111,7 @@ public class FieldsTablePanel extends Panel {
     private Component createValueLabel(String id, final IModel<String> facetNameModel, final IModel<String> valueModel) {
         final String fieldName = facetNameModel.getObject();
 
-        if (fieldNameService.getFieldName(KEY.FIELD_LANGUAGE_CODE).equals(facetNameModel.getObject())) {
+        if (fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE).equals(facetNameModel.getObject())) {
             return new LanguageInfoLink(id, valueModel, facetNameModel);
         } else if (SMART_LINK_FIELDS.contains(fieldName)) {
             // create label that generates links

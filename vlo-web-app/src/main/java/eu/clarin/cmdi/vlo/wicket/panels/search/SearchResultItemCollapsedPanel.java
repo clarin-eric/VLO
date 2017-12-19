@@ -17,7 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.Ordering;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
@@ -45,9 +45,9 @@ public class SearchResultItemCollapsedPanel extends Panel {
         this.selectionModel = selectionModel;
 
         // description, truncated if too long
-        add(new SolrFieldLabel("description", documentModel, fieldNameService.getFieldName(KEY.FIELD_DESCRIPTION), "", MAX_DESCRIPTION_LENGTH, LONG_DESCRIPTION_TRUNCATE_POINT));
+        add(new SolrFieldLabel("description", documentModel, fieldNameService.getFieldName(FieldKey.DESCRIPTION), "", MAX_DESCRIPTION_LENGTH, LONG_DESCRIPTION_TRUNCATE_POINT));
         // extra short description for smaller devices
-        add(new SolrFieldLabel("description-shorter", documentModel, fieldNameService.getFieldName(KEY.FIELD_DESCRIPTION), "", MAX_DESCRIPTION_LENGTH_SHORTER, LONG_DESCRIPTION_TRUNCATE_POINT_SHORTER));
+        add(new SolrFieldLabel("description-shorter", documentModel, fieldNameService.getFieldName(FieldKey.DESCRIPTION), "", MAX_DESCRIPTION_LENGTH_SHORTER, LONG_DESCRIPTION_TRUNCATE_POINT_SHORTER));
     }
 
     @Override

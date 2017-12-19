@@ -23,7 +23,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import java.util.List;
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
@@ -76,7 +76,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacetsSelection> implements IAjaxIndicatorAware {
 
-    private static final KEY AVAILABILITY_FIELD = KEY.FIELD_LICENSE_TYPE;
+    private static final FieldKey AVAILABILITY_FIELD = FieldKey.LICENSE_TYPE;
     private final List<String> availabilityLevels;
 
     @SpringBean

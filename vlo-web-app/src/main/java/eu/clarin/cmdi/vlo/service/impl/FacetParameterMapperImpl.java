@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.service.impl;
 
 import javax.inject.Inject;
 
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.service.FacetParameterMapper.IdentityMapper;
@@ -51,8 +51,8 @@ public class FacetParameterMapperImpl extends IdentityMapper {
      */
     @Override
     public String getFacet(String facet) {
-        if(facet.equals(fieldNameService.getFieldName(KEY.DEPRECATED_FIELD_LANGUAGE)))
-            return fieldNameService.getFieldName(KEY.FIELD_LANGUAGE_CODE);
+        if(facet.equals(fieldNameService.getFieldName(FieldKey.DEPRECATED_LANGUAGE)))
+            return fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE);
         
         return super.getFacet(facet);
     }
@@ -65,7 +65,7 @@ public class FacetParameterMapperImpl extends IdentityMapper {
      */
     @Override
     public String getValue(String facet, String value) {
-        if(facet.equals(fieldNameService.getFieldName(KEY.DEPRECATED_FIELD_LANGUAGE)))
+        if(facet.equals(fieldNameService.getFieldName(FieldKey.DEPRECATED_LANGUAGE)))
             return mapToLanguageCode(value);
         
         return super.getValue(facet, value);

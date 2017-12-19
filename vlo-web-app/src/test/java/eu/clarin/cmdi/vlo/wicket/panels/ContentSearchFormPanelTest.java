@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
-import eu.clarin.cmdi.vlo.FacetConstants.KEY;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.VloApplicationTestConfig;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
@@ -67,7 +67,7 @@ public class ContentSearchFormPanelTest {
     @Test
     public void testSearchFormPanel() {
         final SolrDocument document = new SolrDocument();
-        document.setField(fieldNameService.getFieldName(KEY.FIELD_SELF_LINK), "hdl:1234/selflink");
+        document.setField(fieldNameService.getFieldName(FieldKey.SELF_LINK), "hdl:1234/selflink");
 
         final ContentSearchFormPanel panel = new ContentSearchFormPanel("panel", Model.of(document), Model.of("http://cqlEndPoint/"));
         tester.startComponentInPage(panel);
