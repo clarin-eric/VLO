@@ -24,5 +24,5 @@ public interface FieldNameService {
      * @param key
      * @return deprecated fieldname in the database (solr)
      */
-    public String getDFieldName(FieldKey key);
+    public String getDeprecatedFieldName(FieldKey key);
 }

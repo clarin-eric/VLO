@@ -72,7 +72,7 @@ public class VloSolrSpringConfig {
 
    @Bean
    public SearchResultsDao searchResultsDao() {
-      return new SearchResultsDaoImpl(solrClient(), vloConfig);
+      return new SearchResultsDaoImpl(solrClient(), vloConfig, fieldNameService);
    }
 
    @Bean
@@ -82,7 +82,7 @@ public class VloSolrSpringConfig {
 
    @Bean
    public AutoCompleteService autoCompleteService() {
-      return new AutoCompleteServiceImpl(solrClient(), vloConfig);
+      return new AutoCompleteServiceImpl(solrClient(), vloConfig, fieldNameService);
    }
 
    @Bean(destroyMethod = "close")

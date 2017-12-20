@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,8 +22,8 @@ import org.apache.solr.client.solrj.response.QueryResponse;
  */
 public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoCompleteService {
 
-    public AutoCompleteServiceImpl(SolrClient solrClient, VloConfig config) {
-        super(solrClient, config);
+    public AutoCompleteServiceImpl(SolrClient solrClient, VloConfig config, FieldNameService fieldNameService) {
+        super(solrClient, config, fieldNameService);
     }
     
     /**

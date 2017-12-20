@@ -77,7 +77,7 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
         // set up an embedded solr server
         super.setUp();
         server = new EmbeddedSolrServer(h.getCoreContainer(), h.getCore().getName());
-        instance = new SearchResultsDaoImpl(server, vloConfig);
+        instance = new SearchResultsDaoImpl(server, vloConfig, fieldNameService);
 
         // add some documents
         int id = 1;
