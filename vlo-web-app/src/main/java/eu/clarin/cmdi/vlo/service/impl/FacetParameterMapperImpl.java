@@ -51,7 +51,7 @@ public class FacetParameterMapperImpl extends IdentityMapper {
      */
     @Override
     public String getFacet(String facet) {
-        if(facet.equals(fieldNameService.getDFieldName(FieldKey.DEPRECATED_LANGUAGE)))
+        if(facet.equals(fieldNameService.getDeprecatedFieldName(FieldKey.DEPRECATED_LANGUAGE)))
             return fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE);
         
         return super.getFacet(facet);
@@ -65,7 +65,7 @@ public class FacetParameterMapperImpl extends IdentityMapper {
      */
     @Override
     public String getValue(String facet, String value) {
-        if(facet.equals(fieldNameService.getDFieldName(FieldKey.DEPRECATED_LANGUAGE)))
+        if(facet.equals(fieldNameService.getDeprecatedFieldName(FieldKey.DEPRECATED_LANGUAGE)))
             return mapToLanguageCode(value);
         
         return super.getValue(facet, value);

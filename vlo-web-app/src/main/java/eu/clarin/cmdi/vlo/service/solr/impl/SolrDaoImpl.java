@@ -1,7 +1,9 @@
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -21,10 +23,13 @@ public class SolrDaoImpl {
    
     private final SolrClient solrClient;
     private final VloConfig vloConfig;
+    
+    private final String ID;
 
-    public SolrDaoImpl(SolrClient solrClient, VloConfig vloConfig) {
+    public SolrDaoImpl(SolrClient solrClient, VloConfig vloConfig, FieldNameService fieldNameService) {
         this.solrClient = solrClient;
         this.vloConfig = vloConfig;
+        this.ID = fieldNameService.getFieldName(FieldKey.ID) + ":";
     }
 
     protected SolrClient getSolrClient() {
@@ -100,7 +105,7 @@ public class SolrDaoImpl {
         }
         SolrDocument result = null;
         SolrQuery query = new SolrQuery();
-        query.setQuery("id:" + ClientUtils.escapeQueryChars(docId));
+        query.setQuery(ID + ClientUtils.escapeQueryChars(docId));
         query.setFields("*");
         SolrDocumentList docs = fireQuery(query).getResults();
         if (docs.getNumFound() > 1) {

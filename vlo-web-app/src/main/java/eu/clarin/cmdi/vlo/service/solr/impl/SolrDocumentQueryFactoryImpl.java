@@ -26,7 +26,9 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import eu.clarin.cmdi.vlo.FieldKey;;
+import org.apache.solr.client.solrj.util.ClientUtils;
+
+import eu.clarin.cmdi.vlo.FieldKey;
 
 
 /**
@@ -34,8 +36,10 @@ import eu.clarin.cmdi.vlo.FieldKey;;
  * @author twagoo
  */
 public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrDocumentQueryFactory {
-
-    private final FieldNameService fieldNameService;
+    
+    private final String ID;
+    private final String SELF_LINK;
+    
 
     /**
      * Template query for new document queries
@@ -47,7 +51,8 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
      * @param documentFields fields that should be included in document queries
      */
     public SolrDocumentQueryFactoryImpl(Collection<String> documentFields, FieldNameService fieldNameService) {
-        this.fieldNameService = fieldNameService;
+        this.ID = fieldNameService.getFieldName(FieldKey.ID);
+        this.SELF_LINK = fieldNameService.getFieldName(FieldKey.SELF_LINK);
         defaultQueryTemplate = new SolrQuery();
         defaultQueryTemplate.setFields(documentFields.toArray(new String[]{}));
 //        //TODO: qf (all fields with weights - make configurable (later)
@@ -79,8 +84,8 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
         // be unique and self link use to be ID in old VLO, so this should keep old
         // URL's valid with a minimal likelihood of clashes
         final ImmutableMap<String, String> idOrQueryMap = ImmutableMap.<String, String>builder()
-                .put(fieldNameService.getFieldName(FieldKey.ID), docId)
-                .put(fieldNameService.getFieldName(FieldKey.SELF_LINK), docId)
+                .put(ID, docId)
+                .put(SELF_LINK, docId)
                 .build();
         query.addFilterQuery(createFilterOrQuery(idOrQueryMap));
 
@@ -91,7 +96,7 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
 
     @Override
     public SolrQuery createSimilarDocumentsQuery(String docId) {
-        final SolrQuery query = new SolrQuery("id:" + docId);
+        final SolrQuery query = new SolrQuery(ID + ":" + ClientUtils.escapeQueryChars(docId));
         query.setRequestHandler("/mlt");
         return query;
     }

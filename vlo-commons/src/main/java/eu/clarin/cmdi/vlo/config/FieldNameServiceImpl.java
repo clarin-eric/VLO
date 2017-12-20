@@ -21,7 +21,7 @@ public final class FieldNameServiceImpl implements FieldNameService{
     public String getFieldName(FieldKey key) {
         return this.vloConfig.getFields().get(key.toString());
     }
-    public String getDFieldName(FieldKey key) {
-        return this.vloConfig.getDFields().get(key.toString());
+    public String getDeprecatedFieldName(FieldKey key) {
+        return this.vloConfig.getDeprecatedFields().get(key.toString());
     }
 }

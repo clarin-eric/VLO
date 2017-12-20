@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
 import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -15,8 +16,8 @@ public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDa
 
     private final static Logger logger = LoggerFactory.getLogger(SearchResultsDaoImpl.class);
 
-    public SearchResultsDaoImpl(SolrClient solrClient, VloConfig config) {
-        super(solrClient, config);
+    public SearchResultsDaoImpl(SolrClient solrClient, VloConfig config, FieldNameService fieldNameService) {
+        super(solrClient, config, fieldNameService);
     }
 
     @Override
