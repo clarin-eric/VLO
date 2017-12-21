@@ -63,6 +63,8 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
 
     @Override
     public IConverter<String> getConverter(String fieldName) {
+        if(fieldName == null)
+            return null;
         if(fieldName.equals(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)))
             return languageCodeConverter;
         if(fieldName.equals(fieldNameService.getFieldName(FieldKey.DESCRIPTION)))
