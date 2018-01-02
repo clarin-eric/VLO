@@ -740,7 +740,7 @@
         <str name="qf">name^8</str>
         <str name="qf">description^4 </str>
         <str name="qf">keywords^2</str>
-        <str name="qf">language^2</str>
+        <str name="qf">_languageName^2</str>
         <str name="qf">country^2</str>
         <str name="qf">organisation^2</str>
         <str name="qf">subject^2</str>
