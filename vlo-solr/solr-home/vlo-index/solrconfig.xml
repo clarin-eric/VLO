@@ -730,11 +730,25 @@
         
         <!-- 'Fetch all documents' query -->
         <str name="q.alt">*:*</str>
+
+        <!-- Default conjunction operator -->
+        <str name="q.op">AND</str>
+        <str name="mm">100%</str>
         
         <!-- Query fields -->
-        <str name="qf">
-           text name^8 description^4 keywords^2 language^2 country^2 organisation^2 subject^2 collection^1 modality^1 genre^1 continent^.5 id^.1
-        </str>
+        <str name="qf">text</str>
+        <str name="qf">name^8</str>
+        <str name="qf">description^4 </str>
+        <str name="qf">keywords^2</str>
+        <str name="qf">_languageName^2</str>
+        <str name="qf">country^2</str>
+        <str name="qf">organisation^2</str>
+        <str name="qf">subject^2</str>
+        <str name="qf">collection^1</str>
+        <str name="qf">modality^1</str>
+        <str name="qf">genre^1 </str>
+        <str name="qf">continent^.5</str>
+        <str name="qf">id^.1</str>
         
         <!-- alias: language = _languageName -->
         <str name="f.language.qf">
@@ -1231,85 +1245,85 @@
        
        See http://wiki.apache.org/solr/GuessingFieldTypes
     -->
-  <updateRequestProcessorChain name="files-update-processor">
-    <!-- UUIDUpdateProcessorFactory will generate an id if none is present in the incoming document -->
-    <processor class="solr.UUIDUpdateProcessorFactory" />
-    <processor class="solr.RemoveBlankFieldUpdateProcessorFactory"/>
-    <processor class="solr.FieldNameMutatingUpdateProcessorFactory">
-      <str name="pattern">[^\w-\.]</str>
-      <str name="replacement">_</str>
-    </processor>
-    <processor class="solr.ParseBooleanFieldUpdateProcessorFactory"/>
-    <processor class="solr.ParseLongFieldUpdateProcessorFactory"/>
-    <processor class="solr.ParseDoubleFieldUpdateProcessorFactory"/>
-    <processor class="solr.ParseDateFieldUpdateProcessorFactory">
-      <arr name="format">
-        <str>yyyy-MM-dd'T'HH:mm:ss.SSSZ</str>
-        <str>yyyy-MM-dd'T'HH:mm:ss,SSSZ</str>
-        <str>yyyy-MM-dd'T'HH:mm:ss.SSS</str>
-        <str>yyyy-MM-dd'T'HH:mm:ss,SSS</str>
-        <str>yyyy-MM-dd'T'HH:mm:ssZ</str>
-        <str>yyyy-MM-dd'T'HH:mm:ss</str>
-        <str>yyyy-MM-dd'T'HH:mmZ</str>
-        <str>yyyy-MM-dd'T'HH:mm</str>
-        <str>yyyy-MM-dd HH:mm:ss.SSSZ</str>
-        <str>yyyy-MM-dd HH:mm:ss,SSSZ</str>
-        <str>yyyy-MM-dd HH:mm:ss.SSS</str>
-        <str>yyyy-MM-dd HH:mm:ss,SSS</str>
-        <str>yyyy-MM-dd HH:mm:ssZ</str>
-        <str>yyyy-MM-dd HH:mm:ss</str>
-        <str>yyyy-MM-dd HH:mmZ</str>
-        <str>yyyy-MM-dd HH:mm</str>
-        <str>yyyy-MM-dd</str>
-      </arr>
-    </processor>
-    <processor class="solr.AddSchemaFieldsUpdateProcessorFactory">
-      <str name="defaultFieldType">strings</str>
-      <lst name="typeMapping">
-        <str name="valueClass">java.lang.Boolean</str>
-        <str name="fieldType">booleans</str>
-      </lst>
-      <lst name="typeMapping">
-        <str name="valueClass">java.util.Date</str>
-        <str name="fieldType">tdates</str>
-      </lst>
-      <lst name="typeMapping">
-        <str name="valueClass">java.lang.Long</str>
-        <str name="valueClass">java.lang.Integer</str>
-        <str name="fieldType">tlongs</str>
-      </lst>
-      <lst name="typeMapping">
-        <str name="valueClass">java.lang.Number</str>
-        <str name="fieldType">tdoubles</str>
-      </lst>
-    </processor>
+    <updateRequestProcessorChain name="files-update-processor">
+        <!-- UUIDUpdateProcessorFactory will generate an id if none is present in the incoming document -->
+        <processor class="solr.UUIDUpdateProcessorFactory" />
+        <processor class="solr.RemoveBlankFieldUpdateProcessorFactory"/>
+        <processor class="solr.FieldNameMutatingUpdateProcessorFactory">
+            <str name="pattern">[^\w-\.]</str>
+            <str name="replacement">_</str>
+        </processor>
+        <processor class="solr.ParseBooleanFieldUpdateProcessorFactory"/>
+        <processor class="solr.ParseLongFieldUpdateProcessorFactory"/>
+        <processor class="solr.ParseDoubleFieldUpdateProcessorFactory"/>
+        <processor class="solr.ParseDateFieldUpdateProcessorFactory">
+            <arr name="format">
+                <str>yyyy-MM-dd'T'HH:mm:ss.SSSZ</str>
+                <str>yyyy-MM-dd'T'HH:mm:ss,SSSZ</str>
+                <str>yyyy-MM-dd'T'HH:mm:ss.SSS</str>
+                <str>yyyy-MM-dd'T'HH:mm:ss,SSS</str>
+                <str>yyyy-MM-dd'T'HH:mm:ssZ</str>
+                <str>yyyy-MM-dd'T'HH:mm:ss</str>
+                <str>yyyy-MM-dd'T'HH:mmZ</str>
+                <str>yyyy-MM-dd'T'HH:mm</str>
+                <str>yyyy-MM-dd HH:mm:ss.SSSZ</str>
+                <str>yyyy-MM-dd HH:mm:ss,SSSZ</str>
+                <str>yyyy-MM-dd HH:mm:ss.SSS</str>
+                <str>yyyy-MM-dd HH:mm:ss,SSS</str>
+                <str>yyyy-MM-dd HH:mm:ssZ</str>
+                <str>yyyy-MM-dd HH:mm:ss</str>
+                <str>yyyy-MM-dd HH:mmZ</str>
+                <str>yyyy-MM-dd HH:mm</str>
+                <str>yyyy-MM-dd</str>
+            </arr>
+        </processor>
+        <processor class="solr.AddSchemaFieldsUpdateProcessorFactory">
+            <str name="defaultFieldType">strings</str>
+            <lst name="typeMapping">
+                <str name="valueClass">java.lang.Boolean</str>
+                <str name="fieldType">booleans</str>
+            </lst>
+            <lst name="typeMapping">
+                <str name="valueClass">java.util.Date</str>
+                <str name="fieldType">tdates</str>
+            </lst>
+            <lst name="typeMapping">
+                <str name="valueClass">java.lang.Long</str>
+                <str name="valueClass">java.lang.Integer</str>
+                <str name="fieldType">tlongs</str>
+            </lst>
+            <lst name="typeMapping">
+                <str name="valueClass">java.lang.Number</str>
+                <str name="fieldType">tdoubles</str>
+            </lst>
+        </processor>
 
-    <processor class="solr.LogUpdateProcessorFactory"/>
-    <processor class="solr.DistributedUpdateProcessorFactory"/>
-    <processor class="solr.RunUpdateProcessorFactory"/>
-  </updateRequestProcessorChain>
+        <processor class="solr.LogUpdateProcessorFactory"/>
+        <processor class="solr.DistributedUpdateProcessorFactory"/>
+        <processor class="solr.RunUpdateProcessorFactory"/>
+    </updateRequestProcessorChain>
 
-  <queryResponseWriter name="json" class="solr.JSONResponseWriter">
-    <!-- For the purposes of the tutorial, JSON responses are written as
-     plain text so that they are easy to read in *any* browser.
-     If you expect a MIME type of "application/json" just remove this override.
-    -->
-    <str name="content-type">text/plain; charset=UTF-8</str>
-  </queryResponseWriter>
+    <queryResponseWriter name="json" class="solr.JSONResponseWriter">
+        <!-- For the purposes of the tutorial, JSON responses are written as
+         plain text so that they are easy to read in *any* browser.
+         If you expect a MIME type of "application/json" just remove this override.
+        -->
+        <str name="content-type">text/plain; charset=UTF-8</str>
+    </queryResponseWriter>
 
-  <!--
+    <!--
      Custom response writers can be declared as needed...
     -->
-  <queryResponseWriter name="velocity" class="solr.VelocityResponseWriter" startup="lazy">
-    <str name="template.base.dir">${velocity.template.base.dir:}</str>
-  </queryResponseWriter>
+    <queryResponseWriter name="velocity" class="solr.VelocityResponseWriter" startup="lazy">
+        <str name="template.base.dir">${velocity.template.base.dir:}</str>
+    </queryResponseWriter>
 
-  <!-- XSLT response writer transforms the XML output by any xslt file found
+    <!-- XSLT response writer transforms the XML output by any xslt file found
        in Solr's conf/xslt directory.  Changes to xslt files are checked for
        every xsltCacheLifetimeSeconds.  
     -->
-  <queryResponseWriter name="xslt" class="solr.XSLTResponseWriter">
-    <int name="xsltCacheLifetimeSeconds">5</int>
-  </queryResponseWriter>
+    <queryResponseWriter name="xslt" class="solr.XSLTResponseWriter">
+        <int name="xsltCacheLifetimeSeconds">5</int>
+    </queryResponseWriter>
 
 </config>

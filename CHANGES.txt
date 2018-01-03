@@ -1,5 +1,10 @@
 Bug fixes and new features
 --------------------------
+VLO-4.3.2 (January 2018)
+
+* Fixed issue with default conjunction operator
+    <https://github.com/clarin-eric/VLO/issues/123>
+
 VLO-4.3.1 (December 2017)
 
 * Fixed issue with Ajax response to search form request
