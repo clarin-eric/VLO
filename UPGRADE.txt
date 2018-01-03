@@ -2,7 +2,16 @@
 General upgrade instructions
 ----------------------------
 
-Quick overview of the upgrade steps (for details see DEPLOY-README)
+If using a dockerised setup on basis of the VLO and Solr image available via 
+<https://gitlab.com/CLARIN-ERIC>, the general upgrade instruction below do not apply.
+Pleas do check the version specific instructions as they may be relevant.
+
+If using the docker compose configuration (available via <https://gitlab.com/CLARIN-ERIC/
+compose_vlo/>), make sure to remove the Solr home provisioning volume before bringing
+the services up, as otherwise an obsolete Solr configuration may be applied to the Solr
+container!!!
+
+Quick overview of the manual upgrade steps (for details see DEPLOY-README)
 
 - Unpack the VLO distribution tarball
 
@@ -32,6 +41,14 @@ required.
 
 - In 'bin', run the importer using the updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
+
+-----------------------------
+Upgrading from 4.3.1 to 4.3.2
+-----------------------------
+Maintenance release, no actions required (Solr index can be kept). Make sure that the
+new Solr home content is applied to your Solr instance!!! Extra care has to be taken if
+using compose_vlo, please read its documentation at <https://gitlab.com/CLARIN-ERIC/
+compose_vlo/>.
 
 -----------------------------
 Upgrading from 4.3.0 to 4.3.1
