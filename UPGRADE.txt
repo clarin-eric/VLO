@@ -13,33 +13,44 @@ container!!!
 
 Quick overview of the manual upgrade steps (for details see DEPLOY-README)
 
-- Unpack the VLO distribution tarball
+1. Unpack the VLO distribution tarball
 
-- Go to the 'war' directory.
-- Run the `unpack-wars.sh` script in that directory
+2. Go to the 'war' directory.
+
+3. Run the `unpack-wars.sh` script in that directory
   (OR execute the following steps manually:
 	- Unzip the vlo-web-app-#.##.war in a new 'vlo' directory
 	- Recursively assign ownership of the entire unpacked distribution to the
 	appropriate user, i.e. 'vlouser' on catalog.clarin.eu)
 
-- In the 'config' directory, inspect VloConfig.xml and the data roots 
+4. In the 'config' directory, inspect VloConfig.xml and the data roots 
 configuration file that is included into this file by means of XInclude. It is
 advised to perform a diff between the old and new versions of these files.
 Depending on configuration preferences, you may want to copy settings from the
 old configuration to the new one.
 
-- Stop the Tomcat (or at least the VLO web app) and the Solr server.
-- Replace the 'current' symlink with a link to location of the new VLO directory.
+5. Stop 
+	1) the Tomcat (or at least the VLO web app), and 
+	2) the Solr server.
 
-- Make sure that the installed Solr server is of a version matching the requirements of
+6. Replace the 'current' symlink with a link to location of the new VLO directory.
+
+7. Make sure that the installed Solr server is of a version matching the requirements of
 the current version of the VLO, and that its home directory is configured to be the 
 Solr home directory provided by the VLO in 'solr/vlo-solr-home'.
 
-- If needed, flush the Solr index (by removing the content of the Solr data directory).
+8. If needed, flush the Solr index (by removing the content of the Solr data directory).
 The upgrade instructions for specific versions of the VLO indicate whether such a flush is
-required.
+required and you may want to check with the person responsible for the instance of the VLO
+you are upgrading.
 
-- In 'bin', run the importer using the updated configuration file:
+9. Start
+	1) the Solr server, and
+	2) the Tomcat server
+
+10. If you want to run an import straight away (discuss this with the person responsible
+for the upgraded VLO instance), go to the `bin` directory and run the importer using the
+updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
 
 -----------------------------
