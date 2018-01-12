@@ -215,7 +215,7 @@
         </resources>
         <testResources>
             <testResource>
-                <filtering>false</filtering>
+                <filtering>true</filtering>
                 <directory>src/test/resources</directory>
             </testResource>
             <testResource>
@@ -323,7 +323,7 @@
                         </configuration>            
                     </execution>
                     <execution>
-                        <!-- copy fonts from bootstrap distribution -->
+                        <!-- copy scripts from bootstrap distribution -->
                         <id>copy-script</id>
                         <phase>generate-resources</phase>
                         <goals>
