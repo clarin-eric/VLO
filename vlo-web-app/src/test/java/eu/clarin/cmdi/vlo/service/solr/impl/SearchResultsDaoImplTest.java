@@ -57,7 +57,15 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        SolrTestCaseJ4.initCore(getResourcePath(getConfigString()), getResourcePath(getSchemaString()));
+        SolrTestCaseJ4.initCore(
+                //config
+                getResourcePath("/solr/vlo-index/solrconfig.xml"),
+                //schema
+                getResourcePath("/solr/vlo-index/conf/managed-schema"),
+                //solr home
+                getResourcePath("/solr"), 
+                //core name
+                "vlo-index");
     }
 
     @Before
@@ -168,14 +176,6 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
             SolrDocumentList documents = instance.getDocuments(query);
             assertEquals(0, documents.getNumFound());
         }
-    }
-
-    public static String getSchemaString() {
-        return "/solr/vlo-index/conf/managed-schema";
-    }
-
-    public static String getConfigString() {
-        return "/solr/vlo-index/solrconfig.xml";
     }
 
     public static String getResourcePath(String resource) throws Exception {
