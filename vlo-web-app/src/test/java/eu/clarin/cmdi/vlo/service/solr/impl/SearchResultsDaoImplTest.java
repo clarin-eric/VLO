@@ -171,11 +171,11 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
     }
 
     public static String getSchemaString() {
-        return "/solr/collection1/conf/managed-schema";
+        return "/solr/vlo-index/conf/managed-schema";
     }
 
     public static String getConfigString() {
-        return "/solr/collection1/solrconfig.xml";
+        return "/solr/vlo-index/solrconfig.xml";
     }
 
     public static String getResourcePath(String resource) throws Exception {
