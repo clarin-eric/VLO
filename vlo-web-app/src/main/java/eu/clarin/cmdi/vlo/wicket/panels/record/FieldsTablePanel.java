@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.record;
 
 import eu.clarin.cmdi.vlo.wicket.components.LanguageInfoLink;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
@@ -30,10 +31,13 @@ import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.OrderedListModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -79,19 +83,29 @@ public class FieldsTablePanel extends Panel {
     @SpringBean 
     private FieldNameService fieldNameService;
     
-    private final Collection<String> SMART_LINK_FIELDS
-    = ImmutableSet.of(
-            fieldNameService.getFieldName(FieldKey.DESCRIPTION),
-            fieldNameService.getFieldName(FieldKey.LANDINGPAGE),
-            fieldNameService.getFieldName(FieldKey.SEARCHPAGE),
-            fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA),
-            fieldNameService.getFieldName(FieldKey.SELF_LINK)
-    );
-    
+    private final Collection<String> SMART_LINK_FIELDS;
+
     private IDataProvider<DocumentField> fieldProvider;
 
     public FieldsTablePanel(String id, IDataProvider<DocumentField> fieldProvider) {
         super(id);
+        
+        ImmutableSet.Builder<String> imb = ImmutableSet.builder();
+        
+        if(fieldNameService.getFieldName(FieldKey.DESCRIPTION) != null)
+        	imb.add(fieldNameService.getFieldName(FieldKey.DESCRIPTION));
+        if(fieldNameService.getFieldName(FieldKey.LANDINGPAGE) != null)
+        	imb.add(fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
+        if(fieldNameService.getFieldName(FieldKey.SEARCHPAGE) != null)
+        	imb.add(fieldNameService.getFieldName(FieldKey.SEARCHPAGE));
+        if(fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA) != null)
+        	imb.add(fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA));
+        if(fieldNameService.getFieldName(FieldKey.SELF_LINK) != null)
+        	imb.add(fieldNameService.getFieldName(FieldKey.SELF_LINK));
+        
+
+        this.SMART_LINK_FIELDS = imb.build();
+        
         this.fieldProvider = fieldProvider;
         
     }

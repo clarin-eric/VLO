@@ -161,22 +161,41 @@ public class MetadataImporter {
     }
 
     protected static Map<String, AbstractPostNormalizer> registerPostProcessors(VloConfig config, FieldNameService fieldNameService, LanguageCodeUtils languageCodeUtils) {
-        return ImmutableMap.<String, AbstractPostNormalizer>builder()
-                .put(fieldNameService.getFieldName(FieldKey.ID), new IdPostNormalizer())
-                .put(fieldNameService.getFieldName(FieldKey.CONTINENT), new ContinentNamePostNormalizer())
-                .put(fieldNameService.getFieldName(FieldKey.COUNTRY), new CountryNamePostNormalizer(config))
-                .put(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE), new LanguageCodePostNormalizer(config, languageCodeUtils))
-                .put(fieldNameService.getFieldName(FieldKey.LANGUAGE_NAME), new LanguageNamePostNormalizer(languageCodeUtils))
-                .put(fieldNameService.getFieldName(FieldKey.AVAILABILITY), new AvailabilityPostNormalizer(config))
-                .put(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE), new LicenseTypePostNormalizer(config))
-                .put(fieldNameService.getFieldName(FieldKey.ORGANISATION), new OrganisationPostNormalizer(config))
-                .put(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE), new TemporalCoveragePostNormalizer())
-                .put(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT), new NationalProjectPostNormalizer(config))
-                .put(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE), new CMDIComponentProfileNamePostNormalizer(config))
-                .put(fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS), new ResourceClassPostNormalizer())
-                .put(fieldNameService.getFieldName(FieldKey.LICENSE), new LicensePostNormalizer(config))
-                .put(fieldNameService.getFieldName(FieldKey.NAME), new NamePostNormalizer())
-                .build();
+        ImmutableMap.Builder<String, AbstractPostNormalizer> imb = ImmutableMap.builder();
+        
+        imb.put(fieldNameService.getFieldName(FieldKey.ID), new IdPostNormalizer());
+        
+        if(fieldNameService.getFieldName(FieldKey.CONTINENT) != null)
+        	imb.put(fieldNameService.getFieldName(FieldKey.CONTINENT), new ContinentNamePostNormalizer());
+        if(fieldNameService.getFieldName(FieldKey.COUNTRY) != null)
+        	imb.put(fieldNameService.getFieldName(FieldKey.COUNTRY), new CountryNamePostNormalizer(config));
+        if(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE) != null)
+        	imb.put(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE), new LanguageCodePostNormalizer(config, languageCodeUtils));
+        if(fieldNameService.getFieldName(FieldKey.LANGUAGE_NAME) != null)
+        	imb.put(fieldNameService.getFieldName(FieldKey.LANGUAGE_NAME), new LanguageNamePostNormalizer(languageCodeUtils));
+        if(fieldNameService.getFieldName(FieldKey.AVAILABILITY) != null)
+        	imb.put(fieldNameService.getFieldName(FieldKey.AVAILABILITY), new AvailabilityPostNormalizer(config));
+        if(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE) != null)
+        	imb.put(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE), new LicenseTypePostNormalizer(config));
+        if(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE) != null)
+        	imb.put(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE), new LicenseTypePostNormalizer(config));
+        if(fieldNameService.getFieldName(FieldKey.ORGANISATION) != null)
+        	imb.put(fieldNameService.getFieldName(FieldKey.ORGANISATION), new OrganisationPostNormalizer(config));
+        if(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE) != null)
+        	imb.put(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE), new TemporalCoveragePostNormalizer());
+        if(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT) != null)
+        	imb.put(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT), new NationalProjectPostNormalizer(config));
+        if(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE) != null)
+        	imb.put(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE), new CMDIComponentProfileNamePostNormalizer(config));
+        if(fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS) != null)
+        	imb.put(fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS), new ResourceClassPostNormalizer());
+        if(fieldNameService.getFieldName(FieldKey.LICENSE) != null)
+        	imb.put(fieldNameService.getFieldName(FieldKey.LICENSE), new LicensePostNormalizer(config));
+        if(fieldNameService.getFieldName(FieldKey.NAME) != null)
+        	imb.put(fieldNameService.getFieldName(FieldKey.NAME), new NamePostNormalizer());
+    	
+    	return imb.build();
+
     }
 
     /**
