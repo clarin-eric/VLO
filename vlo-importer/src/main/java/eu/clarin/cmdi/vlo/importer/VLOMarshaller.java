@@ -2,6 +2,7 @@ package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.importer.mapping.ValueMappings;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -57,6 +58,10 @@ public class VLOMarshaller {
             logger.info("Unmarshalling facet concepts definition from file {}", facetConcepts);
             return unmarshal(is);
         });
+    }
+    
+    public final ValueMappings getValueMappings() {
+    	return null;
     }
 
     /**

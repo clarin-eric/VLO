@@ -120,7 +120,8 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         }
         
         final String facetConceptsFile = config.getFacetConceptsFile();
-        return facetMappingFactory.getFacetMapping(facetConceptsFile, profileId, useLocalXSDCache);
+        final String valueMappingsFile = config.getValueMappingsFile();
+        return facetMappingFactory.getFacetMapping(facetConceptsFile, valueMappingsFile, profileId, useLocalXSDCache);
     }
 
     /**
@@ -363,7 +364,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             
             
             //implementation of cross facet mapping (cfm)
-            if(!config.getConditions().isEmpty()){
+/*            if(!config.getConditions().isEmpty()){
             	
             	for(CFMCondition condition : config.getConditions()){
             		if(condition.getIfValue().equals(value)){ //the value matches the condition-value
@@ -379,7 +380,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             	
             	return true;
             }
-            
+*/            
             //end of cfm implementation
 
             final List<String> postProcessed = postProcess(config.getName(), value, cmdiData);

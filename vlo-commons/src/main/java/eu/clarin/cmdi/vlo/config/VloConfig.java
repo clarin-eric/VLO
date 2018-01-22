@@ -82,7 +82,7 @@ public class VloConfig {
 
     private String licenseTypeMapUrl;
     
-    private String crossFacetMapUrl = "";
+    private String valueMappingsFile = "";
 
     private String countryComponentUrl = "";
 
@@ -136,7 +136,6 @@ public class VloConfig {
 
     private int solrThreads = 2;
     
-    private boolean useCrossMapping = false;
     
     @XmlJavaTypeAdapter(XmlFieldAdapter.class)
     private Map<String,String> fields;
@@ -1294,20 +1293,13 @@ public class VloConfig {
         this.solrThreads = solrThreads;
     }
     
-    public boolean isUseCrossMapping() {
-		return useCrossMapping;
-	}
-
-	public void setUseCrossMapping(boolean useCrossMapping) {
-		this.useCrossMapping = useCrossMapping;
-	}
     
-    public String getCrossFacetMapUrl() {
-    	return this.crossFacetMapUrl;
+    public String getValueMappingsFile() {
+    	return this.valueMappingsFile;
     }
     
-    public void setCrossFacetMapUrl(String crossFacetMapUrl){
-    	this.crossFacetMapUrl = crossFacetMapUrl;
+    public void setValueMappingsFile(String valueMappingsFile){
+    	this.valueMappingsFile = valueMappingsFile;
     }
 
 	/**

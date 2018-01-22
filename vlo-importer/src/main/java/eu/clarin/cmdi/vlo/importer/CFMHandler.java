@@ -32,7 +32,7 @@ public class CFMHandler extends DefaultHandler {
 
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-		if("origin-facet".equals(qName)){
+/*		if("origin-facet".equals(qName)){
 			this.orginFacet = this.mapping.getFacetConfiguration(attributes.getValue("name"));
 			if(this.orginFacet == null)
 				LOG.warn("origin facet " + attributes.getValue("name") + " can't be processed since there is NO valid facetConcept defined for this facet");
@@ -49,6 +49,6 @@ public class CFMHandler extends DefaultHandler {
 				LOG.warn("cross facet " + attributes.getValue("name") + " can't be processed since there is NO valid facetConcept defined for this facet");
 			else
 				this.orginFacet.getConditions().get(this.orginFacet.getConditions().size() -1).addFacetValuePair(crossFacet, attributes.getValue("setvalue"));;
-		}
+		}*/
 	}
 }

@@ -19,9 +19,9 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
 
-public class CrossfacetMappingTest extends ImporterTestcase {
+public class ValueMappingsTest extends ImporterTestcase {
 
-    protected final static org.slf4j.Logger LOG = LoggerFactory.getLogger(CrossfacetMappingTest.class);
+    protected final static org.slf4j.Logger LOG = LoggerFactory.getLogger(ValueMappingsTest.class);
 
     @Test
     public void testSimple() throws Exception {
@@ -51,8 +51,8 @@ public class CrossfacetMappingTest extends ImporterTestcase {
         session += "</CMD>\n";
         File sessionFile = createCmdiFile("testSession", session);
 
-        this.config.setUseCrossMapping(true);
-        this.config.setCrossFacetMapUrl(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
+
+        this.config.setValueMappingsFile(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
@@ -90,8 +90,8 @@ public class CrossfacetMappingTest extends ImporterTestcase {
         session += "</CMD>\n";
         File sessionFile = createCmdiFile("testSession", session);
 
-        this.config.setUseCrossMapping(true);
-        this.config.setCrossFacetMapUrl(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
+
+        this.config.setValueMappingsFile(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
@@ -127,8 +127,7 @@ public class CrossfacetMappingTest extends ImporterTestcase {
         session += "</CMD>\n";
         File sessionFile = createCmdiFile("testSession", session);
 
-        this.config.setUseCrossMapping(true);
-        this.config.setCrossFacetMapUrl(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
+        this.config.setValueMappingsFile(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
@@ -173,8 +172,7 @@ public class CrossfacetMappingTest extends ImporterTestcase {
 
         File sessionFile = createCmdiFile("testSession", session);
 
-        this.config.setUseCrossMapping(true);
-        this.config.setCrossFacetMapUrl(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
+        this.config.setValueMappingsFile(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
@@ -217,8 +215,7 @@ public class CrossfacetMappingTest extends ImporterTestcase {
         session += "</CMD>\n";
         File sessionFile = createCmdiFile("testSession", session);
 
-        this.config.setUseCrossMapping(true);
-        this.config.setCrossFacetMapUrl(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
+        this.config.setValueMappingsFile(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
@@ -300,7 +297,7 @@ public class CrossfacetMappingTest extends ImporterTestcase {
                                 try {
                                     processCmdi(file, dataRoot, null);
                                 } catch (SolrServerException ex) {
-                                    Logger.getLogger(CrossfacetMappingTest.class.getName()).log(Level.SEVERE, null, ex);
+                                    Logger.getLogger(ValueMappingsTest.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }
                         }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import eu.clarin.cmdi.vlo.importer.mapping.AbstractCondition;
+
 
 /**
  * Once created contains the information about the facets and such. Just a
@@ -18,7 +20,10 @@ public class FacetConfiguration {
     private List<Pattern> patterns = new ArrayList<>();
     private List<Pattern> fallbackPatterns = new ArrayList<>();
     private List<FacetConfiguration> derivedFacets = new ArrayList<FacetConfiguration>();
-    private List<CFMCondition> conditions = new ArrayList<CFMCondition>();
+    
+    
+    private List<AbstractCondition> conditions = new ArrayList<AbstractCondition>();
+    
     private boolean allowMultipleValues = true;
     // allow multiple values for the same XPath, even if allowMultipleValues == false
     // (for example for CMD elements with multilingual == yes)
@@ -71,11 +76,11 @@ public class FacetConfiguration {
         return name;
     }
     
-    public List<CFMCondition> getConditions(){
+    public List<AbstractCondition> getConditions(){
     	return this.conditions;
     }
     
-    public void addCondition(CFMCondition condition){
+    public void addCondition(AbstractCondition condition){
     	this.conditions.add(condition);
     }
 

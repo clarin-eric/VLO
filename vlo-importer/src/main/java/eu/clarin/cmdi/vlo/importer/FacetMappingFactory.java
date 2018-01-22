@@ -74,8 +74,8 @@ public class FacetMappingFactory {
      * @param useLocalXSDCache
      * @return
      */
-    public FacetMapping getFacetMapping(String facetConceptsFile, String xsd, Boolean useLocalXSDCache) {
-        return getOrCreateMapping(facetConceptsFile, xsd, useLocalXSDCache);
+    public FacetMapping getFacetMapping(String facetConceptsFile, String valueMappingsFile, String xsd, Boolean useLocalXSDCache) {
+        return getOrCreateMapping(facetConceptsFile, valueMappingsFile, xsd, useLocalXSDCache);
     }
 
     /**
@@ -91,7 +91,7 @@ public class FacetMappingFactory {
      *
      * @return facet concept mapping
      */
-    private FacetMapping getOrCreateMapping(String facetConcepts, String xsd, Boolean useLocalXSDCache) {
+    private FacetMapping getOrCreateMapping(String facetConcepts, String valueMappingsFile, String xsd, Boolean useLocalXSDCache) {
         return mapping.computeIfAbsent(xsd, (key) -> {
             return createMapping(facetConcepts, xsd, useLocalXSDCache);
         });
@@ -239,35 +239,15 @@ public class FacetMappingFactory {
             	}
             }
         //... and crossfacets
-            if(this.config.isUseCrossMapping()){
+/*            if(this.config.isUseCrossMapping()){
             	setCrossMapping(result);
             }
-            
+*/            
         } 
         catch (NavException | URISyntaxException e) {
             LOG.error("Error creating facetMapping from xsd: {}", xsd, e);
         }
         return result;
-    }
-    
-    
-    private void setCrossMapping(FacetMapping mapping){
-
-    		try {
-				SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
-  	
-				parser.parse(config.getCrossFacetMapUrl(), new CFMHandler(mapping));
-			} catch (ParserConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SAXException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
     }
 
     /**
