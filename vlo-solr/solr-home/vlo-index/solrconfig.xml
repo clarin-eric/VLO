@@ -733,7 +733,6 @@
 
         <!-- Default conjunction operator -->
         <str name="q.op">AND</str>
-        <str name="mm">100%</str>
         
         <!-- Query fields -->
         <str name="qf">text</str>
