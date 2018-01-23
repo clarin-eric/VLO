@@ -6,7 +6,7 @@
 //
 
 
-package eu.clarin.cmdi.vlo.importer.mapping;
+package eu.clarin.cmdi.vlo.importer.jaxb;
 
 import java.util.ArrayList;
 import java.util.List;

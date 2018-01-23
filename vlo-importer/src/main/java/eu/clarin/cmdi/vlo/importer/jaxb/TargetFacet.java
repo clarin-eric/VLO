@@ -6,14 +6,11 @@
 //
 
 
-package eu.clarin.cmdi.vlo.importer.mapping;
+package eu.clarin.cmdi.vlo.importer.jaxb;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
@@ -30,10 +27,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element ref="{}value-map" maxOccurs="unbounded"/>
- *       &lt;/sequence>
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}NCName" />
+ *       &lt;attribute name="overrideExistingValues" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="removeSourceValue" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -42,47 +38,18 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "valueMap"
-})
-@XmlRootElement(name = "origin-facet")
-public class OriginFacet {
+@XmlType(name = "")
+@XmlRootElement(name = "target-facet")
+public class TargetFacet {
 
-    @XmlElement(name = "value-map", required = true)
-    protected List<ValueMap> valueMap;
     @XmlAttribute(name = "name", required = true)
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "NCName")
     protected String name;
-
-    /**
-     * Gets the value of the valueMap property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the valueMap property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getValueMap().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link ValueMap }
-     * 
-     * 
-     */
-    public List<ValueMap> getValueMap() {
-        if (valueMap == null) {
-            valueMap = new ArrayList<ValueMap>();
-        }
-        return this.valueMap;
-    }
+    @XmlAttribute(name = "overrideExistingValues")
+    protected Boolean overrideExistingValues;
+    @XmlAttribute(name = "removeSourceValue")
+    protected Boolean removeSourceValue;
 
     /**
      * Gets the value of the name property.
@@ -106,6 +73,54 @@ public class OriginFacet {
      */
     public void setName(String value) {
         this.name = value;
+    }
+
+    /**
+     * Gets the value of the overrideExistingValues property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isOverrideExistingValues() {
+        return overrideExistingValues;
+    }
+
+    /**
+     * Sets the value of the overrideExistingValues property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setOverrideExistingValues(Boolean value) {
+        this.overrideExistingValues = value;
+    }
+
+    /**
+     * Gets the value of the removeSourceValue property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isRemoveSourceValue() {
+        return removeSourceValue;
+    }
+
+    /**
+     * Sets the value of the removeSourceValue property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setRemoveSourceValue(Boolean value) {
+        this.removeSourceValue = value;
     }
 
 }

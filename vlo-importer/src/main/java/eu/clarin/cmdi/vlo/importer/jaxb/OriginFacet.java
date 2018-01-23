@@ -6,15 +6,19 @@
 //
 
 
-package eu.clarin.cmdi.vlo.importer.mapping;
+package eu.clarin.cmdi.vlo.importer.jaxb;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -27,8 +31,9 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{}origin-facet" maxOccurs="unbounded"/>
+ *         &lt;element ref="{}value-map" maxOccurs="unbounded"/>
  *       &lt;/sequence>
+ *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}NCName" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -38,41 +43,69 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "originFacet"
+    "valueMap"
 })
-@XmlRootElement(name = "value-mappings")
-public class ValueMappings {
+@XmlRootElement(name = "origin-facet")
+public class OriginFacet {
 
-    @XmlElement(name = "origin-facet", required = true)
-    protected List<OriginFacet> originFacet;
+    @XmlElement(name = "value-map", required = true)
+    protected List<ValueMap> valueMap;
+    @XmlAttribute(name = "name", required = true)
+    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+    @XmlSchemaType(name = "NCName")
+    protected String name;
 
     /**
-     * Gets the value of the originFacet property.
+     * Gets the value of the valueMap property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the originFacet property.
+     * This is why there is not a <CODE>set</CODE> method for the valueMap property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getOriginFacet().add(newItem);
+     *    getValueMap().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link OriginFacet }
+     * {@link ValueMap }
      * 
      * 
      */
-    public List<OriginFacet> getOriginFacet() {
-        if (originFacet == null) {
-            originFacet = new ArrayList<OriginFacet>();
+    public List<ValueMap> getValueMap() {
+        if (valueMap == null) {
+            valueMap = new ArrayList<ValueMap>();
         }
-        return this.originFacet;
+        return this.valueMap;
+    }
+
+    /**
+     * Gets the value of the name property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the value of the name property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setName(String value) {
+        this.name = value;
     }
 
 }

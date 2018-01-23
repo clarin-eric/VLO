@@ -6,7 +6,7 @@
 //
 
 
-package eu.clarin.cmdi.vlo.importer.mapping;
+package eu.clarin.cmdi.vlo.importer.jaxb;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

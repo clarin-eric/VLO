@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import eu.clarin.cmdi.vlo.importer.mapping.AbstractCondition;
+import eu.clarin.cmdi.vlo.importer.mapping.ConditionTargetSet;
 
 
 /**
@@ -22,7 +22,7 @@ public class FacetConfiguration {
     private List<FacetConfiguration> derivedFacets = new ArrayList<FacetConfiguration>();
     
     
-    private List<AbstractCondition> conditions = new ArrayList<AbstractCondition>();
+    private List<ConditionTargetSet> targetValueSet = new ArrayList<ConditionTargetSet>();
     
     private boolean allowMultipleValues = true;
     // allow multiple values for the same XPath, even if allowMultipleValues == false
@@ -76,12 +76,12 @@ public class FacetConfiguration {
         return name;
     }
     
-    public List<AbstractCondition> getConditions(){
-    	return this.conditions;
+    public List<ConditionTargetSet> getTargetValueSets(){
+    	return this.targetValueSet;
     }
     
-    public void addCondition(AbstractCondition condition){
-    	this.conditions.add(condition);
+    public void addTargetValueSet(ConditionTargetSet targetValueSet){
+    	this.targetValueSet.add(targetValueSet);
     }
 
     @Override

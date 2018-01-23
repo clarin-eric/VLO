@@ -2,7 +2,7 @@ package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.importer.mapping.ValueMappings;
+import eu.clarin.cmdi.vlo.importer.jaxb.ValueMappings;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -60,10 +60,6 @@ public class VLOMarshaller {
         });
     }
     
-    public final ValueMappings getValueMappings() {
-    	return null;
-    }
-
     /**
      * Get object from input stream
      *

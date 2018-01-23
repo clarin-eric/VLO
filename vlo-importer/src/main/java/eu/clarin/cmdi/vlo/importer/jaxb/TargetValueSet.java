@@ -6,12 +6,13 @@
 //
 
 
-package eu.clarin.cmdi.vlo.importer.mapping;
+package eu.clarin.cmdi.vlo.importer.jaxb;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlMixed;
@@ -45,43 +46,23 @@ import javax.xml.bind.annotation.XmlType;
 })
 @XmlRootElement(name = "target-value-set")
 public class TargetValueSet {
+	
+	@XmlElement(name="target-value")
+    protected List<TargetValue> targetValues;
+	@XmlElement(name="source-value")
+    protected List<SourceValue> souceValues;
 
-    @XmlElementRefs({
-        @XmlElementRef(name = "source-value", type = SourceValue.class, required = false),
-        @XmlElementRef(name = "target-value", type = TargetValue.class, required = false)
-    })
-    @XmlMixed
-    protected List<Object> content;
+	public TargetValueSet() {
+		this.targetValues = new ArrayList<TargetValue>();
+		this.souceValues = new ArrayList<SourceValue>();
+	}
+	
+	public List<TargetValue> getTargetValues() {
+		return this.targetValues;
+	}
+	public List<SourceValue> getSouceValues() {
+		return this.souceValues;
+	}
 
-    /**
-     * Gets the value of the content property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the content property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getContent().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link SourceValue }
-     * {@link TargetValue }
-     * {@link String }
-     * 
-     * 
-     */
-    public List<Object> getContent() {
-        if (content == null) {
-            content = new ArrayList<Object>();
-        }
-        return this.content;
-    }
 
 }

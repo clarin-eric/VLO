@@ -14,7 +14,7 @@ public class RegExCondition extends AbstractCondition {
 	}
 
 	@Override
-	public boolean match(String expression) {
+	public boolean matches(String expression) {
 		// TODO Auto-generated method stub
 		return pattern.matcher(expression).matches();
 	}

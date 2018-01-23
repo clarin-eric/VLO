@@ -20,6 +20,7 @@ import org.xml.sax.SAXException;
 
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
@@ -37,9 +38,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import eu.clarin.cmdi.vlo.importer.jaxb.*;
 
 /**
  * Creates facet-mappings (xpaths) from a configuration. As they say "this is
@@ -59,10 +62,30 @@ public class FacetMappingFactory {
     private final VLOMarshaller marshaller;
     private final FieldNameServiceImpl fieldNameService;
 
+
     public FacetMappingFactory(VloConfig config, VLOMarshaller marshaller) {
         this.config = config;
         this.fieldNameService = new FieldNameServiceImpl(config);
         this.marshaller = marshaller;
+        
+        try {
+			ObjectFactory fac = new ObjectFactory();
+			
+			ValueMappings vm = (ValueMappings) fac.unmarshal(config.getValueMappingsFile());
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
         
     }
 
