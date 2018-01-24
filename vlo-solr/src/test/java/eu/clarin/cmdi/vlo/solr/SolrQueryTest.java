@@ -85,13 +85,31 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
     }
 
     @Test
-    public void testGetAllValues() throws Exception {
-        final SolrDocumentList results = getResults(client, ImmutableMap.builder()
-                .put("q", "*:*")
-                .put("rows", 0)
+    public void testGetAllDocumentsCount() throws Exception {
+        assertResultCount(56, "*:*");
+    }
+
+    @Test
+    public void testQuery_AND() throws Exception {
+        assertResultCount(19, "German");
+        assertResultCount(1, "German Treebank");
+        assertResultCount(1, "German AND Treebank");
+        assertResultCount(1, "(German AND Treebank)");
+        assertResultCount(1, "+German +Treebank");
+        assertResultCount(1, "+(German Treebank)");
+    }
+
+    private void assertResultCount(long expectedCount, String query) throws SolrServerException, IOException {
+        final long numFound = getResults(query, 0).getNumFound();
+        assertEquals(String.format("Expected %d results, actual result count is %d", expectedCount, numFound), expectedCount, numFound);
+    }
+
+    private SolrDocumentList getResults(String query, int rows) throws SolrServerException, IOException {
+        return getResults(client, ImmutableMap.builder()
+                .put("q", query)
+                .put("rows", rows)
                 .build()
         );
-        assertEquals(56, results.getNumFound());
     }
 
     private static SolrDocumentList getResults(SolrClient client, Map<String, String> params) throws SolrServerException, IOException {
@@ -106,7 +124,8 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
 
     /**
      * Reads Solr input document definition from a json file
-     * @return 
+     *
+     * @return
      */
     private static List<SolrInputDocument> getInputDocuments() {
         try (JsonReader reader = Json.createReader(SolrQueryTest.class.getResourceAsStream(INPUT_DOCUMENTS_RESOURCE))) {
