@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import javax.json.Json;
 import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonWriter;
@@ -102,7 +103,12 @@ public class SolrInputDataCreator {
         doc.getFieldNames().stream()
                 .filter((field) -> (INCLUDED_FIELDS.contains(field)))
                 .forEach((field) -> {
-                    objectBuilder.add(field, doc.getFirstValue(field).toString());
+                    JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+                    doc.getFieldValues(field).stream().forEach((value) -> {
+                        arrayBuilder.add(value.toString());
+                    });
+                    objectBuilder.add(field, arrayBuilder.build());
+
                 });
         return objectBuilder.build();
     }

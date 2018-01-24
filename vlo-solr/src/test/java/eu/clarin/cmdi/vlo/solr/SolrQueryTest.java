@@ -136,7 +136,9 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
 
                         final JsonObject documentJson = t.asJsonObject();
                         documentJson.keySet().forEach((key) -> {
-                            solrInputDocument.addField(key, documentJson.getString(key));
+                            documentJson.getJsonArray(key).stream().forEach((v) -> {
+                                solrInputDocument.addField(key, v.toString());
+                            });
                         });
 
                         return solrInputDocument;
