@@ -73,7 +73,7 @@ public class SolrInputDataCreator {
      * Solr fields to include in the JSON output
      */
     private final static List<String> INCLUDED_FIELDS = ImmutableList.of(
-            "id", "name", "_languageName", "collection", "country", "genre", "resourceClass"
+            "id", "name", "_languageName", "collection", "country", "genre", "resourceClass", "_resourceRefCount"
     );
 
     private void writeJson(Writer writer) throws Exception {
