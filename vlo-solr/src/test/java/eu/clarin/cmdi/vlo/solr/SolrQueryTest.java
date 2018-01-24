@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.solr;
 import com.carrotsearch.ant.tasks.junit4.dependencies.com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -127,22 +128,9 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
      *
      * @return
      */
-    private static List<SolrInputDocument> getInputDocuments() {
-        try (JsonReader reader = Json.createReader(SolrQueryTest.class.getResourceAsStream(INPUT_DOCUMENTS_RESOURCE))) {
-            final JsonArray documentsArray = reader.readArray();
-            return documentsArray.stream()
-                    .map((t) -> {
-                        final SolrInputDocument solrInputDocument = new SolrInputDocument();
-
-                        final JsonObject documentJson = t.asJsonObject();
-                        documentJson.keySet().forEach((key) -> {
-                            documentJson.getJsonArray(key).stream().forEach((v) -> {
-                                solrInputDocument.addField(key, v.toString());
-                            });
-                        });
-
-                        return solrInputDocument;
-                    }).collect(Collectors.toList());
+    private static List<SolrInputDocument> getInputDocuments() throws IOException {
+        try (InputStream inputStream = SolrQueryTest.class.getResourceAsStream(INPUT_DOCUMENTS_RESOURCE)) {
+            return SolrInputDataCreator.getDocumentsFromJson(inputStream);
         }
     }
 
