@@ -40,7 +40,9 @@ import org.junit.Test;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- *
+ * Tests query response behaviour given a fixed set of resources
+ * 
+ * TODO: Add test for facets
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class SolrQueryTest extends SolrTestCaseJ4 {
@@ -98,6 +100,39 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
         assertResultCount(1, "(German AND Treebank)");
         assertResultCount(1, "+German +Treebank");
         assertResultCount(1, "+(German Treebank)");
+                
+        assertResultCount(9, "language:German AND country:Germany");
+    }
+
+    @Test
+    public void testQuery_OR() throws Exception {
+        assertResultCount(9, "Corpus");
+        assertResultCount(1, "Nederlands");
+        assertResultCount(9, "Corpus OR Nederlands");
+        assertResultCount(10, "Corpus OR Nederlands OR Treebank");
+        assertResultCount(10, "(Corpus OR Nederlands OR Treebank)");
+        assertResultCount(10, "Corpus OR (Nederlands OR Treebank)");
+        assertResultCount(10, "(Corpus OR Nederlands) OR Treebank");
+
+        assertResultCount(1, "country:Bulgaria");
+        assertResultCount(5, "country:Netherlands");
+        assertResultCount(6, "country:Netherlands OR country:Bulgaria");
+        assertResultCount(6, "country:(Netherlands OR Bulgaria)");
+    }
+
+    @Test
+    public void testQuery_NOT() throws Exception {
+        assertResultCount(19, "German");
+        assertResultCount(37, "-German");
+        assertResultCount(37, "NOT German");
+        
+        assertResultCount(4, "French");
+        assertResultCount(3, "French -*Tools*");
+        
+        assertResultCount(53, "-country:France");
+        assertResultCount(53, "country:(NOT France)");
+        assertResultCount(44, "-country:Germany -country:France");
+        assertResultCount(44, "-country:(Germany OR France)");
     }
 
     private void assertResultCount(long expectedCount, String query) throws SolrServerException, IOException {
