@@ -38,7 +38,9 @@ import javax.json.JsonReader;
 import javax.json.JsonString;
 import javax.json.JsonValue;
 import javax.json.JsonWriter;
+import javax.json.JsonWriterFactory;
 import javax.json.stream.JsonCollectors;
+import javax.json.stream.JsonGenerator;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -76,6 +78,13 @@ public class SolrInputDataCreator {
             "id", "name", "_languageName", "collection", "country", "genre", "resourceClass", "_resourceRefCount"
     );
 
+    /**
+     * Options for JSON writer (see {@link JsonWriterFactory})
+     */
+    private final static Map<String, Object> JSON_WRITER_PROPS = ImmutableMap.of(
+            JsonGenerator.PRETTY_PRINTING, true
+    );
+
     private void writeJson(Writer writer) throws Exception {
         try (SolrClient client = newSolrClient()) {
             writeResults(writer, getResults(client));
@@ -93,14 +102,15 @@ public class SolrInputDataCreator {
         final Iterable<SolrDocument> iterable = () -> resultsIterator;
         final Stream<SolrDocument> resultStream = StreamSupport.stream(iterable.spliterator(), false);
 
-        try (JsonWriter jsonWriter = Json.createWriter(writer)) {
+        final JsonWriterFactory jsonWriterFactory = Json.createWriterFactory(JSON_WRITER_PROPS);
+        try (JsonWriter jsonWriter = jsonWriterFactory.createWriter(writer)) {
             final JsonArray resultsArray
                     = resultStream
                             //map to JSON
                             .map(SolrInputDataCreator::solrDocToJson)
                             //collect into array
                             .collect(JsonCollectors.toJsonArray());
-            jsonWriter.writeArray(resultsArray);
+            jsonWriter.write(resultsArray);
         }
     }
 
