@@ -41,8 +41,9 @@ import org.junit.Test;
  */
 /**
  * Tests query response behaviour given a fixed set of resources
- * 
+ *
  * TODO: Add test for facets
+ *
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class SolrQueryTest extends SolrTestCaseJ4 {
@@ -100,7 +101,7 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
         assertResultCount(1, "(German AND Treebank)");
         assertResultCount(1, "+German +Treebank");
         assertResultCount(1, "+(German Treebank)");
-                
+
         assertResultCount(9, "language:German AND country:Germany");
     }
 
@@ -125,19 +126,38 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
         assertResultCount(19, "German");
         assertResultCount(37, "-German");
         assertResultCount(37, "NOT German");
-        
+
         assertResultCount(4, "French");
         assertResultCount(3, "French -*Tools*");
-        
+
         assertResultCount(53, "-country:France");
         assertResultCount(53, "country:(NOT France)");
         assertResultCount(44, "-country:Germany -country:France");
         assertResultCount(44, "-country:(Germany OR France)");
     }
 
+    @Test
+    public void testQueryCounts() throws Exception {
+        assertResultCount(14, "_resourceRefCount:0");
+        assertResultCount(42, "_resourceRefCount:[1 TO *]");
+    }
+
+    @Test
+    public void testFieldAlias() throws Exception {
+        assertNotEquals(0, getResultCount("_resourceRefCount:0"));
+        assertEquals(getResultCount("_resourceRefCount:0"), getResultCount("resources:0")); 
+        
+        assertNotEquals(0, getResultCount("_languageName:German"));
+        assertEquals(getResultCount("_languageName:German"), getResultCount("language:German"));       
+    }
+
     private void assertResultCount(long expectedCount, String query) throws SolrServerException, IOException {
-        final long numFound = getResults(query, 0).getNumFound();
+        final long numFound = getResultCount(query);
         assertEquals(String.format("Expected %d results, actual result count is %d", expectedCount, numFound), expectedCount, numFound);
+    }
+    
+    private long getResultCount(String query) throws SolrServerException, IOException {
+        return getResults(query, 0).getNumFound();
     }
 
     private SolrDocumentList getResults(String query, int rows) throws SolrServerException, IOException {
