@@ -1,10 +1,15 @@
 package eu.clarin.cmdi.vlo.solr;
 
-import com.carrotsearch.ant.tasks.junit4.dependencies.com.google.common.collect.ImmutableList;
 import com.carrotsearch.ant.tasks.junit4.dependencies.com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import org.apache.solr.SolrTestCaseJ4;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -39,10 +44,15 @@ import org.junit.Test;
  */
 public class SolrQueryTest extends SolrTestCaseJ4 {
 
+    private static final String INPUT_DOCUMENTS_RESOURCE = "/documents.json";
+    private static List<SolrInputDocument> INPUT_DOCUMENTS;
+
     private SolrClient client;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
+        INPUT_DOCUMENTS = getInputDocuments();
+
         SolrTestCaseJ4.initCore(
                 //config
                 getResourcePath("/solr/vlo-index/solrconfig.xml"),
@@ -60,7 +70,7 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
         // set up an embedded solr server
         super.setUp();
         client = new EmbeddedSolrServer(h.getCoreContainer(), h.getCore().getName());
-        client.add(getInputDocuments());
+        client.add(INPUT_DOCUMENTS);
         client.commit();
 
         super.postSetUp();
@@ -78,18 +88,10 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
     public void testGetAllValues() throws Exception {
         final SolrDocumentList results = getResults(client, ImmutableMap.builder()
                 .put("q", "*:*")
+                .put("rows", 0)
                 .build()
         );
-        assertEquals(2, results.size());
-    }
-
-    @Test
-    public void testGetValues2() throws Exception {
-        final SolrDocumentList results = getResults(client, ImmutableMap.builder()
-                .put("q", "*:*")
-                .build()
-        );
-        assertEquals(2, results.size());
+        assertEquals(56, results.getNumFound());
     }
 
     private static SolrDocumentList getResults(SolrClient client, Map<String, String> params) throws SolrServerException, IOException {
@@ -102,11 +104,25 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
         return new File(SolrQueryTest.class.getResource(resource).toURI()).getAbsolutePath();
     }
 
-    private static ImmutableList getInputDocuments() {
-        return ImmutableList.builder()
-                .add(new SolrInputDocument("id", "1", "name", "test 1"))
-                .add(new SolrInputDocument("id", "2", "name", "test 2"))
-                .build();
+    /**
+     * Reads Solr input document definition from a json file
+     * @return 
+     */
+    private static List<SolrInputDocument> getInputDocuments() {
+        try (JsonReader reader = Json.createReader(SolrQueryTest.class.getResourceAsStream(INPUT_DOCUMENTS_RESOURCE))) {
+            final JsonArray documentsArray = reader.readArray();
+            return documentsArray.stream()
+                    .map((t) -> {
+                        final SolrInputDocument solrInputDocument = new SolrInputDocument();
+
+                        final JsonObject documentJson = t.asJsonObject();
+                        documentJson.keySet().forEach((key) -> {
+                            solrInputDocument.addField(key, documentJson.getString(key));
+                        });
+
+                        return solrInputDocument;
+                    }).collect(Collectors.toList());
+        }
     }
 
 }
