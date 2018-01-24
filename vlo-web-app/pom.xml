@@ -230,7 +230,8 @@
             </testResource>
             <testResource>
                 <filtering>false</filtering>
-                <directory>target/generated-test-resources</directory>
+                <directory>../vlo-solr/solr-home</directory>
+                <targetPath>solr</targetPath>
             </testResource>
         </testResources>
         <plugins>
@@ -334,22 +335,6 @@
                             <resources>
                                 <resource>
                                     <directory>${project.build.directory}/generated-sources/bootstrap/js</directory>
-                                </resource>
-                            </resources>              
-                        </configuration>            
-                    </execution>
-                    <execution>
-                        <!-- copy solr config for web app tests -->
-                        <id>test-copy-solr-conf</id>
-                        <phase>generate-test-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/generated-test-resources/solr/vlo-index</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/vlo-solr/solr-home/vlo-index</directory>
                                 </resource>
                             </resources>              
                         </configuration>            
