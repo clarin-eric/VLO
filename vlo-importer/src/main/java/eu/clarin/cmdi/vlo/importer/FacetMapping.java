@@ -1,6 +1,8 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -9,18 +11,18 @@ import java.util.List;
 
 public class FacetMapping {
 
-    private List<FacetConfiguration> facets = new ArrayList<FacetConfiguration>();
+    private HashMap<String, FacetConfiguration> facets = new HashMap<String, FacetConfiguration>();
 
-    public List<FacetConfiguration> getFacets() {
-        return facets;
+    public Collection<FacetConfiguration> getFacets() {
+        return facets.values();
     }
 
     public void addFacet(FacetConfiguration facetConfiguration) {
-        facets.add(facetConfiguration);
+        facets.put(facetConfiguration.getName(), facetConfiguration);
     }
     
     public FacetConfiguration getFacetConfiguration(String facetName){
-    	return this.facets.stream().filter(fc -> fc.getName().equalsIgnoreCase(facetName)).findFirst().orElse(null);
+    	return this.facets.computeIfAbsent(facetName, v -> new FacetConfiguration(this));
     }
 
 }

@@ -169,22 +169,22 @@ public class MetadataImporter {
         	imb.put(fieldNameService.getFieldName(FieldKey.CONTINENT), new ContinentNamePostNormalizer());
         if(fieldNameService.getFieldName(FieldKey.COUNTRY) != null)
         	imb.put(fieldNameService.getFieldName(FieldKey.COUNTRY), new CountryNamePostNormalizer(config));
-        if(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE), new LanguageCodePostNormalizer(config, languageCodeUtils));
+//        if(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE) != null)
+//        	imb.put(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE), new LanguageCodePostNormalizer(config, languageCodeUtils));
         if(fieldNameService.getFieldName(FieldKey.LANGUAGE_NAME) != null)
         	imb.put(fieldNameService.getFieldName(FieldKey.LANGUAGE_NAME), new LanguageNamePostNormalizer(languageCodeUtils));
-        if(fieldNameService.getFieldName(FieldKey.AVAILABILITY) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.AVAILABILITY), new AvailabilityPostNormalizer(config));
-        if(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE), new LicenseTypePostNormalizer(config));
-        if(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE), new LicenseTypePostNormalizer(config));
-        if(fieldNameService.getFieldName(FieldKey.ORGANISATION) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.ORGANISATION), new OrganisationPostNormalizer(config));
+//        if(fieldNameService.getFieldName(FieldKey.AVAILABILITY) != null)
+//        	imb.put(fieldNameService.getFieldName(FieldKey.AVAILABILITY), new AvailabilityPostNormalizer(config));
+//        if(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE) != null)
+//        	imb.put(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE), new LicenseTypePostNormalizer(config));
+//        if(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE) != null)
+//        	imb.put(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE), new LicenseTypePostNormalizer(config));
+//        if(fieldNameService.getFieldName(FieldKey.ORGANISATION) != null)
+//        	imb.put(fieldNameService.getFieldName(FieldKey.ORGANISATION), new OrganisationPostNormalizer(config));
         if(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE) != null)
         	imb.put(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE), new TemporalCoveragePostNormalizer());
-        if(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT), new NationalProjectPostNormalizer(config));
+//        if(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT) != null)
+//        	imb.put(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT), new NationalProjectPostNormalizer(config));
         if(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE) != null)
         	imb.put(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE), new CMDIComponentProfileNamePostNormalizer(config));
         if(fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS) != null)
@@ -871,7 +871,7 @@ public class MetadataImporter {
     }
 
     private MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, VLOMarshaller marshaller, SolrBridge solrBridge) {
-        this(config, languageCodeUtils, new FacetMappingFactory(config, marshaller), marshaller, null, solrBridge);
+        this(config, languageCodeUtils, new FacetMappingFactory(config), marshaller, null, solrBridge);
     }
 
 }

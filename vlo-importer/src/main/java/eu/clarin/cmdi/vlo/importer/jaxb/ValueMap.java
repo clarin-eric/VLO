@@ -46,9 +46,9 @@ import javax.xml.bind.annotation.XmlType;
 public class ValueMap {
 
     @XmlElement(name = "target-facet")
-    protected List<TargetFacet> targetFacet;
+    protected List<TargetFacet> targetFacets;
     @XmlElement(name = "target-value-set", required = true)
-    protected List<TargetValueSet> targetValueSet;
+    protected List<TargetValueSet> targetValueSets;
 
     /**
      * Gets the value of the targetFacet property.
@@ -72,11 +72,11 @@ public class ValueMap {
      * 
      * 
      */
-    public List<TargetFacet> getTargetFacet() {
-        if (targetFacet == null) {
-            targetFacet = new ArrayList<TargetFacet>();
+    public List<TargetFacet> getTargetFacets() {
+        if (targetFacets == null) {
+            targetFacets = new ArrayList<TargetFacet>();
         }
-        return this.targetFacet;
+        return this.targetFacets;
     }
 
     /**
@@ -102,10 +102,10 @@ public class ValueMap {
      * 
      */
     public List<TargetValueSet> getTargetValueSet() {
-        if (targetValueSet == null) {
-            targetValueSet = new ArrayList<TargetValueSet>();
+        if (targetValueSets == null) {
+            targetValueSets = new ArrayList<TargetValueSet>();
         }
-        return this.targetValueSet;
+        return this.targetValueSets;
     }
 
 }

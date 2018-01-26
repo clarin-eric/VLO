@@ -9,7 +9,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
+import eu.clarin.cmdi.vlo.importer.jaxb.FacetConceptMapping;
+import eu.clarin.cmdi.vlo.importer.jaxb.FacetConceptMapping.FacetConcept;
 
 public class FacetConceptMappingTest {
 

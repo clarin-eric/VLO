@@ -49,7 +49,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class OriginFacet {
 
     @XmlElement(name = "value-map", required = true)
-    protected List<ValueMap> valueMap;
+    protected List<ValueMap> valueMaps;
     @XmlAttribute(name = "name", required = true)
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "NCName")
@@ -77,11 +77,11 @@ public class OriginFacet {
      * 
      * 
      */
-    public List<ValueMap> getValueMap() {
-        if (valueMap == null) {
-            valueMap = new ArrayList<ValueMap>();
+    public List<ValueMap> getValueMaps() {
+        if (valueMaps == null) {
+            valueMaps = new ArrayList<ValueMap>();
         }
-        return this.valueMap;
+        return this.valueMaps;
     }
 
     /**

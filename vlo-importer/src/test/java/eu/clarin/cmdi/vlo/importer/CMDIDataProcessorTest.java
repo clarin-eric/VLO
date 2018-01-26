@@ -32,7 +32,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         super.setup();
         // make sure the mapping file for testing is used
         config.setFacetConceptsFile(getTestFacetConceptFilePath());
-        facetMappingFactory = new FacetMappingFactory(config, marshaller);
+        facetMappingFactory = new FacetMappingFactory(config);
         resourceStructureGraph = new ResourceStructureGraph();
     }
 

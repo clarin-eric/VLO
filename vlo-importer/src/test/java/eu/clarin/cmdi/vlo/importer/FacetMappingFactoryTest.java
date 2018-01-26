@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.importer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -31,7 +32,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
     public void setup() throws Exception {
         super.setup();
         config.setFacetConceptsFile(FACETCONCEPTS_FILENAME);
-        facetMappingFactory = new FacetMappingFactory(config, marshaller);
+        facetMappingFactory = new FacetMappingFactory(config);
     }
 
     @Test
@@ -39,7 +40,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
         FacetMapping facetMapping = facetMappingFactory
                 .getFacetMapping(FACETCONCEPTS_FILENAME, VALUEMAPPINGS_FILENAME, IMDI_PROFILE_ID, true);
 
-        List<FacetConfiguration> facets = facetMapping.getFacets();
+        List<FacetConfiguration> facets = new ArrayList<FacetConfiguration>(facetMapping.getFacets());
         assertEquals(23, facets.size());
 
         int index = 0;
@@ -195,7 +196,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
         FacetMapping facetMapping = facetMappingFactory
                 .getFacetMapping(FACETCONCEPTS_FILENAME, VALUEMAPPINGS_FILENAME, OLAC_PROFILE_ID, true);
 
-        List<FacetConfiguration> facets = facetMapping.getFacets();
+        List<FacetConfiguration> facets = new ArrayList<FacetConfiguration>(facetMapping.getFacets());
         assertEquals(23, facets.size());
 
         int index = 0;
@@ -332,7 +333,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
         FacetMapping facetMapping = facetMappingFactory
                 .getFacetMapping(FACETCONCEPTS_FILENAME, VALUEMAPPINGS_FILENAME, LRT_PROFILE_ID, true);
 
-        List<FacetConfiguration> facets = facetMapping.getFacets();
+        List<FacetConfiguration> facets = new ArrayList<FacetConfiguration>(facetMapping.getFacets());
         assertEquals(23, facets.size());
 
         int index = 0;
@@ -481,7 +482,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
         FacetMapping facetMapping = facetMappingFactory
                 .getFacetMapping(FACETCONCEPTS_FILENAME, VALUEMAPPINGS_FILENAME, ID_PROFILE_ID, true);
 
-        List<FacetConfiguration> facets = facetMapping.getFacets();
+        List<FacetConfiguration> facets = new ArrayList<FacetConfiguration>(facetMapping.getFacets());
 
         FacetConfiguration facet = facets.get(0);
 
@@ -511,7 +512,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
     public void testStringBasedBlacklisting() {
         FacetMapping facetMapping = facetMappingFactory
                 .getFacetMapping(FACETCONCEPTS_FILENAME, VALUEMAPPINGS_FILENAME, TEXTCORPUSPROFILE_PROFILE_ID, true);
-        List<FacetConfiguration> facets = facetMapping.getFacets();
+        List<FacetConfiguration> facets = new ArrayList<FacetConfiguration>(facetMapping.getFacets());
 
         FacetConfiguration facet = facets.get(5);
         assertEquals(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE), facet.getName());
@@ -529,7 +530,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
     public void testConceptLinkAttributMapping() {
         FacetMapping facetMapping = facetMappingFactory
                 .getFacetMapping(FACETCONCEPTS_FILENAME, VALUEMAPPINGS_FILENAME, TEIHEADER_PROFILE_ID, true);
-        List<FacetConfiguration> facets = facetMapping.getFacets();
+        List<FacetConfiguration> facets = new ArrayList<FacetConfiguration>(facetMapping.getFacets());
 
         FacetConfiguration facet = facets.get(20);
         assertEquals(fieldNameService.getFieldName(FieldKey.AVAILABILITY), facet.getName());
@@ -540,7 +541,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
     public void testCLAVASMapping() throws IOException {
         FacetMapping facetMapping = facetMappingFactory
                 .getFacetMapping(FACETCONCEPTS_FILENAME, VALUEMAPPINGS_FILENAME, CLAVAS_PROFILE_ID, true);
-        List<FacetConfiguration> facets = facetMapping.getFacets();
+        List<FacetConfiguration> facets = new ArrayList<FacetConfiguration>(facetMapping.getFacets());
 
         FacetConfiguration facet = facets.get(8);
         assertEquals(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE), facet.getName());

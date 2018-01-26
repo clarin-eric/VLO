@@ -10,9 +10,6 @@ import static eu.clarin.cmdi.vlo.CmdConstants.CMD_NAMESPACE;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
-import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.AcceptableContext;
-import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.RejectableContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,9 +37,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import eu.clarin.cmdi.vlo.importer.jaxb.*;
+import eu.clarin.cmdi.vlo.importer.jaxb.FacetConceptMapping.AcceptableContext;
+import eu.clarin.cmdi.vlo.importer.jaxb.FacetConceptMapping.FacetConcept;
+import eu.clarin.cmdi.vlo.importer.jaxb.FacetConceptMapping.RejectableContext;
+import eu.clarin.cmdi.vlo.importer.mapping.ConditionTargetSet;
+import eu.clarin.cmdi.vlo.importer.mapping.RegExCondition;
+import eu.clarin.cmdi.vlo.importer.mapping.StringCondition;
+import eu.clarin.cmdi.vlo.importer.mapping.Target;
+
 
 /**
  * Creates facet-mappings (xpaths) from a configuration. As they say "this is
@@ -58,35 +61,70 @@ public class FacetMappingFactory {
     /**
      * Our one instance of the FMF.
      */
-    private final VloConfig config;
-    private final VLOMarshaller marshaller;
+    private final VloConfig vloConfig;
+
     private final FieldNameServiceImpl fieldNameService;
+    
+    private FacetConceptMapping facetConecptMapping;
+    private ValueMappings valueMappings;
+    
+
+    
+    //private final ValueMapping valueMappings;
 
 
-    public FacetMappingFactory(VloConfig config, VLOMarshaller marshaller) {
-        this.config = config;
-        this.fieldNameService = new FieldNameServiceImpl(config);
-        this.marshaller = marshaller;
+    public FacetMappingFactory(VloConfig vloConfig){
+        this.vloConfig = vloConfig;
+        this.fieldNameService = new FieldNameServiceImpl(vloConfig);
         
-        try {
-			ObjectFactory fac = new ObjectFactory();
+        ObjectFactory objFac = null;
+		try {
+			objFac = new ObjectFactory();
 			
-			ValueMappings vm = (ValueMappings) fac.unmarshal(config.getValueMappingsFile());
-		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}
+		catch (JAXBException ex) {
+			LOG.error("");
+		}
+		
+		try {
+			
+			this.facetConecptMapping = (FacetConceptMapping) objFac.unmarshal(vloConfig.getFacetConceptsFile()); 
+	        
+		} 
+		catch (JAXBException ex) {
+			LOG.error("");
 		}
         
-        
+		catch (FileNotFoundException ex) {
+			LOG.error("");
+		} 
+		catch (SAXException ex) {
+			LOG.error("");
+		} 
+		catch (ParserConfigurationException ex) {
+			LOG.error("");
+		} 
+		
+		try {
+			this.valueMappings = (ValueMappings) objFac.unmarshal(vloConfig.getValueMappingsFile());
+		} 
+		catch (FileNotFoundException ex) {
+			// TODO Auto-generated catch block
+			ex.printStackTrace();
+		} 
+		catch (JAXBException ex) {
+			// TODO Auto-generated catch block
+			ex.printStackTrace();
+		} 
+		catch (SAXException ex) {
+			// TODO Auto-generated catch block
+			ex.printStackTrace();
+		} 
+		catch (ParserConfigurationException ex) {
+			// TODO Auto-generated catch block
+			ex.printStackTrace();
+		}
+
     }
 
     /**
@@ -135,17 +173,18 @@ public class FacetMappingFactory {
      */
     private FacetMapping createMapping(String facetConcepts, String xsd, Boolean useLocalXSDCache) {
         LOG.debug("Creating mapping for {} using {} (useLocalXSDCache: {})", xsd, facetConcepts, useLocalXSDCache);
-        FacetMapping result = new FacetMapping();
-        // Gets the configuration. VLOMarshaller only reads in the facetconceptmapping.xml file and returns the result (though the reading in is implicit).
-        FacetConceptMapping conceptMapping = marshaller.getFacetConceptMapping(facetConcepts);
+        FacetMapping facetMapping = new FacetMapping();
+        // Gets the configuration. VLOMarshaller only reads in the facetconceptmapping.xml file and returns the facetMapping (though the reading in is implicit).
+        //FacetConceptMapping conceptMapping = marshaller.getFacetConceptMapping(facetConcepts); //must be replaced !!!!!!!!!!!!
         try {
             //The magic
             Map<String, List<Pattern>> conceptLinkPathMapping = createConceptLinkPathMapping(xsd, useLocalXSDCache);
             Map<Pattern, String> pathConceptLinkMapping = null;
             // Below we put the stuff we found into the configuration class.
-            for (FacetConcept facetConcept : conceptMapping.getFacetConcepts()) {
+            for (FacetConcept facetConcept : this.facetConecptMapping.getFacetConcepts()) {
                 LOG.trace("-- Facet concept {}", facetConcept);
-                FacetConfiguration config = new FacetConfiguration(result);
+
+                FacetConfiguration facetConfiguration = facetMapping.getFacetConfiguration(facetConcept.getName());
                 List<Pattern> xpaths = new ArrayList<>();
                 handleId(xpaths, facetConcept);
                 for (String concept : facetConcept.getConcepts()) {
@@ -224,53 +263,90 @@ public class FacetMappingFactory {
                     }
                 }
 
-                config.setCaseInsensitive(facetConcept.isCaseInsensitive());
-                config.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
-                config.setMultilingual(facetConcept.isMultilingual());
-                config.setName(facetConcept.getName());
+                facetConfiguration.setCaseInsensitive(facetConcept.isCaseInsensitive());
+                facetConfiguration.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
+                facetConfiguration.setMultilingual(facetConcept.isMultilingual());
+//                facetConfiguration.setName(facetConcept.getName());
 
                 LinkedHashSet<Pattern> linkedHashSet = new LinkedHashSet<>(xpaths);
                 if (xpaths.size() != linkedHashSet.size()) {
                     LOG.error("Duplicate XPaths for facet {} in: {}.", facetConcept.getName(), xpaths);
                 }
-                config.setPatterns(new ArrayList<>(linkedHashSet));
-                config.setFallbackPatterns(facetConcept.getPatterns());
-
-//                config.setDerivedFacets(facetConcept.getDerivedFacets());
+                facetConfiguration.setPatterns(new ArrayList<>(linkedHashSet));
+                facetConfiguration.setFallbackPatterns(facetConcept.getPatterns());
                 
-                
-                
-
-/*                if (!config.getPatterns().isEmpty() || !config.getFallbackPatterns().isEmpty()) {
-                    result.addFacet(config);
-                }*/
-                result.addFacet(config);
-            }
-            
-            //now where all FacetConfigurations are created we can build references for derived facets
-            FacetConfiguration derivedFacet;
-            
-            for (FacetConcept facetConcept : conceptMapping.getFacetConcepts()) {
-            	FacetConfiguration fc = result.getFacetConfiguration(facetConcept.getName());
-            	
-            	for(String derivedFacetName : facetConcept.getDerivedFacets()){
-            		if((derivedFacet = result.getFacetConfiguration(derivedFacetName)) == null) {
-            			LOG.warn("derived facet " + derivedFacetName + " can't be processed since there is NO valid facetConcept defined for this facet");
-            		}
-            		else
-            			fc.addDerivedFacet(derivedFacet);
+                //derived Facets
+                for(String derivedFacetName : facetConcept.getDerivedFacets()){
+                	
+            		facetConfiguration.addDerivedFacet(facetMapping.getFacetConfiguration(derivedFacetName));
             	}
+                
+                setValueMapping(facetMapping, facetConfiguration);
+                
             }
-        //... and crossfacets
-/*            if(this.config.isUseCrossMapping()){
-            	setCrossMapping(result);
-            }
-*/            
+            
         } 
         catch (NavException | URISyntaxException e) {
             LOG.error("Error creating facetMapping from xsd: {}", xsd, e);
         }
-        return result;
+        return facetMapping;
+    }
+    
+    public void setDerivedFacets() {
+    	
+    }
+    
+    public void setValueMapping(FacetMapping facetMapping, FacetConfiguration facetConfiguration) {
+    	
+    	OriginFacet originFacet = this.valueMappings.getOriginFacet().stream().filter(o -> o.getName().equals(facetConfiguration.getName())).findFirst().orElse(null);
+    	
+    	if(originFacet == null) //no value mapping defined for this facaet
+    		return; 
+    	//(originFacet -> originFacet.).orElse(null) facetConfiguration.getName()
+		List<TargetValue> targets;
+		
+		
+		List<ConditionTargetSet> conditionTargetSets;
+
+		
+		ConditionTargetSet conditionTargetSet;
+		
+
+		
+		
+		
+
+			for(ValueMap valueMap : originFacet.getValueMaps()) { 
+				
+				
+				
+				for(TargetValueSet targetValueSet : valueMap.getTargetValueSet()) {
+					conditionTargetSets = new ArrayList<ConditionTargetSet>();
+					
+					conditionTargetSet = new ConditionTargetSet();					
+					for(SourceValue sourceValue : targetValueSet.getSouceValues()) {
+						if(sourceValue.isIsRegex()) {
+							conditionTargetSet.addCondtion(new RegExCondition(sourceValue.getContent()));
+						}
+						else {
+							conditionTargetSet.addCondtion(new StringCondition(sourceValue.getContent(), sourceValue.isCaseSensitive()));
+						}
+					}
+					
+					for(TargetValue targetValue: targetValueSet.getTargetValues()) {
+						conditionTargetSet.addTarget(
+								new Target(facetMapping.getFacetConfiguration(targetValue.getFacet()), targetValue.getValue())
+								
+							);
+					}
+					
+					conditionTargetSets.add(conditionTargetSet);
+					
+					facetConfiguration.addConditionTargetSet(conditionTargetSet);
+				}
+			
+
+		}
     }
 
     /**
@@ -324,7 +400,7 @@ public class FacetMappingFactory {
         if (useLocalXSDCache) {
             parseSuccess = vg.parseFile(Thread.currentThread().getContextClassLoader().getResource("testProfiles/" + xsd + ".xsd").getPath(), true);
         } else {
-            parseSuccess = vg.parseHttpUrl(config.getComponentRegistryProfileSchema(xsd), true);
+            parseSuccess = vg.parseHttpUrl(vloConfig.getComponentRegistryProfileSchema(xsd), true);
         }
 
         if (!parseSuccess) {
@@ -353,7 +429,7 @@ public class FacetMappingFactory {
                     int vocabIndex = getVocabIndex(vn);
                     if (vocabIndex != -1) {
                         String uri = vn.toNormalizedString(vocabIndex);
-                        Vocabulary vocab = new Vocabulary(config.getVocabularyRegistryUrl(), new URI(uri));
+                        Vocabulary vocab = new Vocabulary(vloConfig.getVocabularyRegistryUrl(), new URI(uri));
                         xpath.setVocabulary(vocab);
                         int propIndex = getVocabPropIndex(vn);
                         if (propIndex != -1) {
@@ -393,7 +469,7 @@ public class FacetMappingFactory {
                             int vocabIndex = getVocabIndex(vn);
                             if (vocabIndex != -1) {
                                 String uri = vn.toNormalizedString(vocabIndex);
-                                Vocabulary vocab = new Vocabulary(config.getVocabularyRegistryUrl(), new URI(uri));
+                                Vocabulary vocab = new Vocabulary(vloConfig.getVocabularyRegistryUrl(), new URI(uri));
                                 xpath.setVocabulary(vocab);
                                 int propIndex = getVocabPropIndex(vn);
                                 if (propIndex != -1) {
@@ -560,4 +636,5 @@ public class FacetMappingFactory {
         }
         fileWriter.close();
     }
+    
 }

@@ -13,7 +13,6 @@ import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CFMCondition;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
-import eu.clarin.cmdi.vlo.importer.FacetConceptMapping;
 import eu.clarin.cmdi.vlo.importer.FacetConfiguration;
 import eu.clarin.cmdi.vlo.importer.FacetMapping;
 import eu.clarin.cmdi.vlo.importer.FacetMappingFactory;
@@ -22,6 +21,10 @@ import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
 import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
 import eu.clarin.cmdi.vlo.importer.Vocabulary;
 import eu.clarin.cmdi.vlo.importer.CFMCondition.FacetValuePair;
+import eu.clarin.cmdi.vlo.importer.jaxb.FacetConceptMapping;
+import eu.clarin.cmdi.vlo.importer.jaxb.TargetValue;
+import eu.clarin.cmdi.vlo.importer.mapping.ConditionTargetSet;
+import eu.clarin.cmdi.vlo.importer.mapping.Target;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
 
 import java.io.File;
@@ -31,6 +34,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -256,7 +260,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @throws VTDException
      */
     private void processFacets(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
-        final List<FacetConfiguration> facetList = facetMapping.getFacets();
+        final Collection<FacetConfiguration> facetList = facetMapping.getFacets();
         final List<String> processedFacets = new ArrayList<>(facetList.size());
         for (FacetConfiguration config : facetList) {
             processedFacets.add(config.getName());
@@ -363,25 +367,24 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             final String languageCode = extractLanguageCode(nav);
             
             
-            //implementation of cross facet mapping (cfm)
-/*            if(!config.getConditions().isEmpty()){
-            	
-            	for(CFMCondition condition : config.getConditions()){
-            		if(condition.getIfValue().equals(value)){ //the value matches the condition-value
-            			for(FacetValuePair fvp : condition.getFacetValuePairs()){
-            				ArrayList<Pair<String,String>> cfmList = new ArrayList<Pair<String,String>>();
-            				cfmList.add(new ImmutablePair<String,String>(fvp.getValue(), languageCode));
-            				
-            				insertFacetValues(fvp.getFacetConfiguration().getName(), cfmList, cmdiData, fvp.getFacetConfiguration().getAllowMultipleValues(), fvp.getFacetConfiguration().isCaseInsensitive(), false);
-
-            			}
+            // implementation of valuemapping (replacement of cfm, issue 93)
+            for(ConditionTargetSet conditionTargetSet : config.getConditionTargetSets()) {
+            	if(conditionTargetSet.matches(value)) {
+            		
+            		for(Target target :conditionTargetSet.getTargets()) {
+        				ArrayList<Pair<String,String>> cfmList = new ArrayList<Pair<String,String>>();
+        				cfmList.add(new ImmutablePair<String,String>(target.getValue(), languageCode));
+        				
+        				insertFacetValues(target.getFacetConfiguration().getName(), cfmList, cmdiData, target.getFacetConfiguration().getAllowMultipleValues(), target.getFacetConfiguration().isCaseInsensitive(), false);
+            			
             		}
+            		
+            		return true;
+            		
             	}
             	
-            	return true;
             }
-*/            
-            //end of cfm implementation
+            // end of valuemapping implementation
 
             final List<String> postProcessed = postProcess(config.getName(), value, cmdiData);
             addValuesToList(config.getName(), postProcessed, valueLangPairList, languageCode);
