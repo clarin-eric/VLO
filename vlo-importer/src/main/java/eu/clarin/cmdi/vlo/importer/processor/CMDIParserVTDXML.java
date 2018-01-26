@@ -11,8 +11,8 @@ import eu.clarin.cmdi.vlo.CmdConstants;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.importer.CFMCondition;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.FacetConceptMapping;
 import eu.clarin.cmdi.vlo.importer.FacetConfiguration;
 import eu.clarin.cmdi.vlo.importer.FacetMapping;
 import eu.clarin.cmdi.vlo.importer.FacetMappingFactory;
@@ -20,9 +20,6 @@ import eu.clarin.cmdi.vlo.importer.Pattern;
 import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
 import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
 import eu.clarin.cmdi.vlo.importer.Vocabulary;
-import eu.clarin.cmdi.vlo.importer.CFMCondition.FacetValuePair;
-import eu.clarin.cmdi.vlo.importer.jaxb.FacetConceptMapping;
-import eu.clarin.cmdi.vlo.importer.jaxb.TargetValue;
 import eu.clarin.cmdi.vlo.importer.mapping.ConditionTargetSet;
 import eu.clarin.cmdi.vlo.importer.mapping.Target;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
@@ -123,9 +120,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             throw new RuntimeException("Cannot get xsd schema so cannot get a proper mapping. Parse failed!");
         }
         
-        final String facetConceptsFile = config.getFacetConceptsFile();
-        final String valueMappingsFile = config.getValueMappingsFile();
-        return facetMappingFactory.getFacetMapping(facetConceptsFile, valueMappingsFile, profileId, useLocalXSDCache);
+        return facetMappingFactory.getFacetMapping(profileId, useLocalXSDCache);
     }
 
     /**

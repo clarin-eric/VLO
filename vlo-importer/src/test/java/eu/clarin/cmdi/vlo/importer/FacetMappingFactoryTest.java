@@ -32,13 +32,13 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
     public void setup() throws Exception {
         super.setup();
         config.setFacetConceptsFile(FACETCONCEPTS_FILENAME);
-        facetMappingFactory = new FacetMappingFactory(config);
+        facetMappingFactory = new FacetMappingFactory(config, marshaller);
     }
 
     @Test
     public void testGetImdiMapping() {
         FacetMapping facetMapping = facetMappingFactory
-                .getFacetMapping(FACETCONCEPTS_FILENAME, VALUEMAPPINGS_FILENAME, IMDI_PROFILE_ID, true);
+                .getFacetMapping(IMDI_PROFILE_ID, true);
 
         List<FacetConfiguration> facets = new ArrayList<FacetConfiguration>(facetMapping.getFacets());
         assertEquals(23, facets.size());
@@ -194,7 +194,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
     @Test
     public void testGetOlacMapping() {
         FacetMapping facetMapping = facetMappingFactory
-                .getFacetMapping(FACETCONCEPTS_FILENAME, VALUEMAPPINGS_FILENAME, OLAC_PROFILE_ID, true);
+                .getFacetMapping(OLAC_PROFILE_ID, true);
 
         List<FacetConfiguration> facets = new ArrayList<FacetConfiguration>(facetMapping.getFacets());
         assertEquals(23, facets.size());
@@ -331,7 +331,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
     @Test
     public void testGetLrtMapping() {
         FacetMapping facetMapping = facetMappingFactory
-                .getFacetMapping(FACETCONCEPTS_FILENAME, VALUEMAPPINGS_FILENAME, LRT_PROFILE_ID, true);
+                .getFacetMapping(LRT_PROFILE_ID, true);
 
         List<FacetConfiguration> facets = new ArrayList<FacetConfiguration>(facetMapping.getFacets());
         assertEquals(23, facets.size());
@@ -480,7 +480,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
     public void testGetIdMapping() throws Exception {
 
         FacetMapping facetMapping = facetMappingFactory
-                .getFacetMapping(FACETCONCEPTS_FILENAME, VALUEMAPPINGS_FILENAME, ID_PROFILE_ID, true);
+                .getFacetMapping(ID_PROFILE_ID, true);
 
         List<FacetConfiguration> facets = new ArrayList<FacetConfiguration>(facetMapping.getFacets());
 
@@ -511,7 +511,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
     @Test
     public void testStringBasedBlacklisting() {
         FacetMapping facetMapping = facetMappingFactory
-                .getFacetMapping(FACETCONCEPTS_FILENAME, VALUEMAPPINGS_FILENAME, TEXTCORPUSPROFILE_PROFILE_ID, true);
+                .getFacetMapping(TEXTCORPUSPROFILE_PROFILE_ID, true);
         List<FacetConfiguration> facets = new ArrayList<FacetConfiguration>(facetMapping.getFacets());
 
         FacetConfiguration facet = facets.get(5);
@@ -529,7 +529,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
     @Test
     public void testConceptLinkAttributMapping() {
         FacetMapping facetMapping = facetMappingFactory
-                .getFacetMapping(FACETCONCEPTS_FILENAME, VALUEMAPPINGS_FILENAME, TEIHEADER_PROFILE_ID, true);
+                .getFacetMapping(TEIHEADER_PROFILE_ID, true);
         List<FacetConfiguration> facets = new ArrayList<FacetConfiguration>(facetMapping.getFacets());
 
         FacetConfiguration facet = facets.get(20);
@@ -540,7 +540,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
     @Test
     public void testCLAVASMapping() throws IOException {
         FacetMapping facetMapping = facetMappingFactory
-                .getFacetMapping(FACETCONCEPTS_FILENAME, VALUEMAPPINGS_FILENAME, CLAVAS_PROFILE_ID, true);
+                .getFacetMapping(CLAVAS_PROFILE_ID, true);
         List<FacetConfiguration> facets = new ArrayList<FacetConfiguration>(facetMapping.getFacets());
 
         FacetConfiguration facet = facets.get(8);

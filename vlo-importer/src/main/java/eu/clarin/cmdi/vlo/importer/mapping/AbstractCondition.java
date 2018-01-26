@@ -16,6 +16,8 @@ public abstract class AbstractCondition {
 		this.targetFacets = new ArrayList<FacetConfiguration>();
 	}
 	
+	public abstract void setExpression(String expression);
+	
 	public abstract boolean matches(String expression);
 	
 	public void addTargetFacet(FacetConfiguration facetConfiguration) {

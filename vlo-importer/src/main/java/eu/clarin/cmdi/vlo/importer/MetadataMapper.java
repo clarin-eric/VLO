@@ -100,7 +100,7 @@ public class MetadataMapper {
             config.setPrintMapping(true);
             final LanguageCodeUtils languageCodeUtils = new LanguageCodeUtils(config);
             final VLOMarshaller marshaller = new VLOMarshaller();
-            final FacetMappingFactory facetMappingFactory = new FacetMappingFactory(config);
+            final FacetMappingFactory facetMappingFactory = new FacetMappingFactory(config, marshaller);
 
             CMDIDataProcessor processor = new CMDIParserVTDXML(MetadataImporter.registerPostProcessors(config,  new FieldNameServiceImpl(config), languageCodeUtils), config, facetMappingFactory, marshaller, false);
 

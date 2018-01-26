@@ -3,8 +3,6 @@ package eu.clarin.cmdi.vlo.importer.mapping;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.clarin.cmdi.vlo.importer.jaxb.TargetValue;
-
 public class ConditionTargetSet {
 	private final List<AbstractCondition> conditions;
 	private final List<Target> targets;

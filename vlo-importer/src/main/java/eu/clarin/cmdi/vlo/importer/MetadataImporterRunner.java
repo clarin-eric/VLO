@@ -135,7 +135,7 @@ public class MetadataImporterRunner {
     protected static MetadataImporter runImporter(final VloConfig config, String datarootsList) throws MalformedURLException, IOException {
         final LanguageCodeUtils languageCodeUtils = new LanguageCodeUtils(config);
         final VLOMarshaller marshaller = new VLOMarshaller();
-        final FacetMappingFactory facetMappingFactory = new FacetMappingFactory(config);
+        final FacetMappingFactory facetMappingFactory = new FacetMappingFactory(config, marshaller);
 
         // optionally, modify the configuration here
         // create and start the importer

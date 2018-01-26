@@ -7,10 +7,18 @@ import java.util.regex.*;
  *
  */
 public class RegExCondition extends AbstractCondition {
-	private final Pattern pattern;
+	private Pattern pattern;
 	
-	public RegExCondition(String regex) {
-		this.pattern = Pattern.compile(regex);
+	public RegExCondition() {
+		
+	}
+	
+	public void setExpression(String expression) {
+		this.pattern = Pattern.compile(expression);
+	}
+	
+	public RegExCondition(String expression) {
+		this.pattern = Pattern.compile(expression);
 	}
 
 	@Override
