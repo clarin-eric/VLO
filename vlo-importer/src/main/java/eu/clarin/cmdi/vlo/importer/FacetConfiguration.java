@@ -29,8 +29,9 @@ public class FacetConfiguration {
     // (for example for CMD elements with multilingual == yes)
     private boolean multilingual = false;
     
-    public FacetConfiguration(FacetMapping mapping){
+    public FacetConfiguration(FacetMapping mapping, String name){
     	this.mapping = mapping;
+    	this.name = name;
     }
 
     public void setCaseInsensitive(boolean caseValue) {

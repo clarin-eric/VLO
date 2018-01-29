@@ -1,25 +1,25 @@
 package eu.clarin.cmdi.vlo.importer.mapping;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Vector;
 
 public class ConditionTargetSet {
-	private final List<AbstractCondition> conditions;
-	private final List<Target> targets;
+	private final Vector<AbstractCondition> conditions;
+	private final Vector<TargetFacet> targets;
 	
 	public ConditionTargetSet() {
-		this.conditions = new ArrayList<AbstractCondition>();
-		this.targets = new ArrayList<Target>();
+		this.conditions = new Vector<AbstractCondition>();
+		this.targets = new Vector<TargetFacet>();
 	}
 	
 	public void addCondtion(AbstractCondition condition) {
 		this.conditions.add(condition);
 	}
 	
-	public void addTarget(Target target) {
+	public void addTarget(TargetFacet target) {
 		this.targets.add(target);
 	}
-	public List<Target> getTargets(){
+	public Vector<TargetFacet> getTargets(){
 		return this.targets;
 	}
 	

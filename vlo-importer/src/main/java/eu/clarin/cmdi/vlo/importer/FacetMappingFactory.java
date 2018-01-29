@@ -32,11 +32,13 @@ import java.util.Date;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -72,16 +74,18 @@ public class FacetMappingFactory {
         this.conceptMapping = marshaller.getFacetConceptMapping(vloConfig.getFacetConceptsFile());
         
         this.conditionTargetSetPerFacet = new HashMap<String, List<ConditionTargetSet>>();
-        
+      
         SAXParserFactory fac = SAXParserFactory.newInstance();
 		fac.setXIncludeAware(true);
 		fac.setNamespaceAware(true);
 		
-		try {
-			fac.newSAXParser().parse(vloConfig.getValueMappingsFile(), new ValueMappingsHandler(this.conceptMapping, this.conditionTargetSetPerFacet));
-		} catch (SAXException | IOException | ParserConfigurationException ex) {
-			LOG.error("Value Mappings no initialized!", ex);
-		}
+		
+
+			try {
+				fac.newSAXParser().parse(vloConfig.getValueMappingsFile(), new ValueMappingsHandler(this.conceptMapping, this.conditionTargetSetPerFacet));
+			} catch (SAXException | IOException | ParserConfigurationException ex) {
+				LOG.error("Value Mappings no initialized!", ex);
+			}
     }
 
     /**

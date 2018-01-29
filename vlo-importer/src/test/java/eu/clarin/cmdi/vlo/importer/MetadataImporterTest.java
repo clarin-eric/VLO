@@ -305,7 +305,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         dataRoot.setPrefix("http://example.com");
         config.setDataRoots(Collections.singletonList(dataRoot));
         config.setFacetConceptsFile(ImporterTestcase.getTestFacetConceptFilePath());
-        
+        config.setValueMappingsFile(ImporterTestcase.getTestValueMappingsFilePath());
 
 
     }

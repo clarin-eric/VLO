@@ -2,7 +2,7 @@ package eu.clarin.cmdi.vlo.importer.mapping;
 
 import eu.clarin.cmdi.vlo.importer.FacetConfiguration;
 
-public class Target {
+public class TargetFacet {
 	private FacetConfiguration facetConfiguration;
 	
 	private boolean overrideExistingValues;
@@ -10,13 +10,20 @@ public class Target {
 	private String value;
 	
 	
-	public Target(FacetConfiguration facetConfiguration, String value) {
+	public TargetFacet(FacetConfiguration facetConfiguration, String value) {
 		super();
 		this.facetConfiguration = facetConfiguration;
 		this.value = value;
 	}
 	
-	public Target(FacetConfiguration facetConfiguration, String overrideExistingValues, String removeSourceValue) {
+	public TargetFacet(TargetFacet targetFacet) {
+		this.facetConfiguration = targetFacet.facetConfiguration;
+		this.overrideExistingValues = targetFacet.overrideExistingValues;
+		this.removeSourceValue = targetFacet.removeSourceValue;
+		this.value = targetFacet.value;
+	}
+	
+	public TargetFacet(FacetConfiguration facetConfiguration, String overrideExistingValues, String removeSourceValue) {
 		this.facetConfiguration = facetConfiguration;
 		this.overrideExistingValues = "true".equals(overrideExistingValues);
 		this.removeSourceValue = "true".equals(removeSourceValue);
@@ -28,6 +35,14 @@ public class Target {
 	public void setFacetConfiguration(FacetConfiguration facetConfiguration) {
 		this.facetConfiguration = facetConfiguration;
 	}
+	
+	public void setOverrideExistingValues(boolean overrideExistingValues) {
+		this.overrideExistingValues = overrideExistingValues;
+	}
+	
+	public void setRemoveSourceValue(boolean removeSourceValue) {
+		this.removeSourceValue = removeSourceValue;
+	}
 	public String getValue() {
 		return value;
 	}
@@ -35,6 +50,7 @@ public class Target {
 		this.value = value;
 	}
 	
-	
-
+	public TargetFacet clone() {
+		return new TargetFacet(this);
+	}
 }

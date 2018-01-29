@@ -21,7 +21,7 @@ import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
 import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
 import eu.clarin.cmdi.vlo.importer.Vocabulary;
 import eu.clarin.cmdi.vlo.importer.mapping.ConditionTargetSet;
-import eu.clarin.cmdi.vlo.importer.mapping.Target;
+import eu.clarin.cmdi.vlo.importer.mapping.TargetFacet;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
 
 import java.io.File;
@@ -366,7 +366,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             for(ConditionTargetSet conditionTargetSet : config.getConditionTargetSets()) {
             	if(conditionTargetSet.matches(value)) {
             		
-            		for(Target target :conditionTargetSet.getTargets()) {
+            		for(TargetFacet target :conditionTargetSet.getTargets()) {
         				ArrayList<Pair<String,String>> cfmList = new ArrayList<Pair<String,String>>();
         				cfmList.add(new ImmutablePair<String,String>(target.getValue(), languageCode));
         				

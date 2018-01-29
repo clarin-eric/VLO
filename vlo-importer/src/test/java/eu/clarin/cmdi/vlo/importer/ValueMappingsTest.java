@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.slf4j.LoggerFactory;
 
 public class ValueMappingsTest extends ImporterTestcase {
-
+/*
     protected final static org.slf4j.Logger LOG = LoggerFactory.getLogger(ValueMappingsTest.class);
 
     @Test
@@ -247,15 +247,15 @@ public class ValueMappingsTest extends ImporterTestcase {
     }
 
     private List<SolrInputDocument> importData(File rootFile) throws Exception {
-        /*
+        
          * Read configuration in ImporterTestCase.setup and change the setup to
          * suit the test.
-         */
+         
         modifyConfig(rootFile);
 
         final DummySolrBridgeImpl solrBridge = new DummySolrBridgeImpl();
         MetadataImporter importer = new MetadataImporter(config, languageCodeUtils, solrBridge) {
-            /*
+            
              * Because in the test, the solr server is not assumed to be 
              * available, override the importer's class startImport method by
              * leaving out interaction with server. 
@@ -265,7 +265,7 @@ public class ValueMappingsTest extends ImporterTestcase {
              * processCmdi method invoking the sendDocs method. Please note 
              * however, that the latter method is overriden, and the actual 
              * database is being replaced by an array of documents.
-             */
+             
             @Override
             void startImport() throws MalformedURLException {
 
@@ -289,11 +289,11 @@ public class ValueMappingsTest extends ImporterTestcase {
                                         + " because it is too large.");
                             } else {
                                 LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
-                                /*
+                                
                                  * Anticipate on the solr exception that will
                                  * never by raised because sendDocs is overriden
                                  * in a suitable way.
-                                 */
+                                 
                                 try {
                                     processCmdi(file, dataRoot, null);
                                 } catch (SolrServerException ex) {
@@ -333,5 +333,5 @@ public class ValueMappingsTest extends ImporterTestcase {
         config.setDataRoots(Collections.singletonList(dataRoot));
         config.setFacetConceptsFile(ImporterTestcase.getTestFacetConceptFilePath());
     }
-
+*/
 }

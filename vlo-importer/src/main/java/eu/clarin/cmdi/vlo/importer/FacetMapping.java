@@ -1,9 +1,9 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import java.util.ArrayList;
+
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
+
 
 /**
  * A list of facets. One FacetConfiguration for each facet.
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class FacetMapping {
 
-    private HashMap<String, FacetConfiguration> facets = new HashMap<String, FacetConfiguration>();
+    private LinkedHashMap<String, FacetConfiguration> facets = new LinkedHashMap<String, FacetConfiguration>();
 
     public Collection<FacetConfiguration> getFacets() {
         return facets.values();
@@ -22,7 +22,7 @@ public class FacetMapping {
     }
     
     public FacetConfiguration getFacetConfiguration(String facetName){
-    	return this.facets.computeIfAbsent(facetName, v -> new FacetConfiguration(this));
+    	return this.facets.computeIfAbsent(facetName, fn -> new FacetConfiguration(this, fn));
     }
 
 }

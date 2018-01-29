@@ -15,7 +15,7 @@ import org.junit.Before;
 public class FacetMappingFactoryTest extends ImporterTestcase {
 
     private final static String FACETCONCEPTS_FILENAME = ImporterTestcase.getTestFacetConceptFilePath();
-    private final static String VALUEMAPPINGS_FILENAME = "";
+    private final static String VALUEMAPPINGS_FILENAME = ImporterTestcase.getTestValueMappingsFilePath();
 
     private final static String IMDI_PROFILE_ID = "clarin.eu:cr1:p_1271859438204";
     private final static String OLAC_PROFILE_ID = "clarin.eu:cr1:p_1288172614026";
@@ -32,6 +32,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
     public void setup() throws Exception {
         super.setup();
         config.setFacetConceptsFile(FACETCONCEPTS_FILENAME);
+        config.setValueMappingsFile(VALUEMAPPINGS_FILENAME);
         facetMappingFactory = new FacetMappingFactory(config, marshaller);
     }
 

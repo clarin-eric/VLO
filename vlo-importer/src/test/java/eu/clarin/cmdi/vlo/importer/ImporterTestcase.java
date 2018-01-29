@@ -53,5 +53,13 @@ public abstract class ImporterTestcase {
             throw new RuntimeException(ex);
         }
     }
+    
+    public static String getTestValueMappingsFilePath() {
+        try {
+            return new File(ImporterTestcase.class.getResource("/valueMappingsTest.xml").toURI()).getAbsolutePath();
+        } catch (URISyntaxException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
 }
