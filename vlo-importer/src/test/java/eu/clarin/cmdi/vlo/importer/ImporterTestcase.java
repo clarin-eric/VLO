@@ -31,6 +31,18 @@ public abstract class ImporterTestcase {
         FileUtils.writeStringToFile(file, content, "UTF-8");
         return file;
     }
+    
+    protected String createTmpFile(String content) throws IOException{
+    	File file = tempFolder.newFile(System.currentTimeMillis() + ".tmp");
+        FileUtils.writeStringToFile(file, content, "UTF-8");
+        return file.getAbsolutePath();
+    }
+    
+    protected File createValueMappingsFile(String name, String content) throws IOException {
+        File file = tempFolder.newFile(name + System.currentTimeMillis() + "_" + ch++ + ".xml");
+        FileUtils.writeStringToFile(file, content, "UTF-8");
+        return file;
+    }
 
     @Before
     public void setup() throws Exception {

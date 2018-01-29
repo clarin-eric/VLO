@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.slf4j.LoggerFactory;
 
 public class ValueMappingsTest extends ImporterTestcase {
-/*
+
     protected final static org.slf4j.Logger LOG = LoggerFactory.getLogger(ValueMappingsTest.class);
 
     @Test
@@ -50,94 +50,147 @@ public class ValueMappingsTest extends ImporterTestcase {
         session += "   </Components>\n";
         session += "</CMD>\n";
         File sessionFile = createCmdiFile("testSession", session);
+        
+        config.setValueMappingsFile(createTmpFile("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
+        		"\n" + 
+        		"<value-mappings>\n" + 
+        		"<origin-facet name=\"collection\">\n" + 
+        		"  <value-map>\n" + 
+        		"  	<target-value-set>\n" + 
+        		"  		<target-value facet=\"subject\">blabla1</target-value>\n" + 
+        		"  		<target-value facet=\"name\">blabla2</target-value>\n" + 
+        		"  		<target-value facet=\"temporalCoverage\">blabla3</target-value>\n" + 
+        		"  		<source-value>CollectionName</source-value>\n" + 
+        		"  	</target-value-set>\n" + 
+        		"  </value-map>\n" + 
+        		"</origin-facet>\n" + 
+        		"</value-mappings>\n" + 
+        		""));
 
-
-        this.config.setValueMappingsFile(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
         SolrInputDocument doc = docs.get(0);
-
-        assertEquals("blabla", getValue(doc, fieldNameService.getFieldName(FieldKey.SUBJECT)));
+        
+        assertEquals("blabla1", getValue(doc, fieldNameService.getFieldName(FieldKey.SUBJECT)));       
+        assertEquals("blabla3", getValue(doc, fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE)));
 
     }
 
     @Test
-    public void testSingleValueWithOrigin() throws Exception {
-        String session = "";
-        session += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        session += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1271859438204\">\n";
-        session += "   <Header>\n";
-        session += "      <MdCreationDate>2008-05-27</MdCreationDate>\n";
-        session += "      <MdSelfLink> testID1Session</MdSelfLink>\n";
-        session += "      <MdCollectionDisplayName>CollectionName</MdCollectionDisplayName>\n";
-        session += "      <MdProfile>clarin.eu:cr1:p_1271859438204</MdProfile>\n";
-        session += "   </Header>\n";
-        session += "   <Resources>\n";
-        session += "      <ResourceProxyList>\n";
-        session += "         <ResourceProxy id=\"d314e408\">\n";
-        session += "            <ResourceType mimetype=\"video/x-mpeg1\" >Resource</ResourceType>\n";
-        session += "            <ResourceRef>../Media/elan-example1.mpg</ResourceRef>\n";
-        session += "         </ResourceProxy>\n";
-        session += "      </ResourceProxyList>\n";
-        session += "   </Resources>\n";
-        session += "   <Components>\n";
-        session += "      <cmdp:Session>\n";
-        session += "         <cmdp:Name>kleve-route</cmdp:Name>\n";
-        session += "         <cmdp:Title>kleve-route-title</cmdp:Title>\n";
-        session += "      </cmdp:Session>\n";
-        session += "   </Components>\n";
-        session += "</CMD>\n";
-        File sessionFile = createCmdiFile("testSession", session);
+    public void testRegEx() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1280305685235\">\n";
+        content += "   <cmd:Header>\n";
+        content += "      <cmd:MdProfile>clarin.eu:cr1:p_1280305685235</cmd:MdProfile>\n";
+        content += "   </cmd:Header>\n";
+        content += "   <cmd:Resources>\n";
+        content += "   </cmd:Resources>\n";
+        content += "    <cmd:Components>\n";
+        content += "        <cmdp:DynaSAND>\n";
+        content += "            <cmdp:Collection>\n";
+        content += "                <cmdp:GeneralInfo>\n";
+        content += "                    <cmdp:Name>DiDDD</cmdp:Name>\n";
+        content += "                    <cmdp:ID>id1234</cmdp:ID>\n";
+        content += "                </cmdp:GeneralInfo>\n";
+        content += "                <cmdp:Project>\n";
+        content += "                    <cmdp:Name>DiDDD-project</cmdp:Name>\n";
+        content += "                </cmdp:Project>\n";
+        content += "            </cmdp:Collection>\n";
+        content += "        </cmdp:DynaSAND>\n";
+        content += "    </cmd:Components>\n";
+        content += "</cmd:CMD>\n";
+        File sessionFile = createCmdiFile("testSession", content);
+
+        config.setValueMappingsFile(createTmpFile("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
+        		"\n" + 
+        		"<value-mappings>\n" + 
+        		"<origin-facet name=\"projectName\">\n" + 
+        		"  <value-map>\n" + 
+        		"  	<target-value-set>\n" + 
+        		"  		<target-value facet=\"subject\">blabla1</target-value>\n" + 
+        		"  		<target-value facet=\"projectName\">blabla2</target-value>\n" + 
+        		"  		<target-value facet=\"projectName\">blabla3</target-value>\n" + 
+        		"  		<source-value isRegex=\"true\">DiDDD.+</source-value>\n" + 
+        		"  	</target-value-set>\n" + 
+        		"  </value-map>\n" + 
+        		"</origin-facet>\n" + 
+        		"</value-mappings>\n" + 
+        		""));
 
 
-        this.config.setValueMappingsFile(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
         SolrInputDocument doc = docs.get(0);
 
         //since this facet permits only one value the value from the cmdi-file should be taken and hence those from the cfm be ignored
-        assertEquals("kleve-route", getValue(doc, fieldNameService.getFieldName(FieldKey.NAME)));
-        //to be sure that it works for a facet where no value is set
-        assertEquals("cfmvalue", getValue(doc, fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE)));
+        assertEquals("blabla1", getValue(doc, fieldNameService.getFieldName(FieldKey.SUBJECT)));
+        
+        Object[] values = getMultipleValues(doc, fieldNameService.getFieldName(FieldKey.PROJECT_NAME)).toArray();
+        assertEquals(2, values.length);
+        
+        assertEquals("blabla2", values[0]);
+        assertEquals("blabla3", values[1]);
+
     }
 
     @Test
-    public void testSingleValueWithNoOrigin() throws Exception {
-        String session = "";
-        session += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        session += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1271859438204\">\n";
-        session += "   <Header>\n";
-        session += "      <MdCreationDate>2008-05-27</MdCreationDate>\n";
-        session += "      <MdSelfLink> testID1Session</MdSelfLink>\n";
-        session += "      <MdCollectionDisplayName>CollectionName</MdCollectionDisplayName>\n";
-        session += "      <MdProfile>clarin.eu:cr1:p_1271859438204</MdProfile>\n";
-        session += "   </Header>\n";
-        session += "   <Resources>\n";
-        session += "      <ResourceProxyList>\n";
-        session += "         <ResourceProxy id=\"d314e408\">\n";
-        session += "            <ResourceType mimetype=\"video/x-mpeg1\" >Resource</ResourceType>\n";
-        session += "            <ResourceRef>../Media/elan-example1.mpg</ResourceRef>\n";
-        session += "         </ResourceProxy>\n";
-        session += "      </ResourceProxyList>\n";
-        session += "   </Resources>\n";
-        session += "   <Components>\n";
-        session += "   </Components>\n";
-        session += "</CMD>\n";
-        File sessionFile = createCmdiFile("testSession", session);
+    public void testTargetFacet() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1280305685235\">\n";
+        content += "   <cmd:Header>\n";
+        content += "      <cmd:MdProfile>clarin.eu:cr1:p_1280305685235</cmd:MdProfile>\n";
+        content += "   </cmd:Header>\n";
+        content += "   <cmd:Resources>\n";
+        content += "   </cmd:Resources>\n";
+        content += "    <cmd:Components>\n";
+        content += "        <cmdp:DynaSAND>\n";
+        content += "            <cmdp:Collection>\n";
+        content += "                <cmdp:GeneralInfo>\n";
+        content += "                    <cmdp:Name>DiDDD</cmdp:Name>\n";
+        content += "                    <cmdp:ID>id1234</cmdp:ID>\n";
+        content += "                </cmdp:GeneralInfo>\n";
+        content += "                <cmdp:Project>\n";
+        content += "                    <cmdp:Name>DiDDD-project</cmdp:Name>\n";
+        content += "                </cmdp:Project>\n";
+        content += "            </cmdp:Collection>\n";
+        content += "        </cmdp:DynaSAND>\n";
+        content += "    </cmd:Components>\n";
+        content += "</cmd:CMD>\n";
+        File sessionFile = createCmdiFile("testSession", content);
 
-        this.config.setValueMappingsFile(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
+        config.setValueMappingsFile(createTmpFile("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
+        		"\n" + 
+        		"<value-mappings>\n" + 
+        		"<origin-facet name=\"projectName\">\n" + 
+        		"  <value-map>\n" +
+        		"  <target-facet name=\"subject\" />" + 
+        		"  <target-facet name=\"projectName\" />" + 
+        		"  	<target-value-set>\n" + 
+        		"  		<target-value>blabla1</target-value>\n" + 
+        		"  		<source-value isRegex=\"true\">DiDDD.+</source-value>\n" + 
+        		"  	</target-value-set>\n" + 
+        		"  </value-map>\n" + 
+        		"</origin-facet>\n" + 
+        		"</value-mappings>\n" + 
+        		""));
+
+
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
         SolrInputDocument doc = docs.get(0);
 
         //since this facet permits only one value the value from the cmdi-file should be taken and hence those from the cfm be ignored
-        assertEquals("cfmvalue", getValue(doc, fieldNameService.getFieldName(FieldKey.NAME)));
+        assertEquals("blabla1", getValue(doc, fieldNameService.getFieldName(FieldKey.SUBJECT)));
+        assertEquals("blabla1", getValue(doc, fieldNameService.getFieldName(FieldKey.PROJECT_NAME)));
+        
 
     }
-
+/*
     @Test
     public void testMultipleValues() throws Exception {
         String session = "";
@@ -172,7 +225,6 @@ public class ValueMappingsTest extends ImporterTestcase {
 
         File sessionFile = createCmdiFile("testSession", session);
 
-        this.config.setValueMappingsFile(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
@@ -215,7 +267,6 @@ public class ValueMappingsTest extends ImporterTestcase {
         session += "</CMD>\n";
         File sessionFile = createCmdiFile("testSession", session);
 
-        this.config.setValueMappingsFile(new File(this.getClass().getResource("/cfmTest.xml").toURI()).getAbsolutePath());
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
@@ -230,7 +281,7 @@ public class ValueMappingsTest extends ImporterTestcase {
         assertEquals("collection2", values[1]);
         assertEquals("collection3", values[2]);
     }
-
+*/
     private Object getValue(SolrInputDocument doc, String field) {
         if (doc.getFieldValues(field) != null) {
             assertEquals(1, doc.getFieldValues(field).size());
@@ -248,14 +299,14 @@ public class ValueMappingsTest extends ImporterTestcase {
 
     private List<SolrInputDocument> importData(File rootFile) throws Exception {
         
-         * Read configuration in ImporterTestCase.setup and change the setup to
-         * suit the test.
+         /* Read configuration in ImporterTestCase.setup and change the setup to
+         * suit the test. */
          
         modifyConfig(rootFile);
 
         final DummySolrBridgeImpl solrBridge = new DummySolrBridgeImpl();
         MetadataImporter importer = new MetadataImporter(config, languageCodeUtils, solrBridge) {
-            
+            /*
              * Because in the test, the solr server is not assumed to be 
              * available, override the importer's class startImport method by
              * leaving out interaction with server. 
@@ -265,7 +316,7 @@ public class ValueMappingsTest extends ImporterTestcase {
              * processCmdi method invoking the sendDocs method. Please note 
              * however, that the latter method is overriden, and the actual 
              * database is being replaced by an array of documents.
-             
+             */
             @Override
             void startImport() throws MalformedURLException {
 
@@ -290,9 +341,9 @@ public class ValueMappingsTest extends ImporterTestcase {
                             } else {
                                 LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
                                 
-                                 * Anticipate on the solr exception that will
+                                 /* Anticipate on the solr exception that will
                                  * never by raised because sendDocs is overriden
-                                 * in a suitable way.
+                                 * in a suitable way. */
                                  
                                 try {
                                     processCmdi(file, dataRoot, null);
@@ -332,6 +383,9 @@ public class ValueMappingsTest extends ImporterTestcase {
         dataRoot.setPrefix("http://example.com");
         config.setDataRoots(Collections.singletonList(dataRoot));
         config.setFacetConceptsFile(ImporterTestcase.getTestFacetConceptFilePath());
+        
     }
-*/
+    
+
+
 }

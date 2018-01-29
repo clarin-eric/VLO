@@ -1,15 +1,16 @@
 package eu.clarin.cmdi.vlo.importer.mapping;
 
 import java.util.ArrayList;
-import java.util.Vector;
+import java.util.List;
+
 
 public class ConditionTargetSet {
-	private final Vector<AbstractCondition> conditions;
-	private final Vector<TargetFacet> targets;
+	private final List<AbstractCondition> conditions;
+	private final List<TargetFacet> targets;
 	
 	public ConditionTargetSet() {
-		this.conditions = new Vector<AbstractCondition>();
-		this.targets = new Vector<TargetFacet>();
+		this.conditions = new ArrayList<AbstractCondition>();
+		this.targets = new ArrayList<TargetFacet>();
 	}
 	
 	public void addCondtion(AbstractCondition condition) {
@@ -19,16 +20,12 @@ public class ConditionTargetSet {
 	public void addTarget(TargetFacet target) {
 		this.targets.add(target);
 	}
-	public Vector<TargetFacet> getTargets(){
+	public List<TargetFacet> getTargets(){
 		return this.targets;
 	}
 	
-	public boolean matches(String expression) {
-		for(AbstractCondition condition : this.conditions) {
-			if(condition.matches(expression))
-				return true;
-		}
-		return false;
+	public boolean matches(String expression) { 
+		return this.conditions.stream().anyMatch(condition -> condition.matches(expression));
 	}
 
 }

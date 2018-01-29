@@ -40,6 +40,10 @@ public class TargetFacet {
 		this.overrideExistingValues = overrideExistingValues;
 	}
 	
+	public boolean getOverrideExistingValues() {
+		return this.overrideExistingValues;
+	}
+	
 	public void setRemoveSourceValue(boolean removeSourceValue) {
 		this.removeSourceValue = removeSourceValue;
 	}

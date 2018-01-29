@@ -74,6 +74,7 @@ public class FacetMappingFactory {
         this.conceptMapping = marshaller.getFacetConceptMapping(vloConfig.getFacetConceptsFile());
         
         this.conditionTargetSetPerFacet = new HashMap<String, List<ConditionTargetSet>>();
+        
       
         SAXParserFactory fac = SAXParserFactory.newInstance();
 		fac.setXIncludeAware(true);

@@ -367,10 +367,10 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             	if(conditionTargetSet.matches(value)) {
             		
             		for(TargetFacet target :conditionTargetSet.getTargets()) {
-        				ArrayList<Pair<String,String>> cfmList = new ArrayList<Pair<String,String>>();
-        				cfmList.add(new ImmutablePair<String,String>(target.getValue(), languageCode));
+        				ArrayList<Pair<String,String>> targetList = new ArrayList<Pair<String,String>>();
+        				targetList.add(new ImmutablePair<String,String>(target.getValue(), languageCode));
         				
-        				insertFacetValues(target.getFacetConfiguration().getName(), cfmList, cmdiData, target.getFacetConfiguration().getAllowMultipleValues(), target.getFacetConfiguration().isCaseInsensitive(), false);
+        				insertFacetValues(target.getFacetConfiguration().getName(), targetList, cmdiData, target.getFacetConfiguration().getAllowMultipleValues(), target.getFacetConfiguration().isCaseInsensitive(), target.getOverrideExistingValues());
             			
             		}
             		
@@ -429,7 +429,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         });
 
         // insert values into original facet
-        insertFacetValues(config.getName(), reorderedValueLangPairList, cmdiData, allowMultipleValues, config.isCaseInsensitive(), true);
+        insertFacetValues(config.getName(), reorderedValueLangPairList, cmdiData, allowMultipleValues, config.isCaseInsensitive(), false);
 
         // insert post-processed values into derived facet(s) if configured
         for (FacetConfiguration derivedFacet : config.getDerivedFacets()) {
@@ -478,7 +478,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         return vcl;
     }
 
-    private void insertFacetValues(String name, List<Pair<String, String>> valueLangPairList, CMDIData cmdiData, boolean allowMultipleValues, boolean caseInsensitive, boolean hasPriority) {
+    private void insertFacetValues(String name, List<Pair<String, String>> valueLangPairList, CMDIData cmdiData, boolean allowMultipleValues, boolean caseInsensitive, boolean overrideExistingValues) {
 
         for (int i = 0; i < valueLangPairList.size(); i++) {
 //            if (!allowMultipleValues && i > 0) {
@@ -489,7 +489,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                 fieldValue = "{" + valueLangPairList.get(i).getRight() + "}" + fieldValue;
             }
             if(!allowMultipleValues){
-            	if(hasPriority)
+            	if(overrideExistingValues)
             		cmdiData.replaceDocField(name, fieldValue, caseInsensitive);
             	else
             		cmdiData.addDocFieldIfNull(name, fieldValue, caseInsensitive);

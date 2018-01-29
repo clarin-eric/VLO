@@ -15,19 +15,18 @@ import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
 public class ValueMappingsHandler extends DefaultHandler {
 	private final static Logger LOG = LoggerFactory.getLogger(ValueMappingsHandler.class);
 	
+	//initialized via constructor
 	private final List<FacetConcept> facetConcepts;
-	
 	private final Map<String, List<ConditionTargetSet>> conditionTargetSetsPerFacet;
 	
-	
-	private String originFacetName;
+	// shortcuts to prevent many lookups of last Element in a List
 	private List <ConditionTargetSet> conditionTargetSets;
 	private ConditionTargetSet conditionTargetSet;
-	private List<AbstractCondition> conditions;
-	private List<TargetFacet> targetFacets;
-	private List<TargetFacet> targetValues;
+	
 	private AbstractCondition condition;
 	private TargetFacet targetFacet;
+	
+	private List<TargetFacet> targetFacets;
 	private String value;
 	
 	
@@ -48,26 +47,11 @@ public class ValueMappingsHandler extends DefaultHandler {
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		switch(qName) {
-		case "origin-facet":
-			this.conditionTargetSetsPerFacet.put(this.originFacetName, this.conditionTargetSets);
-			
-			
-			break;
-		case "value-map":
-
-			break;
-		case "target-facet":
-			
-			break;
-		case "target-value-set":
-			this.conditionTargetSets.add(new ConditionTargetSet());
-			break;
 		case "target-value":
-			this.targetValues.stream().forEach(facet ->{
+			this.conditionTargetSet.getTargets().stream().forEach(facet ->{
 				if(facet.getValue() == null)
 					facet.setValue(this.value);
 			});
-			this.conditionTargetSet.addTarget(this.targetFacet);
 			break;
 		case "source-value":
 			this.condition.setExpression(this.value);
@@ -82,15 +66,16 @@ public class ValueMappingsHandler extends DefaultHandler {
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		FacetConcept facetConcept;
+		FacetConfiguration facetConfiguration;
+		
 		
 		switch(qName) {
 		case "origin-facet":
-			this.originFacetName = attributes.getValue("name");					
+			this.conditionTargetSets = new ArrayList<ConditionTargetSet>();			
+			this.conditionTargetSetsPerFacet.put(attributes.getValue("name"), conditionTargetSets);				
 			break;
 		case "value-map":
-			this.targetFacets = new ArrayList<TargetFacet>();
-			this.conditionTargetSets = new Vector<ConditionTargetSet>();
-			
+			this.targetFacets = new ArrayList<TargetFacet>();					
 			break;
 		case "target-facet":
 			facetConcept = this.facetConcepts.stream().filter(fc -> fc.getName().equals(attributes.getValue("name"))).findFirst().orElse(null);
@@ -100,7 +85,7 @@ public class ValueMappingsHandler extends DefaultHandler {
 				return; //warning for reference to a facet which hasn't been defined
 			}
 			
-			FacetConfiguration facetConfiguration = new FacetConfiguration(null, attributes.getValue("name"));
+			facetConfiguration = new FacetConfiguration(null, attributes.getValue("name"));
 			facetConfiguration.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
 			facetConfiguration.setCaseInsensitive(facetConcept.isCaseInsensitive());
 			
@@ -113,36 +98,38 @@ public class ValueMappingsHandler extends DefaultHandler {
 			break;
 		case "target-value-set":
 			this.conditionTargetSet = new ConditionTargetSet();	
-			this.conditions = new ArrayList<AbstractCondition>();
-			this.targetValues = new ArrayList<TargetFacet>();
+			this.conditionTargetSets.add(this.conditionTargetSet);
 			break;
 		case "target-value":
 			if(attributes.getValue("facet") == null){ //clone targetfacets
-				ArrayList<TargetFacet> tmpList = new ArrayList<TargetFacet>();
+				
 				
 				this.targetFacets.forEach(facet -> {
+					
+					this.targetFacet = facet.clone();
+					this.conditionTargetSet.addTarget(this.targetFacet);
 					
 					if(attributes.getValue("overrideExistingValues") != null) //only override if attribute is set
 						this.targetFacet.setOverrideExistingValues("true".equals(attributes.getValue("overrideExistingValues")));
 					if(attributes.getValue("removeSourceValue") != null) //only override if attribute is set
 						this.targetFacet.setRemoveSourceValue("true".equals(attributes.getValue("removeSourceValue")));
 					
-					this.targetValues.add(this.targetFacet);
+					
 				});
-				return;
+				break;
 			}
 			// look up a general setting if a facet is set
 			this.targetFacet = this.targetFacets.stream().filter(facet -> facet.getFacetConfiguration().getName().equals(attributes.getValue("facet"))).findFirst().orElse(null);
 			
 			if(this.targetFacet != null) { //there is a general setting
-				this.targetFacet = this.targetFacet.clone();
+				this.targetFacet = this.targetFacet.clone(); //going on with the clone
 				if(attributes.getValue("overrideExistingValues") != null) //only override if attribute is set
 					this.targetFacet.setOverrideExistingValues("true".equals(attributes.getValue("overrideExistingValues")));
 				if(attributes.getValue("removeSourceValue") != null) //only override if attribute is set
 					this.targetFacet.setRemoveSourceValue("true".equals(attributes.getValue("removeSourceValue")));
 				
-				this.targetValues.add(this.targetFacet);
-				return;
+				this.conditionTargetSet.addTarget(this.targetFacet);
+				break;
 			}
 			
 			
@@ -157,21 +144,22 @@ public class ValueMappingsHandler extends DefaultHandler {
 			facetConfiguration.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
 			facetConfiguration.setCaseInsensitive(facetConcept.isCaseInsensitive());
 			
-			this.targetFacet = new TargetFacet(
-					facetConfiguration, 
-					attributes.getValue("overrideExistingValues"), 
-					attributes.getValue("removeSourceValue")
-				);			
+			this.conditionTargetSet.addTarget(
+					new TargetFacet(
+							facetConfiguration, 
+							attributes.getValue("overrideExistingValues"), 
+							attributes.getValue("removeSourceValue")
+							)
+					);			
 			return;
 		case "source-value":
-			if("true".equalsIgnoreCase(attributes.getValue("isRegex"))) {
+			if("true".equalsIgnoreCase(attributes.getValue("isRegex")))
 				this.condition = new RegExCondition();
-				return;
 				
-			}
-			this.condition = new StringCondition("true".equalsIgnoreCase(attributes.getValue("caseSensitive")));
+			else
+				this.condition = new StringCondition("true".equalsIgnoreCase(attributes.getValue("caseSensitive")));
 
-			
+			this.conditionTargetSet.addCondtion(this.condition);
 			break;
 		default:
 				
