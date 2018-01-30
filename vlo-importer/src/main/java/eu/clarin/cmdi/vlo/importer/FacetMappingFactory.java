@@ -85,7 +85,7 @@ public class FacetMappingFactory {
 			try {
 				fac.newSAXParser().parse(vloConfig.getValueMappingsFile(), new ValueMappingsHandler(this.conceptMapping, this.conditionTargetSetPerFacet));
 			} catch (SAXException | IOException | ParserConfigurationException ex) {
-				LOG.error("Value Mappings no initialized!", ex);
+				LOG.error("Value Mappings not initialized!", ex);
 			}
     }
 
