@@ -11,7 +11,7 @@ public class TargetFacet {
 	
 	
 	public TargetFacet(FacetConfiguration facetConfiguration, String value) {
-		super();
+		this.removeSourceValue = true;
 		this.facetConfiguration = facetConfiguration;
 		this.value = value;
 	}
@@ -26,7 +26,7 @@ public class TargetFacet {
 	public TargetFacet(FacetConfiguration facetConfiguration, String overrideExistingValues, String removeSourceValue) {
 		this.facetConfiguration = facetConfiguration;
 		this.overrideExistingValues = "true".equals(overrideExistingValues);
-		this.removeSourceValue = "true".equals(removeSourceValue);
+		this.removeSourceValue = !"false".equals(removeSourceValue); //should always be true if not set explicitly
 		
 	}
 	public FacetConfiguration getFacetConfiguration() {
@@ -46,6 +46,9 @@ public class TargetFacet {
 	
 	public void setRemoveSourceValue(boolean removeSourceValue) {
 		this.removeSourceValue = removeSourceValue;
+	}
+	public boolean getRemoveSourceValue() {
+		return this.removeSourceValue;
 	}
 	public String getValue() {
 		return value;

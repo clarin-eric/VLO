@@ -361,12 +361,15 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             final String value = nav.toString(index);
             final String languageCode = extractLanguageCode(nav);
             
-            
+            boolean removeSourceValue = true;
             // implementation of valuemapping (replacement of cfm, issue 93)
             for(ConditionTargetSet conditionTargetSet : config.getConditionTargetSets()) {
             	if(conditionTargetSet.matches(value)) {
             		
             		for(TargetFacet target :conditionTargetSet.getTargets()) {
+            		    if(!target.getRemoveSourceValue())
+            		        removeSourceValue = false;
+            			
         				ArrayList<Pair<String,String>> targetList = new ArrayList<Pair<String,String>>();
         				targetList.add(new ImmutablePair<String,String>(target.getValue(), languageCode));
         				
@@ -374,7 +377,8 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             			
             		}
             		
-            		return true;
+            		if(removeSourceValue)
+            		    return true;
             		
             	}
             	
@@ -488,13 +492,12 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             if (name.equals(fieldNameService.getFieldName(FieldKey.DESCRIPTION))) {
                 fieldValue = "{" + valueLangPairList.get(i).getRight() + "}" + fieldValue;
             }
-            if(!allowMultipleValues){
-            	if(overrideExistingValues)
-            		cmdiData.replaceDocField(name, fieldValue, caseInsensitive);
-            	else
-            		cmdiData.addDocFieldIfNull(name, fieldValue, caseInsensitive);
+            
+            if(overrideExistingValues || !allowMultipleValues) {
+            	cmdiData.replaceDocField(name, fieldValue, caseInsensitive);
             	break;
             }
+
             cmdiData.addDocField(name, fieldValue, caseInsensitive);
         }
     }
