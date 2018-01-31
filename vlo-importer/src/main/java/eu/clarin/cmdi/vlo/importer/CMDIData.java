@@ -18,16 +18,14 @@ import eu.clarin.cmdi.vlo.config.FieldNameService;
  */
 public class CMDIData {
     private final FieldNameService fieldNameService;
-    
-
 
     private final static Logger LOG = LoggerFactory.getLogger(CMDIData.class);
     private static final String METADATA_TYPE = "Metadata";
     private static final String DATA_RESOURCE_TYPE = "Resource";
     private static final String SEARCH_SERVICE_TYPE = "SearchService";
-    //* Definition of the string denoting the landing page type. */
+    // * Definition of the string denoting the landing page type. */
     private static final String LANDING_PAGE_TYPE = "LandingPage";
-    //* Definition of the string denoting the search page type. */
+    // * Definition of the string denoting the search page type. */
     private static final String SEARCH_PAGE_TYPE = "SearchPage";
 
     /**
@@ -46,7 +44,7 @@ public class CMDIData {
     private final List<Resource> searchResources = new ArrayList<>();
     private final List<Resource> landingPageResources = new ArrayList<>();
     private final List<Resource> searchPageResources = new ArrayList<>();
-    
+
     public CMDIData(FieldNameService fieldNameService) {
         this.fieldNameService = fieldNameService;
     }
@@ -70,17 +68,17 @@ public class CMDIData {
             handleDocField(name, value, caseInsensitive);
         }
     }
-    
-    public void replaceDocField(String name, String value, boolean caseInsensitive){
-    	if(this.doc != null){
-    		this.doc.removeField(name);
-    	}
-    	this.addDocField(name, value, caseInsensitive);
+
+    public void replaceDocField(String name, String value, boolean caseInsensitive) {
+        if (this.doc != null) {
+            this.doc.removeField(name);
+        }
+        this.addDocField(name, value, caseInsensitive);
     }
-    
-    public void addDocFieldIfNull(String name, String value, boolean caseInsensitive){
-    	if(this.getDocField(name) == null)
-    		this.addDocField(name, value, caseInsensitive);
+
+    public void addDocFieldIfNull(String name, String value, boolean caseInsensitive) {
+        if (this.getDocField(name) == null)
+            this.addDocField(name, value, caseInsensitive);
     }
 
     /**
@@ -101,13 +99,14 @@ public class CMDIData {
             }
             Collection<Object> fieldValues = doc.getFieldValues(name);
             if (fieldValues == null || !fieldValues.contains(value)) {
-                //if availability facet reduce tag to most restrictive
-                if (name.equals(fieldNameService.getFieldName(FieldKey.AVAILABILITY)) || name.equals(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE))) {
+                // if availability facet reduce tag to most restrictive
+                if (name.equals(fieldNameService.getFieldName(FieldKey.AVAILABILITY))
+                        || name.equals(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE))) {
                     reduceAvailability(name, value);
                 } else {
                     doc.addField(name, value);
                 }
-            } //ignore double values don't add them
+            } // ignore double values don't add them
         }
     }
 
@@ -155,12 +154,15 @@ public class CMDIData {
     /**
      * Add a meta data resource to the list of resources of that type.
      *
-     * Whenever the type is not one of a type supported by the CMDI
-     * specification, a warning is logged.
+     * Whenever the type is not one of a type supported by the CMDI specification, a
+     * warning is logged.
      *
-     * @param resource meta data resource
-     * @param type type of the resource
-     * @param mimeType mime type associated with the resource
+     * @param resource
+     *            meta data resource
+     * @param type
+     *            type of the resource
+     * @param mimeType
+     *            mime type associated with the resource
      */
     public void addResource(String resource, String type, String mimeType) {
         if (METADATA_TYPE.equals(type)) {
@@ -179,8 +181,7 @@ public class CMDIData {
         } else if (SEARCH_PAGE_TYPE.equals(type)) {
             searchPageResources.add(new Resource(resource, type, mimeType));
         } else {
-            LOG.warn("Ignoring unsupported resource type "
-                    + type + ", name=" + resource);
+            LOG.warn("Ignoring unsupported resource type " + type + ", name=" + resource);
         }
     }
 
@@ -196,25 +197,27 @@ public class CMDIData {
      * In case that Availability facet has more then one value use the most
      * restrictive tag from PUB, ACA and RES. TODO: Move this to post processor
      *
-     * @param field field to reduce availability values in
-     * @param value value to insert (add or replace)
+     * @param field
+     *            field to reduce availability values in
+     * @param value
+     *            value to insert (add or replace)
      */
     private void reduceAvailability(String field, String value) {
         Collection<Object> currentValues = doc.getFieldValues(field);
 
-        //the first value
+        // the first value
         if (currentValues == null) {
             doc.addField(field, value);
             return;
         }
 
         int lvlNew = availabilityToLvl(value);
-        if (lvlNew == -1) { //other tags, add them, uniqueness has already being checked
+        if (lvlNew == -1) { // other tags, add them, uniqueness has already being checked
             doc.addField(field, value);
             return;
         }
 
-        //current level of availability
+        // current level of availability
         int lvlCur = -1;
         for (Object val : currentValues) {
             int rhs = availabilityToLvl(val.toString());
@@ -223,13 +226,13 @@ public class CMDIData {
             }
         }
 
-        //if new values is more restrictive replace the old with new
+        // if new values is more restrictive replace the old with new
         if (lvlNew > lvlCur) {
             SolrInputField fOld = doc.get(field);
             SolrInputField fNew = new SolrInputField(field);
 
-            fNew.addValue(value); //new, more restrictive value
-            for (Object val : fOld.getValues()) { //copy other tags
+            fNew.addValue(value); // new, more restrictive value
+            for (Object val : fOld.getValues()) { // copy other tags
                 if (availabilityToLvl(val.toString()) == -1) {
                     fNew.addValue(val);
                 }
@@ -246,14 +249,14 @@ public class CMDIData {
         }
 
         switch (availabilty) {
-            case FacetConstants.AVAILABILITY_LEVEL_PUB:
-                return 1;
-            case FacetConstants.AVAILABILITY_LEVEL_ACA:
-                return 2;
-            case FacetConstants.AVAILABILITY_LEVEL_RES:
-                return 3;
-            default:
-                return -1; // other tags
+        case FacetConstants.AVAILABILITY_LEVEL_PUB:
+            return 1;
+        case FacetConstants.AVAILABILITY_LEVEL_ACA:
+            return 2;
+        case FacetConstants.AVAILABILITY_LEVEL_RES:
+            return 3;
+        default:
+            return -1; // other tags
         }
     }
 }
