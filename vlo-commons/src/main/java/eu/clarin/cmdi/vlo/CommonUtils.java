@@ -50,7 +50,8 @@ public final class CommonUtils {
             "application/x-gzip",
             "application/x-tar", "application/x-tar-gz",
             "application/x-zip", "application/x-zip-compressed",
-            "application/x-7z-compressed", "application/x-7zip-compressed"
+            "application/x-7z-compressed", "application/x-7zip-compressed",
+            "application/x-xz"
     );
 
     /**
