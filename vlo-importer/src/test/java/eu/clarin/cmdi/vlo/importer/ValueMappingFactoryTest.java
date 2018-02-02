@@ -123,6 +123,47 @@ public class ValueMappingFactoryTest {
  
     }
 
+    @Test
+    public void testConditionMatch() throws IOException {
+        String fileName = createTmpFile(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
+                "\n" + 
+                "<value-mappings>\n" + 
+                "<origin-facet name=\"name\">\n" + 
+                "  <value-map>\n" + 
+                "   <target-value-set>\n" + 
+                "       <target-value facet=\"subject\">blabla1</target-value>\n" + 
+                "       <source-value isRegex=\"true\">D.+</source-value>\n" + 
+                "   </target-value-set>\n" + 
+                "  </value-map>\n" + 
+                "   <target-value-set>\n" + 
+                "       <target-value facet=\"name\">blabla1</target-value>\n" + 
+                "       <source-value>DonauDampfschifffahrtsGesellschaftsKaptitän</source-value>\n" + 
+                "   </target-value-set>\n" + 
+                "   <target-value-set>\n" + 
+                "       <target-value facet=\"name\">blabla1</target-value>\n" + 
+                "       <source-value caseSensitive=\"true\">DonauDampfschifffahrtsGesellschaftsKaptitän</source-value>\n" + 
+                "   </target-value-set>\n" + 
+                "  </value-map>\n" +                 
+                "</origin-facet>\n" + 
+                "</value-mappings>\n"
+            );
+    
+        Map<String, List<ConditionTargetSet>> map = ValueMappingFactory.getValueMappings(fileName, this.conceptMapping);
+        
+
+        assertEquals(true, map.get("name").get(0).matches("Data"));
+        assertEquals(false, map.get("name").get(0).matches("data"));
+        
+        assertEquals(true, map.get("name").get(1).matches("DonauDampfschifffahrtsGesellschaftsKaptitän"));
+        assertEquals(true, map.get("name").get(1).matches("donaudampfschifffahrtsgesellschaftskaptitän"));
+        assertEquals(false, map.get("name").get(1).matches("donaudampfschifffahrtsgesellschaftskaptitaen"));
+        
+        assertEquals(true, map.get("name").get(2).matches("DonauDampfschifffahrtsGesellschaftsKaptitän"));
+        assertEquals(false, map.get("name").get(2).matches("donaudampfschifffahrtsgesellschaftskaptitän"));
+        assertEquals(false, map.get("name").get(2).matches("donaudampfschifffahrtsgesellschaftskaptitaen"));
+    }
+
     
     private  String createTmpFile(String content) throws IOException{
         File file = File.createTempFile(String.valueOf(System.currentTimeMillis()), ".tmp");

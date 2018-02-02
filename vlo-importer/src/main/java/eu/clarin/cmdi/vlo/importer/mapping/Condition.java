@@ -7,7 +7,7 @@ public class Condition {
     
     public Condition(String isRegEx, String isCaseSensitive) {
         this.isRegEx = "true".equalsIgnoreCase(isRegEx);
-        this.isCaseSensitive = "false".equalsIgnoreCase(isCaseSensitive);
+        this.isCaseSensitive = "true".equalsIgnoreCase(isCaseSensitive);
     }
     public boolean isRegEx() {
         return isRegEx;
