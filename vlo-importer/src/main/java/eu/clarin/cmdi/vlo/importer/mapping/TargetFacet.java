@@ -1,7 +1,5 @@
 package eu.clarin.cmdi.vlo.importer.mapping;
 
-import eu.clarin.cmdi.vlo.importer.FacetConfiguration;
-
 public class TargetFacet {
     private FacetConfiguration facetConfiguration;
 
@@ -10,8 +8,9 @@ public class TargetFacet {
     private String value;
 
     public TargetFacet(FacetConfiguration facetConfiguration, String value) {
-        this.removeSourceValue = true;
         this.facetConfiguration = facetConfiguration;
+        this.overrideExistingValues = false;
+        this.removeSourceValue = true;
         this.value = value;
     }
 
@@ -24,8 +23,8 @@ public class TargetFacet {
 
     public TargetFacet(FacetConfiguration facetConfiguration, String overrideExistingValues, String removeSourceValue) {
         this.facetConfiguration = facetConfiguration;
-        this.overrideExistingValues = "true".equals(overrideExistingValues);
-        this.removeSourceValue = !"false".equals(removeSourceValue); // should always be true if not set explicitly
+        setOverrideExistingValues(overrideExistingValues);
+        setRemoveSourceValue(removeSourceValue);
 
     }
 
@@ -37,16 +36,16 @@ public class TargetFacet {
         this.facetConfiguration = facetConfiguration;
     }
 
-    public void setOverrideExistingValues(boolean overrideExistingValues) {
-        this.overrideExistingValues = overrideExistingValues;
+    public void setOverrideExistingValues(String overrideExistingValues) {
+        this.overrideExistingValues = "true".equals(overrideExistingValues); // should always be false if not set explicitly true
     }
 
     public boolean getOverrideExistingValues() {
         return this.overrideExistingValues;
     }
 
-    public void setRemoveSourceValue(boolean removeSourceValue) {
-        this.removeSourceValue = removeSourceValue;
+    public void setRemoveSourceValue(String removeSourceValue) {
+        this.removeSourceValue = !"false".equals(removeSourceValue); // should always be true if not set explicitly false
     }
 
     public boolean getRemoveSourceValue() {

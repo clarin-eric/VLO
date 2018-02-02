@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.importer;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.processor.CMDIParserVTDXML;
 
 import static org.junit.Assert.assertEquals;

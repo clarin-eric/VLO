@@ -6,6 +6,8 @@ package eu.clarin.cmdi.vlo.importer;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.clarin.cmdi.vlo.importer.mapping.FacetConfiguration;
+
 /**
  * @author WolfgangWalter SAUER (wowasa) <wolfgang.sauer@oeaw.ac.at>
  *

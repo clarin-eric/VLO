@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer;
+package eu.clarin.cmdi.vlo.importer.mapping;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import eu.clarin.cmdi.vlo.importer.Pattern;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

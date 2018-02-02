@@ -9,6 +9,10 @@ import java.util.List;
 import org.junit.Test;
 
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetConfiguration;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
+
 import java.io.IOException;
 import org.junit.Before;
 

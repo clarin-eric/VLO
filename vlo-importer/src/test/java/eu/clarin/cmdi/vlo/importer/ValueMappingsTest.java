@@ -54,6 +54,13 @@ public class ValueMappingsTest extends ImporterTestcase {
         config.setValueMappingsFile(createTmpFile("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
         		"\n" + 
         		"<value-mappings>\n" + 
+                "<origin-facet name=\"name\">\n" + 
+                "  <value-map>\n" + 
+                "   <target-value-set>\n" + 
+                "       <source-value isRegex=\"true\">.+</source-value>\n" + 
+                "   </target-value-set>\n" + 
+                "  </value-map>\n" + 
+                "</origin-facet>\n" + 
         		"<origin-facet name=\"collection\">\n" + 
         		"  <value-map>\n" + 
         		"  	<target-value-set>\n" + 
@@ -72,10 +79,67 @@ public class ValueMappingsTest extends ImporterTestcase {
 
         SolrInputDocument doc = docs.get(0);
         
-        assertEquals("blabla1", getValue(doc, fieldNameService.getFieldName(FieldKey.SUBJECT)));       
+        assertEquals("blabla1", getValue(doc, fieldNameService.getFieldName(FieldKey.SUBJECT)));   
+        assertEquals("blabla2", getValue(doc, fieldNameService.getFieldName(FieldKey.NAME)));
         assertEquals("blabla3", getValue(doc, fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE)));
 
     }
+    
+    @Test
+    public void testKeepSource() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1280305685235\">\n";
+        content += "   <cmd:Header>\n";
+        content += "      <cmd:MdProfile>clarin.eu:cr1:p_1280305685235</cmd:MdProfile>\n";
+        content += "   </cmd:Header>\n";
+        content += "   <cmd:Resources>\n";
+        content += "   </cmd:Resources>\n";
+        content += "    <cmd:Components>\n";
+        content += "        <cmdp:DynaSAND>\n";
+        content += "            <cmdp:Collection>\n";
+        content += "                <cmdp:GeneralInfo>\n";
+        content += "                    <cmdp:Name>DiDDD</cmdp:Name>\n";
+        content += "                    <cmdp:ID>id1234</cmdp:ID>\n";
+        content += "                </cmdp:GeneralInfo>\n";
+        content += "                <cmdp:Project>\n";
+        content += "                    <cmdp:Name>DiDDD-project</cmdp:Name>\n";
+        content += "                </cmdp:Project>\n";
+        content += "            </cmdp:Collection>\n";
+        content += "        </cmdp:DynaSAND>\n";
+        content += "    </cmd:Components>\n";
+        content += "</cmd:CMD>\n";
+        File sessionFile = createCmdiFile("testSession", content);
+
+        
+        config.setValueMappingsFile(createTmpFile("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
+                "\n" + 
+                "<value-mappings>\n" + 
+                "<origin-facet name=\"projectName\">\n" + 
+                "  <value-map>\n" + 
+                "   <target-value-set>\n" + 
+                "       <target-value facet=\"projectName\" removeSourceValue=\"false\">blabla2</target-value>\n" + 
+                "       <source-value isRegex=\"true\">.+</source-value>\n" + 
+                "   </target-value-set>\n" + 
+                "  </value-map>\n" + 
+                "</origin-facet>\n" + 
+                "</value-mappings>\n" + 
+                ""));
+
+
+        List<SolrInputDocument> docs = importData(sessionFile);
+
+        SolrInputDocument doc = docs.get(0);
+        
+        Object[] values = getMultipleValues(doc, fieldNameService.getFieldName(FieldKey.PROJECT_NAME)).toArray();
+        assertEquals(2, values.length);
+        
+ 
+        assertEquals("blabla2", values[0]);
+        assertEquals("DiDDD-project", values[1]);
+
+    }
+
 
     @Test
     public void testRegEx() throws Exception {
@@ -190,98 +254,6 @@ public class ValueMappingsTest extends ImporterTestcase {
         
 
     }
-/*
-    @Test
-    public void testMultipleValues() throws Exception {
-        String session = "";
-        session += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        session += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1271859438204\">\n";
-        session += "   <Header>\n";
-        session += "      <MdCreationDate>2008-05-27</MdCreationDate>\n";
-        session += "      <MdSelfLink> testID1Session</MdSelfLink>\n";
-        session += "      <MdCollectionDisplayName>CollectionName</MdCollectionDisplayName>\n";
-        session += "      <MdProfile>clarin.eu:cr1:p_1271859438204</MdProfile>\n";
-        session += "   </Header>\n";
-        session += "   <Resources>\n";
-        session += "      <ResourceProxyList>\n";
-        session += "         <ResourceProxy id=\"d314e408\">\n";
-        session += "            <ResourceType mimetype=\"video/x-mpeg1\" >Resource</ResourceType>\n";
-        session += "            <ResourceRef>../Media/elan-example1.mpg</ResourceRef>\n";
-        session += "         </ResourceProxy>\n";
-        session += "      </ResourceProxyList>\n";
-        session += "   </Resources>\n";
-        session += "   <Components>\n";
-        session += "      <cmdp:media-corpus-profile>\n";
-        session += "         <cmdp:Corpus>\n";
-        session += "             <cmdp:Topic>mysubject</cmdp:Topic>\n";
-        session += "         </cmdp:Corpus>";
-        session += "      </cmdp:media-corpus-profile>\n";
-        session += "      <cmdp:Session>\n";
-        session += "         <cmdp:Name>kleve-route</cmdp:Name>\n";
-        session += "         <cmdp:Title>kleve-route-title</cmdp:Title>\n";
-        session += "      </cmdp:Session>\n";
-        session += "   </Components>\n";
-        session += "</CMD>\n";
-
-        File sessionFile = createCmdiFile("testSession", session);
-
-
-        List<SolrInputDocument> docs = importData(sessionFile);
-
-        SolrInputDocument doc = docs.get(0);
-
-        Object[] values = getMultipleValues(doc, fieldNameService.getFieldName(FieldKey.SUBJECT)).toArray();
-
-        assertEquals(2, values.length);
-        //assertEquals("", getMultipleValues(doc, FacetConstants.FIELD_SUBJECT).);
-        assertEquals("blabla", values[0]);
-        assertEquals("mysubject", values[1]);
-
-    }
-
-    @Test
-    public void testValueSplit() throws Exception {
-        String session = "";
-        session += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        session += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1271859438204\">\n";
-        session += "   <Header>\n";
-        session += "      <MdCreationDate>2008-05-27</MdCreationDate>\n";
-        session += "      <MdSelfLink> testID1Session</MdSelfLink>\n";
-        session += "      <MdCollectionDisplayName>MYName</MdCollectionDisplayName>\n";
-        session += "      <MdProfile>clarin.eu:cr1:p_1271859438204</MdProfile>\n";
-        session += "   </Header>\n";
-        session += "   <Resources>\n";
-        session += "      <ResourceProxyList>\n";
-        session += "         <ResourceProxy id=\"d314e408\">\n";
-        session += "            <ResourceType mimetype=\"video/x-mpeg1\" >Resource</ResourceType>\n";
-        session += "            <ResourceRef>../Media/elan-example1.mpg</ResourceRef>\n";
-        session += "         </ResourceProxy>\n";
-        session += "      </ResourceProxyList>\n";
-        session += "   </Resources>\n";
-        session += "   <Components>\n";
-        session += "      <cmdp:Session>\n";
-        session += "         <cmdp:Name>kleve-route</cmdp:Name>\n";
-        session += "         <cmdp:Title>kleve-route-title</cmdp:Title>\n";
-        session += "      </cmdp:Session>\n";
-        session += "   </Components>\n";
-        session += "</CMD>\n";
-        File sessionFile = createCmdiFile("testSession", session);
-
-
-        List<SolrInputDocument> docs = importData(sessionFile);
-
-        SolrInputDocument doc = docs.get(0);
-
-        Object[] values = getMultipleValues(doc, fieldNameService.getFieldName(FieldKey.COLLECTION)).toArray();
-
-        //three values set
-        assertEquals(3, values.length);
-        //to be sure that it works for a facet where no value is set
-        assertEquals("collection1", values[0]);
-        assertEquals("collection2", values[1]);
-        assertEquals("collection3", values[2]);
-    }
-*/
     private Object getValue(SolrInputDocument doc, String field) {
         if (doc.getFieldValues(field) != null) {
             assertEquals(1, doc.getFieldValues(field).size());

@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.importer;
+package eu.clarin.cmdi.vlo.importer.mapping;
 
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
@@ -10,11 +10,12 @@ import static eu.clarin.cmdi.vlo.CmdConstants.CMD_NAMESPACE;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
-import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.AcceptableContext;
-import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.RejectableContext;
-import eu.clarin.cmdi.vlo.importer.mapping.ConditionTargetSet;
-import eu.clarin.cmdi.vlo.importer.mapping.ValueMappingsHandler;
+import eu.clarin.cmdi.vlo.importer.Pattern;
+import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
+import eu.clarin.cmdi.vlo.importer.Vocabulary;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping.AcceptableContext;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping.FacetConcept;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping.RejectableContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,20 +74,7 @@ public class FacetMappingFactory {
         
         this.conceptMapping = marshaller.getFacetConceptMapping(vloConfig.getFacetConceptsFile());
         
-        this.conditionTargetSetPerFacet = new HashMap<String, List<ConditionTargetSet>>();
-        
-      
-        SAXParserFactory fac = SAXParserFactory.newInstance();
-		fac.setXIncludeAware(true);
-		fac.setNamespaceAware(true);
-		
-		
-
-			try {
-				fac.newSAXParser().parse(vloConfig.getValueMappingsFile(), new ValueMappingsHandler(this.conceptMapping, this.conditionTargetSetPerFacet));
-			} catch (SAXException | IOException | ParserConfigurationException ex) {
-				LOG.error("Value Mappings not initialized!", ex);
-			}
+        this.conditionTargetSetPerFacet = ValueMappingFactory.getValueMappings(vloConfig.getValueMappingsFile(), this.conceptMapping);
     }
 
     /**

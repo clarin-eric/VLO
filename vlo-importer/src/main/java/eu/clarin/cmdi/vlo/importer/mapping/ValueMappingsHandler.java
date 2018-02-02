@@ -8,9 +8,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import eu.clarin.cmdi.vlo.importer.FacetConceptMapping;
-import eu.clarin.cmdi.vlo.importer.FacetConfiguration;
-import eu.clarin.cmdi.vlo.importer.FacetConceptMapping.FacetConcept;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping.FacetConcept;
 
 /**
  * @author @author Wolfgang Walter SAUER (wowasa)
@@ -28,7 +26,7 @@ public class ValueMappingsHandler extends DefaultHandler {
     private List<ConditionTargetSet> conditionTargetSets;
     private ConditionTargetSet conditionTargetSet;
 
-    private AbstractCondition condition;
+    private Condition condition;
     private TargetFacet targetFacet;
 
     private List<TargetFacet> targetFacets;
@@ -56,8 +54,8 @@ public class ValueMappingsHandler extends DefaultHandler {
             });
             break;
         case "source-value":
-            this.condition.setPattern(this.value);
-            this.conditionTargetSet.addCondtion(this.condition);
+            this.condition.setExpression(this.value);
+            this.conditionTargetSet.addCondition(this.condition);
             break;
         default:
 
@@ -107,10 +105,9 @@ public class ValueMappingsHandler extends DefaultHandler {
                     this.conditionTargetSet.addTarget(this.targetFacet);
 
                     if (attributes.getValue("overrideExistingValues") != null) // only override if attribute is set
-                        this.targetFacet.setOverrideExistingValues(
-                                "true".equals(attributes.getValue("overrideExistingValues")));
+                        this.targetFacet.setOverrideExistingValues(attributes.getValue("overrideExistingValues"));
                     if (attributes.getValue("removeSourceValue") != null) // only override if attribute is set
-                        this.targetFacet.setRemoveSourceValue("true".equals(attributes.getValue("removeSourceValue")));
+                        this.targetFacet.setRemoveSourceValue(attributes.getValue("removeSourceValue"));// should always be true if not set explicitly
 
                 });
                 break;
@@ -123,10 +120,9 @@ public class ValueMappingsHandler extends DefaultHandler {
             if (this.targetFacet != null) { // there is a general setting
                 this.targetFacet = this.targetFacet.clone(); // going on with the clone
                 if (attributes.getValue("overrideExistingValues") != null) // only override if attribute is set
-                    this.targetFacet
-                            .setOverrideExistingValues("true".equals(attributes.getValue("overrideExistingValues")));
+                    this.targetFacet.setOverrideExistingValues(attributes.getValue("overrideExistingValues"));
                 if (attributes.getValue("removeSourceValue") != null) // only override if attribute is set
-                    this.targetFacet.setRemoveSourceValue("true".equals(attributes.getValue("removeSourceValue")));
+                    this.targetFacet.setRemoveSourceValue(attributes.getValue("removeSourceValue"));
 
                 this.conditionTargetSet.addTarget(this.targetFacet);
                 break;
@@ -136,7 +132,7 @@ public class ValueMappingsHandler extends DefaultHandler {
                     .findFirst().orElse(null);
 
             if (facetConcept == null) {
-                LOG.warn("no facet conecpt for target-facet " + attributes.getValue("facet"));
+                LOG.warn("no facet concept for target-facet " + attributes.getValue("facet"));
                 break; // warning for reference to a facet which hasn't been defined
             }
 
@@ -148,13 +144,8 @@ public class ValueMappingsHandler extends DefaultHandler {
                     attributes.getValue("overrideExistingValues"), attributes.getValue("removeSourceValue")));
             break;
         case "source-value":
-            if ("true".equalsIgnoreCase(attributes.getValue("isRegex")))
-                this.condition = new RegExCondition();
+            this.condition = new Condition(attributes.getValue("isRegex"), attributes.getValue("caseSensitive"));
 
-            else
-                this.condition = new StringCondition("true".equalsIgnoreCase(attributes.getValue("caseSensitive")));
-
-            this.conditionTargetSet.addCondtion(this.condition);
             break;
         default:
 

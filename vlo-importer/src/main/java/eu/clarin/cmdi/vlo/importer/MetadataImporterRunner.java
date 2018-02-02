@@ -19,6 +19,8 @@ package eu.clarin.cmdi.vlo.importer;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;

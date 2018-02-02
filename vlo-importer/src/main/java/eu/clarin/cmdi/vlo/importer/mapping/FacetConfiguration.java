@@ -1,10 +1,10 @@
-package eu.clarin.cmdi.vlo.importer;
+package eu.clarin.cmdi.vlo.importer.mapping;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import eu.clarin.cmdi.vlo.importer.mapping.ConditionTargetSet;
+import eu.clarin.cmdi.vlo.importer.Pattern;
 
 
 /**

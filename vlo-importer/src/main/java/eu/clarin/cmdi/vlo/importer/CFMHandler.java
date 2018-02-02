@@ -9,6 +9,9 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import eu.clarin.cmdi.vlo.importer.mapping.FacetConfiguration;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
+
 /**
  * @author WolfgangWalter SAUER (wowasa) <wolfgang.sauer@oeaw.ac.at>
  *

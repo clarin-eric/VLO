@@ -2,7 +2,7 @@ package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-
+import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
