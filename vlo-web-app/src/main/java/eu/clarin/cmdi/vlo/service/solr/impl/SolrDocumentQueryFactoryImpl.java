@@ -21,7 +21,9 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentQueryFactory;
 import java.util.Collection;
+import static java_cup.sym.ID;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.util.ClientUtils;
 
 /**
  *
@@ -82,7 +84,7 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
 
     @Override
     public SolrQuery createSimilarDocumentsQuery(String docId) {
-        final SolrQuery query = new SolrQuery("id:" + docId);
+        final SolrQuery query = new SolrQuery(String.format("%s:\"%s\"", "id", ClientUtils.escapeQueryChars(docId)));
         query.setRequestHandler("/mlt");
         return query;
     }
