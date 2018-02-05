@@ -54,6 +54,11 @@ updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
 
 -----------------------------
+Upgrading from 4.3.3 to 4.3.4
+-----------------------------
+Maintenance release, no actions required (Solr index can be kept).
+
+-----------------------------
 Upgrading from 4.3.2 to 4.3.3
 -----------------------------
 Maintenance release, no actions required (Solr index can be kept). Make sure that the
