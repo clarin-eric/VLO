@@ -129,6 +129,8 @@ public class CMDIData {
 
     /**
      * Returns list of all search interfaces (preferably CQL interfaces)
+     *
+     * @return list of search interface resources
      */
     public List<Resource> getSearchResources() {
         return searchResources;
@@ -137,7 +139,7 @@ public class CMDIData {
     /**
      * Return the list of landing page resources.
      *
-     * @return the list
+     * @return list of landing page resources
      */
     public List<Resource> getLandingPageResources() {
         return landingPageResources;
@@ -150,6 +152,20 @@ public class CMDIData {
      */
     public List<Resource> getSearchPageResources() {
         return searchPageResources;
+    }
+
+    /**
+     * Returns a joined list of all resources
+     * @return list of all resources
+     */
+    public List<Resource> getAllResources() {
+        List<Resource> combinedList = new ArrayList<>();
+        combinedList.addAll(getDataResources());
+        combinedList.addAll(getMetadataResources());
+        combinedList.addAll(getSearchResources());
+        combinedList.addAll(getSearchPageResources());
+        combinedList.addAll(getLandingPageResources());
+        return combinedList;
     }
 
     /**

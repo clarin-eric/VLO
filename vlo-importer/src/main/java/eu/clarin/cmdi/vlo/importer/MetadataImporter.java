@@ -507,6 +507,12 @@ public class MetadataImporter {
             nrOfFilesWithError.incrementAndGet();
         }
         if (cmdiData != null) {
+            if(cmdiData.getAllResources().isEmpty()) {
+                nrOfFilesSkipped.incrementAndGet();
+                LOG.warn("Skipping {}, no resource proxy found", file);
+                return;
+            }
+
             if (processedIds.add(cmdiData.getId())) {
                 SolrInputDocument solrDocument = cmdiData.getSolrDocument();
                 if (solrDocument != null) {
