@@ -155,17 +155,13 @@ public class CMDIData {
     }
 
     /**
-     * Returns a joined list of all resources
-     * @return list of all resources
+     * Checks if any resources (metadata, landingpage, etc.) are available
+     * @return Returns true if at least one resource is available
      */
-    public List<Resource> getAllResources() {
-        List<Resource> combinedList = new ArrayList<>();
-        combinedList.addAll(getDataResources());
-        combinedList.addAll(getMetadataResources());
-        combinedList.addAll(getSearchResources());
-        combinedList.addAll(getSearchPageResources());
-        combinedList.addAll(getLandingPageResources());
-        return combinedList;
+    public boolean hasResources() {
+        return !(getDataResources().isEmpty() && getMetadataResources().isEmpty()
+                && getSearchResources().isEmpty() && getSearchPageResources().isEmpty()
+                && getLandingPageResources().isEmpty());
     }
 
     /**
