@@ -96,7 +96,7 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
 
     @Override
     public SolrQuery createSimilarDocumentsQuery(String docId) {
-        final SolrQuery query = new SolrQuery(String.format("%s:\"%s\"", ID, ClientUtils.escapeQueryChars(docId)));
+        final SolrQuery query = new SolrQuery(ID + ":" + ClientUtils.escapeQueryChars(docId));
         query.setRequestHandler("/mlt");
         return query;
     }
