@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.record;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Ordering;
-import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
@@ -52,7 +52,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.model.util.MapModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  *
@@ -64,8 +63,6 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
 
     @SpringBean
     private VloConfig vloConfig;
-    @SpringBean
-    private FieldNameService fieldNameService;
 
     private final IModel<Collection<String>> licenseTypeModel;
     private final IModel<Collection<String>> availabilityModel;
@@ -74,10 +71,10 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
 
     public RecordLicenseInfoPanel(String id, IModel<SolrDocument> model) {
         super(id, model);
-        this.licenseTypeModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.LICENSE_TYPE));
-        this.availabilityModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.AVAILABILITY));
-        this.accessInfoModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.ACCESS_INFO));
-        this.licensesModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.LICENSE));
+        this.licenseTypeModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_LICENSE_TYPE);
+        this.availabilityModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_AVAILABILITY);
+        this.accessInfoModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_ACCESS_INFO);
+        this.licensesModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_LICENSE);
 
         add(createInfoContainer("availableInfo"));
         add(createNoInfoContainer("noInfo"));
@@ -118,7 +115,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
                         new Model<String>());
 
                 //Model for the user friendly name of the license
-                final ConvertedFieldValueModel licenseNameModel = new ConvertedFieldValueModel(item.getModel(), fieldNameService.getFieldName(FieldKey.LICENSE));
+                final ConvertedFieldValueModel licenseNameModel = new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_LICENSE);
 
                 //create link to licence page
                 item.add(new ExternalLink("licensePage", linkPageModel) {
@@ -156,7 +153,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
             protected void populateItem(ListItem<String> item) {
 
                 //human friendly version of availability value
-                final IModel<String> titleModel = new ConvertedFieldValueModel(item.getModel(), fieldNameService.getFieldName(FieldKey.AVAILABILITY));
+                final IModel<String> titleModel = new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_AVAILABILITY);
 
                 //descriptor model for the availability value - with fallback to 'plain' (converted) value
                 final IModel<FieldValueDescriptor> descriptorModel = new MapValueModel<>(descriptorsModel, item.getModel());
@@ -232,7 +229,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
 
     public MarkupContainer createOriginalContextContainer(final String id) {
         // get landing page from document
-        final SolrFieldStringModel valueModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
+        final SolrFieldStringModel valueModel = new SolrFieldStringModel(getModel(), FacetConstants.FIELD_LANDINGPAGE);
         // wrap in model that transforms handle links
         final IModel<String> landingPageHrefModel = new HandleLinkModel(valueModel);
 

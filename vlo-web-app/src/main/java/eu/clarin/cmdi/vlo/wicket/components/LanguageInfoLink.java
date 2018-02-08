@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
-
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import static eu.clarin.cmdi.vlo.config.VloConfig.LANGUAGE_LINK_TEMPLATE_LANGUAGE_CODE_PLACEHOLDER;
 import java.util.regex.Matcher;

@@ -16,8 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
-import eu.clarin.cmdi.vlo.config.FieldNameService;
-//import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
@@ -44,7 +43,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  * Panel that shows the "basic" (non-technical) property fields of a document
@@ -64,8 +62,6 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
     private ResourceStringConverter resourceStringConverter;
     @SpringBean(name = "resolvingResourceStringConverter")
     private ResourceStringConverter resolvingResourceStringConverter;
-    @SpringBean
-    private FieldNameService fieldNameService;
     
     private final SolrFieldModel<String> resourcesModel;
     private ResourceInfoModel resourceInfoModel;
@@ -73,8 +69,8 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
     public RecordDetailsPanel(String id, IModel<SolrDocument> model) {
         super(id, model);
         
-        resourcesModel = new SolrFieldModel<>(model, fieldNameService.getFieldName(FieldKey.RESOURCE));
-        resourceInfoModel = new ResourceInfoModel(resourceStringConverter, new SolrFieldStringModel(model, fieldNameService.getFieldName(FieldKey.RESOURCE)));
+        resourcesModel = new SolrFieldModel<>(model, FacetConstants.FIELD_RESOURCE);
+        resourceInfoModel = new ResourceInfoModel(resourceStringConverter, new SolrFieldStringModel(model, FacetConstants.FIELD_RESOURCE));
 
         // Fields table
         add(new FieldsTablePanel("fieldsTable", new DocumentFieldsProvider(getModel(), basicPropertiesFilter, fieldOrder))

@@ -67,54 +67,6 @@
     <licenseTypeMapUrl>${vloconfig.mappingFilesLocation}LicenseTypeMap.xml</licenseTypeMapUrl> <!-- bundled resource: /uniform-maps/LicenseAvailabilityMap.xml -->
     
     <crossFacetMapUrl>${vloconfig.mappingFilesLocation}CrossFacetMap.xml</crossFacetMapUrl> <!-- bundled resource: /uniform-maps/CrossFacetMap.xml -->
-    
-	  <fields>
-		  <field key="NAME">name</field>
-		  <field key="DESCRIPTION">description</field>
-		  <field key="COLLECTION">collection</field>
-        <field key="LANGUAGE_CODE">languageCode</field>
-        <field key="MODALITY">modality</field>
-        <field key="CONTINENT">continent</field>
-        <field key="COUNTRY">country</field>
-        <field key="GENRE">genre</field>
-        <field key="SUBJECT">subject</field>
-        <field key="ORGANISATION">organisation</field>
-        <field key="LICENSE">license</field>
-        <field key="LICENSE_TYPE">licenseType</field>
-        <field key="AVAILABILITY">availability</field>
-        <field key="ACCESS_INFO">accessInfo</field>
-        <field key="KEYWORDS">keywords</field>
-        <field key="NATIONAL_PROJECT">nationalProject</field>
-        <field key="RESOURCE_CLASS">resourceClass</field>
-        <field key="RESOURCE">_resourceRef</field>
-        <field key="SELF_LINK">_selfLink</field>
-        <field key="ID">id</field>
-        <field key="DATA_PROVIDER">dataProvider</field>
-        <field key="FILENAME">_fileName</field>
-        <field key="FORMAT">format</field>
-        <field key="LANDINGPAGE">_landingPageRef</field>
-        <field key="SEARCHPAGE">_searchPageRef</field>
-        <field key="SEARCH_SERVICE">_contentSearchRef</field>
-        <field key="LAST_SEEN">_lastSeen</field>
-        <field key="CLARIN_PROFILE">_componentProfile</field>
-        <field key="COMPLETE_METADATA">metadataSource</field>
-        <field key="HIERARCHY_WEIGHT">_hierarchyWeight</field>
-        <field key="HAS_PART">_hasPart</field>
-        <field key="HAS_PART_COUNT">_hasPartCount</field>
-        <field key="RESOURCE_COUNT">_resourceRefCount</field>
-        <field key="IS_PART_OF">_isPartOf</field>
-        <field key="SOLR_SCORE">score</field>
-        <field key="COMPLETE_METADATA">metadataSource</field>
-        <field key="PROJECT_NAME">projectName</field>
-        <field key="TEMPORAL_COVERAGE">temporalCoverage</field>
-        <field key="DAYS_SINCE_LAST_SEEN">_daysSinceLastSeen</field>
-        <field key="HAS_PART_COUNT_WEIGHT">_hasPartCountWeight</field>
-        <field key="LANGUAGE_NAME">_languageName</field>   
-	</fields>
-	  
-	<deprecatedFields>
-	  <field key="DEPRECATED_LANGUAGE">language</field>
-	</deprecatedFields>
             
     <!-- Fields shown as facets on the search page -->
     <facetFields>        

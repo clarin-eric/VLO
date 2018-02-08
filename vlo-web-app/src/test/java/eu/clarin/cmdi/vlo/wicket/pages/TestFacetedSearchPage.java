@@ -1,32 +1,58 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.VloApplicationTestConfig;
+import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.config.VloServicesSpringConfig;
 import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
-import eu.clarin.cmdi.vlo.wicket.AbstractWicketTest;
 import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.util.tester.WicketTester;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+/**
+ * Mock injection based on blog post by Petri Kainulainen found at
+ * {@link http://www.petrikainulainen.net/programming/tips-and-tricks/mocking-spring-beans-with-apache-wicket-and-mockito/}
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
-public class TestFacetedSearchPage extends AbstractWicketTest {
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD) // gives us a fresh context for each test
+public class TestFacetedSearchPage {
 
+    @Inject
+    private VloWicketApplication application;
     @Inject
     private Mockery mockery;
     @Inject
     private FacetFieldsService facetFieldsService;
     @Inject
     private SolrDocumentService documentService;
+
+    private WicketTester tester;
+
+    @Before
+    public void setUp() {
+        tester = new WicketTester(application);
+    }
 
     @Test
     public void homepageRendersSuccessfully() {
@@ -62,18 +88,40 @@ public class TestFacetedSearchPage extends AbstractWicketTest {
         });
 
         //start and render the test page
-        getTester().startPage(FacetedSearchPage.class);
+        tester.startPage(FacetedSearchPage.class);
 
         //assert rendered page class
-        getTester().assertRenderedPage(FacetedSearchPage.class);
+        tester.assertRenderedPage(FacetedSearchPage.class);
+    }
+
+    /**
+     * Custom configuration injected into web app for testing
+     */
+    @Configuration
+    @PropertySource(value = "classpath:/config.default.properties", ignoreResourceNotFound = false)
+    @Import({
+        VloSolrTestConfig.class,
+        VloApplicationTestConfig.class,
+        VloServicesSpringConfig.class})
+    static class ContextConfiguration {
+
+        @Bean
+        public Mockery mockery() {
+            // shared mockery context
+            return new JUnit4Mockery();
+        }
+
+        @Bean
+        public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+            return new PropertySourcesPlaceholderConfigurer();
+        }
     }
 
     /**
      * Provides some mock Solr services
      */
     @Configuration
-    @Import({WicketBaseContextConfiguration.class})
-    static class ContextConfiguration extends VloSolrSpringConfig {
+    static class VloSolrTestConfig extends VloSolrSpringConfig {
 
         @Inject
         private Mockery mockery;

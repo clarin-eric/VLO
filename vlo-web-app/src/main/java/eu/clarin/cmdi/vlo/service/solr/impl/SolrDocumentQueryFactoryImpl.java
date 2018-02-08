@@ -18,28 +18,16 @@ package eu.clarin.cmdi.vlo.service.solr.impl;
 
 import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentQueryFactory;
 import java.util.Collection;
-
-import javax.inject.Inject;
-
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.util.ClientUtils;
-
-import eu.clarin.cmdi.vlo.FieldKey;
-
 
 /**
  *
  * @author twagoo
  */
 public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrDocumentQueryFactory {
-    
-    private final String ID;
-    private final String SELF_LINK;
-    
 
     /**
      * Template query for new document queries
@@ -50,9 +38,7 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
      *
      * @param documentFields fields that should be included in document queries
      */
-    public SolrDocumentQueryFactoryImpl(Collection<String> documentFields, FieldNameService fieldNameService) {
-        this.ID = fieldNameService.getFieldName(FieldKey.ID);
-        this.SELF_LINK = fieldNameService.getFieldName(FieldKey.SELF_LINK);
+    public SolrDocumentQueryFactoryImpl(Collection<String> documentFields) {
         defaultQueryTemplate = new SolrQuery();
         defaultQueryTemplate.setFields(documentFields.toArray(new String[]{}));
 //        //TODO: qf (all fields with weights - make configurable (later)
@@ -84,8 +70,8 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
         // be unique and self link use to be ID in old VLO, so this should keep old
         // URL's valid with a minimal likelihood of clashes
         final ImmutableMap<String, String> idOrQueryMap = ImmutableMap.<String, String>builder()
-                .put(ID, docId)
-                .put(SELF_LINK, docId)
+                .put(FacetConstants.FIELD_ID, docId)
+                .put(FacetConstants.FIELD_SELF_LINK, docId)
                 .build();
         query.addFilterQuery(createFilterOrQuery(idOrQueryMap));
 
@@ -96,7 +82,7 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
 
     @Override
     public SolrQuery createSimilarDocumentsQuery(String docId) {
-        final SolrQuery query = new SolrQuery(ID + ":" + ClientUtils.escapeQueryChars(docId));
+        final SolrQuery query = new SolrQuery("id:" + docId);
         query.setRequestHandler("/mlt");
         return query;
     }

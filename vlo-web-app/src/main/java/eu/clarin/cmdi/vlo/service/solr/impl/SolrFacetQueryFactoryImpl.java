@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.service.solr.SolrFacetQueryFactory;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.List;
@@ -27,7 +28,6 @@ import org.apache.solr.client.solrj.SolrQuery;
  *
  * @author twagoo
  */
-
 public class SolrFacetQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrFacetQueryFactory {
 
     private final SolrQuery baseQuery;

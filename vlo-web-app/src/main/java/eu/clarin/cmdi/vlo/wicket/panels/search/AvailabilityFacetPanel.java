@@ -23,9 +23,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import java.util.List;
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
-import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -76,7 +74,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacetsSelection> implements IAjaxIndicatorAware {
 
-    private static final FieldKey AVAILABILITY_FIELD = FieldKey.LICENSE_TYPE;
+    public static final String AVAILABILITY_FIELD = FacetConstants.FIELD_LICENSE_TYPE;
     private final List<String> availabilityLevels;
 
     @SpringBean
@@ -85,8 +83,6 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
     private VloConfig vloConfig;
     @SpringBean
     private PiwikConfig piwikConfig;
-    @SpringBean
-    private FieldNameService fieldNameService;
 
     private final FacetFieldsModel facetFieldsModel;
 
@@ -103,7 +99,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
                 .add(indicatorAppender)
         );
 
-        if (selectionModel.getObject().getSelectionValues(fieldNameService.getFieldName(AVAILABILITY_FIELD)) != null) {
+        if (selectionModel.getObject().getSelectionValues(AVAILABILITY_FIELD) != null) {
             //if there any selection, make initially expanded
             getExpansionModel().setObject(ExpansionState.EXPANDED);
         }
@@ -138,7 +134,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
 
     private class AvailabilityDataView extends DataView<Count> {
 
-        private final IModel<String> fieldNameModel = Model.of(fieldNameService.getFieldName(AVAILABILITY_FIELD));
+        private final IModel<String> fieldNameModel = Model.of(AVAILABILITY_FIELD);
         /**
          * Model of (a serializable copy of) the availability levels map with
          * descriptions and display names for each level
@@ -181,7 +177,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
         }
 
         private Component createValueCheckbox(final String id, final String targetValue) {
-            return new CheckBox(id, new FixedValueSetBooleanSelectionModel(fieldNameService.getFieldName(AVAILABILITY_FIELD), availabilityLevels, targetValue, getModel()))
+            return new CheckBox(id, new FixedValueSetBooleanSelectionModel(AVAILABILITY_FIELD, availabilityLevels, targetValue, getModel()))
                     .add(new OnChangeAjaxBehavior() {
 
                         @Override
@@ -215,7 +211,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
         private final Ordering<Count> valuesOrdering = Ordering.from(new FacetNameComparator(availabilityLevels));
 
         public AvailabilityValuesProvider() {
-            super(new FacetFieldModel(fieldNameService.getFieldName(AVAILABILITY_FIELD), facetFieldsModel), fieldValueConverterProvider);
+            super(new FacetFieldModel(AVAILABILITY_FIELD, facetFieldsModel), fieldValueConverterProvider);
         }
 
         @Override

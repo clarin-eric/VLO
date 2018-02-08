@@ -17,14 +17,8 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.VloWicketApplication;
-import eu.clarin.cmdi.vlo.config.FieldNameService;
-
 import static eu.clarin.cmdi.vlo.VloWebAppParameters.*;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
@@ -34,15 +28,10 @@ import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
 import org.apache.wicket.Session;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
@@ -57,8 +46,6 @@ import org.slf4j.LoggerFactory;
 public class QueryFacetsSelectionParametersConverter implements PageParametersConverter<QueryFacetsSelection> {
 
     public final static Logger logger = LoggerFactory.getLogger(QueryFacetsSelectionParametersConverter.class);
-    
-
     /**
      * Splitter for facet query strings like "language:Dutch". Because it is
      * limited to two tokens, will also work for strings with a colon in their
@@ -78,9 +65,9 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
      *
      * @see FacetParameterMapper.IdentityMapper
      */
-/*    public QueryFacetsSelectionParametersConverter() {
-        //this(new FacetParameterMapper.IdentityMapper());
-    }*/
+    public QueryFacetsSelectionParametersConverter() {
+        this(new FacetParameterMapper.IdentityMapper());
+    }
 
     /**
      * Constructs a converter that does not do any facet (value) mapping
@@ -97,8 +84,8 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
      *
      * @param facetParamMapper mapper to apply to facet names and values
      */
-    public QueryFacetsSelectionParametersConverter(FacetParameterMapper facetParamMapper, Collection<String> facetsAllowed) {
-        this(facetParamMapper, ImmutableSet.copyOf(facetsAllowed));
+    public QueryFacetsSelectionParametersConverter(FacetParameterMapper facetParamMapper) {
+        this(facetParamMapper, FacetConstants.AVAILABLE_FACETS);
     }
 
     /**
@@ -111,7 +98,6 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
         this.facetParamMapper = facetParamMapper;
         this.facetsAllowed = facetsAllowed;
     }
-    
 
     @Override
     public QueryFacetsSelection fromParameters(PageParameters params) {
@@ -138,8 +124,6 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
 
         return new QueryFacetsSelection(query, selection);
     }
-    
-
 
     private void applySelectionTypeFromParameter(StringValue selectionType, final HashMap<String, FacetSelection> selection) {
         final List<String> fqType = FILTER_SPLITTER.splitToList(selectionType.toString());

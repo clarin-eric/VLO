@@ -17,16 +17,12 @@
 package eu.clarin.cmdi.vlo.wicket.provider;
 
 import eu.clarin.cmdi.vlo.VloWicketApplication;
-import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.inject.Inject;
-
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
@@ -37,15 +33,12 @@ import org.apache.wicket.model.IModel;
  */
 public class SolrDocumentProvider implements IDataProvider<SolrDocument> {
 
-    private final FieldNameService fieldNameService;
-
     private final IModel<QueryFacetsSelection> selectionModel;
 
     private Long size;
 
-    public SolrDocumentProvider(IModel<QueryFacetsSelection> selection, FieldNameService fieldNameService) {
+    public SolrDocumentProvider(IModel<QueryFacetsSelection> selection) {
         this.selectionModel = selection;
-        this.fieldNameService = fieldNameService;
     }
 
     @Override
@@ -66,7 +59,7 @@ public class SolrDocumentProvider implements IDataProvider<SolrDocument> {
 
     @Override
     public IModel<SolrDocument> model(SolrDocument object) {
-        return new SolrDocumentModel(object, fieldNameService);
+        return new SolrDocumentModel(object);
     }
 
     @Override

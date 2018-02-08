@@ -6,20 +6,20 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.4-SNAPSHOT</version>
+        <version>4.3.3</version>
     </parent>
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-web-app</artifactId>
     <packaging>war</packaging>
-    <version>4.4-SNAPSHOT</version>
+    <version>4.3.3</version>
     <name>VLO Web Application</name>
     <description></description>
 
     <properties>
         <wicket.version>7.9.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
-        <spring.version>4.3.13.RELEASE</spring.version>
+        <spring.version>4.3.12.RELEASE</spring.version>
         <jetty.version>8.1.17.v20150415</jetty.version>
         <jackson.version>2.9.1</jackson.version>
         <clarin-basestyle.version>0.2.0</clarin-basestyle.version>
@@ -215,7 +215,7 @@
         </resources>
         <testResources>
             <testResource>
-                <filtering>true</filtering>
+                <filtering>false</filtering>
                 <directory>src/test/resources</directory>
             </testResource>
             <testResource>
@@ -227,10 +227,6 @@
                 <excludes>
                     <exclude>**/*.java</exclude>
                 </excludes>
-            </testResource>
-            <testResource>
-                <filtering>false</filtering>
-                <directory>target/generated-test-resources</directory>
             </testResource>
         </testResources>
         <plugins>
@@ -323,7 +319,7 @@
                         </configuration>            
                     </execution>
                     <execution>
-                        <!-- copy scripts from bootstrap distribution -->
+                        <!-- copy fonts from bootstrap distribution -->
                         <id>copy-script</id>
                         <phase>generate-resources</phase>
                         <goals>
@@ -334,22 +330,6 @@
                             <resources>
                                 <resource>
                                     <directory>${project.build.directory}/generated-sources/bootstrap/js</directory>
-                                </resource>
-                            </resources>              
-                        </configuration>            
-                    </execution>
-                    <execution>
-                        <!-- copy solr config for web app tests -->
-                        <id>test-copy-solr-conf</id>
-                        <phase>generate-test-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/generated-test-resources/solr/vlo-index</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/vlo-solr/solr-home/vlo-index</directory>
                                 </resource>
                             </resources>              
                         </configuration>            

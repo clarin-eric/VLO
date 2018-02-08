@@ -17,7 +17,6 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
@@ -41,7 +40,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  *
@@ -51,9 +49,6 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
 
     @SpringBean
     private VloConfig vloConfig;
-    @SpringBean
-    private FieldNameService fieldNameService;
-    
     private final IDataProvider<SolrDocument> documentProvider;
 
     public VirtualCollectionSubmissionPage(IModel<QueryFacetsSelection> model, IDataProvider<SolrDocument> documentProvider) {
@@ -102,9 +97,9 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
             @Override
             protected void populateItem(Item<SolrDocument> item) {
                 final WebMarkupContainer mdUri = new WebMarkupContainer("metadataUri");
-                final IModel<String> linkModel = new SolrFieldStringModel(item.getModel(), fieldNameService.getFieldName(FieldKey.SELF_LINK));
+                final IModel<String> linkModel = new SolrFieldStringModel(item.getModel(), FacetConstants.FIELD_SELF_LINK);
                 if (linkModel.getObject() == null) {
-                    mdUri.add(new AttributeModifier("value", new SolrFieldStringModel(item.getModel(), fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA))));
+                    mdUri.add(new AttributeModifier("value", new SolrFieldStringModel(item.getModel(), FacetConstants.FIELD_COMPLETE_METADATA)));
                 } else {
                     mdUri.add(new AttributeModifier("value", linkModel));
                 }

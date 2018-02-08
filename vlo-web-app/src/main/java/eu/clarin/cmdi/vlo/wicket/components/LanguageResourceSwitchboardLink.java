@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
-
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;

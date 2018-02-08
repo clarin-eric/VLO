@@ -18,30 +18,23 @@ package eu.clarin.cmdi.vlo.service.impl;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Ordering;
-import eu.clarin.cmdi.vlo.config.FieldNameService;
-
+import eu.clarin.cmdi.vlo.FacetConstants;
 import java.util.Comparator;
 import java.util.Map;
-
-import javax.inject.Inject;
-
 import eu.clarin.cmdi.vlo.service.FieldValueOrderingsFactory;
-import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  *
  * @author twagoo
  */
 public class FieldValueOrderingsFactoryImpl implements FieldValueOrderingsFactory {
-    @Inject
-    FieldNameService fieldNameService;
 
     private static final String LANGUAGE_CODE_PREFIX_ENGLISH = "{code:eng}";
 
     @Override
     public Map<String, Ordering<String>> createFieldValueOrderingMap() {
         return ImmutableMap.of(
-            fieldNameService.getFieldName(FieldKey.DESCRIPTION), createDescriptionFieldOrdering()
+                FacetConstants.FIELD_DESCRIPTION, createDescriptionFieldOrdering()
         );
     }
 

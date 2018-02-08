@@ -1,9 +1,6 @@
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.FieldKey;
-import eu.clarin.cmdi.vlo.VloWicketApplication;
-import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -20,16 +17,10 @@ import org.slf4j.LoggerFactory;
 public class SolrDaoImpl {
 
     private final static Logger logger = LoggerFactory.getLogger(SolrDaoImpl.class);
-   
     private final SolrClient solrClient;
-    private final VloConfig vloConfig;
-    
-    private final String ID;
 
-    public SolrDaoImpl(SolrClient solrClient, VloConfig vloConfig, FieldNameService fieldNameService) {
+    public SolrDaoImpl(SolrClient solrClient, VloConfig config) {
         this.solrClient = solrClient;
-        this.vloConfig = vloConfig;
-        this.ID = fieldNameService.getFieldName(FieldKey.ID) + ":";
     }
 
     protected SolrClient getSolrClient() {
@@ -67,7 +58,7 @@ public class SolrDaoImpl {
                 String facetInFilter = filter.split(":")[0]
                         .replaceFirst("^\\{!tag=.*\\}", ""); //strip out tag syntax (may be used for OR queries, see query factory implementation)
                 
-                if (vloConfig.getFields().values().contains(facetInFilter)) {
+                if (FacetConstants.AVAILABLE_FACETS.contains(facetInFilter)) {
                     // facet in the filter is in the set that is defined by the config file
                 } else {
                     if (facetInFilter.startsWith("_")) {
@@ -105,7 +96,7 @@ public class SolrDaoImpl {
         }
         SolrDocument result = null;
         SolrQuery query = new SolrQuery();
-        query.setQuery(ID + ClientUtils.escapeQueryChars(docId));
+        query.setQuery("id:" + ClientUtils.escapeQueryChars(docId));
         query.setFields("*");
         SolrDocumentList docs = fireQuery(query).getResults();
         if (docs.getNumFound() > 1) {

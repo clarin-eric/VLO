@@ -18,8 +18,8 @@ package eu.clarin.cmdi.vlo.wicket.panels.record;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
-import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
@@ -57,7 +57,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  *
@@ -78,8 +77,6 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
     private SolrDocumentService documentService;
     @SpringBean
     private PiwikConfig piwikConfig;
-    @SpringBean
-    private FieldNameService fieldNameService;
 
     private final IDataProvider<SolrDocument> parentsProvider;
     private final MarkupContainer treeContainer;
@@ -119,7 +116,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        logger.debug("Expand up: {}", item.getModelObject().get(fieldNameService.getFieldName(FieldKey.ID)));
+                        logger.debug("Expand up: {}", item.getModelObject().get(FacetConstants.FIELD_ID));
 
                         // tree root up one level, expand root for traceability by user                        
                         HierarchyPanel.this.setModel(item.getModel());
@@ -130,7 +127,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                         tree.expand(new ModelWrapper<>(PARENTS_ROOT_PATH, item.getModel()));
 
                         if (logger.isDebugEnabled()) {
-                            logger.debug("Expand {} -> {}", PARENTS_ROOT_PATH, item.getModelObject().getFieldValue(fieldNameService.getFieldName(FieldKey.NAME)));
+                            logger.debug("Expand {} -> {}", PARENTS_ROOT_PATH, item.getModelObject().getFieldValue(FacetConstants.FIELD_NAME));
                         }
 
                         if (target != null) {
@@ -146,7 +143,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                         // the actual updating of the expansion set...
                         for (ModelWrapper<SolrDocument> item : currentExpansion) {
                             // append the node id of the new parent to the root path for each path
-                            final String newPath = item.getPath().replaceFirst(PARENTS_ROOT_PATH, PARENTS_ROOT_PATH + "/" + item.getModelObject().getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
+                            final String newPath = item.getPath().replaceFirst(PARENTS_ROOT_PATH, PARENTS_ROOT_PATH + "/" + item.getModelObject().getFieldValue(FacetConstants.FIELD_ID));
                             tree.collapse(item);
                             tree.expand(new ModelWrapper<>(newPath, item.getModel()));
                         }
@@ -234,8 +231,8 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                                     .add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
                                         @Override
                                         public String getObject() {
-                                            final boolean isCurrent = node.getObject().getModelObject().getFieldValue(fieldNameService.getFieldName(FieldKey.ID))
-                                                    .equals(pageDocumentModel.getObject().getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
+                                            final boolean isCurrent = node.getObject().getModelObject().getFieldValue(FacetConstants.FIELD_ID)
+                                                    .equals(pageDocumentModel.getObject().getFieldValue(FacetConstants.FIELD_ID));
                                             return isCurrent ? "current" : "";
                                         }
                                     }, " "));
@@ -277,7 +274,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
         @Override
         public Iterator<? extends ModelWrapper<SolrDocument>> getRoots() {
             if (logger.isDebugEnabled()) {
-                logger.debug("Root: {} -> {}", PARENTS_ROOT_PATH, HierarchyPanel.this.getModel().getObject().getFieldValue(fieldNameService.getFieldName(FieldKey.NAME)));
+                logger.debug("Root: {} -> {}", PARENTS_ROOT_PATH, HierarchyPanel.this.getModel().getObject().getFieldValue(FacetConstants.FIELD_NAME));
             }
             return Iterators.singletonIterator(new ModelWrapper<>(PARENTS_ROOT_PATH, HierarchyPanel.this.getModel()));
         }
@@ -287,7 +284,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
             if (node.isLimit()) {
                 return false;
             } else {
-                final Object partCount = node.getModelObject().getFieldValue(fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT));
+                final Object partCount = node.getModelObject().getFieldValue(FacetConstants.FIELD_HAS_PART_COUNT);
                 return (partCount instanceof Number) && ((Number) partCount).intValue() > 0;
             }
         }
@@ -297,7 +294,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
             if (node.isLimit()) {
                 return Collections.emptyIterator();
             } else {
-                final Collection<Object> parts = node.getModelObject().getFieldValues(fieldNameService.getFieldName(FieldKey.HAS_PART));
+                final Collection<Object> parts = node.getModelObject().getFieldValues(FacetConstants.FIELD_HAS_PART);
                 final Iterator<Object> objectIterator;
                 if (childrenShown == null) {
                     // unlimited
@@ -312,7 +309,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                         final SolrDocument document = documentService.getDocument(childId.toString());
                         final String path = node.getPath() + "/" + childId;
                         logger.debug("Child node path: {}", path);
-                        return new ModelWrapper<>(path, new SolrDocumentModel(document, fieldNameService));
+                        return new ModelWrapper<>(path, new SolrDocumentModel(document));
                     }
                 });
                 if (childrenShown != null && parts.size() > childrenShown) {
@@ -338,7 +335,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
         @Override
         public Iterator<? extends SolrDocument> iterator(long first, long count) {
-            final Collection<Object> parentIds = HierarchyPanel.this.getModelObject().getFieldValues(fieldNameService.getFieldName(FieldKey.IS_PART_OF));
+            final Collection<Object> parentIds = HierarchyPanel.this.getModelObject().getFieldValues(FacetConstants.FIELD_IS_PART_OF);
             if (parentIds == null) {
                 // no parents, so provide empty list of documents
                 return Collections.emptyIterator();
@@ -357,7 +354,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
         @Override
         public long size() {
             if (size == null) {
-                final Collection<Object> fieldValues = HierarchyPanel.this.getModelObject().getFieldValues(fieldNameService.getFieldName(FieldKey.IS_PART_OF));
+                final Collection<Object> fieldValues = HierarchyPanel.this.getModelObject().getFieldValues(FacetConstants.FIELD_IS_PART_OF);
                 if (fieldValues == null) {
                     // no parent field
                     size = 0L;
@@ -375,7 +372,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                 // dangling hasPart references can happen...
                 return new Model<>();
             } else {
-                return new SolrDocumentModel(object, fieldNameService);
+                return new SolrDocumentModel(object);
             }
         }
 
