@@ -19,7 +19,8 @@ package eu.clarin.cmdi.vlo.wicket.panels.record;
 import eu.clarin.cmdi.vlo.wicket.components.LanguageInfoLink;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.DocumentField;
 import eu.clarin.cmdi.vlo.wicket.components.FacetSelectLink;
@@ -69,23 +70,88 @@ public class FieldsTablePanel extends Panel {
      * {@link SmartLinkMultiLineLabel}, which detects URLs and turns them into
      * links
      */
-    private final static Collection<String> SMART_LINK_FIELDS
-            = ImmutableSet.of(
-                    FacetConstants.FIELD_DESCRIPTION,
-                    FacetConstants.FIELD_LANDINGPAGE,
-                    FacetConstants.FIELD_SEARCHPAGE,
-                    FacetConstants.FIELD_COMPLETE_METADATA,
-                    FacetConstants.FIELD_SELF_LINK
-            );
+
 
     @SpringBean
     private VloConfig vloConfig;
     @SpringBean(name = "fieldValueSorters")
     private Map<String, Ordering> fieldValueOrderingMap;
+    @SpringBean 
+    private FieldNameService fieldNameService;
+    
+    private final Collection<String> SMART_LINK_FIELDS
+    = ImmutableSet.of(
+            fieldNameService.getFieldName(FieldKey.DESCRIPTION),
+            fieldNameService.getFieldName(FieldKey.LANDINGPAGE),
+            fieldNameService.getFieldName(FieldKey.SEARCHPAGE),
+            fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA),
+            fieldNameService.getFieldName(FieldKey.SELF_LINK)
+    );
+    
+    private IDataProvider<DocumentField> fieldProvider;
 
     public FieldsTablePanel(String id, IDataProvider<DocumentField> fieldProvider) {
         super(id);
-        add(new DataView<DocumentField>("documentField", fieldProvider) {
+        this.fieldProvider = fieldProvider;
+        
+    }
+
+    private IModel<List<String>> createOrderedFieldValuesModel(final IModel<List<String>> valuesModel, final IModel<String> fieldNameModel) {
+
+        final IModel<Ordering<String>> orderingModel = new LoadableDetachableModel<Ordering<String>>() {
+            @Override
+            protected Ordering<String> load() {
+                return fieldValueOrderingMap.get(fieldNameModel.getObject());
+            }
+
+        };
+        return new OrderedListModel<>(valuesModel, orderingModel);
+    }
+
+    private Component createValueLabel(String id, final IModel<String> facetNameModel, final IModel<String> valueModel) {
+        final String fieldName = facetNameModel.getObject();
+
+        if (fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE).equals(facetNameModel.getObject())) {
+            return new LanguageInfoLink(id, valueModel, facetNameModel);
+        } else if (SMART_LINK_FIELDS.contains(fieldName)) {
+            // create label that generates links
+            return new SmartLinkFieldValueLabel(id, new HandleLinkModel(valueModel), facetNameModel);
+        } else {
+            // add a label for the facet value
+            final Label fieldLabel = new FieldValueLabel(id, valueModel, facetNameModel);
+
+            // some selected fields may have HTML that needs to be preserved...
+            fieldLabel.setEscapeModelStrings(!UNESCAPED_VALUE_FIELDS.contains(fieldName));
+            return fieldLabel;
+        }
+    }
+
+    private Link createFacetSelectLink(String id, final IModel<String> facetNameModel, final IModel valueModel) {
+        return new FacetSelectLink(id, valueModel, facetNameModel) {
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                // only show for facet fields
+                setVisible(isShowFacetSelectLinks()
+                        && vloConfig.getFacetsInSearch().contains(facetNameModel.getObject()));
+            }
+        };
+    }
+
+    protected boolean isShowFacetSelectLinks() {
+        return true;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.wicket.MarkupContainer#onInitialize()
+     */
+    @Override
+    protected void onInitialize() {
+        // TODO Auto-generated method stub
+        super.onInitialize();
+        
+        add(new DataView<DocumentField>("documentField", this.fieldProvider) {
 
             @Override
             protected void populateItem(final Item<DocumentField> item) {
@@ -127,53 +193,7 @@ public class FieldsTablePanel extends Panel {
                 }));
             }
         });
-    }
 
-    private IModel<List<String>> createOrderedFieldValuesModel(final IModel<List<String>> valuesModel, final IModel<String> fieldNameModel) {
-
-        final IModel<Ordering<String>> orderingModel = new LoadableDetachableModel<Ordering<String>>() {
-            @Override
-            protected Ordering<String> load() {
-                return fieldValueOrderingMap.get(fieldNameModel.getObject());
-            }
-
-        };
-        return new OrderedListModel<>(valuesModel, orderingModel);
-    }
-
-    private Component createValueLabel(String id, final IModel<String> facetNameModel, final IModel<String> valueModel) {
-        final String fieldName = facetNameModel.getObject();
-
-        if (FacetConstants.FIELD_LANGUAGE_CODE.equals(facetNameModel.getObject())) {
-            return new LanguageInfoLink(id, valueModel, facetNameModel);
-        } else if (SMART_LINK_FIELDS.contains(fieldName)) {
-            // create label that generates links
-            return new SmartLinkFieldValueLabel(id, new HandleLinkModel(valueModel), facetNameModel);
-        } else {
-            // add a label for the facet value
-            final Label fieldLabel = new FieldValueLabel(id, valueModel, facetNameModel);
-
-            // some selected fields may have HTML that needs to be preserved...
-            fieldLabel.setEscapeModelStrings(!UNESCAPED_VALUE_FIELDS.contains(fieldName));
-            return fieldLabel;
-        }
-    }
-
-    private Link createFacetSelectLink(String id, final IModel<String> facetNameModel, final IModel valueModel) {
-        return new FacetSelectLink(id, valueModel, facetNameModel) {
-
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                // only show for facet fields
-                setVisible(isShowFacetSelectLinks()
-                        && vloConfig.getFacetsInSearch().contains(facetNameModel.getObject()));
-            }
-        };
-    }
-
-    protected boolean isShowFacetSelectLinks() {
-        return true;
     }
 
 //    re-enable for 'fancy' popups for the field descriptions

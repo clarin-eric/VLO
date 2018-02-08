@@ -2,6 +2,8 @@ package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloConfigFactory;
 import java.io.File;
@@ -16,6 +18,7 @@ public abstract class ImporterTestcase {
 
     private final VloConfigFactory configFactory = new DefaultVloConfigFactory();
     protected VloConfig config;
+    protected FieldNameService fieldNameService;
     protected LanguageCodeUtils languageCodeUtils;
     protected VLOMarshaller marshaller;
     private char ch = 'a';
@@ -38,6 +41,7 @@ public abstract class ImporterTestcase {
         // read the configuration defined in the packaged configuration file
         // and configure to use bundled mappings
         config = DefaultVloConfigFactory.configureDefaultMappingLocations(configFactory.newConfig());
+        fieldNameService = new FieldNameServiceImpl(config);
         languageCodeUtils = new LanguageCodeUtils(config);
         marshaller = new VLOMarshaller();
     }

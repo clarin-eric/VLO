@@ -4,10 +4,15 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * VLO configuration
@@ -15,6 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author keeloo, twagoo
  */
 @XmlRootElement(name = "VloConfig")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class VloConfig {
 
     public static final String LANGUAGE_LINK_TEMPLATE_LANGUAGE_CODE_PLACEHOLDER = "{}";
@@ -89,6 +95,7 @@ public class VloConfig {
 
 
     // services
+    @XmlElement(name = "FederatedContentSearchUrl")
     private String federatedContentSearchUrl = "";
 
     private boolean useHandleResolver = false;
@@ -130,6 +137,14 @@ public class VloConfig {
     private int solrThreads = 2;
     
     private boolean useCrossMapping = false;
+    
+    @XmlJavaTypeAdapter(XmlFieldAdapter.class)
+    private Map<String,String> fields;
+    
+    @XmlJavaTypeAdapter(XmlFieldAdapter.class)
+    @XmlElement(name="deprecatedFields")
+    private Map<String,String> deprecatedFields;
+
 
     /**
      * A set of fields to be excluded from display<br><br>
@@ -747,7 +762,7 @@ public class VloConfig {
      *
      * @return the value
      */
-    @XmlElement(name = "FederatedContentSearchUrl")
+    
     public String getFederatedContentSearchUrl() {
         return federatedContentSearchUrl;
     }
@@ -787,6 +802,8 @@ public class VloConfig {
     public void setNationalProjectMapping(String nationalProjectMapping) {
         this.nationalProjectMapping = nationalProjectMapping;
     }
+    
+
 
     /**
      * Get the value of the FacetFields parameter<br><br>
@@ -1293,4 +1310,31 @@ public class VloConfig {
     	this.crossFacetMapUrl = crossFacetMapUrl;
     }
 
+	/**
+	 * @return the fields
+	 */
+	public Map<String, String> getFields() {
+		return fields;
+	}
+
+	/**
+	 * @param fields the fields to set
+	 */
+	public void setFields(Map<String, String> fields) {
+		this.fields = fields;
+	}
+
+    /**
+     * @return the dFields
+     */
+    public Map<String, String> getDeprecatedFields() {
+        return deprecatedFields;
+    }
+
+    /**
+     * @param dFields the dFields to set
+     */
+    public void setDeprecatedFields(Map<String, String> deprecatedFields) {
+        this.deprecatedFields = deprecatedFields;
+    }
 }

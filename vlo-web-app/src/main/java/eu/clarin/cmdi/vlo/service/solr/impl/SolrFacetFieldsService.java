@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
@@ -26,8 +26,12 @@ import eu.clarin.cmdi.vlo.service.solr.SolrFacetQueryFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import javax.inject.Inject;
+
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
+import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  * Gets FacetFields from SOLR based on a selection and the queries constructed
@@ -36,7 +40,8 @@ import org.apache.solr.client.solrj.response.FacetField.Count;
  * @author twagoo
  */
 public class SolrFacetFieldsService implements FacetFieldsService {
-
+    @Inject
+    private FieldNameService fieldNameService;
     private final SearchResultsDao searchResultsDao;
     private final SolrFacetQueryFactory queryFatory;
 
@@ -67,7 +72,7 @@ public class SolrFacetFieldsService implements FacetFieldsService {
         for (FacetField facet : response) {
             FacetSelection facetSelection = query.getSelectionValues(facet.getName());
 
-            if (facetSelection == null || facet.getName().equals(FacetConstants.FIELD_LICENSE_TYPE)) {
+            if (facetSelection == null || facet.getName().equals(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE))) {
                 filteredFacets.add(facet);
                 continue;
             } else {

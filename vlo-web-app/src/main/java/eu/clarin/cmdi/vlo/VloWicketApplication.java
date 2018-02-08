@@ -24,6 +24,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
 import eu.clarin.cmdi.vlo.service.PermalinkService;
@@ -74,9 +75,11 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     @Inject
     private Map<String, Ordering<String>> fieldValueOrderings;
     @Inject
-    private PermalinkService permalinkService;
-    @Inject
     private VloConfig vloConfig;
+    @Inject
+    private FieldNameService fieldNameService;
+    @Inject
+    private PermalinkService permalinkService;
     
     private ApplicationContext applicationContext;
     private String appVersionQualifier;
@@ -253,6 +256,10 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     
     public String getAppVersionQualifier() {
         return appVersionQualifier;
+    }
+    
+    public FieldNameService getFieldNameService() {
+        return this.fieldNameService;
     }
 
     /**

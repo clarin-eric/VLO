@@ -17,7 +17,8 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.Ordering;
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
@@ -37,12 +38,15 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  *
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
+    @SpringBean
+    private FieldNameService fieldNameService;
 
     private final IModel<SearchContext> searchContextModel;
 
@@ -51,8 +55,8 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
         this.searchContextModel = searchContextModel;
 
         //add 'tags' for all availability values
-        final SolrFieldModel<String> licenseTypeModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_LICENSE_TYPE);
-        final SolrFieldModel<String> availabilityModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_AVAILABILITY);
+        final SolrFieldModel<String> licenseTypeModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.LICENSE_TYPE));
+        final SolrFieldModel<String> availabilityModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.AVAILABILITY));
         add(new ListView<String>("availabilityTag", new CollectionListModel<>(new CombinedLicenseTypeAvailabilityModel(licenseTypeModel, availabilityModel), availabilityOrder)) {
             @Override
             protected void populateItem(ListItem<String> item) {
@@ -61,13 +65,13 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
                         .add(new AttributeAppender("class", item.getModel(), " "))
                         .add(new AttributeModifier("title",
                                 new FormattedStringModel(Model.of("Availability: %s"),
-                                        new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_AVAILABILITY))))
+                                        new ConvertedFieldValueModel(item.getModel(), fieldNameService.getFieldName(FieldKey.AVAILABILITY)))))
                 );
             }
         });
 
         //add 'tags' for all licence values
-        final SolrFieldModel<String> licensesModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_LICENSE);
+        final SolrFieldModel<String> licensesModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.LICENSE));
         //pattern to match non-alphanumeric characters (for replacement in CSS class)
         final IModel<Pattern> nonAlphanumericPatternModel = Model.of(Pattern.compile("[^a-zA-Z0-9]"));
 
@@ -81,7 +85,7 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
                                 new StringReplaceModel(item.getModel(), nonAlphanumericPatternModel, Model.of("_")), " "))
                         .add(new AttributeModifier("title",
                                 new FormattedStringModel(Model.of("Licence: %s"),
-                                        new ConvertedFieldValueModel(item.getModel(), FacetConstants.FIELD_LICENSE))))
+                                        new ConvertedFieldValueModel(item.getModel(), fieldNameService.getFieldName(FieldKey.LICENSE)))))
                 );
             }
         });

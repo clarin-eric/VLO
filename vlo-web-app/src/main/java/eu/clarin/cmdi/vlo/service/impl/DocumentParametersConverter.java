@@ -16,10 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.FieldKey;
+
+import javax.inject.Inject;
+
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
@@ -29,6 +33,8 @@ import org.apache.wicket.util.string.StringValue;
  * @author twagoo
  */
 public class DocumentParametersConverter implements PageParametersConverter<SolrDocument> {
+    @Inject
+    private FieldNameService fieldNameService;
 
     @Override
     public SolrDocument fromParameters(PageParameters params) {
@@ -45,7 +51,7 @@ public class DocumentParametersConverter implements PageParametersConverter<Solr
         final PageParameters params = new PageParameters();
         if (document != null) {
             params.add(VloWebAppParameters.DOCUMENT_ID,
-                    document.getFieldValue(FacetConstants.FIELD_ID));
+                document.getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
         }
         return params;
     }

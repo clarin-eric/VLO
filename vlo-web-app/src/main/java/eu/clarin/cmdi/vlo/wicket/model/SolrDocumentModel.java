@@ -16,14 +16,19 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import java.util.Objects;
+
+import javax.inject.Inject;
+
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+
+import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  * Detachable model for Solr documents that uses the {@link SolrDocumentService}
@@ -34,14 +39,17 @@ import org.apache.wicket.model.Model;
  */
 public class SolrDocumentModel extends LoadableDetachableModel<SolrDocument> {
 
+    
     private final IModel<String> docId;
+    
 
-    public SolrDocumentModel(SolrDocument document) {
+
+    public SolrDocumentModel(SolrDocument document, FieldNameService fieldNameService) {
         super(document);
         if (document == null) {
             this.docId = null;
         } else {
-            this.docId = Model.of((String) document.getFieldValue(FacetConstants.FIELD_ID));
+            this.docId = Model.of((String) document.getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
         }
     }
 

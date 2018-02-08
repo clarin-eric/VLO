@@ -16,17 +16,21 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.PermalinkService;
+
+import javax.inject.Inject;
+
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import eu.clarin.cmdi.vlo.FieldKey;
 
 /**
  * Permalink service that uses a parameter converter and the current wicket
@@ -36,6 +40,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class PermalinkServiceImpl implements PermalinkService {
+    @Inject
+    private FieldNameService fieldNameService;
 
     private final PageParametersConverter<QueryFacetsSelection> paramsConverter;
 
@@ -49,9 +55,9 @@ public class PermalinkServiceImpl implements PermalinkService {
         if (selection != null) {
             params.mergeWith(paramsConverter.toParameters(selection));
         }
-
+        
         if (document != null) {
-            params.add(VloWebAppParameters.DOCUMENT_ID, document.getFirstValue(FacetConstants.FIELD_ID));
+            params.add(VloWebAppParameters.DOCUMENT_ID, document.getFirstValue(fieldNameService.getFieldName(FieldKey.ID)));
         }
 
         final String style = Session.get().getStyle();

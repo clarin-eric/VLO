@@ -17,7 +17,8 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.Ordering;
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
@@ -66,6 +67,8 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
     ResourceStringConverter resolvingResourceStringConverter;
     @SpringBean(name = "documentFieldOrder")
     private List<String> fieldOrder;
+    @SpringBean
+    private FieldNameService fieldNameService;
 
     private final IModel<SearchContext> searchContextModel;
 
@@ -74,8 +77,8 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
         this.searchContextModel = searchContextModel;
 
         // add untruncated description
-        final NullFallbackModel descriptionModel = new NullFallbackModel(new SolrFieldStringModel(documentModel, FacetConstants.FIELD_DESCRIPTION), "");
-        add(new SmartLinkFieldValueLabel("description", descriptionModel, Model.of(FacetConstants.FIELD_DESCRIPTION)));
+        final NullFallbackModel descriptionModel = new NullFallbackModel(new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.DESCRIPTION)), "");
+        add(new SmartLinkFieldValueLabel("description", descriptionModel, Model.of(fieldNameService.getFieldName(FieldKey.DESCRIPTION))));
 
         // add link to record
         add(new RecordPageLink("recordLink", documentModel, searchContextModel));
@@ -96,7 +99,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
     }
 
     private WebMarkupContainer createResourcesView(String id, final IModel<SearchContext> selectionModel) {
-        final SolrFieldModel<String> resourceModel = new SolrFieldModel<>(getModel(), FacetConstants.FIELD_RESOURCE);
+        final SolrFieldModel<String> resourceModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.RESOURCE));
         // create a container for the list view that is only visible if there actually are resources
         final WebMarkupContainer container = new WebMarkupContainer(id) {
             @Override

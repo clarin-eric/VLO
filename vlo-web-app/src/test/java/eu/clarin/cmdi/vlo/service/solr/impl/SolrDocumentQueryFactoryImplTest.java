@@ -17,29 +17,60 @@
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
 import com.google.common.collect.ImmutableList;
+
+import eu.clarin.cmdi.vlo.VloApplicationTestConfig;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.config.VloServicesSpringConfig;
+import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+
+import javax.inject.Inject;
+
 import org.apache.solr.client.solrj.SolrQuery;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+
 import static org.junit.Assert.*;
 
 /**
  *
  * @author twagoo
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD) // gives us a fresh context for each test
 public class SolrDocumentQueryFactoryImplTest {
 
     private final Collection<String> docFields = ImmutableList.of("field1", "field2", "field3");
     private SolrDocumentQueryFactoryImpl instance;
+    
+    @Inject
+    FieldNameService fieldNameService;
 
     @Before
     public void setUp() {
-        instance = new SolrDocumentQueryFactoryImpl(docFields);
+        instance = new SolrDocumentQueryFactoryImpl(docFields, fieldNameService);
     }
 
     /**
@@ -87,5 +118,46 @@ public class SolrDocumentQueryFactoryImplTest {
         assertTrue(fields.contains("field2"));
         assertTrue(fields.contains("field3"));
     }
+    /**
+     * Custom configuration injected into web app for testing
+     */
+    @Configuration
+    @PropertySource(value = "classpath:/config.default.properties", ignoreResourceNotFound = false)
+    @Import({
+        VloSolrTestConfig.class,
+        VloApplicationTestConfig.class,
+        VloServicesSpringConfig.class})
+    static class ContextConfiguration {
 
+        @Bean
+        public Mockery mockery() {
+            // shared mockery context
+            return new JUnit4Mockery();
+        }
+
+        @Bean
+        public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+            return new PropertySourcesPlaceholderConfigurer();
+        }
+    }
+
+    /**
+     * Provides some mock Solr services
+     */
+    @Configuration
+    static class VloSolrTestConfig extends VloSolrSpringConfig {
+
+        @Inject
+        private Mockery mockery;
+
+        @Override
+        public SolrDocumentService documentService() {
+            return mockery.mock(SolrDocumentService.class);
+        }
+
+        @Override
+        public FacetFieldsService facetFieldsService() {
+            return mockery.mock(FacetFieldsService.class, "facetFieldsService");
+        }
+    }
 }
