@@ -256,13 +256,13 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      */
     private void processFacets(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
         final Collection<FacetConfiguration> facetList = facetMapping.getFacets();
-        final List<String> processedFacets = new ArrayList<>(facetList.size());
+//        final List<String> processedFacets = new ArrayList<>(facetList.size());
         for (FacetConfiguration config : facetList) {
-            processedFacets.add(config.getName());
+//            processedFacets.add(config.getName());
             boolean matchedPattern = false;
             List<Pattern> patterns = config.getPatterns();
             for (Pattern pattern : patterns) {
-                matchedPattern = matchPattern(cmdiData, nav, config, pattern, config.getAllowMultipleValues() || config.getMultilingual());
+                matchedPattern = matchPattern(cmdiData, nav, config, pattern);
                 if (matchedPattern && !config.getAllowMultipleValues()) {
                     break;
                 }
@@ -271,23 +271,24 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             // using fallback patterns if extraction failed
             if (!matchedPattern) {
                 for (Pattern pattern : config.getFallbackPatterns()) {
-                    matchedPattern = matchPattern(cmdiData, nav, config, pattern, config.getAllowMultipleValues() || config.getMultilingual());
+                    matchedPattern = matchPattern(cmdiData, nav, config, pattern);
                     if (matchedPattern && !config.getAllowMultipleValues()) {
                         break;
                     }
                 }
             }
-
+/*
             if (!matchedPattern) {
                 //no matching value
                 processNoMatch(config.getName(), config.getAllowMultipleValues(), config.isCaseInsensitive(), cmdiData);
-            }
+            }*/
         }
 
-        handleUnprocessedFields(processedFacets, cmdiData);
+        //handleUnprocessedFields(processedFacets, cmdiData);
+        setDefaultIfNull(facetList, cmdiData);
     }
 
-    private void handleUnprocessedFields(final List<String> processedFields, CMDIData cmdiData) {
+/*    private void handleUnprocessedFields(final List<String> processedFields, CMDIData cmdiData) {
         // check for unprocessed facets that allow 'no value' post processing
         Map<String, FacetConceptMapping.FacetConcept> facetConceptMap = null;
         for (String fieldWithPostProcessor : postProcessors.keySet()) {
@@ -307,7 +308,20 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                 }
             }
         }
+    }*/
+    
+    private void setDefaultIfNull(Collection<FacetConfiguration> facetList, CMDIData cmdiData) {
+
+        for(FacetConfiguration facetConfig : facetList) {
+            if(cmdiData.getDocField(facetConfig.getName()) == null && this.postProcessors.containsKey(facetConfig.getName()) && this.postProcessors.get(facetConfig.getName()).doesProcessNoValue()) {
+                final ArrayList<Pair<String, String>> valueLangPairList = new ArrayList<>();
+                addValuesToList(facetConfig.getName(), this.postProcessors.get(facetConfig.getName()).process(null, cmdiData), valueLangPairList, DEFAULT_LANGUAGE);
+                insertFacetValues(facetConfig, valueLangPairList, cmdiData, false);
+            }
+        }
     }
+    
+
 
     /**
      * Performs post processing in case no value was found for a specific facet
@@ -317,14 +331,14 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @param caseInsensitive case insensitive?
      * @param cmdiData current CMDI data object
      */
-    private void processNoMatch(String facetName, boolean allowMultipleValues, boolean caseInsensitive, CMDIData cmdiData) {
-        if (postProcessors.containsKey(facetName) && postProcessors.get(facetName).doesProcessNoValue()) {
+    private void processNoMatch(FacetConfiguration facetConfig, CMDIData cmdiData) {
+        if (postProcessors.containsKey(facetConfig.getName()) && postProcessors.get(facetConfig.getName()).doesProcessNoValue()) {
             //post process 'no value'
-            final List<String> postProcessed = postProcess(facetName, null, cmdiData);
+            final List<String> postProcessed = postProcess(facetConfig.getName(), null, cmdiData);
             if (postProcessed != null && !postProcessed.isEmpty()) {
                 final ArrayList<Pair<String, String>> valueLangPairList = new ArrayList<>();
-                addValuesToList(facetName, postProcessed, valueLangPairList, DEFAULT_LANGUAGE);
-                insertFacetValues(facetName, valueLangPairList, cmdiData, allowMultipleValues, caseInsensitive, false);
+                addValuesToList(facetConfig.getName(), postProcessed, valueLangPairList, DEFAULT_LANGUAGE);
+                insertFacetValues(facetConfig, valueLangPairList, cmdiData, false);
             }
         }
     }
@@ -342,18 +356,25 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @return pattern matched a node in the CMDI file?
      * @throws VTDException
      */
-    private boolean matchPattern(CMDIData cmdiData, VTDNav nav, FacetConfiguration config, Pattern pattern, Boolean allowMultipleValues) throws VTDException, URISyntaxException, UnsupportedEncodingException {
+    private boolean matchPattern(CMDIData cmdiData, VTDNav nav, FacetConfiguration config, Pattern pattern) throws VTDException, URISyntaxException, UnsupportedEncodingException {
         final AutoPilot ap = new AutoPilot(nav);
         setNameSpace(ap, extractXsd(nav));
         ap.selectXPath(pattern.getPattern());
 
         boolean matchedPattern = false;
+        boolean removeSourceValue = false;
+        
         int index = ap.evalXPath();
         List<Pair<String, String>> valueLangPairList = new ArrayList<>();
+        
+
 
         // extract (almost) all values with their language code
+
         while (index != -1) {
             matchedPattern = true;
+            removeSourceValue = false;
+            
             if (nav.getTokenType(index) == VTDNav.TOKEN_ATTR_NAME) {
                 //if it is an attribute you need to add 1 to the index to get the right value
                 index++;
@@ -361,46 +382,45 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             final String value = nav.toString(index);
             final String languageCode = extractLanguageCode(nav);
             
-            boolean removeSourceValue = true;
             // implementation of valuemapping (replacement of cfm, issue 93)
             for(ConditionTargetSet conditionTargetSet : config.getConditionTargetSets()) {
             	if(conditionTargetSet.matches(value)) {
             		
             		for(TargetFacet target :conditionTargetSet.getTargets()) {
-            		    if(!target.getRemoveSourceValue())
-            		        removeSourceValue = false;
-            			
+            		    removeSourceValue = target.getRemoveSourceValue();
+
         				ArrayList<Pair<String,String>> targetList = new ArrayList<Pair<String,String>>();
         				targetList.add(new ImmutablePair<String,String>(target.getValue(), languageCode));
         				
-        				insertFacetValues(target.getFacetConfiguration().getName(), targetList, cmdiData, target.getFacetConfiguration().getAllowMultipleValues(), target.getFacetConfiguration().isCaseInsensitive(), target.getOverrideExistingValues());
+        				insertFacetValues(target.getFacetConfiguration(), targetList, cmdiData, target.getOverrideExistingValues());
             			
             		}
-            		
-            		if(removeSourceValue)
-            		    return true;
             		
             	}
             	
             }
             // end of valuemapping implementation
 
-            final List<String> postProcessed = postProcess(config.getName(), value, cmdiData);
-            addValuesToList(config.getName(), postProcessed, valueLangPairList, languageCode);
+            if(!removeSourceValue) {
 
-            String vcl = extractValueConceptLink(nav);
-            if (vcl!=null) {
-                ImmutablePair<String,String> vp = null;
-                if (vcl.contains("CCR_")) {
-                    vp = CCR.getValue(new URI(vcl));
-                } else if (pattern.hasVocabulary()) {
-                    vp = pattern.getVocabulary().getValue(new URI(vcl));
-                }
-                if (vp!=null) {
-                    final String v = (String)vp.getLeft();
-                    final String l = (vp.getRight()!=null?postProcessors.get(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)).process((String)vp.getRight(),cmdiData).get(0):DEFAULT_LANGUAGE);
-                    for(String pv : postProcess(config.getName(),v,cmdiData)) {
-                        valueLangPairList.add(new ImmutablePair<>(pv,l));
+        
+                final List<String> postProcessed = postProcess(config.getName(), value, cmdiData);
+                addValuesToList(config.getName(), postProcessed, valueLangPairList, languageCode);
+        
+                String vcl = extractValueConceptLink(nav);
+                if (vcl!=null) {
+                    ImmutablePair<String,String> vp = null;
+                    if (vcl.contains("CCR_")) {
+                        vp = CCR.getValue(new URI(vcl));
+                    } else if (pattern.hasVocabulary()) {
+                        vp = pattern.getVocabulary().getValue(new URI(vcl));
+                    }
+                    if (vp!=null) {
+                        final String v = (String)vp.getLeft();
+                        final String l = (vp.getRight()!=null?postProcessors.get(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)).process((String)vp.getRight(),cmdiData).get(0):DEFAULT_LANGUAGE);
+                        for(String pv : postProcess(config.getName(),v,cmdiData)) {
+                            valueLangPairList.add(new ImmutablePair<>(pv,l));
+                        }
                     }
                 }
             }
@@ -433,7 +453,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         });
 
         // insert values into original facet
-        insertFacetValues(config.getName(), reorderedValueLangPairList, cmdiData, allowMultipleValues, config.isCaseInsensitive(), false);
+        insertFacetValues(config, reorderedValueLangPairList, cmdiData, false);
 
         // insert post-processed values into derived facet(s) if configured
         for (FacetConfiguration derivedFacet : config.getDerivedFacets()) {
@@ -443,7 +463,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                     derivedValueLangPairList.add(new ImmutablePair<>(derivedValue, valueLangPair.getRight()));
                 }
             }
-            insertFacetValues(derivedFacet.getName(), derivedValueLangPairList, cmdiData, derivedFacet.getAllowMultipleValues(), derivedFacet.isCaseInsensitive(), false);
+            insertFacetValues(derivedFacet, derivedValueLangPairList, cmdiData, false);
         }
 
         return matchedPattern;
@@ -482,24 +502,32 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         return vcl;
     }
 
-    private void insertFacetValues(String name, List<Pair<String, String>> valueLangPairList, CMDIData cmdiData, boolean allowMultipleValues, boolean caseInsensitive, boolean overrideExistingValues) {
+    private void insertFacetValues(FacetConfiguration facetConfig, List<Pair<String, String>> valueLangPairList, CMDIData cmdiData, boolean overrideExistingValues) {
 
         for (int i = 0; i < valueLangPairList.size(); i++) {
 //            if (!allowMultipleValues && i > 0) {
 //                break;
 //            }
             String fieldValue = valueLangPairList.get(i).getLeft().trim();
-            if (name.equals(fieldNameService.getFieldName(FieldKey.DESCRIPTION))) {
+            if (facetConfig.getName().equals(fieldNameService.getFieldName(FieldKey.DESCRIPTION))) {
                 fieldValue = "{" + valueLangPairList.get(i).getRight() + "}" + fieldValue;
             }
-            
-            if(overrideExistingValues || !allowMultipleValues) {
-            	cmdiData.replaceDocField(name, fieldValue, caseInsensitive);
-            	break;
+            if(overrideExistingValues) {
+                if(cmdiData.getDocField(facetConfig.getName()) != null)
+                    LOG.info("overriding existing value(s) in facet {} with value" + facetConfig.getName(), fieldValue); 
+                cmdiData.replaceDocField(facetConfig.getName(), fieldValue, facetConfig.isCaseInsensitive());
+                
+                if(!(facetConfig.getAllowMultipleValues() || facetConfig.getMultilingual()))
+                    break;
             }
-
-            cmdiData.addDocField(name, fieldValue, caseInsensitive);
-        }
+            else {
+                if(!(facetConfig.getAllowMultipleValues() || facetConfig.getMultilingual()) && cmdiData.getDocField(facetConfig.getName()) != null) {
+                    LOG.warn("value for facet {} is set already. Since multiple value are not allowed value {} will be ignored!", facetConfig.getName(), fieldValue);
+                    break;
+                }
+                cmdiData.addDocField(facetConfig.getName(), fieldValue, facetConfig.isCaseInsensitive());
+            }
+         }
     }
 
     /**

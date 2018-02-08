@@ -17,7 +17,6 @@
 package eu.clarin.cmdi.vlo.wicket.model;
 
 
-import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import java.util.Set;
 import org.apache.solr.common.SolrDocument;
@@ -36,9 +35,6 @@ public class SearchResultExpansionStateModel implements IModel<ExpansionState> {
 
     private final IModel<Set<Object>> expandedItemsModel;
     private final IModel<SolrDocument> documentModel;
-    
-
-    private final FieldNameService fieldNameService = VloWicketApplication.get().getFieldNameService();
 
     /**
      *
@@ -79,8 +75,7 @@ public class SearchResultExpansionStateModel implements IModel<ExpansionState> {
     }
 
     private Object getDocumentId() {
-        //return documentModel.getObject().getFieldValue(FacetConstants.FIELD_ID);
-        return documentModel.getObject().getFieldValue(fieldNameService.getFieldName(FieldKey.ID));
+        return documentModel.getObject().getFieldValue(VloWicketApplication.get().getFieldNameService().getFieldName(FieldKey.ID));
     }
 
 }
