@@ -83,7 +83,7 @@ public class ValueMappingFactoryTest {
                 "</origin-facet>\n" + 
                 "<origin-facet name=\"collection\">\n" + 
                 "  <value-map>\n" + 
-                "   <target-facet name=\"name\" overrideExistingValues=\"true\" removeSourceValue=\"false\" />\n" +
+                "   <target-facet name=\"name\" overrideExistingValues=\"true\" removeSourceValue=\"true\" />\n" +
                 "   <target-value-set>\n" + 
                 "       <target-value facet=\"subject\">blabla1</target-value>\n" + 
                 "       <target-value facet=\"name\">blabla2</target-value>\n" + 
@@ -91,7 +91,7 @@ public class ValueMappingFactoryTest {
                 "   </target-value-set>\n" + 
                 "  </value-map>\n" + 
                 "  <value-map>\n" + 
-                "   <target-facet name=\"name\" overrideExistingValues=\"true\" removeSourceValue=\"false\" />\n" +
+                "   <target-facet name=\"name\" overrideExistingValues=\"true\" />\n" +
                 "   <target-value-set>\n" + 
                 "       <target-value>blabla1</target-value>\n" + 
                 "       <target-value>blabla2</target-value>\n" + 
@@ -106,12 +106,12 @@ public class ValueMappingFactoryTest {
         
 
         assertEquals(false, map.get("name").get(0).getTargets().get(0).getOverrideExistingValues());
-        assertEquals(true, map.get("name").get(0).getTargets().get(0).getRemoveSourceValue());
+        assertEquals(false, map.get("name").get(0).getTargets().get(0).getRemoveSourceValue());
         
         assertEquals(false, map.get("collection").get(0).getTargets().get(0).getOverrideExistingValues());
-        assertEquals(true, map.get("collection").get(0).getTargets().get(0).getRemoveSourceValue());
+        assertEquals(false, map.get("collection").get(0).getTargets().get(0).getRemoveSourceValue());
         assertEquals(true, map.get("collection").get(0).getTargets().get(1).getOverrideExistingValues());
-        assertEquals(false, map.get("collection").get(0).getTargets().get(1).getRemoveSourceValue());
+        assertEquals(true, map.get("collection").get(0).getTargets().get(1).getRemoveSourceValue());
         
         assertEquals(2, map.get("collection").size());
         assertEquals("name", map.get("collection").get(1).getTargets().get(0).getFacetConfiguration().getName());

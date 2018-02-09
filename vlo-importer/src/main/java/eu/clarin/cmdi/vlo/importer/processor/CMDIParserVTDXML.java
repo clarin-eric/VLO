@@ -23,6 +23,7 @@ import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.mapping.TargetFacet;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
+import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizerWithVocabularyMap;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -356,7 +357,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @return pattern matched a node in the CMDI file?
      * @throws VTDException
      */
-    private boolean matchPattern(CMDIData cmdiData, VTDNav nav, FacetConfiguration config, Pattern pattern) throws VTDException, URISyntaxException, UnsupportedEncodingException {
+    private boolean matchPattern(CMDIData cmdiData, VTDNav nav, FacetConfiguration facetConfig, Pattern pattern) throws VTDException, URISyntaxException, UnsupportedEncodingException {
         final AutoPilot ap = new AutoPilot(nav);
         setNameSpace(ap, extractXsd(nav));
         ap.selectXPath(pattern.getPattern());
@@ -383,29 +384,28 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             final String languageCode = extractLanguageCode(nav);
             
             // implementation of valuemapping (replacement of cfm, issue 93)
-            for(ConditionTargetSet conditionTargetSet : config.getConditionTargetSets()) {
-            	if(conditionTargetSet.matches(value)) {
-            		
-            		for(TargetFacet target :conditionTargetSet.getTargets()) {
-            		    removeSourceValue = target.getRemoveSourceValue();
 
-        				ArrayList<Pair<String,String>> targetList = new ArrayList<Pair<String,String>>();
-        				targetList.add(new ImmutablePair<String,String>(target.getValue(), languageCode));
-        				
-        				insertFacetValues(target.getFacetConfiguration(), targetList, cmdiData, target.getOverrideExistingValues());
-            			
-            		}
-            		
-            	}
-            	
-            }
             // end of valuemapping implementation
 
-            if(!removeSourceValue) {
+
 
         
-                final List<String> postProcessed = postProcess(config.getName(), value, cmdiData);
-                addValuesToList(config.getName(), postProcessed, valueLangPairList, languageCode);
+            final List<String> postProcessed = postProcess(facetConfig.getName(), value, cmdiData);
+            
+            if(this.postProcessors.containsKey(facetConfig.getName()) && !(this.postProcessors.get(facetConfig.getName()) instanceof AbstractPostNormalizerWithVocabularyMap)){
+                for(String postProcessedValue : postProcessed) {
+                    removeSourceValue |= removeSourceValue(facetConfig, postProcessedValue, languageCode, cmdiData);
+                }
+            }
+            else {
+                removeSourceValue |= removeSourceValue(facetConfig, value, languageCode, cmdiData);
+            }
+            
+            if(!removeSourceValue) {
+            
+            
+            
+                addValuesToList(facetConfig.getName(), postProcessed, valueLangPairList, languageCode);
         
                 String vcl = extractValueConceptLink(nav);
                 if (vcl!=null) {
@@ -418,15 +418,16 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                     if (vp!=null) {
                         final String v = (String)vp.getLeft();
                         final String l = (vp.getRight()!=null?postProcessors.get(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)).process((String)vp.getRight(),cmdiData).get(0):DEFAULT_LANGUAGE);
-                        for(String pv : postProcess(config.getName(),v,cmdiData)) {
+                        for(String pv : postProcess(facetConfig.getName(),v,cmdiData)) {
                             valueLangPairList.add(new ImmutablePair<>(pv,l));
                         }
                     }
                 }
-            }
+            } 
             
             index = ap.evalXPath();
-        }
+        
+        }//end while
         
         // return if no result was found or accepted
         if (!matchedPattern || valueLangPairList.isEmpty()) {
@@ -453,10 +454,10 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         });
 
         // insert values into original facet
-        insertFacetValues(config, reorderedValueLangPairList, cmdiData, false);
+        insertFacetValues(facetConfig, reorderedValueLangPairList, cmdiData, false);
 
         // insert post-processed values into derived facet(s) if configured
-        for (FacetConfiguration derivedFacet : config.getDerivedFacets()) {
+        for (FacetConfiguration derivedFacet : facetConfig.getDerivedFacets()) {
             final List<Pair<String, String>> derivedValueLangPairList = new ArrayList<>();
             for (Pair<String, String> valueLangPair : reorderedValueLangPairList) {
                 for (String derivedValue : postProcess(derivedFacet.getName(), valueLangPair.getLeft(), cmdiData)) {
@@ -467,6 +468,30 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         }
 
         return matchedPattern;
+    }
+    
+    private boolean removeSourceValue(FacetConfiguration facetConfig, String value, String languageCode, CMDIData cmdiData) {
+        boolean removeSourceValue = false;
+        
+        for(ConditionTargetSet conditionTargetSet : facetConfig.getConditionTargetSets()) {
+            if(conditionTargetSet.matches(value)) {
+                
+                for(TargetFacet target :conditionTargetSet.getTargets()) {
+                    removeSourceValue |= target.getRemoveSourceValue();
+
+                    ArrayList<Pair<String,String>> targetList = new ArrayList<Pair<String,String>>();
+                    targetList.add(new ImmutablePair<String,String>(target.getValue(), languageCode));
+                    
+                    insertFacetValues(target.getFacetConfiguration(), targetList, cmdiData, target.getOverrideExistingValues());
+                    
+                }
+                
+            }
+            
+        }        
+        
+        return removeSourceValue;
+        
     }
 
     private String extractLanguageCode(VTDNav nav) throws NavException {

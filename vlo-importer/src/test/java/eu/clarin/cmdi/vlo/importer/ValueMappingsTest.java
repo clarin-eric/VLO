@@ -193,11 +193,11 @@ public class ValueMappingsTest extends ImporterTestcase {
         assertEquals("blabla1", getValue(doc, fieldNameService.getFieldName(FieldKey.SUBJECT)));
         
         Object[] values = getMultipleValues(doc, fieldNameService.getFieldName(FieldKey.PROJECT_NAME)).toArray();
-        assertEquals(2, values.length);
+        assertEquals(3, values.length);
         
         assertEquals("blabla2", values[0]);
         assertEquals("blabla3", values[1]);
-
+        assertEquals("DiDDD-project", values[2]);
     }
 
     @Test
@@ -232,7 +232,7 @@ public class ValueMappingsTest extends ImporterTestcase {
         		"<origin-facet name=\"projectName\">\n" + 
         		"  <value-map>\n" +
         		"  <target-facet name=\"subject\" />" + 
-        		"  <target-facet name=\"projectName\" />" + 
+        		"  <target-facet name=\"projectName\" removeSourceValue=\"true\"/>" + 
         		"  	<target-value-set>\n" + 
         		"  		<target-value>blabla1</target-value>\n" + 
         		"  		<source-value isRegex=\"true\">DiDDD.+</source-value>\n" + 
