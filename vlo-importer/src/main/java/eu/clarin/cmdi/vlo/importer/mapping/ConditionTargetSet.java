@@ -27,6 +27,15 @@ public class ConditionTargetSet {
         else
             this.caseLess.add(condition.getExpression().toLowerCase());             
     }
+    
+    public void addCondition(String isRegEx, String isCaseSensitive, String expression) {
+        if("true".equalsIgnoreCase(isRegEx))
+            this.patterns.add(Pattern.compile(expression));
+        else if("true".equalsIgnoreCase(isCaseSensitive))
+            this.caseSensitive.add(expression);
+        else
+            this.caseLess.add(expression.toLowerCase());             
+    }
 
     public void addTarget(TargetFacet target) {
         this.targets.add(target);

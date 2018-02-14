@@ -50,7 +50,7 @@ public class ValueMappingFactoryTest {
                 "</value-mappings>\n"
             );
     
-        Map<String, List<ConditionTargetSet>> map = ValueMappingFactory.getValueMappings(fileName, this.conceptMapping);
+        Map<String, List<ConditionTargetSet>> map = ValueMappingFactory.getValueMappingsFromDOM(fileName, this.conceptMapping);
         
         assertEquals(1, map.get("name").size());
         assertEquals(1, map.get("name").get(0).getTargets().size());
@@ -102,7 +102,7 @@ public class ValueMappingFactoryTest {
                 "</value-mappings>\n"
             );
     
-        Map<String, List<ConditionTargetSet>> map = ValueMappingFactory.getValueMappings(fileName, this.conceptMapping);
+        Map<String, List<ConditionTargetSet>> map = ValueMappingFactory.getValueMappingsFromDOM(fileName, this.conceptMapping);
         
 
         assertEquals(false, map.get("name").get(0).getTargets().get(0).getOverrideExistingValues());
@@ -136,6 +136,7 @@ public class ValueMappingFactoryTest {
                 "       <source-value isRegex=\"true\">D.+</source-value>\n" + 
                 "   </target-value-set>\n" + 
                 "  </value-map>\n" + 
+                "  <value-map>\n" + 
                 "   <target-value-set>\n" + 
                 "       <target-value facet=\"name\">blabla1</target-value>\n" + 
                 "       <source-value>DonauDampfschifffahrtsGesellschaftsKaptitän</source-value>\n" + 
@@ -149,7 +150,7 @@ public class ValueMappingFactoryTest {
                 "</value-mappings>\n"
             );
     
-        Map<String, List<ConditionTargetSet>> map = ValueMappingFactory.getValueMappings(fileName, this.conceptMapping);
+        Map<String, List<ConditionTargetSet>> map = ValueMappingFactory.getValueMappingsFromDOM(fileName, this.conceptMapping);
         
 
         assertEquals(true, map.get("name").get(0).matches("Data"));
