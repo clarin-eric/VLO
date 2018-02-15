@@ -111,14 +111,10 @@ public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
     }
 
     protected synchronized void submitBuffer() throws IOException, SolrServerException {
-        try {
-            getClient().add(buffer);
-            LOG.trace("Submit count total: {}", submitCount.addAndGet(buffer.size()));
-            buffer.clear();
-        } catch (IOException | SolrServerException ex) {
-            LOG.error("An exception occurred while submitting buffer containing documents with the following ids: {}", getBufferDocIds());
-            throw ex;
-        }
+        LOG.debug("Submitting buffer. Document ids: {}", getBufferDocIds());
+        getClient().add(buffer);
+        LOG.trace("Submit count total: {}", submitCount.addAndGet(buffer.size()));
+        buffer.clear();
     }
 
     private String getBufferDocIds() {
@@ -131,5 +127,4 @@ public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
                 //join ID strings
                 .collect(Collectors.joining(", "));
     }
-
 }
