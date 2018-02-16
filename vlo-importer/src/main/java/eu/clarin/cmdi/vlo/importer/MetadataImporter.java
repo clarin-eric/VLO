@@ -537,7 +537,7 @@ public class MetadataImporter {
      * @return true if id is acceptable, false otherwise
      */
     protected boolean idOk(String id) {
-        return id != null && !id.isEmpty();
+        return id != null && !id.trim().isEmpty();
     }
 
     /**
