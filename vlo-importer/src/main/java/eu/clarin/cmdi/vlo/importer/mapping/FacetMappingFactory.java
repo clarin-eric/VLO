@@ -74,7 +74,7 @@ public class FacetMappingFactory {
         
         this.conceptMapping = marshaller.getFacetConceptMapping(vloConfig.getFacetConceptsFile());
         
-        this.conditionTargetSetPerFacet = ValueMappingFactory.getValueMappingsFromDOM(vloConfig.getValueMappingsFile(), this.conceptMapping);
+        this.conditionTargetSetPerFacet = new ValueMappingFactoryDOMImpl().getValueMappings(vloConfig.getValueMappingsFile(), this.conceptMapping);
     }
 
     /**

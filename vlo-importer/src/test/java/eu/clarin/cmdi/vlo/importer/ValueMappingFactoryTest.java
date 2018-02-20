@@ -13,7 +13,8 @@ import org.junit.Test;
 
 import eu.clarin.cmdi.vlo.importer.mapping.ConditionTargetSet;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping;
-import eu.clarin.cmdi.vlo.importer.mapping.ValueMappingFactory;
+import eu.clarin.cmdi.vlo.importer.mapping.ValueMappingFactoryDOMImpl;
+import eu.clarin.cmdi.vlo.importer.mapping.ValueMappingFactorySAXImpl;
 
 public class ValueMappingFactoryTest {
     private FacetConceptMapping conceptMapping;
@@ -50,7 +51,7 @@ public class ValueMappingFactoryTest {
                 "</value-mappings>\n"
             );
     
-        Map<String, List<ConditionTargetSet>> map = ValueMappingFactory.getValueMappingsFromDOM(fileName, this.conceptMapping);
+        Map<String, List<ConditionTargetSet>> map = new ValueMappingFactoryDOMImpl().getValueMappings(fileName, this.conceptMapping);
         
         assertEquals(1, map.get("name").size());
         assertEquals(1, map.get("name").get(0).getTargets().size());
@@ -102,7 +103,7 @@ public class ValueMappingFactoryTest {
                 "</value-mappings>\n"
             );
     
-        Map<String, List<ConditionTargetSet>> map = ValueMappingFactory.getValueMappingsFromDOM(fileName, this.conceptMapping);
+        Map<String, List<ConditionTargetSet>> map = new ValueMappingFactoryDOMImpl().getValueMappings(fileName, this.conceptMapping);
         
 
         assertEquals(false, map.get("name").get(0).getTargets().get(0).getOverrideExistingValues());
@@ -150,7 +151,7 @@ public class ValueMappingFactoryTest {
                 "</value-mappings>\n"
             );
     
-        Map<String, List<ConditionTargetSet>> map = ValueMappingFactory.getValueMappingsFromDOM(fileName, this.conceptMapping);
+        Map<String, List<ConditionTargetSet>> map = new ValueMappingFactoryDOMImpl().getValueMappings(fileName, this.conceptMapping);
         
 
         assertEquals(true, map.get("name").get(0).matches("Data"));
