@@ -45,7 +45,7 @@ public class TargetFacet {
     }
 
     public void setRemoveSourceValue(String removeSourceValue) {
-        this.removeSourceValue = "true".equalsIgnoreCase(removeSourceValue); // should always be true if not set explicitly false
+        this.removeSourceValue = "true".equalsIgnoreCase(removeSourceValue); // should always be false if not set explicitly true
     }
 
     public boolean getRemoveSourceValue() {

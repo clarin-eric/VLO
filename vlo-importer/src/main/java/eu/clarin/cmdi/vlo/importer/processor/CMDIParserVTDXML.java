@@ -17,7 +17,6 @@ import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
 import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
 import eu.clarin.cmdi.vlo.importer.Vocabulary;
 import eu.clarin.cmdi.vlo.importer.mapping.ConditionTargetSet;
-import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetConfiguration;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
@@ -36,7 +35,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
-//import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -311,6 +309,12 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         }
     }*/
     
+    /**
+     * Sets default value if Null and if definded for the facet 
+     * 
+     * @param facetList list of processed facet configurations
+     * @param cmdiData current CMDI data object
+     */
     private void setDefaultIfNull(Collection<FacetConfiguration> facetList, CMDIData cmdiData) {
 
         for(FacetConfiguration facetConfig : facetList) {
@@ -327,9 +331,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     /**
      * Performs post processing in case no value was found for a specific facet
      *
-     * @param facetName facet
-     * @param allowMultipleValues allow multiple values?
-     * @param caseInsensitive case insensitive?
+     * @param facetConfig facet configuration
      * @param cmdiData current CMDI data object
      */
     private void processNoMatch(FacetConfiguration facetConfig, CMDIData cmdiData) {
@@ -351,9 +353,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @param cmdiData representation of the CMDI document
      * @param nav VTD Navigator
      * @param config facet configuration
-     * @param pattern XPath expression
-     * @param allowMultipleValues information if multiple values are allowed in
-     * this facet
+     * @param pattern XPath expression of this facet
      * @return pattern matched a node in the CMDI file?
      * @throws VTDException
      */
@@ -394,11 +394,11 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             
             if(this.postProcessors.containsKey(facetConfig.getName()) && !(this.postProcessors.get(facetConfig.getName()) instanceof AbstractPostNormalizerWithVocabularyMap)){
                 for(String postProcessedValue : postProcessed) {
-                    removeSourceValue |= removeSourceValue(facetConfig, postProcessedValue, languageCode, cmdiData);
+                    removeSourceValue |= processValueMapping(facetConfig, postProcessedValue, languageCode, cmdiData);
                 }
             }
             else {
-                removeSourceValue |= removeSourceValue(facetConfig, value, languageCode, cmdiData);
+                removeSourceValue |= processValueMapping(facetConfig, value, languageCode, cmdiData);
             }
             
             if(!removeSourceValue) {
@@ -470,7 +470,16 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         return matchedPattern;
     }
     
-    private boolean removeSourceValue(FacetConfiguration facetConfig, String value, String languageCode, CMDIData cmdiData) {
+    /**
+     * Process value mappings and determine whether the source value should be processed or removed (excluded from processing)
+     * 
+     * @param facetConfig facet configuration
+     * @param value either post-processed or origin value
+     * @param languageCode from xml:lang or default language
+     * @param cmdiData representation of the CMDI document
+     * @return remove source value?
+     */
+    private boolean processValueMapping(FacetConfiguration facetConfig, String value, String languageCode, CMDIData cmdiData) {
         boolean removeSourceValue = false;
         
         for(ConditionTargetSet conditionTargetSet : facetConfig.getConditionTargetSets()) {
@@ -494,6 +503,11 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         
     }
 
+    /**
+     * @param nav
+     * @return language code from xml:lang or default language code
+     * @throws NavException
+     */
     private String extractLanguageCode(VTDNav nav) throws NavException {
         // extract language code in xml:lang if available
         Integer langAttrIndex = nav.getAttrVal("xml:lang");
@@ -517,6 +531,11 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         }
     }
 
+    /**
+     * @param nav
+     * @return value concept link from element cmd:ValueConceptLink or Null
+     * @throws NavException
+     */
     private String extractValueConceptLink(VTDNav nav) throws NavException {
         // extract english for ValueConceptLink if available
         Integer vclAttrIndex = nav.getAttrVal("cmd:ValueConceptLink");
@@ -527,6 +546,14 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         return vcl;
     }
 
+    /**
+     * Inserts values to the representation of the CMDI document
+     * 
+     * @param facetConfig facet configuration
+     * @param valueLangPairList
+     * @param cmdiData representation of the CMDI document
+     * @param overrideExistingValues should existing values be overridden (= delete + insert)?
+     */
     private void insertFacetValues(FacetConfiguration facetConfig, List<Pair<String, String>> valueLangPairList, CMDIData cmdiData, boolean overrideExistingValues) {
 
         for (int i = 0; i < valueLangPairList.size(); i++) {
