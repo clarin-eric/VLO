@@ -111,7 +111,9 @@ public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
     }
 
     protected synchronized void submitBuffer() throws IOException, SolrServerException {
-        LOG.debug("Submitting buffer. Document ids: {}", getBufferDocIds());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Submitting buffer. Document ids: {}", getBufferDocIds());
+        }
         getClient().add(buffer);
         LOG.trace("Submit count total: {}", submitCount.addAndGet(buffer.size()));
         buffer.clear();
