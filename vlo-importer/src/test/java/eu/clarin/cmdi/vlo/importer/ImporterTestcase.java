@@ -53,6 +53,7 @@ public abstract class ImporterTestcase {
         // read the configuration defined in the packaged configuration file
         // and configure to use bundled mappings
         config = DefaultVloConfigFactory.configureDefaultMappingLocations(configFactory.newConfig());
+        config.setValueMappingsFile(getTestValueMappingsFilePath());
         fieldNameService = new FieldNameServiceImpl(config);
         languageCodeUtils = new LanguageCodeUtils(config);
         marshaller = new VLOMarshaller();
