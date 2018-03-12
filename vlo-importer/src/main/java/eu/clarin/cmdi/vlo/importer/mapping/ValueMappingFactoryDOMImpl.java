@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +22,8 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
     private final static Logger LOG = LoggerFactory.getLogger(ValueMappingFactoryDOMImpl.class);
     
 
-    public final Map<String, List<ConditionTargetSet>> getValueMappings(String fileName, FacetConceptMapping facetConceptMapping){
-        HashMap<String, List<ConditionTargetSet>> valueMappings = new HashMap<String, List<ConditionTargetSet>>();
+    public final Map<String, ConditionTargetSet> getValueMappings(String fileName, FacetConceptMapping facetConceptMapping){
+        HashMap<String, ConditionTargetSet> valueMappings = new HashMap<String, ConditionTargetSet>();
         
         DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
         fac.setXIncludeAware(true);
@@ -43,8 +43,8 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
                     
                     Element originFacet = (Element) originFacets.item(a);
                     
-                    List<ConditionTargetSet> conditionTargetSets = new ArrayList<ConditionTargetSet>();
-                    valueMappings.put(originFacet.getAttribute("name"), conditionTargetSets);
+                    ConditionTargetSet conditionTargetSet = new ConditionTargetSet();
+                    valueMappings.put(originFacet.getAttribute("name"), conditionTargetSet);
                     
                     NodeList valueMaps = originFacet.getElementsByTagName("value-map");
                     
@@ -76,22 +76,11 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
                         NodeList targetValueSets = valueMap.getElementsByTagName("target-value-set");
                         
                         for(int c=0; c < targetValueSets.getLength(); c++) {
-                            ConditionTargetSet conditionTargetSet = new ConditionTargetSet();
-                            conditionTargetSets.add(conditionTargetSet);
+
+                            List<TargetFacet> targets = new ArrayList<TargetFacet>(); 
                             
                             Element targetValueSet = (Element) targetValueSets.item(c);
                             
-                            NodeList sourceValues = targetValueSet.getElementsByTagName("source-value");
-                            
-                            for(int d=0; d < sourceValues.getLength(); d++) {
-                                Element sourceValue = (Element) sourceValues.item(d);
-                                
-                                conditionTargetSet.addCondition(
-                                        sourceValue.getAttribute("isRegex"),
-                                        sourceValue.getAttribute("caseSensitive"),
-                                        sourceValue.getTextContent()                                      
-                                    );
-                            }
                             
                             NodeList targetValues = targetValueSet.getElementsByTagName("target-value");
                             
@@ -113,7 +102,7 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
                                             targetFacet.setRemoveSourceValue(targetValue.getAttribute("removeSourceValue"));// should always be true if not set explicitly
                                         
                                         targetFacet.setValue(targetValue.getTextContent());
-                                        conditionTargetSet.addTarget(targetFacet);
+                                        targets.add(targetFacet);
                                         
                                     }
                                     
@@ -133,7 +122,7 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
                                     
                                     targetFacet.setValue(targetValue.getTextContent());
 
-                                    conditionTargetSet.addTarget(targetFacet);
+                                    targets.add(targetFacet);
                                     continue;
                                 }
 
@@ -153,9 +142,23 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
                                 
                                 targetFacet.setValue(targetValue.getTextContent());
 
-                                conditionTargetSet.addTarget(targetFacet);
+                                targets.add(targetFacet);
 
-                            }                            
+                            } 
+                            
+                            NodeList sourceValues = targetValueSet.getElementsByTagName("source-value");
+                            
+                            for(int d=0; d < sourceValues.getLength(); d++) {
+                                Element sourceValue = (Element) sourceValues.item(d);
+                                
+                                conditionTargetSet.addConditionTarget(
+                                        sourceValue.getAttribute("isRegex"),
+                                        sourceValue.getAttribute("caseSensitive"),
+                                        sourceValue.getTextContent(),
+                                        targets
+                                    );
+                            }
+
                         }
                     }
                 }

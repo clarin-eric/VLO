@@ -482,22 +482,19 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private boolean processValueMapping(FacetConfiguration facetConfig, String value, String languageCode, CMDIData cmdiData) {
         boolean removeSourceValue = false;
         
-        for(ConditionTargetSet conditionTargetSet : facetConfig.getConditionTargetSets()) {
-            if(conditionTargetSet.matches(value)) {
-                
-                for(TargetFacet target :conditionTargetSet.getTargets()) {
-                    removeSourceValue |= target.getRemoveSourceValue();
+        
+        if(facetConfig.getConditionTargetSet() == null) // no set defined for the facet
+            return false;
+        
+        for(TargetFacet target : facetConfig.getConditionTargetSet().getTargetsFor(value)) {
+            removeSourceValue |= target.getRemoveSourceValue();
 
-                    ArrayList<Pair<String,String>> targetList = new ArrayList<Pair<String,String>>();
-                    targetList.add(new ImmutablePair<String,String>(target.getValue(), languageCode));
-                    
-                    insertFacetValues(target.getFacetConfiguration(), targetList, cmdiData, target.getOverrideExistingValues());
-                    
-                }
-                
-            }
+            ArrayList<Pair<String,String>> targetList = new ArrayList<Pair<String,String>>();
+            targetList.add(new ImmutablePair<String,String>(target.getValue(), languageCode));
             
-        }        
+            insertFacetValues(target.getFacetConfiguration(), targetList, cmdiData, target.getOverrideExistingValues());
+            
+        }       
         
         return removeSourceValue;
         
@@ -574,7 +571,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             }
             else {
                 if(!(facetConfig.getAllowMultipleValues() || facetConfig.getMultilingual()) && cmdiData.getDocField(facetConfig.getName()) != null) {
-                    LOG.warn("value for facet {} is set already. Since multiple value are not allowed value {} will be ignored!", facetConfig.getName(), fieldValue);
+                    LOG.info("value for facet {} is set already. Since multiple value are not allowed value {} will be ignored!", facetConfig.getName(), fieldValue);
                     break;
                 }
                 cmdiData.addDocField(facetConfig.getName(), fieldValue, facetConfig.isCaseInsensitive());

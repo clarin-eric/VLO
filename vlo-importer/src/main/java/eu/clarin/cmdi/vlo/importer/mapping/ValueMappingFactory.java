@@ -4,6 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface ValueMappingFactory {
-    public Map<String, List<ConditionTargetSet>> getValueMappings(String fileName, FacetConceptMapping facetConceptMapping);
+    public Map<String, ConditionTargetSet> getValueMappings(String fileName, FacetConceptMapping facetConceptMapping);
 
 }

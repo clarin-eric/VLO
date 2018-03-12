@@ -26,21 +26,21 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
 
         // initialized via constructor
         private final List<FacetConcept> facetConcepts;
-        private final Map<String, List<ConditionTargetSet>> conditionTargetSetsPerFacet;
+        private final Map<String, ConditionTargetSet> conditionTargetSetPerFacet;
 
-        // shortcuts to prevent many lookups of last Element in a List
-        private List<ConditionTargetSet> conditionTargetSets;
+
         private ConditionTargetSet conditionTargetSet;
 
         private Condition condition;
         private TargetFacet targetFacet;
 
-        private List<TargetFacet> targetFacets;
+        private List<Condition> conditions;
+        private List<TargetFacet> defaultFacets, targetFacets;
         private String value;
 
         public ValueMappingsHandler(FacetConceptMapping facetConceptMapping,
-                Map<String, List<ConditionTargetSet>> conditionTargetSetsPerFacet) {
-            this.conditionTargetSetsPerFacet = conditionTargetSetsPerFacet;
+                Map<String, ConditionTargetSet> conditionTargetSetPerFacet) {
+            this.conditionTargetSetPerFacet = conditionTargetSetPerFacet;
 
             this.facetConcepts = facetConceptMapping.getFacetConcepts();
         }
@@ -53,15 +53,20 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
         @Override
         public void endElement(String uri, String localName, String qName) throws SAXException {
             switch (qName) {
+            case "target-value-set":
+                this.conditions.forEach(condition -> {
+                        this.conditionTargetSet.addConditionTarget(condition.isRegex(), condition.isCaseSensitive(), condition.getExpression(), this.targetFacets);
+                    }
+                );
+                
             case "target-value":
-                this.conditionTargetSet.getTargets().stream().forEach(facet -> {
+                this.targetFacets.stream().forEach(facet -> {
                     if (facet.getValue() == null)
                         facet.setValue(this.value);
                 });
                 break;
             case "source-value":
                 this.condition.setExpression(this.value);
-                this.conditionTargetSet.addCondition(this.condition);
                 break;
             default:
 
@@ -76,11 +81,11 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
 
             switch (qName) {
             case "origin-facet":
-                this.conditionTargetSets = new ArrayList<ConditionTargetSet>();
-                this.conditionTargetSetsPerFacet.put(attributes.getValue("name"), conditionTargetSets);
+                this.conditionTargetSet = new ConditionTargetSet();
+                this.conditionTargetSetPerFacet.put(attributes.getValue("name"), conditionTargetSet);
                 break;
             case "value-map":
-                this.targetFacets = new ArrayList<TargetFacet>();
+                this.defaultFacets = new ArrayList<TargetFacet>();
                 break;
             case "target-facet":
                 facetConcept = this.facetConcepts.stream().filter(fc -> fc.getName().equals(attributes.getValue("name")))
@@ -95,20 +100,20 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
                 facetConfiguration.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
                 facetConfiguration.setCaseInsensitive(facetConcept.isCaseInsensitive());
 
-                this.targetFacets.add(new TargetFacet(facetConfiguration, attributes.getValue("overrideExistingValues"),
+                this.defaultFacets.add(new TargetFacet(facetConfiguration, attributes.getValue("overrideExistingValues"),
                         attributes.getValue("removeSourceValue")));
                 break;
             case "target-value-set":
-                this.conditionTargetSet = new ConditionTargetSet();
-                this.conditionTargetSets.add(this.conditionTargetSet);
+                this.targetFacets = new ArrayList<TargetFacet>();
+                this.conditions = new ArrayList<Condition>();
                 break;
             case "target-value":
                 if (attributes.getValue("facet") == null) { // clone targetfacets
 
-                    this.targetFacets.forEach(facet -> {
+                    this.defaultFacets.forEach(facet -> {
 
                         this.targetFacet = facet.clone();
-                        this.conditionTargetSet.addTarget(this.targetFacet);
+                        this.targetFacets.add(this.targetFacet);
 
                         if (attributes.getValue("overrideExistingValues") != null) // only override if attribute is set
                             this.targetFacet.setOverrideExistingValues(attributes.getValue("overrideExistingValues"));
@@ -130,7 +135,7 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
                     if (attributes.getValue("removeSourceValue") != null) // only override if attribute is set
                         this.targetFacet.setRemoveSourceValue(attributes.getValue("removeSourceValue"));
 
-                    this.conditionTargetSet.addTarget(this.targetFacet);
+                    this.targetFacets.add(this.targetFacet);
                     break;
                 }
 
@@ -146,11 +151,12 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
                 facetConfiguration.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
                 facetConfiguration.setCaseInsensitive(facetConcept.isCaseInsensitive());
 
-                this.conditionTargetSet.addTarget(new TargetFacet(facetConfiguration,
+                this.targetFacets.add(new TargetFacet(facetConfiguration,
                         attributes.getValue("overrideExistingValues"), attributes.getValue("removeSourceValue")));
                 break;
             case "source-value":
                 this.condition = new Condition(attributes.getValue("isRegex"), attributes.getValue("caseSensitive"));
+                this.conditions.add(this.condition);
 
                 break;
             default:
@@ -159,8 +165,33 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
         }
     }
     
-    public final Map<String, List<ConditionTargetSet>> getValueMappings(String fileName, FacetConceptMapping conceptMapping){
-        HashMap<String, List<ConditionTargetSet>> valueMappings = new HashMap<String, List<ConditionTargetSet>>();
+    private class Condition{
+        private String isRegex, caseSensitive, expression;
+        
+        public Condition(String isRegex, String caseSensitive) {
+            this.isRegex = isRegex;
+            this.caseSensitive = caseSensitive;
+        }
+        
+        public void setExpression(String expression) {
+            this.expression = expression;
+        }
+        
+        public String isRegex() {
+            return this.isRegex;
+        }
+        
+        public String isCaseSensitive() {
+            return this.isCaseSensitive();
+        }
+        
+        public String getExpression() {
+            return expression;
+        }
+    }
+    
+    public final Map<String, ConditionTargetSet> getValueMappings(String fileName, FacetConceptMapping conceptMapping){
+        HashMap<String, ConditionTargetSet> valueMappings = new HashMap<String, ConditionTargetSet>();
         
         SAXParserFactory fac = SAXParserFactory.newInstance();
         fac.setXIncludeAware(true);

@@ -65,7 +65,7 @@ public class FacetMappingFactory {
     
     private final FacetConceptMapping conceptMapping;
     
-    private final Map<String, List<ConditionTargetSet>> conditionTargetSetPerFacet;
+    private final Map<String, ConditionTargetSet> conditionTargetSetPerFacet;
 
     public FacetMappingFactory(VloConfig vloConfig, VLOMarshaller marshaller) {
         this.vloConfig = vloConfig;
@@ -232,7 +232,7 @@ public class FacetMappingFactory {
                 
                 // setValueMappings
                 if(this.conditionTargetSetPerFacet.containsKey(config.getName()))
-                		config.addConditionTargetSets(this.conditionTargetSetPerFacet.get(config.getName()));
+                		config.setConditionTargetSet(this.conditionTargetSetPerFacet.get(config.getName()));
             }
             
             //now where all FacetConfigurations are created we can build references for derived facets

@@ -22,7 +22,7 @@ public class FacetConfiguration {
     private List<FacetConfiguration> derivedFacets = new ArrayList<FacetConfiguration>();
     
     
-    private List<ConditionTargetSet> conditionTargetSets = new ArrayList<ConditionTargetSet>();
+    private ConditionTargetSet conditionTargetSet;
     
     private boolean allowMultipleValues = true;
     // allow multiple values for the same XPath, even if allowMultipleValues == false
@@ -77,15 +77,12 @@ public class FacetConfiguration {
         return name;
     }
     
-    public List<ConditionTargetSet> getConditionTargetSets(){
-    	return this.conditionTargetSets;
+    public ConditionTargetSet getConditionTargetSet(){
+    	return this.conditionTargetSet;
     }
     
-    public void addConditionTargetSet(ConditionTargetSet conditionTargetSet){
-    	this.conditionTargetSets.add(conditionTargetSet);
-    }
-    public void addConditionTargetSets(List<ConditionTargetSet> conditionTargetSets) {
-    	this.conditionTargetSets.addAll(conditionTargetSets);
+    public void setConditionTargetSet(ConditionTargetSet conditionTargetSet){
+    	this.conditionTargetSet = conditionTargetSet;
     }
 
     @Override
