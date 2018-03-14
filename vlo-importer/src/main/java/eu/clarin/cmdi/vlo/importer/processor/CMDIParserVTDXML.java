@@ -16,7 +16,6 @@ import eu.clarin.cmdi.vlo.importer.Pattern;
 import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
 import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
 import eu.clarin.cmdi.vlo.importer.Vocabulary;
-import eu.clarin.cmdi.vlo.importer.mapping.ConditionTargetSet;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetConfiguration;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
@@ -51,18 +50,14 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private static final String ENGLISH_LANGUAGE = "code:eng";
     private static final String DEFAULT_LANGUAGE = "code:und";
     private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
-    private final VloConfig config;
     private final Vocabulary CCR;
     private final FacetMappingFactory facetMappingFactory;
-    private final VLOMarshaller marshaller;
     private final FieldNameServiceImpl fieldNameService;
     
     public CMDIParserVTDXML(Map<String, AbstractPostNormalizer> postProcessors, VloConfig config, FacetMappingFactory facetMappingFactory, VLOMarshaller marshaller, Boolean useLocalXSDCache) {
         this.postProcessors = postProcessors;
         this.useLocalXSDCache = useLocalXSDCache;
-        this.config = config;
         this.facetMappingFactory = facetMappingFactory;
-        this.marshaller = marshaller;
         this.CCR = new Vocabulary(config.getConceptRegistryUrl());
         this.fieldNameService = new FieldNameServiceImpl(config);
     }
@@ -255,13 +250,17 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      */
     private void processFacets(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
         final Collection<FacetConfiguration> facetList = facetMapping.getFacets();
+        
+        List<TargetFacet> overridingTargets = new ArrayList<TargetFacet>();
+        
 //        final List<String> processedFacets = new ArrayList<>(facetList.size());
         for (FacetConfiguration config : facetList) {
+            
 //            processedFacets.add(config.getName());
             boolean matchedPattern = false;
             List<Pattern> patterns = config.getPatterns();
             for (Pattern pattern : patterns) {
-                matchedPattern = matchPattern(cmdiData, nav, config, pattern);
+                matchedPattern = matchPattern(cmdiData, nav, config, pattern, overridingTargets);
                 if (matchedPattern && !config.getAllowMultipleValues()) {
                     break;
                 }
@@ -270,47 +269,36 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             // using fallback patterns if extraction failed
             if (!matchedPattern) {
                 for (Pattern pattern : config.getFallbackPatterns()) {
-                    matchedPattern = matchPattern(cmdiData, nav, config, pattern);
+                    matchedPattern = matchPattern(cmdiData, nav, config, pattern, overridingTargets);
                     if (matchedPattern && !config.getAllowMultipleValues()) {
                         break;
                     }
                 }
             }
-/*
-            if (!matchedPattern) {
-                //no matching value
-                processNoMatch(config.getName(), config.getAllowMultipleValues(), config.isCaseInsensitive(), cmdiData);
-            }*/
-        }
 
-        //handleUnprocessedFields(processedFacets, cmdiData);
+        }
+        
+        processOverrideValues(overridingTargets,cmdiData);
+
         setDefaultIfNull(facetList, cmdiData);
     }
-
-/*    private void handleUnprocessedFields(final List<String> processedFields, CMDIData cmdiData) {
-        // check for unprocessed facets that allow 'no value' post processing
-        Map<String, FacetConceptMapping.FacetConcept> facetConceptMap = null;
-        for (String fieldWithPostProcessor : postProcessors.keySet()) {
-            if (!processedFields.contains(fieldWithPostProcessor)) {
-                if (postProcessors.get(fieldWithPostProcessor).doesProcessNoValue()) {
-                    //get properties from facet concept definition
-                    if (facetConceptMap == null) {
-                        final FacetConceptMapping facetConceptMapping = marshaller.getFacetConceptMapping(config.getFacetConceptsFile());
-                        facetConceptMap = facetConceptMapping.getFacetConceptMap();
-                    }
-                    final FacetConceptMapping.FacetConcept facetConcept = facetConceptMap.get(fieldWithPostProcessor);
-                    if (facetConcept == null) {
-                        LOG.warn("Postprocessor defined for field not defined in facet concepts definition: {}. Skipping processing of unmapped field.", fieldWithPostProcessor);
-                    } else {
-                        processNoMatch(fieldWithPostProcessor, facetConcept.isAllowMultipleValues(), facetConcept.isCaseInsensitive(), cmdiData);
-                    }
-                }
-            }
-        }
-    }*/
     
     /**
-     * Sets default value if Null and if definded for the facet 
+     * @param overridingTargets list of buffered target facets
+     * @param cmdiData current CMDI data object
+     */
+    private void processOverrideValues(List<TargetFacet> overridingTargets, CMDIData cmdiData) {
+        overridingTargets.forEach(targetFacet -> {
+            ArrayList<Pair<String,String>> valueList = new ArrayList<Pair<String,String>>();
+            valueList.add(new ImmutablePair<String,String>(targetFacet.getValue(), DEFAULT_LANGUAGE));
+
+            insertFacetValues(targetFacet.getFacetConfiguration(), null, cmdiData, true);
+        });  
+    }
+
+    
+    /**
+     * Sets default value if Null and if defined for the facet 
      * 
      * @param facetList list of processed facet configurations
      * @param cmdiData current CMDI data object
@@ -328,23 +316,6 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     
 
 
-    /**
-     * Performs post processing in case no value was found for a specific facet
-     *
-     * @param facetConfig facet configuration
-     * @param cmdiData current CMDI data object
-     */
-    private void processNoMatch(FacetConfiguration facetConfig, CMDIData cmdiData) {
-        if (postProcessors.containsKey(facetConfig.getName()) && postProcessors.get(facetConfig.getName()).doesProcessNoValue()) {
-            //post process 'no value'
-            final List<String> postProcessed = postProcess(facetConfig.getName(), null, cmdiData);
-            if (postProcessed != null && !postProcessed.isEmpty()) {
-                final ArrayList<Pair<String, String>> valueLangPairList = new ArrayList<>();
-                addValuesToList(facetConfig.getName(), postProcessed, valueLangPairList, DEFAULT_LANGUAGE);
-                insertFacetValues(facetConfig, valueLangPairList, cmdiData, false);
-            }
-        }
-    }
 
     /**
      * Extracts content from CMDI file for a specific facet based on a single
@@ -357,7 +328,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @return pattern matched a node in the CMDI file?
      * @throws VTDException
      */
-    private boolean matchPattern(CMDIData cmdiData, VTDNav nav, FacetConfiguration facetConfig, Pattern pattern) throws VTDException, URISyntaxException, UnsupportedEncodingException {
+    private boolean matchPattern(CMDIData cmdiData, VTDNav nav, FacetConfiguration facetConfig, Pattern pattern, List<TargetFacet> overridingTargets) throws VTDException, URISyntaxException, UnsupportedEncodingException {
         final AutoPilot ap = new AutoPilot(nav);
         setNameSpace(ap, extractXsd(nav));
         ap.selectXPath(pattern.getPattern());
@@ -383,22 +354,16 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             final String value = nav.toString(index);
             final String languageCode = extractLanguageCode(nav);
             
-            // implementation of valuemapping (replacement of cfm, issue 93)
-
-            // end of valuemapping implementation
-
-
-
         
             final List<String> postProcessed = postProcess(facetConfig.getName(), value, cmdiData);
             
             if(this.postProcessors.containsKey(facetConfig.getName()) && !(this.postProcessors.get(facetConfig.getName()) instanceof AbstractPostNormalizerWithVocabularyMap)){
                 for(String postProcessedValue : postProcessed) {
-                    removeSourceValue |= processValueMapping(facetConfig, postProcessedValue, languageCode, cmdiData);
+                    removeSourceValue |= processValueMapping(facetConfig, postProcessedValue, cmdiData, overridingTargets);
                 }
             }
             else {
-                removeSourceValue |= processValueMapping(facetConfig, value, languageCode, cmdiData);
+                removeSourceValue |= processValueMapping(facetConfig, value, cmdiData, overridingTargets);
             }
             
             if(!removeSourceValue) {
@@ -479,7 +444,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @param cmdiData representation of the CMDI document
      * @return remove source value?
      */
-    private boolean processValueMapping(FacetConfiguration facetConfig, String value, String languageCode, CMDIData cmdiData) {
+    private boolean processValueMapping(FacetConfiguration facetConfig, String value, CMDIData cmdiData, List<TargetFacet> overridingTargets) {
         boolean removeSourceValue = false;
         
         
@@ -489,10 +454,17 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         for(TargetFacet target : facetConfig.getConditionTargetSet().getTargetsFor(value)) {
             removeSourceValue |= target.getRemoveSourceValue();
 
-            ArrayList<Pair<String,String>> targetList = new ArrayList<Pair<String,String>>();
-            targetList.add(new ImmutablePair<String,String>(target.getValue(), languageCode));
             
-            insertFacetValues(target.getFacetConfiguration(), targetList, cmdiData, target.getOverrideExistingValues());
+            if(target.getOverrideExistingValues()) {
+                overridingTargets.add(target);
+                
+            }
+            else {
+                ArrayList<Pair<String,String>> valueList = new ArrayList<Pair<String,String>>();
+                valueList.add(new ImmutablePair<String,String>(target.getValue(), DEFAULT_LANGUAGE));
+
+                insertFacetValues(target.getFacetConfiguration(), valueList, cmdiData, target.getOverrideExistingValues());
+            }
             
         }       
         
