@@ -27,6 +27,13 @@ public class TargetFacet {
         setRemoveSourceValue(removeSourceValue);
 
     }
+    
+    public TargetFacet(FacetConfiguration facetConfiguration, String overrideExistingValues, String removeSourceValue, String value) {
+        this.facetConfiguration = facetConfiguration;
+        setOverrideExistingValues(overrideExistingValues);
+        setRemoveSourceValue(removeSourceValue);
+        this.value = value;
+    }
 
     public FacetConfiguration getFacetConfiguration() {
         return facetConfiguration;
