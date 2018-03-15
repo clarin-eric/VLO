@@ -368,4 +368,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         // see https://github.com/clarin-eric/VLO/issues/95
         simpleModeModel.setObject(false);
     }
+
+    public SearchResultsPanel getSearchResultsPanel() {
+        return searchResultsPanel;
+    }
 }
