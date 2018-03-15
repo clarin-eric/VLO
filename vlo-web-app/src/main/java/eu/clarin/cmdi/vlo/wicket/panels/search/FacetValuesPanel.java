@@ -289,7 +289,11 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
             @Override
             protected IModel<?> getCloseButtonLabelModel() {
-                return Model.of("Done");
+                return Model.of("Apply");
+            }
+            @Override
+            protected IModel<?> getDismissButtonLabelModel() {
+                return Model.of("Cancel");
             }
 
             private void updateAfterClose(AjaxRequestTarget target) {
@@ -335,6 +339,8 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         };
 
         window.addOrReplace(modalContent);
+        window.setShowDismissIcon(false);
+        window.setShowDismissButton(true);
         return window;
     }
 

@@ -237,13 +237,13 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
                     if (selectionValues == null || selectionValues.isEmpty()) {
                         return "No matching values available.";
                     } else {
-                        return "No matching values remaining. Click \"Done\" to apply the current selection.";
+                        return "No matching values remaining. Click \"Apply\" to apply the current selection.";
                     }
                 } else if (view.getPageCount() <= 1) {
-                    return String.format("Showing %d available values. Select one or more and click \"Done\":", view.getItemCount());
+                    return String.format("Showing %d available values. Select one or more and click \"Apply\":", view.getItemCount());
                 } else {
                     final long offset = view.getFirstItemOffset();
-                    return String.format("Showing items %d - %d of %d matching values. Select one or more and click \"Done\":", offset + 1, offset + view.getViewSize(), view.getItemCount());
+                    return String.format("Showing items %d - %d of %d matching values. Select one or more and click \"Apply\":", offset + 1, offset + view.getViewSize(), view.getItemCount());
                 }
             }
         });
