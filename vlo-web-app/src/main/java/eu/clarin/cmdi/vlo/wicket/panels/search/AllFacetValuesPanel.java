@@ -179,6 +179,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
                 if (target != null) {
                     target.add(valuesContainer);
                 }
+                onSelectionChanged(target);
             }
 
         }.setRenderForCollapsed(false);
@@ -212,6 +213,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
                                 target.appendJavaScript(selectionTrackingBehavior.generatePiwikJs(target));
                             }
                         }
+                        onSelectionChanged(target);
                     }
                 };
                 item.add(selectLink);
@@ -333,6 +335,10 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
             target.add(valuesContainer);
         }
 
+    }
+    
+    protected void onSelectionChanged(AjaxRequestTarget target) {
+        
     }
 
     @Override

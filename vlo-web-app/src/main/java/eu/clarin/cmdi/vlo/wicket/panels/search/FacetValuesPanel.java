@@ -314,7 +314,20 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
         };
 
-        final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), selectionTypeModeModel, selectionModel, filterModel);
+        final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), selectionTypeModeModel, selectionModel, filterModel) {
+            @Override
+            protected void onSelectionChanged(AjaxRequestTarget target) {
+                if (target != null) {
+                    // Special case: update search results only so as to provide some visual feedback. 
+                    // (calling onValuesSelected would be nice but may re-render the facet panels which would break the modal window)
+                    final Component resultsPanel = getPage().get("searchContainer:searchResults");
+                    if(resultsPanel != null) {
+                        target.add(resultsPanel);
+                    }
+                }
+            }
+
+        };
 
         window.addOrReplace(modalContent);
         return window;
