@@ -254,6 +254,67 @@ public class ValueMappingsTest extends ImporterTestcase {
         
 
     }
+    
+    @Test
+    public void testMapToNull() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1289827960126\">\n";
+        content += "   <Header>\n";
+        content += "      <MdSelfLink>testID2</MdSelfLink>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1289827960126</MdProfile>\n";
+        content += "   </Header>\n";
+        content += "   <Resources>\n";
+        content += "      <ResourceProxyList>\n";
+        content += "         <ResourceProxy id=\"refLink\">\n";
+        content += "            <ResourceType>Resource</ResourceType>\n";
+        content += "            <ResourceRef>http://terminotica.upf.es/CREL/LIC01.htm</ResourceRef>\n";
+        content += "         </ResourceProxy>\n";
+        content += "         <ResourceProxy id=\"refLink2\">\n";
+        content += "            <ResourceType>Resource</ResourceType>\n";
+        content += "            <ResourceRef>file://bla.resource2.txt</ResourceRef>\n";
+        content += "         </ResourceProxy>\n";
+        content += "      </ResourceProxyList>\n";
+        content += "   </Resources>\n";
+        content += "   <Components>\n";
+        content += "     <cmdp:LrtInventoryResource>\n";
+        content += "         <cmdp:LrtCommon>\n";
+        content += "             <cmdp:ResourceName>PALIC</cmdp:ResourceName>\n";
+        content += "             <cmdp:ResourceType>Televisie</cmdp:ResourceType>\n";
+        content += "         </cmdp:LrtCommon>\n";
+        content += "     </cmdp:LrtInventoryResource>\n";
+        content += "   </Components>\n";
+        content += "</CMD>\n";
+
+        File sessionFile = createCmdiFile("testSession", content);
+
+        config.setValueMappingsFile(createTmpFile("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
+                "\n" + 
+                "<value-mappings>\n" + 
+                "<origin-facet name=\"resourceClass\">\n" + 
+                "  <value-map>\n" +
+                "   <target-value-set>\n" + 
+                "       <target-value facet=\"resourceClass\" removeSourceValue=\"true\"></target-value>\n" + 
+                "       <source-value>Televisie</source-value>\n" + 
+                "   </target-value-set>\n" + 
+                "  </value-map>\n" + 
+                "</origin-facet>\n" + 
+                "</value-mappings>\n" + 
+                ""));
+
+
+
+        List<SolrInputDocument> docs = importData(sessionFile);
+
+        SolrInputDocument doc = docs.get(0);
+
+        //since this facet permits only one value the value from the cmdi-file should be taken and hence those from the cfm be ignored
+        assertEquals(null, getValue(doc, fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS)));
+
+        
+
+    }
+
     private Object getValue(SolrInputDocument doc, String field) {
         if (doc.getFieldValues(field) != null) {
             assertEquals(1, doc.getFieldValues(field).size());
