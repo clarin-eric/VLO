@@ -130,7 +130,7 @@ public class MetadataImporter {
     /**
      * Contains MDSelflinks (usually). Just to know what we have already done.
      */
-    protected final Set<String> processedIds = new HashSet<>();
+    protected final Set<String> processedIds = Sets.newConcurrentHashSet();
     /**
      * Some caching for solr documents (we are more efficient if we ram a whole
      * bunch to the solr server at once.
@@ -399,7 +399,7 @@ public class MetadataImporter {
         LOG.info("Found {} file(s) without an id. (id is generated based on fileName but that may not be unique)", nrOfFilesWithoutId);
         LOG.info("Found {} file(s) with errors.", nrOfFilesWithError);
         LOG.info("Found {} file(s) too large.", nrOfFilesTooLarge);
-        LOG.info("Skipped {} file(s) due to duplicate id.", nrOfFilesSkipped);
+        LOG.info("Skipped {} file(s) due to duplicate or problematic id.", nrOfFilesSkipped);
         LOG.info("Update of {} took {} secs. Total nr of files analyzed {}", nrOFDocumentsSent, time / 1000, nrOfFilesAnalyzed);
     }
 
@@ -525,6 +525,14 @@ public class MetadataImporter {
             nrOfFilesWithError.incrementAndGet();
         }
         if (cmdiData != null) {
+            if (!cmdiData.hasResources()) {
+                nrOfFilesSkipped.incrementAndGet();
+                LOG.warn("Skipping {}, no resource proxy found", file);
+                return;
+            }
+            
+            assert cmdiData.getId() != null; //idOk check guarantees this
+
             if (processedIds.add(cmdiData.getId())) {
                 SolrInputDocument solrDocument = cmdiData.getSolrDocument();
                 if (solrDocument != null) {
@@ -547,7 +555,7 @@ public class MetadataImporter {
      * @return true if id is acceptable, false otherwise
      */
     protected boolean idOk(String id) {
-        return id != null && !id.isEmpty();
+        return id != null && !id.trim().isEmpty();
     }
 
     /**

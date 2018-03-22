@@ -55,7 +55,7 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
     }
 
     public final String generatePiwikJs(AjaxRequestTarget target) {
-        String js = "if(Piwik != null) { ";
+        String js = "if(typeof Piwik == 'object' && Piwik != null) { ";
         if (async) {
             js += "var tracker = Piwik.getAsyncTracker(); ";
         } else {

@@ -77,6 +77,7 @@ public class SolrBridgeImpl implements SolrBridge {
             public void handleError(Throwable exception) {
                 super.handleError(exception);
                 serverError.set(exception);
+                onSolrClientError(exception);
             }
         };
     }
@@ -122,6 +123,10 @@ public class SolrBridgeImpl implements SolrBridge {
 
     public void setCommit(boolean commit) {
         this.commit = commit;
+    }
+    
+    protected void onSolrClientError(Throwable exception) {
+        //do nothing
     }
 
 }

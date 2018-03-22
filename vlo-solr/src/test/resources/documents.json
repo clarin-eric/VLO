@@ -1,0 +1,1267 @@
+
+[
+    {
+        "collection": [
+            "The European Library: NationalLibraryBulgaria"
+        ],
+        "name": [
+            "бележка"
+        ],
+        "country": [
+            "Bulgaria"
+        ],
+        "_languageName": [
+            "Bulgarian"
+        ],
+        "resourceClass": [
+            "TEXT"
+        ],
+        "id": [
+            "europeana_58_aggregation_47_europeana_47_9200377_47_BibliographicResource_3000115528936"
+        ],
+        "_resourceRefCount": [
+            "3"
+        ]
+    },
+    {
+        "collection": [
+            "CLARIN-DK-UCPH Repository"
+        ],
+        "name": [
+            "Magasin du Nord"
+        ],
+        "_languageName": [
+            "Danish"
+        ],
+        "resourceClass": [
+            "Text"
+        ],
+        "id": [
+            "hdl_58_11221_47_90D1-4400-4082-6-7_64_md_61_cmdi"
+        ],
+        "_resourceRefCount": [
+            "3"
+        ]
+    },
+    {
+        "collection": [
+            "CLARIN-DK-UCPH Repository"
+        ],
+        "name": [
+            "Anmærkninger over den Kunst at skrive et godt Brev Del B"
+        ],
+        "_languageName": [
+            "Danish"
+        ],
+        "resourceClass": [
+            "Text"
+        ],
+        "id": [
+            "hdl_58_11221_47_90D1-8004-2240-5-A_64_md_61_cmdi"
+        ],
+        "_resourceRefCount": [
+            "25"
+        ]
+    },
+    {
+        "collection": [
+            "ORTOLANG Repository: Workspace eaf8ae34-1427-46f6-b632-58bd1d557541"
+        ],
+        "name": [
+            "Grindmill songs of Maharashtra",
+            "Chants de la mouture au Maharashtra",
+            "Canciones de la molienda en Maharashtra",
+            "महाराष्ट्रातील जात्यावरील गाणी"
+        ],
+        "_languageName": [
+            "Marathe",
+            "Marathi",
+            "Marathi Rural",
+            "Marathi, Rural",
+            "Marath Rústico",
+            "马拉文, Rural",
+            "Mar-1"
+        ],
+        "resourceClass": [
+            "Linguistic-type: primary_text",
+            "Discourse-type: singing"
+        ],
+        "id": [
+            "oai_58_ortolang.fr_58_eaf8ae34-1427-46f6-b632-58bd1d557541"
+        ],
+        "_resourceRefCount": [
+            "3"
+        ]
+    },
+    {
+        "collection": [
+            "The European Library: BSB"
+        ],
+        "name": [
+            "Le point du jour ou Résultat de ce qui s'est passé la veille à l'Assemblée Nationale - 4. 1789, 31. Okt. - 3. Dez. = Nr. 121 - 150"
+        ],
+        "country": [
+            "Germany"
+        ],
+        "_languageName": [
+            "German",
+            "French"
+        ],
+        "resourceClass": [
+            "Analitic serial",
+            "TEXT"
+        ],
+        "id": [
+            "europeana_58_aggregation_47_europeana_47_9200386_47_BibliographicResource_3000044582579"
+        ],
+        "_resourceRefCount": [
+            "3"
+        ]
+    },
+    {
+        "name": [
+            "The Nenets-Finnish-Nenets Dictionaries of Neahttadigisánit"
+        ],
+        "country": [
+            "Finland"
+        ],
+        "_languageName": [
+            "Finnish",
+            "Nenets"
+        ],
+        "collection": [
+            "Sample data"
+        ],
+        "id": [
+            "http_58__47__47_urn.fi_47_urn_58_nbn_58_fi_58_lb-2014073058"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "92031_Ag_EU_TEL_a0157"
+        ],
+        "name": [
+            "Begin. [fol. 1\n                        recto:] [F]Rater ambrosius tua michi munuscula perferens. detulit siml[ul] [et]\n                        suauissimas litteras, etc. [fol. 5 recto:] [I]N principio creauit deus celu[m] et\n                        terram, etc. End. [fol. 641 verso:] Gratia d[omi]n[i] n[ost]r[i] ihesu cristi tu[m]\n                        [sic] omnib[us] vobis ame[n]. G.L."
+        ],
+        "country": [
+            "United Kingdom"
+        ],
+        "resourceClass": [
+            "Still image",
+            "Text",
+            "IMAGE"
+        ],
+        "id": [
+            "Sample data/edm-record-exp1.cmdi"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "LINDAT / CLARIN Data & Tools"
+        ],
+        "name": [
+            "Universal Dependencies 1.3"
+        ],
+        "_languageName": [
+            "Ancient Greek",
+            "Arabic",
+            "Basque",
+            "Bulgarian",
+            "Croatian",
+            "Czech",
+            "Danish",
+            "Dutch",
+            "English",
+            "Estonian",
+            "Finnish",
+            "French",
+            "German",
+            "Gothic",
+            "Modern Greek",
+            "Hebrew",
+            "Hindi",
+            "Hungarian",
+            "Indonesian",
+            "Irish",
+            "Italian",
+            "Japanese",
+            "Latin",
+            "Norwegian",
+            "Church Slavic; Old Slavonic; Old Church Slavonic; Church Slavonic; Old Bulgarian",
+            "Farsi; Persian",
+            "Polish",
+            "Portuguese",
+            "Romanian; Moldavian; Moldovan",
+            "Slovenian",
+            "Spanish; Castilian",
+            "Swedish",
+            "Tamil",
+            "Catalan; Valencian",
+            "Chinese",
+            "Galician",
+            "Kazakh",
+            "Latvian",
+            "Russian",
+            "Turkish",
+            "Ancient Greek (to 1453)",
+            "Modern Greek (1453-)"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_11234_47_1-1699_64_format_61_cmdi"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "CLARINO NB – Språkbanken"
+        ],
+        "name": [
+            "NST Acoustic database for Swedish speech synthesis (44 kHz)",
+            "NST database for svensk talesyntese (44 kHz)"
+        ],
+        "resourceClass": [
+            "Corpus"
+        ],
+        "id": [
+            "http_58__47__47_www.nb.no_47_sprakbanken_47_show_63_serial_61_sbr-18"
+        ],
+        "_resourceRefCount": [
+            "2"
+        ]
+    },
+    {
+        "collection": [
+            "The European Library: BSB"
+        ],
+        "name": [
+            "Amphilochii Episcopi Iconiensis\n            Epistola ad Seleucum"
+        ],
+        "country": [
+            "Germany"
+        ],
+        "_languageName": [
+            "German",
+            "Latin"
+        ],
+        "resourceClass": [
+            "Monograph",
+            "TEXT"
+        ],
+        "id": [
+            "europeana_58_aggregation_47_europeana_47_9200386_47_BibliographicResource_3000059109382"
+        ],
+        "_resourceRefCount": [
+            "2"
+        ]
+    },
+    {
+        "collection": [
+            "TalkBank"
+        ],
+        "name": [
+            "Embargo MPI-EVA-Manchester Corpus HANDLE"
+        ],
+        "country": [
+            "United Kingdom"
+        ],
+        "_languageName": [
+            "English"
+        ],
+        "genre": [
+            "discourse"
+        ],
+        "id": [
+            "hdl_58_1234_47_5678"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "TalkBank"
+        ],
+        "name": [
+            "Embargo MPI-EVA-Manchester Corpus NO SELFLINK"
+        ],
+        "country": [
+            "United Kingdom"
+        ],
+        "_languageName": [
+            "English"
+        ],
+        "genre": [
+            "discourse"
+        ],
+        "id": [
+            "Sample data/oai_www_mpi_nl_https___corpus1_mpi_nl_media_archive_mirrored_corpora_childes_data_cmdi_childes_Embargo_MPI_EVA_Manchester_gina_4_05_14_cmdi copy 2.xml"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "TalkBank"
+        ],
+        "name": [
+            "Embargo MPI-EVA-Manchester Corpus"
+        ],
+        "country": [
+            "United Kingdom"
+        ],
+        "_languageName": [
+            "English"
+        ],
+        "genre": [
+            "discourse"
+        ],
+        "id": [
+            "https_58__47__47_corpus1.mpi.nl_47_media-archive_47_mirrored_corpora_47_childes_47_data-cmdi_47_childes_47_Embargo_47_MPI-EVA-Manchester_47_gina_47_4-05-14.cmdi"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "TalkBank"
+        ],
+        "name": [
+            "English Morisset Corpus"
+        ],
+        "country": [
+            "United States"
+        ],
+        "_languageName": [
+            "English"
+        ],
+        "genre": [
+            "discourse"
+        ],
+        "id": [
+            "https_58__47__47_corpus1.mpi.nl_47_media-archive_47_mirrored_corpora_47_childes_47_data-cmdi_47_childes_47_Eng-NA_47_Morisset_47_Topeka_47_319m30t.cmdi"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "Hamburger Zentrum für Sprachkorpora (HZSK)"
+        ],
+        "name": [
+            "Commented Learner Corpus Academic Writing",
+            "Kommentiertes Lerndenkorpus akademisches Schreiben"
+        ],
+        "country": [
+            "Germany"
+        ],
+        "_languageName": [
+            "German"
+        ],
+        "genre": [
+            "academic writing",
+            "akademisches schreiben"
+        ],
+        "resourceClass": [
+            "Corpus"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_11022_47_0000-0000-8DE4-0"
+        ],
+        "_resourceRefCount": [
+            "3"
+        ]
+    },
+    {
+        "collection": [
+            "Leipzig Corpora Collection"
+        ],
+        "name": [
+            "ukr_newscrawl_2011_1M"
+        ],
+        "_languageName": [
+            "Ukrainian"
+        ],
+        "genre": [
+            "newspaper text"
+        ],
+        "resourceClass": [
+            "Written Corpus"
+        ],
+        "id": [
+            "11022_47_0000-0000-7F86-B"
+        ],
+        "_resourceRefCount": [
+            "2"
+        ]
+    },
+    {
+        "collection": [
+            "Hamburg Dependency Treebank"
+        ],
+        "name": [
+            "Hamburg Dependency Treebank"
+        ],
+        "_languageName": [
+            "German"
+        ],
+        "genre": [
+            "newspaper article"
+        ],
+        "resourceClass": [
+            "Treebank"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_11022_47_0000-0000-7FCC-D"
+        ],
+        "_resourceRefCount": [
+            "2"
+        ]
+    },
+    {
+        "collection": [
+            "Bavarian Archive for Speech Signals (BAS)"
+        ],
+        "name": [
+            "Natural Media Motion-Capture Corpus"
+        ],
+        "country": [
+            "Germany"
+        ],
+        "_languageName": [
+            "English",
+            "German"
+        ],
+        "genre": [
+            "gesture form analysis"
+        ],
+        "resourceClass": [
+            "Video",
+            "Audio",
+            "Other"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_11858_47_00-1779-0000-0028-9149-A_64_format_61_cmdi"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "TLA Collections"
+        ],
+        "name": [
+            "Corpus Spoken Dutch",
+            "Corpus Gesproken Nederlands"
+        ],
+        "_languageName": [
+            "Dutch"
+        ],
+        "id": [
+            "tla.mpi.nl_58_collections_58_cgn"
+        ],
+        "_resourceRefCount": [
+            "2"
+        ]
+    },
+    {
+        "collection": [
+            "Institut für Deutsche Sprache, CLARIN-D Zentrum, Mannheim"
+        ],
+        "name": [
+            "Mannheimer Korpus Historischer Zeitungen und\n\t\t\t\tZeitschriften"
+        ],
+        "_languageName": [
+            "German"
+        ],
+        "resourceClass": [
+            "Collection"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_10932_47_00-01B8-AE41-41A4-DC01-5"
+        ],
+        "_resourceRefCount": [
+            "4"
+        ]
+    },
+    {
+        "collection": [
+            "UBU Clarin Set"
+        ],
+        "name": [
+            "\"...op het afnemen en vervoeren naar de galge van Hekendorp...\" : poging tot reconstructie van een merkwaardig sodomieproces in 1732"
+        ],
+        "genre": [
+            "info:eu-repo/semantics/article"
+        ],
+        "resourceClass": [
+            "Text"
+        ],
+        "id": [
+            "oai_58_dspace.library.uu.nl_58_1874_47_212798"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "Bavarian Archive for Speech Signals (BAS)"
+        ],
+        "name": [
+            "0001"
+        ],
+        "country": [
+            "Germany"
+        ],
+        "_languageName": [
+            "German"
+        ],
+        "genre": [
+            "question answering",
+            "provide street name, zip, city name, telephone number"
+        ],
+        "id": [
+            "hdl_58_11858_47_00-1779-0000-001D-B72F-B_64_format_61_cmdi"
+        ],
+        "_resourceRefCount": [
+            "12"
+        ]
+    },
+    {
+        "collection": [
+            "INL Taalbank Nederlands"
+        ],
+        "name": [
+            "WFT",
+            "Wurdboek fan de Fryske taal online in de GTB"
+        ],
+        "country": [
+            "Netherlands"
+        ],
+        "_languageName": [
+            "Western Frisian",
+            "Dutch"
+        ],
+        "id": [
+            "hdl_58_10032_47_bddcec71af362a589fde6c50ea0b865e"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "name": [
+            "Kariya: a language of Nigeria"
+        ],
+        "_languageName": [
+            "Kariya"
+        ],
+        "collection": [
+            "Sample data"
+        ],
+        "id": [
+            "Sample data/oai_ethnologue_com_kil.xml"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "LRT + Open Submissions Data & Tools"
+        ],
+        "name": [
+            "The Norwegian Newspaper Corpus"
+        ],
+        "_languageName": [
+            "Norwegian"
+        ],
+        "resourceClass": [
+            "Corpus"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_11372_47_LRT-370_64_format_61_cmdi"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "Clarino UiB"
+        ],
+        "name": [
+            "Text material from Forskning.no (1998 - 2012)"
+        ],
+        "country": [
+            "Norway"
+        ],
+        "_languageName": [
+            "Norwegian",
+            "Norwegian Bokmål"
+        ],
+        "resourceClass": [
+            "Corpus"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_11509_47_80"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "name": [
+            "Or. 1431",
+            "Bughyat al-murtād li-taṣḥīḥ al-ḍād"
+        ],
+        "_languageName": [
+            "Arabic"
+        ],
+        "resourceClass": [
+            "PhysicalObject"
+        ],
+        "collection": [
+            "Sample data"
+        ],
+        "id": [
+            "Sample data/c1ac523a_0c23_4062_87ce_2fa78a2cf993.xml"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "Speech and Language Data Repository"
+        ],
+        "name": [
+            "Standard ARABIC - statements",
+            "ÁRABE estándar - frases afirmativas",
+            "ARABE standard - phrases affirmatives"
+        ],
+        "country": [
+            "France"
+        ],
+        "_languageName": [
+            "Standard Arabic",
+            "Arabic",
+            "Arabic, Standard",
+            "Árabe",
+            "Arabe Standard",
+            "阿拉伯语 Standard",
+            "Árábe",
+            "Arabe",
+            "阿拉伯语",
+            "عربي"
+        ],
+        "genre": [
+            "language_description"
+        ],
+        "resourceClass": [
+            "Info:eu-repo/semantics/dataset",
+            "Sound"
+        ],
+        "id": [
+            "Sample data/oai_sldr_org_sldr000745.xml"
+        ],
+        "_resourceRefCount": [
+            "6"
+        ]
+    },
+    {
+        "collection": [
+            "MPI CGN"
+        ],
+        "name": [
+            "radio: broadcast local radio"
+        ],
+        "country": [
+            "Netherlands"
+        ],
+        "_languageName": [
+            "Dutch"
+        ],
+        "genre": [
+            "discourse",
+            "commentary"
+        ],
+        "id": [
+            "hdl_58_1839_47_00-0000-0000-0001-53A7-1_64_format_61_cmdi"
+        ],
+        "_resourceRefCount": [
+            "6"
+        ]
+    },
+    {
+        "collection": [
+            "TLA: DoBeS archive"
+        ],
+        "name": [
+            "Doublet files"
+        ],
+        "country": [
+            "Unspecified"
+        ],
+        "genre": [
+            "unspecified"
+        ],
+        "id": [
+            "hdl_58_1839_47_00-0000-0000-000D-EF25-C_64_format_61_cmdi"
+        ],
+        "_resourceRefCount": [
+            "18"
+        ]
+    },
+    {
+        "collection": [
+            "CLARIN LRT inventory"
+        ],
+        "name": [
+            "ALBAYZIN"
+        ],
+        "country": [
+            "Spain"
+        ],
+        "_languageName": [
+            "Spanish; Castilian"
+        ],
+        "resourceClass": [
+            "Spoken Corpus"
+        ],
+        "id": [
+            "http_58__47__47_lrt.clarin.eu_47_node_47_3363"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "name": [
+            "The Northern Sami-Finnish-Northern Sami Dictionaries of Neahttadigisánit",
+            "Neahttadigisánitin pohjoissaame-suomi-pohjoissaame-sanakirjat"
+        ],
+        "country": [
+            "Finland"
+        ],
+        "_languageName": [
+            "Finnish",
+            "Northern Sami"
+        ],
+        "collection": [
+            "Sample data"
+        ],
+        "id": [
+            "Sample data/oai_kielipankki_fi_sh1ade30.xml"
+        ],
+        "_resourceRefCount": [
+            "0"
+        ]
+    },
+    {
+        "collection": [
+            "Lindat-Clarin: UFAL - Published Data"
+        ],
+        "name": [
+            "CoNLL 2009 Shared Task - Czech Data"
+        ],
+        "_languageName": [
+            "Czech"
+        ],
+        "resourceClass": [
+            "Corpus"
+        ],
+        "id": [
+            "https_58__47__47_ufal-point.mff.cuni.cz_47_oai_47_request_63_verb_61_GetRecord_38_identifier_61_oai_58_ufal-point.mff.cuni.cz_58_11858_47_00-097C-0000-0001-C6D1-9_38_metadataPrefix_61_cmdi"
+        ],
+        "_resourceRefCount": [
+            "0"
+        ]
+    },
+    {
+        "collection": [
+            "Meertens Collection: Soundbites"
+        ],
+        "name": [
+            "'s-Gravendeel"
+        ],
+        "_languageName": [
+            "Dutch"
+        ],
+        "genre": [
+            "discourse",
+            "conversation"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_10744_47_mi_b9001180-e301-4069-91c2-96e169d3f2ab"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "ICLTT Content Repository"
+        ],
+        "name": [
+            "Dictionary Gate"
+        ],
+        "_languageName": [
+            "Egyptian Arabic",
+            "German"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_11022_47_0000-0000-001B-2"
+        ],
+        "_resourceRefCount": [
+            "0"
+        ]
+    },
+    {
+        "name": [
+            "Initial test from VLO search results"
+        ],
+        "collection": [
+            "Sample data"
+        ],
+        "id": [
+            "hdl_58_11148_47_0000-0003-0ADA-D"
+        ],
+        "_resourceRefCount": [
+            "0"
+        ]
+    },
+    {
+        "collection": [
+            "Institut für Deutsche Sprache, CLARIN-D Zentrum, Mannheim"
+        ],
+        "name": [
+            "Allgemeine Auswanderungs=Zeitung"
+        ],
+        "_languageName": [
+            "German"
+        ],
+        "resourceClass": [
+            "Collection"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_10932_47_00-01B8-AE82-6835-C601-1"
+        ],
+        "_resourceRefCount": [
+            "0"
+        ]
+    },
+    {
+        "collection": [
+            "Institut für Deutsche Sprache, CLARIN-D Zentrum, Mannheim"
+        ],
+        "name": [
+            "Allgemeine Zeitung"
+        ],
+        "_languageName": [
+            "German"
+        ],
+        "resourceClass": [
+            "Collection"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_10932_47_00-01B8-AEE5-8FD7-8C01-F"
+        ],
+        "_resourceRefCount": [
+            "0"
+        ]
+    },
+    {
+        "collection": [
+            "Arthurian Fiction project"
+        ],
+        "name": [
+            "Tistram og Isold"
+        ],
+        "id": [
+            "https_58__47__47_service.arthurianfiction.org_47_manuscript_47_MAN0000000370"
+        ],
+        "_resourceRefCount": [
+            "0"
+        ]
+    },
+    {
+        "collection": [
+            "Hamburger Zentrum für Sprachkorpora (HZSK)"
+        ],
+        "name": [
+            "Dolmetschen im Krankenhaus (DiK)"
+        ],
+        "country": [
+            "Germany",
+            "Portugal",
+            "Turkey"
+        ],
+        "_languageName": [
+            "German",
+            "Portuguese",
+            "Spanish; Castilian",
+            "Turkish"
+        ],
+        "genre": [
+            "discourse"
+        ],
+        "resourceClass": [
+            "Corpus"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_11022_47_0000-0000-534B-F"
+        ],
+        "_resourceRefCount": [
+            "0"
+        ]
+    },
+    {
+        "name": [
+            "Vitis Christi Oder Weinstock Christi : Nach Anleitung der in der Christlichen Kirchen eingesezten und hergebrachten Fest und Feyertage  / Allen Christliebenden und der Seligkeit begierigen Herzen vorgestellet/ Durch Joachim a Glasenapp. Equit. Pomer.",
+            "Neue Evangelische Weinlese"
+        ],
+        "_languageName": [
+            "German"
+        ],
+        "collection": [
+            "Sample data"
+        ],
+        "id": [
+            "Sample data/oai_diglib_hab_de_ppn_737689137.xml"
+        ],
+        "_resourceRefCount": [
+            "2"
+        ]
+    },
+    {
+        "collection": [
+            "Clarino Bergen Centre - INESS"
+        ],
+        "name": [
+            "Lassy Small Corpus, version 1.2.1 (copy @ INESS)"
+        ],
+        "_languageName": [
+            "Dutch"
+        ],
+        "resourceClass": [
+            "Corpus"
+        ],
+        "id": [
+            "hdl_58_11495_47_DB24-E0B1-A02D-1"
+        ],
+        "_resourceRefCount": [
+            "0"
+        ]
+    },
+    {
+        "collection": [
+            "Meertens collection: Liederenbank"
+        ],
+        "name": [
+            "Nieuwe Voordrachten. Antoon laat je niet verleiden, EEN DEFTIGE FAMILIE of De kinderen van den Orgelbaas. MIGNON of het Beeld der Rozen"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_10744_47_mi_753b8eef-af12-4a87-af42-d36ec1c32243"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "Deutsches Textarchiv (1600–1900)"
+        ],
+        "name": [
+            "Versuch über die Elektricität, worinn Theorie und Ausübung dieser Wissenschaft durch eine Menge methodisch geordneter Experimente erläutert wird, nebst einem Versuch über den Magnet"
+        ],
+        "country": [
+            "Germany"
+        ],
+        "_languageName": [
+            "German"
+        ],
+        "genre": [
+            "wissenschaft",
+            "physik",
+            "ready",
+            "dtae"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_11858_47_00-203C-0000-0029-F47B-8"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "Institut für Deutsche Sprache, CLARIN-D Zentrum, Mannheim"
+        ],
+        "name": [
+            "PG_DE_046"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_10932_47_00-01FB-5484-DA23-4701-1"
+        ],
+        "_resourceRefCount": [
+            "2"
+        ]
+    },
+    {
+        "collection": [
+            "Dingler Online"
+        ],
+        "name": [
+            "Dinglers polytechnisches Journal",
+            "Band 346, Jahrgang 1931"
+        ],
+        "country": [
+            "Germany"
+        ],
+        "_languageName": [
+            "German"
+        ],
+        "genre": [
+            "gebrauchsliteratur",
+            "zeitschrift",
+            "dingler"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_11858_47_00-203C-0000-0027-9BEF-E"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "Deutsches Textarchiv (1600–1900)"
+        ],
+        "name": [
+            "Die Weisheit des Brahmanen",
+            "ein Lehrgedicht in Bruchstücken",
+            "Drittes Bändchen"
+        ],
+        "country": [
+            "Germany"
+        ],
+        "_languageName": [
+            "German"
+        ],
+        "genre": [
+            "belletristik",
+            "lyrik",
+            "core",
+            "ready",
+            "mts"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_11858_47_00-203C-0000-0029-FB09-3"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "Institut für Deutsche Sprache, CLARIN-D\n\t\t\t\t\t\tZentrum, Mannheim"
+        ],
+        "name": [
+            "Allerneueste Europäische Welt- und Staatsgeschichte"
+        ],
+        "_languageName": [
+            "German"
+        ],
+        "resourceClass": [
+            "Collection"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_10932_47_00-017B-E0F5-6287-4E01-8"
+        ],
+        "_resourceRefCount": [
+            "0"
+        ]
+    },
+    {
+        "collection": [
+            "Institut für Deutsche Sprache, CLARIN-D Zentrum, Mannheim"
+        ],
+        "name": [
+            "Geplante Aufnahmeaktion"
+        ],
+        "_languageName": [
+            "German"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_10932_47_00-01B9-05EC-74E2-5101-A"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "CKCC"
+        ],
+        "country": [
+            "Netherlands",
+            "Belgium",
+            "United Kingdom",
+            "Germany",
+            "Italy",
+            "France",
+            "Brazil",
+            "Switzerland",
+            "Portugal",
+            "Denmark",
+            "Sweden",
+            "Chile",
+            "Turkey",
+            "Cape Verde",
+            "Indonesia",
+            "Taiwan",
+            "Croatia",
+            "Luxembourg",
+            "Poland",
+            "Spain",
+            "Austria"
+        ],
+        "id": [
+            "http_58__47__47_rest.clarin-beta.dans.knaw.nl_47_metadata_47_cmdi_47_easy-file_58_4334126"
+        ],
+        "_resourceRefCount": [
+            "7299"
+        ]
+    },
+    {
+        "country": [
+            "Netherlands"
+        ],
+        "genre": [
+            "interview"
+        ],
+        "collection": [
+            "Sample data"
+        ],
+        "id": [
+            "http_58__47__47_rest.clarin-beta.dans.knaw.nl_47_metadata_47_cmdi"
+        ],
+        "_resourceRefCount": [
+            "1"
+        ]
+    },
+    {
+        "collection": [
+            "CKCC"
+        ],
+        "country": [
+            "Netherlands",
+            "Belgium",
+            "France",
+            "Germany",
+            "Switzerland",
+            "Italy",
+            "United Kingdom",
+            "Czech Republic",
+            "Poland",
+            "Denmark",
+            "Austria",
+            "Sweden",
+            "South Africa",
+            "Brazil",
+            "Spain"
+        ],
+        "id": [
+            "http_58__47__47_rest.clarin-beta.dans.knaw.nl_47_metadata_47_cmdi_47_easy-file_58_4334129"
+        ],
+        "_resourceRefCount": [
+            "3091"
+        ]
+    },
+    {
+        "collection": [
+            "Arthurian Fiction project"
+        ],
+        "name": [
+            "Erec en prose"
+        ],
+        "_languageName": [
+            "French",
+            "Anglonorman"
+        ],
+        "id": [
+            "https_58__47__47_service.arthurianfiction.org_47_narrative_47_NAR0000000209"
+        ],
+        "_resourceRefCount": [
+            "0"
+        ]
+    },
+    {
+        "collection": [
+            "Arthurian Fiction project"
+        ],
+        "name": [
+            "Folie Lancelot"
+        ],
+        "_languageName": [
+            "French",
+            "Anglonorman"
+        ],
+        "id": [
+            "https_58__47__47_service.arthurianfiction.org_47_narrative_47_NAR0000000198"
+        ],
+        "_resourceRefCount": [
+            "0"
+        ]
+    },
+    {
+        "collection": [
+            "Arthurian Fiction project"
+        ],
+        "name": [
+            "Tistram og Isold"
+        ],
+        "_languageName": [
+            "Danish"
+        ],
+        "id": [
+            "https_58__47__47_service.arthurianfiction.org_47_narrative_47_NAR0000000077"
+        ],
+        "_resourceRefCount": [
+            "0"
+        ]
+    },
+    {
+        "collection": [
+            "Institut für Deutsche Sprache, CLARIN-D Zentrum, Mannheim"
+        ],
+        "name": [
+            "Der allerneuesten Europäischen Welt= und Staats=Geschichte II. Theil"
+        ],
+        "_languageName": [
+            "German"
+        ],
+        "resourceClass": [
+            "Collection"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_10932_47_00-01B8-AE42-9CC4-E401-C"
+        ],
+        "_resourceRefCount": [
+            "0"
+        ]
+    }
+]

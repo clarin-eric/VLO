@@ -54,6 +54,32 @@ updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
 
 -----------------------------
+Upgrading from 4.3.5 to 4.3.6
+-----------------------------
+Maintenance release, no actions required (Solr index can be kept).
+
+Only the importer is affected by the changes in this release, so you could also choose
+to only replace the importer (bin directory). No configuration changes are required.
+
+-----------------------------
+Upgrading from 4.3.4 to 4.3.5
+-----------------------------
+Maintenance release, no actions required (Solr index can be kept).
+
+-----------------------------
+Upgrading from 4.3.3 to 4.3.4
+-----------------------------
+Maintenance release, no actions required (Solr index can be kept).
+
+-----------------------------
+Upgrading from 4.3.2 to 4.3.3
+-----------------------------
+Maintenance release, no actions required (Solr index can be kept). Make sure that the
+new Solr home content is applied to your Solr instance!!! Extra care has to be taken if
+using compose_vlo, please read its documentation at <https://gitlab.com/CLARIN-ERIC/
+compose_vlo/>.
+
+-----------------------------
 Upgrading from 4.3.1 to 4.3.2
 -----------------------------
 Maintenance release, no actions required (Solr index can be kept). Make sure that the

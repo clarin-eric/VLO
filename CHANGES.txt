@@ -1,5 +1,24 @@
 Bug fixes and new features
 --------------------------
+VLO 4.3.6 (February 2018)
+
+* Fixes missing field values in random records
+    <https://github.com/clarin-eric/VLO/issues/147>
+
+VLO-4.3.5 (February 2018)
+* Reverted changes in 4.3.4 that cause issues in the front end (while keeping the fix 
+for #133)
+
+VLO-4.3.4 (February 2018)
+
+* Fixed issue with retrieving similar documents, leading to errors loading the record page
+    <https://github.com/clarin-eric/VLO/issues/133>
+
+VLO-4.3.3 (January 2018)
+
+* Fixed issue with boolean query operator interpretation
+    <https://github.com/clarin-eric/VLO/issues/129>
+
 VLO-4.3.2 (January 2018)
 
 * Fixed issue with default conjunction operator

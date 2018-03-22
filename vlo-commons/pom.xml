@@ -157,17 +157,17 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>20.0</version> <!-- bump to 21 as soon as we switch to JDK8 (or to 22 when it arrives) -->
+            <version>23.6-jre</version>
         </dependency>
         <dependency>
             <groupId>com.ximpleware</groupId>
             <artifactId>vtd-xml</artifactId>
-            <version>2.13</version>
+            <version>2.11</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.5</version>
+            <version>2.6</version>
         </dependency>
     </dependencies>
 </project>

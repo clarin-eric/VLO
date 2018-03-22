@@ -16,16 +16,12 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
-import java.io.Serializable;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -40,6 +36,8 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 public abstract class BootstrapModal extends Panel {
 
     private final IModel<Boolean> visibilityModel = Model.of(false);
+    private boolean showDismissIcon = true;
+    private boolean showDismissButton = false;
 
     public BootstrapModal(String id) {
         super(id);
@@ -65,6 +63,13 @@ public abstract class BootstrapModal extends Panel {
                 onClose(target);
             }
         }.add(new Label("closeButtonLabel", getCloseButtonLabelModel())));
+
+        add(new AjaxLink("dismissButton") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onDismiss(target);
+            }
+        }.add(new Label("dismissButtonLabel", getDismissButtonLabelModel())));
         setOutputMarkupId(true);
     }
 
@@ -72,6 +77,8 @@ public abstract class BootstrapModal extends Panel {
     protected void onConfigure() {
         get("title").setVisible(visibilityModel.getObject());
         get("bodyContent").setVisible(visibilityModel.getObject());
+        get("closeCross").setVisible(showDismissIcon);
+        get("dismissButton").setVisible(showDismissButton);
     }
 
     protected abstract IModel<String> getTitle();
@@ -129,6 +136,18 @@ public abstract class BootstrapModal extends Panel {
 
     protected IModel<?> getCloseButtonLabelModel() {
         return Model.of("Close");
+    }
+
+    protected IModel<?> getDismissButtonLabelModel() {
+        return Model.of("Cancel");
+    }
+
+    public void setShowDismissIcon(boolean showDismissIcon) {
+        this.showDismissIcon = showDismissIcon;
+    }
+
+    public void setShowDismissButton(boolean showDismissButton) {
+        this.showDismissButton = showDismissButton;
     }
 
 }

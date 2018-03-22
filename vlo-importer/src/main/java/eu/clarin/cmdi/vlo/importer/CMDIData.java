@@ -128,6 +128,8 @@ public class CMDIData {
 
     /**
      * Returns list of all search interfaces (preferably CQL interfaces)
+     *
+     * @return list of search interface resources
      */
     public List<Resource> getSearchResources() {
         return searchResources;
@@ -136,7 +138,7 @@ public class CMDIData {
     /**
      * Return the list of landing page resources.
      *
-     * @return the list
+     * @return list of landing page resources
      */
     public List<Resource> getLandingPageResources() {
         return landingPageResources;
@@ -149,6 +151,16 @@ public class CMDIData {
      */
     public List<Resource> getSearchPageResources() {
         return searchPageResources;
+    }
+
+    /**
+     * Checks if any resources (metadata, landingpage, etc.) are available
+     * @return Returns true if at least one resource is available
+     */
+    public boolean hasResources() {
+        return !(getDataResources().isEmpty() && getMetadataResources().isEmpty()
+                && getSearchResources().isEmpty() && getSearchPageResources().isEmpty()
+                && getLandingPageResources().isEmpty());
     }
 
     /**

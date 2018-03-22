@@ -160,6 +160,12 @@ public class MetadataImporterTest extends ImporterTestcase {
         session += "      <MdProfile>clarin.eu:cr1:p_1271859438204</MdProfile>\n";
         session += "   </Header>\n";
         session += "   <Resources>\n";
+        session += "      <ResourceProxyList>\n";
+        session += "          <ResourceProxy>\n";
+        session += "             <ResourceType>Resource</ResourceType>\n";
+        session += "             <ResourceRef>http://example.org/resource</ResourceRef>\n";
+        session += "          </ResourceProxy>\n";
+        session += "      </ResourceProxyList>\n";
         session += "   </Resources>\n";
         session += "   <Components>\n";
         session += "      <Session>\n";
@@ -185,6 +191,12 @@ public class MetadataImporterTest extends ImporterTestcase {
         content += "      <cmd:MdProfile>clarin.eu:cr1:p_1280305685235</cmd:MdProfile>\n";
         content += "   </cmd:Header>\n";
         content += "   <cmd:Resources>\n";
+        content += "      <cmd:ResourceProxyList>\n";
+        content += "          <cmd:ResourceProxy>\n";
+        content += "             <cmd:ResourceType>Resource</cmd:ResourceType>\n";
+        content += "             <cmd:ResourceRef>http://example.org/resource</cmd:ResourceRef>\n";
+        content += "          </cmd:ResourceProxy>\n";
+        content += "      </cmd:ResourceProxyList>\n";
         content += "   </cmd:Resources>\n";
         content += "    <cmd:Components>\n";
         content += "        <cmdp:DynaSAND>\n";
@@ -207,6 +219,28 @@ public class MetadataImporterTest extends ImporterTestcase {
         SolrInputDocument doc = docs.get(0);
         assertEquals("testRoot", getValue(doc, FieldKey.COLLECTION));
         assertEquals("DiDDD-project", getValue(doc, FieldKey.PROJECT_NAME));
+    }
+
+    @Test
+    public void testMissingResourceProxies() throws Exception {
+        String session = "";
+        session += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        session += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\">\n";
+        session += "   <Header>\n";
+        session += "      <MdProfile>clarin.eu:cr1:p_1271859438204</MdProfile>\n";
+        session += "   </Header>\n";
+        session += "   <Resources/>\n";
+        session += "   <Components>\n";
+        session += "      <Session>\n";
+        session += "         <Name>kleve-route</Name>\n";
+        session += "         <Title>kleve-route-title</Title>\n";
+        session += "      </Session>\n";
+        session += "   </Components>\n";
+        session += "</CMD>\n";
+        File sessionFile = createCmdiFile("testSession", session);
+
+        List<SolrInputDocument> docs = importData(sessionFile);
+        assertEquals(0, docs.size());
     }
 
     private Object getValue(SolrInputDocument doc, FieldKey key) {

@@ -31,6 +31,7 @@ import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.provider.PartitionedDataProvider;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
+import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapModal;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetFieldValuesProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
@@ -40,6 +41,7 @@ import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.Component;
+import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -287,7 +289,11 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
             @Override
             protected IModel<?> getCloseButtonLabelModel() {
-                return Model.of("Done");
+                return Model.of("Apply");
+            }
+            @Override
+            protected IModel<?> getDismissButtonLabelModel() {
+                return Model.of("Cancel");
             }
 
             private void updateAfterClose(AjaxRequestTarget target) {
@@ -314,9 +320,27 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
         };
 
-        final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), selectionTypeModeModel, selectionModel, filterModel);
+        final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), selectionTypeModeModel, selectionModel, filterModel) {
+            @Override
+            protected void onSelectionChanged(AjaxRequestTarget target) {
+                if (target != null) {
+                    // Special case: update search results only so as to provide some visual feedback. 
+                    // (calling onValuesSelected would be nice but may re-render the facet panels which would break the modal window)
+                    final Page page = getPage();
+                    if (page instanceof FacetedSearchPage) {
+                        final Component resultsPanel = ((FacetedSearchPage)page).getSearchResultsPanel();
+                        if (resultsPanel != null) {
+                            target.add(resultsPanel);
+                        }
+                    }
+                }
+            }
+
+        };
 
         window.addOrReplace(modalContent);
+        window.setShowDismissIcon(false);
+        window.setShowDismissButton(true);
         return window;
     }
 

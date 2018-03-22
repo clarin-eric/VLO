@@ -24,7 +24,11 @@ function showModal(obj, cb) {
             cb(); // wicket callback to proceed after showing the modal
         });
     }
-    obj.modal('show');
+    obj.modal({
+        'backdrop': 'static', 
+        'keyboard': false, 
+        'show': true
+    });
 }
 
 function hideModal(obj, cb) {

@@ -111,11 +111,11 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
             @Override
             protected void populateItem(final ListItem<String> item) {
                 //Model for the license URL: URLs are taken from the license 
-                //URL property file. The fallback will guarantee a null value, 
-                //even if no property has been defined for the license id at hand
+                //URL property file. As a fallback, the URI is used as a link
+                //if no property has been defined for the license id at hand
                 final IModel<String> linkPageModel = new NullFallbackModel(
                         new StringResourceModel("license.url.${}", this, item.getModel()), //see licenseUrls.properties
-                        new Model<String>());
+                        item.getModel());
 
                 //Model for the user friendly name of the license
                 final ConvertedFieldValueModel licenseNameModel = new ConvertedFieldValueModel(item.getModel(), fieldNameService.getFieldName(FieldKey.LICENSE));

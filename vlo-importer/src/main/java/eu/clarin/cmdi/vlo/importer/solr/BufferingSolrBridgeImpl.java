@@ -16,12 +16,16 @@
  */
 package eu.clarin.cmdi.vlo.importer.solr;
 
+import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
@@ -37,8 +41,10 @@ import org.slf4j.LoggerFactory;
 public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
 
     private final static Logger LOG = LoggerFactory.getLogger(BufferingSolrBridgeImpl.class);
-    
+
     private static final double BUFFER_SIZE_FACTOR = 1.2;
+
+    private final FieldNameService fieldNameService;
 
     private final Collection<SolrInputDocument> buffer;
     private final int flushSize;
@@ -46,12 +52,14 @@ public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
 
     public BufferingSolrBridgeImpl(VloConfig config) {
         super(config);
-        
+
+        this.fieldNameService = new FieldNameServiceImpl(config);
+
         //flush size determines how often the buffered is submitted to Solr
         this.flushSize = config.getMaxDocsInList();
-        
+
         //initialize buffer with capacity based on flush size
-        this.buffer = new ArrayList<>((int)(BUFFER_SIZE_FACTOR * flushSize));
+        this.buffer = new ArrayList<>((int) (BUFFER_SIZE_FACTOR * flushSize));
 
         LOG.info("Buffered will be submitted to the Solr server if it contains {} or more documents", flushSize);
     }
@@ -103,9 +111,22 @@ public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
     }
 
     protected synchronized void submitBuffer() throws IOException, SolrServerException {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Submitting buffer. Document ids: {}", getBufferDocIds());
+        }
         getClient().add(buffer);
         LOG.trace("Submit count total: {}", submitCount.addAndGet(buffer.size()));
         buffer.clear();
     }
 
+    private String getBufferDocIds() {
+        final String idField = fieldNameService.getFieldName(FieldKey.ID);
+        return buffer.stream()
+                //extract IDs
+                .map((doc) -> {
+                    return doc.getFieldValue(idField).toString();
+                })
+                //join ID strings
+                .collect(Collectors.joining(", "));
+    }
 }
