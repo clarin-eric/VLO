@@ -94,6 +94,12 @@ public class ValueMappingsTest extends ImporterTestcase {
         content += "      <cmd:MdProfile>clarin.eu:cr1:p_1280305685235</cmd:MdProfile>\n";
         content += "   </cmd:Header>\n";
         content += "   <cmd:Resources>\n";
+        content += "      <cmd:ResourceProxyList>\n";
+        content += "         <cmd:ResourceProxy id=\"refLink\">\n";
+        content += "            <cmd:ResourceType>Resource</cmd:ResourceType>\n";
+        content += "            <cmd:ResourceRef>hdl:1234/567-890-abc</cmd:ResourceRef>\n";
+        content += "         </cmd:ResourceProxy>\n";
+        content += "      </cmd:ResourceProxyList>\n";
         content += "   </cmd:Resources>\n";
         content += "    <cmd:Components>\n";
         content += "        <cmdp:DynaSAND>\n";
@@ -150,6 +156,12 @@ public class ValueMappingsTest extends ImporterTestcase {
         content += "      <cmd:MdProfile>clarin.eu:cr1:p_1280305685235</cmd:MdProfile>\n";
         content += "   </cmd:Header>\n";
         content += "   <cmd:Resources>\n";
+        content += "      <cmd:ResourceProxyList>\n";
+        content += "         <cmd:ResourceProxy id=\"refLink\">\n";
+        content += "            <cmd:ResourceType>Resource</cmd:ResourceType>\n";
+        content += "            <cmd:ResourceRef>hdl:1234/567-890-abc</cmd:ResourceRef>\n";
+        content += "         </cmd:ResourceProxy>\n";
+        content += "      </cmd:ResourceProxyList>\n";
         content += "   </cmd:Resources>\n";
         content += "    <cmd:Components>\n";
         content += "        <cmdp:DynaSAND>\n";
@@ -209,6 +221,12 @@ public class ValueMappingsTest extends ImporterTestcase {
         content += "      <cmd:MdProfile>clarin.eu:cr1:p_1280305685235</cmd:MdProfile>\n";
         content += "   </cmd:Header>\n";
         content += "   <cmd:Resources>\n";
+        content += "      <cmd:ResourceProxyList>\n";
+        content += "         <cmd:ResourceProxy id=\"refLink\">\n";
+        content += "            <cmd:ResourceType>Resource</cmd:ResourceType>\n";
+        content += "            <cmd:ResourceRef>hdl:1234/567-890-abc</cmd:ResourceRef>\n";
+        content += "         </cmd:ResourceProxy>\n";
+        content += "      </cmd:ResourceProxyList>\n";
         content += "   </cmd:Resources>\n";
         content += "    <cmd:Components>\n";
         content += "        <cmdp:DynaSAND>\n";
@@ -268,7 +286,7 @@ public class ValueMappingsTest extends ImporterTestcase {
         content += "      <ResourceProxyList>\n";
         content += "         <ResourceProxy id=\"refLink\">\n";
         content += "            <ResourceType>Resource</ResourceType>\n";
-        content += "            <ResourceRef>http://terminotica.upf.es/CREL/LIC01.htm</ResourceRef>\n";
+        content += "            <ResourceRef>hdl:1234/567-890-abc</ResourceRef>\n";
         content += "         </ResourceProxy>\n";
         content += "         <ResourceProxy id=\"refLink2\">\n";
         content += "            <ResourceType>Resource</ResourceType>\n";
