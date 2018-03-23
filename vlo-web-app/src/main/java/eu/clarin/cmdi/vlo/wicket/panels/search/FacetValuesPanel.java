@@ -370,22 +370,4 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * (fallback)!
      */
     protected abstract void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target);
-
-    @Override
-    protected void onBeforeRender() {
-        super.onBeforeRender();
-        // if an ajax update, set the watermark on the input field
-        final AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
-        if (target != null) {
-            target.appendJavaScript(String.format("jQuery('#%1$s input').watermark('Type to search for more');", getMarkupId()));
-            // focus? better only when expanded. jQuery('#%1$s input').focus()
-        }
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        // include watermark JQuery extension sources
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getJQueryWatermarkJS()));
-    }
-
 }
