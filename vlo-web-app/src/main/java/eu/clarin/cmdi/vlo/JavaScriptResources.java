@@ -31,7 +31,6 @@ public final class JavaScriptResources {
 
     private final static ResourceReference BOOTSTRAP = new ContextRelativeResourceReference("script/bootstrap.js"); //bootstrap scripts are extracted from CLARIN's base style bootstrap package
     private final static JavaScriptResourceReference HIGHLIGHT = new JavaScriptResourceReference(RecordPage.class, "jquery.highlight.js");
-    private final static CssResourceReference JQUERY_UI_CSS = new CssResourceReference(VloBasePage.class, "jquery-ui-1.11.4.custom/jquery-ui.min.css");
 
     private final static JavaScriptResourceReference VLO_FRONT = new JavaScriptResourceReference(VloBasePage.class, "vlo-front.js");
     private final static JavaScriptResourceReference VLO_HEADER = new JavaScriptResourceReference(VloBasePage.class, "vlo-header.js");
@@ -53,10 +52,6 @@ public final class JavaScriptResources {
     }
     public static JavaScriptResourceReference getVloFacetsJS() {
         return VLO_FACETS;
-    }
-    
-    public static CssResourceReference getJQueryUICSS() {
-        return JQUERY_UI_CSS;
     }
 
     public static JavaScriptResourceReference getHighlightJS() {
