@@ -66,7 +66,7 @@
 
     <licenseTypeMapUrl>${vloconfig.mappingFilesLocation}LicenseTypeMap.xml</licenseTypeMapUrl> <!-- bundled resource: /uniform-maps/LicenseAvailabilityMap.xml -->
     
-    <valueMappingsFile>/value-maps/map_resourceType.xml</valueMappingsFile> <!-- bundled resource: /uniform-maps/CrossFacetMap.xml -->
+    <valueMappingsFile>${vloconfig.valueMappingFile}</valueMappingsFile> <!-- bundled resource: ??? -->
     
 	  <fields>
 		  <field key="NAME">name</field>

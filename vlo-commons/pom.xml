@@ -82,6 +82,8 @@
                 <vloconfig.mappingFilesLocation>/uniform-maps/</vloconfig.mappingFilesLocation> 
                 <!-- empty location uses bundled default facet concepts file (from the VLO-mapping project) -->
                 <vloconfig.facetConceptsFileLocation></vloconfig.facetConceptsFileLocation>
+                <!-- bundled value mappings definition -->
+                <vloconfig.valueMappingFile>/value-maps/map_resourceType.xml</vloconfig.valueMappingFile>
             </properties>
         </profile>
         
@@ -127,6 +129,7 @@
                 <vloconfig.dataRootsFile>${VLO_DOCKER_DATAROOTS_FILE}</vloconfig.dataRootsFile>
                 <vloconfig.mappingFilesLocation>${VLO_DOCKER_MAPPING_BASE_URI}uniform-maps/</vloconfig.mappingFilesLocation>
                 <vloconfig.facetConceptsFileLocation>${VLO_DOCKER_MAPPING_BASE_URI}mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
+                <vloconfig.valueMappingFile>${VLO_DOCKER_VALUE_MAPPING_URI}</vloconfig.valueMappingFile>
                 <vloconfig.fileProcessingThreads>${VLO_DOCKER_FILE_PROCESSING_THREADS}</vloconfig.fileProcessingThreads>
                 <vloconfig.solrThreads>${VLO_DOCKER_SOLR_THREADS}</vloconfig.solrThreads>
             </properties>
