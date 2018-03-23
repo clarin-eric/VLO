@@ -191,7 +191,6 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
     public void renderHead(IHeaderResponse response) {
         // JQuery UI for tooltips
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getSyntaxHelpJS()));
-
     }
 
     protected abstract void selectionChanged(AjaxRequestTarget target);
