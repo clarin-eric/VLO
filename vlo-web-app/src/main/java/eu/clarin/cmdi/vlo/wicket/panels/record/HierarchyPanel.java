@@ -206,7 +206,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
         final AbstractTree<ModelWrapper<SolrDocument>> result = new IndicatingNestedTree<ModelWrapper<SolrDocument>>(id, treeProvider) {
             @Override
             public Component newNodeComponent(String id, IModel<ModelWrapper<SolrDocument>> model) {
-                return new Node<ModelWrapper<SolrDocument>>(id, this, model) {
+                return new IndicatingNode<ModelWrapper<SolrDocument>>(id, this, model) {
                     @Override
                     protected MarkupContainer createJunctionComponent(String id) {
                         final MarkupContainer junction = super.createJunctionComponent(id);

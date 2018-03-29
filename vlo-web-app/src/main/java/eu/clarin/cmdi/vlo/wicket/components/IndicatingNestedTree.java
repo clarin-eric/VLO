@@ -21,6 +21,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
+import org.apache.wicket.extensions.markup.html.repeater.tree.AbstractTree;
 import org.apache.wicket.extensions.markup.html.repeater.tree.DefaultNestedTree;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.extensions.markup.html.repeater.tree.Node;
@@ -46,36 +47,45 @@ public abstract class IndicatingNestedTree<T> extends DefaultNestedTree<T> {
     @Override
     public Component newNodeComponent(String id, final IModel<T> model) {
         // when aksed to create a node, return an instance that provides an indicating link for junctions
-        final Node<T> node = new Node<T>(id, this, model) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected Component createContent(String id, IModel<T> model) {
-                // copied from NestedTree
-                return IndicatingNestedTree.this.newContentComponent(id, model);
-            }
-
-            @Override
-            protected MarkupContainer createJunctionComponent(String id) {
-                // based on the default implementation in Node, but returning an indicating link instead
-                return new IndicatingAjaxFallbackLink<Void>(id) {
-                    private static final long serialVersionUID = 1L;
-
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        toggle();
-                    }
-
-                    @Override
-                    public boolean isEnabled() {
-                        return IndicatingNestedTree.this.getProvider().hasChildren(model.getObject());
-                    }
-                };
-            }
-
-        };
+        final Node node = new IndicatingNode(id, this, model);
         node.setOutputMarkupId(true);
         return node;
+    }
+
+    public static class IndicatingNode<U> extends Node<U> {
+
+        private final IModel<U> model;
+        private final AbstractTree<U> tree;
+
+        public IndicatingNode(String id, AbstractTree<U> tree, IModel<U> model) {
+            super(id, tree, model);
+            this.model = model;
+            this.tree = tree;
+        }
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        protected Component createContent(String id, IModel<U> model) {
+            return ((IndicatingNestedTree) tree).newContentComponent(id, model);
+        }
+
+        @Override
+        protected MarkupContainer createJunctionComponent(String id) {
+            // based on the default implementation in Node, but returning an indicating link instead
+            return new IndicatingAjaxFallbackLink<Void>(id) {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    toggle();
+                }
+
+                @Override
+                public boolean isEnabled() {
+                    return tree.getProvider().hasChildren(model.getObject());
+                }
+            };
+        }
     }
 
 }
