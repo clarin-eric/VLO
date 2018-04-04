@@ -95,6 +95,7 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
                 if (target != null) {
                     target.add(ExpandablePanel.this);
                 }
+                onExpansionToggle(target);
             }
         };
 
@@ -153,8 +154,13 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
     protected String getCollapsedClass() {
         return "facet collapsedfacet";
     }
-
-    protected void onExpandCollapse(AjaxRequestTarget target) {
+    
+    /**
+     * Override to apply logic when expansion state is toggled
+     * @param target 
+     */
+    protected void onExpansionToggle(AjaxRequestTarget target) {
+       //NOOP 
     }
 
     private static class ExpansionStateRepresentationModel extends AbstractReadOnlyModel<String> {

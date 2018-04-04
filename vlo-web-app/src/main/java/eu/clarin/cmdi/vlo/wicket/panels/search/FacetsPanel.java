@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -149,6 +148,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
                 allFacetsShown.setObject(Boolean.TRUE);
                 if (target != null) {
                     target.add(container);
+                    target.appendJavaScript("$('[data-toggle=\"tooltip\"]').tooltip();");
                 }
             }
 
@@ -190,9 +190,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
     @Override
     public void renderHead(IHeaderResponse response) {
         // JQuery UI for tooltips
-        response.render(CssHeaderItem.forReference(JavaScriptResources.getJQueryUICSS()));
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getSyntaxHelpJS()));
-
     }
 
     protected abstract void selectionChanged(AjaxRequestTarget target);

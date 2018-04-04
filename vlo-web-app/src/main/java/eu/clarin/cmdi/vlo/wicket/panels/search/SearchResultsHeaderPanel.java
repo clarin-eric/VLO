@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
@@ -38,6 +37,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -138,18 +139,31 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
     }
 
     private Component createQueryItem(String id) {
-        final Component query = new WebMarkupContainer(id)
-                .add(new Label("label", new PropertyModel<String>(getModel(), "query")))
-                .add(new AjaxFallbackLink<QueryFacetsSelection>("remove", getModel()) {
+        final Label label = new Label("label", new PropertyModel<>(getModel(), "query"));
 
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        // get a copy of the current selection
-                        final QueryFacetsSelection newSelection = getModelObject().copy();
-                        newSelection.setQuery(null);
-                        onSelectionChanged(newSelection, target);
-                    }
-                });
+        //ajax indicator should go behind label even though behaviour is triggered by remove link...
+        final AjaxIndicatorAppender ajaxIndicatorAppender = new AjaxIndicatorAppender();
+        label.add(ajaxIndicatorAppender);
+
+        final AjaxFallbackLink<QueryFacetsSelection> removeLink = new IndicatingAjaxFallbackLink<QueryFacetsSelection>("remove", getModel()) {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                // get a copy of the current selection
+                final QueryFacetsSelection newSelection = getModelObject().copy();
+                newSelection.setQuery(null);
+                onSelectionChanged(newSelection, target);
+            }
+
+            @Override
+            public String getAjaxIndicatorMarkupId() {
+                return ajaxIndicatorAppender.getMarkupId();
+            }
+
+        };
+        final Component query = new WebMarkupContainer(id)
+                .add(label)
+                .add(removeLink);
         return query;
     }
 
@@ -176,10 +190,15 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                 // add facet name as title attribute so that it becomes available through a tooltip
                 valueLabel.add(new AttributeModifier("title",
                         new SolrFieldNameModel(new PropertyModel(selectionModel, "key"))));
+
+                //ajax indicator should go behind label even though behaviour is triggered by remove link...
+                final AjaxIndicatorAppender ajaxIndicatorAppender = new AjaxIndicatorAppender();
+                valueLabel.add(ajaxIndicatorAppender);
+
                 item.add(valueLabel);
 
                 // add a link for removal of the facet value selection
-                item.add(new AjaxFallbackLink<QueryFacetsSelection>("remove", getModel()) {
+                item.add(new IndicatingAjaxFallbackLink<QueryFacetsSelection>("remove", getModel()) {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -190,6 +209,12 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                         newSelection.selectValues(facet, null);
                         onSelectionChanged(newSelection, target);
                     }
+
+                    @Override
+                    public String getAjaxIndicatorMarkupId() {
+                        return ajaxIndicatorAppender.getMarkupId();
+                    }
+
                 });
             }
         });
@@ -273,11 +298,12 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         private String getAnyValueString() {
             if (null != facet) {
 
-                if(facet.equals(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE)))
+                if (facet.equals(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE))) {
                     return "Content searchable"; //TODO: make string property
-                if(facet.equals(fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT)))
+                }
+                if (facet.equals(fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT))) {
                     return "Collection records"; //TODO: make string property
-
+                }
                 return "any " + facet;
 
             }

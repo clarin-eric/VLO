@@ -199,8 +199,8 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
     }
 
     @Override
-    protected void onExpandCollapse(AjaxRequestTarget target) {
-        super.onExpandCollapse(target);
+    protected void onExpansionToggle(AjaxRequestTarget target) {
+        super.onExpansionToggle(target);
         if (target != null) {
             target.appendJavaScript("applyFacetTooltips();");
         }
