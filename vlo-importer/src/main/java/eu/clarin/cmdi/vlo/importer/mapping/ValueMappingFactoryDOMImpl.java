@@ -38,11 +38,13 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
         fac.setNamespaceAware(true);
 
         try {
+            LOG.info("Parsing value mapping in {}", fileName);
             DocumentBuilder builder = fac.newDocumentBuilder();
             Document doc = builder.parse(fileName);
 
             NodeList originFacets = doc.getElementsByTagName("origin-facet");
 
+            LOG.info("Found {} origin-facet nodes", originFacets.getLength());
             for (int a = 0; a < originFacets.getLength(); a++) {
 
                 Element originFacet = (Element) originFacets.item(a);
@@ -65,6 +67,7 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
      * @param originFacetElement
      */
     private void processOriginFacet(FacetConceptMapping facetConceptMapping, ConditionTargetSet conditionTargetSet, Element originFacetElement) {
+        LOG.info("Processing origin-facet node with name='{}'", originFacetElement.getAttribute("name"));
         NodeList valueMaps = originFacetElement.getElementsByTagName("value-map");
 
         for (int b = 0; b < valueMaps.getLength(); b++) {
@@ -82,6 +85,7 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
      * @param valueMapElement
      */
     private void processValueMap(FacetConceptMapping facetConceptMapping, ConditionTargetSet conditionTargetSet, Element valueMapElement) {
+        LOG.info("-- Processing value-map node");
         List<TargetFacet> defaultTargets = new ArrayList<TargetFacet>();
 
         NodeList defaultFacets = valueMapElement.getElementsByTagName("target-facet");
@@ -98,7 +102,7 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
         }
 
         NodeList targetValueSets = valueMapElement.getElementsByTagName("target-value-set");
-
+        LOG.info("-- Found {} target-value-set nodes", targetValueSets.getLength());
         for (int c = 0; c < targetValueSets.getLength(); c++) {
 
             Element targetValueSet = (Element) targetValueSets.item(c);
@@ -116,11 +120,13 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
      */
     private void processTargetValueSet(FacetConceptMapping facetConceptMapping, ConditionTargetSet conditionTargetSet, List<TargetFacet> defaultTargets, Element targetValueSetElement) {
         NodeList targetValues = targetValueSetElement.getElementsByTagName("target-value");
+        LOG.debug("-- -- Processing target-value-set with {} target-value node(s)", targetValues.getLength());
 
         List<TargetFacet> targets = new ArrayList<TargetFacet>();
 
         for (int d = 0; d < targetValues.getLength(); d++) {
             Element targetValue = (Element) targetValues.item(d);
+            LOG.debug("-- -- Processing target-value node with facet='{}'", targetValue.getAttribute("facet"));
 
             TargetFacet targetFacet;
 
@@ -138,7 +144,7 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
                     .findFirst().orElse(null);
 
             if (targetFacet != null) { // there is a general setting
-
+                LOG.debug("-- -- -- Clone default target");
                 targets.add(cloneDefaultTarget(targetFacet, targetValue));
                 continue;
             }
@@ -147,14 +153,17 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
 
             if (targetFacet != null) {
                 targets.add(targetFacet);
+                LOG.debug("-- -- -- Added target {} [overrideExistingValues: {}, removeSourceValue: {}]", targetFacet.getValue(), targetFacet.getOverrideExistingValues(), targetFacet.getRemoveSourceValue());
             }
 
         }
 
         NodeList sourceValues = targetValueSetElement.getElementsByTagName("source-value");
-
+        LOG.debug("-- -- Continued processing of target-value-set with {} source-value node(s)", sourceValues.getLength());
+        
         for (int d = 0; d < sourceValues.getLength(); d++) {
             Element sourceValue = (Element) sourceValues.item(d);
+            LOG.debug("-- -- -- Processing source-value node with content '{}'", sourceValue.getTextContent());
 
             conditionTargetSet.addConditionTarget(
                     sourceValue.getAttribute("isRegex"),

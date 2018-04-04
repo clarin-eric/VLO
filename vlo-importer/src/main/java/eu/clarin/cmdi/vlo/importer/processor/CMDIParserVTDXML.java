@@ -288,11 +288,15 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @param cmdiData current CMDI data object
      */
     private void processOverrideValues(List<TargetFacet> overridingTargets, CMDIData cmdiData) {
+        if(LOG.isDebugEnabled() && !overridingTargets.isEmpty()) {
+            LOG.debug("Applying {} values set to override existing values in the target", overridingTargets.size());
+        }
         overridingTargets.forEach(targetFacet -> {
             ArrayList<Pair<String, String>> valueList = new ArrayList<Pair<String, String>>();
             valueList.add(new ImmutablePair<String, String>(targetFacet.getValue(), DEFAULT_LANGUAGE));
 
-            insertFacetValues(targetFacet.getFacetConfiguration(), null, cmdiData, true);
+            LOG.debug("Value mapping: inserting replacement value '{}' in field {}", targetFacet.getFacetConfiguration().getName(), targetFacet.getValue());
+            insertFacetValues(targetFacet.getFacetConfiguration(), valueList, cmdiData, true);
         });
     }
 
@@ -441,17 +445,20 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         {
             return false;
         }
+        
+        LOG.trace("Processing value mapping for facet {}, value {}", facetConfig.getName(), value);
 
         for (TargetFacet target : facetConfig.getConditionTargetSet().getTargetsFor(value)) {
             removeSourceValue |= target.getRemoveSourceValue();
-
+            
             if (target.getOverrideExistingValues()) {
+                LOG.debug("Saving to override later: [{}: '{}'] -> [{}: '{}']", facetConfig.getName(), value, target.getFacetConfiguration().getName(), target.getValue());
                 overridingTargets.add(target);
-
             } else {
                 ArrayList<Pair<String, String>> valueList = new ArrayList<Pair<String, String>>();
                 valueList.add(new ImmutablePair<String, String>(target.getValue(), DEFAULT_LANGUAGE));
-
+                
+                LOG.debug("Value mapping: applying mapping [{}: '{}'] -> [{}: '{}'] (override existing: {})", facetConfig.getName(), value, target.getFacetConfiguration().getName(), target.getValue(), target.getOverrideExistingValues());
                 insertFacetValues(target.getFacetConfiguration(), valueList, cmdiData, target.getOverrideExistingValues());
             }
 
