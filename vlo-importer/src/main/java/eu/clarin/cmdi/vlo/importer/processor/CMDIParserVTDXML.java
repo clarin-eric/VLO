@@ -361,7 +361,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
                 removeSourceValue |= processValueMapping(facetConfig, value, cmdiData, overridingTargets);
             }
 
-            if (!removeSourceValue) {
+            if (!removeSourceValue) { //positive 'removeSourceValue' means skip processing original value
 
                 addValuesToList(facetConfig.getName(), postProcessed, valueLangPairList, languageCode);
 

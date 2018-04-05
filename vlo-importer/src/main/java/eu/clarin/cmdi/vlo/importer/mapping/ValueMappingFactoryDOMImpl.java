@@ -142,10 +142,11 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
             targetFacet = defaultTargets.stream()
                     .filter(facet -> facet.getFacetConfiguration().getName().equals(targetValue.getAttribute("facet")))
                     .findFirst().orElse(null);
-
-            if (targetFacet != null) { // there is a general setting
-                LOG.debug("-- -- -- Clone default target");
-                targets.add(cloneDefaultTarget(targetFacet, targetValue));
+ 
+           if (targetFacet != null) { // there is a general setting
+                TargetFacet clonedTargetFacet = cloneDefaultTarget(targetFacet, targetValue);
+                targets.add(clonedTargetFacet);
+                LOG.debug("-- -- -- Added target value '{}' (cloned target definition: [overrideExistingValues: {}, removeSourceValue: {}])", clonedTargetFacet.getValue(), clonedTargetFacet.getOverrideExistingValues(), clonedTargetFacet.getRemoveSourceValue());
                 continue;
             }
 
@@ -153,7 +154,7 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
 
             if (targetFacet != null) {
                 targets.add(targetFacet);
-                LOG.debug("-- -- -- Added target {} [overrideExistingValues: {}, removeSourceValue: {}]", targetFacet.getValue(), targetFacet.getOverrideExistingValues(), targetFacet.getRemoveSourceValue());
+                LOG.debug("-- -- -- Added target value '{}' [overrideExistingValues: {}, removeSourceValue: {}]", targetFacet.getValue(), targetFacet.getOverrideExistingValues(), targetFacet.getRemoveSourceValue());
             }
 
         }
