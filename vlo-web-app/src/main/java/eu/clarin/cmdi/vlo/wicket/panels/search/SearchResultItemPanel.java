@@ -17,7 +17,6 @@
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.collect.Ordering;
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -37,10 +36,13 @@ import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
@@ -116,29 +118,47 @@ public class SearchResultItemPanel extends Panel {
         final ResouceTypeCountDataProvider countProvider = new ResouceTypeCountDataProvider(resourcesModel, countingService);
         // part count model to determine whether a record is a collection record
         final SolrFieldModel<String> partCountModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT));
+        // get model for landing page
+        final IModel<String> landingPageModel = new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
 
         // add a container for the resource type counts (only visible if there are actual resources)
         add(new WebMarkupContainer("resources")
                 // view that shows provided counts
                 .add(new ResourceCountDataView("resourceCount", countProvider))
                 //badge for collection records
-                .add(new WebMarkupContainer("collectionRecord") {
+                .add(new WebMarkupContainer("collectionRecord")
+                        .add(new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.HIERARCHY_SECTION))
+                        // collection, go to hierarchy instead of records
+                        //badge for records without resources (resource count data view will not yield any badges)
+                        .add(new Behavior() {
+                            @Override
+                            public void onConfigure(Component component) {
+                                component.setVisible(partCountModel.getObject() != null);
+                            }
 
-                    @Override
-                    protected void onConfigure() {
-                        super.onConfigure();
-                        setVisible(partCountModel.getObject() != null);
-                    }
-                }.add(new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.HIERARCHY_SECTION))) // collection, go to hierarchy instead of records
-                //badge for records without resources (resource count data view will not yield any badges)
-                .add(new WebMarkupContainer("noResources") {
+                        })
+                )
+                //badge for record with no resources
+                .add(new WebMarkupContainer("noResources")
+                        .add(new RecordPageLink("recordLink", documentModel, selectionModel)) //initial tab *not* resources as there are none...
+                        .add(new Behavior() {
+                            @Override
+                            public void onConfigure(Component component) {
+                                component.setVisible(countProvider.size() == 0 && partCountModel.getObject() == null);
+                            }
 
-                    @Override
-                    protected void onConfigure() {
-                        super.onConfigure();
-                        setVisible(countProvider.size() == 0 && partCountModel.getObject() == null);
-                    }
-                }.add(new RecordPageLink("recordLink", documentModel, selectionModel))) //initial tab *not* resources as there are none...
+                        })
+                )
+                //badge for landing page
+                .add(new WebMarkupContainer("landingPage")
+                        .add(new ExternalLink("pageLink", landingPageModel))
+                        .add(new Behavior() {
+                            @Override
+                            public void onConfigure(Component component) {
+                                component.setVisible(landingPageModel.getObject() != null);
+                            }
+
+                        }))
         );
 
         add(new SearchResultItemLicensePanel("licenseInfo", documentModel, selectionModel, availabilityOrdering));
