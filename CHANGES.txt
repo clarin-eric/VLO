@@ -1,5 +1,47 @@
 Bug fixes and new features
 --------------------------
+VLO 4.4.0 (May 2018)
+    
+## New and improved features ##
+* A link to the landing page, if available, is shown in the search results
+    <https://github.com/clarin-eric/VLO/issues/161>
+* All licence URIs, if available and mappable from the metadata, are shown on the
+record page
+    <https://github.com/clarin-eric/VLO/issues/155>
+* The value selection change in the 'more' dialogue is applied in the background
+    <https://github.com/clarin-eric/VLO/issues/136>
+* Records that have no resource proxy at all are skipped during import
+    <https://github.com/clarin-eric/VLO/issues/134>
+* New value mapping strategy for normalisation and metadata curation
+    <https://github.com/clarin-eric/VLO/issues/93>
+* Normalisation: map to null to exclude a value in a field
+    <https://github.com/clarin-eric/VLO/issues/97>
+* Normalisation: map to multiple values
+    <https://github.com/clarin-eric/VLO/issues/98>
+* Data provider and national project fields populated based on data from OAI-PMH and
+the centre registry
+    <https://github.com/clarin-eric/VLO/issues/131>
+
+## Bug fixes ##
+* Storing full text again, fixing retrieval issues
+    <https://github.com/clarin-eric/VLO/issues/162>
+* Facet tooltips re-initialisation after expansion/collapse
+    <https://github.com/clarin-eric/VLO/issues/160>
+* Fixed potential race condition that can cause failure to detect duplicate ids
+    <https://github.com/clarin-eric/VLO/issues/144>
+* Better/fixed Ajax response status feedback
+    <https://github.com/clarin-eric/VLO/issues/135>
+
+## Other changes ##
+* Make Wicket develop/deployment mode configurable through environment variable
+    <https://github.com/clarin-eric/VLO/issues/119>
+* Make the list of fields configurable
+    <https://github.com/clarin-eric/VLO/issues/112>
+* Cleanup: remove unused Javascript plugins
+    <https://github.com/clarin-eric/VLO/issues/111>
+* Stability: avoiding possible Null-values for immutable objects
+    <https://github.com/clarin-eric/VLO/issues/130>
+
 VLO 4.3.6 (February 2018)
 
 * Fixes missing field values in random records

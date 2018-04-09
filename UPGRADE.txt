@@ -54,6 +54,54 @@ updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
 
 -----------------------------
+Upgrading from 4.3.x to 4.4.0
+-----------------------------
+The Solr schema has changed. Flush the index and run an import OR replace with a 
+pre-imported index.
+
+Make sure that the new Solr home content is applied to your Solr instance!!! Extra care 
+has to be taken if using compose_vlo, please read its documentation at 
+<https://gitlab.com/CLARIN-ERIC/compose_vlo/>.
+
+You may optionally upgrade the Solr server to version 7.2.1. Note that this version of
+the VLO has not been tested to work with Solr 7.3 or higher. Solr 7.2.1 is available at
+<http://archive.apache.org/dist/lucene/solr/7.2.1/>. Make sure that all configurations
+specific to the environment are kept while upgrading.
+
+## Configuration
+
+Three new properties have been added to VloConfig.xml:
+
+- `valueMappingsFile`
+  - This should be the (file:) URL of a value mapping definition, as can be found in 
+  the VLO-mapping project <https://github.com/clarin-eric/VLO-mapping>. The file may use
+  XInclude to combine multiple mappings, as is the case with the `master.xml` file found
+  in VLO-mapping. Consult the VLO developers for information on the right file to use.
+- `fields`
+  - This contains a set of `field` properties, which map a set of pre-defined
+  field keys to the names of actual fields defined in Solr. You can assume that the
+  provided mapping matches the Solr schema distributed along with the VLO.
+- `deprecatedFields`
+  - Analogues to `fields` (see above), this contains the Solr field names of deprecated
+  fields.
+  
+## Docker
+
+Two new environment variables have been added to the `docker-vlo` project, with defaults
+suitable for most deployments including beta and production.  The appropriate settings 
+will be guaranteed for those environments that have dedicated Docker Compose
+configurations in the `compose_vlo` project.
+
+- The new environment variable `VLO_DOCKER_VALUE_MAPPING_URI`
+image. It sets the value for `valueMappingsFile` in `VloConfig.xml` (see above). The
+default value `file:/srv/VLO-mapping/value-maps/dist/master.xml` works nicely with the
+`compose_vlo` configurations.
+- The new environment variable `VLO_DOCKER_WICKET_CONFIGURATION` can be used to select
+the 'configuration mode' of Wicket, which is either 'deployment' (default) or 
+'development' or. The default should be used in most cases, including beta and production
+environments.
+
+-----------------------------
 Upgrading from 4.3.5 to 4.3.6
 -----------------------------
 Maintenance release, no actions required (Solr index can be kept).
