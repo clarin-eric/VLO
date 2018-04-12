@@ -69,9 +69,6 @@ public class VloConfig {
 
     private boolean printMapping = false;
 
-    //(required = false)
-    private String nationalProjectMapping = "";
-
     private String organisationNamesUrl;
 
     private String languageNameVariantsUrl;
@@ -778,32 +775,6 @@ public class VloConfig {
     public void setFederatedContentSearchUrl(String param) {
         federatedContentSearchUrl = param;
     }
-
-    /**
-     * Get the value of the NationalProjectMapping parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @return the value
-     */
-    public String getNationalProjectMapping() {
-        return nationalProjectMapping;
-    }
-
-    /**
-     * Set the value of the NationalProjectMapping parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @param nationalProjectMapping the value
-     */
-    public void setNationalProjectMapping(String nationalProjectMapping) {
-        this.nationalProjectMapping = nationalProjectMapping;
-    }
-    
-
 
     /**
      * Get the value of the FacetFields parameter<br><br>

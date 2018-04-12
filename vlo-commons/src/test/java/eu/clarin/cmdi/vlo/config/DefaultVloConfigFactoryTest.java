@@ -589,23 +589,6 @@ public class DefaultVloConfigFactoryTest {
     }
 
     /**
-     * Test the setNationalProjectMapping method
-     */
-    @Test
-    public void testSetNationalProjectMapping() {
-
-        System.out.println("setFNationalProjectMapping");
-
-        String param = "nationalProjectsMapping.xml";
-
-        config.setNationalProjectMapping(param);
-
-        String result = config.getNationalProjectMapping();
-
-        assertEquals(param, result);
-    }
-
-    /**
      * Test of getFacetFields method
      */
     @Test
