@@ -54,8 +54,6 @@
         Evaluated in the this order.
     -->
     
-    <nationalProjectMapping>${vloconfig.mappingFilesLocation}nationalProjectsMapping.xml</nationalProjectMapping> <!-- bundled resource: /uniform-maps/nationalProjectsMapping.xml -->
-    
     <organisationNamesUrl>${vloconfig.mappingFilesLocation}OrganisationControlledVocabulary.xml</organisationNamesUrl> <!-- bundled resource: /uniform-maps/OrganisationControlledVocabulary.xml -->
     
     <languageNameVariantsUrl>${vloconfig.mappingFilesLocation}LanguageNameVariantsMap.xml</languageNameVariantsUrl> <!-- bundled resource: /uniform-maps/LanguageNameVariantsMap.xml -->
@@ -90,6 +88,7 @@
         <field key="SELF_LINK">_selfLink</field>
         <field key="ID">id</field>
         <field key="DATA_PROVIDER">dataProvider</field>
+        <field key="DATA_PROVIDER_NAME">dataProviderName</field>
         <field key="FILENAME">_fileName</field>
         <field key="FORMAT">format</field>
         <field key="LANDINGPAGE">_landingPageRef</field>
@@ -109,7 +108,8 @@
         <field key="TEMPORAL_COVERAGE">temporalCoverage</field>
         <field key="DAYS_SINCE_LAST_SEEN">_daysSinceLastSeen</field>
         <field key="HAS_PART_COUNT_WEIGHT">_hasPartCountWeight</field>
-        <field key="LANGUAGE_NAME">_languageName</field>   
+        <field key="LANGUAGE_NAME">_languageName</field>
+        <field key="OAI_ENDPOINT_URI">_oaiEndpointURI</field>
 	</fields>
 	  
 	<deprecatedFields>

@@ -136,6 +136,7 @@
   <field name="_landingPageRef" type="string" multiValued="true" indexed="true" stored="true"/>
   <field name="_languageName" type="text_general" multiValued="true" indexed="true" stored="true"/>
   <field name="_lastSeen" type="tdate" multiValued="false" indexed="true" stored="true"/>
+  <field name="_oaiEndpointURI" type="string" multiValued="false" indexed="true" stored="true"/>
   <field name="_resourceRef" type="string" multiValued="true" indexed="true" stored="true"/>
   <field name="_resourceRefCount" type="int" multiValued="false" indexed="true" stored="true"/>
   <field name="_searchPageRef" type="string" multiValued="true" indexed="true" stored="true"/>
@@ -148,6 +149,7 @@
   <field name="continent" type="string" termVectors="true" multiValued="true" indexed="true" stored="true"/>
   <field name="country" type="string" termVectors="true" multiValued="true" indexed="true" stored="true"/>
   <field name="dataProvider" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="dataProviderName" type="string" multiValued="false" indexed="true" stored="true"/>
   <field name="description" type="text_general" termVectors="true" multiValued="true" indexed="true" stored="true"/>
   <field name="distributionType" type="string" multiValued="true" indexed="true" stored="true"/>
   <field name="format" type="string" termVectors="true" multiValued="true" indexed="true" stored="true"/>
