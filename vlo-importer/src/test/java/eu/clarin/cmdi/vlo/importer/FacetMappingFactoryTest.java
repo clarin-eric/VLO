@@ -39,7 +39,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, IMDI_PROFILE_ID, true);
 
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(23, facets.size());
+        assertEquals(22, facets.size());
 
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
@@ -155,11 +155,6 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
 
-        assertEquals("/cmd:CMD/cmd:Header/cmd:MdCollectionDisplayName/text()",
-                mapping.getFallbackPatterns().get(0).getPattern());
-        assertEquals(1, mapping.getFallbackPatterns().size());
-        mapping = facets.get(index++);
-
         assertEquals("/cmd:CMD/cmd:Header//text()", mapping.getFallbackPatterns().get(0).getPattern());
         assertEquals("/cmd:CMD/cmd:Components//text()", mapping.getFallbackPatterns().get(1).getPattern());
         assertEquals(2, mapping.getFallbackPatterns().size());
@@ -195,7 +190,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, OLAC_PROFILE_ID, true);
 
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(23, facets.size());
+        assertEquals(22, facets.size());
 
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
@@ -295,10 +290,6 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
         assertEquals(1, mapping.getPatterns().size());
         mapping = facets.get(index++);
 
-        assertEquals(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT), mapping.getName());
-        assertEquals(1, mapping.getFallbackPatterns().size());
-        mapping = facets.get(index++);
-
         assertEquals("/cmd:CMD/cmd:Header//text()", mapping.getFallbackPatterns().get(0).getPattern());
         assertEquals("/cmd:CMD/cmd:Components//text()", mapping.getFallbackPatterns().get(1).getPattern());
         assertEquals(2, mapping.getFallbackPatterns().size());
@@ -332,7 +323,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, LRT_PROFILE_ID, true);
 
         List<FacetConfiguration> facets = facetMapping.getFacets();
-        assertEquals(23, facets.size());
+        assertEquals(22, facets.size());
 
         int index = 0;
         FacetConfiguration mapping = facets.get(index++);
@@ -433,11 +424,6 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
         mapping = facets.get(index++);
         mapping = facets.get(index++);
 
-        assertEquals("/cmd:CMD/cmd:Header/cmd:MdCollectionDisplayName/text()",
-                mapping.getFallbackPatterns().get(0).getPattern());
-        assertEquals(1, mapping.getFallbackPatterns().size());
-        mapping = facets.get(index++);
-
         assertEquals("/cmd:CMD/cmd:Header//text()", mapping.getFallbackPatterns().get(0).getPattern());
         assertEquals("/cmd:CMD/cmd:Components//text()", mapping.getFallbackPatterns().get(1).getPattern());
         assertEquals(2, mapping.getFallbackPatterns().size());
@@ -530,7 +516,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
                 .getFacetMapping(FACETCONCEPTS_FILENAME, TEIHEADER_PROFILE_ID, true);
         List<FacetConfiguration> facets = facetMapping.getFacets();
 
-        FacetConfiguration facet = facets.get(20);
+        FacetConfiguration facet = facets.get(19);
         assertEquals(fieldNameService.getFieldName(FieldKey.AVAILABILITY), facet.getName());
         assertEquals("/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:publicationStmt/cmdp:availability/@status", facet.getPatterns().get(0).getPattern());
     }
