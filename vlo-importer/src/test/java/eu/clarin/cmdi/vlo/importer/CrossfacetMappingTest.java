@@ -298,7 +298,7 @@ public class CrossfacetMappingTest extends ImporterTestcase {
                                  * in a suitable way.
                                  */
                                 try {
-                                    processCmdi(file, dataRoot, null);
+                                    processCmdi(file, dataRoot, null, null);
                                 } catch (SolrServerException ex) {
                                     Logger.getLogger(CrossfacetMappingTest.class.getName()).log(Level.SEVERE, null, ex);
                                 }
