@@ -53,7 +53,6 @@ public class DefaultVloConfigFactory extends AbstractXmlVloConfigFactory {
         config.setLicenseAvailabilityMapUrl("/uniform-maps/LicenseAvailabilityMap.xml");
         config.setLicenseURIMapUrl("/uniform-maps/LicenseURIMap.xml");
         config.setOrganisationNamesUrl("/uniform-maps/OrganisationControlledVocabulary.xml");
-        config.setNationalProjectMapping("/uniform-maps/nationalProjectsMapping.xml");
         config.setLanguageNameVariantsUrl("/uniform-maps/LanguageNameVariantsMap.xml");
         return config;
     }

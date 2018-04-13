@@ -352,9 +352,6 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-2571_2be2e583-e5af-34c2-3673-93359ec1f7df</concept>
 		<concept>http://purl.org/dc/terms/format</concept>
 	</facetConcept>
-  <facetConcept name="nationalProject" description="The national project in which this resource is provided">
-		<pattern>/cmd:CMD/cmd:Header/cmd:MdCollectionDisplayName/text()</pattern>
-	</facetConcept>
 	<facetConcept name="text">
 		<pattern>/cmd:CMD/cmd:Header//text()</pattern>
 		<pattern>/cmd:CMD/cmd:Components//text()</pattern>

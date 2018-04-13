@@ -16,9 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.facets;
 
-import javax.xml.transform.Result;
 import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -61,7 +59,7 @@ public class FacetConceptsMarshallerTest {
         final FacetConceptsMarshaller instance = new FacetConceptsMarshaller();
 
         final FacetConcepts result = instance.unmarshal(source);
-        assertEquals(25, result.getFacetConcept().size());
+        assertEquals(24, result.getFacetConcept().size());
 
         final FacetConcept concept = result.getFacetConcept().get(3);
         assertEquals("projectName", concept.getName());

@@ -447,9 +447,6 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-2571_2be2e583-e5af-34c2-3673-93359ec1f7df</concept>
 		<concept>http://purl.org/dc/terms/format</concept>
 	</facetConcept>
-	<facetConcept name="nationalProject" description="The national CLARIN project providing the resource or tool" definition="The national CLARIN project providing the resource or tool.">
-		<pattern>/c:CMD/c:Header/c:MdCollectionDisplayName/text()</pattern>
-	</facetConcept>
 	<facetConcept name="text">
 		<pattern>/c:CMD/c:Header//text()</pattern>
 		<pattern>/c:CMD/c:Components//text()</pattern>

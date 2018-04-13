@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,7 +48,6 @@ import eu.clarin.cmdi.vlo.importer.normalizer.LanguageNamePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.LicensePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.LicenseTypePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.NamePostNormalizer;
-import eu.clarin.cmdi.vlo.importer.normalizer.NationalProjectPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.OrganisationPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.ResourceClassPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.TemporalCoveragePostNormalizer;
@@ -182,8 +180,6 @@ public class MetadataImporter {
         	imb.put(fieldNameService.getFieldName(FieldKey.ORGANISATION), new OrganisationPostNormalizer(config));
         if(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE) != null)
         	imb.put(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE), new TemporalCoveragePostNormalizer());
-        if(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT), new NationalProjectPostNormalizer(config));
         if(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE) != null)
         	imb.put(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE), new CMDIComponentProfileNamePostNormalizer(config));
         if(fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS) != null)
@@ -272,15 +268,19 @@ public class MetadataImporter {
             solrBridge.getClient().deleteByQuery(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER) + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
             LOG.info("Deleting data of provider done.");
         }
+
+        // load mapping data provided by CLARIN's OAI-PMH harvester
+        Map<String, EndpointDescription> directoryEndpointMap = HarvesterMap.loadEndpointMap(new File(dataRoot.getRootFile().getParent(), "map.csv"));
+
         // import files from every centre/endpoint within the data root
         for (List<File> centreFiles : getFilesFromDataRoot(dataRoot.getRootFile())) {
-            processCentreFiles(centreFiles, dataRoot);
+            processCentreFiles(centreFiles, dataRoot, directoryEndpointMap);
         }
         updateDaysSinceLastImport(dataRoot);
         LOG.info("End of processing: " + dataRoot.getOriginName());
     }
 
-    protected void processCentreFiles(final List<File> centreFiles, final DataRoot dataRoot) throws IOException, SolrServerException, InterruptedException {
+    protected void processCentreFiles(final List<File> centreFiles, final DataRoot dataRoot, final Map<String,EndpointDescription> directoryEndpointMap) throws IOException, SolrServerException, InterruptedException {
         LOG.info("Processing directory: {}", centreFiles.get(0).getParent());
         String centerDirName = centreFiles.get(0).getParentFile().getName();
 
@@ -316,7 +316,7 @@ public class MetadataImporter {
         final Stream<Callable<Void>> processors = centreFiles.stream().map((File file) -> {
             return (Callable) () -> {
                 LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
-                processCmdi(file, dataRoot, resourceStructureGraph);
+                processCmdi(file, dataRoot, resourceStructureGraph, directoryEndpointMap.get(file.getParentFile().getName()));
                 return null;
             };
         });
@@ -506,12 +506,12 @@ public class MetadataImporter {
      *
      * @param file CMDI input file
      * @param dataOrigin
-     * @param processor
      * @param resourceStructureGraph null to skip hierarchy processing
+     * @param endpointDescription
      * @throws SolrServerException
      * @throws IOException
      */
-    protected void processCmdi(File file, DataRoot dataOrigin, ResourceStructureGraph resourceStructureGraph) throws SolrServerException, IOException {
+    protected void processCmdi(File file, DataRoot dataOrigin, ResourceStructureGraph resourceStructureGraph, EndpointDescription endpointDescription) throws SolrServerException, IOException {
         nrOfFilesAnalyzed.incrementAndGet();
         CMDIData cmdiData = null;
         try {
@@ -536,7 +536,7 @@ public class MetadataImporter {
             if (processedIds.add(cmdiData.getId())) {
                 SolrInputDocument solrDocument = cmdiData.getSolrDocument();
                 if (solrDocument != null) {
-                    updateDocument(solrDocument, cmdiData, file, dataOrigin);
+                    updateDocument(solrDocument, cmdiData, file, dataOrigin, endpointDescription);
                     if (resourceStructureGraph != null && resourceStructureGraph.getVertex(cmdiData.getId()) != null) {
                         resourceStructureGraph.getVertex(cmdiData.getId()).setWasImported(true);
                     }
@@ -567,10 +567,11 @@ public class MetadataImporter {
      * @param cmdiData
      * @param file
      * @param dataOrigin
+     * @param endpointDescription
      * @throws SolrServerException
      * @throws IOException
      */
-    protected void updateDocument(SolrInputDocument solrDocument, CMDIData cmdiData, File file, DataRoot dataOrigin) throws SolrServerException,
+    protected void updateDocument(SolrInputDocument solrDocument, CMDIData cmdiData, File file, DataRoot dataOrigin, EndpointDescription endpointDescription) throws SolrServerException,
             IOException {
         if (!solrDocument.containsKey(fieldNameService.getFieldName(FieldKey.COLLECTION))) {
             solrDocument.addField(fieldNameService.getFieldName(FieldKey.COLLECTION), dataOrigin.getOriginName());
@@ -578,6 +579,16 @@ public class MetadataImporter {
         solrDocument.addField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER), dataOrigin.getOriginName());
         solrDocument.addField(fieldNameService.getFieldName(FieldKey.ID), cmdiData.getId());
         solrDocument.addField(fieldNameService.getFieldName(FieldKey.FILENAME), file.getAbsolutePath());
+
+        // data provided by CLARIN's OAI-PMH harvester
+        if(endpointDescription != null) {
+            if(endpointDescription.getOaiEndpointUrl() != null)
+                solrDocument.addField(fieldNameService.getFieldName(FieldKey.OAI_ENDPOINT_URI), endpointDescription.getOaiEndpointUrl());
+            if(endpointDescription.getNationalProject() != null)
+                solrDocument.addField(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT), endpointDescription.getNationalProject());
+            if(endpointDescription.getCentreName() != null)
+                solrDocument.addField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER_NAME), endpointDescription.getCentreName());
+        }
 
         String metadataSourceUrl = dataOrigin.getPrefix();
         metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getToStrip().length());
