@@ -1,4 +1,4 @@
-<VloConfig>
+﻿<VloConfig>
     
     <deleteAllFirst>${vloconfig.deleteAllFirst}</deleteAllFirst>
     
