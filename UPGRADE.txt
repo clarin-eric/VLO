@@ -32,6 +32,7 @@ old configuration to the new one.
 5. Stop 
 	1) the Tomcat (or at least the VLO web app), and 
 	2) the Solr server.
+	3) jmxtrans, if applicable
 
 6. Replace the 'current' symlink with a link to location of the new VLO directory.
 
@@ -47,6 +48,7 @@ you are upgrading.
 9. Start
 	1) the Solr server, and
 	2) the Tomcat server
+	3) jmxtrans, if applicable
 
 10. If you want to run an import straight away (discuss this with the person responsible
 for the upgraded VLO instance), go to the `bin` directory and run the importer using the
@@ -63,10 +65,15 @@ Make sure that the new Solr home content is applied to your Solr instance!!! Ext
 has to be taken if using compose_vlo, please read its documentation at 
 <https://gitlab.com/CLARIN-ERIC/compose_vlo/>.
 
-You may optionally upgrade the Solr server to version 7.2.1. Note that this version of
-the VLO has not been tested to work with Solr 7.3 or higher. Solr 7.2.1 is available at
+You may optionally upgrade the Solr server to version 7.2.1. Note that this version has 
+NOT been tested to work with Solr 7.3 or higher. Solr 7.2.1 is available at
 <http://archive.apache.org/dist/lucene/solr/7.2.1/>. Make sure that all configurations
-specific to the environment are kept while upgrading.
+specific to the environment are kept while upgrading (i.e. make sure your solr.in.sh
+file is not altered in any problematic way - see
+<https://lucene.apache.org/solr/guide/6_6/taking-solr-to-production.html>).
+
+If applicable, make sure to also restart jmxtrans after restarting Solr for whatever
+reason.
 
 ## Configuration
 
