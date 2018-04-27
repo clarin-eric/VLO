@@ -35,6 +35,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Serializes and deserializes {@link VloConfig} objects to/from XML files using
  * the Java Architecture for XML Binding (JAXB)
@@ -42,6 +45,7 @@ import org.xml.sax.XMLReader;
  * @author twagoo
  */
 public class VloConfigMarshaller {
+    private final static Logger _logger = LoggerFactory.getLogger(VloConfigMarshaller.class);
 
     private final JAXBContext jc;
 
@@ -82,10 +86,17 @@ public class VloConfigMarshaller {
 
 
         try {
+            // to prevent the parser adding xml:base
             spf.setFeature("http://apache.org/xml/features/xinclude/fixup-base-uris", false);
+            
             
             Schema schema = xsdFac.newSchema(getClass().getResource("/VloConfig.xsd"));
             unmarshaller.setSchema(schema);
+            unmarshaller.setEventHandler(validationEvent -> { 
+                _logger.warn(validationEvent.toString());
+                return true; // unmarshalling should continue in case of validation error
+                });
+            
             final XMLReader xr = spf.newSAXParser().getXMLReader();
             // XML transformation 'source' needs to be converted to a SAX 'input source'
             final InputSource inputSource = SAXSource.sourceToInputSource(source);
