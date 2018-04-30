@@ -32,7 +32,6 @@ import java.util.Properties;
 
 import javax.inject.Inject;
 
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 
@@ -47,7 +46,7 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
     private final LanguageCodeUtils languageCodeUtils;
     private final FieldValueConverter availabilityConverter;
     private final FieldValueConverter licenseConverter;
-    
+
     @Inject
     private FieldNameService fieldNameService;
 
@@ -63,16 +62,20 @@ public class FieldValueConverterProviderImpl implements FieldValueConverterProvi
 
     @Override
     public IConverter<String> getConverter(String fieldName) {
-        if(fieldName == null)
+        if (fieldName == null) {
             return null;
-        if(fieldName.equals(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)))
+        } else if (fieldName.equals(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE))) {
             return languageCodeConverter;
-        if(fieldName.equals(fieldNameService.getFieldName(FieldKey.DESCRIPTION)))
+        } else if (fieldName.equals(fieldNameService.getFieldName(FieldKey.DESCRIPTION))) {
             return descriptionConverter;
-        if(fieldName.equals(fieldNameService.getFieldName(FieldKey.AVAILABILITY)) || 
-            fieldName.equals(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE)))
-                return availabilityConverter;
-        return null;
+        } else if (fieldName.equals(fieldNameService.getFieldName(FieldKey.LICENSE))) {
+            return licenseConverter;
+        } else if (fieldName.equals(fieldNameService.getFieldName(FieldKey.AVAILABILITY))
+                || fieldName.equals(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE))) {
+            return availabilityConverter;
+        } else {
+            return null;
+        }
     }
 
     /**
