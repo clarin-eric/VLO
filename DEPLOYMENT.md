@@ -188,7 +188,7 @@ that all existing records from this set are removed from the index before import
 ### Mapping configuration
 
 Review the following configuration properties in `VloConfig.xml`:
-- `facetConceptsFile`, `nationalProjectMapping`, `organisationNamesUrl`, 
+- `facetConceptsFile`, `valueMappingsFile`, `organisationNamesUrl`, 
 `languageNameVariantsUrl`, `licenseAvailabilityMapUrl`, `resourceClassMapUrl`,
 `licenseURIMapUrl`, `licenseTypeMapUrl`
 

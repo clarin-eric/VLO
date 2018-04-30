@@ -99,6 +99,11 @@ Three new properties have been added to VloConfig.xml:
   - Analogues to `fields` (see above), this contains the Solr field names of deprecated
   fields.
   
+The following properties have been REMOVED:
+- `useCrossMapping`
+- `crossFacetMapUrl`
+- `nationalProjectMapping`
+  
 ## Docker
 
 Two new environment variables have been added to the `docker-vlo` project, with defaults
