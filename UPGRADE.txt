@@ -43,11 +43,23 @@ IMPORTANT: If 'transplanting' a Solr data directory from another server, make su
 you are running at least the same version of Solr as the source at which the index was
 created.
 
+Upgrading Solr can be done, depending on your OS, using the Solr installation script
+`install_solr_service.sh` with the -f option. The 'solr' directory inside the VLO 
+deployment package contains a tarball with scripts and information for 
+installing/upgrading a Solr instance that matches this version of the VLO. For details,
+see the `README.md` file in the VLO's Solr distribution and the general `DEPLOYMENT.md`.
+
+Also see 
+<https://lucene.apache.org/solr/guide/7_2/taking-solr-to-production.html#taking-solr-to-production>.
+
 8. If needed, flush the Solr index (by removing the content of the Solr data directory).
 The upgrade instructions for specific versions of the VLO indicate whether such a flush is
 required and you may want to check with the person responsible for the instance of the VLO
-you are upgrading. If 'transplanting' a Solr index, you can put it in the right location
-(check your Solr configuration for this).
+you are upgrading.
+
+If 'transplanting' a Solr index from another server, you can put it in the right location,
+replacing the existing Solr data. Check your Solr configuration for the SOLR_DATA setting
+which configures the location of the Solr data directory.
 
 9. Start
 	1) the Solr server, and
@@ -63,17 +75,15 @@ updated configuration file:
 Upgrading from 4.3.x to 4.4.0
 -----------------------------
 The Solr schema has changed. Flush the index and run an import OR replace with a 
-pre-imported index.
+pre-imported index ('transplantation') - ask the developer what approach to take.
 
 Make sure that the new Solr home content is applied to your Solr instance!!! Extra care 
 has to be taken if using compose_vlo, please read its documentation at 
 <https://gitlab.com/CLARIN-ERIC/compose_vlo/>.
 
-You may optionally upgrade the Solr server to version 7.2.1. Note that this version of
-the VLO has NOT been tested to work with Solr 7.3 or higher. The 'solr' directory contains
-a tarball with scripts and information for setting up a Solr instance that matches this 
-version of the VLO. For details, see the `README.md` file in the VLO's Solr distribution
-and the general `DEPLOYMENT.md`.
+You may optionally upgrade (at step 7) the Solr server to version 7.2.1 if your deployment
+target has an older version installed. Note that this version of the VLO has NOT been
+tested to work with Solr 7.3 or higher. 
 
 IMPORTANT: Make sure that all configurations specific to the environment are kept while 
 upgrading (i.e. make sure your solr.in.sh file is not altered in any problematic way - see
