@@ -1,9 +1,9 @@
 #!/bin/bash
-SOLR_VERSION="7.1.0"
+SOLR_VERSION="7.2.1"
 SOLR_DIST_FILE="solr-${SOLR_VERSION}.tgz"
-SOLR_DIST_URL="http://ftp.tudelft.nl/apache/lucene/solr/${SOLR_VERSION}/${SOLR_DIST_FILE}"
-SOLR_DIST_SIGNATURE_URL="http://www-eu.apache.org/dist/lucene/solr/${SOLR_VERSION}/${SOLR_DIST_FILE}.asc"
-SOLR_DIST_KEYS_URL="http://www-eu.apache.org/dist/lucene/solr/${SOLR_VERSION}/KEYS"
+SOLR_DIST_URL="http://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/${SOLR_DIST_FILE}"
+SOLR_DIST_SIGNATURE_URL="http://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/${SOLR_DIST_FILE}.asc"
+SOLR_DIST_KEYS_URL="http://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/KEYS"
 
 SOLR_TARGET_DIR="target/solr"
 
