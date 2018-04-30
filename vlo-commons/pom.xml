@@ -83,7 +83,7 @@
                 <!-- empty location uses bundled default facet concepts file (from the VLO-mapping project) -->
                 <vloconfig.facetConceptsFileLocation></vloconfig.facetConceptsFileLocation>
                 <!-- bundled value mappings definition -->
-                <vloconfig.valueMappingFile>/value-maps/map_resourceType.xml</vloconfig.valueMappingFile>
+                <vloconfig.valueMappingFile>/value-maps/dist/master.xml</vloconfig.valueMappingFile>
             </properties>
         </profile>
         
@@ -96,6 +96,7 @@
                 <vloconfig.dataRootsFile>file:/srv/webapps/vlo/dataroots-testvm.xml</vloconfig.dataRootsFile>
                 <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
                 <vloconfig.facetConceptsFileLocation>file:/srv/VLO-mapping/mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
+                <vloconfig.valueMappingFile>file:/srv/VLO-mapping/value-maps/dist/master.xml</vloconfig.valueMappingFile>
                 <!-- File processing threads; 0 or lower lets JVM determine based on number of cores present -->
                 <vloconfig.fileProcessingThreads>-1</vloconfig.fileProcessingThreads>
                 <vloconfig.solrThreads>2</vloconfig.solrThreads>
@@ -109,10 +110,11 @@
                 <vloconfig.deleteAllFirst>false</vloconfig.deleteAllFirst>
                 <vloconfig.maxDaysInSolr>7</vloconfig.maxDaysInSolr>
                 <vloconfig.solrUrl>http://localhost:8983/solr/vlo-index/</vloconfig.solrUrl>
-                <vloconfig.homeUrl>http://vlo.clarin.eu</vloconfig.homeUrl>
+                <vloconfig.homeUrl>https://vlo.clarin.eu</vloconfig.homeUrl>
                 <vloconfig.dataRootsFile>dataroots-production.xml</vloconfig.dataRootsFile>
                 <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
                 <vloconfig.facetConceptsFileLocation>file:/srv/VLO-mapping/mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
+                <vloconfig.valueMappingFile>file:/srv/VLO-mapping/value-maps/dist/master.xml</vloconfig.valueMappingFile>
                 <vloconfig.fileProcessingThreads>-1</vloconfig.fileProcessingThreads>
                 <vloconfig.solrThreads>4</vloconfig.solrThreads>
             </properties>

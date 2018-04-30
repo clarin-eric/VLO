@@ -1,6 +1,6 @@
 Bug fixes and new features
 --------------------------
-VLO 4.4.0 (May 2018)
+VLO 4.4.0 (April 2018)
     
 ## New and improved features ##
 * A link to the landing page, if available, is shown in the search results

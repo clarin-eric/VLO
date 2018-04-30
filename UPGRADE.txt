@@ -32,21 +32,27 @@ old configuration to the new one.
 5. Stop 
 	1) the Tomcat (or at least the VLO web app), and 
 	2) the Solr server.
+	3) jmxtrans, if applicable
 
 6. Replace the 'current' symlink with a link to location of the new VLO directory.
 
 7. Make sure that the installed Solr server is of a version matching the requirements of
 the current version of the VLO, and that its home directory is configured to be the 
 Solr home directory provided by the VLO in 'solr/vlo-solr-home'.
+IMPORTANT: If 'transplanting' a Solr data directory from another server, make sure that 
+you are running at least the same version of Solr as the source at which the index was
+created.
 
 8. If needed, flush the Solr index (by removing the content of the Solr data directory).
 The upgrade instructions for specific versions of the VLO indicate whether such a flush is
 required and you may want to check with the person responsible for the instance of the VLO
-you are upgrading.
+you are upgrading. If 'transplanting' a Solr index, you can put it in the right location
+(check your Solr configuration for this).
 
 9. Start
 	1) the Solr server, and
 	2) the Tomcat server
+	3) jmxtrans, if applicable
 
 10. If you want to run an import straight away (discuss this with the person responsible
 for the upgraded VLO instance), go to the `bin` directory and run the importer using the
@@ -64,9 +70,17 @@ has to be taken if using compose_vlo, please read its documentation at
 <https://gitlab.com/CLARIN-ERIC/compose_vlo/>.
 
 You may optionally upgrade the Solr server to version 7.2.1. Note that this version of
-the VLO has not been tested to work with Solr 7.3 or higher. Solr 7.2.1 is available at
-<http://archive.apache.org/dist/lucene/solr/7.2.1/>. Make sure that all configurations
-specific to the environment are kept while upgrading.
+the VLO has NOT been tested to work with Solr 7.3 or higher. The 'solr' directory contains
+a tarball with scripts and information for setting up a Solr instance that matches this 
+version of the VLO. For details, see the `README.md` file in the VLO's Solr distribution
+and the general `DEPLOYMENT.md`.
+
+IMPORTANT: Make sure that all configurations specific to the environment are kept while 
+upgrading (i.e. make sure your solr.in.sh file is not altered in any problematic way - see
+<https://lucene.apache.org/solr/guide/7_2/taking-solr-to-production.html>).
+
+If applicable, make sure to also restart jmxtrans after restarting Solr for whatever
+reason.
 
 ## Configuration
 
