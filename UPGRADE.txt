@@ -60,6 +60,11 @@ updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
 
 -----------------------------
+Upgrading from 4.4.0 to 4.4.1
+-----------------------------
+Maintenance release, no changes required (steps 4, 7 and 8 can be skipped)
+
+-----------------------------
 Upgrading from 4.3.x to 4.4.0
 -----------------------------
 The Solr schema has changed. Flush the index and run an import OR replace with a 
