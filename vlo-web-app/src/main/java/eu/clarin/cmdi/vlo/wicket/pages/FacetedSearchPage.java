@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
@@ -19,6 +20,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.historyapi.HistoryApiAware;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
@@ -48,13 +50,14 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.PropertyModel;
 
 /**
  * The main search page showing a search form, facets, and search results
  *
  * @author twagoo
  */
-public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
+public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> implements HistoryApiAware {
 
     private static final long serialVersionUID = 1L;
     //private final static List<String> ADDITIONAL_FACETS = ImmutableList.of(FacetConstants.FIELD_LICENSE_TYPE);
@@ -87,6 +90,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     private FacetFieldsModel fieldsModel;
     private IModel<FacetSelectionType> facetSelectionTypeModeModel;
     private IModel<Boolean> simpleModeModel;
+    private Map<String, IModel> paramModels;
 
     public FacetedSearchPage(IModel<QueryFacetsSelection> queryModel) {
         this(queryModel, Model.of(false));
@@ -139,6 +143,10 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
             }
 
         };
+        
+        paramModels = ImmutableMap.<String, IModel>builder()
+                .put("q", new PropertyModel<>(getModel(), "query"))
+                .build();
     }
 
     private FacetSelectionType getFacetSelectionTypeModeFromSessionOrDefault() {
@@ -346,6 +354,11 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     @Override
     public IModel<String> getCanonicalUrlModel() {
         return new PermaLinkModel(getPageClass(), getModel());
+    }
+
+    @Override
+    public Map<String, IModel> getUrlParametersMap() {
+        return paramModels;
     }
 
     @Override
