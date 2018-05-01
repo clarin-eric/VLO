@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.historyapi;
 
+import java.util.Collection;
 import java.util.Map;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
@@ -28,7 +29,7 @@ import org.springframework.web.util.JavaScriptUtils;
  * Listener for Ajax request targets that updates the 'history', that is sets
  * the URL parameters based on the model values provided by the page IFF it
  * supports this by implementing {@link HistoryApiAware}.
- * 
+ *
  * @author Twan Goosen <twan@clarin.eu>
  * @see HistoryApiAware
  */
@@ -47,18 +48,29 @@ public class HistoryApiAjaxRequestTargetListener extends AjaxRequestTarget.Abstr
         final StringBuilder state = new StringBuilder();
         final Map<String, IModel> map = page.getUrlParametersMap();
         map.keySet().forEach((key) -> {
-            final String value = map.get(key).getObject().toString();
-            final String encodedValue = UrlEncoder.QUERY_INSTANCE.encode(value, "UTF-8");
-            state.append(key).append("=").append(encodedValue).append("&");
+            final Object object = map.get(key).getObject();
+            if (object instanceof Collection) {
+                ((Collection) object).forEach((objectItem) -> {
+                    addObjectStringToState(state, key, objectItem);
+                });
+            } else if (object != null) {
+                addObjectStringToState(state, key, object);
+            }
         });
         final String stateString = JavaScriptUtils.javaScriptEscape(state.toString());
 
         return ""
                 + "var path = this.window.location.pathname;"
                 + "var queryParams = this.window.location.search;"
-                + "var newUrl = path + '?" +  stateString + "';"
+                + "var newUrl = path + '?" + stateString + "';"
                 + "var stateObj = { app: 'vlo' };" //TODO: wrap state in JSON ?
                 + "history.replaceState(stateObj, 'page', newUrl);";
+    }
+
+    private void addObjectStringToState(StringBuilder state, String key, final Object object) {
+        final String value = object.toString();
+        final String encodedValue = UrlEncoder.QUERY_INSTANCE.encode(value, "UTF-8");
+        state.append(key).append("=").append(encodedValue).append("&");
     }
 
 }
