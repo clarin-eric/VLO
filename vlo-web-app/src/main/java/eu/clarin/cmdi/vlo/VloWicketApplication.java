@@ -26,6 +26,7 @@ import org.springframework.context.ApplicationContextAware;
 
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.historyapi.HistoryApiAjaxRequestTargetListener;
 import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
 import eu.clarin.cmdi.vlo.service.PermalinkService;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
@@ -117,6 +118,9 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         // determine version qualifier (e.g. 'beta'), which can be used to visually mark the base page
         appVersionQualifier = determineVersionQualifier();
         logger.info("Version qualifier: {}", appVersionQualifier);
+        
+        // add history API ajax request target listener for URL updates on Ajax request
+        getAjaxRequestTargetListeners().add(new HistoryApiAjaxRequestTargetListener());
     }
     
     private void registerResourceBundles() {
