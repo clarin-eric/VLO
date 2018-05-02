@@ -16,12 +16,12 @@
  */
 package eu.clarin.cmdi.vlo.wicket.historyapi;
 
-import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.encoding.UrlEncoder;
 import org.springframework.web.util.JavaScriptUtils;
 
@@ -40,37 +40,44 @@ public class HistoryApiAjaxRequestTargetListener extends AjaxRequestTarget.Abstr
         super.onBeforeRespond(map, target);
         final Page page = target.getPage();
         if (page instanceof HistoryApiAware) {
-            target.appendJavaScript(createParamsScript((HistoryApiAware) page));
+            final Optional<String> script = createParamsScript((HistoryApiAware) page);
+            if (script.isPresent()) {
+                target.appendJavaScript(script.get());
+            }
         }
     }
 
-    private String createParamsScript(HistoryApiAware page) {
+    private Optional<String> createParamsScript(HistoryApiAware page) {
         final StringBuilder state = new StringBuilder();
-        final Map<String, IModel> map = page.getUrlParametersMap();
-        map.keySet().forEach((key) -> {
-            final Object object = map.get(key).getObject();
-            if (object instanceof Collection) {
-                ((Collection) object).forEach((objectItem) -> {
-                    addObjectStringToState(state, key, objectItem);
-                });
-            } else if (object != null) {
-                addObjectStringToState(state, key, object);
-            }
+        final PageParameters params = page.getHistoryApiPageParameters();
+        params.getNamedKeys().forEach((key) -> {
+            params.getValues(key).stream()
+                    .filter((objectItem) -> !objectItem.isEmpty())
+                    .forEach((objectItem) -> {
+                        addObjectStringToState(state, key, objectItem.toString());
+                    });
         });
-        final String stateString = JavaScriptUtils.javaScriptEscape(state.toString());
-
-        return ""
-                + "var path = this.window.location.pathname;"
-                + "var queryParams = this.window.location.search;"
-                + "var newUrl = path + '?" + stateString + "';"
-                + "var stateObj = { app: 'vlo' };" //TODO: wrap state in JSON ?
-                + "history.replaceState(stateObj, 'page', newUrl);";
+        if (state.length() == 0) {
+            //nothing to do
+            return Optional.empty();
+        } else {
+            //create javascript to replace state via history API
+            return Optional.of(""
+                    + "var stateString ='" + JavaScriptUtils.javaScriptEscape(state.toString()) + "';"
+                    + "var path = this.window.location.pathname;"
+                    + "var queryParams = this.window.location.search;"
+                    + "var newUrl = path + '?' + stateString;"
+                    + "var stateObj = { app: 'vlo' };" //TODO: wrap state in JSON ?
+                    + "history.replaceState(stateObj, 'page', newUrl);");
+        }
     }
 
-    private void addObjectStringToState(StringBuilder state, String key, final Object object) {
-        final String value = object.toString();
+    private void addObjectStringToState(StringBuilder state, String key, String value) {
+        if (state.length() != 0) {
+            state.append("&");
+        }
         final String encodedValue = UrlEncoder.QUERY_INSTANCE.encode(value, "UTF-8");
-        state.append(key).append("=").append(encodedValue).append("&");
+        state.append(key).append("=").append(encodedValue);
     }
 
 }

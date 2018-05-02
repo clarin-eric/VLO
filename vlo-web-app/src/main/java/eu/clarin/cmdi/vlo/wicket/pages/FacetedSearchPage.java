@@ -357,8 +357,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     }
 
     @Override
-    public Map<String, IModel> getUrlParametersMap() {
-        return paramModels;
+    public PageParameters getHistoryApiPageParameters() {
+        return paramsConverter.toParameters(getModelObject());
     }
 
     @Override

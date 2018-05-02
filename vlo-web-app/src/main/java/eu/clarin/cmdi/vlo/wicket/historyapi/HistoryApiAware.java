@@ -16,8 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.historyapi;
 
-import java.util.Map;
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * Pages must implement this interface in order to support URL rewriting based
@@ -29,10 +28,8 @@ import org.apache.wicket.model.IModel;
 public interface HistoryApiAware {
 
     /**
-     *
-     * @return map of parameter names and value models to represent as query
-     * parameters {@literal e.g.}
-     * {@code ?{key1}={model value1}&{key2}={model value 2}}
+     * 
+     * @return page parameters to represent in URL on update
      */
-    Map<String, IModel> getUrlParametersMap();
+    PageParameters getHistoryApiPageParameters();
 }
