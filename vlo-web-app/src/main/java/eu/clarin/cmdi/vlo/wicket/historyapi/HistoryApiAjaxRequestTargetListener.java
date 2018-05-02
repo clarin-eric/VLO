@@ -40,14 +40,11 @@ public class HistoryApiAjaxRequestTargetListener extends AjaxRequestTarget.Abstr
         super.onBeforeRespond(map, target);
         final Page page = target.getPage();
         if (page instanceof HistoryApiAware) {
-            final Optional<String> script = createParamsScript((HistoryApiAware) page);
-            if (script.isPresent()) {
-                target.appendJavaScript(script.get());
-            }
+            target.appendJavaScript(createParamsScript((HistoryApiAware) page));
         }
     }
 
-    private Optional<String> createParamsScript(HistoryApiAware page) {
+    private String createParamsScript(HistoryApiAware page) {
         final StringBuilder state = new StringBuilder();
         final PageParameters params = page.getHistoryApiPageParameters();
         params.getNamedKeys().forEach((key) -> {
@@ -57,19 +54,10 @@ public class HistoryApiAjaxRequestTargetListener extends AjaxRequestTarget.Abstr
                         addObjectStringToState(state, key, objectItem.toString());
                     });
         });
-        if (state.length() == 0) {
-            //nothing to do
-            return Optional.empty();
-        } else {
-            //create javascript to replace state via history API
-            return Optional.of(""
-                    + "var stateString ='" + JavaScriptUtils.javaScriptEscape(state.toString()) + "';"
-                    + "var path = this.window.location.pathname;"
-                    + "var queryParams = this.window.location.search;"
-                    + "var newUrl = path + '?' + stateString;"
-                    + "var stateObj = { app: 'vlo' };" //TODO: wrap state in JSON ?
-                    + "history.replaceState(stateObj, 'page', newUrl);");
-        }
+
+        //create javascript to replace state via history API
+        final String stateStringEscaped = JavaScriptUtils.javaScriptEscape(state.toString());
+        return String.format("applyPageParametersToHistory('%s');", stateStringEscaped);
     }
 
     private void addObjectStringToState(StringBuilder state, String key, String value) {
