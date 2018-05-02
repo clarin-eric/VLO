@@ -20,7 +20,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.historyapi.HistoryApiAware;
+import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;

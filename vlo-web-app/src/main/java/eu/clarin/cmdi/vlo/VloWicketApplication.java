@@ -26,7 +26,7 @@ import org.springframework.context.ApplicationContextAware;
 
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.historyapi.HistoryApiAjaxRequestTargetListener;
+import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAjaxRequestTargetListener;
 import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
 import eu.clarin.cmdi.vlo.service.PermalinkService;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
