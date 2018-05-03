@@ -39,6 +39,7 @@ public final class JavaScriptResources {
     private final static JavaScriptResourceReference FIELDS_TABLE = new JavaScriptResourceReference(RecordPage.class, "vlo-fields-table.js");
 
     private final static ResourceReference BOOTSTRAP_TOC = new ContextRelativeResourceReference("assets/bootstrap-toc/bootstrap-toc.js");
+    private final static ResourceReference BOOTSTRAP_TOUR = new ContextRelativeResourceReference("assets/bootstrap-tour/bootstrap-tour.min.js");
 
     public static ResourceReference getBootstrapJS() {
         return BOOTSTRAP;
@@ -74,6 +75,10 @@ public final class JavaScriptResources {
     
     public static ResourceReference getBootstrapToc() {
         return BOOTSTRAP_TOC;
+    }
+    
+    public static ResourceReference getBootstrapTour() {
+        return BOOTSTRAP_TOUR;
     }
 
 }
