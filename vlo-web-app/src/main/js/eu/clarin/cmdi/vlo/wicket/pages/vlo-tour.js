@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-function startVloTour(restart) {
+function startVloTour(restart, step) {
     var opts = {
         name: 'vlo-tour',
         steps: createTourSteps()
@@ -29,6 +29,10 @@ function startVloTour(restart) {
 
     // Initialize the tour
     tour.init();
+    
+    if(step !== undefined) {
+        tour.goTo(step);
+    }
 
     // Start the tour
     return tour.start();
@@ -37,15 +41,30 @@ function startVloTour(restart) {
 function createTourSteps() {
     return [
         {
-            element: "#topnavigation",
-            title: "Navigation",
-            content: "Very helpful"
+            element: "#header",
+            title: "VLO guided tour",
+            content: "Would you like to get a quick tour of the VLO? This can also be triggered from the Help page.",
+            placement: "auto bottom",
+            onShown: function(tour) {
+                $('#step-'+tour.getCurrentStep()+' button[data-role=prev]').hide();
+                $('#step-'+tour.getCurrentStep()+' button[data-role=next]').text('Take tour');
+                $('#step-'+tour.getCurrentStep()+' button[data-role=end]').text('No thanks');
+            }
         },
         {
-            element: "#footer",
-            title: "Way down",
-            content: "Who doesn't like a footer?"
+            element: "#search-form",
+            title: "Search form",
+            content: "Enter one or more keywords in the box to search through all records. You can use AND, OR and NOT to create more advanced queries. These and other options are explained in detail in the <a href='help'>Help page</a>.",
+            placement: "auto bottom"
         }
     ];
     
 }
+
+$(document).ready(function() {
+    if(window.location.hash === '#tour') {
+        startVloTour(true, 1);
+    } else {
+        startVloTour(false);
+    }
+});
