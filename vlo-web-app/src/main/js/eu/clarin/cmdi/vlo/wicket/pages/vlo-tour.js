@@ -20,17 +20,17 @@ function startVloTour(restart, step) {
         name: 'vlo-tour',
         steps: createTourSteps()
     };
-    
+
     var tour = new Tour(opts);
-    
-    if(restart) {
+
+    if (restart) {
         tour.restart();
     }
 
     // Initialize the tour
     tour.init();
-    
-    if(step !== undefined) {
+
+    if (step !== undefined) {
         tour.goTo(step);
     }
 
@@ -38,19 +38,18 @@ function startVloTour(restart, step) {
     return tour.start();
 }
 
+function hideSimpleAndStart() {
+    if (transitionFromSimple) {
+        transitionFromSimple(function () {
+            startVloTour(true);
+        });
+    } else {
+        startVloTour(true);
+    }
+}
+
 function createTourSteps() {
     return [
-        {
-            element: "#header",
-            title: "VLO guided tour",
-            content: "Would you like to get a quick tour of the VLO? This can also be triggered from the Help page.",
-            placement: "auto bottom",
-            onShown: function(tour) {
-                $('#step-'+tour.getCurrentStep()+' button[data-role=prev]').hide();
-                $('#step-'+tour.getCurrentStep()+' button[data-role=next]').text('Take tour');
-                $('#step-'+tour.getCurrentStep()+' button[data-role=end]').text('No thanks');
-            }
-        },
         {
             element: "#search-form",
             title: "Search form",
@@ -58,13 +57,18 @@ function createTourSteps() {
             placement: "auto bottom"
         }
     ];
-    
+
 }
 
-$(document).ready(function() {
-    if(window.location.hash === '#tour') {
-        startVloTour(true, 1);
+$(document).ready(function () {
+    if (window.location.hash === '#tour') {
+        hideSimpleAndStart();
     } else {
-        startVloTour(false);
+        $("#simple-jumbotron #learn-more").hide();
+        $("#simple-jumbotron #take-tour").removeClass('hidden');
+        $("#simple-jumbotron #take-tour").click(function () {
+            hideSimpleAndStart();
+        });
     }
+
 });
