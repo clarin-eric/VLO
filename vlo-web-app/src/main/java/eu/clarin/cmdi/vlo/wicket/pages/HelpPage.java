@@ -16,11 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.request.resource.ContextRelativeResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -45,7 +45,7 @@ public class HelpPage extends VloBasePage {
         super.renderHead(response);
 
         // Table of content with scrollspy (required CSS is compiled along with the VLO LESS)
-        response.render(JavaScriptHeaderItem.forReference(new ContextRelativeResourceReference("assets/bootstrap-toc/bootstrap-toc.js")));
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getBootstrapToc()));
         // Enable scroll spy on the body tag, required for the table of contents
         final String scrollspyScript = ""
                 + "$(document).ready(function() {"
