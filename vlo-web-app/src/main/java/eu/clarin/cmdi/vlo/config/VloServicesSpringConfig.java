@@ -143,7 +143,7 @@ public class VloServicesSpringConfig {
         //TODO: Read properties from file??
         final Properties transformationProperties = new Properties();
         transformationProperties.setProperty(OutputKeys.METHOD, "html");
-        transformationProperties.setProperty(OutputKeys.INDENT, "yes");
+        transformationProperties.setProperty(OutputKeys.INDENT, "no");
         transformationProperties.setProperty(OutputKeys.ENCODING, "UTF-8");
         return new XmlTransformationServiceImpl(xsltSource, transformationProperties);
     }

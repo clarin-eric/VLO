@@ -22,6 +22,11 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import javax.annotation.PostConstruct;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
@@ -29,6 +34,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.slf4j.Logger;
@@ -46,8 +52,9 @@ public class XmlTransformationServiceImpl implements XmlTransformationService {
 
     private final static Logger logger = LoggerFactory.getLogger(XmlTransformationServiceImpl.class);
 
-    private final Templates template;
+    private Future<Templates> templatesFuture;
     private final Properties transformationProperties;
+    private final Source xsltSource;
 
     /**
      *
@@ -55,16 +62,38 @@ public class XmlTransformationServiceImpl implements XmlTransformationService {
      * }
      * @param properties transformation properties to be passed to the
      * transformer object before transformation
-     * @throws TransformerConfigurationException if the transformer could not be
-     * configured correctly
+     *
      */
-    public XmlTransformationServiceImpl(Source xsltSource, Properties properties) throws TransformerConfigurationException {
-        final TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        // create a template to derive transformers from, which makes this thread safe
-        this.template = transformerFactory.newTemplates(xsltSource);
+    public XmlTransformationServiceImpl(Source xsltSource, Properties properties) {
+        this.xsltSource = xsltSource;
         this.transformationProperties = properties;
+    }
 
-        logger.debug("Transformation service created for {} with properties {}", xsltSource, properties);
+    /**
+     * Make transformation templates from xslt source
+     *
+     * @throws RuntimeException if the transformer could not be configured
+     * correctly
+     */
+    @PostConstruct
+    public void init() {
+        logger.debug("Initializing transformation service with {} and properties {}", xsltSource.getSystemId(), transformationProperties);
+        
+        //initialise in separate thread as this can take a while and could slow down application startup
+        final ExecutorService executor = Executors.newSingleThreadExecutor();
+        this.templatesFuture = executor.submit(() -> {
+            return compileTemplates();
+        });
+    }
+
+    private Templates compileTemplates() throws TransformerConfigurationException {
+        logger.debug("Compiling stylesheet {} with properties {}", xsltSource.getSystemId(), transformationProperties);
+        final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        // create a template to derive transformers from, which makes this class thread safe
+        final Templates template = transformerFactory.newTemplates(xsltSource);
+
+        logger.debug("Done compiling stylesheet {}", xsltSource.getSystemId());        
+        return template;
     }
 
     /**
@@ -79,11 +108,11 @@ public class XmlTransformationServiceImpl implements XmlTransformationService {
     public String transformXml(URL location) throws TransformerException {
         logger.debug("Transforming {}", location);
 
-        // create a transformer based on the template
-        final Transformer transformer = template.newTransformer();
-        transformer.setOutputProperties(transformationProperties);
-
         try {
+            // create a transformer based on the template
+            final Transformer transformer = templatesFuture.get().newTransformer();
+            transformer.setOutputProperties(transformationProperties);
+
             final InputStream inStream = location.openStream();
             final StringWriter outWriter = new StringWriter();
 
@@ -98,6 +127,10 @@ public class XmlTransformationServiceImpl implements XmlTransformationService {
             return outWriter.toString();
         } catch (IOException ex) {
             throw new TransformerException("Error while opening input stream for " + location.toString(), ex);
+        } catch (ExecutionException ex) {
+            throw new TransformerException("Compilation of stylesheet " + location.toString() + " errored", ex);
+        } catch (InterruptedException ex) {
+            throw new TransformerException("Thread compiling stylesheet " + location.toString() + " was interrupted", ex);
         }
 
     }
