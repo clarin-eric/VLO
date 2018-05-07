@@ -48,13 +48,62 @@ function hideSimpleAndStart() {
     }
 }
 
+function typeValue(input, value) {
+    if (value.length > 0) {
+        var current = $(input).val();
+        $(input).val(current + value.substr(0, 1));
+        if (value.length > 1) {
+            setTimeout(function () {
+                typeValue(input, value.substr(1));
+            }, 30 + Math.floor(50 * Math.random()));
+        }
+    }
+}
+
 function createTourSteps() {
+
+    //  Steps from CLARIN-PLUS screencast (https://b2drop.eudat.eu/s/FrrnfN1refArxFy)
+    //  
+    //    * text search
+    //    * results
+    //    * facets ('categories')
+    //    * expand a few
+    //    * filter by language (e.g. estonian)
+    //        * one result remains
+    //    * search result
+    //        * expand for details
+    //        * availability laundry tags
+    //    * navigate to record page
+    //        * tabs
+    //        * original provider
+    //        * goes into repository
+    //        * back to VLO
+    //        * back to search results
+    //    * remove selection
+    //    * adapt search
+    //        * resource type
+    //    * help page    
+
     return [
         {
             element: "#search-form",
-            title: "Search form",
-            content: "Enter one or more keywords in the box to search through all records. You can use AND, OR and NOT to create more advanced queries. These and other options are explained in detail in the <a href='help'>Help page</a>.",
-            placement: "auto bottom"
+            title: "Enter query",
+            content: "Enter one or more keywords in the search box to search through all records. You can use AND, OR and NOT to create more advanced queries. These and other options are explained in detail in the <a href='help#syntax'>Help page</a>.",
+            placement: "auto top",
+            onNext: function () {
+                var searchInput = $('#search-form input.search-box')
+                if (searchInput.val() === '') {
+                    typeValue(searchInput, 'emotional speech');
+                }
+            }
+        }, {
+            element: "#search-form button",
+            title: "Search",
+            content: "Press the button (or the enter key) to search",
+            placement: "auto bottom",
+            onShown: function () {
+                //TOOD: listen to form submit - go to next if submitted
+            }
         }
     ];
 
@@ -62,12 +111,12 @@ function createTourSteps() {
 
 $(document).ready(function () {
     if (window.location.hash === '#tour') {
-        hideSimpleAndStart();
+        startVloTour(true);
     } else {
         $("#simple-jumbotron #learn-more").hide();
         $("#simple-jumbotron #take-tour").removeClass('hidden');
         $("#simple-jumbotron #take-tour").click(function () {
-            hideSimpleAndStart();
+            startVloTour(true);
         });
     }
 
