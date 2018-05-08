@@ -89,20 +89,34 @@ function createTourSteps() {
             element: "#search-form",
             title: "Enter query",
             content: "Enter one or more keywords in the search box to search through all records. You can use AND, OR and NOT to create more advanced queries. These and other options are explained in detail in the <a href='help#syntax'>Help page</a>.",
-            placement: "auto top",
-            onNext: function () {
-                var searchInput = $('#search-form input.search-box')
-                if (searchInput.val() === '') {
-                    typeValue(searchInput, 'emotional speech');
-                }
-            }
+            placement: "auto top"
         }, {
             element: "#search-form button",
             title: "Search",
             content: "Press the button (or the enter key) to search",
             placement: "auto bottom",
-            onShown: function () {
-                //TOOD: listen to form submit - go to next if submitted
+            onShow: function () {
+                var searchInput = $('#search-form input.search-box')
+                if (searchInput.val() === '') {
+                    typeValue(searchInput, 'speech');
+                }
+            },
+            onShown: function (tour) {
+                //listen to form submit - go to next if submitted
+                $('#search-form .search-button').one('click', function() {
+                    $('#search-form').data('tour-submitted', true);
+                    tour.goTo(2);
+                });
+            }
+        }, {
+            element: "#searchresultitems",
+            title: "Results",
+            content: "Search results are shown here",
+            placement: "auto top",
+            onShow: function() {
+                if(!$('#search-form').data('tour-submitted')) {
+                    $('#search-form .search-button').click();
+                }
             }
         }
     ];
@@ -111,12 +125,12 @@ function createTourSteps() {
 
 $(document).ready(function () {
     if (window.location.hash === '#tour') {
-        startVloTour(true);
+        hideSimpleAndStart();
     } else {
         $("#simple-jumbotron #learn-more").hide();
         $("#simple-jumbotron #take-tour").removeClass('hidden');
         $("#simple-jumbotron #take-tour").click(function () {
-            startVloTour(true);
+            hideSimpleAndStart();
         });
     }
 
