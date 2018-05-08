@@ -130,7 +130,7 @@ function createTourSteps() {
             content: "Click the name of a facet to expand it and see the values found within the current search results.",
             placement: "auto right"
         }, {
-            element: "#facets .expandedfacet",
+            element: "#facets .expandedfacet:first",
             title: "Facet values",
             content: "These are the values that occur within the search results for this facet. Click a value to select it and narrow down the search results accordingly. Try selecting one or more values and see how the result listing changes.",
             placement: "auto right",
@@ -138,6 +138,24 @@ function createTourSteps() {
                 //expand a facet if not expanded yet
                 if ($('#facets .expandedfacet').length <= 0) {
                     $('#facets .facet:first a.expandable-panel-toggle').click();
+                }
+                return (new jQuery.Deferred()).promise();
+            }
+        }, {
+            element: "#searchresultitems .searchresultitem:first .searchresultmoreless",
+            title: "Search result",
+            content: "Each search result represent a record that matches the search criteria. More information about the record can be displayed by expanding the description (click the '+' button).",
+            placement: "auto left"
+        }, {
+            element: "#searchresultitems .searchresultitem:first .recorddetailstable",
+            title: "Record details",
+            content: "Various important aspects of the record are shown in this table",
+            placement: "auto left", 
+            onShow: function() {
+                //expand result item if not expanded yet
+                //
+                if ($('#searchresultitems .searchresultitem:first .recorddetailstable').length <= 0) {
+                    $('#searchresultitems .searchresultitem:first a.searchresultdetailstoggle').click();
                 }
                 return (new jQuery.Deferred()).promise();
             }
