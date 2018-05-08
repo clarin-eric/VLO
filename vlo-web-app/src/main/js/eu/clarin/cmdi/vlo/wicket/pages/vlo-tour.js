@@ -103,7 +103,7 @@ function createTourSteps() {
             },
             onShown: function (tour) {
                 //listen to form submit - go to next if submitted
-                $('#search-form .search-button').one('click', function() {
+                $('#search-form .search-button').one('click', function () {
                     $('#search-form').data('tour-submitted', true);
                     tour.goTo(2);
                 });
@@ -113,10 +113,33 @@ function createTourSteps() {
             title: "Results",
             content: "Search results are shown here",
             placement: "auto top",
-            onShow: function() {
-                if(!$('#search-form').data('tour-submitted')) {
+            onShow: function () {
+                //submit search form if not submitted yet
+                if (!$('#search-form').data('tour-submitted')) {
                     $('#search-form .search-button').click();
                 }
+            }
+        }, {
+            element: "#facets",
+            title: "Facets",
+            content: "Various 'facets' allow you to narrow down the search results.",
+            placement: "auto right"
+        }, {
+            element: "#facets .facet:first",
+            title: "Expand facet",
+            content: "Click the name of a facet to expand it and see the values found within the current search results.",
+            placement: "auto right"
+        }, {
+            element: "#facets .expandedfacet",
+            title: "Facet values",
+            content: "These are the values that occur within the search results for this facet. Click a value to select it and narrow down the search results accordingly. Try selecting one or more values and see how the result listing changes.",
+            placement: "auto right",
+            onShow: function () {
+                //expand a facet if not expanded yet
+                if ($('#facets .expandedfacet').length <= 0) {
+                    $('#facets .facet:first a.expandable-panel-toggle').click();
+                }
+                return (new jQuery.Deferred()).promise();
             }
         }
     ];
