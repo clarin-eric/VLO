@@ -1,5 +1,9 @@
 Bug fixes and new features
 --------------------------
+VLO 4.4.3 (May 2018)
+* Fixed a regression in the web app
+    <https://github.com/clarin-eric/VLO/issues/171>
+    
 VLO 4.4.2 (May 2018)
 * Fixed a regression in the statistics generator
     <https://github.com/clarin-eric/VLO/issues/170>
