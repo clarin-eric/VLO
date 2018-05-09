@@ -382,6 +382,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
         super.renderHead(response);
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getBootstrapTour()));
         response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js")));
+        response.render(JavaScriptHeaderItem.forScript("initTourSearchPage();", "initTourSearchPage"));
     }
 
 }

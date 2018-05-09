@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-function startVloTour(restart, step) {
+function createTour(restart, step) {
     var opts = {
         name: 'vlo-tour',
         steps: createTourSteps()
@@ -33,18 +33,17 @@ function startVloTour(restart, step) {
     if (step !== undefined) {
         tour.goTo(step);
     }
-
-    // Start the tour
-    return tour.start();
+    
+    return tour;
 }
 
 function hideSimpleAndStart() {
-    if (transitionFromSimple) {
+    if (transitionFromSimple !== undefined) {
         transitionFromSimple(function () {
-            startVloTour(true);
+            createTour(true).start();
         });
     } else {
-        startVloTour(true);
+        createTour(true).start();
     }
 }
 
@@ -113,6 +112,7 @@ function createTourSteps() {
             title: "Results",
             content: "Search results are shown here",
             placement: "auto top",
+            orphan: true,
             onShow: function () {
                 //submit search form if not submitted yet
                 if (!$('#search-form').data('tour-submitted')) {
@@ -140,24 +140,44 @@ function createTourSteps() {
             content: "Licence information, if available, is shown next to each search result.",
             placement: "auto left"
         }, {
-            element: "#searchresultitems .searchresultitem:first h3",
+            element: "#searchresultitems .searchresultitem:first h3 a",
             title: "Find out more",
             content: "Click the record title to find out everything about the described resources, including how to access the content.",
+            placement: "auto top",
+            reflex: true
+//            redirect: function() {
+//                document.location.href = $('#searchresultitems .searchresultitem:first h3 a').attr('href') + '#tour';
+//            }
+        }, {
+            element: ".record-tabpanel:first",
+            title: "Record information",
+            content: "Various tabs...",
             placement: "auto top"
         }
     ];
 
 }
 
-$(document).ready(function () {
-    if (window.location.hash === '#tour') {
-        hideSimpleAndStart();
-    } else {
-        $("#simple-jumbotron #learn-more").hide();
-        $("#simple-jumbotron #take-tour").removeClass('hidden');
-        $("#simple-jumbotron #take-tour").click(function () {
+function initTourSearchPage() {
+    $(document).ready(function () {
+        if (window.location.hash === '#tour') {
             hideSimpleAndStart();
-        });
-    }
+        } else {
+            $("#simple-jumbotron #learn-more").hide();
+            $("#simple-jumbotron #take-tour").removeClass('hidden');
+            $("#simple-jumbotron #take-tour").click(function () {
+                hideSimpleAndStart();
+            });
+        }
 
-});
+    });
+}
+
+function initTourRecordPage() {
+    $(document).ready(function () {
+        var tour = createTour(false);
+        if(tour.getCurrentStep() !== null && !tour.ended()) {
+            tour.start();
+        }
+    });
+}

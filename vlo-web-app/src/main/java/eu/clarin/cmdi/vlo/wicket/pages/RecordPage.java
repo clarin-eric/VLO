@@ -80,6 +80,10 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.JavaScriptResources;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 /**
  *
@@ -436,4 +440,11 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         return new PermaLinkModel(getPageClass(), null, getModel());
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getBootstrapTour()));
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js")));
+        response.render(JavaScriptHeaderItem.forScript("initTourRecordPage();", "initTourRecordPage"));
+    }
 }
