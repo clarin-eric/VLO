@@ -18,6 +18,7 @@
 function createTour(restart, step) {
     var opts = {
         name: 'vlo-tour',
+        redirect: true,
         steps: createTourSteps()
     };
 
@@ -33,7 +34,7 @@ function createTour(restart, step) {
     if (step !== undefined) {
         tour.goTo(step);
     }
-    
+
     return tour;
 }
 
@@ -143,16 +144,25 @@ function createTourSteps() {
             element: "#searchresultitems .searchresultitem:first h3 a",
             title: "Find out more",
             content: "Click the record title to find out everything about the described resources, including how to access the content.",
-            placement: "auto top",
-            reflex: true
-//            redirect: function() {
-//                document.location.href = $('#searchresultitems .searchresultitem:first h3 a').attr('href') + '#tour';
-//            }
+            placement: "auto top"
         }, {
             element: ".record-tabpanel:first",
             title: "Record information",
             content: "Various tabs...",
-            placement: "auto top"
+            placement: "auto top",
+            path: RegExp(/.*\/record.*/i),
+            redirect: function () {
+                var resultLink = $('#searchresultitems .searchresultitem:first h3 a');
+                if (resultLink.length > 0) {
+                    var newPath = resultLink.attr('href') + '#tour';
+                    console.log("new path: " + newPath);
+
+                    if (this._inited === true) {
+                        document.location.href = newPath;
+                        return (new jQuery.Deferred()).promise();
+                    }
+                }
+            }
         }
     ];
 
@@ -175,9 +185,11 @@ function initTourSearchPage() {
 
 function initTourRecordPage() {
     $(document).ready(function () {
-        var tour = createTour(false);
-        if(tour.getCurrentStep() !== null && !tour.ended()) {
-            tour.start();
+        if (window.location.hash === '#tour') {
+            var tour = createTour(false);
+            if (tour.getCurrentStep() !== null && !tour.ended()) {
+                tour.start();
+            }
         }
     });
 }
