@@ -87,18 +87,18 @@ function createTourSteps() {
     return [
         {
             element: "#search-form",
-            title: "Enter query",
-            content: "Enter one or more keywords in the search box to search through all records. You can use AND, OR and NOT to create more advanced queries. These and other options are explained in detail in the <a href='help#syntax'>Help page</a>.",
+            title: "Enter search terms",
+            content: "Enter some keywords reflecting your interest in the search box to search through all records. You can use AND, OR and NOT to create more advanced queries. These and other options are explained in detail in the <a href='help#syntax'>Help page</a>.",
             placement: "auto top"
         }, {
             element: "#search-form button",
             title: "Search",
-            content: "Press the button (or the enter key) to search",
+            content: "Press the button to search",
             placement: "auto bottom",
             onShow: function () {
                 var searchInput = $('#search-form input.search-box')
                 if (searchInput.val() === '') {
-                    typeValue(searchInput, 'speech');
+                    typeValue(searchInput, 'speech corpus');
                 }
             },
             onShown: function (tour) {
@@ -127,38 +127,23 @@ function createTourSteps() {
         }, {
             element: "#facets .facet:first",
             title: "Expand facet",
-            content: "Click the name of a facet to expand it and see the values found within the current search results.",
+            content: "Click the name of a facet to expand it and see the values found within the current search results. Try selecting one or more values and see how the result listing changes.",
             placement: "auto right"
-        }, {
-            element: "#facets .expandedfacet:first",
-            title: "Facet values",
-            content: "These are the values that occur within the search results for this facet. Click a value to select it and narrow down the search results accordingly. Try selecting one or more values and see how the result listing changes.",
-            placement: "auto right",
-            onShow: function () {
-                //expand a facet if not expanded yet
-                if ($('#facets .expandedfacet').length <= 0) {
-                    $('#facets .facet:first a.expandable-panel-toggle').click();
-                }
-                return (new jQuery.Deferred()).promise();
-            }
         }, {
             element: "#searchresultitems .searchresultitem:first .searchresultmoreless",
             title: "Search result",
             content: "Each search result represent a record that matches the search criteria. More information about the record can be displayed by expanding the description (click the '+' button).",
             placement: "auto left"
         }, {
-            element: "#searchresultitems .searchresultitem:first .recorddetailstable",
-            title: "Record details",
-            content: "Various important aspects of the record are shown in this table",
-            placement: "auto left", 
-            onShow: function() {
-                //expand result item if not expanded yet
-                //
-                if ($('#searchresultitems .searchresultitem:first .recorddetailstable').length <= 0) {
-                    $('#searchresultitems .searchresultitem:first a.searchresultdetailstoggle').click();
-                }
-                return (new jQuery.Deferred()).promise();
-            }
+            element: "#searchresultitems .searchresultitem:first .searchresult-licenseInfo",
+            title: "Licence information",
+            content: "Licence information, if available, is shown next to each search result.",
+            placement: "auto left"
+        }, {
+            element: "#searchresultitems .searchresultitem:first h3",
+            title: "Find out more",
+            content: "Click the record title to find out everything about the described resources, including how to access the content.",
+            placement: "auto top"
         }
     ];
 
