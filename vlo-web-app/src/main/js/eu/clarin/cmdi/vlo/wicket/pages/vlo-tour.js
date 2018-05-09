@@ -146,9 +146,9 @@ function createTourSteps() {
             content: "Click the record title to find out everything about the described resources, including how to access the content.",
             placement: "auto top"
         }, {
-            element: ".record-tabpanel:first",
+            element: ".record-tabpanel",
             title: "Record information",
-            content: "Various tabs...",
+            content: "Each of these tabs represents a different aspect of the record. The first tab lists the most important information about the described resource(s).",
             placement: "auto top",
             path: RegExp(/.*\/record.*/i),
             redirect: function () {
@@ -162,6 +162,15 @@ function createTourSteps() {
                         return (new jQuery.Deferred()).promise();
                     }
                 }
+            }
+        }, {
+            element: ".record-tabpanel",
+            title: "Resources",
+            content: "This tab lists the described resource(s). If present, you can click any of the links to click it. Note that not all records link directly to the described resources. In such cases, look for a landing page or search link.",
+            placement: "auto bottom",
+            path: RegExp(/.*\/record.*/i),
+            onShow: function() {
+                $(".tab1 a").click();
             }
         }
     ];
