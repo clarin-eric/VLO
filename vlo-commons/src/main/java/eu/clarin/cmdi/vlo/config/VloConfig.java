@@ -6,9 +6,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -70,7 +72,9 @@ public class VloConfig {
     // mapping
     //(required = false)
     private String facetConceptsFile = "";
-
+    
+    @XmlElementWrapper(name = "languageFilters")
+    @XmlElement(name = "languageFilter")
     private String[] languageFilters = {"", "", ""};
 
     private boolean printMapping = false;
@@ -846,11 +850,13 @@ public class VloConfig {
      * @return the value
      */
     public List<String> getFacetFields() {
-        return facetField;
+        return this.facetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
+        //return facetField;
     }
 
     public List<String> getSimpleSearchFacetFields() {
-        return simpleSearchFacetField;
+        return this.simpleSearchFacetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
+        //return simpleSearchFacetField;
     }
 
     public void setSimpleSearchFacetFields(List<String> simpleSearchFacetField) {
@@ -858,7 +864,8 @@ public class VloConfig {
     }
 
     public Set<String> getPrimaryFacetFields() {
-        return primaryFacetField;
+        return this.primaryFacetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
+        //return primaryFacetField;
     }
 
     public void setPrimaryFacetFields(Set<String> primaryFacetField) {
@@ -873,7 +880,7 @@ public class VloConfig {
      * @see #getCollectionFacet()
      */
     public List<String> getFacetsInSearch() {
-        final ArrayList<String> allFacets = new ArrayList<String>(facetField);
+        final ArrayList<String> allFacets = new ArrayList<String>(getFacetFields());
         final String collection = getCollectionFacet();
         if (collection != null) {
             allFacets.add(collection);
@@ -920,7 +927,8 @@ public class VloConfig {
     }
 
     public Set<String> getIgnoredFields() {
-        return ignoredField;
+        return this.ignoredField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
+        //return ignoredField;
     }
 
     public void setIgnoredFields(Set<String> ignoredFields) {
@@ -928,7 +936,8 @@ public class VloConfig {
     }
 
     public Set<String> getTechnicalFields() {
-        return technicalField;
+        return this.technicalField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
+        //return technicalField;
     }
 
     public void setTechnicalFields(Set<String> technicalFields) {
