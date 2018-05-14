@@ -645,8 +645,16 @@ public class DefaultVloConfigFactoryTest {
 
         System.out.println("setFacetFields");
 
+        List<String> keys = Arrays.asList(
+                "RESOURCE_CLASS",
+                "MODALITY",
+                "GENRE",
+                "COUNTRY",
+                "DATA_PROVIDER",
+                "NATIONAL_PROJECT",
+                "KEYWORDS");
+        
         List<String> expResult = Arrays.asList(
-                "language",
                 "resourceClass",
                 "modality",
                 "genre",
@@ -655,7 +663,7 @@ public class DefaultVloConfigFactoryTest {
                 "nationalProject",
                 "keywords");
 
-        config.setFacetFields(expResult);
+        config.setFacetFields(keys);
 
         List<String> result = config.getFacetFields();
 
