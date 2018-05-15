@@ -610,7 +610,7 @@ public class DefaultVloConfigFactoryTest {
                 "nationalProject",
                 "dataProvider");
 
-        List<String> result = config.getFacetFields();
+        List<String> result = config.getFacetFieldsDiss();
 
         assertEquals(expResult, result);
     }
@@ -665,7 +665,7 @@ public class DefaultVloConfigFactoryTest {
 
         config.setFacetFields(keys);
 
-        List<String> result = config.getFacetFields();
+        List<String> result = config.getFacetFieldsDiss();
 
         assertEquals(expResult, result);
     }
@@ -895,19 +895,19 @@ public class DefaultVloConfigFactoryTest {
 
     @Test
     public void testGetIgnoredFields() {
-        Set<String> result = config.getIgnoredFields();
+        Set<String> result = config.getIgnoredFieldsDiss();
         assertEquals(6, result.size());
     }
 
     @Test
     public void testGetTechnicalFields() {
-        Set<String> result = config.getTechnicalFields();
+        Set<String> result = config.getTechnicalFieldsDiss();
         assertEquals(11, result.size());
     }
 
     @Test
     public void testGetSimpleSearchFacetFields() {
-        List<String> result = config.getSimpleSearchFacetFields();
+        List<String> result = config.getSimpleSearchFacetFieldsDiss();
         assertEquals(5, result.size());
     }
 

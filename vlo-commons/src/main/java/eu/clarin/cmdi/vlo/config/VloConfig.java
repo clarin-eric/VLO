@@ -21,6 +21,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *
  * @author keeloo, twagoo
  */
+/**
+ * @author @author Wolfgang Walter SAUER (wowasa) &lt;wolfgang.sauer@oeaw.ac.at&gt;
+ *
+ */
 @XmlRootElement(name = "VloConfig")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class VloConfig {
@@ -847,25 +851,50 @@ public class VloConfig {
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @return the value
+     * @return List of field-keys
      */
     public List<String> getFacetFields() {
+        return this.facetField;
+    }
+    
+    /**
+     * @return List of dissolved field-names
+     */
+    public List<String> getFacetFieldsDiss() {
         return this.facetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
-        //return facetField;
+    }
+    
+    /**
+     * @return List of field-keys
+     */
+    public List<String> getSimpleSearchFacetFields() {
+        return this.simpleSearchFacetField;
     }
 
-    public List<String> getSimpleSearchFacetFields() {
+    /**
+     * @return List of dissolved field-names
+     */
+    public List<String> getSimpleSearchFacetFieldsDiss() {
         return this.simpleSearchFacetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
-        //return simpleSearchFacetField;
     }
 
     public void setSimpleSearchFacetFields(List<String> simpleSearchFacetField) {
         this.simpleSearchFacetField = simpleSearchFacetField;
     }
-
+    
+    /**
+     * @return Set of field-keys
+     */
     public Set<String> getPrimaryFacetFields() {
+        return this.primaryFacetField;
+    }
+
+
+    /**
+     * @return Set of dissolved field-names
+     */
+    public Set<String> getPrimaryFacetFieldsDiss() {
         return this.primaryFacetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
-        //return primaryFacetField;
     }
 
     public void setPrimaryFacetFields(Set<String> primaryFacetField) {
@@ -876,11 +905,11 @@ public class VloConfig {
      *
      * @return all facet fields, including collection facet (arbitrary order
      * unspecified)
-     * @see #getFacetFields()
+     * @see #getFacetFieldsDiss()
      * @see #getCollectionFacet()
      */
     public List<String> getFacetsInSearch() {
-        final ArrayList<String> allFacets = new ArrayList<String>(getFacetFields());
+        final ArrayList<String> allFacets = new ArrayList<String>(getFacetFieldsDiss());
         final String collection = getCollectionFacet();
         if (collection != null) {
             allFacets.add(collection);
@@ -899,9 +928,19 @@ public class VloConfig {
     public void setFacetFields(List<String> param) {
         facetField = param;
     }
-
+    
+    /**
+     * @return Collection of field-keys
+     */
     public Collection<String> getSearchResultFields() {
         return searchResultField;
+    }
+
+    /**
+     * @return Collection of dissolved field-names
+     */
+    public Collection<String> getSearchResultFieldsDiss() {
+        return searchResultField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
     }
 
     public void setSearchResultFields(Set<String> searchResultField) {
@@ -925,19 +964,38 @@ public class VloConfig {
     public void setCollectionFacet(String collectionFacet) {
         this.collectionFacet = collectionFacet;
     }
-
+    
+    /**
+     * @return Set of field-keys
+     */
     public Set<String> getIgnoredFields() {
+        return this.ignoredField;
+    }
+
+
+    /**
+     * @return Set of dissolved field-names
+     */
+    public Set<String> getIgnoredFieldsDiss() {
         return this.ignoredField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
-        //return ignoredField;
     }
 
     public void setIgnoredFields(Set<String> ignoredFields) {
         this.ignoredField = ignoredFields;
     }
-
+    
+    /**
+     * @return Set of field-keys
+     */
     public Set<String> getTechnicalFields() {
+        return this.technicalField;
+    }
+
+    /**
+     * @return Set of dissolved field-names
+     */
+    public Set<String> getTechnicalFieldsDiss() {
         return this.technicalField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
-        //return technicalField;
     }
 
     public void setTechnicalFields(Set<String> technicalFields) {

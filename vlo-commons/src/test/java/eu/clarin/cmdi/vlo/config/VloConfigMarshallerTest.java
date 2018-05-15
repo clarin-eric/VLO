@@ -59,7 +59,7 @@ public class VloConfigMarshallerTest {
 
         assertNotNull(config);
         assertEquals(testProps.getProperty("solrUrl"), config.getSolrUrl());
-        assertEquals(12, config.getFacetFields().size());
+        assertEquals(12, config.getFacetFieldsDiss().size());
 
         assertEquals(4, config.getAvailabilityValues().size());
         assertEquals("Public", config.getAvailabilityValues().get(0).getDisplayValue());
