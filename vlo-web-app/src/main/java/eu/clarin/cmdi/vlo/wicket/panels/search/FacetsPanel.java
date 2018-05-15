@@ -123,7 +123,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
                             //class appender that differentiates between primary and secondary facets (based on configuration)
                             @Override
                             public String getObject() {
-                                final Collection<String> primaryFacetFields = vloConfig.getPrimaryFacetFields();
+                                final Collection<String> primaryFacetFields = vloConfig.getPrimaryFacetFieldsDiss();
                                 if (primaryFacetFields == null || primaryFacetFields.isEmpty()) {
                                     //no primary facets configured, don't set a class
                                     return null;
