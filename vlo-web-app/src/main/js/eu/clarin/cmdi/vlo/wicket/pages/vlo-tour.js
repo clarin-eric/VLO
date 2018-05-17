@@ -196,7 +196,14 @@ function createTourSteps() {
             element: "#recordprevnext .btn:first",
             title: "Search results navigation",
             content: "Use these buttons to navigate to the previous or next item from the result results without having to go back to the list.",
-            placement: "auto bottom"
+            placement: "auto bottom",
+            onShow: function() {
+                $("#recordprevnext").on('click', '.btn', function(evt){
+                    //make sure tour is continued after navigation
+                    evt.preventDefault();
+                    window.location = evt.target.closest('a').getAttribute('href') + '#tour';
+                });
+            }
         }, {
             element: "#topnavigation",
             title: "&quot;Breadcrumbs&quot;",
