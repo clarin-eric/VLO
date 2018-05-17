@@ -15,6 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * VLO guided tour definition based on Bootstrap Tour
+ * <http://bootstraptour.com/>. Note that this was not designed to work on 
+ * mobile devices, so screen sizes 'md' and up only.
+ * 
+ */
+
 function createTour(restart, step) {
     var opts = {
         name: 'vlo-tour',
@@ -61,29 +68,6 @@ function typeValue(input, value) {
 }
 
 function createTourSteps() {
-
-    //  Steps from CLARIN-PLUS screencast (https://b2drop.eudat.eu/s/FrrnfN1refArxFy)
-    //  
-    //    * text search
-    //    * results
-    //    * facets ('categories')
-    //    * expand a few
-    //    * filter by language (e.g. estonian)
-    //        * one result remains
-    //    * search result
-    //        * expand for details
-    //        * availability laundry tags
-    //    * navigate to record page
-    //        * tabs
-    //        * original provider
-    //        * goes into repository
-    //        * back to VLO
-    //        * back to search results
-    //    * remove selection
-    //    * adapt search
-    //        * resource type
-    //    * help page    
-
     return [
         {
             element: "#search-form",
@@ -128,7 +112,7 @@ function createTourSteps() {
         }, {
             element: "#facets .facet:first",
             title: "Expand facet",
-            content: "Click the name of a facet to expand it and see the values found within the current search results. Try selecting one or more values and see how the result listing changes.",
+            content: "Click the name of a facet to expand it and see the values found within the current search results. Try <strong>selecting and unselecting</strong> a couple of values in one or more facets to see how this affects the list of results.",
             placement: "auto right",
             onShown: function () {
                 //expand facet
@@ -251,7 +235,9 @@ function initTourSearchPage() {
         if (window.location.hash === '#tour') {
             hideSimpleAndStart();
         } else {
-            $("#simple-jumbotron #learn-more").hide();
+            //hide 'learn more' (except on small screens)
+            $("#simple-jumbotron #learn-more").addClass('visible-xs-block');
+            //show 'take tour' (except on small screens)
             $("#simple-jumbotron #take-tour").removeClass('hidden');
             $("#simple-jumbotron #take-tour").click(function () {
                 hideSimpleAndStart();
