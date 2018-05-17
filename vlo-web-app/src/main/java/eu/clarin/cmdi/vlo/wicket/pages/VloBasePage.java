@@ -223,8 +223,9 @@ public class VloBasePage<T> extends GenericWebPage<T> {
                 .add(new AttributeModifier("class", "clarin-logo hidden-xs"));
 
         //add all menu compoennts
-        navbar.addComponents(new ImmutableNavbarComponent(new NavbarButton(FacetedSearchPage.class, Model.of("Search")), ComponentPosition.LEFT),
-                new ImmutableNavbarComponent(new NavbarButton(HelpPage.class, Model.of("Help")), ComponentPosition.LEFT),
+        navbar.addComponents(
+                new ImmutableNavbarComponent(new NavbarButton(FacetedSearchPage.class, Model.of("Search")).add(new AttributeModifier("class", "search-link")), ComponentPosition.LEFT),
+                new ImmutableNavbarComponent(new NavbarButton(HelpPage.class, Model.of("Help")).add(new AttributeModifier("class", "help-link")), ComponentPosition.LEFT),
                 new ImmutableNavbarComponent(clarinLink, ComponentPosition.RIGHT)
         );
         return navbar;

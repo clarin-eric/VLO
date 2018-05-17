@@ -131,7 +131,7 @@ function createTourSteps() {
             content: "Click the name of a facet to expand it and see the values found within the current search results. Try selecting one or more values and see how the result listing changes.",
             placement: "auto right",
             onShown: function () {
-                //expand
+                //expand facet
                 if ($('#facets .facet:first').hasClass('collapsedfacet')) {
                     $('#facets .facet.collapsedfacet:first a.expandable-panel-toggle').click();
                 }
@@ -150,7 +150,7 @@ function createTourSteps() {
             element: "#searchresultitems .searchresultitem:first h3 a",
             title: "Find out more",
             content: "Click the record title to find out everything about the described resources, including how to access the content. Press <strong>next</strong> to go to the record page for this result.",
-            placement: "auto top"
+            placement: "auto bottom"
         }, {
             element: ".record-tabpanel .nav-tabs li:last",
             title: "Record information",
@@ -214,9 +214,33 @@ function createTourSteps() {
         }, {
             element: "#topnavigation",
             title: "&quot;Breadcrumbs&quot;",
-            content: "These links seve as 'breadcrumbs' that show you where you are in your exploration and allow you to go back one or more levels .",
+            content: "The links in this bar serve as 'breadcrumbs' that show you where you are in your exploration and allow you to go back one or more levels .",
             placement: "auto bottom",
             path: RegExp(/.*\/record.*/i)
+        }, {
+            element: "#feedbacklink",
+            title: "Send feedback",
+            content: "Use the feedback button to send feedback regarding any record, search results or the VLO to the maintainers of the VLO and CLARIN's metadata infrastructure.",
+            placement: "auto bottom"
+        }, {
+            element: "#header .help-link",
+            title: "Help and documentation",
+            content: "You can always click the <em>Help</em> link in the header to learn about the VLO and how to use it. There you will also find contact information in case you have questions that you did not find answered on that page.",
+            placement: "auto bottom"
+        }, {
+            element: ".breadcrumbs-searchresults",
+            title: "Back to the search results",
+            content: "Click the link in the breadcrumbs bar to go back to your search results and continue exploring the VLO. The tour ends here. Thanks for your attention and interest in using the VLO!",
+            placement: "auto bottom", 
+            onShow: function(tour) {
+                $('.breadcrumbs-searchresults').one('click', function(evt) {
+                    evt.preventDefault();
+                    //stop tour
+                    tour.end();
+                    //replicate link action
+                    window.location = $(evt.target).closest('a').getAttribute('href');
+                });
+            }
         }
     ];
 
