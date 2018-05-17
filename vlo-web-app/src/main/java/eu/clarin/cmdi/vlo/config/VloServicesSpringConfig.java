@@ -152,19 +152,19 @@ public class VloServicesSpringConfig {
     @Bean(name = "basicPropertiesFilter")
     public FieldFilter basicPropertiesFieldFilter() {
         return new ExclusiveFieldFilter(Sets.union(
-                vloConfig.getIgnoredFieldsDiss(),
-                vloConfig.getTechnicalFieldsDiss()));
+                vloConfig.getIgnoredFieldNames(),
+                vloConfig.getTechnicalFieldNames()));
     }
 
     @Bean(name = "searchResultPropertiesFilter")
     public FieldFilter searchResultPropertiesFilter() {
-        return new InclusiveFieldFilter(vloConfig.getSearchResultFieldsDiss());
+        return new InclusiveFieldFilter(vloConfig.getSearchResultFieldNames());
     }
 
     @Bean(name = "technicalPropertiesFilter")
     public FieldFilter technicalPropertiesFieldFilter() {
         return new InclusiveFieldFilter(
-                vloConfig.getTechnicalFieldsDiss());
+                vloConfig.getTechnicalFieldNames());
     }
 
     @Bean

@@ -50,7 +50,7 @@ public class FacetValueCountsCollector implements VloStatisticsCollector {
         query.setRows(0);
         query.setFacet(true);
         
-        config.getFacetFieldsDiss().forEach((value) -> {
+        config.getFacetFieldNames().forEach((value) -> {
             query.addFacetField(value);
         });
         
