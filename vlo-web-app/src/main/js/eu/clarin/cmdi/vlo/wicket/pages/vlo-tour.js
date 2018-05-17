@@ -22,6 +22,8 @@
  * 
  */
 
+var TOUR_QUERY_EXAMPLE="speech corpus";
+
 function createTour(restart, step) {
     var opts = {
         name: 'vlo-tour',
@@ -82,14 +84,15 @@ function createTourSteps() {
             onShow: function () {
                 var searchInput = $('#search-form input.search-box')
                 if (searchInput.val() === '') {
-                    typeValue(searchInput, 'speech corpus');
+                    typeValue(searchInput, TOUR_QUERY_EXAMPLE);
                 }
             },
             onShown: function (tour) {
                 //listen to form submit - go to next if submitted
-                $('#search-form .search-button').one('click', function () {
+                $('#search-form .search-button').one('click.tour', function () {
+                    //store submitted state (to be checked on next step)
                     $('#search-form').data('tour-submitted', true);
-                    tour.goTo(2);
+                    tour.next();
                 });
             }
         }, {
@@ -99,7 +102,10 @@ function createTourSteps() {
             placement: "auto top",
             orphan: true,
             onShow: function () {
-                //submit search form if not submitted yet
+                //unregister any remaining event handles on form submit
+                $('#search-form .search-button').off('click.tour');
+                
+                //submit search form if not submitted yet (check stored data)
                 if (!$('#search-form').data('tour-submitted')) {
                     $('#search-form .search-button').click();
                 }
@@ -167,7 +173,6 @@ function createTourSteps() {
             title: "Availability tab",
             content: "Here you will find an indication of the known information regarding rights to using, accessing and/or distributing resources. Make sure to always check at the primary source before actually using or redistributing any of the resources!",
             placement: "auto top",
-            path: RegExp(/.*\/record.*/i),
             onShow: function () {
                 $(".tab2 a").click();
             }
@@ -176,7 +181,6 @@ function createTourSteps() {
             title: "&quot;All metadata&quot; tab",
             content: "Any available metadata that is not shown in the details can be found here.",
             placement: "auto top",
-            path: RegExp(/.*\/record.*/i),
             onShow: function () {
                 $(".tab3 a").click();
             }
@@ -185,7 +189,6 @@ function createTourSteps() {
             title: "&quot;Technical details&quot; tab",
             content: "Any available metadata that is not shown in the details can be found here.",
             placement: "auto top",
-            path: RegExp(/.*\/record.*/i),
             onShow: function () {
                 $(".tab4 a").click();
             }
@@ -193,14 +196,12 @@ function createTourSteps() {
             element: "#recordprevnext .btn:first",
             title: "Search results navigation",
             content: "Use these buttons to navigate to the previous or next item from the result results without having to go back to the list.",
-            placement: "auto bottom",
-            path: RegExp(/.*\/record.*/i)
+            placement: "auto bottom"
         }, {
             element: "#topnavigation",
             title: "&quot;Breadcrumbs&quot;",
             content: "The links in this bar serve as 'breadcrumbs' that show you where you are in your exploration and allow you to go back one or more levels .",
-            placement: "auto bottom",
-            path: RegExp(/.*\/record.*/i)
+            placement: "auto bottom"
         }, {
             element: "#feedbacklink",
             title: "Send feedback",
