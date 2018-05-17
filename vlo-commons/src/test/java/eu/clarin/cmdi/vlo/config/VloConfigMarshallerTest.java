@@ -59,7 +59,7 @@ public class VloConfigMarshallerTest {
 
         assertNotNull(config);
         assertEquals(testProps.getProperty("solrUrl"), config.getSolrUrl());
-        assertEquals(12, config.getFacetFieldsDiss().size());
+        assertEquals(12, config.getFacetFieldNames().size());
 
         assertEquals(4, config.getAvailabilityValues().size());
         assertEquals("Public", config.getAvailabilityValues().get(0).getDisplayValue());
@@ -73,7 +73,7 @@ public class VloConfigMarshallerTest {
         final VloConfig config = new VloConfig();
         config.setSolrUrl("http://server/solr");
         config.setDataRoots(Arrays.asList(new DataRoot("originName", new File("rootFile"), "prefix", "toStrip", Boolean.FALSE)));
-        config.setFacetFields(Arrays.asList("collection", "country", "continent"));
+        config.setFacetFieldKeys(Arrays.asList("collection", "country", "continent"));
         config.setAvailabilityValues(Arrays.asList(
                 new FieldValueDescriptor("PUB", "Public", "Description for public"),
                 new FieldValueDescriptor("ACA", "Academic", "Description for academic")
