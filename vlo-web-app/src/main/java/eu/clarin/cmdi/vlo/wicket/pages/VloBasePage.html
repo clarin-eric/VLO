@@ -27,10 +27,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <meta wicket:id="pageDescription" name="description" content="" />
         <meta name="msvalidate.01" content="5328C9E13F0CD2549D6E6F4218714CBC" />
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700,700i&amp;subset=latin-ext,vietnamese" rel="stylesheet">
-        <link rel="stylesheet" href="css/vlo.css" />
-        <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css" />
-        <link rel="icon" href="images/favicon.ico" type="image/x-icon"/> 
-        <link wicket:id="canonicalUrl" rel="canonical" />
+            <link rel="stylesheet" href="css/vlo.css" />
+            <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css" />
+            <link rel="icon" href="images/favicon.ico" type="image/x-icon"/> 
+            <link wicket:id="canonicalUrl" rel="canonical" />
     </head>
     <body>
         <header wicket:id="header" id="header" role="banner">
@@ -43,6 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </header>
 
         <div class="container">
+
             <div class="row">
                 <div wicket:id="feedback" id="feedback">[feedback]</div>
             </div>
@@ -50,6 +51,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <div class="row">
                 <!-- page content -->
                 <wicket:child />
+            </div>
+
+            <div id="user-rating" class="col-sm-4 hide-simple">
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <button type="button" class="close pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        How satisfied are you with the service provided on this web site?
+                    </div>
+                </div>
             </div>
         </div>
 
