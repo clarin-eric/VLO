@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo;
 
+import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAjaxRequestTargetListener;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
 import org.apache.wicket.request.resource.ContextRelativeResourceReference;
@@ -37,6 +38,7 @@ public final class JavaScriptResources {
     private final static JavaScriptResourceReference VLO_FACETS = new JavaScriptResourceReference(VloBasePage.class, "vlo-facets.js");
     private final static JavaScriptResourceReference SEARCH = new JavaScriptResourceReference(VloBasePage.class, "vlo-search.js");
     private final static JavaScriptResourceReference FIELDS_TABLE = new JavaScriptResourceReference(RecordPage.class, "vlo-fields-table.js");
+    private final static JavaScriptResourceReference HISTORY_API = new JavaScriptResourceReference(HistoryApiAjaxRequestTargetListener.class, "vlo-historyapi.js");
 
     private final static ResourceReference BOOTSTRAP_TOC = new ContextRelativeResourceReference("assets/bootstrap-toc/bootstrap-toc.js");
     private final static ResourceReference BOOTSTRAP_TOUR = new ContextRelativeResourceReference("assets/bootstrap-tour/bootstrap-tour.min.js");
@@ -51,6 +53,10 @@ public final class JavaScriptResources {
 
     public static JavaScriptResourceReference getVloHeaderJS() {
         return VLO_HEADER;
+    }
+
+    public static JavaScriptResourceReference getHistoryApiJS() {
+        return HISTORY_API;
     }
 
     public static JavaScriptResourceReference getVloFacetsJS() {

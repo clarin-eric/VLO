@@ -84,15 +84,16 @@ import eu.clarin.cmdi.vlo.JavaScriptResources;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
 
 /**
  *
  * @author twagoo
  */
-public class RecordPage extends VloBasePage<SolrDocument> {
+public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiAware {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     public final static String DETAILS_SECTION = "details";
@@ -409,6 +410,25 @@ public class RecordPage extends VloBasePage<SolrDocument> {
                 target.add(RecordPage.this.tabs);
             }
         }
+    }
+
+    @Override
+    public PageParameters getHistoryApiPageParameters() {
+        // Merge document params, selection params
+        final PageParameters params = documentParamConverter.toParameters(getModelObject())
+                .mergeWith(selectionParametersConverter.toParameters(selectionModel.getObject()));
+
+        // Add navigation params if present
+        if (navigationModel != null && navigationModel.getObject() != null) {
+            params.mergeWith(contextParamConverter.toParameters(navigationModel.getObject()));
+        }
+
+        // Add tab id if selected tab is not the default tab
+        if (tabs.getSelectedTab() > 0) {
+            params.add(VloWebAppParameters.RECORD_PAGE_TAB, TABS_ORDER.get(tabs.getSelectedTab()));
+        }
+
+        return params;
     }
 
     @Override

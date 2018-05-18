@@ -177,6 +177,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         response.render(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference()));
         // Include other JavaScript for header (e.g. permalink animation)
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloHeaderJS()));
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getHistoryApiJS()));
     }
 
     private void addComponents() {
