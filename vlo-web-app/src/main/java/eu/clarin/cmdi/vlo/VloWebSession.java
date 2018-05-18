@@ -20,6 +20,7 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import java.io.Serializable;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
+import org.apache.wicket.util.time.Time;
 
 /**
  *
@@ -29,8 +30,11 @@ public class VloWebSession extends WebSession {
 
     private static final String SELECTION_TYPE_ATTRIBUTE_NAME = "selectionType";
 
+    private final Time initTime;
+
     public VloWebSession(Request request) {
         super(request);
+        this.initTime = Time.now();
     }
 
     public static VloWebSession get() {
@@ -49,4 +53,9 @@ public class VloWebSession extends WebSession {
     public void setFacetSelectionTypeMode(FacetSelectionType value) {
         setAttribute(SELECTION_TYPE_ATTRIBUTE_NAME, value);
     }
+
+    public Time getInitTime() {
+        return initTime;
+    }
+
 }

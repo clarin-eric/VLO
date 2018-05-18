@@ -27,6 +27,7 @@ import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
+import eu.clarin.cmdi.vlo.wicket.panels.RatingPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
@@ -140,6 +141,8 @@ public class VloBasePage<T> extends GenericWebPage<T> {
             }
 
         });
+
+        add(new RatingPanel("rating"));
     }
 
     /**
