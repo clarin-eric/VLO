@@ -48,26 +48,55 @@ import org.slf4j.LoggerFactory;
  */
 public class RatingPanel extends Panel {
 
+    private enum RatingLevel {
+        VERY_DISSATISFIED("0", "sentiment_very_dissatisfied", "Very dissatisfied"),
+        DISSATISFIED("1", "sentiment_dissatisfied", "Dissatisfied"),
+        NEUTRAL("2", "sentiment_neutral", "Neutral"),
+        SATISFIED("3", "sentiment_satisfied", "Satisfied"),
+        VERY_SATISFIED("4", "sentiment_very_satisfied", "Very satisfied");
+
+        private final String value;
+        private final String icon;
+        private final String description;
+
+        private RatingLevel(String value, String icon, String description) {
+            this.value = value;
+            this.icon = icon;
+            this.description = description;
+        }
+
+        public String value() {
+            return value;
+        }
+
+        public String icon() {
+            return icon;
+        }
+
+        public String description() {
+            return description;
+        }
+
+    }
+
     public static final Logger logger = LoggerFactory.getLogger(RatingPanel.class);
 
     public final static Duration TIME_BEFORE_RATING_ASKED = Duration.seconds(5); //TODO: make configurable via VloConfig
 
     public final static String PANEL_DISMISSED_ATTRIBUTE = "RATING_PANEL_DISMISSED";
 
-    private IModel<String> selectedRatingModel = new Model<String>();
-    private IModel<String> commentModel = new Model<String>();
+    private IModel<RatingLevel> selectedRatingModel = new Model<>();
+    private IModel<String> commentModel = new Model<>();
 
     public RatingPanel(String id) {
         super(id);
 
         // add links for rating levels
         final RepeatingView ratingLinks = new RepeatingView("user-rating-link");
-        add(ratingLinks
-                .add(newRatingLink(ratingLinks.newChildId(), "0", "sentiment_very_dissatisfied", "Very dissatisfied"))
-                .add(newRatingLink(ratingLinks.newChildId(), "1", "sentiment_dissatisfied", "Dissatisfied"))
-                .add(newRatingLink(ratingLinks.newChildId(), "2", "sentiment_neutral", "Neutral"))
-                .add(newRatingLink(ratingLinks.newChildId(), "3", "sentiment_satisfied", "Satisfied"))
-                .add(newRatingLink(ratingLinks.newChildId(), "4", "sentiment_very_satisfied", "Very satisfied")));
+        for (RatingLevel ratingLevel : RatingLevel.values()) {
+            ratingLinks.add(newRatingLink(ratingLinks.newChildId(), ratingLevel));
+        }
+        add(ratingLinks);
 
         // form to submit (shown after rating selected) and optionally add motivation text
         add(createCommentSubmitForm("user-rating-form"));
@@ -86,21 +115,21 @@ public class RatingPanel extends Panel {
         // we need to be able to refresh this via Ajax
         setOutputMarkupId(true);
     }
-    
+
     /**
      * Creates the links for selecting a user satisfaction rating
-     * 
+     *
      * @param id link id
      * @param value value to store/submit
      * @param iconName name of material design icon to display
      * @param description textual description used for link title
-     * @return 
+     * @return
      */
-    private Component newRatingLink(String id, String value, String iconName, String description) {
+    private Component newRatingLink(String id, RatingLevel level) {
         final Link ratingLink = new AjaxFallbackLink(id) {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                selectedRatingModel.setObject(value);
+                selectedRatingModel.setObject(level);
                 if (target != null) {
                     target.add(RatingPanel.this);
                 }
@@ -121,7 +150,7 @@ public class RatingPanel extends Panel {
         final IModel<String> selectedClassModel = new AbstractReadOnlyModel<String>() {
             @Override
             public String getObject() {
-                if (value.equals((selectedRatingModel.getObject()))) {
+                if (level.equals((selectedRatingModel.getObject()))) {
                     return "user-rating-selected";
                 } else {
                     return null;
@@ -131,16 +160,16 @@ public class RatingPanel extends Panel {
 
         return ratingLink
                 //label determines icon (see material design icons)
-                .add(new Label("user-rating-link-icon", Model.of(iconName)))
+                .add(new Label("user-rating-link-icon", Model.of(level.icon())))
                 //title attribute provides tooltip with description
-                .add(new AttributeModifier("title", Model.of(description)))
+                .add(new AttributeModifier("title", Model.of(level.description())))
                 //apply selected rating class
                 .add(new AttributeAppender("class", selectedClassModel, " "));
     }
 
     private Form createCommentSubmitForm(String id) {
         final Form form = new Form(id);
-        
+
         // hide form until rating has been selectedÏ
         form.add(new Behavior() {
             @Override
@@ -149,7 +178,6 @@ public class RatingPanel extends Panel {
             }
 
         });
-
 
         // text area allowing user to input motivation for rating or other comment
         form.add(new TextArea<String>("user-rating-comment-input", commentModel));
@@ -175,7 +203,7 @@ public class RatingPanel extends Panel {
             }
 
         });
-        
+
         return form;
     }
 
