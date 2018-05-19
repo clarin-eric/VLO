@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.VloWebSession;
 import java.io.Serializable;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -27,6 +28,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.time.Time;
@@ -40,6 +43,8 @@ public class RatingPanel extends Panel {
     public final static Duration TIME_BEFORE_RATING_ASKED = Duration.seconds(5); //TODO: make configurable via VloConfig
 
     public final static String PANEL_DISMISSED_ATTRIBUTE = "RATING_PANEL_DISMISSED";
+
+    private IModel<String> selectedRatingModel = new Model<String>();
 
     public RatingPanel(String id) {
         super(id);
@@ -80,10 +85,23 @@ public class RatingPanel extends Panel {
                 }
             }
         };
-        
+
+        //model for appending class indicating selection IFF equal to selected value
+        final IModel<String> selectedClassModel = new AbstractReadOnlyModel<String>() {
+            @Override
+            public String getObject() {
+                if (value.equals((selectedRatingModel.getObject())))  {
+                    return "user-rating-selected";
+                } else {
+                    return null;
+                }
+            }
+        };
+
         return ratingLink
                 .add(new Label("user-rating-link-icon", Model.of(iconName)))
-                .add(new AttributeAppender("title", Model.of(description)));
+                .add(new AttributeModifier("title", Model.of(description)))
+                .add(new AttributeAppender("class", selectedClassModel, " "));
     }
 
     @Override
@@ -96,7 +114,7 @@ public class RatingPanel extends Panel {
     }
 
     private void submitRating(String value) {
-        //TODO
+        selectedRatingModel.setObject(value);
     }
 
     /**
