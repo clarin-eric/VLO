@@ -26,7 +26,6 @@ import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
-import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
@@ -61,44 +60,19 @@ public class RatingPanel extends Panel {
     public RatingPanel(String id) {
         super(id);
 
+        // add links for rating levels
         final RepeatingView ratingLinks = new RepeatingView("user-rating-link");
-        ratingLinks
+        add(ratingLinks
                 .add(newRatingLink(ratingLinks.newChildId(), "0", "sentiment_very_dissatisfied", "Very dissatisfied"))
                 .add(newRatingLink(ratingLinks.newChildId(), "1", "sentiment_dissatisfied", "Dissatisfied"))
                 .add(newRatingLink(ratingLinks.newChildId(), "2", "sentiment_neutral", "Neutral"))
                 .add(newRatingLink(ratingLinks.newChildId(), "3", "sentiment_satisfied", "Satisfied"))
-                .add(newRatingLink(ratingLinks.newChildId(), "4", "sentiment_very_satisfied", "Very satisfied"));
+                .add(newRatingLink(ratingLinks.newChildId(), "4", "sentiment_very_satisfied", "Very satisfied")));
 
-        add(ratingLinks);
+        // form to submit (shown after rating selected) and optionally add motivation text
+        add(createCommentSubmitForm("user-rating-form"));
 
-        final Form form = new Form("user-rating-form");
-        add(form
-                .add(new TextArea<String>("user-rating-comment-input", commentModel))
-                .add(new AjaxFallbackButton("user-rating-form-submit", form) {
-                    @Override
-                    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                        submitRating();
-                        if (target != null) {
-                            target.add(RatingPanel.this);
-                            //upon submission, show the 'thanks for your feedback' in place of the submit button
-                            target.prependJavaScript(
-                                    "cb|$('#user-rating-form-submit').slideUp();"
-                                            + "$('#user-rating-form-thank-you').removeClass('hidden').hide()" //re-hide because hidden class in bootstrap prevents showing
-                                            + ".slideDown(400, function(){" //slide down
-                                            + "  setTimeout(cb, 1000);" //show for a second before continuing
-                                            + "});");
-                        }
-                    }
-
-                })
-                .add(new Behavior() {
-                    @Override
-                    public void onConfigure(Component component) {
-                        component.setVisible(selectedRatingModel.getObject() != null);
-                    }
-
-                }));
-
+        // link to dismiss entire panel persistently
         add(new AjaxFallbackLink("dismiss") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -109,10 +83,20 @@ public class RatingPanel extends Panel {
             }
         });
 
+        // we need to be able to refresh this via Ajax
         setOutputMarkupId(true);
     }
-
-    public Component newRatingLink(String id, String value, String iconName, String description) {
+    
+    /**
+     * Creates the links for selecting a user satisfaction rating
+     * 
+     * @param id link id
+     * @param value value to store/submit
+     * @param iconName name of material design icon to display
+     * @param description textual description used for link title
+     * @return 
+     */
+    private Component newRatingLink(String id, String value, String iconName, String description) {
         final Link ratingLink = new AjaxFallbackLink(id) {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -146,12 +130,56 @@ public class RatingPanel extends Panel {
         };
 
         return ratingLink
+                //label determines icon (see material design icons)
                 .add(new Label("user-rating-link-icon", Model.of(iconName)))
+                //title attribute provides tooltip with description
                 .add(new AttributeModifier("title", Model.of(description)))
+                //apply selected rating class
                 .add(new AttributeAppender("class", selectedClassModel, " "));
     }
 
-    private void submitRating() {
+    private Form createCommentSubmitForm(String id) {
+        final Form form = new Form(id);
+        
+        // hide form until rating has been selectedÏ
+        form.add(new Behavior() {
+            @Override
+            public void onConfigure(Component component) {
+                component.setVisible(selectedRatingModel.getObject() != null);
+            }
+
+        });
+
+
+        // text area allowing user to input motivation for rating or other comment
+        form.add(new TextArea<String>("user-rating-comment-input", commentModel));
+
+        // submit button
+        form.add(new AjaxFallbackButton("user-rating-form-submit", form) {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                //submit logic
+                submit();
+
+                if (target != null) {
+                    // refresh whole panel
+                    target.add(RatingPanel.this);
+                    // upon submission, show the 'thanks for your feedback' in place of the submit button
+                    target.prependJavaScript(
+                            "cb|$('#user-rating-form-submit').slideUp();"
+                            + "$('#user-rating-form-thank-you').removeClass('hidden').hide()" //re-hide because hidden class in bootstrap prevents showing
+                            + ".slideDown(400, function(){" //slide down
+                            + "  setTimeout(cb, 1000);" //show for a second before continuing
+                            + "});");
+                }
+            }
+
+        });
+        
+        return form;
+    }
+
+    private void submit() {
         if (selectedRatingModel.getObject() == null) {
             logger.warn("Rating form submitted without rating selected!");
         } else {
