@@ -22,7 +22,9 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
@@ -39,28 +41,16 @@ public class RatingPanel extends Panel {
 
     public final static String PANEL_DISMISSED_ATTRIBUTE = "RATING_PANEL_DISMISSED";
 
-    public Component newRatingLink(String id, String value, String iconName) {
-        return (new AjaxFallbackLink(id) {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                submitRating(value);
-                if (target != null) {
-                    target.add(RatingPanel.this);
-                }
-            }
-        }).add(new Label("user-rating-link-icon", Model.of(iconName)));
-    }
-
     public RatingPanel(String id) {
         super(id);
 
         final RepeatingView ratingLinks = new RepeatingView("user-rating-link");
         ratingLinks
-                .add(newRatingLink(ratingLinks.newChildId(), "0", "sentiment_very_dissatisfied"))
-                .add(newRatingLink(ratingLinks.newChildId(), "1", "sentiment_dissatisfied"))
-                .add(newRatingLink(ratingLinks.newChildId(), "2", "sentiment_neutral"))
-                .add(newRatingLink(ratingLinks.newChildId(), "3", "sentiment_satisfied"))
-                .add(newRatingLink(ratingLinks.newChildId(), "4", "sentiment_very_satisfied"));
+                .add(newRatingLink(ratingLinks.newChildId(), "0", "sentiment_very_dissatisfied", "Very dissatisfied"))
+                .add(newRatingLink(ratingLinks.newChildId(), "1", "sentiment_dissatisfied", "Dissatisfied"))
+                .add(newRatingLink(ratingLinks.newChildId(), "2", "sentiment_neutral", "Neutral"))
+                .add(newRatingLink(ratingLinks.newChildId(), "3", "sentiment_satisfied", "Satisfied"))
+                .add(newRatingLink(ratingLinks.newChildId(), "4", "sentiment_very_satisfied", "Very satisfied"));
 
         add(ratingLinks);
 
@@ -78,6 +68,22 @@ public class RatingPanel extends Panel {
         //TODO: handler to send rating to back end
         //TODO: feedback form
         setOutputMarkupId(true);
+    }
+
+    public Component newRatingLink(String id, String value, String iconName, String description) {
+        final Link ratingLink = new AjaxFallbackLink(id) {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                submitRating(value);
+                if (target != null) {
+                    target.add(RatingPanel.this);
+                }
+            }
+        };
+        
+        return ratingLink
+                .add(new Label("user-rating-link-icon", Model.of(iconName)))
+                .add(new AttributeAppender("title", Model.of(description)));
     }
 
     @Override
