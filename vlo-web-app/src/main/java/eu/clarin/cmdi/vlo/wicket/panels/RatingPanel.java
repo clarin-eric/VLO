@@ -23,8 +23,12 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -33,6 +37,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.time.Time;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -40,11 +46,14 @@ import org.apache.wicket.util.time.Time;
  */
 public class RatingPanel extends Panel {
 
+    public static final Logger logger = LoggerFactory.getLogger(RatingPanel.class);
+
     public final static Duration TIME_BEFORE_RATING_ASKED = Duration.seconds(5); //TODO: make configurable via VloConfig
 
     public final static String PANEL_DISMISSED_ATTRIBUTE = "RATING_PANEL_DISMISSED";
 
     private IModel<String> selectedRatingModel = new Model<String>();
+    private IModel<String> commentModel = new Model<String>();
 
     public RatingPanel(String id) {
         super(id);
@@ -59,6 +68,24 @@ public class RatingPanel extends Panel {
 
         add(ratingLinks);
 
+        final Form form = new Form("user-rating-form");
+        add(form
+                .add(new TextArea<String>("user-rating-comment-input", commentModel))
+                .add(new AjaxFallbackButton("user-rating-form-submit", form) {
+                    @Override
+                    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                        submitRating();
+                    }
+
+                })
+                .add(new Behavior() {
+                    @Override
+                    public void onConfigure(Component component) {
+                        component.setVisible(selectedRatingModel.getObject() != null);
+                    }
+
+                }));
+
         add(new AjaxFallbackLink("dismiss") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -69,9 +96,6 @@ public class RatingPanel extends Panel {
             }
         });
 
-        //TODO: add buttons for submitting a rating
-        //TODO: handler to send rating to back end
-        //TODO: feedback form
         setOutputMarkupId(true);
     }
 
@@ -90,7 +114,7 @@ public class RatingPanel extends Panel {
         final IModel<String> selectedClassModel = new AbstractReadOnlyModel<String>() {
             @Override
             public String getObject() {
-                if (value.equals((selectedRatingModel.getObject())))  {
+                if (value.equals((selectedRatingModel.getObject()))) {
                     return "user-rating-selected";
                 } else {
                     return null;
@@ -102,6 +126,16 @@ public class RatingPanel extends Panel {
                 .add(new Label("user-rating-link-icon", Model.of(iconName)))
                 .add(new AttributeModifier("title", Model.of(description)))
                 .add(new AttributeAppender("class", selectedClassModel, " "));
+    }
+
+    private void submitRating() {
+        if (selectedRatingModel.getObject() == null) {
+            logger.warn("Rating form submitted without rating selected!");
+        } else {
+            logger.info("User rating submitted: {} - '{}'", selectedRatingModel.getObject(), commentModel.getObject());
+            //TODO: handler to send rating to back end
+            dismiss();
+        }
     }
 
     @Override
