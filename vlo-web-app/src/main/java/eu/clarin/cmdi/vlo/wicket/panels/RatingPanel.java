@@ -22,8 +22,11 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
+import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
@@ -75,6 +78,9 @@ public class RatingPanel extends Panel {
                     @Override
                     protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                         submitRating();
+                        if (target != null) {
+                            target.add(RatingPanel.this);
+                        }
                     }
 
                 })
@@ -103,12 +109,22 @@ public class RatingPanel extends Panel {
         final Link ratingLink = new AjaxFallbackLink(id) {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                submitRating(value);
+                selectedRatingModel.setObject(value);
                 if (target != null) {
                     target.add(RatingPanel.this);
                 }
             }
+
+            @Override
+            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                super.updateAjaxAttributes(attributes);
+                //before sending, set chosen value as selected
+                attributes.getAjaxCallListeners()
+                        .add(new AjaxCallListener().onBeforeSend("$('#'+attrs.c).addClass('user-rating-selected')"));
+            }
+
         };
+        ratingLink.setOutputMarkupId(true);
 
         //model for appending class indicating selection IFF equal to selected value
         final IModel<String> selectedClassModel = new AbstractReadOnlyModel<String>() {
@@ -145,10 +161,6 @@ public class RatingPanel extends Panel {
         //This panel should only be shown after a certain amount of time has
         //passed in the session and if not dismissed before
         setVisible(!isDismissed() && preRatingTimeHasLapsed());
-    }
-
-    private void submitRating(String value) {
-        selectedRatingModel.setObject(value);
     }
 
     /**
