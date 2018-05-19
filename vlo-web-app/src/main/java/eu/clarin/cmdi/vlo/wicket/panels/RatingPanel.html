@@ -28,7 +28,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="panel panel-info">
                     <div class="panel-body">
                         <a wicket:id="dismiss" class="close pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></a>
-                        How satisfied are you with the service provided on this web site?
+                        <p class="user-rating-question">
+                            How satisfied are you with the service provided on this web site?
+                        </p>
+                        <p class="user-rating-options">
+                            <a wicket:id="user-rating-link" class="user-rating-link">
+                                <i class="rating-icon material-icons"><span wicket:id="user-rating-link-icon"></span></i>
+                            </a>
+                        </p>
                     </div>
                 </div>
             </div>

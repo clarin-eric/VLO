@@ -83,4 +83,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     right: 0px;
     z-index: 100;
     opacity: .9;
+    
+    .user-rating-question {
+        font-weight: bold;
+    }
+
+    .user-rating-options {
+        text-align: center;
+    }
+
+    .user-rating-link {        
+        color: @text-color;
+
+        &:hover {
+            color: @link-hover-color;
+            text-decoration: none;
+        }
+
+        .rating-icon {
+            font-size: 36px;
+        }
+    }
 }
