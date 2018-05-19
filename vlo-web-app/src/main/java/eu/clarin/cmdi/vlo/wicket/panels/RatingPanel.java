@@ -80,6 +80,13 @@ public class RatingPanel extends Panel {
                         submitRating();
                         if (target != null) {
                             target.add(RatingPanel.this);
+                            //upon submission, show the 'thanks for your feedback' in place of the submit button
+                            target.prependJavaScript(
+                                    "cb|$('#user-rating-form-submit').slideUp();"
+                                            + "$('#user-rating-form-thank-you').removeClass('hidden').hide()" //re-hide because hidden class in bootstrap prevents showing
+                                            + ".slideDown(400, function(){" //slide down
+                                            + "  setTimeout(cb, 1000);" //show for a second before continuing
+                                            + "});");
                         }
                     }
 
@@ -120,7 +127,7 @@ public class RatingPanel extends Panel {
                 super.updateAjaxAttributes(attributes);
                 //before sending, set chosen value as selected
                 attributes.getAjaxCallListeners()
-                        .add(new AjaxCallListener().onBeforeSend("$('#'+attrs.c).addClass('user-rating-selected')"));
+                        .add(new AjaxCallListener().onBeforeSend("$('#'+attrs.c).addClass('user-rating-selected');"));
             }
 
         };
