@@ -37,6 +37,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.time.Time;
 import org.slf4j.Logger;
@@ -65,15 +66,15 @@ public class RatingPanel extends Panel {
             this.description = description;
         }
 
-        public String value() {
+        public String getValue() {
             return value;
         }
 
-        public String icon() {
+        public String getIcon() {
             return icon;
         }
 
-        public String description() {
+        public String getDescription() {
             return description;
         }
 
@@ -100,6 +101,16 @@ public class RatingPanel extends Panel {
 
         // form to submit (shown after rating selected) and optionally add motivation text
         add(createCommentSubmitForm("user-rating-form"));
+
+        add(new Label("user-rating-selection", new PropertyModel<String>(selectedRatingModel, "description"))
+                .add(new Behavior() {
+                    @Override
+                    public void onConfigure(Component component) {
+                        component.setVisible(selectedRatingModel.getObject() != null);
+                    }
+
+                })
+        );
 
         // link to dismiss entire panel persistently
         add(new AjaxFallbackLink("dismiss") {
@@ -160,9 +171,9 @@ public class RatingPanel extends Panel {
 
         return ratingLink
                 //label determines icon (see material design icons)
-                .add(new Label("user-rating-link-icon", Model.of(level.icon())))
+                .add(new Label("user-rating-link-icon", Model.of(level.getIcon())))
                 //title attribute provides tooltip with description
-                .add(new AttributeModifier("title", Model.of(level.description())))
+                .add(new AttributeModifier("title", Model.of(level.getDescription())))
                 //apply selected rating class
                 .add(new AttributeAppender("class", selectedClassModel, " "));
     }
