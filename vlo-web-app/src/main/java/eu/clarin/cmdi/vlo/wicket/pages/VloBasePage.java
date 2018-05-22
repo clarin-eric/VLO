@@ -71,6 +71,8 @@ public class VloBasePage<T> extends GenericWebPage<T> {
     @SpringBean
     private PiwikConfig piwikConfig;
 
+    private RatingPanel ratingPanel;
+
     public VloBasePage() {
         addComponents();
     }
@@ -142,7 +144,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
         });
 
-        add(new RatingPanel("rating"));
+        add(ratingPanel = new RatingPanel("rating"));
     }
 
     /**
@@ -233,6 +235,10 @@ public class VloBasePage<T> extends GenericWebPage<T> {
                 new ImmutableNavbarComponent(clarinLink, ComponentPosition.RIGHT)
         );
         return navbar;
+    }
+
+    protected final RatingPanel getRatingPanel() {
+        return ratingPanel;
     }
 
 }
