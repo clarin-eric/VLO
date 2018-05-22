@@ -28,6 +28,7 @@ import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -92,17 +93,29 @@ public class RatingPanel extends Panel {
     public RatingPanel(String id) {
         super(id);
 
+        final WebMarkupContainer ratingPanel = new WebMarkupContainer("user-rating-panel");
+        ratingPanel.add(new Behavior() {
+            @Override
+            public void onConfigure(Component component) {
+                //This panel should only be shown after a certain amount of time has
+                //passed in the session and if not dismissed before
+                component.setVisible(!isDismissed() && preRatingTimeHasLapsed());
+            }
+
+        });
+        add(ratingPanel);
+
         // add links for rating levels
         final RepeatingView ratingLinks = new RepeatingView("user-rating-link");
         for (RatingLevel ratingLevel : RatingLevel.values()) {
             ratingLinks.add(newRatingLink(ratingLinks.newChildId(), ratingLevel));
         }
-        add(ratingLinks);
+        ratingPanel.add(ratingLinks);
 
         // form to submit (shown after rating selected) and optionally add motivation text
-        add(createCommentSubmitForm("user-rating-form"));
+        ratingPanel.add(createCommentSubmitForm("user-rating-form"));
 
-        add(new Label("user-rating-selection", new PropertyModel<String>(selectedRatingModel, "description"))
+        ratingPanel.add(new Label("user-rating-selection", new PropertyModel<String>(selectedRatingModel, "description"))
                 .add(new Behavior() {
                     @Override
                     public void onConfigure(Component component) {
@@ -113,7 +126,7 @@ public class RatingPanel extends Panel {
         );
 
         // link to dismiss entire panel persistently
-        add(new AjaxFallbackLink("dismiss") {
+        ratingPanel.add(new AjaxFallbackLink("dismiss") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 dismiss();
@@ -191,7 +204,7 @@ public class RatingPanel extends Panel {
         });
 
         // text area allowing user to input motivation for rating or other comment
-        form.add(new TextArea<String>("user-rating-comment-input", commentModel));
+        form.add(new TextArea<>("user-rating-comment-input", commentModel));
 
         // submit button
         form.add(new AjaxFallbackButton("user-rating-form-submit", form) {
@@ -204,11 +217,12 @@ public class RatingPanel extends Panel {
                     // refresh whole panel
                     target.add(RatingPanel.this);
                     // upon submission, show the 'thanks for your feedback' in place of the submit button
-                    target.prependJavaScript(
-                            "cb|$('#user-rating-form-submit').slideUp();"
-                            + "$('#user-rating-form-thank-you').removeClass('hidden').hide()" //re-hide because hidden class in bootstrap prevents showing
-                            + ".slideDown(400, function(){" //slide down
-                            + "  setTimeout(cb, 1000);" //show for a second before continuing
+                    target.appendJavaScript(
+                            "$('.user-rating-thankyou')"
+                            + ".removeClass('hidden').hide().fadeIn()"
+                            // also add handler for dismiss link
+                            + ".on('click', '.close', function() {"
+                            + "    $('.user-rating-thankyou').fadeOut();"
                             + "});");
                 }
             }
@@ -226,15 +240,6 @@ public class RatingPanel extends Panel {
             //TODO: handler to send rating to back end
             dismiss();
         }
-    }
-
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-
-        //This panel should only be shown after a certain amount of time has
-        //passed in the session and if not dismissed before
-        setVisible(!isDismissed() && preRatingTimeHasLapsed());
     }
 
     /**

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <wicket:panel>
 
             <div id="user-rating" class="col-sm-4 hide-simple">
-                <div class="panel panel-info">
+                <div wicket:id="user-rating-panel" class="panel panel-info">
                     <div class="panel-body">
                         <a wicket:id="dismiss" class="close pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></a>
                         <p class="user-rating-question">
@@ -49,9 +49,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             </div>
                             <button wicket:id="user-rating-form-submit" id="user-rating-form-submit" type="submit" class="btn btn-default">Submit</button>
                         </form>
-                        <div id="user-rating-form-thank-you" class="hidden">
-                            Thanks for your feedback!
-                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-info user-rating-thankyou hidden">
+                    <div class="panel-body">
+                        <a class="close pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+                        Thanks for your feedback!
                     </div>
                 </div>
             </div>
