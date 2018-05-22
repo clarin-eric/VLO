@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import eu.clarin.cmdi.vlo.wicket.model.RatingLevel;
 import eu.clarin.cmdi.vlo.VloWebSession;
 import java.io.Serializable;
 import org.apache.wicket.AttributeModifier;
@@ -45,41 +46,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Panel for eliciting user satisfaction ratings. Has logic for delayed
+ * display (relative to session initiation) and persisted dismissal (within
+ * and across sessions). Designed to work with and without javascript.
  *
+ * @see RatingLevel
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class RatingPanel extends Panel {
-
-    private enum RatingLevel {
-        VERY_DISSATISFIED("0", "sentiment_very_dissatisfied", "Very dissatisfied"),
-        DISSATISFIED("1", "sentiment_dissatisfied", "Dissatisfied"),
-        NEUTRAL("2", "sentiment_neutral", "Neutral"),
-        SATISFIED("3", "sentiment_satisfied", "Satisfied"),
-        VERY_SATISFIED("4", "sentiment_very_satisfied", "Very satisfied");
-
-        private final String value;
-        private final String icon;
-        private final String description;
-
-        private RatingLevel(String value, String icon, String description) {
-            this.value = value;
-            this.icon = icon;
-            this.description = description;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public String getIcon() {
-            return icon;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-    }
 
     public static final Logger logger = LoggerFactory.getLogger(RatingPanel.class);
 
@@ -87,46 +61,38 @@ public class RatingPanel extends Panel {
 
     public final static String PANEL_DISMISSED_ATTRIBUTE = "RATING_PANEL_DISMISSED";
 
-    private IModel<RatingLevel> selectedRatingModel = new Model<>();
-    private IModel<String> commentModel = new Model<>();
+    private final IModel<RatingLevel> selectedRatingModel = new Model<>();
+    private final IModel<String> commentModel = new Model<>();
 
     public RatingPanel(String id) {
         super(id);
 
         final WebMarkupContainer ratingPanel = new WebMarkupContainer("user-rating-panel");
+        //The panel should only be shown after a certain amount of time has 
+        //passed in the session and if not dismissed before
         ratingPanel.add(new Behavior() {
             @Override
             public void onConfigure(Component component) {
-                //This panel should only be shown after a certain amount of time has
-                //passed in the session and if not dismissed before
                 component.setVisible(!isDismissed() && preRatingTimeHasLapsed());
             }
 
         });
-        add(ratingPanel);
 
-        // add links for rating levels
-        final RepeatingView ratingLinks = new RepeatingView("user-rating-link");
-        for (RatingLevel ratingLevel : RatingLevel.values()) {
-            ratingLinks.add(newRatingLink(ratingLinks.newChildId(), ratingLevel));
-        }
-        ratingPanel.add(ratingLinks);
+        add(ratingPanel
+                // link to dismiss entire panel persistently
+                .add(createDismissButton("dismiss"))
+                // add links for rating levels
+                .add(createRatingLinks("user-rating-link"))
+                // form to submit (shown after rating selected) and optionally add motivation text
+                .add(createCommentSubmitForm("user-rating-form"))
+                .add(createCurrentSelectionLabel("user-rating-selection")));
 
-        // form to submit (shown after rating selected) and optionally add motivation text
-        ratingPanel.add(createCommentSubmitForm("user-rating-form"));
+        // we need to be able to refresh this via Ajax
+        setOutputMarkupId(true);
+    }
 
-        ratingPanel.add(new Label("user-rating-selection", new PropertyModel<String>(selectedRatingModel, "description"))
-                .add(new Behavior() {
-                    @Override
-                    public void onConfigure(Component component) {
-                        component.setVisible(selectedRatingModel.getObject() != null);
-                    }
-
-                })
-        );
-
-        // link to dismiss entire panel persistently
-        ratingPanel.add(new AjaxFallbackLink("dismiss") {
+    private Component createDismissButton(String id) {
+        return (new AjaxFallbackLink(id) {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 dismiss();
@@ -134,10 +100,22 @@ public class RatingPanel extends Panel {
                     target.add(RatingPanel.this);
                 }
             }
-        });
+        }).add(new Behavior() {
+            @Override
+            public void onConfigure(Component component) {
+                // hide once a selection has been made
+                component.setVisible(selectedRatingModel.getObject() == null);
+            }
 
-        // we need to be able to refresh this via Ajax
-        setOutputMarkupId(true);
+        });
+    }
+
+    private RepeatingView createRatingLinks(String id) {
+        final RepeatingView ratingLinks = new RepeatingView(id);
+        for (RatingLevel ratingLevel : RatingLevel.values()) {
+            ratingLinks.add(newRatingLink(ratingLinks.newChildId(), ratingLevel));
+        }
+        return ratingLinks;
     }
 
     /**
@@ -189,6 +167,18 @@ public class RatingPanel extends Panel {
                 .add(new AttributeModifier("title", Model.of(level.getDescription())))
                 //apply selected rating class
                 .add(new AttributeAppender("class", selectedClassModel, " "));
+    }
+
+    private Component createCurrentSelectionLabel(String id) {
+        return new Label(id, new PropertyModel<String>(selectedRatingModel, "description"))
+                .add(new Behavior() {
+                    @Override
+                    public void onConfigure(Component component) {
+                        //hide until a selection has been made
+                        component.setVisible(selectedRatingModel.getObject() != null);
+                    }
+
+                });
     }
 
     private Form createCommentSubmitForm(String id) {
