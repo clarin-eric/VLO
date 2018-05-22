@@ -46,9 +46,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Panel for eliciting user satisfaction ratings. Has logic for delayed
- * display (relative to session initiation) and persisted dismissal (within
- * and across sessions). Designed to work with and without javascript.
+ * Panel for eliciting user satisfaction ratings. Has logic for delayed display
+ * (relative to session initiation) and persisted dismissal (within and across
+ * sessions). Designed to work with and without javascript.
  *
  * @see RatingLevel
  * @author Twan Goosen <twan@clarin.eu>
@@ -214,6 +214,18 @@ public class RatingPanel extends Panel {
                             + ".on('click', '.close', function() {"
                             + "    $('.user-rating-thankyou').fadeOut();"
                             + "});");
+                }
+            }
+
+        });
+
+        form.add(new AjaxFallbackLink("user-rating-form-cancel") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                selectedRatingModel.setObject(null);
+                commentModel.setObject(null);
+                if (target != null) {
+                    target.add(RatingPanel.this);
                 }
             }
 
