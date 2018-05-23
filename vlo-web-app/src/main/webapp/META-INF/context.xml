@@ -39,4 +39,23 @@
         description="defaults to '*.vlo.clarin.eu'"
         value="*.vlo.clarin.eu"/>
     -->
+    
+   <!-- Rating configuration, including connection to CouchDB backend -->
+   <!--    
+    <Parameter 
+        name="eu.clarin.cmdi.vlo.rating.enabled" 
+        value="false"/>  
+        
+    <Parameter 
+        name="eu.clarin.cmdi.vlo.rating.couchdb.url" 
+        value="http://localhost:5984/ratings"/>  
+        
+    <Parameter 
+        name="eu.clarin.cmdi.vlo.rating.couchdb.user" 
+        value="vlo"/>             
+        
+    <Parameter 
+        name="eu.clarin.cmdi.vlo.rating.couchdb.password" 
+        value="olv"/>     
+    -->
 </Context>

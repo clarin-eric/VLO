@@ -199,8 +199,16 @@ public class VloServicesSpringConfig {
     }
 
     @Bean
+    public RatingConfig ratingConfig() {
+        return new RatingConfig();
+    }
+
+    @Bean
     public RatingStore ratingStore() {
-        return new CouchDbRatingStore("http://localhost:5984/ratings", "vlo", "olv"); //TODO: configurable
+        return new CouchDbRatingStore(
+                ratingConfig().getCouchDbBaseUrl(),
+                ratingConfig().getCouchDbUser(),
+                ratingConfig().getCouchDbPassword());
     }
 
 }

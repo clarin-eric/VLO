@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
+import com.google.common.base.Strings;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
@@ -37,9 +38,9 @@ public class CouchDbRatingStore implements RatingStore {
 
     public static final Logger logger = LoggerFactory.getLogger(CouchDbRatingStore.class);
 
-    private final String ratingsBaseUri;// = "http://localhost:5984/ratings";
-    private final String userName;// = "vlo";
-    private final String password;// = "olv";
+    private final String ratingsBaseUri;
+    private final String userName;
+    private final String password;
 
     public CouchDbRatingStore(String ratingsBaseUri, String userName, String password) {
         this.ratingsBaseUri = ratingsBaseUri;
@@ -49,9 +50,13 @@ public class CouchDbRatingStore implements RatingStore {
 
     @Override
     public void storeRating(RatingLevel rating, String comment) throws VloWebAppException {
-        final long now = System.currentTimeMillis();
-        logger.debug("Storing rating and comment: '{}', '{}', '{}'", now, rating.getDescription(), comment);
-        store(now, rating, comment);
+        if (Strings.isNullOrEmpty(ratingsBaseUri)) {
+            throw new VloWebAppException("CouchDB rating store not configured (base URL not set)");
+        } else {
+            final long now = System.currentTimeMillis();
+            logger.debug("Storing rating and comment: '{}', '{}', '{}'", now, rating.getDescription(), comment);
+            store(now, rating, comment);
+        }
     }
 
     private void store(long now, RatingLevel rating, String comment) throws VloWebAppException {
