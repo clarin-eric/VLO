@@ -33,6 +33,7 @@ import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
+import eu.clarin.cmdi.vlo.service.impl.CouchDbRatingStore;
 import eu.clarin.cmdi.vlo.service.impl.DocumentParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
 import eu.clarin.cmdi.vlo.service.impl.FacetDescriptionServiceImpl;
@@ -199,7 +200,7 @@ public class VloServicesSpringConfig {
 
     @Bean
     public RatingStore ratingStore() {
-        return new RethinkRatingStore(vloConfig);
+        return new CouchDbRatingStore("http://localhost:5984/ratings", "vlo", "olv"); //TODO: configurable
     }
 
 }
