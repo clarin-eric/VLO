@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 import eu.clarin.cmdi.vlo.wicket.model.RatingLevel;
 import eu.clarin.cmdi.vlo.VloWebSession;
 import java.io.Serializable;
+import javax.servlet.http.Cookie;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
@@ -40,6 +41,8 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.cookies.CookieDefaults;
+import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.time.Time;
 import org.slf4j.Logger;
@@ -59,7 +62,18 @@ public class RatingPanel extends Panel {
 
     public final static Duration TIME_BEFORE_RATING_ASKED = Duration.seconds(5); //TODO: make configurable via VloConfig
 
-    public final static String PANEL_DISMISSED_ATTRIBUTE = "RATING_PANEL_DISMISSED";
+    public final static String PANEL_DISMISSED_ATTRIBUTE = "VLO_RATING_PANEL_DISMISSED";
+    public final static String PANEL_DISMISSED_COOKIE = "VLO_RATING_PANEL_DISMISSED";
+    /**
+     * Maximum of age of cookie that keeps panel from appearing on dismissal
+     * without submitting a rating
+     */
+    public final static Duration COOKIE_MAX_AGE_DISMISS = Duration.days(7);
+    /**
+     * Maximum of age of cookie that keeps panel from appearing after submitting
+     * a rating
+     */
+    public final static Duration COOKIE_MAX_AGE_SUBMIT = Duration.days(30);
 
     private final IModel<RatingLevel> selectedRatingModel = new Model<>();
     private final IModel<String> commentModel = new Model<>();
@@ -95,7 +109,7 @@ public class RatingPanel extends Panel {
         return (new AjaxFallbackLink(id) {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                dismiss();
+                dismiss(COOKIE_MAX_AGE_DISMISS);
                 if (target != null) {
                     target.add(RatingPanel.this);
                 }
@@ -240,7 +254,7 @@ public class RatingPanel extends Panel {
         } else {
             logger.info("User rating submitted: {} - '{}'", selectedRatingModel.getObject(), commentModel.getObject());
             //TODO: handler to send rating to back end
-            dismiss();
+            dismiss(COOKIE_MAX_AGE_SUBMIT);
         }
     }
 
@@ -252,21 +266,25 @@ public class RatingPanel extends Panel {
     private boolean isDismissed() {
         //Check if dismissed in session
         final Session session = Session.get();
-        final Serializable dismissedAttribute = (session == null) ? null : session.getAttribute(PANEL_DISMISSED_ATTRIBUTE);
+        final Serializable dismissedSessionAttribute = (session == null) ? null : session.getAttribute(PANEL_DISMISSED_ATTRIBUTE);
 
-        if (dismissedAttribute != null) {
-            return Boolean.TRUE.equals(dismissedAttribute);
-        } else {//TODO: else check cookie
-            return false;
+        if (dismissedSessionAttribute != null) {
+            //dismissed state was stored in session
+            return Boolean.TRUE.equals(dismissedSessionAttribute);
+        } else {
+            //has a cookie been set?
+            return isDismissedCookie();
         }
     }
 
     /**
      * dismisses the panel for the time being
      */
-    private void dismiss() {
+    private void dismiss(Duration maxCookieAge) {
+        //set session param
         Session.get().setAttribute(PANEL_DISMISSED_ATTRIBUTE, Boolean.TRUE);
-        //TODO: also set cookie (for a month or so)
+        //set cookie
+        setDismissedCookie(true, maxCookieAge);
     }
 
     /**
@@ -276,6 +294,31 @@ public class RatingPanel extends Panel {
     private boolean preRatingTimeHasLapsed() {
         final VloWebSession session = VloWebSession.get();
         return (session != null && Time.now().after(session.getInitTime().add(TIME_BEFORE_RATING_ASKED)));
+    }
+
+    private boolean isDismissedCookie() {
+        return Boolean.valueOf(getCookie(PANEL_DISMISSED_COOKIE));
+    }
+
+    private void setDismissedCookie(boolean value, Duration maxAge) {
+        setCookie(PANEL_DISMISSED_COOKIE, Boolean.toString(value), maxAge);
+    }
+
+    private String getCookie(String key) {
+        final Cookie cookie = new CookieUtils().getCookie(key);
+        if (cookie != null) {
+            return cookie.getValue();
+        } else {
+            return null;
+        }
+    }
+
+    private void setCookie(String key, String value, Duration maxAge) {
+        final CookieDefaults cookieDefaults = new CookieDefaults();
+        //maximum age of the cookie to be set in seconds
+        cookieDefaults.setMaxAge((int) (maxAge.getMilliseconds() / 1000));
+        //save cookie
+        new CookieUtils(cookieDefaults).save(key, value);
     }
 
 }
