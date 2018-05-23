@@ -30,11 +30,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
+@Ignore("This will only work with an instance of CouchDB available")
 public class CouchDbRatingStoreTest {
 
     private final String ratingsBaseUri = "http://localhost:5984/ratings";
