@@ -28,6 +28,7 @@ import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.FieldValueOrderingsFactory;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.PermalinkService;
+import eu.clarin.cmdi.vlo.service.RatingStore;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.service.UriResolver;
@@ -42,6 +43,7 @@ import eu.clarin.cmdi.vlo.service.impl.PermalinkServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.QueryFacetsSelectionParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ResourceStringConverterImpl;
 import eu.clarin.cmdi.vlo.service.impl.ResourceTypeCountingServiceImpl;
+import eu.clarin.cmdi.vlo.service.impl.RethinkRatingStore;
 import eu.clarin.cmdi.vlo.service.impl.SearchContextParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.UriResolverImpl;
 import eu.clarin.cmdi.vlo.service.impl.XmlTransformationServiceImpl;
@@ -78,10 +80,9 @@ public class VloServicesSpringConfig {
 
     @Inject
     VloConfig vloConfig;
-    
+
     @Inject
     FieldNameService fieldNameService;
-    
 
     @Bean
     public ResourceTypeCountingService resourceTypeCountingService() {
@@ -196,5 +197,9 @@ public class VloServicesSpringConfig {
         return new PiwikConfig();
     }
 
+    @Bean
+    public RatingStore ratingStore() {
+        return new RethinkRatingStore(vloConfig);
+    }
 
 }

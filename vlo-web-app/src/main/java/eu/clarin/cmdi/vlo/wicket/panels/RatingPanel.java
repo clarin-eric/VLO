@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.wicket.model.RatingLevel;
 import eu.clarin.cmdi.vlo.VloWebSession;
+import eu.clarin.cmdi.vlo.service.RatingStore;
 import java.io.Serializable;
 import javax.servlet.http.Cookie;
 import org.apache.wicket.AttributeModifier;
@@ -41,6 +42,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.cookies.CookieDefaults;
 import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.util.time.Duration;
@@ -74,6 +76,9 @@ public class RatingPanel extends Panel {
      * a rating
      */
     public final static Duration COOKIE_MAX_AGE_SUBMIT = Duration.days(30);
+
+    @SpringBean
+    private RatingStore ratingStore;
 
     private final IModel<RatingLevel> selectedRatingModel = new Model<>();
     private final IModel<String> commentModel = new Model<>();
@@ -253,7 +258,12 @@ public class RatingPanel extends Panel {
             logger.warn("Rating form submitted without rating selected!");
         } else {
             logger.info("User rating submitted: {} - '{}'", selectedRatingModel.getObject(), commentModel.getObject());
-            //TODO: handler to send rating to back end
+            
+            //send rating to store
+            ratingStore.storeRating(selectedRatingModel.getObject(), commentModel.getObject());
+            logger.debug("User rating stored");
+            
+            //dismiss panel
             dismiss(COOKIE_MAX_AGE_SUBMIT);
         }
     }
