@@ -1,260 +1,261 @@
-<VloConfig>
-    
-    <deleteAllFirst>${vloconfig.deleteAllFirst}</deleteAllFirst>
-    
-    <maxDaysInSolr>${vloconfig.maxDaysInSolr}</maxDaysInSolr>
-    
-    <solrUrl>${vloconfig.solrUrl}</solrUrl>
-    
-    <homeUrl>${vloconfig.homeUrl}</homeUrl>
-    
-    <helpUrl>${vloconfig.helpUrl}</helpUrl>
-    
-    <xi:include href="${vloconfig.dataRootsFile}" xmlns:xi="http://www.w3.org/2001/XInclude"></xi:include>
-    
-    <fileProcessingThreads>${vloconfig.fileProcessingThreads}</fileProcessingThreads>
-    
-    <solrThreads>${vloconfig.solrThreads}</solrThreads>
-    
-    <!-- Wicket: the maximum number of page instances which will be stored in the application scoped second level cache for faster retrieval -->
-    <pagesInApplicationCache>40</pagesInApplicationCache>
-    
-    <!-- Wicket: the maximum size (in KILOBYTES) of the File where page instances per session are stored. -->
-    <sessionCacheSize>10000</sessionCacheSize>
-   
-    <maxDocsInList>1024</maxDocsInList>
-    
-    <minDocsInSolrQueue>1024</minDocsInSolrQueue>
-    
-    <solrTimeOut>300</solrTimeOut>
-    
-    <!-- Max record file size to accept in bytes -->
-    <maxFileSize>50000000</maxFileSize>
-    
-    <useHandleResolver>false</useHandleResolver>
-    
-    <printMapping>false</printMapping>
-    
-    <!-- leave empty to use default packaged definition -->
-    <facetConceptsFile>${vloconfig.facetConceptsFileLocation}</facetConceptsFile>
-    
-    <profileSchemaUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/{PROFILE_ID}/xsd</profileSchemaUrl>
-    
-    <componentRegistryRESTURL>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/</componentRegistryRESTURL>
-    
-    <handleServerUrl>http://hdl.handle.net/</handleServerUrl>
-    
-    <conceptRegistryUrl>https://concepts.clarin.eu/ccr/api/find-concepts</conceptRegistryUrl>
-    
-    <vocabularyRegistryUrl>http://clavas.clarin.eu/clavas/public/api/find-concepts</vocabularyRegistryUrl>
-    
-    <!-- 
-        Mapping file locations.
-        These can be an absolute URL, absolute file path or packaged resource location.
-        Evaluated in the this order.
-    -->
-    
-    <organisationNamesUrl>${vloconfig.mappingFilesLocation}OrganisationControlledVocabulary.xml</organisationNamesUrl> <!-- bundled resource: /uniform-maps/OrganisationControlledVocabulary.xml -->
-    
-    <languageNameVariantsUrl>${vloconfig.mappingFilesLocation}LanguageNameVariantsMap.xml</languageNameVariantsUrl> <!-- bundled resource: /uniform-maps/LanguageNameVariantsMap.xml -->
-    
-    <licenseAvailabilityMapUrl>${vloconfig.mappingFilesLocation}LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl> <!-- bundled resource: /uniform-maps/LicenseAvailabilityMap.xml -->
-    
-    <licenseURIMapUrl>${vloconfig.mappingFilesLocation}LicenseURIMap.xml</licenseURIMapUrl> <!-- bundled resource: /uniform-maps/LicenseURIMap.xml -->
+﻿<VloConfig>
 
-    <licenseTypeMapUrl>${vloconfig.mappingFilesLocation}LicenseTypeMap.xml</licenseTypeMapUrl> <!-- bundled resource: /uniform-maps/LicenseAvailabilityMap.xml -->
-    
-    <valueMappingsFile>${vloconfig.valueMappingFile}</valueMappingsFile> <!-- bundled resource: ??? -->
-    
-	  <fields>
-		  <field key="NAME">name</field>
-		  <field key="DESCRIPTION">description</field>
-		  <field key="COLLECTION">collection</field>
-        <field key="LANGUAGE_CODE">languageCode</field>
-        <field key="MODALITY">modality</field>
-        <field key="CONTINENT">continent</field>
-        <field key="COUNTRY">country</field>
-        <field key="GENRE">genre</field>
-        <field key="SUBJECT">subject</field>
-        <field key="ORGANISATION">organisation</field>
-        <field key="LICENSE">license</field>
-        <field key="LICENSE_TYPE">licenseType</field>
-        <field key="AVAILABILITY">availability</field>
-        <field key="ACCESS_INFO">accessInfo</field>
-        <field key="KEYWORDS">keywords</field>
-        <field key="NATIONAL_PROJECT">nationalProject</field>
-        <field key="RESOURCE_CLASS">resourceClass</field>
-        <field key="RESOURCE">_resourceRef</field>
-        <field key="SELF_LINK">_selfLink</field>
-        <field key="ID">id</field>
-        <field key="DATA_PROVIDER">dataProvider</field>
-        <field key="DATA_PROVIDER_NAME">dataProviderName</field>
-        <field key="FILENAME">_fileName</field>
-        <field key="FORMAT">format</field>
-        <field key="LANDINGPAGE">_landingPageRef</field>
-        <field key="SEARCHPAGE">_searchPageRef</field>
-        <field key="SEARCH_SERVICE">_contentSearchRef</field>
-        <field key="LAST_SEEN">_lastSeen</field>
-        <field key="CLARIN_PROFILE">_componentProfile</field>
-        <field key="COMPLETE_METADATA">metadataSource</field>
-        <field key="HIERARCHY_WEIGHT">_hierarchyWeight</field>
-        <field key="HAS_PART">_hasPart</field>
-        <field key="HAS_PART_COUNT">_hasPartCount</field>
-        <field key="RESOURCE_COUNT">_resourceRefCount</field>
-        <field key="IS_PART_OF">_isPartOf</field>
-        <field key="SOLR_SCORE">score</field>
-        <field key="COMPLETE_METADATA">metadataSource</field>
-        <field key="PROJECT_NAME">projectName</field>
-        <field key="TEMPORAL_COVERAGE">temporalCoverage</field>
-        <field key="DAYS_SINCE_LAST_SEEN">_daysSinceLastSeen</field>
-        <field key="HAS_PART_COUNT_WEIGHT">_hasPartCountWeight</field>
-        <field key="LANGUAGE_NAME">_languageName</field>
-        <field key="OAI_ENDPOINT_URI">_oaiEndpointURI</field>
+	<deleteAllFirst>${vloconfig.deleteAllFirst}</deleteAllFirst>
+
+	<maxDaysInSolr>${vloconfig.maxDaysInSolr}</maxDaysInSolr>
+
+	<solrUrl>${vloconfig.solrUrl}</solrUrl>
+
+	<homeUrl>${vloconfig.homeUrl}</homeUrl>
+
+	<helpUrl>${vloconfig.helpUrl}</helpUrl>
+
+	<xi:include href="${vloconfig.dataRootsFile}" xmlns:xi="http://www.w3.org/2001/XInclude"></xi:include>
+
+	<fileProcessingThreads>${vloconfig.fileProcessingThreads}
+	</fileProcessingThreads>
+
+	<solrThreads>${vloconfig.solrThreads}</solrThreads>
+
+	<!-- Wicket: the maximum number of page instances which will be stored in 
+		the application scoped second level cache for faster retrieval -->
+	<pagesInApplicationCache>40</pagesInApplicationCache>
+
+	<!-- Wicket: the maximum size (in KILOBYTES) of the File where page instances 
+		per session are stored. -->
+	<sessionCacheSize>10000</sessionCacheSize>
+
+	<maxDocsInList>1024</maxDocsInList>
+
+	<minDocsInSolrQueue>1024</minDocsInSolrQueue>
+
+	<solrTimeOut>300</solrTimeOut>
+
+	<!-- Max record file size to accept in bytes -->
+	<maxFileSize>50000000</maxFileSize>
+
+	<useHandleResolver>false</useHandleResolver>
+
+	<printMapping>false</printMapping>
+
+	<!-- leave empty to use default packaged definition -->
+	<facetConceptsFile>${vloconfig.facetConceptsFileLocation}
+	</facetConceptsFile>
+
+	<profileSchemaUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/{PROFILE_ID}/xsd</profileSchemaUrl>
+
+	<componentRegistryRESTURL>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/</componentRegistryRESTURL>
+
+	<handleServerUrl>http://hdl.handle.net/</handleServerUrl>
+
+	<conceptRegistryUrl>https://concepts.clarin.eu/ccr/api/find-concepts</conceptRegistryUrl>
+
+	<vocabularyRegistryUrl>http://clavas.clarin.eu/clavas/public/api/find-concepts</vocabularyRegistryUrl>
+
+	<!-- Mapping file locations. These can be an absolute URL, absolute file 
+		path or packaged resource location. Evaluated in the this order. -->
+
+	<organisationNamesUrl>${vloconfig.mappingFilesLocation}OrganisationControlledVocabulary.xml</organisationNamesUrl> <!-- bundled resource: /uniform-maps/OrganisationControlledVocabulary.xml -->
+
+	<languageNameVariantsUrl>${vloconfig.mappingFilesLocation}LanguageNameVariantsMap.xml</languageNameVariantsUrl> <!-- bundled resource: /uniform-maps/LanguageNameVariantsMap.xml -->
+
+	<licenseAvailabilityMapUrl>${vloconfig.mappingFilesLocation}LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl> <!-- bundled resource: /uniform-maps/LicenseAvailabilityMap.xml -->
+
+	<licenseURIMapUrl>${vloconfig.mappingFilesLocation}LicenseURIMap.xml</licenseURIMapUrl> <!-- bundled resource: /uniform-maps/LicenseURIMap.xml -->
+
+	<licenseTypeMapUrl>${vloconfig.mappingFilesLocation}LicenseTypeMap.xml</licenseTypeMapUrl> <!-- bundled resource: /uniform-maps/LicenseAvailabilityMap.xml -->
+
+	<valueMappingsFile>${vloconfig.valueMappingFile}</valueMappingsFile> <!-- bundled resource: ??? -->
+
+	<fields>
+		<field key="NAME">name</field>
+		<field key="DESCRIPTION">description</field>
+		<field key="COLLECTION">collection</field>
+		<field key="LANGUAGE_CODE">languageCode</field>
+		<field key="MODALITY">modality</field>
+		<field key="CONTINENT">continent</field>
+		<field key="COUNTRY">country</field>
+		<field key="GENRE">genre</field>
+		<field key="SUBJECT">subject</field>
+		<field key="ORGANISATION">organisation</field>
+		<field key="LICENSE">license</field>
+		<field key="LICENSE_TYPE">licenseType</field>
+		<field key="AVAILABILITY">availability</field>
+		<field key="ACCESS_INFO">accessInfo</field>
+		<field key="KEYWORDS">keywords</field>
+		<field key="NATIONAL_PROJECT">nationalProject</field>
+		<field key="RESOURCE_CLASS">resourceClass</field>
+		<field key="RESOURCE">_resourceRef</field>
+		<field key="SELF_LINK">_selfLink</field>
+		<field key="ID">id</field>
+		<field key="DATA_PROVIDER">dataProvider</field>
+		<field key="DATA_PROVIDER_NAME">dataProviderName</field>
+		<field key="FILENAME">_fileName</field>
+		<field key="FORMAT">format</field>
+		<field key="LANDINGPAGE">_landingPageRef</field>
+		<field key="SEARCHPAGE">_searchPageRef</field>
+		<field key="SEARCH_SERVICE">_contentSearchRef</field>
+		<field key="LAST_SEEN">_lastSeen</field>
+		<field key="CLARIN_PROFILE">_componentProfile</field>
+		<field key="COMPLETE_METADATA">metadataSource</field>
+		<field key="HIERARCHY_WEIGHT">_hierarchyWeight</field>
+		<field key="HAS_PART">_hasPart</field>
+		<field key="HAS_PART_COUNT">_hasPartCount</field>
+		<field key="RESOURCE_COUNT">_resourceRefCount</field>
+		<field key="IS_PART_OF">_isPartOf</field>
+		<field key="SOLR_SCORE">score</field>
+		<field key="COMPLETE_METADATA">metadataSource</field>
+		<field key="PROJECT_NAME">projectName</field>
+		<field key="TEMPORAL_COVERAGE">temporalCoverage</field>
+		<field key="DAYS_SINCE_LAST_SEEN">_daysSinceLastSeen</field>
+		<field key="HAS_PART_COUNT_WEIGHT">_hasPartCountWeight</field>
+		<field key="LANGUAGE_NAME">_languageName</field>
+		<field key="OAI_ENDPOINT_URI">_oaiEndpointURI</field>
 	</fields>
-	  
+
 	<deprecatedFields>
-	  <field key="DEPRECATED_LANGUAGE">language</field>
+		<field key="DEPRECATED_LANGUAGE">language</field>
 	</deprecatedFields>
-            
-    <!-- Fields shown as facets on the search page -->
-    <facetFields>        
-        <facetField>languageCode</facetField>
-        <facetField>collection</facetField>
-        <facetField>resourceClass</facetField>
-        <facetField>modality</facetField>
-        <facetField>format</facetField>
-        <facetField>keywords</facetField>
-        <facetField>genre</facetField>
-        <facetField>subject</facetField>
-        <facetField>country</facetField>
-        <facetField>organisation</facetField>
-        <facetField>nationalProject</facetField>
-        <facetField>dataProvider</facetField>
-    </facetFields>
-        
-    <simpleSearchFacetFields>
-        <simpleSearchFacetField>languageCode</simpleSearchFacetField>
-        <simpleSearchFacetField>collection</simpleSearchFacetField>
-        <simpleSearchFacetField>resourceClass</simpleSearchFacetField>
-        <simpleSearchFacetField>modality</simpleSearchFacetField>
-        <simpleSearchFacetField>genre</simpleSearchFacetField>
-    </simpleSearchFacetFields>
-    
-    <primaryFacetFields>
-        <primaryFacetField>languageCode</primaryFacetField>
-        <primaryFacetField>collection</primaryFacetField>
-        <primaryFacetField>resourceClass</primaryFacetField>
-        <primaryFacetField>modality</primaryFacetField>
-        <primaryFacetField>format</primaryFacetField>
-        <primaryFacetField>keywords</primaryFacetField>
-    </primaryFacetFields>
-    
-    <!-- If this many facets or more than this have values, hide non-primary facets -->
-    <hideSecondaryFacetsLimit>8</hideSecondaryFacetsLimit>
-    
-    <!-- Fields shown in expanded search results on the search page -->
-    <searchResultFields>
-        <searchResultField>name</searchResultField>
-        <searchResultField>country</searchResultField>
-        <searchResultField>languageCode</searchResultField>
-        <searchResultField>modality</searchResultField>
-        <searchResultField>subject</searchResultField>
-        <searchResultField>genre</searchResultField>
-        <searchResultField>organisation</searchResultField>
-        <searchResultField>collection</searchResultField>
-        <searchResultField>nationalProject</searchResultField>
-    </searchResultFields>
-    
-    <!-- Fields ignored in the record page -->
-    <ignoredFields>
-        <ignoredField>format</ignoredField>
-        <ignoredField>score</ignoredField>
-        <ignoredField>license</ignoredField>
-        <ignoredField>availability</ignoredField>
-        <ignoredField>licenseType</ignoredField>
-        <ignoredField>accessInfo</ignoredField>
-    </ignoredFields>
-    
-    <!-- Fields shown as technical fields in the record page -->
-    <technicalFields>
-        <technicalField>id</technicalField>
-        <technicalField>_selfLink</technicalField>
-        <technicalField>dataProvider</technicalField>
-        <technicalField>metadataSource</technicalField>
-        <technicalField>_landingPageRef</technicalField>
-        <technicalField>_searchPageRef</technicalField>
-        <technicalField>_contentSearchRef</technicalField>
-        <technicalField>_lastSeen</technicalField>
-        <technicalField>_componentProfile</technicalField>
-        <technicalField>_hierarchyWeight</technicalField>
-        <technicalField>_hasPartCount</technicalField>
-    </technicalFields>
-      
-    <!-- 
-        This defines the availability levels shown in the web app and their
-        display values and descriptions
 
-        Descriptions are shown on the record page and as tooltip in the 
-        availability facet. Values have been adapted from 
-        <https://www.clarin.eu/content/license-categories>.
-    -->
-    <availability>
-        <availabilityValue value="PUB">
-            <displayValue>Public</displayValue>
-            <description>PUB language resources can be distributed publicly. The distribution of these materials is not restricted by copyright or personal data protection issues.</description>
-        </availabilityValue>
-        <availabilityValue value="ACA">
-            <displayValue>Academic</displayValue>
-            <description>ACA language resources can be accessed only for research purposes. The end-user does not need to ask for usage permission but can access the resources via e.g. federated login.</description>
-        </availabilityValue>
-        <availabilityValue value="RES">
-            <displayValue>Restricted for individual</displayValue>
-            <description>RES language resources have additional restrictions, which require permission from the rights holder. These resources may contain material whose usage is limited due to copyright and/or personal data protection issues.</description>
-        </availabilityValue>
-        <availabilityValue value="UNSPECIFIED">
-            <displayValue>Unspecified</displayValue>
-            <description>No specification of availability (contact the original provider)</description>
-        </availabilityValue>
-    </availability>
-    
-    <languageFilters>
-        <languageFilter>filterOne</languageFilter>
-        <languageFilter>filterTwo</languageFilter>
-        <languageFilter>filterThree</languageFilter>
-    </languageFilters>
-    
-    <facetOverviewLength>30</facetOverviewLength>
-    
-    <countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
-    
-    <languageLinkTemplate>https://infra.clarin.eu/content/language_info/data/{}.html</languageLinkTemplate>
-    
-    <feedbackFromUrl>http://www.clarin.eu/node/3759?url=</feedbackFromUrl>
+	<!-- Fields shown as facets on the search page -->
+	<facetFields>
+		<facetField>LANGUAGE_CODE</facetField>
+		<facetField>COLLECTION</facetField>
+		<facetField>RESOURCE_CLASS</facetField>
+		<facetField>MODALITY</facetField>
+		<facetField>FORMAT</facetField>
+		<facetField>KEYWORDS</facetField>
+		<facetField>GENRE</facetField>
+		<facetField>SUBJECT</facetField>
+		<facetField>COUNTRY</facetField>
+		<facetField>ORGANISATION</facetField>
+		<facetField>NATIONAL_PROJECT</facetField>
+		<facetField>DATA_PROVIDER</facetField>
+	</facetFields>
 
-    <language2LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438109/xml</language2LetterCodeComponentUrl>
-    
-    <language3LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438110/xml</language3LetterCodeComponentUrl>
-   
-    <silToISO639CodesUrl>https://infra.clarin.eu/CMDI/1.1/xslt/sil_to_iso6393.xml</silToISO639CodesUrl>
-    
-    <reverseProxyPrefix></reverseProxyPrefix>
-    
-    <FederatedContentSearchUrl>http://weblicht.sfs.uni-tuebingen.de/Aggregator/</FederatedContentSearchUrl>
-    
-    <cqlEndpointFilter>http://cqlservlet.mpi.nl/</cqlEndpointFilter>
-    
-    <cqlEndpointAlternative>http://cqlservlet.mpi.nl/</cqlEndpointAlternative>
-    
-    <!-- Set to -1 to disable virtual collection creation from VLO -->
-    <vcrMaximumItemsCount>1000</vcrMaximumItemsCount>
+	<simpleSearchFacetFields>
+		<simpleSearchFacetField>LANGUAGE_CODE</simpleSearchFacetField>
+		<simpleSearchFacetField>COLLECTION</simpleSearchFacetField>
+		<simpleSearchFacetField>RESOURCE_CLASS</simpleSearchFacetField>
+		<simpleSearchFacetField>MODALITY</simpleSearchFacetField>
+		<simpleSearchFacetField>GENRE</simpleSearchFacetField>
+	</simpleSearchFacetFields>
 
-    <vcrSubmitEndpoint>https://clarin.ids-mannheim.de/vcr/service/submit</vcrSubmitEndpoint>
+	<primaryFacetFields>
+		<primaryFacetField>LANGUAGE_CODE</primaryFacetField>
+		<primaryFacetField>COLLECTION</primaryFacetField>
+		<primaryFacetField>RESOURCE_CLASS</primaryFacetField>
+		<primaryFacetField>MODALITY</primaryFacetField>
+		<primaryFacetField>FORMAT</primaryFacetField>
+		<primaryFacetField>KEYWORDS</primaryFacetField>
+	</primaryFacetFields>
 
-    <lrSwitchboardBaseUrl>http://weblicht.sfs.uni-tuebingen.de/clrs/</lrSwitchboardBaseUrl>
-    
-    <!-- makes the score for the result ranking visible in the search results -->
-    <showResultScores>false</showResultScores>
-    
-    <processHierarchies>true</processHierarchies>
-    
+	<!-- If this many facets or more than this have values, hide non-primary 
+		facets -->
+	<hideSecondaryFacetsLimit>8</hideSecondaryFacetsLimit>
+
+	<!-- Fields shown in expanded search results on the search page -->
+	<searchResultFields>
+		<searchResultField>NAME</searchResultField>
+		<searchResultField>COUNTRY</searchResultField>
+		<searchResultField>LANGUAGE_CODE</searchResultField>
+		<searchResultField>MODALITY</searchResultField>
+		<searchResultField>SUBJECT</searchResultField>
+		<searchResultField>GENRE</searchResultField>
+		<searchResultField>ORGANISATION</searchResultField>
+		<searchResultField>COLLECTION</searchResultField>
+		<searchResultField>NATIONAL_PROJECT</searchResultField>
+	</searchResultFields>
+
+	<!-- Fields ignored in the record page -->
+	<ignoredFields>
+		<ignoredField>FORMAT</ignoredField>
+		<ignoredField>SOLR_SCORE</ignoredField>
+		<ignoredField>LICENSE</ignoredField>
+		<ignoredField>AVAILABILITY</ignoredField>
+		<ignoredField>LICENSE_TYPE</ignoredField>
+		<ignoredField>ACCESS_INFO</ignoredField>
+	</ignoredFields>
+
+	<!-- Fields shown as technical fields in the record page -->
+	<technicalFields>
+		<technicalField>ID</technicalField>
+		<technicalField>SELF_LINK</technicalField>
+		<technicalField>DATA_PROVIDER</technicalField>
+		<technicalField>COMPLETE_METADATA</technicalField>
+		<technicalField>LANDINGPAGE</technicalField>
+		<technicalField>SEARCHPAGE</technicalField>
+		<technicalField>SEARCH_SERVICE</technicalField>
+		<technicalField>LAST_SEEN</technicalField>
+		<technicalField>CLARIN_PROFILE</technicalField>
+		<technicalField>HIERARCHY_WEIGHT</technicalField>
+		<technicalField>HAS_PART_COUNT</technicalField>
+	</technicalFields>
+
+	<!-- This defines the availability levels shown in the web app and their 
+		display values and descriptions Descriptions are shown on the record page 
+		and as tooltip in the availability facet. Values have been adapted from <https://www.clarin.eu/content/license-categories>. -->
+	<availability>
+		<availabilityValue value="PUB">
+			<displayValue>Public</displayValue>
+			<description>PUB language resources can be distributed publicly. The
+				distribution of these materials is not restricted by copyright or
+				personal data protection issues.</description>
+		</availabilityValue>
+		<availabilityValue value="ACA">
+			<displayValue>Academic</displayValue>
+			<description>ACA language resources can be accessed only for research
+				purposes. The end-user does not need to ask for usage permission but
+				can access the resources via e.g. federated login.</description>
+		</availabilityValue>
+		<availabilityValue value="RES">
+			<displayValue>Restricted for individual</displayValue>
+			<description>RES language resources have additional restrictions, which require permission from the rights holder. These resources may contain material whose usage is limited due to copyright and/or personal data protection issues.</description>
+		</availabilityValue>
+		<availabilityValue value="UNSPECIFIED">
+			<displayValue>Unspecified</displayValue>
+			<description>No specification of availability (contact the original provider)</description>
+		</availabilityValue>
+	</availability>
+
+	<languageFilters>
+		<languageFilter>filterOne</languageFilter>
+		<languageFilter>filterTwo</languageFilter>
+		<languageFilter>filterThree</languageFilter>
+	</languageFilters>
+
+	<facetOverviewLength>30</facetOverviewLength>
+
+	<countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
+
+	<languageLinkTemplate>https://infra.clarin.eu/content/language_info/data/{}.html</languageLinkTemplate>
+
+	<feedbackFromUrl>http://www.clarin.eu/node/3759?url=</feedbackFromUrl>
+
+	<language2LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438109/xml</language2LetterCodeComponentUrl>
+
+	<language3LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438110/xml</language3LetterCodeComponentUrl>
+
+	<silToISO639CodesUrl>https://infra.clarin.eu/CMDI/1.1/xslt/sil_to_iso6393.xml</silToISO639CodesUrl>
+
+	<reverseProxyPrefix></reverseProxyPrefix>
+
+	<FederatedContentSearchUrl>http://weblicht.sfs.uni-tuebingen.de/Aggregator/</FederatedContentSearchUrl>
+
+	<cqlEndpointFilter>http://cqlservlet.mpi.nl/</cqlEndpointFilter>
+
+	<cqlEndpointAlternative>http://cqlservlet.mpi.nl/</cqlEndpointAlternative>
+
+	<!-- Set to -1 to disable virtual collection creation from VLO -->
+	<vcrMaximumItemsCount>1000</vcrMaximumItemsCount>
+
+	<vcrSubmitEndpoint>https://clarin.ids-mannheim.de/vcr/service/submit</vcrSubmitEndpoint>
+
+	<lrSwitchboardBaseUrl>http://weblicht.sfs.uni-tuebingen.de/clrs/</lrSwitchboardBaseUrl>
+
+	<!-- makes the score for the result ranking visible in the search results -->
+	<showResultScores>false</showResultScores>
+
+	<processHierarchies>true</processHierarchies>
+
 </VloConfig>

@@ -6,9 +6,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -18,6 +20,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * VLO configuration
  *
  * @author keeloo, twagoo
+ */
+/**
+ * @author @author Wolfgang Walter SAUER (wowasa) &lt;wolfgang.sauer@oeaw.ac.at&gt;
+ *
  */
 @XmlRootElement(name = "VloConfig")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -64,7 +70,9 @@ public class VloConfig {
     // mapping
     //(required = false)
     private String facetConceptsFile = "";
-
+    
+    @XmlElementWrapper(name = "languageFilters")
+    @XmlElement(name = "languageFilter")
     private String[] languageFilters = {"", "", ""};
 
     private boolean printMapping = false;
@@ -781,22 +789,50 @@ public class VloConfig {
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @return the value
+     * @return List of field-keys
      */
-    public List<String> getFacetFields() {
-        return facetField;
+    public List<String> getFacetFieldKeys() {
+        return this.facetField;
+    }
+    
+    /**
+     * @return List of resolved field-names
+     */
+    public List<String> getFacetFieldNames() {
+        return this.facetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
+    }
+    
+    /**
+     * @return List of field-keys
+     */
+    public List<String> getSimpleSearchFacetFieldKeys() {
+        return this.simpleSearchFacetField;
     }
 
-    public List<String> getSimpleSearchFacetFields() {
-        return simpleSearchFacetField;
+    /**
+     * @return List of resolved field-names
+     */
+    public List<String> getSimpleSearchFacetFieldNames() {
+        return this.simpleSearchFacetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
     }
 
-    public void setSimpleSearchFacetFields(List<String> simpleSearchFacetField) {
+    public void setSimpleSearchFacetFieldKeys(List<String> simpleSearchFacetField) {
         this.simpleSearchFacetField = simpleSearchFacetField;
     }
+    
+    /**
+     * @return Set of field-keys
+     */
+    public Set<String> getPrimaryFacetFieldKeys() {
+        return this.primaryFacetField;
+    }
 
-    public Set<String> getPrimaryFacetFields() {
-        return primaryFacetField;
+
+    /**
+     * @return Set of resolved field-names
+     */
+    public Set<String> getPrimaryFacetFieldNames() {
+        return this.primaryFacetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
     }
 
     public void setPrimaryFacetFields(Set<String> primaryFacetField) {
@@ -807,11 +843,11 @@ public class VloConfig {
      *
      * @return all facet fields, including collection facet (arbitrary order
      * unspecified)
-     * @see #getFacetFields()
+     * @see #getFacetFieldNames()
      * @see #getCollectionFacet()
      */
     public List<String> getFacetsInSearch() {
-        final ArrayList<String> allFacets = new ArrayList<String>(facetField);
+        final ArrayList<String> allFacets = new ArrayList<String>(getFacetFieldNames());
         final String collection = getCollectionFacet();
         if (collection != null) {
             allFacets.add(collection);
@@ -825,17 +861,27 @@ public class VloConfig {
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param param the value, a list of facet fields
+     * @param param the value, a list of facet field-keys
      */
-    public void setFacetFields(List<String> param) {
+    public void setFacetFieldKeys(List<String> param) {
         facetField = param;
     }
-
-    public Collection<String> getSearchResultFields() {
+    
+    /**
+     * @return Collection of field-keys
+     */
+    public Collection<String> getSearchResultFieldKeys() {
         return searchResultField;
     }
 
-    public void setSearchResultFields(Set<String> searchResultField) {
+    /**
+     * @return Collection of resolved field-names
+     */
+    public Collection<String> getSearchResultFieldNames() {
+        return searchResultField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
+    }
+
+    public void setSearchResultFieldKeys(Set<String> searchResultField) {
         this.searchResultField = searchResultField;
     }
 
@@ -856,20 +902,41 @@ public class VloConfig {
     public void setCollectionFacet(String collectionFacet) {
         this.collectionFacet = collectionFacet;
     }
-
-    public Set<String> getIgnoredFields() {
-        return ignoredField;
+    
+    /**
+     * @return Set of field-keys
+     */
+    public Set<String> getIgnoredFieldKeys() {
+        return this.ignoredField;
     }
 
-    public void setIgnoredFields(Set<String> ignoredFields) {
+
+    /**
+     * @return Set of resolved field-names
+     */
+    public Set<String> getIgnoredFieldNames() {
+        return this.ignoredField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
+    }
+
+    public void setIgnoredFieldKeys(Set<String> ignoredFields) {
         this.ignoredField = ignoredFields;
     }
-
-    public Set<String> getTechnicalFields() {
-        return technicalField;
+    
+    /**
+     * @return Set of field-keys
+     */
+    public Set<String> getTechnicalFieldKeys() {
+        return this.technicalField;
     }
 
-    public void setTechnicalFields(Set<String> technicalFields) {
+    /**
+     * @return Set of resolved field-names
+     */
+    public Set<String> getTechnicalFieldNames() {
+        return this.technicalField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
+    }
+
+    public void setTechnicalFieldKeys(Set<String> technicalFields) {
         this.technicalField = technicalFields;
     }
 

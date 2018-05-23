@@ -120,7 +120,7 @@ public class SimpleSearchBrowsePanel extends GenericPanel<QueryFacetsSelection> 
         public FacetSelectorsView(String id, IModel<QueryFacetsSelection> selectionModel) {
             super(id);
             this.selectionModel = selectionModel;
-            setModel(new FacetFieldsModel(facetFieldsService, vloConfig.getSimpleSearchFacetFields(), selectionModel, -1));
+            setModel(new FacetFieldsModel(facetFieldsService, vloConfig.getSimpleSearchFacetFieldNames(), selectionModel, -1));
         }
 
         @Override
