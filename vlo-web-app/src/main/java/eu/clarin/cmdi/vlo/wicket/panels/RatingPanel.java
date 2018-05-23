@@ -16,9 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import eu.clarin.cmdi.vlo.VloWebAppException;
 import eu.clarin.cmdi.vlo.wicket.model.RatingLevel;
 import eu.clarin.cmdi.vlo.VloWebSession;
 import eu.clarin.cmdi.vlo.service.RatingStore;
+import java.io.IOException;
 import java.io.Serializable;
 import javax.servlet.http.Cookie;
 import org.apache.wicket.AttributeModifier;
@@ -59,9 +61,9 @@ import org.slf4j.LoggerFactory;
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class RatingPanel extends Panel {
-
+    
     public static final Logger logger = LoggerFactory.getLogger(RatingPanel.class);
-
+    
     public final static Duration TIME_BEFORE_RATING_ASKED = Duration.seconds(5); //TODO: make configurable via VloConfig
 
     public final static String PANEL_DISMISSED_ATTRIBUTE = "VLO_RATING_PANEL_DISMISSED";
@@ -76,16 +78,16 @@ public class RatingPanel extends Panel {
      * a rating
      */
     public final static Duration COOKIE_MAX_AGE_SUBMIT = Duration.days(30);
-
+    
     @SpringBean
     private RatingStore ratingStore;
-
+    
     private final IModel<RatingLevel> selectedRatingModel = new Model<>();
     private final IModel<String> commentModel = new Model<>();
-
+    
     public RatingPanel(String id) {
         super(id);
-
+        
         final WebMarkupContainer ratingPanel = new WebMarkupContainer("user-rating-panel");
         //The panel should only be shown after a certain amount of time has 
         //passed in the session and if not dismissed before
@@ -94,9 +96,9 @@ public class RatingPanel extends Panel {
             public void onConfigure(Component component) {
                 component.setVisible(!isDismissed() && preRatingTimeHasLapsed());
             }
-
+            
         });
-
+        
         add(ratingPanel
                 // link to dismiss entire panel persistently
                 .add(createDismissButton("dismiss"))
@@ -109,7 +111,7 @@ public class RatingPanel extends Panel {
         // we need to be able to refresh this via Ajax
         setOutputMarkupId(true);
     }
-
+    
     private Component createDismissButton(String id) {
         return (new AjaxFallbackLink(id) {
             @Override
@@ -125,10 +127,10 @@ public class RatingPanel extends Panel {
                 // hide once a selection has been made
                 component.setVisible(selectedRatingModel.getObject() == null);
             }
-
+            
         });
     }
-
+    
     private RepeatingView createRatingLinks(String id) {
         final RepeatingView ratingLinks = new RepeatingView(id);
         for (RatingLevel ratingLevel : RatingLevel.values()) {
@@ -155,7 +157,7 @@ public class RatingPanel extends Panel {
                     target.add(RatingPanel.this);
                 }
             }
-
+            
             @Override
             protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
                 super.updateAjaxAttributes(attributes);
@@ -163,7 +165,7 @@ public class RatingPanel extends Panel {
                 attributes.getAjaxCallListeners()
                         .add(new AjaxCallListener().onBeforeSend("$('#'+attrs.c).addClass('user-rating-selected');"));
             }
-
+            
         };
         ratingLink.setOutputMarkupId(true);
 
@@ -178,7 +180,7 @@ public class RatingPanel extends Panel {
                 }
             }
         };
-
+        
         return ratingLink
                 //label determines icon (see material design icons)
                 .add(new Label("user-rating-link-icon", Model.of(level.getIcon())))
@@ -187,7 +189,7 @@ public class RatingPanel extends Panel {
                 //apply selected rating class
                 .add(new AttributeAppender("class", selectedClassModel, " "));
     }
-
+    
     private Component createCurrentSelectionLabel(String id) {
         return new Label(id, new PropertyModel<String>(selectedRatingModel, "description"))
                 .add(new Behavior() {
@@ -196,10 +198,10 @@ public class RatingPanel extends Panel {
                         //hide until a selection has been made
                         component.setVisible(selectedRatingModel.getObject() != null);
                     }
-
+                    
                 });
     }
-
+    
     private Form createCommentSubmitForm(String id) {
         final Form form = new Form(id);
 
@@ -209,7 +211,7 @@ public class RatingPanel extends Panel {
             public void onConfigure(Component component) {
                 component.setVisible(selectedRatingModel.getObject() != null);
             }
-
+            
         });
 
         // text area allowing user to input motivation for rating or other comment
@@ -221,7 +223,7 @@ public class RatingPanel extends Panel {
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 //submit logic
                 submit();
-
+                
                 if (target != null) {
                     // refresh whole panel
                     target.add(RatingPanel.this);
@@ -235,9 +237,9 @@ public class RatingPanel extends Panel {
                             + "});");
                 }
             }
-
+            
         });
-
+        
         form.add(new AjaxFallbackLink("user-rating-form-cancel") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -247,22 +249,26 @@ public class RatingPanel extends Panel {
                     target.add(RatingPanel.this);
                 }
             }
-
+            
         });
-
+        
         return form;
     }
-
+    
     private void submit() {
         if (selectedRatingModel.getObject() == null) {
             logger.warn("Rating form submitted without rating selected!");
         } else {
             logger.info("User rating submitted: {} - '{}'", selectedRatingModel.getObject(), commentModel.getObject());
             
-            //send rating to store
-            ratingStore.storeRating(selectedRatingModel.getObject(), commentModel.getObject());
-            logger.debug("User rating stored");
-            
+            try {
+                //send rating to store
+                ratingStore.storeRating(selectedRatingModel.getObject(), commentModel.getObject());
+                logger.debug("User rating stored");
+            } catch (VloWebAppException ex) {
+                logger.error("Exception while storing a submitted user satisfaction rating!", ex);
+                error("Failed to submit rating");
+            }
             //dismiss panel
             dismiss(COOKIE_MAX_AGE_SUBMIT);
         }
@@ -277,7 +283,7 @@ public class RatingPanel extends Panel {
         //Check if dismissed in session
         final Session session = Session.get();
         final Serializable dismissedSessionAttribute = (session == null) ? null : session.getAttribute(PANEL_DISMISSED_ATTRIBUTE);
-
+        
         if (dismissedSessionAttribute != null) {
             //dismissed state was stored in session
             return Boolean.TRUE.equals(dismissedSessionAttribute);
@@ -305,15 +311,15 @@ public class RatingPanel extends Panel {
         final VloWebSession session = VloWebSession.get();
         return (session != null && Time.now().after(session.getInitTime().add(TIME_BEFORE_RATING_ASKED)));
     }
-
+    
     private boolean isDismissedCookie() {
         return Boolean.valueOf(getCookie(PANEL_DISMISSED_COOKIE));
     }
-
+    
     private void setDismissedCookie(boolean value, Duration maxAge) {
         setCookie(PANEL_DISMISSED_COOKIE, Boolean.toString(value), maxAge);
     }
-
+    
     private String getCookie(String key) {
         final Cookie cookie = new CookieUtils().getCookie(key);
         if (cookie != null) {
@@ -322,7 +328,7 @@ public class RatingPanel extends Panel {
             return null;
         }
     }
-
+    
     private void setCookie(String key, String value, Duration maxAge) {
         final CookieDefaults cookieDefaults = new CookieDefaults();
         //maximum age of the cookie to be set in seconds
@@ -330,5 +336,5 @@ public class RatingPanel extends Panel {
         //save cookie
         new CookieUtils(cookieDefaults).save(key, value);
     }
-
+    
 }

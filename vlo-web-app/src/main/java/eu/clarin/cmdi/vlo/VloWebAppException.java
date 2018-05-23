@@ -14,17 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.service;
-
-import eu.clarin.cmdi.vlo.VloWebAppException;
-import eu.clarin.cmdi.vlo.wicket.model.RatingLevel;
+package eu.clarin.cmdi.vlo;
 
 /**
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-public interface RatingStore {
+public class VloWebAppException extends Exception {
 
-    public void storeRating(RatingLevel rating, String comment) throws VloWebAppException;
+    public VloWebAppException(String message) {
+        super(message);
+    }
 
+    public VloWebAppException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public VloWebAppException(Throwable cause) {
+        super(cause);
+    }
+    
 }

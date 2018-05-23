@@ -61,7 +61,7 @@ public class RethinkRatingStoreTest {
      * Test of storeRating method, of class RethinkRatingStore.
      */
     @Test
-    public void testStoreRating() {
+    public void testStoreRating() throws Exception {
         try (Cursor cursor = r.table(TABLE).run(conn)) {
             assertEquals("Empty table", 0, Iterators.size(cursor));
         }
