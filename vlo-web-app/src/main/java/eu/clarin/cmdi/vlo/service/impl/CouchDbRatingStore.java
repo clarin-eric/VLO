@@ -17,8 +17,8 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 import eu.clarin.cmdi.vlo.VloWebAppException;
 import eu.clarin.cmdi.vlo.service.RatingStore;
@@ -82,6 +82,8 @@ public class CouchDbRatingStore implements RatingStore {
             } else {
                 logger.debug("Server response: {}", response.getEntity(String.class));
             }
+        } catch (ClientHandlerException ex) {
+            throw new VloWebAppException("Exception while trying to push to CouchDB server", ex);
         } finally {
             client.destroy();
         }
