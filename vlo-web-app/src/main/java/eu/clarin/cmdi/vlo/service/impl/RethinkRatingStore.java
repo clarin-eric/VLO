@@ -16,6 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
+import static com.rethinkdb.RethinkDB.r;
+import com.rethinkdb.gen.ast.Table;
+import com.rethinkdb.net.Connection;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.service.RatingStore;
 import eu.clarin.cmdi.vlo.wicket.model.RatingLevel;
@@ -30,16 +33,38 @@ public class RethinkRatingStore implements RatingStore {
 
     public static final Logger logger = LoggerFactory.getLogger(RethinkRatingStore.class);
 
-    private final VloConfig vloConfig;
+    private final String db;
+
+    private final static String TABLE = "rating";
+
+    private final Connection.Builder connectionBuilder;
 
     public RethinkRatingStore(VloConfig vloConfig) {
-        this.vloConfig = vloConfig;
+        this("localhost", 32772, "rating_vlo");//TODO: from config
+    }
+
+    public RethinkRatingStore(String host, int port, String db) {
+        this.connectionBuilder = r.connection().hostname(host).port(port);
+        this.db = db;
     }
 
     @Override
     public void storeRating(RatingLevel rating, String comment) {
         final long now = System.currentTimeMillis();
         logger.debug("Storing rating and comment: '{}', '{}', '{}'", now, rating.getDescription(), comment);
+        store(now, rating, comment);
+    }
+
+    private void store(long now, RatingLevel rating, String comment) {
+        try (Connection conn = connectionBuilder.connect()) {
+            final Table table = r.db(db).table(TABLE);
+            table.insert(r
+                    .hashMap("timestamp", now)
+                    .with("rating_value", rating.getValue())
+                    .with("rating_description", rating.getDescription())
+                    .with("comment", comment))
+                    .run(conn);
+        }
     }
 
 }
