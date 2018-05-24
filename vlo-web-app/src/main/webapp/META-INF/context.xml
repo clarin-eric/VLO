@@ -59,7 +59,7 @@
         
     <Parameter 
         name="eu.clarin.cmdi.vlo.rating.couchdb.user" 
-        description="CouchDB user name"
+        description="CouchDB user name (leave empty for no auth)"
         value="user"/>             
         
     <Parameter 

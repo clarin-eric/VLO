@@ -35,25 +35,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Rating store that talks to CouchDB or any other REST service that supports
+ * the following: 1) basic authentication; 2) creation of a resource by means of
+ * an empty PUT; 3) creation of documents within that resource through PUTs of
+ * JSON objects
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class CouchDbRatingStore implements RatingStore {
-    
+
     public static final Logger logger = LoggerFactory.getLogger(CouchDbRatingStore.class);
-    
+
     private final String ratingsBaseUri;
     private final String userName;
     private final String password;
     private final String serviceName;
-    
+
     public CouchDbRatingStore(String ratingsBaseUri, String userName, String password, String serviceName) {
         this.ratingsBaseUri = ratingsBaseUri;
         this.userName = userName;
         this.password = password;
         this.serviceName = serviceName;
     }
-    
+
     @PostConstruct
     public void initResource() {
         if (Strings.isNullOrEmpty(ratingsBaseUri)) {
@@ -77,7 +81,7 @@ public class CouchDbRatingStore implements RatingStore {
             }
         }
     }
-    
+
     @Override
     public void storeRating(RatingLevel rating, String comment, String host) throws VloWebAppException {
         if (Strings.isNullOrEmpty(ratingsBaseUri)) {
@@ -88,7 +92,7 @@ public class CouchDbRatingStore implements RatingStore {
             store(now, rating, comment, host);
         }
     }
-    
+
     private void store(long timestamp, RatingLevel rating, String comment, String host) throws VloWebAppException {
         final Client client = newClient();
         try {
@@ -107,7 +111,7 @@ public class CouchDbRatingStore implements RatingStore {
             client.destroy();
         }
     }
-    
+
     private JSONObject createJsonForRating(long timestamp, RatingLevel rating, String comment, String host) throws JSONException {
         //create the rating object as JSON
         return new JSONObject()
@@ -118,7 +122,7 @@ public class CouchDbRatingStore implements RatingStore {
                 .put("rating_description", rating.getDescription())
                 .put("comment", comment);
     }
-    
+
     private void putRating(final Client client, final String id, final JSONObject ratingObject, boolean createIfNotExists) throws VloWebAppException, ClientHandlerException, UniformInterfaceException {
         final ClientResponse response
                 = client.resource(ratingsBaseUri)
@@ -140,10 +144,12 @@ public class CouchDbRatingStore implements RatingStore {
             logger.debug("Server response: {}", response.getEntity(String.class));
         }
     }
-    
+
     private Client newClient() {
         final Client client = Client.create();
-        client.addFilter(new HTTPBasicAuthFilter(userName, password));
+        if (!Strings.isNullOrEmpty(userName)) {
+            client.addFilter(new HTTPBasicAuthFilter(userName, password));
+        }
         return client;
     }
 
@@ -166,5 +172,5 @@ public class CouchDbRatingStore implements RatingStore {
             return false;
         }
     }
-    
+
 }
