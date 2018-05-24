@@ -40,22 +40,31 @@
         value="*.vlo.clarin.eu"/>
     -->
     
-   <!-- Rating configuration, including connection to CouchDB backend -->
+   <!-- User satisfaction/rating collection configuration, including connection to CouchDB backend -->
    <!--    
     <Parameter 
         name="eu.clarin.cmdi.vlo.rating.enabled" 
+        description="Set to true to enable user satisfaction rating collection"
         value="false"/>  
         
     <Parameter 
+        name="eu.clarin.cmdi.vlo.rating.service" 
+        description="Name of the service to store along with the ratings"
+        value="VLO"/>  
+        
+    <Parameter 
         name="eu.clarin.cmdi.vlo.rating.couchdb.url" 
+        description="CouchDB resource URL"
         value="http://localhost:5984/ratings"/>  
         
     <Parameter 
         name="eu.clarin.cmdi.vlo.rating.couchdb.user" 
-        value="vlo"/>             
+        description="CouchDB user name"
+        value="user"/>             
         
     <Parameter 
         name="eu.clarin.cmdi.vlo.rating.couchdb.password" 
-        value="olv"/>     
+        description="CouchDB password"
+        value="password"/>     
     -->
 </Context>

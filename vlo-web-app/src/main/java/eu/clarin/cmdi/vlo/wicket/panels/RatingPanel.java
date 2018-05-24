@@ -266,7 +266,7 @@ public class RatingPanel extends Panel {
 
             try {
                 //send rating to store
-                ratingStore.storeRating(selectedRatingModel.getObject(), commentModel.getObject());
+                ratingStore.storeRating(selectedRatingModel.getObject(), commentModel.getObject(), getRequest().getClientUrl().getHost());
                 logger.debug("User rating stored");
             } catch (VloWebAppException ex) {
                 logger.error("Exception while storing a submitted user satisfaction rating!", ex);

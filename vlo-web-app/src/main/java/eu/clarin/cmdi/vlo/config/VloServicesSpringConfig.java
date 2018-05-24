@@ -44,7 +44,6 @@ import eu.clarin.cmdi.vlo.service.impl.PermalinkServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.QueryFacetsSelectionParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ResourceStringConverterImpl;
 import eu.clarin.cmdi.vlo.service.impl.ResourceTypeCountingServiceImpl;
-import eu.clarin.cmdi.vlo.service.impl.RethinkRatingStore;
 import eu.clarin.cmdi.vlo.service.impl.SearchContextParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.UriResolverImpl;
 import eu.clarin.cmdi.vlo.service.impl.XmlTransformationServiceImpl;
@@ -208,7 +207,8 @@ public class VloServicesSpringConfig {
         return new CouchDbRatingStore(
                 ratingConfig().getCouchDbBaseUrl(),
                 ratingConfig().getCouchDbUser(),
-                ratingConfig().getCouchDbPassword());
+                ratingConfig().getCouchDbPassword(),
+                ratingConfig().getServiceName());
     }
 
 }

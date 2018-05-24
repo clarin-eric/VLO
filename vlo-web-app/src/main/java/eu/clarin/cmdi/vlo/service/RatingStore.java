@@ -25,6 +25,6 @@ import eu.clarin.cmdi.vlo.wicket.model.RatingLevel;
  */
 public interface RatingStore {
 
-    public void storeRating(RatingLevel rating, String comment) throws VloWebAppException;
+    public void storeRating(RatingLevel rating, String comment, String host) throws VloWebAppException;
 
 }

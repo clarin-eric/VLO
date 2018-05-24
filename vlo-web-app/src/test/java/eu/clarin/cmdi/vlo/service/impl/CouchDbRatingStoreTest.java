@@ -48,7 +48,7 @@ public class CouchDbRatingStoreTest {
 
     @Before
     public void setUp() {
-        instance = new CouchDbRatingStore(ratingsBaseUri, userName, password);
+        instance = new CouchDbRatingStore(ratingsBaseUri, userName, password, "vlo");
         client = Client.create();
         client.addFilter(new HTTPBasicAuthFilter(userName, password));
     }
@@ -67,8 +67,9 @@ public class CouchDbRatingStoreTest {
     @Test
     public void testStoreRating() throws Exception {
         final long beforeCount = getDocCount();
-        instance.storeRating(RatingLevel.VERY_SATISFIED, "my comment");
+        instance.storeRating(RatingLevel.VERY_SATISFIED, "my comment", "test.vlo.clarin.eu");
         assertEquals(beforeCount + 1, getDocCount());
+        //TODO: test values
     }
 
     private long getDocCount() throws ClientHandlerException, IOException, UniformInterfaceException, ParseException {

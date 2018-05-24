@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class RatingConfig {
+
     @Value("${eu.clarin.cmdi.vlo.rating.enabled:false}")
     private boolean enabled;
 
@@ -34,6 +35,9 @@ public class RatingConfig {
 
     @Value("${eu.clarin.cmdi.vlo.rating.couchdb.password:}")
     private String couchDbPassword;
+
+    @Value("${eu.clarin.cmdi.vlo.rating.service:vlo}")
+    private String serviceName;
 
     public boolean isEnabled() {
         return enabled;
@@ -49,6 +53,10 @@ public class RatingConfig {
 
     public String getCouchDbPassword() {
         return couchDbPassword;
+    }
+
+    public String getServiceName() {
+        return serviceName;
     }
 
 }
