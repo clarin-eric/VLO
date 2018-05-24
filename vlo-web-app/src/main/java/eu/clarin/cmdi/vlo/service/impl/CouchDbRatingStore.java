@@ -20,12 +20,16 @@ import com.google.common.base.Strings;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.UniformInterfaceException;
+import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 import eu.clarin.cmdi.vlo.VloWebAppException;
 import eu.clarin.cmdi.vlo.service.RatingStore;
 import eu.clarin.cmdi.vlo.wicket.model.RatingLevel;
 import java.util.UUID;
+import javax.annotation.PostConstruct;
 import javax.ws.rs.core.Response.Status;
+import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.ajax.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +52,28 @@ public class CouchDbRatingStore implements RatingStore {
         this.password = password;
     }
 
+    @PostConstruct
+    public void initResource() {
+        if (Strings.isNullOrEmpty(ratingsBaseUri)) {
+            logger.info("CouchDB rating store not configured (base URL not set). Will not try to initialise.");
+        } else {
+            //check if resource exists at URI; if  not, try to create it
+            final Client client = newClient();
+            try {
+                final WebResource resource = client.resource(ratingsBaseUri);
+                final ClientResponse getResponse = resource.get(ClientResponse.class);
+                if (getResponse.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+                    //resource does NOT exist; try to create it
+                    instantiateResource(resource);
+                } else {
+                    logger.debug("Resource found at {}", ratingsBaseUri);
+                }
+            } finally {
+                client.destroy();
+            }
+        }
+    }
+
     @Override
     public void storeRating(RatingLevel rating, String comment) throws VloWebAppException {
         if (Strings.isNullOrEmpty(ratingsBaseUri)) {
@@ -59,38 +85,70 @@ public class CouchDbRatingStore implements RatingStore {
         }
     }
 
-    private void store(long now, RatingLevel rating, String comment) throws VloWebAppException {
-        final Client client = Client.create();
-        client.addFilter(new HTTPBasicAuthFilter(userName, password));
+    private void store(long timestamp, RatingLevel rating, String comment) throws VloWebAppException {
+        final Client client = newClient();
         try {
             //generate a unique ID for the rating
             final String id = UUID.randomUUID().toString();
 
-            //create the rating object as JSON
-            final JSONObject ratingObject = new JSONObject()
-                    .put("timestamp", System.currentTimeMillis())
-                    .put("rating_value", rating.getValue())
-                    .put("rating_description", rating.getDescription())
-                    .put("comment", comment);
-
-            logger.debug("Sending object to server: {} with id {}", ratingObject, id);
+            //create object to put
+            final JSONObject ratingObject = createJsonForRating(timestamp, rating, comment);
 
             //send off to store
-            final ClientResponse response
-                    = client.resource(ratingsBaseUri)
-                            .path(id)
-                            .put(ClientResponse.class, ratingObject.toString());
-
-            //verify response (should be 201 CREATED)
-            if (response.getStatus() != Status.CREATED.getStatusCode()) {
-                throw new VloWebAppException("Unexpected response to rating PUT: " + response.getStatus() + " - " + response.getEntity(String.class));
-            } else {
-                logger.debug("Server response: {}", response.getEntity(String.class));
-            }
-        } catch (ClientHandlerException ex) {
+            logger.debug("Sending object to server: {} with id {}", ratingObject, id);
+            putRating(client, id, ratingObject);
+        } catch (ClientHandlerException | UniformInterfaceException ex) {
             throw new VloWebAppException("Exception while trying to push to CouchDB server", ex);
         } finally {
             client.destroy();
+        }
+    }
+
+    private JSONObject createJsonForRating(long timestamp, RatingLevel rating, String comment) throws JSONException {
+        //create the rating object as JSON
+        return new JSONObject()
+                .put("timestamp", timestamp)
+                .put("rating_value", rating.getValue())
+                .put("rating_description", rating.getDescription())
+                .put("comment", comment);
+    }
+
+    private void putRating(final Client client, final String id, final JSONObject ratingObject) throws VloWebAppException, ClientHandlerException, UniformInterfaceException {
+        final ClientResponse response
+                = client.resource(ratingsBaseUri)
+                        .path(id)
+                        .put(ClientResponse.class, ratingObject.toString());
+
+        //verify response (should be 201 CREATED)
+        if (response.getStatus() != Status.CREATED.getStatusCode()) {
+            throw new VloWebAppException("Unexpected response to rating PUT: " + response.getStatus() + " - " + response.getEntity(String.class));
+        } else {
+            logger.debug("Server response: {}", response.getEntity(String.class));
+        }
+    }
+
+    private Client newClient() {
+        final Client client = Client.create();
+        client.addFilter(new HTTPBasicAuthFilter(userName, password));
+        return client;
+    }
+
+    /**
+     * Create the specified resource via a plain PUT
+     *
+     * @param resource
+     * @throws RuntimeException
+     * @throws UniformInterfaceException
+     * @throws ClientHandlerException
+     */
+    private void instantiateResource(final WebResource resource) throws RuntimeException, UniformInterfaceException, ClientHandlerException {
+        logger.info("Resource {} not found. Will try to create it via PUT.", ratingsBaseUri);
+        final ClientResponse putResponse = resource.put(ClientResponse.class);
+        if (putResponse.getStatus() == Status.CREATED.getStatusCode()) {
+            logger.info("Successfully created resource at {}", ratingsBaseUri);
+        } else {
+            logger.error("Could not create resource {} via PUT", ratingsBaseUri);
+            throw new RuntimeException("Failed to create resource " + ratingsBaseUri + " for " + getClass().getSimpleName());
         }
     }
 
