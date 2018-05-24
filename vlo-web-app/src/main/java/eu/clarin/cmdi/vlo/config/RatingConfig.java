@@ -39,6 +39,15 @@ public class RatingConfig {
     @Value("${eu.clarin.cmdi.vlo.rating.service:vlo}")
     private String serviceName;
 
+    @Value("${eu.clarin.cmdi.vlo.rating.panel.showPanelDelay:120}") // 120 seconds = 2 minutes
+    private Long showPanelDelay;
+
+    @Value("${eu.clarin.cmdi.vlo.rating.panel.dismissTimeout:604800}") // 604800 seconds = 7 days
+    private Long panelDismissTimeout;
+
+    @Value("${eu.clarin.cmdi.vlo.rating.panel.submitTimeout:2592000}") // 2592000 seconds = 30 days
+    private Long panelSubmitTimeout;
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -57,6 +66,33 @@ public class RatingConfig {
 
     public String getServiceName() {
         return serviceName;
+    }
+
+    /**
+     *
+     * @return minimal time (seconds) to wait between session start and first
+     * appearance of panel
+     */
+    public Long getShowPanelDelay() {
+        return showPanelDelay;
+    }
+
+    /**
+     *
+     * @return minimal time (seconds) between dismissing the panel and showing
+     * it again
+     */
+    public Long getPanelDismissTimeout() {
+        return panelDismissTimeout;
+    }
+
+    /**
+     *
+     * @return minimal time (seconds) between submitting the panel and showing
+     * it again
+     */
+    public Long getPanelSubmitTimeout() {
+        return panelSubmitTimeout;
     }
 
 }

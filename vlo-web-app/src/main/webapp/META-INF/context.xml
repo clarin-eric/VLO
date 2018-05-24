@@ -48,6 +48,21 @@
         value="false"/>  
         
     <Parameter 
+        name="eu.clarin.cmdi.vlo.rating.panel.showPanelDelay" 
+        description="minimal time (seconds) to wait between session start and first appearance of panel"
+        value="120"/>  
+
+    <Parameter 
+        name="eu.clarin.cmdi.vlo.rating.panel.dismissTimeout" 
+        description="minimal time (seconds) between dismissing the panel and showing it again"
+        value="604800"/>  
+
+    <Parameter 
+        name="eu.clarin.cmdi.vlo.rating.panel.submitTimeout" 
+        description="minimal time (seconds) between submitting the panel and showing it again"
+        value="2592000"/>  
+        
+    <Parameter 
         name="eu.clarin.cmdi.vlo.rating.service" 
         description="Name of the service to store along with the ratings"
         value="VLO"/>  

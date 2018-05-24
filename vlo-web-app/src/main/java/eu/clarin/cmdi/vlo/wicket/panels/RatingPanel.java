@@ -64,20 +64,24 @@ public class RatingPanel extends Panel {
 
     public static final Logger logger = LoggerFactory.getLogger(RatingPanel.class);
 
-    public final static Duration TIME_BEFORE_RATING_ASKED = Duration.seconds(5); //TODO: make configurable via VloConfig
-
     public final static String PANEL_DISMISSED_ATTRIBUTE = "VLO_RATING_PANEL_DISMISSED";
     public final static String PANEL_DISMISSED_COOKIE = "VLO_RATING_PANEL_DISMISSED";
+
+    /**
+     * minimal time (seconds) to wait between session start and first appearance
+     * of panel
+     */
+    private Duration showPanelDelay = Duration.minutes(2);
     /**
      * Maximum of age of cookie that keeps panel from appearing on dismissal
      * without submitting a rating
      */
-    public final static Duration COOKIE_MAX_AGE_DISMISS = Duration.days(7);
+    private Duration cookieMaxAgeDismiss = Duration.days(7);
     /**
      * Maximum of age of cookie that keeps panel from appearing after submitting
      * a rating
      */
-    public final static Duration COOKIE_MAX_AGE_SUBMIT = Duration.days(30);
+    private Duration cookieMaxAgeSubmit = Duration.days(30);
 
     @SpringBean
     private RatingStore ratingStore;
@@ -115,11 +119,25 @@ public class RatingPanel extends Panel {
         setOutputMarkupId(true);
     }
 
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        if (ratingConfig.getShowPanelDelay() != null) {
+            showPanelDelay = Duration.seconds(ratingConfig.getShowPanelDelay());
+        }
+        if (ratingConfig.getPanelDismissTimeout() != null) {
+            cookieMaxAgeDismiss = Duration.seconds(ratingConfig.getPanelDismissTimeout());
+        }
+        if (ratingConfig.getPanelSubmitTimeout() != null) {
+            cookieMaxAgeSubmit = Duration.seconds(ratingConfig.getPanelSubmitTimeout());
+        }
+    }
+
     private Component createDismissButton(String id) {
         return (new AjaxFallbackLink(id) {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                dismiss(COOKIE_MAX_AGE_DISMISS);
+                dismiss(cookieMaxAgeDismiss);
                 if (target != null) {
                     target.add(RatingPanel.this);
                 }
@@ -273,7 +291,7 @@ public class RatingPanel extends Panel {
                 error("Failed to submit rating");
             }
             //dismiss panel
-            dismiss(COOKIE_MAX_AGE_SUBMIT);
+            dismiss(cookieMaxAgeSubmit);
         }
     }
 
@@ -312,7 +330,7 @@ public class RatingPanel extends Panel {
      */
     private boolean preRatingTimeHasLapsed() {
         final VloWebSession session = VloWebSession.get();
-        return (session != null && Time.now().after(session.getInitTime().add(TIME_BEFORE_RATING_ASKED)));
+        return (session != null && Time.now().after(session.getInitTime().add(showPanelDelay)));
     }
 
     private boolean isDismissedCookie() {
