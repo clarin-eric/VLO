@@ -16,11 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.VloWebAppException;
 import eu.clarin.cmdi.vlo.wicket.model.RatingLevel;
 import eu.clarin.cmdi.vlo.VloWebSession;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.RatingConfig;
 import eu.clarin.cmdi.vlo.service.RatingStore;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import java.io.Serializable;
 import javax.servlet.http.Cookie;
 import org.apache.wicket.AttributeModifier;
@@ -89,6 +92,9 @@ public class RatingPanel extends Panel {
     @SpringBean
     private RatingConfig ratingConfig;
 
+    @SpringBean
+    private PiwikConfig piwikConfig;
+
     private final IModel<RatingLevel> selectedRatingModel = new Model<>();
     private final IModel<String> commentModel = new Model<>();
 
@@ -134,7 +140,7 @@ public class RatingPanel extends Panel {
     }
 
     private Component createDismissButton(String id) {
-        return (new AjaxFallbackLink(id) {
+        final Component button = new AjaxFallbackLink(id) {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 dismiss(cookieMaxAgeDismiss);
@@ -142,14 +148,23 @@ public class RatingPanel extends Panel {
                     target.add(RatingPanel.this);
                 }
             }
-        }).add(new Behavior() {
+        };
+        
+        // Hide the button once a selection has been made
+        button.add(new Behavior() {
             @Override
             public void onConfigure(Component component) {
-                // hide once a selection has been made
                 component.setVisible(selectedRatingModel.getObject() == null);
             }
 
         });
+
+        // Action tracking via piwik
+        if (piwikConfig.isEnabled()) {
+            button.add(new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_USER_SATISFACTION, PiwikEventConstants.PIWIK_EVENT_ACTION_USER_SATISFACTION_DISMISS));
+        }
+        
+        return button;
     }
 
     private RepeatingView createRatingLinks(String id) {
@@ -188,7 +203,6 @@ public class RatingPanel extends Panel {
             }
 
         };
-        ratingLink.setOutputMarkupId(true);
 
         //model for appending class indicating selection IFF equal to selected value
         final IModel<String> selectedClassModel = new AbstractReadOnlyModel<String>() {
@@ -202,13 +216,32 @@ public class RatingPanel extends Panel {
             }
         };
 
-        return ratingLink
+        ratingLink
                 //label determines icon (see material design icons)
                 .add(new Label("user-rating-link-icon", Model.of(level.getIcon())))
                 //title attribute provides tooltip with description
                 .add(new AttributeModifier("title", Model.of(level.getDescription())))
                 //apply selected rating class
-                .add(new AttributeAppender("class", selectedClassModel, " "));
+                .add(new AttributeAppender("class", selectedClassModel, " "))
+                .setOutputMarkupId(true);
+
+        // action tracking via piwik
+        if (piwikConfig.isEnabled()) {
+            ratingLink.add(new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_USER_SATISFACTION, PiwikEventConstants.PIWIK_EVENT_ACTION_USER_SATISFACTION_RATING_SCORE) {
+                @Override
+                protected String getName(AjaxRequestTarget target) {
+                    return level.getDescription();
+                }
+
+                @Override
+                protected String getValue(AjaxRequestTarget target) {
+                    return level.getValue();
+                }
+
+            });
+        }
+
+        return ratingLink;
     }
 
     private Component createCurrentSelectionLabel(String id) {
@@ -226,7 +259,7 @@ public class RatingPanel extends Panel {
     private Form createCommentSubmitForm(String id) {
         final Form form = new Form(id);
 
-        // hide form until rating has been selectedÏ
+        // hide form until rating has been selected
         form.add(new Behavior() {
             @Override
             public void onConfigure(Component component) {
@@ -235,11 +268,8 @@ public class RatingPanel extends Panel {
 
         });
 
-        // text area allowing user to input motivation for rating or other comment
-        form.add(new TextArea<>("user-rating-comment-input", commentModel));
-
         // submit button
-        form.add(new AjaxFallbackButton("user-rating-form-submit", form) {
+        final AjaxFallbackButton submitButton = new AjaxFallbackButton("user-rating-form-submit", form) {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 //submit logic
@@ -259,9 +289,10 @@ public class RatingPanel extends Panel {
                 }
             }
 
-        });
+        };
 
-        form.add(new AjaxFallbackLink("user-rating-form-cancel") {
+        //cancel button
+        final AjaxFallbackLink cancelButton = new AjaxFallbackLink("user-rating-form-cancel") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 selectedRatingModel.setObject(null);
@@ -271,7 +302,22 @@ public class RatingPanel extends Panel {
                 }
             }
 
-        });
+        };
+
+        // text area allowing user to input motivation for rating or other comment
+        final TextArea<String> commentInput = new TextArea<>("user-rating-comment-input", commentModel);
+
+        // add components to form
+        form
+                .add(commentInput)
+                .add(submitButton)
+                .add(cancelButton);
+
+        // action tracking via piwik
+        if (piwikConfig.isEnabled()) {
+            cancelButton.add(new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_USER_SATISFACTION, PiwikEventConstants.PIWIK_EVENT_ACTION_USER_SATISFACTION_CANCEL));
+            submitButton.add(new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_USER_SATISFACTION, PiwikEventConstants.PIWIK_EVENT_ACTION_USER_SATISFACTION_SUBMIT));
+        }
 
         return form;
     }
