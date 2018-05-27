@@ -46,6 +46,11 @@ public class CouchDbRatingStore implements RatingStore {
 
     public static final Logger logger = LoggerFactory.getLogger(CouchDbRatingStore.class);
 
+    /**
+     * Time to wait for service to become available (in milliseconds)
+     */
+    private static final int INITIAL_SERVER_CONNECT_TIMEOUT = 2 * 60 * 1000;
+
     private final String ratingsBaseUri;
     private final String userName;
     private final String password;
@@ -63,22 +68,8 @@ public class CouchDbRatingStore implements RatingStore {
         if (Strings.isNullOrEmpty(ratingsBaseUri)) {
             logger.info("CouchDB rating store not configured (base URL not set). Will not try to initialise.");
         } else {
-            //check if resource exists at URI; if  not, try to create it
-            final Client client = newClient();
-            try {
-                final WebResource resource = client.resource(ratingsBaseUri);
-                final ClientResponse getResponse = resource.get(ClientResponse.class);
-                if (getResponse.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-                    //resource does NOT exist; try to create it
-                    if (!instantiateResource(resource)) {
-                        throw new RuntimeException("Failed to create resource " + ratingsBaseUri + " for " + getClass().getSimpleName());
-                    }
-                } else {
-                    logger.debug("Resource found at {}", ratingsBaseUri);
-                }
-            } finally {
-                client.destroy();
-            }
+            waitForServiceConnection();
+            checkResourceAvailability();
         }
     }
 
@@ -154,6 +145,68 @@ public class CouchDbRatingStore implements RatingStore {
     }
 
     /**
+     * check service availability
+     *
+     * @throws RuntimeException
+     */
+    private void waitForServiceConnection() throws RuntimeException {
+        final Client client = newClient();
+        final long startTime = System.currentTimeMillis();
+        logger.info("Checking connection on {}", ratingsBaseUri);
+        try {
+            waitForServiceConnection(client.resource(ratingsBaseUri), startTime, INITIAL_SERVER_CONNECT_TIMEOUT);
+        } finally {
+            client.destroy();
+        }
+    }
+
+    private static void waitForServiceConnection(WebResource resource, long startTime, long timeOut) {
+        try {
+            resource.get(ClientResponse.class);
+            logger.info("Established connection to {}", resource.getURI());
+        } catch (ClientHandlerException e) {
+            if (Math.abs(System.currentTimeMillis() - startTime) < timeOut) {
+                logger.trace("Failed attempt to connect", e);
+                logger.info("No connection on {}. Retrying...", resource.getURI());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException("Interrupted while trying to connect to store back end on " + resource.getURI(), ex);
+                }
+                waitForServiceConnection(resource, startTime, timeOut);
+            } else {
+                logger.error("Failed to connect to {}", resource.getURI());
+                throw new RuntimeException("Could not connect to store back end on " + resource.getURI(), e);
+            }
+        }
+    }
+
+    /**
+     * check if resource exists at URI; if not, try to create it
+     *
+     * @throws RuntimeException
+     */
+    private void checkResourceAvailability() throws RuntimeException {
+        logger.info("Checking resource availability at {}", ratingsBaseUri);
+        final Client client = newClient();
+        try {
+            final WebResource resource = client.resource(ratingsBaseUri);
+            final ClientResponse getResponse = resource.get(ClientResponse.class
+            );
+            if (getResponse.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+                //resource does NOT exist; try to create it
+                if (!instantiateResource(resource)) {
+                    throw new RuntimeException("Failed to create resource " + ratingsBaseUri + " for " + getClass().getSimpleName());
+                }
+            } else {
+                logger.debug("Resource found at {}", ratingsBaseUri);
+            }
+        } finally {
+            client.destroy();
+        }
+    }
+
+    /**
      * Create the specified resource via a plain PUT
      *
      * @param resource
@@ -163,7 +216,8 @@ public class CouchDbRatingStore implements RatingStore {
      */
     private boolean instantiateResource(final WebResource resource) throws RuntimeException, UniformInterfaceException, ClientHandlerException {
         logger.info("Resource {} not found. Will try to create it via PUT.", ratingsBaseUri);
-        final ClientResponse putResponse = resource.put(ClientResponse.class);
+        final ClientResponse putResponse = resource.put(ClientResponse.class
+        );
         if (putResponse.getStatus() == Status.CREATED.getStatusCode()) {
             logger.info("Successfully created resource at {}", ratingsBaseUri);
             return true;
