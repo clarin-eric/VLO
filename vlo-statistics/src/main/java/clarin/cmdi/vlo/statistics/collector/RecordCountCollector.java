@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
 /**
@@ -35,7 +36,9 @@ public class RecordCountCollector implements VloStatisticsCollector {
         final SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
         query.setRows(0);
-        final QueryResponse result = solrClient.query(query);
+        QueryRequest req = new QueryRequest(query);
+        req.setBasicAuthCredentials(config.getSolrUserReadOnly(), config.getSolrUserReadOnlyPass());
+        final QueryResponse result = req.process(solrClient);
         final long recordCount = result.getResults().getNumFound();
 
         report.setRecordCount(recordCount);
