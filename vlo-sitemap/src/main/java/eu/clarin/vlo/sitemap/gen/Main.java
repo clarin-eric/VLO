@@ -36,6 +36,8 @@ public class Main {
 	Config.SITEMAP_NAME_PREFIX = prop.getString("SITEMAP_NAME_PREFIX");
 	Config.SITEMAP_INDEX_NAME = prop.getString("SITEMAP_INDEX_NAME");
 	Config.RECORD_URL_TEMPLATE = prop.getString("RECORD_URL_TEMPLATE");
+        Config.SOLR_USER = prop.getString("SOLR_USER");
+        Config.SOLR_PASS = prop.getString("SOLR_PASS");
 	Config.SOLR_QUERY_URL = prop.getString("SOLR_QUERY_URL");
 	Config.INCLUDE_URLS = prop.getList("INCLUDE_URLS");
 	
