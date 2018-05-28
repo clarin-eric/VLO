@@ -53,6 +53,12 @@ public class VloConfig {
     //(required = false)
     private int solrTimeOut = 0;
 
+    // Solr authentication
+    private String solrUserReadOnly;
+    private String solrUserReadOnlyPass;
+    private String solrUserReadWrite;
+    private String solrUserReadWritePass;
+
     @XmlElementWrapper(name = "dataRoots")
     @XmlElement(name = "DataRoot")
     private List<DataRoot> dataRoot;
@@ -346,6 +352,62 @@ public class VloConfig {
      */
     public void setSolrTimeOut(int param) {
         solrTimeOut = param;
+    }
+
+        /**
+     * @return the solrUserReadOnly
+     */
+    public String getSolrUserReadOnly() {
+        return solrUserReadOnly;
+    }
+
+    /**
+     * @param solrUserReadOnly the userReadOnlyName to set
+     */
+    public void setSolrUserReadOnly(String solrUserReadOnly) {
+        this.solrUserReadOnly = solrUserReadOnly;
+    }
+
+    /**
+     * @return the solrUserReadOnlyPass
+     */
+    public String getSolrUserReadOnlyPass() {
+        return solrUserReadOnlyPass;
+    }
+
+    /**
+     * @param solrUserReadOnlyPass the solrUserReadOnlyPass to set
+     */
+    public void setSolrUserReadOnlyPass(String solrUserReadOnlyPass) {
+        this.solrUserReadOnlyPass = solrUserReadOnlyPass;
+    }
+
+    /**
+     * @return the solrUserReadWrite
+     */
+    public String getSolrUserReadWrite() {
+        return solrUserReadWrite;
+    }
+
+    /**
+     * @param solrUserReadWrite the solrUserReadWrite to set
+     */
+    public void setSolrUserReadWrite(String solrUserReadWrite) {
+        this.solrUserReadWrite = solrUserReadWrite;
+    }
+
+    /**
+     * @return the solrUserReadWritePass
+     */
+    public String getSolrUserReadWritePass() {
+        return solrUserReadWritePass;
+    }
+
+    /**
+     * @param solrUserReadWritePass the solrUserReadWritePass to set
+     */
+    public void setUserReadWritePass(String solrUserReadWritePass) {
+        this.solrUserReadWritePass = solrUserReadWritePass;
     }
 
     /**

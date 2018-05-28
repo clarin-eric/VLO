@@ -21,7 +21,11 @@
         <vloconfig.homeUrl>http://www.clarin.eu/vlo</vloconfig.homeUrl>
         <vloconfig.helpUrl>http://www.clarin.eu/vlo</vloconfig.helpUrl>
         <vloconfig.fileProcessingThreads>2</vloconfig.fileProcessingThreads>
-        <vloconfig.solrThreads>2</vloconfig.solrThreads>
+	<vloconfig.solrThreads>2</vloconfig.solrThreads>
+	<vloconfig.solrUserReadOnly>user_read</vloconfig.solrUserReadOnly>
+	<vloconfig.solrUserReadOnlyPass>PASS_READ_ONLY</vloconfig.solrUserReadOnlyPass>
+	<vloconfig.solrUserReadWrite>user_rw</vloconfig.solrUserReadWrite>
+	<vloconfig.solrUserReadWritePass>PASS_READ/WRITE</vloconfig.solrUserReadWritePass>
     </properties>
     
     <build>
