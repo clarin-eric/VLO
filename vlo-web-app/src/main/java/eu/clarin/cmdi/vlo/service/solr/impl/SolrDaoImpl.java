@@ -9,6 +9,7 @@ import java.io.IOException;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
@@ -87,7 +88,9 @@ public class SolrDaoImpl {
     protected QueryResponse fireQuery(SolrQuery query) {
         try {
             logger.debug("Executing query: {}", query);
-            final QueryResponse response = solrClient.query(query);
+            QueryRequest req = new QueryRequest(query);
+            req.setBasicAuthCredentials(vloConfig.getSolrUserReadOnly(), vloConfig.getSolrUserReadOnlyPass());
+            final QueryResponse response = req.process(solrClient);
             logger.trace("Response: {}", response);
             return response;
         } catch(SolrException | SolrServerException e) {
