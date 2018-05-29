@@ -3,9 +3,9 @@
     "blockUnknown":true,
     "class":"solr.BasicAuthPlugin",
     "credentials":{
-        "user_admin":"PASS_ADMIN",
-        "user_rw":"PASS_READ/WRITE",
-        "user_read":"PASS_READ_ONLY"
+        "user_admin":"${VLO_DOCKER_SOLR_PASSWORD_ADMIN}",
+        "${VLO_DOCKER_SOLR_USER_READ_WRITE}":"${VLO_DOCKER_SOLR_PASSWORD_READ_WRITE}",
+        "${VLO_DOCKER_SOLR_USER_READ_ONLY}":"${VLO_DOCKER_SOLR_PASSWORD_READ_ONLY}"
     },
     "":{"v":0}
 },
@@ -27,8 +27,8 @@
    ],
    "user-role":{
        "user_admin":["role_admin", "role_write", "role_read"],
-       "user_rw":["role_write", "role_read"],
-       "user_read":"role_read"
+       "${VLO_DOCKER_SOLR_USER_READ_WRITE}":["role_write", "role_read"],
+       "${VLO_DOCKER_SOLR_USER_READ_ONLY}":"role_read"
    }
 }
 }
