@@ -111,13 +111,21 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
         });
 
         // pagination navigators
-        navigatorTop = new BootstrapAjaxPagingNavigator("pagingTop", resultsView);
+        navigatorTop = new BootstrapAjaxPagingNavigator("pagingTop", resultsView) {
+            @Override
+            protected void onAjaxEvent(AjaxRequestTarget target) {
+                super.onAjaxEvent(target);
+                onAjaxSearchPagination(target);
+            }
+
+        };
         add(navigatorTop);
         navigatorBottom = new BootstrapAjaxPagingNavigator("pagingBottom", resultsView) {
 
             @Override
             protected void onAjaxEvent(AjaxRequestTarget target) {
                 super.onAjaxEvent(target);
+                onAjaxSearchPagination(target);
                 //bottom navigator action should trigger scroll to top navigator
                 target.appendJavaScript(String.format("$('html, body')"
                         + ".animate({"
@@ -154,6 +162,10 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
         final boolean multiplePages = resultsView.getPageCount() > 1;
         navigatorTop.setVisible(multiplePages);
         navigatorBottom.setVisible(multiplePages);
+    }
+
+    protected void onAjaxSearchPagination(AjaxRequestTarget target) {
+
     }
 
 }

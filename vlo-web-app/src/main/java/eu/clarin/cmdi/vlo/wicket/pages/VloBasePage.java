@@ -27,6 +27,7 @@ import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
+import eu.clarin.cmdi.vlo.wicket.panels.RatingPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
@@ -69,6 +70,8 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
     @SpringBean
     private PiwikConfig piwikConfig;
+
+    private RatingPanel ratingPanel;
 
     public VloBasePage() {
         addComponents();
@@ -140,6 +143,8 @@ public class VloBasePage<T> extends GenericWebPage<T> {
             }
 
         });
+
+        add(ratingPanel = new RatingPanel("rating"));
     }
 
     /**
@@ -230,6 +235,10 @@ public class VloBasePage<T> extends GenericWebPage<T> {
                 new ImmutableNavbarComponent(clarinLink, ComponentPosition.RIGHT)
         );
         return navbar;
+    }
+
+    protected final RatingPanel getRatingPanel() {
+        return ratingPanel;
     }
 
 }
