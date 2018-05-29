@@ -21,11 +21,11 @@
         <vloconfig.homeUrl>http://www.clarin.eu/vlo</vloconfig.homeUrl>
         <vloconfig.helpUrl>http://www.clarin.eu/vlo</vloconfig.helpUrl>
         <vloconfig.fileProcessingThreads>2</vloconfig.fileProcessingThreads>
-	<vloconfig.solrThreads>2</vloconfig.solrThreads>
-	<vloconfig.solrUserReadOnly>user_read</vloconfig.solrUserReadOnly>
-	<vloconfig.solrUserReadOnlyPass>PASS_READ_ONLY</vloconfig.solrUserReadOnlyPass>
-	<vloconfig.solrUserReadWrite>user_rw</vloconfig.solrUserReadWrite>
-	<vloconfig.solrUserReadWritePass>PASS_READ/WRITE</vloconfig.solrUserReadWritePass>
+        <vloconfig.solrThreads>2</vloconfig.solrThreads>
+        <vloconfig.solrUserReadOnly>user_read</vloconfig.solrUserReadOnly>
+        <vloconfig.solrUserReadOnlyPass>PASS_READ_ONLY</vloconfig.solrUserReadOnlyPass>
+        <vloconfig.solrUserReadWrite>user_rw</vloconfig.solrUserReadWrite>
+        <vloconfig.solrUserReadWritePass>PASS_READ/WRITE</vloconfig.solrUserReadWritePass>
     </properties>
     
     <build>
@@ -138,6 +138,10 @@
                 <vloconfig.valueMappingFile>${VLO_DOCKER_VALUE_MAPPING_URI}</vloconfig.valueMappingFile>
                 <vloconfig.fileProcessingThreads>${VLO_DOCKER_FILE_PROCESSING_THREADS}</vloconfig.fileProcessingThreads>
                 <vloconfig.solrThreads>${VLO_DOCKER_SOLR_THREADS}</vloconfig.solrThreads>
+                <vloconfig.solrUserReadOnly>${VLO_DOCKER_SOLR_USER_READ_ONLY}</vloconfig.solrUserReadOnly>
+                <vloconfig.solrUserReadOnlyPass>${VLO_DOCKER_SOLR_PASSWORD_READ_ONLY}</vloconfig.solrUserReadOnlyPass>
+                <vloconfig.solrUserReadWrite>${VLO_DOCKER_SOLR_USER_READ_WRITE}</vloconfig.solrUserReadWrite>
+                <vloconfig.solrUserReadWritePass>${VLO_DOCKER_SOLR_PASSWORD_READ_WRITE}</vloconfig.solrUserReadWritePass>
             </properties>
         </profile>
     </profiles>
