@@ -34,7 +34,6 @@
 				<xs:element ref="fields" />
 				<xs:element ref="deprecatedFields" />
 				<xs:element ref="facetFields" />
-				<xs:element ref="simpleSearchFacetFields" />
 				<xs:element ref="primaryFacetFields" />
 				<xs:element name="hideSecondaryFacetsLimit" type="xs:string" />
 				<xs:element ref="searchResultFields" />

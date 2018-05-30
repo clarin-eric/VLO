@@ -131,15 +131,6 @@
         <facetField>DATA_PROVIDER</facetField>
     </facetFields>
 
-    <!-- KEYS of fields shown as facets on the simple search page -->
-    <simpleSearchFacetFields>
-        <simpleSearchFacetField>LANGUAGE_CODE</simpleSearchFacetField>
-        <simpleSearchFacetField>COLLECTION</simpleSearchFacetField>
-        <simpleSearchFacetField>RESOURCE_CLASS</simpleSearchFacetField>
-        <simpleSearchFacetField>MODALITY</simpleSearchFacetField>
-        <simpleSearchFacetField>GENRE</simpleSearchFacetField>
-    </simpleSearchFacetFields>
-
     <!-- KEYS of fields shown as primary facets -->
     <primaryFacetFields>
         <primaryFacetField>LANGUAGE_CODE</primaryFacetField>
