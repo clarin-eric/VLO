@@ -863,15 +863,28 @@ public class DefaultVloConfigFactoryTest {
     }
 
     @Test
-    public void testGetIgnoredFields() {
+    public void testGetIgnoredFieldNames() {
         Set<String> result = config.getIgnoredFieldNames();
         assertEquals(6, result.size());
     }
 
+
     @Test
-    public void testGetTechnicalFields() {
+    public void testGetIgnoredFieldKeys() {
+        Set<String> result = config.getIgnoredFieldKeys();
+        assertEquals(6, result.size());
+    }
+
+    @Test
+    public void testGetTechnicalFieldNames() {
         Set<String> result = config.getTechnicalFieldNames();
         assertEquals(11, result.size());
+    }
+
+    @Test
+    public void testGetTechnicalFieldKeys() {
+        Set<String> result = config.getTechnicalFieldKeys();
+        assertEquals(6, result.size());
     }
 
     @Test
