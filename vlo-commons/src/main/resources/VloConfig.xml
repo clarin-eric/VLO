@@ -212,14 +212,6 @@
         </availabilityValue>
     </availability>
 
-    <languageFilters>
-        <languageFilter>filterOne</languageFilter>
-        <languageFilter>filterTwo</languageFilter>
-        <languageFilter>filterThree</languageFilter>
-    </languageFilters>
-
-    <facetOverviewLength>30</facetOverviewLength>
-
     <countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
 
     <languageLinkTemplate>https://infra.clarin.eu/content/language_info/data/{}.html</languageLinkTemplate>
@@ -231,8 +223,6 @@
     <language3LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438110/xml</language3LetterCodeComponentUrl>
 
     <silToISO639CodesUrl>https://infra.clarin.eu/CMDI/1.1/xslt/sil_to_iso6393.xml</silToISO639CodesUrl>
-
-    <reverseProxyPrefix></reverseProxyPrefix>
 
     <FederatedContentSearchUrl>http://weblicht.sfs.uni-tuebingen.de/Aggregator/</FederatedContentSearchUrl>
 

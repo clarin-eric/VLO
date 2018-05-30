@@ -40,15 +40,12 @@
 				<xs:element ref="ignoredFields" />
 				<xs:element ref="technicalFields" />
 				<xs:element ref="availability" />
-				<xs:element ref="languageFilters" />
-				<xs:element name="facetOverviewLength" type="xs:string" />
 				<xs:element name="countryComponentUrl" type="xs:string" />
 				<xs:element name="languageLinkTemplate" type="xs:string" />
 				<xs:element name="feedbackFromUrl" type="xs:string" />
 				<xs:element name="language2LetterCodeComponentUrl" type="xs:string" />
 				<xs:element name="language3LetterCodeComponentUrl" type="xs:string" />
 				<xs:element name="silToISO639CodesUrl" type="xs:string" />
-				<xs:element name="reverseProxyPrefix" type="xs:string" />
 				<xs:element name="FederatedContentSearchUrl" type="xs:string" />
 				<xs:element name="cqlEndpointFilter" type="xs:string" />
 				<xs:element name="cqlEndpointAlternative" type="xs:string" />
