@@ -21,8 +21,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.ValidationEventHandler;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -45,6 +45,7 @@ import org.slf4j.LoggerFactory;
  * @author twagoo
  */
 public class VloConfigMarshaller {
+
     private final static Logger _logger = LoggerFactory.getLogger(VloConfigMarshaller.class);
 
     private final JAXBContext jc;
@@ -76,39 +77,36 @@ public class VloConfigMarshaller {
     public final VloConfig unmarshal(Source source) throws JAXBException {
         final Unmarshaller unmarshaller = jc.createUnmarshaller();
         SchemaFactory xsdFac = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        
+
         // custom parser, so that we can make it XInclude aware
         final SAXParserFactory spf = SAXParserFactory.newInstance();
         spf.setXIncludeAware(true);
         spf.setNamespaceAware(true);
-        
-        
-
 
         try {
             // to prevent the parser adding xml:base
             spf.setFeature("http://apache.org/xml/features/xinclude/fixup-base-uris", false);
-            
-            
+
             Schema schema = xsdFac.newSchema(getClass().getResource("/VloConfig.xsd"));
             unmarshaller.setSchema(schema);
-            unmarshaller.setEventHandler(validationEvent -> { 
-                _logger.warn(validationEvent.toString());
-                return true; // unmarshalling should continue in case of validation error
-                });
-            
+            unmarshaller.setEventHandler(getConfigValidationEventHandler());
+
             final XMLReader xr = spf.newSAXParser().getXMLReader();
             // XML transformation 'source' needs to be converted to a SAX 'input source'
             final InputSource inputSource = SAXSource.sourceToInputSource(source);
             final SAXSource saxSource = new SAXSource(xr, inputSource);
 
- 
             return (VloConfig) unmarshaller.unmarshal(saxSource);
-        } catch (ParserConfigurationException ex) {
-            throw new JAXBException(ex);
-        } catch (SAXException ex) {
+        } catch (ParserConfigurationException | SAXException ex) {
             throw new JAXBException(ex);
         }
+    }
+
+    protected ValidationEventHandler getConfigValidationEventHandler() {
+        return validationEvent -> {
+            _logger.warn(validationEvent.toString());
+            return true; // unmarshalling should continue in case of validation error
+        };
     }
 
 }
