@@ -11,7 +11,10 @@ compose_vlo/>), make sure to remove the Solr home provisioning volume before bri
 the services up, as otherwise an obsolete Solr configuration may be applied to the Solr
 container!!!
 
-Quick overview of the manual upgrade steps (for details see DEPLOY-README)
+Below you will find a quick overview of the manual upgrade steps. For more details see 
+DEPLOYMENT.md. Note that these steps do not apply in a direct way if you are using the
+docker based setup. Be advised to always take note of the version specific upgrade
+instructions (see below) in any case.
 
 1. Unpack the VLO distribution tarball
 
@@ -27,7 +30,10 @@ Quick overview of the manual upgrade steps (for details see DEPLOY-README)
 configuration file that is included into this file by means of XInclude. It is
 advised to perform a diff between the old and new versions of these files.
 Depending on configuration preferences, you may want to copy settings from the
-old configuration to the new one.
+old configuration to the new one. 
+
+See the version specific upgrade instructions below to see whether any specific changes
+require your attention at this point!
 
 5. Stop 
 	1) the Tomcat (or at least the VLO web app), and 
@@ -70,6 +76,91 @@ which configures the location of the Solr data directory.
 for the upgraded VLO instance), go to the `bin` directory and run the importer using the
 updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
+
+-----------------------------
+Upgrading from 4.4.x to 4.5.0
+-----------------------------
+The changes with consequences for configuration and deployment in this version are:
+
+1. Introduction of an authentication requirement for communication with the Solr server
+   by clients including the VLO importer, web app and utilities to generate sitemap 
+   and statistics
+2. Introduction of a CouchDB backend to support the optional feature of user satisfaction
+   reporting 
+3. Several changes in VloConfig.xml
+
+See the sections below for details for all of these.
+
+## §1: Solr authentication
+
+The bundled Solr configuration has been extended with a security configuration (see
+`solr/vlo-solr-home/security.json` in the deployment package) which enables basic 
+authentication for all HTTP access. This file contains hashed passwords for a number of
+users with different roles. The VLO has to be configured with credentials for both a user
+with only read access, and a user with read/write access. For this purpose, new settings
+have been introduced to VloConfig.xml (see §3). The `config.properties` file of the
+statistics generator, if used, also needs to be adapted accordingly.
+
+The docker compose setup for the VLO provides shared environment variables for securing
+and accessing the Solr instance. See its documentation at 
+<https://gitlab.com/CLARIN-ERIC/compose_vlo/>. IMPORTANT: the Solr home provisioning 
+volume must (and can safely) be removed before starting the services after upgrading!!
+
+For some technical notes, see <https://github.com/clarin-eric/VLO/issues/126> and
+the relevant Solr documentation section at 
+<https://lucene.apache.org/solr/guide/7_3/basic-authentication-plugin.html>.
+
+## §2: CouchDB based user satisfaction rating storage
+
+A new feature has been added to the VLO web app, which, if enabled, presents users with
+a widget that allows them to 'rate' the VLO and optionally include some textual comment.
+This information, once submitted, is sent to a REST service as a JSON structure by the
+web application's back end. This behaviour has been implemented and tested to work with
+a CouchDB 2.1 instance. The following context parameters have been added to allow for
+setting this up (default values in parentheses where applicable):
+
+- eu.clarin.cmdi.vlo.rating.enabled (false)
+- eu.clarin.cmdi.vlo.rating.couchdb.url
+- eu.clarin.cmdi.vlo.rating.couchdb.user
+- eu.clarin.cmdi.vlo.rating.couchdb.password   
+- eu.clarin.cmdi.vlo.rating.panel.showPanelDelay (120)
+- eu.clarin.cmdi.vlo.rating.panel.dismissTimeout (604800)
+- eu.clarin.cmdi.vlo.rating.panel.submitTimeout (2592000)
+
+If 'eu.clarin.cmdi.vlo.rating.enabled' is not set to 'true' or 
+'eu.clarin.cmdi.vlo.rating.couchdb.url' is empty or unset, the VLO will leave the
+feature disabled. The CouchDB URL must identify and locate the resource to which the
+JSON data must be sent (via HTTP PUT); typically this would be 
+"http://localhost:5984/ratings". The configured CouchDB user must have write access to
+this resource (i.e. be allowed to create subresources via HTTP PUT), and the resource must
+either exist or the user must have permissions to instantiate this resource (via HTTP 
+PUT).
+
+The docker compose setup for the VLO contains a overlay (usersatisfaction.yml) that both
+defines a CouchDB service and configures the VLO correctly for communicating with this
+service. You can also configure the VLO to communicate with an external REST service for
+this purpose by setting the relevant environment variables. See the documentation at 
+<https://gitlab.com/CLARIN-ERIC/compose_vlo/>.
+
+For some technical notes, see <https://github.com/clarin-eric/VLO/issues/165>.
+
+## §3: Changes in VloConfig.xml
+
+VloConfig.xml has seen a change in the available configuration options, with both 
+removals and new additions in this release
+
+- Settings added to VloConfig.xml: 
+	solrUserReadOnly, solrUserReadOnlyPass, solrUserReadWrite, solrUserReadWritePass
+- Settings removed from VloConfig.xml:
+	simpleSearchFacetFields, languageFilters, facetOverviewLength
+- The nature of the following settings has changed in that the included fields should now
+be referenced by key rather than field name:
+	facetFields, primaryFacetFields, searchResultFields, ignoredFields, technicalFields
+
+The bundled VloConfig.xml has all these changes applied. When upgrading, it is advised
+to use the bundled VloConfig.xml and adapt as needed. When using the docker setup, all
+important settings can be tweaked through environment variables. See its documentation at 
+<https://gitlab.com/CLARIN-ERIC/compose_vlo/>.
 
 -----------------------------
 Upgrading from 4.4.2 to 4.4.3

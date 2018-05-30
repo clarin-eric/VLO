@@ -1,9 +1,21 @@
 Bug fixes and new features
 --------------------------
-VLO 4.5.0 (July???? 2018)
+VLO 4.5.0 (July 2018)
 
-* Added a guided tour to the web app
+* The URL in the address bar updates on changes through Ajax for better sharing
+    <https://github.com/clarin-eric/VLO/issues/122>   
+* A guided tour has been added to the web app
     <https://github.com/clarin-eric/VLO/issues/7>
+* User satisfaction can be elicited via a pop-up widget (and stored in a database)
+    <https://github.com/clarin-eric/VLO/issues/165>
+* EOSC-hub statement added to the web app's footer
+    <https://github.com/clarin-eric/VLO/issues/175>
+* Solr authorisation
+    <https://github.com/clarin-eric/VLO/issues/126>
+* Referencing to field-keys instead of solr field names in VloConfig
+    <https://github.com/clarin-eric/VLO/issues/166>
+* Schema validation of VloConfig.xml
+    <https://github.com/clarin-eric/VLO/issues/124>
 
 VLO 4.4.3 (May 2018)
 

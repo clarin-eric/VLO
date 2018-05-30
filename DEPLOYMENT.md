@@ -100,6 +100,28 @@ to its absolute path. The VLO specific data will then be stored by Solr in
 `${solr.data.home}/${CORE_NAME}/data`. Note: as of version 4.3 of the VLO,
 `CORE_NAME=vlo-index`.
 
+### Security
+
+The bundled Solr configuration has been extended with a security configuration (see
+`solr/vlo-solr-home/security.json` in the deployment package) which enables basic 
+authentication for all HTTP access. This file contains hashed passwords for a number of
+users with different roles. The VLO has to be configured with credentials for both a user
+with only read access, and a user with read/write access. For this purpose, a
+number of settings have been introduced to VloConfig.xml:
+
+- `solrUserReadOnly`
+- `solrUserReadOnlyPass`
+- `solrUserReadWrite`
+- `solrUserReadWritePass`
+
+The docker compose setup for the VLO provides shared environment variables for securing
+and accessing the Solr instance. See its [documentation](https://gitlab.com/CLARIN-ERIC/compose_vlo/). 
+**IMPORTANT**: the Solr home provisioning volume must (and can safely) be removed before
+starting the services after upgrading!!
+
+For some technical notes, see [issue #126](https://github.com/clarin-eric/VLO/issues/126) and
+the relevant [Solr documentation section](https://lucene.apache.org/solr/guide/7_3/basic-authentication-plugin.html).
+
 #### Docker
 
 In a container based setup (i.e. using Docker (Compose)), you may want to use 
@@ -118,7 +140,8 @@ and just mount a persistent (core specific!) storage directory in that location.
 **not recommended** for production.
 
 The [VLO Docker Compose configuration](https://gitlab.com/CLARIN-ERIC/compose_vlo) may
-be helpful to get started.
+be helpful to get started. Notice that there are various compose configuration overlays
+(`.yml` files) for different environments and different optional features/extensions.
 
 ## Web-app
 
@@ -161,6 +184,17 @@ Piwik access statistics can be configured by setting the  following context para
 - `eu.clarin.cmdi.vlo.piwik.siteId` (defaults to production value)
 - `eu.clarin.cmdi.vlo.piwik.host` (defaults to production value)
 - `eu.clarin.cmdi.vlo.piwik.domains` (defaults to production value)
+See packaged context.xml for details and examples.
+
+User satisfaction score elicitation and storage in a CouchDB (or equivalent) database
+can be configured by setting the following context parameters:
+- `eu.clarin.cmdi.vlo.rating.enabled` (set true to enable)
+- `eu.clarin.cmdi.vlo.rating.couchdb.url` (has to be the url of the target parent resource)
+- `eu.clarin.cmdi.vlo.rating.couchdb.user`
+- `eu.clarin.cmdi.vlo.rating.couchdb.password`
+- `eu.clarin.cmdi.vlo.rating.panel.showPanelDelay` (defaults to 120)
+- `eu.clarin.cmdi.vlo.rating.panel.dismissTimeout` (defaults to 604800)
+- `eu.clarin.cmdi.vlo.rating.panel.submitTimeout` (defaults to 2592000)
 See packaged context.xml for details and examples.
 
 ## Importerer
