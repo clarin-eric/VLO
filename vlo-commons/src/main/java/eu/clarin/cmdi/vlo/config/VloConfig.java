@@ -75,10 +75,6 @@ public class VloConfig {
     // mapping
     //(required = false)
     private String facetConceptsFile = "";
-    
-    @XmlElementWrapper(name = "languageFilters")
-    @XmlElement(name = "languageFilter")
-    private String[] languageFilters = {"", "", ""};
 
     private boolean printMapping = false;
 
@@ -124,9 +120,6 @@ public class VloConfig {
     private String conceptRegistryUrl = "";
 
     private String vocabularyRegistryUrl = "";
-
-    // web application user interface 
-    private int facetOverviewLength = 0;
 
     private String homeUrl = "";
 
@@ -194,10 +187,6 @@ public class VloConfig {
     private int hideSecondaryFacetsLimit = 7;
 
     private String collectionFacet;
-
-    // test related parameters
-    //(required = false)
-    private String reverseProxyPrefix = "";
 
     //(required = false)
     private String cqlEndpointFilter = "";
@@ -981,54 +970,6 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the languageFields parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @return the value
-     */
-    public String[] getLanguageFilters() {
-        return languageFilters;
-    }
-
-    /**
-     * Set the value of the languageFilters parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @param param the value, a list of language filters
-     */
-    public void setLanguageFilters(String[] param) {
-        languageFilters = param;
-    }
-
-    /**
-     * Get the value of the getFacetOverviewLength parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @return the value
-     */
-    public int getFacetOverviewLength() {
-        return facetOverviewLength;
-    }
-
-    /**
-     * Set the value of the setFacetOverviewLength parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @param param the value
-     */
-    public void setFacetOverviewLength(Integer param) {
-        facetOverviewLength = param;
-    }
-
-    /**
      * Get the value of the CountryComponentUrl parameter<br><br>
      *
      * For a description of the parameter, refer to the general VLO
@@ -1122,30 +1063,6 @@ public class VloConfig {
      */
     public void setSilToISO639CodesUrl(String param) {
         silToISO639CodesUrl = param;
-    }
-
-    /**
-     * Get the value of the reverseProxyPath parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @return the value
-     */
-    public String getReverseProxyPrefix() {
-        return reverseProxyPrefix;
-    }
-
-    /**
-     * Set the value of the reverseProxyPrefix parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @param param the value
-     */
-    public void setReverseProxyPrefix(String param) {
-        reverseProxyPrefix = param;
     }
 
     /**

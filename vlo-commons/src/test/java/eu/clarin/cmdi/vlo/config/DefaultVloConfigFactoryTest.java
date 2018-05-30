@@ -795,37 +795,6 @@ public class DefaultVloConfigFactoryTest {
     }
 
     /**
-     * Test the getReverseProxyPrefix method
-     */
-    @Test
-    public void testReverseProxyPrefix() {
-
-        System.out.println("getReverseProxyPrefix");
-
-        String expResult = "";
-        String result = config.getReverseProxyPrefix();
-
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test the setReverseProxyPrefix method
-     */
-    @Test
-    public void testSetReverseProxyPrefix() {
-
-        System.out.println("setReverseProxyPrefix");
-
-        String param = "vlodev/";
-
-        config.setReverseProxyPrefix(param);
-
-        String result = config.getReverseProxyPrefix();
-
-        assertEquals(param, result);
-    }
-
-    /**
      * Test the getCqlEndpointFilter method
      */
     @Test
