@@ -21,10 +21,12 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Properties;
+import javax.xml.bind.ValidationEventHandler;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -53,16 +55,33 @@ public class VloConfigMarshallerTest {
      */
     @Test
     public void testUnmarshal() throws Exception {
-        InputStream configFile = getClass().getResourceAsStream(VLO_CONFIG_FILE);
-        VloConfig config = instance.unmarshal(new StreamSource(configFile, getClass().getResource(VLO_CONFIG_FILE).toString()));
-        configFile.close();
+        try (InputStream configFile = getClass().getResourceAsStream(VLO_CONFIG_FILE)) {
+            VloConfig config = instance.unmarshal(new StreamSource(configFile, getClass().getResource(VLO_CONFIG_FILE).toString()));
 
-        assertNotNull(config);
-        assertEquals(testProps.getProperty("solrUrl"), config.getSolrUrl());
-        assertEquals(12, config.getFacetFields().size());
+            assertNotNull(config);
+            assertEquals(testProps.getProperty("solrUrl"), config.getSolrUrl());
+            assertEquals(12, config.getFacetFieldNames().size());
 
-        assertEquals(4, config.getAvailabilityValues().size());
-        assertEquals("Public", config.getAvailabilityValues().get(0).getDisplayValue());
+            assertEquals(4, config.getAvailabilityValues().size());
+            assertEquals("Public", config.getAvailabilityValues().get(0).getDisplayValue());
+        }
+    }
+
+    @Test
+    public void testDefaultConfigValidity() throws Exception {
+        final VloConfigMarshaller failingOnValidationErrorInstance = new VloConfigMarshaller() {
+            @Override
+            protected ValidationEventHandler getConfigValidationEventHandler() {
+                return (event) -> {
+                    fail("Validation error while unmarshalling default configuration:" + event.getMessage());
+                    return false;
+                };
+            }
+
+        };
+        try (InputStream configFile = getClass().getResourceAsStream(VLO_CONFIG_FILE)) {
+            VloConfig config = failingOnValidationErrorInstance.unmarshal(new StreamSource(configFile, getClass().getResource(VLO_CONFIG_FILE).toString()));
+        }
     }
 
     /**
@@ -73,7 +92,7 @@ public class VloConfigMarshallerTest {
         final VloConfig config = new VloConfig();
         config.setSolrUrl("http://server/solr");
         config.setDataRoots(Arrays.asList(new DataRoot("originName", new File("rootFile"), "prefix", "toStrip", Boolean.FALSE)));
-        config.setFacetFields(Arrays.asList("collection", "country", "continent"));
+        config.setFacetFieldKeys(Arrays.asList("collection", "country", "continent"));
         config.setAvailabilityValues(Arrays.asList(
                 new FieldValueDescriptor("PUB", "Public", "Description for public"),
                 new FieldValueDescriptor("ACA", "Academic", "Description for academic")
