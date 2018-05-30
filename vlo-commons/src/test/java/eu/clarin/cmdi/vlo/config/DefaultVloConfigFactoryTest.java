@@ -906,12 +906,6 @@ public class DefaultVloConfigFactoryTest {
     }
 
     @Test
-    public void testGetSimpleSearchFacetFields() {
-        List<String> result = config.getSimpleSearchFacetFieldNames();
-        assertEquals(5, result.size());
-    }
-
-    @Test
     public void testGetVcrSubmitEndpoint() {
         assertEquals("https://clarin.ids-mannheim.de/vcr/service/submit", config.getVcrSubmitEndpoint());
     }

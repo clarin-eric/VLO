@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -188,9 +187,6 @@ public class VloConfig {
      */
     @XmlElementWrapper(name = "facetFields")
     private List<String> facetField = new ArrayList<String>();
-
-    @XmlElementWrapper(name = "simpleSearchFacetFields")
-    private List<String> simpleSearchFacetField;
 
     @XmlElementWrapper(name = "primaryFacetFields")
     private Set<String> primaryFacetField;
@@ -862,24 +858,6 @@ public class VloConfig {
      */
     public List<String> getFacetFieldNames() {
         return this.facetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
-    }
-    
-    /**
-     * @return List of field-keys
-     */
-    public List<String> getSimpleSearchFacetFieldKeys() {
-        return this.simpleSearchFacetField;
-    }
-
-    /**
-     * @return List of resolved field-names
-     */
-    public List<String> getSimpleSearchFacetFieldNames() {
-        return this.simpleSearchFacetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
-    }
-
-    public void setSimpleSearchFacetFieldKeys(List<String> simpleSearchFacetField) {
-        this.simpleSearchFacetField = simpleSearchFacetField;
     }
     
     /**
