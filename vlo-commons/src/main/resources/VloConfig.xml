@@ -115,7 +115,7 @@
         <field key="DEPRECATED_LANGUAGE">language</field>
     </deprecatedFields>
 
-    <!-- Fields shown as facets on the search page -->
+    <!-- KEYS of fields shown as facets on the search page -->
     <facetFields>
         <facetField>LANGUAGE_CODE</facetField>
         <facetField>COLLECTION</facetField>
@@ -131,6 +131,7 @@
         <facetField>DATA_PROVIDER</facetField>
     </facetFields>
 
+    <!-- KEYS of fields shown as facets on the simple search page -->
     <simpleSearchFacetFields>
         <simpleSearchFacetField>LANGUAGE_CODE</simpleSearchFacetField>
         <simpleSearchFacetField>COLLECTION</simpleSearchFacetField>
@@ -139,6 +140,7 @@
         <simpleSearchFacetField>GENRE</simpleSearchFacetField>
     </simpleSearchFacetFields>
 
+    <!-- KEYS of fields shown as primary facets -->
     <primaryFacetFields>
         <primaryFacetField>LANGUAGE_CODE</primaryFacetField>
         <primaryFacetField>COLLECTION</primaryFacetField>
@@ -151,7 +153,7 @@
     <!-- If this many facets or more than this have values, hide non-primary facets -->
     <hideSecondaryFacetsLimit>8</hideSecondaryFacetsLimit>
 
-    <!-- Fields shown in expanded search results on the search page -->
+    <!-- KEYS of fields shown in expanded search results on the search page -->
     <searchResultFields>
         <searchResultField>NAME</searchResultField>
         <searchResultField>COUNTRY</searchResultField>
@@ -164,7 +166,7 @@
         <searchResultField>NATIONAL_PROJECT</searchResultField>
     </searchResultFields>
 
-    <!-- Fields ignored in the record page -->
+    <!-- KEYS of fields ignored in the record page -->
     <ignoredFields>
         <ignoredField>FORMAT</ignoredField>
         <ignoredField>SOLR_SCORE</ignoredField>
@@ -174,7 +176,7 @@
         <ignoredField>ACCESS_INFO</ignoredField>
     </ignoredFields>
 
-    <!-- Fields shown as technical fields in the record page -->
+    <!-- KEYS of fields shown as technical fields in the record page -->
     <technicalFields>
         <technicalField>ID</technicalField>
         <technicalField>SELF_LINK</technicalField>
