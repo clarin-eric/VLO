@@ -36,7 +36,7 @@
         <vlo.mapping.version>1.2.1</vlo.mapping.version>
         
         <!-- Common runtime dependency versions -->
-        <solr.version>7.3.0</solr.version>
+        <solr.version>7.3.1</solr.version>
         <slf4j.version>1.7.25</slf4j.version>
         <saxon.version>9.8.0-8</saxon.version>
         
