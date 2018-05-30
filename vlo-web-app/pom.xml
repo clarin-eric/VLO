@@ -19,9 +19,9 @@
 
     <properties>
         <wicket.version>7.10.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
-        <spring.version>4.3.13.RELEASE</spring.version>
+        <spring.version>4.3.17.RELEASE</spring.version>
         <jetty.version>8.1.17.v20150415</jetty.version>
-        <jackson.version>2.9.1</jackson.version>
+        <jackson.version>2.9.5</jackson.version>
         <clarin-basestyle.version>0.2.0</clarin-basestyle.version>
         <!-- selects the appender for the log4j root logger -->
         <log4j.appender>File</log4j.appender>
