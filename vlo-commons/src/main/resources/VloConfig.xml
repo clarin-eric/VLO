@@ -29,6 +29,14 @@
     <minDocsInSolrQueue>1024</minDocsInSolrQueue>
 
     <solrTimeOut>300</solrTimeOut>
+    
+    <!-- Authentication for Solr server -->
+    <!-- Read-only user (e.g. for Webapp) -->
+    <solrUserReadOnly>${vloconfig.solrUserReadOnly}</solrUserReadOnly>
+    <solrUserReadOnlyPass>${vloconfig.solrUserReadOnlyPass}</solrUserReadOnlyPass>
+    <!-- Read-Write user (Importer) -->
+    <solrUserReadWrite>${vloconfig.solrUserReadWrite}</solrUserReadWrite>
+    <solrUserReadWritePass>${vloconfig.solrUserReadWritePass}</solrUserReadWritePass>
 
     <!-- Max record file size to accept in bytes -->
     <maxFileSize>50000000</maxFileSize>

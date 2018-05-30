@@ -16,6 +16,10 @@
 				<xs:element name="maxDocsInList" type="xs:string" />
 				<xs:element name="minDocsInSolrQueue" type="xs:string" />
 				<xs:element name="solrTimeOut" type="xs:string" />
+                                <xs:element name="solrUserReadOnly" type="xs:string" />
+				<xs:element name="solrUserReadOnlyPass" type="xs:string" />
+				<xs:element name="solrUserReadWrite" type="xs:string" />
+				<xs:element name="solrUserReadWritePass" type="xs:string" />
 				<xs:element name="maxFileSize" type="xs:string" />
 				<xs:element name="useHandleResolver" type="xs:string" />
 				<xs:element name="printMapping" type="xs:string" />
