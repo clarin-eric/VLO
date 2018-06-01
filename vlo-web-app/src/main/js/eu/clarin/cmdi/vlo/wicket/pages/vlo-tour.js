@@ -22,7 +22,7 @@
  * 
  */
 
-var TOUR_QUERY_EXAMPLE="speech corpus";
+var TOUR_QUERY_EXAMPLE = "speech corpus";
 
 function createTour(restart, step) {
     var opts = {
@@ -69,6 +69,13 @@ function typeValue(input, value) {
     }
 }
 
+function disablePrev(tour) {
+    // disable 'prev' button on current step
+    $(".tour-vlo-tour-" + tour.getCurrentStep() + " .btn[data-role=prev]")
+            .attr('disabled', 'disabled')
+            .addClass('disabled');
+}
+
 function createTourSteps() {
     return [
         {
@@ -104,7 +111,7 @@ function createTourSteps() {
             onShow: function () {
                 //unregister any remaining event handles on form submit
                 $('#search-form .search-button').off('click.tour');
-                
+
                 //submit search form if not submitted yet (check stored data)
                 if (!$('#search-form').data('tour-submitted')) {
                     $('#search-form .search-button').click();
@@ -158,7 +165,8 @@ function createTourSteps() {
                         return (new jQuery.Deferred()).promise();
                     }
                 }
-            }
+            },
+            onShown: disablePrev
         }, {
             element: ".record-tabpanel .tab1",
             title: "Resources tab",
@@ -197,8 +205,8 @@ function createTourSteps() {
             title: "Search results navigation",
             content: "Use these buttons to navigate to the previous or next item from the result results without having to go back to the list.",
             placement: "auto bottom",
-            onShow: function() {
-                $("#recordprevnext").on('click', '.btn', function(evt){
+            onShow: function () {
+                $("#recordprevnext").on('click', '.btn', function (evt) {
                     //make sure tour is continued after navigation
                     evt.preventDefault();
                     window.location = evt.target.closest('a').getAttribute('href') + '#tour';
@@ -223,9 +231,9 @@ function createTourSteps() {
             element: ".breadcrumbs-searchresults",
             title: "Back to the search results",
             content: "Click the link in the breadcrumbs bar to go back to your search results and continue exploring the VLO. The tour ends here. Thanks for your attention and interest in using the VLO!",
-            placement: "auto bottom", 
-            onShow: function(tour) {
-                $('.breadcrumbs-searchresults').one('click', function(evt) {
+            placement: "auto bottom",
+            onShow: function (tour) {
+                $('.breadcrumbs-searchresults').one('click', function (evt) {
                     evt.preventDefault();
                     //stop tour
                     tour.end();
