@@ -121,8 +121,8 @@ public class RatingPanel extends Panel {
                 .add(createCommentSubmitForm("user-rating-form"))
                 .add(createCurrentSelectionLabel("user-rating-selection")));
 
-        // we need to be able to refresh this via Ajax
-        setOutputMarkupId(true);
+        // we need to be able to refresh this via Ajax (also if hidden)
+        setOutputMarkupPlaceholderTag(true);
     }
 
     @Override
