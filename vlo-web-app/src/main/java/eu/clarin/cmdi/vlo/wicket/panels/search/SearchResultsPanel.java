@@ -117,7 +117,6 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
                 super.onAjaxEvent(target);
                 onAjaxSearchPagination(target);
             }
-
         };
         add(navigatorTop);
         navigatorBottom = new BootstrapAjaxPagingNavigator("pagingBottom", resultsView) {
