@@ -115,8 +115,6 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
             @Override
             protected void onAjaxEvent(AjaxRequestTarget target) {
                 super.onAjaxEvent(target);
-                //updating record offset in search result header
-                target.add(super.getPage().get("searchContainer:searchresultsheader"));
                 onAjaxSearchPagination(target);
             }
         };
@@ -126,8 +124,6 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
             @Override
             protected void onAjaxEvent(AjaxRequestTarget target) {
                 super.onAjaxEvent(target);
-                //updating record offset in search result header
-                target.add(super.getPage().get("searchContainer:searchresultsheader"));
                 onAjaxSearchPagination(target);
                 //bottom navigator action should trigger scroll to top navigator
                 target.appendJavaScript(String.format("$('html, body')"
