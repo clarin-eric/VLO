@@ -6,22 +6,22 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.4.3</version>
+        <version>4.5.0-beta1</version>
     </parent>
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-web-app</artifactId>
     <packaging>war</packaging>
-    <version>4.4.3</version>
+    <version>4.5.0-beta1</version>
     <name>VLO Web Application</name>
     <description></description>
 
     <properties>
         <wicket.version>7.10.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
-        <spring.version>4.3.13.RELEASE</spring.version>
+        <spring.version>4.3.17.RELEASE</spring.version>
         <jetty.version>8.1.17.v20150415</jetty.version>
-        <jackson.version>2.9.1</jackson.version>
+        <jackson.version>2.9.5</jackson.version>
         <clarin-basestyle.version>0.2.0</clarin-basestyle.version>
         <!-- selects the appender for the log4j root logger -->
         <log4j.appender>File</log4j.appender>
@@ -189,6 +189,11 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
         </dependency>
     </dependencies>
     

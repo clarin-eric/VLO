@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.VloWebSession;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
@@ -19,6 +20,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
@@ -44,17 +46,20 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 /**
  * The main search page showing a search form, facets, and search results
  *
  * @author twagoo
  */
-public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
+public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> implements HistoryApiAware {
 
     private static final long serialVersionUID = 1L;
     //private final static List<String> ADDITIONAL_FACETS = ImmutableList.of(FacetConstants.FIELD_LICENSE_TYPE);
@@ -124,7 +129,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     }
 
     private void createModels() {
-        final List<String> facetFields = vloConfig.getFacetFields();
+        final List<String> facetFields = vloConfig.getFacetFieldNames();
         final List<String> allFields = ImmutableList.copyOf(Iterables.concat(facetFields, ImmutableList.of(fieldNameService.getFieldName(ADDITIONAL_FACETS))));
         facetNamesModel = new FacetNamesModel(facetFields);
         fieldsModel = new FacetFieldsModel(facetFieldsService, allFields, getModel(), -1);
@@ -225,6 +230,16 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
                 super.onConfigure();
                 setVisible(solrDocumentProvider.size() > 0);
             }
+
+            @Override
+            protected void onAjaxSearchPagination(AjaxRequestTarget target) {
+                super.onAjaxSearchPagination(target);
+                if (target != null) {
+                    //update rating panel as the initial hiding time may have lapsed
+                    target.add(getRatingPanel());
+                }
+            }
+
         };
         searchContainer.add(searchResultsPanel.setOutputMarkupPlaceholderTag(true));
 
@@ -304,6 +319,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
                 if (target != null) {
                     target.prependJavaScript("cb|transitionFromSimple(cb);");
                     target.add(searchContainer); //update everything within container
+                    target.add(getRatingPanel()); //also update rating panel as the initial hiding time may have lapsed
                 }
 
                 updateSelection(target);
@@ -339,6 +355,11 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
             target.add(resultsHeader);
             target.add(searchResultsPanel);
             target.add(selections);
+
+            //also update rating panel as the initial hiding time may have lapsed
+            target.add(getRatingPanel());
+
+            //reapply js for nice tooltips
             target.appendJavaScript("applyFacetTooltips();");
         }
     }
@@ -346,6 +367,11 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     @Override
     public IModel<String> getCanonicalUrlModel() {
         return new PermaLinkModel(getPageClass(), getModel());
+    }
+
+    @Override
+    public PageParameters getHistoryApiPageParameters() {
+        return paramsConverter.toParameters(getModelObject());
     }
 
     @Override
@@ -372,4 +398,13 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> {
     public SearchResultsPanel getSearchResultsPanel() {
         return searchResultsPanel;
     }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getBootstrapTour()));
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js")));
+        response.render(JavaScriptHeaderItem.forScript("initTourSearchPage();", "initTourSearchPage"));
+    }
+
 }

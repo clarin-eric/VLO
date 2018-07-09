@@ -27,6 +27,7 @@ import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
+import eu.clarin.cmdi.vlo.wicket.panels.RatingPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
@@ -69,6 +70,8 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
     @SpringBean
     private PiwikConfig piwikConfig;
+
+    private RatingPanel ratingPanel;
 
     public VloBasePage() {
         addComponents();
@@ -140,6 +143,8 @@ public class VloBasePage<T> extends GenericWebPage<T> {
             }
 
         });
+
+        add(ratingPanel = new RatingPanel("rating"));
     }
 
     /**
@@ -177,6 +182,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         response.render(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference()));
         // Include other JavaScript for header (e.g. permalink animation)
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloHeaderJS()));
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getHistoryApiJS()));
     }
 
     private void addComponents() {
@@ -223,11 +229,16 @@ public class VloBasePage<T> extends GenericWebPage<T> {
                 .add(new AttributeModifier("class", "clarin-logo hidden-xs"));
 
         //add all menu compoennts
-        navbar.addComponents(new ImmutableNavbarComponent(new NavbarButton(FacetedSearchPage.class, Model.of("Search")), ComponentPosition.LEFT),
-                new ImmutableNavbarComponent(new NavbarButton(HelpPage.class, Model.of("Help")), ComponentPosition.LEFT),
+        navbar.addComponents(
+                new ImmutableNavbarComponent(new NavbarButton(FacetedSearchPage.class, Model.of("Search")).add(new AttributeModifier("class", "search-link")), ComponentPosition.LEFT),
+                new ImmutableNavbarComponent(new NavbarButton(HelpPage.class, Model.of("Help")).add(new AttributeModifier("class", "help-link")), ComponentPosition.LEFT),
                 new ImmutableNavbarComponent(clarinLink, ComponentPosition.RIGHT)
         );
         return navbar;
+    }
+
+    protected final RatingPanel getRatingPanel() {
+        return ratingPanel;
     }
 
 }

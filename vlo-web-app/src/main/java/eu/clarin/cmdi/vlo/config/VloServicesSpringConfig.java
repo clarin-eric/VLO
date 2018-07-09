@@ -28,10 +28,12 @@ import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.FieldValueOrderingsFactory;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.PermalinkService;
+import eu.clarin.cmdi.vlo.service.RatingStore;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
+import eu.clarin.cmdi.vlo.service.impl.CouchDbRatingStore;
 import eu.clarin.cmdi.vlo.service.impl.DocumentParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
 import eu.clarin.cmdi.vlo.service.impl.FacetDescriptionServiceImpl;
@@ -78,10 +80,9 @@ public class VloServicesSpringConfig {
 
     @Inject
     VloConfig vloConfig;
-    
+
     @Inject
     FieldNameService fieldNameService;
-    
 
     @Bean
     public ResourceTypeCountingService resourceTypeCountingService() {
@@ -143,7 +144,7 @@ public class VloServicesSpringConfig {
         //TODO: Read properties from file??
         final Properties transformationProperties = new Properties();
         transformationProperties.setProperty(OutputKeys.METHOD, "html");
-        transformationProperties.setProperty(OutputKeys.INDENT, "yes");
+        transformationProperties.setProperty(OutputKeys.INDENT, "no");
         transformationProperties.setProperty(OutputKeys.ENCODING, "UTF-8");
         return new XmlTransformationServiceImpl(xsltSource, transformationProperties);
     }
@@ -151,19 +152,19 @@ public class VloServicesSpringConfig {
     @Bean(name = "basicPropertiesFilter")
     public FieldFilter basicPropertiesFieldFilter() {
         return new ExclusiveFieldFilter(Sets.union(
-                vloConfig.getIgnoredFields(),
-                vloConfig.getTechnicalFields()));
+                vloConfig.getIgnoredFieldNames(),
+                vloConfig.getTechnicalFieldNames()));
     }
 
     @Bean(name = "searchResultPropertiesFilter")
     public FieldFilter searchResultPropertiesFilter() {
-        return new InclusiveFieldFilter(vloConfig.getSearchResultFields());
+        return new InclusiveFieldFilter(vloConfig.getSearchResultFieldNames());
     }
 
     @Bean(name = "technicalPropertiesFilter")
     public FieldFilter technicalPropertiesFieldFilter() {
         return new InclusiveFieldFilter(
-                vloConfig.getTechnicalFields());
+                vloConfig.getTechnicalFieldNames());
     }
 
     @Bean
@@ -196,5 +197,18 @@ public class VloServicesSpringConfig {
         return new PiwikConfig();
     }
 
+    @Bean
+    public RatingConfig ratingConfig() {
+        return new RatingConfig();
+    }
+
+    @Bean
+    public RatingStore ratingStore() {
+        return new CouchDbRatingStore(
+                ratingConfig().getCouchDbBaseUrl(),
+                ratingConfig().getCouchDbUser(),
+                ratingConfig().getCouchDbPassword(),
+                ratingConfig().getServiceName());
+    }
 
 }

@@ -5,11 +5,11 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.4.3</version>
+        <version>4.5.0-beta1</version>
     </parent>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-commons</artifactId>
-    <version>4.4.3</version>
+    <version>4.5.0-beta1</version>
     <name>VLO Commons</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -22,6 +22,10 @@
         <vloconfig.helpUrl>http://www.clarin.eu/vlo</vloconfig.helpUrl>
         <vloconfig.fileProcessingThreads>2</vloconfig.fileProcessingThreads>
         <vloconfig.solrThreads>2</vloconfig.solrThreads>
+        <vloconfig.solrUserReadOnly>user_read</vloconfig.solrUserReadOnly>
+        <vloconfig.solrUserReadOnlyPass>PASS_READ_ONLY</vloconfig.solrUserReadOnlyPass>
+        <vloconfig.solrUserReadWrite>user_rw</vloconfig.solrUserReadWrite>
+        <vloconfig.solrUserReadWritePass>PASS_READ/WRITE</vloconfig.solrUserReadWritePass>
     </properties>
     
     <build>
@@ -84,22 +88,11 @@
                 <vloconfig.facetConceptsFileLocation></vloconfig.facetConceptsFileLocation>
                 <!-- bundled value mappings definition -->
                 <vloconfig.valueMappingFile>/value-maps/dist/master.xml</vloconfig.valueMappingFile>
-            </properties>
-        </profile>
-        
-        <profile>
-            <!-- For deployment to catalog-clarin.esc.rzg.mpg.de -->
-            <id>dev-vm</id>
-            <properties>
-                <maven.test.skip>true</maven.test.skip>
-                <vloconfig.solrUrl>http://localhost:8983/solr/vlo-index/</vloconfig.solrUrl>
-                <vloconfig.dataRootsFile>file:/srv/webapps/vlo/dataroots-testvm.xml</vloconfig.dataRootsFile>
-                <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
-                <vloconfig.facetConceptsFileLocation>file:/srv/VLO-mapping/mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
-                <vloconfig.valueMappingFile>file:/srv/VLO-mapping/value-maps/dist/master.xml</vloconfig.valueMappingFile>
-                <!-- File processing threads; 0 or lower lets JVM determine based on number of cores present -->
-                <vloconfig.fileProcessingThreads>-1</vloconfig.fileProcessingThreads>
-                <vloconfig.solrThreads>2</vloconfig.solrThreads>
+                <!-- these credentials match the credentials in docker compose project .env template -->
+                <vloconfig.solrUserReadOnly>docker_user_read</vloconfig.solrUserReadOnly>
+                <vloconfig.solrUserReadOnlyPass>docker_secret</vloconfig.solrUserReadOnlyPass>
+                <vloconfig.solrUserReadWrite>docker_user_rw</vloconfig.solrUserReadWrite>
+                <vloconfig.solrUserReadWritePass>docker_secret</vloconfig.solrUserReadWritePass>
             </properties>
         </profile>
         
@@ -134,6 +127,10 @@
                 <vloconfig.valueMappingFile>${VLO_DOCKER_VALUE_MAPPING_URI}</vloconfig.valueMappingFile>
                 <vloconfig.fileProcessingThreads>${VLO_DOCKER_FILE_PROCESSING_THREADS}</vloconfig.fileProcessingThreads>
                 <vloconfig.solrThreads>${VLO_DOCKER_SOLR_THREADS}</vloconfig.solrThreads>
+                <vloconfig.solrUserReadOnly>${VLO_DOCKER_SOLR_USER_READ_ONLY}</vloconfig.solrUserReadOnly>
+                <vloconfig.solrUserReadOnlyPass>${VLO_DOCKER_SOLR_PASSWORD_READ_ONLY}</vloconfig.solrUserReadOnlyPass>
+                <vloconfig.solrUserReadWrite>${VLO_DOCKER_SOLR_USER_READ_WRITE}</vloconfig.solrUserReadWrite>
+                <vloconfig.solrUserReadWritePass>${VLO_DOCKER_SOLR_PASSWORD_READ_WRITE}</vloconfig.solrUserReadWritePass>
             </properties>
         </profile>
     </profiles>

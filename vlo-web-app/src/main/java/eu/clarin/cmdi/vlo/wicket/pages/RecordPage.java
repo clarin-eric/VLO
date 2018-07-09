@@ -80,15 +80,20 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.JavaScriptResources;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
 
 /**
  *
  * @author twagoo
  */
-public class RecordPage extends VloBasePage<SolrDocument> {
+public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiAware {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     public final static String DETAILS_SECTION = "details";
@@ -408,6 +413,25 @@ public class RecordPage extends VloBasePage<SolrDocument> {
     }
 
     @Override
+    public PageParameters getHistoryApiPageParameters() {
+        // Merge document params, selection params
+        final PageParameters params = documentParamConverter.toParameters(getModelObject())
+                .mergeWith(selectionParametersConverter.toParameters(selectionModel.getObject()));
+
+        // Add navigation params if present
+        if (navigationModel != null && navigationModel.getObject() != null) {
+            params.mergeWith(contextParamConverter.toParameters(navigationModel.getObject()));
+        }
+
+        // Add tab id if selected tab is not the default tab
+        if (tabs.getSelectedTab() > 0) {
+            params.add(VloWebAppParameters.RECORD_PAGE_TAB, TABS_ORDER.get(tabs.getSelectedTab()));
+        }
+
+        return params;
+    }
+
+    @Override
     public void detachModels() {
         super.detachModels();
         if (navigationModel != null) {
@@ -436,4 +460,11 @@ public class RecordPage extends VloBasePage<SolrDocument> {
         return new PermaLinkModel(getPageClass(), null, getModel());
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getBootstrapTour()));
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js")));
+        response.render(JavaScriptHeaderItem.forScript("initTourRecordPage();", "initTourRecordPage"));
+    }
 }

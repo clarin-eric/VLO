@@ -117,6 +117,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
                 super.onAjaxEvent(target);
                 //updating record offset in search result header
                 target.add(super.getPage().get("searchContainer:searchresultsheader"));
+                onAjaxSearchPagination(target);
             }
         };
         add(navigatorTop);
@@ -127,7 +128,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
                 super.onAjaxEvent(target);
                 //updating record offset in search result header
                 target.add(super.getPage().get("searchContainer:searchresultsheader"));
-
+                onAjaxSearchPagination(target);
                 //bottom navigator action should trigger scroll to top navigator
                 target.appendJavaScript(String.format("$('html, body')"
                         + ".animate({"
@@ -164,6 +165,10 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
         final boolean multiplePages = resultsView.getPageCount() > 1;
         navigatorTop.setVisible(multiplePages);
         navigatorBottom.setVisible(multiplePages);
+    }
+
+    protected void onAjaxSearchPagination(AjaxRequestTarget target) {
+
     }
 
 }

@@ -5,13 +5,13 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.4.3</version>
+        <version>4.5.0-beta1</version>
     </parent>
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-importer</artifactId> 
-    <version>4.4.3</version>
+    <version>4.5.0-beta1</version>
     <packaging>jar</packaging>
 
     <name>VLO Importer</name>
@@ -191,6 +191,11 @@
             <artifactId>opencsv</artifactId>
             <version>4.1</version>
         </dependency>
+	<dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.11</version>
+	</dependency>
     </dependencies>
 
 </project>

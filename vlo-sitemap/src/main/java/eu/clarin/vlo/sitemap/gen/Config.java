@@ -11,6 +11,8 @@ public class Config {
     public static String SITEMAP_NAME_PREFIX;
     public static String SITEMAP_INDEX_NAME;
     public static String RECORD_URL_TEMPLATE;
+    public static String SOLR_USER;
+    public static String SOLR_PASS;
     public static String SOLR_QUERY_URL;
     public static List<String> INCLUDE_URLS;
 }

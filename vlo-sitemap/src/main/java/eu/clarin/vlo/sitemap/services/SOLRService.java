@@ -1,5 +1,8 @@
 package eu.clarin.vlo.sitemap.services;
 
+import java.io.File;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +16,9 @@ import com.ximpleware.VTDNav;
 
 import eu.clarin.vlo.sitemap.gen.Config;
 import eu.clarin.vlo.sitemap.pojo.Sitemap.URL;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import org.apache.commons.io.FileUtils;
 
 public class SOLRService {
 
@@ -28,11 +34,21 @@ public class SOLRService {
         vg = new VTDGen();
     }
 
-    public List<URL> getRecordURLS() throws VTDException {
-        final String url = Config.SOLR_QUERY_URL + GET_IDS + MAX_NUM_OF_RECORDS;
+    public List<URL> getRecordURLS() throws VTDException, MalformedURLException, IOException {
+        final java.net.URL url = new java.net.URL(Config.SOLR_QUERY_URL + GET_IDS + MAX_NUM_OF_RECORDS);
 
         //TODO: paginate
-        final boolean parseSuccess = vg.parseHttpUrl(url, false);
+        // download result into temp file, because parseHttpUrl() doesn't support HTTP Basic Auth
+        File tmpFile = File.createTempFile("vlo_sitemap-", ".tmp");
+        Authenticator.setDefault(new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(Config.SOLR_USER, Config.SOLR_PASS.toCharArray());
+            }
+        });
+        FileUtils.copyURLToFile(url, tmpFile);
+        final boolean parseSuccess = vg.parseFile(tmpFile.getAbsolutePath(), false);
+        tmpFile.delete();
 
         if (!parseSuccess) {
             throw new RuntimeException("Error retrieving or parsing result from: " + url);

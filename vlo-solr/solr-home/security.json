@@ -1,0 +1,34 @@
+{
+"authentication":{
+    "blockUnknown":true,
+    "class":"solr.BasicAuthPlugin",
+    "credentials":{
+        "user_admin":"${VLO_DOCKER_SOLR_PASSWORD_ADMIN_HASH}",
+        "${VLO_DOCKER_SOLR_USER_READ_WRITE}":"${VLO_DOCKER_SOLR_PASSWORD_READ_WRITE_HASH}",
+        "${VLO_DOCKER_SOLR_USER_READ_ONLY}":"${VLO_DOCKER_SOLR_PASSWORD_READ_ONLY_HASH}"
+    },
+    "":{"v":0}
+},
+"authorization":{
+   "class":"solr.RuleBasedAuthorizationPlugin",
+   "permissions":[
+        {"index": 1, "name":"update","role":"role_write"},
+        {"index": 2, "name":"config-edit","role":"role_admin"},
+        {"index": 3, "name":"config-read","role":"role_admin"},
+        {"index": 4, "name":"security-read","role":"role_admin"},
+        {"index": 5, "name":"security-edit","role":"role_admin"},
+        {"index": 6, "name":"schema-read","role":"role_read"},
+        {"index": 7, "name":"schema-edit","role":"role_admin"},
+        {"index": 8, "name":"core-admin-read","role":"role_admin"},
+        {"index": 9, "name":"core-admin-edit","role":"role_admin"},
+        {"index": 10, "name":"collection-admin-read","role":"role_admin"},
+        {"index": 11, "name":"collection-admin-edit","role":"role_admin"},
+        {"index": 12, "name":"read","role":"role_read"}
+   ],
+   "user-role":{
+       "user_admin":["role_admin", "role_write", "role_read"],
+       "${VLO_DOCKER_SOLR_USER_READ_WRITE}":["role_write", "role_read"],
+       "${VLO_DOCKER_SOLR_USER_READ_ONLY}":"role_read"
+   }
+}
+}

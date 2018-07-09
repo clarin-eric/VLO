@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!--
+Copyright (C) 2014 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+    <head>
+        <title>facet panel</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <wicket:panel>
+
+            <div id="user-rating" class="col-sm-4 hide-simple">
+                <div wicket:id="user-rating-panel" class="panel panel-primary">
+                    <div class="panel-body">
+                        <a wicket:id="dismiss" class="close pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+                        <p class="user-rating-question">
+                            How satisfied are you with the service provided on this web site?
+                        </p>
+                        <p class="user-rating-options">
+                            <a wicket:id="user-rating-link" class="user-rating-link">
+                                <i class="rating-icon material-icons"><span wicket:id="user-rating-link-icon"></span></i>
+                            </a>
+                        </p>
+                        <p wicket:id="user-rating-selection" class="user-rating-selection">[selected]</p>
+                        <form wicket:id="user-rating-form">
+                            <p>
+                                Please confirm your choice by pressing the <em>submit</em> button below.
+                            </p>
+                            <p>
+                                If you like, you can use the field below to motivate your response.
+                            </p>
+                            <div class="form-group">
+                                <textarea wicket:id="user-rating-comment-input" class="form-control" placeholder="Optionally provide additional feedback" aria-describedby="user-rating-feedback-addon"></textarea>
+                            </div>
+                            <button wicket:id="user-rating-form-submit" id="user-rating-form-submit" type="submit" class="btn btn-default">Submit</button>
+                            <a wicket:id="user-rating-form-cancel" id="user-rating-form-cancel" type="button" class="btn btn-default">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+                <div class="panel panel-primary user-rating-thankyou hidden">
+                    <div class="panel-body">
+                        <a class="close pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+                        Thanks for your feedback!
+                    </div>
+                </div>
+            </div>
+
+        </wicket:panel>
+    </body>
+</html>

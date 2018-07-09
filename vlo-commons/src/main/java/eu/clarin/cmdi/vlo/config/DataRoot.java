@@ -25,6 +25,59 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "DataRoot")
 public class DataRoot extends Object {
+    /**
+     * name describing the meta data
+     */
+    private String originName;
+
+    /**
+     * top level directory in which the meta data is stored
+     */
+    private File rootFile;
+
+    /**
+     * Web equivalent of the toStrip. For example:
+     *
+     * /lat/apache/htdocs/
+     */
+    private String prefix;
+
+    /**
+     * Left part of the rootFile
+     *
+     * By first removing {@literal tostrip} from {@literal rootFile} and then
+     * append the result of that operation to the {@literal prefix} you obtain
+     * the URL to the meta data.
+     */
+    @XmlElement(name = "tostrip")
+    private String toStrip;
+
+    /**
+     * Flag to signal the removal of records from the Solr server
+     *
+     * The value of this flag overrides the value defined in the {
+     *
+     * @lieteral VloConfig.xml} file. With the deleteFirst flag you can control
+     * the removal of the records originating from originName.
+     */
+    @XmlElement(name="deleteFirst")
+    private boolean deleteFirst = false;
+    
+    /**
+     * String containing all directories that shouldn't be used for building a
+     * hierarchy graph (comma separated)
+     */
+    @XmlAttribute
+    private String ignoreHierarchyDirs;
+
+    /**
+     * Get the value of the prefix element<br><br>
+     *
+     * For a description of the element, refer to the general VLO documentation.
+     *
+     * @return the value
+     */
+
 
     /**
      * Constructor method
@@ -105,50 +158,6 @@ public class DataRoot extends Object {
         return hash;
     }
 
-    /**
-     * name describing the meta data
-     */
-    private String originName;
-
-    /**
-     * top level directory in which the meta data is stored
-     */
-    private File rootFile;
-
-    /**
-     * Web equivalent of the toStrip. For example:
-     *
-     * /lat/apache/htdocs/
-     */
-    private String prefix;
-
-    /**
-     * Left part of the rootFile
-     *
-     * By first removing {@literal tostrip} from {@literal rootFile} and then
-     * append the result of that operation to the {@literal prefix} you obtain
-     * the URL to the meta data.
-     */
-    @XmlElement(name = "tostrip")
-    private String toStrip;
-
-    /**
-     * Flag to signal the removal of records from the Solr server
-     *
-     * The value of this flag overrides the value defined in the {
-     *
-     * @lieteral VloConfig.xml} file. With the deleteFirst flag you can control
-     * the removal of the records originating from originName.
-     */
-    private boolean deleteFirst = false;
-
-    /**
-     * Get the value of the prefix element<br><br>
-     *
-     * For a description of the element, refer to the general VLO documentation.
-     *
-     * @return the value
-     */
     public String getPrefix() {
         return prefix;
     }
@@ -275,12 +284,6 @@ public class DataRoot extends Object {
         }
     }
 
-    /**
-     * String containing all directories that shouldn't be used for building a
-     * hierarchy graph (comma separated)
-     */
-    @XmlAttribute
-    private String ignoreHierarchyDirs;
 
     public void setIgnoreHierarchyDirs(String ignoreHierarchyDirs) {
         this.ignoreHierarchyDirs = ignoreHierarchyDirs;

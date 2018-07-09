@@ -1,0 +1,226 @@
+﻿<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="VloConfig">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="deleteAllFirst" type="xs:string" />
+				<xs:element name="maxDaysInSolr" type="xs:string" />
+				<xs:element name="solrUrl" type="xs:string" />
+				<xs:element name="homeUrl" type="xs:string" />
+				<xs:element name="helpUrl" type="xs:string" />
+				<xs:element ref="dataRoots" />
+				<xs:element name="fileProcessingThreads" type="xs:string" />
+				<xs:element name="solrThreads" type="xs:string" />
+				<xs:element name="pagesInApplicationCache" type="xs:string" />
+				<xs:element name="sessionCacheSize" type="xs:string" />
+				<xs:element name="maxDocsInList" type="xs:string" />
+				<xs:element name="minDocsInSolrQueue" type="xs:string" />
+				<xs:element name="solrTimeOut" type="xs:string" />
+                                <xs:element name="solrUserReadOnly" type="xs:string" />
+				<xs:element name="solrUserReadOnlyPass" type="xs:string" />
+				<xs:element name="solrUserReadWrite" type="xs:string" />
+				<xs:element name="solrUserReadWritePass" type="xs:string" />
+				<xs:element name="maxFileSize" type="xs:string" />
+				<xs:element name="useHandleResolver" type="xs:string" />
+				<xs:element name="printMapping" type="xs:string" />
+				<xs:element name="facetConceptsFile" type="xs:string" />
+				<xs:element name="profileSchemaUrl" type="xs:string" />
+				<xs:element name="componentRegistryRESTURL" type="xs:string" />
+				<xs:element name="handleServerUrl" type="xs:string" />
+				<xs:element name="conceptRegistryUrl" type="xs:string" />
+				<xs:element name="vocabularyRegistryUrl" type="xs:string" />
+				<xs:element name="organisationNamesUrl" type="xs:string" />
+				<xs:element name="languageNameVariantsUrl" type="xs:string" />
+				<xs:element name="licenseAvailabilityMapUrl" type="xs:string" />
+				<xs:element name="licenseURIMapUrl" type="xs:string" />
+				<xs:element name="licenseTypeMapUrl" type="xs:string" />
+				<xs:element name="valueMappingsFile" type="xs:string" />
+				<xs:element ref="fields" />
+				<xs:element ref="deprecatedFields" />
+				<xs:element ref="facetFields" />
+				<xs:element ref="primaryFacetFields" />
+				<xs:element name="hideSecondaryFacetsLimit" type="xs:string" />
+				<xs:element ref="searchResultFields" />
+				<xs:element ref="ignoredFields" />
+				<xs:element ref="technicalFields" />
+				<xs:element ref="availability" />
+				<xs:element name="countryComponentUrl" type="xs:string" />
+				<xs:element name="languageLinkTemplate" type="xs:string" />
+				<xs:element name="feedbackFromUrl" type="xs:string" />
+				<xs:element name="language2LetterCodeComponentUrl" type="xs:string" />
+				<xs:element name="language3LetterCodeComponentUrl" type="xs:string" />
+				<xs:element name="silToISO639CodesUrl" type="xs:string" />
+				<xs:element name="FederatedContentSearchUrl" type="xs:string" />
+				<xs:element name="cqlEndpointFilter" type="xs:string" />
+				<xs:element name="cqlEndpointAlternative" type="xs:string" />
+				<xs:element name="vcrMaximumItemsCount" type="xs:string" />
+				<xs:element name="vcrSubmitEndpoint" type="xs:string" />
+				<xs:element name="lrSwitchboardBaseUrl" type="xs:string" />
+				<xs:element name="showResultScores" type="xs:string" />
+				<xs:element name="processHierarchies" type="xs:string" />
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="dataRoots">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="DataRoot" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DataRoot">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="deleteFirst" type="xs:boolean" />
+				<xs:element name="originName" type="xs:string" />
+				<xs:element name="rootFile" type="xs:string" />
+				<xs:element name="prefix" type="xs:string" />
+				<xs:element name="tostrip" type="xs:string" />
+			</xs:all>
+			<xs:attribute name="processHierarchyDirs" type="xs:string" />
+			<xs:attribute name="ignoreHierarchyDirs" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="fields">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="field" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="field">
+		<xs:complexType mixed="true">
+			<xs:attribute name="key" use="required" type="keyType">
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="deprecatedFields">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="field" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="facetFields">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="facetField" type="keyType"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="simpleSearchFacetFields">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="simpleSearchFacetField" type="keyType"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="primaryFacetFields">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="primaryFacetField" type="keyType"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="searchResultFields">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="searchResultField" type="keyType"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ignoredFields">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ignoredField" type="keyType"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="technicalFields">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="technicalField" type="keyType" 
+					minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="availability">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="availabilityValue" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="availabilityValue">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="displayValue" type="xs:string" />
+				<xs:element name="description" type="xs:string" />
+			</xs:sequence>
+			<xs:attribute name="value" type="xs:string" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="languageFilters">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="languageFilter" type="xs:string" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="fieldKeyType">
+		<xs:attribute name="key" use="required" type="keyType" />
+	</xs:complexType>
+	<xs:simpleType name="keyType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="NAME" />
+			<xs:enumeration value="DESCRIPTION" />
+			<xs:enumeration value="COLLECTION" />
+			<xs:enumeration value="LANGUAGE_CODE" />
+			<xs:enumeration value="MODALITY" />
+			<xs:enumeration value="CONTINENT" />
+			<xs:enumeration value="COUNTRY" />
+			<xs:enumeration value="GENRE" />
+			<xs:enumeration value="SUBJECT" />
+			<xs:enumeration value="ORGANISATION" />
+			<xs:enumeration value="LICENSE" />
+			<xs:enumeration value="LICENSE_TYPE" />
+			<xs:enumeration value="AVAILABILITY" />
+			<xs:enumeration value="ACCESS_INFO" />
+			<xs:enumeration value="KEYWORDS" />
+			<xs:enumeration value="NATIONAL_PROJECT" />
+			<xs:enumeration value="RESOURCE_CLASS" />
+			<xs:enumeration value="RESOURCE" />
+			<xs:enumeration value="SELF_LINK" />
+			<xs:enumeration value="ID" />
+			<xs:enumeration value="DATA_PROVIDER" />
+			<xs:enumeration value="DATA_PROVIDER_NAME" />
+			<xs:enumeration value="FILENAME" />
+			<xs:enumeration value="FORMAT" />
+			<xs:enumeration value="LANDINGPAGE" />
+			<xs:enumeration value="SEARCHPAGE" />
+			<xs:enumeration value="SEARCH_SERVICE" />
+			<xs:enumeration value="LAST_SEEN" />
+			<xs:enumeration value="CLARIN_PROFILE" />
+			<xs:enumeration value="COMPLETE_METADATA" />
+			<xs:enumeration value="HIERARCHY_WEIGHT" />
+			<xs:enumeration value="HAS_PART" />
+			<xs:enumeration value="HAS_PART_COUNT" />
+			<xs:enumeration value="RESOURCE_COUNT" />
+			<xs:enumeration value="IS_PART_OF" />
+			<xs:enumeration value="SOLR_SCORE" />
+			<xs:enumeration value="COMPLETE_METADATA" />
+			<xs:enumeration value="PROJECT_NAME" />
+			<xs:enumeration value="TEMPORAL_COVERAGE" />
+			<xs:enumeration value="DAYS_SINCE_LAST_SEEN" />
+			<xs:enumeration value="HAS_PART_COUNT_WEIGHT" />
+			<xs:enumeration value="LANGUAGE_NAME" />
+			<xs:enumeration value="OAI_ENDPOINT_URI" />
+			<xs:enumeration value="DEPRECATED_LANGUAGE" />
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

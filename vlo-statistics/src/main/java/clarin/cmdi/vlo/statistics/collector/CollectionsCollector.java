@@ -27,6 +27,7 @@ import java.io.IOException;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.slf4j.Logger;
@@ -47,17 +48,19 @@ public class CollectionsCollector implements VloStatisticsCollector {
         if(this.fieldNameService == null)
             this.fieldNameService = new FieldNameServiceImpl(config);
         
-        report.setCollections(obtainCollectionCounts(solrClient));
+        report.setCollections(obtainCollectionCounts(config, solrClient));
     }
 
-    private List<VloReport.CollectionCount> obtainCollectionCounts(SolrClient solrClient) throws SolrServerException, IOException {
+    private List<VloReport.CollectionCount> obtainCollectionCounts(VloConfig config, SolrClient solrClient) throws SolrServerException, IOException {
         final SolrQuery query = new SolrQuery();
         query.setRows(0);
         query.setFacet(true);
         query.addFacetField(fieldNameService.getFieldName(FieldKey.COLLECTION));
         query.setFacetLimit(Integer.MAX_VALUE);
 
-        final QueryResponse result = solrClient.query(query);
+        QueryRequest req = new QueryRequest(query);
+        req.setBasicAuthCredentials(config.getSolrUserReadOnly(), config.getSolrUserReadOnlyPass());
+        final QueryResponse result = req.process(solrClient);
         final FacetField collectionField = result.getFacetField(fieldNameService.getFieldName(FieldKey.COLLECTION));
         logger.debug("Collection field: {}", collectionField.getValues());
 

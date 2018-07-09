@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -18,6 +19,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * VLO configuration
  *
  * @author keeloo, twagoo
+ */
+/**
+ * @author @author Wolfgang Walter SAUER (wowasa) &lt;wolfgang.sauer@oeaw.ac.at&gt;
+ *
  */
 @XmlRootElement(name = "VloConfig")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -53,6 +58,12 @@ public class VloConfig {
     //(required = false)
     private int solrTimeOut = 0;
 
+    // Solr authentication
+    private String solrUserReadOnly;
+    private String solrUserReadOnlyPass;
+    private String solrUserReadWrite;
+    private String solrUserReadWritePass;
+
     @XmlElementWrapper(name = "dataRoots")
     @XmlElement(name = "DataRoot")
     private List<DataRoot> dataRoot;
@@ -64,8 +75,6 @@ public class VloConfig {
     // mapping
     //(required = false)
     private String facetConceptsFile = "";
-
-    private String[] languageFilters = {"", "", ""};
 
     private boolean printMapping = false;
 
@@ -111,9 +120,6 @@ public class VloConfig {
     private String conceptRegistryUrl = "";
 
     private String vocabularyRegistryUrl = "";
-
-    // web application user interface 
-    private int facetOverviewLength = 0;
 
     private String homeUrl = "";
 
@@ -175,19 +181,12 @@ public class VloConfig {
     @XmlElementWrapper(name = "facetFields")
     private List<String> facetField = new ArrayList<String>();
 
-    @XmlElementWrapper(name = "simpleSearchFacetFields")
-    private List<String> simpleSearchFacetField;
-
     @XmlElementWrapper(name = "primaryFacetFields")
     private Set<String> primaryFacetField;
 
     private int hideSecondaryFacetsLimit = 7;
 
     private String collectionFacet;
-
-    // test related parameters
-    //(required = false)
-    private String reverseProxyPrefix = "";
 
     //(required = false)
     private String cqlEndpointFilter = "";
@@ -346,6 +345,62 @@ public class VloConfig {
      */
     public void setSolrTimeOut(int param) {
         solrTimeOut = param;
+    }
+
+        /**
+     * @return the solrUserReadOnly
+     */
+    public String getSolrUserReadOnly() {
+        return solrUserReadOnly;
+    }
+
+    /**
+     * @param solrUserReadOnly the userReadOnlyName to set
+     */
+    public void setSolrUserReadOnly(String solrUserReadOnly) {
+        this.solrUserReadOnly = solrUserReadOnly;
+    }
+
+    /**
+     * @return the solrUserReadOnlyPass
+     */
+    public String getSolrUserReadOnlyPass() {
+        return solrUserReadOnlyPass;
+    }
+
+    /**
+     * @param solrUserReadOnlyPass the solrUserReadOnlyPass to set
+     */
+    public void setSolrUserReadOnlyPass(String solrUserReadOnlyPass) {
+        this.solrUserReadOnlyPass = solrUserReadOnlyPass;
+    }
+
+    /**
+     * @return the solrUserReadWrite
+     */
+    public String getSolrUserReadWrite() {
+        return solrUserReadWrite;
+    }
+
+    /**
+     * @param solrUserReadWrite the solrUserReadWrite to set
+     */
+    public void setSolrUserReadWrite(String solrUserReadWrite) {
+        this.solrUserReadWrite = solrUserReadWrite;
+    }
+
+    /**
+     * @return the solrUserReadWritePass
+     */
+    public String getSolrUserReadWritePass() {
+        return solrUserReadWritePass;
+    }
+
+    /**
+     * @param solrUserReadWritePass the solrUserReadWritePass to set
+     */
+    public void setUserReadWritePass(String solrUserReadWritePass) {
+        this.solrUserReadWritePass = solrUserReadWritePass;
     }
 
     /**
@@ -781,22 +836,32 @@ public class VloConfig {
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @return the value
+     * @return List of field-keys
      */
-    public List<String> getFacetFields() {
-        return facetField;
+    public List<String> getFacetFieldKeys() {
+        return this.facetField;
+    }
+    
+    /**
+     * @return List of resolved field-names
+     */
+    public List<String> getFacetFieldNames() {
+        return this.facetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
+    }
+    
+    /**
+     * @return Set of field-keys
+     */
+    public Set<String> getPrimaryFacetFieldKeys() {
+        return this.primaryFacetField;
     }
 
-    public List<String> getSimpleSearchFacetFields() {
-        return simpleSearchFacetField;
-    }
 
-    public void setSimpleSearchFacetFields(List<String> simpleSearchFacetField) {
-        this.simpleSearchFacetField = simpleSearchFacetField;
-    }
-
-    public Set<String> getPrimaryFacetFields() {
-        return primaryFacetField;
+    /**
+     * @return Set of resolved field-names
+     */
+    public Set<String> getPrimaryFacetFieldNames() {
+        return this.primaryFacetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
     }
 
     public void setPrimaryFacetFields(Set<String> primaryFacetField) {
@@ -807,11 +872,11 @@ public class VloConfig {
      *
      * @return all facet fields, including collection facet (arbitrary order
      * unspecified)
-     * @see #getFacetFields()
+     * @see #getFacetFieldNames()
      * @see #getCollectionFacet()
      */
     public List<String> getFacetsInSearch() {
-        final ArrayList<String> allFacets = new ArrayList<String>(facetField);
+        final ArrayList<String> allFacets = new ArrayList<String>(getFacetFieldNames());
         final String collection = getCollectionFacet();
         if (collection != null) {
             allFacets.add(collection);
@@ -825,17 +890,27 @@ public class VloConfig {
      * For a description of the parameter, refer to the general VLO
      * documentation.
      *
-     * @param param the value, a list of facet fields
+     * @param param the value, a list of facet field-keys
      */
-    public void setFacetFields(List<String> param) {
+    public void setFacetFieldKeys(List<String> param) {
         facetField = param;
     }
-
-    public Collection<String> getSearchResultFields() {
+    
+    /**
+     * @return Collection of field-keys
+     */
+    public Collection<String> getSearchResultFieldKeys() {
         return searchResultField;
     }
 
-    public void setSearchResultFields(Set<String> searchResultField) {
+    /**
+     * @return Collection of resolved field-names
+     */
+    public Collection<String> getSearchResultFieldNames() {
+        return searchResultField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
+    }
+
+    public void setSearchResultFieldKeys(Set<String> searchResultField) {
         this.searchResultField = searchResultField;
     }
 
@@ -856,69 +931,42 @@ public class VloConfig {
     public void setCollectionFacet(String collectionFacet) {
         this.collectionFacet = collectionFacet;
     }
-
-    public Set<String> getIgnoredFields() {
-        return ignoredField;
+    
+    /**
+     * @return Set of field-keys
+     */
+    public Set<String> getIgnoredFieldKeys() {
+        return this.ignoredField;
     }
 
-    public void setIgnoredFields(Set<String> ignoredFields) {
+
+    /**
+     * @return Set of resolved field-names
+     */
+    public Set<String> getIgnoredFieldNames() {
+        return this.ignoredField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
+    }
+
+    public void setIgnoredFieldKeys(Set<String> ignoredFields) {
         this.ignoredField = ignoredFields;
     }
-
-    public Set<String> getTechnicalFields() {
-        return technicalField;
+    
+    /**
+     * @return Set of field-keys
+     */
+    public Set<String> getTechnicalFieldKeys() {
+        return this.technicalField;
     }
 
-    public void setTechnicalFields(Set<String> technicalFields) {
+    /**
+     * @return Set of resolved field-names
+     */
+    public Set<String> getTechnicalFieldNames() {
+        return this.technicalField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
+    }
+
+    public void setTechnicalFieldKeys(Set<String> technicalFields) {
         this.technicalField = technicalFields;
-    }
-
-    /**
-     * Get the value of the languageFields parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @return the value
-     */
-    public String[] getLanguageFilters() {
-        return languageFilters;
-    }
-
-    /**
-     * Set the value of the languageFilters parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @param param the value, a list of language filters
-     */
-    public void setLanguageFilters(String[] param) {
-        languageFilters = param;
-    }
-
-    /**
-     * Get the value of the getFacetOverviewLength parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @return the value
-     */
-    public int getFacetOverviewLength() {
-        return facetOverviewLength;
-    }
-
-    /**
-     * Set the value of the setFacetOverviewLength parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @param param the value
-     */
-    public void setFacetOverviewLength(Integer param) {
-        facetOverviewLength = param;
     }
 
     /**
@@ -1015,30 +1063,6 @@ public class VloConfig {
      */
     public void setSilToISO639CodesUrl(String param) {
         silToISO639CodesUrl = param;
-    }
-
-    /**
-     * Get the value of the reverseProxyPath parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @return the value
-     */
-    public String getReverseProxyPrefix() {
-        return reverseProxyPrefix;
-    }
-
-    /**
-     * Set the value of the reverseProxyPrefix parameter<br><br>
-     *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
-     *
-     * @param param the value
-     */
-    public void setReverseProxyPrefix(String param) {
-        reverseProxyPrefix = param;
     }
 
     /**

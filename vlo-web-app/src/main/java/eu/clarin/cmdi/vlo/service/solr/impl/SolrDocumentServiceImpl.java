@@ -35,16 +35,16 @@ public class SolrDocumentServiceImpl implements SolrDocumentService {
 
     private final static Logger logger = LoggerFactory.getLogger(SolrDocumentServiceImpl.class);
     private final SearchResultsDao searchResultsDao;
-    private final SolrDocumentQueryFactory queryFatory;
+    private final SolrDocumentQueryFactory queryFactory;
 
-    public SolrDocumentServiceImpl(SearchResultsDao searchResultsDao, SolrDocumentQueryFactory queryFatory) {
+    public SolrDocumentServiceImpl(SearchResultsDao searchResultsDao, SolrDocumentQueryFactory queryFactory) {
         this.searchResultsDao = searchResultsDao;
-        this.queryFatory = queryFatory;
+        this.queryFactory = queryFactory;
     }
 
     @Override
     public SolrDocument getDocument(String docId) {
-        final SolrQuery query = queryFatory.createDocumentQuery(docId);
+        final SolrQuery query = queryFactory.createDocumentQuery(docId);
         final SolrDocumentList result = searchResultsDao.getDocuments(query);
         if (result.size() < 1) {
             return null;
@@ -56,13 +56,13 @@ public class SolrDocumentServiceImpl implements SolrDocumentService {
 
     @Override
     public List<SolrDocument> getDocuments(QueryFacetsSelection selection, int first, int count) {
-        final SolrQuery query = queryFatory.createDocumentQuery(selection, first, count);
+        final SolrQuery query = queryFactory.createDocumentQuery(selection, first, count);
         return searchResultsDao.getDocuments(query);
     }
 
     @Override
     public long getDocumentCount(QueryFacetsSelection selection) {
-        final SolrQuery query = queryFatory.createDocumentQuery(selection, 0, 0);
+        final SolrQuery query = queryFactory.createDocumentQuery(selection, 0, 0);
         return searchResultsDao.getDocuments(query).getNumFound();
     }
 

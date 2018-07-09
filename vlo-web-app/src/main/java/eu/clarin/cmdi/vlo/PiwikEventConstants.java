@@ -30,18 +30,23 @@ public class PiwikEventConstants {
     public static final String PIWIK_EVENT_CATEGORY_FACET = "Facet";
     public static final String PIWIK_EVENT_CATEGORY_RECORDPAGE = "RecordPageTab";
     public static final String PIWIK_EVENT_CATEGORY_LRS = "LRS";
+    public static final String PIWIK_EVENT_CATEGORY_USER_SATISFACTION = "UserSatisfaction";
 
     //Actions
     public static final String PIWIK_EVENT_ACTION_FACET_EXPANDCOLLAPSE = "ExpandCollapse";
     public static final String PIWIK_EVENT_ACTION_FACET_ALLVALUES = "AllValues";
     public static final String PIWIK_EVENT_ACTION_FACET_SELECT = "Select";
     public static final String PIWIK_EVENT_ACTION_FACET_UNSELECT = "Unselect";
-    public static final String PIWIK_EVENT_ACTION_AVAILABILITY = "AvailabilitySelection";    
+    public static final String PIWIK_EVENT_ACTION_AVAILABILITY = "AvailabilitySelection";
     public static final String PIWIK_EVENT_ACTION_RECORDPAGE_TABSWITCH = "Switch";
     public static final String PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE = "ProcessResource";
     public static final String PIWIK_EVENT_ACTION_HIERARCHY_UP = "HierarchyNavigateUp";
     public static final String PIWIK_EVENT_ACTION_HIERARCHY_CHILD = "HierarchyToggleChild";
-    
+    public static final String PIWIK_EVENT_ACTION_USER_SATISFACTION_RATING_SCORE = "SelectUserSatisfactionScore";
+    public static final String PIWIK_EVENT_ACTION_USER_SATISFACTION_CANCEL = "UserSatisfactionCancel";
+    public static final String PIWIK_EVENT_ACTION_USER_SATISFACTION_SUBMIT = "UserSatisfactionSubmit";
+    public static final String PIWIK_EVENT_ACTION_USER_SATISFACTION_DISMISS = "UserSatisfactionDismiss";
+
     //Page views
     public static final String PIWIK_PAGEVIEW_SEARCH = "Search page";
 
