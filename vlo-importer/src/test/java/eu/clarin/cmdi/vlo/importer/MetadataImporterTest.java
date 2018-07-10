@@ -217,7 +217,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         List<SolrInputDocument> docs = importData(sessionFile);
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
-        assertEquals("testRoot", getValue(doc, FieldKey.COLLECTION));
+        assertEquals(null, getValue(doc, FieldKey.COLLECTION));
         assertEquals("DiDDD-project", getValue(doc, FieldKey.PROJECT_NAME));
     }
 
