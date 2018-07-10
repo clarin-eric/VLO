@@ -573,9 +573,6 @@ public class MetadataImporter {
      */
     protected void updateDocument(SolrInputDocument solrDocument, CMDIData cmdiData, File file, DataRoot dataOrigin, EndpointDescription endpointDescription) throws SolrServerException,
             IOException {
-        if (!solrDocument.containsKey(fieldNameService.getFieldName(FieldKey.COLLECTION))) {
-            solrDocument.addField(fieldNameService.getFieldName(FieldKey.COLLECTION), dataOrigin.getOriginName());
-        }
         solrDocument.addField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER), dataOrigin.getOriginName());
         solrDocument.addField(fieldNameService.getFieldName(FieldKey.ID), cmdiData.getId());
         solrDocument.addField(fieldNameService.getFieldName(FieldKey.FILENAME), file.getAbsolutePath());
