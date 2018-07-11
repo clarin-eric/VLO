@@ -28,8 +28,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class VloApplicationSpringConfig {
-
-
     
     @Bean
     public FieldNameService fieldNameService() {
