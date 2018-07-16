@@ -30,6 +30,8 @@ function createTour(restart, step) {
         redirect: true,
         steps: createTourSteps()
     };
+    
+    Tour.prototype._onScroll = () => {}; // https://github.com/sorich87/bootstrap-tour/issues/658
 
     var tour = new Tour(opts);
 

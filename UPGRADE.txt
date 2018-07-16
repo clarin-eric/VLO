@@ -85,8 +85,8 @@ The changes with consequences for configuration and deployment in this version a
 1. Introduction of an authentication requirement for communication with the Solr server
    by clients including the VLO importer, web app and utilities to generate sitemap 
    and statistics
-2. Introduction of a CouchDB backend to support the optional feature of user satisfaction
-   reporting 
+2. Introduction of a mechanism to support Javascript snippet based integrations, e.g.
+   for user satisfaction assessment
 3. Several changes in VloConfig.xml
 
 See the sections below for details for all of these.
@@ -110,39 +110,19 @@ For some technical notes, see <https://github.com/clarin-eric/VLO/issues/126> an
 the relevant Solr documentation section at 
 <https://lucene.apache.org/solr/guide/7_3/basic-authentication-plugin.html>.
 
-## §2: CouchDB based user satisfaction rating storage
+## §2: User satisfaction rating and adding other functionality through javascript snippets
 
-A new feature has been added to the VLO web app, which, if enabled, presents users with
-a widget that allows them to 'rate' the VLO and optionally include some textual comment.
-This information, once submitted, is sent to a REST service as a JSON structure by the
-web application's back end. This behaviour has been implemented and tested to work with
-a CouchDB 2.1 instance. The following context parameters have been added to allow for
-setting this up (default values in parentheses where applicable):
+A new context parameter
 
-- eu.clarin.cmdi.vlo.rating.enabled (false)
-- eu.clarin.cmdi.vlo.rating.couchdb.url
-- eu.clarin.cmdi.vlo.rating.couchdb.user
-- eu.clarin.cmdi.vlo.rating.couchdb.password   
-- eu.clarin.cmdi.vlo.rating.panel.showPanelDelay (120)
-- eu.clarin.cmdi.vlo.rating.panel.dismissTimeout (604800)
-- eu.clarin.cmdi.vlo.rating.panel.submitTimeout (2592000)
+	eu.clarin.cmdi.vlo.snippets.bottom.file
 
-If 'eu.clarin.cmdi.vlo.rating.enabled' is not set to 'true' or 
-'eu.clarin.cmdi.vlo.rating.couchdb.url' is empty or unset, the VLO will leave the
-feature disabled. The CouchDB URL must identify and locate the resource to which the
-JSON data must be sent (via HTTP PUT); typically this would be 
-"http://localhost:5984/ratings". The configured CouchDB user must have write access to
-this resource (i.e. be allowed to create subresources via HTTP PUT), and the resource must
-either exist or the user must have permissions to instantiate this resource (via HTTP 
-PUT).
+is now available that allows for the configuration of a location to load HTML content
+to include below the closing 'body' tag. The concrete use case for this is to enable
+integrations such as feedback collection via Mopinion.
 
-The docker compose setup for the VLO contains a overlay (usersatisfaction.yml) that both
-defines a CouchDB service and configures the VLO correctly for communicating with this
-service. You can also configure the VLO to communicate with an external REST service for
-this purpose by setting the relevant environment variables. See the documentation at 
+The docker compose setup for the VLO contains a overlay (mopinion.yml) that enables
+a feedback panel defined via <https://app.mopinion.com>. See the documentation at
 <https://gitlab.com/CLARIN-ERIC/compose_vlo/>.
-
-For some technical notes, see <https://github.com/clarin-eric/VLO/issues/165>.
 
 ## §3: Changes in VloConfig.xml
 

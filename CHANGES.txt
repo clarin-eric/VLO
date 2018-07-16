@@ -6,8 +6,9 @@ VLO 4.5.0 (July 2018)
     <https://github.com/clarin-eric/VLO/issues/122>   
 * A guided tour has been added to the web app
     <https://github.com/clarin-eric/VLO/issues/7>
-* User satisfaction can be elicited via a pop-up widget (and stored in a database)
+* User satisfaction can be elicited
     <https://github.com/clarin-eric/VLO/issues/165>
+    <https://github.com/clarin-eric/VLO/issues/185>
 * EOSC-hub statement added to the web app's footer
     <https://github.com/clarin-eric/VLO/issues/175>
 * Solr authorisation

@@ -203,6 +203,11 @@ public class VloServicesSpringConfig {
     }
 
     @Bean
+    public SnippetConfig snippetConfig() {
+        return new SnippetConfig();
+    }
+
+    @Bean
     public RatingStore ratingStore() {
         return new CouchDbRatingStore(
                 ratingConfig().getCouchDbBaseUrl(),

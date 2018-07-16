@@ -235,6 +235,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
             protected void onAjaxSearchPagination(AjaxRequestTarget target) {
                 super.onAjaxSearchPagination(target);
                 if (target != null) {
+                    //updating record offset in search result header
+                    target.add(resultsHeader);
                     //update rating panel as the initial hiding time may have lapsed
                     target.add(getRatingPanel());
                 }
