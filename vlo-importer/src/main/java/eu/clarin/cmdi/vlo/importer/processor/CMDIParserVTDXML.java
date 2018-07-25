@@ -74,7 +74,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         final VTDNav nav = vg.getNav();
         final FacetMapping facetMapping = getFacetMapping(nav.cloneNav());
 
-        if (facetMapping.getFacets().isEmpty()) {
+        if (facetMapping.getFacetConfigurations().isEmpty()) {
             LOG.error("Problems mapping facets for file: {}", file.getAbsolutePath());
         }
 
@@ -249,7 +249,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @throws VTDException
      */
     private void processFacets(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
-        final Collection<FacetConfiguration> facetList = facetMapping.getFacets();
+        final Collection<FacetConfiguration> facetList = facetMapping.getFacetConfigurations();
 
         List<TargetFacet> overridingTargets = new ArrayList<TargetFacet>();
 

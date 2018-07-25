@@ -19,7 +19,6 @@ import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping.RejectableContext
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
 
 import java.io.File;
@@ -33,17 +32,13 @@ import java.util.Date;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
 
 /**
  * Creates facet-mappings (xpaths) from a configuration. As they say "this is
@@ -63,18 +58,24 @@ public class FacetMappingFactory {
 
     private final FieldNameServiceImpl fieldNameService;
     
-    private final FacetConceptMapping conceptMapping;
+    protected final FacetConceptMapping conceptMapping;
     
-    private final Map<String, ConditionTargetSet> conditionTargetSetPerFacet;
+    private final FacetMapping baseMapping;
+    
+    
 
     public FacetMappingFactory(VloConfig vloConfig, VLOMarshaller marshaller) {
-        this.vloConfig = vloConfig;
+        this.vloConfig = vloConfig;     
         this.fieldNameService = new FieldNameServiceImpl(vloConfig);
-        //this.marshaller = marshaller;
-        
         this.conceptMapping = marshaller.getFacetConceptMapping(vloConfig.getFacetConceptsFile());
+        this.baseMapping = createBaseMapping();
         
-        this.conditionTargetSetPerFacet = new ValueMappingFactoryDOMImpl().getValueMappings(vloConfig.getValueMappingsFile(), this.conceptMapping);
+        new ValueMappingFactoryDOMImpl().createValueMapping(vloConfig.getValueMappingsFile(), this.conceptMapping, this.baseMapping);
+        
+    }
+    
+    public FacetConceptMapping getConceptMapping() {
+        return this.conceptMapping;
     }
 
     /**
@@ -102,10 +103,40 @@ public class FacetMappingFactory {
      *
      * @return facet concept mapping
      */
-    private FacetMapping getOrCreateMapping(String xsd, Boolean useLocalXSDCache) {
+    protected FacetMapping getOrCreateMapping(String xsd, Boolean useLocalXSDCache) {
         return mapping.computeIfAbsent(xsd, (key) -> {
             return createMapping(xsd, useLocalXSDCache);
         });
+    }
+    
+    private FacetMapping createBaseMapping() {
+        LOG.debug("Creating base mapping");
+
+        // Gets the configuration. VLOMarshaller only reads in the facetconceptmapping.xml file and returns the facetMapping (though the reading in is implicit).
+//        FacetConceptMapping conceptMapping = marshaller.getFacetConceptMapping(facetConcepts);
+        FacetMapping facetMapping = new FacetMapping();
+
+        // Below we put the stuff we found into the configuration class.
+        for (FacetConcept facetConcept : this.conceptMapping.getFacetConcepts()) {
+            LOG.trace("-- Facet concept {}", facetConcept);
+            FacetConfiguration config = facetMapping.getFacetConfiguration(facetConcept.getName());
+
+            config.setCaseInsensitive(facetConcept.isCaseInsensitive());
+            config.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
+            config.setMultilingual(facetConcept.isMultilingual());
+//                config.setName(facetConcept.getName());
+
+            config.setFallbackPatterns(facetConcept.getPatterns());
+            
+            //set derived facets
+            for(String derivedFacetName : facetConcept.getDerivedFacets()){
+
+                config.addDerivedFacet(facetMapping.getFacetConfiguration(derivedFacetName));
+            }
+            
+        }
+        
+        return facetMapping;    
     }
 
     /**
@@ -121,12 +152,14 @@ public class FacetMappingFactory {
      *
      * @return the facet mapping used to map meta data to facets
      */
-    private FacetMapping createMapping(String xsd, Boolean useLocalXSDCache) {
+    protected FacetMapping createMapping(String xsd, Boolean useLocalXSDCache) {
         LOG.debug("Creating mapping for {} using {} (useLocalXSDCache: {})", xsd, this.vloConfig.getFacetConceptsFile(), useLocalXSDCache);
-        FacetMapping facetMapping = new FacetMapping();
+
         // Gets the configuration. VLOMarshaller only reads in the facetconceptmapping.xml file and returns the facetMapping (though the reading in is implicit).
 //        FacetConceptMapping conceptMapping = marshaller.getFacetConceptMapping(facetConcepts);
+        FacetMapping facetMapping = null;
         try {
+            facetMapping = (FacetMapping)baseMapping.clone();
             //The magic
             Map<String, List<Pattern>> conceptLinkPathMapping = createConceptLinkPathMapping(xsd, useLocalXSDCache);
             Map<Pattern, String> pathConceptLinkMapping = null;
@@ -212,34 +245,20 @@ public class FacetMappingFactory {
                     }
                 }
 
-                config.setCaseInsensitive(facetConcept.isCaseInsensitive());
-                config.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
-                config.setMultilingual(facetConcept.isMultilingual());
-//                config.setName(facetConcept.getName());
-
                 LinkedHashSet<Pattern> linkedHashSet = new LinkedHashSet<>(xpaths);
                 if (xpaths.size() != linkedHashSet.size()) {
                     LOG.error("Duplicate XPaths for facet {} in: {}.", facetConcept.getName(), xpaths);
                 }
                 config.setPatterns(new ArrayList<>(linkedHashSet));
-                config.setFallbackPatterns(facetConcept.getPatterns());
                 
-                //set derived facets
-                for(String derivedFacetName : facetConcept.getDerivedFacets()){
-
-        			config.addDerivedFacet(facetMapping.getFacetConfiguration(derivedFacetName));
-            	}
-                
-                // setValueMappings
-                if(this.conditionTargetSetPerFacet.containsKey(config.getName()))
-                		config.setConditionTargetSet(this.conditionTargetSetPerFacet.get(config.getName()));
-            }
-            
-            //now where all FacetConfigurations are created we can build references for derived facets
-            
+            }            
         } 
         catch (NavException | URISyntaxException e) {
             LOG.error("Error creating facetMapping from xsd: {}", xsd, e);
+        } 
+        catch (CloneNotSupportedException e) {
+            // TODO Auto-generated catch block
+            LOG.error("couldn't clone the base facet map", e);
         }
         return facetMapping;
     }
@@ -520,7 +539,7 @@ public class FacetMappingFactory {
         for (String xsd : xsdNames) {
             FacetMapping facetMapping = mapping.get(xsd);
             fileWriter.append(xsd + "\n");
-            for (FacetConfiguration config : facetMapping.getFacets()) {
+            for (FacetConfiguration config : facetMapping.getFacetConfigurations()) {
                 fileWriter.append("FacetName:" + config.getName() + "\n");
                 fileWriter.append("Mappings:\n");
                 for (Pattern pattern : config.getPatterns()) {
@@ -531,5 +550,9 @@ public class FacetMappingFactory {
             fileWriter.flush();
         }
         fileWriter.close();
+    }
+
+    public FacetMapping getBaseMapping() {
+        return baseMapping;
     }
 }

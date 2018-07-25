@@ -16,12 +16,19 @@
  */
 package eu.clarin.cmdi.vlo.importer;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Menzo Windhouwer &lt;menzo.windhouwer@meertens.knaw.nl&gt;
  */
-public class Pattern {
+public class Pattern implements Serializable{
     
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     private String pattern;
     
     //CLAVAS open/closed vocab
