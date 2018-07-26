@@ -28,12 +28,10 @@ import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.FieldValueOrderingsFactory;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.PermalinkService;
-import eu.clarin.cmdi.vlo.service.RatingStore;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
-import eu.clarin.cmdi.vlo.service.impl.CouchDbRatingStore;
 import eu.clarin.cmdi.vlo.service.impl.DocumentParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
 import eu.clarin.cmdi.vlo.service.impl.FacetDescriptionServiceImpl;
@@ -198,22 +196,8 @@ public class VloServicesSpringConfig {
     }
 
     @Bean
-    public RatingConfig ratingConfig() {
-        return new RatingConfig();
-    }
-
-    @Bean
     public SnippetConfig snippetConfig() {
         return new SnippetConfig();
-    }
-
-    @Bean
-    public RatingStore ratingStore() {
-        return new CouchDbRatingStore(
-                ratingConfig().getCouchDbBaseUrl(),
-                ratingConfig().getCouchDbUser(),
-                ratingConfig().getCouchDbPassword(),
-                ratingConfig().getServiceName());
     }
 
 }
