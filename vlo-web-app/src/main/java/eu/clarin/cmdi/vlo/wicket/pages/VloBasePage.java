@@ -195,7 +195,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getHistoryApiJS()));
 
         if (bottomSnippet != null) {
-            response.render(JavaScriptHeaderItem.forScript(bottomSnippet, "rating"));
+            response.render(JavaScriptHeaderItem.forScript(bottomSnippet, "bottomSnippet"));
         }
     }
 
