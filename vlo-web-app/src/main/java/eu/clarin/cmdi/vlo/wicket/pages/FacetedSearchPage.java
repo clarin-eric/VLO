@@ -237,8 +237,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
                 if (target != null) {
                     //updating record offset in search result header
                     target.add(resultsHeader);
-                    //update rating panel as the initial hiding time may have lapsed
-                    target.add(getRatingPanel());
                 }
             }
 
@@ -321,7 +319,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
                 if (target != null) {
                     target.prependJavaScript("cb|transitionFromSimple(cb);");
                     target.add(searchContainer); //update everything within container
-                    target.add(getRatingPanel()); //also update rating panel as the initial hiding time may have lapsed
                 }
 
                 updateSelection(target);
@@ -357,9 +354,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
             target.add(resultsHeader);
             target.add(searchResultsPanel);
             target.add(selections);
-
-            //also update rating panel as the initial hiding time may have lapsed
-            target.add(getRatingPanel());
 
             //reapply js for nice tooltips
             target.appendJavaScript("applyFacetTooltips();");
