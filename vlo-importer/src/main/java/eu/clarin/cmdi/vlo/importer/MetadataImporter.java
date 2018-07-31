@@ -159,7 +159,7 @@ public class MetadataImporter {
 
     }
 
-    protected static Map<String, AbstractPostNormalizer> registerPostProcessors(VloConfig config, FieldNameService fieldNameService, LanguageCodeUtils languageCodeUtils) {
+    public static Map<String, AbstractPostNormalizer> registerPostProcessors(VloConfig config, FieldNameService fieldNameService, LanguageCodeUtils languageCodeUtils) {
         ImmutableMap.Builder<String, AbstractPostNormalizer> imb = ImmutableMap.builder();
         
         imb.put(fieldNameService.getFieldName(FieldKey.ID), new IdPostNormalizer());

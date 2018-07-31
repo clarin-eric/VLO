@@ -308,7 +308,7 @@ public class FacetMappingFactory {
      * data category which can be found in CMDI files with this schema)
      * @throws NavException
      */
-    private Map<String, List<Pattern>> createConceptLinkPathMapping(String xsd, Boolean useLocalXSDCache) throws NavException, URISyntaxException {
+    protected Map<String, List<Pattern>> createConceptLinkPathMapping(String xsd, Boolean useLocalXSDCache) throws NavException, URISyntaxException {
         Map<String, List<Pattern>> result = new HashMap<>();
         VTDGen vg = new VTDGen();
         boolean parseSuccess;
@@ -335,12 +335,9 @@ public class FacetMappingFactory {
                 if (datcatIndex != -1) {
                     String conceptLink = vn.toNormalizedString(datcatIndex);
                     Pattern xpath = createXpath(elementPath, null);
-                    List<Pattern> paths = result.get(conceptLink);
-                    if (paths == null) {
-                        paths = new ArrayList<>();
-                        result.put(conceptLink, paths);
-                    }
-                    paths.add(xpath);
+                    
+                    result.computeIfAbsent(conceptLink, k -> new ArrayList<Pattern>()).add(xpath);
+
                     int vocabIndex = getVocabIndex(vn);
                     if (vocabIndex != -1) {
                         String uri = vn.toNormalizedString(vocabIndex);
@@ -375,12 +372,9 @@ public class FacetMappingFactory {
                             String conceptLink = vn.toNormalizedString(attributeDatcatIndex);
 
                             Pattern xpath = createXpath(elementPath, attributeName);
-                            List<Pattern> values = result.get(conceptLink);
-                            if (values == null) {
-                                values = new ArrayList<>();
-                                result.put(conceptLink, values);
-                            }
-                            values.add(xpath);
+                            
+                            result.computeIfAbsent(conceptLink, k -> new ArrayList<Pattern>()).add(xpath);
+
                             int vocabIndex = getVocabIndex(vn);
                             if (vocabIndex != -1) {
                                 String uri = vn.toNormalizedString(vocabIndex);
