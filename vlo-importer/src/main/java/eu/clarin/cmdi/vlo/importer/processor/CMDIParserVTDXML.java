@@ -39,9 +39,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -258,10 +256,9 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     private void setDefaultIfNull(Collection<FacetConfiguration> facetList, CMDIData cmdiData) {
         for (FacetConfiguration facetConfig : facetList) {
             if (cmdiData.getDocField(facetConfig.getName()) == null && this.postProcessors.containsKey(facetConfig.getName()) && this.postProcessors.get(facetConfig.getName()).doesProcessNoValue()) {
-
-            for(String value : this.postProcessors.get(facetConfig.getName()).process(null, cmdiData)) 
-                insertFacetValue(cmdiData, facetConfig, ImmutableTriple.of(value, null, DEFAULT_LANGUAGE));
-
+                final ArrayList<Pair<String, String>> valueLangPairList = new ArrayList<>();
+                addValuesToList(facetConfig.getName(), this.postProcessors.get(facetConfig.getName()).process(null, cmdiData), valueLangPairList, DEFAULT_LANGUAGE);
+                insertFacetValues(facetConfig, valueLangPairList, cmdiData, false);
             }
         }
     }
@@ -275,91 +272,58 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      */    
     private void processFacets(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
 
-        /*
-         * the map is necessary now to assure that English values are first in the list, even when the target is not the same as the origin facet
-         */
-        Map<FacetConfiguration, LinkedList<ValueStruct>> facetValuesMap = getFacetValuesMap(cmdiData, nav, facetMapping);
+
+        Map<FacetConfiguration, List<ValueSet>> facetValuesMap = getFacetValuesMap(cmdiData, nav, facetMapping);
         
         writeValuesToDoc(cmdiData, facetValuesMap);
         setDefaultIfNull(facetValuesMap.keySet(), cmdiData);
     }
     
-    /**
-     *  
-     * @param cmdiData
-     * @param nav
-     * @param facetMapping
-     * @return a map of target facet configurations as and a List of ValueStruct as value. 
-     * @throws VTDException
-     * @throws URISyntaxException
-     * @throws UnsupportedEncodingException
-     */
-    public Map<FacetConfiguration, LinkedList<ValueStruct>> getFacetValuesMap(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
-        Map<FacetConfiguration, LinkedList<ValueStruct>> facetValuesMap = new HashMap<FacetConfiguration, LinkedList<ValueStruct>>();
-        /* 
-         * The temporary storage in a map is necessary to assure that the values for a each target facet are sorted for English language first,  
-        *  even when by the means of cross facet mapping the values are set while processing another facet than the target facet.
-        */         
+    public Map<FacetConfiguration, List<ValueSet>> getFacetValuesMap(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
+        Map<FacetConfiguration, List<ValueSet>> facetValuesMap = new HashMap<FacetConfiguration, List<ValueSet>>();
+        
         final Collection<FacetConfiguration> facetConfigList = facetMapping.getFacetConfigurations();
 
         
-        List<Triple<String, Integer, String>> valueLanguagePairList;
+        boolean matchedPattern;
 
         for (FacetConfiguration facetConfig : facetConfigList) {
+            matchedPattern = false;
             
-            valueLanguagePairList = new ArrayList<Triple<String, Integer, String>>();
 
             for (Pattern pattern : facetConfig.getPatterns()) {
-                valueLanguagePairList.addAll(matchPattern(cmdiData, nav, pattern));
-                if (!valueLanguagePairList.isEmpty() && !facetConfig.getAllowMultipleValues()) {
+                matchedPattern = matchPattern(cmdiData, facetValuesMap, nav, facetConfig, pattern);
+                if (matchedPattern && !facetConfig.getAllowMultipleValues() && !facetConfig.getMultilingual()) {
                     break;
                 }
             }
 
             // using fallback patterns if extraction failed
-            if (valueLanguagePairList.isEmpty()) {
+            if (!matchedPattern) {
                 for (Pattern pattern : facetConfig.getFallbackPatterns()) {
-                    valueLanguagePairList.addAll(matchPattern(cmdiData, nav, pattern));
-                    if (!valueLanguagePairList.isEmpty() && !facetConfig.getAllowMultipleValues()) {
+
+                    if (matchPattern(cmdiData, facetValuesMap, nav, facetConfig, pattern) && !facetConfig.getAllowMultipleValues() && !facetConfig.getMultilingual()) {
                         break;
                     }
                 }
             }
-            
-            //processing the raw values for the origin facet
-            for(Triple<String, Integer, String> valueLanguagePair: valueLanguagePairList)
-                processRawValue(cmdiData, facetValuesMap, facetConfig, valueLanguagePair);
-            
-            //processing the same list of raw values for each derived facet
-            for(FacetConfiguration derivedFacetConfig : facetConfig.getDerivedFacets()) {
-                for(Triple<String, Integer, String> valueLanguagePair: valueLanguagePairList)
-                    processRawValue(cmdiData, facetValuesMap, derivedFacetConfig, valueLanguagePair);
-            }
-            
+
         }
         
         return facetValuesMap;
     }
     
-    /**
-     * @param cmdiData
-     * @param nav
-     * @param pattern
-     * @return
-     * @throws VTDException
-     * @throws URISyntaxException
-     * @throws UnsupportedEncodingException
-     */
-    public List<Triple<String,Integer,String>> matchPattern(CMDIData cmdiData, VTDNav nav, Pattern pattern) throws VTDException, URISyntaxException, UnsupportedEncodingException {
+    public boolean matchPattern(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> facetValuesMap, VTDNav nav, FacetConfiguration facetConfig, Pattern pattern) throws VTDException, URISyntaxException, UnsupportedEncodingException {
         final AutoPilot ap = new AutoPilot(nav);
         setNameSpace(ap, extractXsd(nav));
         ap.selectXPath(pattern.getPattern());
         
         int index = ap.evalXPath();
-        List<Triple<String, Integer, String>> valueIndexLanguageList = new ArrayList<>();
+        
+        boolean matchedPattern = false;
         
         while (index != -1) {
-
+            matchedPattern = true;
 
             if (nav.getTokenType(index) == VTDNav.TOKEN_ATTR_NAME) {
                 //if it is an attribute you need to add 1 to the index to get the right value
@@ -367,77 +331,56 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             }
 
             
-            valueIndexLanguageList.add(
-                    ImmutableTriple.of(nav.toString(index), index, extractLanguageCode(nav))
-                );
+            processRawValue(cmdiData, facetValuesMap, index, facetConfig, ImmutablePair.of(nav.toString(index), extractLanguageCode(nav)), false);
             
+
+            processValueConceptLink(cmdiData, facetValuesMap, nav, facetConfig, pattern);           
             
-            Triple<String, Integer, String> vcl = extractValueConceptLink(nav);
-            if (vcl != null) {
-                ImmutablePair<String, String> vp = null;
-                if (vcl.getLeft().contains("CCR_")) {
-                    vp = CCR.getValue(new URI(vcl.getLeft()));
-                } 
-                else if (pattern.hasVocabulary()) {
-                    vp = pattern.getVocabulary().getValue(new URI(vcl.getLeft()));
-                }
-                if (vp != null) {
-                    final String v = (String) vp.getLeft();
-                    final String l = (vp.getRight() != null ? postProcessors.get(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)).process((String) vp.getRight(), null).get(0) : DEFAULT_LANGUAGE);
-
-                    valueIndexLanguageList.add(ImmutableTriple.of(v, vcl.getMiddle(), l));
-
-                }
+            //process derived facets
+            for(FacetConfiguration derivedFacetConfig : facetConfig.getDerivedFacets()) {
+                processRawValue(cmdiData, facetValuesMap, index, derivedFacetConfig, ImmutablePair.of(nav.toString(index), extractLanguageCode(nav)), true);
             }
             
             index = ap.evalXPath();
         }
         
-        return valueIndexLanguageList;
-    }
-    
-    protected Pair<String, String> getPair(VTDNav nav, int index) throws NavException {
-        return ImmutablePair.of(nav.toString(index), extractLanguageCode(nav));
+        return matchedPattern;
     }
     
     
-    public void processRawValue(CMDIData cmdiData, Map<FacetConfiguration, LinkedList<ValueStruct>> targetValueMap, FacetConfiguration originFacetConfig, Triple<String, Integer, String> valueIndexLanguage) {
-     // ignore non-English language names for facet LANGUAGE_CODE
-        if (originFacetConfig.getName().equals(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)) && !valueIndexLanguage.getRight().equals(ENGLISH_LANGUAGE) && !valueIndexLanguage.getRight().equals(DEFAULT_LANGUAGE)) 
+    public void processRawValue(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> targetValueMap, int vtdIndex, FacetConfiguration facetConfig, Pair<String, String> valueLanguagePair, boolean isDerived) {
+        if (facetConfig.getName().equals(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)) && !valueLanguagePair.getRight().equals(ENGLISH_LANGUAGE) && !valueLanguagePair.getRight().equals(DEFAULT_LANGUAGE)) {
             return;
-            
+        }
         boolean removeSourceValue = false;
 
-        final List<String> postProcessed = postProcess(originFacetConfig.getName(), valueIndexLanguage.getLeft(), cmdiData);
+        final List<String> postProcessed = postProcess(facetConfig.getName(), valueLanguagePair.getLeft(), cmdiData);
 
-        if (originFacetConfig.getConditionTargetSet() != null) {
+        if (facetConfig.getConditionTargetSet() != null) {
 
-            if (this.postProcessors.containsKey(originFacetConfig.getName()) && !(this.postProcessors
-                    .get(originFacetConfig.getName()) instanceof AbstractPostNormalizerWithVocabularyMap)) {
+            if (this.postProcessors.containsKey(facetConfig.getName()) && !(this.postProcessors
+                    .get(facetConfig.getName()) instanceof AbstractPostNormalizerWithVocabularyMap)) {
                 for (String postProcessedValue : postProcessed) {
-                    for (TargetFacet target : originFacetConfig.getConditionTargetSet().getTargetsFor(postProcessedValue)) {
+                    for (TargetFacet target : facetConfig.getConditionTargetSet().getTargetsFor(postProcessedValue)) {
                         removeSourceValue |= target.getRemoveSourceValue();
+                        
+                        ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, target, ImmutablePair.of(target.getValue(), ENGLISH_LANGUAGE), isDerived);
 
-                        setTargetValue(
-                                targetValueMap, 
-                                originFacetConfig, 
-                                target.getFacetConfiguration(),
-                                ImmutableTriple.of(target.getValue(), valueIndexLanguage.getMiddle(), ENGLISH_LANGUAGE),
-                                target.getOverrideExistingValues());
+
+                        setTargetValue(targetValueMap, valueSet);
 
                     }
 
                 }
             } else {
-                for (TargetFacet target : originFacetConfig.getConditionTargetSet()
-                        .getTargetsFor(valueIndexLanguage.getLeft())) {
+                for (TargetFacet target : facetConfig.getConditionTargetSet()
+                        .getTargetsFor(valueLanguagePair.getLeft())) {
                     removeSourceValue |= target.getRemoveSourceValue();
 
-                    setTargetValue(
-                            targetValueMap, 
-                            originFacetConfig, 
-                            target.getFacetConfiguration(),
-                            ImmutableTriple.of(target.getValue(), valueIndexLanguage.getMiddle(), ENGLISH_LANGUAGE), target.getOverrideExistingValues());
+                    ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, target, ImmutablePair.of(target.getValue(), ENGLISH_LANGUAGE), isDerived);
+
+
+                    setTargetValue(targetValueMap, valueSet);
 
                 }
             }
@@ -446,11 +389,9 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
 
         if (!removeSourceValue) { // positive 'removeSourceValue' means skip adding value to origin facet
             for (String postProcessedValue : postProcessed) {
-                setTargetValue(
-                        targetValueMap, 
-                        originFacetConfig,
-                        originFacetConfig,
-                        ImmutableTriple.of(postProcessedValue, valueIndexLanguage.getMiddle(), valueIndexLanguage.getRight()), false);
+                
+                ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, new TargetFacet(facetConfig, ""), ImmutablePair.of(postProcessedValue, valueLanguagePair.getRight()), isDerived);
+                setTargetValue(targetValueMap, valueSet);
             }
 
         }
@@ -458,11 +399,11 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     }
     
 
-    private void writeValuesToDoc(CMDIData cmdiData, Map<FacetConfiguration, LinkedList<ValueStruct>> targetValueMap) {
-        for(Entry<FacetConfiguration, LinkedList<ValueStruct>> entry : targetValueMap.entrySet()) {
+    private void writeValuesToDoc(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> targetValueMap) {
+        for(Entry<FacetConfiguration, List<ValueSet>> entry : targetValueMap.entrySet()) {
 
-            for(ValueStruct valueStruct : entry.getValue()) {
-                insertFacetValue(cmdiData, entry.getKey(), valueStruct.getValueIndexLanguage());
+            for(ValueSet valueSet : entry.getValue()) {
+                insertFacetValue(cmdiData, entry.getKey(), valueSet.getValueLanguagePair());
                 if(!(entry.getKey().getAllowMultipleValues()||entry.getKey().getMultilingual()))
                         break;
             }
@@ -470,53 +411,36 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         }
     }
     
-    private void insertFacetValue( CMDIData cmdiData, FacetConfiguration facetConfig, Triple<String, Integer, String> valueIndexLanguage) {
+    private void insertFacetValue( CMDIData cmdiData, FacetConfiguration facetConfig, Pair<String, String> valueLangPair) {
 
-        String fieldValue = valueIndexLanguage.getLeft().trim();
+        String fieldValue = valueLangPair.getLeft().trim();
         
         if (facetConfig.getName().equals(fieldNameService.getFieldName(FieldKey.DESCRIPTION))) {
-            fieldValue = "{" + valueIndexLanguage.getRight() + "}" + fieldValue;
+            fieldValue = "{" + valueLangPair.getRight() + "}" + fieldValue;
         }
 
         cmdiData.addDocField(facetConfig.getName(), fieldValue, facetConfig.isCaseInsensitive());
     }
     
-    public void setTargetValue(Map<FacetConfiguration, LinkedList<ValueStruct>> targetValueMap, FacetConfiguration originFacetConfig, FacetConfiguration targetFacetConfig, Triple<String, Integer, String> valueIndexLanguage, boolean overrideExistingValues) {
-        if(overrideExistingValues) {
-            LinkedList<ValueStruct> ll = new LinkedList<ValueStruct>() {
-
-                /**
-                 * A way to assure that an overriding value once set is not overridden again. Alternatively it could be stored and be written after
-                 * having written all other values of the target facet
-                 */
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public void addFirst(ValueStruct e) {}
-
-                @Override
-                public void addLast(ValueStruct e) {}
- 
-            };
-            ll.add(new ValueStruct(originFacetConfig, targetFacetConfig, valueIndexLanguage));            
-            
-            targetValueMap.put(targetFacetConfig, ll);
-            LOG.info("overriding existing value(s) in facet {} with value" + targetFacetConfig.getName(), valueIndexLanguage.getLeft());
-        }
+    public void setTargetValue(Map<FacetConfiguration, List<ValueSet>> targetValueMap, ValueSet valueSet) {
+        if(valueSet.getTargetFacet().getOverrideExistingValues())
+            targetValueMap.compute(valueSet.getTargetFacet().getFacetConfiguration(), (k,v) -> new ArrayList<ValueSet>()).add(valueSet);
+            //targetValueMap.put(facetConfig, new ArrayList().add(valueSet));
         else {
-            LinkedList<ValueStruct> ll = targetValueMap.computeIfAbsent(targetFacetConfig, key -> new LinkedList<ValueStruct>());
+            LinkedList<ValueSet> lili = (LinkedList<ValueSet>) targetValueMap.computeIfAbsent(valueSet.getTargetFacet().getFacetConfiguration(), k -> new LinkedList<ValueSet>());
             
-            if(!targetFacetConfig.getAllowMultipleValues() && !targetFacetConfig.getMultilingual() && ll.size() > 0) {
-                LOG.info("value for facet {} is set already. Since multiple value are not allowed value {} will be ignored!", targetFacetConfig.getName(), valueIndexLanguage.getLeft());
+            if(lili.size() > 0 && (lili.get(0).getTargetFacet().getOverrideExistingValues() || (!valueSet.getTargetFacet().getFacetConfiguration().getAllowMultipleValues() && !valueSet.getTargetFacet().getFacetConfiguration().getAllowMultipleValues()))) {
                 return;
             }
             
-            if(valueIndexLanguage.getRight().equals(ENGLISH_LANGUAGE)) {//prevents necessity to sort later
-                ll.addFirst(new ValueStruct(originFacetConfig, targetFacetConfig, valueIndexLanguage)); 
+
+            if(valueSet.getValueLanguagePair().getRight().equals(ENGLISH_LANGUAGE)) {//prevents necessity to sort later
+                lili.addFirst(valueSet); 
             }
             else {
-                ll.addLast(new ValueStruct(originFacetConfig, targetFacetConfig, valueIndexLanguage));
-            }       
+                lili.addLast(valueSet);
+            }
+       
         }
     }
 
@@ -539,25 +463,89 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         return postProcessors.get(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)).process(languageCode, null).get(0);
     }
 
-
+    private void addValuesToList(String facetName, final List<String> values, List<Pair<String, String>> valueLangPairList, final String languageCode) {
+        for (String value : values) {
+            // ignore non-English language names for facet LANGUAGE_CODE
+            if (facetName.equals(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)) && !languageCode.equals(ENGLISH_LANGUAGE) && !languageCode.equals(DEFAULT_LANGUAGE)) {
+                continue;
+            }
+            valueLangPairList.add(new ImmutablePair<>(value, languageCode));
+        }
+    }
 
     /**
      * @param nav
      * @return value concept link from element cmd:ValueConceptLink or Null
      * @throws NavException
+     * @throws URISyntaxException 
+     * @throws UnsupportedEncodingException 
+     * @throws XPathEvalException 
+     * @throws XPathParseException 
      */
-    private Triple<String, Integer, String> extractValueConceptLink(VTDNav nav) throws NavException {
-        // extract English for ValueConceptLink if available
+    private void processValueConceptLink(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> facetValuesMap, VTDNav nav, FacetConfiguration facetConfig, Pattern pattern) throws NavException, XPathParseException, XPathEvalException, UnsupportedEncodingException, URISyntaxException {
+        // extract english for ValueConceptLink if available
         Integer vclAttrIndex = nav.getAttrVal("cmd:ValueConceptLink");
-        
-        //using triple to have the index in the middle as in the other cases 
-        Triple<String, Integer, String> vcl = null;
+        String vcl = null;
         if (vclAttrIndex != -1) {
-            vcl = ImmutableTriple.of(nav.toString(vclAttrIndex).trim(), vclAttrIndex, null);
+            vcl = nav.toString(vclAttrIndex).trim();
+            
+
+            ImmutablePair<String, String> vp = null;
+            if (vcl.contains("CCR_")) {
+                vp = CCR.getValue(new URI(vcl));
+            } 
+            else if (pattern.hasVocabulary()) {
+                vp = pattern.getVocabulary().getValue(new URI(vcl));
+            }
+            if (vp != null) {
+                final String v = (String) vp.getLeft();
+                final String l = (vp.getRight() != null ? postProcessors.get(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)).process((String) vp.getRight(), null).get(0) : DEFAULT_LANGUAGE);
+                
+                processRawValue(cmdiData, facetValuesMap, vclAttrIndex, facetConfig, ImmutablePair.of(v, l), false);
+
+
+            }
         }
-        return vcl;
+
     }
 
+    /**
+     * Inserts values to the representation of the CMDI document
+     *
+     * @param facetConfig facet configuration
+     * @param valueLangPairList
+     * @param cmdiData representation of the CMDI document
+     * @param overrideExistingValues should existing values be overridden (=
+     * delete + insert)?
+     */
+    private void insertFacetValues(FacetConfiguration facetConfig, List<Pair<String, String>> valueLangPairList, CMDIData cmdiData, boolean overrideExistingValues) {
+
+        for (int i = 0; i < valueLangPairList.size(); i++) {
+//            if (!allowMultipleValues && i > 0) {
+//                break;
+//            }
+            String fieldValue = valueLangPairList.get(i).getLeft().trim();
+            if (facetConfig.getName().equals(fieldNameService.getFieldName(FieldKey.DESCRIPTION))) {
+                fieldValue = "{" + valueLangPairList.get(i).getRight() + "}" + fieldValue;
+            }
+            if (overrideExistingValues) {
+                if (cmdiData.getDocField(facetConfig.getName()) != null) {
+                    LOG.info("overriding existing value(s) in facet {} with value" + facetConfig.getName(), fieldValue);
+                }
+                cmdiData.replaceDocField(facetConfig.getName(), fieldValue, facetConfig.isCaseInsensitive());
+
+                if (!(facetConfig.getAllowMultipleValues() || facetConfig.getMultilingual())) {
+                    break;
+                }
+            } else {
+                if (!(facetConfig.getAllowMultipleValues() || facetConfig.getMultilingual()) && cmdiData.getDocField(facetConfig.getName()) != null) {
+                    LOG.info("value for facet {} is set already. Since multiple value are not allowed value {} will be ignored!", facetConfig.getName(), fieldValue);
+                    break;
+                }
+                cmdiData.addDocField(facetConfig.getName(), fieldValue, facetConfig.isCaseInsensitive());
+            }
+        }
+    }
 
     /**
      * Applies registered PostProcessor to extracted values
