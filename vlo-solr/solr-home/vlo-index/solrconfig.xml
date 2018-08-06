@@ -727,6 +727,9 @@
         
         <!-- See https://wiki.apache.org/solr/DisMaxQParserPlugin -->
         <str name="defType">edismax</str>
+
+        <!-- collapse results with the same signature -->
+        <str name="fq">{!collapse field=_signature}</str>
         
         <!-- 'Fetch all documents' query -->
         <str name="q.alt">*:*</str>
