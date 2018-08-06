@@ -141,6 +141,7 @@
   <field name="_resourceRefCount" type="int" multiValued="false" indexed="true" stored="true"/>
   <field name="_searchPageRef" type="string" multiValued="true" indexed="true" stored="true"/>
   <field name="_selfLink" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="_signature" type="string" stored="true" indexed="true" multiValued="false"/>
   <field name="_suggester" type="textSuggest" multiValued="true" indexed="true" stored="true"/>
   <field name="_version_" type="long" indexed="true" stored="true"/>
   <field name="accessInfo" type="string" multiValued="true" indexed="true" stored="true"/>
