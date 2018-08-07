@@ -31,13 +31,13 @@ public abstract class ImporterTestcase {
         FileUtils.writeStringToFile(file, content, "UTF-8");
         return file;
     }
-    
-    protected String createTmpFile(String content) throws IOException{
-    	File file = tempFolder.newFile(System.currentTimeMillis() + ".tmp");
+
+    protected String createTmpFile(String content) throws IOException {
+        File file = tempFolder.newFile(System.currentTimeMillis() + ".tmp");
         FileUtils.writeStringToFile(file, content, "UTF-8");
         return file.getAbsolutePath();
     }
-    
+
     protected File createValueMappingsFile(String name, String content) throws IOException {
         File file = tempFolder.newFile(name + System.currentTimeMillis() + "_" + ch++ + ".xml");
         FileUtils.writeStringToFile(file, content, "UTF-8");
@@ -54,6 +54,11 @@ public abstract class ImporterTestcase {
         // and configure to use bundled mappings
         config = DefaultVloConfigFactory.configureDefaultMappingLocations(configFactory.newConfig());
         config.setValueMappingsFile(getTestValueMappingsFilePath());
+        config.setSilToISO639CodesUrl(getSilToIsoMapUrl());
+        config.setCountryComponentUrl(getCountryCodeComponentUrl());
+        config.setLanguage2LetterCodeComponentUrl(getLanguage2LetterCodeUrl());
+        config.setLanguage3LetterCodeComponentUrl(getLanguage3LetterCodeUrl());
+        
         fieldNameService = new FieldNameServiceImpl(config);
         languageCodeUtils = new LanguageCodeUtils(config);
         marshaller = new VLOMarshaller();
@@ -66,13 +71,29 @@ public abstract class ImporterTestcase {
             throw new RuntimeException(ex);
         }
     }
-    
+
     public static String getTestValueMappingsFilePath() {
         try {
             return new File(ImporterTestcase.class.getResource("/valueMappingsTest.xml").toURI()).getAbsolutePath();
         } catch (URISyntaxException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public static String getSilToIsoMapUrl() {
+        return ImporterTestcase.class.getResource("/infra_clarin_eu/sil_to_iso6393.xml").toString();
+    }
+
+    private String getCountryCodeComponentUrl() {
+        return ImporterTestcase.class.getResource("/catalog_clarin_eu/c_1271859438104.xml").toString();
+    }
+
+    private String getLanguage2LetterCodeUrl() {
+        return ImporterTestcase.class.getResource("/catalog_clarin_eu/c_1271859438109.xml").toString();
+    }
+
+    private String getLanguage3LetterCodeUrl() {
+        return ImporterTestcase.class.getResource("/catalog_clarin_eu/c_1271859438110.xml").toString();
     }
 
 }
