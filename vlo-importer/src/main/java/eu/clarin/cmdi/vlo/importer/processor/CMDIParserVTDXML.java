@@ -1,6 +1,5 @@
 package eu.clarin.cmdi.vlo.importer.processor;
 
-import com.ximpleware.AutoPilot;
 import com.ximpleware.VTDException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
@@ -25,7 +24,7 @@ import org.slf4j.LoggerFactory;
 public class CMDIParserVTDXML implements CMDIDataProcessor {
 
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
-    
+
     private final Map<String, AbstractPostNormalizer> postProcessors;
     private final Boolean useLocalXSDCache;
 
@@ -62,11 +61,12 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
 
         nav.toElement(VTDNav.ROOT);
 
-        processResources(cmdiData, nav, resourceStructureGraph);
-        
+        final ResourceProcessorVTDXML resourceProcessor = new ResourceProcessorVTDXML();
+        resourceProcessor.processResources(cmdiData, nav, resourceStructureGraph);
+
         final FacetProcessorVTDXML facetProcessor = new FacetProcessorVTDXML(postProcessors, config, marshaller);
         facetProcessor.processFacets(cmdiData, nav, facetMapping);
-        
+
         return cmdiData;
     }
 
@@ -89,55 +89,6 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     @Override
     public String extractMdSelfLink(File file) throws IOException {
         return selfLinkExtractor.extractMdSelfLink(file);
-    }
-
-    /**
-     * Extract ResourceProxies from ResourceProxyList
-     *
-     * @param cmdiData representation of the CMDI document
-     * @param nav VTD Navigator
-     * @throws VTDException
-     */
-    private void processResources(CMDIData cmdiData, VTDNav nav, ResourceStructureGraph resourceStructureGraph) throws VTDException {
-        AutoPilot mdSelfLink = new AutoPilot(nav);
-        SchemaParsingUtil.setNameSpace(mdSelfLink, null);
-        mdSelfLink.selectXPath("/cmd:CMD/cmd:Header/cmd:MdSelfLink");
-        String mdSelfLinkString = mdSelfLink.evalXPathToString();
-        if (resourceStructureGraph != null) {
-            resourceStructureGraph.addResource(mdSelfLinkString);
-        }
-
-        AutoPilot resourceProxy = new AutoPilot(nav);
-        SchemaParsingUtil.setNameSpace(resourceProxy, null);
-        resourceProxy.selectXPath("/cmd:CMD/cmd:Resources/cmd:ResourceProxyList/cmd:ResourceProxy");
-
-        AutoPilot resourceRef = new AutoPilot(nav);
-        SchemaParsingUtil.setNameSpace(resourceRef, null);
-        resourceRef.selectXPath("cmd:ResourceRef");
-
-        AutoPilot resourceType = new AutoPilot(nav);
-        SchemaParsingUtil.setNameSpace(resourceType, null);
-        resourceType.selectXPath("cmd:ResourceType");
-
-        AutoPilot resourceMimeType = new AutoPilot(nav);
-        SchemaParsingUtil.setNameSpace(resourceMimeType, null);
-        resourceMimeType.selectXPath("cmd:ResourceType/@mimetype");
-
-        while (resourceProxy.evalXPath() != -1) {
-            String ref = resourceRef.evalXPathToString();
-            String type = resourceType.evalXPathToString();
-            String mimeType = resourceMimeType.evalXPathToString();
-
-            if (!ref.equals("") && !type.equals("")) {
-                // note that the mime type could be empty
-                cmdiData.addResource(ref, type, mimeType);
-            }
-
-            // resource hierarchy information?
-            if (resourceStructureGraph != null && type.toLowerCase().equals("metadata")) {
-                resourceStructureGraph.addEdge(ref, mdSelfLinkString);
-            }
-        }
     }
 
 }
