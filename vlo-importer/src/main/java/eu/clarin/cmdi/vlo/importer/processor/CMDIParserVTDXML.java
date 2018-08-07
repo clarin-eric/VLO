@@ -61,11 +61,11 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
 
         nav.toElement(VTDNav.ROOT);
 
-        final ResourceProcessorVTDXML resourceProcessor = new ResourceProcessorVTDXML();
-        resourceProcessor.processResources(cmdiData, nav, resourceStructureGraph);
+        newResourceProcessor()
+                .processResources(cmdiData, nav, resourceStructureGraph);
 
-        final FacetProcessorVTDXML facetProcessor = new FacetProcessorVTDXML(postProcessors, config, marshaller);
-        facetProcessor.processFacets(cmdiData, nav, facetMapping);
+        newFacetProcessor()
+                .processFacets(cmdiData, nav, facetMapping);
 
         return cmdiData;
     }
@@ -89,6 +89,14 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     @Override
     public String extractMdSelfLink(File file) throws IOException {
         return selfLinkExtractor.extractMdSelfLink(file);
+    }
+
+    protected FacetProcessorVTDXML newFacetProcessor() {
+        return new FacetProcessorVTDXML(postProcessors, config, marshaller);
+    }
+
+    protected ResourceProcessorVTDXML newResourceProcessor() {
+        return new ResourceProcessorVTDXML();
     }
 
 }
