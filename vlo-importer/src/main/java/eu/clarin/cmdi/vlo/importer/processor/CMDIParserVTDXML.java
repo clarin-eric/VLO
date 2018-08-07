@@ -1,70 +1,52 @@
 package eu.clarin.cmdi.vlo.importer.processor;
 
 import com.ximpleware.AutoPilot;
-import com.ximpleware.NavException;
 import com.ximpleware.VTDException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
-import com.ximpleware.XPathEvalException;
-import com.ximpleware.XPathParseException;
-import eu.clarin.cmdi.vlo.CmdConstants;
-import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
-import eu.clarin.cmdi.vlo.importer.Pattern;
 import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
 import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
 import eu.clarin.cmdi.vlo.importer.Vocabulary;
-import eu.clarin.cmdi.vlo.importer.mapping.FacetConfiguration;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
-import eu.clarin.cmdi.vlo.importer.mapping.TargetFacet;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
-import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizerWithVocabularyMap;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CMDIParserVTDXML implements CMDIDataProcessor {
+
     public static final String ENGLISH_LANGUAGE = "code:eng";
     public static final String DEFAULT_LANGUAGE = "code:und";
 
     private final Map<String, AbstractPostNormalizer> postProcessors;
     private final Boolean useLocalXSDCache;
-    private static final java.util.regex.Pattern PROFILE_ID_PATTERN = java.util.regex.Pattern.compile(".*(clarin.eu:cr1:p_[0-9]+).*");
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
-
 
     private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
     private final Vocabulary CCR;
     private final FacetMappingFactory facetMappingFactory;
     private final FieldNameServiceImpl fieldNameService;
-    private final ValueWriter valueWriter;
+    private final VloConfig config;
+    private final VLOMarshaller marshaller;
 
     public CMDIParserVTDXML(Map<String, AbstractPostNormalizer> postProcessors, VloConfig config, FacetMappingFactory facetMappingFactory, VLOMarshaller marshaller, Boolean useLocalXSDCache) {
+        this.config = config;
+        this.marshaller = marshaller;
         this.postProcessors = postProcessors;
         this.useLocalXSDCache = useLocalXSDCache;
         this.facetMappingFactory = facetMappingFactory;
         this.CCR = new Vocabulary(config.getConceptRegistryUrl());
         this.fieldNameService = new FieldNameServiceImpl(config);
-        this.valueWriter = new ValueWriter(config, postProcessors);
     }
 
     @Override
@@ -85,25 +67,9 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
 
         nav.toElement(VTDNav.ROOT);
         processResources(cmdiData, nav, resourceStructureGraph);
-        processFacets(cmdiData, nav, facetMapping);
+        FacetProcessor facetProcessor = new FacetProcessor(postProcessors, config, facetMappingFactory, marshaller, useLocalXSDCache);
+        facetProcessor.processFacets(cmdiData, nav, facetMapping);
         return cmdiData;
-    }
-
-    @Override
-    public String extractMdSelfLink(File file) throws IOException {
-        return selfLinkExtractor.extractMdSelfLink(file);
-    }
-
-    /**
-     * Setting namespace for Autopilot ap
-     *
-     * @param ap
-     */
-    private void setNameSpace(AutoPilot ap, String profileId) {
-        ap.declareXPathNameSpace("cmd", CmdConstants.CMD_NAMESPACE);
-        if (profileId != null) {
-            ap.declareXPathNameSpace("cmdp", "http://www.clarin.eu/cmd/1/profiles/" + profileId);
-        }
     }
 
     /**
@@ -114,7 +80,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      * @throws VTDException
      */
     private FacetMapping getFacetMapping(VTDNav nav) throws VTDException {
-        final String profileId = extractXsd(nav);
+        final String profileId = SchemaParsingUtil.extractXsd(nav);
         if (profileId == null) {
             throw new RuntimeException("Cannot get xsd schema so cannot get a proper mapping. Parse failed!");
         }
@@ -122,78 +88,9 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         return facetMappingFactory.getFacetMapping(profileId, useLocalXSDCache);
     }
 
-    /**
-     * Try two approaches to extract the XSD schema information from the CMDI
-     * file
-     *
-     * @param nav VTD Navigator
-     * @return ID of CMDI schema, or null if neither the CMDI header nor the
-     * XMLSchema-instance's attributes contained the information
-     * @throws VTDException
-     */
-    public String extractXsd(VTDNav nav) throws VTDException {
-        String profileID = getProfileIdFromHeader(nav);
-        if (profileID == null) {
-            profileID = getProfileIdFromSchemaLocation(nav);
-        }
-        return profileID;
-    }
-
-    /**
-     * Extract XSD schema information from CMDI header (using element
-     * //Header/MdProfile)
-     *
-     * @param nav VTD Navigator
-     * @return ID of CMDI schema, or null if content of //Header/MdProfile
-     * element could not be read
-     * @throws XPathParseException
-     * @throws XPathEvalException
-     * @throws NavException
-     */
-    private String getProfileIdFromHeader(VTDNav nav) throws XPathParseException, XPathEvalException, NavException {
-        nav.toElement(VTDNav.ROOT);
-        AutoPilot ap = new AutoPilot(nav);
-        setNameSpace(ap, null);
-        ap.selectXPath("/cmd:CMD/cmd:Header/cmd:MdProfile/text()");
-        int index = ap.evalXPath();
-        String profileId = null;
-        if (index != -1) {
-            profileId = nav.toString(index).trim();
-        }
-        return profileId;
-    }
-
-    /**
-     * Extract XSD schema information from schemaLocation or
-     * noNamespaceSchemaLocation attributes
-     *
-     * @param nav VTD Navigator
-     * @return ID of CMDI schema, or null if attributes don't exist
-     * @throws NavException
-     */
-    private String getProfileIdFromSchemaLocation(VTDNav nav) throws NavException {
-        String result = null;
-        nav.toElement(VTDNav.ROOT);
-        int index = nav.getAttrValNS("http://www.w3.org/2001/XMLSchema-instance", "schemaLocation");
-        if (index != -1) {
-            String schemaLocation = nav.toNormalizedString(index);
-            String[] schemaLocationArray = schemaLocation.split(" ");
-            result = schemaLocationArray[schemaLocationArray.length - 1];
-        } else {
-            index = nav.getAttrValNS("http://www.w3.org/2001/XMLSchema-instance", "noNamespaceSchemaLocation");
-            if (index != -1) {
-                result = nav.toNormalizedString(index);
-            }
-        }
-
-        // extract profile ID
-        if (result != null) {
-            Matcher m = PROFILE_ID_PATTERN.matcher(result);
-            if (m.find()) {
-                return m.group(1);
-            }
-        }
-        return null;
+    @Override
+    public String extractMdSelfLink(File file) throws IOException {
+        return selfLinkExtractor.extractMdSelfLink(file);
     }
 
     /**
@@ -205,7 +102,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
      */
     private void processResources(CMDIData cmdiData, VTDNav nav, ResourceStructureGraph resourceStructureGraph) throws VTDException {
         AutoPilot mdSelfLink = new AutoPilot(nav);
-        setNameSpace(mdSelfLink, null);
+        SchemaParsingUtil.setNameSpace(mdSelfLink, null);
         mdSelfLink.selectXPath("/cmd:CMD/cmd:Header/cmd:MdSelfLink");
         String mdSelfLinkString = mdSelfLink.evalXPathToString();
         if (resourceStructureGraph != null) {
@@ -213,19 +110,19 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         }
 
         AutoPilot resourceProxy = new AutoPilot(nav);
-        setNameSpace(resourceProxy, null);
+        SchemaParsingUtil.setNameSpace(resourceProxy, null);
         resourceProxy.selectXPath("/cmd:CMD/cmd:Resources/cmd:ResourceProxyList/cmd:ResourceProxy");
 
         AutoPilot resourceRef = new AutoPilot(nav);
-        setNameSpace(resourceRef, null);
+        SchemaParsingUtil.setNameSpace(resourceRef, null);
         resourceRef.selectXPath("cmd:ResourceRef");
 
         AutoPilot resourceType = new AutoPilot(nav);
-        setNameSpace(resourceType, null);
+        SchemaParsingUtil.setNameSpace(resourceType, null);
         resourceType.selectXPath("cmd:ResourceType");
 
         AutoPilot resourceMimeType = new AutoPilot(nav);
-        setNameSpace(resourceMimeType, null);
+        SchemaParsingUtil.setNameSpace(resourceMimeType, null);
         resourceMimeType.selectXPath("cmd:ResourceType/@mimetype");
 
         while (resourceProxy.evalXPath() != -1) {
@@ -244,278 +141,5 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
             }
         }
     }
-    
-    /**
-     * Extracts facet values according to the facetMapping
-     *
-     * @param cmdiData representation of the CMDI document
-     * @param nav VTD Navigator
-     * @param facetMapping the facet mapping used to map meta data to facets
-     * @throws VTDException
-     */    
-    private void processFacets(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
-
-
-        Map<FacetConfiguration, List<ValueSet>> facetValuesMap = getFacetValuesMap(cmdiData, nav, facetMapping);
-        
-        valueWriter.writeValuesToDoc(cmdiData, facetValuesMap);
-        
-        valueWriter.writeDefaultValues(cmdiData, facetValuesMap);
-    }
-    
-    /**
-     * @param cmdiData representation of the CMDI document
-     * @param nav VTD Navigator
-     * @param facetMapping A Map of facet-names (key)/ FacetConfiguration (value)
-     * @return A map of FacetConfigurations/Lists of ValueSets
-     * @throws VTDException
-     * @throws URISyntaxException
-     * @throws UnsupportedEncodingException
-     */
-    public Map<FacetConfiguration, List<ValueSet>> getFacetValuesMap(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
-        Map<FacetConfiguration, List<ValueSet>> facetValuesMap = new HashMap<FacetConfiguration, List<ValueSet>>();
-        
-        final Collection<FacetConfiguration> facetConfigList = facetMapping.getFacetConfigurations();
-
-        
-        boolean matchedPattern;
-
-        for (FacetConfiguration facetConfig : facetConfigList) {
-            matchedPattern = false;
-            
-
-            for (Pattern pattern : facetConfig.getPatterns()) {
-                matchedPattern = matchPattern(cmdiData, facetValuesMap, nav, facetConfig, pattern);
-                if (matchedPattern && !facetConfig.getAllowMultipleValues() && !facetConfig.getMultilingual()) {
-                    break;
-                }
-            }
-
-            // using fallback patterns if extraction failed
-            if (!matchedPattern) {
-                for (Pattern pattern : facetConfig.getFallbackPatterns()) {
-
-                    if (matchPattern(cmdiData, facetValuesMap, nav, facetConfig, pattern) && !facetConfig.getAllowMultipleValues() && !facetConfig.getMultilingual()) {
-                        break;
-                    }
-                }
-            }
-
-        }
-        
-        return facetValuesMap;
-    }
-    
-    /**
-     * @param cmdiData representation of the CMDI document
-     * @param facetValuesMap A map of FacetConfigurations (key)/Lists of ValueSets (value)
-     * @param nav VTD Navigator
-     * @param facetConfig FacetConfiguration to process
-     * @param pattern Pattern to process (since a facet configuration contains usually multiple patterns)
-     * @return true, if there was a match for the pattern 
-     * @throws VTDException
-     * @throws URISyntaxException
-     * @throws UnsupportedEncodingException
-     */
-    public boolean matchPattern(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> facetValuesMap, VTDNav nav, FacetConfiguration facetConfig, Pattern pattern) throws VTDException, URISyntaxException, UnsupportedEncodingException {
-        final AutoPilot ap = new AutoPilot(nav);
-        setNameSpace(ap, extractXsd(nav));
-        ap.selectXPath(pattern.getPattern());
-        
-        int index = ap.evalXPath();
-        
-        LOG.trace("facet: {}, pattern: {}, VTDIndex: {}", facetConfig.getName(), pattern.getPattern(), index);
-        
-        boolean matchedPattern = false;
-        
-        while (index != -1) {
-            matchedPattern = true;
-
-            if (nav.getTokenType(index) == VTDNav.TOKEN_ATTR_NAME) {
-                //if it is an attribute you need to add 1 to the index to get the right value
-                index++;
-            }
-
-            
-            processRawValue(cmdiData, facetValuesMap, index, facetConfig, ImmutablePair.of(nav.toString(index), extractLanguageCode(nav)), false);
-            
-
-            processValueConceptLink(cmdiData, facetValuesMap, nav, facetConfig, pattern);           
-            
-            //process derived facets
-            for(FacetConfiguration derivedFacetConfig : facetConfig.getDerivedFacets()) {
-                processRawValue(cmdiData, facetValuesMap, index, derivedFacetConfig, ImmutablePair.of(nav.toString(index), extractLanguageCode(nav)), true);
-            }
-            
-            index = ap.evalXPath();
-        }
-        
-        return matchedPattern;
-    }
-    
-    
-    /**
-     * Processing a raw value means to preserve it for import as it is, to normalize it (post-normalizers) or to add/replace it by a predefined value (value-mapping). 
-     * A value can be mapped to the origin-facet as it is defined in the facetConcepts file and/or to any other facet. 
-     * 
-     * @param cmdiData cmdiData representation of the CMDI document
-     * @param facetValuesMap A map of FacetConfigurations (key)/Lists of ValueSets (value)
-     * @param vtdIndex VTD Navigator
-     * @param facetConfig FacetConfiguration of the origin facet (which might lead to different target facets) 
-     * @param valueLanguagePair Value/language Pair
-     * @param isDerived Is derived facet
-     */
-    public void processRawValue(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> facetValuesMap, int vtdIndex, FacetConfiguration facetConfig, Pair<String, String> valueLanguagePair, boolean isDerived) {
-        if (facetConfig.getName().equals(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)) && !valueLanguagePair.getRight().equals(ENGLISH_LANGUAGE) && !valueLanguagePair.getRight().equals(DEFAULT_LANGUAGE)) {
-            return;
-        }
-        boolean removeSourceValue = false;
-
-        final List<String> postProcessed = postProcess(facetConfig.getName(), valueLanguagePair.getLeft(), cmdiData);
-
-        if (facetConfig.getConditionTargetSet() != null) {
-
-            if (this.postProcessors.containsKey(facetConfig.getName()) && !(this.postProcessors
-                    .get(facetConfig.getName()) instanceof AbstractPostNormalizerWithVocabularyMap)) {
-                for (String postProcessedValue : postProcessed) {
-                    for (TargetFacet target : facetConfig.getConditionTargetSet().getTargetsFor(postProcessedValue)) {
-                        removeSourceValue |= target.getRemoveSourceValue();
-                        
-                        ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, target, ImmutablePair.of(target.getValue(), ENGLISH_LANGUAGE), isDerived);
-
-
-                        setTargetValue(facetValuesMap, valueSet);
-
-                    }
-
-                }
-            } else {
-                for (TargetFacet target : facetConfig.getConditionTargetSet()
-                        .getTargetsFor(valueLanguagePair.getLeft())) {
-                    removeSourceValue |= target.getRemoveSourceValue();
-
-                    ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, target, ImmutablePair.of(target.getValue(), ENGLISH_LANGUAGE), isDerived);
-
-
-                    setTargetValue(facetValuesMap, valueSet);
-
-                }
-            }
-
-        }
-
-        if (!removeSourceValue) { // positive 'removeSourceValue' means skip adding value to origin facet
-            for (String postProcessedValue : postProcessed) {
-                
-                ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, new TargetFacet(facetConfig, ""), ImmutablePair.of(postProcessedValue, valueLanguagePair.getRight()), isDerived);
-                setTargetValue(facetValuesMap, valueSet);
-            }
-
-        }
-        
-    }
-    
-    /**
-     * @param facetValuesMap A map of FacetConfigurations (key)/Lists of ValueSets (value)
-     * @param valueSet
-     */
-    public void setTargetValue(Map<FacetConfiguration, List<ValueSet>> facetValuesMap, ValueSet valueSet) {
-        if(valueSet.getTargetFacet().getOverrideExistingValues())
-            facetValuesMap.compute(valueSet.getTargetFacet().getFacetConfiguration(), (k,v) -> new ArrayList<ValueSet>()).add(valueSet);
-            //targetValueMap.put(facetConfig, new ArrayList().add(valueSet));
-        else {
-            LinkedList<ValueSet> lili = (LinkedList<ValueSet>) facetValuesMap.computeIfAbsent(valueSet.getTargetFacet().getFacetConfiguration(), k -> new LinkedList<ValueSet>());
-            
-            if(lili.size() > 0 && (lili.get(0).getTargetFacet().getOverrideExistingValues() || (!valueSet.getTargetFacet().getFacetConfiguration().getAllowMultipleValues() && !valueSet.getTargetFacet().getFacetConfiguration().getAllowMultipleValues()))) {
-                LOG.info("value {} ignored since facet {} has either defined an overriding value or doensn't allow multiple values", 
-                        valueSet.getValueLanguagePair().getLeft(), valueSet.getTargetFacet().getFacetConfiguration().getName());
-                return;
-            }
-
-            if(valueSet.getValueLanguagePair().getRight().equals(ENGLISH_LANGUAGE)) {//prevents necessity to sort later
-                lili.addFirst(valueSet); 
-            }
-            else {
-                lili.addLast(valueSet);
-            }
-        }
-    }
-
-
-    /**
-     * @param nav
-     * @return language code from xml:lang or default language code
-     * @throws NavException
-     */
-    private String extractLanguageCode(VTDNav nav) throws NavException {
-        // extract language code in xml:lang if available
-        Integer langAttrIndex = nav.getAttrVal("xml:lang");
-        String languageCode;
-        if (langAttrIndex != -1) {
-            languageCode = nav.toString(langAttrIndex).trim();
-        } else {
-            return DEFAULT_LANGUAGE;
-        }
-
-        return postProcessors.get(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)).process(languageCode, null).get(0);
-    }
-
-    /**
-     * @param nav
-     * @return value concept link from element cmd:ValueConceptLink or Null
-     * @throws NavException
-     * @throws URISyntaxException 
-     * @throws UnsupportedEncodingException 
-     * @throws XPathEvalException 
-     * @throws XPathParseException 
-     */
-    private void processValueConceptLink(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> facetValuesMap, VTDNav nav, FacetConfiguration facetConfig, Pattern pattern) throws NavException, XPathParseException, XPathEvalException, UnsupportedEncodingException, URISyntaxException {
-        // extract english for ValueConceptLink if available
-        Integer vclAttrIndex = nav.getAttrVal("cmd:ValueConceptLink");
-        String vcl = null;
-        if (vclAttrIndex != -1) {
-            vcl = nav.toString(vclAttrIndex).trim();
-            
-
-            ImmutablePair<String, String> vp = null;
-            if (vcl.contains("CCR_")) {
-                vp = CCR.getValue(new URI(vcl));
-            } 
-            else if (pattern.hasVocabulary()) {
-                vp = pattern.getVocabulary().getValue(new URI(vcl));
-            }
-            if (vp != null) {
-                final String v = (String) vp.getLeft();
-                final String l = (vp.getRight() != null ? postProcessors.get(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)).process((String) vp.getRight(), null).get(0) : DEFAULT_LANGUAGE);
-                
-                processRawValue(cmdiData, facetValuesMap, vclAttrIndex, facetConfig, ImmutablePair.of(v, l), false);
-
-
-            }
-        }
-
-    }
-
-    /**
-     * Applies registered PostProcessor to extracted values
-     *
-     * @param facetName name of the facet for which value was extracted
-     * @param extractedValue extracted value from CMDI file
-     * @return value after applying matching PostProcessor or the original value
-     * if no PostProcessor was registered for the facet
-     */
-    private List<String> postProcess(String facetName, String extractedValue, CMDIData cmdiData) {
-        List<String> resultList = new ArrayList<>();
-        if (postProcessors.containsKey(facetName)) {
-            AbstractPostNormalizer processor = postProcessors.get(facetName);
-            resultList = processor.process(extractedValue, cmdiData);
-        } else {
-            resultList.add(extractedValue);
-        }
-        return resultList;
-    }
-    
-
-    
 
 }
