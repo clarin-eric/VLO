@@ -31,12 +31,11 @@ import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
 import eu.clarin.cmdi.vlo.importer.Vocabulary;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetConfiguration;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
-import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.mapping.TargetFacet;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizerWithVocabularyMap;
-import static eu.clarin.cmdi.vlo.importer.processor.CMDIParserVTDXML.DEFAULT_LANGUAGE;
-import static eu.clarin.cmdi.vlo.importer.processor.CMDIParserVTDXML.ENGLISH_LANGUAGE;
+import static eu.clarin.cmdi.vlo.importer.processor.LanguageDefaults.DEFAULT_LANGUAGE;
+import static eu.clarin.cmdi.vlo.importer.processor.LanguageDefaults.ENGLISH_LANGUAGE;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -58,20 +57,14 @@ import org.slf4j.LoggerFactory;
 public class FacetProcessor {
 
     private final Map<String, AbstractPostNormalizer> postProcessors;
-    private final Boolean useLocalXSDCache;
-    private static final java.util.regex.Pattern PROFILE_ID_PATTERN = java.util.regex.Pattern.compile(".*(clarin.eu:cr1:p_[0-9]+).*");
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
 
-    private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
     private final Vocabulary CCR;
-    private final FacetMappingFactory facetMappingFactory;
     private final FieldNameServiceImpl fieldNameService;
     private final ValueWriter valueWriter;
 
-    public FacetProcessor(Map<String, AbstractPostNormalizer> postProcessors, VloConfig config, FacetMappingFactory facetMappingFactory, VLOMarshaller marshaller, Boolean useLocalXSDCache) {
+    public FacetProcessor(Map<String, AbstractPostNormalizer> postProcessors, VloConfig config, VLOMarshaller marshaller) {
         this.postProcessors = postProcessors;
-        this.useLocalXSDCache = useLocalXSDCache;
-        this.facetMappingFactory = facetMappingFactory;
         this.CCR = new Vocabulary(config.getConceptRegistryUrl());
         this.fieldNameService = new FieldNameServiceImpl(config);
         this.valueWriter = new ValueWriter(config, postProcessors);

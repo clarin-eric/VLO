@@ -9,7 +9,6 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
 import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
 import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
-import eu.clarin.cmdi.vlo.importer.Vocabulary;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
@@ -25,15 +24,12 @@ import org.slf4j.LoggerFactory;
 
 public class CMDIParserVTDXML implements CMDIDataProcessor {
 
-    public static final String ENGLISH_LANGUAGE = "code:eng";
-    public static final String DEFAULT_LANGUAGE = "code:und";
-
+    private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
+    
     private final Map<String, AbstractPostNormalizer> postProcessors;
     private final Boolean useLocalXSDCache;
-    private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
 
     private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
-    private final Vocabulary CCR;
     private final FacetMappingFactory facetMappingFactory;
     private final FieldNameServiceImpl fieldNameService;
     private final VloConfig config;
@@ -45,7 +41,6 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         this.postProcessors = postProcessors;
         this.useLocalXSDCache = useLocalXSDCache;
         this.facetMappingFactory = facetMappingFactory;
-        this.CCR = new Vocabulary(config.getConceptRegistryUrl());
         this.fieldNameService = new FieldNameServiceImpl(config);
     }
 
@@ -66,9 +61,12 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         }
 
         nav.toElement(VTDNav.ROOT);
+
         processResources(cmdiData, nav, resourceStructureGraph);
-        FacetProcessor facetProcessor = new FacetProcessor(postProcessors, config, facetMappingFactory, marshaller, useLocalXSDCache);
+        
+        final FacetProcessor facetProcessor = new FacetProcessor(postProcessors, config, marshaller);
         facetProcessor.processFacets(cmdiData, nav, facetMapping);
+        
         return cmdiData;
     }
 
