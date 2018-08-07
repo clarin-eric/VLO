@@ -19,25 +19,44 @@ package eu.clarin.cmdi.vlo.importer.processor;
 import com.ximpleware.AutoPilot;
 import com.ximpleware.VTDException;
 import com.ximpleware.VTDNav;
+import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
 import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
 
 /**
- *
+ * Processes resource from a CMDI file. Not to be reused!
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class ResourceProcessorVTDXML implements ResourceProcessor {
+
+    private final VTDNav nav;
+
+    public ResourceProcessorVTDXML(VTDNav nav) {
+        this.nav = nav;
+    }
 
     /**
      * Extract ResourceProxies from ResourceProxyList
      *
      * @param cmdiData representation of the CMDI document
-     * @param nav VTD Navigator
      * @param resourceStructureGraph
-     * @throws VTDException
      */
     @Override
-    public void processResources(CMDIData cmdiData, VTDNav nav, ResourceStructureGraph resourceStructureGraph) throws VTDException {
+    public void processResources(CMDIData cmdiData, ResourceStructureGraph resourceStructureGraph) throws CMDIParsingException {
+        try {
+            doProcess(cmdiData, resourceStructureGraph);
+        } catch (VTDException ex) {
+            throw new CMDIParsingException("VTD parsing exception while processing resources", ex);
+        }
+    }
+
+    /**
+     *
+     * @param cmdiData
+     * @param resourceStructureGraph
+     * @throws XPathParseException
+     */
+    private void doProcess(CMDIData cmdiData, ResourceStructureGraph resourceStructureGraph) throws VTDException {
         AutoPilot mdSelfLink = new AutoPilot(nav);
         SchemaParsingUtil.setNameSpace(mdSelfLink, null);
         mdSelfLink.selectXPath("/cmd:CMD/cmd:Header/cmd:MdSelfLink");

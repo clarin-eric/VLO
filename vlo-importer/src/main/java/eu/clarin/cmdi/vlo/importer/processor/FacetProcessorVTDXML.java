@@ -51,6 +51,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Processes values from a CMDI file into facets. Not to be reused!
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
@@ -62,31 +63,34 @@ public class FacetProcessorVTDXML implements FacetProcessor {
     private final Vocabulary CCR;
     private final FieldNameServiceImpl fieldNameService;
     private final ValueWriter valueWriter;
+    private final VTDNav nav;
 
-    public FacetProcessorVTDXML(Map<String, AbstractPostNormalizer> postProcessors, VloConfig config, VLOMarshaller marshaller) {
+    public FacetProcessorVTDXML(Map<String, AbstractPostNormalizer> postProcessors, VloConfig config, VLOMarshaller marshaller, VTDNav nav) {
         this.postProcessors = postProcessors;
         this.CCR = new Vocabulary(config.getConceptRegistryUrl());
         this.fieldNameService = new FieldNameServiceImpl(config);
         this.valueWriter = new ValueWriter(config, postProcessors);
+        this.nav = nav;
     }
 
     /**
      * Extracts facet values according to the facetMapping
      *
      * @param cmdiData representation of the CMDI document
-     * @param nav VTD Navigator
      * @param facetMapping the facet mapping used to map meta data to facets
-     * @throws VTDException
      * @throws java.net.URISyntaxException
      */
     @Override
-    public void processFacets(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
+    public void processFacets(CMDIData cmdiData, FacetMapping facetMapping) throws URISyntaxException, UnsupportedEncodingException, CMDIParsingException {
+        try {
+            Map<FacetConfiguration, List<ValueSet>> facetValuesMap = getFacetValuesMap(cmdiData, nav, facetMapping);
 
-        Map<FacetConfiguration, List<ValueSet>> facetValuesMap = getFacetValuesMap(cmdiData, nav, facetMapping);
+            valueWriter.writeValuesToDoc(cmdiData, facetValuesMap);
 
-        valueWriter.writeValuesToDoc(cmdiData, facetValuesMap);
-
-        valueWriter.writeDefaultValues(cmdiData, facetValuesMap);
+            valueWriter.writeDefaultValues(cmdiData, facetValuesMap);
+        } catch (VTDException ex) {
+            throw new CMDIParsingException("VTD parsing exception while processing facets", ex);
+        }
     }
 
     /**

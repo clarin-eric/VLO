@@ -16,22 +16,28 @@
  */
 package eu.clarin.cmdi.vlo.importer.processor;
 
-import eu.clarin.cmdi.vlo.importer.CMDIData;
-import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
-
 /**
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-public interface ResourceProcessor {
+public class CMDIParsingException extends Exception {
 
-    /**
-     * Extract ResourceProxies from ResourceProxyList
-     *
-     * @param cmdiData representation of the CMDI document
-     * @param resourceStructureGraph
-     * @throws eu.clarin.cmdi.vlo.importer.processor.CMDIParsingException
-     */
-    void processResources(CMDIData cmdiData, ResourceStructureGraph resourceStructureGraph) throws CMDIParsingException;
+    public CMDIParsingException(String message) {
+        super(message);
+    }
+
+    public CMDIParsingException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public CMDIParsingException(Throwable cause) {
+        super(cause);
+    }
+
+    public CMDIParsingException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
+    
+    
     
 }

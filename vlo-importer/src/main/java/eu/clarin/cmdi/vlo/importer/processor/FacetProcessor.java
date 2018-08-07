@@ -16,8 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.importer.processor;
 
-import com.ximpleware.VTDException;
-import com.ximpleware.VTDNav;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
 import java.io.UnsupportedEncodingException;
@@ -33,11 +31,11 @@ public interface FacetProcessor {
      * Extracts facet values according to the facetMapping
      *
      * @param cmdiData representation of the CMDI document
-     * @param nav VTD Navigator
      * @param facetMapping the facet mapping used to map meta data to facets
-     * @throws VTDException
+     * @throws eu.clarin.cmdi.vlo.importer.processor.CMDIParsingException
      * @throws java.net.URISyntaxException
+     * @throws java.io.UnsupportedEncodingException
      */
-    void processFacets(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException;
-    
+    void processFacets(CMDIData cmdiData, FacetMapping facetMapping) throws CMDIParsingException, URISyntaxException, UnsupportedEncodingException;
+
 }

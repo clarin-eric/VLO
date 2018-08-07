@@ -44,7 +44,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     }
 
     @Override
-    public CMDIData process(File file, ResourceStructureGraph resourceStructureGraph) throws VTDException, IOException, URISyntaxException {
+    public CMDIData process(File file, ResourceStructureGraph resourceStructureGraph) throws CMDIParsingException, VTDException, IOException, URISyntaxException {
         final CMDIData cmdiData = new CMDIData(this.fieldNameService);
         final VTDGen vg = new VTDGen();
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
@@ -61,11 +61,11 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
 
         nav.toElement(VTDNav.ROOT);
 
-        newResourceProcessor()
-                .processResources(cmdiData, nav, resourceStructureGraph);
+        newResourceProcessor(nav)
+                .processResources(cmdiData, resourceStructureGraph);
 
-        newFacetProcessor()
-                .processFacets(cmdiData, nav, facetMapping);
+        newFacetProcessor(nav)
+                .processFacets(cmdiData, facetMapping);
 
         return cmdiData;
     }
@@ -94,18 +94,20 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     /**
      * Instantiates a new resource processor. Called for each processed file.
      *
+     * @param nav
      * @return a new resource processor
      */
-    protected ResourceProcessor newResourceProcessor() {
-        return new ResourceProcessorVTDXML();
+    protected ResourceProcessor newResourceProcessor(VTDNav nav) {
+        return new ResourceProcessorVTDXML(nav);
     }
 
     /**
      * Instantiates a new facet processor. Called for each processed file.
      *
+     * @param nav
      * @return a new facet processor
      */
-    protected FacetProcessor newFacetProcessor() {
-        return new FacetProcessorVTDXML(postProcessors, config, marshaller);
+    protected FacetProcessor newFacetProcessor(VTDNav nav) {
+        return new FacetProcessorVTDXML(postProcessors, config, marshaller, nav);
     }
 }
