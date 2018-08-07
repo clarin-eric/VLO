@@ -26,7 +26,7 @@ import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-public class ResourceProcessorVTDXML {
+public class ResourceProcessorVTDXML implements ResourceProcessor {
 
     /**
      * Extract ResourceProxies from ResourceProxyList
@@ -36,6 +36,7 @@ public class ResourceProcessorVTDXML {
      * @param resourceStructureGraph
      * @throws VTDException
      */
+    @Override
     public void processResources(CMDIData cmdiData, VTDNav nav, ResourceStructureGraph resourceStructureGraph) throws VTDException {
         AutoPilot mdSelfLink = new AutoPilot(nav);
         SchemaParsingUtil.setNameSpace(mdSelfLink, null);

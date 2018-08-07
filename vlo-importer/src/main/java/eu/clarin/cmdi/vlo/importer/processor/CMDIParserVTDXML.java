@@ -91,12 +91,21 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         return selfLinkExtractor.extractMdSelfLink(file);
     }
 
-    protected FacetProcessorVTDXML newFacetProcessor() {
-        return new FacetProcessorVTDXML(postProcessors, config, marshaller);
-    }
-
-    protected ResourceProcessorVTDXML newResourceProcessor() {
+    /**
+     * Instantiates a new resource processor. Called for each processed file.
+     *
+     * @return a new resource processor
+     */
+    protected ResourceProcessor newResourceProcessor() {
         return new ResourceProcessorVTDXML();
     }
 
+    /**
+     * Instantiates a new facet processor. Called for each processed file.
+     *
+     * @return a new facet processor
+     */
+    protected FacetProcessor newFacetProcessor() {
+        return new FacetProcessorVTDXML(postProcessors, config, marshaller);
+    }
 }

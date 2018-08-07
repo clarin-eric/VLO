@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-public class FacetProcessorVTDXML {
+public class FacetProcessorVTDXML implements FacetProcessor {
 
     private final Map<String, AbstractPostNormalizer> postProcessors;
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
@@ -79,6 +79,7 @@ public class FacetProcessorVTDXML {
      * @throws VTDException
      * @throws java.net.URISyntaxException
      */
+    @Override
     public void processFacets(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
 
         Map<FacetConfiguration, List<ValueSet>> facetValuesMap = getFacetValuesMap(cmdiData, nav, facetMapping);
@@ -98,7 +99,7 @@ public class FacetProcessorVTDXML {
      * @throws URISyntaxException
      * @throws UnsupportedEncodingException
      */
-    public Map<FacetConfiguration, List<ValueSet>> getFacetValuesMap(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
+    private Map<FacetConfiguration, List<ValueSet>> getFacetValuesMap(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
         Map<FacetConfiguration, List<ValueSet>> facetValuesMap = new HashMap<FacetConfiguration, List<ValueSet>>();
 
         final Collection<FacetConfiguration> facetConfigList = facetMapping.getFacetConfigurations();
@@ -143,7 +144,7 @@ public class FacetProcessorVTDXML {
      * @throws URISyntaxException
      * @throws UnsupportedEncodingException
      */
-    public boolean matchPattern(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> facetValuesMap, VTDNav nav, FacetConfiguration facetConfig, Pattern pattern) throws VTDException, URISyntaxException, UnsupportedEncodingException {
+    private boolean matchPattern(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> facetValuesMap, VTDNav nav, FacetConfiguration facetConfig, Pattern pattern) throws VTDException, URISyntaxException, UnsupportedEncodingException {
         final AutoPilot ap = new AutoPilot(nav);
         SchemaParsingUtil.setNameSpace(ap, SchemaParsingUtil.extractXsd(nav));
         ap.selectXPath(pattern.getPattern());
@@ -243,7 +244,7 @@ public class FacetProcessorVTDXML {
      * @param valueLanguagePair Value/language Pair
      * @param isDerived Is derived facet
      */
-    public void processRawValue(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> facetValuesMap, int vtdIndex, FacetConfiguration facetConfig, Pair<String, String> valueLanguagePair, boolean isDerived) {
+    private void processRawValue(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> facetValuesMap, int vtdIndex, FacetConfiguration facetConfig, Pair<String, String> valueLanguagePair, boolean isDerived) {
         if (facetConfig.getName().equals(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)) && !valueLanguagePair.getRight().equals(ENGLISH_LANGUAGE) && !valueLanguagePair.getRight().equals(DEFAULT_LANGUAGE)) {
             return;
         }
@@ -296,7 +297,7 @@ public class FacetProcessorVTDXML {
      * ValueSets (value)
      * @param valueSet
      */
-    public void setTargetValue(Map<FacetConfiguration, List<ValueSet>> facetValuesMap, ValueSet valueSet) {
+    private void setTargetValue(Map<FacetConfiguration, List<ValueSet>> facetValuesMap, ValueSet valueSet) {
         if (valueSet.getTargetFacet().getOverrideExistingValues()) {
             facetValuesMap.compute(valueSet.getTargetFacet().getFacetConfiguration(), (k, v) -> new ArrayList<ValueSet>()).add(valueSet);
         } //targetValueMap.put(facetConfig, new ArrayList().add(valueSet));
