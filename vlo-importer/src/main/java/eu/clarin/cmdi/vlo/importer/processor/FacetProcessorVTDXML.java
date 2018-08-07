@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-public class FacetProcessor {
+public class FacetProcessorVTDXML {
 
     private final Map<String, AbstractPostNormalizer> postProcessors;
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
@@ -63,7 +63,7 @@ public class FacetProcessor {
     private final FieldNameServiceImpl fieldNameService;
     private final ValueWriter valueWriter;
 
-    public FacetProcessor(Map<String, AbstractPostNormalizer> postProcessors, VloConfig config, VLOMarshaller marshaller) {
+    public FacetProcessorVTDXML(Map<String, AbstractPostNormalizer> postProcessors, VloConfig config, VLOMarshaller marshaller) {
         this.postProcessors = postProcessors;
         this.CCR = new Vocabulary(config.getConceptRegistryUrl());
         this.fieldNameService = new FieldNameServiceImpl(config);

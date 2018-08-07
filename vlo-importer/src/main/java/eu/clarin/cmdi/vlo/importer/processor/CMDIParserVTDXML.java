@@ -64,7 +64,7 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
 
         processResources(cmdiData, nav, resourceStructureGraph);
         
-        final FacetProcessor facetProcessor = new FacetProcessor(postProcessors, config, marshaller);
+        final FacetProcessorVTDXML facetProcessor = new FacetProcessorVTDXML(postProcessors, config, marshaller);
         facetProcessor.processFacets(cmdiData, nav, facetMapping);
         
         return cmdiData;
