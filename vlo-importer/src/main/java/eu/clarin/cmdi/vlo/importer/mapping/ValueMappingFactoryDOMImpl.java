@@ -16,6 +16,7 @@ import org.xml.sax.SAXException;
 import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping.FacetConcept;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizerWithVocabularyMap;
+import org.xml.sax.InputSource;
 
 /**
  * @author @author Wolfgang Walter SAUER (wowasa)
@@ -39,8 +40,12 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
 
         try {
             LOG.info("Parsing value mapping in {}", fileName);
-            DocumentBuilder builder = fac.newDocumentBuilder();
-            Document doc = builder.parse(mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(fileName));
+            final InputSource valueMappingDefinitionStream = mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(fileName);
+            if (valueMappingDefinitionStream == null) {
+                throw new IOException("No input source for " + fileName);
+            }
+            final DocumentBuilder builder = fac.newDocumentBuilder();
+            Document doc = builder.parse(valueMappingDefinitionStream);
 
             NodeList originFacets = doc.getElementsByTagName("origin-facet");
 
@@ -48,7 +53,7 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
             for (int a = 0; a < originFacets.getLength(); a++) {
 
                 Element originFacet = (Element) originFacets.item(a);
-                
+
                 FacetConfiguration facetConfig = facetMapping.getFacetConfiguration(originFacet.getAttribute("name"));
 
                 ConditionTargetSet conditionTargetSet = new ConditionTargetSet();
@@ -142,8 +147,8 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
             targetFacet = defaultTargets.stream()
                     .filter(facet -> facet.getFacetConfiguration().getName().equals(targetValue.getAttribute("facet")))
                     .findFirst().orElse(null);
- 
-           if (targetFacet != null) { // there is a general setting
+
+            if (targetFacet != null) { // there is a general setting
                 TargetFacet clonedTargetFacet = cloneDefaultTarget(targetFacet, targetValue);
                 targets.add(clonedTargetFacet);
                 LOG.debug("-- -- -- Added target value '{}' (cloned target definition: [overrideExistingValues: {}, removeSourceValue: {}])", clonedTargetFacet.getValue(), clonedTargetFacet.getOverrideExistingValues(), clonedTargetFacet.getRemoveSourceValue());
@@ -161,7 +166,7 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
 
         NodeList sourceValues = targetValueSetElement.getElementsByTagName("source-value");
         LOG.debug("-- -- Continued processing of target-value-set with {} source-value node(s)", sourceValues.getLength());
-        
+
         for (int d = 0; d < sourceValues.getLength(); d++) {
             Element sourceValue = (Element) sourceValues.item(d);
             LOG.debug("-- -- -- Processing source-value node with content '{}'", sourceValue.getTextContent());

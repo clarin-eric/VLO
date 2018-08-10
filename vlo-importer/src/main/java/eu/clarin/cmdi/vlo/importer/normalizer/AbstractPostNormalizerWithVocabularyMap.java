@@ -3,11 +3,7 @@ package eu.clarin.cmdi.vlo.importer.normalizer;
 import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 
-import java.io.InputStream;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.normalization.NormalizationService;
 import eu.clarin.cmdi.vlo.normalization.NormalizationVocabulary;
@@ -17,6 +13,7 @@ import eu.clarin.cmdi.vlo.transformers.VariantsMapMarshaller;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.bind.JAXBException;
+import org.xml.sax.InputSource;
 
 /* 
  * abstract class that encapsulates common map creation from mapping files
@@ -77,15 +74,15 @@ public abstract class AbstractPostNormalizerWithVocabularyMap extends AbstractPo
         return MAPPING_CACHE.computeIfAbsent(mapUrl, (key) -> {
             LOG.info("Reading vocabulary file from: {}", mapUrl);
 
-            final InputStream stream;
+            final InputSource streamSource;
             try {
-                stream = mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(mapUrl);
+                streamSource = mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(mapUrl);
 
-                if (stream == null) {
+                if (streamSource == null) {
                     throw new RuntimeException("Cannot instantiate postProcessor, " + mapUrl + " is not an absolute URL, file path or packaged resource location");
                 } else {
                     try {
-                        return VariantsMapMarshaller.unmarshal(stream);
+                        return VariantsMapMarshaller.unmarshal(streamSource.getByteStream());
                     } catch (JAXBException ex) {
                         throw new RuntimeException("Cannot instantiate postProcessor: ", ex);
                     }
