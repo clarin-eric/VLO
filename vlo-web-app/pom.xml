@@ -454,7 +454,7 @@
             </plugin>
         </plugins>
     </reporting>
-    
+<!--    
     <repositories>
         <repository>
             <id>Apache Nexus</id>
@@ -466,5 +466,5 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-    </repositories>
+    </repositories>-->
 </project>
