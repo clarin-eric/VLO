@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ComponentSpec isProfile="false" CMDVersion="1.2" CMDOriginalVersion="1.1" xsi:noNamespaceSchemaLocation="https://infra.clarin.eu/CMDI/1.x/xsd/cmd-component.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Header>
+        <ID>clarin.eu:cr1:c_1271859438109</ID>
+        <Name>iso-639-1</Name>
+        <Description>The list of ISO-639-1 language codes</Description>
+        <Status>production</Status>
+    </Header>
+    <Component name="ISO639">
+        <Element name="iso-639-1-code" CardinalityMin="1" CardinalityMax="1" cue:DisplayPriority="1" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+            <ValueScheme>
+                <Vocabulary>
+                    <enumeration>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130489-001" AppInfo="Afar (aa)">aa</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130304-001" AppInfo="Abkhazian; Abkhaz (ab)">ab</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130305-001" AppInfo="Avestan (ae)">ae</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130306-001" AppInfo="Afrikaans (af)">af</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130307-001" AppInfo="Akan (ak)">ak</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130308-001" AppInfo="Amharic (am)">am</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130309-001" AppInfo="Aragonese (an)">an</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130310-001" AppInfo="Arabic (ar)">ar</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130311-001" AppInfo="Assamese (as)">as</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130312-001" AppInfo="Avar; Avarish; Avaric (av)">av</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130313-001" AppInfo="Aymara (ay)">ay</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130314-001" AppInfo="Azerbaijani (az)">az</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130315-001" AppInfo="Bashkir (ba)">ba</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130316-001" AppInfo="Belarusian (be)">be</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130317-001" AppInfo="Bulgarian (bg)">bg</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130318-001" AppInfo="Bihari languages (bh)">bh</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130319-001" AppInfo="Bislama (bi)">bi</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130320-001" AppInfo="Bambara (bm)">bm</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130321-001" AppInfo="Bengali; Bangla (bn)">bn</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130322-001" AppInfo="Tibetan (bo)">bo</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130323-001" AppInfo="Breton (br)">br</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130324-001" AppInfo="Bosnian (bs)">bs</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130325-001" AppInfo="Catalan; Valencian (ca)">ca</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130326-001" AppInfo="Chechen (ce)">ce</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130327-001" AppInfo="Chamorro (ch)">ch</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130328-001" AppInfo="Corsican (co)">co</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130329-001" AppInfo="Cree (cr)">cr</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130330-001" AppInfo="Czech (cs)">cs</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130331-001" AppInfo="Church Slavic; Old Slavonic; Old Church Slavonic; Church Slavonic; Old Bulgarian (cu)">cu</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130332-001" AppInfo="Chuvash (cv)">cv</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130333-001" AppInfo="Welsh (cy)">cy</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130334-001" AppInfo="Danish (da)">da</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130335-001" AppInfo="German (de)">de</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130336-001" AppInfo="Divehi; Dhivehi; Maldivian (dv)">dv</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130337-001" AppInfo="Dzongkha; Bhutani; Butanese (dz)">dz</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130338-001" AppInfo="Ewe (ee)">ee</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130339-001" AppInfo="Modern Greek (el)">el</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130340-001" AppInfo="English (en)">en</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130341-001" AppInfo="Esperanto (eo)">eo</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130342-001" AppInfo="Spanish; Castilian (es)">es</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130343-001" AppInfo="Estonian (et)">et</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130344-001" AppInfo="Basque (eu)">eu</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130345-001" AppInfo="Farsi; Persian (fa)">fa</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130346-001" AppInfo="Fulah; Fula; Fulani; Fulfulde; Peul (ff)">ff</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130347-001" AppInfo="Finnish (fi)">fi</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130348-001" AppInfo="Fijian (fj)">fj</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130349-001" AppInfo="Faroese; Faeroese (fo)">fo</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130350-001" AppInfo="French (fr)">fr</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130351-001" AppInfo="Western Frisian (fy)">fy</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130352-001" AppInfo="Irish (ga)">ga</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130353-001" AppInfo="Gaelic; Scottish Gaelic (gd)">gd</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130354-001" AppInfo="Galician (gl)">gl</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130355-001" AppInfo="Guarani (gn)">gn</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130356-001" AppInfo="Gujarati (gu)">gu</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130357-001" AppInfo="Manx (gv)">gv</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130358-001" AppInfo="Hausa (ha)">ha</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130359-001" AppInfo="Hebrew (he)">he</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130360-001" AppInfo="Hindi (hi)">hi</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130361-001" AppInfo="Hiri Motu (ho)">ho</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130362-001" AppInfo="Croatian (hr)">hr</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130363-001" AppInfo="Haitian; Haitian Creole (ht)">ht</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130364-001" AppInfo="Hungarian (hu)">hu</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130365-001" AppInfo="Armenian (hy)">hy</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130366-001" AppInfo="Herero (hz)">hz</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130367-001" AppInfo="Interlingua (ia)">ia</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130368-001" AppInfo="Indonesian (id)">id</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130369-001" AppInfo="Interlingue (ie)">ie</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130370-001" AppInfo="Igbo (ig)">ig</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130371-001" AppInfo="Sichuan Yi; Nuosu (ii)">ii</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130372-001" AppInfo="Inupiaq (ik)">ik</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130301-001" AppInfo="Indonesian (in)">in</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130373-001" AppInfo="Ido (io)">io</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130374-001" AppInfo="Icelandic (is)">is</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130375-001" AppInfo="Italian (it)">it</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130376-001" AppInfo="Inuktitut (iu)">iu</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130302-001" AppInfo="Hebrew (iw)">iw</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130377-001" AppInfo="Japanese (ja)">ja</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130303-001" AppInfo="Yiddish (ji)">ji</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130378-001" AppInfo="Javanese (jv)">jv</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130379-001" AppInfo="Georgian (ka)">ka</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130380-001" AppInfo="Kongo (kg)">kg</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130381-001" AppInfo="Kikuyu; Gikuyu (ki)">ki</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130382-001" AppInfo="Kuanyama; Kwanyama (kj)">kj</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130383-001" AppInfo="Kazakh (kk)">kk</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130384-001" AppInfo="Greenlandic; Kalaallisut (kl)">kl</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130385-001" AppInfo="Central Khmer (km)">km</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130386-001" AppInfo="Kannada (kn)">kn</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130387-001" AppInfo="Korean (ko)">ko</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130388-001" AppInfo="Kanuri (kr)">kr</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130389-001" AppInfo="Kashmiri (ks)">ks</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130390-001" AppInfo="Kurdish (ku)">ku</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130391-001" AppInfo="Komi (kv)">kv</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130392-001" AppInfo="Cornish (kw)">kw</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130393-001" AppInfo="Kyrgyz; Kirghiz (ky)">ky</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130394-001" AppInfo="Latin (la)">la</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130395-001" AppInfo="Letzeburgesch; Luxembourgish (lb)">lb</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130396-001" AppInfo="Luganda; Ganda (lg)">lg</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130397-001" AppInfo="Limburgish; Limburger; Limburgian (li)">li</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130398-001" AppInfo="Lingala (ln)">ln</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130399-001" AppInfo="Laotian; Lao (lo)">lo</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130400-001" AppInfo="Lithuanian (lt)">lt</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130401-001" AppInfo="Luba-Katanga (lu)">lu</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130402-001" AppInfo="Latvian (lv)">lv</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130403-001" AppInfo="Malagasy (mg)">mg</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130404-001" AppInfo="Marshallese (mh)">mh</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130405-001" AppInfo="Maori (mi)">mi</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130406-001" AppInfo="Macedonian (mk)">mk</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130407-001" AppInfo="Malayalam (ml)">ml</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130408-001" AppInfo="Mongolian (mn)">mn</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130409-001" AppInfo="Moldavian; Moldovan (mo)">mo</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130410-001" AppInfo="Marathi (mr)">mr</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130411-001" AppInfo="Malay (ms)">ms</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130412-001" AppInfo="Maltese (mt)">mt</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130413-001" AppInfo="Myanmar; Burmese (my)">my</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130414-001" AppInfo="Nauruan (na)">na</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130415-001" AppInfo="Norwegian Bokmål (nb)">nb</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130416-001" AppInfo="North Ndebele (nd)">nd</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130417-001" AppInfo="Nepali (ne)">ne</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130418-001" AppInfo="Ndonga (ng)">ng</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130419-001" AppInfo="Dutch (nl)">nl</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130420-001" AppInfo="Norwegian Nynorsk (nn)">nn</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130421-001" AppInfo="Norwegian (no)">no</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130422-001" AppInfo="South Ndebele (nr)">nr</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130423-001" AppInfo="Navajo; Navaho (nv)">nv</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130424-001" AppInfo="Chichewa; Chewa; Nyanja (ny)">ny</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130425-001" AppInfo="Occitan; Provençal (oc)">oc</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130426-001" AppInfo="Ojibwa (oj)">oj</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130427-001" AppInfo="Oromo; Afan Oromo; Galla (om)">om</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130428-001" AppInfo="Oriya (or)">or</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130429-001" AppInfo="Ossetian; Ossetic (os)">os</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130430-001" AppInfo="Punjabi; Panjabi (pa)">pa</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130431-001" AppInfo="Pali (pi)">pi</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130432-001" AppInfo="Polish (pl)">pl</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130433-001" AppInfo="Pashto; Pushto (ps)">ps</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130434-001" AppInfo="Portuguese (pt)">pt</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130435-001" AppInfo="Quechua (qu)">qu</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130436-001" AppInfo="Romansh (rm)">rm</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130437-001" AppInfo="Kirundi; Rundi (rn)">rn</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130438-001" AppInfo="Romanian; Moldavian; Moldovan (ro)">ro</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130439-001" AppInfo="Russian (ru)">ru</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130440-001" AppInfo="Kinyarwanda; Rwanda (rw)">rw</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130441-001" AppInfo="Sanskrit (sa)">sa</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130442-001" AppInfo="Sardinian (sc)">sc</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130443-001" AppInfo="Sindhi (sd)">sd</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130444-001" AppInfo="Northern Sami (se)">se</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130445-001" AppInfo="Sango; Sangho (sg)">sg</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130446-001" AppInfo="Serbo-Croatian (sh)">sh</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130447-001" AppInfo="Sinhala; Sinhalese; Singhalese (si)">si</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130448-001" AppInfo="Slovak (sk)">sk</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130449-001" AppInfo="Slovenian (sl)">sl</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130450-001" AppInfo="Samoan (sm)">sm</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130451-001" AppInfo="Shona (sn)">sn</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130452-001" AppInfo="Somali (so)">so</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130453-001" AppInfo="Albanian (sq)">sq</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130454-001" AppInfo="Serbian (sr)">sr</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130455-001" AppInfo="Swazi; Swati; Siswati (ss)">ss</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130456-001" AppInfo="Sesotho; Southern Sotho (st)">st</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130457-001" AppInfo="Sundanese (su)">su</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130458-001" AppInfo="Swedish (sv)">sv</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130459-001" AppInfo="Swahili; Kiswahili (sw)">sw</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130460-001" AppInfo="Tamil (ta)">ta</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130461-001" AppInfo="Telugu (te)">te</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130462-001" AppInfo="Tajik (tg)">tg</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130463-001" AppInfo="Thai (th)">th</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130464-001" AppInfo="Tigrinya (ti)">ti</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130465-001" AppInfo="Turkmen (tk)">tk</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130466-001" AppInfo="Tagalog (tl)">tl</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130467-001" AppInfo="Setswana; Tswana (tn)">tn</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130468-001" AppInfo="Tonga (to)">to</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130469-001" AppInfo="Turkish (tr)">tr</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130470-001" AppInfo="Tsonga (ts)">ts</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130471-001" AppInfo="Tatar (tt)">tt</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130472-001" AppInfo="Twi (tw)">tw</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130473-001" AppInfo="Tahitian (ty)">ty</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130474-001" AppInfo="Uighur; Uyghur (ug)">ug</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130475-001" AppInfo="Ukrainian (uk)">uk</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130476-001" AppInfo="Urdu (ur)">ur</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130477-001" AppInfo="Uzbek (uz)">uz</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130478-001" AppInfo="Venda (ve)">ve</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130479-001" AppInfo="Vietnamese (vi)">vi</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130480-001" AppInfo="Volapük (vo)">vo</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130481-001" AppInfo="Walloon (wa)">wa</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130482-001" AppInfo="Wolof (wo)">wo</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130483-001" AppInfo="Xhosa (xh)">xh</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130484-001" AppInfo="Yiddish (yi)">yi</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130485-001" AppInfo="Yoruba (yo)">yo</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130486-001" AppInfo="Zhuang; Chuang (za)">za</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130487-001" AppInfo="Chinese (zh)">zh</item>
+                        <item ConceptLink="http://cdb.iso.org/lg/CDB-00130488-001" AppInfo="Zulu (zu)">zu</item>
+                    </enumeration>
+                </Vocabulary>
+            </ValueScheme>
+        </Element>
+    </Component>
+</ComponentSpec>

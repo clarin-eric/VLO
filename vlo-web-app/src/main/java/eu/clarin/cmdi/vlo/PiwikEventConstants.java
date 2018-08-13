@@ -42,10 +42,6 @@ public class PiwikEventConstants {
     public static final String PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE = "ProcessResource";
     public static final String PIWIK_EVENT_ACTION_HIERARCHY_UP = "HierarchyNavigateUp";
     public static final String PIWIK_EVENT_ACTION_HIERARCHY_CHILD = "HierarchyToggleChild";
-    public static final String PIWIK_EVENT_ACTION_USER_SATISFACTION_RATING_SCORE = "SelectUserSatisfactionScore";
-    public static final String PIWIK_EVENT_ACTION_USER_SATISFACTION_CANCEL = "UserSatisfactionCancel";
-    public static final String PIWIK_EVENT_ACTION_USER_SATISFACTION_SUBMIT = "UserSatisfactionSubmit";
-    public static final String PIWIK_EVENT_ACTION_USER_SATISFACTION_DISMISS = "UserSatisfactionDismiss";
 
     //Page views
     public static final String PIWIK_PAGEVIEW_SEARCH = "Search page";

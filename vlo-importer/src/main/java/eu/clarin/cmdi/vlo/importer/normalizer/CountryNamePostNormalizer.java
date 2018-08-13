@@ -6,7 +6,7 @@ import com.ximpleware.VTDException;
 
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
 
 import java.io.IOException;
 
@@ -35,7 +35,7 @@ public class CountryNamePostNormalizer extends AbstractPostNormalizer {
      * @return List of country names
      */
     @Override
-    public List<String> process(String value, CMDIData cmdiData) {
+    public List<String> process(String value, DocFieldContainer cmdiData) {
         if (value == null) {
             return Collections.singletonList(null);
         } else {

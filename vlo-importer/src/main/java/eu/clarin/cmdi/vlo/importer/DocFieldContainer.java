@@ -14,17 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.service;
+package eu.clarin.cmdi.vlo.importer;
 
-import eu.clarin.cmdi.vlo.VloWebAppException;
-import eu.clarin.cmdi.vlo.wicket.model.RatingLevel;
+import java.util.Collection;
 
 /**
+ * Provides access to fields in a document by name
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-public interface RatingStore {
+public interface DocFieldContainer {
 
-    public void storeRating(RatingLevel rating, String comment, String host) throws VloWebAppException;
+    String getId();
 
+    Collection<Object> getDocField(String name);
 }

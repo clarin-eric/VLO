@@ -3,7 +3,7 @@ package eu.clarin.cmdi.vlo.importer.normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
 
 public class ResourceClassPostNormalizer extends AbstractPostNormalizer {
 
@@ -14,7 +14,7 @@ public class ResourceClassPostNormalizer extends AbstractPostNormalizer {
      * @return Value with upper case first letter and some value normalisation
      */
     @Override
-    public List<String> process(String value, CMDIData cmdiData) {
+    public List<String> process(String value, DocFieldContainer cmdiData) {
         String result = value;
 
         // replace DCMI URLs with DCMI type

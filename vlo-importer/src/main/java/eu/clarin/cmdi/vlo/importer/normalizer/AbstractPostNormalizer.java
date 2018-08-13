@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
 
 /**
  *
@@ -49,10 +49,10 @@ public abstract class AbstractPostNormalizer{
     /**
     *
     * @param value value to post-process; can be null
-    * @param cmdiData processing context, can be null or incomplete
+    * @param docFieldContainer processing context, can be null or incomplete
     * @return list of post-processed values
     */
-   public abstract List<String> process(String value, CMDIData cmdiData);
+   public abstract List<String> process(String value, DocFieldContainer docFieldContainer);
 
    /**
     *

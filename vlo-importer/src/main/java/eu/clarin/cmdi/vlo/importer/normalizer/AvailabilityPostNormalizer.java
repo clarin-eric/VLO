@@ -1,7 +1,7 @@
 package eu.clarin.cmdi.vlo.importer.normalizer;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +18,7 @@ public class AvailabilityPostNormalizer extends AbstractPostNormalizerWithVocabu
     }
 
     @Override
-    public List<String> process(final String value, CMDIData cmdiData) {
+    public List<String> process(final String value, DocFieldContainer cmdiData) {
         String normalizedVal = normalize(value);
         //Availability variants can be normalized with multiple values, in vocabulary they are separated with ;
         return normalizedVal != null ? Arrays.asList(normalizedVal.split(";")) : new ArrayList<>();

@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
-import com.google.common.io.Files;
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapFeedbackPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.ImmutableNavbarComponent;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
@@ -29,10 +28,6 @@ import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.SnippetConfig;
 import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
-import eu.clarin.cmdi.vlo.wicket.panels.RatingPanel;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
@@ -81,8 +76,6 @@ public class VloBasePage<T> extends GenericWebPage<T> {
     @SpringBean
     private SnippetConfig snippetConfig;
     private String bottomSnippet;
-
-    private RatingPanel ratingPanel;
 
     public VloBasePage() {
         addComponents();
@@ -155,8 +148,6 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
         });
 
-        add(ratingPanel = new RatingPanel("rating"));
-
         // Add bottom snippets content if a file URL is configured to retrieve content from
         if (Strings.isEmpty(snippetConfig.getBottomSnippetFileUrl())) {
             add(new WebMarkupContainer("bottomSnippet"));
@@ -204,7 +195,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getHistoryApiJS()));
 
         if (bottomSnippet != null) {
-            response.render(JavaScriptHeaderItem.forScript(bottomSnippet, "rating"));
+            response.render(JavaScriptHeaderItem.forScript(bottomSnippet, "bottomSnippet"));
         }
     }
 
@@ -258,10 +249,6 @@ public class VloBasePage<T> extends GenericWebPage<T> {
                 new ImmutableNavbarComponent(clarinLink, ComponentPosition.RIGHT)
         );
         return navbar;
-    }
-
-    protected final RatingPanel getRatingPanel() {
-        return ratingPanel;
     }
 
 }
