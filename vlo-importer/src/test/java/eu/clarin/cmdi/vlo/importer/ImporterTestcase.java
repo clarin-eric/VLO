@@ -11,15 +11,16 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
 public abstract class ImporterTestcase {
 
-    private final VloConfigFactory configFactory = new DefaultVloConfigFactory();
-    protected VloConfig config;
+    private final static VloConfigFactory configFactory = new DefaultVloConfigFactory();
+    protected static VloConfig config;
+    protected static LanguageCodeUtils languageCodeUtils;
     protected FieldNameService fieldNameService;
-    protected LanguageCodeUtils languageCodeUtils;
     protected VLOMarshaller marshaller;
     private char ch = 'a';
 
@@ -43,13 +44,9 @@ public abstract class ImporterTestcase {
         FileUtils.writeStringToFile(file, content, "UTF-8");
         return file;
     }
-
-    @Before
-    public void setup() throws Exception {
-        if (Thread.currentThread().getName().equals("main")) {
-            Thread.currentThread().setName("test-main");
-        }
-
+    
+    @BeforeClass
+    public static void setupClass() throws Exception {
         // read the configuration defined in the packaged configuration file
         // and configure to use bundled mappings
         config = DefaultVloConfigFactory.configureDefaultMappingLocations(configFactory.newConfig());
@@ -58,9 +55,16 @@ public abstract class ImporterTestcase {
         config.setCountryComponentUrl(getCountryCodeComponentUrl());
         config.setLanguage2LetterCodeComponentUrl(getLanguage2LetterCodeUrl());
         config.setLanguage3LetterCodeComponentUrl(getLanguage3LetterCodeUrl());
+        languageCodeUtils = new LanguageCodeUtils(config);
+    }
+
+    @Before
+    public void setup() throws Exception {
+        if (Thread.currentThread().getName().equals("main")) {
+            Thread.currentThread().setName("test-main");
+        }
         
         fieldNameService = new FieldNameServiceImpl(config);
-        languageCodeUtils = new LanguageCodeUtils(config);
         marshaller = new VLOMarshaller();
     }
 
@@ -84,15 +88,15 @@ public abstract class ImporterTestcase {
         return ImporterTestcase.class.getResource("/infra_clarin_eu/sil_to_iso6393.xml").toString();
     }
 
-    private String getCountryCodeComponentUrl() {
+    private static String getCountryCodeComponentUrl() {
         return ImporterTestcase.class.getResource("/catalog_clarin_eu/c_1271859438104.xml").toString();
     }
 
-    private String getLanguage2LetterCodeUrl() {
+    private static String getLanguage2LetterCodeUrl() {
         return ImporterTestcase.class.getResource("/catalog_clarin_eu/c_1271859438109.xml").toString();
     }
 
-    private String getLanguage3LetterCodeUrl() {
+    private static String getLanguage3LetterCodeUrl() {
         return ImporterTestcase.class.getResource("/catalog_clarin_eu/c_1271859438110.xml").toString();
     }
 
