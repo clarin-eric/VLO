@@ -17,7 +17,7 @@
 package eu.clarin.cmdi.vlo.importer.normalizer;
 
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
-import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
 
 import static eu.clarin.cmdi.vlo.importer.normalizer.LanguageCodePostNormalizer.CODE_PREFIX;
 import static eu.clarin.cmdi.vlo.importer.normalizer.LanguageCodePostNormalizer.LANG_NAME_PREFIX;
@@ -41,7 +41,7 @@ public class LanguageNamePostNormalizer extends AbstractPostNormalizer {
     }
 
     @Override
-    public List<String> process(String value, CMDIData cmdiData) {
+    public List<String> process(String value, DocFieldContainer cmdiData) {
         if (value.startsWith(LANG_NAME_PREFIX)) {
             return returnName(value);
         } else if (value.startsWith(CODE_PREFIX)) {

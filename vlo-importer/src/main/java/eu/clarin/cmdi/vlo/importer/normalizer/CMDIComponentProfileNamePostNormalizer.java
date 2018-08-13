@@ -5,7 +5,7 @@ import com.ximpleware.VTDException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +32,7 @@ public class CMDIComponentProfileNamePostNormalizer extends AbstractPostNormaliz
     }
 
     @Override
-    public List<String> process(String profileId, CMDIData cmdiData) {
+    public List<String> process(String profileId, DocFieldContainer cmdiData) {
         if (profileId != null) {
             return cache.computeIfAbsent(profileId, (key) -> {
                 try {

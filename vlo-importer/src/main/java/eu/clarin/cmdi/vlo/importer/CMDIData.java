@@ -16,7 +16,7 @@ import eu.clarin.cmdi.vlo.config.FieldNameService;
 /**
  * Represents a document of CMDI data.
  */
-public class CMDIData {
+public class CMDIData implements DocFieldContainer {
     private final FieldNameService fieldNameService;
 
     private final static Logger LOG = LoggerFactory.getLogger(CMDIData.class);
@@ -110,6 +110,7 @@ public class CMDIData {
         }
     }
 
+    @Override
     public Collection<Object> getDocField(String name) {
         if (doc == null) {
             return null;
@@ -201,6 +202,7 @@ public class CMDIData {
         this.id = id;
     }
 
+    @Override
     public String getId() {
         return id;
     }

@@ -8,7 +8,7 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,7 +32,7 @@ public class LicenseTypePostNormalizer extends AbstractPostNormalizerWithVocabul
     }
 
     @Override
-    public List<String> process(final String value, CMDIData cmdiData) {
+    public List<String> process(final String value, DocFieldContainer cmdiData) {
         if (value != null) {
             final String normalizedVal = normalize(value);
             //Availability variants can be normalized with multiple values, in vocabulary they are separated with ;
@@ -49,7 +49,7 @@ public class LicenseTypePostNormalizer extends AbstractPostNormalizerWithVocabul
      * @param cmdiData
      * @return 
      */
-    private List<String> transferValuesFromAvailability(CMDIData cmdiData) {
+    private List<String> transferValuesFromAvailability(DocFieldContainer cmdiData) {
         if (cmdiData != null) {
             final Collection<Object> availabilityValues = cmdiData.getDocField(fieldNameService.getFieldName(FieldKey.AVAILABILITY));
             if (availabilityValues != null) {
