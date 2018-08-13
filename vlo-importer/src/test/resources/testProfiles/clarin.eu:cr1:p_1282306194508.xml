@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ComponentSpec isProfile="true" CMDVersion="1.2" CMDOriginalVersion="1.1" xsi:noNamespaceSchemaLocation="https://infra.clarin.eu/CMDI/1.x/xsd/cmd-component.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Header>
+        <ID>clarin.eu:cr1:p_1282306194508</ID>
+        <Name>teiHeader</Name>
+        <Description>a version of the teiHeader, based on the recommended header in http://www.tei-c.org/release/doc/tei-p5-doc/en/html/HD.html#HD7
+encoding fileDesc and profileDesc components, leaving out encodingDesc and revisionDesc</Description>
+        <Status>production</Status>
+    </Header>
+    <Component name="teiHeader" CardinalityMin="1" CardinalityMax="1">
+        <Component name="fileDesc" ComponentRef="clarin.eu:cr1:c_1282306194507" CardinalityMin="1" CardinalityMax="1">
+            <Element name="extent" ConceptLink="http://hdl.handle.net/11459/CCR_C-2580_6dfe4e09-1c61-9b24-98ad-16bb867860fe" ValueScheme="string" CardinalityMin="0" CardinalityMax="unbounded" cue:DisplayPriority="1" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                <Documentation>http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-extent.html</Documentation>
+            </Element>
+            <Component name="titleStmt" ComponentRef="clarin.eu:cr1:c_1282306194499" CardinalityMin="1" CardinalityMax="1">
+                <Element name="title" ConceptLink="http://purl.org/dc/elements/1.1/title" ValueScheme="string" CardinalityMin="1" CardinalityMax="unbounded" cue:DisplayPriority="2" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                    <Documentation>http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-title.html</Documentation>
+                    <AttributeList>
+                        <Attribute name="type" ValueScheme="string"/>
+                        <Attribute name="level">
+                            <ValueScheme>
+                                <Vocabulary>
+                                    <enumeration>
+                                        <item ConceptLink="" AppInfo="">a</item>
+                                        <item ConceptLink="" AppInfo="">m</item>
+                                        <item ConceptLink="" AppInfo="">j</item>
+                                        <item ConceptLink="" AppInfo="">s</item>
+                                        <item ConceptLink="" AppInfo="">u</item>
+                                    </enumeration>
+                                </Vocabulary>
+                            </ValueScheme>
+                        </Attribute>
+                    </AttributeList>
+                </Element>
+                <Element name="author" ValueScheme="string" CardinalityMin="0" CardinalityMax="unbounded" cue:DisplayPriority="1" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                    <Documentation>http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-author.html</Documentation>
+                    <AttributeList>
+                        <Attribute name="key" ValueScheme="string"/>
+                        <Attribute name="ref" ValueScheme="string"/>
+                    </AttributeList>
+                </Element>
+                <Element name="editor" ConceptLink="http://purl.org/dc/elements/1.1/contributor" ValueScheme="string" CardinalityMin="0" CardinalityMax="unbounded">
+                    <Documentation>http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-editor.html</Documentation>
+                    <AttributeList>
+                        <Attribute name="role" ValueScheme="string"/>
+                    </AttributeList>
+                </Element>
+                <Component name="respStmt" CardinalityMin="0" CardinalityMax="unbounded">
+                    <Element name="resp" ValueScheme="string" CardinalityMin="1" CardinalityMax="1" cue:DisplayPriority="1" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                        <Documentation>contains a phrase describing the nature of a person's intellectual responsibility</Documentation>
+                    </Element>
+                    <Element name="name" ValueScheme="string" CardinalityMin="1" CardinalityMax="1">
+                        <Documentation>name of the responsible person</Documentation>
+                    </Element>
+                </Component>
+            </Component>
+            <Component name="editionStmt" CardinalityMin="0" CardinalityMax="1">
+                <Element name="edition" ValueScheme="string" CardinalityMin="0" CardinalityMax="1" cue:DisplayPriority="1" xmlns:cue="http://www.clarin.eu/cmdi/cues/1"/>
+            </Component>
+            <Component name="publicationStmt" CardinalityMin="1" CardinalityMax="1">
+                <Element name="publisher" ConceptLink="http://purl.org/dc/elements/1.1/publisher" ValueScheme="string" CardinalityMin="1" CardinalityMax="1" cue:DisplayPriority="4" xmlns:cue="http://www.clarin.eu/cmdi/cues/1"/>
+                <Element name="pubPlace" ValueScheme="string" CardinalityMin="1" CardinalityMax="1" cue:DisplayPriority="3" xmlns:cue="http://www.clarin.eu/cmdi/cues/1"/>
+                <Element name="availability" ConceptLink="http://purl.org/dc/elements/1.1/rights" ValueScheme="string" CardinalityMin="1" CardinalityMax="1" cue:DisplayPriority="1" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                    <AttributeList>
+                        <Attribute name="status" ValueScheme="string"/>
+                    </AttributeList>
+                </Element>
+                <Element name="date" ConceptLink="http://purl.org/dc/elements/1.1/date" ValueScheme="string" CardinalityMin="1" CardinalityMax="1" cue:DisplayPriority="2" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                    <AttributeList>
+                        <Attribute name="when" ValueScheme="gYear"/>
+                    </AttributeList>
+                </Element>
+            </Component>
+            <Component name="notesStmt" CardinalityMin="0" CardinalityMax="1">
+                <Element name="note" ValueScheme="string" CardinalityMin="1" CardinalityMax="unbounded" cue:DisplayPriority="1" xmlns:cue="http://www.clarin.eu/cmdi/cues/1"/>
+            </Component>
+            <Component name="sourceDesc" ConceptLink="http://purl.org/dc/elements/1.1/source" CardinalityMin="1" CardinalityMax="unbounded">
+                <Element name="bibl" ValueScheme="string" CardinalityMin="0" CardinalityMax="unbounded" cue:DisplayPriority="1" xmlns:cue="http://www.clarin.eu/cmdi/cues/1"/>
+                <Component name="biblStruct" ComponentRef="clarin.eu:cr1:c_1282306194500" CardinalityMin="0" CardinalityMax="unbounded">
+                    <Component name="monogr" CardinalityMin="1" CardinalityMax="unbounded">
+                        <Element name="title" ConceptLink="http://purl.org/dc/elements/1.1/title" ValueScheme="string" CardinalityMin="1" CardinalityMax="unbounded" cue:DisplayPriority="2" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                            <Documentation>http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-title.html</Documentation>
+                            <AttributeList>
+                                <Attribute name="type" ValueScheme="string"/>
+                                <Attribute name="level">
+                                    <ValueScheme>
+                                        <Vocabulary>
+                                            <enumeration>
+                                                <item ConceptLink="" AppInfo="">a</item>
+                                                <item ConceptLink="" AppInfo="">m</item>
+                                                <item ConceptLink="" AppInfo="">j</item>
+                                                <item ConceptLink="" AppInfo="">s</item>
+                                                <item ConceptLink="" AppInfo="">u</item>
+                                            </enumeration>
+                                        </Vocabulary>
+                                    </ValueScheme>
+                                </Attribute>
+                            </AttributeList>
+                        </Element>
+                        <Element name="author" ValueScheme="string" CardinalityMin="0" CardinalityMax="unbounded" cue:DisplayPriority="1" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                            <Documentation>http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-author.html</Documentation>
+                            <AttributeList>
+                                <Attribute name="key" ValueScheme="string"/>
+                                <Attribute name="ref" ValueScheme="string"/>
+                            </AttributeList>
+                        </Element>
+                        <Element name="editor" ConceptLink="http://purl.org/dc/elements/1.1/contributor" ValueScheme="string" CardinalityMin="0" CardinalityMax="unbounded">
+                            <Documentation>http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-editor.html</Documentation>
+                            <AttributeList>
+                                <Attribute name="role" ValueScheme="string"/>
+                            </AttributeList>
+                        </Element>
+                        <Element name="edition" ValueScheme="string" CardinalityMin="0" CardinalityMax="unbounded"/>
+                        <Element name="idno" ConceptLink="http://purl.org/dc/elements/1.1/identifier" ValueScheme="string" CardinalityMin="0" CardinalityMax="unbounded">
+                            <Documentation>identifier of the described object</Documentation>
+                        </Element>
+                        <Element name="extent" ValueScheme="string" CardinalityMin="0" CardinalityMax="unbounded"/>
+                        <Component name="respStmt" CardinalityMin="0" CardinalityMax="unbounded">
+                            <Element name="resp" ValueScheme="string" CardinalityMin="1" CardinalityMax="1" cue:DisplayPriority="1" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                                <Documentation>contains a phrase describing the nature of a person's intellectual responsibility</Documentation>
+                            </Element>
+                            <Element name="name" ValueScheme="string" CardinalityMin="1" CardinalityMax="1">
+                                <Documentation>name of the responsible person</Documentation>
+                            </Element>
+                        </Component>
+                        <Component name="imprint" CardinalityMin="1" CardinalityMax="unbounded">
+                            <Element name="publisher" ConceptLink="http://purl.org/dc/elements/1.1/publisher" ValueScheme="string" CardinalityMin="1" CardinalityMax="1" cue:DisplayPriority="3" xmlns:cue="http://www.clarin.eu/cmdi/cues/1"/>
+                            <Element name="pubPlace" ValueScheme="string" CardinalityMin="1" CardinalityMax="1" cue:DisplayPriority="2" xmlns:cue="http://www.clarin.eu/cmdi/cues/1"/>
+                            <Element name="date" ConceptLink="http://hdl.handle.net/11459/CCR_C-2510_2402e609-046a-dfbf-c2d7-5a2f1ae6dc86" ValueScheme="string" CardinalityMin="1" CardinalityMax="1" cue:DisplayPriority="1" xmlns:cue="http://www.clarin.eu/cmdi/cues/1"/>
+                        </Component>
+                    </Component>
+                </Component>
+            </Component>
+        </Component>
+        <Component name="profileDesc" ComponentRef="clarin.eu:cr1:c_1282306194504" CardinalityMin="0" CardinalityMax="1">
+            <Component name="langUsage" CardinalityMin="0" CardinalityMax="1">
+                <Element name="language" ConceptLink="http://purl.org/dc/elements/1.1/language" ValueScheme="string" CardinalityMin="1" CardinalityMax="unbounded" cue:DisplayPriority="1" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                    <Documentation>describes the languages, sublanguages, registers, dialects, etc. represented within a text</Documentation>
+                    <AttributeList>
+                        <Attribute name="ident" ValueScheme="string"/>
+                        <Attribute name="usage" ValueScheme="decimal"/>
+                    </AttributeList>
+                </Element>
+            </Component>
+            <Component name="textClass" CardinalityMin="0" CardinalityMax="1">
+                <Element name="classCode" ValueScheme="string" CardinalityMin="0" CardinalityMax="unbounded" cue:DisplayPriority="1" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                    <AttributeList>
+                        <Attribute name="scheme" ValueScheme="anyURI"/>
+                    </AttributeList>
+                </Element>
+                <Component name="keywords" CardinalityMin="0" CardinalityMax="unbounded">
+                    <AttributeList>
+                        <Attribute name="scheme" ValueScheme="anyURI"/>
+                    </AttributeList>
+                    <Element name="term" ValueScheme="string" CardinalityMin="0" CardinalityMax="unbounded" cue:DisplayPriority="1" xmlns:cue="http://www.clarin.eu/cmdi/cues/1"/>
+                </Component>
+            </Component>
+            <Component name="textDesc" ComponentRef="clarin.eu:cr1:c_1282306194502" CardinalityMin="0" CardinalityMax="1">
+                <AttributeList>
+                    <Attribute name="n">
+                        <ValueScheme>
+                            <pattern>((\p{L}|\p{N}|\p{P}|\p{S})+|\s)+</pattern>
+                        </ValueScheme>
+                    </Attribute>
+                    <Attribute name="rend">
+                        <ValueScheme>
+                            <pattern>((\p{L}|\p{N}|\p{P}|\p{S})+|\s)+</pattern>
+                        </ValueScheme>
+                    </Attribute>
+                    <Attribute name="rendition" ValueScheme="anyURI"/>
+                </AttributeList>
+                <Element name="channel" ConceptLink="http://hdl.handle.net/11459/CCR_C-2464_be58b081-dad1-85f8-d20d-0445078f4ac0" ValueScheme="string" CardinalityMin="0" CardinalityMax="1" cue:DisplayPriority="8" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                    <AttributeList>
+                        <Attribute name="mode">
+                            <ValueScheme>
+                                <Vocabulary>
+                                    <enumeration>
+                                        <item AppInfo="unknown or inapplicable [default]">x</item>
+                                        <item AppInfo="spoken">s</item>
+                                        <item AppInfo="written">w</item>
+                                        <item AppInfo="spoken to be written, e.g. dictation">sw</item>
+                                        <item AppInfo="written to be spoken, e.g. a script">ws</item>
+                                        <item AppInfo="mixed">m</item>
+                                    </enumeration>
+                                </Vocabulary>
+                            </ValueScheme>
+                        </Attribute>
+                    </AttributeList>
+                </Element>
+                <Element name="constitution" ValueScheme="string" CardinalityMin="0" CardinalityMax="1" cue:DisplayPriority="7" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                    <AttributeList>
+                        <Attribute name="type">
+                            <ValueScheme>
+                                <Vocabulary>
+                                    <enumeration>
+                                        <item AppInfo="a single complete text  [Default]">single</item>
+                                        <item AppInfo="a text made by combining several smaller items, each individually complete">composite</item>
+                                        <item AppInfo="(fragments) a text made by combining several smaller, not necessarily complete, items">frags</item>
+                                        <item AppInfo="composition unknown or unspecified ">unknown</item>
+                                    </enumeration>
+                                </Vocabulary>
+                            </ValueScheme>
+                        </Attribute>
+                    </AttributeList>
+                </Element>
+                <Element name="derivation" ConceptLink="http://hdl.handle.net/11459/CCR_C-2518_ea48054d-f23f-c493-bcc0-067561b87c67" ValueScheme="string" CardinalityMin="0" CardinalityMax="1" cue:DisplayPriority="6" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                    <AttributeList>
+                        <Attribute name="type" ValueScheme="string"/>
+                    </AttributeList>
+                </Element>
+                <Element name="domain" ConceptLink="http://hdl.handle.net/11459/CCR_C-2467_f4e7331f-b930-fc42-eeea-05e383cfaa78" ValueScheme="string" CardinalityMin="0" CardinalityMax="1" cue:DisplayPriority="5" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                    <AttributeList>
+                        <Attribute name="type" ValueScheme="string"/>
+                    </AttributeList>
+                </Element>
+                <Element name="factuality" ValueScheme="string" CardinalityMin="0" CardinalityMax="1" cue:DisplayPriority="4" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                    <AttributeList>
+                        <Attribute name="type">
+                            <ValueScheme>
+                                <Vocabulary>
+                                    <enumeration>
+                                        <item AppInfo="the text is to be regarded as entirely imaginative">fiction</item>
+                                        <item AppInfo="the text is to be regarded as entirely informative or factual">fact</item>
+                                        <item AppInfo="the text contains a mixture of fact and fiction">mixed</item>
+                                        <item AppInfo="the fiction/fact distinction is not regarded as helpful or appropriate to this text ">inapplicable</item>
+                                    </enumeration>
+                                </Vocabulary>
+                            </ValueScheme>
+                        </Attribute>
+                    </AttributeList>
+                </Element>
+                <Element name="interaction" ConceptLink="http://hdl.handle.net/11459/CCR_C-2476_d4606c12-013a-0155-14e2-daa5a4400ef2" ValueScheme="string" CardinalityMin="0" CardinalityMax="1" cue:DisplayPriority="3" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                    <AttributeList>
+                        <Attribute name="type">
+                            <ValueScheme>
+                                <Vocabulary>
+                                    <enumeration>
+                                        <item ConceptLink="http://hdl.handle.net/11459/CCR_C-2614_26318c7d-b4c5-184e-383d-ed33810533f0" AppInfo="no interaction of any kind, e.g. a monologue">none</item>
+                                        <item ConceptLink="http://hdl.handle.net/11459/CCR_C-2615_95078a97-a401-af2c-ca86-d2496f364552" AppInfo="some degree of interaction, e.g. a monologue with set responses">partial</item>
+                                        <item ConceptLink="http://hdl.handle.net/11459/CCR_C-2613_9c3c15d9-ee24-5989-dd95-d32fa5ea6cc8" AppInfo="complete interaction, e.g. a face to face conversation">complete</item>
+                                        <item AppInfo="this parameter is inappropriate or inapplicable in this case">inapplicable</item>
+                                    </enumeration>
+                                </Vocabulary>
+                            </ValueScheme>
+                        </Attribute>
+                        <Attribute name="active" ValueScheme="string"/>
+                        <Attribute name="passive" ValueScheme="string"/>
+                    </AttributeList>
+                </Element>
+                <Element name="preparedness" ValueScheme="string" CardinalityMin="0" CardinalityMax="1" cue:DisplayPriority="2" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                    <AttributeList>
+                        <Attribute name="type" ValueScheme="string"/>
+                    </AttributeList>
+                </Element>
+                <Element name="purpose" ValueScheme="string" CardinalityMin="0" CardinalityMax="unbounded" cue:DisplayPriority="1" xmlns:cue="http://www.clarin.eu/cmdi/cues/1">
+                    <AttributeList>
+                        <Attribute name="type" ValueScheme="string"/>
+                        <Attribute name="degree" ValueScheme="string"/>
+                    </AttributeList>
+                </Element>
+            </Component>
+        </Component>
+    </Component>
+</ComponentSpec>
