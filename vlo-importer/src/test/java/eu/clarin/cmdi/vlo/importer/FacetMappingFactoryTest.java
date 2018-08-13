@@ -534,7 +534,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
 
         FacetConfiguration facet = facets.get(20);
         assertEquals(fieldNameService.getFieldName(FieldKey.AVAILABILITY), facet.getName());
-        assertEquals("/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:publicationStmt/cmdp:availability/@status", facet.getPatterns().get(0).getPattern());
+        assertEquals("/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:publicationStmt/cmdp:availability/@status", facet.getFallbackPatterns().get(0).getPattern());
     }
 
     @Test
