@@ -158,6 +158,10 @@
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:ToolProfile/cmdp:ToolContext/cmdp:DocumentationLanguages</blacklistPattern>
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:LexicalResourceProfile/cmdp:DocumentationLanguages</blacklistPattern>
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:DocumentationLanguages</blacklistPattern>
+		<derivedFacet>_languageName</derivedFacet>
+	</facetConcept>
+	<facetConcept name="_languageName" description="Language name" definition="">
+		<!-- No mapping, values derived from 'languageCode' -->
 	</facetConcept>
         <facetConcept name="organisation" description="Organisation involved in creation and/or distribution of the resource">
 		<concept>http://www.isocat.org/datcat/DC-2459</concept>
@@ -371,12 +375,42 @@
 		<pattern>/cmd:CMD/cmd:Components/cmdp:media-corpus-profile/cmdp:Collection/cmdp:Project/cmdp:Title/text()</pattern>
 		<!--  BAS -->
 	</facetConcept>
-	<facetConcept name="availability" description="The usage conditions for the resource or tool" definition="A rough description of the conditions under which the resource or tool can be used.">
-		<concept>http://hdl.handle.net/11459/CCR_C-5303_9afa7d0c-f292-8e89-24f8-997a3d2971ae</concept>
+    <facetConcept name="availability" description="The usage conditions for the resource or tool" definition="A rough description of the conditions under which the resource or tool can be used.">
+		<concept>http://www.isocat.org/datcat/DC-2457</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2457_45bbaa1a-7002-2ecd-ab9d-57a189f694a6</concept>
+		<!-- A description of the licensing conditions... -->
+		<concept>http://www.isocat.org/datcat/DC-2453</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-2453_1f0c3ea5-7966-ae11-d3c6-448424d4e6e8</concept>
+		<!-- A description of the terms of availability of the resource in simple words. -->
+		<concept>http://www.isocat.org/datcat/DC-3800</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-3800_12a79edd-0ffe-8d82-9831-45d125c54aee</concept>
+		<!-- licenceType: Indication of the type of a copyright licence. -->
+		<concept>http://www.isocat.org/datcat/DC-6846</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-6846_d6adb99c-15ac-fac7-7911-f64c48298ce3</concept>
+		<!-- DASISH from DC Rights -->
+		<concept>http://www.isocat.org/datcat/DC-5439</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-5439_98bb103d-476a-7f62-54b4-bf9de24d2229</concept>
+		
+		<!-- URL of the license -->
+		<concept>http://www.isocat.org/datcat/DC-6586</concept>
+		<concept>http://hdl.handle.net/11459/CCR_C-6586_2c79d86a-5a75-0890-d407-7d9cb86b9beb</concept>
+		
+		<!-- TEI header license -->
+                <concept>http://hdl.handle.net/11459/CCR_C-5362_8cffd964-f57e-09ed-daed-eeabbf2d22c0</concept>
+		<!-- TEI header availability -->
+ 		<concept>http://hdl.handle.net/11459/CCR_C-5302_8dfad601-5387-7317-57d1-1f0e65b75af2</concept>
+				
+		<!-- the DC is used in the distributionType facet -->
+		<concept>http://purl.org/dc/terms/license</concept>
+		<concept>http://purl.org/dc/terms/rights</concept>
+		<concept>http://purl.org/dc/terms/accessRights</concept>
+		
+		<!-- TEI header availability attributes -->
+ 		<pattern>/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:publicationStmt/cmdp:availability/@status</pattern>
 	</facetConcept>
-        
         <facetConcept name="licenseType" description="Distribution and/or licence class (public, academic or restricted)" definition="A rights-based classification of language resources and tools, indicating the scope of the target audience">
             <concept>http://hdl.handle.net/11459/CCR_C-5439_98bb103d-476a-7f62-54b4-bf9de24d2229</concept>
+	 		<pattern>/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:publicationStmt/cmdp:availability/cmdp:ab/@type</pattern>
         </facetConcept>
         <facetConcept name="license" allowMultipleValues="true" description="The licensing conditions for the resource or tool" definition="The name of the license or a very brief description of the licensing conditions under which the resource or tool can be used.">
 		<!-- URL of the license -->

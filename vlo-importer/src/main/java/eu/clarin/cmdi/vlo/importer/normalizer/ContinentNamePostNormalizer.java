@@ -2,7 +2,7 @@ package eu.clarin.cmdi.vlo.importer.normalizer;
 
 import com.google.common.collect.ImmutableMap;
 
-import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +25,7 @@ public class ContinentNamePostNormalizer extends AbstractPostNormalizer {
      * Replaces two-letter continent codes with continent names
      */
     @Override
-    public List<String> process(final String value, CMDIData cmdiData) {
+    public List<String> process(final String value, DocFieldContainer cmdiData) {
         if (value == null) {
             return Collections.singletonList(null);
         } else {

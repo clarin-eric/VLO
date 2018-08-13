@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.importer.solr.DummySolrBridgeImpl;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.DataRoot;
@@ -20,9 +21,17 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+
 public class MetadataImporterTest extends ImporterTestcase {
 
     protected final static org.slf4j.Logger LOG = LoggerFactory.getLogger(MetadataImporterTest.class);
+
+    private final static String TEST_RESOURCE_SECTION
+            = "   <cmd:Resources>\n"
+            + "     <cmd:ResourceProxyList><cmd:ResourceProxy><cmd:ResourceType>Resource</cmd:ResourceType><cmd:ResourceRef>http://example.org/resource</cmd:ResourceRef></cmd:ResourceProxy></cmd:ResourceProxyList>\n"
+            + "   </cmd:Resources>\n";
 
     @Test
     public void testImporterSimple() throws Exception {
@@ -190,14 +199,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         content += "   <cmd:Header>\n";
         content += "      <cmd:MdProfile>clarin.eu:cr1:p_1280305685235</cmd:MdProfile>\n";
         content += "   </cmd:Header>\n";
-        content += "   <cmd:Resources>\n";
-        content += "      <cmd:ResourceProxyList>\n";
-        content += "          <cmd:ResourceProxy>\n";
-        content += "             <cmd:ResourceType>Resource</cmd:ResourceType>\n";
-        content += "             <cmd:ResourceRef>http://example.org/resource</cmd:ResourceRef>\n";
-        content += "          </cmd:ResourceProxy>\n";
-        content += "      </cmd:ResourceProxyList>\n";
-        content += "   </cmd:Resources>\n";
+        content += TEST_RESOURCE_SECTION;
         content += "    <cmd:Components>\n";
         content += "        <cmdp:DynaSAND>\n";
         content += "            <cmdp:Collection>\n";
@@ -243,14 +245,114 @@ public class MetadataImporterTest extends ImporterTestcase {
         assertEquals(0, docs.size());
     }
 
+    @Test
+    public void testDerivedFacetsWithPostProcessing() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1289827960126\">\n"
+                + "    <cmd:Header>\n"
+                + "        <cmd:MdProfile>clarin.eu:cr1:p_1289827960126</cmd:MdProfile>\n"
+                + "    </cmd:Header>\n"
+                + TEST_RESOURCE_SECTION
+                + "    <cmd:Components>\n"
+                + "        <cmdp:LrtInventoryResource>\n"
+                + "            <cmdp:LrtCommon>\n"
+                + "                <cmdp:Languages>\n"
+                + "                    <cmdp:ISO639>\n"
+                + "                        <cmdp:iso-639-3-code>nld</cmdp:iso-639-3-code>\n"
+                + "                    </cmdp:ISO639>\n"
+                + "                </cmdp:Languages>\n"
+                + "                <cmdp:Countries>\n"
+                + "                </cmdp:Countries>\n"
+                + "            </cmdp:LrtCommon>\n"
+                + "        </cmdp:LrtInventoryResource>\n"
+                + "    </cmd:Components>\n"
+                + "</cmd:CMD>";
+        File rootFile = createCmdiFile("example", content);
+
+        List<SolrInputDocument> docs = importData(rootFile);
+        assertEquals(1, docs.size());
+        SolrInputDocument doc = docs.get(0);
+
+        assertEquals("ISO code mapping to langauge code", "code:nld", getValue(doc, FieldKey.LANGUAGE_CODE));
+        assertEquals("Language code -> language name post processing", "Dutch", getValue(doc, FieldKey.LANGUAGE_NAME));
+    }
+
+    @Test
+    public void testDefaultValuePostProcessing() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1475136016208\">\n"
+                + "    <cmd:Header>\n"
+                + "        <cmd:MdProfile>clarin.eu:cr1:p_1475136016208</cmd:MdProfile>\n"
+                + "    </cmd:Header>\n"
+                + TEST_RESOURCE_SECTION
+                + "    <cmd:Components>\n"
+                + "        <cmdp:EDM>\n"
+                + "            <cmdp:edm-Aggregation>\n"
+                + "                <cmdp:edm-rights>\n"
+                + "                    <cmdp:rightsURI>PUB</cmdp:rightsURI>\n"
+                + "                </cmdp:edm-rights>\n"
+                + "            </cmdp:edm-Aggregation>\n"
+                + "        </cmdp:EDM>\n"
+                + "    </cmd:Components>\n"
+                + "</cmd:CMD>";
+        File rootFile = createCmdiFile("example", content);
+
+        List<SolrInputDocument> docs = importData(rootFile);
+        assertEquals(1, docs.size());
+        SolrInputDocument doc = docs.get(0);
+
+        // 'reflective' postprocessing, i.e. we have a post processor that acts on 'null' values, uses value from an already populated field to populate its target field
+        assertEquals("PRECONDITION: Availability filled in from doc value", "PUB", getValue(doc, FieldKey.AVAILABILITY));
+        assertEquals("Explicit license filled in from availability", "PUB", getValue(doc, FieldKey.LICENSE_TYPE));
+    }
+
+    @Test
+    public void testMultilingualValues() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1475136016208\">\n"
+                + "    <cmd:Header>\n"
+                + "        <cmd:MdProfile>clarin.eu:cr1:p_1475136016208</cmd:MdProfile>\n"
+                + "    </cmd:Header>\n"
+                + TEST_RESOURCE_SECTION
+                + "    <cmd:Components>\n"
+                + "        <EDM>\n"
+                + "            <ProvidedCHOProxy>\n"
+                + "                <edm-ProvidedCHO>\n"
+                + "                    <dc-description xml:lang=\"fr\">Line 1</dc-description>\n"
+                + "                    <dc-description xml:lang=\"en\">Line 2</dc-description>\n"
+                + "                    <dc-description>Line 3</dc-description>\n"
+                + "                    <dc-description xml:lang=\"en\">Line 4</dc-description>\n"
+                + "                </edm-ProvidedCHO>\n"
+                + "            </ProvidedCHOProxy>\n"
+                + "        </EDM>\n"
+                + "    </cmd:Components>\n"
+                + "</cmd:CMD>";
+        File rootFile = createCmdiFile("example", content);
+
+        List<SolrInputDocument> docs = importData(rootFile);
+        assertEquals(1, docs.size());
+        SolrInputDocument doc = docs.get(0);
+
+        final List<Object> fieldValues = ImmutableList.copyOf(doc.getFieldValues(fieldNameService.getFieldName(FieldKey.DESCRIPTION)));
+        assertThat("Order should be preserved except for preferred language priority",
+                fieldValues, contains(
+                        "{code:eng}Line 2", //English first
+                        "{code:eng}Line 4", //English first
+                        "{code:fra}Line 1", //Then keep order
+                        "{code:und}Line 3")); //Then keep order
+    }
+
     private Object getValue(SolrInputDocument doc, FieldKey key) {
         String field = fieldNameService.getFieldName(key);
-    	if(doc.getFieldValues(field) != null){
-	        assertEquals(1, doc.getFieldValues(field).size());
-	        return doc.getFieldValue(field);
-    	}
-    	else
-    		return null;
+        if (doc.getFieldValues(field) != null) {
+            assertEquals(1, doc.getFieldValues(field).size());
+            return doc.getFieldValue(field);
+        } else {
+            return null;
+        }
     }
 
     private List<SolrInputDocument> importData(File rootFile) throws Exception {
@@ -259,7 +361,7 @@ public class MetadataImporterTest extends ImporterTestcase {
          * suit the test.
          */
         modifyConfig(rootFile);
-        
+
         final DummySolrBridgeImpl solrBridge = new DummySolrBridgeImpl();
         MetadataImporter importer = new MetadataImporter(config, languageCodeUtils, solrBridge) {
             /*
@@ -341,8 +443,6 @@ public class MetadataImporterTest extends ImporterTestcase {
         config.setFacetConceptsFile(ImporterTestcase.getTestFacetConceptFilePath());
         config.setValueMappingsFile(ImporterTestcase.getTestValueMappingsFilePath());
 
-
     }
-
 
 }

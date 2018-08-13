@@ -1,7 +1,7 @@
 package eu.clarin.cmdi.vlo.importer.normalizer;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +19,7 @@ public class LicensePostNormalizer extends AbstractPostNormalizerWithVocabularyM
     }
 
     @Override
-    public List<String> process(String value, CMDIData cmdiData) {
+    public List<String> process(String value, DocFieldContainer cmdiData) {
         String normalizedVal = normalize(value);
         if (normalizedVal != null) {
             return Collections.singletonList(normalizedVal);

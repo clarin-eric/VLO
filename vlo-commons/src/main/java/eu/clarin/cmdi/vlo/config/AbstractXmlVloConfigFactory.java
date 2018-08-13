@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.net.URI;
 import javax.xml.bind.JAXBException;
 import javax.xml.transform.stream.StreamSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -28,6 +30,7 @@ import javax.xml.transform.stream.StreamSource;
  */
 public abstract class AbstractXmlVloConfigFactory implements VloConfigFactory {
 
+    private final static Logger LOG = LoggerFactory.getLogger(AbstractXmlVloConfigFactory.class);
     private final VloConfigMarshaller marshaller;
 
     public AbstractXmlVloConfigFactory() {
@@ -41,8 +44,12 @@ public abstract class AbstractXmlVloConfigFactory implements VloConfigFactory {
     public VloConfig newConfig() throws IOException {
         final InputStream fileStream = getXmlConfigurationInputStream();
         try {
-            final VloConfig config = marshaller.unmarshal(new StreamSource(fileStream, getLocation().toString()));
-            config.setConfigLocation(getLocation());
+            final URI location = getLocation();
+            LOG.debug("Config location: {}", location);
+            
+            final VloConfig config = marshaller.unmarshal(new StreamSource(fileStream, location.toString()));
+            config.setConfigLocation(location);
+            
             return config;
         } catch (JAXBException ex) {
             throw new RuntimeException("Could not deserialize configuration file", ex);
