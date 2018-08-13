@@ -400,12 +400,12 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("audio/mpeg", res.getMimeType());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(17, doc.getFieldNames().size());
         assertEquals("test-hdl:1839/00-0000-0000-0009-294C-9", doc.getFieldValue("_selfLink"));
         assertEquals("kleve-route", doc.getFieldValue("name"));
         assertEquals("Peter Wittenburg", doc.getFieldValue(fieldNameService.getFieldName(FieldKey.PROJECT_NAME)));
         assertEquals("Europe", doc.getFieldValue("continent"));
         assertEquals("code:eng", doc.getFieldValue("languageCode"));
+        assertEquals("English", doc.getFieldValue("_languageName"));
         assertEquals("Netherlands", doc.getFieldValue("country"));
         assertEquals("Max Planck Institute for Psycholinguistics", doc.getFieldValue("organisation"));
         assertEquals("demo", doc.getFieldValue("genre"));
@@ -418,6 +418,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("video/x-mpeg1", fieldValues.get(0));
         assertEquals("video/mp4", fieldValues.get(1));
         assertEquals(null, doc.getFieldValue("subject"));
+        assertEquals(17, doc.getFieldNames().size());
     }
 
     @Test
@@ -598,6 +599,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(2, doc.getFieldValues("languageCode").size());
         assertTrue(doc.getFieldValues("languageCode").contains("code:zho"));
         assertTrue(doc.getFieldValues("languageCode").contains("name:X-sil-CHN"));
+        assertEquals(2, doc.getFieldValues("_languageName").size());
         assertEquals(null, doc.getFieldValue("country"));
         assertEquals(null, doc.getFieldValue("organisation"));
         assertEquals("transcription", doc.getFieldValue("genre"));
@@ -879,18 +881,19 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(0, dataResources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(String.format("Expected field set different from %s", doc.getFieldNames()), 10, doc.getFieldNames().size());
         assertEquals("clarin.eu:lrt:433", doc.getFieldValue("_selfLink"));
         assertEquals("Corpus of Present-day Written Estonian", doc.getFieldValue("name"));
         assertEquals(null, doc.getFieldValue("continent"));
         assertEquals(1, doc.getFieldValues("languageCode").size());
         assertEquals("code:est", doc.getFieldValue("languageCode"));
+        assertEquals("Estonian", doc.getFieldValue("_languageName"));
         assertEquals("Estonia", doc.getFieldValue("country"));
         assertEquals("Test", doc.getFieldValue("organisation"));
         assertEquals(null, doc.getFieldValue("year"));
         assertEquals(null, doc.getFieldValue("genre"));
         assertEquals("{code:eng}written general; 95 mio words; TEI/SGML", doc.getFieldValue("description"));
         assertEquals("Written Corpus", doc.getFieldValue(fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS)));
+        assertEquals(String.format("Expected field set different from %s", doc.getFieldNames()), 10, doc.getFieldNames().size());
     }
 
     @Test
