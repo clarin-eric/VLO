@@ -158,6 +158,10 @@
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:ToolProfile/cmdp:ToolContext/cmdp:DocumentationLanguages</blacklistPattern>
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:LexicalResourceProfile/cmdp:DocumentationLanguages</blacklistPattern>
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:DocumentationLanguages</blacklistPattern>
+		<derivedFacet>_languageName</derivedFacet>
+	</facetConcept>
+	<facetConcept name="_languageName" description="Language name" definition="">
+		<!-- No mapping, values derived from 'languageCode' -->
 	</facetConcept>
         <facetConcept name="organisation" description="Organisation involved in creation and/or distribution of the resource">
 		<concept>http://www.isocat.org/datcat/DC-2459</concept>

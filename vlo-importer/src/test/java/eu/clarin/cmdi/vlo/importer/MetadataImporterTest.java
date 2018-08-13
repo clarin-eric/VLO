@@ -243,14 +243,49 @@ public class MetadataImporterTest extends ImporterTestcase {
         assertEquals(0, docs.size());
     }
 
+    @Test
+    public void testDerivedFacetsWithPostProcessing() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1289827960126\">\n"
+                + "    <cmd:Header>\n"
+                + "        <cmd:MdProfile>clarin.eu:cr1:p_1289827960126</cmd:MdProfile>\n"
+                + "    </cmd:Header>\n"
+                + "   <cmd:Resources>"
+                + "     <cmd:ResourceProxyList><cmd:ResourceProxy><cmd:ResourceType>Resource</cmd:ResourceType><cmd:ResourceRef>http://example.org/resource</cmd:ResourceRef></cmd:ResourceProxy></cmd:ResourceProxyList>\n"
+                + "   </cmd:Resources>\n"
+                + "    <cmd:Components>\n"
+                + "        <cmdp:LrtInventoryResource>\n"
+                + "            <cmdp:LrtCommon>\n"
+                + "                <cmdp:Languages>\n"
+                + "                    <cmdp:ISO639>\n"
+                + "                        <cmdp:iso-639-3-code>nld</cmdp:iso-639-3-code>\n"
+                + "                    </cmdp:ISO639>\n"
+                + "                </cmdp:Languages>\n"
+                + "                <cmdp:Countries>\n"
+                + "                </cmdp:Countries>\n"
+                + "            </cmdp:LrtCommon>\n"
+                + "        </cmdp:LrtInventoryResource>\n"
+                + "    </cmd:Components>\n"
+                + "</cmd:CMD>";
+        File rootFile = createCmdiFile("example", content);
+
+        List<SolrInputDocument> docs = importData(rootFile);
+        assertEquals(1, docs.size());
+        SolrInputDocument doc = docs.get(0);
+        
+        assertEquals("ISO code mapping to langauge code", "code:nld", getValue(doc, FieldKey.LANGUAGE_CODE));
+        assertEquals("Language code -> language name post processing", "Dutch", getValue(doc, FieldKey.LANGUAGE_NAME));
+    }
+
     private Object getValue(SolrInputDocument doc, FieldKey key) {
         String field = fieldNameService.getFieldName(key);
-    	if(doc.getFieldValues(field) != null){
-	        assertEquals(1, doc.getFieldValues(field).size());
-	        return doc.getFieldValue(field);
-    	}
-    	else
-    		return null;
+        if (doc.getFieldValues(field) != null) {
+            assertEquals(1, doc.getFieldValues(field).size());
+            return doc.getFieldValue(field);
+        } else {
+            return null;
+        }
     }
 
     private List<SolrInputDocument> importData(File rootFile) throws Exception {
@@ -259,7 +294,7 @@ public class MetadataImporterTest extends ImporterTestcase {
          * suit the test.
          */
         modifyConfig(rootFile);
-        
+
         final DummySolrBridgeImpl solrBridge = new DummySolrBridgeImpl();
         MetadataImporter importer = new MetadataImporter(config, languageCodeUtils, solrBridge) {
             /*
@@ -341,8 +376,6 @@ public class MetadataImporterTest extends ImporterTestcase {
         config.setFacetConceptsFile(ImporterTestcase.getTestFacetConceptFilePath());
         config.setValueMappingsFile(ImporterTestcase.getTestValueMappingsFilePath());
 
-
     }
-
 
 }
