@@ -251,7 +251,7 @@ public class MetadataImporterTest extends ImporterTestcase {
                 + "    <cmd:Header>\n"
                 + "        <cmd:MdProfile>clarin.eu:cr1:p_1289827960126</cmd:MdProfile>\n"
                 + "    </cmd:Header>\n"
-                + "   <cmd:Resources>"
+                + "   <cmd:Resources>\n"
                 + "     <cmd:ResourceProxyList><cmd:ResourceProxy><cmd:ResourceType>Resource</cmd:ResourceType><cmd:ResourceRef>http://example.org/resource</cmd:ResourceRef></cmd:ResourceProxy></cmd:ResourceProxyList>\n"
                 + "   </cmd:Resources>\n"
                 + "    <cmd:Components>\n"
@@ -273,9 +273,41 @@ public class MetadataImporterTest extends ImporterTestcase {
         List<SolrInputDocument> docs = importData(rootFile);
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
-        
+
         assertEquals("ISO code mapping to langauge code", "code:nld", getValue(doc, FieldKey.LANGUAGE_CODE));
         assertEquals("Language code -> language name post processing", "Dutch", getValue(doc, FieldKey.LANGUAGE_NAME));
+    }
+
+    @Test
+    public void testDefaultValuePostProcessing() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1475136016208\">\n"
+                + "    <cmd:Header>\n"
+                + "        <cmd:MdProfile>clarin.eu:cr1:p_1475136016208</cmd:MdProfile>\n"
+                + "    </cmd:Header>\n"
+                + "   <cmd:Resources>\n"
+                + "     <cmd:ResourceProxyList><cmd:ResourceProxy><cmd:ResourceType>Resource</cmd:ResourceType><cmd:ResourceRef>http://example.org/resource</cmd:ResourceRef></cmd:ResourceProxy></cmd:ResourceProxyList>\n"
+                + "   </cmd:Resources>\n"
+                + "    <cmd:Components>\n"
+                + "        <cmdp:EDM>\n"
+                + "            <cmdp:edm-Aggregation>\n"
+                + "                <cmdp:edm-rights>\n"
+                + "                    <cmdp:rightsURI>PUB</cmdp:rightsURI>\n"
+                + "                </cmdp:edm-rights>\n"
+                + "            </cmdp:edm-Aggregation>\n"
+                + "        </cmdp:EDM>\n"
+                + "    </cmd:Components>\n"
+                + "</cmd:CMD>";
+        File rootFile = createCmdiFile("example", content);
+
+        List<SolrInputDocument> docs = importData(rootFile);
+        assertEquals(1, docs.size());
+        SolrInputDocument doc = docs.get(0);
+        
+        // 'reflective' postprocessing, i.e. we have a post processor that acts on 'null' values, uses value from an already populated field to populate its target field
+        assertEquals("PRECONDITION: Availability filled in from doc value", "PUB", getValue(doc, FieldKey.AVAILABILITY));
+        assertEquals("Explicit license filled in from availability", "PUB", getValue(doc, FieldKey.LICENSE_TYPE));
     }
 
     private Object getValue(SolrInputDocument doc, FieldKey key) {
