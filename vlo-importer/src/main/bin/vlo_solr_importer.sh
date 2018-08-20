@@ -1,6 +1,8 @@
 #!/bin/sh
 
-VMOPTS="-Xmx4G"
+if [ -z "$IMPORTER_JAVA_OPTS" ]; then
+	IMPORTER_JAVA_OPTS="-Xmx4G"
+fi
 
 # Get the script's source directory
 DIR="$(dirname "$0")"
@@ -36,7 +38,7 @@ echo Logging in ${LOGDIR}
 # -l path OR -l "path1 path2 ..."
 #
 
-$JAVA ${VMOPTS} \
+$JAVA ${IMPORTER_JAVA_OPTS} \
     -cp "${DIR}:${DIR}/vlo-importer-${project.version}-importer.jar" \
 	-DconfigFile=${DFLT_CONFIG} \
     -DIMPORTER_LOG_DIR=${LOGDIR} \
