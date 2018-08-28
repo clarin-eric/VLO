@@ -207,8 +207,8 @@ public class ValueMappingsTest extends ImporterTestcase {
         Object[] values = getMultipleValues(doc, fieldNameService.getFieldName(FieldKey.PROJECT_NAME)).toArray();
         assertEquals(3, values.length);
         
-        assertEquals("blabla3", values[0]);
-        assertEquals("blabla2", values[1]);
+        assertEquals("blabla2", values[0]);
+        assertEquals("blabla3", values[1]);
         assertEquals("DiDDD-project", values[2]);
     }
 

@@ -21,6 +21,7 @@ import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetConfiguration;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
 import static eu.clarin.cmdi.vlo.importer.processor.LanguageDefaults.DEFAULT_LANGUAGE;
 import static eu.clarin.cmdi.vlo.importer.processor.LanguageDefaults.ENGLISH_LANGUAGE;
@@ -73,8 +74,8 @@ public class ValueWriter {
      * @param facetValuesMap processed facet configurations
      * @param cmdiData current CMDI data object
      */
-    public void writeDefaultValues(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> facetValuesMap) {
-        Collection<FacetConfiguration> facetList = facetValuesMap.keySet();
+    public void writeDefaultValues(CMDIData cmdiData, FacetMapping facetMapping) {
+        Collection<FacetConfiguration> facetList = facetMapping.getFacetConfigurations();
         for (FacetConfiguration facetConfig : facetList) {
             if (cmdiData.getDocField(facetConfig.getName()) == null && this.postProcessors.containsKey(facetConfig.getName()) && this.postProcessors.get(facetConfig.getName()).doesProcessNoValue()) {
                 final ArrayList<Pair<String, String>> valueLangPairList = new ArrayList<>();

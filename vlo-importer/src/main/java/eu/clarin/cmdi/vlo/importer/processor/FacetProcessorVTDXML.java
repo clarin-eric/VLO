@@ -42,7 +42,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -87,7 +87,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
 
             valueWriter.writeValuesToDoc(cmdiData, facetValuesMap);
 
-            valueWriter.writeDefaultValues(cmdiData, facetValuesMap);
+            valueWriter.writeDefaultValues(cmdiData, facetMapping);
         } catch (VTDException ex) {
             throw new CMDIParsingException("VTD parsing exception while processing facets", ex);
         }
@@ -104,7 +104,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      * @throws UnsupportedEncodingException
      */
     private Map<FacetConfiguration, List<ValueSet>> getFacetValuesMap(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
-        Map<FacetConfiguration, List<ValueSet>> facetValuesMap = new HashMap<FacetConfiguration, List<ValueSet>>();
+        Map<FacetConfiguration, List<ValueSet>> facetValuesMap = new LinkedHashMap<FacetConfiguration, List<ValueSet>>();
 
         final Collection<FacetConfiguration> facetConfigList = facetMapping.getFacetConfigurations();
 
@@ -131,7 +131,36 @@ public class FacetProcessorVTDXML implements FacetProcessor {
             }
 
         }
-
+        
+        // reordering result pairs: prefer English content
+        List<ValueSet> reorderedValueSetList;
+        List<ValueSet> englishContentList;
+        List<ValueSet> nonEnglishContentList;
+        
+        for(Map.Entry<FacetConfiguration, List<ValueSet>> entry : facetValuesMap.entrySet()) {
+            reorderedValueSetList = new ArrayList<ValueSet>();
+            englishContentList = new ArrayList<ValueSet>();            
+            nonEnglishContentList = new ArrayList<ValueSet>();
+            
+            for (int i = 0; i < entry.getValue().size(); i++) {
+                ValueSet valueSet = entry.getValue().get(i);
+                if (valueSet.getValueLanguagePair().getRight().equals(ENGLISH_LANGUAGE)) {
+                    englishContentList.add(valueSet);
+                } else {
+                    nonEnglishContentList.add(valueSet);
+                }
+            }
+            reorderedValueSetList.addAll(englishContentList);
+            reorderedValueSetList.addAll(nonEnglishContentList);
+            
+            facetValuesMap.put(entry.getKey(), reorderedValueSetList);
+            
+        }
+        
+/*      alternative approach for English first  
+ *      facetValuesMap.forEach((facetConfig, valueSetList)-> 
+                valueSetList.sort((first, second) -> first.getValueLanguagePair().getRight().equals(ENGLISH_LANGUAGE) && !second.getValueLanguagePair().getRight().equals(ENGLISH_LANGUAGE)?-1:0)
+            );*/
         return facetValuesMap;
     }
 
@@ -311,7 +340,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
             facetValuesMap.compute(valueSet.getTargetFacet().getFacetConfiguration(), (k, v) -> new ArrayList<ValueSet>()).add(valueSet);
         } //targetValueMap.put(facetConfig, new ArrayList().add(valueSet));
         else {
-            LinkedList<ValueSet> lili = (LinkedList<ValueSet>) facetValuesMap.computeIfAbsent(valueSet.getTargetFacet().getFacetConfiguration(), k -> new LinkedList<ValueSet>());
+            ArrayList<ValueSet> lili = (ArrayList<ValueSet>) facetValuesMap.computeIfAbsent(valueSet.getTargetFacet().getFacetConfiguration(), k -> new ArrayList<ValueSet>());
 
             if (lili.size() > 0 && (lili.get(0).getTargetFacet().getOverrideExistingValues() || (!valueSet.getTargetFacet().getFacetConfiguration().getAllowMultipleValues() && !valueSet.getTargetFacet().getFacetConfiguration().getAllowMultipleValues()))) {
                 LOG.info("value {} ignored since facet {} has either defined an overriding value or doensn't allow multiple values",
@@ -319,11 +348,9 @@ public class FacetProcessorVTDXML implements FacetProcessor {
                 return;
             }
 
-            if (valueSet.getValueLanguagePair().getRight().equals(ENGLISH_LANGUAGE)) {//prevents necessity to sort later
-                lili.addFirst(valueSet);
-            } else {
-                lili.addLast(valueSet);
-            }
+
+            lili.add(valueSet);
+
         }
     }
 
