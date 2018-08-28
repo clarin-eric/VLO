@@ -42,7 +42,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -104,7 +103,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      * @throws UnsupportedEncodingException
      */
     private Map<FacetConfiguration, List<ValueSet>> getFacetValuesMap(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
-        Map<FacetConfiguration, List<ValueSet>> facetValuesMap = new LinkedHashMap<FacetConfiguration, List<ValueSet>>();
+        Map<FacetConfiguration, List<ValueSet>> facetValuesMap = new HashMap<FacetConfiguration, List<ValueSet>>();
 
         final Collection<FacetConfiguration> facetConfigList = facetMapping.getFacetConfigurations();
 
