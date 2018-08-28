@@ -167,14 +167,9 @@ public class FacetProcessorVTDXML implements FacetProcessor {
                 index++;
             }
 
-            processRawValue(cmdiData, facetValuesMap, index, facetConfig, ImmutablePair.of(nav.toString(index), extractLanguageCode(nav)), false);
+            processRawValue(cmdiData, facetValuesMap, index, facetConfig, ImmutablePair.of(nav.toString(index), extractLanguageCode(nav)));
 
             processValueConceptLink(cmdiData, facetValuesMap, nav, facetConfig, pattern);
-
-            //process derived facets
-            for (FacetConfiguration derivedFacetConfig : facetConfig.getDerivedFacets()) {
-                processRawValue(cmdiData, facetValuesMap, index, derivedFacetConfig, ImmutablePair.of(nav.toString(index), extractLanguageCode(nav)), true);
-            }
 
             index = ap.evalXPath();
         }
@@ -226,7 +221,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
                 final String v = (String) vp.getLeft();
                 final String l = (vp.getRight() != null ? postProcessors.get(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)).process((String) vp.getRight(), null).get(0) : DEFAULT_LANGUAGE);
 
-                processRawValue(cmdiData, facetValuesMap, vclAttrIndex, facetConfig, ImmutablePair.of(v, l), false);
+                processRawValue(cmdiData, facetValuesMap, vclAttrIndex, facetConfig, ImmutablePair.of(v, l));
 
             }
         }
@@ -248,7 +243,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      * @param valueLanguagePair Value/language Pair
      * @param isDerived Is derived facet
      */
-    private void processRawValue(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> facetValuesMap, int vtdIndex, FacetConfiguration facetConfig, Pair<String, String> valueLanguagePair, boolean isDerived) {
+    private void processRawValue(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> facetValuesMap, int vtdIndex, FacetConfiguration facetConfig, Pair<String, String> valueLanguagePair) {
         if (facetConfig.getName().equals(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)) && !valueLanguagePair.getRight().equals(ENGLISH_LANGUAGE) && !valueLanguagePair.getRight().equals(DEFAULT_LANGUAGE)) {
             return;
         }
@@ -264,7 +259,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
                     for (TargetFacet target : facetConfig.getConditionTargetSet().getTargetsFor(postProcessedValue)) {
                         removeSourceValue |= target.getRemoveSourceValue();
 
-                        ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, target, ImmutablePair.of(target.getValue(), ENGLISH_LANGUAGE), isDerived);
+                        ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, target, ImmutablePair.of(target.getValue(), ENGLISH_LANGUAGE), false);
 
                         setTargetValue(facetValuesMap, valueSet);
 
@@ -276,7 +271,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
                         .getTargetsFor(valueLanguagePair.getLeft())) {
                     removeSourceValue |= target.getRemoveSourceValue();
 
-                    ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, target, ImmutablePair.of(target.getValue(), ENGLISH_LANGUAGE), isDerived);
+                    ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, target, ImmutablePair.of(target.getValue(), ENGLISH_LANGUAGE), false);
 
                     setTargetValue(facetValuesMap, valueSet);
 
@@ -288,10 +283,20 @@ public class FacetProcessorVTDXML implements FacetProcessor {
         if (!removeSourceValue) { // positive 'removeSourceValue' means skip adding value to origin facet
             for (String postProcessedValue : postProcessed) {
 
-                ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, new TargetFacet(facetConfig, ""), ImmutablePair.of(postProcessedValue, valueLanguagePair.getRight()), isDerived);
+                ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, new TargetFacet(facetConfig, ""), ImmutablePair.of(postProcessedValue, valueLanguagePair.getRight()), false);
                 setTargetValue(facetValuesMap, valueSet);
             }
 
+        }
+        
+        // insert post-processed values into derived facet(s) if configured
+        for (FacetConfiguration derivedFacetConfig : facetConfig.getDerivedFacets()) {
+            for (String postProcessedValue : postProcessed) {
+                for (String derivedValue : postProcess(derivedFacetConfig.getName(), postProcessedValue, cmdiData)) {
+                    ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, new TargetFacet(derivedFacetConfig, ""), ImmutablePair.of(derivedValue, valueLanguagePair.getRight()), true);
+                    setTargetValue(facetValuesMap, valueSet);
+                }
+            }
         }
 
     }
