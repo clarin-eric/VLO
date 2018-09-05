@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -52,7 +51,6 @@ import javax.xml.parsers.SAXParserFactory;
 public class FacetMappingFactory {
 
     private final static Logger LOG = LoggerFactory.getLogger(FacetMappingFactory.class);
-    
 
     private final ConcurrentHashMap<String, FacetMapping> mapping = new ConcurrentHashMap<>();
 
@@ -62,18 +60,18 @@ public class FacetMappingFactory {
     private final VloConfig vloConfig;
 
     private final FieldNameServiceImpl fieldNameService;
-    
+
     private final FacetConceptMapping conceptMapping;
-    
+
     private final Map<String, ConditionTargetSet> conditionTargetSetPerFacet;
 
     public FacetMappingFactory(VloConfig vloConfig, VLOMarshaller marshaller) {
         this.vloConfig = vloConfig;
         this.fieldNameService = new FieldNameServiceImpl(vloConfig);
         //this.marshaller = marshaller;
-        
+
         this.conceptMapping = marshaller.getFacetConceptMapping(vloConfig.getFacetConceptsFile());
-        
+
         this.conditionTargetSetPerFacet = new ValueMappingFactoryDOMImpl().getValueMappings(vloConfig.getValueMappingsFile(), this.conceptMapping);
     }
 
@@ -141,6 +139,7 @@ public class FacetMappingFactory {
                     List<Pattern> paths = conceptLinkPathMapping.get(concept);
                     if (paths != null) {
                         if (facetConcept.hasContext()) {
+                            LOG.trace("-- -- -- Concept has context");
                             for (Pattern path : paths) {
                                 LOG.trace("-- -- -- Concept path {}", path);
                                 // lazily instantiate the reverse mapping, i.e., from path to concept
@@ -159,12 +158,12 @@ public class FacetMappingFactory {
                                     AcceptableContext acceptableContext = facetConcept.getAcceptableContext();
                                     if (context == null && acceptableContext.includeEmpty()) {
                                         // no context is accepted
-                                        LOG.trace("facet[{}] path[{}] context[{}](empty) is accepted", facetConcept.getName(), path, context);
+                                        LOG.trace("-- -- -- -- facet[{}] path[{}] context[{}](empty) is accepted", facetConcept.getName(), path, context);
                                         xpaths.add(path);
                                         handled = true;
                                     } else if (acceptableContext.getConcepts().contains(context)) {
                                         // a specific context is accepted
-                                        LOG.trace("facet[{}] path[{}] context[{}] is accepted", facetConcept.getName(), path, context);
+                                        LOG.trace("-- -- -- -- facet[{}] path[{}] context[{}] is accepted", facetConcept.getName(), path, context);
                                         xpaths.add(path);
                                         handled = true;
                                     }
@@ -174,25 +173,26 @@ public class FacetMappingFactory {
                                     RejectableContext rejectableContext = facetConcept.getRejectableContext();
                                     if (context == null && rejectableContext.includeEmpty()) {
                                         // no context is rejected
-                                        LOG.trace("facet[{}] path[{}] context[{}](empty) is rejected", facetConcept.getName(), path, context);
+                                        LOG.trace("-- -- -- -- facet[{}] path[{}] context[{}](empty) is rejected", facetConcept.getName(), path, context);
                                         handled = true;
                                     } else if (rejectableContext.getConcepts().contains(context)) {
                                         // a specific context is rejected
-                                        LOG.trace("facet[{}] path[{}] context[{}] is rejected", facetConcept.getName(), path, context);
+                                        LOG.trace("-- -- -- -- facet[{}] path[{}] context[{}] is rejected", facetConcept.getName(), path, context);
                                         handled = true;
                                     } else if (rejectableContext.includeAny()) {
                                         // any context is rejected
-                                        LOG.trace("facet[{}] path[{}] context[{}](any) is rejected", facetConcept.getName(), path, context);
+                                        LOG.trace("-- -- -- -- facet[{}] path[{}] context[{}](any) is rejected", facetConcept.getName(), path, context);
                                         handled = true;
                                     }
                                 }
                                 if (!handled && context != null && facetConcept.hasAcceptableContext() && facetConcept.getAcceptableContext().includeAny()) {
                                     // any, not rejected context, is accepted
-                                    LOG.trace("facet[{}] path[{}] context[{}](any) is accepted", facetConcept.getName(), path, context);
+                                    LOG.trace("-- -- -- -- facet[{}] path[{}] context[{}](any) is accepted", facetConcept.getName(), path, context);
                                     xpaths.add(path);
                                 }
                             }
                         } else {
+                            LOG.trace("-- -- -- Paths: {} (concept has no context)", paths);
                             xpaths.addAll(paths);
                         }
                     }
@@ -223,27 +223,26 @@ public class FacetMappingFactory {
                 }
                 config.setPatterns(new ArrayList<>(linkedHashSet));
                 config.setFallbackPatterns(facetConcept.getPatterns());
-                
-                //set derived facets
-                for(String derivedFacetName : facetConcept.getDerivedFacets()){
 
-        			config.addDerivedFacet(facetMapping.getFacetConfiguration(derivedFacetName));
-            	}
-                
+                //set derived facets
+                for (String derivedFacetName : facetConcept.getDerivedFacets()) {
+
+                    config.addDerivedFacet(facetMapping.getFacetConfiguration(derivedFacetName));
+                }
+
                 // setValueMappings
-                if(this.conditionTargetSetPerFacet.containsKey(config.getName()))
-                		config.setConditionTargetSet(this.conditionTargetSetPerFacet.get(config.getName()));
+                if (this.conditionTargetSetPerFacet.containsKey(config.getName())) {
+                    config.setConditionTargetSet(this.conditionTargetSetPerFacet.get(config.getName()));
+                }
             }
-            
+
             //now where all FacetConfigurations are created we can build references for derived facets
-            
-        } 
-        catch (NavException | URISyntaxException e) {
+        } catch (NavException | URISyntaxException e) {
             LOG.error("Error creating facetMapping from xsd: {}", xsd, e);
         }
+        LOG.debug("Mapping for {}: {}", xsd, facetMapping);
         return facetMapping;
     }
-    
 
     /**
      * Look if there is a contextual (container) data category associated with
