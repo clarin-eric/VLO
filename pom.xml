@@ -85,6 +85,16 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
+        <repository>
+            <id>sonatype-apache</id>
+            <url>https://repository.apache.org/releases</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
     </repositories>
     	
 </project>
