@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 if [ -z "$IMPORTER_JAVA_OPTS" ]; then
 	IMPORTER_JAVA_OPTS="-Xmx4G"
@@ -42,5 +42,6 @@ $JAVA ${IMPORTER_JAVA_OPTS} \
     -cp "${DIR}:${DIR}/vlo-importer-${project.version}-importer.jar" \
 	-DconfigFile=${DFLT_CONFIG} \
     -DIMPORTER_LOG_DIR=${LOGDIR} \
+    -DIMPORTER_LOG_LEVEL=${IMPORTER_LOG_LEVEL:-INFO} \
     eu.clarin.cmdi.vlo.importer.MetadataImporterRunner "$@"
 
