@@ -1,11 +1,11 @@
 package eu.clarin.cmdi.vlo.importer.mapping;
 
+import eu.clarin.cmdi.vlo.importer.ProfileXsdWalker;
 import static eu.clarin.cmdi.vlo.CmdConstants.CMD_NAMESPACE;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
-import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
@@ -24,19 +23,17 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.Pattern;
 import eu.clarin.cmdi.vlo.importer.Vocabulary;
 
+public class ConceptLinkPathMapperImpl extends ProfileXsdWalker implements ConceptLinkPathMapper {
 
-public class ConceptLinkPathMapperImpl implements ConceptLinkPathMapper {
     private final static Logger LOG = LoggerFactory.getLogger(FacetMappingFactory.class);
     private final VloConfig vloConfig;
-    private final String xsd;
-    private final Boolean useLocalXSDCache;
-    
+
     public ConceptLinkPathMapperImpl(VloConfig vloConfig, String xsd, Boolean useLocalXSDCache) {
+        super(vloConfig, xsd, useLocalXSDCache);
         this.vloConfig = vloConfig;
-        this.xsd = xsd;
-        this.useLocalXSDCache = useLocalXSDCache;
+
     }
-    
+
     @Override
     public String getXsd() {
         // TODO Auto-generated method stub
@@ -59,51 +56,17 @@ public class ConceptLinkPathMapperImpl implements ConceptLinkPathMapper {
      * @return Map (Data Category -> List of XPath expressions linked to the key
      * data category which can be found in CMDI files with this schema)
      * @throws NavException
-     * @throws URISyntaxException 
+     * @throws URISyntaxException
      */
     @Override
-    public Map<String, List<Pattern>> createConceptLinkPathMapping() throws NavException, URISyntaxException{
-        Map<String, List<Pattern>> result = new HashMap<>();
-        VTDGen vg = new VTDGen();
-        boolean parseSuccess;
-        if (useLocalXSDCache) {
-            parseSuccess = vg.parseFile(Thread.currentThread().getContextClassLoader().getResource("testProfiles/" + xsd + ".xsd").getPath(), true);
-        } else {
-            parseSuccess = vg.parseHttpUrl(vloConfig.getComponentRegistryProfileSchema(xsd), true);
-        }
-
-        if (!parseSuccess) {
-            LOG.error("Cannot create ConceptLink Map from xsd (xsd is probably not reachable): " + xsd + ". All metadata instances that use this xsd will not be imported correctly.");
-            return result; //return empty map, so the incorrect xsd is not tried for all metadata instances that specify it.
-        }
-        VTDNav vn = vg.getNav();
-        AutoPilot ap = new AutoPilot(vn);
-        ap.selectElement("xs:element");
-        LinkedList<Token> elementPath = new LinkedList<>();
-        while (ap.iterate()) {
-            int i = vn.getAttrVal("name");
-            if (i != -1) {
-                String elementName = vn.toNormalizedString(i);
-                updateElementPath(vn, elementPath, elementName);
-                
-                processElementConceptLink(vn, elementPath, result);
-
-                // look for associated attributes with concept links
-                vn.push();
-                
-                processAttributes(vn, elementPath, result, elementName);
-
-                // returning to normal element-based workflow
-                vn.pop();
-            }
-        }
-        return result;
+    public Map<String, List<Pattern>> createConceptLinkPathMapping() throws NavException, URISyntaxException {
+        return walkProfile();
     }
 
-    private void processAttributes(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result, String elementName) throws URISyntaxException {
+    protected void processAttributes(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result, String elementName) throws URISyntaxException {
         AutoPilot attributeAutopilot = new AutoPilot(vn);
         attributeAutopilot.declareXPathNameSpace("xs", "http://www.w3.org/2001/XMLSchema");
-        
+
         try {
             attributeAutopilot.selectXPath("./xs:complexType/xs:simpleContent/xs:extension/xs:attribute | ./xs:complexType/xs:attribute");
             while (attributeAutopilot.evalXPath() != -1) {
@@ -117,15 +80,15 @@ public class ConceptLinkPathMapperImpl implements ConceptLinkPathMapper {
     private void processAttributeConceptLink(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result) throws URISyntaxException, NavException {
         int attributeConceptLinkIndex = getConceptLinkIndex(vn);
         int attributeNameIndex = vn.getAttrVal("name");
-        
+
         if (attributeNameIndex != -1 && attributeConceptLinkIndex != -1) {
             String attributeName = vn.toNormalizedString(attributeNameIndex);
             String conceptLink = vn.toNormalizedString(attributeConceptLinkIndex);
-            
+
             Pattern xpath = createXpath(elementPath, attributeName);
-            
+
             result.computeIfAbsent(conceptLink, k -> new ArrayList<Pattern>()).add(xpath);
-            
+
             int vocabIndex = getVocabIndex(vn);
             if (vocabIndex != -1) {
                 String uri = vn.toNormalizedString(vocabIndex);
@@ -145,14 +108,14 @@ public class ConceptLinkPathMapperImpl implements ConceptLinkPathMapper {
         }
     }
 
-    private void processElementConceptLink(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result) throws NavException, URISyntaxException {
+    protected void processElement(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result) throws NavException, URISyntaxException {
         int datcatIndex = getConceptLinkIndex(vn);
         if (datcatIndex != -1) {
             String conceptLink = vn.toNormalizedString(datcatIndex);
             Pattern xpath = createXpath(elementPath, null);
-            
+
             result.computeIfAbsent(conceptLink, k -> new ArrayList<>()).add(xpath);
-            
+
             int vocabIndex = getVocabIndex(vn);
             if (vocabIndex != -1) {
                 String uri = vn.toNormalizedString(vocabIndex);
@@ -173,8 +136,8 @@ public class ConceptLinkPathMapperImpl implements ConceptLinkPathMapper {
     }
 
     /**
-     * Goal is to get the "ConceptLink" attribute. Tries a number of different favors
-     * that were found in the xsd's.
+     * Goal is to get the "ConceptLink" attribute. Tries a number of different
+     * favors that were found in the xsd's.
      *
      * @return -1 if index is not found.
      */
@@ -230,64 +193,6 @@ public class ConceptLinkPathMapperImpl implements ConceptLinkPathMapper {
             result = vn.getAttrVal("cmd:ValueLanguage");
         }
         return result;
-    }
-
-    /**
-     * Given an xml-token path thingy create an xpath.
-     *
-     * @param elementPath
-     * @param attributeName will be appended as attribute to XPath expression if
-     * not null
-     * @return
-     */
-    private Pattern createXpath(List<Token> elementPath, String attributeName) {
-        StringBuilder xpath = new StringBuilder("/cmd:CMD/cmd:Components/");
-        for (Token token : elementPath) {
-            xpath.append("cmdp:").append(token.name).append("/");
-        }
-
-        if (attributeName != null) {
-            return new Pattern(xpath.append("@").append(attributeName).toString());
-        } else {
-            return new Pattern(xpath.append("text()").toString());
-        }
-    }
-
-    /**
-     * does some updating after a step. To keep the path proper and path-y.
-     *
-     * @param vn
-     * @param elementPath
-     * @param elementName
-     */
-    private void updateElementPath(VTDNav vn, LinkedList<Token> elementPath, String elementName) {
-        int previousDepth = elementPath.isEmpty() ? -1 : elementPath.peekLast().depth;
-        int currentDepth = vn.getCurrentDepth();
-        if (currentDepth == previousDepth) {
-            elementPath.removeLast();
-        } else if (currentDepth < previousDepth) {
-            while (currentDepth <= previousDepth) {
-                elementPath.removeLast();
-                previousDepth = elementPath.peekLast().depth;
-            }
-        }
-        elementPath.offerLast(new Token(currentDepth, elementName));
-    }
-
-    class Token {
-
-        final String name;
-        final int depth;
-
-        public Token(int depth, String name) {
-            this.depth = depth;
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name + ":" + depth;
-        }
     }
 
 }
