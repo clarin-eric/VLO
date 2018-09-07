@@ -5,14 +5,15 @@ import org.apache.commons.lang3.tuple.Pair;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetConfiguration;
 import eu.clarin.cmdi.vlo.importer.mapping.TargetFacet;
 
-public class ValueSet{
+public class ValueSet {
+
     private int vtdIndex;
     private FacetConfiguration originFacetConfig;
     private TargetFacet targetFacet;
     private Pair<String, String> valueLanguagePair;
     private boolean isDerived;
-    
-    public ValueSet(int vtdIndex, FacetConfiguration originFacetConfig, TargetFacet targetFacet, Pair<String,String> valueLanguagePair, boolean isDerived) {
+
+    public ValueSet(int vtdIndex, FacetConfiguration originFacetConfig, TargetFacet targetFacet, Pair<String, String> valueLanguagePair, boolean isDerived) {
         this.vtdIndex = vtdIndex;
         this.originFacetConfig = originFacetConfig;
         this.targetFacet = targetFacet;
@@ -40,12 +41,20 @@ public class ValueSet{
         return targetFacet;
     }
 
+    public String getTargetFacetName() {
+        return getTargetFacet().getFacetConfiguration().getName();
+    }
+
     public void setTargetFacet(TargetFacet targetFacet) {
         this.targetFacet = targetFacet;
     }
 
     public Pair<String, String> getValueLanguagePair() {
         return valueLanguagePair;
+    }
+    
+    public String getValue() {
+        return getValueLanguagePair().getValue();
     }
 
     public void setValueLanguagePair(Pair<String, String> valueLanguagePair) {
@@ -59,6 +68,5 @@ public class ValueSet{
     public void setDerived(boolean isDerived) {
         this.isDerived = isDerived;
     }
-
 
 }

@@ -55,12 +55,13 @@ public class ValueWriter {
      * @param facetValuesMap A map of FacetConfigurations (key)/Lists of
      * ValueSets (value)
      */
-    public void writeValuesToDoc(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> facetValuesMap) {
-        for (Map.Entry<FacetConfiguration, List<ValueSet>> entry : facetValuesMap.entrySet()) {
+    public void writeValuesToDoc(CMDIData cmdiData, FacetValuesMap facetValuesMap) {
+        for (Map.Entry<String, List<ValueSet>> entry : facetValuesMap.entrySet()) {
 
             for (ValueSet valueSet : entry.getValue()) {
-                insertFacetValue(cmdiData, entry.getKey(), valueSet.getValueLanguagePair());
-                if (!(entry.getKey().getAllowMultipleValues() || entry.getKey().getMultilingual())) {
+                final FacetConfiguration targetFacetConfig = valueSet.getTargetFacet().getFacetConfiguration();
+                insertFacetValue(cmdiData, targetFacetConfig, valueSet.getValueLanguagePair());
+                if (!(targetFacetConfig.getAllowMultipleValues() || targetFacetConfig.getMultilingual())) {
                     break;
                 }
             }

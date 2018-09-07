@@ -77,8 +77,9 @@ public class CMDIData implements DocFieldContainer {
     }
 
     public void addDocFieldIfNull(String name, String value, boolean caseInsensitive) {
-        if (this.getDocField(name) == null)
+        if (this.getDocField(name) == null) {
             this.addDocField(name, value, caseInsensitive);
+        }
     }
 
     /**
@@ -156,6 +157,7 @@ public class CMDIData implements DocFieldContainer {
 
     /**
      * Checks if any resources (metadata, landingpage, etc.) are available
+     *
      * @return Returns true if at least one resource is available
      */
     public boolean hasResources() {
@@ -167,15 +169,12 @@ public class CMDIData implements DocFieldContainer {
     /**
      * Add a meta data resource to the list of resources of that type.
      *
-     * Whenever the type is not one of a type supported by the CMDI specification, a
-     * warning is logged.
+     * Whenever the type is not one of a type supported by the CMDI
+     * specification, a warning is logged.
      *
-     * @param resource
-     *            meta data resource
-     * @param type
-     *            type of the resource
-     * @param mimeType
-     *            mime type associated with the resource
+     * @param resource meta data resource
+     * @param type type of the resource
+     * @param mimeType mime type associated with the resource
      */
     public void addResource(String resource, String type, String mimeType) {
         if (METADATA_TYPE.equals(type)) {
@@ -202,7 +201,6 @@ public class CMDIData implements DocFieldContainer {
         this.id = id;
     }
 
-    @Override
     public String getId() {
         return id;
     }
@@ -211,10 +209,8 @@ public class CMDIData implements DocFieldContainer {
      * In case that Availability facet has more then one value use the most
      * restrictive tag from PUB, ACA and RES. TODO: Move this to post processor
      *
-     * @param field
-     *            field to reduce availability values in
-     * @param value
-     *            value to insert (add or replace)
+     * @param field field to reduce availability values in
+     * @param value value to insert (add or replace)
      */
     private void reduceAvailability(String field, String value) {
         Collection<Object> currentValues = doc.getFieldValues(field);
@@ -263,14 +259,14 @@ public class CMDIData implements DocFieldContainer {
         }
 
         switch (availabilty) {
-        case FacetConstants.AVAILABILITY_LEVEL_PUB:
-            return 1;
-        case FacetConstants.AVAILABILITY_LEVEL_ACA:
-            return 2;
-        case FacetConstants.AVAILABILITY_LEVEL_RES:
-            return 3;
-        default:
-            return -1; // other tags
+            case FacetConstants.AVAILABILITY_LEVEL_PUB:
+                return 1;
+            case FacetConstants.AVAILABILITY_LEVEL_ACA:
+                return 2;
+            case FacetConstants.AVAILABILITY_LEVEL_RES:
+                return 3;
+            default:
+                return -1; // other tags
         }
     }
 }

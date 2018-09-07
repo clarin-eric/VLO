@@ -41,9 +41,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
@@ -82,7 +82,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
     @Override
     public void processFacets(CMDIData cmdiData, FacetMapping facetMapping) throws URISyntaxException, UnsupportedEncodingException, CMDIParsingException {
         try {
-            Map<FacetConfiguration, List<ValueSet>> facetValuesMap = getFacetValuesMap(cmdiData, nav, facetMapping);
+            FacetValuesMap facetValuesMap = getFacetValuesMap(cmdiData, nav, facetMapping);
 
             valueWriter.writeValuesToDoc(cmdiData, facetValuesMap);
 
@@ -102,8 +102,8 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      * @throws URISyntaxException
      * @throws UnsupportedEncodingException
      */
-    private Map<FacetConfiguration, List<ValueSet>> getFacetValuesMap(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
-        Map<FacetConfiguration, List<ValueSet>> facetValuesMap = new HashMap<FacetConfiguration, List<ValueSet>>();
+    private FacetValuesMap getFacetValuesMap(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
+        FacetValuesMap facetValuesMap = new FacetValuesMap();
 
         final Collection<FacetConfiguration> facetConfigList = facetMapping.getFacetConfigurations();
 
@@ -130,17 +130,17 @@ public class FacetProcessorVTDXML implements FacetProcessor {
             }
 
         }
-        
+
         // reordering result pairs: prefer English content
         List<ValueSet> reorderedValueSetList;
         List<ValueSet> englishContentList;
         List<ValueSet> nonEnglishContentList;
-        
-        for(Map.Entry<FacetConfiguration, List<ValueSet>> entry : facetValuesMap.entrySet()) {
-            reorderedValueSetList = new ArrayList<ValueSet>();
-            englishContentList = new ArrayList<ValueSet>();            
-            nonEnglishContentList = new ArrayList<ValueSet>();
-            
+
+        for (Map.Entry<String, List<ValueSet>> entry : facetValuesMap.entrySet()) {
+            reorderedValueSetList = new ArrayList<>();
+            englishContentList = new ArrayList<>();
+            nonEnglishContentList = new ArrayList<>();
+
             for (int i = 0; i < entry.getValue().size(); i++) {
                 ValueSet valueSet = entry.getValue().get(i);
                 if (valueSet.getValueLanguagePair().getRight().equals(ENGLISH_LANGUAGE)) {
@@ -151,12 +151,12 @@ public class FacetProcessorVTDXML implements FacetProcessor {
             }
             reorderedValueSetList.addAll(englishContentList);
             reorderedValueSetList.addAll(nonEnglishContentList);
-            
+
             facetValuesMap.put(entry.getKey(), reorderedValueSetList);
-            
+
         }
-        
-/*      alternative approach for English first  
+
+        /*      alternative approach for English first  
  *      facetValuesMap.forEach((facetConfig, valueSetList)-> 
                 valueSetList.sort((first, second) -> first.getValueLanguagePair().getRight().equals(ENGLISH_LANGUAGE) && !second.getValueLanguagePair().getRight().equals(ENGLISH_LANGUAGE)?-1:0)
             );*/
@@ -176,7 +176,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      * @throws URISyntaxException
      * @throws UnsupportedEncodingException
      */
-    private boolean matchPattern(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> facetValuesMap, VTDNav nav, FacetConfiguration facetConfig, Pattern pattern) throws VTDException, URISyntaxException, UnsupportedEncodingException {
+    private boolean matchPattern(CMDIData cmdiData, FacetValuesMap facetValuesMap, VTDNav nav, FacetConfiguration facetConfig, Pattern pattern) throws VTDException, URISyntaxException, UnsupportedEncodingException {
         final AutoPilot ap = new AutoPilot(nav);
         SchemaParsingUtil.setNameSpace(ap, SchemaParsingUtil.extractXsd(nav));
         ap.selectXPath(pattern.getPattern());
@@ -232,7 +232,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      * @throws XPathEvalException
      * @throws XPathParseException
      */
-    private void processValueConceptLink(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> facetValuesMap, VTDNav nav, FacetConfiguration facetConfig, Pattern pattern) throws NavException, XPathParseException, XPathEvalException, UnsupportedEncodingException, URISyntaxException {
+    private void processValueConceptLink(CMDIData cmdiData, FacetValuesMap facetValuesMap, VTDNav nav, FacetConfiguration facetConfig, Pattern pattern) throws NavException, XPathParseException, XPathEvalException, UnsupportedEncodingException, URISyntaxException {
         // extract english for ValueConceptLink if available
         Integer vclAttrIndex = nav.getAttrVal("cmd:ValueConceptLink");
         String vcl = null;
@@ -271,7 +271,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      * @param valueLanguagePair Value/language Pair
      * @param isDerived Is derived facet
      */
-    private void processRawValue(CMDIData cmdiData, Map<FacetConfiguration, List<ValueSet>> facetValuesMap, int vtdIndex, FacetConfiguration facetConfig, Pair<String, String> valueLanguagePair) {
+    private void processRawValue(CMDIData cmdiData, FacetValuesMap facetValuesMap, int vtdIndex, FacetConfiguration facetConfig, Pair<String, String> valueLanguagePair) {
         if (facetConfig.getName().equals(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)) && !valueLanguagePair.getRight().equals(ENGLISH_LANGUAGE) && !valueLanguagePair.getRight().equals(DEFAULT_LANGUAGE)) {
             return;
         }
@@ -316,7 +316,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
             }
 
         }
-        
+
         // insert post-processed values into derived facet(s) if configured
         for (FacetConfiguration derivedFacetConfig : facetConfig.getDerivedFacets()) {
             for (String postProcessedValue : postProcessed) {
@@ -334,22 +334,21 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      * ValueSets (value)
      * @param valueSet
      */
-    private void setTargetValue(Map<FacetConfiguration, List<ValueSet>> facetValuesMap, ValueSet valueSet) {
+    private void setTargetValue(FacetValuesMap facetValuesMap, ValueSet valueSet) {
         if (valueSet.getTargetFacet().getOverrideExistingValues()) {
-            facetValuesMap.compute(valueSet.getTargetFacet().getFacetConfiguration(), (k, v) -> new ArrayList<ValueSet>()).add(valueSet);
-        } //targetValueMap.put(facetConfig, new ArrayList().add(valueSet));
+            facetValuesMap.put(valueSet);
+        }
         else {
-            ArrayList<ValueSet> lili = (ArrayList<ValueSet>) facetValuesMap.computeIfAbsent(valueSet.getTargetFacet().getFacetConfiguration(), k -> new ArrayList<ValueSet>());
+            final List<ValueSet> valueSets = Optional.of(
+                    facetValuesMap.get(valueSet.getTargetFacetName()))
+                    .orElse(new ArrayList<>());
 
-            if (lili.size() > 0 && (lili.get(0).getTargetFacet().getOverrideExistingValues() || (!valueSet.getTargetFacet().getFacetConfiguration().getAllowMultipleValues() && !valueSet.getTargetFacet().getFacetConfiguration().getAllowMultipleValues()))) {
+            if (valueSets.size() > 0 && (valueSets.get(0).getTargetFacet().getOverrideExistingValues() || (!valueSet.getTargetFacet().getFacetConfiguration().getAllowMultipleValues() && !valueSet.getTargetFacet().getFacetConfiguration().getAllowMultipleValues()))) {
                 LOG.info("value {} ignored since facet {} has either defined an overriding value or doensn't allow multiple values",
                         valueSet.getValueLanguagePair().getLeft(), valueSet.getTargetFacet().getFacetConfiguration().getName());
-                return;
+            } else {
+                valueSets.add(valueSet);
             }
-
-
-            lili.add(valueSet);
-
         }
     }
 
