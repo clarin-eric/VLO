@@ -52,9 +52,13 @@ public class ValueSet {
     public Pair<String, String> getValueLanguagePair() {
         return valueLanguagePair;
     }
-    
+
     public String getValue() {
-        return getValueLanguagePair().getValue();
+        return getValueLanguagePair().getLeft();
+    }
+
+    public String getLanguage() {
+        return getValueLanguagePair().getRight();
     }
 
     public void setValueLanguagePair(Pair<String, String> valueLanguagePair) {

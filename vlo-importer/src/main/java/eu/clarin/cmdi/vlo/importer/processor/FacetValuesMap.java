@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,13 +32,13 @@ import java.util.stream.Collectors;
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class FacetValuesMap implements DocFieldContainer {
-    
+
     private final Map<String, List<ValueSet>> facetValuesMap;
-    
+
     public FacetValuesMap() {
         facetValuesMap = new HashMap<>();
     }
-    
+
     @Override
     public Collection<Object> getDocField(String name) {
         // get value object collection out of value set list
@@ -46,21 +47,23 @@ public class FacetValuesMap implements DocFieldContainer {
                 .map(ValueSet::getValue)
                 .collect(Collectors.toList());
     }
-    
+
     public List<ValueSet> put(String facet, List<ValueSet> valueSet) {
         return facetValuesMap.put(facet, valueSet);
     }
-    
-    public void put(ValueSet valueSet) {
-        facetValuesMap.put(valueSet.getTargetFacetName(), Lists.newArrayList(valueSet));
+
+    public boolean addToTarget(ValueSet valueSet) {
+        return facetValuesMap
+                .computeIfAbsent(valueSet.getTargetFacetName(), (k) -> Lists.newArrayList())
+                .add(valueSet);
     }
-    
+
     public Set<Map.Entry<String, List<ValueSet>>> entrySet() {
         return facetValuesMap.entrySet();
     }
-    
+
     public List<ValueSet> get(String name) {
         return facetValuesMap.get(name);
     }
-    
+
 }

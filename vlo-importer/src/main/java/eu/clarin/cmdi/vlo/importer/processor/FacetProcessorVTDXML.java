@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.importer.processor;
 
+import com.google.common.collect.Lists;
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
 import com.ximpleware.VTDException;
@@ -336,18 +337,18 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      */
     private void setTargetValue(FacetValuesMap facetValuesMap, ValueSet valueSet) {
         if (valueSet.getTargetFacet().getOverrideExistingValues()) {
-            facetValuesMap.put(valueSet);
+            facetValuesMap.put(valueSet.getTargetFacetName(), Lists.newArrayList(valueSet));
         }
         else {
-            final List<ValueSet> valueSets = Optional.of(
+            final List<ValueSet> existingValueSets = Optional.ofNullable(
                     facetValuesMap.get(valueSet.getTargetFacetName()))
                     .orElse(new ArrayList<>());
 
-            if (valueSets.size() > 0 && (valueSets.get(0).getTargetFacet().getOverrideExistingValues() || (!valueSet.getTargetFacet().getFacetConfiguration().getAllowMultipleValues() && !valueSet.getTargetFacet().getFacetConfiguration().getAllowMultipleValues()))) {
+            if (existingValueSets.size() > 0 && (existingValueSets.get(0).getTargetFacet().getOverrideExistingValues() || (!valueSet.getTargetFacet().getFacetConfiguration().getAllowMultipleValues() && !valueSet.getTargetFacet().getFacetConfiguration().getAllowMultipleValues()))) {
                 LOG.info("value {} ignored since facet {} has either defined an overriding value or doensn't allow multiple values",
-                        valueSet.getValueLanguagePair().getLeft(), valueSet.getTargetFacet().getFacetConfiguration().getName());
+                        valueSet.getValue(), valueSet.getTargetFacetName());
             } else {
-                valueSets.add(valueSet);
+                facetValuesMap.addToTarget(valueSet);
             }
         }
     }
