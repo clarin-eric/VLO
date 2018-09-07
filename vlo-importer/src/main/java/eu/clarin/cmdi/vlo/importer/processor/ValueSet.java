@@ -12,13 +12,15 @@ public class ValueSet {
     private TargetFacet targetFacet;
     private Pair<String, String> valueLanguagePair;
     private boolean isDerived;
+    private boolean isResultOfValueMapping;
 
-    public ValueSet(int vtdIndex, FacetConfiguration originFacetConfig, TargetFacet targetFacet, Pair<String, String> valueLanguagePair, boolean isDerived) {
+    public ValueSet(int vtdIndex, FacetConfiguration originFacetConfig, TargetFacet targetFacet, Pair<String, String> valueLanguagePair, boolean isDerived, boolean isResultOfValueMapping) {
         this.vtdIndex = vtdIndex;
         this.originFacetConfig = originFacetConfig;
         this.targetFacet = targetFacet;
         this.valueLanguagePair = valueLanguagePair;
         this.isDerived = isDerived;
+        this.isResultOfValueMapping = isResultOfValueMapping;
     }
 
     public int getVtdIndex() {
@@ -71,6 +73,14 @@ public class ValueSet {
 
     public void setDerived(boolean isDerived) {
         this.isDerived = isDerived;
+    }
+
+    public boolean isResultOfValueMapping() {
+        return isResultOfValueMapping;
+    }
+
+    public void setResultOfValueMapping(boolean resultOfValueMapping) {
+        this.isResultOfValueMapping = resultOfValueMapping;
     }
 
 }
