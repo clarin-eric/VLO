@@ -13,11 +13,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
 import com.ximpleware.VTDNav;
-import com.ximpleware.XPathEvalException;
-import com.ximpleware.XPathParseException;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.Pattern;
@@ -72,17 +69,13 @@ public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, List
     }
 
     @Override
-    protected void processAttribute(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result) throws URISyntaxException, NavException {
-        int attributeConceptLinkIndex = getConceptLinkIndex(vn);
-        int attributeNameIndex = vn.getAttrVal("name");
+    protected void processElement(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result) throws NavException, URISyntaxException {
+        int conceptLinkIndex = getConceptLinkIndex(vn);
+        if (conceptLinkIndex != -1) {
+            String conceptLink = vn.toNormalizedString(conceptLinkIndex);
+            Pattern xpath = createXpath(elementPath, null);
 
-        if (attributeNameIndex != -1 && attributeConceptLinkIndex != -1) {
-            String attributeName = vn.toNormalizedString(attributeNameIndex);
-            String conceptLink = vn.toNormalizedString(attributeConceptLinkIndex);
-
-            Pattern xpath = createXpath(elementPath, attributeName);
-
-            result.computeIfAbsent(conceptLink, k -> new ArrayList<Pattern>()).add(xpath);
+            result.computeIfAbsent(conceptLink, k -> new ArrayList<>()).add(xpath);
 
             int vocabIndex = getVocabIndex(vn);
             if (vocabIndex != -1) {
@@ -103,13 +96,18 @@ public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, List
         }
     }
 
-    protected void processElement(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result) throws NavException, URISyntaxException {
-        int datcatIndex = getConceptLinkIndex(vn);
-        if (datcatIndex != -1) {
-            String conceptLink = vn.toNormalizedString(datcatIndex);
-            Pattern xpath = createXpath(elementPath, null);
+    @Override
+    protected void processAttribute(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result) throws URISyntaxException, NavException {
+        int attributeConceptLinkIndex = getConceptLinkIndex(vn);
+        int attributeNameIndex = vn.getAttrVal("name");
 
-            result.computeIfAbsent(conceptLink, k -> new ArrayList<>()).add(xpath);
+        if (attributeNameIndex != -1 && attributeConceptLinkIndex != -1) {
+            String attributeName = vn.toNormalizedString(attributeNameIndex);
+            String conceptLink = vn.toNormalizedString(attributeConceptLinkIndex);
+
+            Pattern xpath = createXpath(elementPath, attributeName);
+
+            result.computeIfAbsent(conceptLink, k -> new ArrayList<Pattern>()).add(xpath);
 
             int vocabIndex = getVocabIndex(vn);
             if (vocabIndex != -1) {
