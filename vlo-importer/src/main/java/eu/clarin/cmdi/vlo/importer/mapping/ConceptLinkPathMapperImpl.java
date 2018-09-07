@@ -22,8 +22,9 @@ import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.Pattern;
 import eu.clarin.cmdi.vlo.importer.Vocabulary;
+import java.util.HashMap;
 
-public class ConceptLinkPathMapperImpl extends ProfileXsdWalker implements ConceptLinkPathMapper {
+public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, List<Pattern>>> implements ConceptLinkPathMapper {
 
     private final static Logger LOG = LoggerFactory.getLogger(FacetMappingFactory.class);
     private final VloConfig vloConfig;
@@ -45,6 +46,13 @@ public class ConceptLinkPathMapperImpl extends ProfileXsdWalker implements Conce
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    protected Map<String, List<Pattern>> createResultObject() {
+        return new HashMap<>();
+    }
+    
+    
 
     /**
      * "this is where the magic happens". Finds paths in the xsd to all concepts

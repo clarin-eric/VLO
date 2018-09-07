@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-public abstract class ProfileXsdWalker {
+public abstract class ProfileXsdWalker<R> {
 
     private final static Logger LOG = LoggerFactory.getLogger(ProfileXsdWalker.class);
 
@@ -47,9 +47,11 @@ public abstract class ProfileXsdWalker {
         this.xsd = xsd;
         this.useLocalXSDCache = useLocalXSDCache;
     }
+    
+    protected abstract R createResultObject();
 
-    protected Map<String, List<Pattern>> walkProfile() throws URISyntaxException, NavException {
-        Map<String, List<Pattern>> result = new HashMap<>();
+    protected R walkProfile() throws URISyntaxException, NavException {
+        R result = createResultObject();
         VTDGen vg = new VTDGen();
         boolean parseSuccess;
         if (useLocalXSDCache) {
@@ -81,9 +83,9 @@ public abstract class ProfileXsdWalker {
         return result;
     }
 
-    protected abstract void processAttributes(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result, String elementName) throws URISyntaxException;
+    protected abstract void processAttributes(VTDNav vn, LinkedList<Token> elementPath, R result, String elementName) throws URISyntaxException;
 
-    protected abstract void processElement(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result) throws NavException, URISyntaxException;
+    protected abstract void processElement(VTDNav vn, LinkedList<Token> elementPath, R result) throws NavException, URISyntaxException;
 
     /**
      * Given an xml-token path thingy create an xpath.
