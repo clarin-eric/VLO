@@ -5,7 +5,6 @@ import static eu.clarin.cmdi.vlo.CmdConstants.CMD_NAMESPACE;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,9 +36,7 @@ public class ConceptLinkPathMapperImpl implements ConceptLinkPathMapper {
         this.xsd = xsd;
         this.useLocalXSDCache = useLocalXSDCache;
     }
-
-
-
+    
     @Override
     public String getXsd() {
         // TODO Auto-generated method stub
@@ -82,77 +79,19 @@ public class ConceptLinkPathMapperImpl implements ConceptLinkPathMapper {
         VTDNav vn = vg.getNav();
         AutoPilot ap = new AutoPilot(vn);
         ap.selectElement("xs:element");
-        Deque<Token> elementPath = new LinkedList<>();
+        LinkedList<Token> elementPath = new LinkedList<>();
         while (ap.iterate()) {
             int i = vn.getAttrVal("name");
             if (i != -1) {
                 String elementName = vn.toNormalizedString(i);
                 updateElementPath(vn, elementPath, elementName);
-                int datcatIndex = getDatcatIndex(vn);
-                if (datcatIndex != -1) {
-                    String conceptLink = vn.toNormalizedString(datcatIndex);
-                    Pattern xpath = createXpath(elementPath, null);
-                    
-                    result.computeIfAbsent(conceptLink, k -> new ArrayList<Pattern>()).add(xpath);
-
-                    int vocabIndex = getVocabIndex(vn);
-                    if (vocabIndex != -1) {
-                        String uri = vn.toNormalizedString(vocabIndex);
-                        Vocabulary vocab = new Vocabulary(vloConfig.getVocabularyRegistryUrl(), new URI(uri));
-                        xpath.setVocabulary(vocab);
-                        int propIndex = getVocabPropIndex(vn);
-                        if (propIndex != -1) {
-                            String prop = vn.toNormalizedString(propIndex);
-                            vocab.setProperty(prop);
-                        }
-                        int langIndex = getVocabLangIndex(vn);
-                        if (langIndex != -1) {
-                            String lang = vn.toNormalizedString(langIndex);
-                            vocab.setLanguage(lang);
-                        }
-                    }
-                }
+                
+                processElementConceptLink(vn, elementPath, result);
 
                 // look for associated attributes with concept links
                 vn.push();
-                AutoPilot attributeAutopilot = new AutoPilot(vn);
-                attributeAutopilot.declareXPathNameSpace("xs", "http://www.w3.org/2001/XMLSchema");
-
-                try {
-                    attributeAutopilot.selectXPath("./xs:complexType/xs:simpleContent/xs:extension/xs:attribute | ./xs:complexType/xs:attribute");
-                    while (attributeAutopilot.evalXPath() != -1) {
-                        int attributeDatcatIndex = getDatcatIndex(vn);
-                        int attributeNameIndex = vn.getAttrVal("name");
-
-                        if (attributeNameIndex != -1 && attributeDatcatIndex != -1) {
-                            String attributeName = vn.toNormalizedString(attributeNameIndex);
-                            String conceptLink = vn.toNormalizedString(attributeDatcatIndex);
-
-                            Pattern xpath = createXpath(elementPath, attributeName);
-                            
-                            result.computeIfAbsent(conceptLink, k -> new ArrayList<Pattern>()).add(xpath);
-
-                            int vocabIndex = getVocabIndex(vn);
-                            if (vocabIndex != -1) {
-                                String uri = vn.toNormalizedString(vocabIndex);
-                                Vocabulary vocab = new Vocabulary(vloConfig.getVocabularyRegistryUrl(), new URI(uri));
-                                xpath.setVocabulary(vocab);
-                                int propIndex = getVocabPropIndex(vn);
-                                if (propIndex != -1) {
-                                    String prop = vn.toNormalizedString(propIndex);
-                                    vocab.setProperty(prop);
-                                }
-                                int langIndex = getVocabLangIndex(vn);
-                                if (langIndex != -1) {
-                                    String lang = vn.toNormalizedString(langIndex);
-                                    vocab.setLanguage(lang);
-                                }
-                            }
-                        }
-                    }
-                } catch (XPathParseException | XPathEvalException | NavException e) {
-                    LOG.error("Cannot extract attributes for element " + elementName + ". Will continue anyway...", e);
-                }
+                
+                processAttributes(vn, elementPath, result, elementName);
 
                 // returning to normal element-based workflow
                 vn.pop();
@@ -161,13 +100,85 @@ public class ConceptLinkPathMapperImpl implements ConceptLinkPathMapper {
         return result;
     }
 
+    private void processAttributes(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result, String elementName) throws URISyntaxException {
+        AutoPilot attributeAutopilot = new AutoPilot(vn);
+        attributeAutopilot.declareXPathNameSpace("xs", "http://www.w3.org/2001/XMLSchema");
+        
+        try {
+            attributeAutopilot.selectXPath("./xs:complexType/xs:simpleContent/xs:extension/xs:attribute | ./xs:complexType/xs:attribute");
+            while (attributeAutopilot.evalXPath() != -1) {
+                processAttributeConceptLink(vn, elementPath, result);
+            }
+        } catch (XPathParseException | XPathEvalException | NavException e) {
+            LOG.error("Cannot extract attributes for element " + elementName + ". Will continue anyway...", e);
+        }
+    }
+
+    private void processAttributeConceptLink(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result) throws URISyntaxException, NavException {
+        int attributeConceptLinkIndex = getConceptLinkIndex(vn);
+        int attributeNameIndex = vn.getAttrVal("name");
+        
+        if (attributeNameIndex != -1 && attributeConceptLinkIndex != -1) {
+            String attributeName = vn.toNormalizedString(attributeNameIndex);
+            String conceptLink = vn.toNormalizedString(attributeConceptLinkIndex);
+            
+            Pattern xpath = createXpath(elementPath, attributeName);
+            
+            result.computeIfAbsent(conceptLink, k -> new ArrayList<Pattern>()).add(xpath);
+            
+            int vocabIndex = getVocabIndex(vn);
+            if (vocabIndex != -1) {
+                String uri = vn.toNormalizedString(vocabIndex);
+                Vocabulary vocab = new Vocabulary(vloConfig.getVocabularyRegistryUrl(), new URI(uri));
+                xpath.setVocabulary(vocab);
+                int propIndex = getVocabPropIndex(vn);
+                if (propIndex != -1) {
+                    String prop = vn.toNormalizedString(propIndex);
+                    vocab.setProperty(prop);
+                }
+                int langIndex = getVocabLangIndex(vn);
+                if (langIndex != -1) {
+                    String lang = vn.toNormalizedString(langIndex);
+                    vocab.setLanguage(lang);
+                }
+            }
+        }
+    }
+
+    private void processElementConceptLink(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result) throws NavException, URISyntaxException {
+        int datcatIndex = getConceptLinkIndex(vn);
+        if (datcatIndex != -1) {
+            String conceptLink = vn.toNormalizedString(datcatIndex);
+            Pattern xpath = createXpath(elementPath, null);
+            
+            result.computeIfAbsent(conceptLink, k -> new ArrayList<>()).add(xpath);
+            
+            int vocabIndex = getVocabIndex(vn);
+            if (vocabIndex != -1) {
+                String uri = vn.toNormalizedString(vocabIndex);
+                Vocabulary vocab = new Vocabulary(vloConfig.getVocabularyRegistryUrl(), new URI(uri));
+                xpath.setVocabulary(vocab);
+                int propIndex = getVocabPropIndex(vn);
+                if (propIndex != -1) {
+                    String prop = vn.toNormalizedString(propIndex);
+                    vocab.setProperty(prop);
+                }
+                int langIndex = getVocabLangIndex(vn);
+                if (langIndex != -1) {
+                    String lang = vn.toNormalizedString(langIndex);
+                    vocab.setLanguage(lang);
+                }
+            }
+        }
+    }
+
     /**
-     * Goal is to get the "datcat" attribute. Tries a number of different favors
+     * Goal is to get the "ConceptLink" attribute. Tries a number of different favors
      * that were found in the xsd's.
      *
      * @return -1 if index is not found.
      */
-    private int getDatcatIndex(VTDNav vn) throws NavException {
+    private int getConceptLinkIndex(VTDNav vn) throws NavException {
         int result = -1;
         result = vn.getAttrValNS(CMD_NAMESPACE, "ConceptLink");
         if (result == -1) {
@@ -229,7 +240,7 @@ public class ConceptLinkPathMapperImpl implements ConceptLinkPathMapper {
      * not null
      * @return
      */
-    private Pattern createXpath(Deque<Token> elementPath, String attributeName) {
+    private Pattern createXpath(List<Token> elementPath, String attributeName) {
         StringBuilder xpath = new StringBuilder("/cmd:CMD/cmd:Components/");
         for (Token token : elementPath) {
             xpath.append("cmdp:").append(token.name).append("/");
@@ -249,7 +260,7 @@ public class ConceptLinkPathMapperImpl implements ConceptLinkPathMapper {
      * @param elementPath
      * @param elementName
      */
-    private void updateElementPath(VTDNav vn, Deque<Token> elementPath, String elementName) {
+    private void updateElementPath(VTDNav vn, LinkedList<Token> elementPath, String elementName) {
         int previousDepth = elementPath.isEmpty() ? -1 : elementPath.peekLast().depth;
         int currentDepth = vn.getCurrentDepth();
         if (currentDepth == previousDepth) {
