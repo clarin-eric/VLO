@@ -20,6 +20,8 @@ import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
+import com.ximpleware.XPathEvalException;
+import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.Pattern;
 import java.net.URISyntaxException;
@@ -83,8 +85,22 @@ public abstract class ProfileXsdWalker<R> {
         return result;
     }
 
-    protected abstract void processAttributes(VTDNav vn, LinkedList<Token> elementPath, R result, String elementName) throws URISyntaxException;
+    protected void processAttributes(VTDNav vn, LinkedList<Token> elementPath, R result, String elementName) throws URISyntaxException {
+        AutoPilot attributeAutopilot = new AutoPilot(vn);
+        attributeAutopilot.declareXPathNameSpace("xs", "http://www.w3.org/2001/XMLSchema");
 
+        try {
+            attributeAutopilot.selectXPath("./xs:complexType/xs:simpleContent/xs:extension/xs:attribute | ./xs:complexType/xs:attribute");
+            while (attributeAutopilot.evalXPath() != -1) {
+                processAttribute(vn, elementPath, result);
+            }
+        } catch (XPathParseException | XPathEvalException | NavException e) {
+            LOG.error("Cannot extract attributes for element " + elementName + ". Will continue anyway...", e);
+        }
+    }
+    
+    protected abstract void processAttribute(VTDNav vn, LinkedList<Token> elementPath, R result) throws URISyntaxException, NavException;
+    
     protected abstract void processElement(VTDNav vn, LinkedList<Token> elementPath, R result) throws NavException, URISyntaxException;
 
     /**

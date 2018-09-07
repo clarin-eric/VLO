@@ -71,21 +71,8 @@ public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, List
         return walkProfile();
     }
 
-    protected void processAttributes(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result, String elementName) throws URISyntaxException {
-        AutoPilot attributeAutopilot = new AutoPilot(vn);
-        attributeAutopilot.declareXPathNameSpace("xs", "http://www.w3.org/2001/XMLSchema");
-
-        try {
-            attributeAutopilot.selectXPath("./xs:complexType/xs:simpleContent/xs:extension/xs:attribute | ./xs:complexType/xs:attribute");
-            while (attributeAutopilot.evalXPath() != -1) {
-                processAttributeConceptLink(vn, elementPath, result);
-            }
-        } catch (XPathParseException | XPathEvalException | NavException e) {
-            LOG.error("Cannot extract attributes for element " + elementName + ". Will continue anyway...", e);
-        }
-    }
-
-    private void processAttributeConceptLink(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result) throws URISyntaxException, NavException {
+    @Override
+    protected void processAttribute(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result) throws URISyntaxException, NavException {
         int attributeConceptLinkIndex = getConceptLinkIndex(vn);
         int attributeNameIndex = vn.getAttrVal("name");
 
