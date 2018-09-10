@@ -144,7 +144,8 @@ public class MetadataImporter {
         this.postProcessors = registerPostProcessors(config, this.fieldNameService, languageCodeUtils);
         this.solrBridge = solrBrdige;
 
-        final CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
+        final CMDIDataSolrImplFactory cmdiDataFactory = new CMDIDataSolrImplFactory(fieldNameService);
+        final CMDIDataProcessor<SolrInputDocument> processor = new CMDIParserVTDXML<>(postProcessors, config, mappingFactory, marshaller, cmdiDataFactory, false);
         this.recordProcessor = new CMDIRecordProcessor(processor, solrBrdige, fieldNameService, stats);
 
     }

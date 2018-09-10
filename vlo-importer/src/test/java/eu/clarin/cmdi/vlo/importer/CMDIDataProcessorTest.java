@@ -24,7 +24,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     private ResourceStructureGraph resourceStructureGraph;
 
     private CMDIDataProcessor<SolrInputDocument> getDataParser() {
-        return new CMDIParserVTDXML<>(MetadataImporter.registerPostProcessors(config, fieldNameService, languageCodeUtils), config, facetMappingFactory, marshaller, true);
+        return new CMDIParserVTDXML<>(MetadataImporter.registerPostProcessors(config, fieldNameService, languageCodeUtils), config, facetMappingFactory, marshaller, new CMDIDataSolrImplFactory(fieldNameService), true);
     }
 
     @Before
@@ -440,7 +440,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "      </cmdp:Session>\n";
         content += "   </Components>\n";
         content += "</CMD>\n";
-        File cmdiFile = createCmdiFile("testSession", content);        
+        File cmdiFile = createCmdiFile("testSession", content);
         CMDIDataProcessor<SolrInputDocument> processor = getDataParser();
         CMDIData<SolrInputDocument> data = processor.process(cmdiFile, resourceStructureGraph);
         assertEquals("kleve-route", data.getDocument().getFieldValue(fieldNameService.getFieldName(FieldKey.NAME)));

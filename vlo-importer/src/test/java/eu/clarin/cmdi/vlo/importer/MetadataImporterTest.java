@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.importer.solr.DummySolrBridgeImpl;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.DataRoot;
+import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 
 import java.io.File;
 import java.io.IOException;
@@ -405,7 +406,7 @@ public class MetadataImporterTest extends ImporterTestcase {
                                  */
                                 try {
                                     getRecordProcessor().processCmdi(file, dataRoot, null, null);
-                                } catch (SolrServerException ex) {
+                                } catch (DocumentStoreException ex) {
                                     Logger.getLogger(MetadataImporterTest.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }

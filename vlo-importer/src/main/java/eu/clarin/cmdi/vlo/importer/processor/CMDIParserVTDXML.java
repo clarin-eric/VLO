@@ -6,7 +6,7 @@ import com.ximpleware.VTDNav;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
-import eu.clarin.cmdi.vlo.importer.CMDIDataSolrImpl;
+import eu.clarin.cmdi.vlo.importer.CMDIDataFactory;
 import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
 import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
@@ -29,23 +29,23 @@ public class CMDIParserVTDXML<T> implements CMDIDataProcessor {
     private final Map<String, AbstractPostNormalizer> postProcessors;
     private final Boolean useLocalXSDCache;
 
+    private final CMDIDataFactory<T> cmdiDataFactory;
     private final FacetMappingFactory facetMappingFactory;
-    private final FieldNameServiceImpl fieldNameService;
     private final VloConfig config;
     private final VLOMarshaller marshaller;
 
-    public CMDIParserVTDXML(Map<String, AbstractPostNormalizer> postProcessors, VloConfig config, FacetMappingFactory facetMappingFactory, VLOMarshaller marshaller, Boolean useLocalXSDCache) {
+    public CMDIParserVTDXML(Map<String, AbstractPostNormalizer> postProcessors, VloConfig config, FacetMappingFactory facetMappingFactory, VLOMarshaller marshaller, CMDIDataFactory<T> cmdiDataFactory, Boolean useLocalXSDCache) {
         this.config = config;
         this.marshaller = marshaller;
         this.postProcessors = postProcessors;
         this.useLocalXSDCache = useLocalXSDCache;
         this.facetMappingFactory = facetMappingFactory;
-        this.fieldNameService = new FieldNameServiceImpl(config);
+        this.cmdiDataFactory = cmdiDataFactory;
     }
 
     @Override
     public CMDIData<T> process(File file, ResourceStructureGraph resourceStructureGraph) throws CMDIParsingException, VTDException, IOException, URISyntaxException {
-        final CMDIData cmdiData = new CMDIDataSolrImpl(this.fieldNameService); //TODO: Factory!
+        final CMDIData<T> cmdiData = cmdiDataFactory.newCMDIDataInstance();
         final VTDGen vg = new VTDGen();
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
             vg.setDoc(IOUtils.toByteArray(fileInputStream));

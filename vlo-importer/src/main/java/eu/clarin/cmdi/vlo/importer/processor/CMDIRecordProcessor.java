@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStore;
@@ -49,7 +48,7 @@ public class CMDIRecordProcessor<T> {
 
     protected final static Logger LOG = LoggerFactory.getLogger(CMDIRecordProcessor.class);
     private final FieldNameServiceImpl fieldNameService;
-    private final CMDIDataProcessor processor;
+    private final CMDIDataProcessor<T> processor;
     private final ImportStatistics stats;
     private final DocumentStore documentStore;
 
@@ -58,7 +57,7 @@ public class CMDIRecordProcessor<T> {
      */
     private final Set<String> processedIds = Sets.newConcurrentHashSet();
 
-    public CMDIRecordProcessor(CMDIDataProcessor processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ImportStatistics importStatistics) {
+    public CMDIRecordProcessor(CMDIDataProcessor<T> processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ImportStatistics importStatistics) {
         this.processor = processor;
         this.documentStore = documentStore;
         this.fieldNameService = fieldNameService;
