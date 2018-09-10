@@ -120,9 +120,8 @@ public class CMDIRecordImporter<T> {
     }
 
     /**
-     * Adds some additional information from DataRoot to solrDocument, add
-     * solrDocument to document list, submits list to SolrServer every 1000
-     * files
+     * Adds some additional information from DataRoot to the document, add
+     * document to document store
      *
      * @param document
      * @param cmdiData
@@ -157,19 +156,19 @@ public class CMDIRecordImporter<T> {
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA), metadataSourceUrl, false);
 
         // add SearchServices (should be CQL endpoint)
-        for (Resource resource : cmdiData.getSearchResources()) {
+        cmdiData.getSearchResources().forEach((resource) -> {
             cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE), resource.getResourceName(), false);
-        }
+        });
 
         // add landing page resource
-        for (Resource resource : cmdiData.getLandingPageResources()) {
+        cmdiData.getLandingPageResources().forEach((resource) -> {
             cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), resource.getResourceName(), false);
-        }
+        });
 
         // add search page resource
-        for (Resource resource : cmdiData.getSearchPageResources()) {
+        cmdiData.getSearchPageResources().forEach((resource) -> {
             cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SEARCHPAGE), resource.getResourceName(), false);
-        }
+        });
 
         // add timestamp
         Date dt = new Date();
@@ -182,7 +181,7 @@ public class CMDIRecordImporter<T> {
         // add resource proxys      
         addResourceData(document, cmdiData);
 
-        LOG.debug("Adding document for submission to SOLR: {}", file);
+        LOG.debug("Submitting to document store: {}", file);
 
         documentStore.addDocument(document);
         if (stats.nrOFDocumentsSent().incrementAndGet() % 250 == 0) {
@@ -194,7 +193,7 @@ public class CMDIRecordImporter<T> {
      * Adds two fields FIELD_FORMAT and FIELD_RESOURCE. The Type can be
      * specified in the "ResourceType" element of an imdi file or possibly
      * overwritten by some more specific xpath (as in the LRT cmdi files). So if
-     * a type is overwritten and already in the solrDocument we take that type.
+     * a type is overwritten and already in the document we take that type.
      *
      * @param document
      * @param cmdiData
