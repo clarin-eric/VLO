@@ -23,6 +23,7 @@ public class CMDIDataSolrImpl extends CMDIDataBaseImpl<SolrInputDocument> {
         super(fieldNameService);
     }
 
+    @Override
     public SolrInputDocument getDocument() {
         return doc;
     }
@@ -34,29 +35,34 @@ public class CMDIDataSolrImpl extends CMDIDataBaseImpl<SolrInputDocument> {
      * @param valueSet
      * @param caseInsensitive
      */
+    @Override
     public void addDocField(ValueSet valueSet, boolean caseInsensitive) {
         addDocField(valueSet.getTargetFacetName(), valueSet.getValue(), caseInsensitive);
     }
 
+    @Override
     public void replaceDocField(ValueSet valueSet, boolean caseInsensitive) {
         replaceDocField(valueSet.getTargetFacetName(), valueSet.getValue(), caseInsensitive);
     }
 
-    public void addDocField(String fieldName, String value, boolean caseInsensitive) {
+    @Override
+    public void addDocField(String fieldName, Object value, boolean caseInsensitive) {
         if (fieldNameService.getFieldName(FieldKey.ID).equals(fieldName)) {
-            setId(value.trim());
+            setId(value.toString().trim());
         } else {
             handleDocField(fieldName, value, caseInsensitive);
         }
     }
 
-    public void replaceDocField(String name, String value, boolean caseInsensitive) {
+    @Override
+    public void replaceDocField(String name, Object value, boolean caseInsensitive) {
         if (this.doc != null) {
             this.doc.removeField(name);
         }
         this.addDocField(name, value, caseInsensitive);
     }
 
+    @Override
     public void addDocFieldIfNull(ValueSet valueSet, boolean caseInsensitive) {
         if (this.getDocField(valueSet.getTargetFacetName()) == null) {
             this.addDocField(valueSet, caseInsensitive);
@@ -71,20 +77,20 @@ public class CMDIDataSolrImpl extends CMDIDataBaseImpl<SolrInputDocument> {
      * @param value
      * @param caseInsensitive
      */
-    private void handleDocField(String name, String value, boolean caseInsensitive) {
+    private void handleDocField(String name, Object value, boolean caseInsensitive) {
         if (doc == null) {
             doc = new SolrInputDocument();
         }
-        if (value != null && !value.trim().isEmpty()) {
+        if (value instanceof String && !((String) value).trim().isEmpty()) {
             if (caseInsensitive) {
-                value = value.toLowerCase();
+                value = ((String) value).toLowerCase();
             }
             Collection<Object> fieldValues = doc.getFieldValues(name);
             if (fieldValues == null || !fieldValues.contains(value)) {
                 // if availability facet reduce tag to most restrictive
                 if (name.equals(fieldNameService.getFieldName(FieldKey.AVAILABILITY))
                         || name.equals(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE))) {
-                    reduceAvailability(name, value);
+                    reduceAvailability(name, value.toString());
                 } else {
                     doc.addField(name, value);
                 }

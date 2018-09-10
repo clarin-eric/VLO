@@ -134,50 +134,50 @@ public class CMDIRecordImporter<T> {
      */
     protected void updateDocument(T document, CMDIData<T> cmdiData, File file, DataRoot dataOrigin, EndpointDescription endpointDescription) throws DocumentStoreException,
             IOException {
-        document.addField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER), dataOrigin.getOriginName());
-        document.addField(fieldNameService.getFieldName(FieldKey.ID), cmdiData.getId());
-        document.addField(fieldNameService.getFieldName(FieldKey.FILENAME), file.getAbsolutePath());
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER), dataOrigin.getOriginName(), false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.ID), cmdiData.getId(), false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FILENAME), file.getAbsolutePath(), false);
 
         // data provided by CLARIN's OAI-PMH harvester
         if (endpointDescription != null) {
             if (endpointDescription.getOaiEndpointUrl() != null) {
-                document.addField(fieldNameService.getFieldName(FieldKey.OAI_ENDPOINT_URI), endpointDescription.getOaiEndpointUrl());
+                cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.OAI_ENDPOINT_URI), endpointDescription.getOaiEndpointUrl(), false);
             }
             if (endpointDescription.getNationalProject() != null) {
-                document.addField(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT), endpointDescription.getNationalProject());
+                cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT), endpointDescription.getNationalProject(), false);
             }
             if (endpointDescription.getCentreName() != null) {
-                document.addField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER_NAME), endpointDescription.getCentreName());
+                cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER_NAME), endpointDescription.getCentreName(), false);
             }
         }
 
         String metadataSourceUrl = dataOrigin.getPrefix();
         metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getToStrip().length());
 
-        document.addField(fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA), metadataSourceUrl);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA), metadataSourceUrl, false);
 
         // add SearchServices (should be CQL endpoint)
         for (Resource resource : cmdiData.getSearchResources()) {
-            document.addField(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE), resource.getResourceName());
+            cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE), resource.getResourceName(), false);
         }
 
         // add landing page resource
         for (Resource resource : cmdiData.getLandingPageResources()) {
-            document.addField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), resource.getResourceName());
+            cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), resource.getResourceName(), false);
         }
 
         // add search page resource
         for (Resource resource : cmdiData.getSearchPageResources()) {
-            document.addField(fieldNameService.getFieldName(FieldKey.SEARCHPAGE), resource.getResourceName());
+            cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SEARCHPAGE), resource.getResourceName(), false);
         }
 
         // add timestamp
         Date dt = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        document.addField(fieldNameService.getFieldName(FieldKey.LAST_SEEN), df.format(dt));
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LAST_SEEN), df.format(dt), false);
 
         // set number of days since last import to '0'
-        document.addField(fieldNameService.getFieldName(FieldKey.DAYS_SINCE_LAST_SEEN), 0);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DAYS_SINCE_LAST_SEEN), 0, false);
 
         // add resource proxys      
         addResourceData(document, cmdiData);
@@ -215,16 +215,15 @@ public class CMDIRecordImporter<T> {
                 }
             }
 
-            FormatPostNormalizer processor = new FormatPostNormalizer();
-            mimeType = processor.process(mimeType, null).get(0);
+            mimeType = new FormatPostNormalizer().process(mimeType, null).get(0);
 
             // TODO check should probably be moved into Solr (by using some minimum length filter)
             if (!mimeType.equals("")) {
-                document.addField(fieldNameService.getFieldName(FieldKey.FORMAT), mimeType);
+                cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FORMAT), mimeType, true);
             }
-            document.addField(fieldNameService.getFieldName(FieldKey.RESOURCE), mimeType + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR
-                    + resource.getResourceName());
+            cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE), mimeType + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR
+                    + resource.getResourceName(), false);
         }
-        document.addField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size());
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size(), false);
     }
 }

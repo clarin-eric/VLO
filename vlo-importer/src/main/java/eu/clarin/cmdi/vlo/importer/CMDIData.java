@@ -35,7 +35,7 @@ public interface CMDIData<T> extends DocFieldContainer {
      */
     void addDocField(ValueSet valueSet, boolean caseInsensitive);
 
-    void addDocField(String fieldName, String value, boolean caseInsensitive);
+    void addDocField(String fieldName, Object value, boolean caseInsensitive);
 
     void addDocFieldIfNull(ValueSet valueSet, boolean caseInsensitive);
 
@@ -91,7 +91,7 @@ public interface CMDIData<T> extends DocFieldContainer {
 
     void replaceDocField(ValueSet valueSet, boolean caseInsensitive);
 
-    void replaceDocField(String name, String value, boolean caseInsensitive);
+    void replaceDocField(String name, Object value, boolean caseInsensitive);
 
     void setId(String id);
     
