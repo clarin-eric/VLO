@@ -39,6 +39,7 @@ import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.CMDIDataSolrImpl;
 import org.apache.solr.SolrTestCaseJ4;
 
 import org.junit.BeforeClass;
@@ -89,17 +90,17 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
 
         // add some documents
         int id = 1;
-        CMDIData cmdiData = new CMDIData(fieldNameService);
+        CMDIData<SolrInputDocument> cmdiData = new CMDIDataSolrImpl(fieldNameService);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "Collection1", false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COUNTRY), "Country1", false);
-        SolrInputDocument document = cmdiData.getSolrDocument();
+        SolrInputDocument document = cmdiData.getDocument();
         document.addField("id", Integer.toString(id++));
         server.add(document);
 
-        cmdiData = new CMDIData(fieldNameService);
+        cmdiData = new CMDIDataSolrImpl(fieldNameService);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "Collection1", false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COUNTRY), "Country2", false);
-        document = cmdiData.getSolrDocument();
+        document = cmdiData.getDocument();
         document.addField("id", Integer.toString(id++));
         server.add(document);
 
