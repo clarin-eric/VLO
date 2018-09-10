@@ -37,7 +37,13 @@ public class CMDIDataSolrImpl extends CMDIDataBaseImpl<SolrInputDocument> {
      */
     @Override
     public void addDocField(ValueSet valueSet, boolean caseInsensitive) {
-        addDocField(valueSet.getTargetFacetName(), valueSet.getValue(), caseInsensitive);
+        final String fieldName = valueSet.getTargetFacetName();
+        final String value = valueSet.getValue();
+        if (fieldNameService.getFieldName(FieldKey.ID).equals(fieldName)) {
+            setId(value.trim());
+        } else {
+            addDocField(fieldName, value, caseInsensitive);
+        }
     }
 
     @Override
@@ -47,11 +53,7 @@ public class CMDIDataSolrImpl extends CMDIDataBaseImpl<SolrInputDocument> {
 
     @Override
     public void addDocField(String fieldName, Object value, boolean caseInsensitive) {
-        if (fieldNameService.getFieldName(FieldKey.ID).equals(fieldName)) {
-            setId(value.toString().trim());
-        } else {
-            handleDocField(fieldName, value, caseInsensitive);
-        }
+        handleDocField(fieldName, value, caseInsensitive);
     }
 
     @Override
@@ -78,12 +80,10 @@ public class CMDIDataSolrImpl extends CMDIDataBaseImpl<SolrInputDocument> {
     public boolean hasField(String name) {
         return this.doc.containsKey(name);
     }
-    
+
     public Collection<Object> getFieldValues(String name) {
         return this.doc.getFieldValues(name);
     }
-    
-    
 
     /**
      * Sets a field in the doc to a certain value. Before adding checks for
