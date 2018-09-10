@@ -14,20 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.importer.processor;
+package eu.clarin.cmdi.vlo.importer;
 
 import com.google.common.collect.Sets;
-import eu.clarin.cmdi.vlo.importer.ImportStatistics;
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
-import eu.clarin.cmdi.vlo.importer.CMDIData;
-import eu.clarin.cmdi.vlo.importer.EndpointDescription;
-import eu.clarin.cmdi.vlo.importer.Resource;
-import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
 import eu.clarin.cmdi.vlo.importer.normalizer.FormatPostNormalizer;
+import eu.clarin.cmdi.vlo.importer.processor.CMDIDataProcessor;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -41,12 +37,14 @@ import eu.clarin.cmdi.vlo.importer.solr.DocumentStore;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 
 /**
+ * Handles a single record in the import process
  *
  * @author Twan Goosen <twan@clarin.eu>
+ * @param <T>
  */
-public class CMDIRecordProcessor<T> {
+public class CMDIRecordImporter<T> {
 
-    protected final static Logger LOG = LoggerFactory.getLogger(CMDIRecordProcessor.class);
+    protected final static Logger LOG = LoggerFactory.getLogger(CMDIRecordImporter.class);
     private final FieldNameServiceImpl fieldNameService;
     private final CMDIDataProcessor<T> processor;
     private final ImportStatistics stats;
@@ -57,13 +55,13 @@ public class CMDIRecordProcessor<T> {
      */
     private final Set<String> processedIds = Sets.newConcurrentHashSet();
 
-    public CMDIRecordProcessor(CMDIDataProcessor<T> processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ImportStatistics importStatistics) {
+    public CMDIRecordImporter(CMDIDataProcessor<T> processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ImportStatistics importStatistics) {
         this.processor = processor;
         this.documentStore = documentStore;
         this.fieldNameService = fieldNameService;
         this.stats = importStatistics;
     }
-    
+
     /**
      * Process single CMDI file with CMDIDataProcessor
      *
@@ -74,7 +72,7 @@ public class CMDIRecordProcessor<T> {
      * @throws eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException
      * @throws IOException
      */
-    public void processCmdi(File file, DataRoot dataOrigin, ResourceStructureGraph resourceStructureGraph, EndpointDescription endpointDescription) throws DocumentStoreException, IOException {
+    public void importRecord(File file, DataRoot dataOrigin, ResourceStructureGraph resourceStructureGraph, EndpointDescription endpointDescription) throws DocumentStoreException, IOException {
         stats.nrOfFilesAnalyzed().incrementAndGet();
         CMDIData<T> cmdiData = null;
         try {

@@ -370,9 +370,9 @@ public class MetadataImporterTest extends ImporterTestcase {
              * available, override the importer's class startImport method by
              * leaving out interaction with server. 
              * 
-             * By invoking the processCmdi method, the class being defined here
+             * By invoking the importRecord method, the class being defined here
              * needs to anticipate on an exception possibly thrown by the 
-             * processCmdi method invoking the sendDocs method. Please note 
+             * importRecord method invoking the sendDocs method. Please note 
              * however, that the latter method is overriden, and the actual 
              * database is being replaced by an array of documents.
              */
@@ -405,7 +405,7 @@ public class MetadataImporterTest extends ImporterTestcase {
                                  * in a suitable way.
                                  */
                                 try {
-                                    getRecordProcessor().processCmdi(file, dataRoot, null, null);
+                                    getRecordProcessor().importRecord(file, dataRoot, null, null);
                                 } catch (DocumentStoreException ex) {
                                     Logger.getLogger(MetadataImporterTest.class.getName()).log(Level.SEVERE, null, ex);
                                 }

@@ -103,7 +103,7 @@ public class MetadataImporter {
      */
     private final SolrBridge solrBridge;
 
-    private final CMDIRecordProcessor<SolrInputDocument> recordProcessor;
+    private final CMDIRecordImporter<SolrInputDocument> recordHandler;
     private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
 
     private static class DefaultSolrBridgeFactory {
@@ -146,7 +146,7 @@ public class MetadataImporter {
 
         final CMDIDataSolrImplFactory cmdiDataFactory = new CMDIDataSolrImplFactory(fieldNameService);
         final CMDIDataProcessor<SolrInputDocument> processor = new CMDIParserVTDXML<>(postProcessors, config, mappingFactory, marshaller, cmdiDataFactory, false);
-        this.recordProcessor = new CMDIRecordProcessor(processor, solrBrdige, fieldNameService, stats);
+        this.recordHandler = new CMDIRecordImporter(processor, solrBrdige, fieldNameService, stats);
 
     }
 
@@ -319,7 +319,7 @@ public class MetadataImporter {
         final Stream<Callable<Void>> processors = centreFiles.stream().map((File file) -> {
             return (Callable) () -> {
                 LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
-                recordProcessor.processCmdi(file, dataRoot, resourceStructureGraph, directoryEndpointMap.get(file.getParentFile().getName()));
+                recordHandler.importRecord(file, dataRoot, resourceStructureGraph, directoryEndpointMap.get(file.getParentFile().getName()));
                 return null;
             };
         });
@@ -708,8 +708,8 @@ public class MetadataImporter {
         return stats;
     }
 
-    protected CMDIRecordProcessor getRecordProcessor() {
-        return recordProcessor;
+    protected CMDIRecordImporter getRecordProcessor() {
+        return recordHandler;
     }
 
     /**
