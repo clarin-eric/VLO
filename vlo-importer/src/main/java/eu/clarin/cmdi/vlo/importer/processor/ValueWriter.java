@@ -94,7 +94,7 @@ public class ValueWriter {
     private void insertFacetValue(CMDIData cmdiData, FacetConfiguration facetConfig, ValueSet valueSet) {
         if (facetConfig.getName().equals(fieldNameService.getFieldName(FieldKey.DESCRIPTION))) {
             valueSet = valueSet.makeCopy();
-            valueSet.setValue("{" + valueSet.getLanguage() + "}" + valueSet.getValue());
+            valueSet.setValue("{" + valueSet.getLanguage() + "}" + valueSet.getValue().trim());
         }
 
         cmdiData.addDocField(valueSet, facetConfig.isCaseInsensitive());
