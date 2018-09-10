@@ -24,11 +24,53 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ImportStatistics {
     
-    public final AtomicInteger nrOFDocumentsSent = new AtomicInteger();
-    public final AtomicInteger nrOfFilesAnalyzed = new AtomicInteger();
-    public final AtomicInteger nrOfFilesSkipped = new AtomicInteger();
-    public final AtomicInteger nrOfFilesWithoutId = new AtomicInteger();
-    public final AtomicInteger nrOfFilesWithError = new AtomicInteger();
-    public final AtomicInteger nrOfFilesTooLarge = new AtomicInteger();
+    private final AtomicInteger nrOFDocumentsSent = new AtomicInteger();
+    private final AtomicInteger nrOfFilesAnalyzed = new AtomicInteger();
+    private final AtomicInteger nrOfFilesSkipped = new AtomicInteger();
+    private final AtomicInteger nrOfFilesWithoutId = new AtomicInteger();
+    private final AtomicInteger nrOfFilesWithError = new AtomicInteger();
+    private final AtomicInteger nrOfFilesTooLarge = new AtomicInteger();
+
+    /**
+     * @return the nrOFDocumentsSent
+     */
+    public AtomicInteger nrOFDocumentsSent() {
+        return nrOFDocumentsSent;
+    }
+
+    /**
+     * @return the nrOfFilesAnalyzed
+     */
+    public AtomicInteger nrOfFilesAnalyzed() {
+        return nrOfFilesAnalyzed;
+    }
+
+    /**
+     * @return the nrOfFilesSkipped
+     */
+    public AtomicInteger nrOfFilesSkipped() {
+        return nrOfFilesSkipped;
+    }
+
+    /**
+     * @return the nrOfFilesWithoutId
+     */
+    public AtomicInteger nrOfFilesWithoutId() {
+        return nrOfFilesWithoutId;
+    }
+
+    /**
+     * @return the nrOfFilesWithError
+     */
+    public AtomicInteger nrOfFilesWithError() {
+        return nrOfFilesWithError;
+    }
+
+    /**
+     * @return the nrOfFilesTooLarge
+     */
+    public AtomicInteger nrOfFilesTooLarge() {
+        return nrOfFilesTooLarge;
+    }
     
 }

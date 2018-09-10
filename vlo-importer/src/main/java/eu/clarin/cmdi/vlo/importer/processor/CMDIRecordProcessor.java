@@ -49,13 +49,19 @@ public class CMDIRecordProcessor {
     protected final static Logger LOG = LoggerFactory.getLogger(CMDIRecordProcessor.class);
     private final FieldNameServiceImpl fieldNameService;
     private final CMDIDataProcessor processor;
-    private final ImportStatistics importStatistics;
+    private final ImportStatistics stats;
 
     /**
      * Contains MDSelflinks (usually). Just to know what we have already done.
      */
     private final Set<String> processedIds = Sets.newConcurrentHashSet();
 
+    public CMDIRecordProcessor(FieldNameServiceImpl fieldNameService, CMDIDataProcessor processor, ImportStatistics importStatistics) {
+        this.fieldNameService = fieldNameService;
+        this.processor = processor;
+        this.stats = importStatistics;
+    }
+    
     /**
      * Process single CMDI file with CMDIDataProcessor
      *
@@ -67,21 +73,21 @@ public class CMDIRecordProcessor {
      * @throws IOException
      */
     protected void processCmdi(File file, DataRoot dataOrigin, ResourceStructureGraph resourceStructureGraph, EndpointDescription endpointDescription) throws SolrServerException, IOException {
-        importStatistics.nrOfFilesAnalyzed.incrementAndGet();
+        stats.nrOfFilesAnalyzed().incrementAndGet();
         CMDIData cmdiData = null;
         try {
             cmdiData = processor.process(file, resourceStructureGraph);
             if (!idOk(cmdiData.getId())) {
                 cmdiData.setId(dataOrigin.getOriginName() + "/" + file.getName()); //No id found in the metadata file so making one up based on the file name. Not quaranteed to be unique, but we have to set something.
-                importStatistics.nrOfFilesWithoutId.incrementAndGet();
+                stats.nrOfFilesWithoutId().incrementAndGet();
             }
         } catch (Exception e) {
             LOG.error("error in file: {}", file, e);
-            importStatistics.nrOfFilesWithError.incrementAndGet();
+            stats.nrOfFilesWithError().incrementAndGet();
         }
         if (cmdiData != null) {
             if (!cmdiData.hasResources()) {
-                importStatistics.nrOfFilesSkipped.incrementAndGet();
+                stats.nrOfFilesSkipped().incrementAndGet();
                 LOG.warn("Skipping {}, no resource proxy found", file);
                 return;
             }
@@ -97,7 +103,7 @@ public class CMDIRecordProcessor {
                     }
                 }
             } else {
-                importStatistics.nrOfFilesSkipped.incrementAndGet();
+                stats.nrOfFilesSkipped().incrementAndGet();
                 LOG.warn("Skipping {}, already processed id: {}", file, cmdiData.getId());
             }
         }
@@ -179,8 +185,8 @@ public class CMDIRecordProcessor {
         LOG.debug("Adding document for submission to SOLR: {}", file);
 
         solrBridge.addDocument(solrDocument);
-        if (importStatistics.nrOFDocumentsSent.incrementAndGet() % 250 == 0) {
-            LOG.info("Number of documents sent thus far: {}", importStatistics.nrOFDocumentsSent);
+        if (stats.nrOFDocumentsSent().incrementAndGet() % 250 == 0) {
+            LOG.info("Number of documents sent thus far: {}", stats.nrOFDocumentsSent());
         }
     }
 

@@ -129,12 +129,7 @@ public class MetadataImporter {
     //protected List<SolrInputDocument> docs = new ArrayList<>();
 
     // SOME STATS
-    protected final AtomicInteger nrOFDocumentsSent = new AtomicInteger();
-    protected final AtomicInteger nrOfFilesAnalyzed = new AtomicInteger();
-    protected final AtomicInteger nrOfFilesSkipped = new AtomicInteger();
-    protected final AtomicInteger nrOfFilesWithoutId = new AtomicInteger();
-    protected final AtomicInteger nrOfFilesWithError = new AtomicInteger();
-    protected final AtomicInteger nrOfFilesTooLarge = new AtomicInteger();
+    private final ImportStatistics stats = new ImportStatistics();
     private Long time;
     private final FieldNameServiceImpl fieldNameService;
 
@@ -316,7 +311,7 @@ public class MetadataImporter {
         final Set<Callable<Void>> processorsCollection = processors.collect(Collectors.toSet());
         fileProcessingPool.invokeAll(processorsCollection);
 
-        LOG.info("Number of documents sent thus far: {}", nrOFDocumentsSent);
+        LOG.info("Number of documents sent thus far: {}", stats.nrOFDocumentsSent());
         solrBridge.commit();
         if (resourceStructureGraph != null) {
             fileProcessingPool.submit(() -> {
@@ -360,7 +355,7 @@ public class MetadataImporter {
         if (config.getMaxFileSize() > 0
                 && file.length() > config.getMaxFileSize()) {
             LOG.info("Skipping {} because it is too large.", file.getAbsolutePath());
-            nrOfFilesTooLarge.incrementAndGet();
+            stats.nrOfFilesTooLarge().incrementAndGet();
             ignoredFileSet.add(file);
         } else if (createHierarchyGraph) {
             String mdSelfLink = null;
@@ -368,7 +363,7 @@ public class MetadataImporter {
                 mdSelfLink = processor.extractMdSelfLink(file);
             } catch (Exception e) {
                 LOG.error("error in file: {}", file, e);
-                nrOfFilesWithError.incrementAndGet();
+                stats.nrOfFilesWithError().incrementAndGet();
             }
             if (mdSelfLink != null) {
                 mdSelfLinkSet.add(StringUtils.normalizeIdString(mdSelfLink));
@@ -389,11 +384,11 @@ public class MetadataImporter {
     }
 
     protected void logStatistics() {
-        LOG.info("Found {} file(s) without an id. (id is generated based on fileName but that may not be unique)", nrOfFilesWithoutId);
-        LOG.info("Found {} file(s) with errors.", nrOfFilesWithError);
-        LOG.info("Found {} file(s) too large.", nrOfFilesTooLarge);
-        LOG.info("Skipped {} file(s) due to duplicate or problematic id.", nrOfFilesSkipped);
-        LOG.info("Update of {} took {} secs. Total nr of files analyzed {}", nrOFDocumentsSent, time / 1000, nrOfFilesAnalyzed);
+        LOG.info("Found {} file(s) without an id. (id is generated based on fileName but that may not be unique)", stats.nrOfFilesWithoutId());
+        LOG.info("Found {} file(s) with errors.", stats.nrOfFilesWithError());
+        LOG.info("Found {} file(s) too large.", stats.nrOfFilesTooLarge());
+        LOG.info("Skipped {} file(s) due to duplicate or problematic id.", stats.nrOfFilesSkipped());
+        LOG.info("Update of {} took {} secs. Total nr of files analyzed {}", stats.nrOFDocumentsSent(), time / 1000, stats.nrOfFilesAnalyzed());
     }
 
     /**
