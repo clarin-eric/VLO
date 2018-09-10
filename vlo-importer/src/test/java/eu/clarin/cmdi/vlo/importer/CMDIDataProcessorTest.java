@@ -610,13 +610,13 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         Collections.sort(descriptions);
         assertEquals("{code:und}Channel: Talking;\n    Genre: Traditional Narrative / Story;\n    Country: Panama;\n"
                 + "    Place of Recording: Mulatuppu;\n    Event: Community Gathering;\n"
-                + "    Institutional Affiliation: University of Texas at Austin;\n    Participant Information: Political Leader;", descriptions.get(0).toString());
-        assertEquals("{code:und}Test", descriptions.get(1).toString());
+                + "    Institutional Affiliation: University of Texas at Austin;\n    Participant Information: Political Leader;", descriptions.get(0));
+        assertEquals("{code:und}Test", descriptions.get(1));
         assertEquals("{code:und}The one-eyed grandmother is one of many traditional Kuna stories performed "
                 + "in the Kuna gathering house. This story, performed here by Pedro Arias, combines "
                 + "European derived motifs (Tom Thumb and Hansel and Gretel) with themes that seem more "
                 + "Kuna in origin. All are woven together and a moral is provided. Pedro Arias performed "
-                + "this story before a gathered audience in the morning..", descriptions.get(2).toString());
+                + "this story before a gathered audience in the morning..", descriptions.get(2));
         assertEquals("Sound", doc.getFieldValue(fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS)));
     }
 
