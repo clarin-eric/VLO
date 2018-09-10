@@ -200,9 +200,10 @@ public class CMDIRecordImporter<T> {
      * @param cmdiData
      */
     protected void addResourceData(T document, CMDIData cmdiData) {
-        List<Object> fieldValues = document.containsKey(fieldNameService.getFieldName(FieldKey.FORMAT)) ? new ArrayList<>(document
-                .getFieldValues(fieldNameService.getFieldName(FieldKey.FORMAT))) : null;
-        document.removeField(fieldNameService.getFieldName(FieldKey.FORMAT)); //Remove old values they might be overwritten.
+        List<Object> fieldValues = cmdiData.hasField(fieldNameService.getFieldName(FieldKey.FORMAT))
+                ? new ArrayList<>(cmdiData.getFieldValues(fieldNameService.getFieldName(FieldKey.FORMAT)))
+                : null;
+        cmdiData.removeField(fieldNameService.getFieldName(FieldKey.FORMAT)); //Remove old values they might be overwritten.
         List<Resource> resources = cmdiData.getDataResources();
         for (int i = 0; i < resources.size(); i++) {
             Resource resource = resources.get(i);

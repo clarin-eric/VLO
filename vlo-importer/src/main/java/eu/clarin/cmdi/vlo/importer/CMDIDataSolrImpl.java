@@ -69,6 +69,22 @@ public class CMDIDataSolrImpl extends CMDIDataBaseImpl<SolrInputDocument> {
         }
     }
 
+    @Override
+    public void removeField(String name) {
+        this.doc.removeField(name);
+    }
+
+    @Override
+    public boolean hasField(String name) {
+        return this.doc.containsKey(name);
+    }
+    
+    public Collection<Object> getFieldValues(String name) {
+        return this.doc.getFieldValues(name);
+    }
+    
+    
+
     /**
      * Sets a field in the doc to a certain value. Before adding checks for
      * duplicates.
@@ -90,7 +106,7 @@ public class CMDIDataSolrImpl extends CMDIDataBaseImpl<SolrInputDocument> {
                 // if availability facet reduce tag to most restrictive
                 if (name.equals(fieldNameService.getFieldName(FieldKey.AVAILABILITY))
                         || name.equals(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE))) {
-                    reduceAvailability(name, value.toString());
+                    reduceAvailability(name, value.toString()); //TODO: move this out of this class!!
                 } else {
                     doc.addField(name, value);
                 }

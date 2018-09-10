@@ -92,6 +92,12 @@ public interface CMDIData<T> extends DocFieldContainer {
     void replaceDocField(ValueSet valueSet, boolean caseInsensitive);
 
     void replaceDocField(String name, Object value, boolean caseInsensitive);
+    
+    void removeField(String name);
+    
+    boolean hasField(String name);
+    
+    Collection<Object> getFieldValues(String name);
 
     void setId(String id);
     
