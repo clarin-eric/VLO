@@ -115,8 +115,8 @@ public class MetadataMapper {
 
             CMDIData cmdiData = processor.process(record, new ResourceStructureGraph());
 
-            for (String field : cmdiData.getSolrDocument().getFieldNames()) {
-                System.out.println(cmdiData.getSolrDocument().getField(field));
+            for (String field : cmdiData.getDocument().getFieldNames()) {
+                System.out.println(cmdiData.getDocument().getField(field));
             }
 
             // finished importing

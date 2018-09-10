@@ -36,29 +36,32 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import eu.clarin.cmdi.vlo.importer.solr.DocumentStore;
+import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 
 /**
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-public class CMDIRecordProcessor {
+public class CMDIRecordProcessor<T> {
 
     protected final static Logger LOG = LoggerFactory.getLogger(CMDIRecordProcessor.class);
     private final FieldNameServiceImpl fieldNameService;
     private final CMDIDataProcessor processor;
     private final ImportStatistics stats;
+    private final DocumentStore documentStore;
 
     /**
      * Contains MDSelflinks (usually). Just to know what we have already done.
      */
     private final Set<String> processedIds = Sets.newConcurrentHashSet();
 
-    public CMDIRecordProcessor(CMDIDataProcessor processor, FieldNameServiceImpl fieldNameService, ImportStatistics importStatistics) {
-        this.fieldNameService = fieldNameService;
+    public CMDIRecordProcessor(CMDIDataProcessor processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ImportStatistics importStatistics) {
         this.processor = processor;
+        this.documentStore = documentStore;
+        this.fieldNameService = fieldNameService;
         this.stats = importStatistics;
     }
     
@@ -95,9 +98,9 @@ public class CMDIRecordProcessor {
             assert cmdiData.getId() != null; //idOk check guarantees this
 
             if (processedIds.add(cmdiData.getId())) {
-                SolrInputDocument solrDocument = cmdiData.getSolrDocument();
-                if (solrDocument != null) {
-                    updateDocument(solrDocument, cmdiData, file, dataOrigin, endpointDescription);
+                T document = cmdiData.getDocument();
+                if (document != null) {
+                    updateDocument(document, cmdiData, file, dataOrigin, endpointDescription);
                     if (resourceStructureGraph != null && resourceStructureGraph.getVertex(cmdiData.getId()) != null) {
                         resourceStructureGraph.getVertex(cmdiData.getId()).setWasImported(true);
                     }
@@ -124,67 +127,67 @@ public class CMDIRecordProcessor {
      * solrDocument to document list, submits list to SolrServer every 1000
      * files
      *
-     * @param solrDocument
+     * @param document
      * @param cmdiData
      * @param file
      * @param dataOrigin
      * @param endpointDescription
-     * @throws SolrServerException
+     * @throws DocumentStoreException
      * @throws IOException
      */
-    protected void updateDocument(SolrInputDocument solrDocument, CMDIData cmdiData, File file, DataRoot dataOrigin, EndpointDescription endpointDescription) throws SolrServerException,
+    protected void updateDocument(T document, CMDIData cmdiData, File file, DataRoot dataOrigin, EndpointDescription endpointDescription) throws DocumentStoreException,
             IOException {
-        solrDocument.addField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER), dataOrigin.getOriginName());
-        solrDocument.addField(fieldNameService.getFieldName(FieldKey.ID), cmdiData.getId());
-        solrDocument.addField(fieldNameService.getFieldName(FieldKey.FILENAME), file.getAbsolutePath());
+        document.addField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER), dataOrigin.getOriginName());
+        document.addField(fieldNameService.getFieldName(FieldKey.ID), cmdiData.getId());
+        document.addField(fieldNameService.getFieldName(FieldKey.FILENAME), file.getAbsolutePath());
 
         // data provided by CLARIN's OAI-PMH harvester
         if (endpointDescription != null) {
             if (endpointDescription.getOaiEndpointUrl() != null) {
-                solrDocument.addField(fieldNameService.getFieldName(FieldKey.OAI_ENDPOINT_URI), endpointDescription.getOaiEndpointUrl());
+                document.addField(fieldNameService.getFieldName(FieldKey.OAI_ENDPOINT_URI), endpointDescription.getOaiEndpointUrl());
             }
             if (endpointDescription.getNationalProject() != null) {
-                solrDocument.addField(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT), endpointDescription.getNationalProject());
+                document.addField(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT), endpointDescription.getNationalProject());
             }
             if (endpointDescription.getCentreName() != null) {
-                solrDocument.addField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER_NAME), endpointDescription.getCentreName());
+                document.addField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER_NAME), endpointDescription.getCentreName());
             }
         }
 
         String metadataSourceUrl = dataOrigin.getPrefix();
         metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getToStrip().length());
 
-        solrDocument.addField(fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA), metadataSourceUrl);
+        document.addField(fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA), metadataSourceUrl);
 
         // add SearchServices (should be CQL endpoint)
         for (Resource resource : cmdiData.getSearchResources()) {
-            solrDocument.addField(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE), resource.getResourceName());
+            document.addField(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE), resource.getResourceName());
         }
 
         // add landing page resource
         for (Resource resource : cmdiData.getLandingPageResources()) {
-            solrDocument.addField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), resource.getResourceName());
+            document.addField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), resource.getResourceName());
         }
 
         // add search page resource
         for (Resource resource : cmdiData.getSearchPageResources()) {
-            solrDocument.addField(fieldNameService.getFieldName(FieldKey.SEARCHPAGE), resource.getResourceName());
+            document.addField(fieldNameService.getFieldName(FieldKey.SEARCHPAGE), resource.getResourceName());
         }
 
         // add timestamp
         Date dt = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        solrDocument.addField(fieldNameService.getFieldName(FieldKey.LAST_SEEN), df.format(dt));
+        document.addField(fieldNameService.getFieldName(FieldKey.LAST_SEEN), df.format(dt));
 
         // set number of days since last import to '0'
-        solrDocument.addField(fieldNameService.getFieldName(FieldKey.DAYS_SINCE_LAST_SEEN), 0);
+        document.addField(fieldNameService.getFieldName(FieldKey.DAYS_SINCE_LAST_SEEN), 0);
 
         // add resource proxys      
-        addResourceData(solrDocument, cmdiData);
+        addResourceData(document, cmdiData);
 
         LOG.debug("Adding document for submission to SOLR: {}", file);
 
-        solrBridge.addDocument(solrDocument);
+        documentStore.addDocument(document);
         if (stats.nrOFDocumentsSent().incrementAndGet() % 250 == 0) {
             LOG.info("Number of documents sent thus far: {}", stats.nrOFDocumentsSent());
         }
@@ -196,13 +199,13 @@ public class CMDIRecordProcessor {
      * overwritten by some more specific xpath (as in the LRT cmdi files). So if
      * a type is overwritten and already in the solrDocument we take that type.
      *
-     * @param solrDocument
+     * @param document
      * @param cmdiData
      */
-    protected void addResourceData(SolrInputDocument solrDocument, CMDIData cmdiData) {
-        List<Object> fieldValues = solrDocument.containsKey(fieldNameService.getFieldName(FieldKey.FORMAT)) ? new ArrayList<>(solrDocument
+    protected void addResourceData(T document, CMDIData cmdiData) {
+        List<Object> fieldValues = document.containsKey(fieldNameService.getFieldName(FieldKey.FORMAT)) ? new ArrayList<>(document
                 .getFieldValues(fieldNameService.getFieldName(FieldKey.FORMAT))) : null;
-        solrDocument.removeField(fieldNameService.getFieldName(FieldKey.FORMAT)); //Remove old values they might be overwritten.
+        document.removeField(fieldNameService.getFieldName(FieldKey.FORMAT)); //Remove old values they might be overwritten.
         List<Resource> resources = cmdiData.getDataResources();
         for (int i = 0; i < resources.size(); i++) {
             Resource resource = resources.get(i);
@@ -220,11 +223,11 @@ public class CMDIRecordProcessor {
 
             // TODO check should probably be moved into Solr (by using some minimum length filter)
             if (!mimeType.equals("")) {
-                solrDocument.addField(fieldNameService.getFieldName(FieldKey.FORMAT), mimeType);
+                document.addField(fieldNameService.getFieldName(FieldKey.FORMAT), mimeType);
             }
-            solrDocument.addField(fieldNameService.getFieldName(FieldKey.RESOURCE), mimeType + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR
+            document.addField(fieldNameService.getFieldName(FieldKey.RESOURCE), mimeType + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR
                     + resource.getResourceName());
         }
-        solrDocument.addField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size());
+        document.addField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size());
     }
 }

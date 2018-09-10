@@ -49,6 +49,7 @@ import eu.clarin.cmdi.vlo.importer.normalizer.ResourceClassPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.TemporalCoveragePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.processor.*;
 import eu.clarin.cmdi.vlo.importer.solr.BufferingSolrBridgeImpl;
+import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridge;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridgeImpl;
 import java.net.SocketTimeoutException;
@@ -102,7 +103,7 @@ public class MetadataImporter {
      */
     private final SolrBridge solrBridge;
 
-    private final CMDIRecordProcessor recordProcessor;
+    private final CMDIRecordProcessor<SolrInputDocument> recordProcessor;
     private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
 
     private static class DefaultSolrBridgeFactory {
@@ -144,7 +145,7 @@ public class MetadataImporter {
         this.solrBridge = solrBrdige;
 
         final CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
-        this.recordProcessor = new CMDIRecordProcessor(processor, fieldNameService, stats);
+        this.recordProcessor = new CMDIRecordProcessor(processor, solrBrdige, fieldNameService, stats);
 
     }
 
@@ -330,7 +331,7 @@ public class MetadataImporter {
             fileProcessingPool.submit(() -> {
                 try {
                     updateDocumentHierarchy(resourceStructureGraph);
-                } catch (IOException | SolrServerException ex) {
+                } catch (IOException | DocumentStoreException ex) {
                     throw new RuntimeException("An exception occurred while updating a document hierarchy for a centre in the '" + dataRoot.getOriginName() + "' data root", ex);
                 }
             });
@@ -524,7 +525,7 @@ public class MetadataImporter {
      * @throws SolrServerException
      * @throws MalformedURLException
      */
-    private synchronized void updateDocumentHierarchy(ResourceStructureGraph resourceStructureGraph) throws SolrServerException, MalformedURLException, IOException {
+    private synchronized void updateDocumentHierarchy(ResourceStructureGraph resourceStructureGraph) throws DocumentStoreException, MalformedURLException, IOException {
         LOG.info(resourceStructureGraph.printStatistics(0));
         final AtomicInteger updateCount = new AtomicInteger();
         final Iterator<CmdiVertex> vertexIter = resourceStructureGraph.getFoundVertices().iterator();
@@ -610,7 +611,7 @@ public class MetadataImporter {
             processors.add(() -> {
                 try {
                     performUpdateDaysSinceLastImportBatch(dataRoot, fetchSize, batchOffset, updatedDocs, nowDate);
-                } catch (SolrServerException | IOException ex) {
+                } catch (DocumentStoreException | SolrServerException | IOException ex) {
                     LOG.error("Error while updating 'days since last seen' property for old records", ex);
                 }
                 return null;
@@ -632,7 +633,7 @@ public class MetadataImporter {
         LOG.info("Updated \"days since last seen\" value in {} records.", updatedDocs.get());
     }
 
-    private void performUpdateDaysSinceLastImportBatch(DataRoot dataRoot, final int fetchSize, int offset, AtomicInteger updatedDocs, final LocalDate nowDate) throws SolrServerException, IOException {
+    private void performUpdateDaysSinceLastImportBatch(DataRoot dataRoot, final int fetchSize, int offset, AtomicInteger updatedDocs, final LocalDate nowDate) throws SolrServerException, DocumentStoreException, IOException {
         int updatedInBatch = 0;
         final SolrQuery query = createOldRecordsQuery(dataRoot);
         query.setStart(offset);
@@ -654,7 +655,7 @@ public class MetadataImporter {
             solrBridge.addDocument(updateDoc);
             final Throwable error = solrBridge.popError();
             if (error != null) {
-                throw new SolrServerException(error);
+                throw new DocumentStoreException(error);
             }
         }
         final int totalUpdated = updatedDocs.addAndGet(updatedInBatch);

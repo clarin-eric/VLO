@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 CLARIN
+ * Copyright (C) 2018 CLARIN
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,25 +17,16 @@
 package eu.clarin.cmdi.vlo.importer.solr;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Collection;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.common.SolrInputDocument;
 
 /**
  *
- * @author twagoo
+ * @author Twan Goosen <twan@clarin.eu>
  */
-public interface SolrBridge extends DocumentStore<SolrInputDocument> {
+public interface DocumentStore<T> {
 
-    SolrClient getClient();
+    void addDocument(T doc) throws DocumentStoreException, IOException;
 
-    void init() throws MalformedURLException;
-
-    void shutdown() throws SolrServerException, IOException;
-
-    void commit() throws SolrServerException, IOException;
-
-    Throwable popError();
+    void addDocuments(Collection<T> docs) throws DocumentStoreException, IOException;
+    
 }

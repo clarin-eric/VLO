@@ -33,7 +33,6 @@ import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -103,13 +102,21 @@ public class SolrBridgeImpl implements SolrBridge {
     }
 
     @Override
-    public void addDocument(SolrInputDocument doc) throws SolrServerException, IOException {
-        solrClient.add(doc);
+    public void addDocument(SolrInputDocument doc) throws IOException, DocumentStoreException {
+        try {
+            solrClient.add(doc);
+        } catch (SolrServerException ex) {
+            throw new DocumentStoreException(ex);
+        }
     }
 
     @Override
-    public void addDocuments(Collection<SolrInputDocument> docs) throws SolrServerException, IOException {
-        solrClient.add(docs);
+    public void addDocuments(Collection<SolrInputDocument> docs) throws IOException, DocumentStoreException {
+        try {
+            solrClient.add(docs);
+        } catch (SolrServerException ex) {
+            throw new DocumentStoreException(ex);
+        }
     }
 
     @Override
@@ -144,7 +151,7 @@ public class SolrBridgeImpl implements SolrBridge {
     public void setCommit(boolean commit) {
         this.commit = commit;
     }
-    
+
     protected void onSolrClientError(Throwable exception) {
         //do nothing
     }
