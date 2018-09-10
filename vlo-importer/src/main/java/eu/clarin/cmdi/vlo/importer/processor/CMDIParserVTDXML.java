@@ -86,11 +86,6 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
         return facetMappingFactory.getFacetMapping(profileId, useLocalXSDCache);
     }
 
-    @Override
-    public String extractMdSelfLink(File file) throws IOException {
-        return selfLinkExtractor.extractMdSelfLink(file);
-    }
-
     /**
      * Instantiates a new resource processor. Called for each processed file.
      *

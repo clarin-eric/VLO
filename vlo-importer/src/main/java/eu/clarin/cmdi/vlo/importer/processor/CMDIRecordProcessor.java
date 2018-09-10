@@ -56,7 +56,7 @@ public class CMDIRecordProcessor {
      */
     private final Set<String> processedIds = Sets.newConcurrentHashSet();
 
-    public CMDIRecordProcessor(FieldNameServiceImpl fieldNameService, CMDIDataProcessor processor, ImportStatistics importStatistics) {
+    public CMDIRecordProcessor(CMDIDataProcessor processor, FieldNameServiceImpl fieldNameService, ImportStatistics importStatistics) {
         this.fieldNameService = fieldNameService;
         this.processor = processor;
         this.stats = importStatistics;
@@ -72,7 +72,7 @@ public class CMDIRecordProcessor {
      * @throws SolrServerException
      * @throws IOException
      */
-    protected void processCmdi(File file, DataRoot dataOrigin, ResourceStructureGraph resourceStructureGraph, EndpointDescription endpointDescription) throws SolrServerException, IOException {
+    public void processCmdi(File file, DataRoot dataOrigin, ResourceStructureGraph resourceStructureGraph, EndpointDescription endpointDescription) throws SolrServerException, IOException {
         stats.nrOfFilesAnalyzed().incrementAndGet();
         CMDIData cmdiData = null;
         try {

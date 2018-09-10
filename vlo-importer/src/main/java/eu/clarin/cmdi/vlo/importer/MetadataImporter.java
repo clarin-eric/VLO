@@ -102,7 +102,8 @@ public class MetadataImporter {
      */
     private final SolrBridge solrBridge;
 
-    private final CMDIDataProcessor processor;
+    private final CMDIRecordProcessor recordProcessor;
+    private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
 
     private static class DefaultSolrBridgeFactory {
 
@@ -121,13 +122,11 @@ public class MetadataImporter {
      */
     protected final Map<String, AbstractPostNormalizer> postProcessors;
 
-
     /**
      * Some caching for solr documents (we are more efficient if we ram a whole
      * bunch to the solr server at once.
      */
     //protected List<SolrInputDocument> docs = new ArrayList<>();
-
     // SOME STATS
     private final ImportStatistics stats = new ImportStatistics();
     private Long time;
@@ -143,41 +142,55 @@ public class MetadataImporter {
         this.clDatarootsList = clDatarootsList;
         this.postProcessors = registerPostProcessors(config, this.fieldNameService, languageCodeUtils);
         this.solrBridge = solrBrdige;
-        this.processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
+
+        final CMDIDataProcessor processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
+        this.recordProcessor = new CMDIRecordProcessor(processor, fieldNameService, stats);
 
     }
 
     public static Map<String, AbstractPostNormalizer> registerPostProcessors(VloConfig config, FieldNameService fieldNameService, LanguageCodeUtils languageCodeUtils) {
         ImmutableMap.Builder<String, AbstractPostNormalizer> imb = ImmutableMap.builder();
-        
+
         imb.put(fieldNameService.getFieldName(FieldKey.ID), new IdPostNormalizer());
-        
-        if(fieldNameService.getFieldName(FieldKey.CONTINENT) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.CONTINENT), new ContinentNamePostNormalizer());
-        if(fieldNameService.getFieldName(FieldKey.COUNTRY) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.COUNTRY), new CountryNamePostNormalizer(config));
-        if(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE), new LanguageCodePostNormalizer(config, languageCodeUtils));
-        if(fieldNameService.getFieldName(FieldKey.LANGUAGE_NAME) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.LANGUAGE_NAME), new LanguageNamePostNormalizer(languageCodeUtils));
-        if(fieldNameService.getFieldName(FieldKey.AVAILABILITY) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.AVAILABILITY), new AvailabilityPostNormalizer(config));
-        if(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE), new LicenseTypePostNormalizer(config));
-        if(fieldNameService.getFieldName(FieldKey.ORGANISATION) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.ORGANISATION), new OrganisationPostNormalizer(config));
-        if(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE), new TemporalCoveragePostNormalizer());
-        if(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE), new CMDIComponentProfileNamePostNormalizer(config));
-        if(fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS), new ResourceClassPostNormalizer());
-        if(fieldNameService.getFieldName(FieldKey.LICENSE) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.LICENSE), new LicensePostNormalizer(config));
-        if(fieldNameService.getFieldName(FieldKey.NAME) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.NAME), new NamePostNormalizer());
-    	
-    	return imb.build();
+
+        if (fieldNameService.getFieldName(FieldKey.CONTINENT) != null) {
+            imb.put(fieldNameService.getFieldName(FieldKey.CONTINENT), new ContinentNamePostNormalizer());
+        }
+        if (fieldNameService.getFieldName(FieldKey.COUNTRY) != null) {
+            imb.put(fieldNameService.getFieldName(FieldKey.COUNTRY), new CountryNamePostNormalizer(config));
+        }
+        if (fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE) != null) {
+            imb.put(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE), new LanguageCodePostNormalizer(config, languageCodeUtils));
+        }
+        if (fieldNameService.getFieldName(FieldKey.LANGUAGE_NAME) != null) {
+            imb.put(fieldNameService.getFieldName(FieldKey.LANGUAGE_NAME), new LanguageNamePostNormalizer(languageCodeUtils));
+        }
+        if (fieldNameService.getFieldName(FieldKey.AVAILABILITY) != null) {
+            imb.put(fieldNameService.getFieldName(FieldKey.AVAILABILITY), new AvailabilityPostNormalizer(config));
+        }
+        if (fieldNameService.getFieldName(FieldKey.LICENSE_TYPE) != null) {
+            imb.put(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE), new LicenseTypePostNormalizer(config));
+        }
+        if (fieldNameService.getFieldName(FieldKey.ORGANISATION) != null) {
+            imb.put(fieldNameService.getFieldName(FieldKey.ORGANISATION), new OrganisationPostNormalizer(config));
+        }
+        if (fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE) != null) {
+            imb.put(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE), new TemporalCoveragePostNormalizer());
+        }
+        if (fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE) != null) {
+            imb.put(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE), new CMDIComponentProfileNamePostNormalizer(config));
+        }
+        if (fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS) != null) {
+            imb.put(fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS), new ResourceClassPostNormalizer());
+        }
+        if (fieldNameService.getFieldName(FieldKey.LICENSE) != null) {
+            imb.put(fieldNameService.getFieldName(FieldKey.LICENSE), new LicensePostNormalizer(config));
+        }
+        if (fieldNameService.getFieldName(FieldKey.NAME) != null) {
+            imb.put(fieldNameService.getFieldName(FieldKey.NAME), new NamePostNormalizer());
+        }
+
+        return imb.build();
 
     }
 
@@ -268,7 +281,7 @@ public class MetadataImporter {
         LOG.info("End of processing: " + dataRoot.getOriginName());
     }
 
-    protected void processCentreFiles(final List<File> centreFiles, final DataRoot dataRoot, final Map<String,EndpointDescription> directoryEndpointMap) throws IOException, SolrServerException, InterruptedException {
+    protected void processCentreFiles(final List<File> centreFiles, final DataRoot dataRoot, final Map<String, EndpointDescription> directoryEndpointMap) throws IOException, SolrServerException, InterruptedException {
         LOG.info("Processing directory: {}", centreFiles.get(0).getParent());
         String centerDirName = centreFiles.get(0).getParentFile().getName();
 
@@ -304,7 +317,7 @@ public class MetadataImporter {
         final Stream<Callable<Void>> processors = centreFiles.stream().map((File file) -> {
             return (Callable) () -> {
                 LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
-                processCmdi(file, dataRoot, resourceStructureGraph, directoryEndpointMap.get(file.getParentFile().getName()));
+                recordProcessor.processCmdi(file, dataRoot, resourceStructureGraph, directoryEndpointMap.get(file.getParentFile().getName()));
                 return null;
             };
         });
@@ -360,7 +373,7 @@ public class MetadataImporter {
         } else if (createHierarchyGraph) {
             String mdSelfLink = null;
             try {
-                mdSelfLink = processor.extractMdSelfLink(file);
+                mdSelfLink = selfLinkExtractor.extractMdSelfLink(file);
             } catch (Exception e) {
                 LOG.error("error in file: {}", file, e);
                 stats.nrOfFilesWithError().incrementAndGet();
@@ -687,6 +700,14 @@ public class MetadataImporter {
      */
     public Long getTime() {
         return time;
+    }
+
+    public ImportStatistics getImportStatistics() {
+        return stats;
+    }
+
+    protected CMDIRecordProcessor getRecordProcessor() {
+        return recordProcessor;
     }
 
     /**

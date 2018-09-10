@@ -397,7 +397,7 @@ public class ValueMappingsTest extends ImporterTestcase {
                                  * in a suitable way. */
                                  
                                 try {
-                                    processCmdi(file, dataRoot, null, null);
+                                    getRecordProcessor().processCmdi(file, dataRoot, null, null);
                                 } catch (SolrServerException ex) {
                                     Logger.getLogger(ValueMappingsTest.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -409,16 +409,7 @@ public class ValueMappingsTest extends ImporterTestcase {
 
                 } catch (IOException e) {
                     LOG.error("error updating files:\n", e);
-                } finally {
-
                 }
-                long took = (System.currentTimeMillis() - start) / 1000;
-                LOG.info("Found " + nrOfFilesWithoutId
-                        + " file(s) without an id. (id is generated based on fileName but that may not be unique)");
-                LOG.info("Found " + nrOfFilesWithError
-                        + " file(s) with errors.");
-                LOG.info("Update of " + nrOFDocumentsSent + " took " + took
-                        + " secs. Total nr of files analyzed " + nrOfFilesAnalyzed);
             }
         };
         importer.startImport();
