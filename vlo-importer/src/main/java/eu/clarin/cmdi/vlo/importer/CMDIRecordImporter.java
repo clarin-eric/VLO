@@ -97,7 +97,13 @@ public class CMDIRecordImporter<T> {
             if (processedIds.add(cmdiData.getId())) {
                 T document = cmdiData.getDocument();
                 if (document != null) {
-                    updateDocument(document, cmdiData, file, dataOrigin, endpointDescription);
+                    // add technical metadata
+                    addTechnicalMetadata(cmdiData, dataOrigin, file, endpointDescription);
+                    // add resource proxys      
+                    addResourceData(cmdiData);
+                    // update doc in store
+                    submitDocumentUpdate(document, file);
+                    // mark document as completed in graph
                     if (resourceStructureGraph != null && resourceStructureGraph.getVertex(cmdiData.getId()) != null) {
                         resourceStructureGraph.getVertex(cmdiData.getId()).setWasImported(true);
                     }
@@ -115,24 +121,11 @@ public class CMDIRecordImporter<T> {
      * @param id
      * @return true if id is acceptable, false otherwise
      */
-    protected boolean idOk(String id) {
+    private boolean idOk(String id) {
         return id != null && !id.trim().isEmpty();
     }
 
-    /**
-     * Adds some additional information from DataRoot to the document, add
-     * document to document store
-     *
-     * @param document
-     * @param cmdiData
-     * @param file
-     * @param dataOrigin
-     * @param endpointDescription
-     * @throws DocumentStoreException
-     * @throws IOException
-     */
-    protected void updateDocument(T document, CMDIData<T> cmdiData, File file, DataRoot dataOrigin, EndpointDescription endpointDescription) throws DocumentStoreException,
-            IOException {
+    private void addTechnicalMetadata(CMDIData<T> cmdiData, DataRoot dataOrigin, File file, EndpointDescription endpointDescription) {
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER), dataOrigin.getOriginName(), false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.ID), cmdiData.getId(), false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FILENAME), file.getAbsolutePath(), false);
@@ -177,16 +170,6 @@ public class CMDIRecordImporter<T> {
 
         // set number of days since last import to '0'
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DAYS_SINCE_LAST_SEEN), 0, false);
-
-        // add resource proxys      
-        addResourceData(document, cmdiData);
-
-        LOG.debug("Submitting to document store: {}", file);
-
-        documentStore.addDocument(document);
-        if (stats.nrOFDocumentsSent().incrementAndGet() % 250 == 0) {
-            LOG.info("Number of documents sent thus far: {}", stats.nrOFDocumentsSent());
-        }
     }
 
     /**
@@ -198,7 +181,7 @@ public class CMDIRecordImporter<T> {
      * @param document
      * @param cmdiData
      */
-    protected void addResourceData(T document, CMDIData cmdiData) {
+    private void addResourceData(CMDIData cmdiData) {
         List<Object> fieldValues = cmdiData.hasField(fieldNameService.getFieldName(FieldKey.FORMAT))
                 ? new ArrayList<>(cmdiData.getFieldValues(fieldNameService.getFieldName(FieldKey.FORMAT)))
                 : null;
@@ -225,5 +208,24 @@ public class CMDIRecordImporter<T> {
                     + resource.getResourceName(), false);
         }
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size(), false);
+    }
+
+    /**
+     * Adds some additional information from DataRoot to the document, add
+     * document to document store
+     *
+     * @param document
+     * @param file
+     * @throws DocumentStoreException
+     * @throws IOException
+     */
+    private void submitDocumentUpdate(T document, File file) throws DocumentStoreException,
+            IOException {
+        LOG.debug("Submitting to document store: {}", file);
+
+        documentStore.addDocument(document);
+        if (stats.nrOFDocumentsSent().incrementAndGet() % 250 == 0) {
+            LOG.info("Number of documents sent thus far: {}", stats.nrOFDocumentsSent());
+        }
     }
 }
