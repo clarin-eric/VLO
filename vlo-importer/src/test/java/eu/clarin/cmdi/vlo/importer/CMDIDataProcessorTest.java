@@ -23,8 +23,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     protected FacetMappingFactory facetMappingFactory;
     private ResourceStructureGraph resourceStructureGraph;
 
-    private CMDIDataProcessor getDataParser() {
-        return new CMDIParserVTDXML(MetadataImporter.registerPostProcessors(config, fieldNameService, languageCodeUtils), config, facetMappingFactory, marshaller, true);
+    private CMDIDataProcessor<SolrInputDocument> getDataParser() {
+        return new CMDIParserVTDXML<>(MetadataImporter.registerPostProcessors(config, fieldNameService, languageCodeUtils), config, facetMappingFactory, marshaller, true);
     }
 
     @Before
@@ -84,7 +84,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
         File cmdiFile = createCmdiFile("testCorpus", content);
         CMDIDataProcessor processor = getDataParser();
-        CMDIData data = processor.process(cmdiFile, resourceStructureGraph);
+        CMDIData<SolrInputDocument> data = processor.process(cmdiFile, resourceStructureGraph);
         assertEquals("test-hdl_58_1839_47_00-0000-0000-0000-0001-D", data.getId());
         List<Resource> resources = data.getMetadataResources();
         assertEquals(3, resources.size());
@@ -385,8 +385,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "   </Components>\n";
         content += "</CMD>\n";
         File cmdiFile = createCmdiFile("testSession", content);
-        CMDIDataProcessor processor = getDataParser();
-        CMDIData data = processor.process(cmdiFile, resourceStructureGraph);
+        CMDIDataProcessor<SolrInputDocument> processor = getDataParser();
+        CMDIData<SolrInputDocument> data = processor.process(cmdiFile, resourceStructureGraph);
         assertEquals("test-hdl_58_1839_47_00-0000-0000-0009-294C-9", data.getId());
         List<Resource> resources = data.getMetadataResources();
         assertEquals(0, resources.size());
@@ -440,9 +440,9 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "      </cmdp:Session>\n";
         content += "   </Components>\n";
         content += "</CMD>\n";
-        File cmdiFile = createCmdiFile("testSession", content);
-        CMDIDataProcessor processor = getDataParser();
-        CMDIData data = processor.process(cmdiFile, resourceStructureGraph);
+        File cmdiFile = createCmdiFile("testSession", content);        
+        CMDIDataProcessor<SolrInputDocument> processor = getDataParser();
+        CMDIData<SolrInputDocument> data = processor.process(cmdiFile, resourceStructureGraph);
         assertEquals("kleve-route", data.getDocument().getFieldValue(fieldNameService.getFieldName(FieldKey.NAME)));
     }
 
@@ -515,8 +515,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "   </cmd:Components>\n";
         content += "</cmd:CMD>\n";
         File cmdiFile = createCmdiFile("testSession", content);
-        CMDIDataProcessor processor = getDataParser();
-        CMDIData data = processor.process(cmdiFile, resourceStructureGraph);
+        CMDIDataProcessor<SolrInputDocument> processor = getDataParser();
+        CMDIData<SolrInputDocument> data = processor.process(cmdiFile, resourceStructureGraph);
         assertEquals("test-hdl_58_1839_47_00-0000-0000-0009-294C-9", data.getId()); //modified handle -> 'clean' id
         List<Resource> resources = data.getMetadataResources();
         assertEquals(0, resources.size());
@@ -583,8 +583,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testOlac", content);
-        CMDIDataProcessor processor = getDataParser();
-        CMDIData data = processor.process(cmdiFile, resourceStructureGraph);
+        CMDIDataProcessor<SolrInputDocument> processor = getDataParser();
+        CMDIData<SolrInputDocument> data = processor.process(cmdiFile, resourceStructureGraph);
         assertEquals("oai_58_ailla.utexas.edu_58_1", data.getId());
         List<Resource> resources = data.getMetadataResources();
         assertEquals(0, resources.size());
@@ -642,8 +642,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testOlac", content);
-        CMDIDataProcessor processor = getDataParser();
-        CMDIData data = processor.process(cmdiFile, resourceStructureGraph);
+        CMDIDataProcessor<SolrInputDocument> processor = getDataParser();
+        CMDIData<SolrInputDocument> data = processor.process(cmdiFile, resourceStructureGraph);
         SolrInputDocument doc = data.getDocument();
         assertNull(doc.getFieldValue("_selfLink"));
         assertEquals(3, doc.getFieldValues(fieldNameService.getFieldName(FieldKey.SUBJECT)).size());
@@ -730,8 +730,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testOlac", content);
-        CMDIDataProcessor processor = getDataParser();
-        CMDIData data = processor.process(cmdiFile, resourceStructureGraph);
+        CMDIDataProcessor<SolrInputDocument> processor = getDataParser();
+        CMDIData<SolrInputDocument> data = processor.process(cmdiFile, resourceStructureGraph);
         SolrInputDocument doc = data.getDocument();
         assertTrue(doc.getFieldValues("subject").contains("kuna"));
     }
@@ -752,8 +752,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testOlac", content);
-        CMDIDataProcessor processor = getDataParser();
-        CMDIData data = processor.process(cmdiFile, resourceStructureGraph);
+        CMDIDataProcessor<SolrInputDocument> processor = getDataParser();
+        CMDIData<SolrInputDocument> data = processor.process(cmdiFile, resourceStructureGraph);
         SolrInputDocument doc = data.getDocument();
         assertEquals("Netherlands", doc.getFieldValue(fieldNameService.getFieldName(FieldKey.COUNTRY)));
     }
@@ -775,8 +775,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testOlac", content);
-        CMDIDataProcessor processor = getDataParser();
-        CMDIData data = processor.process(cmdiFile, resourceStructureGraph);
+        CMDIDataProcessor<SolrInputDocument> processor = getDataParser();
+        CMDIData<SolrInputDocument> data = processor.process(cmdiFile, resourceStructureGraph);
         SolrInputDocument doc = data.getDocument();
 //        Collection<Object> values = doc.getFieldValues(FacetConstants.DEPRECATED_FIELD_LANGUAGE);
 //        assertEquals(2, values.size());
@@ -818,8 +818,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testOlac", content);
-        CMDIDataProcessor processor = getDataParser();
-        CMDIData data = processor.process(cmdiFile, resourceStructureGraph);
+        CMDIDataProcessor<SolrInputDocument> processor = getDataParser();
+        CMDIData<SolrInputDocument> data = processor.process(cmdiFile, resourceStructureGraph);
         assertEquals("collection_ATILF_Resources.cmdi", data.getId());
         assertEquals("collection_ATILF_Resources.cmdi", data.getDocument().getFieldValue("_selfLink"));
         List<Resource> resources = data.getMetadataResources();
@@ -872,8 +872,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testOlac", content);
-        CMDIDataProcessor processor = getDataParser();
-        CMDIData data = processor.process(cmdiFile, resourceStructureGraph);
+        CMDIDataProcessor<SolrInputDocument> processor = getDataParser();
+        CMDIData<SolrInputDocument> data = processor.process(cmdiFile, resourceStructureGraph);
         assertEquals("clarin.eu_58_lrt_58_433", data.getId());
         List<Resource> resources = data.getMetadataResources();
         assertEquals(0, resources.size());
@@ -925,8 +925,8 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "</CMD>\n";
 
         File cmdiFile = createCmdiFile("testAttributeMapping", content);
-        CMDIDataProcessor processor = getDataParser();
-        CMDIData data = processor.process(cmdiFile, resourceStructureGraph);
+        CMDIDataProcessor<SolrInputDocument> processor = getDataParser();
+        CMDIData<SolrInputDocument> data = processor.process(cmdiFile, resourceStructureGraph);
 
         assertEquals("RES", data.getDocument().getFieldValue(fieldNameService.getFieldName(FieldKey.AVAILABILITY)));
     }

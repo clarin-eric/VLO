@@ -72,12 +72,12 @@ public class CMDIRecordProcessor<T> {
      * @param dataOrigin
      * @param resourceStructureGraph null to skip hierarchy processing
      * @param endpointDescription
-     * @throws SolrServerException
+     * @throws eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException
      * @throws IOException
      */
-    public void processCmdi(File file, DataRoot dataOrigin, ResourceStructureGraph resourceStructureGraph, EndpointDescription endpointDescription) throws SolrServerException, IOException {
+    public void processCmdi(File file, DataRoot dataOrigin, ResourceStructureGraph resourceStructureGraph, EndpointDescription endpointDescription) throws DocumentStoreException, IOException {
         stats.nrOfFilesAnalyzed().incrementAndGet();
-        CMDIData cmdiData = null;
+        CMDIData<T> cmdiData = null;
         try {
             cmdiData = processor.process(file, resourceStructureGraph);
             if (!idOk(cmdiData.getId())) {
@@ -135,7 +135,7 @@ public class CMDIRecordProcessor<T> {
      * @throws DocumentStoreException
      * @throws IOException
      */
-    protected void updateDocument(T document, CMDIData cmdiData, File file, DataRoot dataOrigin, EndpointDescription endpointDescription) throws DocumentStoreException,
+    protected void updateDocument(T document, CMDIData<T> cmdiData, File file, DataRoot dataOrigin, EndpointDescription endpointDescription) throws DocumentStoreException,
             IOException {
         document.addField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER), dataOrigin.getOriginName());
         document.addField(fieldNameService.getFieldName(FieldKey.ID), cmdiData.getId());

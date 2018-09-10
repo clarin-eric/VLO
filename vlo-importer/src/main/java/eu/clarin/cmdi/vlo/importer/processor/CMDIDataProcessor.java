@@ -5,7 +5,7 @@ import java.io.File;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
 import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
 
-public interface CMDIDataProcessor {
+public interface CMDIDataProcessor<T> {
 
     /**
      * Extract content from CMDI file
@@ -13,5 +13,5 @@ public interface CMDIDataProcessor {
      * @return
      * @throws Exception 
      */
-    public CMDIData process(File file, ResourceStructureGraph resourceStructureGraph) throws Exception ;
+    public CMDIData<T> process(File file, ResourceStructureGraph resourceStructureGraph) throws Exception ;
 }

@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
  * @author Twan Goosen <twan@clarin.eu>
  * @param <T> Type of document store
  */
-public abstract class CMDIDataBaseImpl<T> implements DocFieldContainer {
+public abstract class CMDIDataBaseImpl<T> implements CMDIData<T> {
 
     protected static final Logger LOG = LoggerFactory.getLogger(CMDIData.class);
     protected static final String METADATA_TYPE = "Metadata";
@@ -56,32 +56,13 @@ public abstract class CMDIDataBaseImpl<T> implements DocFieldContainer {
         this.fieldNameService = fieldNameService;
     }
 
-    public abstract T getDocument();
-
-    /**
-     * Sets a field in the doc to a certain value. Well, at least calls another
-     * (private) method that actually does this.
-     *
-     * @param valueSet
-     * @param caseInsensitive
-     */
-    public abstract void addDocField(ValueSet valueSet, boolean caseInsensitive);
-
-    public abstract void replaceDocField(ValueSet valueSet, boolean caseInsensitive);
-
-    public abstract void addDocField(String fieldName, String value, boolean caseInsensitive);
-
-    public abstract void replaceDocField(String name, String value, boolean caseInsensitive);
-
-    public abstract void addDocFieldIfNull(ValueSet valueSet, boolean caseInsensitive);
 
     @Override
-    public abstract Collection<Object> getDocField(String name);
-
     public List<Resource> getDataResources() {
         return dataResources;
     }
 
+    @Override
     public List<Resource> getMetadataResources() {
         return metaDataResources;
     }
@@ -91,6 +72,7 @@ public abstract class CMDIDataBaseImpl<T> implements DocFieldContainer {
      *
      * @return list of search interface resources
      */
+    @Override
     public List<Resource> getSearchResources() {
         return searchResources;
     }
@@ -100,6 +82,7 @@ public abstract class CMDIDataBaseImpl<T> implements DocFieldContainer {
      *
      * @return list of landing page resources
      */
+    @Override
     public List<Resource> getLandingPageResources() {
         return landingPageResources;
     }
@@ -109,6 +92,7 @@ public abstract class CMDIDataBaseImpl<T> implements DocFieldContainer {
      *
      * @return the list
      */
+    @Override
     public List<Resource> getSearchPageResources() {
         return searchPageResources;
     }
@@ -118,6 +102,7 @@ public abstract class CMDIDataBaseImpl<T> implements DocFieldContainer {
      *
      * @return Returns true if at least one resource is available
      */
+    @Override
     public boolean hasResources() {
         return !(getDataResources().isEmpty() && getMetadataResources().isEmpty() && getSearchResources().isEmpty() && getSearchPageResources().isEmpty() && getLandingPageResources().isEmpty());
     }
@@ -132,6 +117,7 @@ public abstract class CMDIDataBaseImpl<T> implements DocFieldContainer {
      * @param type type of the resource
      * @param mimeType mime type associated with the resource
      */
+    @Override
     public void addResource(String resource, String type, String mimeType) {
         if (METADATA_TYPE.equals(type)) {
             metaDataResources.add(new Resource(resource, type, mimeType));
@@ -153,10 +139,12 @@ public abstract class CMDIDataBaseImpl<T> implements DocFieldContainer {
         }
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }
 
+    @Override
     public String getId() {
         return id;
     }

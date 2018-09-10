@@ -19,6 +19,7 @@ import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.processor.CMDIDataProcessor;
 import eu.clarin.cmdi.vlo.importer.processor.CMDIParserVTDXML;
+import org.apache.solr.common.SolrInputDocument;
 
 public class MetadataMapper {
 
@@ -103,7 +104,7 @@ public class MetadataMapper {
             final VLOMarshaller marshaller = new VLOMarshaller();
             final FacetMappingFactory facetMappingFactory = new FacetMappingFactory(config, marshaller);
 
-            CMDIDataProcessor processor = new CMDIParserVTDXML(MetadataImporter.registerPostProcessors(config,  new FieldNameServiceImpl(config), languageCodeUtils), config, facetMappingFactory, marshaller, false);
+            CMDIDataProcessor<SolrInputDocument> processor = new CMDIParserVTDXML(MetadataImporter.registerPostProcessors(config,  new FieldNameServiceImpl(config), languageCodeUtils), config, facetMappingFactory, marshaller, false);
 
             if (recordFile == null) {
                 String message = "Could not get record filename - stopping.";
@@ -113,7 +114,7 @@ public class MetadataMapper {
 
             File record = new File(recordFile);
 
-            CMDIData cmdiData = processor.process(record, new ResourceStructureGraph());
+            CMDIData<SolrInputDocument> cmdiData = processor.process(record, new ResourceStructureGraph());
 
             for (String field : cmdiData.getDocument().getFieldNames()) {
                 System.out.println(cmdiData.getDocument().getField(field));

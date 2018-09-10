@@ -6,6 +6,7 @@ import com.ximpleware.VTDNav;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.CMDIDataSolrImpl;
 import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
 import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
@@ -21,14 +22,13 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CMDIParserVTDXML implements CMDIDataProcessor {
+public class CMDIParserVTDXML<T> implements CMDIDataProcessor {
 
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
 
     private final Map<String, AbstractPostNormalizer> postProcessors;
     private final Boolean useLocalXSDCache;
 
-    private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
     private final FacetMappingFactory facetMappingFactory;
     private final FieldNameServiceImpl fieldNameService;
     private final VloConfig config;
@@ -44,8 +44,8 @@ public class CMDIParserVTDXML implements CMDIDataProcessor {
     }
 
     @Override
-    public CMDIData process(File file, ResourceStructureGraph resourceStructureGraph) throws CMDIParsingException, VTDException, IOException, URISyntaxException {
-        final CMDIData cmdiData = new CMDIData(this.fieldNameService);
+    public CMDIData<T> process(File file, ResourceStructureGraph resourceStructureGraph) throws CMDIParsingException, VTDException, IOException, URISyntaxException {
+        final CMDIData cmdiData = new CMDIDataSolrImpl(this.fieldNameService); //TODO: Factory!
         final VTDGen vg = new VTDGen();
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
             vg.setDoc(IOUtils.toByteArray(fileInputStream));
