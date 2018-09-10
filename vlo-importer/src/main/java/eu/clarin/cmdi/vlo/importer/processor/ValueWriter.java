@@ -60,7 +60,7 @@ public class ValueWriter {
 
             for (ValueSet valueSet : entry.getValue()) {
                 final FacetConfiguration targetFacetConfig = valueSet.getTargetFacet().getFacetConfiguration();
-                insertFacetValue(cmdiData, targetFacetConfig, valueSet.getValueLanguagePair());
+                insertFacetValue(cmdiData, targetFacetConfig, valueSet);
                 if (!(targetFacetConfig.getAllowMultipleValues() || targetFacetConfig.getMultilingual())) {
                     break;
                 }
@@ -72,7 +72,7 @@ public class ValueWriter {
     /**
      * Sets default value if Null and if defined for the facet
      *
-     * @param facetValuesMap processed facet configurations
+     * @param facetMapping
      * @param cmdiData current CMDI data object
      */
     public void writeDefaultValues(CMDIData cmdiData, FacetMapping facetMapping) {
@@ -91,15 +91,13 @@ public class ValueWriter {
      * @param facetConfig FacetConfiguration of the target facet
      * @param valueLangPair Value/language Pair
      */
-    private void insertFacetValue(CMDIData cmdiData, FacetConfiguration facetConfig, Pair<String, String> valueLangPair) {
-
-        String fieldValue = valueLangPair.getLeft().trim();
-
+    private void insertFacetValue(CMDIData cmdiData, FacetConfiguration facetConfig, ValueSet valueSet) {
         if (facetConfig.getName().equals(fieldNameService.getFieldName(FieldKey.DESCRIPTION))) {
-            fieldValue = "{" + valueLangPair.getRight() + "}" + fieldValue;
+            valueSet = valueSet.makeCopy();
+            valueSet.setValue("{" + valueSet.getLanguage() + "}" + valueSet.getValue());
         }
 
-        cmdiData.addDocField(facetConfig.getName(), fieldValue, facetConfig.isCaseInsensitive());
+        cmdiData.addDocField(valueSet, facetConfig.isCaseInsensitive());
     }
 
     /**

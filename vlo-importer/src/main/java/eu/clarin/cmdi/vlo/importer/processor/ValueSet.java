@@ -4,6 +4,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import eu.clarin.cmdi.vlo.importer.mapping.FacetConfiguration;
 import eu.clarin.cmdi.vlo.importer.mapping.TargetFacet;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public class ValueSet {
 
@@ -58,6 +59,10 @@ public class ValueSet {
     public String getValue() {
         return getValueLanguagePair().getLeft();
     }
+    
+    public void setValue(String value) {
+        setValueLanguagePair(ImmutablePair.of(value, getLanguage()));
+    }
 
     public String getLanguage() {
         return getValueLanguagePair().getRight();
@@ -81,6 +86,10 @@ public class ValueSet {
 
     public void setResultOfValueMapping(boolean resultOfValueMapping) {
         this.isResultOfValueMapping = resultOfValueMapping;
+    }
+
+    public ValueSet makeCopy() {
+        return new ValueSet(vtdIndex, originFacetConfig, targetFacet, valueLanguagePair, isDerived, isResultOfValueMapping);
     }
 
 }

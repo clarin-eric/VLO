@@ -12,11 +12,13 @@ import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.importer.processor.ValueSet;
 
 /**
  * Represents a document of CMDI data.
  */
 public class CMDIData implements DocFieldContainer {
+
     private final FieldNameService fieldNameService;
 
     private final static Logger LOG = LoggerFactory.getLogger(CMDIData.class);
@@ -57,15 +59,22 @@ public class CMDIData implements DocFieldContainer {
      * Sets a field in the doc to a certain value. Well, at least calls another
      * (private) method that actually does this.
      *
-     * @param name
-     * @param value
+     * @param valueSet
      * @param caseInsensitive
      */
-    public void addDocField(String name, String value, boolean caseInsensitive) {
-        if (fieldNameService.getFieldName(FieldKey.ID).equals(name)) {
+    public void addDocField(ValueSet valueSet, boolean caseInsensitive) {
+        addDocField(valueSet.getTargetFacetName(), valueSet.getValue(), caseInsensitive);
+    }
+
+    public void replaceDocField(ValueSet valueSet, boolean caseInsensitive) {
+        replaceDocField(valueSet.getTargetFacetName(), valueSet.getValue(), caseInsensitive);
+    }
+
+    public void addDocField(String fieldName, String value, boolean caseInsensitive) {
+        if (fieldNameService.getFieldName(FieldKey.ID).equals(fieldName)) {
             setId(value.trim());
         } else {
-            handleDocField(name, value, caseInsensitive);
+            handleDocField(fieldName, value, caseInsensitive);
         }
     }
 
@@ -76,9 +85,9 @@ public class CMDIData implements DocFieldContainer {
         this.addDocField(name, value, caseInsensitive);
     }
 
-    public void addDocFieldIfNull(String name, String value, boolean caseInsensitive) {
-        if (this.getDocField(name) == null) {
-            this.addDocField(name, value, caseInsensitive);
+    public void addDocFieldIfNull(ValueSet valueSet, boolean caseInsensitive) {
+        if (this.getDocField(valueSet.getTargetFacetName()) == null) {
+            this.addDocField(valueSet, caseInsensitive);
         }
     }
 
