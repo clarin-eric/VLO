@@ -59,7 +59,7 @@ public class ValueSet {
     public String getValue() {
         return getValueLanguagePair().getLeft();
     }
-    
+
     public void setValue(String value) {
         setValueLanguagePair(ImmutablePair.of(value, getLanguage()));
     }
@@ -89,7 +89,14 @@ public class ValueSet {
     }
 
     public ValueSet makeCopy() {
-        return new ValueSet(vtdIndex, originFacetConfig, targetFacet, valueLanguagePair, isDerived, isResultOfValueMapping);
+        return new ValueSet(vtdIndex, originFacetConfig, targetFacet, Pair.of(valueLanguagePair.getLeft(), valueLanguagePair.getRight()), isDerived, isResultOfValueMapping);
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s [%s] %s", vtdIndex, getLanguage(), getValue());
+    }
+    
+    
 
 }
