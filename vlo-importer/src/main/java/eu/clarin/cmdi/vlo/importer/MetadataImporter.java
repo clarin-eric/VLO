@@ -60,6 +60,7 @@ import java.time.ZoneId;
 import static java.time.temporal.ChronoUnit.DAYS;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -201,12 +202,16 @@ public class MetadataImporter {
     }
 
     public static ImmutableList<FacetValuesMapFilter> registerPostMappingFilters(FieldNameService fieldNameService) {
-        return ImmutableList.of(
-                new AvailabilityPostFilter(
-                        fieldNameService.getFieldName(FieldKey.AVAILABILITY),
-                        fieldNameService.getFieldName(FieldKey.LICENSE_TYPE)
-                )
-        );
+        final List<String> availablilityFields = Stream.of(FieldKey.AVAILABILITY, FieldKey.LICENSE_TYPE)
+                .map(fieldNameService::getFieldName)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        
+        final ImmutableList.Builder<FacetValuesMapFilter> builder = ImmutableList.<FacetValuesMapFilter>builder();
+        if (!availablilityFields.isEmpty()) {
+                builder.add(new AvailabilityPostFilter(availablilityFields));
+        }
+        return builder.build();
     }
 
     /**
