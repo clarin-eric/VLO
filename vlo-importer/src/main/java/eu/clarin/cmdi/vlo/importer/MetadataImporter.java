@@ -68,6 +68,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -159,59 +161,44 @@ public class MetadataImporter {
     public static Map<String, AbstractPostNormalizer> registerPostProcessors(VloConfig config, FieldNameService fieldNameService, LanguageCodeUtils languageCodeUtils) {
         ImmutableMap.Builder<String, AbstractPostNormalizer> imb = ImmutableMap.builder();
 
-        imb.put(fieldNameService.getFieldName(FieldKey.ID), new IdPostNormalizer());
-
-        if (fieldNameService.getFieldName(FieldKey.CONTINENT) != null) {
-            imb.put(fieldNameService.getFieldName(FieldKey.CONTINENT), new ContinentNamePostNormalizer());
-        }
-        if (fieldNameService.getFieldName(FieldKey.COUNTRY) != null) {
-            imb.put(fieldNameService.getFieldName(FieldKey.COUNTRY), new CountryNamePostNormalizer(config));
-        }
-        if (fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE) != null) {
-            imb.put(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE), new LanguageCodePostNormalizer(config, languageCodeUtils));
-        }
-        if (fieldNameService.getFieldName(FieldKey.LANGUAGE_NAME) != null) {
-            imb.put(fieldNameService.getFieldName(FieldKey.LANGUAGE_NAME), new LanguageNamePostNormalizer(languageCodeUtils));
-        }
-        if (fieldNameService.getFieldName(FieldKey.AVAILABILITY) != null) {
-            imb.put(fieldNameService.getFieldName(FieldKey.AVAILABILITY), new AvailabilityPostNormalizer(config));
-        }
-        if (fieldNameService.getFieldName(FieldKey.LICENSE_TYPE) != null) {
-            imb.put(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE), new LicenseTypePostNormalizer(config));
-        }
-        if (fieldNameService.getFieldName(FieldKey.ORGANISATION) != null) {
-            imb.put(fieldNameService.getFieldName(FieldKey.ORGANISATION), new OrganisationPostNormalizer(config));
-        }
-        if (fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE) != null) {
-            imb.put(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE), new TemporalCoveragePostNormalizer());
-        }
-        if (fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE) != null) {
-            imb.put(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE), new CMDIComponentProfileNamePostNormalizer(config));
-        }
-        if (fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS) != null) {
-            imb.put(fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS), new ResourceClassPostNormalizer());
-        }
-        if (fieldNameService.getFieldName(FieldKey.LICENSE) != null) {
-            imb.put(fieldNameService.getFieldName(FieldKey.LICENSE), new LicensePostNormalizer(config));
-        }
-        if (fieldNameService.getFieldName(FieldKey.NAME) != null) {
-            imb.put(fieldNameService.getFieldName(FieldKey.NAME), new NamePostNormalizer());
-        }
-
+        imb.put(fieldNameService.getFieldName(FieldKey.ID), new IdPostNormalizer());       
+        registerPostProcessor(fieldNameService, imb, FieldKey.CONTINENT, () -> new ContinentNamePostNormalizer());
+        registerPostProcessor(fieldNameService, imb, FieldKey.COUNTRY, () -> new CountryNamePostNormalizer(config));
+        registerPostProcessor(fieldNameService, imb, FieldKey.LANGUAGE_CODE, () -> new LanguageCodePostNormalizer(config, languageCodeUtils));
+        registerPostProcessor(fieldNameService, imb, FieldKey.LANGUAGE_NAME, () -> new LanguageNamePostNormalizer(languageCodeUtils));
+        registerPostProcessor(fieldNameService, imb, FieldKey.AVAILABILITY, () -> new AvailabilityPostNormalizer(config));
+        registerPostProcessor(fieldNameService, imb, FieldKey.LICENSE_TYPE, () -> new LicenseTypePostNormalizer(config));
+        registerPostProcessor(fieldNameService, imb, FieldKey.ORGANISATION, () -> new OrganisationPostNormalizer(config));
+        registerPostProcessor(fieldNameService, imb, FieldKey.TEMPORAL_COVERAGE, () -> new TemporalCoveragePostNormalizer());
+        registerPostProcessor(fieldNameService, imb, FieldKey.CLARIN_PROFILE, () -> new CMDIComponentProfileNamePostNormalizer(config));
+        registerPostProcessor(fieldNameService, imb, FieldKey.RESOURCE_CLASS, () -> new ResourceClassPostNormalizer());
+        registerPostProcessor(fieldNameService, imb, FieldKey.LICENSE, () -> new LicensePostNormalizer(config));
+        registerPostProcessor(fieldNameService, imb, FieldKey.NAME, () -> new NamePostNormalizer());
+        
         return imb.build();
+    }
+    
+    public static void registerPostProcessor(FieldNameService fieldNameService, ImmutableMap.Builder<String, AbstractPostNormalizer> imb, FieldKey key, Supplier<AbstractPostNormalizer> postProcessorConstructor) {
+        forFieldsIfExists((fields) -> imb.put(fields.get(0), postProcessorConstructor.get()), fieldNameService, key);
     }
 
     public static ImmutableList<FacetValuesMapFilter> registerPostMappingFilters(FieldNameService fieldNameService) {
-        final List<String> availablilityFields = Stream.of(FieldKey.AVAILABILITY, FieldKey.LICENSE_TYPE)
+        final ImmutableList.Builder<FacetValuesMapFilter> builder = ImmutableList.<FacetValuesMapFilter>builder();
+        forFieldsIfExists(
+                (fields) -> builder.add(new AvailabilityPostFilter(fields)),
+                fieldNameService,
+                FieldKey.AVAILABILITY, FieldKey.LICENSE_TYPE);
+        return builder.build();
+    }
+
+    private static void forFieldsIfExists(Consumer<List<String>> consumer, FieldNameService fieldNameService, FieldKey... key) {
+        final List<String> fields = Stream.of(key)
                 .map(fieldNameService::getFieldName)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-        
-        final ImmutableList.Builder<FacetValuesMapFilter> builder = ImmutableList.<FacetValuesMapFilter>builder();
-        if (!availablilityFields.isEmpty()) {
-                builder.add(new AvailabilityPostFilter(availablilityFields));
+        if (!fields.isEmpty()) {
+            consumer.accept(fields);
         }
-        return builder.build();
     }
 
     /**
