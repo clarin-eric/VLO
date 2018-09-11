@@ -45,23 +45,33 @@ public class ValueWriter {
 
     private final FieldNameServiceImpl fieldNameService;
     private final Map<String, AbstractPostNormalizer> postProcessors;
-    private final List<FacetValuesMapFilter> preWriteFilters;
+    private final List<FacetValuesMapFilter> postMappingFilters;
 
-    public ValueWriter(VloConfig config, Map<String, AbstractPostNormalizer> postProcessors, List<FacetValuesMapFilter> preWriteFilters) {
+    /**
+     *
+     * @param config VLO configuration
+     * @param postProcessors Processors to use for creating default values
+     * @param postMappingFilters Filters to be applied before writing values to
+     * the CMDIData object
+     */
+    public ValueWriter(VloConfig config, Map<String, AbstractPostNormalizer> postProcessors, List<FacetValuesMapFilter> postMappingFilters) {
         this.postProcessors = postProcessors;
         this.fieldNameService = new FieldNameServiceImpl(config);
-        this.preWriteFilters = preWriteFilters;
+        this.postMappingFilters = postMappingFilters;
     }
 
     /**
+     * Applies post-mapping filters, then writes values from the facetValuesMap
+     * to the cmdiData object
+     *
      * @param cmdiData cmdiData representation of the CMDI document
      * @param facetValuesMap A map of FacetConfigurations (key)/Lists of
      * ValueSets (value)
      */
     public void writeValuesToDoc(CMDIData cmdiData, FacetValuesMap facetValuesMap) {
         //filter values
-        if (preWriteFilters != null) {
-            preWriteFilters.forEach(f -> f.filter(facetValuesMap));
+        if (postMappingFilters != null) {
+            postMappingFilters.forEach(f -> f.filter(facetValuesMap));
         }
 
         //insert values
