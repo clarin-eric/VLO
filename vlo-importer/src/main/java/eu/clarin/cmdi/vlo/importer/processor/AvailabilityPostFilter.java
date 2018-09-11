@@ -21,31 +21,39 @@ import eu.clarin.cmdi.vlo.FacetConstants;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * In case that Availability facet has more then one value use the most
  * restrictive tag from PUB, ACA and RES.
  */
 public class AvailabilityPostFilter implements FacetValuesMapFilter {
-
+    
+    private final static Logger LOG = LoggerFactory.getLogger(AvailabilityPostFilter.class);
+    
     private final List<String> fields;
-
+    
     public AvailabilityPostFilter(String... field) {
         this.fields = ImmutableList.copyOf(field);
+        LOG.debug("Post-filtering fields {}", fields);
     }
-
+    
     @Override
     public void filter(FacetValuesMap map) {
         fields.forEach(field -> reduceAvailabilityForField(map, field));
     }
-
+    
     private void reduceAvailabilityForField(FacetValuesMap map, String fieldName) {
         final List<ValueSet> values = map.get(fieldName);
         if (values != null) {
-            map.put(fieldName, reduceAvailability(values));
+            final List<ValueSet> reduced = reduceAvailability(values);
+            map.put(fieldName, reduced);
+            
+            LOG.trace("Reduced values for {}: {}->{}", fieldName, values, reduced);
         }
     }
-
+    
     private List<ValueSet> reduceAvailability(List<ValueSet> valueSets) {
         if (valueSets.isEmpty()) {
             return valueSets;
@@ -62,11 +70,11 @@ public class AvailabilityPostFilter implements FacetValuesMapFilter {
                 .max((vs1, vs2) -> availabilityToLvl(vs1) - availabilityToLvl(vs2))
                 // map to stream so that we can concatenate
                 .map(Stream::of).orElseGet(Stream::empty);
-
+        
         return Stream.concat(highestLevel, otherTags)
                 .collect(Collectors.toList());
     }
-
+    
     private int availabilityToLvl(ValueSet vs) {
         final String availabilty = vs.getValue();
         if (availabilty == null) {
@@ -83,5 +91,5 @@ public class AvailabilityPostFilter implements FacetValuesMapFilter {
                 return -1; // other tags
         }
     }
-
+    
 }
