@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStore;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
+import java.util.Optional;
 
 /**
  * Handles a single record in the import process
@@ -49,6 +50,8 @@ public class CMDIRecordImporter<T> {
     private final CMDIDataProcessor<T> processor;
     private final ImportStatistics stats;
     private final DocumentStore documentStore;
+
+    private final static DataRoot NOOP_DATAROOT = new DataRoot("dataroot", new File("/"), "http://null", "", false);
 
     /**
      * Contains MDSelflinks (usually). Just to know what we have already done.
@@ -66,19 +69,20 @@ public class CMDIRecordImporter<T> {
      * Process single CMDI file with CMDIDataProcessor
      *
      * @param file CMDI input file
-     * @param dataOrigin
-     * @param resourceStructureGraph null to skip hierarchy processing
-     * @param endpointDescription
+     * @param dataOrigin if left empty, a dummy data origin will be used to populate the technical metadata
+     * @param resourceStructureGraph leave empty skip hierarchy processing
+     * @param endpointDescription if present, used to populate some fields including national project
      * @throws eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException
      * @throws IOException
      */
-    public void importRecord(File file, DataRoot dataOrigin, ResourceStructureGraph resourceStructureGraph, EndpointDescription endpointDescription) throws DocumentStoreException, IOException {
+    public void importRecord(File file, Optional<DataRoot> dataOrigin, Optional<ResourceStructureGraph> resourceStructureGraph, Optional<EndpointDescription> endpointDescription) throws DocumentStoreException, IOException {
         stats.nrOfFilesAnalyzed().incrementAndGet();
         CMDIData<T> cmdiData = null;
         try {
-            cmdiData = processor.process(file, resourceStructureGraph);
+            cmdiData = processor.process(file, resourceStructureGraph.orElse(null));
             if (!idOk(cmdiData.getId())) {
-                cmdiData.setId(dataOrigin.getOriginName() + "/" + file.getName()); //No id found in the metadata file so making one up based on the file name. Not quaranteed to be unique, but we have to set something.
+                cmdiData.setId(dataOrigin.orElse(NOOP_DATAROOT)
+                        .getOriginName() + "/" + file.getName()); //No id found in the metadata file so making one up based on the file name. Not quaranteed to be unique, but we have to set something.
                 stats.nrOfFilesWithoutId().incrementAndGet();
             }
         } catch (Exception e) {
@@ -98,14 +102,14 @@ public class CMDIRecordImporter<T> {
                 T document = cmdiData.getDocument();
                 if (document != null) {
                     // add technical metadata
-                    addTechnicalMetadata(cmdiData, dataOrigin, file, endpointDescription);
+                    addTechnicalMetadata(file, cmdiData, dataOrigin.orElse(NOOP_DATAROOT), endpointDescription);
                     // add resource proxys      
                     addResourceData(cmdiData);
                     // update doc in store
                     submitDocumentUpdate(document, file);
                     // mark document as completed in graph
-                    if (resourceStructureGraph != null && resourceStructureGraph.getVertex(cmdiData.getId()) != null) {
-                        resourceStructureGraph.getVertex(cmdiData.getId()).setWasImported(true);
+                    if (resourceStructureGraph.isPresent() && resourceStructureGraph.get().getVertex(cmdiData.getId()) != null) {
+                        resourceStructureGraph.get().getVertex(cmdiData.getId()).setWasImported(true);
                     }
                 }
             } else {
@@ -125,27 +129,28 @@ public class CMDIRecordImporter<T> {
         return id != null && !id.trim().isEmpty();
     }
 
-    private void addTechnicalMetadata(CMDIData<T> cmdiData, DataRoot dataOrigin, File file, EndpointDescription endpointDescription) {
+    private void addTechnicalMetadata(File file, CMDIData<T> cmdiData, DataRoot dataOrigin, Optional<EndpointDescription> endpointDescription) {
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER), dataOrigin.getOriginName(), false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.ID), cmdiData.getId(), false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FILENAME), file.getAbsolutePath(), false);
 
         // data provided by CLARIN's OAI-PMH harvester
-        if (endpointDescription != null) {
-            if (endpointDescription.getOaiEndpointUrl() != null) {
-                cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.OAI_ENDPOINT_URI), endpointDescription.getOaiEndpointUrl(), false);
-            }
-            if (endpointDescription.getNationalProject() != null) {
-                cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT), endpointDescription.getNationalProject(), false);
-            }
-            if (endpointDescription.getCentreName() != null) {
-                cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER_NAME), endpointDescription.getCentreName(), false);
-            }
-        }
+        endpointDescription.ifPresent(
+                descr -> {
+                    if (descr.getOaiEndpointUrl() != null) {
+                        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.OAI_ENDPOINT_URI), descr.getOaiEndpointUrl(), false);
+                    }
+                    if (descr.getNationalProject() != null) {
+                        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT), descr.getNationalProject(), false);
+                    }
+                    if (descr.getCentreName() != null) {
+                        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER_NAME), descr.getCentreName(), false);
+                    }
+                }
+        );
 
         String metadataSourceUrl = dataOrigin.getPrefix();
         metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getToStrip().length());
-
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA), metadataSourceUrl, false);
 
         // add SearchServices (should be CQL endpoint)

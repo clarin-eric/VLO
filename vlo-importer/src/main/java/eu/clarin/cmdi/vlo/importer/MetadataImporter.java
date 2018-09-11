@@ -60,6 +60,7 @@ import java.time.ZoneId;
 import static java.time.temporal.ChronoUnit.DAYS;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -331,7 +332,7 @@ public class MetadataImporter {
         final Stream<Callable<Void>> processors = centreFiles.stream().map((File file) -> {
             return (Callable) () -> {
                 LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
-                recordHandler.importRecord(file, dataRoot, resourceStructureGraph, directoryEndpointMap.get(file.getParentFile().getName()));
+                recordHandler.importRecord(file, Optional.of(dataRoot), Optional.of(resourceStructureGraph), Optional.of(directoryEndpointMap.get(file.getParentFile().getName())));
                 return null;
             };
         });

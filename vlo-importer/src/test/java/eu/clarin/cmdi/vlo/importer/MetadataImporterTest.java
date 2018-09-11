@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -405,7 +405,7 @@ public class MetadataImporterTest extends ImporterTestcase {
                                  * in a suitable way.
                                  */
                                 try {
-                                    getRecordProcessor().importRecord(file, dataRoot, null, null);
+                                    getRecordProcessor().importRecord(file, Optional.of(dataRoot), Optional.empty(), Optional.empty());
                                 } catch (DocumentStoreException ex) {
                                     Logger.getLogger(MetadataImporterTest.class.getName()).log(Level.SEVERE, null, ex);
                                 }
