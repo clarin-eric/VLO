@@ -161,7 +161,7 @@ public class MetadataImporter {
     public static Map<String, AbstractPostNormalizer> registerPostProcessors(VloConfig config, FieldNameService fieldNameService, LanguageCodeUtils languageCodeUtils) {
         ImmutableMap.Builder<String, AbstractPostNormalizer> imb = ImmutableMap.builder();
 
-        imb.put(fieldNameService.getFieldName(FieldKey.ID), new IdPostNormalizer());       
+        imb.put(fieldNameService.getFieldName(FieldKey.ID), new IdPostNormalizer());
         registerPostProcessor(fieldNameService, imb, FieldKey.CONTINENT, () -> new ContinentNamePostNormalizer());
         registerPostProcessor(fieldNameService, imb, FieldKey.COUNTRY, () -> new CountryNamePostNormalizer(config));
         registerPostProcessor(fieldNameService, imb, FieldKey.LANGUAGE_CODE, () -> new LanguageCodePostNormalizer(config, languageCodeUtils));
@@ -174,12 +174,8 @@ public class MetadataImporter {
         registerPostProcessor(fieldNameService, imb, FieldKey.RESOURCE_CLASS, () -> new ResourceClassPostNormalizer());
         registerPostProcessor(fieldNameService, imb, FieldKey.LICENSE, () -> new LicensePostNormalizer(config));
         registerPostProcessor(fieldNameService, imb, FieldKey.NAME, () -> new NamePostNormalizer());
-        
+
         return imb.build();
-    }
-    
-    public static void registerPostProcessor(FieldNameService fieldNameService, ImmutableMap.Builder<String, AbstractPostNormalizer> imb, FieldKey key, Supplier<AbstractPostNormalizer> postProcessorConstructor) {
-        forFieldsIfExists((fields) -> imb.put(fields.get(0), postProcessorConstructor.get()), fieldNameService, key);
     }
 
     public static ImmutableList<FacetValuesMapFilter> registerPostMappingFilters(FieldNameService fieldNameService) {
@@ -189,16 +185,6 @@ public class MetadataImporter {
                 fieldNameService,
                 FieldKey.AVAILABILITY, FieldKey.LICENSE_TYPE);
         return builder.build();
-    }
-
-    private static void forFieldsIfExists(Consumer<List<String>> consumer, FieldNameService fieldNameService, FieldKey... key) {
-        final List<String> fields = Stream.of(key)
-                .map(fieldNameService::getFieldName)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-        if (!fields.isEmpty()) {
-            consumer.accept(fields);
-        }
     }
 
     /**
@@ -715,6 +701,37 @@ public class MetadataImporter {
 
     protected CMDIRecordImporter getRecordProcessor() {
         return recordHandler;
+    }
+
+    /**
+     * Helper for registering a post-processor
+     *
+     * @param fieldNameService
+     * @param imb
+     * @param key
+     * @param postProcessorConstructor
+     */
+    private static void registerPostProcessor(FieldNameService fieldNameService, ImmutableMap.Builder<String, AbstractPostNormalizer> imb, FieldKey key, Supplier<AbstractPostNormalizer> postProcessorConstructor) {
+        forFieldsIfExists((fields) -> imb.put(fields.get(0), postProcessorConstructor.get()), fieldNameService, key);
+    }
+
+    /**
+     * Executes am operation on a list of fields identified by key if one or
+     * more of these exist
+     *
+     * @param consumer operation to execute, only parameter being the list of resolved field names known to exist
+     * @param fieldNameService
+     * @param key keys of fields to check for and operate on
+     */
+    private static void forFieldsIfExists(Consumer<List<String>> consumer, FieldNameService fieldNameService, FieldKey... key) {
+        final List<String> fields = Stream.of(key)
+                .map(fieldNameService::getFieldName)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        
+        if (!fields.isEmpty()) {
+            consumer.accept(fields);
+        }
     }
 
     /**
