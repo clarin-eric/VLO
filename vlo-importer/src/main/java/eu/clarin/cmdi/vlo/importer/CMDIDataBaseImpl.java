@@ -147,20 +147,4 @@ public abstract class CMDIDataBaseImpl<T> implements CMDIData<T> {
         return id;
     }
 
-    protected int availabilityToLvl(String availabilty) {
-        if (availabilty == null) {
-            return 0;
-        }
-        switch (availabilty) {
-            case FacetConstants.AVAILABILITY_LEVEL_PUB:
-                return 1;
-            case FacetConstants.AVAILABILITY_LEVEL_ACA:
-                return 2;
-            case FacetConstants.AVAILABILITY_LEVEL_RES:
-                return 3;
-            default:
-                return -1; // other tags
-        }
-    }
-
 }

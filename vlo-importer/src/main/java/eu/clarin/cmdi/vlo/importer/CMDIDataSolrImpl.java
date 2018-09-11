@@ -1,13 +1,14 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
 import java.util.Collection;
 
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.SolrInputField;
 
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.importer.processor.ValueSet;
+import org.apache.solr.common.SolrInputField;
 
 /**
  * Represents a document of CMDI data.
@@ -81,6 +82,7 @@ public class CMDIDataSolrImpl extends CMDIDataBaseImpl<SolrInputDocument> {
         return this.doc.containsKey(name);
     }
 
+    @Override
     public Collection<Object> getFieldValues(String name) {
         return this.doc.getFieldValues(name);
     }
@@ -130,7 +132,7 @@ public class CMDIDataSolrImpl extends CMDIDataBaseImpl<SolrInputDocument> {
      * @param field field to reduce availability values in
      * @param value value to insert (add or replace)
      */
-    protected void reduceAvailability(String field, String value) {
+    private void reduceAvailability(String field, String value) {
         Collection<Object> currentValues = doc.getFieldValues(field);
         // the first value
         if (currentValues == null) {
@@ -163,6 +165,22 @@ public class CMDIDataSolrImpl extends CMDIDataBaseImpl<SolrInputDocument> {
                 }
             }
             doc.replace(field, fOld, fNew);
+        }
+    }
+
+    private int availabilityToLvl(String availabilty) {
+        if (availabilty == null) {
+            return 0;
+        }
+        switch (availabilty) {
+            case FacetConstants.AVAILABILITY_LEVEL_PUB:
+                return 1;
+            case FacetConstants.AVAILABILITY_LEVEL_ACA:
+                return 2;
+            case FacetConstants.AVAILABILITY_LEVEL_RES:
+                return 3;
+            default:
+                return -1; // other tags
         }
     }
 
