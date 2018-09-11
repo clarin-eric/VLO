@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.importer.processor;
 
+import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -40,14 +41,20 @@ import org.slf4j.LoggerFactory;
  */
 public class ValueWriter {
 
+
     private final static Logger LOG = LoggerFactory.getLogger(ValueWriter.class);
 
     private final FieldNameServiceImpl fieldNameService;
     private final Map<String, AbstractPostNormalizer> postProcessors;
+    private final List<FacetValuesMapFilter> valuesMapFilters;
 
     public ValueWriter(VloConfig config, Map<String, AbstractPostNormalizer> postProcessors) {
         this.postProcessors = postProcessors;
         this.fieldNameService = new FieldNameServiceImpl(config);
+
+        valuesMapFilters = ImmutableList.of(
+                new AvailabilityPostFilter(fieldNameService)
+        );
     }
 
     /**
@@ -56,6 +63,7 @@ public class ValueWriter {
      * ValueSets (value)
      */
     public void writeValuesToDoc(CMDIData cmdiData, FacetValuesMap facetValuesMap) {
+        filterValuesMap(facetValuesMap);
         for (Map.Entry<String, List<ValueSet>> entry : facetValuesMap.entrySet()) {
 
             for (ValueSet valueSet : entry.getValue()) {
@@ -67,6 +75,10 @@ public class ValueWriter {
             }
 
         }
+    }
+
+    private void filterValuesMap(FacetValuesMap facetValuesMap) {
+        valuesMapFilters.forEach(f -> f.filter(facetValuesMap));
     }
 
     /**
@@ -147,4 +159,5 @@ public class ValueWriter {
             valueLangPairList.add(new ImmutablePair<>(value, languageCode));
         }
     }
+
 }
