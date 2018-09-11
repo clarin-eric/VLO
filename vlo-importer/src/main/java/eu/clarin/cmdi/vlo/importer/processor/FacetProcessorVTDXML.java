@@ -278,7 +278,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
         }
         boolean removeSourceValue = false;
 
-        final List<String> postProcessed = postProcess(facetConfig.getName(), valueLanguagePair.getLeft(), cmdiData);
+        final List<String> postProcessed = postProcess(facetConfig.getName(), valueLanguagePair.getLeft(), facetValuesMap);
         
         if (facetConfig.getConditionTargetSet() != null) {
 
@@ -321,7 +321,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
         // insert post-processed values into derived facet(s) if configured
         for (FacetConfiguration derivedFacetConfig : facetConfig.getDerivedFacets()) {
             for (String postProcessedValue : postProcessed) {
-                for (String derivedValue : postProcess(derivedFacetConfig.getName(), postProcessedValue, cmdiData)) {
+                for (String derivedValue : postProcess(derivedFacetConfig.getName(), postProcessedValue, facetValuesMap)) {
                     ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, new TargetFacet(derivedFacetConfig, ""), ImmutablePair.of(derivedValue, valueLanguagePair.getRight()), true, false);
                     setTargetValue(facetValuesMap, valueSet);
                 }
@@ -361,11 +361,11 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      * @return value after applying matching PostProcessor or the original value
      * if no PostProcessor was registered for the facet
      */
-    private List<String> postProcess(String facetName, String extractedValue, CMDIData cmdiData) {
+    private List<String> postProcess(String facetName, String extractedValue, FacetValuesMap facetValuesMap) {
         List<String> resultList = new ArrayList<>();
         if (postProcessors.containsKey(facetName)) {
             AbstractPostNormalizer processor = postProcessors.get(facetName);
-            resultList = processor.process(extractedValue, cmdiData);
+            resultList = processor.process(extractedValue, facetValuesMap);
         } else {
             resultList.add(extractedValue);
         }
