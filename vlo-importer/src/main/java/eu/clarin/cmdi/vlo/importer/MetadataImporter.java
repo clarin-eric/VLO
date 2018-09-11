@@ -324,7 +324,7 @@ public class MetadataImporter {
         final Stream<Callable<Void>> processors = centreFiles.stream().map((File file) -> {
             return (Callable) () -> {
                 LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
-                recordHandler.importRecord(file, Optional.of(dataRoot), Optional.of(resourceStructureGraph), Optional.of(directoryEndpointMap.get(file.getParentFile().getName())));
+                recordHandler.importRecord(file, Optional.of(dataRoot), Optional.ofNullable(resourceStructureGraph), Optional.ofNullable(directoryEndpointMap.get(file.getParentFile().getName())));
                 return null;
             };
         });
