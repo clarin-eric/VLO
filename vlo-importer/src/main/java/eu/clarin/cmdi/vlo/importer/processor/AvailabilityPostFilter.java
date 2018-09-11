@@ -16,9 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.importer.processor;
 
+import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.FieldKey;
-import eu.clarin.cmdi.vlo.config.FieldNameService;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,16 +28,15 @@ import java.util.stream.Stream;
  */
 public class AvailabilityPostFilter implements FacetValuesMapFilter {
 
-    final FieldNameService fieldNameService;
+    private final List<String> fields;
 
-    public AvailabilityPostFilter(FieldNameService fieldNameService) {
-        this.fieldNameService = fieldNameService;
+    public AvailabilityPostFilter(String... field) {
+        this.fields = ImmutableList.copyOf(field);
     }
 
     @Override
     public void filter(FacetValuesMap map) {
-        reduceAvailabilityForField(map, fieldNameService.getFieldName(FieldKey.AVAILABILITY));
-        reduceAvailabilityForField(map, fieldNameService.getFieldName(FieldKey.LICENSE_TYPE));
+        fields.forEach(field -> reduceAvailabilityForField(map, field));
     }
 
     private void reduceAvailabilityForField(FacetValuesMap map, String fieldName) {

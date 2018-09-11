@@ -201,7 +201,10 @@ public class MetadataImporter {
 
     public static ImmutableList<FacetValuesMapFilter> registerPostMappingFilters(FieldNameService fieldNameService) {
         return ImmutableList.of(
-                new AvailabilityPostFilter(fieldNameService)
+                new AvailabilityPostFilter(
+                        fieldNameService.getFieldName(FieldKey.AVAILABILITY),
+                        fieldNameService.getFieldName(FieldKey.LICENSE_TYPE)
+                )
         );
     }
 
