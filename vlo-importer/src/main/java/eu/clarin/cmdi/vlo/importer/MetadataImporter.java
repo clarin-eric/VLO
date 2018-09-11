@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import java.io.File;
@@ -123,6 +124,8 @@ public class MetadataImporter {
      */
     protected final Map<String, AbstractPostNormalizer> postProcessors;
 
+    protected final List<FacetValuesMapFilter> postMappingFilters;
+
     /**
      * Some caching for solr documents (we are more efficient if we ram a whole
      * bunch to the solr server at once.
@@ -141,11 +144,12 @@ public class MetadataImporter {
         this.config = config;
         this.fieldNameService = new FieldNameServiceImpl(config);
         this.clDatarootsList = clDatarootsList;
-        this.postProcessors = registerPostProcessors(config, this.fieldNameService, languageCodeUtils);
+        this.postProcessors = registerPostProcessors(config, fieldNameService, languageCodeUtils);
+        this.postMappingFilters = registerPostMappingFilters(fieldNameService);
         this.solrBridge = solrBrdige;
 
         final CMDIDataSolrImplFactory cmdiDataFactory = new CMDIDataSolrImplFactory(fieldNameService);
-        final CMDIDataProcessor<SolrInputDocument> processor = new CMDIParserVTDXML<>(postProcessors, config, mappingFactory, marshaller, cmdiDataFactory, false);
+        final CMDIDataProcessor<SolrInputDocument> processor = new CMDIParserVTDXML<>(postProcessors, postMappingFilters, config, mappingFactory, marshaller, cmdiDataFactory, fieldNameService, false);
         this.recordHandler = new CMDIRecordImporter(processor, solrBrdige, fieldNameService, stats);
 
     }
@@ -193,7 +197,12 @@ public class MetadataImporter {
         }
 
         return imb.build();
+    }
 
+    public static ImmutableList<FacetValuesMapFilter> registerPostMappingFilters(FieldNameService fieldNameService) {
+        return ImmutableList.of(
+                new AvailabilityPostFilter(fieldNameService)
+        );
     }
 
     /**

@@ -24,7 +24,7 @@ import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.FieldKey;
-import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
 import eu.clarin.cmdi.vlo.importer.Pattern;
@@ -61,15 +61,15 @@ public class FacetProcessorVTDXML implements FacetProcessor {
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
 
     private final Vocabulary CCR;
-    private final FieldNameServiceImpl fieldNameService;
+    private final FieldNameService fieldNameService;
     private final ValueWriter valueWriter;
     private final VTDNav nav;
 
-    public FacetProcessorVTDXML(Map<String, AbstractPostNormalizer> postProcessors, VloConfig config, VLOMarshaller marshaller, VTDNav nav) {
+    public FacetProcessorVTDXML(Map<String, AbstractPostNormalizer> postProcessors, VloConfig config, VLOMarshaller marshaller, ValueWriter valueWriter, FieldNameService fieldNameService, VTDNav nav) {
         this.postProcessors = postProcessors;
         this.CCR = new Vocabulary(config.getConceptRegistryUrl());
-        this.fieldNameService = new FieldNameServiceImpl(config);
-        this.valueWriter = new ValueWriter(config, postProcessors);
+        this.fieldNameService = fieldNameService;
+        this.valueWriter = valueWriter;
         this.nav = nav;
     }
 

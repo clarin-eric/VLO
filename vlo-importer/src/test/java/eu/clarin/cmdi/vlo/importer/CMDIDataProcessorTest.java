@@ -24,7 +24,10 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
     private ResourceStructureGraph resourceStructureGraph;
 
     private CMDIDataProcessor<SolrInputDocument> getDataParser() {
-        return new CMDIParserVTDXML<>(MetadataImporter.registerPostProcessors(config, fieldNameService, languageCodeUtils), config, facetMappingFactory, marshaller, new CMDIDataSolrImplFactory(fieldNameService), true);
+        return new CMDIParserVTDXML<>(
+                MetadataImporter.registerPostProcessors(config, fieldNameService, languageCodeUtils),
+                MetadataImporter.registerPostMappingFilters(fieldNameService),
+                config, facetMappingFactory, marshaller, new CMDIDataSolrImplFactory(fieldNameService), fieldNameService, true);
     }
 
     @Before

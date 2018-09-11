@@ -41,20 +41,16 @@ import org.slf4j.LoggerFactory;
  */
 public class ValueWriter {
 
-
     private final static Logger LOG = LoggerFactory.getLogger(ValueWriter.class);
 
     private final FieldNameServiceImpl fieldNameService;
     private final Map<String, AbstractPostNormalizer> postProcessors;
-    private final List<FacetValuesMapFilter> valuesMapFilters;
+    private final List<FacetValuesMapFilter> preWriteFilters;
 
-    public ValueWriter(VloConfig config, Map<String, AbstractPostNormalizer> postProcessors) {
+    public ValueWriter(VloConfig config, Map<String, AbstractPostNormalizer> postProcessors, List<FacetValuesMapFilter> preWriteFilters) {
         this.postProcessors = postProcessors;
         this.fieldNameService = new FieldNameServiceImpl(config);
-
-        valuesMapFilters = ImmutableList.of(
-                new AvailabilityPostFilter(fieldNameService)
-        );
+        this.preWriteFilters = preWriteFilters;
     }
 
     /**
@@ -63,7 +59,12 @@ public class ValueWriter {
      * ValueSets (value)
      */
     public void writeValuesToDoc(CMDIData cmdiData, FacetValuesMap facetValuesMap) {
-        filterValuesMap(facetValuesMap);
+        //filter values
+        if (preWriteFilters != null) {
+            preWriteFilters.forEach(f -> f.filter(facetValuesMap));
+        }
+
+        //insert values
         for (Map.Entry<String, List<ValueSet>> entry : facetValuesMap.entrySet()) {
 
             for (ValueSet valueSet : entry.getValue()) {
@@ -75,10 +76,6 @@ public class ValueWriter {
             }
 
         }
-    }
-
-    private void filterValuesMap(FacetValuesMap facetValuesMap) {
-        valuesMapFilters.forEach(f -> f.filter(facetValuesMap));
     }
 
     /**

@@ -18,9 +18,8 @@ package eu.clarin.cmdi.vlo.importer.processor;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.FieldKey;
-import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,9 +29,9 @@ import java.util.stream.Stream;
  */
 public class AvailabilityPostFilter implements FacetValuesMapFilter {
 
-    final FieldNameServiceImpl fieldNameService;
+    final FieldNameService fieldNameService;
 
-    public AvailabilityPostFilter(FieldNameServiceImpl fieldNameService) {
+    public AvailabilityPostFilter(FieldNameService fieldNameService) {
         this.fieldNameService = fieldNameService;
     }
 

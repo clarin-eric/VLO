@@ -66,7 +66,7 @@ public class CMDIParserVTDXMLTest extends ImporterTestcase {
         final VloConfig newVloConfig = new VloConfig();
         newVloConfig.setValueMappingsFile(super.getTestValueMappingsFilePath());
         final FacetMappingFactory facetMappingFactory = new FacetMappingFactory(newVloConfig, marshaller);
-        CMDIParserVTDXML parser = new CMDIParserVTDXML(null, newVloConfig, facetMappingFactory, marshaller, new CMDIDataSolrImplFactory(fieldNameService), true);
+        CMDIParserVTDXML parser = new CMDIParserVTDXML(null, null, newVloConfig, facetMappingFactory, marshaller, new CMDIDataSolrImplFactory(fieldNameService), fieldNameService, true);
         String xsd = SchemaParsingUtil.extractXsd(nav);
         return xsd;
     }

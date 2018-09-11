@@ -109,7 +109,8 @@ public class MetadataMapper {
             final CMDIDataSolrImplFactory cmdiDataFactory = new CMDIDataSolrImplFactory(fieldNameService);
             CMDIDataProcessor<SolrInputDocument> processor = new CMDIParserVTDXML(
                     MetadataImporter.registerPostProcessors(config, fieldNameService, languageCodeUtils),
-                    config, facetMappingFactory, marshaller, cmdiDataFactory, false);
+                    MetadataImporter.registerPostMappingFilters(fieldNameService),
+                    config, facetMappingFactory, marshaller, cmdiDataFactory, fieldNameService, false);
 
             if (recordFile == null) {
                 String message = "Could not get record filename - stopping.";
