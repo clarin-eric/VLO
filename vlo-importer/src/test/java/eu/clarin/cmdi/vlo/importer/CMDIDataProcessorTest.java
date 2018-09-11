@@ -930,4 +930,48 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
 
         assertEquals("RES", data.getDocument().getFieldValue(fieldNameService.getFieldName(FieldKey.AVAILABILITY)));
     }
+
+    @Test
+    public void testReduceAvailability() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1271859438204\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
+        content += "     xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438204/xsd\">\n";
+        content += "   <Header>\n";
+        content += "      <MdSelfLink>test-hdl:1839/00-0000-0000-0009-294C-9</MdSelfLink>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1271859438204</MdProfile>\n";
+        content += "   </Header>\n";
+        content += "   <Resources>\n";
+        content += "      <ResourceProxyList>\n";
+        content += "      </ResourceProxyList>\n";
+        content += "      <JournalFileProxyList/>\n";
+        content += "      <ResourceRelationList/>\n";
+        content += "   </Resources>\n";
+        content += "   <Components>\n";
+        content += "      <cmdp:Session>\n";
+        content += "         <cmdp:Resources>\n";
+        content += "            <cmdp:MediaFile>\n";
+        content += "               <cmdp:Access>\n";
+        content += "                  <cmdp:Availability>PUB</cmdp:Availability>\n";
+        content += "               </cmdp:Access>\n";
+        content += "            </cmdp:MediaFile>\n";
+        content += "            <cmdp:MediaFile>\n";
+        content += "               <cmdp:Access>\n";
+        content += "                  <cmdp:Availability>RES</cmdp:Availability>\n";
+        content += "               </cmdp:Access>\n";
+        content += "            </cmdp:MediaFile>\n";
+        content += "            <cmdp:MediaFile>\n";
+        content += "               <cmdp:Access>\n";
+        content += "                  <cmdp:Availability>ACA</cmdp:Availability>\n";
+        content += "               </cmdp:Access>\n";
+        content += "            </cmdp:MediaFile>\n";
+        content += "         </cmdp:Resources>\n";
+        content += "      </cmdp:Session>\n";
+        content += "   </Components>\n";
+        content += "</CMD>\n";
+        File cmdiFile = createCmdiFile("testSession", content);
+        CMDIDataProcessor<SolrInputDocument> processor = getDataParser();
+        CMDIData<SolrInputDocument> data = processor.process(cmdiFile, resourceStructureGraph);
+        assertEquals("RES", data.getDocument().getFieldValue(fieldNameService.getFieldName(FieldKey.AVAILABILITY)));
+    }
 }
