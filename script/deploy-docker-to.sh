@@ -51,5 +51,5 @@ fi
 	fi
 	
 	echo "Pushing '${IMAGE_TAG}' to ${SSH_HOST}"
-	docker image save "${IMAGE_TAG}" | ssh -C ${SSH_HOST} sudo docker image load
+	docker image save "${IMAGE_TAG}" | ssh -C ${SSH_HOST} docker image load
 )
