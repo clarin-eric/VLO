@@ -344,8 +344,8 @@ public class FacetProcessorVTDXML implements FacetProcessor {
                     facetValuesMap.get(valueSet.getTargetFacetName()))
                     .orElse(new ArrayList<>());
 
-            if (existingValueSets.size() > 0 && (existingValueSets.get(0).getTargetFacet().getOverrideExistingValues() || (!valueSet.getTargetFacet().getFacetConfiguration().getAllowMultipleValues() && !valueSet.getTargetFacet().getFacetConfiguration().getAllowMultipleValues()))) {
-                LOG.info("value {} ignored since facet {} has either defined an overriding value or doensn't allow multiple values",
+            if (existingValueSets.size() > 0 && (existingValueSets.get(0).getTargetFacet().getOverrideExistingValues() || (!valueSet.getTargetFacet().getFacetConfiguration().getAllowMultipleValues() && !valueSet.getTargetFacet().getFacetConfiguration().getMultilingual()))) {
+                LOG.debug("value {} ignored since facet {} has either defined an overriding value or doensn't allow multiple values",
                         valueSet.getValue(), valueSet.getTargetFacetName());
             } else {
                 facetValuesMap.addToTarget(valueSet);
