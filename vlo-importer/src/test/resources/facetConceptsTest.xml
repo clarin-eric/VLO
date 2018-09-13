@@ -24,7 +24,7 @@
 		<pattern>/cmd:CMD/cmd:Components/cmdp:media-session-profile/cmdp:media-session/cmdp:Corpus</pattern>
 		<pattern>/cmd:CMD/cmd:Components/cmdp:media-corpus-profile/cmdp:Collection/cmdp:GeneralInfo/cmdp:Title/text()</pattern>
 	</facetConcept>
-	<facetConcept name="name" allowMultipleValues="false" description="The name of the resource or tool" definition="The full public name of the resource or tool.">
+	<facetConcept name="name" allowMultipleValues="false" multilingual="true" description="The name of the resource or tool" definition="The full public name of the resource or tool.">
 		<concept>http://www.isocat.org/datcat/DC-5428</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5428_65670fd6-3426-68ac-8f29-faef6ffd02ce</concept>
 		<concept>http://www.isocat.org/datcat/DC-5127</concept>

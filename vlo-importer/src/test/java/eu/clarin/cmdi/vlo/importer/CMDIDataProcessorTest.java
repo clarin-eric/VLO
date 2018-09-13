@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import org.apache.solr.common.SolrInputDocument;
 import static org.junit.Assert.assertEquals;
@@ -976,5 +977,44 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         CMDIDataProcessor<SolrInputDocument> processor = getDataParser();
         CMDIData<SolrInputDocument> data = processor.process(cmdiFile, resourceStructureGraph);
         assertEquals("RES", data.getDocument().getFieldValue(fieldNameService.getFieldName(FieldKey.AVAILABILITY)));
+    }
+    
+    @Test
+    public void testMultilingual() throws Exception {
+        // name facet has multilingual="true" but allowMultipleValues="false"
+        // only one XPath should match, but multilingual values should all be stored
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1274880881885\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n";
+        content += "   <Header>\n";
+        content += "      <MdCreationDate>2003-01-14</MdCreationDate>\n";
+        content += "      <MdSelfLink>test-hdl:1839/00-0000-0000-0000-0001-D</MdSelfLink>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1274880881885</MdProfile>\n";
+        content += "   </Header>\n";
+        content += "   <Resources>\n";
+        content += "      <ResourceProxyList>\n";
+        content += "      </ResourceProxyList>\n";
+        content += "      <JournalFileProxyList/>\n";
+        content += "      <ResourceRelationList/>\n";
+        content += "   </Resources>\n";
+        content += "   <Components>\n";
+        content += "      <cmdp:imdi-corpus>\n";
+        content += "         <cmdp:Corpus>\n";
+        content += "            <cmdp:Name xml:lang=\"nl\">Dutch 1</cmdp:Name>\n";
+        content += "            <cmdp:Name xml:lang=\"en\">English 1</cmdp:Name>\n";
+        content += "            <cmdp:Title xml:lang=\"nl\">Dutch 2</cmdp:Title>\n";
+        content += "            <cmdp:Title xml:lang=\"en\">English 2</cmdp:Title>\n";
+        content += "         </cmdp:Corpus>\n";
+        content += "      </cmdp:imdi-corpus>\n";
+        content += "   </Components>\n";
+        content += "</CMD>\n";
+        File cmdiFile = createCmdiFile("testAttributeMapping", content);
+        CMDIDataProcessor processor = getDataParser();
+        CMDIData data = processor.process(cmdiFile, resourceStructureGraph);
+        Collection<Object> values = data.getSolrDocument().getFieldValues(fieldNameService.getFieldName(FieldKey.NAME));
+        assertEquals(2, values.size());
+        Iterator<Object> iterator = values.iterator();
+        assertEquals("English 1", iterator.next().toString());
+        assertEquals("Dutch 1", iterator.next().toString());
     }
 }
