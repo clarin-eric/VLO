@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
 
 import java.util.regex.Matcher;
 
@@ -20,7 +20,7 @@ public class FormatPostNormalizer extends AbstractPostNormalizer {
      * @return value if it is a valid MIMEtype or UNKNOWN_STRING otherwise
      */
     @Override
-    public List<String> process(String value, CMDIData cmdiData) {
+    public List<String> process(String value, DocFieldContainer cmdiData) {
         Matcher mimeTypeMatcher = MIMETYPE_PATTERN.matcher(value);
         List<String> resultList = new ArrayList<String>();
 

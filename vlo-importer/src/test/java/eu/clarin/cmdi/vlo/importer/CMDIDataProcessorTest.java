@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import org.apache.solr.common.SolrInputDocument;
 import static org.junit.Assert.assertEquals;
@@ -400,12 +401,12 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("audio/mpeg", res.getMimeType());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(14, doc.getFieldNames().size());
         assertEquals("test-hdl:1839/00-0000-0000-0009-294C-9", doc.getFieldValue("_selfLink"));
         assertEquals("kleve-route", doc.getFieldValue("name"));
         assertEquals("Peter Wittenburg", doc.getFieldValue(fieldNameService.getFieldName(FieldKey.PROJECT_NAME)));
         assertEquals("Europe", doc.getFieldValue("continent"));
         assertEquals("code:eng", doc.getFieldValue("languageCode"));
+        assertEquals("English", doc.getFieldValue("_languageName"));
         assertEquals("Netherlands", doc.getFieldValue("country"));
         assertEquals("Max Planck Institute for Psycholinguistics", doc.getFieldValue("organisation"));
         assertEquals("demo", doc.getFieldValue("genre"));
@@ -418,6 +419,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("video/x-mpeg1", fieldValues.get(0));
         assertEquals("video/mp4", fieldValues.get(1));
         assertEquals(null, doc.getFieldValue("subject"));
+        assertEquals(17, doc.getFieldNames().size());
     }
 
     @Test
@@ -591,13 +593,14 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(0, dataResources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(9, doc.getFieldNames().size());
+        assertEquals(10, doc.getFieldNames().size());
         assertEquals("oai:ailla.utexas.edu:1", doc.getFieldValue("_selfLink"));
         assertEquals(null, doc.getFieldValue("name"));
         assertEquals(null, doc.getFieldValue("continent"));
         assertEquals(2, doc.getFieldValues("languageCode").size());
         assertTrue(doc.getFieldValues("languageCode").contains("code:zho"));
         assertTrue(doc.getFieldValues("languageCode").contains("name:X-sil-CHN"));
+        assertEquals(2, doc.getFieldValues("_languageName").size());
         assertEquals(null, doc.getFieldValue("country"));
         assertEquals(null, doc.getFieldValue("organisation"));
         assertEquals("transcription", doc.getFieldValue("genre"));
@@ -879,18 +882,19 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(0, dataResources.size());
         SolrInputDocument doc = data.getSolrDocument();
         assertNotNull(doc);
-        assertEquals(String.format("Expected field set different from %s", doc.getFieldNames()), 9, doc.getFieldNames().size());
         assertEquals("clarin.eu:lrt:433", doc.getFieldValue("_selfLink"));
         assertEquals("Corpus of Present-day Written Estonian", doc.getFieldValue("name"));
         assertEquals(null, doc.getFieldValue("continent"));
         assertEquals(1, doc.getFieldValues("languageCode").size());
         assertEquals("code:est", doc.getFieldValue("languageCode"));
+        assertEquals("Estonian", doc.getFieldValue("_languageName"));
         assertEquals("Estonia", doc.getFieldValue("country"));
         assertEquals("Test", doc.getFieldValue("organisation"));
         assertEquals(null, doc.getFieldValue("year"));
         assertEquals(null, doc.getFieldValue("genre"));
         assertEquals("{code:eng}written general; 95 mio words; TEI/SGML", doc.getFieldValue("description"));
         assertEquals("Written Corpus", doc.getFieldValue(fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS)));
+        assertEquals(String.format("Expected field set different from %s", doc.getFieldNames()), 10, doc.getFieldNames().size());
     }
 
     @Test
@@ -926,5 +930,44 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         CMDIData data = processor.process(cmdiFile, resourceStructureGraph);
 
         assertEquals("RES", data.getSolrDocument().getFieldValue(fieldNameService.getFieldName(FieldKey.AVAILABILITY)));
+    }
+    
+    @Test
+    public void testMultilingual() throws Exception {
+        // name facet has multilingual="true" but allowMultipleValues="false"
+        // only one XPath should match, but multilingual values should all be stored
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1274880881885\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n";
+        content += "   <Header>\n";
+        content += "      <MdCreationDate>2003-01-14</MdCreationDate>\n";
+        content += "      <MdSelfLink>test-hdl:1839/00-0000-0000-0000-0001-D</MdSelfLink>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1274880881885</MdProfile>\n";
+        content += "   </Header>\n";
+        content += "   <Resources>\n";
+        content += "      <ResourceProxyList>\n";
+        content += "      </ResourceProxyList>\n";
+        content += "      <JournalFileProxyList/>\n";
+        content += "      <ResourceRelationList/>\n";
+        content += "   </Resources>\n";
+        content += "   <Components>\n";
+        content += "      <cmdp:imdi-corpus>\n";
+        content += "         <cmdp:Corpus>\n";
+        content += "            <cmdp:Name xml:lang=\"nl\">Dutch 1</cmdp:Name>\n";
+        content += "            <cmdp:Name xml:lang=\"en\">English 1</cmdp:Name>\n";
+        content += "            <cmdp:Title xml:lang=\"nl\">Dutch 2</cmdp:Title>\n";
+        content += "            <cmdp:Title xml:lang=\"en\">English 2</cmdp:Title>\n";
+        content += "         </cmdp:Corpus>\n";
+        content += "      </cmdp:imdi-corpus>\n";
+        content += "   </Components>\n";
+        content += "</CMD>\n";
+        File cmdiFile = createCmdiFile("testAttributeMapping", content);
+        CMDIDataProcessor processor = getDataParser();
+        CMDIData data = processor.process(cmdiFile, resourceStructureGraph);
+        Collection<Object> values = data.getSolrDocument().getFieldValues(fieldNameService.getFieldName(FieldKey.NAME));
+        assertEquals(2, values.size());
+        Iterator<Object> iterator = values.iterator();
+        assertEquals("English 1", iterator.next().toString());
+        assertEquals("Dutch 1", iterator.next().toString());
     }
 }

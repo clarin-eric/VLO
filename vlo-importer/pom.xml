@@ -33,6 +33,14 @@
                 <vlo.import.logging.level>DEBUG</vlo.import.logging.level>
             </properties>
         </profile>
+        <profile>
+            <!--  For use in docker images (see https://gitlab.com/CLARIN-ERIC) -->
+            <id>docker</id>
+            <properties>
+                <log4j.appender>File</log4j.appender>
+                <vlo.import.logging.level>${IMPORTER_LOG_LEVEL}</vlo.import.logging.level>
+            </properties>
+        </profile>
     </profiles>
 
     <build>
@@ -191,11 +199,17 @@
             <artifactId>opencsv</artifactId>
             <version>4.1</version>
         </dependency>
-	<dependency>
+        <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.11</version>
-	</dependency>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <version>1.3</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
 
 /**
  *
@@ -33,7 +33,7 @@ public class NamePostNormalizer extends AbstractPostNormalizer {
     private static final Pattern OMIT_QUOTES_PATTERN = Pattern.compile("^([\"\'“])(.*)\\1$");
 
     @Override
-    public List<String> process(String value, CMDIData cmdiData) {
+    public List<String> process(String value, DocFieldContainer cmdiData) {
         Matcher nameMatcher = OMIT_QUOTES_PATTERN.matcher(value);
         List<String> resultList = new ArrayList<>();
 
