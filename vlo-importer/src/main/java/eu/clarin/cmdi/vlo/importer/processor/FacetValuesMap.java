@@ -39,11 +39,16 @@ public class FacetValuesMap implements DocFieldContainer {
 
     @Override
     public Collection<Object> getDocField(String name) {
-        // get value object collection out of value set list
-        return facetValuesMap.get(name)
-                .stream()
-                .map(ValueSet::getValue)
-                .collect(Collectors.toList());
+        final List<ValueSet> valueSets = facetValuesMap.get(name);
+        if (valueSets == null) {
+            return null;
+        } else {
+            // get value object collection out of value set list
+            return valueSets
+                    .stream()
+                    .map(ValueSet::getValue)
+                    .collect(Collectors.toList());
+        }
     }
 
     public List<ValueSet> put(String facet, List<ValueSet> valueSet) {
