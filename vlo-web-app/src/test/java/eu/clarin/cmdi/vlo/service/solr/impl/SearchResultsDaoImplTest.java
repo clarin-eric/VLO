@@ -97,7 +97,7 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
         server.add(document);
 
         cmdiData = new CMDIData(fieldNameService);
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "Collection1", false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "Collection2", false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COUNTRY), "Country2", false);
         document = cmdiData.getSolrDocument();
         document.addField("id", Integer.toString(id++));
@@ -137,10 +137,10 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
         assertNotNull(facetFields);
         assertEquals(2, facetFields.size());
 
-        // 1 collection
+        // 2 collections
         assertThat(facetFields, Matchers.<FacetField>hasItem(Matchers.allOf(
                 Matchers.<FacetField>hasProperty("name", equalTo(fieldNameService.getFieldName(FieldKey.COLLECTION))),
-                Matchers.<FacetField>hasProperty("valueCount", equalTo(1)))));
+                Matchers.<FacetField>hasProperty("valueCount", equalTo(2)))));
 
         // 2 countries
         assertThat(facetFields, Matchers.<FacetField>hasItem(Matchers.allOf(
@@ -170,7 +170,7 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
             assertEquals("1", documents.get(0).getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
         }
 
-        query.setFilterQueries(fieldNameService.getFieldName(FieldKey.COLLECTION) + ":Collection2");
+        query.setFilterQueries(fieldNameService.getFieldName(FieldKey.COLLECTION) + ":Collection3");
         {
             // no matches
             SolrDocumentList documents = instance.getDocuments(query);
