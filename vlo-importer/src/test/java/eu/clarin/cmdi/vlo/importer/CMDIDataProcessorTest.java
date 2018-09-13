@@ -1008,10 +1008,10 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         content += "      </cmdp:imdi-corpus>\n";
         content += "   </Components>\n";
         content += "</CMD>\n";
-        File cmdiFile = createCmdiFile("testAttributeMapping", content);
-        CMDIDataProcessor processor = getDataParser();
-        CMDIData data = processor.process(cmdiFile, resourceStructureGraph);
-        Collection<Object> values = data.getSolrDocument().getFieldValues(fieldNameService.getFieldName(FieldKey.NAME));
+        File cmdiFile = createCmdiFile("testSession", content);
+        CMDIDataProcessor<SolrInputDocument> processor = getDataParser();
+        CMDIData<SolrInputDocument> data = processor.process(cmdiFile, resourceStructureGraph);
+        Collection<Object> values = data.getDocument().getFieldValues(fieldNameService.getFieldName(FieldKey.NAME));
         assertEquals(2, values.size());
         Iterator<Object> iterator = values.iterator();
         assertEquals("English 1", iterator.next().toString());
