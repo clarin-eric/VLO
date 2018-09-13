@@ -44,8 +44,6 @@ public class ValueMappingsTest extends ImporterTestcase {
         session += "   </Resources>\n";
         session += "   <Components>\n";
         session += "      <cmdp:Session>\n";
-        session += "         <cmdp:Name>kleve-route</cmdp:Name>\n";
-        session += "         <cmdp:Title>kleve-route-title</cmdp:Title>\n";
         session += "      </cmdp:Session>\n";
         session += "   </Components>\n";
         session += "</CMD>\n";
