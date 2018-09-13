@@ -164,6 +164,7 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
         return getResults(client, ImmutableMap.builder()
                 .put("q", query)
                 .put("rows", rows)
+                .put("fq", "{!collapse field=id}") //effictively 'de-collapse' to get reliable result counts
                 .build()
         );
     }
