@@ -115,7 +115,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
 
             for (Pattern pattern : facetConfig.getPatterns()) {
                 matchedPattern = matchPattern(cmdiData, facetValuesMap, nav, facetConfig, pattern);
-                if (matchedPattern && !facetConfig.getAllowMultipleValues() && !facetConfig.getMultilingual()) {
+                if (matchedPattern && !facetConfig.getAllowMultipleValues()) {
                     break;
                 }
             }
@@ -124,7 +124,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
             if (!matchedPattern) {
                 for (Pattern pattern : facetConfig.getFallbackPatterns()) {
 
-                    if (matchPattern(cmdiData, facetValuesMap, nav, facetConfig, pattern) && !facetConfig.getAllowMultipleValues() && !facetConfig.getMultilingual()) {
+                    if (matchPattern(cmdiData, facetValuesMap, nav, facetConfig, pattern) && !facetConfig.getAllowMultipleValues()) {
                         break;
                     }
                 }
