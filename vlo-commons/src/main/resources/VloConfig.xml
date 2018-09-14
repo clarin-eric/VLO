@@ -117,6 +117,7 @@
         <field key="HAS_PART_COUNT_WEIGHT">_hasPartCountWeight</field>
         <field key="LANGUAGE_NAME">_languageName</field>
         <field key="OAI_ENDPOINT_URI">_oaiEndpointURI</field>
+        <field key="SIGNATURE">_signature</field>
     </fields>
 
     <deprecatedFields>
@@ -173,6 +174,7 @@
         <ignoredField>AVAILABILITY</ignoredField>
         <ignoredField>LICENSE_TYPE</ignoredField>
         <ignoredField>ACCESS_INFO</ignoredField>
+        <ignoredField>SIGNATURE</ignoredField>
     </ignoredFields>
 
     <!-- KEYS of fields shown as technical fields in the record page -->

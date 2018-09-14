@@ -1,13 +1,6 @@
 package eu.clarin.cmdi.vlo;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-
-import eu.clarin.cmdi.vlo.config.FieldNameService;
-import eu.clarin.cmdi.vlo.FieldKey;
-
-import java.util.ArrayList;
-import java.util.Set;
 
 /**
  * Definition of facet, resource type and URL constants.

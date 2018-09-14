@@ -221,6 +221,7 @@
 			<xs:enumeration value="LANGUAGE_NAME" />
 			<xs:enumeration value="OAI_ENDPOINT_URI" />
 			<xs:enumeration value="DEPRECATED_LANGUAGE" />
+			<xs:enumeration value="SIGNATURE" />
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>
