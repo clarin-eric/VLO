@@ -94,7 +94,7 @@ public class SearchResultItemPanel extends Panel {
         this.expansionStateModel = expansionStateModel;
         this.selectionModel = selectionModel;
         this.documentExpansionPairModel = documentExpansionPairModel;
-        this.documentModel = new PropertyModel<SolrDocument>(documentExpansionPairModel, "document");
+        this.documentModel = new PropertyModel<>(documentExpansionPairModel, "document");
 
         add(new RecordPageLink("recordLink", documentModel, selectionModel)
                 .add(new SingleValueSolrFieldLabel("title", documentModel, fieldNameService.getFieldName(FieldKey.NAME), "Unnamed record"))
@@ -170,6 +170,8 @@ public class SearchResultItemPanel extends Panel {
                 .add(new Label("score", new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.SOLR_SCORE))))
                 .setVisible(config.isShowResultScores())
         );
+        
+        add(new Label("collapsedItemsCount", new PropertyModel<>(documentExpansionPairModel, "expansionCount")));
 
         setOutputMarkupId(true);
     }

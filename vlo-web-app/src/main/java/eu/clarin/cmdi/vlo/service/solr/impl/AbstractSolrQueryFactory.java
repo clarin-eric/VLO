@@ -144,7 +144,7 @@ public abstract class AbstractSolrQueryFactory {
     }
     
     protected SolrQuery enableExpansion(SolrQuery query) {
-        query.set("expansion", true);
+        query.set("expand", true);
         return query;
     }
 
