@@ -23,8 +23,6 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentQueryFactory;
 import java.util.Collection;
 
-import javax.inject.Inject;
-
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
@@ -55,8 +53,6 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
         this.SELF_LINK = fieldNameService.getFieldName(FieldKey.SELF_LINK);
         defaultQueryTemplate = new SolrQuery();
         defaultQueryTemplate.setFields(documentFields.toArray(new String[]{}));
-//        //TODO: qf (all fields with weights - make configurable (later)
-//        defaultQueryTemplate.setParam(DisMaxParams.QF, "name^20 description^10");
     }
 
     @Override
