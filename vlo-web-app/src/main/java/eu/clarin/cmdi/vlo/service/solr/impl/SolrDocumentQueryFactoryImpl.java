@@ -28,16 +28,14 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 
 import eu.clarin.cmdi.vlo.FieldKey;
 
-
 /**
  *
  * @author twagoo
  */
 public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrDocumentQueryFactory {
-    
+
     private final String ID;
     private final String SELF_LINK;
-    
 
     /**
      * Template query for new document queries
@@ -68,6 +66,12 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
     }
 
     @Override
+    public SolrQuery createDocumentQueryWithExpansion(QueryFacetsSelection selection, int first, int count) {
+        final SolrQuery query = createDocumentQuery(selection, first, count);
+        return enableExpansion(query);
+    }
+
+    @Override
     public SolrQuery createDocumentQuery(String docId) {
         // make a query to look up a specific document by its ID
         final SolrQuery query = getDefaultDocumentQuery();
@@ -88,6 +92,12 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
         // one result max
         query.setRows(1);
         return query;
+    }
+
+    @Override
+    public SolrQuery createDocumentQueryWithExpansion(String docId) {
+        final SolrQuery query = createDocumentQuery(docId);
+        return enableExpansion(query);
     }
 
     @Override

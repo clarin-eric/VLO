@@ -59,7 +59,7 @@ public class SolrDocumentServiceImpl implements SolrDocumentService {
 
     @Override
     public SolrDocumentExpansionPair getDocumentWithExpansion(String docId, String collapseField) {
-        final SolrQuery query = queryFactory.createDocumentQuery(docId);
+        final SolrQuery query = queryFactory.createDocumentQueryWithExpansion(docId);
         final QueryResponse result = searchResultsDao.getQueryResponse(query);
         final SolrDocumentList docs = result.getResults();
         if (docs.getNumFound() < 1) {
@@ -78,7 +78,7 @@ public class SolrDocumentServiceImpl implements SolrDocumentService {
 
     @Override
     public SolrDocumentExpansionList getDocumentsWithExpansion(QueryFacetsSelection selection, int first, int count, String collapseField) {
-        final SolrQuery query = queryFactory.createDocumentQuery(selection, first, count);
+        final SolrQuery query = queryFactory.createDocumentQueryWithExpansion(selection, first, count);
         final QueryResponse queryResponse = searchResultsDao.getQueryResponse(query);
         if (queryResponse.getResults() == null) {
             return SolrDocumentExpansionListImpl.empty();
