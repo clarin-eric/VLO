@@ -18,10 +18,12 @@ package eu.clarin.cmdi.vlo.service.solr.impl;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionList;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentQueryFactory;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
@@ -58,6 +60,16 @@ public class SolrDocumentServiceImpl implements SolrDocumentService {
     public List<SolrDocument> getDocuments(QueryFacetsSelection selection, int first, int count) {
         final SolrQuery query = queryFactory.createDocumentQuery(selection, first, count);
         return searchResultsDao.getDocuments(query);
+    }
+
+    @Override
+    public SolrDocumentExpansionList getDocumentsWithExpansion(QueryFacetsSelection selection, int first, int count) {
+        final SolrQuery query = queryFactory.createDocumentQuery(selection, first, count);
+        final QueryResponse queryResponse = searchResultsDao.getQueryResponse(query);
+        if (queryResponse.getResults() == null) {
+            return SolrDocumentExpansionListImpl.empty();
+        }
+        return new SolrDocumentExpansionListImpl(queryResponse);
     }
 
     @Override

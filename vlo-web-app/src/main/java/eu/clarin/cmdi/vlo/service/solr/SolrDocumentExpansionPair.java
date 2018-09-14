@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 CLARIN
+ * Copyright (C) 2018 CLARIN
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,21 +17,20 @@
 package eu.clarin.cmdi.vlo.service.solr;
 
 import java.util.List;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrDocument;
 
 /**
  *
- * @author twagoo
+ * @author Twan Goosen <twan@clarin.eu>
  */
-public interface SearchResultsDao {
+public interface SolrDocumentExpansionPair {
 
-    SolrDocumentList getDocuments(SolrQuery query);
+    SolrDocument getDocument();
+    
+    boolean hasExpansion();
 
-    List<FacetField> getFacets(SolrQuery query);
+    List<SolrDocument> getExpansionDocuments();
 
-    QueryResponse getQueryResponse(SolrQuery query);
+    long getExpansionCount();
 
 }

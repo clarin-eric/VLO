@@ -48,4 +48,8 @@ public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDa
         }
     }
 
+    @Override
+    public QueryResponse getQueryResponse(SolrQuery query) {
+        return fireQuery(query);
+    }
 }

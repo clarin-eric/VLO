@@ -30,6 +30,8 @@ public interface SolrDocumentService {
 
     List<SolrDocument> getDocuments(QueryFacetsSelection selection, int first, int count);
     
+    SolrDocumentExpansionList getDocumentsWithExpansion(QueryFacetsSelection selection, int first, int count);
+    
     long getDocumentCount(QueryFacetsSelection selection);
 
 }
