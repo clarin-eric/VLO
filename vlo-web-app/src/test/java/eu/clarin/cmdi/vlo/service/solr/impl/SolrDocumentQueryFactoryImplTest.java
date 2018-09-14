@@ -36,6 +36,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.apache.solr.client.solrj.SolrQuery;
+import org.hamcrest.Matchers;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
@@ -109,9 +110,9 @@ public class SolrDocumentQueryFactoryImplTest {
         final SolrQuery query = instance.createDocumentQuery("document\"Id");
 
         final String[] filterQueries = query.getFilterQueries();
-        assertEquals(1, filterQueries.length);
+        assertEquals(2, filterQueries.length);
         // expecting query that looks in both id and selflink fields with properly escaped values
-        assertEquals("id:\"document\\\"Id\" OR _selfLink:\"document\\\"Id\"", filterQueries[0]);
+        assertThat(filterQueries, Matchers.hasItemInArray("id:\"document\\\"Id\" OR _selfLink:\"document\\\"Id\""));
 
         final String fields = query.getFields();
         assertTrue(fields.contains("field1"));
