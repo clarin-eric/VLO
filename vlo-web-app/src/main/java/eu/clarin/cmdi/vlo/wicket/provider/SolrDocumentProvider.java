@@ -19,15 +19,12 @@ package eu.clarin.cmdi.vlo.wicket.provider;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionList;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
-import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import java.math.BigDecimal;
 import java.util.Iterator;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 
@@ -35,24 +32,27 @@ import org.apache.wicket.model.IModel;
  *
  * @author twagoo
  */
-public class SolrDocumentProvider implements IDataProvider<SolrDocument> {
+public class SolrDocumentProvider implements IDataProvider<SolrDocumentExpansionPair> {
 
     private final FieldNameService fieldNameService;
 
     private final IModel<QueryFacetsSelection> selectionModel;
 
     private Long size;
+    private final String collapseField;
 
-    public SolrDocumentProvider(IModel<QueryFacetsSelection> selection, FieldNameService fieldNameService) {
+    public SolrDocumentProvider(IModel<QueryFacetsSelection> selection, FieldNameService fieldNameService, String collapseField) {
         this.selectionModel = selection;
         this.fieldNameService = fieldNameService;
+        this.collapseField = collapseField;
     }
 
     @Override
-    public Iterator<? extends SolrDocument> iterator(long first, long count) {
-        final List<SolrDocument> documents = getDocumentService().getDocuments(selectionModel.getObject(),
+    public Iterator<? extends SolrDocumentExpansionPair> iterator(long first, long count) {
+        final SolrDocumentExpansionList documents = getDocumentService().getDocumentsWithExpansion(selectionModel.getObject(),
                 BigDecimal.valueOf(first).intValueExact(), // safe long->int conversion
-                BigDecimal.valueOf(count).intValueExact()); // safe long->int conversion
+                BigDecimal.valueOf(count).intValueExact(),
+                collapseField); // safe long->int conversion
         return documents.iterator();
     }
 
@@ -65,8 +65,8 @@ public class SolrDocumentProvider implements IDataProvider<SolrDocument> {
     }
 
     @Override
-    public IModel<SolrDocument> model(SolrDocument object) {
-        return new SolrDocumentModel(object, fieldNameService);
+    public IModel<SolrDocumentExpansionPair> model(SolrDocumentExpansionPair object) {
+        return new SolrDocumentExpansionPairModel(object, fieldNameService, collapseField);
     }
 
     @Override

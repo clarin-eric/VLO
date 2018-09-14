@@ -21,13 +21,12 @@ import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import java.util.Objects;
 
-
-import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 
 /**
  * Detachable model for Solr documents that uses the {@link SolrDocumentService}
@@ -36,32 +35,31 @@ import eu.clarin.cmdi.vlo.FieldKey;
  * @author twagoo
  * @see VloWicketApplication#getDocumentService()
  */
-public class SolrDocumentModel extends LoadableDetachableModel<SolrDocument> {
+public class SolrDocumentExpansionPairModel extends LoadableDetachableModel<SolrDocumentExpansionPair> {
 
-    
     private final IModel<String> docId;
-    
+    private String collapseField;
 
-
-    public SolrDocumentModel(SolrDocument document, FieldNameService fieldNameService) {
-        super(document);
-        if (document == null) {
+    public SolrDocumentExpansionPairModel(SolrDocumentExpansionPair pair, FieldNameService fieldNameService, String collapseField) {
+        super(pair);
+        if (pair == null) {
             this.docId = null;
         } else {
-            this.docId = Model.of((String) document.getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
+            this.docId = Model.of((String) pair.getDocument().getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
         }
+        this.collapseField = collapseField;
     }
 
-    public SolrDocumentModel(String docId) {
+    public SolrDocumentExpansionPairModel(String docId) {
         this(Model.of(docId));
     }
 
-    public SolrDocumentModel(IModel<String> docId) {
+    public SolrDocumentExpansionPairModel(IModel<String> docId) {
         this.docId = docId;
     }
 
     @Override
-    protected SolrDocument load() {
+    protected SolrDocumentExpansionPair load() {
         if (docId == null) {
             return null;
         } else {
@@ -69,7 +67,7 @@ public class SolrDocumentModel extends LoadableDetachableModel<SolrDocument> {
             if (id == null) {
                 return null;
             } else {
-                return getDocumentService().getDocument(id);
+                return getDocumentService().getDocumentWithExpansion(id, collapseField);
             }
         }
     }
@@ -96,7 +94,7 @@ public class SolrDocumentModel extends LoadableDetachableModel<SolrDocument> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final SolrDocumentModel other = (SolrDocumentModel) obj;
+        final SolrDocumentExpansionPairModel other = (SolrDocumentExpansionPairModel) obj;
         if (!Objects.equals(this.docId, other.docId)) {
             return false;
         }

@@ -20,11 +20,13 @@ import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionList;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.apache.commons.collections4.IteratorUtils;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 
 /**
@@ -36,18 +38,28 @@ public class SolrDocumentExpansionListImpl implements SolrDocumentExpansionList,
     private static final SolrDocumentExpansionList EMPTY = new EmptySolrDocumentExpansionList();
 
     private final QueryResponse queryResponse;
+    private final String collapseField;
 
-    public SolrDocumentExpansionListImpl(QueryResponse queryResponse) {
+    public SolrDocumentExpansionListImpl(QueryResponse queryResponse, String collapseField) {
         this.queryResponse = queryResponse;
+        this.collapseField = collapseField;
     }
 
     @Override
     public List<SolrDocumentExpansionPair> getDocuments() {
+        return getPairStream().collect(Collectors.toList());
+    }
+
+    @Override
+    public Iterator<? extends SolrDocumentExpansionPair> iterator() {
+        return getPairStream().iterator();
+    }
+
+    private Stream<SolrDocumentExpansionPair> getPairStream() {
         final Map<String, SolrDocumentList> expansion = queryResponse.getExpandedResults();
         return queryResponse.getResults()
                 .stream()
-                .map(doc -> new SolrDocumentExpansionPairImpl(doc, expansion, "_signature"))
-                .collect(Collectors.toList());
+                .map(doc -> new SolrDocumentExpansionPairImpl(doc, expansion, collapseField));
     }
 
     @Override
@@ -59,39 +71,6 @@ public class SolrDocumentExpansionListImpl implements SolrDocumentExpansionList,
         return EMPTY;
     }
 
-    private static class SolrDocumentExpansionPairImpl implements SolrDocumentExpansionPair, Serializable {
-
-        private final String keyField;
-        private final SolrDocument document;
-        private final Map<String, SolrDocumentList> expansion;
-
-        public SolrDocumentExpansionPairImpl(SolrDocument document, Map<String, SolrDocumentList> expansion, String keyField) {
-            this.document = document;
-            this.expansion = expansion;
-            this.keyField = keyField;
-        }
-
-        @Override
-        public SolrDocument getDocument() {
-            return document;
-        }
-
-        @Override
-        public boolean hasExpansion() {
-            return expansion != null;
-        }
-
-        @Override
-        public SolrDocumentList getExpansionDocuments() {
-            return expansion.get(document.getFieldValue(keyField).toString());
-        }
-
-        @Override
-        public long getExpansionCount() {
-            return getExpansionDocuments().getNumFound();
-        }
-
-    }
 
     private final static class EmptySolrDocumentExpansionList implements SolrDocumentExpansionList, Serializable {
 
@@ -103,6 +82,11 @@ public class SolrDocumentExpansionListImpl implements SolrDocumentExpansionList,
         @Override
         public long getNumFound() {
             return 0L;
+        }
+
+        @Override
+        public Iterator<? extends SolrDocumentExpansionPair> iterator() {
+            return IteratorUtils.emptyIterator();
         }
     }
 

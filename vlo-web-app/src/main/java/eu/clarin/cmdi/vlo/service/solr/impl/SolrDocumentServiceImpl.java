@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.service.solr.impl;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionList;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentQueryFactory;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import java.util.List;
@@ -57,19 +58,32 @@ public class SolrDocumentServiceImpl implements SolrDocumentService {
     }
 
     @Override
+    public SolrDocumentExpansionPair getDocumentWithExpansion(String docId, String collapseField) {
+        final SolrQuery query = queryFactory.createDocumentQuery(docId);
+        final QueryResponse result = searchResultsDao.getQueryResponse(query);
+        final SolrDocumentList docs = result.getResults();
+        if (docs.getNumFound() < 1) {
+            return null;
+        } else {
+            logger.debug("Document with docId {} retrieved:", result);
+            return new SolrDocumentExpansionPairImpl(docs.get(0), result.getExpandedResults(), collapseField);
+        }
+    }
+
+    @Override
     public List<SolrDocument> getDocuments(QueryFacetsSelection selection, int first, int count) {
         final SolrQuery query = queryFactory.createDocumentQuery(selection, first, count);
         return searchResultsDao.getDocuments(query);
     }
 
     @Override
-    public SolrDocumentExpansionList getDocumentsWithExpansion(QueryFacetsSelection selection, int first, int count) {
+    public SolrDocumentExpansionList getDocumentsWithExpansion(QueryFacetsSelection selection, int first, int count, String collapseField) {
         final SolrQuery query = queryFactory.createDocumentQuery(selection, first, count);
         final QueryResponse queryResponse = searchResultsDao.getQueryResponse(query);
         if (queryResponse.getResults() == null) {
             return SolrDocumentExpansionListImpl.empty();
         }
-        return new SolrDocumentExpansionListImpl(queryResponse);
+        return new SolrDocumentExpansionListImpl(queryResponse, collapseField);
     }
 
     @Override

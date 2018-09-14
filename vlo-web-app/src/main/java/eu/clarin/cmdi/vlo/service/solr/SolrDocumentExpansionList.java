@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.solr;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -25,6 +26,8 @@ import java.util.List;
 public interface SolrDocumentExpansionList {
     
     List<SolrDocumentExpansionPair> getDocuments();
+    
+    Iterator<? extends SolrDocumentExpansionPair> iterator();
     
     long getNumFound();
     
