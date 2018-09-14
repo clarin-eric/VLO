@@ -32,7 +32,7 @@ import org.apache.wicket.model.IModel;
  *
  * @author twagoo
  */
-public class SolrDocumentProvider implements IDataProvider<SolrDocumentExpansionPair> {
+public class SolrDocumentExpansionPairProvider implements IDataProvider<SolrDocumentExpansionPair> {
 
     private final FieldNameService fieldNameService;
 
@@ -41,7 +41,7 @@ public class SolrDocumentProvider implements IDataProvider<SolrDocumentExpansion
     private Long size;
     private final String collapseField;
 
-    public SolrDocumentProvider(IModel<QueryFacetsSelection> selection, FieldNameService fieldNameService, String collapseField) {
+    public SolrDocumentExpansionPairProvider(IModel<QueryFacetsSelection> selection, FieldNameService fieldNameService, String collapseField) {
         this.selectionModel = selection;
         this.fieldNameService = fieldNameService;
         this.collapseField = collapseField;
