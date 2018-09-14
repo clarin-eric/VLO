@@ -23,6 +23,7 @@ import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
@@ -32,7 +33,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -62,13 +62,13 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
     @SpringBean
     private PiwikConfig piwikConfig;
 
-    private final DataView<SolrDocument> resultsView;
+    private final DataView<SolrDocumentExpansionPair> resultsView;
     private final IModel<Set<Object>> expansionsModel;
 
     private final Component navigatorBottom;
     private final Component navigatorTop;
 
-    public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel, IDataProvider<SolrDocument> solrDocumentProvider) {
+    public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel, IDataProvider<SolrDocumentExpansionPair> solrDocumentProvider) {
         super(id, selectionModel);
         this.expansionsModel = new Model(new HashSet<Object>());
 
@@ -78,10 +78,10 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
                 FieldValueDescriptor.valuesList(vloConfig.getAvailabilityValues()));
 
         // data view for search results
-        resultsView = new DataView<SolrDocument>("resultItem", solrDocumentProvider, 10) {
+        resultsView = new DataView<SolrDocumentExpansionPair>("resultItem", solrDocumentProvider, 10) {
 
             @Override
-            protected void populateItem(Item<SolrDocument> item) {
+            protected void populateItem(Item<SolrDocumentExpansionPair> item) {
                 final long index = (getCurrentPage() * getItemsPerPage()) + item.getIndex();
                 final long size = internalGetDataProvider().size();
                 final SearchContextModel contextModel = new SearchContextModel(index, size, selectionModel);
@@ -146,7 +146,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
         expansionsModel.getObject().clear();
     }
 
-    public AbstractPageableView<SolrDocument> getResultsView() {
+    public AbstractPageableView<SolrDocumentExpansionPair> getResultsView() {
         return resultsView;
     }
 

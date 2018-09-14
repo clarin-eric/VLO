@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import static eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel.ITEMS_PER_PAGE_OPTIONS;
@@ -70,9 +71,9 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
     private FieldNameService fieldNameService;
 
     private final IDataProvider<SolrDocument> solrDocumentProvider;
-    private final AbstractPageableView<SolrDocument> resultsView;
+    private final AbstractPageableView<SolrDocumentExpansionPair> resultsView;
 
-    public SearchResultsHeaderPanel(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocument> resultsView, IDataProvider<SolrDocument> solrDocumentProvider) {
+    public SearchResultsHeaderPanel(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocumentExpansionPair> resultsView, IDataProvider<SolrDocument> solrDocumentProvider) {
         super(id, model);
 
         this.solrDocumentProvider = solrDocumentProvider;

@@ -26,6 +26,7 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
@@ -39,7 +40,8 @@ import eu.clarin.cmdi.vlo.wicket.panels.search.FacetsPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchFormPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsHeaderPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel;
-import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProvider;
+import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentExpansionPairProvider;
+import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProviderAdapter;
 import java.util.Map;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
@@ -64,6 +66,9 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     private static final long serialVersionUID = 1L;
     //private final static List<String> ADDITIONAL_FACETS = ImmutableList.of(FacetConstants.FIELD_LICENSE_TYPE);
     private final static FieldKey ADDITIONAL_FACETS = FieldKey.LICENSE_TYPE;
+    
+    
+    private static final String COLLAPSE_FIELD_NAME = "_signature"; //TODO: make this configurable, use keys and perhaps overridable by the user
 
     @SpringBean
     private FacetFieldsService facetFieldsService;
@@ -76,7 +81,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     @SpringBean
     private FieldNameService fieldNameService;
 
-    private IDataProvider<SolrDocument> documentsProvider;
+    private IDataProvider<SolrDocumentExpansionPair> documentsProvider;
+    private IDataProvider<SolrDocument> solrDocumentsProvider;
 
     private MarkupContainer searchContainer;
     private SearchResultsPanel searchResultsPanel;
@@ -156,7 +162,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     }
 
     private void addComponents() {
-        documentsProvider = new SolrDocumentProvider(getModel(), fieldNameService);
+        documentsProvider = new SolrDocumentExpansionPairProvider(getModel(), fieldNameService, COLLAPSE_FIELD_NAME);
+        solrDocumentsProvider = new SolrDocumentProviderAdapter(documentsProvider, fieldNameService);
 
         searchContainer = new WebMarkupContainer("searchContainer");
         searchContainer.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
@@ -169,7 +176,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         searchContainer.setOutputMarkupId(true);
         add(searchContainer);
 
-        final IDataProvider<SolrDocument> solrDocumentProvider = new SolrDocumentProvider(getModel(), fieldNameService);
+        final IDataProvider<SolrDocumentExpansionPair> solrDocumentExpansionProvider = new SolrDocumentExpansionPairProvider(getModel(), fieldNameService, COLLAPSE_FIELD_NAME);
+        final IDataProvider<SolrDocument> solrDocumentProvider = new SolrDocumentProviderAdapter(solrDocumentExpansionProvider, fieldNameService);
 
         navigation = createNavigation("navigation");
         searchContainer.add(navigation);
@@ -223,7 +231,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
                 " "));
 
         //search results panel and header
-        searchResultsPanel = new SearchResultsPanel("searchResults", getModel(), solrDocumentProvider) {
+        searchResultsPanel = new SearchResultsPanel("searchResults", getModel(), solrDocumentExpansionProvider) {
 
             @Override
             protected void onConfigure() {
@@ -243,13 +251,13 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         };
         searchContainer.add(searchResultsPanel.setOutputMarkupPlaceholderTag(true));
 
-        final AbstractPageableView<SolrDocument> resultsView = searchResultsPanel.getResultsView();
+        final AbstractPageableView<SolrDocumentExpansionPair> resultsView = searchResultsPanel.getResultsView();
 
         resultsHeader = createResultsHeader("searchresultsheader", getModel(), resultsView, solrDocumentProvider);
         searchContainer.add(resultsHeader.setOutputMarkupId(true));
     }
 
-    private SearchResultsHeaderPanel createResultsHeader(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocument> resultsView, IDataProvider<SolrDocument> solrDocumentProvider) {
+    private SearchResultsHeaderPanel createResultsHeader(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocumentExpansionPair> resultsView, IDataProvider<SolrDocument> solrDocumentProvider) {
         return new SearchResultsHeaderPanel(id, model, resultsView, solrDocumentProvider) {
             @Override
             protected void onChange(AjaxRequestTarget target) {
@@ -283,7 +291,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     }
 
     private Panel createOptionsPanel(String id) {
-        final Panel panel = new AdvancedSearchOptionsPanel(id, getModel(), facetSelectionTypeModeModel, documentsProvider) {
+        final Panel panel = new AdvancedSearchOptionsPanel(id, getModel(), facetSelectionTypeModeModel, solrDocumentsProvider) {
 
             @Override
             protected void selectionChanged(AjaxRequestTarget target) {

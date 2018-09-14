@@ -24,6 +24,7 @@ import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermScriptFactory;
 import eu.clarin.cmdi.vlo.wicket.components.FacetSelectLink;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
@@ -71,6 +72,7 @@ public class SearchResultItemPanel extends Panel {
     private FieldNameService fieldNameService;
 
     private final IModel<SearchContext> selectionModel;
+    private final IModel<SolrDocumentExpansionPair> documentExpansionPairModel;
     private final IModel<SolrDocument> documentModel;
 
     private final Panel collapsedDetails;
@@ -80,18 +82,19 @@ public class SearchResultItemPanel extends Panel {
     /**
      *
      * @param id markup id of the panel
-     * @param documentModel model of document that this search item represents
+     * @param documentExpansionPairModel model of document that this search item represents
      * @param selectionModel model of current selection (will be passed on to
      * record page when link is clicked)
      * @param expansionStateModel model for the expansion state of this search
      * item
      * @param availabilityOrdering ordering for availability 'tags'
      */
-    public SearchResultItemPanel(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel, IModel<ExpansionState> expansionStateModel, Ordering<String> availabilityOrdering) {
-        super(id, documentModel);
+    public SearchResultItemPanel(String id, IModel<SolrDocumentExpansionPair> documentExpansionPairModel, IModel<SearchContext> selectionModel, IModel<ExpansionState> expansionStateModel, Ordering<String> availabilityOrdering) {
+        super(id, documentExpansionPairModel);
         this.expansionStateModel = expansionStateModel;
         this.selectionModel = selectionModel;
-        this.documentModel = documentModel;
+        this.documentExpansionPairModel = documentExpansionPairModel;
+        this.documentModel = new PropertyModel<SolrDocument>(documentExpansionPairModel, "document");
 
         add(new RecordPageLink("recordLink", documentModel, selectionModel)
                 .add(new SingleValueSolrFieldLabel("title", documentModel, fieldNameService.getFieldName(FieldKey.NAME), "Unnamed record"))
