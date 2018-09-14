@@ -34,6 +34,7 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 public abstract class AbstractSolrQueryFactory {
 
     protected static final String SOLR_SEARCH_ALL = "*:*";
+    protected static final String EXPAND_ROWS = "5";
 
     protected final void addQueryFacetParameters(final SolrQuery query, QueryFacetsSelection queryFacetsSelections) {
         final String queryString = queryFacetsSelections.getQuery();
@@ -145,6 +146,7 @@ public abstract class AbstractSolrQueryFactory {
     
     protected SolrQuery enableExpansion(SolrQuery query) {
         query.set("expand", true);
+        query.set("expand.rows=" + EXPAND_ROWS);
         return query;
     }
 
