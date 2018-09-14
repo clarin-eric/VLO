@@ -81,7 +81,14 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     @SpringBean
     private FieldNameService fieldNameService;
 
+    /**
+     * Provider of search results including 'expansion' of collapsed (very similar) records
+     */
     private IDataProvider<SolrDocumentExpansionPair> documentsProvider;
+    
+    /**
+     * Provider of search results without expansion of collapsed records
+     */
     private IDataProvider<SolrDocument> solrDocumentsProvider;
 
     private MarkupContainer searchContainer;
@@ -176,9 +183,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         searchContainer.setOutputMarkupId(true);
         add(searchContainer);
 
-        final IDataProvider<SolrDocumentExpansionPair> solrDocumentExpansionProvider = new SolrDocumentExpansionPairProvider(getModel(), fieldNameService, COLLAPSE_FIELD_NAME);
-        final IDataProvider<SolrDocument> solrDocumentProvider = new SolrDocumentProviderAdapter(solrDocumentExpansionProvider, fieldNameService);
-
         navigation = createNavigation("navigation");
         searchContainer.add(navigation);
 
@@ -191,7 +195,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
             @Override
             protected void onConfigure() {
                 final Map<String, FacetSelection> facetSelection = FacetedSearchPage.this.getModel().getObject().getSelection();
-                setVisible(solrDocumentProvider.size() > 0
+                setVisible(documentsProvider.size() > 0
                         || (facetSelection != null && !facetSelection.isEmpty()));
             }
         };
@@ -231,12 +235,12 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
                 " "));
 
         //search results panel and header
-        searchResultsPanel = new SearchResultsPanel("searchResults", getModel(), solrDocumentExpansionProvider) {
+        searchResultsPanel = new SearchResultsPanel("searchResults", getModel(), documentsProvider) {
 
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-                setVisible(solrDocumentProvider.size() > 0);
+                setVisible(documentsProvider.size() > 0);
             }
 
             @Override
@@ -253,7 +257,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
 
         final AbstractPageableView<SolrDocumentExpansionPair> resultsView = searchResultsPanel.getResultsView();
 
-        resultsHeader = createResultsHeader("searchresultsheader", getModel(), resultsView, solrDocumentProvider);
+        resultsHeader = createResultsHeader("searchresultsheader", getModel(), resultsView, solrDocumentsProvider);
         searchContainer.add(resultsHeader.setOutputMarkupId(true));
     }
 
