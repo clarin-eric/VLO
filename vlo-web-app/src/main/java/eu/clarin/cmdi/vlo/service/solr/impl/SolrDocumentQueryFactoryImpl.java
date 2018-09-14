@@ -51,6 +51,7 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
         this.SELF_LINK = fieldNameService.getFieldName(FieldKey.SELF_LINK);
         defaultQueryTemplate = new SolrQuery();
         defaultQueryTemplate.setFields(documentFields.toArray(new String[]{}));
+        defaultQueryTemplate.addFilterQuery("{!collapse field=_signature}");
     }
 
     @Override
