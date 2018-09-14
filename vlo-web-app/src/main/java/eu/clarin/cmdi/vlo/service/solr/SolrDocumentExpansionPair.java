@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.service.solr;
 
 import java.util.List;
+import java.util.Optional;
 import org.apache.solr.common.SolrDocument;
 
 /**
@@ -26,10 +27,8 @@ import org.apache.solr.common.SolrDocument;
 public interface SolrDocumentExpansionPair {
 
     SolrDocument getDocument();
-    
-    boolean hasExpansion();
 
-    List<SolrDocument> getExpansionDocuments();
+    Optional<? extends List<SolrDocument>> getExpansionDocuments();
 
     long getExpansionCount();
 

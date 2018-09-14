@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.service.solr.impl;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Optional;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 
@@ -31,31 +32,33 @@ public class SolrDocumentExpansionPairImpl implements SolrDocumentExpansionPair,
     private final String keyField;
     private final SolrDocument document;
     private final Map<String, SolrDocumentList> expansion;
-
+    
     public SolrDocumentExpansionPairImpl(SolrDocument document, Map<String, SolrDocumentList> expansion, String keyField) {
         this.document = document;
         this.expansion = expansion;
         this.keyField = keyField;
     }
-
+    
     @Override
     public SolrDocument getDocument() {
         return document;
     }
-
+    
     @Override
-    public boolean hasExpansion() {
-        return expansion != null;
+    public Optional<SolrDocumentList> getExpansionDocuments() {
+        if (expansion == null) {
+            return Optional.empty();
+        } else {
+            return Optional.ofNullable(document.getFieldValue(keyField))
+                    .map(signature -> expansion.get(signature.toString()));
+        }
     }
-
-    @Override
-    public SolrDocumentList getExpansionDocuments() {
-        return expansion.get(document.getFieldValue(keyField).toString());
-    }
-
+    
     @Override
     public long getExpansionCount() {
-        return getExpansionDocuments().getNumFound();
+        return getExpansionDocuments()
+                .map(docList -> docList.getNumFound())
+                .orElse(Long.valueOf(0));
     }
     
 }
