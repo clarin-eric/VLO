@@ -23,7 +23,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CMDIParserVTDXML<T> implements CMDIDataProcessor {
+public class CMDIParserVTDXML<T> implements CMDIDataProcessor<T> {
 
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
 
