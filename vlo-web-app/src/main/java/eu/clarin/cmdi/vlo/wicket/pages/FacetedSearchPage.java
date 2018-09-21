@@ -2,6 +2,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import eu.clarin.cmdi.vlo.CmdConstants;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
@@ -67,9 +68,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     //private final static List<String> ADDITIONAL_FACETS = ImmutableList.of(FacetConstants.FIELD_LICENSE_TYPE);
     private final static FieldKey ADDITIONAL_FACETS = FieldKey.LICENSE_TYPE;
     
-    
-    private static final String COLLAPSE_FIELD_NAME = "_signature"; //TODO: make this configurable, use keys and perhaps overridable by the user
-
     @SpringBean
     private FacetFieldsService facetFieldsService;
     @SpringBean
@@ -169,7 +167,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     }
 
     private void addComponents() {
-        documentsProvider = new SolrDocumentExpansionPairProvider(getModel(), fieldNameService, COLLAPSE_FIELD_NAME);
+        documentsProvider = new SolrDocumentExpansionPairProvider(getModel(), fieldNameService);
         solrDocumentsProvider = new SolrDocumentProviderAdapter(documentsProvider, fieldNameService);
 
         searchContainer = new WebMarkupContainer("searchContainer");

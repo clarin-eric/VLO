@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.provider;
 
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
@@ -39,12 +40,10 @@ public class SolrDocumentExpansionPairProvider implements IDataProvider<SolrDocu
     private final IModel<QueryFacetsSelection> selectionModel;
 
     private Long size;
-    private final String collapseField;
 
-    public SolrDocumentExpansionPairProvider(IModel<QueryFacetsSelection> selection, FieldNameService fieldNameService, String collapseField) {
+    public SolrDocumentExpansionPairProvider(IModel<QueryFacetsSelection> selection, FieldNameService fieldNameService) {
         this.selectionModel = selection;
         this.fieldNameService = fieldNameService;
-        this.collapseField = collapseField;
     }
 
     @Override
@@ -52,7 +51,7 @@ public class SolrDocumentExpansionPairProvider implements IDataProvider<SolrDocu
         final SolrDocumentExpansionList documents = getDocumentService().getDocumentsWithExpansion(selectionModel.getObject(),
                 BigDecimal.valueOf(first).intValueExact(), // safe long->int conversion
                 BigDecimal.valueOf(count).intValueExact(),
-                collapseField); // safe long->int conversion
+                FacetConstants.COLLAPSE_FIELD_NAME); // safe long->int conversion
         return documents.iterator();
     }
 
@@ -66,7 +65,7 @@ public class SolrDocumentExpansionPairProvider implements IDataProvider<SolrDocu
 
     @Override
     public IModel<SolrDocumentExpansionPair> model(SolrDocumentExpansionPair object) {
-        return new SolrDocumentExpansionPairModel(object, fieldNameService, collapseField);
+        return new SolrDocumentExpansionPairModel(object, fieldNameService, FacetConstants.COLLAPSE_FIELD_NAME);
     }
 
     @Override

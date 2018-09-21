@@ -7,7 +7,6 @@ import com.google.common.collect.ImmutableList;
  */
 public class FacetConstants {
 
-
     //Normalized mimeTypes
     public static final String RESOURCE_TYPE_AUDIO = "audio";
     public static final String RESOURCE_TYPE_VIDEO = "video";
@@ -71,5 +70,7 @@ public class FacetConstants {
             FacetConstants.AVAILABILITY_LEVEL_ACA,
             FacetConstants.AVAILABILITY_LEVEL_RES
     );
+    
+    public static final String COLLAPSE_FIELD_NAME = "_signature";
 
 }
