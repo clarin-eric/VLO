@@ -96,7 +96,7 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
     }
 
     @Override
-    public SolrQuery createDuplicateDocumentsQuery(String docId, String collapseField, String collapseValue) {
+    public SolrQuery createDuplicateDocumentsQuery(String docId, String collapseField, String collapseValue, int expansionLimit) {
         // make a query to look up a specific document by its ID
         return getDefaultDocumentQuery()
                 // we can use the 'fast' request handler here, document ranking is of no interest
@@ -107,7 +107,8 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
                 .addFilterQuery(createFilterQuery(collapseField, collapseValue))
                 // exclude target document
                 .addFilterQuery(createNegativeFilterQuery(ID, docId))
-                .addFilterQuery(createNegativeFilterQuery(SELF_LINK, docId));
+                .addFilterQuery(createNegativeFilterQuery(SELF_LINK, docId))
+                .setRows(expansionLimit);
 
     }
 

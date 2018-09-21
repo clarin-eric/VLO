@@ -37,6 +37,11 @@ import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
  */
 public class SolrDocumentExpansionPairModel extends LoadableDetachableModel<SolrDocumentExpansionPair> {
 
+    /**
+     * Maximum number of records to retrieve in the expansion
+     */
+    private static final int DEFAULT_EXPANSION_LIMIT = 25;
+
     private final IModel<String> docId;
     private String collapseField;
 
@@ -67,7 +72,7 @@ public class SolrDocumentExpansionPairModel extends LoadableDetachableModel<Solr
             if (id == null) {
                 return null;
             } else {
-                return getDocumentService().getDocumentWithExpansion(id, collapseField);
+                return getDocumentService().getDocumentWithExpansion(id, collapseField, DEFAULT_EXPANSION_LIMIT);
             }
         }
     }

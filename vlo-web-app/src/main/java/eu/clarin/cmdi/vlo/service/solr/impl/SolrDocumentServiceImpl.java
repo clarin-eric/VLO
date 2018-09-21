@@ -60,13 +60,13 @@ public class SolrDocumentServiceImpl implements SolrDocumentService {
     }
 
     @Override
-    public SolrDocumentExpansionPair getDocumentWithExpansion(String docId, String collapseField) {
+    public SolrDocumentExpansionPair getDocumentWithExpansion(String docId, String collapseField, int expansionCount) {
         final SolrDocument doc = getDocument(docId);
         if (doc == null) {
             return null;
         } else {
             final String signature = doc.getFieldValue(collapseField).toString();
-            final SolrQuery duplicatesQuery = queryFactory.createDuplicateDocumentsQuery(docId, collapseField, signature);
+            final SolrQuery duplicatesQuery = queryFactory.createDuplicateDocumentsQuery(docId, collapseField, signature, expansionCount);
             final QueryResponse duplicatesQueryResponse = searchResultsDao.getQueryResponse(duplicatesQuery);
             final SolrDocumentList result = duplicatesQueryResponse.getResults();
             final Map<String, SolrDocumentList> expansionMap;
