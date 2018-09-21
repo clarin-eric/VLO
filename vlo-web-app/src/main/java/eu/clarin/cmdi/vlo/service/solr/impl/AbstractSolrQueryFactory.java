@@ -23,7 +23,6 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -126,21 +125,14 @@ public abstract class AbstractSolrQueryFactory {
     private String createFacetOrQuery(String facetName, Collection<String> values) {
         // escape value and wrap in quotes to make literal query
         // prefix field name with tag statement (see <http://wiki.apache.org/solr/SimpleFacetParameters#Multi-Select_Faceting_and_LocalParams>)
-        final StringBuilder queryBuilder = new StringBuilder(String.format("{!tag=%1$s}%1$s", facetName)).append(":(");
-        // loop over values
-        final Iterator<String> iterator = values.iterator();
-        while (iterator.hasNext()) {
-            final String value = iterator.next();
+        final String prefix = String.format("{!tag=%1$s}%1$s:(", facetName);
+        //close parentheses
+        final String postfix = ")";
 
-            queryBuilder.append(ClientUtils.escapeQueryChars(value));
-
-            // add 'OR' connector except for last token
-            if (iterator.hasNext()) {
-                queryBuilder.append(" OR ");
-            }
-        }
-        queryBuilder.append(")");
-        return queryBuilder.toString();
+        // escape and join 
+        return values.stream()
+                .map(ClientUtils::escapeQueryChars)
+                .collect(Collectors.joining(" OR ", prefix, postfix));
     }
 
     protected SolrQuery enableExpansion(SolrQuery query) {
