@@ -96,9 +96,19 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
     }
 
     @Override
-    public SolrQuery createDocumentQueryWithExpansion(String docId) {
-        final SolrQuery query = createDocumentQuery(docId);
-        return enableExpansion(query);
+    public SolrQuery createDuplicateDocumentsQuery(String docId, String collapseField, String collapseValue) {
+        // make a query to look up a specific document by its ID
+        return getDefaultDocumentQuery()
+                // we can use the 'fast' request handler here, document ranking is of no interest
+                .setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST)
+                // consider all documents
+                .setQuery(SOLR_SEARCH_ALL)
+                // limit to matching signature
+                .addFilterQuery(createFilterQuery(collapseField, collapseValue))
+                // exclude target document
+                .addFilterQuery(createNegativeFilterQuery(ID, docId))
+                .addFilterQuery(createNegativeFilterQuery(SELF_LINK, docId));
+
     }
 
     @Override

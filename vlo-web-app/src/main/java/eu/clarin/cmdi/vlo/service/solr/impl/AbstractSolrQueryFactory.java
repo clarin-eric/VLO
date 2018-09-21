@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
@@ -87,12 +88,12 @@ public abstract class AbstractSolrQueryFactory {
         }
     }
 
-    private String createFilterQuery(String facetName, String value) {
+    protected String createFilterQuery(String facetName, String value) {
         // escape value and wrap in quotes to make literal query
         return createFilterQuery("%s:\"%s\"", facetName, value);
     }
 
-    private String createNegativeFilterQuery(String facetName, String value) {
+    protected String createNegativeFilterQuery(String facetName, String value) {
         // escape value and wrap in quotes to make literal query, prepend negator
         return createFilterQuery("-%s:\"%s\"", facetName, value);
     }
@@ -109,17 +110,10 @@ public abstract class AbstractSolrQueryFactory {
      * @return
      */
     protected final String createFilterOrQuery(Map<String, String> facetValues) {
-        // escape value and wrap in quotes to make literal query
-        final StringBuilder queryBuilder = new StringBuilder();
-        final Iterator<Map.Entry<String, String>> iterator = facetValues.entrySet().iterator();
-        while (iterator.hasNext()) {
-            final Map.Entry<String, String> facetValue = iterator.next();
-            queryBuilder.append(createFilterQuery(facetValue.getKey(), facetValue.getValue()));
-            if (iterator.hasNext()) {
-                queryBuilder.append(" OR ");
-            }
-        }
-        return queryBuilder.toString();
+        return facetValues.entrySet()
+                .stream()
+                .map(e -> createFilterQuery(e.getKey(), e.getValue()))
+                .collect(Collectors.joining(" OR "));
     }
 
     /**

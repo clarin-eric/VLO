@@ -59,15 +59,7 @@ public interface SolrDocumentQueryFactory {
      */
     SolrQuery createDocumentQuery(String docId);
 
-    /**
-     * Creates a query to retrieve a single document by id, including result expansion
-     *
-     * @param docId identifier of document to retrieve
-     * @return a query set up to retrieve one row at most with the document that
-     * has the specified identifier
-     * @see FacetConstants#FIELD_ID
-     */
-    SolrQuery createDocumentQueryWithExpansion(String docId);
+    SolrQuery createDuplicateDocumentsQuery(String docId, String collapseField, String collapseValue);
 
     /**
      * Creates a query to retrieve documents similar to the identified one

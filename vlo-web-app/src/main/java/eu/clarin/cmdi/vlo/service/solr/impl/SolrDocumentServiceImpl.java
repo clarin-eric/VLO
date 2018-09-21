@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
+import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionList;
@@ -23,6 +24,7 @@ import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentQueryFactory;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import java.util.List;
+import java.util.Map;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -59,14 +61,22 @@ public class SolrDocumentServiceImpl implements SolrDocumentService {
 
     @Override
     public SolrDocumentExpansionPair getDocumentWithExpansion(String docId, String collapseField) {
-        final SolrQuery query = queryFactory.createDocumentQueryWithExpansion(docId);
-        final QueryResponse result = searchResultsDao.getQueryResponse(query);
-        final SolrDocumentList docs = result.getResults();
-        if (docs.getNumFound() < 1) {
+        final SolrDocument doc = getDocument(docId);
+        if (doc == null) {
             return null;
         } else {
-            logger.debug("Document with docId {} retrieved:", result);
-            return new SolrDocumentExpansionPairImpl(docs.get(0), result.getExpandedResults(), collapseField);
+            final String signature = doc.getFieldValue(collapseField).toString();
+            final SolrQuery duplicatesQuery = queryFactory.createDuplicateDocumentsQuery(docId, collapseField, signature);
+            final QueryResponse duplicatesQueryResponse = searchResultsDao.getQueryResponse(duplicatesQuery);
+            final SolrDocumentList result = duplicatesQueryResponse.getResults();
+            final Map<String, SolrDocumentList> expansionMap;
+            if (result == null) {
+                expansionMap = ImmutableMap.of();
+            } else {
+                expansionMap = ImmutableMap.of(signature, result);
+            }
+
+            return new SolrDocumentExpansionPairImpl(doc, expansionMap, collapseField);
         }
     }
 
