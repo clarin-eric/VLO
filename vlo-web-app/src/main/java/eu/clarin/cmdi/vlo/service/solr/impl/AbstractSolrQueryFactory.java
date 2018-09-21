@@ -16,10 +16,12 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
+import com.google.common.collect.Streams;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -78,7 +80,10 @@ public abstract class AbstractSolrQueryFactory {
                     }
                 }
             }
-            query.setFilterQueries(encodedQueries.toArray(new String[encodedQueries.size()]));
+            query.setFilterQueries(
+                    Streams.concat(
+                            Arrays.stream(query.getFilterQueries()),
+                            encodedQueries.stream()).toArray(String[]::new));
         }
     }
 
@@ -143,7 +148,7 @@ public abstract class AbstractSolrQueryFactory {
         queryBuilder.append(")");
         return queryBuilder.toString();
     }
-    
+
     protected SolrQuery enableExpansion(SolrQuery query) {
         query.set("expand", true);
         query.set("expand.rows=" + EXPAND_ROWS);
