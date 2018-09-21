@@ -84,7 +84,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </p>
                     <div wicket:id="collapsedDetails" class="searchresultitembrief">[COLLAPSED]</div>
                     <div wicket:id="expandedDetails" class="searchresultitemextended">[COLLAPSED]</div>
-                    Records hidden: <span wicket:id="collapsedItemsCount">-1</span>
+                    <div class="search-results-duplicates" wicket:id="duplicateResults">
+                        <div class="search-results-duplicates-preamble">
+                            <p>
+                                The search results include <span wicket:id="expansionCount">[COUNT]</span> (near) duplicate(s) of this record.
+                            </p>
+                            <p>
+                                <a wicket:id="expandDuplicates">Click here to see the (near) duplicate results</a>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </wicket:panel>

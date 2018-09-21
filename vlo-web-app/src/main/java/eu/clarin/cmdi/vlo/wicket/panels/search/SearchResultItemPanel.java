@@ -39,6 +39,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -82,7 +83,8 @@ public class SearchResultItemPanel extends Panel {
     /**
      *
      * @param id markup id of the panel
-     * @param documentExpansionPairModel model of document that this search item represents
+     * @param documentExpansionPairModel model of document that this search item
+     * represents
      * @param selectionModel model of current selection (will be passed on to
      * record page when link is clicked)
      * @param expansionStateModel model for the expansion state of this search
@@ -170,8 +172,34 @@ public class SearchResultItemPanel extends Panel {
                 .add(new Label("score", new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.SOLR_SCORE))))
                 .setVisible(config.isShowResultScores())
         );
-        
-        add(new Label("collapsedItemsCount", new PropertyModel<>(documentExpansionPairModel, "expansionCount")));
+
+        //add(new Label("collapsedItemsCount", new PropertyModel<>(documentExpansionPairModel, "expansionCount")));
+        final IModel<Boolean> duplicatesShownModel = Model.of(false);
+        add(
+                new WebMarkupContainer("duplicateResults")
+                        .add(new Label("expansionCount", new PropertyModel<String>(documentExpansionPairModel, "expansionCount")))
+                        .add(new AjaxFallbackLink("expandDuplicates") {
+                            @Override
+                            public void onClick(AjaxRequestTarget target) {
+                                //TODO
+                                duplicatesShownModel.setObject(true);
+                            }
+
+                            @Override
+                            protected void onConfigure() {
+                                super.onConfigure();
+                                setVisible(!duplicatesShownModel.getObject());
+                            }
+
+                        })
+                        .add(new Behavior() {
+                            @Override
+                            public void onConfigure(Component duplicateResultsView) {
+                                duplicateResultsView.setVisible(documentExpansionPairModel.getObject().getExpansionCount() > 0);
+                            }
+
+                        })
+        );
 
         setOutputMarkupId(true);
     }
