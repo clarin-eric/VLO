@@ -91,8 +91,8 @@ public class SolrDocumentQueryFactoryImplTest {
         assertEquals(Integer.valueOf(15), query.getRows());
 
         final String[] filterQueries = query.getFilterQueries();
-        assertEquals(1, filterQueries.length);
-        assertEquals("field1:\"value\\ 1\"", filterQueries[0]);
+        assertEquals(2, filterQueries.length);
+        assertThat(filterQueries, Matchers.hasItemInArray("field1:\"value\\ 1\""));
 
         final String fields = query.getFields();
         assertTrue(fields.contains("field1"));
