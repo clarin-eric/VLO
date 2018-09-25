@@ -50,5 +50,6 @@ public enum FieldKey {
     LANGUAGE_NAME,
     LANDINGPAGE,
     SEARCHPAGE,
-    DEPRECATED_LANGUAGE       
+    DEPRECATED_LANGUAGE,
+    SIGNATURE
 }
