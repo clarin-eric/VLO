@@ -618,6 +618,9 @@ public class MetadataImporter {
         // add resource proxys      
         addResourceData(solrDocument, cmdiData);
 
+        // create and add document signature
+        solrDocument.addField(fieldNameService.getFieldName(FieldKey.SIGNATURE), DeduplicationSignature.getSignature(fieldNameService, solrDocument));
+
         LOG.debug("Adding document for submission to SOLR: {}", file);
 
         solrBridge.addDocument(solrDocument);
