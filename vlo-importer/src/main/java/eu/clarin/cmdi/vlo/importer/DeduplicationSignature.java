@@ -18,31 +18,31 @@ package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
+import java.util.Arrays;
+import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.LoggerFactory;
 
 /**
  * Generates a signature for a document to detect (near-) duplicates
- * 
+ *
  * @author Thomas Eckart
  */
 public class DeduplicationSignature {
     protected static final org.slf4j.Logger LOG = LoggerFactory.getLogger(DeduplicationSignature.class);
-    
+
     public static String getSignature(FieldNameServiceImpl fieldNameService, SolrInputDocument doc) {
         StringBuilder sb = new StringBuilder("");
 
-        for(Object obj : doc.getFieldValues(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE))) {
-            String value = (String) obj;
-            sb.append(value);
+        List<FieldKey> signatureFields = Arrays.asList(FieldKey.LANGUAGE_CODE, FieldKey.DATA_PROVIDER_NAME, FieldKey.DESCRIPTION, FieldKey.COLLECTION);
+        for (FieldKey field : signatureFields) {
+            if (doc.getFieldNames().contains(fieldNameService.getFieldName(field))) {
+                for (Object value : doc.getFieldValues(fieldNameService.getFieldName(field))) {
+                    sb.append((String) value);
+                }
+            }
         }
-        sb.append(doc.getFieldValue(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER_NAME)));
-        for(Object obj : doc.getFieldValues(fieldNameService.getFieldName(FieldKey.DESCRIPTION))) {
-            String value = (String) obj;
-            sb.append(value);
-        }
-        sb.append(doc.getFieldValue(fieldNameService.getFieldName(FieldKey.COLLECTION)));
 
         return DigestUtils.md5Hex(sb.toString());
     }
