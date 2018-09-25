@@ -1304,7 +1304,7 @@
             <str name="signatureField">_signature</str>
             <bool name="overwriteDupes">false</bool>
             <str name="fields">languageCode,collection,description</str>
-            <str name="signatureClass">solr.processor.Lookup3Signature</str> <!-- TODO Lookup3Signature, TextProfileSignature (fuzzy) -->
+            <str name="signatureClass">solr.processor.Lookup3Signature</str> <!-- Standard alternatives: Lookup3Signature, TextProfileSignature (fuzzy) -->
         </processor>
 
         <processor class="solr.LogUpdateProcessorFactory"/>
