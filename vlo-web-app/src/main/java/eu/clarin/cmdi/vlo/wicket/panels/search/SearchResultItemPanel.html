@@ -91,6 +91,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             </p>
                             <p>
                                 <a wicket:id="expandDuplicates">Click here to see the (near) duplicate results</a>
+                                <ul wicket:id="duplicatesView" class="search-results-duplicates-list">
+                                    <li wicket:id="duplicateItem">
+                                        <a wicket:id="duplicateItemLink"><wicket:container wicket:id="duplicateItemName">[item]</wicket:container></a>
+                                    </li>
+                                </ul>
                             </p>
                         </div>
                     </div>
