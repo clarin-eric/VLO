@@ -90,15 +90,17 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
         // add some documents
         int id = 1;
         CMDIData cmdiData = new CMDIData(fieldNameService);
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "Collection1", false);
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COUNTRY), "Country1", false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "First collection", false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COUNTRY), "A country", false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SIGNATURE), "doc1", true);
         SolrInputDocument document = cmdiData.getSolrDocument();
         document.addField("id", Integer.toString(id++));
         server.add(document);
 
         cmdiData = new CMDIData(fieldNameService);
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "Collection2", false);
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COUNTRY), "Country2", false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "Second collection", false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COUNTRY), "Another country", false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SIGNATURE), "doc2", true);
         document = cmdiData.getSolrDocument();
         document.addField("id", Integer.toString(id++));
         server.add(document);
@@ -162,15 +164,15 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
         }
 
         // get document with specific field value
-        query.setQuery(fieldNameService.getFieldName(FieldKey.COUNTRY) + ":Country1");
+        query.setQuery(fieldNameService.getFieldName(FieldKey.COUNTRY) + ":\"Another country\"");
         {
             // only document with id "1" should match this
             SolrDocumentList documents = instance.getDocuments(query);
             assertEquals(1, documents.getNumFound());
-            assertEquals("1", documents.get(0).getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
+            assertEquals("2", documents.get(0).getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
         }
 
-        query.setFilterQueries(fieldNameService.getFieldName(FieldKey.COLLECTION) + ":Collection3");
+        query.setFilterQueries(fieldNameService.getFieldName(FieldKey.COLLECTION) + ":\"Third collection\"");
         {
             // no matches
             SolrDocumentList documents = instance.getDocuments(query);
