@@ -54,7 +54,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
 
     private final static Logger LOG = LoggerFactory.getLogger(DuplicateSearchResultItemsPanel.class);
 
-    private static final int ITEMS_PER_PAGE = 1;
+    private static final int ITEMS_PER_PAGE = 10;
 
     @SpringBean
     private FieldNameService fieldNameService;
@@ -73,7 +73,9 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
             @Override
             public void onClick(AjaxRequestTarget target) {
                 duplicatesShownModel.setObject(true);
-                target.add(DuplicateSearchResultItemsPanel.this);
+                if (target != null) {
+                    target.add(DuplicateSearchResultItemsPanel.this);
+                }
             }
 
             @Override
@@ -111,6 +113,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
                         component.setVisible(duplicatesShownModel.getObject());
                     }
                 })
+                .setOutputMarkupId(true)
         ).add(new Behavior() {
             @Override
             public void onConfigure(Component duplicateResultsView) {
