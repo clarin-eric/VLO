@@ -34,6 +34,8 @@ import eu.clarin.cmdi.vlo.FieldKey;
  */
 public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrDocumentQueryFactory {
 
+    private static final String COLLAPSE_FIELD_QUERY = "{!collapse field=_signature}";
+    
     private final String ID;
     private final String SELF_LINK;
 
@@ -51,13 +53,14 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
         this.SELF_LINK = fieldNameService.getFieldName(FieldKey.SELF_LINK);
         defaultQueryTemplate = new SolrQuery();
         defaultQueryTemplate.setFields(documentFields.toArray(new String[]{}));
-        defaultQueryTemplate.addFilterQuery("{!collapse field=_signature}");
     }
 
     @Override
     public SolrQuery createDocumentQuery(QueryFacetsSelection selection, int first, int count) {
         // make a query to get all documents that match the selection criteria
         final SolrQuery query = getDefaultDocumentQuery();
+        // collapse similar fields
+        query.addFilterQuery(COLLAPSE_FIELD_QUERY);
         // apply selection
         addQueryFacetParameters(query, selection);
         // set offset and limit
@@ -107,7 +110,6 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
                 .addFilterQuery(createFilterQuery(collapseField, collapseValue))
                 // exclude target document
                 .addFilterQuery(createNegativeFilterQuery(ID, docId))
-                .addFilterQuery(createNegativeFilterQuery(SELF_LINK, docId))
                 .setStart(offset)
                 .setRows(expansionLimit);
 
