@@ -68,10 +68,12 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
 
     private final Component navigatorBottom;
     private final Component navigatorTop;
+    private final IModel<Set<String>> duplicateItemsExpansionsModel;
 
     public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel, IDataProvider<SolrDocumentExpansionPair> solrDocumentProvider) {
         super(id, selectionModel);
-        this.expansionsModel = new Model(new HashSet<Object>());
+        this.expansionsModel = new Model(new HashSet<>());
+        this.duplicateItemsExpansionsModel = new Model(new HashSet<>());
 
         //define the order for availability values
         final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering(
@@ -88,7 +90,9 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
                 final SearchContextModel contextModel = new SearchContextModel(index, size, selectionModel);
                 // single result item
                 item.add(new SearchResultItemPanel("resultItemDetails", (SolrDocumentExpansionPairModel) item.getModel(), contextModel,
-                        new SearchResultExpansionStateModel(expansionsModel, item.getModel()), availabilityOrdering
+                        new SearchResultExpansionStateModel(expansionsModel, item.getModel()), 
+                        duplicateItemsExpansionsModel,
+                        availabilityOrdering
                 ));
             }
         };
@@ -145,6 +149,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
 
     public void resetExpansion() {
         expansionsModel.getObject().clear();
+        duplicateItemsExpansionsModel.getObject().clear();
     }
 
     public AbstractPageableView<SolrDocumentExpansionPair> getResultsView() {

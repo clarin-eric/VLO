@@ -40,7 +40,6 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
@@ -61,18 +60,16 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
 
     private final IModel<SearchContext> selectionModel;
 
-    public DuplicateSearchResultItemsPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<SearchContext> selectionModel) {
+    public DuplicateSearchResultItemsPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<SearchContext> selectionModel, IModel<Boolean> expandedModel) {
         super(id, documentExpansionPairModel);
         this.selectionModel = selectionModel;
-
-        final IModel<Boolean> duplicatesShownModel = Model.of(false);
-
+        
         add(new Label("expansionCount", new PropertyModel<>(documentExpansionPairModel, "expansionCount")));
 
         add(new IndicatingAjaxFallbackLink("expandDuplicates") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                duplicatesShownModel.setObject(true);
+                expandedModel.setObject(true);
                 if (target != null) {
                     target.add(DuplicateSearchResultItemsPanel.this);
                 }
@@ -81,7 +78,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-                setVisible(!duplicatesShownModel.getObject());
+                setVisible(!expandedModel.getObject());
             }
 
         });
@@ -110,7 +107,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
                 .add(new Behavior() {
                     @Override
                     public void onConfigure(Component component) {
-                        component.setVisible(duplicatesShownModel.getObject());
+                        component.setVisible(expandedModel.getObject());
                     }
                 })
                 .setOutputMarkupId(true)
