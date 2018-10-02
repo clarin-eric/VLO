@@ -47,6 +47,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Panel that optionally (on expansion) lists the 'near duplicate' items for a
+ * search result
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
@@ -61,12 +63,21 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
 
     private final IModel<SearchContext> selectionModel;
 
-    public DuplicateSearchResultItemsPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<SearchContext> selectionModel, IModel<ExpansionState> expandedModel) {
+    /**
+     *
+     * @param id component id
+     * @param documentExpansionPairModel model of Solr document and its
+     * expansion
+     * @param searchContextModel model for current search context
+     * @param expandedModel model for current 'duplicate items' expansion state
+     */
+    public DuplicateSearchResultItemsPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<SearchContext> searchContextModel, IModel<ExpansionState> expandedModel) {
         super(id, documentExpansionPairModel);
-        this.selectionModel = selectionModel;
-        
+        this.selectionModel = searchContextModel;
+
         add(new Label("expansionCount", new PropertyModel<>(documentExpansionPairModel, "expansionCount")));
 
+        // link to expand (i.e. show list)
         add(new IndicatingAjaxFallbackLink("expandDuplicates") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -84,19 +95,21 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
 
         });
 
+        // view of documents list
         final DataView<SolrDocument> duplicatesView = new DataView<SolrDocument>("duplicateItem", new DuplicateDocumentsProvider(documentExpansionPairModel, fieldNameService), ITEMS_PER_PAGE) {
             @Override
             protected void populateItem(Item<SolrDocument> item) {
                 item.add(
-                        new RecordPageLink("duplicateItemLink", item.getModel(), selectionModel)
+                        new RecordPageLink("duplicateItemLink", item.getModel(), searchContextModel)
                                 .add(new Label("duplicateItemName", new SolrFieldStringModel(item.getModel(), fieldNameService.getFieldName(FieldKey.NAME), true))));
             }
 
         };
 
+        // container for list view and pagination
         add(new WebMarkupContainer("duplicatesView")
                 .add(duplicatesView)
-                .add(new BootstrapAjaxPagingNavigator("duplicatesPaging", duplicatesView)
+                .add(new BootstrapAjaxPagingNavigator("duplicatesPaging", duplicatesView) // pagination for list view
                         .add(new Behavior() {
                             @Override
                             public void onConfigure(Component component) {
@@ -105,19 +118,24 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
 
                         })
                 )
-                .add(new Behavior() {
+                .add(new Behavior() { //show only if expanded
                     @Override
                     public void onConfigure(Component component) {
                         component.setVisible(ExpansionState.EXPANDED == expandedModel.getObject());
                     }
                 })
-                .setOutputMarkupId(true)
-        ).add(new Behavior() {
+                .setOutputMarkupId(true) // container must be Ajax updateable
+        );
+
+        // show only if something to be shown
+        add(new Behavior() {
             @Override
-            public void onConfigure(Component duplicateResultsView) {
-                duplicateResultsView.setVisible(documentExpansionPairModel.getObject().getExpansionCount() > 0);
+            public void onConfigure(Component thisPanel) {
+                thisPanel.setVisible(documentExpansionPairModel.getObject().getExpansionCount() > 0);
             }
         });
+        
+        // component must be Ajax updateable
         setOutputMarkupId(true);
     }
 
