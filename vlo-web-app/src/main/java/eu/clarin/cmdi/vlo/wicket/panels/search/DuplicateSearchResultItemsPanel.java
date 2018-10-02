@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
@@ -60,7 +61,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
 
     private final IModel<SearchContext> selectionModel;
 
-    public DuplicateSearchResultItemsPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<SearchContext> selectionModel, IModel<Boolean> expandedModel) {
+    public DuplicateSearchResultItemsPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<SearchContext> selectionModel, IModel<ExpansionState> expandedModel) {
         super(id, documentExpansionPairModel);
         this.selectionModel = selectionModel;
         
@@ -69,7 +70,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
         add(new IndicatingAjaxFallbackLink("expandDuplicates") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                expandedModel.setObject(true);
+                expandedModel.setObject(ExpansionState.EXPANDED);
                 if (target != null) {
                     target.add(DuplicateSearchResultItemsPanel.this);
                 }
@@ -78,7 +79,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-                setVisible(!expandedModel.getObject());
+                setVisible(ExpansionState.COLLAPSED == expandedModel.getObject());
             }
 
         });
@@ -107,7 +108,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
                 .add(new Behavior() {
                     @Override
                     public void onConfigure(Component component) {
-                        component.setVisible(expandedModel.getObject());
+                        component.setVisible(ExpansionState.EXPANDED == expandedModel.getObject());
                     }
                 })
                 .setOutputMarkupId(true)

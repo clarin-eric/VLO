@@ -65,10 +65,10 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
 
     private final DataView<SolrDocumentExpansionPair> resultsView;
     private final IModel<Set<Object>> expansionsModel;
+    private final IModel<Set<Object>> duplicateItemsExpansionsModel;
 
     private final Component navigatorBottom;
     private final Component navigatorTop;
-    private final IModel<Set<String>> duplicateItemsExpansionsModel;
 
     public SearchResultsPanel(String id, final IModel<QueryFacetsSelection> selectionModel, IDataProvider<SolrDocumentExpansionPair> solrDocumentProvider) {
         super(id, selectionModel);
@@ -90,8 +90,8 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
                 final SearchContextModel contextModel = new SearchContextModel(index, size, selectionModel);
                 // single result item
                 item.add(new SearchResultItemPanel("resultItemDetails", (SolrDocumentExpansionPairModel) item.getModel(), contextModel,
-                        new SearchResultExpansionStateModel(expansionsModel, item.getModel()), 
-                        duplicateItemsExpansionsModel,
+                        new SearchResultExpansionStateModel(expansionsModel, item.getModel()),
+                        new SearchResultExpansionStateModel(duplicateItemsExpansionsModel, item.getModel()),
                         availabilityOrdering
                 ));
             }

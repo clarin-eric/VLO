@@ -30,14 +30,11 @@ import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
-import eu.clarin.cmdi.vlo.wicket.model.SetContainsModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
-import java.util.HashSet;
-import java.util.Set;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -92,7 +89,7 @@ public class SearchResultItemPanel extends Panel {
      * item
      * @param availabilityOrdering ordering for availability 'tags'
      */
-    public SearchResultItemPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<SearchContext> selectionModel, IModel<ExpansionState> expansionStateModel, IModel<Set<String>> duplicateItemsExapnsionModel, Ordering<String> availabilityOrdering) {
+    public SearchResultItemPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<SearchContext> selectionModel, IModel<ExpansionState> expansionStateModel, IModel<ExpansionState> duplicateItemsExpansionModel, Ordering<String> availabilityOrdering) {
         super(id, documentExpansionPairModel);
         this.expansionStateModel = expansionStateModel;
         this.selectionModel = selectionModel;
@@ -173,10 +170,8 @@ public class SearchResultItemPanel extends Panel {
                 .setVisible(config.isShowResultScores())
         );
 
-        final IModel<Boolean> duplicateItemsShownModel = new SetContainsModel<>(duplicateItemsExapnsionModel, new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.ID)));
-
         //add(new Label("collapsedItemsCount", new PropertyModel<>(documentExpansionPairModel, "expansionCount")));
-        add(new DuplicateSearchResultItemsPanel("duplicateResults", documentExpansionPairModel, selectionModel, duplicateItemsShownModel));
+        add(new DuplicateSearchResultItemsPanel("duplicateResults", documentExpansionPairModel, selectionModel, duplicateItemsExpansionModel));
 
         setOutputMarkupId(true);
     }
