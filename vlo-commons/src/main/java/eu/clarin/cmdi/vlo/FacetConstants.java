@@ -44,7 +44,7 @@ public class FacetConstants {
      * Name of the Solr request handler for fast queries (no sorting, boosting
      * or aliases)
      */
-    public static final String SOLR_REQUEST_HANDLER_FAST = "fast";
+    public static final String SOLR_REQUEST_HANDLER_FAST = "/fast";
 
     /**
      * PUB level for the 'availability' facet
