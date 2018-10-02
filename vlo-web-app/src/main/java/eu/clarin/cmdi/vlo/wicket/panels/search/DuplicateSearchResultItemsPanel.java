@@ -20,7 +20,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.Bootstra
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
-import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
@@ -61,19 +60,15 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
     @SpringBean
     private FieldNameService fieldNameService;
 
-    private final IModel<SearchContext> selectionModel;
-
     /**
      *
      * @param id component id
      * @param documentExpansionPairModel model of Solr document and its
      * expansion
-     * @param searchContextModel model for current search context
      * @param expandedModel model for current 'duplicate items' expansion state
      */
-    public DuplicateSearchResultItemsPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<SearchContext> searchContextModel, IModel<ExpansionState> expandedModel) {
+    public DuplicateSearchResultItemsPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<ExpansionState> expandedModel) {
         super(id, documentExpansionPairModel);
-        this.selectionModel = searchContextModel;
 
         add(new Label("expansionCount", new PropertyModel<>(documentExpansionPairModel, "expansionCount")));
 
@@ -100,7 +95,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
             @Override
             protected void populateItem(Item<SolrDocument> item) {
                 item.add(
-                        new RecordPageLink("duplicateItemLink", item.getModel(), searchContextModel)
+                        new RecordPageLink("duplicateItemLink", item.getModel())
                                 .add(new Label("duplicateItemName", new SolrFieldStringModel(item.getModel(), fieldNameService.getFieldName(FieldKey.NAME), true))));
             }
 
@@ -135,14 +130,8 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
             }
         });
         
-        // component must be Ajax updateable
+        // component must be Ajax updateable (on expansion)
         setOutputMarkupId(true);
-    }
-
-    @Override
-    public void detachModels() {
-        super.detachModels();
-        selectionModel.detach();
     }
 
     private static class DuplicateDocumentsProvider implements IDataProvider<SolrDocument> {

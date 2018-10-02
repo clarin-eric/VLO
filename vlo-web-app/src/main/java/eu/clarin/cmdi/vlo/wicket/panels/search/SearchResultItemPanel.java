@@ -170,8 +170,7 @@ public class SearchResultItemPanel extends Panel {
                 .setVisible(config.isShowResultScores())
         );
 
-        //add(new Label("collapsedItemsCount", new PropertyModel<>(documentExpansionPairModel, "expansionCount")));
-        add(new DuplicateSearchResultItemsPanel("duplicateResults", documentExpansionPairModel, selectionModel, duplicateItemsExpansionModel));
+        add(new DuplicateSearchResultItemsPanel("duplicateResults", documentExpansionPairModel, duplicateItemsExpansionModel));
 
         setOutputMarkupId(true);
     }
