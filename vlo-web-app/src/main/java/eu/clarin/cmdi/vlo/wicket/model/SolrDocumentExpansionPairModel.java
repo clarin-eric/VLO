@@ -40,10 +40,13 @@ public class SolrDocumentExpansionPairModel extends LoadableDetachableModel<Solr
     /**
      * Maximum number of records to retrieve in the expansion
      */
-    private static final int DEFAULT_EXPANSION_LIMIT = 25;
+    private static final int DEFAULT_EXPANSION_COUNT = 0;
+    private static final int DEFAULT_EXPANSION_OFFSET = 0;
 
     private final IModel<String> docId;
     private String collapseField;
+    private int expansionOffset;
+    private int expansionCount;
 
     public SolrDocumentExpansionPairModel(SolrDocumentExpansionPair pair, FieldNameService fieldNameService, String collapseField) {
         super(pair);
@@ -53,6 +56,8 @@ public class SolrDocumentExpansionPairModel extends LoadableDetachableModel<Solr
             this.docId = Model.of((String) pair.getDocument().getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
         }
         this.collapseField = collapseField;
+        this.expansionOffset = DEFAULT_EXPANSION_OFFSET;
+        this.expansionCount = DEFAULT_EXPANSION_COUNT;
     }
 
     public SolrDocumentExpansionPairModel(String docId) {
@@ -72,9 +77,15 @@ public class SolrDocumentExpansionPairModel extends LoadableDetachableModel<Solr
             if (id == null) {
                 return null;
             } else {
-                return getDocumentService().getDocumentWithExpansion(id, collapseField, DEFAULT_EXPANSION_LIMIT);
+                return getDocumentService().getDocumentWithExpansion(id, collapseField, expansionOffset, expansionCount);
             }
         }
+    }
+
+    public void setExpansionPage(int offset, int count) {
+        this.expansionOffset = offset;
+        this.expansionCount = count;
+        detach();
     }
 
     @Override

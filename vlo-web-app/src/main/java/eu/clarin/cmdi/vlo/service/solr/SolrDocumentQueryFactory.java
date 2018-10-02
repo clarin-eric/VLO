@@ -59,7 +59,7 @@ public interface SolrDocumentQueryFactory {
      */
     SolrQuery createDocumentQuery(String docId);
 
-    SolrQuery createDuplicateDocumentsQuery(String docId, String collapseField, String collapseValue, int expansionLimit);
+    SolrQuery createDuplicateDocumentsQuery(String docId, String collapseField, String collapseValue, int first, int count);
 
     /**
      * Creates a query to retrieve documents similar to the identified one

@@ -29,6 +29,7 @@ import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchResultExpansionStateModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -86,7 +87,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
                 final long size = internalGetDataProvider().size();
                 final SearchContextModel contextModel = new SearchContextModel(index, size, selectionModel);
                 // single result item
-                item.add(new SearchResultItemPanel("resultItemDetails", item.getModel(), contextModel,
+                item.add(new SearchResultItemPanel("resultItemDetails", (SolrDocumentExpansionPairModel) item.getModel(), contextModel,
                         new SearchResultExpansionStateModel(expansionsModel, item.getModel()), availabilityOrdering
                 ));
             }

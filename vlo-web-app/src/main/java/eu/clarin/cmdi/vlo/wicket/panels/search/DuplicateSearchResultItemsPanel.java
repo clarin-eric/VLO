@@ -16,13 +16,16 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
+import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
+import static java.lang.Math.toIntExact;
 import java.util.Collections;
 import java.util.Iterator;
 import org.apache.solr.common.SolrDocument;
@@ -40,6 +43,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -47,12 +52,16 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentExpansionPair> {
 
+    private final static Logger LOG = LoggerFactory.getLogger(DuplicateSearchResultItemsPanel.class);
+
+    private static final int ITEMS_PER_PAGE = 1;
+
     @SpringBean
     private FieldNameService fieldNameService;
 
     private final IModel<SearchContext> selectionModel;
 
-    public DuplicateSearchResultItemsPanel(String id, IModel<SolrDocumentExpansionPair> documentExpansionPairModel, IModel<SearchContext> selectionModel) {
+    public DuplicateSearchResultItemsPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<SearchContext> selectionModel) {
         super(id, documentExpansionPairModel);
         this.selectionModel = selectionModel;
 
@@ -75,25 +84,34 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
 
         });
 
-        add(new WebMarkupContainer("duplicatesView")
-                .add(new DataView<SolrDocument>("duplicateItem", new DuplicateDocumentsProvider(documentExpansionPairModel, fieldNameService)) {
-                    @Override
-                    protected void populateItem(Item<SolrDocument> item) {
-                        item.add(
-                                new RecordPageLink("duplicateItemLink", item.getModel(), selectionModel)
-                                        .add(new Label("duplicateItemName", new SolrFieldStringModel(item.getModel(), fieldNameService.getFieldName(FieldKey.NAME), true))));
-                    }
+        final DataView<SolrDocument> duplicatesView = new DataView<SolrDocument>("duplicateItem", new DuplicateDocumentsProvider(documentExpansionPairModel, fieldNameService), ITEMS_PER_PAGE) {
+            @Override
+            protected void populateItem(Item<SolrDocument> item) {
+                item.add(
+                        new RecordPageLink("duplicateItemLink", item.getModel(), selectionModel)
+                                .add(new Label("duplicateItemName", new SolrFieldStringModel(item.getModel(), fieldNameService.getFieldName(FieldKey.NAME), true))));
+            }
 
-                })
+        };
+
+        add(new WebMarkupContainer("duplicatesView")
+                .add(duplicatesView)
+                .add(new BootstrapAjaxPagingNavigator("duplicatesPaging", duplicatesView)
+                        .add(new Behavior() {
+                            @Override
+                            public void onConfigure(Component component) {
+                                component.setVisible(duplicatesView.getPageCount() > 1);
+                            }
+
+                        })
+                )
                 .add(new Behavior() {
                     @Override
                     public void onConfigure(Component component) {
                         component.setVisible(duplicatesShownModel.getObject());
                     }
                 })
-        );
-
-        add(new Behavior() {
+        ).add(new Behavior() {
             @Override
             public void onConfigure(Component duplicateResultsView) {
                 duplicateResultsView.setVisible(documentExpansionPairModel.getObject().getExpansionCount() > 0);
@@ -104,24 +122,27 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
 
     @Override
     public void detachModels() {
-        super.detachModels(); 
+        super.detachModels();
         selectionModel.detach();
     }
-    
-    
 
     private static class DuplicateDocumentsProvider implements IDataProvider<SolrDocument> {
 
-        private final IModel<SolrDocumentExpansionPair> expansionPairModel;
+        private final SolrDocumentExpansionPairModel expansionPairModel;
         private final FieldNameService fieldNameService;
 
-        public DuplicateDocumentsProvider(IModel<SolrDocumentExpansionPair> targetDocument, FieldNameService fieldNameService) {
+        public DuplicateDocumentsProvider(SolrDocumentExpansionPairModel targetDocument, FieldNameService fieldNameService) {
             this.expansionPairModel = targetDocument;
             this.fieldNameService = fieldNameService;
         }
 
         @Override
         public Iterator<? extends SolrDocument> iterator(long first, long count) {
+            try {
+                expansionPairModel.setExpansionPage(toIntExact(first), toIntExact(count));
+            } catch (ArithmeticException ex) {
+                LOG.error("Failed long to int coversion on paging: first {}, count {}", first, count, ex);
+            }
             return expansionPairModel.getObject()
                     .getExpansionDocuments()
                     .map(l -> l.iterator())
