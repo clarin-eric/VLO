@@ -31,13 +31,10 @@ import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
-import java.util.Collections;
-import java.util.Iterator;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -75,7 +72,6 @@ public class SearchResultItemPanel extends Panel {
     private FieldNameService fieldNameService;
 
     private final IModel<SearchContext> selectionModel;
-    private final IModel<SolrDocumentExpansionPair> documentExpansionPairModel;
     private final IModel<SolrDocument> documentModel;
 
     private final Panel collapsedDetails;
@@ -97,7 +93,6 @@ public class SearchResultItemPanel extends Panel {
         super(id, documentExpansionPairModel);
         this.expansionStateModel = expansionStateModel;
         this.selectionModel = selectionModel;
-        this.documentExpansionPairModel = documentExpansionPairModel;
         this.documentModel = new PropertyModel<>(documentExpansionPairModel, "document");
 
         add(new RecordPageLink("recordLink", documentModel, selectionModel)
@@ -176,60 +171,9 @@ public class SearchResultItemPanel extends Panel {
         );
 
         //add(new Label("collapsedItemsCount", new PropertyModel<>(documentExpansionPairModel, "expansionCount")));
-        add(createDuplicateResultsView());
+        add(new DuplicateSearchResultItemsPanel("duplicateResults", documentExpansionPairModel, selectionModel));
 
         setOutputMarkupId(true);
-    }
-
-    private Component createDuplicateResultsView() {
-        final IModel<Boolean> duplicatesShownModel = Model.of(false);
-
-        final WebMarkupContainer container = new WebMarkupContainer("duplicateResults");
-
-        container.add(new Label("expansionCount", new PropertyModel<>(documentExpansionPairModel, "expansionCount")));
-
-        container.add(new IndicatingAjaxFallbackLink("expandDuplicates") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                duplicatesShownModel.setObject(true);
-                target.add(container);
-            }
-
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(!duplicatesShownModel.getObject());
-            }
-
-        });
-
-        container.add(new WebMarkupContainer("duplicatesView")
-                .add(new DataView<SolrDocument>("duplicateItem", new DuplicateDocumentsProvider(documentExpansionPairModel, fieldNameService)) {
-                    @Override
-                    protected void populateItem(Item<SolrDocument> item) {
-                        item.add(
-                                new RecordPageLink("duplicateItemLink", item.getModel(), selectionModel)
-                                        .add(new Label("duplicateItemName", new SolrFieldStringModel(item.getModel(), fieldNameService.getFieldName(FieldKey.NAME), true))));
-                    }
-
-                })
-                .add(new Behavior() {
-                    @Override
-                    public void onConfigure(Component component) {
-                        component.setVisible(duplicatesShownModel.getObject());
-                    }
-                })
-        );
-
-        container.add(new Behavior() {
-            @Override
-            public void onConfigure(Component duplicateResultsView) {
-                duplicateResultsView.setVisible(documentExpansionPairModel.getObject().getExpansionCount() > 0);
-            }
-        });
-        container.setOutputMarkupId(true);
-
-        return container;
     }
 
     private Link createExpansionStateToggle(String id) {
@@ -322,38 +266,5 @@ public class SearchResultItemPanel extends Panel {
             // inject this into the resource string that combines it with count
             return StringResourceModelMigration.of("resources.typecount", this, resourceTypeCountModel, resourceTypeModel);
         }
-    }
-
-    private class DuplicateDocumentsProvider implements IDataProvider<SolrDocument> {
-
-        private final IModel<SolrDocumentExpansionPair> expansionPairModel;
-
-        public DuplicateDocumentsProvider(IModel<SolrDocumentExpansionPair> targetDocument, FieldNameService fieldNameService) {
-            this.expansionPairModel = targetDocument;
-        }
-
-        @Override
-        public Iterator<? extends SolrDocument> iterator(long first, long count) {
-            return expansionPairModel.getObject()
-                    .getExpansionDocuments()
-                    .map(l -> l.iterator())
-                    .orElseGet(Collections::emptyIterator);
-        }
-
-        @Override
-        public long size() {
-            return expansionPairModel.getObject().getExpansionCount();
-        }
-
-        @Override
-        public IModel<SolrDocument> model(SolrDocument object) {
-            return new SolrDocumentModel(object, fieldNameService);
-        }
-
-        @Override
-        public void detach() {
-            expansionPairModel.detach();
-        }
-
     }
 }
