@@ -30,6 +30,7 @@ import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
+import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
@@ -56,6 +57,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.string.Strings;
 
 /**
@@ -63,6 +65,7 @@ import org.apache.wicket.util.string.Strings;
  * @author twagoo
  */
 public class SearchResultItemPanel extends Panel {
+    private final static IConverter<String> landingPageLabelConverter = new LandingPageShortLinkLabelConverter();
 
     @SpringBean
     private VloConfig config;
@@ -77,6 +80,8 @@ public class SearchResultItemPanel extends Panel {
     private final Panel collapsedDetails;
     private final Panel expandedDetails;
     private final IModel<ExpansionState> expansionStateModel;
+    
+
 
     /**
      *
@@ -172,6 +177,8 @@ public class SearchResultItemPanel extends Panel {
 
         add(new DuplicateSearchResultItemsPanel("duplicateResults", documentExpansionPairModel, duplicateItemsExpansionModel));
 
+        add(createLandingPageLinkContainer("landingPageLinkContainer", documentModel));
+
         setOutputMarkupId(true);
     }
 
@@ -230,6 +237,33 @@ public class SearchResultItemPanel extends Panel {
     public void detachModels() {
         super.detachModels();
         expansionStateModel.detach();
+    }
+
+    private Component createLandingPageLinkContainer(String id, IModel<SolrDocument> documentModel) {
+        final String landingPageField = fieldNameService.getFieldName(FieldKey.LANDINGPAGE);
+        final SolrFieldStringModel landingPageLinkModel = new SolrFieldStringModel(documentModel, landingPageField);
+
+        return new WebMarkupContainer(id)
+                .add(new ExternalLink("landingPageLink", new HandleLinkModel(landingPageLinkModel))
+                        .add(new Label("landingPageLinkLabel", landingPageLinkModel) {
+                            @Override
+                            public <C> IConverter<C> getConverter(Class<C> type) {
+                                if (type.equals(String.class)) {
+                                    return (IConverter<C>) landingPageLabelConverter;
+                                } else {
+                                    return super.getConverter(type);
+                                }
+                            }
+
+                        })
+                )
+                .add(new Behavior() {
+                    @Override
+                    public void onConfigure(Component component) {
+                        component.setVisible(documentModel.getObject().containsKey(landingPageField));
+                    }
+
+                });
     }
 
     /**

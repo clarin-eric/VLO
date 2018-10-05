@@ -84,8 +84,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </p>
                     <div wicket:id="collapsedDetails" class="searchresultitembrief">[COLLAPSED]</div>
                     <div wicket:id="expandedDetails" class="searchresultitemextended">[COLLAPSED]</div>
-                    <div class="search-result-landing-page-link">
-                        <a href="http://hdl.handle.net/11022/0000-0000-8DE3-1"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> See this record and its resources at hdl.handle.net/11022/0000-0000-8DE3-1</a>
+                    <div wicket:id="landingPageLinkContainer" class="search-result-landing-page-link">
+                        <a wicket:id="landingPageLink" href="http://hdl.handle.net/11022/0000-0000-8DE3-1"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> See this record and its resources at <wicket:container wicket:id="landingPageLinkLabel">hdl.handle.net/11022/0000-0000-8DE3-1</wicket:container></a>
                     </div>
                     <div class="search-results-duplicates" wicket:id="duplicateResults"></div>
                 </div>
