@@ -23,21 +23,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <div class="search-results-duplicates-preamble">
-                <p>
+            <div >
+                <p class="search-results-duplicates-preamble"> 
                     The search results include <span wicket:id="expansionCount">[COUNT]</span> (near) duplicate(s) of this record.
                 </p>
                 <p>
                     <a wicket:id="expandDuplicates">Click here to see the (near) duplicate results</a>
-                    <div wicket:id="duplicatesView" class="search-results-duplicates-list">
-                        <ul>
-                            <li wicket:id="duplicateItem">
-                                <a wicket:id="duplicateItemLink"><wicket:container wicket:id="duplicateItemName">[item]</wicket:container></a>
-                            </li>
-                        </ul>
-                        <ul wicket:id="duplicatesPaging"></ul>
-                    </div>
                 </p>
+            </div>
+            <div wicket:id="duplicatesView" class="search-results-duplicates-list">
+                <ul>
+                    <li wicket:id="duplicateItem">
+                        <a wicket:id="duplicateItemLink"><wicket:container wicket:id="duplicateItemName">[item]</wicket:container></a>
+                    </li>
+                </ul>
+                <ul wicket:id="duplicatesPaging"></ul>
             </div>
         </wicket:panel>
     </body>
