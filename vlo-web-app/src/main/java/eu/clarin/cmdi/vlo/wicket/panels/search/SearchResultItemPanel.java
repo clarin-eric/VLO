@@ -224,21 +224,6 @@ public class SearchResultItemPanel extends Panel {
         return expansionStateToggle;
     }
     
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-        // this is called once per request; set visibility state for detail panels
-        // according to expansion state
-        collapsedDetails.setVisible(expansionStateModel.getObject() == ExpansionState.COLLAPSED);
-        expandedDetails.setVisible(expansionStateModel.getObject() == ExpansionState.EXPANDED);
-    }
-    
-    @Override
-    public void detachModels() {
-        super.detachModels();
-        expansionStateModel.detach();
-    }
-    
     private Component createLandingPageLinkContainer(String id, IModel<SolrDocument> documentModel) {
         final String landingPageField = fieldNameService.getFieldName(FieldKey.LANDINGPAGE);
         final SolrFieldStringModel landingPageLinkModel = new SolrFieldStringModel(documentModel, landingPageField);
@@ -265,6 +250,21 @@ public class SearchResultItemPanel extends Panel {
                     }
                     
                 });
+    }
+    
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        // this is called once per request; set visibility state for detail panels
+        // according to expansion state
+        collapsedDetails.setVisible(expansionStateModel.getObject() == ExpansionState.COLLAPSED);
+        expandedDetails.setVisible(expansionStateModel.getObject() == ExpansionState.EXPANDED);
+    }
+    
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        expansionStateModel.detach();
     }
 
     /**
