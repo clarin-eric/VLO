@@ -68,17 +68,17 @@ import org.apache.wicket.util.string.Strings;
 public class SearchResultItemPanel extends Panel {
 
     private final static IConverter<String> landingPageLabelConverter = new LandingPageShortLinkLabelConverter();
-    
+
     @SpringBean
     private VloConfig config;
     @SpringBean
     private ResourceTypeCountingService countingService;
     @SpringBean
     private FieldNameService fieldNameService;
-    
+
     private final IModel<SearchContext> selectionModel;
     private final IModel<SolrDocument> documentModel;
-    
+
     private final Panel collapsedDetails;
     private final Panel expandedDetails;
     private final IModel<ExpansionState> expansionStateModel;
@@ -99,11 +99,11 @@ public class SearchResultItemPanel extends Panel {
         this.expansionStateModel = expansionStateModel;
         this.selectionModel = selectionModel;
         this.documentModel = new PropertyModel<>(documentExpansionPairModel, "document");
-        
+
         add(new RecordPageLink("recordLink", documentModel, selectionModel)
-                .add(new SingleValueSolrFieldLabel("title", documentModel, fieldNameService.getFieldName(FieldKey.NAME), "Unnamed record"))
+                .add(new SingleValueSolrFieldLabel("title", documentModel, fieldNameService.getFieldName(FieldKey.NAME), new StringResourceModel("searchpage.unnamedrecord", this)))
         );
-        
+
         add(new FacetSelectLink("searchResultCollectionLink", new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.COLLECTION)), Model.of(fieldNameService.getFieldName(FieldKey.COLLECTION)))
                 .add(new SolrFieldLabel("searchResultCollectionName", documentModel, fieldNameService.getFieldName(FieldKey.COLLECTION), "none"))
         );
@@ -142,7 +142,7 @@ public class SearchResultItemPanel extends Panel {
                             public void onConfigure(Component component) {
                                 component.setVisible(partCountModel.getObject() != null);
                             }
-                            
+
                         })
                 )
                 //badge for record with no resources
@@ -153,7 +153,7 @@ public class SearchResultItemPanel extends Panel {
                             public void onConfigure(Component component) {
                                 component.setVisible(countProvider.size() == 0 && partCountModel.getObject() == null);
                             }
-                            
+
                         })
                 )
                 //badge for landing page
@@ -164,27 +164,27 @@ public class SearchResultItemPanel extends Panel {
                             public void onConfigure(Component component) {
                                 component.setVisible(landingPageModel.getObject() != null);
                             }
-                            
+
                         }))
         );
-        
+
         add(new SearchResultItemLicensePanel("licenseInfo", documentModel, selectionModel, availabilityOrdering));
-        
+
         add(new WebMarkupContainer("scoreContainer")
                 .add(new Label("score", new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.SOLR_SCORE))))
                 .setVisible(config.isShowResultScores())
         );
-        
+
         add(new DuplicateSearchResultItemsPanel("duplicateResults", documentExpansionPairModel, duplicateItemsExpansionModel));
-        
+
         add(createLandingPageLinkContainer("landingPageLinkContainer", documentModel));
-        
+
         setOutputMarkupId(true);
     }
-    
+
     private Link createExpansionStateToggle(String id) {
         final Link expansionStateToggle = new IndicatingAjaxFallbackLink(id) {
-            
+
             @Override
             public void onClick(AjaxRequestTarget target) {
                 // toggle the expansion state
@@ -193,7 +193,7 @@ public class SearchResultItemPanel extends Panel {
                 } else {
                     expansionStateModel.setObject(ExpansionState.COLLAPSED);
                 }
-                
+
                 if (target != null) {
                     // parial update (just this search result item)
                     target.add(SearchResultItemPanel.this);
@@ -211,7 +211,7 @@ public class SearchResultItemPanel extends Panel {
         expansionStateToggle.add(
                 new WebMarkupContainer("state").add(
                         new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
-                            
+
                             @Override
                             public String getObject() {
                                 if (expansionStateModel.getObject() == ExpansionState.COLLAPSED) {
@@ -223,11 +223,11 @@ public class SearchResultItemPanel extends Panel {
                         })));
         return expansionStateToggle;
     }
-    
+
     private Component createLandingPageLinkContainer(String id, IModel<SolrDocument> documentModel) {
         final String landingPageField = fieldNameService.getFieldName(FieldKey.LANDINGPAGE);
         final SolrFieldStringModel landingPageLinkModel = new SolrFieldStringModel(documentModel, landingPageField);
-        
+
         return new WebMarkupContainer(id)
                 .add(new ExternalLink("landingPageLink", new HandleLinkModel(landingPageLinkModel))
                         .add(new PIDBadge("landingPageLinkHandleBadge", landingPageLinkModel))
@@ -240,7 +240,7 @@ public class SearchResultItemPanel extends Panel {
                                     return super.getConverter(type);
                                 }
                             }
-                            
+
                         })
                 )
                 .add(new Behavior() {
@@ -248,10 +248,10 @@ public class SearchResultItemPanel extends Panel {
                     public void onConfigure(Component component) {
                         component.setVisible(documentModel.getObject().containsKey(landingPageField));
                     }
-                    
+
                 });
     }
-    
+
     @Override
     protected void onConfigure() {
         super.onConfigure();
@@ -260,7 +260,7 @@ public class SearchResultItemPanel extends Panel {
         collapsedDetails.setVisible(expansionStateModel.getObject() == ExpansionState.COLLAPSED);
         expandedDetails.setVisible(expansionStateModel.getObject() == ExpansionState.EXPANDED);
     }
-    
+
     @Override
     public void detachModels() {
         super.detachModels();
@@ -272,11 +272,11 @@ public class SearchResultItemPanel extends Panel {
      * {@link ResourceTypeCount}
      */
     private class ResourceCountDataView extends DataView<ResourceTypeCount> {
-        
+
         public ResourceCountDataView(String id, IDataProvider<ResourceTypeCount> dataProvider) {
             super(id, dataProvider);
         }
-        
+
         @Override
         protected void populateItem(Item<ResourceTypeCount> item) {
             final Link resourceLink = new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.RESOURCES_SECTION);
