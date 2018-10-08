@@ -65,7 +65,7 @@ public class SolrDocumentExpansionPairProvider implements IDataProvider<SolrDocu
 
     @Override
     public IModel<SolrDocumentExpansionPair> model(SolrDocumentExpansionPair object) {
-        return new SolrDocumentExpansionPairModel(object, fieldNameService, FacetConstants.COLLAPSE_FIELD_NAME);
+        return new SolrDocumentExpansionPairModel(object, selectionModel, fieldNameService, FacetConstants.COLLAPSE_FIELD_NAME);
     }
 
     @Override

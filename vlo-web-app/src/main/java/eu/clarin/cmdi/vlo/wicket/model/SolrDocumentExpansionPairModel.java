@@ -26,6 +26,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 
 /**
@@ -44,28 +45,22 @@ public class SolrDocumentExpansionPairModel extends LoadableDetachableModel<Solr
     private static final int DEFAULT_EXPANSION_OFFSET = 0;
 
     private final IModel<String> docId;
+    private final IModel<QueryFacetsSelection> selectionModel;
     private String collapseField;
     private int expansionOffset;
     private int expansionCount;
 
-    public SolrDocumentExpansionPairModel(SolrDocumentExpansionPair pair, FieldNameService fieldNameService, String collapseField) {
+    public SolrDocumentExpansionPairModel(SolrDocumentExpansionPair pair, IModel<QueryFacetsSelection> selectionModel, FieldNameService fieldNameService, String collapseField) {
         super(pair);
         if (pair == null) {
             this.docId = null;
         } else {
             this.docId = Model.of((String) pair.getDocument().getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
         }
+        this.selectionModel = selectionModel;
         this.collapseField = collapseField;
         this.expansionOffset = DEFAULT_EXPANSION_OFFSET;
         this.expansionCount = DEFAULT_EXPANSION_COUNT;
-    }
-
-    public SolrDocumentExpansionPairModel(String docId) {
-        this(Model.of(docId));
-    }
-
-    public SolrDocumentExpansionPairModel(IModel<String> docId) {
-        this.docId = docId;
     }
 
     @Override
@@ -77,7 +72,7 @@ public class SolrDocumentExpansionPairModel extends LoadableDetachableModel<Solr
             if (id == null) {
                 return null;
             } else {
-                return getDocumentService().getDocumentWithExpansion(id, collapseField, expansionOffset, expansionCount);
+                return getDocumentService().getDocumentWithExpansion(id, collapseField, selectionModel.getObject(), expansionOffset, expansionCount);
             }
         }
     }

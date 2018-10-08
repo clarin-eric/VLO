@@ -99,9 +99,12 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
     }
 
     @Override
-    public SolrQuery createDuplicateDocumentsQuery(String docId, String collapseField, String collapseValue, int offset, int expansionLimit) {
+    public SolrQuery createDuplicateDocumentsQuery(String docId, String collapseField, String collapseValue, QueryFacetsSelection selection, int offset, int expansionLimit) {
         // make a query to look up a specific document by its ID
         return getDefaultDocumentQuery()
+                
+                //TODO: Apply QueryFaetSelection context!!!
+                
                 // we can use the 'fast' request handler here, document ranking is of no interest
                 .setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST)
                 // consider all documents

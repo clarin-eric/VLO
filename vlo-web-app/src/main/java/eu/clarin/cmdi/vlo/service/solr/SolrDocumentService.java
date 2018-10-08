@@ -28,7 +28,7 @@ public interface SolrDocumentService {
     
     SolrDocument getDocument(String docId);
     
-    SolrDocumentExpansionPair getDocumentWithExpansion(String docId, String collapseField, int expansionFirst, int expansionCount);
+    SolrDocumentExpansionPair getDocumentWithExpansion(String docId, String collapseField, QueryFacetsSelection selection, int expansionFirst, int expansionCount);
 
     List<SolrDocument> getDocuments(QueryFacetsSelection selection, int first, int count);
     
