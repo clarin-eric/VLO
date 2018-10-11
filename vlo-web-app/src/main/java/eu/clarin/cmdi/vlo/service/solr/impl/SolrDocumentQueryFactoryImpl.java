@@ -35,7 +35,7 @@ import eu.clarin.cmdi.vlo.FieldKey;
 public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrDocumentQueryFactory {
 
     private static final String COLLAPSE_FIELD_QUERY = "{!collapse field=_signature}";
-    
+
     private final String ID;
     private final String SELF_LINK;
 
@@ -101,10 +101,7 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
     @Override
     public SolrQuery createDuplicateDocumentsQuery(String docId, String collapseField, String collapseValue, QueryFacetsSelection selection, int offset, int expansionLimit) {
         // make a query to look up a specific document by its ID
-        return getDefaultDocumentQuery()
-                
-                //TODO: Apply QueryFaetSelection context!!!
-                
+        SolrQuery query = getDefaultDocumentQuery()
                 // we can use the 'fast' request handler here, document ranking is of no interest
                 .setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST)
                 // consider all documents
@@ -115,6 +112,9 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
                 .addFilterQuery(createNegativeFilterQuery(ID, docId))
                 .setStart(offset)
                 .setRows(expansionLimit);
+        // apply selection
+        addQueryFacetParameters(query, selection);
+        return query;
 
     }
 
