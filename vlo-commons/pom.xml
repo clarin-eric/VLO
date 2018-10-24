@@ -5,11 +5,11 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.5.2-SNAPSHOT</version>
+        <version>4.5.2-RC1</version>
     </parent>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-commons</artifactId>
-    <version>4.5.2-SNAPSHOT</version>
+    <version>4.5.2-RC1</version>
     <name>VLO Commons</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -31,8 +31,8 @@
         <vloconfig.conceptRegistryUrl>https://concepts.clarin.eu/ccr/api/find-concepts</vloconfig.conceptRegistryUrl>
         <vloconfig.vocabularyRegistryUrl>http://clavas.clarin.eu/clavas/public/api/find-concepts</vloconfig.vocabularyRegistryUrl>
         <vloconfig.feedbackFromUrl>http://www.clarin.eu/node/3759?url=</vloconfig.feedbackFromUrl>
-        <vloconfig.federatedContentSearchUrl>http://weblicht.sfs.uni-tuebingen.de/Aggregator/</vloconfig.federatedContentSearchUrl>
-        <vloconfig.lrSwitchboardBaseUrl>http://weblicht.sfs.uni-tuebingen.de/clrs/</vloconfig.lrSwitchboardBaseUrl>        
+        <vloconfig.federatedContentSearchUrl>https://spraakbanken.gu.se/ws/fcs/2.0/aggregator/</vloconfig.federatedContentSearchUrl>
+        <vloconfig.lrSwitchboardBaseUrl>https://switchboard.clarin.eu/</vloconfig.lrSwitchboardBaseUrl>        
         <vloconfig.vcrSubmitEndpoint>https://clarin.ids-mannheim.de/vcr/service/submit</vloconfig.vcrSubmitEndpoint>
     </properties>
     
