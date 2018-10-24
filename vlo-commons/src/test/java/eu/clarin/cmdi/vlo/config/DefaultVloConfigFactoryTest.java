@@ -442,7 +442,7 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testGetFederatedContentSearchUrl() {
-        String expResult = "http://weblicht.sfs.uni-tuebingen.de/Aggregator/";
+        String expResult = "https://spraakbanken.gu.se/ws/fcs/2.0/aggregator/";
         String result = config.getFederatedContentSearchUrl();
         assertEquals(expResult, result);
     }
@@ -703,6 +703,6 @@ public class DefaultVloConfigFactoryTest {
     @Test
     public void testGetLrSwitchboardBaseUrl() {
         String result = config.getLrSwitchboardBaseUrl();
-        assertEquals("http://weblicht.sfs.uni-tuebingen.de/clrs/", result);
+        assertEquals("https://switchboard.clarin.eu/", result);
     }
 }
