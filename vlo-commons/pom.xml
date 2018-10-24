@@ -22,10 +22,18 @@
         <vloconfig.helpUrl>http://www.clarin.eu/vlo</vloconfig.helpUrl>
         <vloconfig.fileProcessingThreads>2</vloconfig.fileProcessingThreads>
         <vloconfig.solrThreads>2</vloconfig.solrThreads>
+        <vloconfig.vcrMaximumItemsCount>1000</vloconfig.vcrMaximumItemsCount>
         <vloconfig.solrUserReadOnly>user_read</vloconfig.solrUserReadOnly>
         <vloconfig.solrUserReadOnlyPass>PASS_READ_ONLY</vloconfig.solrUserReadOnlyPass>
         <vloconfig.solrUserReadWrite>user_rw</vloconfig.solrUserReadWrite>
         <vloconfig.solrUserReadWritePass>PASS_READ/WRITE</vloconfig.solrUserReadWritePass>
+        <!-- external service URLs -->
+        <vloconfig.conceptRegistryUrl>https://concepts.clarin.eu/ccr/api/find-concepts</vloconfig.conceptRegistryUrl>
+        <vloconfig.vocabularyRegistryUrl>http://clavas.clarin.eu/clavas/public/api/find-concepts</vloconfig.vocabularyRegistryUrl>
+        <vloconfig.feedbackFromUrl>http://www.clarin.eu/node/3759?url=</vloconfig.feedbackFromUrl>
+        <vloconfig.federatedContentSearchUrl>http://weblicht.sfs.uni-tuebingen.de/Aggregator/</vloconfig.federatedContentSearchUrl>
+        <vloconfig.lrSwitchboardBaseUrl>http://weblicht.sfs.uni-tuebingen.de/clrs/</vloconfig.lrSwitchboardBaseUrl>        
+        <vloconfig.vcrSubmitEndpoint>https://clarin.ids-mannheim.de/vcr/service/submit</vloconfig.vcrSubmitEndpoint>
     </properties>
     
     <build>
@@ -127,6 +135,13 @@
                 <vloconfig.valueMappingFile>${VLO_DOCKER_VALUE_MAPPING_URI}</vloconfig.valueMappingFile>
                 <vloconfig.fileProcessingThreads>${VLO_DOCKER_FILE_PROCESSING_THREADS}</vloconfig.fileProcessingThreads>
                 <vloconfig.solrThreads>${VLO_DOCKER_SOLR_THREADS}</vloconfig.solrThreads>
+                <vloconfig.vcrMaximumItemsCount>${VLO_DOCKER_VCR_MAXIMUM_ITEMS_COUNT}</vloconfig.vcrMaximumItemsCount>
+                <vloconfig.conceptRegistryUrl>${VLO_DOCKER_CONCEPT_REGISTRY_URL}</vloconfig.conceptRegistryUrl>
+                <vloconfig.vocabularyRegistryUrl>${VLO_DOCKER_VOCABULARY_REGISTRY_URL}</vloconfig.vocabularyRegistryUrl>
+                <vloconfig.feedbackFromUrl>${VLO_DOCKER_FEEDBACK_FORM_URL}</vloconfig.feedbackFromUrl>
+                <vloconfig.federatedContentSearchUrl>${VLO_DOCKER_FCS_BASE_URL}</vloconfig.federatedContentSearchUrl>
+                <vloconfig.lrSwitchboardBaseUrl>${VLO_DOCKER_LRS_BASE_URL}</vloconfig.lrSwitchboardBaseUrl>        
+                <vloconfig.vcrSubmitEndpoint>${VLO_DOCKER_VCR_SUBMIT_ENDPOINT}</vloconfig.vcrSubmitEndpoint>
                 <vloconfig.solrUserReadOnly>${VLO_DOCKER_SOLR_USER_READ_ONLY}</vloconfig.solrUserReadOnly>
                 <vloconfig.solrUserReadOnlyPass>${VLO_DOCKER_SOLR_PASSWORD_READ_ONLY}</vloconfig.solrUserReadOnlyPass>
                 <vloconfig.solrUserReadWrite>${VLO_DOCKER_SOLR_USER_READ_WRITE}</vloconfig.solrUserReadWrite>
