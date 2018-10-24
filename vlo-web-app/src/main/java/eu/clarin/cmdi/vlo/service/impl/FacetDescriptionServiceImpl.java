@@ -25,7 +25,6 @@ import eu.clarin.cmdi.vlo.facets.FacetConcepts;
 import eu.clarin.cmdi.vlo.facets.FacetConceptsMarshaller;
 import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBException;
@@ -33,6 +32,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.InputSource;
 
 /**
  *
@@ -75,10 +75,10 @@ public class FacetDescriptionServiceImpl implements FacetDescriptionService {
             logger.info("No facet concepts file configured. Reading default definitions from packaged file.");
             return new StreamSource(getClass().getResourceAsStream(VloConfig.DEFAULT_FACET_CONCEPTS_RESOURCE_FILE));
         } else {
-            final InputStream stream = mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(facetConceptsFile);
+            final InputSource stream = mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(facetConceptsFile);
             if (stream != null) {
                 logger.info("Reading facet definitions from {}", facetConceptsFile);
-                return new StreamSource(stream);
+                return new StreamSource(stream.getByteStream(), stream.getSystemId());
             } else {
                 return null;
             }

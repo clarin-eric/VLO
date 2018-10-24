@@ -39,6 +39,7 @@ import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.CMDIDataSolrImpl;
 import org.apache.solr.SolrTestCaseJ4;
 
 import org.junit.BeforeClass;
@@ -89,19 +90,20 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
 
         // add some documents
         int id = 1;
-        CMDIData cmdiData = new CMDIData(fieldNameService);
+        CMDIData<SolrInputDocument> cmdiData = new CMDIDataSolrImpl(fieldNameService);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "First collection", false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COUNTRY), "A country", false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SIGNATURE), "doc1", true);
-        SolrInputDocument document = cmdiData.getSolrDocument();
+        SolrInputDocument document = cmdiData.getDocument();
         document.addField("id", Integer.toString(id++));
         server.add(document);
 
-        cmdiData = new CMDIData(fieldNameService);
+        cmdiData = new CMDIDataSolrImpl(fieldNameService);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "Second collection", false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COUNTRY), "Another country", false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SIGNATURE), "doc2", true);
-        document = cmdiData.getSolrDocument();
+        document = cmdiData.getDocument();
+        
         document.addField("id", Integer.toString(id++));
         server.add(document);
 

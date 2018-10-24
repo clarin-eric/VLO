@@ -25,7 +25,5 @@ import java.util.Collection;
  */
 public interface DocFieldContainer {
 
-    String getId();
-
     Collection<Object> getDocField(String name);
 }

@@ -26,7 +26,7 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
 
         // initialized via constructor
         private final List<FacetConcept> facetConcepts;
-        private final Map<String, ConditionTargetSet> conditionTargetSetPerFacet;
+        private final FacetMapping facetMapping;
 
 
         private ConditionTargetSet conditionTargetSet;
@@ -39,8 +39,8 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
         private String value;
 
         public ValueMappingsHandler(FacetConceptMapping facetConceptMapping,
-                Map<String, ConditionTargetSet> conditionTargetSetPerFacet) {
-            this.conditionTargetSetPerFacet = conditionTargetSetPerFacet;
+                FacetMapping facetMapping) {
+            this.facetMapping = facetMapping;
 
             this.facetConcepts = facetConceptMapping.getFacetConcepts();
         }
@@ -81,8 +81,9 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
 
             switch (qName) {
             case "origin-facet":
+                FacetConfiguration facetConfig = this.facetMapping.getFacetConfiguration(attributes.getValue("name"));
                 this.conditionTargetSet = new ConditionTargetSet();
-                this.conditionTargetSetPerFacet.put(attributes.getValue("name"), conditionTargetSet);
+                facetConfig.setConditionTargetSet(conditionTargetSet);
                 break;
             case "value-map":
                 this.defaultFacets = new ArrayList<TargetFacet>();
@@ -182,7 +183,7 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
         }
         
         public String isCaseSensitive() {
-            return this.isCaseSensitive();
+            return this.caseSensitive;
         }
         
         public String getExpression() {
@@ -190,8 +191,7 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
         }
     }
     
-    public final Map<String, ConditionTargetSet> getValueMappings(String fileName, FacetConceptMapping conceptMapping){
-        HashMap<String, ConditionTargetSet> valueMappings = new HashMap<String, ConditionTargetSet>();
+    public final void createValueMapping(String fileName, FacetConceptMapping conceptMapping, FacetMapping facetMapping){
         
         SAXParserFactory fac = SAXParserFactory.newInstance();
         fac.setXIncludeAware(true);
@@ -200,14 +200,10 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
         
 
             try {
-                fac.newSAXParser().parse(fileName, this.new ValueMappingsHandler(conceptMapping, valueMappings));
+                fac.newSAXParser().parse(fileName, this.new ValueMappingsHandler(conceptMapping, facetMapping));
             } 
             catch (SAXException | IOException | ParserConfigurationException ex) {
                 LOG.error("Value Mappings not initialized!", ex);
             }
-            
-            return valueMappings;
     }
-    
-
 }

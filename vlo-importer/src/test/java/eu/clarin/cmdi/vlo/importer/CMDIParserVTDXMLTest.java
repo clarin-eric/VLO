@@ -5,6 +5,7 @@ import com.ximpleware.VTDNav;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.processor.CMDIParserVTDXML;
+import eu.clarin.cmdi.vlo.importer.processor.SchemaParsingUtil;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -65,8 +66,8 @@ public class CMDIParserVTDXMLTest extends ImporterTestcase {
         final VloConfig newVloConfig = new VloConfig();
         newVloConfig.setValueMappingsFile(super.getTestValueMappingsFilePath());
         final FacetMappingFactory facetMappingFactory = new FacetMappingFactory(newVloConfig, marshaller);
-        CMDIParserVTDXML parser = new CMDIParserVTDXML(null, newVloConfig, facetMappingFactory, marshaller, true);
-        String xsd = parser.extractXsd(nav);
+        CMDIParserVTDXML parser = new CMDIParserVTDXML(null, null, newVloConfig, facetMappingFactory, marshaller, new CMDIDataSolrImplFactory(fieldNameService), fieldNameService, true);
+        String xsd = SchemaParsingUtil.extractXsd(nav);
         return xsd;
     }
 }

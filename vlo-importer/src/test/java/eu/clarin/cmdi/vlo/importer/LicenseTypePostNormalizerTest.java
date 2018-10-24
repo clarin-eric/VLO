@@ -78,17 +78,10 @@ public class LicenseTypePostNormalizerTest extends ImporterTestcase {
 
     private static class MockDocFieldContainer implements DocFieldContainer {
 
-        private final String id;
         private final Map<String, Collection<Object>> fields;
 
         public MockDocFieldContainer(String id, Map<String, Collection<Object>> fields) {
-            this.id = id;
             this.fields = fields;
-        }
-
-        @Override
-        public String getId() {
-            return id;
         }
 
         @Override

@@ -1,11 +1,11 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -25,9 +25,7 @@ import org.apache.solr.common.params.SolrParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.FieldKey;
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.config.DataRoot;
@@ -41,7 +39,6 @@ import eu.clarin.cmdi.vlo.importer.normalizer.AvailabilityPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.CMDIComponentProfileNamePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.ContinentNamePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.CountryNamePostNormalizer;
-import eu.clarin.cmdi.vlo.importer.normalizer.FormatPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.IdPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.LanguageCodePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.LanguageNamePostNormalizer;
@@ -53,6 +50,7 @@ import eu.clarin.cmdi.vlo.importer.normalizer.ResourceClassPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.TemporalCoveragePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.processor.*;
 import eu.clarin.cmdi.vlo.importer.solr.BufferingSolrBridgeImpl;
+import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridge;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridgeImpl;
 import java.net.SocketTimeoutException;
@@ -62,12 +60,16 @@ import java.time.ZoneId;
 import static java.time.temporal.ChronoUnit.DAYS;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -106,7 +108,8 @@ public class MetadataImporter {
      */
     private final SolrBridge solrBridge;
 
-    private final CMDIDataProcessor processor;
+    private final CMDIRecordImporter<SolrInputDocument> recordHandler;
+    private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
 
     private static class DefaultSolrBridgeFactory {
 
@@ -125,23 +128,15 @@ public class MetadataImporter {
      */
     protected final Map<String, AbstractPostNormalizer> postProcessors;
 
-    /**
-     * Contains MDSelflinks (usually). Just to know what we have already done.
-     */
-    protected final Set<String> processedIds = Sets.newConcurrentHashSet();
+    protected final List<FacetValuesMapFilter> postMappingFilters;
+
     /**
      * Some caching for solr documents (we are more efficient if we ram a whole
      * bunch to the solr server at once.
      */
     //protected List<SolrInputDocument> docs = new ArrayList<>();
-
     // SOME STATS
-    protected final AtomicInteger nrOFDocumentsSent = new AtomicInteger();
-    protected final AtomicInteger nrOfFilesAnalyzed = new AtomicInteger();
-    protected final AtomicInteger nrOfFilesSkipped = new AtomicInteger();
-    protected final AtomicInteger nrOfFilesWithoutId = new AtomicInteger();
-    protected final AtomicInteger nrOfFilesWithError = new AtomicInteger();
-    protected final AtomicInteger nrOfFilesTooLarge = new AtomicInteger();
+    private final ImportStatistics stats = new ImportStatistics();
     private Long time;
     private final FieldNameServiceImpl fieldNameService;
 
@@ -153,44 +148,43 @@ public class MetadataImporter {
         this.config = config;
         this.fieldNameService = new FieldNameServiceImpl(config);
         this.clDatarootsList = clDatarootsList;
-        this.postProcessors = registerPostProcessors(config, this.fieldNameService, languageCodeUtils);
+        this.postProcessors = registerPostProcessors(config, fieldNameService, languageCodeUtils);
+        this.postMappingFilters = registerPostMappingFilters(fieldNameService);
         this.solrBridge = solrBrdige;
-        this.processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
+
+        final CMDIDataSolrImplFactory cmdiDataFactory = new CMDIDataSolrImplFactory(fieldNameService);
+        final CMDIDataProcessor<SolrInputDocument> processor = new CMDIParserVTDXML<>(postProcessors, postMappingFilters, config, mappingFactory, marshaller, cmdiDataFactory, fieldNameService, false);
+        this.recordHandler = new CMDIRecordImporter(processor, solrBrdige, fieldNameService, stats);
 
     }
 
-    protected static Map<String, AbstractPostNormalizer> registerPostProcessors(VloConfig config, FieldNameService fieldNameService, LanguageCodeUtils languageCodeUtils) {
+    public static Map<String, AbstractPostNormalizer> registerPostProcessors(VloConfig config, FieldNameService fieldNameService, LanguageCodeUtils languageCodeUtils) {
         ImmutableMap.Builder<String, AbstractPostNormalizer> imb = ImmutableMap.builder();
-        
-        imb.put(fieldNameService.getFieldName(FieldKey.ID), new IdPostNormalizer());
-        
-        if(fieldNameService.getFieldName(FieldKey.CONTINENT) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.CONTINENT), new ContinentNamePostNormalizer());
-        if(fieldNameService.getFieldName(FieldKey.COUNTRY) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.COUNTRY), new CountryNamePostNormalizer(config));
-        if(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE), new LanguageCodePostNormalizer(config, languageCodeUtils));
-        if(fieldNameService.getFieldName(FieldKey.LANGUAGE_NAME) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.LANGUAGE_NAME), new LanguageNamePostNormalizer(languageCodeUtils));
-        if(fieldNameService.getFieldName(FieldKey.AVAILABILITY) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.AVAILABILITY), new AvailabilityPostNormalizer(config));
-        if(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.LICENSE_TYPE), new LicenseTypePostNormalizer(config));
-        if(fieldNameService.getFieldName(FieldKey.ORGANISATION) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.ORGANISATION), new OrganisationPostNormalizer(config));
-        if(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE), new TemporalCoveragePostNormalizer());
-        if(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE), new CMDIComponentProfileNamePostNormalizer(config));
-        if(fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS), new ResourceClassPostNormalizer());
-        if(fieldNameService.getFieldName(FieldKey.LICENSE) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.LICENSE), new LicensePostNormalizer(config));
-        if(fieldNameService.getFieldName(FieldKey.NAME) != null)
-        	imb.put(fieldNameService.getFieldName(FieldKey.NAME), new NamePostNormalizer());
-    	
-    	return imb.build();
 
+        imb.put(fieldNameService.getFieldName(FieldKey.ID), new IdPostNormalizer());
+        registerPostProcessor(fieldNameService, imb, FieldKey.CONTINENT, () -> new ContinentNamePostNormalizer());
+        registerPostProcessor(fieldNameService, imb, FieldKey.COUNTRY, () -> new CountryNamePostNormalizer(config));
+        registerPostProcessor(fieldNameService, imb, FieldKey.LANGUAGE_CODE, () -> new LanguageCodePostNormalizer(config, languageCodeUtils));
+        registerPostProcessor(fieldNameService, imb, FieldKey.LANGUAGE_NAME, () -> new LanguageNamePostNormalizer(languageCodeUtils));
+        registerPostProcessor(fieldNameService, imb, FieldKey.AVAILABILITY, () -> new AvailabilityPostNormalizer(config));
+        registerPostProcessor(fieldNameService, imb, FieldKey.LICENSE_TYPE, () -> new LicenseTypePostNormalizer(config));
+        registerPostProcessor(fieldNameService, imb, FieldKey.ORGANISATION, () -> new OrganisationPostNormalizer(config));
+        registerPostProcessor(fieldNameService, imb, FieldKey.TEMPORAL_COVERAGE, () -> new TemporalCoveragePostNormalizer());
+        registerPostProcessor(fieldNameService, imb, FieldKey.CLARIN_PROFILE, () -> new CMDIComponentProfileNamePostNormalizer(config));
+        registerPostProcessor(fieldNameService, imb, FieldKey.RESOURCE_CLASS, () -> new ResourceClassPostNormalizer());
+        registerPostProcessor(fieldNameService, imb, FieldKey.LICENSE, () -> new LicensePostNormalizer(config));
+        registerPostProcessor(fieldNameService, imb, FieldKey.NAME, () -> new NamePostNormalizer());
+
+        return imb.build();
+    }
+
+    public static ImmutableList<FacetValuesMapFilter> registerPostMappingFilters(FieldNameService fieldNameService) {
+        final ImmutableList.Builder<FacetValuesMapFilter> builder = ImmutableList.<FacetValuesMapFilter>builder();
+        forFieldsIfExists(
+                (fields) -> builder.add(new AvailabilityPostFilter(fields)),
+                fieldNameService,
+                FieldKey.AVAILABILITY, FieldKey.LICENSE_TYPE);
+        return builder.build();
     }
 
     /**
@@ -280,7 +274,7 @@ public class MetadataImporter {
         LOG.info("End of processing: " + dataRoot.getOriginName());
     }
 
-    protected void processCentreFiles(final List<File> centreFiles, final DataRoot dataRoot, final Map<String,EndpointDescription> directoryEndpointMap) throws IOException, SolrServerException, InterruptedException {
+    protected void processCentreFiles(final List<File> centreFiles, final DataRoot dataRoot, final Map<String, EndpointDescription> directoryEndpointMap) throws IOException, SolrServerException, InterruptedException {
         LOG.info("Processing directory: {}", centreFiles.get(0).getParent());
         String centerDirName = centreFiles.get(0).getParentFile().getName();
 
@@ -316,20 +310,20 @@ public class MetadataImporter {
         final Stream<Callable<Void>> processors = centreFiles.stream().map((File file) -> {
             return (Callable) () -> {
                 LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
-                processCmdi(file, dataRoot, resourceStructureGraph, directoryEndpointMap.get(file.getParentFile().getName()));
+                recordHandler.importRecord(file, Optional.of(dataRoot), Optional.ofNullable(resourceStructureGraph), Optional.ofNullable(directoryEndpointMap.get(file.getParentFile().getName())));
                 return null;
             };
         });
         final Set<Callable<Void>> processorsCollection = processors.collect(Collectors.toSet());
         fileProcessingPool.invokeAll(processorsCollection);
 
-        LOG.info("Number of documents sent thus far: {}", nrOFDocumentsSent);
+        LOG.info("Number of documents sent thus far: {}", stats.nrOFDocumentsSent());
         solrBridge.commit();
         if (resourceStructureGraph != null) {
             fileProcessingPool.submit(() -> {
                 try {
                     updateDocumentHierarchy(resourceStructureGraph);
-                } catch (IOException | SolrServerException ex) {
+                } catch (IOException | DocumentStoreException ex) {
                     throw new RuntimeException("An exception occurred while updating a document hierarchy for a centre in the '" + dataRoot.getOriginName() + "' data root", ex);
                 }
             });
@@ -367,15 +361,15 @@ public class MetadataImporter {
         if (config.getMaxFileSize() > 0
                 && file.length() > config.getMaxFileSize()) {
             LOG.info("Skipping {} because it is too large.", file.getAbsolutePath());
-            nrOfFilesTooLarge.incrementAndGet();
+            stats.nrOfFilesTooLarge().incrementAndGet();
             ignoredFileSet.add(file);
         } else if (createHierarchyGraph) {
             String mdSelfLink = null;
             try {
-                mdSelfLink = processor.extractMdSelfLink(file);
+                mdSelfLink = selfLinkExtractor.extractMdSelfLink(file);
             } catch (Exception e) {
                 LOG.error("error in file: {}", file, e);
-                nrOfFilesWithError.incrementAndGet();
+                stats.nrOfFilesWithError().incrementAndGet();
             }
             if (mdSelfLink != null) {
                 mdSelfLinkSet.add(StringUtils.normalizeIdString(mdSelfLink));
@@ -396,11 +390,11 @@ public class MetadataImporter {
     }
 
     protected void logStatistics() {
-        LOG.info("Found {} file(s) without an id. (id is generated based on fileName but that may not be unique)", nrOfFilesWithoutId);
-        LOG.info("Found {} file(s) with errors.", nrOfFilesWithError);
-        LOG.info("Found {} file(s) too large.", nrOfFilesTooLarge);
-        LOG.info("Skipped {} file(s) due to duplicate or problematic id.", nrOfFilesSkipped);
-        LOG.info("Update of {} took {} secs. Total nr of files analyzed {}", nrOFDocumentsSent, time / 1000, nrOfFilesAnalyzed);
+        LOG.info("Found {} file(s) without an id. (id is generated based on fileName but that may not be unique)", stats.nrOfFilesWithoutId());
+        LOG.info("Found {} file(s) with errors.", stats.nrOfFilesWithError());
+        LOG.info("Found {} file(s) too large.", stats.nrOfFilesTooLarge());
+        LOG.info("Skipped {} file(s) due to duplicate or problematic id.", stats.nrOfFilesSkipped());
+        LOG.info("Update of {} took {} secs. Total nr of files analyzed {}", stats.nrOFDocumentsSent(), time / 1000, stats.nrOfFilesAnalyzed());
     }
 
     /**
@@ -502,173 +496,7 @@ public class MetadataImporter {
     }
 
     /**
-     * Process single CMDI file with CMDIDataProcessor
-     *
-     * @param file CMDI input file
-     * @param dataOrigin
-     * @param resourceStructureGraph null to skip hierarchy processing
-     * @param endpointDescription
-     * @throws SolrServerException
-     * @throws IOException
-     */
-    protected void processCmdi(File file, DataRoot dataOrigin, ResourceStructureGraph resourceStructureGraph, EndpointDescription endpointDescription) throws SolrServerException, IOException {
-        nrOfFilesAnalyzed.incrementAndGet();
-        CMDIData cmdiData = null;
-        try {
-            cmdiData = processor.process(file, resourceStructureGraph);
-            if (!idOk(cmdiData.getId())) {
-                cmdiData.setId(dataOrigin.getOriginName() + "/" + file.getName()); //No id found in the metadata file so making one up based on the file name. Not quaranteed to be unique, but we have to set something.
-                nrOfFilesWithoutId.incrementAndGet();
-            }
-        } catch (Exception e) {
-            LOG.error("error in file: {}", file, e);
-            nrOfFilesWithError.incrementAndGet();
-        }
-        if (cmdiData != null) {
-            if (!cmdiData.hasResources()) {
-                nrOfFilesSkipped.incrementAndGet();
-                LOG.warn("Skipping {}, no resource proxy found", file);
-                return;
-            }
-            
-            assert cmdiData.getId() != null; //idOk check guarantees this
-
-            if (processedIds.add(cmdiData.getId())) {
-                SolrInputDocument solrDocument = cmdiData.getSolrDocument();
-                if (solrDocument != null) {
-                    updateDocument(solrDocument, cmdiData, file, dataOrigin, endpointDescription);
-                    if (resourceStructureGraph != null && resourceStructureGraph.getVertex(cmdiData.getId()) != null) {
-                        resourceStructureGraph.getVertex(cmdiData.getId()).setWasImported(true);
-                    }
-                }
-            } else {
-                nrOfFilesSkipped.incrementAndGet();
-                LOG.warn("Skipping {}, already processed id: {}", file, cmdiData.getId());
-            }
-        }
-    }
-
-    /**
-     * Check id for validness
-     *
-     * @param id
-     * @return true if id is acceptable, false otherwise
-     */
-    protected boolean idOk(String id) {
-        return id != null && !id.trim().isEmpty();
-    }
-
-    /**
-     * Adds some additional information from DataRoot to solrDocument, add
-     * solrDocument to document list, submits list to SolrServer every 1000
-     * files
-     *
-     * @param solrDocument
-     * @param cmdiData
-     * @param file
-     * @param dataOrigin
-     * @param endpointDescription
-     * @throws SolrServerException
-     * @throws IOException
-     */
-    protected void updateDocument(SolrInputDocument solrDocument, CMDIData cmdiData, File file, DataRoot dataOrigin, EndpointDescription endpointDescription) throws SolrServerException,
-            IOException {
-        solrDocument.addField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER), dataOrigin.getOriginName());
-        solrDocument.addField(fieldNameService.getFieldName(FieldKey.ID), cmdiData.getId());
-        solrDocument.addField(fieldNameService.getFieldName(FieldKey.FILENAME), file.getAbsolutePath());
-
-        // data provided by CLARIN's OAI-PMH harvester
-        if(endpointDescription != null) {
-            if(endpointDescription.getOaiEndpointUrl() != null)
-                solrDocument.addField(fieldNameService.getFieldName(FieldKey.OAI_ENDPOINT_URI), endpointDescription.getOaiEndpointUrl());
-            if(endpointDescription.getNationalProject() != null)
-                solrDocument.addField(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT), endpointDescription.getNationalProject());
-            if(endpointDescription.getCentreName() != null)
-                solrDocument.addField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER_NAME), endpointDescription.getCentreName());
-        }
-
-        String metadataSourceUrl = dataOrigin.getPrefix();
-        metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getToStrip().length());
-
-        solrDocument.addField(fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA), metadataSourceUrl);
-
-        // add SearchServices (should be CQL endpoint)
-        for (Resource resource : cmdiData.getSearchResources()) {
-            solrDocument.addField(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE), resource.getResourceName());
-        }
-
-        // add landing page resource
-        for (Resource resource : cmdiData.getLandingPageResources()) {
-            solrDocument.addField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), resource.getResourceName());
-        }
-
-        // add search page resource
-        for (Resource resource : cmdiData.getSearchPageResources()) {
-            solrDocument.addField(fieldNameService.getFieldName(FieldKey.SEARCHPAGE), resource.getResourceName());
-        }
-
-        // add timestamp
-        Date dt = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        solrDocument.addField(fieldNameService.getFieldName(FieldKey.LAST_SEEN), df.format(dt));
-
-        // set number of days since last import to '0'
-        solrDocument.addField(fieldNameService.getFieldName(FieldKey.DAYS_SINCE_LAST_SEEN), 0);
-
-        // add resource proxys      
-        addResourceData(solrDocument, cmdiData);
-
-        // create and add document signature
-        solrDocument.addField(fieldNameService.getFieldName(FieldKey.SIGNATURE), DeduplicationSignature.getSignature(fieldNameService, solrDocument));
-
-        LOG.debug("Adding document for submission to SOLR: {}", file);
-
-        solrBridge.addDocument(solrDocument);
-        if (nrOFDocumentsSent.incrementAndGet() % 250 == 0) {
-            LOG.info("Number of documents sent thus far: {}", nrOFDocumentsSent);
-        }
-    }
-
-    /**
-     * Adds two fields FIELD_FORMAT and FIELD_RESOURCE. The Type can be
-     * specified in the "ResourceType" element of an imdi file or possibly
-     * overwritten by some more specific xpath (as in the LRT cmdi files). So if
-     * a type is overwritten and already in the solrDocument we take that type.
-     *
-     * @param solrDocument
-     * @param cmdiData
-     */
-    protected void addResourceData(SolrInputDocument solrDocument, CMDIData cmdiData) {
-        List<Object> fieldValues = solrDocument.containsKey(fieldNameService.getFieldName(FieldKey.FORMAT)) ? new ArrayList<>(solrDocument
-                .getFieldValues(fieldNameService.getFieldName(FieldKey.FORMAT))) : null;
-        solrDocument.removeField(fieldNameService.getFieldName(FieldKey.FORMAT)); //Remove old values they might be overwritten.
-        List<Resource> resources = cmdiData.getDataResources();
-        for (int i = 0; i < resources.size(); i++) {
-            Resource resource = resources.get(i);
-            String mimeType = resource.getMimeType();
-            if (mimeType == null) {
-                if (fieldValues != null && i < fieldValues.size()) {
-                    mimeType = CommonUtils.normalizeMimeType(fieldValues.get(i).toString());
-                } else {
-                    mimeType = CommonUtils.normalizeMimeType("");
-                }
-            }
-
-            FormatPostNormalizer processor = new FormatPostNormalizer();
-            mimeType = processor.process(mimeType, null).get(0);
-
-            // TODO check should probably be moved into Solr (by using some minimum length filter)
-            if (!mimeType.equals("")) {
-                solrDocument.addField(fieldNameService.getFieldName(FieldKey.FORMAT), mimeType);
-            }
-            solrDocument.addField(fieldNameService.getFieldName(FieldKey.RESOURCE), mimeType + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR
-                    + resource.getResourceName());
-        }
-        solrDocument.addField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size());
-    }
-
-    /**
-     * Builds suggester index for autocompletion
+    * Builds suggester index for autocompletion
      *
      * @throws SolrServerException
      * @throws MalformedURLException
@@ -689,7 +517,7 @@ public class MetadataImporter {
      * @throws SolrServerException
      * @throws MalformedURLException
      */
-    private synchronized void updateDocumentHierarchy(ResourceStructureGraph resourceStructureGraph) throws SolrServerException, MalformedURLException, IOException {
+    private synchronized void updateDocumentHierarchy(ResourceStructureGraph resourceStructureGraph) throws DocumentStoreException, MalformedURLException, IOException {
         LOG.info(resourceStructureGraph.printStatistics(0));
         final AtomicInteger updateCount = new AtomicInteger();
         final Iterator<CmdiVertex> vertexIter = resourceStructureGraph.getFoundVertices().iterator();
@@ -775,7 +603,7 @@ public class MetadataImporter {
             processors.add(() -> {
                 try {
                     performUpdateDaysSinceLastImportBatch(dataRoot, fetchSize, batchOffset, updatedDocs, nowDate);
-                } catch (SolrServerException | IOException ex) {
+                } catch (DocumentStoreException | SolrServerException | IOException ex) {
                     LOG.error("Error while updating 'days since last seen' property for old records", ex);
                 }
                 return null;
@@ -797,7 +625,7 @@ public class MetadataImporter {
         LOG.info("Updated \"days since last seen\" value in {} records.", updatedDocs.get());
     }
 
-    private void performUpdateDaysSinceLastImportBatch(DataRoot dataRoot, final int fetchSize, int offset, AtomicInteger updatedDocs, final LocalDate nowDate) throws SolrServerException, IOException {
+    private void performUpdateDaysSinceLastImportBatch(DataRoot dataRoot, final int fetchSize, int offset, AtomicInteger updatedDocs, final LocalDate nowDate) throws SolrServerException, DocumentStoreException, IOException {
         int updatedInBatch = 0;
         final SolrQuery query = createOldRecordsQuery(dataRoot);
         query.setStart(offset);
@@ -819,7 +647,7 @@ public class MetadataImporter {
             solrBridge.addDocument(updateDoc);
             final Throwable error = solrBridge.popError();
             if (error != null) {
-                throw new SolrServerException(error);
+                throw new DocumentStoreException(error);
             }
         }
         final int totalUpdated = updatedDocs.addAndGet(updatedInBatch);
@@ -865,6 +693,45 @@ public class MetadataImporter {
      */
     public Long getTime() {
         return time;
+    }
+
+    public ImportStatistics getImportStatistics() {
+        return stats;
+    }
+
+    protected CMDIRecordImporter getRecordProcessor() {
+        return recordHandler;
+    }
+
+    /**
+     * Helper for registering a post-processor
+     *
+     * @param fieldNameService
+     * @param imb
+     * @param key
+     * @param postProcessorConstructor
+     */
+    private static void registerPostProcessor(FieldNameService fieldNameService, ImmutableMap.Builder<String, AbstractPostNormalizer> imb, FieldKey key, Supplier<AbstractPostNormalizer> postProcessorConstructor) {
+        forFieldsIfExists((fields) -> imb.put(fields.get(0), postProcessorConstructor.get()), fieldNameService, key);
+    }
+
+    /**
+     * Executes am operation on a list of fields identified by key if one or
+     * more of these exist
+     *
+     * @param consumer operation to execute, only parameter being the list of resolved field names known to exist
+     * @param fieldNameService
+     * @param key keys of fields to check for and operate on
+     */
+    private static void forFieldsIfExists(Consumer<List<String>> consumer, FieldNameService fieldNameService, FieldKey... key) {
+        final List<String> fields = Stream.of(key)
+                .map(fieldNameService::getFieldName)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        
+        if (!fields.isEmpty()) {
+            consumer.accept(fields);
+        }
     }
 
     /**

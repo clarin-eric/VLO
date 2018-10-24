@@ -20,52 +20,52 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.InputSource;
 
 /**
  *
  * @author twagoo
  */
 public class MappingDefinitionResolver {
-
+    
     private final static Logger LOG = LoggerFactory.getLogger(MappingDefinitionResolver.class);
-
+    
     private final Class resourceContextClass;
-
+    
     public MappingDefinitionResolver(Class resourceContextClass) {
         this.resourceContextClass = resourceContextClass;
     }
-
-    public InputStream tryResolveUrlFileOrResourceStream(String mapUrl) throws IOException {
-        InputStream stream;
+    
+    public InputSource tryResolveUrlFileOrResourceStream(String mapUrl) throws IOException {
         //first try as absolute URL
-        final InputStream urlStream = getUrlStream(mapUrl);
-        if (urlStream != null) {
-            stream = urlStream;
+        final InputSource urlStreamSource = getUrlStream(mapUrl);
+        if (urlStreamSource != null) {
+            return urlStreamSource;
         } else {
             //not an absolute URL try absolute file path
-            final InputStream fileStream = getFileStream(mapUrl);
-            if (fileStream != null) {
-                stream = fileStream;
+            final InputSource fileStreamSource = getFileStream(mapUrl);
+            if (fileStreamSource != null) {
+                return fileStreamSource;
             } else {
                 //not an absolute file path - try resource
-                stream = getResourceStream(mapUrl);
+                return getResourceStream(mapUrl);
             }
         }
-        return stream;
     }
-
-    private InputStream getUrlStream(String potentialUrl) throws IOException {
+    
+    private InputSource getUrlStream(String potentialUrl) throws IOException {
         LOG.trace("Looking for URL {}", potentialUrl);
         try {
             final URL url = new URL(potentialUrl);
             if (url.toURI().isAbsolute()) {
-                return url.openStream();
+                final InputSource inputSource = new InputSource(url.openStream());
+                inputSource.setSystemId(url.toString());
+                return inputSource;
             }
         } catch (MalformedURLException | URISyntaxException ex) {
             LOG.debug("Not a valid vocabulary URL / URI: {}", potentialUrl);
@@ -73,13 +73,15 @@ public class MappingDefinitionResolver {
         //conditions not met - not a valid absolute URL
         return null;
     }
-
-    private InputStream getFileStream(String potentialPath) {
+    
+    private InputSource getFileStream(String potentialPath) {
         LOG.trace("Looking for local path {}", potentialPath);
         final File file = new File(potentialPath);
         try {
             if (file.isAbsolute()) {
-                return new FileInputStream(file);
+                final InputSource inputSource = new InputSource(new FileInputStream(file));
+                inputSource.setSystemId(file.toURI().toString());
+                return inputSource;
             } else {
                 LOG.debug("Not an absolute file path: {}", potentialPath);
             }
@@ -89,9 +91,9 @@ public class MappingDefinitionResolver {
         //conditions not met - not a valid absolute path
         return null;
     }
-
-    private InputStream getResourceStream(String resourceName) {
+    
+    private InputSource getResourceStream(String resourceName) {
         LOG.trace("Looking for bundled resource {}", resourceName);
-        return resourceContextClass.getResourceAsStream(resourceName);
+        return new InputSource(resourceContextClass.getResourceAsStream(resourceName));
     }
 }

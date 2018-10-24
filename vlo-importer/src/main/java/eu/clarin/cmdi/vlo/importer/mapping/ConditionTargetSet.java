@@ -1,13 +1,18 @@
 package eu.clarin.cmdi.vlo.importer.mapping;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
 
-public class ConditionTargetSet {
+public class ConditionTargetSet implements Serializable{
     
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private HashMap<String, List<TargetFacet>> caseLess;
     private HashMap<String, List<TargetFacet>> caseSensitive;
     

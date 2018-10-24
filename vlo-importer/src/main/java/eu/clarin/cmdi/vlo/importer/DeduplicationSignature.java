@@ -21,7 +21,6 @@ import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -30,14 +29,15 @@ import org.slf4j.LoggerFactory;
  * @author Thomas Eckart
  */
 public class DeduplicationSignature {
+
     protected static final org.slf4j.Logger LOG = LoggerFactory.getLogger(DeduplicationSignature.class);
 
-    public static String getSignature(FieldNameServiceImpl fieldNameService, SolrInputDocument doc) {
+    public static String getSignature(FieldNameServiceImpl fieldNameService, CMDIData doc) {
         StringBuilder sb = new StringBuilder("");
 
         List<FieldKey> signatureFields = Arrays.asList(FieldKey.LANGUAGE_CODE, FieldKey.DATA_PROVIDER_NAME, FieldKey.DESCRIPTION, FieldKey.COLLECTION);
         for (FieldKey field : signatureFields) {
-            if (doc.getFieldNames().contains(fieldNameService.getFieldName(field))) {
+            if (doc.hasField(fieldNameService.getFieldName(field))) {
                 for (Object value : doc.getFieldValues(fieldNameService.getFieldName(field))) {
                     sb.append((String) value);
                 }
