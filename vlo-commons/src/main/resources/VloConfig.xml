@@ -54,9 +54,9 @@
 
     <handleServerUrl>http://hdl.handle.net/</handleServerUrl>
 
-    <conceptRegistryUrl>https://concepts.clarin.eu/ccr/api/find-concepts</conceptRegistryUrl>
+    <conceptRegistryUrl>${vloconfig.conceptRegistryUrl}</conceptRegistryUrl>
 
-    <vocabularyRegistryUrl>http://clavas.clarin.eu/clavas/public/api/find-concepts</vocabularyRegistryUrl>
+    <vocabularyRegistryUrl>${vloconfig.vocabularyRegistryUrl}</vocabularyRegistryUrl>
 
     <!-- Mapping file locations. These can be an absolute URL, absolute file 
     path or packaged resource location. Evaluated in the this order. -->
@@ -224,7 +224,7 @@
 
     <languageLinkTemplate>https://infra.clarin.eu/content/language_info/data/{}.html</languageLinkTemplate>
 
-    <feedbackFromUrl>http://www.clarin.eu/node/3759?url=</feedbackFromUrl>
+    <feedbackFromUrl>${vloconfig.feedbackFromUrl}</feedbackFromUrl>
 
     <language2LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438109/xml</language2LetterCodeComponentUrl>
 
@@ -232,18 +232,18 @@
 
     <silToISO639CodesUrl>https://infra.clarin.eu/CMDI/1.1/xslt/sil_to_iso6393.xml</silToISO639CodesUrl>
 
-    <FederatedContentSearchUrl>http://weblicht.sfs.uni-tuebingen.de/Aggregator/</FederatedContentSearchUrl>
+    <FederatedContentSearchUrl>${vloconfig.federatedContentSearchUrl}</FederatedContentSearchUrl>
 
     <cqlEndpointFilter>http://cqlservlet.mpi.nl/</cqlEndpointFilter>
 
     <cqlEndpointAlternative>http://cqlservlet.mpi.nl/</cqlEndpointAlternative>
 
     <!-- Set to -1 to disable virtual collection creation from VLO -->
-    <vcrMaximumItemsCount>1000</vcrMaximumItemsCount>
+    <vcrMaximumItemsCount>${vloconfig.vcrMaximumItemsCount}</vcrMaximumItemsCount>
 
-    <vcrSubmitEndpoint>https://clarin.ids-mannheim.de/vcr/service/submit</vcrSubmitEndpoint>
+    <vcrSubmitEndpoint>${vloconfig.vcrSubmitEndpoint}</vcrSubmitEndpoint>
 
-    <lrSwitchboardBaseUrl>http://weblicht.sfs.uni-tuebingen.de/clrs/</lrSwitchboardBaseUrl>
+    <lrSwitchboardBaseUrl>${vloconfig.lrSwitchboardBaseUrl}</lrSwitchboardBaseUrl>
 
     <!-- makes the score for the result ranking visible in the search results -->
     <showResultScores>false</showResultScores>
