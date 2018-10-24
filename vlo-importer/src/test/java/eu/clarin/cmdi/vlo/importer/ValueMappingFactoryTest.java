@@ -4,17 +4,15 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import eu.clarin.cmdi.vlo.importer.mapping.ConditionTargetSet;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
 import eu.clarin.cmdi.vlo.importer.mapping.ValueMappingFactoryDOMImpl;
-import eu.clarin.cmdi.vlo.importer.mapping.ValueMappingFactorySAXImpl;
+
 
 public class ValueMappingFactoryTest {
     private FacetConceptMapping conceptMapping;
@@ -51,18 +49,20 @@ public class ValueMappingFactoryTest {
                 "</value-mappings>\n"
             );
     
-        Map<String, ConditionTargetSet> map = new ValueMappingFactoryDOMImpl().getValueMappings(fileName, this.conceptMapping);
         
-        assertEquals(1, map.get("name").getTargetsFor("test").size());
-        assertEquals("subject", map.get("name").getTargetsFor("test").get(0).getFacetConfiguration().getName());
-        assertEquals("blabla1", map.get("name").getTargetsFor("test").get(0).getValue());
+        FacetMapping facetMapping = new FacetMapping();
+        new ValueMappingFactoryDOMImpl().createValueMapping(fileName, this.conceptMapping, facetMapping);
+        
+        assertEquals(1, facetMapping.getFacetConfiguration("name").getConditionTargetSet().getTargetsFor("test").size());
+        assertEquals("subject", facetMapping.getFacetConfiguration("name").getConditionTargetSet().getTargetsFor("test").get(0).getFacetConfiguration().getName());
+        assertEquals("blabla1", facetMapping.getFacetConfiguration("name").getConditionTargetSet().getTargetsFor("test").get(0).getValue());
         
 
-        assertEquals(3, map.get("collection").getTargetsFor("CollectionName").size());
-        assertEquals("subject", map.get("collection").getTargetsFor("CollectionName").get(0).getFacetConfiguration().getName());
-        assertEquals(true, map.get("collection").getTargetsFor("CollectionName").get(0).getFacetConfiguration().getAllowMultipleValues());
-        assertEquals("name", map.get("collection").getTargetsFor("CollectionName").get(1).getFacetConfiguration().getName());
-        assertEquals("temporalCoverage", map.get("collection").getTargetsFor("CollectionName").get(2).getFacetConfiguration().getName());
+        assertEquals(3, facetMapping.getFacetConfiguration("collection").getConditionTargetSet().getTargetsFor("CollectionName").size());
+        assertEquals("subject", facetMapping.getFacetConfiguration("collection").getConditionTargetSet().getTargetsFor("CollectionName").get(0).getFacetConfiguration().getName());
+        assertEquals(true, facetMapping.getFacetConfiguration("collection").getConditionTargetSet().getTargetsFor("CollectionName").get(0).getFacetConfiguration().getAllowMultipleValues());
+        assertEquals("name", facetMapping.getFacetConfiguration("collection").getConditionTargetSet().getTargetsFor("CollectionName").get(1).getFacetConfiguration().getName());
+        assertEquals("temporalCoverage", facetMapping.getFacetConfiguration("collection").getConditionTargetSet().getTargetsFor("CollectionName").get(2).getFacetConfiguration().getName());
 
     }
     
@@ -102,24 +102,26 @@ public class ValueMappingFactoryTest {
                 "</value-mappings>\n"
             );
     
-        Map<String, ConditionTargetSet> map = new ValueMappingFactoryDOMImpl().getValueMappings(fileName, this.conceptMapping);
+        FacetMapping facetMapping = new FacetMapping();
+        new ValueMappingFactoryDOMImpl().createValueMapping(fileName, this.conceptMapping, facetMapping);
+
         
 
-        assertEquals(false, map.get("name").getTargetsFor("test").get(0).getOverrideExistingValues());
-        assertEquals(false, map.get("name").getTargetsFor("test").get(0).getRemoveSourceValue());
+        assertEquals(false, facetMapping.getFacetConfiguration("name").getConditionTargetSet().getTargetsFor("test").get(0).getOverrideExistingValues());
+        assertEquals(false, facetMapping.getFacetConfiguration("name").getConditionTargetSet().getTargetsFor("test").get(0).getRemoveSourceValue());
         
-        assertEquals(false, map.get("collection").getTargetsFor("aa").get(0).getOverrideExistingValues());
-        assertEquals(false, map.get("collection").getTargetsFor("aa").get(0).getRemoveSourceValue());
-        assertEquals(true, map.get("collection").getTargetsFor("aa").get(1).getOverrideExistingValues());
-        assertEquals(true, map.get("collection").getTargetsFor("aa").get(1).getRemoveSourceValue());
+        assertEquals(false, facetMapping.getFacetConfiguration("collection").getConditionTargetSet().getTargetsFor("aa").get(0).getOverrideExistingValues());
+        assertEquals(false, facetMapping.getFacetConfiguration("collection").getConditionTargetSet().getTargetsFor("aa").get(0).getRemoveSourceValue());
+        assertEquals(true, facetMapping.getFacetConfiguration("collection").getConditionTargetSet().getTargetsFor("aa").get(1).getOverrideExistingValues());
+        assertEquals(true, facetMapping.getFacetConfiguration("collection").getConditionTargetSet().getTargetsFor("aa").get(1).getRemoveSourceValue());
         
-        assertEquals(2, map.get("collection").getTargetsFor("bb").size());
-        assertEquals("name", map.get("collection").getTargetsFor("bb").get(0).getFacetConfiguration().getName());
-        assertEquals(true, map.get("collection").getTargetsFor("bb").get(0).getOverrideExistingValues());
-        assertEquals(false, map.get("collection").getTargetsFor("bb").get(0).getRemoveSourceValue());
-        assertEquals("name", map.get("collection").getTargetsFor("bb").get(1).getFacetConfiguration().getName());
-        assertEquals(true, map.get("collection").getTargetsFor("bb").get(1).getOverrideExistingValues());
-        assertEquals(false, map.get("collection").getTargetsFor("bb").get(1).getRemoveSourceValue());
+        assertEquals(2, facetMapping.getFacetConfiguration("collection").getConditionTargetSet().getTargetsFor("bb").size());
+        assertEquals("name", facetMapping.getFacetConfiguration("collection").getConditionTargetSet().getTargetsFor("bb").get(0).getFacetConfiguration().getName());
+        assertEquals(true, facetMapping.getFacetConfiguration("collection").getConditionTargetSet().getTargetsFor("bb").get(0).getOverrideExistingValues());
+        assertEquals(false, facetMapping.getFacetConfiguration("collection").getConditionTargetSet().getTargetsFor("bb").get(0).getRemoveSourceValue());
+        assertEquals("name", facetMapping.getFacetConfiguration("collection").getConditionTargetSet().getTargetsFor("bb").get(1).getFacetConfiguration().getName());
+        assertEquals(true, facetMapping.getFacetConfiguration("collection").getConditionTargetSet().getTargetsFor("bb").get(1).getOverrideExistingValues());
+        assertEquals(false, facetMapping.getFacetConfiguration("collection").getConditionTargetSet().getTargetsFor("bb").get(1).getRemoveSourceValue());
  
     }
 
@@ -150,15 +152,17 @@ public class ValueMappingFactoryTest {
                 "</value-mappings>\n"
             );
     
-        Map<String, ConditionTargetSet> map = new ValueMappingFactoryDOMImpl().getValueMappings(fileName, this.conceptMapping);
+        FacetMapping facetMapping = new FacetMapping();
+        new ValueMappingFactoryDOMImpl().createValueMapping(fileName, this.conceptMapping, facetMapping);
+
         
 
-        assertEquals(1, map.get("name").getTargetsFor("Clarin").size());
-        assertEquals(0, map.get("name").getTargetsFor("clarin").size());
+        assertEquals(1, facetMapping.getFacetConfiguration("name").getConditionTargetSet().getTargetsFor("Clarin").size());
+        assertEquals(0, facetMapping.getFacetConfiguration("name").getConditionTargetSet().getTargetsFor("clarin").size());
         
-        assertEquals(2, map.get("name").getTargetsFor("DonauDampfschifffahrtsGesellschaftsKaptitän").size());
-        assertEquals(1, map.get("name").getTargetsFor("donaudampfschifffahrtsgesellschaftskaptitän").size());
-        assertEquals(0, map.get("name").getTargetsFor("donaudampfschifffahrtsgesellschaftskaptitaen").size());
+        assertEquals(2, facetMapping.getFacetConfiguration("name").getConditionTargetSet().getTargetsFor("DonauDampfschifffahrtsGesellschaftsKaptitän").size());
+        assertEquals(1, facetMapping.getFacetConfiguration("name").getConditionTargetSet().getTargetsFor("donaudampfschifffahrtsgesellschaftskaptitän").size());
+        assertEquals(0, facetMapping.getFacetConfiguration("name").getConditionTargetSet().getTargetsFor("donaudampfschifffahrtsgesellschaftskaptitaen").size());
         
 
     }

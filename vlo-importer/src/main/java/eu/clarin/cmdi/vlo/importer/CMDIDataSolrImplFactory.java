@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 CLARIN
+ * Copyright (C) 2018 CLARIN
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,28 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.importer.solr;
+package eu.clarin.cmdi.vlo.importer;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.Collection;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrServerException;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import org.apache.solr.common.SolrInputDocument;
 
 /**
  *
- * @author twagoo
+ * @author Twan Goosen <twan@clarin.eu>
  */
-public interface SolrBridge extends DocumentStore<SolrInputDocument> {
+public class CMDIDataSolrImplFactory implements CMDIDataFactory<SolrInputDocument> {
 
-    SolrClient getClient();
+    private final FieldNameService fieldNameService;
 
-    void init() throws MalformedURLException;
+    public CMDIDataSolrImplFactory(FieldNameService fieldNameService) {
+        this.fieldNameService = fieldNameService;
+    }
 
-    void shutdown() throws SolrServerException, IOException;
+    @Override
+    public CMDIData<SolrInputDocument> newCMDIDataInstance() {
+        return new CMDIDataSolrImpl(fieldNameService);
+    }
 
-    void commit() throws SolrServerException, IOException;
-
-    Throwable popError();
 }

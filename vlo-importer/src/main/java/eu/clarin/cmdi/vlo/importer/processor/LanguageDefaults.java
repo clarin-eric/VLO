@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 CLARIN
+ * Copyright (C) 2018 CLARIN
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,28 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.importer.solr;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.Collection;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.common.SolrInputDocument;
+package eu.clarin.cmdi.vlo.importer.processor;
 
 /**
  *
- * @author twagoo
+ * @author Twan Goosen <twan@clarin.eu>
  */
-public interface SolrBridge extends DocumentStore<SolrInputDocument> {
+public class LanguageDefaults {
 
-    SolrClient getClient();
-
-    void init() throws MalformedURLException;
-
-    void shutdown() throws SolrServerException, IOException;
-
-    void commit() throws SolrServerException, IOException;
-
-    Throwable popError();
+    public static final String ENGLISH_LANGUAGE = "code:eng";
+    public static final String DEFAULT_LANGUAGE = "code:und";
 }
