@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.wicket.panels.search;
+package eu.clarin.cmdi.vlo.wicket;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import java.util.Locale;
@@ -29,7 +29,7 @@ import org.apache.wicket.util.convert.IConverter;
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-class LandingPageShortLinkLabelConverter implements IConverter<String> {
+public class LandingPageShortLinkLabelConverter implements IConverter<String> {
 
     private static final Pattern URL_HOST_PATTERN = Pattern.compile("^https?:\\/\\/([^\\\\/]+)", Pattern.CASE_INSENSITIVE);
 

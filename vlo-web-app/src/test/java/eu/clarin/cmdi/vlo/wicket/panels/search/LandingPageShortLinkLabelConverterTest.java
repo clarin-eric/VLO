@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import eu.clarin.cmdi.vlo.wicket.LandingPageShortLinkLabelConverter;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
