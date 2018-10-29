@@ -46,6 +46,9 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
+import eu.clarin.cmdi.vlo.wicket.panels.PIDBadge;
+import eu.clarin.cmdi.vlo.wicket.LandingPageShortLinkLabelConverter;
+import org.apache.wicket.util.convert.IConverter;
 
 /**
  * Panel that shows the "basic" (non-technical) property fields of a document
@@ -71,6 +74,8 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
     private final SolrFieldModel<String> resourcesModel;
     private ResourceInfoModel resourceInfoModel;
     private IModel<Boolean> coreLinksPanelVisibilityModel;
+
+    private final static IConverter<String> landingPageLabelConverter = new LandingPageShortLinkLabelConverter();
 
     public RecordDetailsPanel(String id, IModel<SolrDocument> model) {
         super(id, model);
@@ -147,9 +152,20 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
     }
 
     private Component createLandingPageLink(String id, IModel<String> linkModel) {
-        final WebMarkupContainer landingPageContainer = new WebMarkupContainer(id);
-        landingPageContainer.add(new ExternalLink("landingPageLink", linkModel));
-        return landingPageContainer;
+        return new WebMarkupContainer(id)
+                .add(new ExternalLink("landingPageLink", linkModel)
+                        .add(new PIDBadge("pidBadge", linkModel))
+                        .add(new Label("landingPageLinkLabel", linkModel) {
+                            @Override
+                            public <C> IConverter<C> getConverter(Class<C> type) {
+                                if (type.equals(String.class)) {
+                                    return (IConverter<C>) landingPageLabelConverter;
+                                } else {
+                                    return super.getConverter(type);
+                                }
+                            }
+
+                        }));
     }
 
     /**
