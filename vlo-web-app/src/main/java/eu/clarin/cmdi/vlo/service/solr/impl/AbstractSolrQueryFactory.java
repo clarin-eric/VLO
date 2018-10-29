@@ -25,7 +25,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
@@ -34,6 +36,8 @@ import org.apache.solr.client.solrj.util.ClientUtils;
  * @author twagoo
  */
 public abstract class AbstractSolrQueryFactory {
+    
+    public static final String COLLAPSE_FIELD_QUERY = "{!collapse field=_signature}";
 
     protected static final String SOLR_SEARCH_ALL = "*:*";
     protected static final String EXPAND_ROWS = "0"; //expansion rows to actually fetch
@@ -82,7 +86,9 @@ public abstract class AbstractSolrQueryFactory {
             }
             query.setFilterQueries(
                     Streams.concat(
-                            Arrays.stream(query.getFilterQueries()),
+                            Optional.ofNullable(query.getFilterQueries())
+                                    .map(Arrays::stream)
+                                    .orElse(Stream.empty()),
                             encodedQueries.stream()).toArray(String[]::new));
         }
     }

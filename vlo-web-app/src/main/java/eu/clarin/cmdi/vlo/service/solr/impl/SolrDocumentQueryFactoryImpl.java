@@ -34,8 +34,6 @@ import eu.clarin.cmdi.vlo.FieldKey;
  */
 public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrDocumentQueryFactory {
 
-    private static final String COLLAPSE_FIELD_QUERY = "{!collapse field=_signature}";
-
     private final String ID;
     private final String SELF_LINK;
 
