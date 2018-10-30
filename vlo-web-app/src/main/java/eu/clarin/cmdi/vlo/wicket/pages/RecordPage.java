@@ -186,7 +186,6 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
         // General information section
         add(new SingleValueSolrFieldLabel("name", getModel(), fieldNameService.getFieldName(FieldKey.NAME), getString("recordpage.unnamedrecord")));
-        add(createLandingPageLink("landingPageLink"));
 
         tabs = createTabs("tabs");
         final StringValue initialTab = params.get(VloWebAppParameters.RECORD_PAGE_TAB);
@@ -347,25 +346,6 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             }
 
         };
-    }
-
-    private ExternalLink createLandingPageLink(String id) {
-        final IModel<String> landingPageHrefModel
-                // wrap in model that transforms handle links
-                = new HandleLinkModel(
-                        // get landing page from document
-                        new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
-        // add landing page link
-        final ExternalLink landingPageLink = new ExternalLink(id, landingPageHrefModel) {
-
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(landingPageHrefModel.getObject() != null);
-            }
-
-        };
-        return landingPageLink;
     }
 
     private Component createSearchLinks(String id) {
