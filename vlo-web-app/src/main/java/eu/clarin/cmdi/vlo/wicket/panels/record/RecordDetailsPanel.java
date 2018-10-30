@@ -177,6 +177,18 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
                         .add(new AttributeModifier("title", new StringResourceModel("resourcetype.${resourceType}.singular", this, resourceInfoModel).setDefaultValue(new PropertyModel(resourceInfoModel, "resourceType")))))
                 //resource name below icon
                 .add(new Label("resourceName", new PropertyModel<>(resourceInfoModel, "fileName")))
+                .add(new PIDBadge("pidBadge", linkModel))
+                .add(new Label("pidLabel", linkModel) {
+                    @Override
+                    public <C> IConverter<C> getConverter(Class<C> type) {
+                        if (type.equals(String.class)) {
+                            return (IConverter<C>) landingPageLabelConverter;
+                        } else {
+                            return super.getConverter(type);
+                        }
+                    }
+
+                }) //TODO: only if it's a PID??
         );
 
         // Resource info gets async update to resolve any handle to a file name
