@@ -73,7 +73,6 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
 
     private final SolrFieldModel<String> resourcesModel;
     private ResourceInfoModel resourceInfoModel;
-    private IModel<Boolean> coreLinksPanelVisibilityModel;
 
     private final static IConverter<String> landingPageLabelConverter = new LandingPageShortLinkLabelConverter();
 
@@ -88,14 +87,6 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
         // Fields table
         add(new FieldsTablePanel("fieldsTable", new DocumentFieldsProvider(getModel(), basicPropertiesFilter, fieldOrder))
                 .add(new HighlightSearchTermBehavior())
-                .add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
-                    @Override
-                    public String getObject() {
-                        // leave space for resource info iff there is exactly one resource
-                        // using boostrap columns; see https://getbootstrap.com/css/#grid
-                        return coreLinksPanelVisibilityModel.getObject() ? "col-sm-9" : "col-xs-12";
-                    }
-                }))
         );
 
         add(new SimilarDocumentsPanel("similar", getModel()));
@@ -137,16 +128,15 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
                 .add(createSingleResourceInfo("resourceInfo", resourceInfoLinkModel)
                         .add(BooleanVisibilityBehavior.visibleOnTrue(resourceInfoVisibilityModel)));
 
-        // overall visibility of core links
-        coreLinksPanelVisibilityModel = new AbstractReadOnlyModel<Boolean>() {
-            @Override
-            public Boolean getObject() {
-                //visible iff landing page or single resource can be shown
-                return landingPageVisibilityModel.getObject() || resourceInfoVisibilityModel.getObject();
-            }
-        };
-
-        coreLinksContainer.add(BooleanVisibilityBehavior.visibleOnTrue(coreLinksPanelVisibilityModel));
+        coreLinksContainer
+                .add(createMultipleResourceLink("resourcesInfo")
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(new AbstractReadOnlyModel<Boolean>() {
+                            @Override
+                            public Boolean getObject() {
+                                return resourcesModel.getObject() != null
+                                        && resourcesModel.getObject().size() > 1;
+                            }
+                        })));
 
         return coreLinksContainer;
     }
@@ -207,6 +197,16 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
 
         resourceInfo.setOutputMarkupId(true);
         return resourceInfo;
+    }
+
+    private Component createMultipleResourceLink(String id) {
+        return new WebMarkupContainer(id)
+                .add(new AjaxFallbackLink("showResources") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        switchToTab(RESOURCES_SECTION, target);
+                    }
+                }.add(new Label("resourcesCount", new PropertyModel<String>(resourcesModel, "size"))));
     }
 
     protected abstract void switchToTab(String tab, AjaxRequestTarget target);
