@@ -37,7 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 Landing page
                             </div>
                             <div>
-                                <wicket:container wicket:id="landingPageLinkLabel">hdl:1234/567-890</wicket:container>
+                                <wicket:container wicket:id="landingPageLinkLabel">[HDL]1234/567-890</wicket:container>
                             </div>
                         </a>
                         <wicket:container wicket:id="landingPagePidLabel"></wicket:container>
@@ -49,11 +49,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 <span wicket:id="resourceTypeIcon"></span>
                             </span>
                             <div wicket:id="resourceName">[Resource name]</div>
-                            <div>
-                                <wicket:container wicket:id="pidBadge"></wicket:container>
-                                <wicket:container wicket:id="pidLabel">hdl:1234/567-890</wicket:container>
-                            </div>
                         </a>
+                        <div>
+                            <wicket:container wicket:id="pidLabel">[HDL]1234/567-890</wicket:container>
+                        </div>
                     </div>
                     <div class="panel panel-default single-resource-info" wicket:id="resourcesInfo">
                         <a wicket:id="showResources" class="resourcelink">

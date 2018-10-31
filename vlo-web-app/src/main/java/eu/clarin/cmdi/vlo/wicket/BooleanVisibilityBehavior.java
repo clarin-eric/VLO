@@ -25,7 +25,7 @@ import org.apache.wicket.model.IModel;
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class BooleanVisibilityBehavior extends Behavior {
-    
+
     private final IModel<Boolean> model;
     private final Boolean visibilityState;
 
@@ -39,6 +39,11 @@ public class BooleanVisibilityBehavior extends Behavior {
         component.setVisible(visibilityState.equals(model.getObject()));
     }
 
+    @Override
+    public void detach(Component component) {
+        model.detach();
+    }
+
     public static BooleanVisibilityBehavior visibleOnTrue(IModel<Boolean> model) {
         return new BooleanVisibilityBehavior(model, Boolean.TRUE);
     }
@@ -46,5 +51,5 @@ public class BooleanVisibilityBehavior extends Behavior {
     public static BooleanVisibilityBehavior visibleOnFalse(IModel<Boolean> model) {
         return new BooleanVisibilityBehavior(model, Boolean.FALSE);
     }
-    
+
 }

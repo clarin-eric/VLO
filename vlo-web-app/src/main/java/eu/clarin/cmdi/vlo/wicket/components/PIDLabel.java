@@ -32,7 +32,6 @@ import org.apache.wicket.util.convert.IConverter;
  */
 public class PIDLabel extends GenericPanel<String> {
 
-    //TODO: matchers for handles, dois, ...
     private final static IConverter<String> labelConverter = new PidLabelLinkConverter();
     private final static IConverter<String> badgeConverter = new PidBadgeLinkConverter();
 
