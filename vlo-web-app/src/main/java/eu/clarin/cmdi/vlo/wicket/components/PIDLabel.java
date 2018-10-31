@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.PIDUtils;
 import java.util.Locale;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -30,9 +31,8 @@ import org.apache.wicket.util.convert.IConverter;
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class PIDLabel extends GenericPanel<String> {
-    
-    //TODO: matchers for handles, dois, ...
 
+    //TODO: matchers for handles, dois, ...
     private final static IConverter<String> labelConverter = new PidLabelLinkConverter();
     private final static IConverter<String> badgeConverter = new PidBadgeLinkConverter();
 
@@ -70,17 +70,9 @@ public class PIDLabel extends GenericPanel<String> {
     }
 
     public static boolean isPid(IModel<String> linkModel) {
-        if (linkModel.getObject() == null) {
-            return false;
-        } else {
-            final String lcValue = linkModel.getObject().toLowerCase();
-            return (lcValue.startsWith(FacetConstants.HANDLE_PREFIX))
-                    || (lcValue.startsWith(FacetConstants.HANDLE_PROXY))
-                    || (lcValue.startsWith(FacetConstants.HANDLE_PROXY_HTTPS));
-        }
+        return PIDUtils.isPid(linkModel.getObject());
     }
 
-    //TODO: option to show only if it's a PID??
     private static class PidBadgeLinkConverter implements IConverter<String> {
 
         @Override

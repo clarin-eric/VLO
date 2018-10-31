@@ -49,6 +49,7 @@ import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.PIDBadge;
 import eu.clarin.cmdi.vlo.wicket.LandingPageShortLinkLabelConverter;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLabel;
+import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import org.apache.wicket.util.convert.IConverter;
 
 /**
@@ -143,10 +144,14 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
     }
 
     private Component createLandingPageLink(String id, IModel<String> linkModel) {
+        final IsPidModel isPidModel = new IsPidModel(linkModel);
+
         return new WebMarkupContainer(id)
                 .add(new ExternalLink("landingPageLink", linkModel)
-                        .add(new Label("landingPageLinkLabel", linkModel)))
-                .add(new PIDLabel("landingPagePidLabel", linkModel));
+                        .add(new Label("landingPageLinkLabel", linkModel)
+                                .add(BooleanVisibilityBehavior.visibleOnFalse(isPidModel))))
+                .add(new PIDLabel("landingPagePidLabel", linkModel)
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel)));
     }
 
     /**
