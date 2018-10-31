@@ -18,8 +18,6 @@ package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -32,8 +30,11 @@ import org.apache.wicket.util.convert.IConverter;
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class PIDLabel extends GenericPanel<String> {
+    
+    //TODO: matchers for handles, dois, ...
 
     private final static IConverter<String> labelConverter = new PidLabelLinkConverter();
+    private final static IConverter<String> badgeConverter = new PidBadgeLinkConverter();
 
     /**
      *
@@ -43,7 +44,17 @@ public class PIDLabel extends GenericPanel<String> {
     public PIDLabel(String id, IModel<String> model) {
         super(id, model);
         add(new ExternalLink("link", model)
-                .add(new PIDBadge("badge", model))
+                .add(new Label("badge", model) {
+                    @Override
+                    public <C> IConverter<C> getConverter(Class<C> type) {
+                        if (type.equals(String.class)) {
+                            return (IConverter<C>) badgeConverter;
+                        } else {
+                            return super.getConverter(type);
+                        }
+                    }
+
+                })
                 .add(new Label("label", model) {
                     @Override
                     public <C> IConverter<C> getConverter(Class<C> type) {
@@ -70,6 +81,27 @@ public class PIDLabel extends GenericPanel<String> {
     }
 
     //TODO: option to show only if it's a PID??
+    private static class PidBadgeLinkConverter implements IConverter<String> {
+
+        @Override
+        public String convertToObject(String value, Locale locale) throws ConversionException {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public String convertToString(String value, Locale locale) {
+            final String lcValue = value.toLowerCase();
+            if (lcValue.startsWith(FacetConstants.HANDLE_PREFIX)
+                    || (lcValue.startsWith(FacetConstants.HANDLE_PROXY))
+                    || (lcValue.startsWith(FacetConstants.HANDLE_PROXY_HTTPS))) {
+                return "HDL";
+            } else {
+                return "WWW";
+            }
+
+        }
+    }
+
     private static class PidLabelLinkConverter implements IConverter<String> {
 
         @Override

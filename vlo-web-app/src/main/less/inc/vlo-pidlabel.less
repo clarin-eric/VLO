@@ -15,8 +15,32 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+@pid-label-border-color: @link-color;
+@pid-label-badge-color: @link-color;
+@pid-label-badge-text-color: #fff;
+
 .pid-label {
-    padding: .1em;
     border: 1px solid;
-    border-radius: .1;
+    border-color: @pid-label-border-color;
+    border-radius: 4px;
+
+    .pid-label-badge {
+        padding: 0 .5em;
+        background: @pid-label-badge-color;
+        color: @pid-label-badge-text-color;
+    }
+
+    .pid-label-link {
+        padding: 0 .5em 0 0;
+    }
+}
+
+/* hover behaviour when the label is (in) a link */
+a .pid-label:hover, a.pid-label:hover {
+    border-color: darken(@pid-label-border-color, 5%);
+
+    .pid-label-badge {
+        background: darken(@pid-label-badge-color, 5%);
+        color: darken(@pid-label-badge-text-color, 5%);
+    }
 }
