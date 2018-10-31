@@ -46,11 +46,8 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
-import eu.clarin.cmdi.vlo.wicket.components.PIDBadge;
-import eu.clarin.cmdi.vlo.wicket.LandingPageShortLinkLabelConverter;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLabel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
-import org.apache.wicket.util.convert.IConverter;
 
 /**
  * Panel that shows the "basic" (non-technical) property fields of a document
@@ -61,6 +58,8 @@ import org.apache.wicket.util.convert.IConverter;
  * @author twagoo
  */
 public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
+
+    private static final int PID_LABEL_TEXT_LENGTH = 25;
 
     @SpringBean(name = "basicPropertiesFilter")
     private FieldFilter basicPropertiesFilter;
@@ -75,8 +74,6 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
 
     private final SolrFieldModel<String> resourcesModel;
     private ResourceInfoModel resourceInfoModel;
-
-    private final static IConverter<String> landingPageLabelConverter = new LandingPageShortLinkLabelConverter();
 
     public RecordDetailsPanel(String id, IModel<SolrDocument> model) {
         super(id, model);
@@ -150,7 +147,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
                 .add(new ExternalLink("landingPageLink", linkModel)
                         .add(new Label("landingPageLinkLabel", linkModel)
                                 .add(BooleanVisibilityBehavior.visibleOnFalse(isPidModel))))
-                .add(new PIDLabel("landingPagePidLabel", linkModel)
+                .add(new PIDLabel("landingPagePidLabel", linkModel, PID_LABEL_TEXT_LENGTH)
                         .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel)));
     }
 
@@ -177,7 +174,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
         );
 
         resourceInfo
-                .add(new PIDLabel("pidLabel", linkModel)
+                .add(new PIDLabel("pidLabel", linkModel, PID_LABEL_TEXT_LENGTH)
                         .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel)));
 
         // Resource info gets async update to resolve any handle to a file name

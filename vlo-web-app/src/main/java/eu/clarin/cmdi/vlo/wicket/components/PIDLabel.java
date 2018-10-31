@@ -32,8 +32,8 @@ import org.apache.wicket.util.convert.IConverter;
  */
 public class PIDLabel extends GenericPanel<String> {
 
-    private final static IConverter<String> labelConverter = new PidLabelLinkConverter(25);
-    private final static IConverter<String> badgeConverter = new PidBadgeLinkConverter();
+    private final IConverter<String> labelConverter;
+    private final static IConverter<String> BADGE_CONVERTER = new PidBadgeLinkConverter();
 
     /**
      *
@@ -41,13 +41,25 @@ public class PIDLabel extends GenericPanel<String> {
      * @param model link model
      */
     public PIDLabel(String id, IModel<String> model) {
+        this(id, model, -1);
+    }
+
+    /**
+     *
+     * @param id component id
+     * @param model link model
+     * @param maxLinkLength maximum length before text inside label gets
+     * truncated
+     */
+    public PIDLabel(String id, IModel<String> model, int maxLinkLength) {
         super(id, model);
+        labelConverter = new PidLabelLinkConverter(maxLinkLength);
         add(new ExternalLink("link", model)
                 .add(new Label("badge", model) {
                     @Override
                     public <C> IConverter<C> getConverter(Class<C> type) {
                         if (type.equals(String.class)) {
-                            return (IConverter<C>) badgeConverter;
+                            return (IConverter<C>) BADGE_CONVERTER;
                         } else {
                             return super.getConverter(type);
                         }
