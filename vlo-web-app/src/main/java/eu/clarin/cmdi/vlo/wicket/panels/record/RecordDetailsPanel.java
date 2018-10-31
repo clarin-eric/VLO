@@ -46,8 +46,9 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
-import eu.clarin.cmdi.vlo.wicket.panels.PIDBadge;
+import eu.clarin.cmdi.vlo.wicket.components.PIDBadge;
 import eu.clarin.cmdi.vlo.wicket.LandingPageShortLinkLabelConverter;
+import eu.clarin.cmdi.vlo.wicket.components.PIDLabel;
 import org.apache.wicket.util.convert.IConverter;
 
 /**
@@ -144,18 +145,8 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
     private Component createLandingPageLink(String id, IModel<String> linkModel) {
         return new WebMarkupContainer(id)
                 .add(new ExternalLink("landingPageLink", linkModel)
-                        .add(new PIDBadge("pidBadge", linkModel))
-                        .add(new Label("landingPageLinkLabel", linkModel) {
-                            @Override
-                            public <C> IConverter<C> getConverter(Class<C> type) {
-                                if (type.equals(String.class)) {
-                                    return (IConverter<C>) landingPageLabelConverter;
-                                } else {
-                                    return super.getConverter(type);
-                                }
-                            }
-
-                        }));
+                        .add(new Label("landingPageLinkLabel", linkModel)))
+                .add(new PIDLabel("landingPagePidLabel", linkModel));
     }
 
     /**
