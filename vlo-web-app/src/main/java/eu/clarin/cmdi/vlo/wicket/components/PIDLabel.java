@@ -17,8 +17,8 @@
 package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.PIDUtils;
 import java.util.Locale;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -32,7 +32,7 @@ import org.apache.wicket.util.convert.IConverter;
  */
 public class PIDLabel extends GenericPanel<String> {
 
-    private final static IConverter<String> labelConverter = new PidLabelLinkConverter();
+    private final static IConverter<String> labelConverter = new PidLabelLinkConverter(25);
     private final static IConverter<String> badgeConverter = new PidBadgeLinkConverter();
 
     /**
@@ -65,11 +65,8 @@ public class PIDLabel extends GenericPanel<String> {
                     }
 
                 })
+                .add(new AttributeModifier("title", model))
         );
-    }
-
-    public static boolean isPid(IModel<String> linkModel) {
-        return PIDUtils.isPid(linkModel.getObject());
     }
 
     private static class PidBadgeLinkConverter implements IConverter<String> {
@@ -95,6 +92,12 @@ public class PIDLabel extends GenericPanel<String> {
 
     private static class PidLabelLinkConverter implements IConverter<String> {
 
+        private final int maxLength;
+
+        public PidLabelLinkConverter(int maxLength) {
+            this.maxLength = maxLength;
+        }
+
         @Override
         public String convertToObject(String value, Locale locale) throws ConversionException {
             throw new UnsupportedOperationException("Not supported yet.");
@@ -102,6 +105,19 @@ public class PIDLabel extends GenericPanel<String> {
 
         @Override
         public String convertToString(String value, Locale locale) {
+            if (value == null) {
+                return null;
+            } else {
+                final String converted = convertToString(value);
+                if (maxLength >= 0 && maxLength < converted.length()) {
+                    return converted.substring(0, maxLength - 3) + "...";
+                } else {
+                    return converted;
+                }
+            }
+        }
+
+        private String convertToString(String value) {
             final String lcValue = value.toLowerCase();
             if (lcValue.startsWith(FacetConstants.HANDLE_PREFIX)) {
                 return value.substring(FacetConstants.HANDLE_PREFIX.length());
