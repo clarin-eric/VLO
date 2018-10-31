@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.PIDUtils;
 import java.util.Locale;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
@@ -84,21 +84,18 @@ public class PIDLabel extends GenericPanel<String> {
     private static class PidBadgeLinkConverter implements IConverter<String> {
 
         @Override
-        public String convertToObject(String value, Locale locale) throws ConversionException {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
         public String convertToString(String value, Locale locale) {
-            final String lcValue = value.toLowerCase();
-            if (lcValue.startsWith(FacetConstants.HANDLE_PREFIX)
-                    || (lcValue.startsWith(FacetConstants.HANDLE_PROXY))
-                    || (lcValue.startsWith(FacetConstants.HANDLE_PROXY_HTTPS))) {
+            if (PIDUtils.isHandle(value)) {
                 return "HDL";
             } else {
                 return "WWW";
             }
 
+        }
+
+        @Override
+        public String convertToObject(String value, Locale locale) throws ConversionException {
+            throw new UnsupportedOperationException("Not supported");
         }
     }
 
@@ -130,18 +127,12 @@ public class PIDLabel extends GenericPanel<String> {
         }
 
         private String convertToString(String value) {
-            final String lcValue = value.toLowerCase();
-            if (lcValue.startsWith(FacetConstants.HANDLE_PREFIX)) {
-                return value.substring(FacetConstants.HANDLE_PREFIX.length());
+            final String schemeSpecificId = PIDUtils.getSchemeSpecificId(value);
+            if (schemeSpecificId == null) {
+                return value;
+            } else {
+                return schemeSpecificId;
             }
-            if (lcValue.startsWith(FacetConstants.HANDLE_PROXY)) {
-                return value.substring(FacetConstants.HANDLE_PROXY.length());
-            }
-            if (lcValue.startsWith(FacetConstants.HANDLE_PROXY_HTTPS)) {
-                return value.substring(FacetConstants.HANDLE_PROXY_HTTPS.length());
-            }
-
-            return value;
         }
 
     }
