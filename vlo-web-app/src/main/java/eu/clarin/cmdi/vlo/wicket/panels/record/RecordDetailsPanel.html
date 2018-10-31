@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     [Fields table]
                 </div>
                 <div class="col-sm-3" wicket:id="coreLinks">
-                    <div class="panel panel-default single-resource-info" wicket:id="landingPage">
+                    <div class="panel panel-default resource-info" wicket:id="landingPage">
                         <a wicket:id="landingPageLink" class="resourcelink" title="The original provider's page for this record">
                             <span class="resource-type-icon">                         
                                 <span class="glyphicon glyphicon-home"></span>
@@ -42,7 +42,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         </a>
                         <wicket:container wicket:id="landingPagePidLabel"></wicket:container>
                     </div>
-                    <div class="panel panel-default single-resource-info" wicket:id="resourceInfo">
+                    <div class="panel panel-default resource-info" wicket:id="resourceInfo">
                         <a wicket:id="showResources" class="pull-right detailslink"><span class="glyphicon glyphicon-info-sign"></span></a>
                         <a wicket:id="resourceLink" class="resourcelink">
                             <span class="resource-type-icon">                            
@@ -50,11 +50,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             </span>
                             <div wicket:id="resourceName">[Resource name]</div>
                         </a>
-                        <div>
-                            <wicket:container wicket:id="pidLabel">[HDL]1234/567-890</wicket:container>
-                        </div>
+                        <wicket:container wicket:id="pidLabel">[HDL]1234/567-890</wicket:container>
                     </div>
-                    <div class="panel panel-default single-resource-info" wicket:id="resourcesInfo">
+                    <div class="panel panel-default resource-info" wicket:id="resourcesInfo">
                         <a wicket:id="showResources" class="resourcelink">
                             <span class="resource-type-icon">                            
                                 <span class="glyphicon glyphicon-folder-open"></span>
