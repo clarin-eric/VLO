@@ -16,16 +16,16 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
-import java.util.Optional;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
+import eu.clarin.cmdi.vlo.PIDUtils;
 
 /**
- * Panel that shows an icon to mark the 'PID' nature of the link represented
- * by the model. Not visible unless link is actually a PID.
+ * Panel that shows an icon to mark the 'PID' nature of the link represented by
+ * the model. Not visible unless link is actually a PID.
  *
  * @author Twan Goosen <twan@clarin.eu>
+ * @see PIDUtils#isPid(java.lang.String)
  */
 public class PIDBadge extends GenericPanel<String> {
 
@@ -41,11 +41,7 @@ public class PIDBadge extends GenericPanel<String> {
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        setVisible(Optional.ofNullable(getModelObject())
-                .map(String::toLowerCase)
-                .map(s -> s.startsWith(FacetConstants.HANDLE_PREFIX) || s.startsWith(FacetConstants.HANDLE_PROXY) || s.startsWith(FacetConstants.HANDLE_PROXY_HTTPS))
-                .orElse(false));
-
+        setVisible(PIDUtils.isPid(getModelObject()));
     }
 
 }
