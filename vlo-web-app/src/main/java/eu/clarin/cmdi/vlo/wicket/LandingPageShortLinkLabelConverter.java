@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
+import eu.clarin.cmdi.vlo.PIDUtils;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,21 +40,16 @@ public class LandingPageShortLinkLabelConverter implements IConverter<String> {
 
     @Override
     public String convertToString(String value, Locale locale) {
-        final String lcValue = value.toLowerCase();
-        if (lcValue.startsWith(FacetConstants.HANDLE_PREFIX)) {
-            return value.substring(FacetConstants.HANDLE_PREFIX.length());
-        }
-        if (lcValue.startsWith(FacetConstants.HANDLE_PROXY)) {
-            return value.substring(FacetConstants.HANDLE_PROXY.length());
-        }
-        if (lcValue.startsWith(FacetConstants.HANDLE_PROXY_HTTPS)) {
-            return value.substring(FacetConstants.HANDLE_PROXY_HTTPS.length());
-        }
-        final Matcher matcher = URL_HOST_PATTERN.matcher(value);
-        if (matcher.find() && matcher.groupCount() > 0) {
-            return matcher.group(1);
+        if (PIDUtils.isHandle(value)) {
+            return PIDUtils.getSchemeSpecificId(value);
         } else {
-            return value;
+            //Find host in URL
+            final Matcher matcher = URL_HOST_PATTERN.matcher(value);
+            if (matcher.find() && matcher.groupCount() > 0) {
+                return matcher.group(1);
+            } else {
+                return value;
+            }
         }
     }
 

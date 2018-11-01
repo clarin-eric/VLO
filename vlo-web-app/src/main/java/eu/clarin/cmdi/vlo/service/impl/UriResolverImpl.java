@@ -17,7 +17,7 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PREFIX;
-import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY;
+import eu.clarin.cmdi.vlo.PIDUtils;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Resolves a URI as follows: if the URI starts with the handle scheme or the
  * handle proxy, the handle is extracted and passed on to this resolver's
- * {@link HandleResolver} and the result of {@link HandleResolver#resolve(java.net.URI) 
+ * {@link HandleResolver} and the result of {@link HandleResolver#resolve(java.net.URI)
  * } is returned (as String); otherwise the original URI is returned.
  *
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
@@ -46,7 +46,7 @@ public class UriResolverImpl implements UriResolver {
 
     @Override
     public String resolve(String uri) {
-        final String handle = getHandle(uri);
+        final String handle = PIDUtils.isHandle(uri) ? HANDLE_PREFIX + PIDUtils.getSchemeSpecificId(uri) : null;
 
         if (handle != null) {
             logger.debug("Calling handle client to resolve handle [{}]", uri);
@@ -63,17 +63,6 @@ public class UriResolverImpl implements UriResolver {
         }
         // not a resolvable handle
         return uri;
-
-    }
-
-    private String getHandle(String uri) {
-        if (uri.startsWith(HANDLE_PREFIX)) {
-            return uri;
-        } else if (uri.startsWith(HANDLE_PROXY)) {
-            return HANDLE_PREFIX + uri.substring(HANDLE_PROXY.length());
-        } else {
-            return null;
-        }
     }
 
 }
