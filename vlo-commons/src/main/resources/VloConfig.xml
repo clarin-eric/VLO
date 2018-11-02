@@ -92,12 +92,12 @@
         <field key="NATIONAL_PROJECT">nationalProject</field>
         <field key="RESOURCE_CLASS">resourceClass</field>
         <field key="RESOURCE">_resourceRef</field>
-        <field key="SELF_LINK">_selfLink</field>
         <field key="ID">id</field>
         <field key="DATA_PROVIDER">dataProvider</field>
         <field key="DATA_PROVIDER_NAME">dataProviderName</field>
         <field key="FILENAME">_fileName</field>
         <field key="FORMAT">format</field>
+        <field key="SELF_LINK">_selfLink</field>
         <field key="LANDINGPAGE">_landingPageRef</field>
         <field key="SEARCHPAGE">_searchPageRef</field>
         <field key="SEARCH_SERVICE">_contentSearchRef</field>
@@ -118,6 +118,7 @@
         <field key="LANGUAGE_NAME">_languageName</field>
         <field key="OAI_ENDPOINT_URI">_oaiEndpointURI</field>
         <field key="SIGNATURE">_signature</field>
+        <field key="RECORD_PID">recordPid</field>
     </fields>
 
     <deprecatedFields>
@@ -177,13 +178,19 @@
         <ignoredField>SIGNATURE</ignoredField>
         <ignoredField>TEMPORAL_COVERAGE</ignoredField>
         <ignoredField>PROJECT_NAME</ignoredField>
+        <ignoredField>RESOURCE</ignoredField>
+        <ignoredField>FILENAME</ignoredField>
+        <ignoredField>HAS_PART</ignoredField>
+        <ignoredField>RESOURCE_COUNT</ignoredField>
+        <ignoredField>DAYS_SINCE_LAST_SEEN</ignoredField>
+        <ignoredField>HAS_PART_COUNT_WEIGHT</ignoredField>
+        <ignoredField>LANGUAGE_NAME</ignoredField>
     </ignoredFields>
 
     <!-- KEYS of fields shown as technical fields in the record page -->
     <technicalFields>
         <technicalField>ID</technicalField>
         <technicalField>SELF_LINK</technicalField>
-        <technicalField>DATA_PROVIDER</technicalField>
         <technicalField>COMPLETE_METADATA</technicalField>
         <technicalField>LANDINGPAGE</technicalField>
         <technicalField>SEARCHPAGE</technicalField>

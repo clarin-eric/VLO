@@ -24,19 +24,25 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.DocumentField;
+import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.FacetSelectLink;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
+import eu.clarin.cmdi.vlo.wicket.components.PIDLabel;
 import eu.clarin.cmdi.vlo.wicket.components.SmartLinkFieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.OrderedListModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -74,40 +80,32 @@ public class FieldsTablePanel extends Panel {
      * {@link SmartLinkMultiLineLabel}, which detects URLs and turns them into
      * links
      */
-
-
     @SpringBean
     private VloConfig vloConfig;
     @SpringBean(name = "fieldValueSorters")
     private Map<String, Ordering> fieldValueOrderingMap;
-    @SpringBean 
+    @SpringBean
     private FieldNameService fieldNameService;
-    
+
     private final Collection<String> SMART_LINK_FIELDS;
 
     private IDataProvider<DocumentField> fieldProvider;
 
     public FieldsTablePanel(String id, IDataProvider<DocumentField> fieldProvider) {
         super(id);
-        
-        ImmutableSet.Builder<String> imb = ImmutableSet.builder();
-        
-        if(fieldNameService.getFieldName(FieldKey.DESCRIPTION) != null)
-        	imb.add(fieldNameService.getFieldName(FieldKey.DESCRIPTION));
-        if(fieldNameService.getFieldName(FieldKey.LANDINGPAGE) != null)
-        	imb.add(fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
-        if(fieldNameService.getFieldName(FieldKey.SEARCHPAGE) != null)
-        	imb.add(fieldNameService.getFieldName(FieldKey.SEARCHPAGE));
-        if(fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA) != null)
-        	imb.add(fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA));
-        if(fieldNameService.getFieldName(FieldKey.SELF_LINK) != null)
-        	imb.add(fieldNameService.getFieldName(FieldKey.SELF_LINK));
-        
 
-        this.SMART_LINK_FIELDS = imb.build();
-        
+        this.SMART_LINK_FIELDS = Stream.of(
+                FieldKey.DESCRIPTION,
+                FieldKey.LANDINGPAGE,
+                FieldKey.SEARCHPAGE,
+                FieldKey.COMPLETE_METADATA,
+                FieldKey.SELF_LINK
+        )
+                //existing fields (check) into a set
+                .map(fieldNameService::getFieldName).filter(Objects::nonNull)
+                .collect(Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet));
+
         this.fieldProvider = fieldProvider;
-        
     }
 
     private IModel<List<String>> createOrderedFieldValuesModel(final IModel<List<String>> valuesModel, final IModel<String> fieldNameModel) {
@@ -127,6 +125,8 @@ public class FieldsTablePanel extends Panel {
 
         if (fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE).equals(facetNameModel.getObject())) {
             return new LanguageInfoLink(id, valueModel, facetNameModel);
+        } else if (fieldNameService.getFieldName(FieldKey.RECORD_PID).equals(facetNameModel.getObject())) {
+            return new PIDLabel(id, valueModel);
         } else if (SMART_LINK_FIELDS.contains(fieldName)) {
             // create label that generates links
             return new SmartLinkFieldValueLabel(id, new HandleLinkModel(valueModel), facetNameModel);
@@ -164,7 +164,7 @@ public class FieldsTablePanel extends Panel {
     protected void onInitialize() {
         // TODO Auto-generated method stub
         super.onInitialize();
-        
+
         add(new DataView<DocumentField>("documentField", this.fieldProvider) {
 
             @Override
@@ -205,6 +205,20 @@ public class FieldsTablePanel extends Panel {
                         }
                     }
                 }));
+
+                //only show PID line if self link is PID
+                if (fieldNameModel.getObject().equals(fieldNameService.getFieldName(FieldKey.RECORD_PID))) {
+                    item.add(BooleanVisibilityBehavior.visibleOnTrue(new IsPidModel(new AbstractReadOnlyModel<String>() {
+                        @Override
+                        public String getObject() {
+                            if (valuesModel.getObject().size() > 0) {
+                                return valuesModel.getObject().get(0);
+                            } else {
+                                return null;
+                            }
+                        }
+                    })));
+                }
             }
         });
 
