@@ -237,7 +237,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             }
         });
         tabs.set(TABS_ORDER.indexOf(RESOURCES_SECTION), new AbstractTab(new StringResourceModel("recordpage.tabs.resources", // model to include resource count in tab title
-                new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT)))) {
+                new NullFallbackModel(new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT)),"?"))) {
             @Override
             public Panel getPanel(String panelId) {
                 return (new ResourceLinksPanel(panelId, getModel()) {
