@@ -97,15 +97,19 @@ public class CMDIDataSolrImpl extends CMDIDataBaseImpl<SolrInputDocument> {
         if (doc == null) {
             doc = new SolrInputDocument();
         }
-        if (value instanceof String && !((String) value).trim().isEmpty()) {
-            if (caseInsensitive) {
-                value = ((String) value).toLowerCase();
+        if (value != null) {
+            if (value instanceof String) {
+                if (((String) value).trim().isEmpty()) {
+                    return;
+                } else if (caseInsensitive) {
+                    value = ((String) value).toLowerCase();
+                }
             }
+            Collection<Object> fieldValues = doc.getFieldValues(name);
+            if (fieldValues == null || !fieldValues.contains(value)) {
+                doc.addField(name, value);
+            } // ignore double values don't add them
         }
-        Collection<Object> fieldValues = doc.getFieldValues(name);
-        if (fieldValues == null || !fieldValues.contains(value)) {
-            doc.addField(name, value);
-        } // ignore double values don't add them
     }
 
     @Override
