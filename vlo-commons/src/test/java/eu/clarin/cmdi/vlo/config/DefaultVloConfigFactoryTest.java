@@ -16,7 +16,7 @@ import static org.hamcrest.CoreMatchers.hasItems;
  */
 public class DefaultVloConfigFactoryTest {
 
-    public static final int IGNORED_FIELDS_COUNT = 6;
+    public static final int IGNORED_FIELDS_COUNT = 9;
     public static final int TECHNICAL_FIELDS_COUNT = 11;
     
     private VloConfig config;
