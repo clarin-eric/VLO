@@ -16,7 +16,7 @@ import static org.hamcrest.CoreMatchers.hasItems;
  */
 public class DefaultVloConfigFactoryTest {
 
-    public static final int IGNORED_FIELDS_COUNT = 7;
+    public static final int IGNORED_FIELDS_COUNT = 9;
     public static final int TECHNICAL_FIELDS_COUNT = 11;
 
     private VloConfig config;
@@ -59,15 +59,15 @@ public class DefaultVloConfigFactoryTest {
         List<DataRoot> dataRoots = Arrays.asList(
                 new DataRoot("MPI IMDI Archive",
                         new File("/lat/apache/htdocs/oai-harvester/mpi-self-harvest/harvested/results/cmdi/"),
-                        "http://catalog.clarin.eu/",
+                        "https://catalog.clarin.eu/",
                         "/lat/apache/htdocs/", false),
                 new DataRoot("CMDI Providers",
                         new File("/lat/apache/htdocs/oai-harvester/cmdi-providers/harvested/results/cmdi/"),
-                        "http://catalog.clarin.eu/",
+                        "https://catalog.clarin.eu/",
                         "/lat/apache/htdocs/", false),
                 new DataRoot("OLAC Metadata Providers",
                         new File("/lat/apache/htdocs/oai-harvester/olac-and-dc-providers/harvested/results/cmdi/"),
-                        "http://catalog.clarin.eu/",
+                        "https://catalog.clarin.eu/",
                         "/lat/apache/htdocs/", false));
 
         config.setDataRoots(dataRoots);
@@ -345,7 +345,7 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testGetComponentRegistryProfileSchema() {
-        String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/someId/xsd";
+        String expResult = "https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/someId/xsd";
         String result = config.getComponentRegistryProfileSchema("someId");
 
         assertEquals(expResult, result);
@@ -356,7 +356,7 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testGetComponentRegistryRESTURL() {
-        String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/";
+        String expResult = "https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/";
         String result = config.getComponentRegistryRESTURL();
 
         assertEquals(expResult, result);
@@ -367,7 +367,7 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testComponentRegistryRESTURL() {
-        String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/";
+        String param = "https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/";
         config.setComponentRegistryRESTURL(param);
         String result = config.getComponentRegistryRESTURL();
         assertEquals(param, result);
@@ -538,7 +538,7 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testCountryComponentUrl() {
-        String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438104/xml";
+        String expResult = "https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438104/xml";
         String result = config.getCountryComponentUrl();
 
         assertEquals(expResult, result);
@@ -549,7 +549,7 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetCountryComponentUrl() {
-        String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438104/xml";
+        String param = "https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438104/xml";
         config.setCountryComponentUrl(param);
         String result = config.getCountryComponentUrl();
         assertEquals(param, result);
@@ -560,7 +560,7 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testGetLanguage2LetterCodeComponentUrl() {
-        String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438109/xml";
+        String expResult = "https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438109/xml";
         String result = config.getLanguage2LetterCodeComponentUrl();
         assertEquals(expResult, result);
     }
@@ -570,7 +570,7 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetLanguage2LetterCodeComponentUrl() {
-        String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438109/xml";
+        String param = "https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438109/xml";
         config.setLanguage2LetterCodeComponentUrl(param);
         String result = config.getLanguage2LetterCodeComponentUrl();
         assertEquals(param, result);
@@ -581,7 +581,7 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testGetLanguage3LetterCodeComponentUrl() {
-        String expResult = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438110/xml";
+        String expResult = "https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438110/xml";
         String result = config.getLanguage3LetterCodeComponentUrl();
         assertEquals(expResult, result);
     }
@@ -591,7 +591,7 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetLanguage3LetterCodeComponentUrl() {
-        String param = "http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438110/xml";
+        String param = "https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438110/xml";
         config.setLanguage3LetterCodeComponentUrl(param);
         String result = config.getLanguage3LetterCodeComponentUrl();
         assertEquals(param, result);

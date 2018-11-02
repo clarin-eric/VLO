@@ -48,9 +48,9 @@
     <!-- leave empty to use default packaged definition -->
     <facetConceptsFile>${vloconfig.facetConceptsFileLocation}</facetConceptsFile>
 
-    <profileSchemaUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/{PROFILE_ID}/xsd</profileSchemaUrl>
+    <profileSchemaUrl>https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/{PROFILE_ID}/xsd</profileSchemaUrl>
 
-    <componentRegistryRESTURL>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/</componentRegistryRESTURL>
+    <componentRegistryRESTURL>https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/</componentRegistryRESTURL>
 
     <handleServerUrl>http://hdl.handle.net/</handleServerUrl>
 
@@ -175,6 +175,8 @@
         <ignoredField>LICENSE_TYPE</ignoredField>
         <ignoredField>ACCESS_INFO</ignoredField>
         <ignoredField>SIGNATURE</ignoredField>
+        <ignoredField>TEMPORAL_COVERAGE</ignoredField>
+        <ignoredField>PROJECT_NAME</ignoredField>
     </ignoredFields>
 
     <!-- KEYS of fields shown as technical fields in the record page -->
@@ -222,15 +224,15 @@
         </availabilityValue>
     </availability>
 
-    <countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
+    <countryComponentUrl>https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
 
     <languageLinkTemplate>https://infra.clarin.eu/content/language_info/data/{}.html</languageLinkTemplate>
 
     <feedbackFromUrl>${vloconfig.feedbackFromUrl}</feedbackFromUrl>
 
-    <language2LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438109/xml</language2LetterCodeComponentUrl>
+    <language2LetterCodeComponentUrl>https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438109/xml</language2LetterCodeComponentUrl>
 
-    <language3LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438110/xml</language3LetterCodeComponentUrl>
+    <language3LetterCodeComponentUrl>https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438110/xml</language3LetterCodeComponentUrl>
 
     <silToISO639CodesUrl>https://infra.clarin.eu/CMDI/1.1/xslt/sil_to_iso6393.xml</silToISO639CodesUrl>
 
