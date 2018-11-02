@@ -173,6 +173,9 @@
         <ignoredField>AVAILABILITY</ignoredField>
         <ignoredField>LICENSE_TYPE</ignoredField>
         <ignoredField>ACCESS_INFO</ignoredField>
+        <ignoredField>SIGNATURE</ignoredField>
+        <ignoredField>TEMPORAL_COVERAGE</ignoredField>
+        <ignoredField>PROJECT_NAME</ignoredField>
     </ignoredFields>
 
     <!-- KEYS of fields shown as technical fields in the record page -->
