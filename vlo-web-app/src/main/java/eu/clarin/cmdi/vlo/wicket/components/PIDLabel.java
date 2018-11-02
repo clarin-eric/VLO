@@ -34,6 +34,7 @@ public class PIDLabel extends GenericPanel<String> {
 
     private final IConverter<String> labelConverter;
     private final static IConverter<String> BADGE_CONVERTER = new PidBadgeLinkConverter();
+    private boolean hideLabel = false;
 
     /**
      *
@@ -76,9 +77,20 @@ public class PIDLabel extends GenericPanel<String> {
                         }
                     }
 
+                    @Override
+                    protected void onConfigure() {
+                        super.onConfigure();
+                        setVisible(!hideLabel);
+                    }
+
                 })
                 .add(new AttributeModifier("title", model))
         );
+    }
+
+    public PIDLabel setHideLabel(boolean hideLabel) {
+        this.hideLabel = hideLabel;
+        return this;
     }
 
     private static class PidBadgeLinkConverter implements IConverter<String> {

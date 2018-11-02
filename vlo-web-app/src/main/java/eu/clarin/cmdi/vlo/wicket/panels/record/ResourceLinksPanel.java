@@ -65,6 +65,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.wicket.components.PIDLabel;
+import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 
 /**
  * Panel that shows all resources represented by a collection of resource
@@ -73,11 +75,11 @@ import eu.clarin.cmdi.vlo.FieldKey;
  * @author twagoo
  */
 public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
-
+    
     private final static Logger logger = LoggerFactory.getLogger(ResourceLinksPanel.class);
-
+    
     private static final int ITEMS_PER_PAGE = 12;
-
+    
     @SpringBean
     private PiwikConfig piwikConfig;
     @SpringBean(name = "resourceStringConverter")
@@ -86,7 +88,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
     private ResourceStringConverter resolvingResourceStringConverter;
     @SpringBean
     private FieldNameService fieldNameService;
-
+    
     private final IModel<List<String>> detailsVisibleModel = new ListModel<>(new ArrayList<String>());
 
     /**
@@ -96,7 +98,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
      */
     public ResourceLinksPanel(String id, IModel<SolrDocument> documentModel) {
         super(id, documentModel);
-
+        
         final SolrFieldModel<String> resourcesModel
                 = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE));
         final IModel<String> landingPageModel
@@ -113,28 +115,28 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
         // pagination
         add(new BootstrapAjaxPagingNavigator("paging", resourceListing) {
-
+            
             @Override
             protected void onConfigure() {
                 setVisible(resourceListing.getPageCount() > 1);
             }
-
+            
         });
-
+        
         add(new MarkupContainer("noResources") {
-
+            
             @Override
             protected void onConfigure() {
                 setVisible(resourceListing.getPageCount() == 0);
             }
-
+            
         }
                 .add(new WebMarkupContainer("landingPageContainer") {
                     @Override
                     protected void onConfigure() {
                         setVisible(landingPageModel.getObject() != null);
                     }
-
+                    
                 }.add(new ExternalLink("landingPageLink", landingPageModel)))
                 .add(new WebMarkupContainer("hierarchyLinkContainer") {
                     @Override
@@ -152,37 +154,37 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         setOutputMarkupId(true);
     }
     private final WebMarkupContainer resourcesTable;
-
+    
     private WebMarkupContainer createResourcesTable(String id, final ResourcesListView resourceListing) {
         final WebMarkupContainer resourceListContainer = new WebMarkupContainer(id) {
             @Override
             protected void onConfigure() {
                 setVisible(resourceListing.getPageCount() > 0);
             }
-
+            
         };
         //add the actual listing
         resourceListContainer.add(resourceListing);
-
+        
         resourceListContainer.setOutputMarkupId(true);
         return resourceListContainer;
     }
-
+    
     private class ResourcesListView extends PageableListView<String> {
-
+        
         public ResourcesListView(String id, IModel<? extends List<String>> model) {
             super(id, model, ITEMS_PER_PAGE);
             setReuseItems(true);
         }
-
+        
         @Override
         protected void populateItem(ListItem<String> item) {
             final Model<Integer> itemIndexModel = Model.of(item.getIndex());
-
+            
             final MarkupContainer columns = new WebMarkupContainer("itemColumns");
             columns.add(new EvenOddClassAppender(itemIndexModel));
             item.add(columns);
-
+            
             final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(resourceStringConverter, item.getModel());
             item.setDefaultModel(new CompoundPropertyModel<>(resourceInfoModel));
 
@@ -199,22 +201,29 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                     //hide if no absolute link could be resolved for the resource (see label below for fallback)
                     setVisible(linkModel.getObject() != null);
                 }
-
+                
             };
 
             // set the file name as the link's text content
             link.add(new Label("fileName", new PropertyModel(resourceInfoModel, "fileName")));
             // make the link update via AJAX with resolved location (in case of handle)
             link.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
-
+                
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
                     target.add(link);
                 }
             });
-
+            
             link.setOutputMarkupId(true);
             columns.add(link);
+            
+            // pid label
+            columns.add(new PIDLabel("pidLabel", linkModel)
+                    //make compact
+                    .setHideLabel(true)
+                    //show only if pid
+                    .add(BooleanVisibilityBehavior.visibleOnTrue(new IsPidModel(linkModel))));
 
             // Fallback label if no absolute link could be determined
             columns.add(new WebMarkupContainer("fileNameNotResolvable") {
@@ -223,7 +232,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                     super.onConfigure();
                     setVisible(linkModel.getObject() == null);
                 }
-
+                
             }.add(new Label("fileName", new PropertyModel(resourceInfoModel, "fileName"))));
 
             // get the friendly name of the resource type dynamically from the resource bundle
@@ -242,48 +251,48 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                     .add(new WebMarkupContainer("show").add(BooleanVisibilityBehavior.visibleOnFalse(itemDetailsShownModel)))
                     .add(new WebMarkupContainer("hide").add(BooleanVisibilityBehavior.visibleOnTrue(itemDetailsShownModel)))
             );
-
+            
             item.add(new WebMarkupContainer("detailsColumns")
                     .add(new Label("mimeType"))
                     .add(new Label("href"))
                     .add(BooleanVisibilityBehavior.visibleOnTrue(itemDetailsShownModel))
                     .add(new EvenOddClassAppender(itemIndexModel))
             );
-
+            
             columns.add(createOptionsDropdown(linkModel, resourceInfoModel));
         }
-
+        
         protected Component createOptionsDropdown(final IModel<String> linkModel, final ResourceInfoModel resourceInfoModel) {
             final List<DropdownMenuItem> options = createDropDownOptions(linkModel, resourceInfoModel);
-
+            
             return new BootstrapDropdown("dropdown", new ListModel(options)) {
                 @Override
                 protected Serializable getButtonClass() {
                     return null; //render as link, not button
                 }
-
+                
                 @Override
                 protected Serializable getButtonIconClass() {
                     return "glyphicon glyphicon-option-horizontal";
                 }
-
+                
                 @Override
                 protected boolean showCaret() {
                     return false;
                 }
-
+                
             };
         }
-
+        
         private List<DropdownMenuItem> createDropDownOptions(final IModel<String> linkModel, final ResourceInfoModel resourceInfoModel) {
             return Lists.newArrayList(new DropdownMenuItem("Process with Language Resource Switchboard", "glyphicon glyphicon-open-file") {
                 @Override
                 protected Link getLink(String id) {
                     final IModel<Collection<Object>> languageValuesModel
                             = new SolrFieldModel<>(ResourceLinksPanel.this.getModel(), fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE));
-
+                    
                     final Link link = new LanguageResourceSwitchboardLink(id, linkModel, languageValuesModel, resourceInfoModel);
-
+                    
                     if (piwikConfig.isEnabled()) {
                         link.add(createLrsActionTrackingBehavior(resourceInfoModel));
                     }
@@ -292,34 +301,34 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             }
             );
         }
-
+        
     }
-
+    
     private AjaxPiwikTrackingBehavior.EventTrackingBehavior createLrsActionTrackingBehavior(final ResourceInfoModel resourceInfoModel) {
         final AjaxPiwikTrackingBehavior.EventTrackingBehavior eventBehavior = new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_LRS, PiwikEventConstants.PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE) {
             @Override
             protected String getName(AjaxRequestTarget target) {
                 return "ResourceDropdown";
             }
-
+            
             @Override
             protected String getValue(AjaxRequestTarget target) {
                 return resourceInfoModel.getObject().getHref();
             }
-
+            
             @Override
             protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
                 attributes.setAsynchronous(false);
                 super.updateAjaxAttributes(attributes);
             }
-
+            
         };
         eventBehavior.setAsync(false);
         return eventBehavior;
     }
-
+    
     public static class EvenOddClassAppender extends AttributeAppender {
-
+        
         public EvenOddClassAppender(final IModel<Integer> indexModel) {
             super("class", new AbstractReadOnlyModel<String>() {
                 @Override
@@ -328,33 +337,33 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                 }
             }, " ");
         }
-
+        
     }
-
+    
     private class ResourceDetailsToggleLink extends AjaxFallbackLink<String> {
-
+        
         public ResourceDetailsToggleLink(String id, IModel<String> idModel) {
             super(id, idModel);
         }
-
+        
         @Override
         public void onClick(AjaxRequestTarget target) {
             final String id = getModel().getObject();
-
+            
             final List<String> visible = detailsVisibleModel.getObject();
             if (visible.contains(id)) {
                 visible.remove(id);
             } else {
                 visible.add(id);
             }
-
+            
             if (target != null) {
                 target.add(resourcesTable);
             }
         }
-
+        
     }
-
+    
     protected abstract void switchToTab(String tab, AjaxRequestTarget target);
-
+    
 }

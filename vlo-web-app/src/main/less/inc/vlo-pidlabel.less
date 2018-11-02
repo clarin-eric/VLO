@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     border-color: @pid-label-border-color;
     border-radius: 4px;
     white-space: nowrap;
+    margin-right: .3em;
 
     .pid-label-badge {
         padding: 0 .5em;
@@ -39,6 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* hover behaviour when the label is (in) a link */
 a .pid-label:hover, a.pid-label:hover {
     border-color: darken(@pid-label-border-color, 5%);
+    text-decoration: none;
 
     .pid-label-badge {
         background: darken(@pid-label-badge-color, 5%);
