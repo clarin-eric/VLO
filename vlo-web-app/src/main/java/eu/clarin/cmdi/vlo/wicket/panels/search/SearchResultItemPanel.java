@@ -37,7 +37,6 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
-import eu.clarin.cmdi.vlo.wicket.components.PIDBadge;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLabel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
