@@ -27,6 +27,7 @@ public class FacetConstants {
     public static final String FIELD_RESOURCE_SPLIT_CHAR = "|";
     public static final String URN_NBN_PREFIX = "urn:nbn";
     public static final String URN_NBN_RESOLVER_URL = "http://www.nbn-resolving.org/redirect/urn:nbn:";
+    public static final String DOI_RESOLVER_URL = "https://doi.org/";
 
     /**
      * regular expression that matches the language prefix in description (group

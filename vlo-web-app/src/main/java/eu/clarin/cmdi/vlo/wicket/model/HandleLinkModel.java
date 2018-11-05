@@ -16,18 +16,23 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
+import static eu.clarin.cmdi.vlo.FacetConstants.DOI_RESOLVER_URL;
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY;
 import static eu.clarin.cmdi.vlo.FacetConstants.URN_NBN_RESOLVER_URL;
 import eu.clarin.cmdi.vlo.PIDUtils;
+import java.util.regex.Pattern;
 import org.apache.wicket.model.IModel;
 
 /**
- * Model that takes a link from an inner model and in case of a handle (any link
- * starting with "hdl:"), will replace the scheme with the handle proxy base URL
+ * Model that takes a link from an inner model and in case of a pid , will
+ * replace the scheme with the resolver URL
  *
  * @author twagoo
+ * @see PIDUtils
  */
 public class HandleLinkModel implements IModel<String> {
+
+    private final static Pattern ACTIONABLE_LINK_PATTERN = Pattern.compile("^https?:\\/\\/", Pattern.CASE_INSENSITIVE);
 
     private final IModel<String> linkModel;
 
@@ -38,9 +43,12 @@ public class HandleLinkModel implements IModel<String> {
     @Override
     public String getObject() {
         final String link = linkModel.getObject();
-        if (link != null) {
+        if (link != null && !ACTIONABLE_LINK_PATTERN.matcher(link).find()) {
             if (PIDUtils.isHandle(link)) {
                 return HANDLE_PROXY + PIDUtils.getSchemeSpecificId(link);
+            }
+            if (PIDUtils.isDoi(link)) {
+                return DOI_RESOLVER_URL + PIDUtils.getSchemeSpecificId(link);
             }
             if (PIDUtils.isUrnNbn(link)) {
                 return URN_NBN_RESOLVER_URL + PIDUtils.getSchemeSpecificId(link);
