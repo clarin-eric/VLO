@@ -30,6 +30,10 @@ import org.apache.wicket.util.convert.IConverter;
  */
 public class PIDLabel extends GenericPanel<String> {
 
+    private static final String HDL_LABEL = "HDL";
+    private static final String DOI_LABEL = "DOI";
+    private static final String OTHER_LABEL = "WWW";
+
     private final IConverter<String> labelConverter;
     private final static IConverter<String> BADGE_CONVERTER = new PidBadgeLinkConverter();
     private boolean hideLabel = false;
@@ -65,7 +69,7 @@ public class PIDLabel extends GenericPanel<String> {
             }
 
         });
-        
+
         add(new Label("label", model) {
             @Override
             public <C> IConverter<C> getConverter(Class<C> type) {
@@ -95,9 +99,11 @@ public class PIDLabel extends GenericPanel<String> {
         @Override
         public String convertToString(String value, Locale locale) {
             if (PIDUtils.isHandle(value)) {
-                return "HDL";
+                return HDL_LABEL;
+            } else if (PIDUtils.isDoi(value)) {
+                return DOI_LABEL;
             } else {
-                return "WWW";
+                return OTHER_LABEL;
             }
         }
 
