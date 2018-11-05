@@ -9,6 +9,7 @@ nbactions*
 nbproject*
 .DS_Store
 *~
+/vlo-solr/solr-home/security.json
 /vlo-sitemap/target/
 /vlo-statistics/target/
 /target/
