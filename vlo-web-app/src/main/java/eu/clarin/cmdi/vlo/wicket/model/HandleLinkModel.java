@@ -16,10 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PREFIX;
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY;
-import static eu.clarin.cmdi.vlo.FacetConstants.URN_NBN_PREFIX;
 import static eu.clarin.cmdi.vlo.FacetConstants.URN_NBN_RESOLVER_URL;
+import eu.clarin.cmdi.vlo.PIDUtils;
 import org.apache.wicket.model.IModel;
 
 /**
@@ -40,11 +39,11 @@ public class HandleLinkModel implements IModel<String> {
     public String getObject() {
         final String link = linkModel.getObject();
         if (link != null) {
-            if (link.toLowerCase().startsWith(HANDLE_PREFIX)) {
-                return HANDLE_PROXY + link.substring(HANDLE_PREFIX.length());
+            if (PIDUtils.isHandle(link)) {
+                return HANDLE_PROXY + PIDUtils.getSchemeSpecificId(link);
             }
-            if (link.toLowerCase().startsWith(URN_NBN_PREFIX)) {
-                return URN_NBN_RESOLVER_URL + link;
+            if (PIDUtils.isUrnNbn(link)) {
+                return URN_NBN_RESOLVER_URL + PIDUtils.getSchemeSpecificId(link);
             }
         }
         return link;

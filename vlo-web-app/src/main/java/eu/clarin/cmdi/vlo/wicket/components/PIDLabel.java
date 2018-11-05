@@ -32,6 +32,7 @@ public class PIDLabel extends GenericPanel<String> {
 
     private static final String HDL_LABEL = "HDL";
     private static final String DOI_LABEL = "DOI";
+    private static final String URN_NBN_LABEL = "URN-NBN";
     private static final String OTHER_LABEL = "WWW";
 
     private final IConverter<String> labelConverter;
@@ -102,6 +103,8 @@ public class PIDLabel extends GenericPanel<String> {
                 return HDL_LABEL;
             } else if (PIDUtils.isDoi(value)) {
                 return DOI_LABEL;
+            } else if (PIDUtils.isUrnNbn(value)) {
+                return URN_NBN_LABEL;
             } else {
                 return OTHER_LABEL;
             }
