@@ -20,16 +20,22 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * TODO: recognise DOI, URN-NBN
+ * TODO: support URN-NBN
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class PIDUtils {
 
-    public final static String HANDLE_PATTERN_STRING = "(hdl:|https?://hdl.handle.net/)(.+)";
+    public final static String HANDLE_PATTERN_STRING = "(hdl:|https?:\\/\\/hdl.handle.net\\/)(.+)";
     public final static int HANDLE_SCHEME_SPECIFIC_PART_GROUP = 2;
     public final static Pattern HANDLE_PATTERN = Pattern.compile(HANDLE_PATTERN_STRING, Pattern.CASE_INSENSITIVE);
-    public final static Pattern PID_PATTERN = Pattern.compile(HANDLE_PATTERN_STRING, Pattern.CASE_INSENSITIVE);
+
+    public final static String DOI_PATTERN_STRING = "(doi:|https?:\\/\\/(dx.)?doi.org\\/)(.+)";
+    public final static int DOI_SCHEME_SPECIFIC_PART_GROUP = 3;
+    public final static Pattern DOI_PATTERN = Pattern.compile(DOI_PATTERN_STRING, Pattern.CASE_INSENSITIVE);
+
+    //PID: HDL or DOI
+    public final static Pattern PID_PATTERN = Pattern.compile("^(" + HANDLE_PATTERN_STRING + "|" + DOI_PATTERN_STRING + ")$", Pattern.CASE_INSENSITIVE);
 
     /**
      *
@@ -60,15 +66,38 @@ public class PIDUtils {
     /**
      *
      * @param uri
+     * @return whether the provided URI is a handle
+     */
+    public static boolean isDoi(String uri) {
+        if (uri == null) {
+            return false;
+        } else {
+            return DOI_PATTERN.matcher(uri).matches();
+        }
+    }
+
+    /**
+     *
+     * @param uri
      * @return the scheme specific part of the URI, for example '1234/56' for
      * 'hdl:1234/56' or 'http://dx.doi.org/1234/56'; if no scheme specific part
      * is found, null will be returned
      */
     public static String getSchemeSpecificId(String uri) {
         if (uri != null) {
-            final Matcher matcher = HANDLE_PATTERN.matcher(uri);
-            if (matcher.matches() && matcher.groupCount() >= HANDLE_SCHEME_SPECIFIC_PART_GROUP) {
-                return matcher.group(HANDLE_SCHEME_SPECIFIC_PART_GROUP);
+            //Handle?
+            {
+                final Matcher matcher = HANDLE_PATTERN.matcher(uri);
+                if (matcher.matches() && matcher.groupCount() >= HANDLE_SCHEME_SPECIFIC_PART_GROUP) {
+                    return matcher.group(HANDLE_SCHEME_SPECIFIC_PART_GROUP);
+                }
+            }
+            //DOI?
+            {
+                final Matcher matcher = DOI_PATTERN.matcher(uri);
+                if (matcher.matches() && matcher.groupCount() >= DOI_SCHEME_SPECIFIC_PART_GROUP) {
+                    return matcher.group(DOI_SCHEME_SPECIFIC_PART_GROUP);
+                }
             }
         }
         return null;
