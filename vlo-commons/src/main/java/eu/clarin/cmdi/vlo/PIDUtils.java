@@ -20,7 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * TODO: support URN-NBN
+ * Utils for detecting and processing persistent identifiers such as Handles, DOIs and URN-NBNs
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
@@ -34,8 +34,12 @@ public class PIDUtils {
     public final static int DOI_SCHEME_SPECIFIC_PART_GROUP = 3;
     public final static Pattern DOI_PATTERN = Pattern.compile(DOI_PATTERN_STRING, Pattern.CASE_INSENSITIVE);
 
+    public final static String URN_NBN_PATTERN_STRING = "(https?:\\/\\/(urn.fi|nbn-resolving.de)\\/)?urn:nbn:(.+)";
+    public final static int URN_NBN_SCHEME_SPECIFIC_PART_GROUP = 3;
+    public final static Pattern URN_NBN_PATTERN = Pattern.compile(URN_NBN_PATTERN_STRING, Pattern.CASE_INSENSITIVE);
+
     //PID: HDL or DOI
-    public final static Pattern PID_PATTERN = Pattern.compile("^(" + HANDLE_PATTERN_STRING + "|" + DOI_PATTERN_STRING + ")$", Pattern.CASE_INSENSITIVE);
+    public final static Pattern PID_PATTERN = Pattern.compile("^(" + HANDLE_PATTERN_STRING + "|" + DOI_PATTERN_STRING + "|" + URN_NBN_PATTERN_STRING + ")$", Pattern.CASE_INSENSITIVE);
 
     /**
      *
@@ -79,6 +83,19 @@ public class PIDUtils {
     /**
      *
      * @param uri
+     * @return whether the provided URI is a handle
+     */
+    public static boolean isUrnNbn(String uri) {
+        if (uri == null) {
+            return false;
+        } else {
+            return URN_NBN_PATTERN.matcher(uri).matches();
+        }
+    }
+
+    /**
+     *
+     * @param uri
      * @return the scheme specific part of the URI, for example '1234/56' for
      * 'hdl:1234/56' or 'http://dx.doi.org/1234/56'; if no scheme specific part
      * is found, null will be returned
@@ -97,6 +114,13 @@ public class PIDUtils {
                 final Matcher matcher = DOI_PATTERN.matcher(uri);
                 if (matcher.matches() && matcher.groupCount() >= DOI_SCHEME_SPECIFIC_PART_GROUP) {
                     return matcher.group(DOI_SCHEME_SPECIFIC_PART_GROUP);
+                }
+            }
+            //URN-NBN?
+            {
+                final Matcher matcher = URN_NBN_PATTERN.matcher(uri);
+                if (matcher.matches() && matcher.groupCount() >= URN_NBN_SCHEME_SPECIFIC_PART_GROUP) {
+                    return matcher.group(URN_NBN_SCHEME_SPECIFIC_PART_GROUP);
                 }
             }
         }

@@ -47,6 +47,13 @@ public class PIDUtilsTest {
                     "https://dx.doi.org/123/456",
                     "https://DX.doi.ORG/123/456");
 
+    private final static List<String> VALID_URN_NBNS
+            = ImmutableList.of(
+                    "urn:nbn:de:bvb:19-146642",
+                    "urn:nbn:fi:lb-2015120101",
+                    "http://urn.fi/urn:nbn:fi:lb-2017021504",
+                    "http://nbn-resolving.de/urn:nbn:de:kobv:b4-200905195090");
+
     private final static List<String> NOT_PIDS
             = ImmutableList.of(
                     "",
@@ -57,10 +64,20 @@ public class PIDUtilsTest {
             = ImmutableList.of(
                     "",
                     "doi:10.1038/nphys1170",
-                    "http://dx.doi.org/10.1038/nphys1170");
+                    "http://dx.doi.org/10.1038/nphys1170",
+                    "urn:nbn:de:bvb:19-146642");
 
     private final static List<String> NOT_DOIS
             = ImmutableList.of(
+                    "hdl:123/456",
+                    "http://hdl.handle.net/123/456",
+                    "https://hdl.handle.net/123/456",
+                    "urn:nbn:de:bvb:19-146642");
+
+    private final static List<String> NOT_URN_NBNS
+            = ImmutableList.of(
+                    "doi:10.1038/nphys1170",
+                    "http://dx.doi.org/10.1038/nphys1170",
                     "hdl:123/456",
                     "http://hdl.handle.net/123/456",
                     "https://hdl.handle.net/123/456");
@@ -72,6 +89,7 @@ public class PIDUtilsTest {
     public void testIsPid() {
         VALID_HANDLES.forEach(h -> assertTrue(h, PIDUtils.isPid(h)));
         VALID_DOIS.forEach(h -> assertTrue(h, PIDUtils.isPid(h)));
+        VALID_URN_NBNS.forEach(h -> assertTrue(h, PIDUtils.isPid(h)));
 
         //negatives
         NOT_PIDS.forEach(h -> assertFalse(h, PIDUtils.isPid(h)));
@@ -104,6 +122,19 @@ public class PIDUtilsTest {
         assertFalse("null", PIDUtils.isDoi(null));
     }
 
+    /**
+     * Test of isHandle method, of class PIDUtils.
+     */
+    @Test
+    public void testIsUrnNbn() {
+        VALID_URN_NBNS.forEach(h -> assertTrue(h, PIDUtils.isUrnNbn(h)));
+
+        //negatives
+        NOT_URN_NBNS.forEach(h -> assertFalse(h, PIDUtils.isUrnNbn(h)));
+        NOT_PIDS.forEach(h -> assertFalse(h, PIDUtils.isUrnNbn(h)));
+        assertFalse("null", PIDUtils.isUrnNbn(null));
+    }
+
     @Test
     public void testGetSchemeSpecificId() {
         VALID_HANDLES.forEach(h -> assertNotNull(PIDUtils.getSchemeSpecificId(h)));
@@ -115,6 +146,11 @@ public class PIDUtilsTest {
         assertEquals("1234/5678", PIDUtils.getSchemeSpecificId("doi:1234/5678"));
         assertEquals("1234/5678", PIDUtils.getSchemeSpecificId("http://DOI.org/1234/5678"));
         assertEquals("1234/5678", PIDUtils.getSchemeSpecificId("HTTPS://dx.doi.org/1234/5678"));
+
+        VALID_URN_NBNS.forEach(h -> assertNotNull(PIDUtils.getSchemeSpecificId(h)));
+        assertEquals("fi:1234/5678", PIDUtils.getSchemeSpecificId("urn:nbn:fi:1234/5678"));
+        assertEquals("fi:1234/5678", PIDUtils.getSchemeSpecificId("http://urn.fi/urn:nbn:fi:1234/5678"));
+        assertEquals("de:123:456", PIDUtils.getSchemeSpecificId("http://nbn-resolving.de/urn:nbn:de:123:456"));
 
         //negatives
         NOT_PIDS.forEach(h -> assertNull(PIDUtils.getSchemeSpecificId(h)));
