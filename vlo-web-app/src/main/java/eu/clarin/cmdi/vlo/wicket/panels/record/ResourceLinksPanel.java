@@ -65,7 +65,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.FieldKey;
-import eu.clarin.cmdi.vlo.wicket.components.PIDLabel;
+import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 
 /**
@@ -219,7 +219,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             columns.add(link);
             
             // pid label
-            columns.add(new PIDLabel("pidLabel", linkModel)
+            columns.add(new PIDLinkLabel("pidLabel", linkModel)
                     //make compact
                     .setHideLabel(true)
                     //show only if pid

@@ -37,7 +37,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
-import eu.clarin.cmdi.vlo.wicket.components.PIDLabel;
+import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import org.apache.solr.common.SolrDocument;
@@ -234,7 +234,7 @@ public class SearchResultItemPanel extends Panel {
 
         return new WebMarkupContainer(id)
                 .add(new ExternalLink("landingPageLink", new HandleLinkModel(landingPageLinkModel))
-                        .add(new PIDLabel("landingPagePidLabel", landingPageLinkModel)
+                        .add(new PIDLinkLabel("landingPagePidLabel", landingPageLinkModel)
                                 .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel))
                         )
                         .add(new Label("landingPageLinkLabel", landingPageLinkModel) {

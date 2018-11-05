@@ -46,7 +46,7 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
-import eu.clarin.cmdi.vlo.wicket.components.PIDLabel;
+import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 
 /**
@@ -147,7 +147,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
                 .add(new ExternalLink("landingPageLink", linkModel)
                         .add(new Label("landingPageLinkLabel", linkModel)
                                 .add(BooleanVisibilityBehavior.visibleOnFalse(isPidModel))))
-                .add(new PIDLabel("landingPagePidLabel", linkModel, PID_LABEL_TEXT_LENGTH)
+                .add(new PIDLinkLabel("landingPagePidLabel", linkModel, PID_LABEL_TEXT_LENGTH)
                         .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel)));
     }
 
@@ -174,7 +174,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
         );
 
         resourceInfo
-                .add(new PIDLabel("pidLabel", linkModel, PID_LABEL_TEXT_LENGTH)
+                .add(new PIDLinkLabel("pidLabel", linkModel, PID_LABEL_TEXT_LENGTH)
                         .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel)));
 
         // Resource info gets async update to resolve any handle to a file name

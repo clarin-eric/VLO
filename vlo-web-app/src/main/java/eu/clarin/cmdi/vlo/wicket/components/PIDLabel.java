@@ -18,9 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.PIDUtils;
 import java.util.Locale;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.ConversionException;
@@ -55,37 +53,36 @@ public class PIDLabel extends GenericPanel<String> {
     public PIDLabel(String id, IModel<String> model, int maxLinkLength) {
         super(id, model);
         labelConverter = new PidLabelLinkConverter(maxLinkLength);
-        add(new ExternalLink("link", model)
-                .add(new Label("badge", model) {
-                    @Override
-                    public <C> IConverter<C> getConverter(Class<C> type) {
-                        if (type.equals(String.class)) {
-                            return (IConverter<C>) BADGE_CONVERTER;
-                        } else {
-                            return super.getConverter(type);
-                        }
-                    }
 
-                })
-                .add(new Label("label", model) {
-                    @Override
-                    public <C> IConverter<C> getConverter(Class<C> type) {
-                        if (type.equals(String.class)) {
-                            return (IConverter<C>) labelConverter;
-                        } else {
-                            return super.getConverter(type);
-                        }
-                    }
+        add(new Label("badge", model) {
+            @Override
+            public <C> IConverter<C> getConverter(Class<C> type) {
+                if (type.equals(String.class)) {
+                    return (IConverter<C>) BADGE_CONVERTER;
+                } else {
+                    return super.getConverter(type);
+                }
+            }
 
-                    @Override
-                    protected void onConfigure() {
-                        super.onConfigure();
-                        setVisible(!hideLabel);
-                    }
+        });
+        
+        add(new Label("label", model) {
+            @Override
+            public <C> IConverter<C> getConverter(Class<C> type) {
+                if (type.equals(String.class)) {
+                    return (IConverter<C>) labelConverter;
+                } else {
+                    return super.getConverter(type);
+                }
+            }
 
-                })
-                .add(new AttributeModifier("title", model))
-        );
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(!hideLabel);
+            }
+
+        });
     }
 
     public PIDLabel setHideLabel(boolean hideLabel) {
@@ -102,7 +99,6 @@ public class PIDLabel extends GenericPanel<String> {
             } else {
                 return "WWW";
             }
-
         }
 
         @Override
