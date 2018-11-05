@@ -25,6 +25,7 @@ import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
+import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermScriptFactory;
 import eu.clarin.cmdi.vlo.wicket.components.FacetSelectLink;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
@@ -37,6 +38,8 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.components.PIDBadge;
+import eu.clarin.cmdi.vlo.wicket.components.PIDLabel;
+import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
@@ -228,10 +231,13 @@ public class SearchResultItemPanel extends Panel {
     private Component createLandingPageLinkContainer(String id, IModel<SolrDocument> documentModel) {
         final String landingPageField = fieldNameService.getFieldName(FieldKey.LANDINGPAGE);
         final SolrFieldStringModel landingPageLinkModel = new SolrFieldStringModel(documentModel, landingPageField);
+        final IModel<Boolean> isPidModel = new IsPidModel(landingPageLinkModel);
 
         return new WebMarkupContainer(id)
                 .add(new ExternalLink("landingPageLink", new HandleLinkModel(landingPageLinkModel))
-                        .add(new PIDBadge("landingPageLinkHandleBadge", landingPageLinkModel))
+                        .add(new PIDLabel("landingPagePidLabel", landingPageLinkModel)
+                                .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel))
+                        )
                         .add(new Label("landingPageLinkLabel", landingPageLinkModel) {
                             @Override
                             public <C> IConverter<C> getConverter(Class<C> type) {
@@ -242,7 +248,7 @@ public class SearchResultItemPanel extends Panel {
                                 }
                             }
 
-                        })
+                        }.add(BooleanVisibilityBehavior.visibleOnFalse(isPidModel)))
                 )
                 .add(new Behavior() {
                     @Override
