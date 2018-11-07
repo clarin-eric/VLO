@@ -30,13 +30,13 @@ import org.apache.wicket.model.IModel;
  * @author twagoo
  * @see PIDUtils
  */
-public class HandleLinkModel implements IModel<String> {
+public class PIDLinkModel implements IModel<String> {
 
     private final static Pattern ACTIONABLE_LINK_PATTERN = Pattern.compile("^https?:\\/\\/", Pattern.CASE_INSENSITIVE);
 
     private final IModel<String> linkModel;
 
-    public HandleLinkModel(IModel<String> linkModel) {
+    public PIDLinkModel(IModel<String> linkModel) {
         this.linkModel = linkModel;
     }
 
@@ -65,5 +65,19 @@ public class HandleLinkModel implements IModel<String> {
     @Override
     public void detach() {
         linkModel.detach();
+    }
+
+    /**
+     *
+     * @param model
+     * @return model if it is a PIDLinkModel, otherwise a new PIDLinkModel that
+     * wraps provided model
+     */
+    public final static PIDLinkModel wrapLinkModel(IModel<String> model) {
+        if (model instanceof PIDLinkModel) {
+            return (PIDLinkModel) model;
+        } else {
+            return new PIDLinkModel(model);
+        }
     }
 }

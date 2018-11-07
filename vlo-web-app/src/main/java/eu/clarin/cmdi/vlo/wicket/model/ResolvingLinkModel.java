@@ -81,7 +81,7 @@ public class ResolvingLinkModel implements IModel<String> {
 
     /**
      * Creates a resolving link model that takes the href out of a resource info
-     * model and wraps it in a {@link HandleLinkModel} so that 'hdl' links and
+     * model and wraps it in a {@link PIDLinkModel} so that 'hdl' links and
      * relative URLs are resolved to actionable links (if possible)
      *
      * @param resourceInfoModel model for resource to create link for
@@ -93,7 +93,7 @@ public class ResolvingLinkModel implements IModel<String> {
                 //URI to resolve against
                 new SolrFieldStringModel(documentModel, VloWicketApplication.get().getFieldNameService().getFieldName(FieldKey.SELF_LINK)),
                 //URI of link to resolve (potentially)
-                new HandleLinkModel(new PropertyModel(resourceInfoModel, "href")));
+                new PIDLinkModel(new PropertyModel(resourceInfoModel, "href")));
     }
 
     @Override

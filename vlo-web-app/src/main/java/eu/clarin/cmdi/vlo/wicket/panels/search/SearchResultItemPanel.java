@@ -33,7 +33,7 @@ import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
-import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
@@ -233,7 +233,7 @@ public class SearchResultItemPanel extends Panel {
         final IModel<Boolean> isPidModel = new IsPidModel(landingPageLinkModel);
 
         return new WebMarkupContainer(id)
-                .add(new ExternalLink("landingPageLink", new HandleLinkModel(landingPageLinkModel))
+                .add(new ExternalLink("landingPageLink", new PIDLinkModel(landingPageLinkModel))
                         .add(new PIDLabel("landingPagePidLabel", landingPageLinkModel)
                                 .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel))
                         )

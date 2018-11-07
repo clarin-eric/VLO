@@ -47,6 +47,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 
 /**

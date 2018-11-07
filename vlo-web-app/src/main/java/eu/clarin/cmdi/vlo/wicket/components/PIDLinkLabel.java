@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
+import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.IModel;
@@ -47,9 +48,9 @@ public class PIDLinkLabel extends Panel {
      */
     public PIDLinkLabel(String id, IModel<String> model, int maxLinkLength) {
         super(id);
-        
+
         this.pidLabel = new PIDLabel("label", model, maxLinkLength);
-        add(new ExternalLink("link", model)
+        add(new ExternalLink("link", PIDLinkModel.wrapLinkModel(model))
                 .add(pidLabel)
                 .add(new AttributeModifier("title", model)));
     }

@@ -29,7 +29,7 @@ import eu.clarin.cmdi.vlo.wicket.components.FacetSelectLink;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.components.SmartLinkFieldValueLabel;
-import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.OrderedListModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
@@ -129,7 +129,7 @@ public class FieldsTablePanel extends Panel {
             return new PIDLinkLabel(id, valueModel);
         } else if (SMART_LINK_FIELDS.contains(fieldName)) {
             // create label that generates links
-            return new SmartLinkFieldValueLabel(id, new HandleLinkModel(valueModel), facetNameModel);
+            return new SmartLinkFieldValueLabel(id, new PIDLinkModel(valueModel), facetNameModel);
         } else {
             // add a label for the facet value
             final Label fieldLabel = new FieldValueLabel(id, valueModel, facetNameModel);

@@ -48,7 +48,7 @@ public class HandleLinkModelTest {
     @Test
     public void testGetObjectWithUrl() {
         final IModel<String> inner = context.mock(IModel.class, "String");
-        final HandleLinkModel instance = new HandleLinkModel(inner);
+        final PIDLinkModel instance = new PIDLinkModel(inner);
 
         {
             // model holds ordinary URL (no handle)
@@ -78,7 +78,7 @@ public class HandleLinkModelTest {
     @Test
     public void testGetObjectWithHandle() {
         final IModel<String> inner = context.mock(IModel.class, "String");
-        final HandleLinkModel instance = new HandleLinkModel(inner);
+        final PIDLinkModel instance = new PIDLinkModel(inner);
         {
             // model holds a handle
             context.checking(new Expectations() {
@@ -123,7 +123,7 @@ public class HandleLinkModelTest {
     @Test
     public void testGetObjectWithUrnNbn() {
         final IModel<String> inner = context.mock(IModel.class, "String");
-        final HandleLinkModel instance = new HandleLinkModel(inner);
+        final PIDLinkModel instance = new PIDLinkModel(inner);
         {
             // model holds a handle
             context.checking(new Expectations() {
@@ -156,7 +156,7 @@ public class HandleLinkModelTest {
     @Test
     public void testGetObjectWithDoi() {
         final IModel<String> inner = context.mock(IModel.class, "String");
-        final HandleLinkModel instance = new HandleLinkModel(inner);
+        final PIDLinkModel instance = new PIDLinkModel(inner);
         {
             // model holds a doi
             context.checking(new Expectations() {
@@ -201,7 +201,7 @@ public class HandleLinkModelTest {
     @Test
     public void testGetObjectWithNull() {
         final IModel<String> inner = context.mock(IModel.class, "String");
-        final HandleLinkModel instance = new HandleLinkModel(inner);
+        final PIDLinkModel instance = new PIDLinkModel(inner);
         // model holds a null reference
         context.checking(new Expectations() {
             {
@@ -217,7 +217,7 @@ public class HandleLinkModelTest {
     @Test
     public void testDetach() {
         final IModel<String> inner = context.mock(IModel.class, "String");
-        final HandleLinkModel instance = new HandleLinkModel(inner);
+        final PIDLinkModel instance = new PIDLinkModel(inner);
 
         // detaching model should detach inner model
         context.checking(new Expectations() {

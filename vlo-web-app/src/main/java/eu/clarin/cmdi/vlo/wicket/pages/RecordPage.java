@@ -36,7 +36,7 @@ import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
-import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
@@ -358,7 +358,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
                     @Override
                     protected void populateItem(ListItem item) {
-                        item.add(new ExternalLink("searchLink", new HandleLinkModel(item.getModel())));
+                        item.add(new ExternalLink("searchLink", new PIDLinkModel(item.getModel())));
                     }
                 });
 
