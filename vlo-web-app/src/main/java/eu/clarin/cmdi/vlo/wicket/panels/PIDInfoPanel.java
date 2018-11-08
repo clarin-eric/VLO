@@ -16,6 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 
@@ -24,10 +27,19 @@ import org.apache.wicket.model.IModel;
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class PIDInfoPanel extends GenericPanel<String> {
+
+    //TODO: resolving link
+    //TODO: PID type
+    //TODO: copy to clipboard
+    //TODO: "what is a pid?" content
     
     public PIDInfoPanel(String id, IModel<String> model) {
-        super(id, model);
+        super(id, PIDLinkModel.wrapLinkModel(model));
+
+        final IModel<String> pidLinkModel = getModel();
+
+        add(new TextField("pidInputField", pidLinkModel));
+        add(new ExternalLink("pidLink", pidLinkModel));
     }
-    
-    
+
 }

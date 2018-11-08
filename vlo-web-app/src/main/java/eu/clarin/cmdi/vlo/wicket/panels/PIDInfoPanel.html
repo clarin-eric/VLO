@@ -30,14 +30,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="text-center">
-                            
+
                             <p>
                                 The persistent identifier for the <strong>metadata record</strong> is:
                             </p>
 
                             <div class="form-group">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" disabled="disabled"  aria-describedby="copy-addon" value="hdl:1234/5678" />
+                                    <input wicket:id="pidInputField" type="text" class="form-control" disabled="disabled"  aria-describedby="copy-addon" value="hdl:1234/5678" />
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button" title="Copy to clipboard"><span class="glyphicon glyphicon-copy"></span></button>
                                     </span>
@@ -56,7 +56,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 <a href="#">http://www.clarin.eu/example/record.cmdi</a>
                             </p>
                             <p>
-                                <a href="#" class="btn btn-primary"><span class="glyphicon glyphicon-hand-right"></span> Go to the record</a>
+                                <a wicket:id="pidLink" href="#" class="btn btn-primary" target="_blank"><span class="glyphicon glyphicon-hand-right"></span> Go to the record</a>
                             </p>
                         </div>
                     </div>
@@ -71,8 +71,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 </h4>
                             </div>
                             <div id="collapseAnswer" class="panel-collapse collapse" role="tabpanel" aria-labelledby="whatIsPidHeading">
-                                <div class="panel-body text-left">
-                                    ....answer....
+                                <div class="panel-body text-left" style="max-height: 8em; overflow-y: scroll;">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et 
+                                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+                                    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                                    deserunt mollit anim id est laborum.
                                 </div>
                             </div>
                         </div>
