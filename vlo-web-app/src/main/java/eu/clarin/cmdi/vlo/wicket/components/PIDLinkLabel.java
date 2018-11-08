@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
+import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapModal;
 import eu.clarin.cmdi.vlo.wicket.panels.PIDInfoPanel;
@@ -42,8 +43,8 @@ public class PIDLinkLabel extends GenericPanel<String> {
      * @param id component id
      * @param model link model
      */
-    public PIDLinkLabel(String id, IModel<String> model) {
-        this(id, model, -1);
+    public PIDLinkLabel(String id, IModel<String> model, IModel<PIDContext> pidContextModel) {
+        this(id, model, pidContextModel, -1);
     }
 
     /**
@@ -53,7 +54,7 @@ public class PIDLinkLabel extends GenericPanel<String> {
      * @param maxLinkLength maximum length before text inside label gets
      * truncated
      */
-    public PIDLinkLabel(String id, IModel<String> model, int maxLinkLength) {
+    public PIDLinkLabel(String id, IModel<String> model, IModel<PIDContext> pidContextModel, int maxLinkLength) {
         super(id, model);
 
         this.pidLabel = new PIDLabel("label", model, maxLinkLength);
@@ -75,7 +76,7 @@ public class PIDLinkLabel extends GenericPanel<String> {
                 return Model.of("Persistent identifier info");
             }
         };
-        pidInfoModal.add(new PIDInfoPanel(pidInfoModal.getContentId(), getModel()));
+        pidInfoModal.add(new PIDInfoPanel(pidInfoModal.getContentId(), getModel(), pidContextModel));
         add(pidInfoModal);
     }
 

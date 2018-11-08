@@ -49,6 +49,8 @@ import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
+import org.apache.wicket.model.Model;
 
 /**
  * Panel that shows the "basic" (non-technical) property fields of a document
@@ -148,7 +150,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
                 .add(new ExternalLink("landingPageLink", linkModel)
                         .add(new Label("landingPageLinkLabel", linkModel)
                                 .add(BooleanVisibilityBehavior.visibleOnFalse(isPidModel))))
-                .add(new PIDLinkLabel("landingPagePidLabel", linkModel, PID_LABEL_TEXT_LENGTH)
+                .add(new PIDLinkLabel("landingPagePidLabel", linkModel, Model.of(PIDContext.LANDING_PAGE), PID_LABEL_TEXT_LENGTH)
                         .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel)));
     }
 
@@ -175,7 +177,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
         );
 
         resourceInfo
-                .add(new PIDLinkLabel("pidLabel", linkModel, PID_LABEL_TEXT_LENGTH)
+                .add(new PIDLinkLabel("pidLabel", linkModel, Model.of(PIDContext.RESOURCE), PID_LABEL_TEXT_LENGTH)
                         .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel)));
 
         // Resource info gets async update to resolve any handle to a file name

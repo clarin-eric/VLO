@@ -32,6 +32,7 @@ import eu.clarin.cmdi.vlo.wicket.components.SmartLinkFieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.OrderedListModel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
@@ -59,6 +60,7 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -126,7 +128,7 @@ public class FieldsTablePanel extends Panel {
         if (fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE).equals(facetNameModel.getObject())) {
             return new LanguageInfoLink(id, valueModel, facetNameModel);
         } else if (fieldNameService.getFieldName(FieldKey.RECORD_PID).equals(facetNameModel.getObject())) {
-            return new PIDLinkLabel(id, valueModel);
+            return new PIDLinkLabel(id, valueModel, Model.of(PIDContext.RECORD));
         } else if (SMART_LINK_FIELDS.contains(fieldName)) {
             // create label that generates links
             return new SmartLinkFieldValueLabel(id, new PIDLinkModel(valueModel), facetNameModel);
