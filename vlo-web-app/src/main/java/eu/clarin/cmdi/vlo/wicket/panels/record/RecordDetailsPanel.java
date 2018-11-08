@@ -145,12 +145,13 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
 
     private Component createLandingPageLink(String id, IModel<String> linkModel) {
         final IsPidModel isPidModel = new IsPidModel(linkModel);
+        final PIDLinkModel pidLinkModel = PIDLinkModel.wrapLinkModel(linkModel);
 
         return new WebMarkupContainer(id)
-                .add(new ExternalLink("landingPageLink", linkModel)
+                .add(new ExternalLink("landingPageLink", pidLinkModel)
                         .add(new Label("landingPageLinkLabel", linkModel)
                                 .add(BooleanVisibilityBehavior.visibleOnFalse(isPidModel))))
-                .add(new PIDLinkLabel("landingPagePidLabel", linkModel, Model.of(PIDContext.LANDING_PAGE), PID_LABEL_TEXT_LENGTH)
+                .add(new PIDLinkLabel("landingPagePidLabel", pidLinkModel, Model.of(PIDContext.LANDING_PAGE), PID_LABEL_TEXT_LENGTH)
                         .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel)));
     }
 
@@ -167,7 +168,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
         final WebMarkupContainer resourceInfo = new WebMarkupContainer(id);
 
         // Resource info for single resource (should not appear if there are more or fewer resources)
-        resourceInfo.add(new ExternalLink("resourceLink", linkModel)
+        resourceInfo.add(new ExternalLink("resourceLink", new PIDLinkModel(ResolvingLinkModel.modelFor(resourceInfoModel, getModel())))
                 //resource type icon
                 .add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel<String>(resourceInfoModel, "resourceType"))
                         //with type name tooltip
