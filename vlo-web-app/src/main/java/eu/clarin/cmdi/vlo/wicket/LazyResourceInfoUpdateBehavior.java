@@ -32,7 +32,7 @@ import org.apache.wicket.util.time.Duration;
  * @author twagoo
  */
 public abstract class LazyResourceInfoUpdateBehavior extends AbstractAjaxTimerBehavior {
-
+    
     private final ResourceStringConverter converter;
     private final ResourceInfoModel resourceInfoModel;
 
@@ -46,15 +46,15 @@ public abstract class LazyResourceInfoUpdateBehavior extends AbstractAjaxTimerBe
         this.converter = converter;
         this.resourceInfoModel = resourceInfoModel;
     }
-
+    
     @Override
     protected void onTimer(AjaxRequestTarget target) {
         // stop timer so that it gets called only once
         this.stop(target);
-        
+
         // inject the advanced converter into the model
         resourceInfoModel.setResourceStringConverter(converter);
-        
+
         // AJAX update of components
         onUpdate(target);
     }
@@ -65,5 +65,5 @@ public abstract class LazyResourceInfoUpdateBehavior extends AbstractAjaxTimerBe
      * @param target the request target
      */
     protected abstract void onUpdate(AjaxRequestTarget target);
-
+    
 }
