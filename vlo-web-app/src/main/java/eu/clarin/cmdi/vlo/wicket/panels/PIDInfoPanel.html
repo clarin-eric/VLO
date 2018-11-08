@@ -37,9 +37,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                             <div class="form-group">
                                 <div class="input-group">
-                                    <input wicket:id="pidInputField" type="text" class="form-control" disabled="disabled"  aria-describedby="copy-addon" value="hdl:1234/5678" />
+                                    <input wicket:id="pidInputField" id="pidInputField" type="text" class="form-control" readonly="readonly" aria-describedby="copy-addon" value="hdl:1234/5678" />
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button" title="Copy to clipboard"><span class="glyphicon glyphicon-copy"></span></button>
+                                        <button class="btn btn-default clipboard" data-clipboard-target="#pidInputField" type="button" title="Copy to clipboard"><span class="glyphicon glyphicon-copy"></span></button>
                                     </span>
                                 </div>
                             </div>
