@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDTypeModel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -32,7 +33,6 @@ import org.apache.wicket.model.StringResourceModel;
 public class PIDInfoPanel extends GenericPanel<String> {
 
     //TODO: resolving link
-    //TODO: PID type
     //TODO: copy to clipboard
     //TODO: "what is a pid?" content
     public PIDInfoPanel(String id, IModel<String> model, IModel<PIDContext> pidContext) {
@@ -46,6 +46,9 @@ public class PIDInfoPanel extends GenericPanel<String> {
         final StringResourceModel pidContextModel = new StringResourceModel("pidContext.${}", this, pidContext);
         add(new Label("pidContextLabel1", pidContextModel));
         add(new Label("pidContextLabel2", pidContextModel));
+        
+        final StringResourceModel pidTypeModel = new StringResourceModel("pidType.${}", this, new PIDTypeModel(pidLinkModel));
+        add(new Label("pidTypeLabel", pidTypeModel));
     }
 
 

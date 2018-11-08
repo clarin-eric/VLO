@@ -16,11 +16,13 @@
  */
 package eu.clarin.cmdi.vlo;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Utils for detecting and processing persistent identifiers such as Handles, DOIs and URN-NBNs
+ * Utils for detecting and processing persistent identifiers such as Handles,
+ * DOIs and URN-NBNs
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
@@ -90,6 +92,23 @@ public class PIDUtils {
             return false;
         } else {
             return URN_NBN_PATTERN.matcher(uri).matches();
+        }
+    }
+
+    public static Optional<PIDType> getType(String uri) {
+        if (isPid(uri)) {            
+            if (isHandle(uri)) {
+                return Optional.of(PIDType.HANDLE);
+            }
+            if (isDoi(uri)) {
+                return Optional.of(PIDType.DOI);
+            }
+            if (isUrnNbn(uri)) {
+                return Optional.of(PIDType.URN_NBN);
+            }
+            return Optional.of(PIDType.OTHER);
+        } else {
+            return Optional.empty();
         }
     }
 
