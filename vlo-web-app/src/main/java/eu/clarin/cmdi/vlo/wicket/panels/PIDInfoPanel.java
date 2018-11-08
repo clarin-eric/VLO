@@ -22,7 +22,9 @@ import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDTypeModel;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -42,9 +44,17 @@ public class PIDInfoPanel extends GenericPanel<String> {
     //TODO: "what is a pid?" content
     @SpringBean
     private UriResolver uriResolver;
+    private final IModel<PIDContext> pidContextModel;
 
-    public PIDInfoPanel(String id, IModel<String> model, IModel<PIDContext> pidContext) {
+    public PIDInfoPanel(String id, IModel<String> model, IModel<PIDContext> pidContextModel) {
         super(id, PIDLinkModel.wrapLinkModel(model));
+        this.pidContextModel = pidContextModel;
+        setOutputMarkupId(true);
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
 
         final IModel<String> pidLinkModel = getModel();
         final PIDTypeModel pidTypeModel = new PIDTypeModel(pidLinkModel);
@@ -52,9 +62,9 @@ public class PIDInfoPanel extends GenericPanel<String> {
         add(new TextField("pidInputField", pidLinkModel));
         add(new ExternalLink("pidLink", pidLinkModel));
 
-        final StringResourceModel pidContextModel = new StringResourceModel("pidContext.${}", this, pidContext);
-        add(new Label("pidContextLabel1", pidContextModel));
-        add(new Label("pidContextLabel2", pidContextModel));
+        final StringResourceModel pidContextLabelModel = new StringResourceModel("pidContext.${}", this, pidContextModel);
+        add(new Label("pidContextLabel1", pidContextLabelModel));
+        add(new Label("pidContextLabel2", pidContextLabelModel));
 
         final StringResourceModel pidTypeLabelModel = new StringResourceModel("pidType.${}", this, pidTypeModel);
         add(new Label("pidTypeLabel", pidTypeLabelModel));
