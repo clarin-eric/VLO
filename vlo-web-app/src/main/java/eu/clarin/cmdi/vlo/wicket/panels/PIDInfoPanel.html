@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!--
+Copyright (C) 2014 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+    <head>
+        <title>PID info panel</title>
+        <meta charset="UTF-8" />
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <wicket:panel>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="text-center">
+                            
+                            <p>
+                                The persistent identifier for the <strong>metadata record</strong> is:
+                            </p>
+
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" disabled="disabled"  aria-describedby="copy-addon" value="hdl:1234/5678" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" title="Copy to clipboard"><span class="glyphicon glyphicon-copy"></span></button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <p>
+                                You can use this <strong>handle</strong> to reference the metadata record<br />
+                                online, in publications and tools supporting handles.
+                            </p>
+
+                            <p>
+                                This identifier resolves to:
+                            </p>
+                            <p>
+                                <a href="#">http://www.clarin.eu/example/record.cmdi</a>
+                            </p>
+                            <p>
+                                <a href="#" class="btn btn-primary"><span class="glyphicon glyphicon-hand-right"></span> Go to the record</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" id="whatIsPidHeading">
+                                <h4 class="panel-title">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseAnswer" aria-expanded="true" aria-controls="collapseAnswer"><span class="glyphicon glyphicon-question-sign"></span> What is a persistent identifier?</a>
+                                </h4>
+                            </div>
+                            <div id="collapseAnswer" class="panel-collapse collapse" role="tabpanel" aria-labelledby="whatIsPidHeading">
+                                <div class="panel-body text-left">
+                                    ....answer....
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+            </div>
+        </wicket:panel>
+    </body>
+</html>

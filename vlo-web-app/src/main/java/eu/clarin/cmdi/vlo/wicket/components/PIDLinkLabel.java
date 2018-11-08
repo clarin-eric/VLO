@@ -17,18 +17,25 @@
 package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
+import eu.clarin.cmdi.vlo.wicket.panels.BootstrapModal;
+import eu.clarin.cmdi.vlo.wicket.panels.PIDInfoPanel;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.request.flow.RedirectToUrlException;
 
 /**
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-public class PIDLinkLabel extends Panel {
+public class PIDLinkLabel extends GenericPanel<String> {
 
     private final PIDLabel pidLabel;
+    private final BootstrapModal pidInfoModal;
 
     /**
      *
@@ -47,12 +54,38 @@ public class PIDLinkLabel extends Panel {
      * truncated
      */
     public PIDLinkLabel(String id, IModel<String> model, int maxLinkLength) {
-        super(id);
+        super(id, model);
 
         this.pidLabel = new PIDLabel("label", model, maxLinkLength);
-        add(new ExternalLink("link", PIDLinkModel.wrapLinkModel(model))
+        final Link link = new AjaxFallbackLink("link", PIDLinkModel.wrapLinkModel(model)) {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                PIDLinkLabel.this.onClick(target);
+            }
+
+        };
+        add(link
                 .add(pidLabel)
                 .add(new AttributeModifier("title", model)));
+
+        // Modal dialogue with PID info
+        pidInfoModal = new BootstrapModal("pidInfo") {
+            @Override
+            protected IModel<String> getTitle() {
+                return Model.of("Persistent identifier info");
+            }
+        };
+        pidInfoModal.add(new PIDInfoPanel(pidInfoModal.getContentId(), getModel()));
+        add(pidInfoModal);
+    }
+
+    protected void onClick(AjaxRequestTarget target) {
+        if (target != null) {
+            pidInfoModal.show(target);
+        } else {
+            //no JS - redirect to PID (resolver) URL
+            throw new RedirectToUrlException(PIDLinkModel.wrapLinkModel(getModel()).getObject());
+        }
     }
 
     public PIDLinkLabel setHideLabel(boolean hideLabel) {
