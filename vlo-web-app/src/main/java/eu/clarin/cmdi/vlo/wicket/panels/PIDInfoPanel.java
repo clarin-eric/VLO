@@ -16,15 +16,21 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import eu.clarin.cmdi.vlo.PIDType;
+import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDTypeModel;
+import org.apache.wicket.Component;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  *
@@ -32,24 +38,47 @@ import org.apache.wicket.model.StringResourceModel;
  */
 public class PIDInfoPanel extends GenericPanel<String> {
 
-    //TODO: resolving link
     //TODO: copy to clipboard
     //TODO: "what is a pid?" content
+    @SpringBean
+    private UriResolver uriResolver;
+
     public PIDInfoPanel(String id, IModel<String> model, IModel<PIDContext> pidContext) {
         super(id, PIDLinkModel.wrapLinkModel(model));
 
         final IModel<String> pidLinkModel = getModel();
+        final PIDTypeModel pidTypeModel = new PIDTypeModel(pidLinkModel);
 
         add(new TextField("pidInputField", pidLinkModel));
         add(new ExternalLink("pidLink", pidLinkModel));
-        
+
         final StringResourceModel pidContextModel = new StringResourceModel("pidContext.${}", this, pidContext);
         add(new Label("pidContextLabel1", pidContextModel));
         add(new Label("pidContextLabel2", pidContextModel));
-        
-        final StringResourceModel pidTypeModel = new StringResourceModel("pidType.${}", this, new PIDTypeModel(pidLinkModel));
-        add(new Label("pidTypeLabel", pidTypeModel));
-    }
 
+        final StringResourceModel pidTypeLabelModel = new StringResourceModel("pidType.${}", this, pidTypeModel);
+        add(new Label("pidTypeLabel", pidTypeLabelModel));
+
+        add(new AjaxLazyLoadPanel("resolvedLink") {
+            @Override
+            public Component getLazyLoadComponent(String markupId) {
+                return new Label(markupId, new LoadableDetachableModel<String>() {
+                    @Override
+                    protected String load() {
+                        return uriResolver.resolve(pidLinkModel.getObject());
+                    }
+                });
+            }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+
+                final PIDType pidType = pidTypeModel.getObject();
+                setVisible(pidType == PIDType.HANDLE);
+            }
+
+        });
+    }
 
 }

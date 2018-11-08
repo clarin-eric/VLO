@@ -49,12 +49,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 online and in publications, or use it with tools that support handles.
                             </p>
 
-                            <p>
-                                This identifier resolves to:
-                            </p>
-                            <p>
-                                <a href="#">http://www.clarin.eu/example/record.cmdi</a>
-                            </p>
+                            <wicket:enclosure>
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <p>
+                                            This identifier resolves to:
+                                        </p>
+                                        <p>
+                                            <a wicket:id="resolvedLink" href="#">http://www.clarin.eu/example/record.cmdi</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </wicket:enclosure>
                             <p>
                                 <a wicket:id="pidLink" href="#" class="btn btn-primary" target="_blank"><span class="glyphicon glyphicon-hand-right"></span> Go to the record</a>
                             </p>

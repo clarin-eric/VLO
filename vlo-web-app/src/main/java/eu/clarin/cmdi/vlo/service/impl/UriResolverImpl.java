@@ -61,6 +61,8 @@ public class UriResolverImpl implements UriResolver {
                 logger.warn("Invalid URI for handle: {}", handle);
             }
         }
+        //TODO: Resolve DOIs
+        
         // not a resolvable handle
         return uri;
     }

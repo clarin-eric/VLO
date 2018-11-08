@@ -19,14 +19,14 @@ package eu.clarin.cmdi.vlo.wicket.model;
 import eu.clarin.cmdi.vlo.PIDType;
 import eu.clarin.cmdi.vlo.PIDUtils;
 import java.util.Optional;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-public class PIDTypeModel extends AbstractReadOnlyModel<PIDType> {
+public class PIDTypeModel extends LoadableDetachableModel<PIDType> {
 
     private final IModel<String> linkModel;
 
@@ -35,14 +35,15 @@ public class PIDTypeModel extends AbstractReadOnlyModel<PIDType> {
     }
 
     @Override
-    public PIDType getObject() {
+    protected PIDType load() {
         final Optional<PIDType> type = PIDUtils.getType(linkModel.getObject());
         return type.orElse(null);
     }
 
     @Override
     public void detach() {
-        linkModel.detach();;
+        super.detach();
+        linkModel.detach();
     }
 
 }
