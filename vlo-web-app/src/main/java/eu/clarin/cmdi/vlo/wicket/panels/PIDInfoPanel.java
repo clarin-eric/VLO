@@ -69,17 +69,7 @@ public class PIDInfoPanel extends GenericPanel<String> {
         final StringResourceModel pidTypeLabelModel = new StringResourceModel("pidType.${}", this, pidTypeModel);
         add(new Label("pidTypeLabel", pidTypeLabelModel));
 
-        add(new AjaxLazyLoadPanel("resolvedLink") {
-            @Override
-            public Component getLazyLoadComponent(String markupId) {
-                return new Label(markupId, new LoadableDetachableModel<String>() {
-                    @Override
-                    protected String load() {
-                        return uriResolver.resolve(pidLinkModel.getObject());
-                    }
-                });
-            }
-
+        final WebMarkupContainer resolvedLinkPanel = new WebMarkupContainer("resolvedLinkPanel") {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
@@ -87,8 +77,28 @@ public class PIDInfoPanel extends GenericPanel<String> {
                 final PIDType pidType = pidTypeModel.getObject();
                 setVisible(pidType == PIDType.HANDLE);
             }
+        };
+        resolvedLinkPanel.setOutputMarkupId(true);
 
-        });
+        add(resolvedLinkPanel
+                .add(new AjaxLazyLoadPanel("resolvedLink") {
+                    @Override
+                    public Component getLazyLoadComponent(String markupId) {
+                        return new Label(markupId, new LoadableDetachableModel<String>() {
+                            @Override
+                            protected String load() {
+                                return uriResolver.resolve(pidLinkModel.getObject());
+                            }
+                        });
+                    }
+
+                    @Override
+                    protected void onComponentLoaded(Component component, AjaxRequestTarget target) {
+                        super.onComponentLoaded(component, target);
+                        target.add(resolvedLinkPanel);
+                    }
+
+                }));
     }
 
 }
