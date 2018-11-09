@@ -36,11 +36,13 @@ public class UriResolverImplTest {
     private final Mockery context = new JUnit4Mockery();
     private UriResolverImpl instance;
     private HandleResolver handleClient;
+    private HandleResolver doiClient;
 
     @Before
     public void setUp() {
-        handleClient = context.mock(HandleResolver.class);
-        instance = new UriResolverImpl(handleClient);
+        handleClient = context.mock(HandleResolver.class, "handleResolver");
+        doiClient = context.mock(HandleResolver.class, "doiResolver");
+        instance = new UriResolverImpl(handleClient, doiClient);
     }
 
     /**
@@ -79,6 +81,36 @@ public class UriResolverImplTest {
             }
         });
         String result = instance.resolve("http://hdl.handle.net/1234/5678");
+        assertEquals("http://www.clarin.eu", result);
+    }
+
+    /**
+     * Test of resolve method, of class HandleClientUriResolverImpl.
+     */
+    @Test
+    public void testResolveDoiScheme() throws InvalidHandleException {
+        context.checking(new Expectations() {
+            {
+                oneOf(doiClient).resolve(URI.create("doi:1234/5678"));
+                will(returnValue(URI.create("http://www.clarin.eu")));
+            }
+        });
+        String result = instance.resolve("doi:1234/5678");
+        assertEquals("http://www.clarin.eu", result);
+    }
+
+    /**
+     * Test of resolve method, of class HandleClientUriResolverImpl.
+     */
+    @Test
+    public void testResolveDoiUrl() throws InvalidHandleException {
+        context.checking(new Expectations() {
+            {
+                oneOf(doiClient).resolve(URI.create("doi:1234/5678"));
+                will(returnValue(URI.create("http://www.clarin.eu")));
+            }
+        });
+        String result = instance.resolve("https://doi.org/1234/5678");
         assertEquals("http://www.clarin.eu", result);
     }
 

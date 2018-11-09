@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
+import static eu.clarin.cmdi.vlo.FacetConstants.DOI_PREFIX;
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PREFIX;
 import eu.clarin.cmdi.vlo.PIDUtils;
 import eu.clarin.cmdi.vlo.service.UriResolver;
@@ -39,32 +40,38 @@ public class UriResolverImpl implements UriResolver {
     private final static Logger logger = LoggerFactory.getLogger(UriResolverImpl.class);
 
     private final HandleResolver handleClient;
+    private final HandleResolver doiClient;
 
-    public UriResolverImpl(HandleResolver handleClient) {
+    public UriResolverImpl(HandleResolver handleClient, HandleResolver doiClient) {
         this.handleClient = handleClient;
+        this.doiClient = doiClient;
     }
 
     @Override
     public String resolve(String uri) {
-        final String handle = PIDUtils.isHandle(uri) ? HANDLE_PREFIX + PIDUtils.getSchemeSpecificId(uri) : null;
-
-        if (handle != null) {
-            logger.debug("Calling handle client to resolve handle [{}]", uri);
-            try {
-                final URI resolved = handleClient.resolve(new URI(handle));
-                if (resolved != null) {
-                    return resolved.toString();
-                }
-            } catch (InvalidHandleException ex) {
-                logger.warn("Invalid handle ecountered: {}", handle);
-            } catch (URISyntaxException ex) {
-                logger.warn("Invalid URI for handle: {}", handle);
-            }
+        final URI resolved;
+        if (PIDUtils.isHandle(uri)) {
+            resolved = resolve(handleClient, HANDLE_PREFIX + PIDUtils.getSchemeSpecificId(uri));
+        } else if (PIDUtils.isDoi(uri)) {
+            resolved = resolve(doiClient, DOI_PREFIX + PIDUtils.getSchemeSpecificId(uri));
+        } else {
+            resolved = null;
         }
-        //TODO: Resolve DOIs
-        
-        // not a resolvable handle
-        return uri;
+
+        return (resolved != null) ? resolved.toString() : uri;
+    }
+
+    private final static URI resolve(HandleResolver resolver, String pid) {
+        try {
+            logger.debug("Using {} to resolve pid [{}]", resolver.getClass().getName(), pid);
+            return resolver.resolve(new URI(pid));
+        } catch (InvalidHandleException ex) {
+            logger.warn("Invalid PID ecountered (resolver {}): {}", resolver.getClass().getName(), pid);
+            return null;
+        } catch (URISyntaxException ex) {
+            logger.warn("PID is not a valid URI: {}", pid);
+            return null;
+        }
     }
 
 }

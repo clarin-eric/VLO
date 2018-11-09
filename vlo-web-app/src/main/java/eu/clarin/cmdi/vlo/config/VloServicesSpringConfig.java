@@ -99,10 +99,14 @@ public class VloServicesSpringConfig {
 
     @Bean
     public UriResolver uriResolver() {
-        return new UriResolverImpl(handleResolver());
+        return new UriResolverImpl(handleResolver(), doiResolver());
     }
 
     public HandleResolver handleResolver() {
+        return new CachingHandleResolver(new HandleRestApiResolver(), HANDLE_CACHE_EXPIRY);
+    }
+
+    public HandleResolver doiResolver() {
         return new CachingHandleResolver(new HandleRestApiResolver(), HANDLE_CACHE_EXPIRY);
     }
 
