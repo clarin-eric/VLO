@@ -452,7 +452,7 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetFederatedContentSearchUrl() {
-        String param = "http://weblicht.sfs.uni-tuebingen.de/Aggregator/";
+        String param = "https://spraakbanken.gu.se/ws/fcs/4.5.6/aggregator/";
         config.setFederatedContentSearchUrl(param);
         String result = config.getFederatedContentSearchUrl();
         assertEquals(param, result);
