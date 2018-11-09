@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
-import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.PIDType;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
@@ -25,8 +24,6 @@ import eu.clarin.cmdi.vlo.wicket.model.PIDTypeModel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
@@ -43,8 +40,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public class PIDInfoPanel extends GenericPanel<String> {
 
-    //TODO: copy to clipboard
-    //TODO: "what is a pid?" content
     @SpringBean
     private UriResolver uriResolver;
     private final IModel<PIDContext> pidContextModel;
