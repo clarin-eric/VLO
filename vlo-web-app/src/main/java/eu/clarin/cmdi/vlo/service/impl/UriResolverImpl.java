@@ -48,6 +48,11 @@ public class UriResolverImpl implements UriResolver {
     }
 
     @Override
+    public boolean canResolve(String uri) {
+        return PIDUtils.isHandle(uri) || PIDUtils.isDoi(uri);
+    }
+
+    @Override
     public String resolve(String uri) {
         final URI resolved;
         if (PIDUtils.isHandle(uri)) {

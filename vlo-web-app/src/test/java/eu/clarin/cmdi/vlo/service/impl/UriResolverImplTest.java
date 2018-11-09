@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import java.net.URI;
+import java.util.stream.Stream;
 import nl.mpi.archiving.corpusstructure.core.handle.HandleResolver;
 import nl.mpi.archiving.corpusstructure.core.handle.InvalidHandleException;
 import org.jmock.Expectations;
@@ -24,6 +25,8 @@ import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,6 +46,13 @@ public class UriResolverImplTest {
         handleClient = context.mock(HandleResolver.class, "handleResolver");
         doiClient = context.mock(HandleResolver.class, "doiResolver");
         instance = new UriResolverImpl(handleClient, doiClient);
+    }
+
+    public void testCanResolve() {
+        Stream.of("hdl:1234/5678", "http://hdl.handle.net/1234/5678", "doi:1234/5678", "https://doi.org/1234/5678")
+                .forEach(p -> assertTrue("can resolve " + p, instance.canResolve(p)));
+        Stream.of("http://www.clarin.eu", "/relative", "zzzz")
+                .forEach(p -> assertFalse("cannot resolve " + p, instance.canResolve(p)));
     }
 
     /**

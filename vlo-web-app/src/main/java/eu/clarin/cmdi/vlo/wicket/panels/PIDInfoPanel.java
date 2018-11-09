@@ -16,12 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
-import eu.clarin.cmdi.vlo.PIDType;
+import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDTypeModel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -30,12 +31,16 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class PIDInfoPanel extends GenericPanel<String> {
+
+    @SpringBean
+    private UriResolver uriResolver;
 
     private final IModel<PIDContext> pidContextModel;
 
@@ -67,16 +72,8 @@ public class PIDInfoPanel extends GenericPanel<String> {
         final StringResourceModel pidTypeLabelPluralModel = new StringResourceModel("pidType.${}.plural", this, pidTypeModel);
         add(new Label("pidTypeLabelPlural", pidTypeLabelPluralModel));
 
-        //container only visible if PID can be pre-resolved
-        final WebMarkupContainer resolvedLinkPanel = new WebMarkupContainer("resolvedLinkPanel") {
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-
-                final PIDType pidType = pidTypeModel.getObject();
-                setVisible(pidType == PIDType.HANDLE);
-            }
-        };
+        //container for resolved link
+        final WebMarkupContainer resolvedLinkPanel = new WebMarkupContainer("resolvedLinkPanel");
         //lazy panel for async resolving (link is not added initially)
         final AjaxLazyLoadPanel lazyResolvedUrlLink = new AjaxLazyLoadPanel("resolvedLink") {
             @Override
@@ -94,7 +91,17 @@ public class PIDInfoPanel extends GenericPanel<String> {
         };
         add(resolvedLinkPanel
                 .add(lazyResolvedUrlLink)
-                .setOutputMarkupId(true));
+                //has to be ajax updateable
+                .setOutputMarkupId(true)
+                //only visible if PID can be pre-resolved
+                .add(new Behavior() {
+                    @Override
+                    public void onConfigure(Component component) {
+                        component.setVisible(uriResolver.canResolve(pidLinkModel.getObject()));
+                    }
+
+                })
+        );
     }
 
 }

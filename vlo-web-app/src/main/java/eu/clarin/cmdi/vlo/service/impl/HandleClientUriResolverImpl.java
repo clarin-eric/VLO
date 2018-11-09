@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
  * } is returned; otherwise the original URI is returned.
  *
  * TODO: add support for resolving URN:NBN <https://trac.clarin.eu/ticket/535>
- * 
+ *
  * @author twagoo
  */
 public class HandleClientUriResolverImpl implements UriResolver {
@@ -41,6 +41,11 @@ public class HandleClientUriResolverImpl implements UriResolver {
 
     public HandleClientUriResolverImpl(HandleClient handleClient) {
         this.handleClient = handleClient;
+    }
+
+    @Override
+    public boolean canResolve(String uri) {
+        return PIDUtils.isHandle(uri);
     }
 
     @Override
@@ -62,7 +67,7 @@ public class HandleClientUriResolverImpl implements UriResolver {
     }
 
     private String getHandle(String uri) {
-        if(PIDUtils.isHandle(uri)) {
+        if (PIDUtils.isHandle(uri)) {
             return PIDUtils.getSchemeSpecificId(uri);
         } else {
             return null;
