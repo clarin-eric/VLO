@@ -234,7 +234,7 @@ public class SearchResultItemPanel extends Panel {
 
         return new WebMarkupContainer(id)
                 .add(new ExternalLink("landingPageLink", new PIDLinkModel(landingPageLinkModel))
-                        .add(new PIDLabel("landingPagePidLabel", landingPageLinkModel)
+                        .add(new WebMarkupContainer("landingPagePidLabel")
                                 .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel))
                         )
                         .add(new Label("landingPageLinkLabel", landingPageLinkModel) {
