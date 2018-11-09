@@ -73,6 +73,10 @@ public class PIDInfoPanel extends GenericPanel<String> {
 
         final StringResourceModel pidTypeLabelModel = new StringResourceModel("pidType.${}", this, pidTypeModel);
         add(new Label("pidTypeLabel", pidTypeLabelModel));
+        
+        final StringResourceModel pidTypeLabelPluralModel = new StringResourceModel("pidType.${}.plural", this, pidTypeModel);
+        add(new Label("pidTypeLabelPlural", pidTypeLabelPluralModel));
+        
 
         final WebMarkupContainer resolvedLinkPanel = new WebMarkupContainer("resolvedLinkPanel") {
             @Override
