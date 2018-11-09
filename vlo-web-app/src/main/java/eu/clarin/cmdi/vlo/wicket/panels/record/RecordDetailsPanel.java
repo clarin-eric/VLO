@@ -50,6 +50,7 @@ import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.model.Model;
 
 /**
@@ -125,20 +126,39 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
                         && resourceInfoLinkModel.getObject() != null);
             }
         };
-
         coreLinksContainer
                 .add(createSingleResourceInfo("resourceInfo", resourceInfoLinkModel)
                         .add(BooleanVisibilityBehavior.visibleOnTrue(resourceInfoVisibilityModel)));
 
+        final AbstractReadOnlyModel<Boolean> resourcesLinkVisibilityModel = new AbstractReadOnlyModel<Boolean>() {
+            @Override
+            public Boolean getObject() {
+                return resourcesModel.getObject() != null
+                        && resourcesModel.getObject().size() > 1;
+            }
+        };
         coreLinksContainer
                 .add(createMultipleResourceLink("resourcesInfo")
-                        .add(BooleanVisibilityBehavior.visibleOnTrue(new AbstractReadOnlyModel<Boolean>() {
-                            @Override
-                            public Boolean getObject() {
-                                return resourcesModel.getObject() != null
-                                        && resourcesModel.getObject().size() > 1;
-                            }
-                        })));
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(resourcesLinkVisibilityModel)));
+
+        coreLinksContainer.add(
+                new Label("resourcesTitle", new AbstractReadOnlyModel() {
+                    @Override
+                    public Object getObject() {
+                        return (resourcesModel.getObject() != null && resourcesModel.getObject().size() == 1)
+                                ? "Linked resource"
+                                : "Linked resources";
+                    }
+                }).add(new Behavior() {
+                    @Override
+                    public void onConfigure(Component component) {
+                        component.setVisible(
+                                landingPageVisibilityModel.getObject() // landing page link is visible
+                                && (resourceInfoVisibilityModel.getObject() || resourcesLinkVisibilityModel.getObject()) // and resource(s) info as well
+                        );
+                    }
+
+                }));
 
         return coreLinksContainer;
     }
