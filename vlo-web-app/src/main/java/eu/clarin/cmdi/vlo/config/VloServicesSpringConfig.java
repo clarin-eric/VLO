@@ -26,17 +26,20 @@ import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
 import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.FieldValueOrderingsFactory;
+import eu.clarin.cmdi.vlo.service.PIDResolver;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.PermalinkService;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
+import eu.clarin.cmdi.vlo.service.impl.DOIResolver;
 import eu.clarin.cmdi.vlo.service.impl.DocumentParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
 import eu.clarin.cmdi.vlo.service.impl.FacetDescriptionServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.FacetParameterMapperImpl;
 import eu.clarin.cmdi.vlo.service.impl.FieldValueOrderingsFactoryImpl;
+import eu.clarin.cmdi.vlo.service.impl.HandleResolverWrapper;
 import eu.clarin.cmdi.vlo.service.impl.InclusiveFieldFilter;
 import eu.clarin.cmdi.vlo.service.impl.PermalinkServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.QueryFacetsSelectionParametersConverter;
@@ -56,7 +59,6 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 import nl.mpi.archiving.corpusstructure.core.handle.CachingHandleResolver;
-import nl.mpi.archiving.corpusstructure.core.handle.HandleResolver;
 import nl.mpi.archiving.corpusstructure.core.handle.HandleRestApiResolver;
 import org.apache.solr.common.SolrDocument;
 import org.springframework.context.annotation.Bean;
@@ -102,12 +104,12 @@ public class VloServicesSpringConfig {
         return new UriResolverImpl(handleResolver(), doiResolver());
     }
 
-    public HandleResolver handleResolver() {
-        return new CachingHandleResolver(new HandleRestApiResolver(), HANDLE_CACHE_EXPIRY);
+    public PIDResolver handleResolver() {
+        return new HandleResolverWrapper(new CachingHandleResolver(new HandleRestApiResolver(), HANDLE_CACHE_EXPIRY));
     }
 
-    public HandleResolver doiResolver() {
-        return new CachingHandleResolver(new HandleRestApiResolver(), HANDLE_CACHE_EXPIRY);
+    public PIDResolver doiResolver() {
+        return new DOIResolver();
     }
 
     @Bean

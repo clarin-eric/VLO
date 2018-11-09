@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
+import eu.clarin.cmdi.vlo.service.PIDResolver;
 import java.net.URI;
 import java.util.stream.Stream;
 import nl.mpi.archiving.corpusstructure.core.handle.HandleResolver;
@@ -38,13 +39,13 @@ public class UriResolverImplTest {
 
     private final Mockery context = new JUnit4Mockery();
     private UriResolverImpl instance;
-    private HandleResolver handleClient;
-    private HandleResolver doiClient;
+    private PIDResolver handleClient;
+    private PIDResolver doiClient;
 
     @Before
     public void setUp() {
-        handleClient = context.mock(HandleResolver.class, "handleResolver");
-        doiClient = context.mock(HandleResolver.class, "doiResolver");
+        handleClient = context.mock(PIDResolver.class, "handleResolver");
+        doiClient = context.mock(PIDResolver.class, "doiResolver");
         instance = new UriResolverImpl(handleClient, doiClient);
     }
 
