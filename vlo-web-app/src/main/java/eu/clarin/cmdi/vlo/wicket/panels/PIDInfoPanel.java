@@ -17,7 +17,6 @@
 package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.PIDType;
-import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDTypeModel;
@@ -30,9 +29,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.StringResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  *
@@ -40,8 +37,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public class PIDInfoPanel extends GenericPanel<String> {
 
-    @SpringBean
-    private UriResolver uriResolver;
     private final IModel<PIDContext> pidContextModel;
 
     public PIDInfoPanel(String id, IModel<String> model, IModel<PIDContext> pidContextModel) {
@@ -72,6 +67,7 @@ public class PIDInfoPanel extends GenericPanel<String> {
         final StringResourceModel pidTypeLabelPluralModel = new StringResourceModel("pidType.${}.plural", this, pidTypeModel);
         add(new Label("pidTypeLabelPlural", pidTypeLabelPluralModel));
 
+        //container only visible if PID can be pre-resolved
         final WebMarkupContainer resolvedLinkPanel = new WebMarkupContainer("resolvedLinkPanel") {
             @Override
             protected void onConfigure() {
@@ -81,28 +77,24 @@ public class PIDInfoPanel extends GenericPanel<String> {
                 setVisible(pidType == PIDType.HANDLE);
             }
         };
-        resolvedLinkPanel.setOutputMarkupId(true);
-
-        final LoadableDetachableModel<String> resolvedLinkModel = new LoadableDetachableModel<String>() {
+        //lazy panel for async resolving (link is not added initially)
+        final AjaxLazyLoadPanel lazyResolvedUrlLink = new AjaxLazyLoadPanel("resolvedLink") {
             @Override
-            protected String load() {
-                return uriResolver.resolve(pidLinkModel.getObject());
+            public Component getLazyLoadComponent(String markupId) {
+                return new ResolvedPidLink(markupId, pidLinkModel);
             }
+
+            @Override
+            protected void onComponentLoaded(Component component, AjaxRequestTarget target) {
+                super.onComponentLoaded(component, target);
+                //re-render all panel after loading to fix glitch
+                target.add(resolvedLinkPanel);
+            }
+
         };
         add(resolvedLinkPanel
-                .add(new AjaxLazyLoadPanel("resolvedLinkContainer") {
-                    @Override
-                    public Component getLazyLoadComponent(String markupId) {
-                        return new ExternalLink(markupId, resolvedLinkModel, resolvedLinkModel);
-                    }
-
-                    @Override
-                    protected void onComponentLoaded(Component component, AjaxRequestTarget target) {
-                        super.onComponentLoaded(component, target);
-                        target.add(resolvedLinkPanel);
-                    }
-
-                }));
+                .add(lazyResolvedUrlLink)
+                .setOutputMarkupId(true));
     }
 
 }
