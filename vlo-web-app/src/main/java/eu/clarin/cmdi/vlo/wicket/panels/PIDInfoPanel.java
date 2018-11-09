@@ -68,10 +68,9 @@ public class PIDInfoPanel extends GenericPanel<String> {
 
         final StringResourceModel pidTypeLabelModel = new StringResourceModel("pidType.${}", this, pidTypeModel);
         add(new Label("pidTypeLabel", pidTypeLabelModel));
-        
+
         final StringResourceModel pidTypeLabelPluralModel = new StringResourceModel("pidType.${}.plural", this, pidTypeModel);
         add(new Label("pidTypeLabelPlural", pidTypeLabelPluralModel));
-        
 
         final WebMarkupContainer resolvedLinkPanel = new WebMarkupContainer("resolvedLinkPanel") {
             @Override
@@ -84,16 +83,17 @@ public class PIDInfoPanel extends GenericPanel<String> {
         };
         resolvedLinkPanel.setOutputMarkupId(true);
 
+        final LoadableDetachableModel<String> resolvedLinkModel = new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return uriResolver.resolve(pidLinkModel.getObject());
+            }
+        };
         add(resolvedLinkPanel
-                .add(new AjaxLazyLoadPanel("resolvedLink") {
+                .add(new AjaxLazyLoadPanel("resolvedLinkContainer") {
                     @Override
                     public Component getLazyLoadComponent(String markupId) {
-                        return new Label(markupId, new LoadableDetachableModel<String>() {
-                            @Override
-                            protected String load() {
-                                return uriResolver.resolve(pidLinkModel.getObject());
-                            }
-                        });
+                        return new ExternalLink(markupId, resolvedLinkModel, resolvedLinkModel);
                     }
 
                     @Override
