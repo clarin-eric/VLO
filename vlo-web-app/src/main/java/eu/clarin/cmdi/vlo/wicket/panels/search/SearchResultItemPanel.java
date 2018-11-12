@@ -28,7 +28,6 @@ import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermScriptFactory;
 import eu.clarin.cmdi.vlo.wicket.components.FacetSelectLink;
-import eu.clarin.cmdi.vlo.wicket.components.PIDLabel;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
@@ -109,6 +108,13 @@ public class SearchResultItemPanel extends Panel {
 
         add(new FacetSelectLink("searchResultCollectionLink", new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.COLLECTION)), Model.of(fieldNameService.getFieldName(FieldKey.COLLECTION)))
                 .add(new SolrFieldLabel("searchResultCollectionName", documentModel, fieldNameService.getFieldName(FieldKey.COLLECTION), "none"))
+                .add(new Behavior() {
+                    @Override
+                    public void onConfigure(Component component) {
+                        component.setVisible(documentModel.getObject().getFieldValue(fieldNameService.getFieldName(FieldKey.COLLECTION)) != null);
+                    }
+
+                })
         );
 
         // add a link to toggle the expansion state

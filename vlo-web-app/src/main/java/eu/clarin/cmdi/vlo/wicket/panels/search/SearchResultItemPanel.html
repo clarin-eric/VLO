@@ -33,7 +33,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <h3>
                         <a wicket:id="recordLink" href="record1.html"><wicket:container wicket:id="title" >[TITLE]</wicket:container></a>
                     </h3>
-                    <div class="small search-result-collection-label">(Part of <a href="#" wicket:id="searchResultCollectionLink"><span wicket:id="searchResultCollectionName">Test collection</span></a>)</div>
+                    <wicket:enclosure child="searchResultCollectionLink">
+                        <div class="small search-result-collection-label">(Part of <a href="#" wicket:id="searchResultCollectionLink"><span wicket:id="searchResultCollectionName">Test collection</span></a>)</div>
+                    </wicket:enclosure>
                 </div>
                 <div class="col-md-2">
                     <div wicket:id="resources" class="searchresult-resources">
