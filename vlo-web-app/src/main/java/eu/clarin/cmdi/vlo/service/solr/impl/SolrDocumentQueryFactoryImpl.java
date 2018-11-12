@@ -68,6 +68,20 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
     }
 
     @Override
+    public SolrQuery createExpandedDocumentQuery(QueryFacetsSelection selection, int first, int count) {
+        // make a query to get all documents that match the selection criteria
+        final SolrQuery query = getDefaultDocumentQuery();
+        // we use the 'fast' request handler here to avoid collapsing (assume ranking is not of interest)
+        query.setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
+        // apply selection
+        addQueryFacetParameters(query, selection);
+        // set offset and limit
+        query.setStart(first);
+        query.setRows(count);
+        return query;
+    }
+
+    @Override
     public SolrQuery createDocumentQueryWithExpansion(QueryFacetsSelection selection, int first, int count) {
         final SolrQuery query = createDocumentQuery(selection, first, count);
         return enableExpansion(query);
