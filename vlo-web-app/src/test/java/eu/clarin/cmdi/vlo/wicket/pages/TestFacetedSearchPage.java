@@ -60,6 +60,8 @@ public class TestFacetedSearchPage extends AbstractWicketTest {
                 // mock search results
                 atLeast(1).of(documentService).getResultCount(with(any(QueryFacetsSelection.class)));
                 will(returnValue(1000L));
+                atLeast(1).of(documentService).getTotalDocumentCount(with(any(QueryFacetsSelection.class)));
+                will(returnValue(1001L));
                 oneOf(documentService).getDocumentsWithExpansion(with(any(QueryFacetsSelection.class)), with(equal(0)), with(equal(10)), with(equal("_signature")));
                 will(returnValue(resultList));
                 atLeast(1).of(resultList).iterator();
