@@ -19,6 +19,8 @@ $(function () {
     //enable nicer bootstrap-style tooltip via plugin
     //http://getbootstrap.com/javascript/#tooltips
     $('form#search-form [data-toggle="tooltip"]').tooltip();
+    
+    registerDuplicateExpansionHandler();
 });
 
 function startSearch() {
@@ -33,6 +35,8 @@ function endSearch() {
     $('form#search-form button').removeAttr("disabled");
     //re-enable tooltip
     $('form#search-form [data-toggle="tooltip"]').tooltip();
+    
+    registerDuplicateExpansionHandler();
 }
 
 function handleSearchFailure(message, status) {
@@ -42,7 +46,7 @@ function handleSearchFailure(message, status) {
 
 function transitionFromSimple(cb) {
     var simpleBox = $('.simple-only:visible');
-    if(simpleBox.length > 0) {
+    if (simpleBox.length > 0) {
         simpleBox.slideUp({
             duration: 'fast',
             start: function () {
@@ -85,6 +89,24 @@ function ensureFillerSize() {
         var fillerHeight = 50 + $(window).height() - simplefiller.offset().top - $("footer").height();
         simplefiller.height(Math.max(150, fillerHeight));
     }
+}
+
+function registerDuplicateExpansionHandler() {
+    //duplicates list expansion/collapse
+    $('#search-content').on('click', '.search-results-duplicates-expand-collapse', function (event) {
+        event.preventDefault();
+
+        //toggle expansion of sibling duplicates list
+        $(this)
+                .parents('.search-results-duplicates-heading')
+                .siblings('.search-results-duplicates-list')
+                .collapse('toggle');
+        
+        //toggle caret direction
+        $(this)
+                .children('.caret')
+                .toggleClass('caret-up');
+    });
 }
 
 $(document).ready(function () {

@@ -23,7 +23,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <div >
+            <div class="search-results-duplicates-heading">
+                <a wicket:id="expandButton" class="pull-right" href="#"><span class="caret"></span></a>
+                <a wicket:id="toggleExpansion" class="search-results-duplicates-expand-collapse pull-right" href="#"><span class="caret caret-up"></span></a>
                 <p class="search-results-duplicates-preamble"> 
                     The search results include <span wicket:id="expansionCount">[COUNT]</span> (near) duplicate(s) of this record.
                 </p>
@@ -31,7 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <a wicket:id="expandDuplicates">Click here to see the (near) duplicate results</a>
                 </p>
             </div>
-            <div wicket:id="duplicatesView" class="search-results-duplicates-list">
+            <div wicket:id="duplicatesView" class="search-results-duplicates-list collapse in">
                 <ul class="list-group">
                     <li wicket:id="duplicateItem" class="list-group-item">
                         <a wicket:id="duplicateItemLink"><wicket:container wicket:id="duplicateItemName">[item]</wicket:container></a>

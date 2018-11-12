@@ -21,11 +21,11 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
+import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import static java.lang.Math.toIntExact;
 import java.util.Collections;
 import java.util.Iterator;
@@ -40,6 +40,7 @@ import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
@@ -54,11 +55,11 @@ import org.slf4j.LoggerFactory;
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentExpansionPair> {
-    
+
     private final static Logger LOG = LoggerFactory.getLogger(DuplicateSearchResultItemsPanel.class);
-    
+
     private static final int ITEMS_PER_PAGE = 10;
-    
+
     @SpringBean
     private FieldNameService fieldNameService;
 
@@ -71,26 +72,34 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
      */
     public DuplicateSearchResultItemsPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<ExpansionState> expandedModel) {
         super(id, documentExpansionPairModel);
-        
+
+        final IModel<Boolean> isExpandedModel = new AbstractReadOnlyModel<Boolean>() {
+            @Override
+            public Boolean getObject() {
+                return expandedModel.getObject() == ExpansionState.EXPANDED;
+            }
+        };
+
         add(new Label("expansionCount", new PropertyModel<>(documentExpansionPairModel, "expansionCount")));
 
-        // link to expand (i.e. show list)
+        // links to expand (i.e. show list)
         add(new IndicatingAjaxFallbackLink("expandDuplicates") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                expandedModel.setObject(ExpansionState.EXPANDED);
-                if (target != null) {
-                    target.add(DuplicateSearchResultItemsPanel.this);
-                }
+                expand(target, expandedModel);
             }
-            
+        }.add(BooleanVisibilityBehavior.visibleOnFalse(isExpandedModel)));
+
+        add(new IndicatingAjaxFallbackLink("expandButton") {
             @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(ExpansionState.COLLAPSED == expandedModel.getObject());
+            public void onClick(AjaxRequestTarget target) {
+                expand(target, expandedModel);
             }
-            
-        });
+        }.add(BooleanVisibilityBehavior.visibleOnFalse(isExpandedModel)));
+
+        // after expansion show JS expansion toggle instead
+        add(new WebMarkupContainer("toggleExpansion")
+                .add(BooleanVisibilityBehavior.visibleOnTrue(isExpandedModel)));
 
         // view of documents list
         final DataView<SolrDocument> duplicatesView = new DataView<SolrDocument>("duplicateItem", new DuplicateDocumentsProvider(documentExpansionPairModel, fieldNameService), ITEMS_PER_PAGE) {
@@ -100,7 +109,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
                         new RecordPageLink("duplicateItemLink", item.getModel())
                                 .add(new SingleValueSolrFieldLabel("duplicateItemName", item.getModel(), fieldNameService.getFieldName(FieldKey.NAME), new StringResourceModel("searchpage.unnamedrecord", this))));
             }
-            
+
         };
 
         // container for list view and pagination
@@ -112,40 +121,41 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
                             public void onConfigure(Component component) {
                                 component.setVisible(duplicatesView.getPageCount() > 1);
                             }
-                            
+
                         })
                 )
-                .add(new Behavior() { //show only if expanded
-                    @Override
-                    public void onConfigure(Component component) {
-                        component.setVisible(ExpansionState.EXPANDED == expandedModel.getObject());
-                    }
-                })
+                .add(BooleanVisibilityBehavior.visibleOnTrue(isExpandedModel))
                 .setOutputMarkupId(true) // container must be Ajax updateable
         );
-
-        // show only if something to be shown
-        add(new Behavior() {
-            @Override
-            public void onConfigure(Component thisPanel) {
-                thisPanel.setVisible(documentExpansionPairModel.getObject().getExpansionCount() > 0);
-            }
-        });
 
         // component must be Ajax updateable (on expansion)
         setOutputMarkupId(true);
     }
-    
+
+    private void expand(AjaxRequestTarget target, IModel<ExpansionState> expandedModel) {
+        expandedModel.setObject(ExpansionState.EXPANDED);
+        if (target != null) {
+            target.add(DuplicateSearchResultItemsPanel.this);
+        }
+    }
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        // show panel only if something to be shown
+        setVisible(getModelObject().getExpansionCount() > 0);
+    }
+
     private static class DuplicateDocumentsProvider implements IDataProvider<SolrDocument> {
-        
+
         private final SolrDocumentExpansionPairModel expansionPairModel;
         private final FieldNameService fieldNameService;
-        
+
         public DuplicateDocumentsProvider(SolrDocumentExpansionPairModel targetDocument, FieldNameService fieldNameService) {
             this.expansionPairModel = targetDocument;
             this.fieldNameService = fieldNameService;
         }
-        
+
         @Override
         public Iterator<? extends SolrDocument> iterator(long first, long count) {
             try {
@@ -158,22 +168,22 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
                     .map(l -> l.iterator())
                     .orElseGet(Collections::emptyIterator);
         }
-        
+
         @Override
         public long size() {
             return expansionPairModel.getObject().getExpansionCount();
         }
-        
+
         @Override
         public IModel<SolrDocument> model(SolrDocument object) {
             return new SolrDocumentModel(object, fieldNameService);
         }
-        
+
         @Override
         public void detach() {
             expansionPairModel.detach();
         }
-        
+
     }
-    
+
 }
