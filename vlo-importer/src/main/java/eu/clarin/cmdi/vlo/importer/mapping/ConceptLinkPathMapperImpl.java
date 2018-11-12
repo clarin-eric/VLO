@@ -34,14 +34,14 @@ public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, List
 
     @Override
     public String getXsd() {
-        // TODO Auto-generated method stub
-        return null;
+        
+        return super.xsd;
     }
 
     @Override
     public Boolean useLocalXSDCache() {
-        // TODO Auto-generated method stub
-        return null;
+
+        return super.useLocalXSDCache;
     }
 
     @Override
