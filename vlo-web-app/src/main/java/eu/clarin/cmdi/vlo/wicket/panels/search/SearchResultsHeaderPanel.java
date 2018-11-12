@@ -125,15 +125,15 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                 final long resultCount = solrDocumentProvider.size();
 
                 if (emptyQuery && emptyFacetSelection) {
-                    return String.format("Showing all records (%d results)", resultCount);
+                    return String.format("Showing all records (%,d results)", resultCount);
                 } else {
                     final long firstShown = 1 + resultsView.getCurrentPage() * resultsView.getItemsPerPage();
                     final long lastShown = Math.min(resultsView.getItemCount(), firstShown + resultsView.getItemsPerPage() - 1);
                     return String.format(
                             String.format("%s%s",
                                     resultCount == 0 ? "No results"
-                                            : String.format("Showing %s %d results",
-                                                    (resultsView.getPageCount() <= 1) ? "" : String.format("%d to %d of ", firstShown, lastShown), resultCount),
+                                            : String.format("Showing %s %,d results",
+                                                    (resultsView.getPageCount() <= 1) ? "" : String.format("%,d to %,d of ", firstShown, lastShown), resultCount),
                                     emptyFacetSelection ? "" : " within selection")
                     );
                 }
