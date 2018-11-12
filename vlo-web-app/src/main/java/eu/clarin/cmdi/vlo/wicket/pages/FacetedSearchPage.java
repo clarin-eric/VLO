@@ -2,7 +2,6 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import eu.clarin.cmdi.vlo.CmdConstants;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
@@ -33,6 +32,7 @@ import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetNamesModel;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.RecordCountModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.AvailabilityFacetPanel;
@@ -103,6 +103,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     private FacetFieldsModel fieldsModel;
     private IModel<FacetSelectionType> facetSelectionTypeModeModel;
     private IModel<Boolean> simpleModeModel;
+    private IModel<Long> recordCountModel;
 
     public FacetedSearchPage(IModel<QueryFacetsSelection> queryModel) {
         this(queryModel, Model.of(false));
@@ -144,7 +145,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         final List<String> allFields = ImmutableList.copyOf(Iterables.concat(facetFields, ImmutableList.of(fieldNameService.getFieldName(ADDITIONAL_FACETS))));
         facetNamesModel = new FacetNamesModel(facetFields);
         fieldsModel = new FacetFieldsModel(facetFieldsService, allFields, getModel(), -1);
-
+        recordCountModel = new RecordCountModel(getModel());
+        
         final FacetSelectionType initialSelectionType = getFacetSelectionTypeModeFromSessionOrDefault();
         facetSelectionTypeModeModel = new Model<FacetSelectionType>(initialSelectionType) {
             @Override
@@ -255,12 +257,12 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
 
         final AbstractPageableView<SolrDocumentExpansionPair> resultsView = searchResultsPanel.getResultsView();
 
-        resultsHeader = createResultsHeader("searchresultsheader", getModel(), resultsView, solrDocumentsProvider);
+        resultsHeader = createResultsHeader("searchresultsheader", getModel(), resultsView, solrDocumentsProvider, recordCountModel);
         searchContainer.add(resultsHeader.setOutputMarkupId(true));
     }
 
-    private SearchResultsHeaderPanel createResultsHeader(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocumentExpansionPair> resultsView, IDataProvider<SolrDocument> solrDocumentProvider) {
-        return new SearchResultsHeaderPanel(id, model, resultsView, solrDocumentProvider) {
+    private SearchResultsHeaderPanel createResultsHeader(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocumentExpansionPair> resultsView, IDataProvider<SolrDocument> solrDocumentProvider, IModel<Long> recordCountModel) {
+        return new SearchResultsHeaderPanel(id, model, resultsView, solrDocumentProvider, recordCountModel) {
             @Override
             protected void onChange(AjaxRequestTarget target) {
                 updateSelection(target);

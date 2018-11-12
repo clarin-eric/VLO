@@ -73,7 +73,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
     private final IDataProvider<SolrDocument> solrDocumentProvider;
     private final AbstractPageableView<SolrDocumentExpansionPair> resultsView;
 
-    public SearchResultsHeaderPanel(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocumentExpansionPair> resultsView, IDataProvider<SolrDocument> solrDocumentProvider) {
+    public SearchResultsHeaderPanel(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocumentExpansionPair> resultsView, IDataProvider<SolrDocument> solrDocumentProvider, IModel<Long> recordCountModel) {
         super(id, model);
 
         this.solrDocumentProvider = solrDocumentProvider;
@@ -84,6 +84,15 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
 
         // form to select number of results per page
         add(createResultPageSizeForm("resultPageSizeForm", resultsView));
+
+        add(new Label("recordCount", recordCountModel));
+        add(new Label("duplicateCount", new AbstractReadOnlyModel<Long>() {
+            @Override
+            public Long getObject() {
+                return solrDocumentProvider.size() - recordCountModel.getObject();
+            }
+
+        }));
 
         //For Ajax updating of search results
         setOutputMarkupId(true);
