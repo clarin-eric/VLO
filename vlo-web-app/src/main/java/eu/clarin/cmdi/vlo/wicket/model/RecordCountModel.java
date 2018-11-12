@@ -37,7 +37,7 @@ public class RecordCountModel extends LoadableDetachableModel<Long> {
     @Override
     protected Long load() {
         final SolrDocumentService documentService = VloWicketApplication.get().getDocumentService();
-        return documentService.getDocumentCount(selectionModel.getObject());
+        return documentService.getTotalDocumentCount(selectionModel.getObject());
     }
 
     @Override

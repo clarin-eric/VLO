@@ -34,6 +34,18 @@ public interface SolrDocumentService {
     
     SolrDocumentExpansionList getDocumentsWithExpansion(QueryFacetsSelection selection, int first, int count, String collapseField);
     
-    long getDocumentCount(QueryFacetsSelection selection);
+    /**
+     * 
+     * @param selection
+     * @return number of results for selection
+     */
+    long getResultCount(QueryFacetsSelection selection);
+    
+    /**
+     * 
+     * @param selection
+     * @return total number of documents in result for selection
+     */
+    long getTotalDocumentCount(QueryFacetsSelection selection);
 
 }

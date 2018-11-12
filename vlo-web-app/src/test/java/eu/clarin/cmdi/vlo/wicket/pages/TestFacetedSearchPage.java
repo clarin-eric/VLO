@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
 import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.solr.common.SolrDocument;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Test;
@@ -59,7 +58,7 @@ public class TestFacetedSearchPage extends AbstractWicketTest {
                 )));
 
                 // mock search results
-                atLeast(1).of(documentService).getDocumentCount(with(any(QueryFacetsSelection.class)));
+                atLeast(1).of(documentService).getResultCount(with(any(QueryFacetsSelection.class)));
                 will(returnValue(1000L));
                 oneOf(documentService).getDocumentsWithExpansion(with(any(QueryFacetsSelection.class)), with(equal(0)), with(equal(10)), with(equal("_signature")));
                 will(returnValue(resultList));

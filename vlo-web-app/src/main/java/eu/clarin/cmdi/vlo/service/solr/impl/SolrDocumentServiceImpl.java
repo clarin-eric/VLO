@@ -97,9 +97,14 @@ public class SolrDocumentServiceImpl implements SolrDocumentService {
     }
 
     @Override
-    public long getDocumentCount(QueryFacetsSelection selection) {
+    public long getResultCount(QueryFacetsSelection selection) {
         final SolrQuery query = queryFactory.createDocumentQuery(selection, 0, 0);
         return searchResultsDao.getDocuments(query).getNumFound();
+    }
+
+    @Override
+    public long getTotalDocumentCount(QueryFacetsSelection selection) {
+        throw new UnsupportedOperationException("not yet implemented");
     }
 
 }

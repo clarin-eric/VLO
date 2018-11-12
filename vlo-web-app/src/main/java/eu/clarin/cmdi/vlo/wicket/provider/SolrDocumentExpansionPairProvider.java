@@ -58,7 +58,7 @@ public class SolrDocumentExpansionPairProvider implements IDataProvider<SolrDocu
     @Override
     public long size() {
         if (size == null) {
-            size = getDocumentService().getDocumentCount(selectionModel.getObject());
+            size = getDocumentService().getResultCount(selectionModel.getObject());
         }
         return size;
     }
