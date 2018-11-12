@@ -52,6 +52,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.convert.ConversionException;
@@ -85,14 +86,29 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         // form to select number of results per page
         add(createResultPageSizeForm("resultPageSizeForm", resultsView));
 
-        add(new Label("recordCount", recordCountModel));
-        add(new Label("duplicateCount", new AbstractReadOnlyModel<Long>() {
+        final IModel<Long> duplicateCountModel = new LoadableDetachableModel<Long>() {
             @Override
-            public Long getObject() {
-                return solrDocumentProvider.size() - recordCountModel.getObject();
+            public Long load() {
+                return recordCountModel.getObject() - solrDocumentProvider.size();
             }
 
-        }));
+            @Override
+            protected void onDetach() {
+                recordCountModel.detach();
+            }
+
+        };
+
+        add(new Label("recordCount", recordCountModel));
+        add(new Label("duplicateCount", duplicateCountModel) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(duplicateCountModel.getObject() > 0);
+            }
+
+        }
+        );
 
         //For Ajax updating of search results
         setOutputMarkupId(true);
