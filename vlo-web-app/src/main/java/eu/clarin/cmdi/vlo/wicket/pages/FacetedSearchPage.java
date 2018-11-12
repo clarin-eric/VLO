@@ -319,7 +319,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     }
 
     private Panel createSearchForm(String id) {
-        final SearchFormPanel form = new SearchFormPanel(id, getModel()) {
+        final SearchFormPanel form = new SearchFormPanel(id, getModel(), recordCountModel) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
