@@ -49,6 +49,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -77,7 +78,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
         this.searchContextModel = searchContextModel;
 
         // add untruncated description
-        final NullFallbackModel descriptionModel = new NullFallbackModel(new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.DESCRIPTION)), "");
+        final NullFallbackModel descriptionModel = new NullFallbackModel(new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.DESCRIPTION)), new StringResourceModel("searchresult.nodescription", this));
         add(new SmartLinkFieldValueLabel("description", descriptionModel, Model.of(fieldNameService.getFieldName(FieldKey.DESCRIPTION))));
 
         // add link to record
