@@ -100,7 +100,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                 final long resultCount = solrDocumentProvider.size();
 
                 if (emptyQuery && emptyFacetSelection) {
-                    return String.format("Showing all %d records", resultCount);
+                    return String.format("Showing all records (%d results)", resultCount);
                 } else {
                     final long firstShown = 1 + resultsView.getCurrentPage() * resultsView.getItemsPerPage();
                     final long lastShown = Math.min(resultsView.getItemCount(), firstShown + resultsView.getItemsPerPage() - 1);
@@ -164,7 +164,14 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         };
         final Component query = new WebMarkupContainer(id)
                 .add(label)
-                .add(removeLink);
+                .add(removeLink)
+                .add(new AttributeModifier("placeholder", new AbstractReadOnlyModel<String>() {
+                    @Override
+                    public String getObject() {
+                        return "Search through 100,000 records";
+                    }
+
+                }));
         return query;
     }
 
