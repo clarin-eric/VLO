@@ -26,6 +26,7 @@ import org.springframework.context.ApplicationContextAware;
 
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.config.VloConfigWicketResource;
 import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAjaxRequestTargetListener;
 import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
 import eu.clarin.cmdi.vlo.service.PermalinkService;
@@ -54,6 +55,8 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
+import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.request.resource.ResourceReference;
 
 /**
  * Application object for your web application. If you want to run this
@@ -62,9 +65,9 @@ import org.apache.wicket.request.http.WebResponse;
  * @see eu.clarin.cmdi.Start#main(String[])
  */
 public class VloWicketApplication extends WebApplication implements ApplicationContextAware {
-    
+
     private final static Logger logger = LoggerFactory.getLogger(VloWicketApplication.class);
-    
+
     @Inject
     private SolrDocumentService documentService;
     @Inject
@@ -81,7 +84,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     private FieldNameService fieldNameService;
     @Inject
     private PermalinkService permalinkService;
-    
+
     private ApplicationContext applicationContext;
     private String appVersionQualifier;
 
@@ -105,7 +108,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
 
         // register global resource bundles (from .properties files)
         registerResourceBundles();
-        
+
         // mount pages on URL paths
         mountPages();
 
@@ -118,11 +121,11 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         // determine version qualifier (e.g. 'beta'), which can be used to visually mark the base page
         appVersionQualifier = determineVersionQualifier();
         logger.info("Version qualifier: {}", appVersionQualifier);
-        
+
         // add history API ajax request target listener for URL updates on Ajax request
         getAjaxRequestTargetListeners().add(new HistoryApiAjaxRequestTargetListener());
     }
-    
+
     private void registerResourceBundles() {
         // this listener will inject any spring beans that need to be autowired
         getComponentInstantiationListeners().add(new SpringComponentInjector(this, applicationContext));
@@ -142,7 +145,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
                 JavaScriptResources.getVloFacetsJS()
         );
     }
-    
+
     private void mountPages() {
         // Faceted search page (simple search is on root)
         mountPage("/search", FacetedSearchPage.class);
@@ -159,14 +162,21 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         mountPage("/help", HelpPage.class);
         // Help page
         mountPage("/error/${" + ErrorPage.PAGE_PARAMETER_RESPONSE_CODE + "}", ErrorPage.class);
+
+        mountResource("/config/VloConfig.xml", new ResourceReference("VloConfig") {
+            @Override
+            public IResource getResource() {
+                return new VloConfigWicketResource(vloConfig.getConfigLocation());
+            }
+        });
     }
-    
+
     private void setupCache() {
         // configure cache by applying the vlo configuration settings to it
         final int pagesInApplicationCache = vloConfig.getPagesInApplicationCache();
         logger.info("Setting Wicket in-memory cache size to {}", pagesInApplicationCache);
         this.getStoreSettings().setInmemoryCacheSize(pagesInApplicationCache);
-        
+
         final Bytes sessionCacheSize = Bytes.kilobytes((long) vloConfig.getSessionCacheSize());
         logger.info("Setting Wicket max size per session to {}", sessionCacheSize);
         this.getStoreSettings().setMaxSizePerSession(sessionCacheSize);
@@ -201,7 +211,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     public static VloWicketApplication get() {
         return (VloWicketApplication) Application.get();
     }
-    
+
     @Override
     public Session newSession(Request request, Response response) {
         return new VloWebSession(request);
@@ -218,7 +228,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
-    
+
     @Override
     protected WebResponse newWebResponse(final WebRequest webRequest, HttpServletResponse httpServletResponse) {
         //Search engine optimisation: prevent JSESSIONID in URL for web crawlers
@@ -240,27 +250,27 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     public XmlTransformationService getCmdiTransformationService() {
         return cmdiTransformationService;
     }
-    
+
     public FieldValueConverterProvider getFieldValueConverterProvider() {
         return fieldValueConverterProvider;
     }
-    
+
     public Map<String, Ordering<String>> getFieldValueOrderings() {
         return fieldValueOrderings;
     }
-    
+
     public FacetDescriptionService getFacetDescriptionService() {
         return facetDescriptionService;
     }
-    
+
     public PermalinkService getPermalinkService() {
         return permalinkService;
     }
-    
+
     public String getAppVersionQualifier() {
         return appVersionQualifier;
     }
-    
+
     public FieldNameService getFieldNameService() {
         return this.fieldNameService;
     }
@@ -282,7 +292,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         mount(mapper);
         return mapper;
     }
-    
+
     private void initBootstrap() {
         Bootstrap.install(this,
                 new BootstrapSettings()
@@ -290,28 +300,28 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
                         .setThemeProvider(new SingleThemeProvider(new ExtremeNoopTheme()))
                         .setJsResourceReference(JavaScriptResources.getBootstrapJS()));
     }
-    
+
     private static class ExtremeNoopTheme implements ITheme {
-        
+
         @Override
         public String name() {
             return "noop-theme";
         }
-        
+
         @Override
         public List<HeaderItem> getDependencies() {
             return Collections.emptyList();
         }
-        
+
         @Override
         public void renderHead(IHeaderResponse response) {
         }
-        
+
         @Override
         public Iterable<String> getCdnUrls() {
             return Collections.emptyList();
         }
-        
+
     }
-    
+
 }
