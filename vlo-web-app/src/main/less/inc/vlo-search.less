@@ -160,32 +160,28 @@
                 text-decoration: none;
                 color: @text-color;
 
-                .search-results-duplicates-preamble, .search-results-duplicates-expand-link {
+                .search-results-duplicates-preamble {
                     display: block;
                     padding-bottom: .5em;
                 }
 
-                .search-results-duplicates-expand-link {
-
-                    color: @link-color;
-
-                    &:hover {
-                        text-decoration: @link-hover-decoration;
-                    }
+                .caret {
+                    margin-top: .5em;
                 }
             }
         }
 
-        .duplicates-expanded {
-            a.search-results-duplicates-expand-collapse {
-                
-                .search-results-duplicates-expand-link {
-                    display: none;
-                }
-                
-                .caret {
-                    transform: rotate(180deg);
-                }
+        .duplicates-expanded .search-results-duplicates-expand-collapse .caret {
+            transform: rotate(180deg);
+        }
+
+        .search-results-duplicates-list a.list-group-item {
+            color: @link-color;
+
+            &:hover {
+                color: @link-hover-color;
+                background: @list-group-bg;
+                text-decoration: @link-hover-decoration;
             }
         }
     }

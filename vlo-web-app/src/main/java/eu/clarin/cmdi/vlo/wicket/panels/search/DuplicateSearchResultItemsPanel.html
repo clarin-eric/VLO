@@ -30,17 +30,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <span class="search-results-duplicates-preamble"> 
                             The search results include <span wicket:id="expansionCount">[COUNT]</span> (near) duplicate(s) of this record.
                         </span>
-                        <span class="search-results-duplicates-expand-link">
-                            Click here to see the (near) duplicate results
-                        </span>
                     </a>
                 </div>
                 <div wicket:id="duplicatesView" class="search-results-duplicates-list collapse in">
-                    <ul class="list-group">
-                        <li wicket:id="duplicateItem" class="list-group-item">
-                            <a wicket:id="duplicateItemLink"><wicket:container wicket:id="duplicateItemName">[item]</wicket:container></a>
-                        </li>
-                    </ul>
+                    <div class="list-group">
+                        <wicket:container wicket:id="duplicateItem">
+                            <a wicket:id="duplicateItemLink" class="list-group-item"><wicket:container wicket:id="duplicateItemName">[item]</wicket:container></a>
+                        </wicket:container>
+                    </div>
                     <ul wicket:id="duplicatesPaging"></ul>
                 </div>
             </div>
