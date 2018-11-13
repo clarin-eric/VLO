@@ -22,7 +22,7 @@ import eu.clarin.cmdi.vlo.wicket.panels.BootstrapModal;
 import eu.clarin.cmdi.vlo.wicket.panels.PIDInfoPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
@@ -58,7 +58,7 @@ public class PIDLinkLabel extends GenericPanel<String> {
         super(id, model);
 
         this.pidLabel = new PIDLabel("label", model, maxLinkLength);
-        final Link link = new AjaxFallbackLink("link", PIDLinkModel.wrapLinkModel(model)) {
+        final Link link = new IndicatingAjaxFallbackLink("link", PIDLinkModel.wrapLinkModel(model)) {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 PIDLinkLabel.this.onClick(target);
