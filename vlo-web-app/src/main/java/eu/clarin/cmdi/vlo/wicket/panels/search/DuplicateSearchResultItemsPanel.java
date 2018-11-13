@@ -24,6 +24,7 @@ import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
+import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import static java.lang.Math.toIntExact;
@@ -32,6 +33,7 @@ import java.util.Iterator;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -42,6 +44,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -80,26 +83,27 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
             }
         };
 
-        add(new Label("expansionCount", new PropertyModel<>(documentExpansionPairModel, "expansionCount")));
+        //container with class that represents expansion state
+        final WebMarkupContainer container = new WebMarkupContainer("duplicatesViewContainer");
 
-        // links to expand (i.e. show list)
-        add(new IndicatingAjaxFallbackLink("expandDuplicates") {
+        // header contains link to expand/collapse duplicates list
+        final IndicatingAjaxFallbackLink toggleHeaderLink = new IndicatingAjaxFallbackLink("toggleExpansion") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                expand(target, expandedModel);
+                expandedModel.setObject(isExpandedModel.getObject() ? ExpansionState.COLLAPSED : ExpansionState.EXPANDED);
+                if (target != null) {
+                    target.add(container);
+                }
             }
-        }.add(BooleanVisibilityBehavior.visibleOnFalse(isExpandedModel)));
+        };
 
-        add(new IndicatingAjaxFallbackLink("expandButton") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                expand(target, expandedModel);
-            }
-        }.add(BooleanVisibilityBehavior.visibleOnFalse(isExpandedModel)));
-
-        // after expansion show JS expansion toggle instead
-        add(new WebMarkupContainer("toggleExpansion")
-                .add(BooleanVisibilityBehavior.visibleOnTrue(isExpandedModel)));
+        add(container
+                .add(toggleHeaderLink
+                        .add(new Label("expansionCount", new PropertyModel<>(documentExpansionPairModel, "expansionCount"))))
+                .add(new AttributeAppender("class",
+                        new BooleanOptionsModel<String>(isExpandedModel,
+                                Model.of("duplicates-expanded duplicates-was-expanded"),
+                                Model.of("duplicates-collapsed")))));
 
         // view of documents list
         final DataView<SolrDocument> duplicatesView = new DataView<SolrDocument>("duplicateItem", new DuplicateDocumentsProvider(documentExpansionPairModel, fieldNameService), ITEMS_PER_PAGE) {
@@ -113,7 +117,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
         };
 
         // container for list view and pagination
-        add(new WebMarkupContainer("duplicatesView")
+        container.add(new WebMarkupContainer("duplicatesView")
                 .add(duplicatesView)
                 .add(new BootstrapAjaxPagingNavigator("duplicatesPaging", duplicatesView) // pagination for list view
                         .add(new Behavior() {
@@ -129,14 +133,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
         );
 
         // component must be Ajax updateable (on expansion)
-        setOutputMarkupId(true);
-    }
-
-    private void expand(AjaxRequestTarget target, IModel<ExpansionState> expandedModel) {
-        expandedModel.setObject(ExpansionState.EXPANDED);
-        if (target != null) {
-            target.add(DuplicateSearchResultItemsPanel.this);
-        }
+        container.setOutputMarkupId(true);
     }
 
     @Override

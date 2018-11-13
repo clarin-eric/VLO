@@ -155,12 +155,38 @@
         clear: both;
         margin-top: .5em;
 
-        .search-results-duplicates-preamble {
-            font-style: bold;
+        .search-results-duplicates-heading {
+            a.search-results-duplicates-expand-collapse {
+                text-decoration: none;
+                color: @text-color;
+
+                .search-results-duplicates-preamble, .search-results-duplicates-expand-link {
+                    display: block;
+                    padding-bottom: .5em;
+                }
+
+                .search-results-duplicates-expand-link {
+
+                    color: @link-color;
+
+                    &:hover {
+                        text-decoration: @link-hover-decoration;
+                    }
+                }
+            }
         }
 
-        .search-results-duplicates-list {
-            padding-bottom: .5em;
+        .duplicates-expanded {
+            a.search-results-duplicates-expand-collapse {
+                
+                .search-results-duplicates-expand-link {
+                    display: none;
+                }
+                
+                .caret {
+                    transform: rotate(180deg);
+                }
+            }
         }
     }
 
