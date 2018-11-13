@@ -173,18 +173,24 @@ public class TopLinksPanel extends Panel {
                         };
                     }
                 }, new DropdownMenuItem("Copy link", "fa fa-clipboard fw") { //Clipboard
+
+                    //non-ajax link as in JS context we can copy the link to clipboard directly
                     @Override
                     protected Link getLink(String id) {
-                        return new AjaxFallbackLink(id) {
+                        final Link link = new Link(id) {
 
                             @Override
-                            public void onClick(AjaxRequestTarget target) {
+                            public void onClick() {
                                 shareMenu.close();
                                 modalBookmarkLinkPanel.setCopyMode();
                                 inlineBookmarkLinkPanel.setCopyMode();
-                                showLinkModal(target);
+                                showLinkModal(null);
                             }
                         };
+                        link
+                                .add(new AttributeAppender("class", "clipboard-copy-link"))
+                                .add(new AttributeAppender("data-clipboard-text", linkModel));
+                        return link;
                     }
                 }, new DropdownMenuItem("Send link by e-mail", "fa fa-envelope fw") { //E-mail
                     @Override

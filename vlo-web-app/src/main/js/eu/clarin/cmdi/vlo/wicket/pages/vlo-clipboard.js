@@ -16,23 +16,58 @@
  */
 
 
+var showCopiedTooltip = function (button) {
+    // show a 'copied' tooltip on the button for a second
+
+    var title = button.attr('title');
+
+    button.attr('title', 'Copied!');
+    button.tooltip({
+        "placement": "bottom",
+        "trigger": "manual"
+    });
+    button.on('shown.bs.tooltip', function (e) {
+        //remove tooltip
+        setTimeout(function () {
+            button.attr('title', title);
+            button.tooltip('destroy');
+        }, 1000);
+    });
+    button.tooltip('show');
+
+    //flash button
+    button.toggleClass('btn-info');
+    setTimeout(function () {
+        button.toggleClass('btn-info');
+    }, 500);
+};
+
 $(document).ready(function () {
+    // general handling for clipboard buttons
     var clipboard = new ClipboardJS('.btn.clipboard');
     clipboard.on('success', function (e) {
-        var button = $(e.trigger);
-        var title = button.attr('title');
+        // success feedback
+        showCopiedTooltip($(e.trigger));
+        
+        //clear selection
+        e.clearSelection();
+    });
 
-        button.attr('title', 'Copied!');
-        button.tooltip({
-            "placement": "bottom",
-            "trigger": "manual"
-        });
-        button.on('shown.bs.tooltip', function (e) {
-            setTimeout(function () {
-                button.attr('title', title);
-                button.tooltip('destroy');
-            }, 1000);
-        });
-        button.tooltip('show');
+    // top navigation 'copy page link' option in 'share' dropdown
+    $('#topnavigation').on('click', '.clipboard-copy-link', function (e) {
+        // do not follow wicket link!
+        e.preventDefault();
+    });
+
+    var clipboardPageLink = new ClipboardJS('#topnavigation .clipboard-copy-link');
+    clipboardPageLink.on('success', function (e) {
+        // success feedback
+        showCopiedTooltip($(e.trigger).parents('.dropdown').children('.btn'));
+    });
+
+    clipboardPageLink.on('error', function (e) {
+        // follow wicket link in case of failure
+        console.log("Failed to copy link to clipboard");
+        window.location = $(e.trigger).attr('href');
     });
 });
