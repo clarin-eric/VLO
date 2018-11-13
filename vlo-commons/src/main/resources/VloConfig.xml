@@ -117,6 +117,7 @@
         <field key="HAS_PART_COUNT_WEIGHT">_hasPartCountWeight</field>
         <field key="LANGUAGE_NAME">_languageName</field>
         <field key="OAI_ENDPOINT_URI">_oaiEndpointURI</field>
+        <field key="SIGNATURE">_signature</field>
     </fields>
 
     <deprecatedFields>
@@ -249,5 +250,13 @@
     <showResultScores>false</showResultScores>
 
     <processHierarchies>true</processHierarchies>
+
+    <!-- fields that are used to generate a document signature to identify duplicates -->
+    <signatureFields>
+        <signatureField>LANGUAGE_CODE</signatureField>
+        <signatureField>DATA_PROVIDER_NAME</signatureField>
+        <signatureField>DESCRIPTION</signatureField>
+        <signatureField>COLLECTION</signatureField>
+    </signatureFields>
 
 </VloConfig>

@@ -145,6 +145,9 @@ public class MetadataImporter {
     private Long time;
     private final FieldNameServiceImpl fieldNameService;
 
+    // Signature generator for document deduplication
+    DeduplicationSignature signature;
+
     public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList) {
         this(config, languageCodeUtils, mappingFactory, marshaller, clDatarootsList, DefaultSolrBridgeFactory.createDefaultSolrBridge(config));
     }
@@ -156,7 +159,7 @@ public class MetadataImporter {
         this.postProcessors = registerPostProcessors(config, this.fieldNameService, languageCodeUtils);
         this.solrBridge = solrBrdige;
         this.processor = new CMDIParserVTDXML(postProcessors, config, mappingFactory, marshaller, false);
-
+        this.signature = new DeduplicationSignature(config.getSignatureFieldNames());
     }
 
     protected static Map<String, AbstractPostNormalizer> registerPostProcessors(VloConfig config, FieldNameService fieldNameService, LanguageCodeUtils languageCodeUtils) {
@@ -619,7 +622,7 @@ public class MetadataImporter {
         addResourceData(solrDocument, cmdiData);
 
         // create and add document signature
-        solrDocument.addField(fieldNameService.getFieldName(FieldKey.SIGNATURE), DeduplicationSignature.getSignature(fieldNameService, solrDocument));
+        solrDocument.addField(fieldNameService.getFieldName(FieldKey.SIGNATURE), signature.getSignature(solrDocument));
 
         LOG.debug("Adding document for submission to SOLR: {}", file);
 
