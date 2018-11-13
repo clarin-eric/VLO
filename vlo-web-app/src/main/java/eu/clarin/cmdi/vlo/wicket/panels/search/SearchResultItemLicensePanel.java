@@ -64,7 +64,7 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
                 item.add(createLink("recordLink")
                         .add(new AttributeAppender("class", item.getModel(), " "))
                         .add(new AttributeModifier("title",
-                                new FormattedStringModel(Model.of("Availability: %s"),
+                                new FormattedStringModel<>(Model.of("Availability: %s"),
                                         new ConvertedFieldValueModel(item.getModel(), fieldNameService.getFieldName(FieldKey.AVAILABILITY)))))
                 );
             }
@@ -84,7 +84,7 @@ public class SearchResultItemLicensePanel extends GenericPanel<SolrDocument> {
                         .add(new AttributeAppender("class",
                                 new StringReplaceModel(item.getModel(), nonAlphanumericPatternModel, Model.of("_")), " "))
                         .add(new AttributeModifier("title",
-                                new FormattedStringModel(Model.of("Licence: %s"),
+                                new FormattedStringModel<>(Model.of("Licence: %s"),
                                         new ConvertedFieldValueModel(item.getModel(), fieldNameService.getFieldName(FieldKey.LICENSE)))))
                 );
             }

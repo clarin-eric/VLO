@@ -23,6 +23,7 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
+import eu.clarin.cmdi.vlo.wicket.model.FormattedStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import static eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel.ITEMS_PER_PAGE_OPTIONS;
@@ -74,6 +75,8 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
     private final IDataProvider<SolrDocument> solrDocumentProvider;
     private final AbstractPageableView<SolrDocumentExpansionPair> resultsView;
 
+    public final static String RECORD_COUNT_NUMBER_FORMAT = "%,d";
+
     public SearchResultsHeaderPanel(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocumentExpansionPair> resultsView, IDataProvider<SolrDocument> solrDocumentProvider, IModel<Long> recordCountModel) {
         super(id, model);
 
@@ -99,8 +102,8 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
 
         };
 
-        add(new Label("recordCount", recordCountModel));
-        add(new Label("duplicateCount", duplicateCountModel) {
+        add(new Label("recordCount", new FormattedStringModel<>(RECORD_COUNT_NUMBER_FORMAT, recordCountModel)));
+        add(new Label("duplicateCount", new FormattedStringModel<>(RECORD_COUNT_NUMBER_FORMAT, duplicateCountModel)) {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
