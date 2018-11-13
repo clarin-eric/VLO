@@ -163,6 +163,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         // Help page
         mountPage("/error/${" + ErrorPage.PAGE_PARAMETER_RESPONSE_CODE + "}", ErrorPage.class);
 
+        // Resource that exposes the contents of VloConfig.xml
         mountResource("/config/VloConfig.xml", new ResourceReference("VloConfig") {
             @Override
             public IResource getResource() {

@@ -26,7 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Resource that exposes the contents of the {@link VloConfig} input file.
  *
+ * @see <a href="https://github.com/clarin-eric/VLO/issues/202">VLO issue #202</a>
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class VloConfigWicketResource extends AbstractResource {
