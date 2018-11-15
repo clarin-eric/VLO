@@ -22,6 +22,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -77,6 +78,7 @@ public class TopLinksPanel extends Panel {
                         throw new RedirectToUrlException(url);
                     }
                 })
+                .add(new ExternalLink("bookmarkLink", linkModel))
                 .add(new AttributeAppender("class", new BooleanOptionsModel<String>(dropDownForcedOpen, Model.of("open"), Model.of("")), " "))
         );
 

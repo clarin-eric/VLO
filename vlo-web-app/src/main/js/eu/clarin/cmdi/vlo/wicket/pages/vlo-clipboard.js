@@ -46,28 +46,18 @@ $(document).ready(function () {
     // general handling for clipboard buttons
     var clipboard = new ClipboardJS('.btn.clipboard');
     clipboard.on('success', function (e) {
-        // success feedback
-        showCopiedTooltip($(e.trigger));
-        
+        var cbBtn = $(e.trigger);
+
+        var dropDownParent = cbBtn.closest('.dropdown');
+        if (dropDownParent && dropDownParent.length > 0) {
+            //feedback on the dropdown trigger
+            showCopiedTooltip(dropDownParent.find('.btn[data-toggle=dropdown]'));
+        } else {
+            //feedback on the button
+            showCopiedTooltip($(e.trigger));
+        }
+
         //clear selection
         e.clearSelection();
-    });
-
-    // top navigation 'copy page link' option in 'share' dropdown
-    $('#topnavigation').on('click', '.clipboard-copy-link', function (e) {
-        // do not follow wicket link!
-        e.preventDefault();
-    });
-
-    var clipboardPageLink = new ClipboardJS('#topnavigation .clipboard-copy-link');
-    clipboardPageLink.on('success', function (e) {
-        // success feedback
-        showCopiedTooltip($(e.trigger).parents('.dropdown').children('.btn'));
-    });
-
-    clipboardPageLink.on('error', function (e) {
-        // follow wicket link in case of failure
-        console.log("Failed to copy link to clipboard");
-        window.location = $(e.trigger).attr('href');
     });
 });
