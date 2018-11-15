@@ -16,21 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
-import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown.DropdownMenuItem;
-import java.io.Serializable;
-import java.util.List;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -55,60 +47,24 @@ public class TopLinksPanel extends Panel {
 
     private final IModel<String> linkModel;
     private final IModel<String> pageTitleModel;
-    private final IModel<Boolean> inlineBookmarkLinkPanelVisibilityModel;
-
-    private final BookmarkLinkPanel modalBookmarkLinkPanel;
-    private final BookmarkLinkPanel inlineBookmarkLinkPanel;
-    private final BootstrapModal linkModal;
-    private final BootstrapDropdown shareMenu;
 
     public TopLinksPanel(String id, final IModel<String> linkModel, final IModel<String> pageTitleModel) {
         super(id);
         this.linkModel = linkModel;
         this.pageTitleModel = pageTitleModel != null ? pageTitleModel : new Model<String>(null);
-        shareMenu = new BootstrapDropdown("shareOptions", new ListModel<>(getShareMenuOptions())) {
+
+        add(new TextField("urlInputField", linkModel));
+
+        add(new Link("emailLink") {
             @Override
-            protected Component createDropDownLink(String id) {
-
-                return super.createDropDownLink(id)
-                        .add(new AttributeAppender("class", "btn-sm", " "));
+            public void onClick() {
+                final String url
+                        = String.format("mailto:?subject=%s&body=%s",
+                                encodeMailtoParamValue(pageTitleModel.getObject()),
+                                encodeMailtoParamValue(linkModel.getObject()));
+                throw new RedirectToUrlException(url);
             }
-
-            @Override
-            protected Serializable getButtonIconClass() {
-                return "fa fa-share-alt";
-            }
-
-        };
-
-        add(shareMenu);
-
-        // modal dialogue for bookmark/copy link
-        linkModal = new BootstrapModal("linkPanel") {
-            @Override
-            protected IModel<String> getTitle() {
-                return Model.of("Page link");
-            }
-        };
-        modalBookmarkLinkPanel = new BookmarkLinkPanel(linkModal.getContentId(), linkModel, pageTitleModel);
-        add(linkModal.add(modalBookmarkLinkPanel));
-
-        // inline 'dialogue' for bookmark/copy link (non-js alternative for modal)
-        inlineBookmarkLinkPanelVisibilityModel = Model.of(false);
-        add(new WebMarkupContainer("inlineBookmarkPanel") {
-            @Override
-            protected void onConfigure() {
-                setVisible(inlineBookmarkLinkPanelVisibilityModel.getObject());
-            }
-        }
-                .add(inlineBookmarkLinkPanel = new BookmarkLinkPanel("linkPanel", linkModel, pageTitleModel))
-                .add(new Link("close") {
-                    @Override
-                    public void onClick() {
-                        inlineBookmarkLinkPanelVisibilityModel.setObject(false);
-                    }
-                })
-        );
+        });
 
         // feedback link
         add(new Link("feedback") {
@@ -123,15 +79,6 @@ public class TopLinksPanel extends Panel {
                 getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(feedbackUrl));
             }
         });
-    }
-
-    private void showLinkModal(AjaxRequestTarget target) {
-        if (target == null) {
-            inlineBookmarkLinkPanelVisibilityModel.setObject(Boolean.TRUE);
-        } else {
-            target.appendJavaScript("onModalShown();");
-            linkModal.show(target);
-        }
     }
 
     protected void onChange(AjaxRequestTarget target) {
@@ -154,60 +101,6 @@ public class TopLinksPanel extends Panel {
         if (pageTitleModel != null) {
             pageTitleModel.detach();
         }
-    }
-
-    private List<DropdownMenuItem> getShareMenuOptions() {
-        return Lists
-                .newArrayList(new DropdownMenuItem("Bookmark this", "fa fa-bookmark fw") { //Bookmark
-                    @Override
-                    protected Link getLink(String id) {
-                        return new AjaxFallbackLink(id) {
-
-                            @Override
-                            public void onClick(AjaxRequestTarget target) {
-                                shareMenu.close();
-                                modalBookmarkLinkPanel.setBookmarkMode();
-                                inlineBookmarkLinkPanel.setBookmarkMode();
-                                showLinkModal(target);
-                            }
-                        };
-                    }
-                }, new DropdownMenuItem("Copy link", "fa fa-clipboard fw") { //Clipboard
-
-                    //non-ajax link as in JS context we can copy the link to clipboard directly
-                    @Override
-                    protected Link getLink(String id) {
-                        final Link link = new Link(id) {
-
-                            @Override
-                            public void onClick() {
-                                shareMenu.close();
-                                modalBookmarkLinkPanel.setCopyMode();
-                                inlineBookmarkLinkPanel.setCopyMode();
-                                showLinkModal(null);
-                            }
-                        };
-                        link
-                                .add(new AttributeAppender("class", "clipboard-copy-link"))
-                                .add(new AttributeAppender("data-clipboard-text", linkModel));
-                        return link;
-                    }
-                }, new DropdownMenuItem("Send link by e-mail", "fa fa-envelope fw") { //E-mail
-                    @Override
-                    protected Link getLink(String id) {
-                        return new Link(id) {
-                            @Override
-                            public void onClick() {
-                                final String url
-                                        = String.format("mailto:?subject=%s&body=%s",
-                                                encodeMailtoParamValue(pageTitleModel.getObject()),
-                                                encodeMailtoParamValue(linkModel.getObject()));
-                                throw new RedirectToUrlException(url);
-                            }
-                        };
-                    }
-                }
-                );
     }
 
     private static String encodeMailtoParamValue(String param) {

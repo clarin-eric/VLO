@@ -20,19 +20,48 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <head>
         <title>permalink panel</title>
         <meta charset="UTF-8">
+            <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+            <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" />
+            <script src="https://code.jquery.com/jquery-2.2.4.min.js" crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </head>
     <body>
-        <wicket:panel>
-            <div style="display: inline-block;" wicket:id="shareOptions">[options]</div>
-            <a target="_blank" wicket:id="feedback" id="feedbacklink" class="btn btn-default btn-sm" 
-               title="Report an issue with this page or record">
-                <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
-            </a>
-            <div wicket:id="linkPanel"></div>
-            <div class="inline-link-panel" wicket:id="inlineBookmarkPanel">
-                <a wicket:id="close" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></a>
-                <div wicket:id="linkPanel"></div>
+        <div id="topnavigation" class="row">
+            <div class="col-xs-8 visible-xs visible-sm"><ul class="breadcrumb" id="breadcrumbs"><li><a href="">Back to the search results</a></li></ul></div>
+            <div class="col-md-8 hidden-xs hidden-sm"><ul class="breadcrumb" id="breadcrumbs"><li class="breadcrumbs-home"><a href="">VLO</a></li><li class="breadcrumbs-searchpage"><a href="">Faceted search</a></li><li class="breadcrumbs-document"><a href="">Record: <span>The Hamburg MapTask Corpus (HAMATAC)</span></a></li></ul></div>
+            <div class="col-md-4 col-xs-4">
+                <div class="top-links padding pull-right">
+
+
+                    <wicket:panel>
+                        <div style="display: inline-block;" class="dropdown">
+                            <a role="button" class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="./record?12-1.ILinkListener-navigation-permalink-shareOptions-button&amp;docId=http_58__47__47_hdl.handle.net_47_11022_47_0000-0000-63C5-2&amp;index=1&amp;count=198063">
+                                <i class="fa fa-share-alt" aria-hidden="true"></i> <span class="caret"></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right share-page-link-controls">
+                                <p>
+                                    The following URL can be used to share this page:
+                                </p>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input wicket:id="urlInputField" id="pageUrlInputField" type="text" class="form-control" readonly="readonly" aria-describedby="copy-addon" value="hdl:1234/5678" />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default clipboard" data-clipboard-target="#pageUrlInputField" type="button" title="Copy to clipboard"><span class="glyphicon glyphicon-copy"></span></button>
+                                        </span>
+                                        <span class="input-group-btn">
+                                            <a wicket:id="emailLink" class="btn btn-default" title="Share link via e-mail"><span class="glyphicon glyphicon-envelope"></span></a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a target="_blank" wicket:id="feedback" id="feedbacklink" class="btn btn-default btn-sm" 
+                           title="Report an issue with this page or record">
+                            <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+                        </a>
+                    </wicket:panel>
+                </div>
             </div>
-        </wicket:panel>
+        </div>
     </body>
 </html>
