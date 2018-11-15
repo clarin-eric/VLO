@@ -23,6 +23,14 @@ $(document).ready(function (){
         $('#bookmarkDragInstruction').slideDown(); 
     });
     
+    $('body').on('shown.bs.dropdown', '#share-dropdown', function(e) {
+       var input = $('#pageUrlInputField');
+       if(input.length > 0) {
+           input[0].focus();
+           input[0].setSelectionRange(0, input[0].value.length);
+       }
+    });
+    
     $('body').on('hidden.bs.dropdown', '#share-dropdown', function(e) {
        $('#bookmarkDragInstruction').hide(); 
     });
