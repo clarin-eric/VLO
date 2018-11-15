@@ -17,7 +17,10 @@
 package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -51,20 +54,31 @@ public class TopLinksPanel extends Panel {
     public TopLinksPanel(String id, final IModel<String> linkModel, final IModel<String> pageTitleModel) {
         super(id);
         this.linkModel = linkModel;
-        this.pageTitleModel = pageTitleModel != null ? pageTitleModel : new Model<String>(null);
+        this.pageTitleModel = pageTitleModel != null ? pageTitleModel : new Model<>(null);
 
-        add(new TextField("urlInputField", linkModel));
+        final IModel<Boolean> dropDownForcedOpen = Model.of(false);
 
-        add(new Link("emailLink") {
-            @Override
-            public void onClick() {
-                final String url
-                        = String.format("mailto:?subject=%s&body=%s",
-                                encodeMailtoParamValue(pageTitleModel.getObject()),
-                                encodeMailtoParamValue(linkModel.getObject()));
-                throw new RedirectToUrlException(url);
-            }
-        });
+        add(new WebMarkupContainer("dropDown")
+                .add(new Link("dropDownButton") {
+                    @Override
+                    public void onClick() {
+                        dropDownForcedOpen.setObject(!dropDownForcedOpen.getObject());
+                    }
+
+                })
+                .add(new TextField("urlInputField", linkModel))
+                .add(new Link("emailLink") {
+                    @Override
+                    public void onClick() {
+                        final String url
+                                = String.format("mailto:?subject=%s&body=%s",
+                                        encodeMailtoParamValue(pageTitleModel.getObject()),
+                                        encodeMailtoParamValue(linkModel.getObject()));
+                        throw new RedirectToUrlException(url);
+                    }
+                })
+                .add(new AttributeAppender("class", new BooleanOptionsModel<String>(dropDownForcedOpen, Model.of("open"), Model.of("")), " "))
+        );
 
         // feedback link
         add(new Link("feedback") {

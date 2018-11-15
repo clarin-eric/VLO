@@ -199,6 +199,8 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         if (bottomSnippet != null) {
             response.render(JavaScriptHeaderItem.forScript(bottomSnippet, "bottomSnippet"));
         }
+        
+        response.render(JavaScriptHeaderItem.forScript("$(document).ready(function() { $('body').removeClass('non-js'); });", "js-only-elements"));
     }
 
     private void addComponents() {

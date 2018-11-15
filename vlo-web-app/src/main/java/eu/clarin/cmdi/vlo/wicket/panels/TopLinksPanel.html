@@ -34,8 +34,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
                     <wicket:panel>
-                        <div style="display: inline-block;" class="dropdown">
-                            <a role="button" class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="./record?12-1.ILinkListener-navigation-permalink-shareOptions-button&amp;docId=http_58__47__47_hdl.handle.net_47_11022_47_0000-0000-63C5-2&amp;index=1&amp;count=198063">
+                        <div wicket:id="dropDown" style="display: inline-block;" class="dropdown">
+                            <a wicket:id="dropDownButton" role="button" class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="./record?12-1.ILinkListener-navigation-permalink-shareOptions-button&amp;docId=http_58__47__47_hdl.handle.net_47_11022_47_0000-0000-63C5-2&amp;index=1&amp;count=198063">
                                 <i class="fa fa-share-alt" aria-hidden="true"></i> <span class="caret"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right share-page-link-controls">
@@ -44,8 +44,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 </p>
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <input wicket:id="urlInputField" id="pageUrlInputField" type="text" class="form-control" readonly="readonly" aria-describedby="copy-addon" value="hdl:1234/5678" />
-                                        <span class="input-group-btn">
+                                        <input wicket:id="urlInputField" id="pageUrlInputField" type="text" class="form-control" readonly="readonly" />
+                                        <span class="input-group-btn js-only">
                                             <button class="btn btn-default clipboard" data-clipboard-target="#pageUrlInputField" type="button" title="Copy to clipboard"><span class="glyphicon glyphicon-copy"></span></button>
                                         </span>
                                         <span class="input-group-btn">
