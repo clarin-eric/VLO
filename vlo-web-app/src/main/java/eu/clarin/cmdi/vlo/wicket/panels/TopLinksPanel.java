@@ -36,8 +36,7 @@ import org.slf4j.LoggerFactory;
 /**
  * A panel with two components:
  * <ul>
- * <li>A dropdown menu with various share options, including two that trigger
- * {@link BookmarkLinkPanel}</li>
+ * <li>A dropdown menu with various share options</li>
  * <li>A feedback link for the current page (base URL taken from {@link VloConfig#getFeedbackFromUrl()
  * })</li>
  * </ul>
