@@ -156,7 +156,25 @@ ul.feedbackPanel {
     } 
 }
 
-.dropdown .share-page-link-controls {
-    width: 30em;
-    padding: 1em;
+/* share page link 'dropdown' (desirable dimensions relative to view port) */
+@media (min-width: @screen-sm-max) {
+    .dropdown .share-page-link-controls {
+        width: 0.6 * @container-md ;
+        padding: 1em;
+    }
+}
+
+@media (max-width: @screen-sm-max) {
+    .dropdown .share-page-link-controls {
+        width: .8 * @container-sm ;
+        padding: .5em;
+    }
+}
+
+
+@media (max-width: @screen-xs-max) {
+    .dropdown .share-page-link-controls {
+        width: 70vw ;
+        padding: 2px;
+    }
 }
