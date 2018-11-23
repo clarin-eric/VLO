@@ -1064,6 +1064,7 @@
           <str name="lookupImpl">FreeTextLookupFactory</str>
           <str name="dictionaryImpl">DocumentDictionaryFactory</str>
           <str name="field">_suggester</str>
+          <str name="separator"> </str>
           <str name="suggestAnalyzerFieldType">textSuggest</str>
           <str name="buildOnStartup">false</str>
           <str name="suggestFreeTextAnalyzerFieldType">textSuggest</str>
