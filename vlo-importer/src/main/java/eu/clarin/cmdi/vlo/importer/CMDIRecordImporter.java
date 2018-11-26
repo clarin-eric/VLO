@@ -50,19 +50,22 @@ public class CMDIRecordImporter<T> {
     private final CMDIDataProcessor<T> processor;
     private final ImportStatistics stats;
     private final DocumentStore documentStore;
+    private final DeduplicationSignature signature;
 
     private final static DataRoot NOOP_DATAROOT = new DataRoot("dataroot", new File("/"), "http://null", "", false);
+
 
     /**
      * Contains MDSelflinks (usually). Just to know what we have already done.
      */
     private final Set<String> processedIds = Sets.newConcurrentHashSet();
 
-    public CMDIRecordImporter(CMDIDataProcessor<T> processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ImportStatistics importStatistics) {
+    public CMDIRecordImporter(CMDIDataProcessor<T> processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ImportStatistics importStatistics, List<String> signatureFieldNames) {
         this.processor = processor;
         this.documentStore = documentStore;
         this.fieldNameService = fieldNameService;
         this.stats = importStatistics;
+        this.signature = new DeduplicationSignature(signatureFieldNames);
     }
 
     /**
@@ -176,7 +179,7 @@ public class CMDIRecordImporter<T> {
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LAST_SEEN), df.format(dt), false);
 
         // create and add document signature
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SIGNATURE), DeduplicationSignature.getSignature(fieldNameService, cmdiData), false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SIGNATURE), signature.getSignature(cmdiData), false);
 
         // set number of days since last import to '0'
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DAYS_SINCE_LAST_SEEN), 0, false);

@@ -58,6 +58,7 @@
 				<xs:element name="lrSwitchboardBaseUrl" type="xs:string" />
 				<xs:element name="showResultScores" type="xs:string" />
 				<xs:element name="processHierarchies" type="xs:string" />
+                                <xs:element ref="signatureFields" />
 			</xs:all>
 		</xs:complexType>
 	</xs:element>
@@ -121,6 +122,14 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element name="primaryFacetField" type="keyType"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+        <xs:element name="signatureFields">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="signatureField" type="keyType"
 					minOccurs="0" maxOccurs="unbounded" />
 			</xs:sequence>
 		</xs:complexType>

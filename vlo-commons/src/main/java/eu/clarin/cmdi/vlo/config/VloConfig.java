@@ -184,6 +184,9 @@ public class VloConfig {
     @XmlElementWrapper(name = "primaryFacetFields")
     private Set<String> primaryFacetField;
 
+    @XmlElementWrapper(name = "signatureFields")
+    private List<String> signatureField;
+
     private int hideSecondaryFacetsLimit = 7;
 
     private String collectionFacet;
@@ -866,6 +869,18 @@ public class VloConfig {
 
     public void setPrimaryFacetFields(Set<String> primaryFacetField) {
         this.primaryFacetField = primaryFacetField;
+    }
+
+    public List<String> getSignatureFieldKeys() {
+        return this.signatureField;
+    }
+
+    public List<String> getSignatureFieldNames() {
+        return this.signatureField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
+    }
+
+    public void setSignatureFields(List<String> signatureField) {
+        this.signatureField = signatureField;
     }
 
     /**

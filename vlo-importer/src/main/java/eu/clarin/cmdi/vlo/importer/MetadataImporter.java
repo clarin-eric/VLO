@@ -151,10 +151,11 @@ public class MetadataImporter {
         this.postProcessors = registerPostProcessors(config, fieldNameService, languageCodeUtils);
         this.postMappingFilters = registerPostMappingFilters(fieldNameService);
         this.solrBridge = solrBrdige;
+        
 
         final CMDIDataSolrImplFactory cmdiDataFactory = new CMDIDataSolrImplFactory(fieldNameService);
         final CMDIDataProcessor<SolrInputDocument> processor = new CMDIParserVTDXML<>(postProcessors, postMappingFilters, config, mappingFactory, marshaller, cmdiDataFactory, fieldNameService, false);
-        this.recordHandler = new CMDIRecordImporter(processor, solrBrdige, fieldNameService, stats);
+        this.recordHandler = new CMDIRecordImporter(processor, solrBrdige, fieldNameService, stats, config.getSignatureFieldNames());
 
     }
 
@@ -496,7 +497,7 @@ public class MetadataImporter {
     }
 
     /**
-    * Builds suggester index for autocompletion
+     * Builds suggester index for autocompletion
      *
      * @throws SolrServerException
      * @throws MalformedURLException

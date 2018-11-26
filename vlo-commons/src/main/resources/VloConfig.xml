@@ -92,12 +92,12 @@
         <field key="NATIONAL_PROJECT">nationalProject</field>
         <field key="RESOURCE_CLASS">resourceClass</field>
         <field key="RESOURCE">_resourceRef</field>
+        <field key="SELF_LINK">_selfLink</field>
         <field key="ID">id</field>
         <field key="DATA_PROVIDER">dataProvider</field>
         <field key="DATA_PROVIDER_NAME">dataProviderName</field>
         <field key="FILENAME">_fileName</field>
         <field key="FORMAT">format</field>
-        <field key="SELF_LINK">_selfLink</field>
         <field key="LANDINGPAGE">_landingPageRef</field>
         <field key="SEARCHPAGE">_searchPageRef</field>
         <field key="SEARCH_SERVICE">_contentSearchRef</field>
@@ -260,5 +260,13 @@
     <showResultScores>false</showResultScores>
 
     <processHierarchies>true</processHierarchies>
+
+    <!-- fields that are used to generate a document signature to identify duplicates -->
+    <signatureFields>
+        <signatureField>LANGUAGE_CODE</signatureField>
+        <signatureField>DATA_PROVIDER_NAME</signatureField>
+        <signatureField>DESCRIPTION</signatureField>
+        <signatureField>COLLECTION</signatureField>
+    </signatureFields>
 
 </VloConfig>
