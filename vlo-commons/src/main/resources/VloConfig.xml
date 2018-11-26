@@ -197,6 +197,7 @@
         <technicalField>SEARCH_SERVICE</technicalField>
         <technicalField>LAST_SEEN</technicalField>
         <technicalField>CLARIN_PROFILE</technicalField>
+        <technicalField>DATA_PROVIDER</technicalField>
         <technicalField>HIERARCHY_WEIGHT</technicalField>
         <technicalField>HAS_PART_COUNT</technicalField>
     </technicalFields>
