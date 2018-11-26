@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
  * @author Thomas Eckart
  */
 public class DeduplicationSignature {
+
     protected static final org.slf4j.Logger LOG = LoggerFactory.getLogger(DeduplicationSignature.class);
     private final List<String> signatureFieldNames;
 
@@ -42,11 +43,11 @@ public class DeduplicationSignature {
      * @param doc
      * @return document signature
      */
-    public String getSignature(SolrInputDocument doc) {
+    public String getSignature(CMDIData doc) {
         StringBuilder sb = new StringBuilder("");
 
         for (String fieldName : signatureFieldNames) {
-            if (doc.getFieldNames().contains(fieldName)) {
+            if (doc.hasField(fieldName)) {
                 for (Object value : doc.getFieldValues(fieldName)) {
                     sb.append((String) value);
                 }

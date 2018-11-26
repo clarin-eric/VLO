@@ -72,12 +72,12 @@ public class DummySolrBridgeImpl implements SolrBridge {
     }
 
     @Override
-    public void addDocument(SolrInputDocument doc) throws SolrServerException, IOException {
+    public void addDocument(SolrInputDocument doc) {
         result.add(doc);
     }
 
     @Override
-    public void addDocuments(Collection<SolrInputDocument> docs) throws SolrServerException, IOException {
+    public void addDocuments(Collection<SolrInputDocument> docs) {
         result.addAll(docs);
     }
 

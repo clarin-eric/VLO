@@ -22,6 +22,8 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
+import eu.clarin.cmdi.vlo.wicket.model.FormattedStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import static eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel.ITEMS_PER_PAGE_OPTIONS;
@@ -51,6 +53,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.convert.ConversionException;
@@ -70,9 +73,11 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
     private FieldNameService fieldNameService;
 
     private final IDataProvider<SolrDocument> solrDocumentProvider;
-    private final AbstractPageableView<SolrDocument> resultsView;
+    private final AbstractPageableView<SolrDocumentExpansionPair> resultsView;
 
-    public SearchResultsHeaderPanel(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocument> resultsView, IDataProvider<SolrDocument> solrDocumentProvider) {
+    public final static String RECORD_COUNT_NUMBER_FORMAT = "%,d";
+
+    public SearchResultsHeaderPanel(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocumentExpansionPair> resultsView, IDataProvider<SolrDocument> solrDocumentProvider, IModel<Long> recordCountModel) {
         super(id, model);
 
         this.solrDocumentProvider = solrDocumentProvider;
@@ -83,6 +88,30 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
 
         // form to select number of results per page
         add(createResultPageSizeForm("resultPageSizeForm", resultsView));
+
+        final IModel<Long> duplicateCountModel = new LoadableDetachableModel<Long>() {
+            @Override
+            public Long load() {
+                return recordCountModel.getObject() - solrDocumentProvider.size();
+            }
+
+            @Override
+            protected void onDetach() {
+                recordCountModel.detach();
+            }
+
+        };
+
+        add(new Label("recordCount", new FormattedStringModel<>(RECORD_COUNT_NUMBER_FORMAT, recordCountModel)));
+        add(new Label("duplicateCount", new FormattedStringModel<>(RECORD_COUNT_NUMBER_FORMAT, duplicateCountModel)) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(duplicateCountModel.getObject() > 0);
+            }
+
+        }
+        );
 
         //For Ajax updating of search results
         setOutputMarkupId(true);
@@ -99,15 +128,15 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                 final long resultCount = solrDocumentProvider.size();
 
                 if (emptyQuery && emptyFacetSelection) {
-                    return String.format("Showing all %d records", resultCount);
+                    return String.format("Showing all records (%,d results)", resultCount);
                 } else {
                     final long firstShown = 1 + resultsView.getCurrentPage() * resultsView.getItemsPerPage();
                     final long lastShown = Math.min(resultsView.getItemCount(), firstShown + resultsView.getItemsPerPage() - 1);
                     return String.format(
                             String.format("%s%s",
                                     resultCount == 0 ? "No results"
-                                            : String.format("Showing %s %d results",
-                                                    (resultsView.getPageCount() <= 1) ? "" : String.format("%d to %d of ", firstShown, lastShown), resultCount),
+                                            : String.format("Showing %s %,d results",
+                                                    (resultsView.getPageCount() <= 1) ? "" : String.format("%,d to %,d of ", firstShown, lastShown), resultCount),
                                     emptyFacetSelection ? "" : " within selection")
                     );
                 }
@@ -163,7 +192,14 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         };
         final Component query = new WebMarkupContainer(id)
                 .add(label)
-                .add(removeLink);
+                .add(removeLink)
+                .add(new AttributeModifier("placeholder", new AbstractReadOnlyModel<String>() {
+                    @Override
+                    public String getObject() {
+                        return "Search through 100,000 records";
+                    }
+
+                }));
         return query;
     }
 

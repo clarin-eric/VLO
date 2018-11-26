@@ -31,21 +31,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <p class="moredocumentproperties">
                     <a class="btn btn-default" wicket:id="recordLink" title="Show detailed information for this search result">More details...</a>
                 </p>
-                <wicket:container wicket:id="resources">
-                    <h4>Resources</h4><!-- panel title? -->
-                    <ul class="searchresultresources">
-                        <li wicket:id="resource">
-                            <span class="badge"><span wicket:id="resourceTypeIcon"></span></span>
-                            <a wicket:id="resourceLink"><span wicket:id="resourceName">Filename.xyz</span></a>
-                            <a wicket:id="downloadLink"><span class="glyphicon glyphicon-download-alt"></span></a>
-                        </li>
-                        <wicket:enclosure child="more">
-                            <li class="moreresources">
-                                <a class="btn btn-default" wicket:id="more"><wicket:container wicket:id="moreLabel">99 more resources...</wicket:container></a>
-                            </li>
-                        </wicket:enclosure>
-                    </ul>
-                </wicket:container>
             </div>
         </wicket:panel>
     </body>

@@ -65,37 +65,6 @@ public class HarvesterMap {
         LOG.info("...found {} mappings.", endpointDescriptionMap.keySet().size());
         return endpointDescriptionMap;
     }
-}
-
-/**
- * Stores metadata provided by the OAI-PMH harvester for every endpoint
- * @author Thomas Eckart
- */
-class EndpointDescription {
-    private final String oaiEndpointUrl;
-    private final String centreName;
-    private final String nationalProject;
     
-    public EndpointDescription(String oaiEndpointUrl, String centreName, String nationalProject) {
-        this.oaiEndpointUrl = oaiEndpointUrl;
-        this.centreName = centreName;
-        this.nationalProject = nationalProject;
-    }
     
-    public String getOaiEndpointUrl() {
-        return oaiEndpointUrl;
-    }
-    
-    public String getCentreName() {
-        return centreName;
-    }
-    
-    public String getNationalProject() {
-        return nationalProject;
-    }
-    
-    @Override
-    public String toString() {
-        return "Endpoint \""+oaiEndpointUrl+"\" of \""+centreName+ "\" ("+nationalProject+")";
-    }
 }

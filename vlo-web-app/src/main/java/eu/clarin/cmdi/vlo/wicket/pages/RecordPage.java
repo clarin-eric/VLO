@@ -36,7 +36,7 @@ import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
-import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
@@ -186,7 +186,6 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
         // General information section
         add(new SingleValueSolrFieldLabel("name", getModel(), fieldNameService.getFieldName(FieldKey.NAME), getString("recordpage.unnamedrecord")));
-        add(createLandingPageLink("landingPageLink"));
 
         tabs = createTabs("tabs");
         final StringValue initialTab = params.get(VloWebAppParameters.RECORD_PAGE_TAB);
@@ -238,7 +237,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             }
         });
         tabs.set(TABS_ORDER.indexOf(RESOURCES_SECTION), new AbstractTab(new StringResourceModel("recordpage.tabs.resources", // model to include resource count in tab title
-                new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT)))) {
+                new NullFallbackModel(new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT)),"?"))) {
             @Override
             public Panel getPanel(String panelId) {
                 return (new ResourceLinksPanel(panelId, getModel()) {
@@ -349,25 +348,6 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         };
     }
 
-    private ExternalLink createLandingPageLink(String id) {
-        final IModel<String> landingPageHrefModel
-                // wrap in model that transforms handle links
-                = new HandleLinkModel(
-                        // get landing page from document
-                        new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
-        // add landing page link
-        final ExternalLink landingPageLink = new ExternalLink(id, landingPageHrefModel) {
-
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(landingPageHrefModel.getObject() != null);
-            }
-
-        };
-        return landingPageLink;
-    }
-
     private Component createSearchLinks(String id) {
         final SolrFieldModel<String> searchPageModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.SEARCHPAGE));
         final SolrFieldModel<String> searchServiceModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE));
@@ -378,7 +358,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
                     @Override
                     protected void populateItem(ListItem item) {
-                        item.add(new ExternalLink("searchLink", new HandleLinkModel(item.getModel())));
+                        item.add(new ExternalLink("searchLink", new PIDLinkModel(item.getModel())));
                     }
                 });
 

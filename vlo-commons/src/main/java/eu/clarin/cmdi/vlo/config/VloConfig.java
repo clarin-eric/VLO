@@ -199,7 +199,7 @@ public class VloConfig {
 
     private URI configLocation;
 
-    private String lrSwitchboardBaseUrl = "http://weblicht.sfs.uni-tuebingen.de/clrs/";
+    private String lrSwitchboardBaseUrl = "https://switchboard.clarin.eu/";
 
     /**
      * Get and set methods for web application parameter members<br><br>

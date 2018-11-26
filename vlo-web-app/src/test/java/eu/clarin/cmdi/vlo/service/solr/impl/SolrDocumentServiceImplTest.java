@@ -108,7 +108,7 @@ public class SolrDocumentServiceImplTest {
     }
 
     /**
-     * Test of getDocumentCount method, of class SolrDocumentServiceImpl.
+     * Test of getResultCount method, of class SolrDocumentServiceImpl.
      */
     @Test
     public void testGetDocumentCount() {
@@ -126,7 +126,7 @@ public class SolrDocumentServiceImplTest {
                 will(returnValue(resultList));
             }
         });
-        final long result = instance.getDocumentCount(selection);
+        final long result = instance.getResultCount(selection);
         assertEquals(42, result);
     }
 

@@ -3,13 +3,14 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionList;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.AbstractWicketTest;
 import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
 import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.solr.common.SolrDocument;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Test;
@@ -30,6 +31,9 @@ public class TestFacetedSearchPage extends AbstractWicketTest {
 
     @Test
     public void homepageRendersSuccessfully() {
+        SolrDocumentExpansionList resultList = mockery.mock(SolrDocumentExpansionList.class);
+        SolrDocumentExpansionPair resultItem = mockery.mock(SolrDocumentExpansionPair.class);
+        
         // mock behaviour of facet fields service
         mockery.checking(new Expectations() {
             {
@@ -54,10 +58,15 @@ public class TestFacetedSearchPage extends AbstractWicketTest {
                 )));
 
                 // mock search results
-                atLeast(1).of(documentService).getDocumentCount(with(any(QueryFacetsSelection.class)));
+                atLeast(1).of(documentService).getResultCount(with(any(QueryFacetsSelection.class)));
                 will(returnValue(1000L));
-                oneOf(documentService).getDocuments(with(any(QueryFacetsSelection.class)), with(equal(0)), with(equal(10)));
-                will(returnValue(Arrays.asList(new SolrDocument(), new SolrDocument())));
+                atLeast(1).of(documentService).getTotalDocumentCount(with(any(QueryFacetsSelection.class)));
+                will(returnValue(1001L));
+                oneOf(documentService).getDocumentsWithExpansion(with(any(QueryFacetsSelection.class)), with(equal(0)), with(equal(10)), with(equal("_signature")));
+                will(returnValue(resultList));
+                atLeast(1).of(resultList).iterator();
+                will(returnIterator(resultItem));
+                allowing(any(SolrDocumentExpansionPair.class)).method(anything());
             }
         });
 

@@ -1,8 +1,6 @@
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.FieldKey;
-import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
@@ -35,54 +33,6 @@ public class SolrDaoImpl {
 
     protected SolrClient getSolrClient() {
         return solrClient;
-    }
-
-    /**
-     * Basic sanitising of Solr queries.
-     *
-     * TODO: Move this to QueryFacetSelection level??
-     *
-     * Query is based on the URL to the VLO web application. Also, explain about
-     * the URL and ?fq=language:dutch Assume filters have the form a:b like for
-     * example language:dutch
-     *
-     * @param query
-     * @return
-     */
-    protected SolrQuery sanitise(SolrQuery query) {
-
-        // String [] facetsFromConfig; 
-        // try and get the filters facets from the query
-        String[] filtersInQuery;
-        filtersInQuery = query.getFilterQueries();
-        
-        if (filtersInQuery == null) {
-            // the query does not contain filters
-        } else {
-            // get the facets from the configuration file
-            // facetsFromConfig = VloConfig.getFacetFields();
-
-            // check the filters in the query by name
-            for (String filter : filtersInQuery) {
-                // split up a filter, look at the string preceeding the semicolon 
-                String facetInFilter = filter.split(":")[0]
-                        .replaceFirst("^\\{!tag=.*\\}", ""); //strip out tag syntax (may be used for OR queries, see query factory implementation)
-                
-                if (vloConfig.getFields().values().contains(facetInFilter)) {
-                    // facet in the filter is in the set that is defined by the config file
-                } else {
-                    if (facetInFilter.startsWith("_")) {
-                        // this facet is hidden, do not consider it
-                    } else {
-                        // the filter name does not match a facet in the facet
-                        query.removeFilterQuery(filter);
-                    }
-                }
-            }
-        }
-
-        // finally, return the sanitised query
-        return query;
     }
 
     protected QueryResponse fireQuery(SolrQuery query) {

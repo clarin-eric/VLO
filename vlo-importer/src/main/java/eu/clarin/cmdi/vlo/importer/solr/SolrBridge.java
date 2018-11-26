@@ -27,17 +27,13 @@ import org.apache.solr.common.SolrInputDocument;
  *
  * @author twagoo
  */
-public interface SolrBridge {
+public interface SolrBridge extends DocumentStore<SolrInputDocument> {
 
     SolrClient getClient();
 
     void init() throws MalformedURLException;
 
     void shutdown() throws SolrServerException, IOException;
-
-    void addDocument(SolrInputDocument doc) throws SolrServerException, IOException;
-
-    void addDocuments(Collection<SolrInputDocument> docs) throws SolrServerException, IOException;
 
     void commit() throws SolrServerException, IOException;
 

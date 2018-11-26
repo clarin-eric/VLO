@@ -14,12 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package eu.clarin.cmdi.vlo.service.solr;
 
 import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 
 /**
@@ -31,5 +31,7 @@ public interface SearchResultsDao {
     SolrDocumentList getDocuments(SolrQuery query);
 
     List<FacetField> getFacets(SolrQuery query);
-    
+
+    QueryResponse getQueryResponse(SolrQuery query);
+
 }

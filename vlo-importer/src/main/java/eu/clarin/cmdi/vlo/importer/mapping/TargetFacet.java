@@ -1,6 +1,13 @@
 package eu.clarin.cmdi.vlo.importer.mapping;
 
-public class TargetFacet {
+import java.io.Serializable;
+
+public class TargetFacet implements Serializable{
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     private FacetConfiguration facetConfiguration;
 
     private boolean overrideExistingValues;

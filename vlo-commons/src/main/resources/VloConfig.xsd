@@ -231,6 +231,7 @@
 			<xs:enumeration value="OAI_ENDPOINT_URI" />
 			<xs:enumeration value="DEPRECATED_LANGUAGE" />
 			<xs:enumeration value="SIGNATURE" />
+			<xs:enumeration value="RECORD_PID" />
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

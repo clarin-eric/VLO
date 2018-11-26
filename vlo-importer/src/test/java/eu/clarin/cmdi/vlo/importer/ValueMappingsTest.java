@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.importer;
 import eu.clarin.cmdi.vlo.importer.solr.DummySolrBridgeImpl;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.DataRoot;
+import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,9 +12,9 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -44,8 +45,6 @@ public class ValueMappingsTest extends ImporterTestcase {
         session += "   </Resources>\n";
         session += "   <Components>\n";
         session += "      <cmdp:Session>\n";
-        session += "         <cmdp:Name>kleve-route</cmdp:Name>\n";
-        session += "         <cmdp:Title>kleve-route-title</cmdp:Title>\n";
         session += "      </cmdp:Session>\n";
         session += "   </Components>\n";
         session += "</CMD>\n";
@@ -362,9 +361,9 @@ public class ValueMappingsTest extends ImporterTestcase {
              * available, override the importer's class startImport method by
              * leaving out interaction with server. 
              * 
-             * By invoking the processCmdi method, the class being defined here
+             * By invoking the importRecord method, the class being defined here
              * needs to anticipate on an exception possibly thrown by the 
-             * processCmdi method invoking the sendDocs method. Please note 
+             * importRecord method invoking the sendDocs method. Please note 
              * however, that the latter method is overriden, and the actual 
              * database is being replaced by an array of documents.
              */
@@ -397,8 +396,8 @@ public class ValueMappingsTest extends ImporterTestcase {
                                  * in a suitable way. */
                                  
                                 try {
-                                    processCmdi(file, dataRoot, null, null);
-                                } catch (SolrServerException ex) {
+                                    getRecordProcessor().importRecord(file, Optional.of(dataRoot), Optional.empty(), Optional.empty());
+                                } catch (DocumentStoreException ex) {
                                     Logger.getLogger(ValueMappingsTest.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }
@@ -409,16 +408,7 @@ public class ValueMappingsTest extends ImporterTestcase {
 
                 } catch (IOException e) {
                     LOG.error("error updating files:\n", e);
-                } finally {
-
                 }
-                long took = (System.currentTimeMillis() - start) / 1000;
-                LOG.info("Found " + nrOfFilesWithoutId
-                        + " file(s) without an id. (id is generated based on fileName but that may not be unique)");
-                LOG.info("Found " + nrOfFilesWithError
-                        + " file(s) with errors.");
-                LOG.info("Update of " + nrOFDocumentsSent + " took " + took
-                        + " secs. Total nr of files analyzed " + nrOfFilesAnalyzed);
             }
         };
         importer.startImport();

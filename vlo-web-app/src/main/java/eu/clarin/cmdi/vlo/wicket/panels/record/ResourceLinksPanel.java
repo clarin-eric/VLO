@@ -29,7 +29,7 @@ import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
-import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
@@ -65,6 +65,9 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
+import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 
 /**
  * Panel that shows all resources represented by a collection of resource
@@ -101,7 +104,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                 = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE));
         final IModel<String> landingPageModel
                 // wrap in model that transforms handle links
-                = new HandleLinkModel(
+                = new PIDLinkModel(
                         // get landing page from document
                         new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
         final SolrFieldModel<String> partCountModel
@@ -215,6 +218,13 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
             link.setOutputMarkupId(true);
             columns.add(link);
+
+            // pid label
+            columns.add(new PIDLinkLabel("pidLabel", linkModel, Model.of(PIDContext.RESOURCE))
+                    //make compact
+                    .setHideLabel(true)
+                    //show only if pid
+                    .add(BooleanVisibilityBehavior.visibleOnTrue(new IsPidModel(linkModel))));
 
             // Fallback label if no absolute link could be determined
             columns.add(new WebMarkupContainer("fileNameNotResolvable") {

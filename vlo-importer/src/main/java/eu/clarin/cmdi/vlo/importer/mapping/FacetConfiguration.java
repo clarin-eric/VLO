@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.importer.mapping;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +12,7 @@ import eu.clarin.cmdi.vlo.importer.Pattern;
  * Once created contains the information about the facets and such. Just a
  * container for some information, doesn't do processing.
  */
-public class FacetConfiguration {
+public class FacetConfiguration implements Serializable{
 	
 	private FacetMapping mapping;
 
@@ -121,5 +122,4 @@ public class FacetConfiguration {
     public void setFacetMapping(FacetMapping mapping){
     	this.mapping = mapping;
     }
-
 }

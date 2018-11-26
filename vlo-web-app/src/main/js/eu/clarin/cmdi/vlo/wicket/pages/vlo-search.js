@@ -42,7 +42,7 @@ function handleSearchFailure(message, status) {
 
 function transitionFromSimple(cb) {
     var simpleBox = $('.simple-only:visible');
-    if(simpleBox.length > 0) {
+    if (simpleBox.length > 0) {
         simpleBox.slideUp({
             duration: 'fast',
             start: function () {

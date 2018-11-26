@@ -50,6 +50,8 @@ fi
 		exit 1
 	fi
 	
-	echo "Pushing '${IMAGE_TAG}' to ${SSH_HOST}"
-	docker image save "${IMAGE_TAG}" | ssh -C ${SSH_HOST} sudo docker image load
+	if [ "$SSH_HOST" != "-" ]; then
+		echo "Pushing '${IMAGE_TAG}' to ${SSH_HOST}"
+		docker image save "${IMAGE_TAG}" | ssh -C ${SSH_HOST} docker image load
+	fi
 )

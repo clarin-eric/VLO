@@ -1,5 +1,16 @@
 Bug fixes and new features
 --------------------------
+VLO 4.5.2 (October 2018)
+
+* Various external service URLs made configurable at build time
+(for docker configurability)
+    <https://github.com/clarin-eric/VLO/issues/199>   
+    
+VLO 4.5.1 (September 2018)
+
+* Funding statements adapted
+* Solr version bumped to 7.4.0
+
 VLO 4.5.0 (July 2018)
 
 * The URL in the address bar updates on changes through Ajax for better sharing

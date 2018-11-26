@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.service.handle.impl;
 
-import eu.clarin.cmdi.vlo.service.handle.impl.HandleRestApiClient;
 import eu.clarin.cmdi.vlo.service.handle.HandleClient;
 
 /**
@@ -27,7 +26,7 @@ import eu.clarin.cmdi.vlo.service.handle.HandleClient;
 public class HandleRestApiClientRunner {
 
     public final static String HANDLE = "1839/00-0000-0000-0000-0000-4";
-    public final static String EXPECTED_URL = "http://corpus1.mpi.nl/IMDI/metadata/IMDI.imdi";
+    public final static String EXPECTED_URL = "https://archive.mpi.nl/islandora/object/lat:1839_00_0000_0000_0000_0000_4";
 
     /**
      * @param args the command line arguments

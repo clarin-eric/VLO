@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 CLARIN
+ * Copyright (C) 2018 CLARIN
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,52 +16,37 @@
  */
 package eu.clarin.cmdi.vlo.wicket.provider;
 
-import eu.clarin.cmdi.vlo.VloWicketApplication;
+import com.google.common.collect.Iterators;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
-import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
-import java.math.BigDecimal;
 import java.util.Iterator;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 
 /**
  *
- * @author twagoo
+ * @author Twan Goosen <twan@clarin.eu>
  */
-public class SolrDocumentProvider implements IDataProvider<SolrDocument> {
+public class SolrDocumentProviderAdapter implements IDataProvider<SolrDocument> {
 
+    private final IDataProvider<SolrDocumentExpansionPair> expansionPairProvider;
     private final FieldNameService fieldNameService;
 
-    private final IModel<QueryFacetsSelection> selectionModel;
-
-    private Long size;
-
-    public SolrDocumentProvider(IModel<QueryFacetsSelection> selection, FieldNameService fieldNameService) {
-        this.selectionModel = selection;
+    public SolrDocumentProviderAdapter(IDataProvider<SolrDocumentExpansionPair> expansionPairProvider, FieldNameService fieldNameService) {
+        this.expansionPairProvider = expansionPairProvider;
         this.fieldNameService = fieldNameService;
     }
 
     @Override
     public Iterator<? extends SolrDocument> iterator(long first, long count) {
-        final List<SolrDocument> documents = getDocumentService().getDocuments(selectionModel.getObject(),
-                BigDecimal.valueOf(first).intValueExact(), // safe long->int conversion
-                BigDecimal.valueOf(count).intValueExact()); // safe long->int conversion
-        return documents.iterator();
+        return Iterators.transform(expansionPairProvider.iterator(first, count), SolrDocumentExpansionPair::getDocument);
     }
 
     @Override
     public long size() {
-        if (size == null) {
-            size = getDocumentService().getDocumentCount(selectionModel.getObject());
-        }
-        return size;
+        return expansionPairProvider.size();
     }
 
     @Override
@@ -71,11 +56,7 @@ public class SolrDocumentProvider implements IDataProvider<SolrDocument> {
 
     @Override
     public void detach() {
-        selectionModel.detach();
-        size = null;
+        expansionPairProvider.detach();
     }
 
-    private SolrDocumentService getDocumentService() {
-        return VloWicketApplication.get().getDocumentService();
-    }
 }

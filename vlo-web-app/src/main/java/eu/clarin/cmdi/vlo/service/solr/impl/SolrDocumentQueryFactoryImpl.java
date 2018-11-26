@@ -23,23 +23,19 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentQueryFactory;
 import java.util.Collection;
 
-import javax.inject.Inject;
-
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
 import eu.clarin.cmdi.vlo.FieldKey;
-
 
 /**
  *
  * @author twagoo
  */
 public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory implements SolrDocumentQueryFactory {
-    
+
     private final String ID;
     private final String SELF_LINK;
-    
 
     /**
      * Template query for new document queries
@@ -55,20 +51,40 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
         this.SELF_LINK = fieldNameService.getFieldName(FieldKey.SELF_LINK);
         defaultQueryTemplate = new SolrQuery();
         defaultQueryTemplate.setFields(documentFields.toArray(new String[]{}));
-//        //TODO: qf (all fields with weights - make configurable (later)
-//        defaultQueryTemplate.setParam(DisMaxParams.QF, "name^20 description^10");
     }
 
     @Override
     public SolrQuery createDocumentQuery(QueryFacetsSelection selection, int first, int count) {
         // make a query to get all documents that match the selection criteria
         final SolrQuery query = getDefaultDocumentQuery();
+        // collapse similar fields
+        query.addFilterQuery(COLLAPSE_FIELD_QUERY);
         // apply selection
         addQueryFacetParameters(query, selection);
         // set offset and limit
         query.setStart(first);
         query.setRows(count);
         return query;
+    }
+
+    @Override
+    public SolrQuery createExpandedDocumentQuery(QueryFacetsSelection selection, int first, int count) {
+        // make a query to get all documents that match the selection criteria
+        final SolrQuery query = getDefaultDocumentQuery();
+        // we use the 'fast' request handler here to avoid collapsing (assume ranking is not of interest)
+        query.setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
+        // apply selection
+        addQueryFacetParameters(query, selection);
+        // set offset and limit
+        query.setStart(first);
+        query.setRows(count);
+        return query;
+    }
+
+    @Override
+    public SolrQuery createDocumentQueryWithExpansion(QueryFacetsSelection selection, int first, int count) {
+        final SolrQuery query = createDocumentQuery(selection, first, count);
+        return enableExpansion(query);
     }
 
     @Override
@@ -92,6 +108,26 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
         // one result max
         query.setRows(1);
         return query;
+    }
+
+    @Override
+    public SolrQuery createDuplicateDocumentsQuery(String docId, String collapseField, String collapseValue, QueryFacetsSelection selection, int offset, int expansionLimit) {
+        // make a query to look up a specific document by its ID
+        SolrQuery query = getDefaultDocumentQuery()
+                // we can use the 'fast' request handler here, document ranking is of no interest
+                .setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST)
+                // consider all documents
+                .setQuery(SOLR_SEARCH_ALL)
+                // limit to matching signature
+                .addFilterQuery(createFilterQuery(collapseField, collapseValue))
+                // exclude target document
+                .addFilterQuery(createNegativeFilterQuery(ID, docId))
+                .setStart(offset)
+                .setRows(expansionLimit);
+        // apply selection
+        addQueryFacetParameters(query, selection);
+        return query;
+
     }
 
     @Override

@@ -48,15 +48,15 @@
     <!-- leave empty to use default packaged definition -->
     <facetConceptsFile>${vloconfig.facetConceptsFileLocation}</facetConceptsFile>
 
-    <profileSchemaUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/{PROFILE_ID}/xsd</profileSchemaUrl>
+    <profileSchemaUrl>https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/{PROFILE_ID}/xsd</profileSchemaUrl>
 
-    <componentRegistryRESTURL>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/</componentRegistryRESTURL>
+    <componentRegistryRESTURL>https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/</componentRegistryRESTURL>
 
     <handleServerUrl>http://hdl.handle.net/</handleServerUrl>
 
-    <conceptRegistryUrl>https://concepts.clarin.eu/ccr/api/find-concepts</conceptRegistryUrl>
+    <conceptRegistryUrl>${vloconfig.conceptRegistryUrl}</conceptRegistryUrl>
 
-    <vocabularyRegistryUrl>http://clavas.clarin.eu/clavas/public/api/find-concepts</vocabularyRegistryUrl>
+    <vocabularyRegistryUrl>${vloconfig.vocabularyRegistryUrl}</vocabularyRegistryUrl>
 
     <!-- Mapping file locations. These can be an absolute URL, absolute file 
     path or packaged resource location. Evaluated in the this order. -->
@@ -118,6 +118,7 @@
         <field key="LANGUAGE_NAME">_languageName</field>
         <field key="OAI_ENDPOINT_URI">_oaiEndpointURI</field>
         <field key="SIGNATURE">_signature</field>
+        <field key="RECORD_PID">recordPid</field>
     </fields>
 
     <deprecatedFields>
@@ -174,13 +175,22 @@
         <ignoredField>AVAILABILITY</ignoredField>
         <ignoredField>LICENSE_TYPE</ignoredField>
         <ignoredField>ACCESS_INFO</ignoredField>
+        <ignoredField>SIGNATURE</ignoredField>
+        <ignoredField>TEMPORAL_COVERAGE</ignoredField>
+        <ignoredField>PROJECT_NAME</ignoredField>
+        <ignoredField>RESOURCE</ignoredField>
+        <ignoredField>FILENAME</ignoredField>
+        <ignoredField>HAS_PART</ignoredField>
+        <ignoredField>RESOURCE_COUNT</ignoredField>
+        <ignoredField>DAYS_SINCE_LAST_SEEN</ignoredField>
+        <ignoredField>HAS_PART_COUNT_WEIGHT</ignoredField>
+        <ignoredField>LANGUAGE_NAME</ignoredField>
     </ignoredFields>
 
     <!-- KEYS of fields shown as technical fields in the record page -->
     <technicalFields>
         <technicalField>ID</technicalField>
         <technicalField>SELF_LINK</technicalField>
-        <technicalField>DATA_PROVIDER</technicalField>
         <technicalField>COMPLETE_METADATA</technicalField>
         <technicalField>LANDINGPAGE</technicalField>
         <technicalField>SEARCHPAGE</technicalField>
@@ -221,30 +231,30 @@
         </availabilityValue>
     </availability>
 
-    <countryComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
+    <countryComponentUrl>https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438104/xml</countryComponentUrl>
 
     <languageLinkTemplate>https://infra.clarin.eu/content/language_info/data/{}.html</languageLinkTemplate>
 
-    <feedbackFromUrl>http://www.clarin.eu/node/3759?url=</feedbackFromUrl>
+    <feedbackFromUrl>${vloconfig.feedbackFromUrl}</feedbackFromUrl>
 
-    <language2LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438109/xml</language2LetterCodeComponentUrl>
+    <language2LetterCodeComponentUrl>https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438109/xml</language2LetterCodeComponentUrl>
 
-    <language3LetterCodeComponentUrl>http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438110/xml</language3LetterCodeComponentUrl>
+    <language3LetterCodeComponentUrl>https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/components/clarin.eu:cr1:c_1271859438110/xml</language3LetterCodeComponentUrl>
 
     <silToISO639CodesUrl>https://infra.clarin.eu/CMDI/1.1/xslt/sil_to_iso6393.xml</silToISO639CodesUrl>
 
-    <FederatedContentSearchUrl>http://weblicht.sfs.uni-tuebingen.de/Aggregator/</FederatedContentSearchUrl>
+    <FederatedContentSearchUrl>${vloconfig.federatedContentSearchUrl}</FederatedContentSearchUrl>
 
     <cqlEndpointFilter>http://cqlservlet.mpi.nl/</cqlEndpointFilter>
 
     <cqlEndpointAlternative>http://cqlservlet.mpi.nl/</cqlEndpointAlternative>
 
     <!-- Set to -1 to disable virtual collection creation from VLO -->
-    <vcrMaximumItemsCount>1000</vcrMaximumItemsCount>
+    <vcrMaximumItemsCount>${vloconfig.vcrMaximumItemsCount}</vcrMaximumItemsCount>
 
-    <vcrSubmitEndpoint>https://clarin.ids-mannheim.de/vcr/service/submit</vcrSubmitEndpoint>
+    <vcrSubmitEndpoint>${vloconfig.vcrSubmitEndpoint}</vcrSubmitEndpoint>
 
-    <lrSwitchboardBaseUrl>http://weblicht.sfs.uni-tuebingen.de/clrs/</lrSwitchboardBaseUrl>
+    <lrSwitchboardBaseUrl>${vloconfig.lrSwitchboardBaseUrl}</lrSwitchboardBaseUrl>
 
     <!-- makes the score for the result ranking visible in the search results -->
     <showResultScores>false</showResultScores>

@@ -36,12 +36,15 @@ public final class JavaScriptResources {
     private final static JavaScriptResourceReference VLO_HEADER = new JavaScriptResourceReference(VloBasePage.class, "vlo-header.js");
     private final static JavaScriptResourceReference VLO_SYNTAX_HELP = new JavaScriptResourceReference(VloBasePage.class, "vlo-syntax-help.js");
     private final static JavaScriptResourceReference VLO_FACETS = new JavaScriptResourceReference(VloBasePage.class, "vlo-facets.js");
+    private final static JavaScriptResourceReference VLO_CLIPBOARD = new JavaScriptResourceReference(VloBasePage.class, "vlo-clipboard.js");
     private final static JavaScriptResourceReference SEARCH = new JavaScriptResourceReference(VloBasePage.class, "vlo-search.js");
     private final static JavaScriptResourceReference FIELDS_TABLE = new JavaScriptResourceReference(RecordPage.class, "vlo-fields-table.js");
     private final static JavaScriptResourceReference HISTORY_API = new JavaScriptResourceReference(HistoryApiAjaxRequestTargetListener.class, "vlo-historyapi.js");
 
     private final static ResourceReference BOOTSTRAP_TOC = new ContextRelativeResourceReference("assets/bootstrap-toc/bootstrap-toc.js");
     private final static ResourceReference BOOTSTRAP_TOUR = new ContextRelativeResourceReference("assets/bootstrap-tour/bootstrap-tour.min.js");
+
+    private final static ResourceReference CLIPBOARD_JS = new ContextRelativeResourceReference("assets/clipboardjs/dist/clipboard.min.js");
 
     public static ResourceReference getBootstrapJS() {
         return BOOTSTRAP;
@@ -75,16 +78,24 @@ public final class JavaScriptResources {
         return SEARCH;
     }
 
+    public static JavaScriptResourceReference getVloClipboardJS() {
+        return VLO_CLIPBOARD;
+    }
+
     public static ResourceReference getFieldsTableJS() {
         return FIELDS_TABLE;
     }
-    
+
     public static ResourceReference getBootstrapToc() {
         return BOOTSTRAP_TOC;
     }
-    
+
     public static ResourceReference getBootstrapTour() {
         return BOOTSTRAP_TOUR;
+    }
+
+    public static ResourceReference getClipBoardJS() {
+        return CLIPBOARD_JS;
     }
 
 }

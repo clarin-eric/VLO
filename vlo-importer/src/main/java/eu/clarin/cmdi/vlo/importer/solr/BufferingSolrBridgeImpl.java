@@ -71,15 +71,23 @@ public class BufferingSolrBridgeImpl extends SolrBridgeImpl {
     }
 
     @Override
-    public synchronized void addDocument(SolrInputDocument doc) throws SolrServerException, IOException {
+    public synchronized void addDocument(SolrInputDocument doc) throws DocumentStoreException, IOException {
         buffer.add(doc);
-        submitIfBufferFull();
+        try {
+            submitIfBufferFull();
+        } catch (SolrServerException ex) {
+            throw new DocumentStoreException(ex);
+        }
     }
 
     @Override
-    public synchronized void addDocuments(Collection<SolrInputDocument> docs) throws SolrServerException, IOException {
+    public synchronized void addDocuments(Collection<SolrInputDocument> docs) throws DocumentStoreException, IOException {
         buffer.addAll(docs);
-        submitIfBufferFull();
+        try {
+            submitIfBufferFull();
+        } catch (SolrServerException ex) {
+            throw new DocumentStoreException(ex);
+        }
     }
 
     @Override

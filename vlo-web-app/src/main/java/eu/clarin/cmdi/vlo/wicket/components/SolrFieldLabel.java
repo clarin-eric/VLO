@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.wicket.model.TruncatingStringModel;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 /**
  * Label that shows the content of a Solr field by its string value (using
@@ -65,7 +66,24 @@ public class SolrFieldLabel extends Label {
         this(id, documentModel, fieldName, nullFallback, maxLength, truncatePoint, false);
     }
 
+    /**
+     *
+     * @param id id of label
+     * @param documentModel model that holds document to show field of
+     * @param fieldName name of field to show value of
+     * @param nullFallback model of which value to show if actual value is null
+     * @param maxLength maximum length to allow
+     * @param truncatePoint point to truncate if string is too long
+     */
+    public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, IModel<String> nullFallback, int maxLength, int truncatePoint) {
+        this(id, documentModel, fieldName, nullFallback, maxLength, truncatePoint, false);
+    }
+
     public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, String nullFallback, int maxLength, int truncatePoint, boolean forceSingleValue) {
+        this(id, documentModel, fieldName, Model.of(nullFallback), maxLength, truncatePoint, forceSingleValue);
+    }
+
+    public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, IModel<String> nullFallback, int maxLength, int truncatePoint, boolean forceSingleValue) {
         super(id, new NullFallbackModel(
                 new TruncatingStringModel(
                         new SolrFieldStringModel(documentModel, fieldName, forceSingleValue), maxLength, truncatePoint), nullFallback));

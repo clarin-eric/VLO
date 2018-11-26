@@ -27,9 +27,25 @@ import org.apache.solr.common.SolrDocument;
 public interface SolrDocumentService {
     
     SolrDocument getDocument(String docId);
+    
+    SolrDocumentExpansionPair getDocumentWithExpansion(String docId, String collapseField, QueryFacetsSelection selection, int expansionFirst, int expansionCount);
 
     List<SolrDocument> getDocuments(QueryFacetsSelection selection, int first, int count);
     
-    long getDocumentCount(QueryFacetsSelection selection);
+    SolrDocumentExpansionList getDocumentsWithExpansion(QueryFacetsSelection selection, int first, int count, String collapseField);
+    
+    /**
+     * 
+     * @param selection
+     * @return number of results for selection
+     */
+    long getResultCount(QueryFacetsSelection selection);
+    
+    /**
+     * 
+     * @param selection
+     * @return total number of documents in result for selection
+     */
+    long getTotalDocumentCount(QueryFacetsSelection selection);
 
 }

@@ -167,10 +167,12 @@
   <field name="nationalProject" type="string" multiValued="true" indexed="true" stored="true"/>
   <field name="organisation" type="string" termVectors="true" multiValued="true" indexed="true" stored="true"/>
   <field name="projectName" type="string" multiValued="true" indexed="true" stored="true"/>
+  <field name="recordPid" type="string" multiValued="false" indexed="true" stored="true"/>
   <field name="resourceClass" type="string" termVectors="true" multiValued="true" indexed="true" stored="true"/>
   <field name="rightsHolder" type="string" multiValued="true" indexed="true" stored="true"/>
   <field name="subject" type="string" termVectors="true" multiValued="true" indexed="true" stored="true"/>
   <field name="temporalCoverage" type="string" termVectors="true" multiValued="true" indexed="true" stored="true"/>
   <field name="text" type="text_general" multiValued="true" indexed="true" stored="true"/>
+  <copyField source="_selfLink" dest="recordPid"/>
   <copyField source="text" dest="_suggester"/>
 </schema>

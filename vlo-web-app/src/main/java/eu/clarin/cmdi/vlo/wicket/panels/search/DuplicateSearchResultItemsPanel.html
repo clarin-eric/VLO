@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!--
+Copyright (C) 2014 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+    <head>
+        <title>facet panel</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <wicket:panel>
+            <div wicket:id="duplicatesViewContainer">
+                <div class="search-results-duplicates-heading">
+                    <a wicket:id="toggleExpansion" class="search-results-duplicates-expand-collapse" href="#">
+                        <span class="caret pull-right"></span>
+                        <span class="search-results-duplicates-preamble"> 
+                            The search results include <span wicket:id="expansionCount">[COUNT]</span> (near) duplicate(s) of this record.
+                        </span>
+                    </a>
+                </div>
+                <div wicket:id="duplicatesView" class="search-results-duplicates-list collapse in">
+                    <div class="list-group">
+                        <wicket:container wicket:id="duplicateItem">
+                            <a wicket:id="duplicateItemLink" class="list-group-item"><wicket:container wicket:id="duplicateItemName">[item]</wicket:container></a>
+                        </wicket:container>
+                    </div>
+                    <ul wicket:id="duplicatesPaging"></ul>
+                </div>
+            </div>
+        </wicket:panel>
+    </body>
+</html>

@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import eu.clarin.cmdi.vlo.wicket.LandingPageShortLinkLabelConverter;
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
@@ -24,15 +25,19 @@ import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
+import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermScriptFactory;
 import eu.clarin.cmdi.vlo.wicket.components.FacetSelectLink;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
+import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
@@ -55,6 +60,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.string.Strings;
 
 /**
@@ -62,6 +68,8 @@ import org.apache.wicket.util.string.Strings;
  * @author twagoo
  */
 public class SearchResultItemPanel extends Panel {
+
+    private final static IConverter<String> landingPageLabelConverter = new LandingPageShortLinkLabelConverter();
 
     @SpringBean
     private VloConfig config;
@@ -80,25 +88,33 @@ public class SearchResultItemPanel extends Panel {
     /**
      *
      * @param id markup id of the panel
-     * @param documentModel model of document that this search item represents
+     * @param documentExpansionPairModel model of document that this search item
+     * represents
      * @param selectionModel model of current selection (will be passed on to
      * record page when link is clicked)
      * @param expansionStateModel model for the expansion state of this search
      * item
      * @param availabilityOrdering ordering for availability 'tags'
      */
-    public SearchResultItemPanel(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel, IModel<ExpansionState> expansionStateModel, Ordering<String> availabilityOrdering) {
-        super(id, documentModel);
+    public SearchResultItemPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<SearchContext> selectionModel, IModel<ExpansionState> expansionStateModel, IModel<ExpansionState> duplicateItemsExpansionModel, Ordering<String> availabilityOrdering) {
+        super(id, documentExpansionPairModel);
         this.expansionStateModel = expansionStateModel;
         this.selectionModel = selectionModel;
-        this.documentModel = documentModel;
+        this.documentModel = new PropertyModel<>(documentExpansionPairModel, "document");
 
         add(new RecordPageLink("recordLink", documentModel, selectionModel)
-                .add(new SingleValueSolrFieldLabel("title", documentModel, fieldNameService.getFieldName(FieldKey.NAME), "Unnamed record"))
+                .add(new SingleValueSolrFieldLabel("title", documentModel, fieldNameService.getFieldName(FieldKey.NAME), new StringResourceModel("searchpage.unnamedrecord", this)))
         );
 
         add(new FacetSelectLink("searchResultCollectionLink", new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.COLLECTION)), Model.of(fieldNameService.getFieldName(FieldKey.COLLECTION)))
                 .add(new SolrFieldLabel("searchResultCollectionName", documentModel, fieldNameService.getFieldName(FieldKey.COLLECTION), "none"))
+                .add(new Behavior() {
+                    @Override
+                    public void onConfigure(Component component) {
+                        component.setVisible(documentModel.getObject().getFieldValue(fieldNameService.getFieldName(FieldKey.COLLECTION)) != null);
+                    }
+
+                })
         );
 
         // add a link to toggle the expansion state
@@ -168,6 +184,10 @@ public class SearchResultItemPanel extends Panel {
                 .setVisible(config.isShowResultScores())
         );
 
+        add(new DuplicateSearchResultItemsPanel("duplicateResults", documentExpansionPairModel, duplicateItemsExpansionModel));
+
+        add(createLandingPageLinkContainer("landingPageLinkContainer", documentModel));
+
         setOutputMarkupId(true);
     }
 
@@ -211,6 +231,37 @@ public class SearchResultItemPanel extends Panel {
                             }
                         })));
         return expansionStateToggle;
+    }
+
+    private Component createLandingPageLinkContainer(String id, IModel<SolrDocument> documentModel) {
+        final String landingPageField = fieldNameService.getFieldName(FieldKey.LANDINGPAGE);
+        final SolrFieldStringModel landingPageLinkModel = new SolrFieldStringModel(documentModel, landingPageField);
+        final IModel<Boolean> isPidModel = new IsPidModel(landingPageLinkModel);
+
+        return new WebMarkupContainer(id)
+                .add(new ExternalLink("landingPageLink", new PIDLinkModel(landingPageLinkModel))
+                        .add(new WebMarkupContainer("landingPagePidLabel")
+                                .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel))
+                        )
+                        .add(new Label("landingPageLinkLabel", landingPageLinkModel) {
+                            @Override
+                            public <C> IConverter<C> getConverter(Class<C> type) {
+                                if (type.equals(String.class)) {
+                                    return (IConverter<C>) landingPageLabelConverter;
+                                } else {
+                                    return super.getConverter(type);
+                                }
+                            }
+
+                        }.add(BooleanVisibilityBehavior.visibleOnFalse(isPidModel)))
+                )
+                .add(new Behavior() {
+                    @Override
+                    public void onConfigure(Component component) {
+                        component.setVisible(documentModel.getObject().containsKey(landingPageField));
+                    }
+
+                });
     }
 
     @Override

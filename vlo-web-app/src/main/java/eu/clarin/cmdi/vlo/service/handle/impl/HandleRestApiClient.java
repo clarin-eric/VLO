@@ -97,7 +97,7 @@ public class HandleRestApiClient implements HandleClient {
         return null;
     }
 
-    public String getUrlFromJson(final String jsonString) throws JSONException {
+    public static String getUrlFromJson(final String jsonString) throws JSONException {
         // The handle API returns a JSON structure with a number of handle
         // record fields. We are only interested in the value at
         // values[x].data.value where values[x].type == 'URL'

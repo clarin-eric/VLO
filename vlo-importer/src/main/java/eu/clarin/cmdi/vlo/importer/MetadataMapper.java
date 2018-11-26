@@ -13,12 +13,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.processor.CMDIDataProcessor;
 import eu.clarin.cmdi.vlo.importer.processor.CMDIParserVTDXML;
+import org.apache.solr.common.SolrInputDocument;
 
 public class MetadataMapper {
 
@@ -103,7 +105,12 @@ public class MetadataMapper {
             final VLOMarshaller marshaller = new VLOMarshaller();
             final FacetMappingFactory facetMappingFactory = new FacetMappingFactory(config, marshaller);
 
-            CMDIDataProcessor processor = new CMDIParserVTDXML(MetadataImporter.registerPostProcessors(config,  new FieldNameServiceImpl(config), languageCodeUtils), config, facetMappingFactory, marshaller, false);
+            final FieldNameService fieldNameService = new FieldNameServiceImpl(config);
+            final CMDIDataSolrImplFactory cmdiDataFactory = new CMDIDataSolrImplFactory(fieldNameService);
+            CMDIDataProcessor<SolrInputDocument> processor = new CMDIParserVTDXML(
+                    MetadataImporter.registerPostProcessors(config, fieldNameService, languageCodeUtils),
+                    MetadataImporter.registerPostMappingFilters(fieldNameService),
+                    config, facetMappingFactory, marshaller, cmdiDataFactory, fieldNameService, false);
 
             if (recordFile == null) {
                 String message = "Could not get record filename - stopping.";
@@ -113,10 +120,10 @@ public class MetadataMapper {
 
             File record = new File(recordFile);
 
-            CMDIData cmdiData = processor.process(record, new ResourceStructureGraph());
+            CMDIData<SolrInputDocument> cmdiData = processor.process(record, new ResourceStructureGraph());
 
-            for (String field : cmdiData.getSolrDocument().getFieldNames()) {
-                System.out.println(cmdiData.getSolrDocument().getField(field));
+            for (String field : cmdiData.getDocument().getFieldNames()) {
+                System.out.println(cmdiData.getDocument().getField(field));
             }
 
             // finished importing

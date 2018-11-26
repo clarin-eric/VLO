@@ -23,4 +23,6 @@ package eu.clarin.cmdi.vlo.service;
  */
 public interface UriResolver {
     String resolve(String URI);
+    
+    boolean canResolve(String URI);
 }

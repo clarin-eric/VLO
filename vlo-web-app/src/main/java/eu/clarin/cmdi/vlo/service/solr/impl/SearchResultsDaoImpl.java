@@ -22,7 +22,7 @@ public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDa
 
     @Override
     public List<FacetField> getFacets(SolrQuery query) {
-        final QueryResponse response = fireQuery(sanitise(query));
+        final QueryResponse response = fireQuery(query);
         final List<FacetField> facetFields = response.getFacetFields();
         if (logger.isDebugEnabled()) {
             if (facetFields.size() == 1) {
@@ -48,4 +48,8 @@ public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDa
         }
     }
 
+    @Override
+    public QueryResponse getQueryResponse(SolrQuery query) {
+        return fireQuery(query);
+    }
 }

@@ -1,19 +1,11 @@
 package eu.clarin.cmdi.vlo;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-
-import eu.clarin.cmdi.vlo.config.FieldNameService;
-import eu.clarin.cmdi.vlo.FieldKey;
-
-import java.util.ArrayList;
-import java.util.Set;
 
 /**
  * Definition of facet, resource type and URL constants.
  */
 public class FacetConstants {
-
 
     //Normalized mimeTypes
     public static final String RESOURCE_TYPE_AUDIO = "audio";
@@ -34,7 +26,9 @@ public class FacetConstants {
     public static final String TEST_HANDLE_MPI_PREFIX = "test-hdl:1839";
     public static final String FIELD_RESOURCE_SPLIT_CHAR = "|";
     public static final String URN_NBN_PREFIX = "urn:nbn";
-    public static final String URN_NBN_RESOLVER_URL = "http://www.nbn-resolving.org/redirect/";
+    public static final String URN_NBN_RESOLVER_URL = "http://www.nbn-resolving.org/redirect/urn:nbn:";
+    public static final String DOI_PREFIX = "doi:";
+    public static final String DOI_RESOLVER_URL = "https://doi.org/";
 
     /**
      * regular expression that matches the language prefix in description (group
@@ -52,7 +46,7 @@ public class FacetConstants {
      * Name of the Solr request handler for fast queries (no sorting, boosting
      * or aliases)
      */
-    public static final String SOLR_REQUEST_HANDLER_FAST = "fast";
+    public static final String SOLR_REQUEST_HANDLER_FAST = "/fast";
 
     /**
      * PUB level for the 'availability' facet
@@ -78,5 +72,7 @@ public class FacetConstants {
             FacetConstants.AVAILABILITY_LEVEL_ACA,
             FacetConstants.AVAILABILITY_LEVEL_RES
     );
+    
+    public static final String COLLAPSE_FIELD_NAME = "_signature";
 
 }

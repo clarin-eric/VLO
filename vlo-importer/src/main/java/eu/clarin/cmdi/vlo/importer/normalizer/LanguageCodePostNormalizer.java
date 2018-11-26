@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
 
 import org.apache.commons.lang.WordUtils;
 
@@ -38,7 +38,7 @@ public class LanguageCodePostNormalizer extends AbstractPostNormalizerWithVocabu
      * @return ISO 639-3 code
      */
     @Override
-    public List<String> process(String value, CMDIData cmdiData) {
+    public List<String> process(String value, DocFieldContainer cmdiData) {
         List<String> resultList = new ArrayList<String>();
 
         if (value != null) {

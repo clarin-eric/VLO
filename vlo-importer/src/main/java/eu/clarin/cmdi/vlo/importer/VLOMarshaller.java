@@ -18,6 +18,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.InputSource;
 
 public class VLOMarshaller {
 
@@ -45,9 +46,12 @@ public class VLOMarshaller {
             InputStream is = null;
 
             try {
-                is = (facetConcepts == null || "".equals(facetConcepts))
-                        ? VLOMarshaller.class.getResourceAsStream(VloConfig.DEFAULT_FACET_CONCEPTS_RESOURCE_FILE)
-                        : mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(facetConcepts);
+                if (facetConcepts == null || "".equals(facetConcepts)) {
+                    is = VLOMarshaller.class.getResourceAsStream(VloConfig.DEFAULT_FACET_CONCEPTS_RESOURCE_FILE);
+                } else {
+                    final InputSource resolvedStream = mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(facetConcepts);
+                    is = (resolvedStream == null) ? null : resolvedStream.getByteStream();
+                }
             } catch (FileNotFoundException e) {
                 logger.error("Could not find facets file: {}", facetConcepts);
                 return null;
@@ -59,7 +63,7 @@ public class VLOMarshaller {
             return unmarshal(is);
         });
     }
-    
+
     /**
      * Get object from input stream
      *

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
 
 public class TemporalCoveragePostNormalizer extends AbstractPostNormalizer {
 
@@ -21,7 +21,7 @@ public class TemporalCoveragePostNormalizer extends AbstractPostNormalizer {
      * @return List of accepted values
      */
     @Override
-    public List<String> process(final String value, CMDIData cmdiData) {
+    public List<String> process(final String value, DocFieldContainer cmdiData) {
         String coverageString = value.trim();
 
         Matcher odrfMatcher = ODRF_PATTERN.matcher(coverageString);

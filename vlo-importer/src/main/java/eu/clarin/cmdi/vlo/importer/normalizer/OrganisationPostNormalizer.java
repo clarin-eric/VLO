@@ -1,7 +1,7 @@
 package eu.clarin.cmdi.vlo.importer.normalizer;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +22,7 @@ public class OrganisationPostNormalizer extends AbstractPostNormalizerWithVocabu
      * replaced with controlled vocabulary
      */
     @Override
-    public List<String> process(String value, CMDIData cmdiData) {
+    public List<String> process(String value, DocFieldContainer cmdiData) {
 
         String[] splitArray = normalizeInputString(value).split(";");
         for (int i = 0; i < splitArray.length; i++) {

@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.model;
 import org.apache.wicket.Session;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 /**
  * Read-only model that returns a formatted string on basis of a value model and
@@ -28,9 +29,9 @@ import org.apache.wicket.model.IModel;
  *
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
-public class FormattedStringModel extends AbstractReadOnlyModel<String> {
-
-    private final IModel<String> valueModel;
+public class FormattedStringModel<T> extends AbstractReadOnlyModel<String> {
+    
+    private final IModel<T> valueModel;
     private final IModel<String> formattingModel;
 
     /**
@@ -39,14 +40,18 @@ public class FormattedStringModel extends AbstractReadOnlyModel<String> {
      * @param valueModel model that provides the value passed as an argument to
      * the formatting string
      */
-    public FormattedStringModel(IModel<String> formattingModel, IModel<String> valueModel) {
+    public FormattedStringModel(IModel<String> formattingModel, IModel<T> valueModel) {
         this.valueModel = valueModel;
         this.formattingModel = formattingModel;
     }
 
+    public FormattedStringModel(String formattingModel, IModel<T> valueModel) {
+        this(Model.of(formattingModel), valueModel);
+    }
+
     @Override
     public String getObject() {
-        final String value = valueModel.getObject();
+        final T value = valueModel.getObject();
         if (value == null) {
             return null;
         } else {
