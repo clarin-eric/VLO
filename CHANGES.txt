@@ -1,10 +1,14 @@
 Bug fixes and new features
 --------------------------
+VLO 4.5.3 (November 2018)
+
+* Fixed a link to the Language Resource Switchboard on the help page
+
 VLO 4.5.2 (October 2018)
 
 * Various external service URLs made configurable at build time
 (for docker configurability)
-    <https://github.com/clarin-eric/VLO/issues/199>   
+    <https://github.com/clarin-eric/VLO/issues/199>       
     
 VLO 4.5.1 (September 2018)
 
