@@ -78,6 +78,12 @@ updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
 
 -----------------------------
+Upgrading from 4.5.2 to 4.5.3
+-----------------------------
+Maintenance release, no changes required. Changes in the corresponding Docker image
+and Docker Compose project may apply. See the documentation of the respective projects.
+
+-----------------------------
 Upgrading from 4.5.1 to 4.5.2
 -----------------------------
 Maintenance release, no changes required. Changes in the corresponding Docker image
