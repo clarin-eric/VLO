@@ -36,6 +36,12 @@ import org.apache.wicket.extensions.markup.html.basic.ILinkRenderStrategy;
  */
 public class SmartLinkFieldValueLabel extends FieldValueLabel {
 
+    /**
+     * URL pattern derived from last solution provided at
+     * http://www.regexguru.com/2008/11/detecting-urls-in-a-block-of-text/
+     */
+    public static final String URL_PATTERN = "\\b(?:(?:https?):\\/\\/)(\\([-a-zA-Z0-9+&@#/%=~_|$?!:,.]*\\)|[-a-zA-Z0-9+&@#/%=~_|$?!:,.])*(\\([-a-zA-Z0-9+&@#/%=~_|$?!:,.]*\\)|[a-zA-Z0-9+&@#/%=~_|$])";
+
     public SmartLinkFieldValueLabel(String id, IModel<?> model, IModel<String> fieldModel) {
         super(id, model, fieldModel);
     }
@@ -73,13 +79,6 @@ public class SmartLinkFieldValueLabel extends FieldValueLabel {
      * {@code @})
      */
     private static class VloLinkParser extends LinkParser {
-
-        /**
-         * URL pattern adapted from {@link DefaultLinkParser}; added the @ in
-         * the second part of the URI for cases like
-         * {@code hdl.handle.net/abc-123@format=cmdi}.
-         */
-        private static final String URL_PATTERN = "([a-zA-Z]+:\\/\\/[\\w\\.\\-\\:\\/~]+)[\\w\\.:\\-\\/\\[\\]\\(\\)\\*\\+\\'\\\"?&=%@;,#!$]*";
 
         public VloLinkParser() {
             addLinkRenderStrategy(URL_PATTERN, new ILinkRenderStrategy() {

@@ -16,18 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.config.FieldNameService;
-
-import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY;
-import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY_HTTPS;
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.PIDUtils;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 
 /**
@@ -41,9 +36,6 @@ public class ResolvingLinkModel implements IModel<String> {
 
     private final IModel<String> resolveObjectModel;
     private final IModel<String> resolveSubjectModel;
-    
-    
-
 
     /**
      *
@@ -65,11 +57,7 @@ public class ResolvingLinkModel implements IModel<String> {
         } else {
             //some resolving is desirable...
             final String resolveAgainst = resolveSubjectModel.getObject();
-            final String resolveAgainstLower = (resolveAgainst == null) ? null : resolveAgainst.toLowerCase();
-            if (resolveAgainstLower == null
-                    || !resolveAgainstLower.startsWith("http")
-                    || resolveAgainstLower.startsWith(HANDLE_PROXY)
-                    || resolveAgainstLower.startsWith(HANDLE_PROXY_HTTPS)) {
+            if (resolveAgainst == null || !resolveAgainst.toLowerCase().startsWith("http") || PIDUtils.isPid(resolveAgainst)) {
                 //can only resolve against http(s) URI (excluding handle proxy)
                 return null;
             } else {
@@ -93,7 +81,7 @@ public class ResolvingLinkModel implements IModel<String> {
 
     /**
      * Creates a resolving link model that takes the href out of a resource info
-     * model and wraps it in a {@link HandleLinkModel} so that 'hdl' links and
+     * model and wraps it in a {@link PIDLinkModel} so that 'hdl' links and
      * relative URLs are resolved to actionable links (if possible)
      *
      * @param resourceInfoModel model for resource to create link for
@@ -105,7 +93,7 @@ public class ResolvingLinkModel implements IModel<String> {
                 //URI to resolve against
                 new SolrFieldStringModel(documentModel, VloWicketApplication.get().getFieldNameService().getFieldName(FieldKey.SELF_LINK)),
                 //URI of link to resolve (potentially)
-                new HandleLinkModel(new PropertyModel(resourceInfoModel, "href")));
+                new PIDLinkModel(new PropertyModel(resourceInfoModel, "href")));
     }
 
     @Override

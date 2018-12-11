@@ -27,7 +27,7 @@ import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.components.SmartLinkFieldValueLabel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
-import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
@@ -49,6 +49,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -77,7 +78,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
         this.searchContextModel = searchContextModel;
 
         // add untruncated description
-        final NullFallbackModel descriptionModel = new NullFallbackModel(new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.DESCRIPTION)), "");
+        final NullFallbackModel descriptionModel = new NullFallbackModel(new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.DESCRIPTION)), new StringResourceModel("searchresult.nodescription", this));
         add(new SmartLinkFieldValueLabel("description", descriptionModel, Model.of(fieldNameService.getFieldName(FieldKey.DESCRIPTION))));
 
         // add link to record
@@ -93,79 +94,6 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
             }
 
         });
-
-        // add a container for the resources (only visible if there are actual resources)
-        add(createResourcesView("resources", searchContextModel));
-    }
-
-    private WebMarkupContainer createResourcesView(String id, final IModel<SearchContext> selectionModel) {
-        final SolrFieldModel<String> resourceModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.RESOURCE));
-        // create a container for the list view that is only visible if there actually are resources
-        final WebMarkupContainer container = new WebMarkupContainer(id) {
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(resourceModel.getObject() != null);
-            }
-
-        };
-
-        final PageableListView resourcesView = createResourcesList("resource", resourceModel);
-        container.add(resourcesView);
-
-        // create a link to the record page that is only visible when there are more resources than shown
-        final RecordPageLink moreLink = new RecordPageLink("more", getModel(), selectionModel, RecordPage.RESOURCES_SECTION) {
-
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(resourcesView.getPageCount() > 1);
-            }
-
-        };
-        // add a record page link that shows the number of resources not shown
-        moreLink.add(new Label("moreLabel", StringResourceModelMigration.of("resources.more", new AbstractReadOnlyModel<Integer>() {
-
-            @Override
-            public Integer getObject() {
-                return resourceModel.getObject().size() - MAX_RESOURCES_TO_SHOW;
-            }
-
-        }, "more...")));
-        container.add(moreLink);
-
-        return container;
-    }
-
-    private PageableListView createResourcesList(String id, SolrFieldModel<String> resourceModel) {
-        // list of resources in this record
-        final IModel<List<String>> resourceListModel = new CollectionListModel<>(resourceModel);
-        // use a a pageable view so that the number of resources actually shown is limited
-        return new PageableListView<String>(id, resourceListModel, MAX_RESOURCES_TO_SHOW) {
-
-            @Override
-            protected void populateItem(final ListItem<String> item) {
-                // get resource string converted into a ResourceInfo model
-                final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(resourceStringConverter, item.getModel());
-
-                final Label resourceName = new Label("resourceName", new PropertyModel(resourceInfoModel, "fileName"));
-                // once loaded, make Ajax request to resolve handles and update resource link
-                resourceName.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
-
-                    @Override
-                    protected void onUpdate(AjaxRequestTarget target) {
-                        // update resource link
-                        target.add(resourceName);
-                    }
-                });
-                resourceName.setOutputMarkupId(true);
-                item.add(new RecordPageLink("resourceLink", SearchResultItemExpandedPanel.this.getModel(), searchContextModel, RecordPage.RESOURCES_SECTION)
-                        .add(resourceName));
-
-                item.add(new ExternalLink("downloadLink", new HandleLinkModel(new PropertyModel(resourceInfoModel, "href"))));
-                item.add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel<String>(resourceInfoModel, "resourceType")));
-            }
-        };
     }
 
     @Override

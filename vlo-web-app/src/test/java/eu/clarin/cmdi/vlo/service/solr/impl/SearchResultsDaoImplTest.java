@@ -91,16 +91,19 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
         // add some documents
         int id = 1;
         CMDIData<SolrInputDocument> cmdiData = new CMDIDataSolrImpl(fieldNameService);
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "Collection1", false);
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COUNTRY), "Country1", false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "First collection", false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COUNTRY), "A country", false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SIGNATURE), "doc1", true);
         SolrInputDocument document = cmdiData.getDocument();
         document.addField("id", Integer.toString(id++));
         server.add(document);
 
         cmdiData = new CMDIDataSolrImpl(fieldNameService);
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "Collection1", false);
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COUNTRY), "Country2", false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "Second collection", false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COUNTRY), "Another country", false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SIGNATURE), "doc2", true);
         document = cmdiData.getDocument();
+        
         document.addField("id", Integer.toString(id++));
         server.add(document);
 
@@ -138,10 +141,10 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
         assertNotNull(facetFields);
         assertEquals(2, facetFields.size());
 
-        // 1 collection
+        // 2 collections
         assertThat(facetFields, Matchers.<FacetField>hasItem(Matchers.allOf(
                 Matchers.<FacetField>hasProperty("name", equalTo(fieldNameService.getFieldName(FieldKey.COLLECTION))),
-                Matchers.<FacetField>hasProperty("valueCount", equalTo(1)))));
+                Matchers.<FacetField>hasProperty("valueCount", equalTo(2)))));
 
         // 2 countries
         assertThat(facetFields, Matchers.<FacetField>hasItem(Matchers.allOf(
@@ -163,15 +166,15 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
         }
 
         // get document with specific field value
-        query.setQuery(fieldNameService.getFieldName(FieldKey.COUNTRY) + ":Country1");
+        query.setQuery(fieldNameService.getFieldName(FieldKey.COUNTRY) + ":\"Another country\"");
         {
             // only document with id "1" should match this
             SolrDocumentList documents = instance.getDocuments(query);
             assertEquals(1, documents.getNumFound());
-            assertEquals("1", documents.get(0).getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
+            assertEquals("2", documents.get(0).getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
         }
 
-        query.setFilterQueries(fieldNameService.getFieldName(FieldKey.COLLECTION) + ":Collection2");
+        query.setFilterQueries(fieldNameService.getFieldName(FieldKey.COLLECTION) + ":\"Third collection\"");
         {
             // no matches
             SolrDocumentList documents = instance.getDocuments(query);

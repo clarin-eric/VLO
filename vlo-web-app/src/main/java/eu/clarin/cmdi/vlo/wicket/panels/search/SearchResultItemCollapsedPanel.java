@@ -24,6 +24,7 @@ import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -31,6 +32,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  * @author twagoo
  */
 public class SearchResultItemCollapsedPanel extends Panel {
+
     @SpringBean
     private FieldNameService fieldNameService;
     private static final int MAX_DESCRIPTION_LENGTH = 350;
@@ -44,10 +46,12 @@ public class SearchResultItemCollapsedPanel extends Panel {
         super(id, documentModel);
         this.selectionModel = selectionModel;
 
+        final StringResourceModel noDescriptionModel = new StringResourceModel("searchresult.nodescription", this);
+
         // description, truncated if too long
-        add(new SolrFieldLabel("description", documentModel, fieldNameService.getFieldName(FieldKey.DESCRIPTION), "", MAX_DESCRIPTION_LENGTH, LONG_DESCRIPTION_TRUNCATE_POINT));
+        add(new SolrFieldLabel("description", documentModel, fieldNameService.getFieldName(FieldKey.DESCRIPTION), noDescriptionModel, MAX_DESCRIPTION_LENGTH, LONG_DESCRIPTION_TRUNCATE_POINT));
         // extra short description for smaller devices
-        add(new SolrFieldLabel("description-shorter", documentModel, fieldNameService.getFieldName(FieldKey.DESCRIPTION), "", MAX_DESCRIPTION_LENGTH_SHORTER, LONG_DESCRIPTION_TRUNCATE_POINT_SHORTER));
+        add(new SolrFieldLabel("description-shorter", documentModel, fieldNameService.getFieldName(FieldKey.DESCRIPTION), noDescriptionModel, MAX_DESCRIPTION_LENGTH_SHORTER, LONG_DESCRIPTION_TRUNCATE_POINT_SHORTER));
     }
 
     @Override

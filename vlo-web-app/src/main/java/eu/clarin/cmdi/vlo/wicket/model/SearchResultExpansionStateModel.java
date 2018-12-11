@@ -19,10 +19,10 @@ package eu.clarin.cmdi.vlo.wicket.model;
 
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import java.util.Set;
-import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.IModel;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 
 /**
  * Model for the expansion state of an individual document in a search result
@@ -34,7 +34,7 @@ import eu.clarin.cmdi.vlo.VloWicketApplication;
 public class SearchResultExpansionStateModel implements IModel<ExpansionState> {
 
     private final IModel<Set<Object>> expandedItemsModel;
-    private final IModel<SolrDocument> documentModel;
+    private final IModel<SolrDocumentExpansionPair> documentModel;
 
     /**
      *
@@ -43,7 +43,7 @@ public class SearchResultExpansionStateModel implements IModel<ExpansionState> {
      * @param documenModel model of the document of which this model represents
      * the expanded state
      */
-    public SearchResultExpansionStateModel(IModel<Set<Object>> expandedItemsModel, IModel<SolrDocument> documenModel) {
+    public SearchResultExpansionStateModel(IModel<Set<Object>> expandedItemsModel, IModel<SolrDocumentExpansionPair> documenModel) {
         this.expandedItemsModel = expandedItemsModel;
         this.documentModel = documenModel;
     }
@@ -75,7 +75,7 @@ public class SearchResultExpansionStateModel implements IModel<ExpansionState> {
     }
 
     private Object getDocumentId() {
-        return documentModel.getObject().getFieldValue(VloWicketApplication.get().getFieldNameService().getFieldName(FieldKey.ID));
+        return documentModel.getObject().getDocument().getFieldValue(VloWicketApplication.get().getFieldNameService().getFieldName(FieldKey.ID));
     }
 
 }

@@ -16,14 +16,18 @@
  */
 package eu.clarin.cmdi.vlo.service.solr.impl;
 
+import com.google.common.collect.Streams;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
@@ -32,8 +36,11 @@ import org.apache.solr.client.solrj.util.ClientUtils;
  * @author twagoo
  */
 public abstract class AbstractSolrQueryFactory {
+    
+    public static final String COLLAPSE_FIELD_QUERY = "{!collapse field=_signature}";
 
     protected static final String SOLR_SEARCH_ALL = "*:*";
+    protected static final String EXPAND_ROWS = "0"; //expansion rows to actually fetch
 
     protected final void addQueryFacetParameters(final SolrQuery query, QueryFacetsSelection queryFacetsSelections) {
         final String queryString = queryFacetsSelections.getQuery();
@@ -77,16 +84,21 @@ public abstract class AbstractSolrQueryFactory {
                     }
                 }
             }
-            query.setFilterQueries(encodedQueries.toArray(new String[encodedQueries.size()]));
+            query.setFilterQueries(
+                    Streams.concat(
+                            Optional.ofNullable(query.getFilterQueries())
+                                    .map(Arrays::stream)
+                                    .orElse(Stream.empty()),
+                            encodedQueries.stream()).toArray(String[]::new));
         }
     }
 
-    private String createFilterQuery(String facetName, String value) {
+    protected String createFilterQuery(String facetName, String value) {
         // escape value and wrap in quotes to make literal query
         return createFilterQuery("%s:\"%s\"", facetName, value);
     }
 
-    private String createNegativeFilterQuery(String facetName, String value) {
+    protected String createNegativeFilterQuery(String facetName, String value) {
         // escape value and wrap in quotes to make literal query, prepend negator
         return createFilterQuery("-%s:\"%s\"", facetName, value);
     }
@@ -103,17 +115,10 @@ public abstract class AbstractSolrQueryFactory {
      * @return
      */
     protected final String createFilterOrQuery(Map<String, String> facetValues) {
-        // escape value and wrap in quotes to make literal query
-        final StringBuilder queryBuilder = new StringBuilder();
-        final Iterator<Map.Entry<String, String>> iterator = facetValues.entrySet().iterator();
-        while (iterator.hasNext()) {
-            final Map.Entry<String, String> facetValue = iterator.next();
-            queryBuilder.append(createFilterQuery(facetValue.getKey(), facetValue.getValue()));
-            if (iterator.hasNext()) {
-                queryBuilder.append(" OR ");
-            }
-        }
-        return queryBuilder.toString();
+        return facetValues.entrySet()
+                .stream()
+                .map(e -> createFilterQuery(e.getKey(), e.getValue()))
+                .collect(Collectors.joining(" OR "));
     }
 
     /**
@@ -126,21 +131,20 @@ public abstract class AbstractSolrQueryFactory {
     private String createFacetOrQuery(String facetName, Collection<String> values) {
         // escape value and wrap in quotes to make literal query
         // prefix field name with tag statement (see <http://wiki.apache.org/solr/SimpleFacetParameters#Multi-Select_Faceting_and_LocalParams>)
-        final StringBuilder queryBuilder = new StringBuilder(String.format("{!tag=%1$s}%1$s", facetName)).append(":(");
-        // loop over values
-        final Iterator<String> iterator = values.iterator();
-        while (iterator.hasNext()) {
-            final String value = iterator.next();
+        final String prefix = String.format("{!tag=%1$s}%1$s:(", facetName);
+        //close parentheses
+        final String postfix = ")";
 
-            queryBuilder.append(ClientUtils.escapeQueryChars(value));
+        // escape and join 
+        return values.stream()
+                .map(ClientUtils::escapeQueryChars)
+                .collect(Collectors.joining(" OR ", prefix, postfix));
+    }
 
-            // add 'OR' connector except for last token
-            if (iterator.hasNext()) {
-                queryBuilder.append(" OR ");
-            }
-        }
-        queryBuilder.append(")");
-        return queryBuilder.toString();
+    protected SolrQuery enableExpansion(SolrQuery query) {
+        query.set("expand", true);
+        query.set("expand.rows=" + EXPAND_ROWS);
+        return query;
     }
 
 }

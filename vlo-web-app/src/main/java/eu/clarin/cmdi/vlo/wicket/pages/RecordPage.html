@@ -54,19 +54,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             <wicket:container wicket:id="recordNavigation"></wicket:container>
 
-            <h1 wicket:id="name" id="recordtitle">[TITLE]</h1>
-
             <div id="record-preamble" class="row">
                 <div class="col-md-4 col-md-push-8">
                     <div wicket:id="licenseInfo" id="record-license-availability-tags" class="pull-right">[license]</div>
                 </div>
                 <div class="col-md-8 col-md-pull-4">
+                    <h1 wicket:id="name" id="recordtitle">[TITLE]</h1>
                     <div>
-                        <a wicket:id="landingPageLink" target="_blank" id="recordlandingpage">
-                            <span class="glyphicon glyphicon-new-window"></span>
-                            <span>Show the original provider's page for this record</span>
-                        </a>
-
                         <div wicket:id="searchlinks" id="recordsearchpage">
                             <div wicket:id="searchPage">
                                 <a wicket:id="searchLink">

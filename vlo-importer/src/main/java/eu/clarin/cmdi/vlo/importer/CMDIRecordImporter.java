@@ -50,28 +50,33 @@ public class CMDIRecordImporter<T> {
     private final CMDIDataProcessor<T> processor;
     private final ImportStatistics stats;
     private final DocumentStore documentStore;
+    private final DeduplicationSignature signature;
 
     private final static DataRoot NOOP_DATAROOT = new DataRoot("dataroot", new File("/"), "http://null", "", false);
+
 
     /**
      * Contains MDSelflinks (usually). Just to know what we have already done.
      */
     private final Set<String> processedIds = Sets.newConcurrentHashSet();
 
-    public CMDIRecordImporter(CMDIDataProcessor<T> processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ImportStatistics importStatistics) {
+    public CMDIRecordImporter(CMDIDataProcessor<T> processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ImportStatistics importStatistics, List<String> signatureFieldNames) {
         this.processor = processor;
         this.documentStore = documentStore;
         this.fieldNameService = fieldNameService;
         this.stats = importStatistics;
+        this.signature = new DeduplicationSignature(signatureFieldNames);
     }
 
     /**
      * Process single CMDI file with CMDIDataProcessor
      *
      * @param file CMDI input file
-     * @param dataOrigin if left empty, a dummy data origin will be used to populate the technical metadata
+     * @param dataOrigin if left empty, a dummy data origin will be used to
+     * populate the technical metadata
      * @param resourceStructureGraph leave empty skip hierarchy processing
-     * @param endpointDescription if present, used to populate some fields including national project
+     * @param endpointDescription if present, used to populate some fields
+     * including national project
      * @throws eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException
      * @throws IOException
      */
@@ -129,7 +134,7 @@ public class CMDIRecordImporter<T> {
         return id != null && !id.trim().isEmpty();
     }
 
-    private void addTechnicalMetadata(File file, CMDIData<T> cmdiData, DataRoot dataOrigin, Optional<EndpointDescription> endpointDescription) {
+    private void addTechnicalMetadata(File file, CMDIData<T> cmdiData, DataRoot dataOrigin, Optional<EndpointDescription> endpointDescription) {        
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER), dataOrigin.getOriginName(), false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.ID), cmdiData.getId(), false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FILENAME), file.getAbsolutePath(), false);
@@ -172,6 +177,9 @@ public class CMDIRecordImporter<T> {
         Date dt = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LAST_SEEN), df.format(dt), false);
+
+        // create and add document signature
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SIGNATURE), signature.getSignature(cmdiData), false);
 
         // set number of days since last import to '0'
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DAYS_SINCE_LAST_SEEN), 0, false);

@@ -16,21 +16,21 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
+import static eu.clarin.cmdi.vlo.FacetConstants.DOI_PREFIX;
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PREFIX;
-import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY;
+import eu.clarin.cmdi.vlo.PIDUtils;
+import eu.clarin.cmdi.vlo.service.PIDResolver;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import java.net.URI;
 import java.net.URISyntaxException;
-import nl.mpi.archiving.corpusstructure.core.handle.HandleResolver;
-import nl.mpi.archiving.corpusstructure.core.handle.InvalidHandleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Resolves a URI as follows: if the URI starts with the handle scheme or the
- * handle proxy, the handle is extracted and passed on to this resolver's
- * {@link HandleResolver} and the result of {@link HandleResolver#resolve(java.net.URI) 
- * } is returned (as String); otherwise the original URI is returned.
+ * Resolves a URI as follows: if the URI is a recognised handle or DOI, the PID
+ * is extracted and passed on to this resolver's {@link PIDResolver} and the
+ * result of {@link PIDResolver#resolve(java.net.URI)} is returned (as String);
+ * otherwise the original URI is returned.
  *
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
@@ -38,40 +38,39 @@ public class UriResolverImpl implements UriResolver {
 
     private final static Logger logger = LoggerFactory.getLogger(UriResolverImpl.class);
 
-    private final HandleResolver handleClient;
+    private final PIDResolver handleClient;
+    private final PIDResolver doiClient;
 
-    public UriResolverImpl(HandleResolver handleClient) {
+    public UriResolverImpl(PIDResolver handleClient, PIDResolver doiClient) {
         this.handleClient = handleClient;
+        this.doiClient = doiClient;
+    }
+
+    @Override
+    public boolean canResolve(String uri) {
+        return PIDUtils.isHandle(uri) || PIDUtils.isDoi(uri);
     }
 
     @Override
     public String resolve(String uri) {
-        final String handle = getHandle(uri);
-
-        if (handle != null) {
-            logger.debug("Calling handle client to resolve handle [{}]", uri);
-            try {
-                final URI resolved = handleClient.resolve(new URI(handle));
-                if (resolved != null) {
-                    return resolved.toString();
-                }
-            } catch (InvalidHandleException ex) {
-                logger.warn("Invalid handle ecountered: {}", handle);
-            } catch (URISyntaxException ex) {
-                logger.warn("Invalid URI for handle: {}", handle);
-            }
+        final URI resolved;
+        if (PIDUtils.isHandle(uri)) {
+            resolved = resolve(handleClient, HANDLE_PREFIX + PIDUtils.getSchemeSpecificId(uri));
+        } else if (PIDUtils.isDoi(uri)) {
+            resolved = resolve(doiClient, DOI_PREFIX + PIDUtils.getSchemeSpecificId(uri));
+        } else {
+            resolved = null;
         }
-        // not a resolvable handle
-        return uri;
 
+        return (resolved != null) ? resolved.toString() : uri;
     }
 
-    private String getHandle(String uri) {
-        if (uri.startsWith(HANDLE_PREFIX)) {
-            return uri;
-        } else if (uri.startsWith(HANDLE_PROXY)) {
-            return HANDLE_PREFIX + uri.substring(HANDLE_PROXY.length());
-        } else {
+    private final static URI resolve(PIDResolver resolver, String pid) {
+        try {
+            logger.debug("Using {} to resolve pid [{}]", resolver.getClass().getName(), pid);
+            return resolver.resolve(new URI(pid));
+        } catch (URISyntaxException ex) {
+            logger.warn("PID is not a valid URI: {}", pid);
             return null;
         }
     }

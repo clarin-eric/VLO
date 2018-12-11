@@ -1,0 +1,49 @@
+/*
+Copyright (C) 2015 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+@pid-label-border-color: @link-color;
+@pid-label-badge-color: @link-color;
+@pid-label-badge-text-color: #fff;
+
+.pid-label {
+    border: 1px solid;
+    border-color: @pid-label-border-color;
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-right: .3em;
+
+    .pid-label-badge {
+        padding: 0 .5em;
+        background: @pid-label-badge-color;
+        color: @pid-label-badge-text-color;
+    }
+
+    .pid-label-link {
+        padding: 0 .5em 0 .5em;
+    }
+}
+
+/* hover behaviour when the label is (in) a link */
+a .pid-label:hover, a.pid-label:hover {
+    border-color: darken(@pid-label-border-color, 5%);
+    text-decoration: none;
+
+    .pid-label-badge {
+        background: darken(@pid-label-badge-color, 5%);
+        color: darken(@pid-label-badge-text-color, 5%);
+    }
+}

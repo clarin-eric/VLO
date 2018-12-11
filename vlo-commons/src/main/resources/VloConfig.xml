@@ -117,6 +117,8 @@
         <field key="HAS_PART_COUNT_WEIGHT">_hasPartCountWeight</field>
         <field key="LANGUAGE_NAME">_languageName</field>
         <field key="OAI_ENDPOINT_URI">_oaiEndpointURI</field>
+        <field key="SIGNATURE">_signature</field>
+        <field key="RECORD_PID">recordPid</field>
     </fields>
 
     <deprecatedFields>
@@ -176,19 +178,26 @@
         <ignoredField>SIGNATURE</ignoredField>
         <ignoredField>TEMPORAL_COVERAGE</ignoredField>
         <ignoredField>PROJECT_NAME</ignoredField>
+        <ignoredField>RESOURCE</ignoredField>
+        <ignoredField>FILENAME</ignoredField>
+        <ignoredField>HAS_PART</ignoredField>
+        <ignoredField>RESOURCE_COUNT</ignoredField>
+        <ignoredField>DAYS_SINCE_LAST_SEEN</ignoredField>
+        <ignoredField>HAS_PART_COUNT_WEIGHT</ignoredField>
+        <ignoredField>LANGUAGE_NAME</ignoredField>
     </ignoredFields>
 
     <!-- KEYS of fields shown as technical fields in the record page -->
     <technicalFields>
         <technicalField>ID</technicalField>
         <technicalField>SELF_LINK</technicalField>
-        <technicalField>DATA_PROVIDER</technicalField>
         <technicalField>COMPLETE_METADATA</technicalField>
         <technicalField>LANDINGPAGE</technicalField>
         <technicalField>SEARCHPAGE</technicalField>
         <technicalField>SEARCH_SERVICE</technicalField>
         <technicalField>LAST_SEEN</technicalField>
         <technicalField>CLARIN_PROFILE</technicalField>
+        <technicalField>DATA_PROVIDER</technicalField>
         <technicalField>HIERARCHY_WEIGHT</technicalField>
         <technicalField>HAS_PART_COUNT</technicalField>
     </technicalFields>
@@ -252,5 +261,13 @@
     <showResultScores>false</showResultScores>
 
     <processHierarchies>true</processHierarchies>
+
+    <!-- fields that are used to generate a document signature to identify duplicates -->
+    <signatureFields>
+        <signatureField>LANGUAGE_CODE</signatureField>
+        <signatureField>DATA_PROVIDER_NAME</signatureField>
+        <signatureField>DESCRIPTION</signatureField>
+        <signatureField>COLLECTION</signatureField>
+    </signatureFields>
 
 </VloConfig>

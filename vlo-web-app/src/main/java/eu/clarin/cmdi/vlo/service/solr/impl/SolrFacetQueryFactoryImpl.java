@@ -41,6 +41,7 @@ public class SolrFacetQueryFactoryImpl extends AbstractSolrQueryFactory implemen
         baseQuery.setRows(0);
         baseQuery.setFacet(true);
         baseQuery.setFacetMinCount(1);
+        baseQuery.addFilterQuery(COLLAPSE_FIELD_QUERY);
     }
 
     @Override

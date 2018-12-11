@@ -17,8 +17,7 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import eu.clarin.cmdi.vlo.service.handle.impl.HandleRestApiClient;
-import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PREFIX;
-import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY;
+import eu.clarin.cmdi.vlo.PIDUtils;
 import eu.clarin.cmdi.vlo.service.handle.HandleClient;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import org.slf4j.Logger;
@@ -31,7 +30,7 @@ import org.slf4j.LoggerFactory;
  * } is returned; otherwise the original URI is returned.
  *
  * TODO: add support for resolving URN:NBN <https://trac.clarin.eu/ticket/535>
- * 
+ *
  * @author twagoo
  */
 public class HandleClientUriResolverImpl implements UriResolver {
@@ -42,6 +41,11 @@ public class HandleClientUriResolverImpl implements UriResolver {
 
     public HandleClientUriResolverImpl(HandleClient handleClient) {
         this.handleClient = handleClient;
+    }
+
+    @Override
+    public boolean canResolve(String uri) {
+        return PIDUtils.isHandle(uri);
     }
 
     @Override
@@ -63,15 +67,11 @@ public class HandleClientUriResolverImpl implements UriResolver {
     }
 
     private String getHandle(String uri) {
-        final String handle;
-        if (uri.startsWith(HANDLE_PREFIX)) {
-            handle = uri.substring(HANDLE_PREFIX.length());
-        } else if (uri.startsWith(HANDLE_PROXY)) {
-            handle = uri.substring(HANDLE_PROXY.length());
+        if (PIDUtils.isHandle(uri)) {
+            return PIDUtils.getSchemeSpecificId(uri);
         } else {
-            handle = null;
+            return null;
         }
-        return handle;
     }
 
 }

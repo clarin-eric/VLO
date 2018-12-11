@@ -727,6 +727,9 @@
         
         <!-- See https://wiki.apache.org/solr/DisMaxQParserPlugin -->
         <str name="defType">edismax</str>
+
+        <!-- collapse results with the same signature -->
+        <str name="fq">{!collapse field=_signature}</str>
         
         <!-- 'Fetch all documents' query -->
         <str name="q.alt">*:*</str>
@@ -814,6 +817,16 @@
           <str name="fl">*</str>
           <str name="version">2.1</str>
            -->
+     </lst>
+  </requestHandler>
+  
+  
+  <requestHandler name="/fast" class="solr.SearchHandler">
+    <!-- fast handler e.g. for getting a document by ID -->
+     <lst name="defaults">
+        <!-- See https://wiki.apache.org/solr/DisMaxQParserPlugin -->
+        <str name="defType">edismax</str>
+        <str name="df">text</str>
      </lst>
   </requestHandler>
 
@@ -1051,6 +1064,7 @@
           <str name="lookupImpl">FreeTextLookupFactory</str>
           <str name="dictionaryImpl">DocumentDictionaryFactory</str>
           <str name="field">_suggester</str>
+          <str name="separator"> </str>
           <str name="suggestAnalyzerFieldType">textSuggest</str>
           <str name="buildOnStartup">false</str>
           <str name="suggestFreeTextAnalyzerFieldType">textSuggest</str>

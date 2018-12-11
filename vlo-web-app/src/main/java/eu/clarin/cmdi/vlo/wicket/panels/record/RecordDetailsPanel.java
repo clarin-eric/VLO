@@ -45,6 +45,13 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
+import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.model.Model;
 
 /**
  * Panel that shows the "basic" (non-technical) property fields of a document
@@ -55,7 +62,9 @@ import eu.clarin.cmdi.vlo.FieldKey;
  * @author twagoo
  */
 public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
-    
+
+    private static final int PID_LABEL_TEXT_LENGTH = 25;
+
     @SpringBean(name = "basicPropertiesFilter")
     private FieldFilter basicPropertiesFilter;
     @SpringBean(name = "documentFieldOrder")
@@ -66,54 +75,120 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
     private ResourceStringConverter resolvingResourceStringConverter;
     @SpringBean
     private FieldNameService fieldNameService;
-    
+
     private final SolrFieldModel<String> resourcesModel;
     private ResourceInfoModel resourceInfoModel;
-    
+
     public RecordDetailsPanel(String id, IModel<SolrDocument> model) {
         super(id, model);
-        
+
         resourcesModel = new SolrFieldModel<>(model, fieldNameService.getFieldName(FieldKey.RESOURCE));
         resourceInfoModel = new ResourceInfoModel(resourceStringConverter, new SolrFieldStringModel(model, fieldNameService.getFieldName(FieldKey.RESOURCE)));
+
+        add(createCoreLinksPanel("coreLinks"));
 
         // Fields table
         add(new FieldsTablePanel("fieldsTable", new DocumentFieldsProvider(getModel(), basicPropertiesFilter, fieldOrder))
                 .add(new HighlightSearchTermBehavior())
-                .add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
-                    @Override
-                    public String getObject() {
-                        // leave space for resource info iff there is exactly one resource
-                        // using boostrap columns; see https://getbootstrap.com/css/#grid
-                        return (resourcesModel.getObject() != null
-                                && resourcesModel.getObject().size() == 1)
-                                ? "col-sm-9"
-                                : "col-xs-12";
-                    }
-                }))
         );
-        
-        add(createSingleResourceInfo("resourceInfo"));
-        
+
         add(new SimilarDocumentsPanel("similar", getModel()));
     }
-    
-    private Component createSingleResourceInfo(String id) {
-        final ResolvingLinkModel linkModel = ResolvingLinkModel.modelFor(resourceInfoModel, getModel());
-        final WebMarkupContainer resourceInfo = new WebMarkupContainer(id) {
+
+    /**
+     * Creates a panel for 'core links' (landing page and/or single resource)
+     *
+     * @param id
+     * @return
+     */
+    private Component createCoreLinksPanel(String id) {
+        final WebMarkupContainer coreLinksContainer = new WebMarkupContainer(id);
+
+        final IModel<String> landingPageLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
+        final IModel<Boolean> landingPageVisibilityModel = new AbstractReadOnlyModel<Boolean>() {
             @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                // show resource info iff there is exactly one resource and it has a proper link 
-                setVisible(
-                        resourcesModel.getObject() != null
-                        && resourcesModel.getObject().size() == 1
-                        && linkModel.getObject() != null);
+            public Boolean getObject() {
+                return landingPageLinkModel.getObject() != null;
             }
-            
         };
 
+        coreLinksContainer
+                .add(createLandingPageLink("landingPage", landingPageLinkModel).
+                        add(BooleanVisibilityBehavior.visibleOnTrue(landingPageVisibilityModel)));
+
+        // resource info for single resource
+        final ResolvingLinkModel resourceInfoLinkModel = ResolvingLinkModel.modelFor(resourceInfoModel, getModel());
+        final IModel<Boolean> resourceInfoVisibilityModel = new AbstractReadOnlyModel<Boolean>() {
+            @Override
+            public Boolean getObject() {
+                return (resourcesModel.getObject() != null
+                        && resourcesModel.getObject().size() == 1
+                        && resourceInfoLinkModel.getObject() != null);
+            }
+        };
+        coreLinksContainer
+                .add(createSingleResourceInfo("resourceInfo", resourceInfoLinkModel)
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(resourceInfoVisibilityModel)));
+
+        final AbstractReadOnlyModel<Boolean> resourcesLinkVisibilityModel = new AbstractReadOnlyModel<Boolean>() {
+            @Override
+            public Boolean getObject() {
+                return resourcesModel.getObject() != null
+                        && resourcesModel.getObject().size() > 1;
+            }
+        };
+        coreLinksContainer
+                .add(createMultipleResourceLink("resourcesInfo")
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(resourcesLinkVisibilityModel)));
+
+        coreLinksContainer.add(
+                new Label("resourcesTitle", new AbstractReadOnlyModel() {
+                    @Override
+                    public Object getObject() {
+                        return (resourcesModel.getObject() != null && resourcesModel.getObject().size() == 1)
+                                ? "Linked resource"
+                                : "Linked resources";
+                    }
+                }).add(new Behavior() {
+                    @Override
+                    public void onConfigure(Component component) {
+                        component.setVisible(
+                                landingPageVisibilityModel.getObject() // landing page link is visible
+                                && (resourceInfoVisibilityModel.getObject() || resourcesLinkVisibilityModel.getObject()) // and resource(s) info as well
+                        );
+                    }
+
+                }));
+
+        return coreLinksContainer;
+    }
+
+    private Component createLandingPageLink(String id, IModel<String> linkModel) {
+        final IsPidModel isPidModel = new IsPidModel(linkModel);
+        final PIDLinkModel pidLinkModel = PIDLinkModel.wrapLinkModel(linkModel);
+
+        return new WebMarkupContainer(id)
+                .add(new ExternalLink("landingPageLink", pidLinkModel)
+                        .add(new Label("landingPageLinkLabel", linkModel)
+                                .add(BooleanVisibilityBehavior.visibleOnFalse(isPidModel))))
+                .add(new PIDLinkLabel("landingPagePidLabel", pidLinkModel, Model.of(PIDContext.LANDING_PAGE), PID_LABEL_TEXT_LENGTH)
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel)));
+    }
+
+    /**
+     * Information component for a single linked resource
+     *
+     * @param id
+     * @param linkModel
+     * @return
+     */
+    private Component createSingleResourceInfo(String id, IModel<String> linkModel) {
+        final IsPidModel isPidModel = new IsPidModel(linkModel);
+
+        final WebMarkupContainer resourceInfo = new WebMarkupContainer(id);
+
         // Resource info for single resource (should not appear if there are more or fewer resources)
-        resourceInfo.add(new ExternalLink("resourceLink", linkModel)
+        resourceInfo.add(new ExternalLink("resourceLink", new PIDLinkModel(ResolvingLinkModel.modelFor(resourceInfoModel, getModel())))
                 //resource type icon
                 .add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel<String>(resourceInfoModel, "resourceType"))
                         //with type name tooltip
@@ -122,33 +197,47 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
                 .add(new Label("resourceName", new PropertyModel<>(resourceInfoModel, "fileName")))
         );
 
+        resourceInfo
+                .add(new PIDLinkLabel("pidLabel", linkModel, Model.of(PIDContext.RESOURCE), PID_LABEL_TEXT_LENGTH)
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel)));
+
         // Resource info gets async update to resolve any handle to a file name
         resourceInfo.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
-            
+
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 target.add(resourceInfo);
             }
         });
-        
+
         resourceInfo.add(new AjaxFallbackLink("showResources") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 switchToTab(RESOURCES_SECTION, target);
             }
         });
-        
+
         resourceInfo.setOutputMarkupId(true);
         return resourceInfo;
     }
-    
+
+    private Component createMultipleResourceLink(String id) {
+        return new WebMarkupContainer(id)
+                .add(new AjaxFallbackLink("showResources") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        switchToTab(RESOURCES_SECTION, target);
+                    }
+                }.add(new Label("resourcesCount", new PropertyModel<String>(resourcesModel, "size"))));
+    }
+
     protected abstract void switchToTab(String tab, AjaxRequestTarget target);
-    
+
     @Override
     public void detachModels() {
         super.detachModels();
         resourcesModel.detach();
         resourceInfoModel.detach();
     }
-    
+
 }

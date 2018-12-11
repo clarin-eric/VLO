@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.wicket.model.CompoundListModel;
-import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.UrlFromStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.XsltModel;
@@ -45,11 +45,10 @@ public class CmdiContentPanel extends GenericPanel<SolrDocument> {
     public CmdiContentPanel(String id, IModel<SolrDocument> model) {
         super(id, model);
 
-        final List<IModel<URL>> locationModels = Arrays.<IModel<URL>>asList(
-                //local (harvested) copy of the record
+        final List<IModel<URL>> locationModels = Arrays.<IModel<URL>>asList(//local (harvested) copy of the record
                 new UrlFromStringModel(new SolrFieldStringModel(model, fieldNameService.getFieldName(FieldKey.FILENAME))),
                 //self link as fallback
-                new UrlFromStringModel(new HandleLinkModel(new SolrFieldStringModel(model, fieldNameService.getFieldName(FieldKey.SELF_LINK)))));
+                new UrlFromStringModel(new PIDLinkModel(new SolrFieldStringModel(model, fieldNameService.getFieldName(FieldKey.SELF_LINK)))));
 
         this.cmdiUrlsModel = new CompoundListModel(locationModels);
     }

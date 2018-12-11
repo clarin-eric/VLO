@@ -22,17 +22,18 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import java.util.Iterator;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteTextField;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.GenericPanel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -48,10 +49,12 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
     private AutoCompleteService autoCompleteDao;
     @SpringBean
     private PiwikConfig piwikConfig;
+    private final IModel<Long> recordCountModel;
 
     //private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
-    public SearchFormPanel(String id, final IModel<QueryFacetsSelection> model) {
+    public SearchFormPanel(String id, final IModel<QueryFacetsSelection> model, final IModel<Long> recordCountModel) {
         super(id, model);
+        this.recordCountModel = recordCountModel;
 
         final Form<QueryFacetsSelection> form = new Form<>("search", model);
 
@@ -62,7 +65,17 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
             protected Iterator<String> getChoices(String input) {
                 return autoCompleteDao.getChoices(input);
             }
-        });
+        }.add(new AttributeModifier("placeholder", new AbstractReadOnlyModel<String>() {
+            @Override
+            public String getObject() {
+                final Long recordCount = recordCountModel.getObject();
+                if (recordCount == null || recordCount < 1) {
+                    return "Search";
+                } else {
+                    return String.format("Search through %,d records", recordCount);
+                }
+            }
+        })));
 
         // Button allows partial updates but can fall back to a full (non-JS) refresh
         final AjaxFallbackButton submitButton = new AjaxFallbackButton("searchSubmit", form) {
@@ -112,6 +125,12 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
         form.add(submitButton);
 
         add(form);
+    }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        recordCountModel.detach();
     }
 
     protected abstract void onSubmit(AjaxRequestTarget target);

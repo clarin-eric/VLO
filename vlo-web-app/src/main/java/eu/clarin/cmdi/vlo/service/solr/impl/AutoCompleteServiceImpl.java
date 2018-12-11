@@ -41,7 +41,7 @@ public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoComplete
             query.setQuery(input.toLowerCase());
             query.setRequestHandler("/suggest");
             
-            final QueryResponse response = fireQuery(sanitise(query));
+            final QueryResponse response = fireQuery(query);
             
             if (response.getSuggesterResponse()!= null) {
                 final Map<String, List<String>> suggestions = response.getSuggesterResponse().getSuggestedTerms();

@@ -21,7 +21,6 @@ import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import java.util.Objects;
 
-import javax.inject.Inject;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.IModel;

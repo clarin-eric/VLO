@@ -16,9 +16,9 @@ import static org.hamcrest.CoreMatchers.hasItems;
  */
 public class DefaultVloConfigFactoryTest {
 
-    public static final int IGNORED_FIELDS_COUNT = 9;
+    public static final int IGNORED_FIELDS_COUNT = 16;
     public static final int TECHNICAL_FIELDS_COUNT = 11;
-    
+
     private VloConfig config;
     private Properties testProps;
 
@@ -452,7 +452,7 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testSetFederatedContentSearchUrl() {
-        String param = "http://weblicht.sfs.uni-tuebingen.de/Aggregator/";
+        String param = "https://spraakbanken.gu.se/ws/fcs/4.5.6/aggregator/";
         config.setFederatedContentSearchUrl(param);
         String result = config.getFederatedContentSearchUrl();
         assertEquals(param, result);

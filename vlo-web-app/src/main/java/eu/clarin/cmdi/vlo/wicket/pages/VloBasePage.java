@@ -193,10 +193,14 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         // Include other JavaScript for header (e.g. permalink animation)
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloHeaderJS()));
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getHistoryApiJS()));
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getClipBoardJS()));
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloClipboardJS()));
 
         if (bottomSnippet != null) {
             response.render(JavaScriptHeaderItem.forScript(bottomSnippet, "bottomSnippet"));
         }
+        
+        response.render(JavaScriptHeaderItem.forScript("$(document).ready(function() { $('body').removeClass('non-js'); });", "js-only-elements"));
     }
 
     private void addComponents() {

@@ -26,7 +26,7 @@ import eu.clarin.cmdi.vlo.wicket.components.ToggleLink;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.CombinedLicenseTypeAvailabilityModel;
 import eu.clarin.cmdi.vlo.wicket.model.ConvertedFieldValueModel;
-import eu.clarin.cmdi.vlo.wicket.model.HandleLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.MapValueModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
@@ -234,7 +234,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
         // get landing page from document
         final SolrFieldStringModel valueModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
         // wrap in model that transforms handle links
-        final IModel<String> landingPageHrefModel = new HandleLinkModel(valueModel);
+        final IModel<String> landingPageHrefModel = new PIDLinkModel(valueModel);
 
         //create container
         final MarkupContainer originalContext = new WebMarkupContainer(id) {

@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <body>
         <wicket:panel>
             <div role="navigation" class="search-results-header navbar navbar-default">
-                <p class="navbar-text">
+                <div class="navbar-text">
                     <span wicket:id="searchInfo">Showing 1 to 25 of 604056 results</span>
                     <span class="query-selection" wicket:id="querySelection">for
                         <span wicket:id="query" class="query-item" title="Search term(s)">
@@ -36,10 +36,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 <span class="query-item-label" wicket:id="label">test</span>
                                 <a wicket:id="remove" class="close" title="Remove from selection"><span aria-hidden="true">&times;</span></a>
                             </span>
-                            
+
                         </wicket:container>
                     </span>
-                </p>
+                    <span class="glyphicon glyphicon-info-sign" role="button" data-toggle="collapse" href="#resultCountDetails"  aria-expanded="false" aria-controls="resultCountDetails" title="Details"></span>
+                    <div class="query-selection-details collapse" id="resultCountDetails" aria-expanded="false">
+                        Search results include <span wicket:id="recordCount">N</span> record(s)<wicket:enclosure>, of which <span wicket:id="duplicateCount">N</span> hidden duplicate(s)</wicket:enclosure>
+                    </div>
+                </div>
                 <form class="resultpagesizeform navbar-form navbar-right hidden-xs" wicket:id="resultPageSizeForm">
                     <div class="form-group">
                         <label for="resultpagesize">Results per page:</label>

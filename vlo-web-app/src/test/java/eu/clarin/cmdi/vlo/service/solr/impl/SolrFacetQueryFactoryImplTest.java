@@ -60,8 +60,8 @@ public class SolrFacetQueryFactoryImplTest {
         // default: query selects all values 
         assertEquals("*:*", query.getQuery());
 
-        // no selection -> no filter queries
-        assertEquals(0, query.getFilterQueries().length);
+        // no selection -> no additional filter queries (only collapse)
+        assertEquals(1, query.getFilterQueries().length);
 
         assertEquals(20, query.getFacetLimit());
     }
@@ -84,8 +84,8 @@ public class SolrFacetQueryFactoryImplTest {
         // default: query selects all values 
         assertEquals("*:*", query.getQuery());
 
-        // Only empty selections -> no filter queries
-        assertEquals(0, query.getFilterQueries().length);
+        // Only empty selections -> no additional filter queries (only collapse)
+        assertEquals(1, query.getFilterQueries().length);
 
         // Facet limit should be adopted
         assertEquals(20, query.getFacetLimit());
@@ -109,8 +109,8 @@ public class SolrFacetQueryFactoryImplTest {
         // default: query selects all values 
         assertEquals("*:*", query.getQuery());
 
-        // Expecting three filter queries as three values have been selected in total
-        assertEquals(3, query.getFilterQueries().length);
+        // Expecting three additional filter queries as three values have been selected in total (in addition to collapse fq)
+        assertEquals(4, query.getFilterQueries().length);
         assertThat(Arrays.asList(query.getFilterQueries()), Matchers.<String>hasItem("facet1:\"valueA\""));
         assertThat(Arrays.asList(query.getFilterQueries()), Matchers.<String>hasItem("facet2:\"valueB\""));
         assertThat(Arrays.asList(query.getFilterQueries()), Matchers.<String>hasItem("facet2:\"valueC\""));
@@ -131,12 +131,11 @@ public class SolrFacetQueryFactoryImplTest {
             }
         };
         SolrQuery query = instance.createFacetQuery(new QueryFacetsSelection("query string", selection), FACET_FIELDS, 20);
-
-        assertEquals(1, query.getFilterQueries().length);
+        
         assertEquals("query string", query.getQuery());
 
-        // Expecting three filter queries as three values have been selected in total
-        assertEquals(1, query.getFilterQueries().length);
+        // Expecting one additional filter query for one selected facet value (in addition to collapse fq)
+        assertEquals(2, query.getFilterQueries().length);
         assertThat(Arrays.asList(query.getFilterQueries()), Matchers.<String>hasItem("facet1:\"value\\ A\""));
 
         // Facet limit should be adopted
