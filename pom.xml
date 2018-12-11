@@ -1,118 +1,118 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>eu.clarin.cmdi</groupId>
-	<artifactId>vlo</artifactId>
-	<name>Virtual Language Observatory</name>
-	<packaging>pom</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>eu.clarin.cmdi</groupId>
+    <artifactId>vlo</artifactId>
+    <name>Virtual Language Observatory</name>
+    <packaging>pom</packaging>
 
-	<!-- When updating the version number here, also update the version number 
-		in each module's pom.xml -->
-	<version>4.7-SNAPSHOT</version>
+    <!-- When updating the version number here, also update the version number 
+    in each module's pom.xml -->
+    <version>4.7-SNAPSHOT</version>
 
-	<description>Virtual Language Observatory (VLO) parent project</description>
-	<organization>
-		<name>CLARIN</name>
-		<url>http://www.clarin.eu</url>
-	</organization>
+    <description>Virtual Language Observatory (VLO) parent project</description>
+    <organization>
+        <name>CLARIN</name>
+        <url>http://www.clarin.eu</url>
+    </organization>
 
-	<modules>
-		<module>vlo-solr</module>
-		<module>vlo-web-app</module>
-		<module>vlo-importer</module>
-		<module>vlo-commons</module>
-		<module>vlo-vocabularies</module>
-		<module>vlo-sitemap</module>
-		<module>vlo-statistics</module>
-		<module>vlo-distribution</module>
-	</modules>
+    <modules>
+        <module>vlo-solr</module>
+        <module>vlo-web-app</module>
+        <module>vlo-importer</module>
+        <module>vlo-commons</module>
+        <module>vlo-vocabularies</module>
+        <module>vlo-sitemap</module>
+        <module>vlo-statistics</module>
+        <module>vlo-distribution</module>
+    </modules>
 
-	<properties>
-		<!-- VLO-mapping project version to obtain default mappings from at build 
-			time -->
-		<vlo.mapping.version>1.2.1</vlo.mapping.version>
+    <properties>
+        <!-- VLO-mapping project version to obtain default mappings from at build 
+        time -->
+        <vlo.mapping.version>1.2.1</vlo.mapping.version>
 
-		<!-- Common runtime dependency versions -->
-		<solr.version>7.4.0</solr.version>
-		<slf4j.version>1.7.25</slf4j.version>
-		<saxon.version>9.8.0-8</saxon.version>
+        <!-- Common runtime dependency versions -->
+        <solr.version>7.4.0</solr.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <saxon.version>9.8.0-8</saxon.version>
 
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<netbeans.hint.license>gpl30</netbeans.hint.license>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-	</properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <netbeans.hint.license>gpl30</netbeans.hint.license>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
 
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>3.0.0-M1</version>
-					<configuration>
-                    <systemPropertyVariables>
-                        <java.security.egd>file:/dev/./urandom</java.security.egd>
-                    </systemPropertyVariables>
-                </configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.0.0-M1</version>
+                    <configuration>
+                        <systemPropertyVariables>
+                            <java.security.egd>file:/dev/./urandom</java.security.egd>
+                        </systemPropertyVariables>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
 
-	</build>
+    </build>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>javancss-maven-plugin</artifactId>
-				<version>2.1</version>
-			</plugin>
-		</plugins>
-	</reporting>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>javancss-maven-plugin</artifactId>
+                <version>2.1</version>
+            </plugin>
+        </plugins>
+    </reporting>
 
-	<repositories>
-		<repository>
-			<id>CLARIN</id>
-			<name>CLARIN Repository</name>
-			<url>https://nexus.clarin.eu/content/repositories/Clarin</url>
-		</repository>
-		<repository>
-			<id>CLARIN-Snapshot</id>
-			<name>CLARIN Snapshot Repository</name>
-			<url>https://nexus.clarin.eu/content/repositories/clarin-snapshot</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</repository>
-		<repository>
-			<id>sonatype-apache</id>
-			<url>https://repository.apache.org/releases</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
+    <repositories>
+        <repository>
+            <id>CLARIN</id>
+            <name>CLARIN Repository</name>
+            <url>https://nexus.clarin.eu/content/repositories/Clarin</url>
+        </repository>
+        <repository>
+            <id>CLARIN-Snapshot</id>
+            <name>CLARIN Snapshot Repository</name>
+            <url>https://nexus.clarin.eu/content/repositories/clarin-snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>sonatype-apache</id>
+            <url>https://repository.apache.org/releases</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
 </project>
