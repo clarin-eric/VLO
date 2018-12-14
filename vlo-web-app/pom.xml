@@ -254,16 +254,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.20.1</version>
-                <configuration>
-                    <systemPropertyVariables>
-                        <java.security.egd>file:/dev/./urandom</java.security.egd>
-                    </systemPropertyVariables>
-                </configuration>
-            </plugin>
-            <plugin>
                 <!-- Unpacks CLARIN flavoured bootstrap LESS sources -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
