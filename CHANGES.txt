@@ -1,5 +1,27 @@
 Bug fixes and new features
 --------------------------
+VLO 4.6.0 (December 2018)
+
+* 'Collapsing' of (near) duplicate search results (based on configurable 'signature')
+	<https://github.com/clarin-eric/VLO/issues/113>
+	<https://github.com/clarin-eric/VLO/issues/195>
+* PIDs (Handles, DOIs) marked in an easily recognisable way with an actionable link and
+info dialogue and shown more prominently
+	<https://github.com/clarin-eric/VLO/issues/173>
+	<https://github.com/clarin-eric/VLO/issues/184>
+* Landing pages shown with more prominence in search result and record page
+	<https://github.com/clarin-eric/VLO/issues/153>
+* Fix in parsing for automatic link generation in descriptions
+	<https://github.com/clarin-eric/VLO/issues/206>
+* Missing collection name in metadata no longer mapped to harvest set name
+	<https://github.com/clarin-eric/VLO/issues/183>
+* VLO configuration gets exposed publicly as protected resources
+	<https://github.com/clarin-eric/VLO/issues/202>
+* VLO importer logic refactored to allow for easier use as a library
+	<https://github.com/clarin-eric/VLO/issues/181>
+* Use of latest version of the CLARIN base style with self-hosted fonts
+	<https://github.com/clarin-eric/VLO/issues/188>
+
 VLO 4.5.3 (November 2018)
 
 * Fixed a link to the Language Resource Switchboard on the help page
