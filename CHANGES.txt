@@ -15,6 +15,8 @@ info dialogue and shown more prominently
 	<https://github.com/clarin-eric/VLO/issues/206>
 * Missing collection name in metadata no longer mapped to harvest set name
 	<https://github.com/clarin-eric/VLO/issues/183>
+* One-click copy link to clipboard
+	<https://github.com/clarin-eric/VLO/issues/151>
 * VLO configuration gets exposed publicly as protected resources
 	<https://github.com/clarin-eric/VLO/issues/202>
 * VLO importer logic refactored to allow for easier use as a library
