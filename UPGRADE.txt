@@ -61,7 +61,8 @@ Also see
 8. If needed, flush the Solr index (by removing the content of the Solr data directory).
 The upgrade instructions for specific versions of the VLO indicate whether such a flush is
 required and you may want to check with the person responsible for the instance of the VLO
-you are upgrading.
+you are upgrading. In case of a dockerised setup, flushing the index likely implies
+removing the Solr data volume.
 
 If 'transplanting' a Solr index from another server, you can put it in the right location,
 replacing the existing Solr data. Check your Solr configuration for the SOLR_DATA setting
@@ -76,6 +77,28 @@ which configures the location of the Solr data directory.
 for the upgraded VLO instance), go to the `bin` directory and run the importer using the
 updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
+
+-----------------------------
+Upgrading from 4.5.x to 4.6.0
+-----------------------------
+* There have been changes to the index. Upgrading requires flushing of the Solr index
+(step 8).
+
+* Take note of the following new mandatory section in VloConfig.xml:
+
+   <!-- fields that are used to generate a document signature to identify duplicates -->
+    <signatureFields>
+        <signatureField>LANGUAGE_CODE</signatureField>
+        <signatureField>DATA_PROVIDER_NAME</signatureField>
+        <signatureField>DESCRIPTION</signatureField>
+        <signatureField>COLLECTION</signatureField>
+    </signatureFields>
+
+This is included in the default VloConfig.xml file and normally does not require
+adaptation.
+
+* Changes in the corresponding Docker image and Docker Compose project may also apply.
+See the documentation of the respective projects.
 
 -----------------------------
 Upgrading from 4.5.2 to 4.5.3
