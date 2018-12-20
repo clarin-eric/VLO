@@ -16,6 +16,7 @@
  */
 package clarin.cmdi.vlo.statistics.collector;
 
+import clarin.cmdi.vlo.statistics.VloReportGenerator;
 import clarin.cmdi.vlo.statistics.model.VloReport;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
@@ -40,7 +41,6 @@ import org.slf4j.LoggerFactory;
 public class CollectionsCollector implements VloStatisticsCollector {
 
     private final static Logger logger = LoggerFactory.getLogger(CollectionsCollector.class);
-    
     private FieldNameService fieldNameService = null;
 
     @Override
@@ -52,7 +52,8 @@ public class CollectionsCollector implements VloStatisticsCollector {
     }
 
     private List<VloReport.CollectionCount> obtainCollectionCounts(VloConfig config, SolrClient solrClient) throws SolrServerException, IOException {
-        final SolrQuery query = new SolrQuery();
+        final SolrQuery query = new SolrQuery("*:*");
+        query.setRequestHandler(VloReportGenerator.SOLR_REQUEST_HANDLER);
         query.setRows(0);
         query.setFacet(true);
         query.addFacetField(fieldNameService.getFieldName(FieldKey.COLLECTION));

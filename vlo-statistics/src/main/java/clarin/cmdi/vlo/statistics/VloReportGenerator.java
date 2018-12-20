@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 public class VloReportGenerator {
 
     private final static Logger logger = LoggerFactory.getLogger(VloReportGenerator.class);
+    public static final String SOLR_REQUEST_HANDLER = "/fast";
 
     private final VloConfig config;
     private final HttpSolrClient solrClient;
