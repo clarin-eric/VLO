@@ -12,6 +12,7 @@ script:
 - mvn clean install -DskipTests=true -Pdocker
 deploy:
   provider: releases
+  prerelease: true
   api_key:
     secure: "${VLO_DEPLOY_TOKEN}"
   file: "vlo-distribution/target/vlo-${TRAVIS_TAG}-docker.tar.gz"
