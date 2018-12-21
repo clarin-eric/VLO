@@ -16,6 +16,7 @@
  */
 package clarin.cmdi.vlo.statistics.collector;
 
+import clarin.cmdi.vlo.statistics.VloReportGenerator;
 import java.io.IOException;
 import clarin.cmdi.vlo.statistics.model.VloReport;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -33,8 +34,8 @@ public class RecordCountCollector implements VloStatisticsCollector {
 
     @Override
     public void collect(VloReport report, VloConfig config, SolrClient solrClient) throws SolrServerException, IOException {
-        final SolrQuery query = new SolrQuery();
-        query.setQuery("*:*");
+        final SolrQuery query = new SolrQuery("*:*");
+        query.setRequestHandler(VloReportGenerator.SOLR_REQUEST_HANDLER);
         query.setRows(0);
         QueryRequest req = new QueryRequest(query);
         req.setBasicAuthCredentials(config.getSolrUserReadOnly(), config.getSolrUserReadOnlyPass());
