@@ -8,8 +8,7 @@ import java.util.regex.Pattern;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
-
-import org.apache.commons.lang.WordUtils;
+import org.apache.commons.text.WordUtils;
 
 public class LanguageCodePostNormalizer extends AbstractPostNormalizerWithVocabularyMap {
 
