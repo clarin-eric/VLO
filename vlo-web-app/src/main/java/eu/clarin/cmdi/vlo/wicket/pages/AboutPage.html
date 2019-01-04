@@ -52,7 +52,7 @@
                     (<a href="http://www.openarchives.org/pmh/">OAI-PMH</a> 
                     is employed).
                 </p>
-                
+
                 <p>
                     If you have questions or remarks concerning the VLO, please
                     contact the maintainers by sending an e-mail to
@@ -60,7 +60,7 @@
                     on individual metadata records can be submitted by using the
                     &quot;report&quot; link that can be found on every page.
                 </p>
-                
+
                 <h2 id="References">References</h2>
                 <h3>Documentation</h3>
                 <ul>
@@ -88,6 +88,12 @@
                         <td>Last commit id:</td>
                         <td><wicket:message key="vlo.revision" /></td>
                     </tr>
+                    <wicket:enclosure>
+                        <tr>
+                            <td>Image version:</td>
+                            <td wicket:id="containerId"></td>
+                        </tr>
+                    </wicket:enclosure>
                     <tr>
                         <td>Date and time of change in the code base:</td>
                         <td><wicket:message key="vlo.changeDate" /></td>
@@ -141,7 +147,7 @@
                     <li><a href="http://spring.io/">Spring Framework</a> (version <wicket:message key="spring.version" />)</li>
                     <li><a href="http://vtd-xml.sourceforge.net/">VTD-XML</a></li>
                 </ul>
-                
+
                 <h2>Funding</h2>
                 <p>Development of the VLO has been made possible in part through funding received from the European Union’s Horizon 2020 research and innovation programme through:</p>
                 <ul>

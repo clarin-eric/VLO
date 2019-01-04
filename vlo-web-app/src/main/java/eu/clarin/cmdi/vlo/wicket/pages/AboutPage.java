@@ -14,13 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package eu.clarin.cmdi.vlo.wicket.pages;
+
+import org.apache.wicket.markup.html.basic.Label;
 
 /**
  *
  * @author twagoo
  */
 public class AboutPage extends VloBasePage {
-    
+
+    public static final String VLO_DOCKER_IMAGE_ENV_VAR = "VLO_DOCKER_IMAGE";
+
+    public AboutPage() {
+        add(new Label("containerId", System.getenv(VLO_DOCKER_IMAGE_ENV_VAR)) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(System.getenv(VLO_DOCKER_IMAGE_ENV_VAR) != null);
+            }
+
+        });
+    }
+
 }
