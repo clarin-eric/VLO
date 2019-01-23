@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 CLARIN
+ * Copyright (C) 2019 CLARIN
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,27 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.wicket.pages;
+package eu.clarin.cmdi.vlo.wicket;
 
-import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
-import eu.clarin.cmdi.vlo.wicket.model.EnvironmentVariableModel;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.Component;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.model.IModel;
 
 /**
- *
- * @author twagoo
+ * Sets component visibility depending on null state of model object:
+ * 
+ * {@code component.setVisible(model.getObject() != null);}
+ * 
+ * @author Twan Goosen <twan@clarin.eu>
  */
-public class AboutPage extends VloBasePage {
+public class InvisibleIfNullBehaviour<T> extends Behavior {
 
-    public static final String VLO_DOCKER_IMAGE_ENV_VAR = "VLO_DOCKER_IMAGE";
+    private final IModel<T> model;
 
-    public AboutPage() {
-        final IModel<String> containedIdModel = new EnvironmentVariableModel(VLO_DOCKER_IMAGE_ENV_VAR);
+    public InvisibleIfNullBehaviour(IModel<T> checkModel) {
+        this.model = checkModel;
+    }
 
-        add(new Label("containerId", containedIdModel)
-                .add(new InvisibleIfNullBehaviour(containedIdModel))
-        );
+    @Override
+    public void onConfigure(Component component) {
+        component.setVisible(model.getObject() != null);
     }
 
 }
