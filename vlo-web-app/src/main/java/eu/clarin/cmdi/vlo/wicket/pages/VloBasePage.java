@@ -28,6 +28,7 @@ import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.SnippetConfig;
 import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
+import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
 import eu.clarin.cmdi.vlo.wicket.model.EnvironmentVariableModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import org.apache.wicket.AttributeModifier;
@@ -75,6 +76,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
     public static final String VLO_APPLICATION_TITLE_ENV_VAR = "VLO_APPLICATION_TITLE";
     public static final String VLO_PAGE_TITLE_ENV_VAR = "VLO_PAGE_TITLE";
+    public static final String VLO_INSTANCE_INFO_ENV_VAR = "VLO_INSTANCE_INFO";
 
     @SpringBean
     private PiwikConfig piwikConfig;
@@ -217,7 +219,8 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
         appTitleModel = new NullFallbackModel(new EnvironmentVariableModel(VLO_APPLICATION_TITLE_ENV_VAR), DEFAULT_APP_TITLE);
         pageTitleModel = new NullFallbackModel(new EnvironmentVariableModel(VLO_PAGE_TITLE_ENV_VAR), DEFAULT_PAGE_TITLE);
-
+        final IModel<String> instanceInfoModel = new NullFallbackModel(new EnvironmentVariableModel(VLO_INSTANCE_INFO_ENV_VAR), "Unnamed application instance");
+        
         add(new BootstrapFeedbackPanel("feedback"));
 
         add(new WebMarkupContainer("header")
@@ -226,6 +229,8 @@ public class VloBasePage<T> extends GenericWebPage<T> {
                 // add 'class' attribute to header indicating version qualifier (e.g. 'beta')
                 .add(new AttributeAppender("class", VloWicketApplication.get().getAppVersionQualifier(), " ")));
 
+        add(new Label("instanceInfo", instanceInfoModel).add(new InvisibleIfNullBehaviour(instanceInfoModel)));        
+        
         add(new HideJavascriptFallbackControlsBehavior());
 
         // add Piwik tracker (if enabled)
