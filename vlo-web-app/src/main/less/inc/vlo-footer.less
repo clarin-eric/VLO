@@ -19,11 +19,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : Twan Goosen <twan.goosen@mpi.nl>
 */
 
+@footer-bg-color: @navbar-default-bg;
+
 #footer {
     min-height: 10em;
     padding-top: 30px;
     border-top: 1px solid @navbar-default-border;
-    background-color: @navbar-default-bg;
+    background-color: @footer-bg-color;
     color: @navbar-default-color;
 
     .version-info {
@@ -33,6 +35,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     .footer-fineprint {
         &, & a {
             color: @navbar-default-color;
+        }
+    }
+    
+    .footer-hidden-text {
+        color: @footer-bg-color;
+        cursor: default;
+        
+        &::selection {
+            color: #000;
+            background-color: darken(@footer-bg-color, 30%);
         }
     }
 

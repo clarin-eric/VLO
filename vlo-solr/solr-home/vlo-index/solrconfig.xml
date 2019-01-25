@@ -772,6 +772,11 @@
             license
         </str>
         
+        <!-- alias: licence = license -->
+        <str name="f.profilename.qf">
+            _componentProfile
+        </str>
+        
         <!-- Phrase fields (boost if phrase is matched) -->
         <str name="pf">
             name^2 description

@@ -28,6 +28,9 @@ import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.SnippetConfig;
 import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
+import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
+import eu.clarin.cmdi.vlo.wicket.model.EnvironmentVariableModel;
+import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
@@ -40,9 +43,9 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.include.Include;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
@@ -68,7 +71,12 @@ import org.slf4j.LoggerFactory;
 public class VloBasePage<T> extends GenericWebPage<T> {
 
     private final static Logger logger = LoggerFactory.getLogger(VloBasePage.class);
+    public static final String DEFAULT_APP_TITLE = "Virtual Language Observatory";
     public final static String DEFAULT_PAGE_TITLE = "CLARIN VLO";
+
+    public static final String VLO_APPLICATION_TITLE_ENV_VAR = "VLO_APPLICATION_TITLE";
+    public static final String VLO_PAGE_TITLE_ENV_VAR = "VLO_PAGE_TITLE";
+    public static final String VLO_INSTANCE_INFO_ENV_VAR = "VLO_INSTANCE_INFO";
 
     @SpringBean
     private PiwikConfig piwikConfig;
@@ -76,6 +84,9 @@ public class VloBasePage<T> extends GenericWebPage<T> {
     @SpringBean
     private SnippetConfig snippetConfig;
     private String bottomSnippet;
+
+    private IModel<String> appTitleModel;
+    private IModel<String> pageTitleModel;
 
     public VloBasePage() {
         addComponents();
@@ -88,6 +99,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
     public VloBasePage(PageParameters parameters) {
         super(parameters);
+
         processTheme(parameters);
         addComponents();
     }
@@ -163,7 +175,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
      * @return string model that provides the page title
      */
     public IModel<String> getTitleModel() {
-        return Model.of(DEFAULT_PAGE_TITLE);
+        return pageTitleModel;
     }
 
     /**
@@ -174,7 +186,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
      * no description
      */
     public IModel<String> getPageDescriptionModel() {
-        return StringResourceModelMigration.of("vloDescription", null, (Object[]) null);
+        return new StringResourceModel("vloDescription", (IModel) null).setParameters((Object[]) null);
     }
 
     /**
@@ -199,12 +211,16 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         if (bottomSnippet != null) {
             response.render(JavaScriptHeaderItem.forScript(bottomSnippet, "bottomSnippet"));
         }
-        
+
         response.render(JavaScriptHeaderItem.forScript("$(document).ready(function() { $('body').removeClass('non-js'); });", "js-only-elements"));
     }
 
     private void addComponents() {
 
+        appTitleModel = new NullFallbackModel(new EnvironmentVariableModel(VLO_APPLICATION_TITLE_ENV_VAR), DEFAULT_APP_TITLE);
+        pageTitleModel = new NullFallbackModel(new EnvironmentVariableModel(VLO_PAGE_TITLE_ENV_VAR), DEFAULT_PAGE_TITLE);
+        final IModel<String> instanceInfoModel = new NullFallbackModel(new EnvironmentVariableModel(VLO_INSTANCE_INFO_ENV_VAR), "Unnamed application instance");
+        
         add(new BootstrapFeedbackPanel("feedback"));
 
         add(new WebMarkupContainer("header")
@@ -213,6 +229,8 @@ public class VloBasePage<T> extends GenericWebPage<T> {
                 // add 'class' attribute to header indicating version qualifier (e.g. 'beta')
                 .add(new AttributeAppender("class", VloWicketApplication.get().getAppVersionQualifier(), " ")));
 
+        add(new Label("instanceInfo", instanceInfoModel).add(new InvisibleIfNullBehaviour(instanceInfoModel)));        
+        
         add(new HideJavascriptFallbackControlsBehavior());
 
         // add Piwik tracker (if enabled)
@@ -233,7 +251,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
             }
 
         };
-        navbar.setBrandName(Model.of("<i class=\"fa fa-globe\" aria-hidden=\"true\"></i> Virtual Language Observatory"));
+        navbar.setBrandName(new StringResourceModel("vloMenuTitle", this).setModel(appTitleModel));
 
         // link to CLARIN website
         final Component clarinLink = new NavbarExternalLink(Model.of("http://www.clarin.eu/")) {

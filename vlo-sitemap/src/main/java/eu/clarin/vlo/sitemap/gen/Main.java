@@ -1,9 +1,7 @@
 package eu.clarin.vlo.sitemap.gen;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Properties;
 
+import com.google.common.collect.ImmutableList;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
@@ -19,7 +17,7 @@ public class Main {
 
 	String proprtiesFile = args.length > 0 ? args[0] : PROPERTIES_FILE;
 
-	Configuration prop;
+	final Configuration prop;
 	//Properties prop = new Properties();
 	try {
 	    _logger.info("reading properties from {}", proprtiesFile);
@@ -39,7 +37,7 @@ public class Main {
         Config.SOLR_USER = prop.getString("SOLR_USER");
         Config.SOLR_PASS = prop.getString("SOLR_PASS");
 	Config.SOLR_QUERY_URL = prop.getString("SOLR_QUERY_URL");
-	Config.INCLUDE_URLS = prop.getList("INCLUDE_URLS");
+	Config.INCLUDE_URLS = ImmutableList.copyOf(prop.getStringArray("INCLUDE_URLS"));
 	
 	_logger.info("properties were successfully read");
 
