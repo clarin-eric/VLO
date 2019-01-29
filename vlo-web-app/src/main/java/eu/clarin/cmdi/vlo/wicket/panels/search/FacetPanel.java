@@ -39,6 +39,8 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.attributes.ThrottlingSettings;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -47,6 +49,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.time.Duration;
 
 /**
  * Panel that displays a single facet based on the current query/value
@@ -59,6 +62,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 public abstract class FacetPanel extends ExpandablePanel<String> {
 
     private final static Logger logger = LoggerFactory.getLogger(FacetPanel.class);
+    private final static Duration FILTER_RESPONSE_THROTTLE = Duration.milliseconds(250L);
 
     @SpringBean
     private PiwikConfig piwikConfig;
@@ -142,6 +146,16 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
                 //update values
                 target.add(facetValuesPanel);
             }
+
+            @Override
+            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                super.updateAjaxAttributes(attributes);
+                //enable throttling on the ajax behaviour - this causes 'debouncing' so that a
+                //request is not sent on every keyup but only after a (short) interval
+                //(This fixes https://github.com/clarin-eric/VLO/issues/215)
+                attributes.setThrottlingSettings(new ThrottlingSettings(FILTER_RESPONSE_THROTTLE, true));
+            }
+
         });
         filterForm.add(filterField);
         return filterForm;
