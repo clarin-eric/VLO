@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import eu.clarin.cmdi.vlo.wicket.components.AjaxIndicatingTextField;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import java.util.Collection;
@@ -38,7 +39,6 @@ import eu.clarin.cmdi.vlo.wicket.model.SelectionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.ThrottlingSettings;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -136,8 +136,7 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
      */
     private Form createFilterForm(String id) {
         final Form filterForm = new Form(id);
-        final TextField<String> filterField = new TextField<>("filterText",
-                new PropertyModel<String>(filterModel, "name"));
+        final TextField<String> filterField = new AjaxIndicatingTextField<>("filterText", new PropertyModel<>(filterModel, "name"));
         // make field update 
         filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
 
@@ -234,5 +233,6 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
     }
 
     protected abstract void selectionChanged(AjaxRequestTarget target);
+
 
 }

@@ -131,6 +131,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             }
         }
     }
+
+    .filter-input-group {
+
+        position: relative;
+
+        .wicket-ajax-indicator {
+            position: absolute;
+            top: .5em;
+            right: .5em;
+        }
+    }
 }
 
 /* availability facet */
@@ -147,12 +158,12 @@ form#availability {
 }
 
 #all-facet-values {
-    
+
     hr {
         margin-top: .5em;
         margin-bottom: .5em;
     }
-    
+
     .pagination {
         margin-top: .5em;
         margin-bottom: .5em;
