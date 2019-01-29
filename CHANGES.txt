@@ -23,6 +23,9 @@ info dialogue and shown more prominently
 	<https://github.com/clarin-eric/VLO/issues/181>
 * Use of latest version of the CLARIN base style with self-hosted fonts
 	<https://github.com/clarin-eric/VLO/issues/188>
+* Improved facet value filtering interaction
+	<https://github.com/clarin-eric/VLO/issues/214>
+	<https://github.com/clarin-eric/VLO/issues/215>
 
 VLO 4.5.3 (November 2018)
 
