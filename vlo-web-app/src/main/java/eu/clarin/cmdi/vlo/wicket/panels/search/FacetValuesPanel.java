@@ -189,9 +189,6 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                // reset filter
-                ((NameAndCountFieldValuesFilter) filterModel.getObject()).setName(null);
-
                 // call callback
                 onValuesSelected(
                         //TODO: get type injected via model
