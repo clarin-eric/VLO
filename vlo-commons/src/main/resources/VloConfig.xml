@@ -137,8 +137,8 @@
         <facetField>SUBJECT</facetField>
         <facetField>COUNTRY</facetField>
         <facetField>ORGANISATION</facetField>
+        <facetField>DATA_PROVIDER_NAME</facetField>
         <facetField>NATIONAL_PROJECT</facetField>
-        <facetField>DATA_PROVIDER</facetField>
     </facetFields>
 
     <!-- KEYS of fields shown as primary facets -->
