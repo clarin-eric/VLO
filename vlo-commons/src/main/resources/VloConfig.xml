@@ -103,7 +103,6 @@
         <field key="SEARCH_SERVICE">_contentSearchRef</field>
         <field key="LAST_SEEN">_lastSeen</field>
         <field key="CLARIN_PROFILE">_componentProfile</field>
-        <field key="COMPLETE_METADATA">metadataSource</field>
         <field key="HIERARCHY_WEIGHT">_hierarchyWeight</field>
         <field key="HAS_PART">_hasPart</field>
         <field key="HAS_PART_COUNT">_hasPartCount</field>
