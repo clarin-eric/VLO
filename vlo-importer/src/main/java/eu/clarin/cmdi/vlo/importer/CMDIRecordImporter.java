@@ -153,6 +153,10 @@ public class CMDIRecordImporter<T> {
                     }
                 }
         );
+        if(!cmdiData.hasField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER))) {
+            // use data root as substitute for dataProvider
+            cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER), dataOrigin.getOriginName(), false);
+        }
 
         String metadataSourceUrl = dataOrigin.getPrefix();
         metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getToStrip().length());
