@@ -50,11 +50,16 @@ public class SearchContextParametersConverter implements PageParametersConverter
         final StringValue indexParam = params.get(VloWebAppParameters.SEARCH_INDEX);
         final StringValue countParam = params.get(VloWebAppParameters.SEARCH_COUNT);
         final QueryFacetsSelection selection = selectionConverter.fromParameters(params);
-        if (!indexParam.isEmpty() && !countParam.isEmpty() && selection != null) {
-            try {
-                return new SearchContextModel(indexParam.toLong(), countParam.toLong(), Model.of(selection));
-            } catch (StringValueConversionException ex) {
-                logger.warn("Illegal query parameter value", ex);
+        if (selection != null) {
+            final Model<QueryFacetsSelection> selectionModel = Model.of(selection);
+            if (!indexParam.isEmpty() && !countParam.isEmpty()) {
+                try {
+                    return new SearchContextModel(indexParam.toLong(), countParam.toLong(), selectionModel);
+                } catch (StringValueConversionException ex) {
+                    logger.warn("Illegal query parameter value", ex);
+                }
+            } else {
+                return new SearchContextModel(selectionModel);
             }
         }
         return null;
@@ -65,8 +70,10 @@ public class SearchContextParametersConverter implements PageParametersConverter
         // start with encoding selection
         final PageParameters params = selectionConverter.toParameters(object.getSelection());
         // add index and count
-        params.add(VloWebAppParameters.SEARCH_INDEX, object.getIndex());
-        params.add(VloWebAppParameters.SEARCH_COUNT, object.getResultCount());
+        if (object.getIndex() != null && object.getResultCount() != null) {
+            params.add(VloWebAppParameters.SEARCH_INDEX, object.getIndex());
+            params.add(VloWebAppParameters.SEARCH_COUNT, object.getResultCount());
+        }
         return params;
     }
 

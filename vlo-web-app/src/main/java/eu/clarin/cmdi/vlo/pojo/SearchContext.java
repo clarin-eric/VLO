@@ -27,8 +27,12 @@ public interface SearchContext extends Serializable{
     
     QueryFacetsSelection getSelection();
     
-    long getResultCount();
+    Long getResultCount();
     
-    long getIndex();
+    Long getIndex();
+
+    public boolean hasPrevious();
+
+    public boolean hasNext();
     
 }

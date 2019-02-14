@@ -184,7 +184,7 @@ public class SearchResultItemPanel extends Panel {
                 .setVisible(config.isShowResultScores())
         );
 
-        add(new DuplicateSearchResultItemsPanel("duplicateResults", documentExpansionPairModel, duplicateItemsExpansionModel));
+        add(new DuplicateSearchResultItemsPanel("duplicateResults", documentExpansionPairModel, new PropertyModel<>(selectionModel,"selection"), duplicateItemsExpansionModel));
 
         add(createLandingPageLinkContainer("landingPageLinkContainer", documentModel));
 

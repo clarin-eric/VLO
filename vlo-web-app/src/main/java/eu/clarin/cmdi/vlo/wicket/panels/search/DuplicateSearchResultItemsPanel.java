@@ -20,11 +20,14 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.Bootstra
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
+import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import static java.lang.Math.toIntExact;
@@ -73,7 +76,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
      * expansion
      * @param expandedModel model for current 'duplicate items' expansion state
      */
-    public DuplicateSearchResultItemsPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<ExpansionState> expandedModel) {
+    public DuplicateSearchResultItemsPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<QueryFacetsSelection> selectionModel, IModel<ExpansionState> expandedModel) {
         super(id, documentExpansionPairModel);
 
         final IModel<Boolean> isExpandedModel = new AbstractReadOnlyModel<Boolean>() {
@@ -110,7 +113,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
             @Override
             protected void populateItem(Item<SolrDocument> item) {
                 item.add(
-                        new RecordPageLink("duplicateItemLink", item.getModel())
+                        new RecordPageLink("duplicateItemLink", item.getModel(), new SearchContextModel(selectionModel))
                                 .add(new SingleValueSolrFieldLabel("duplicateItemName", item.getModel(), fieldNameService.getFieldName(FieldKey.NAME), new StringResourceModel("searchpage.unnamedrecord", this))));
             }
 

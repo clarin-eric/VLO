@@ -28,11 +28,15 @@ import org.apache.wicket.model.Model;
  */
 public class SearchContextModel extends AbstractReadOnlyModel<SearchContext> implements SearchContext {
 
-    private final long index;
-    private final long resultCount;
+    private final Long index;
+    private final Long resultCount;
     private final IModel<QueryFacetsSelection> selectionModel;
 
-    public SearchContextModel(long index, long resultCount, IModel<QueryFacetsSelection> selectionModel) {
+    public SearchContextModel(IModel<QueryFacetsSelection> selectionModel) {
+        this(null, null, selectionModel);
+    }
+
+    public SearchContextModel(Long index, Long resultCount, IModel<QueryFacetsSelection> selectionModel) {
         this.index = index;
         this.resultCount = resultCount;
         this.selectionModel = selectionModel;
@@ -48,12 +52,12 @@ public class SearchContextModel extends AbstractReadOnlyModel<SearchContext> imp
     }
 
     @Override
-    public long getResultCount() {
+    public Long getResultCount() {
         return resultCount;
     }
 
     @Override
-    public long getIndex() {
+    public Long getIndex() {
         return index;
     }
 
@@ -68,9 +72,9 @@ public class SearchContextModel extends AbstractReadOnlyModel<SearchContext> imp
     }
 
     public static SearchContextModel next(SearchContext current) {
-        final long count = current.getResultCount();
-        final long nextIndex = current.getIndex() + 1;
-        if (nextIndex < count) {
+        if (current.hasNext()) {
+            final Long count = current.getResultCount();
+            final Long nextIndex = current.getIndex() + 1;
             return createNew(current, nextIndex, count);
         } else {
             // last index reached
@@ -79,9 +83,9 @@ public class SearchContextModel extends AbstractReadOnlyModel<SearchContext> imp
     }
 
     public static SearchContextModel previous(SearchContext current) {
-        final long count = current.getResultCount();
-        final long prevIndex = current.getIndex() - 1;
-        if (prevIndex >= 0) {
+        if (current.hasPrevious()) {
+            final long count = current.getResultCount();
+            final long prevIndex = current.getIndex() - 1;
             return createNew(current, prevIndex, count);
         } else {
             // last index reached
@@ -94,6 +98,24 @@ public class SearchContextModel extends AbstractReadOnlyModel<SearchContext> imp
             return new SearchContextModel(nextIndex, count, ((SearchContextModel) current).getSelectionModel());
         } else {
             return new SearchContextModel(nextIndex, count, Model.of(current.getSelection()));
+        }
+    }
+
+    @Override
+    public boolean hasPrevious() {
+        if (index == null || resultCount == null) {
+            return false;
+        } else {
+            return index > 0;
+        }
+    }
+
+    @Override
+    public boolean hasNext() {
+        if (index == null || resultCount == null) {
+            return false;
+        } else {
+            return index + 1 < resultCount;
         }
     }
 

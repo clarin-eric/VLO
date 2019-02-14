@@ -19,11 +19,6 @@ package eu.clarin.cmdi.vlo.service.impl;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
-import eu.clarin.cmdi.vlo.FacetConstants;
-import eu.clarin.cmdi.vlo.VloWicketApplication;
-import eu.clarin.cmdi.vlo.config.FieldNameService;
 
 import static eu.clarin.cmdi.vlo.VloWebAppParameters.*;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
@@ -40,8 +35,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
