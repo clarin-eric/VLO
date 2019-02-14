@@ -67,7 +67,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         SolrInputDocument doc = docs.get(0);
         assertEquals("testID1Session", getValue(doc, FieldKey.ID));
         assertEquals("CollectionName", getValue(doc, FieldKey.COLLECTION));
-        assertEquals("testRoot", getValue(doc, FieldKey.DATA_PROVIDER));
+        assertEquals("testRoot", getValue(doc, FieldKey.HARVESTER_ROOT));
         assertEquals("kleve-route", getValue(doc, FieldKey.NAME));
         assertEquals(sessionFile.getAbsolutePath(), getValue(doc, FieldKey.FILENAME));
         assertEquals("video/x-mpeg1", getValue(doc, FieldKey.FORMAT));
