@@ -95,7 +95,7 @@
         <field key="SELF_LINK">_selfLink</field>
         <field key="ID">id</field>
         <field key="HARVESTER_ROOT">_harvesterRoot</field>
-        <field key="DATA_PROVIDER_NAME">dataProviderName</field>
+        <field key="DATA_PROVIDER">dataProvider</field>
         <field key="FILENAME">_fileName</field>
         <field key="FORMAT">format</field>
         <field key="LANDINGPAGE">_landingPageRef</field>
@@ -136,7 +136,7 @@
         <facetField>SUBJECT</facetField>
         <facetField>COUNTRY</facetField>
         <facetField>ORGANISATION</facetField>
-        <facetField>DATA_PROVIDER_NAME</facetField>
+        <facetField>DATA_PROVIDER</facetField>
         <facetField>NATIONAL_PROJECT</facetField>
     </facetFields>
 
@@ -264,7 +264,7 @@
     <!-- fields that are used to generate a document signature to identify duplicates -->
     <signatureFields>
         <signatureField>LANGUAGE_CODE</signatureField>
-        <signatureField>DATA_PROVIDER_NAME</signatureField>
+        <signatureField>DATA_PROVIDER</signatureField>
         <signatureField>DESCRIPTION</signatureField>
         <signatureField>COLLECTION</signatureField>
     </signatureFields>

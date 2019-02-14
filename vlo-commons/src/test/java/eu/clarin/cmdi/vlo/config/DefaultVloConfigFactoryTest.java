@@ -474,7 +474,7 @@ public class DefaultVloConfigFactoryTest {
                 "subject",
                 "country",
                 "organisation",
-                "dataProviderName",
+                "dataProvider",
                 "nationalProject");
 
         List<String> result = config.getFacetFieldNames();
@@ -494,7 +494,7 @@ public class DefaultVloConfigFactoryTest {
             "subject",
             "country",
             "organisation",
-            "dataProviderName",
+            "dataProvider",
             "nationalProject"
         };
         List<String> result = config.getFacetsInSearch();
