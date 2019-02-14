@@ -265,9 +265,7 @@
     <!-- fields that are used to generate a document signature to identify duplicates -->
     <signatureFields>
         <signatureField>LANGUAGE_CODE</signatureField>
-        <signatureField>DATA_PROVIDER_NAME</signatureField>
-        <signatureField>DESCRIPTION</signatureField>
-        <signatureField>COLLECTION</signatureField>
+        <signatureField>NAME</signatureField>
     </signatureFields>
 
 </VloConfig>
