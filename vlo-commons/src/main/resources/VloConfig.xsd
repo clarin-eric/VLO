@@ -206,7 +206,7 @@
 			<xs:enumeration value="RESOURCE" />
 			<xs:enumeration value="SELF_LINK" />
 			<xs:enumeration value="ID" />
-			<xs:enumeration value="DATA_PROVIDER" />
+			<xs:enumeration value="HARVESTER_ROOT" />
 			<xs:enumeration value="DATA_PROVIDER_NAME" />
 			<xs:enumeration value="FILENAME" />
 			<xs:enumeration value="FORMAT" />
