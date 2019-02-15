@@ -128,6 +128,7 @@
   <field name="_contentSearchRef" type="string" multiValued="true" indexed="true" stored="true"/>
   <field name="_daysSinceLastSeen" type="int" default="0" multiValued="false" indexed="true" stored="true"/>
   <field name="_fileName" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="_harvesterRoot" type="string" multiValued="false" indexed="true" stored="true"/>
   <field name="_hasPart" type="string" multiValued="true" indexed="true" stored="true"/>
   <field name="_hasPartCount" type="int" multiValued="false" indexed="true" stored="true"/>
   <field name="_hasPartCountWeight" type="double" multiValued="false" indexed="true" stored="true"/>
@@ -150,7 +151,6 @@
   <field name="continent" type="string" termVectors="true" multiValued="true" indexed="true" stored="true"/>
   <field name="country" type="string" termVectors="true" multiValued="true" indexed="true" stored="true"/>
   <field name="dataProvider" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="dataProviderName" type="string" multiValued="false" indexed="true" stored="true"/>
   <field name="description" type="text_general" termVectors="true" multiValued="true" indexed="true" stored="true"/>
   <field name="distributionType" type="string" multiValued="true" indexed="true" stored="true"/>
   <field name="format" type="string" termVectors="true" multiValued="true" indexed="true" stored="true"/>

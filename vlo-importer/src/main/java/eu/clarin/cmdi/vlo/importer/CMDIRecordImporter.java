@@ -135,7 +135,7 @@ public class CMDIRecordImporter<T> {
     }
 
     private void addTechnicalMetadata(File file, CMDIData<T> cmdiData, DataRoot dataOrigin, Optional<EndpointDescription> endpointDescription) {        
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER), dataOrigin.getOriginName(), false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.HARVESTER_ROOT), dataOrigin.getOriginName(), false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.ID), cmdiData.getId(), false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FILENAME), file.getAbsolutePath(), false);
 
@@ -149,10 +149,14 @@ public class CMDIRecordImporter<T> {
                         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.NATIONAL_PROJECT), descr.getNationalProject(), false);
                     }
                     if (descr.getCentreName() != null) {
-                        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER_NAME), descr.getCentreName(), false);
+                        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER), descr.getCentreName(), false);
                     }
                 }
         );
+        if(!cmdiData.hasField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER))) {
+            // use data root as substitute for dataProvider
+            cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER), dataOrigin.getOriginName(), false);
+        }
 
         String metadataSourceUrl = dataOrigin.getPrefix();
         metadataSourceUrl += file.getAbsolutePath().substring(dataOrigin.getToStrip().length());

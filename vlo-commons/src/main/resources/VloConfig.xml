@@ -94,8 +94,8 @@
         <field key="RESOURCE">_resourceRef</field>
         <field key="SELF_LINK">_selfLink</field>
         <field key="ID">id</field>
+        <field key="HARVESTER_ROOT">_harvesterRoot</field>
         <field key="DATA_PROVIDER">dataProvider</field>
-        <field key="DATA_PROVIDER_NAME">dataProviderName</field>
         <field key="FILENAME">_fileName</field>
         <field key="FORMAT">format</field>
         <field key="LANDINGPAGE">_landingPageRef</field>
@@ -103,7 +103,6 @@
         <field key="SEARCH_SERVICE">_contentSearchRef</field>
         <field key="LAST_SEEN">_lastSeen</field>
         <field key="CLARIN_PROFILE">_componentProfile</field>
-        <field key="COMPLETE_METADATA">metadataSource</field>
         <field key="HIERARCHY_WEIGHT">_hierarchyWeight</field>
         <field key="HAS_PART">_hasPart</field>
         <field key="HAS_PART_COUNT">_hasPartCount</field>
@@ -137,8 +136,8 @@
         <facetField>SUBJECT</facetField>
         <facetField>COUNTRY</facetField>
         <facetField>ORGANISATION</facetField>
-        <facetField>NATIONAL_PROJECT</facetField>
         <facetField>DATA_PROVIDER</facetField>
+        <facetField>NATIONAL_PROJECT</facetField>
     </facetFields>
 
     <!-- KEYS of fields shown as primary facets -->
@@ -197,7 +196,7 @@
         <technicalField>SEARCH_SERVICE</technicalField>
         <technicalField>LAST_SEEN</technicalField>
         <technicalField>CLARIN_PROFILE</technicalField>
-        <technicalField>DATA_PROVIDER</technicalField>
+        <technicalField>HARVESTER_ROOT</technicalField>
         <technicalField>HIERARCHY_WEIGHT</technicalField>
         <technicalField>HAS_PART_COUNT</technicalField>
     </technicalFields>
@@ -265,7 +264,7 @@
     <!-- fields that are used to generate a document signature to identify duplicates -->
     <signatureFields>
         <signatureField>LANGUAGE_CODE</signatureField>
-        <signatureField>DATA_PROVIDER_NAME</signatureField>
+        <signatureField>DATA_PROVIDER</signatureField>
         <signatureField>DESCRIPTION</signatureField>
         <signatureField>COLLECTION</signatureField>
     </signatureFields>

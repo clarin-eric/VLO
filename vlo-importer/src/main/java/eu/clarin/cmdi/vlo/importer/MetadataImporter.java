@@ -260,7 +260,7 @@ public class MetadataImporter {
         LOG.info("Start of processing: " + dataRoot.getOriginName());
         if (dataRoot.deleteFirst()) {
             LOG.info("Deleting data for data provider: " + dataRoot.getOriginName());
-            solrBridge.getClient().deleteByQuery(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER) + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
+            solrBridge.getClient().deleteByQuery(fieldNameService.getFieldName(FieldKey.HARVESTER_ROOT) + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName()));
             LOG.info("Deleting data of provider done.");
         }
 
@@ -659,7 +659,7 @@ public class MetadataImporter {
         final SolrQuery query = new SolrQuery();
         query.setQuery(
                 //we're going to process all records in the current data root...
-                fieldNameService.getFieldName(FieldKey.DATA_PROVIDER) + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName())
+                fieldNameService.getFieldName(FieldKey.HARVESTER_ROOT) + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName())
                 + " AND "
                 // ...that have a "last seen" value _older_ than today (on update/initialisation all records get 0 so we can skip the rest)
                 + fieldNameService.getFieldName(FieldKey.LAST_SEEN) + ":[* TO NOW-1DAY]"

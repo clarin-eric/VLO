@@ -52,9 +52,9 @@ public class TestFacetedSearchPage extends AbstractWicketTest {
                         new FacetField("format"),
                         new FacetField("organisation"),
                         new FacetField("licenseType"),
+                        new FacetField("dataProvider"),
                         new FacetField("nationalProject"),
-                        new FacetField("keywords"),
-                        new FacetField("dataProvider")
+                        new FacetField("keywords")
                 )));
 
                 // mock search results
