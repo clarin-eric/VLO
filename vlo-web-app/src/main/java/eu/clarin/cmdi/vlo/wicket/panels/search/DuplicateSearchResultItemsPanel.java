@@ -21,11 +21,11 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
+import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
@@ -65,6 +65,8 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
     private final static Logger LOG = LoggerFactory.getLogger(DuplicateSearchResultItemsPanel.class);
 
     private static final int ITEMS_PER_PAGE = 10;
+    private static final int MAX_DESCRIPTION_LENGTH = 120;
+    private static final int DESCRIPTION_TRUNCATE_POINT = 100;
 
     @SpringBean
     private FieldNameService fieldNameService;
@@ -104,17 +106,20 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
                 .add(toggleHeaderLink
                         .add(new Label("expansionCount", new PropertyModel<>(documentExpansionPairModel, "expansionCount"))))
                 .add(new AttributeAppender("class",
-                        new BooleanOptionsModel<String>(isExpandedModel,
+                        new BooleanOptionsModel<>(isExpandedModel,
                                 Model.of("duplicates-expanded duplicates-was-expanded"),
                                 Model.of("duplicates-collapsed")))));
 
+        final StringResourceModel noDescriptionModel = new StringResourceModel("searchresult.nodescription", this);
         // view of documents list
         final DataView<SolrDocument> duplicatesView = new DataView<SolrDocument>("duplicateItem", new DuplicateDocumentsProvider(documentExpansionPairModel, fieldNameService), ITEMS_PER_PAGE) {
             @Override
             protected void populateItem(Item<SolrDocument> item) {
-                item.add(
-                        new RecordPageLink("duplicateItemLink", item.getModel(), new SearchContextModel(selectionModel))
-                                .add(new SingleValueSolrFieldLabel("duplicateItemName", item.getModel(), fieldNameService.getFieldName(FieldKey.NAME), new StringResourceModel("searchpage.unnamedrecord", this))));
+                item
+                        .add(new RecordPageLink("duplicateItemLink", item.getModel(), new SearchContextModel(selectionModel))
+                                .add(new SingleValueSolrFieldLabel("duplicateItemName", item.getModel(), fieldNameService.getFieldName(FieldKey.NAME), new StringResourceModel("searchpage.unnamedrecord", this))))
+                        .add(new SolrFieldLabel("duplicateItemDescription", item.getModel(), fieldNameService.getFieldName(FieldKey.DESCRIPTION), noDescriptionModel,
+                                MAX_DESCRIPTION_LENGTH, DESCRIPTION_TRUNCATE_POINT, true));
             }
 
         };

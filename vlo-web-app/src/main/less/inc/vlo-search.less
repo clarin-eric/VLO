@@ -181,13 +181,19 @@
             padding-top: .5em;
         }
 
-        .search-results-duplicates-list a.list-group-item {
-            color: @link-color;
+        .search-results-duplicates-list .list-group-item {
+            a{
+                color: @link-color;
 
-            &:hover {
-                color: @link-hover-color;
-                background: @list-group-bg;
-                text-decoration: @link-hover-decoration;
+                &:hover {
+                    color: @link-hover-color;
+                    background: @list-group-bg;
+                    text-decoration: @link-hover-decoration;
+                }
+            }
+            
+            .search-results-duplicate-description {
+                font-size: small;
             }
         }
     }

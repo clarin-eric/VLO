@@ -36,8 +36,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <p class="duplicates-list-explanation"><span class="glyphicon glyphicon-info-sign"></span> The following record(s) also match your query and/or facet selection but have been grouped together to reduce the number of similar looking search results:</p>
                     <div class="list-group">
                         <wicket:container wicket:id="duplicateItem">
-                            <a wicket:id="duplicateItemLink" class="list-group-item"><wicket:container wicket:id="duplicateItemName">[item]</wicket:container></a>
-                            <!-- TODO: description snippet -->
+                            <div class="list-group-item">
+                                <a wicket:id="duplicateItemLink"><wicket:container wicket:id="duplicateItemName">[item]</wicket:container></a>
+                                <div class="search-results-duplicate-description" wicket:id="duplicateItemDescription"></div>
+                            </div>
                         </wicket:container>
                     </div>
                     <ul wicket:id="duplicatesPaging"></ul>
