@@ -96,7 +96,7 @@
 
                         <div class="help-section">
                             <h2 id="syntax">Search syntax</h2>
-                            
+
                             <p>
                                 In addition to navigating the resources by means of the selection of facet values, the VLO faceted browser also allows for searching
                                 by means of <strong>textual queries</strong>.
@@ -117,16 +117,16 @@
                                 The supported syntax is that of the <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene Query Parser</a>
                                 <sup><a href="#noteedismax" id="refedismax">1</a></sup>.
                             </p>
-                            
+
                             <p>
                                 The Lucene Query Parser syntax allows for the following <strong>boolean operators</strong>: 'AND', 'OR', 'NOT', '+'
                                 and '-'. It also allows for <strong>grouping</strong> of terms by means of parenthesis. 
                                 Terms can be combined into <strong>phrases</strong> by means of double quote characters.
                                 <strong>Ranges</strong> can be specified using square brackets and the word 'TO' (see below for examples).
                             </p>
-                            
+
                             <wicket:link><img src="res/images/advanced-search-syntax.png" class="img-responsive center-block" alt="Using the advanced search syntax" /></wicket:link>
-                            
+
                             The following <strong>examples</strong> illustrate the usage of these operators.
                             Click any of the following examples to perform that query  on the actual data currently in the VLO:
                             <ul>
@@ -203,6 +203,28 @@
                                 the relevance of individual items with respect to your query.
                             </p>
 
+                            <h3>Hidden &quot;duplicate&quot; results</h3>
+                            <p>
+                                <wicket:link><img src="res/images/hidden-result-count.png"class="img-responsive pull-right" alt="Shown and hidden result items" /></wicket:link>
+                                Above the search results, you will find a number that indicates how many search results are listed that match your query. This number
+                                does not necessarily equal the total number of records matching the query; in some cases, part of the matching records are initially hidden from
+                                the results. More specifically, the VLO groups together records among the search results that <strong>have their exact title and language 
+                                information in common</strong>. Within this group, the records that ranks highest in terms of relevance, hierarchy and overall quality (see
+                                explanation of search result ordering above) is shown among the other search results. Other records from the group are initially hidden but 
+                                can easily be accessed by expanding the box that appears below the shown record:
+                            </p>
+                            <p>
+                                <wicket:link><img src="res/images/hidden-result-item.png"class="img-responsive pull-right" alt="Result item with expanded &quot;duplicates&quot;" /></wicket:link>
+                            </p>
+                            <p>
+                                In the example shown here, there are <strong>nineteen records</strong> matching the query that have the same name and have the same object language
+                                (Japanese) according to their metadata. The box below the record description shows the number of hidden records and can be clicked to be and expanded,
+                                and thus to reveal a list links to the hidden items.
+                            </p>
+                            <p>
+                                This example demonstrates how the hiding of duplicates reduces the need to scroll through various pages of identical looking search results,
+                                and prevents such results from obscuring distinct, potentially relevant other results.
+                            </p>
 
                         </div>
 
