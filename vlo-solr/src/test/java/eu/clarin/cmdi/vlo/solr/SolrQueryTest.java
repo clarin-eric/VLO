@@ -85,7 +85,7 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
 
     @Test
     public void testGetAllDocumentsCount() throws Exception {
-        assertResultCount(57, "*:*");
+        assertResultCount(58, "*:*");
     }
 
     @Test
@@ -119,22 +119,22 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
     @Test
     public void testQuery_NOT() throws Exception {
         assertResultCount(20, "German");
-        assertResultCount(37, "-German");
-        assertResultCount(37, "NOT German");
+        assertResultCount(38, "-German");
+        assertResultCount(38, "NOT German");
 
         assertResultCount(4, "French");
         assertResultCount(3, "French -*Tools*");
 
-        assertResultCount(54, "-country:France");
-        assertResultCount(54, "country:(NOT France)");
-        assertResultCount(45, "-country:Germany -country:France");
-        assertResultCount(45, "-country:(Germany OR France)");
+        assertResultCount(55, "-country:France");
+        assertResultCount(55, "country:(NOT France)");
+        assertResultCount(46, "-country:Germany -country:France");
+        assertResultCount(46, "-country:(Germany OR France)");
     }
 
     @Test
     public void testQueryCounts() throws Exception {
         assertResultCount(14, "_resourceRefCount:0");
-        assertResultCount(43, "_resourceRefCount:[1 TO *]");
+        assertResultCount(44, "_resourceRefCount:[1 TO *]");
     }
 
     @Test
@@ -166,6 +166,13 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
         SolrDocumentList resultList = getResults("Staats=Geschichte", 2);
         // having an open license boosts a document among otherwise identical documents
         assertEquals("http_58__47__47_hdl.handle.net_47_10932_47_00-01B8-AE42-9CC4-E401-C", resultList.get(0).getFieldValue("id"));
+    }
+
+    @Test
+    public void testRankingForBoostedDescription() throws Exception {
+        SolrDocumentList resultList = getResults("name:ukr_newscrawl_2011_1M", 2);
+        // having a description boosts a document among otherwise identical documents
+        assertEquals("11022_47_0000-0000-7F86-B", resultList.get(0).getFieldValue("id"));
     }
 
     private void assertResultCount(long expectedCount, String query) throws SolrServerException, IOException {

@@ -398,6 +398,9 @@
         "_languageName": [
             "Ukrainian"
         ],
+        "description": [
+            "This is a dummy description."
+        ],
         "genre": [
             "newspaper text"
         ],
@@ -406,6 +409,29 @@
         ],
         "id": [
             "11022_47_0000-0000-7F86-B"
+        ],
+        "_resourceRefCount": [
+            "2"
+        ]
+    },
+        {
+        "collection": [
+            "Leipzig Corpora Collection"
+        ],
+        "name": [
+            "ukr_newscrawl_2011_1M"
+        ],
+        "_languageName": [
+            "Ukrainian"
+        ],
+        "genre": [
+            "newspaper text"
+        ],
+        "resourceClass": [
+            "Written Corpus"
+        ],
+        "id": [
+            "11022_47_0000-0000-7F86-B-COPY"
         ],
         "_resourceRefCount": [
             "2"
