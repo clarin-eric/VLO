@@ -7,6 +7,9 @@
         "name": [
             "бележка"
         ],
+        "description": [
+            "DUMMY DESCRIPTION This is a very important record. It is so important that it should be ranked on top for the query 'important', whatever other important records are in the index."
+        ],
         "country": [
             "Bulgaria"
         ],
@@ -29,6 +32,9 @@
         ],
         "name": [
             "Magasin du Nord"
+        ],
+        "description": [
+             "DUMMY DESCRIPTION This is also a relevant record. However, it shouldn't be ranked on top for the query 'important'."
         ],
         "_languageName": [
             "Danish"
@@ -890,11 +896,14 @@
         "name": [
             "Tistram og Isold"
         ],
+        "_languageName": [
+            "Danish"
+        ],
         "id": [
             "https_58__47__47_service.arthurianfiction.org_47_manuscript_47_MAN0000000370"
         ],
         "_resourceRefCount": [
-            "0"
+            "10"
         ]
     },
     {
@@ -1259,6 +1268,32 @@
         ],
         "id": [
             "http_58__47__47_hdl.handle.net_47_10932_47_00-01B8-AE42-9CC4-E401-C"
+        ],
+        "availability": [
+            "PUB"
+        ],
+        "_resourceRefCount": [
+            "0"
+        ]
+    },
+        {
+        "collection": [
+            "Institut für Deutsche Sprache, CLARIN-D Zentrum, Mannheim"
+        ],
+        "name": [
+            "Der allerneuesten Europäischen Welt= und Staats=Geschichte II. Theil"
+        ],
+        "_languageName": [
+            "German"
+        ],
+        "resourceClass": [
+            "Collection"
+        ],
+        "id": [
+            "http_58__47__47_hdl.handle.net_47_10932_47_00-01B8-AE42-9CC4-E401-C_COPY"
+        ],
+        "availability": [
+            "PRIV"
         ],
         "_resourceRefCount": [
             "0"

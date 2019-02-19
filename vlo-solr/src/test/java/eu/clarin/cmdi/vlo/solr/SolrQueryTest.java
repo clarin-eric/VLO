@@ -85,12 +85,12 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
 
     @Test
     public void testGetAllDocumentsCount() throws Exception {
-        assertResultCount(56, "*:*");
+        assertResultCount(57, "*:*");
     }
 
     @Test
     public void testQuery_AND() throws Exception {
-        assertResultCount(19, "German");
+        assertResultCount(20, "German");
         assertResultCount(1, "German Treebank");
         assertResultCount(1, "German AND Treebank");
         assertResultCount(1, "(German AND Treebank)");
@@ -118,23 +118,23 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
 
     @Test
     public void testQuery_NOT() throws Exception {
-        assertResultCount(19, "German");
+        assertResultCount(20, "German");
         assertResultCount(37, "-German");
         assertResultCount(37, "NOT German");
 
         assertResultCount(4, "French");
         assertResultCount(3, "French -*Tools*");
 
-        assertResultCount(53, "-country:France");
-        assertResultCount(53, "country:(NOT France)");
-        assertResultCount(44, "-country:Germany -country:France");
-        assertResultCount(44, "-country:(Germany OR France)");
+        assertResultCount(54, "-country:France");
+        assertResultCount(54, "country:(NOT France)");
+        assertResultCount(45, "-country:Germany -country:France");
+        assertResultCount(45, "-country:(Germany OR France)");
     }
 
     @Test
     public void testQueryCounts() throws Exception {
         assertResultCount(14, "_resourceRefCount:0");
-        assertResultCount(42, "_resourceRefCount:[1 TO *]");
+        assertResultCount(43, "_resourceRefCount:[1 TO *]");
     }
 
     @Test
@@ -144,6 +144,28 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
         
         assertNotEquals(0, getResultCount("_languageName:German"));
         assertEquals(getResultCount("_languageName:German"), getResultCount("language:German"));       
+    }
+
+    @Test
+    public void testRankingForTermFrequency() throws Exception {
+        SolrDocumentList resultList = getResults("important", 2);
+        // term frequency of query terms boosts ranking of the containing document
+        assertEquals("europeana_58_aggregation_47_europeana_47_9200377_47_BibliographicResource_3000115528936", resultList.get(0).getFieldValue("id"));
+        assertEquals("hdl_58_11221_47_90D1-4400-4082-6-7_64_md_61_cmdi", resultList.get(1).getFieldValue("id"));
+    }
+
+    @Test
+    public void testRankingForBoostedResources() throws Exception {
+        SolrDocumentList resultList = getResults("Isold", 2);
+        // having more CMDI resources (i.e. higher _resourceRefCount) boosts a document among otherwise identical documents
+        assertTrue(Integer.parseInt(resultList.get(0).getFieldValue("_resourceRefCount").toString()) > Integer.parseInt(resultList.get(1).getFieldValue("_resourceRefCount").toString()));
+    }
+
+    @Test
+    public void testRankingForBoostedAvailability() throws Exception {
+        SolrDocumentList resultList = getResults("Staats=Geschichte", 2);
+        // having an open license boosts a document among otherwise identical documents
+        assertEquals("http_58__47__47_hdl.handle.net_47_10932_47_00-01B8-AE42-9CC4-E401-C", resultList.get(0).getFieldValue("id"));
     }
 
     private void assertResultCount(long expectedCount, String query) throws SolrServerException, IOException {
