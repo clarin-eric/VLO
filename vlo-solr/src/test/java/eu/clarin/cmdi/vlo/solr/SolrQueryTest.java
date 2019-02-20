@@ -175,6 +175,14 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
         assertEquals("11022_47_0000-0000-7F86-B", resultList.get(0).getFieldValue("id"));
     }
 
+    @Test
+    public void testFilterQueryCount() throws Exception {
+        // using the query ('q') as additional filter query shouldn't affect record count
+        assertEquals(getResultCount("country:Netherlands"), getResultsForFilterQuery("country:Netherlands", "country:Netherlands", 0).getNumFound());
+        // but other filter queries might
+        assertNotEquals(getResultCount("country:Netherlands"), getResultsForFilterQuery("country:Netherlands", "country:Germany", 0).getNumFound());
+    }
+
     private void assertResultCount(long expectedCount, String query) throws SolrServerException, IOException {
         final long numFound = getResultCount(query);
         assertEquals(String.format("Expected %d results, actual result count is %d", expectedCount, numFound), expectedCount, numFound);
@@ -189,6 +197,15 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
                 .put("q", query)
                 .put("rows", rows)
                 .put("fq", "{!collapse field=id}") //effictively 'de-collapse' to get reliable result counts
+                .build()
+        );
+    }
+
+    private SolrDocumentList getResultsForFilterQuery(String query, String filterQuery, int rows) throws SolrServerException, IOException {
+        return getResults(client, ImmutableMap.builder()
+                .put("q", query)
+                .put("rows", rows)
+                .put("fq", filterQuery)
                 .build()
         );
     }
