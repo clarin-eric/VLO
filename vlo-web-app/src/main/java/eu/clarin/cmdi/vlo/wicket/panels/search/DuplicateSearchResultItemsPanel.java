@@ -104,9 +104,12 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
             }
         };
 
+        //Model for "The search results include N record(s) with the same title
+        final StringResourceModel duplicatesCountModel = new StringResourceModel("duplicateresults.count")
+                .setParameters(new PropertyModel<>(documentExpansionPairModel, "expansionCount"));
+
         add(container
-                .add(toggleHeaderLink
-                        .add(new Label("expansionCount", new PropertyModel<>(documentExpansionPairModel, "expansionCount"))))
+                .add(toggleHeaderLink.add(new Label("expansionCount", duplicatesCountModel)))
                 .add(new AttributeAppender("class",
                         new BooleanOptionsModel<>(isExpandedModel,
                                 Model.of("duplicates-expanded duplicates-was-expanded"),
@@ -117,9 +120,9 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
             @Override
             protected void populateItem(Item<SolrDocument> item) {
                 final IModel<String> descriptionModel = new TruncatingStringModel(
-                        new SolrFieldStringModel(item.getModel(), fieldNameService.getFieldName(FieldKey.DESCRIPTION), false), 
+                        new SolrFieldStringModel(item.getModel(), fieldNameService.getFieldName(FieldKey.DESCRIPTION), false),
                         MAX_DESCRIPTION_LENGTH, DESCRIPTION_TRUNCATE_POINT);
-                
+
                 item
                         .add(new RecordPageLink("duplicateItemLink", item.getModel(), new SearchContextModel(selectionModel))
                                 .add(new SingleValueSolrFieldLabel("duplicateItemName", item.getModel(), fieldNameService.getFieldName(FieldKey.NAME), new StringResourceModel("searchpage.unnamedrecord", this))))
