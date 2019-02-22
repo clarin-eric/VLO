@@ -39,7 +39,6 @@ import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.AllFacetValuesPanel;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 
 /**

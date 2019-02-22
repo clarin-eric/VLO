@@ -39,6 +39,8 @@ import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.attributes.ThrottlingSettings;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
@@ -60,6 +62,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.time.Duration;
 
 /**
  * A panel that shows all available values for a selected facet. Supports two
@@ -85,6 +88,8 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
     private final static ImmutableList<Integer> OCCURENCES_OPTIONS_LIST = ImmutableList.of(
             0, 2, 5, 10, 100, 1000
     );
+
+    private final static Duration FILTER_RESPONSE_THROTTLE = Duration.milliseconds(250L);
 
     private static final StartsWithOptionsRenderer STARTS_WITH_OPTIONS_RENDERER = new StartsWithOptionsRenderer();
     private static final OccurenceOptionsRenderer OCCURENCE_OPTIONS_RENDERER = new OccurenceOptionsRenderer();
@@ -264,6 +269,16 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
             protected void onUpdate(AjaxRequestTarget target) {
                 target.add(valuesContainer);
             }
+
+            @Override
+            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                super.updateAjaxAttributes(attributes);
+                //enable throttling on the ajax behaviour - this causes 'debouncing' so that a
+                //request is not sent on every keyup but only after a (short) interval
+                //(This fixes https://github.com/clarin-eric/VLO/issues/215)
+                attributes.setThrottlingSettings(new ThrottlingSettings(FILTER_RESPONSE_THROTTLE, true));
+            }
+
         });
         options.add(filterField);
 
@@ -336,9 +351,9 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         }
 
     }
-    
+
     protected void onSelectionChanged(AjaxRequestTarget target) {
-        
+
     }
 
     @Override
