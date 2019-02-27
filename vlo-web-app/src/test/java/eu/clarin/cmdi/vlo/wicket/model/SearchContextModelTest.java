@@ -37,8 +37,8 @@ public class SearchContextModelTest {
 
     private SearchContextModel instance;
     private QueryFacetsSelection selection;
-    private final static long index = 123;
-    private final static long resultCount = 400;
+    private final static Long index = 123L;
+    private final static Long resultCount = 400L;
 
     @Before
     public void setUp() {
@@ -112,7 +112,7 @@ public class SearchContextModelTest {
     @Test
     public void testNext() {
         final SearchContextModel result = SearchContextModel.next(instance);
-        assertEquals(index + 1, result.getIndex());
+        assertEquals(Long.valueOf(index + 1L), result.getIndex());
         assertEquals(resultCount, result.getResultCount());
         assertEquals(selection, result.getSelection());
     }
@@ -122,7 +122,7 @@ public class SearchContextModelTest {
      */
     @Test
     public void testLastNext() {
-        final SearchContextModel lastRecordContext = new SearchContextModel(9, 10, Model.of(selection));
+        final SearchContextModel lastRecordContext = new SearchContextModel(9L, 10L, Model.of(selection));
         assertNull(SearchContextModel.next(lastRecordContext));
     }
 
@@ -132,7 +132,7 @@ public class SearchContextModelTest {
     @Test
     public void testPrevious() {
         final SearchContextModel result = SearchContextModel.previous(instance);
-        assertEquals(index - 1, result.getIndex());
+        assertEquals(Long.valueOf(index - 1), result.getIndex());
         assertEquals(resultCount, result.getResultCount());
         assertEquals(selection, result.getSelection());
     }
@@ -142,7 +142,7 @@ public class SearchContextModelTest {
      */
     @Test
     public void testFirstPrevious() {
-        final SearchContextModel lastRecordContext = new SearchContextModel(0, 10, Model.of(selection));
+        final SearchContextModel lastRecordContext = new SearchContextModel(0L, 10L, Model.of(selection));
         assertNull(SearchContextModel.previous(lastRecordContext));
     }
 

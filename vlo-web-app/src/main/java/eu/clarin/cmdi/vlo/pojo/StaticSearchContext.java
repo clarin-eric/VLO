@@ -24,11 +24,11 @@ import java.io.Serializable;
  */
 public class StaticSearchContext implements SearchContext, Serializable {
 
-    private final long index;
-    private final long resultCount;
+    private final Long index;
+    private final Long resultCount;
     private final QueryFacetsSelection selection;
 
-    public StaticSearchContext(long index, long resultCount, QueryFacetsSelection selection) {
+    public StaticSearchContext(Long index, Long resultCount, QueryFacetsSelection selection) {
         this.index = index;
         this.resultCount = resultCount;
         this.selection = selection;
@@ -40,13 +40,31 @@ public class StaticSearchContext implements SearchContext, Serializable {
     }
 
     @Override
-    public long getResultCount() {
+    public Long getResultCount() {
         return resultCount;
     }
 
     @Override
-    public long getIndex() {
+    public Long getIndex() {
         return index;
+    }
+
+    @Override
+    public boolean hasPrevious() {
+        if (index == null || resultCount == null) {
+            return false;
+        } else {
+            return index > 0;
+        }
+    }
+
+    @Override
+    public boolean hasNext() {
+        if (index == null || resultCount == null) {
+            return false;
+        } else {
+            return index + 1 < resultCount;
+        }
     }
 
 }

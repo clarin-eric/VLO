@@ -25,17 +25,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <wicket:panel>
             <div wicket:id="duplicatesViewContainer">
                 <div class="search-results-duplicates-heading">
-                    <a wicket:id="toggleExpansion" class="search-results-duplicates-expand-collapse" href="#">
+                    <a wicket:id="toggleExpansion" class="search-results-duplicates-expand-collapse" href="#" title="Toggle hidden results" role="button">
                         <span class="caret pull-right"></span>
                         <span class="search-results-duplicates-preamble"> 
-                            The search results include <span wicket:id="expansionCount">[COUNT]</span> (near) duplicate(s) of this record.
+                            <span wicket:id="expansionCount">[The search results include N record(s) with the same title.]</span>
                         </span>
                     </a>
                 </div>
                 <div wicket:id="duplicatesView" class="search-results-duplicates-list collapse in">
+                    <p class="duplicates-list-explanation"><span class="glyphicon glyphicon-info-sign"></span> The following record(s) also match your query and/or facet selection but have been grouped together to reduce the number of similar looking search results:</p>
                     <div class="list-group">
                         <wicket:container wicket:id="duplicateItem">
-                            <a wicket:id="duplicateItemLink" class="list-group-item"><wicket:container wicket:id="duplicateItemName">[item]</wicket:container></a>
+                            <div class="list-group-item">
+                                <a wicket:id="duplicateItemLink"><wicket:container wicket:id="duplicateItemName">[item]</wicket:container></a>
+                                <div class="search-results-duplicate-description" wicket:id="duplicateItemDescription"></div>
+                            </div>
                         </wicket:container>
                     </div>
                     <ul wicket:id="duplicatesPaging"></ul>

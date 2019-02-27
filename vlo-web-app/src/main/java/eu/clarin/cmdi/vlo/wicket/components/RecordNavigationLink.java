@@ -30,8 +30,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
- * Link that causes a navigation to a target record (disabled if no such
- * record exists) in the provided search context
+ * Link that causes a navigation to a target record (disabled if no such record
+ * exists) in the provided search context
  *
  * @author twagoo
  */
@@ -55,7 +55,8 @@ public abstract class RecordNavigationLink extends Link<SearchContext> {
     public void onClick() {
         final SearchContext context = getModelObject();
         final IModel<SearchContext> targetModel = getTargetModel();
-        final List<SolrDocument> documents = documentService.getDocuments(context.getSelection(), (int) targetModel.getObject().getIndex(), 1);
+        final Long index = targetModel.getObject().getIndex();
+        final List<SolrDocument> documents = documentService.getDocuments(context.getSelection(), ((index == null) ? 0 : index.intValue()), 1);
         if (documents.size() > 0) {
             // found it, go there
             final PageParameters params = documentParamConverter.toParameters(documents.get(0));
@@ -82,13 +83,14 @@ public abstract class RecordNavigationLink extends Link<SearchContext> {
     }
 
     /**
-     * 
-     * @return search context model for the target record (evaluated when the link is clicked)
+     *
+     * @return search context model for the target record (evaluated when the
+     * link is clicked)
      */
     protected abstract IModel<SearchContext> getTargetModel();
 
     /**
-     * 
+     *
      * @return whether the target record exists (false will disable the link)
      */
     protected abstract boolean targetExists();

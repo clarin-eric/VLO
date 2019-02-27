@@ -175,13 +175,25 @@
             transform: rotate(180deg);
         }
 
-        .search-results-duplicates-list a.list-group-item {
-            color: @link-color;
+        .duplicates-list-explanation {
+            border-top: 1px solid;
+            border-top-color: @panel-inner-border;
+            padding-top: .5em;
+        }
 
-            &:hover {
-                color: @link-hover-color;
-                background: @list-group-bg;
-                text-decoration: @link-hover-decoration;
+        .search-results-duplicates-list .list-group-item {
+            a{
+                color: @link-color;
+
+                &:hover {
+                    color: @link-hover-color;
+                    background: @list-group-bg;
+                    text-decoration: @link-hover-decoration;
+                }
+            }
+            
+            .search-results-duplicate-description {
+                font-size: small;
             }
         }
     }

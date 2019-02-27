@@ -64,7 +64,7 @@ public class RecordNavigationPanel extends GenericPanel<SearchContext> {
             @Override
             protected boolean targetExists() {
                 // disable for first item
-                return getModelObject().getIndex() > 0;
+                return getModelObject().hasPrevious();
             }
         };
     }
@@ -79,8 +79,7 @@ public class RecordNavigationPanel extends GenericPanel<SearchContext> {
             @Override
             protected boolean targetExists() {
                 // disable for last item
-                final SearchContext context = getModelObject();
-                return context.getIndex() + 1 < context.getResultCount();
+                return getModelObject().hasNext();
             }
         };
     }

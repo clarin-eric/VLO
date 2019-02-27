@@ -20,13 +20,18 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.Bootstra
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
+import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
+import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
+import eu.clarin.cmdi.vlo.wicket.model.TruncatingStringModel;
 import static java.lang.Math.toIntExact;
 import java.util.Collections;
 import java.util.Iterator;
@@ -62,6 +67,8 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
     private final static Logger LOG = LoggerFactory.getLogger(DuplicateSearchResultItemsPanel.class);
 
     private static final int ITEMS_PER_PAGE = 10;
+    private static final int MAX_DESCRIPTION_LENGTH = 120;
+    private static final int DESCRIPTION_TRUNCATE_POINT = 100;
 
     @SpringBean
     private FieldNameService fieldNameService;
@@ -73,7 +80,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
      * expansion
      * @param expandedModel model for current 'duplicate items' expansion state
      */
-    public DuplicateSearchResultItemsPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<ExpansionState> expandedModel) {
+    public DuplicateSearchResultItemsPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<QueryFacetsSelection> selectionModel, IModel<ExpansionState> expandedModel) {
         super(id, documentExpansionPairModel);
 
         final IModel<Boolean> isExpandedModel = new AbstractReadOnlyModel<Boolean>() {
@@ -97,11 +104,14 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
             }
         };
 
+        //Model for "The search results include N record(s) with the same title
+        final StringResourceModel duplicatesCountModel = new StringResourceModel("duplicateresults.count")
+                .setParameters(new PropertyModel<>(documentExpansionPairModel, "expansionCount"));
+
         add(container
-                .add(toggleHeaderLink
-                        .add(new Label("expansionCount", new PropertyModel<>(documentExpansionPairModel, "expansionCount"))))
+                .add(toggleHeaderLink.add(new Label("expansionCount", duplicatesCountModel)))
                 .add(new AttributeAppender("class",
-                        new BooleanOptionsModel<String>(isExpandedModel,
+                        new BooleanOptionsModel<>(isExpandedModel,
                                 Model.of("duplicates-expanded duplicates-was-expanded"),
                                 Model.of("duplicates-collapsed")))));
 
@@ -109,9 +119,15 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
         final DataView<SolrDocument> duplicatesView = new DataView<SolrDocument>("duplicateItem", new DuplicateDocumentsProvider(documentExpansionPairModel, fieldNameService), ITEMS_PER_PAGE) {
             @Override
             protected void populateItem(Item<SolrDocument> item) {
-                item.add(
-                        new RecordPageLink("duplicateItemLink", item.getModel())
-                                .add(new SingleValueSolrFieldLabel("duplicateItemName", item.getModel(), fieldNameService.getFieldName(FieldKey.NAME), new StringResourceModel("searchpage.unnamedrecord", this))));
+                final IModel<String> descriptionModel = new TruncatingStringModel(
+                        new SolrFieldStringModel(item.getModel(), fieldNameService.getFieldName(FieldKey.DESCRIPTION), false),
+                        MAX_DESCRIPTION_LENGTH, DESCRIPTION_TRUNCATE_POINT);
+
+                item
+                        .add(new RecordPageLink("duplicateItemLink", item.getModel(), new SearchContextModel(selectionModel))
+                                .add(new SingleValueSolrFieldLabel("duplicateItemName", item.getModel(), fieldNameService.getFieldName(FieldKey.NAME), new StringResourceModel("searchpage.unnamedrecord", this))))
+                        .add(new Label("duplicateItemDescription", descriptionModel)
+                                .add(new InvisibleIfNullBehaviour(descriptionModel)));
             }
 
         };
