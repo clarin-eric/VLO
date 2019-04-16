@@ -24,34 +24,44 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Small helper class that stores metadata provided by the CLARIN OAI-PMH harvester
+ * Small helper class that stores metadata provided by the CLARIN OAI-PMH
+ * harvester
  *
  * @author Thomas Eckart
  */
 public class HarvesterMap {
+
     protected final static Logger LOG = LoggerFactory.getLogger(HarvesterMap.class);
-    
+
     /**
      * Parses mapping file of OAI-PMH harvester and returns mapping file
      * (harvester directory name -> EndpointDescription)
+     *
      * @param mappingFile
-     * @return Map (key: harvester directory name, value: EndpointDescription object)
+     * @return Map (key: harvester directory name, value: EndpointDescription
+     * object)
      */
     public static Map<String, EndpointDescription> loadEndpointMap(File mappingFile) {
+        if (!mappingFile.exists()) {
+            LOG.warn("No harvester mapping file exists at {}, skipping loading of harvester data");
+            return Collections.emptyMap();
+        }
+
         LOG.info("Loading harvester mapping data");
         HashMap<String, EndpointDescription> endpointDescriptionMap = new HashMap<>();
         try {
             CSVParser parser = new CSVParserBuilder().withSeparator(',').withIgnoreQuotations(false).build();
             CSVReader reader = new CSVReaderBuilder(new FileReader(mappingFile)).withSkipLines(1).withCSVParser(parser).build();
             String[] lineArray;
-            while((lineArray = reader.readNext()) != null) {
-                if(lineArray.length == 4) {
+            while ((lineArray = reader.readNext()) != null) {
+                if (lineArray.length == 4) {
                     EndpointDescription endpoint = new EndpointDescription(lineArray[0], lineArray[2], lineArray[3]);
                     endpointDescriptionMap.put(lineArray[1], endpoint);
                 } else {
@@ -65,6 +75,5 @@ public class HarvesterMap {
         LOG.info("...found {} mappings.", endpointDescriptionMap.keySet().size());
         return endpointDescriptionMap;
     }
-    
-    
+
 }
