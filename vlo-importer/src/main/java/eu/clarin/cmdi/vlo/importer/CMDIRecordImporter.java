@@ -16,10 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.importer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import eu.clarin.cmdi.vlo.CommonUtils;
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.ResourceInfo;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.importer.normalizer.FormatPostNormalizer;
@@ -53,9 +54,9 @@ public class CMDIRecordImporter<T> {
     private final ImportStatistics stats;
     private final DocumentStore documentStore;
     private final DeduplicationSignature signature;
+    private final ObjectMapper objectMapper;
 
     private final static DataRoot NOOP_DATAROOT = new DataRoot("dataroot", new File("/"), "http://null", "", false);
-
 
     /**
      * Contains MDSelflinks (usually). Just to know what we have already done.
@@ -68,6 +69,7 @@ public class CMDIRecordImporter<T> {
         this.fieldNameService = fieldNameService;
         this.stats = importStatistics;
         this.signature = new DeduplicationSignature(signatureFieldNames);
+        this.objectMapper = new ObjectMapper();
     }
 
     /**
@@ -136,7 +138,7 @@ public class CMDIRecordImporter<T> {
         return id != null && !id.trim().isEmpty();
     }
 
-    private void addTechnicalMetadata(File file, CMDIData<T> cmdiData, DataRoot dataOrigin, Optional<EndpointDescription> endpointDescription) {        
+    private void addTechnicalMetadata(File file, CMDIData<T> cmdiData, DataRoot dataOrigin, Optional<EndpointDescription> endpointDescription) {
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.HARVESTER_ROOT), dataOrigin.getOriginName(), false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.ID), cmdiData.getId(), false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FILENAME), file.getAbsolutePath(), false);
@@ -155,7 +157,7 @@ public class CMDIRecordImporter<T> {
                     }
                 }
         );
-        if(!cmdiData.hasField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER))) {
+        if (!cmdiData.hasField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER))) {
             // use data root as substitute for dataProvider
             cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DATA_PROVIDER), dataOrigin.getOriginName(), false);
         }
@@ -247,8 +249,8 @@ public class CMDIRecordImporter<T> {
             if (!mimeType.equals("")) {
                 cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FORMAT), mimeType, true);
             }
-            cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE), mimeType + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR
-                    + resource.getResourceName(), false);
+            ResourceInfo resourceInfo = new ResourceInfo(resource.getResourceName(), mimeType, "");
+            cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE), resourceInfo.toJson(objectMapper), false);
         }
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size(), false);
     }
