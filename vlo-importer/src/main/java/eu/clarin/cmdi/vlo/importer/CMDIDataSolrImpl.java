@@ -7,6 +7,7 @@ import org.apache.solr.common.SolrInputDocument;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.importer.processor.ValueSet;
+import java.util.Collections;
 
 /**
  * Represents a document of CMDI data.
@@ -47,20 +48,35 @@ public class CMDIDataSolrImpl extends CMDIDataBaseImpl<SolrInputDocument> {
 
     @Override
     public void replaceDocField(ValueSet valueSet, boolean caseInsensitive) {
-        replaceDocField(valueSet.getTargetFacetName(), valueSet.getValue(), caseInsensitive);
+        if (valueSet.getTargetFacetName() == null) {
+            LOG.error("Cannot replace field wihtout target facet name - valueSet={}, caseInsensitive={}", valueSet);
+            throw new NullPointerException("TargetFacetName not set in valueSet");
+        } else {
+            replaceDocField(valueSet.getTargetFacetName(), valueSet.getValue(), caseInsensitive);
+        }
     }
 
     @Override
     public void addDocField(String fieldName, Object value, boolean caseInsensitive) {
-        handleDocField(fieldName, value, caseInsensitive);
+        if (fieldName == null) {
+            LOG.error("Cannot add field without fieldName - fieldName='{}', value='{}', caseInsensitive={}", fieldName, value, caseInsensitive);
+            throw new NullPointerException("Field name not set");
+        } else {
+            handleDocField(fieldName, value, caseInsensitive);
+        }
     }
 
     @Override
     public void replaceDocField(String name, Object value, boolean caseInsensitive) {
-        if (this.doc != null) {
-            this.doc.removeField(name);
+        if (name == null) {
+            LOG.error("Cannot replace field without fieldName - name='{}', value='{}', caseInsensitive={}", name, value, caseInsensitive);
+            throw new NullPointerException("Field name not set");
+        } else {
+            if (this.doc != null) {
+                this.doc.removeField(name);
+            }
+            this.addDocField(name, value, caseInsensitive);
         }
-        this.addDocField(name, value, caseInsensitive);
     }
 
     @Override
@@ -72,7 +88,11 @@ public class CMDIDataSolrImpl extends CMDIDataBaseImpl<SolrInputDocument> {
 
     @Override
     public void removeField(String name) {
-        this.doc.removeField(name);
+        if (name == null) {
+            LOG.error("Cannot remove field without name");
+        } else {
+            this.doc.removeField(name);
+        }
     }
 
     @Override
@@ -82,7 +102,12 @@ public class CMDIDataSolrImpl extends CMDIDataBaseImpl<SolrInputDocument> {
 
     @Override
     public Collection<Object> getFieldValues(String name) {
-        return this.doc.getFieldValues(name);
+        if (name == null) {
+            LOG.error("Cannot get values for field without name");
+            return Collections.emptySet();
+        } else {
+            return this.doc.getFieldValues(name);
+        }
     }
 
     /**
@@ -94,21 +119,26 @@ public class CMDIDataSolrImpl extends CMDIDataBaseImpl<SolrInputDocument> {
      * @param caseInsensitive
      */
     private void handleDocField(String name, Object value, boolean caseInsensitive) {
-        if (doc == null) {
-            doc = new SolrInputDocument();
-        }
-        if (value != null) {
-            if (value instanceof String) {
-                if (((String) value).trim().isEmpty()) {
-                    return;
-                } else if (caseInsensitive) {
-                    value = ((String) value).toLowerCase();
-                }
+        if (name == null) {
+            LOG.error("Cannot set field value without fieldName - name='{}', value='{}', caseInsensitive={}", name, value, caseInsensitive);
+            throw new NullPointerException("Field name not set");
+        } else {
+            if (doc == null) {
+                doc = new SolrInputDocument();
             }
-            Collection<Object> fieldValues = doc.getFieldValues(name);
-            if (fieldValues == null || !fieldValues.contains(value)) {
-                doc.addField(name, value);
-            } // ignore double values don't add them
+            if (value != null) {
+                if (value instanceof String) {
+                    if (((String) value).trim().isEmpty()) {
+                        return;
+                    } else if (caseInsensitive) {
+                        value = ((String) value).toLowerCase();
+                    }
+                }
+                Collection<Object> fieldValues = doc.getFieldValues(name);
+                if (fieldValues == null || !fieldValues.contains(value)) {
+                    doc.addField(name, value);
+                } // ignore double values don't add them
+            }
         }
     }
 
