@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PREFIX;
@@ -27,7 +28,6 @@ import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.regex.Pattern;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
 
     private final static Logger logger = LoggerFactory.getLogger(ResourceStringConverterImpl.class);
 
-    private final static String SPLIT_PATTERN = Pattern.quote(FacetConstants.FIELD_RESOURCE_SPLIT_CHAR);
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final UriResolver resolver;
 
     /**
@@ -61,12 +61,12 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
     @Override
     public ResourceInfo getResourceInfo(String resourceString) {
         if (resourceString == null) {
-            return new ResourceInfo(null, null, null, ResourceType.OTHER);
+            return new eu.clarin.cmdi.vlo.pojo.ResourceInfo(null, null, null, ResourceType.OTHER);
         } else {
-            // split resource string to find href and mime type
-            final String[] tokens = resourceString.split(SPLIT_PATTERN, 2);
-            final String mimeType = tokens[0];
-            final String href = tokens[1];
+            // serialize resource string to find href and mime type
+            eu.clarin.cmdi.vlo.ResourceInfo resourceInfo = eu.clarin.cmdi.vlo.ResourceInfo.fromJson(objectMapper, resourceString);
+            final String mimeType = resourceInfo.getType();
+            final String href = resourceInfo.getUrl();
 
             // if there is a resolver, get file name from resolved URL
             final String fileName;
