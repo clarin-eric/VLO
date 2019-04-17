@@ -41,7 +41,7 @@ public class ResourceStringConverterImplTest {
      */
     @Test
     public void testGetResourceInfoVideo() {
-        String resourceString = "video/mpeg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "href"; //invalid URI
+        final String resourceString = createResourceString("video/mpeg", "href"); //invalid URI
         ResourceInfo result = instance.getResourceInfo(resourceString);
         assertEquals("href", result.getHref());
         assertEquals("video/mpeg", result.getMimeType());
@@ -53,7 +53,7 @@ public class ResourceStringConverterImplTest {
      */
     @Test
     public void testGetResourceInfoVideoInvalid() {
-        String resourceString = "video/mpeg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "video href"; //invalid URI
+        final String resourceString = createResourceString("video/mpeg", "video href"); //invalid URI
         ResourceInfo result = instance.getResourceInfo(resourceString);
         assertEquals("video href", result.getHref());
     }
@@ -63,7 +63,7 @@ public class ResourceStringConverterImplTest {
      */
     @Test
     public void testGetResourceInfoAudio() {
-        String resourceString = "audio/ogg" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "href";
+        final String resourceString = createResourceString("audio/ogg", "href");
         ResourceInfo result = instance.getResourceInfo(resourceString);
         assertEquals("href", result.getHref());
         assertEquals("audio/ogg", result.getMimeType());
@@ -75,7 +75,7 @@ public class ResourceStringConverterImplTest {
      */
     @Test
     public void testGetResourceInfoText() {
-        String resourceString = "text/plain" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "href";
+        final String resourceString = createResourceString("text/plain", "href");
         ResourceInfo result = instance.getResourceInfo(resourceString);
         assertEquals("href", result.getHref());
         assertEquals("text/plain", result.getMimeType());
@@ -87,7 +87,7 @@ public class ResourceStringConverterImplTest {
      */
     @Test
     public void testGetResourceInfoAnnotation() {
-        String resourceString = "text/x-chat" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "href";
+        final String resourceString = createResourceString("text/x-chat", "href");
         ResourceInfo result = instance.getResourceInfo(resourceString);
         assertEquals("href", result.getHref());
         assertEquals("text/x-chat", result.getMimeType());
@@ -99,7 +99,7 @@ public class ResourceStringConverterImplTest {
      */
     @Test
     public void testGetResourceInfoArchive() {
-        String resourceString = "application/zip" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "href";
+        final String resourceString = createResourceString("application/zip", "href");
         ResourceInfo result = instance.getResourceInfo(resourceString);
         assertEquals("href", result.getHref());
         assertEquals("application/zip", result.getMimeType());
@@ -111,25 +111,28 @@ public class ResourceStringConverterImplTest {
      */
     @Test
     public void testGetResourceInfoOther() {
-        String resourceString = "application/octet-stream" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + "href";
+        final String resourceString = createResourceString("application/octet-stream", "href");
         ResourceInfo result = instance.getResourceInfo(resourceString);
         assertEquals("href", result.getHref());
         assertEquals("application/octet-stream", result.getMimeType());
         assertEquals(ResourceType.OTHER, result.getResourceType());
     }
-    
-    @Test 
+
+    @Test
     public void testGetResourceInfoFilename() {
         assertFileNameResult("file.txt", "http://myserver.com/file.txt");
         assertFileNameResult("file.txt", "file:/somehwere/on/my/fs/this/file.txt");
         assertFileNameResult("http://myserver.com", "http://myserver.com");
         assertFileNameResult("hdl:12345", "hdl:12345");
     }
-    
-    private void assertFileNameResult(String expected, String href){
-        String resourceString = "application/test" + FacetConstants.FIELD_RESOURCE_SPLIT_CHAR + href;
+
+    private void assertFileNameResult(String expected, String href) {
+        final String resourceString = createResourceString("application/test", href);
         ResourceInfo result = instance.getResourceInfo(resourceString);
         assertEquals(expected, result.getFileName());
     }
 
+    private static String createResourceString(String type, String url) {
+        return String.format("{\"type\": \"%s\", \"url\": \"%s\"}", type, url);
+    }
 }

@@ -37,9 +37,9 @@ import org.slf4j.LoggerFactory;
  * @author twagoo
  */
 public class ResourceStringConverterImpl implements ResourceStringConverter {
-
+    
     private final static Logger logger = LoggerFactory.getLogger(ResourceStringConverterImpl.class);
-
+    
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final UriResolver resolver;
 
@@ -57,7 +57,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
     public ResourceStringConverterImpl(UriResolver resolver) {
         this.resolver = resolver;
     }
-
+    
     @Override
     public ResourceInfo getResourceInfo(String resourceString) {
         if (resourceString == null) {
@@ -65,6 +65,10 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
         } else {
             // serialize resource string to find href and mime type
             eu.clarin.cmdi.vlo.ResourceInfo resourceInfo = eu.clarin.cmdi.vlo.ResourceInfo.fromJson(objectMapper, resourceString);
+            if (resourceInfo == null) {
+                logger.warn("Resource string could not be parsed: {}", resourceString);
+                return new eu.clarin.cmdi.vlo.pojo.ResourceInfo(null, null, null, ResourceType.OTHER);
+            }
             final String mimeType = resourceInfo.getType();
             final String href = resourceInfo.getUrl();
 
@@ -85,7 +89,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
                     resourceType);
         }
     }
-
+    
     private String getFileName(final String href) {
         try {
             if (href.startsWith(HANDLE_PROXY) || href.startsWith(HANDLE_PROXY_HTTPS)) {
@@ -108,7 +112,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             return href;
         }
     }
-
+    
     private ResourceType determineResourceType(final String mimeType) {
         final String normalizeMimeType = CommonUtils.normalizeMimeType(mimeType);
         // map to ResourceType and add to bag
@@ -128,5 +132,5 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             return ResourceType.OTHER;
         }
     }
-
+    
 }

@@ -1,8 +1,10 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.importer.solr.DummySolrBridgeImpl;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.ResourceInfo;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 
@@ -24,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+import static org.junit.Assert.assertNotNull;
 
 public class MetadataImporterTest extends ImporterTestcase {
 
@@ -71,7 +74,11 @@ public class MetadataImporterTest extends ImporterTestcase {
         assertEquals("kleve-route", getValue(doc, FieldKey.NAME));
         assertEquals(sessionFile.getAbsolutePath(), getValue(doc, FieldKey.FILENAME));
         assertEquals("video/x-mpeg1", getValue(doc, FieldKey.FORMAT));
-        assertEquals("video/x-mpeg1|../Media/elan-example1.mpg", getValue(doc, FieldKey.RESOURCE));
+
+        ResourceInfo resourceInfo = ResourceInfo.fromJson(new ObjectMapper(), getValue(doc, FieldKey.RESOURCE).toString());
+        assertNotNull(resourceInfo);
+        assertEquals("video/x-mpeg1", resourceInfo.getType());
+        assertEquals("../Media/elan-example1.mpg", resourceInfo.getUrl());
     }
 
     @Test
@@ -121,8 +128,16 @@ public class MetadataImporterTest extends ImporterTestcase {
         assertEquals(2, fieldValues.size());
         values = new ArrayList(fieldValues);
         Collections.sort(values);
-        assertEquals("unknown type|file://bla.resource2.txt", values.get(0));
-        assertEquals("unknown type|http://terminotica.upf.es/CREL/LIC01.htm", values.get(1));
+        
+        ResourceInfo resourceInfo1 = ResourceInfo.fromJson(new ObjectMapper(), values.get(0));
+        assertNotNull(resourceInfo1);
+        assertEquals("unknown type", resourceInfo1.getType());
+        assertEquals("file://bla.resource2.txt", resourceInfo1.getUrl());
+        
+        ResourceInfo resourceInfo2 = ResourceInfo.fromJson(new ObjectMapper(), values.get(1));
+        assertNotNull(resourceInfo2);
+        assertEquals("unknown type", resourceInfo2.getType());
+        assertEquals("http://terminotica.upf.es/CREL/LIC01.htm", resourceInfo2.getUrl());
     }
 
     @Test
@@ -158,7 +173,11 @@ public class MetadataImporterTest extends ImporterTestcase {
         SolrInputDocument doc = docs.get(0);
         assertEquals("hdl_58_11858_47_00-175C-0000-0000-E180-8", getValue(doc, FieldKey.ID));
         assertEquals("L'Est R\u00e9publicain : \u00e9dition du 17 mai 1999", getValue(doc, FieldKey.NAME));
-        assertEquals("unknown type|http://hdl.handle.net/11858/00-175C-0000-0000-E180-8?urlappend=/TEI", getValue(doc, FieldKey.RESOURCE));
+
+        ResourceInfo resourceInfo = ResourceInfo.fromJson(new ObjectMapper(), getValue(doc, FieldKey.RESOURCE).toString());
+        assertNotNull(resourceInfo);
+        assertEquals("unknown type", resourceInfo.getType());
+        assertEquals("http://hdl.handle.net/11858/00-175C-0000-0000-E180-8?urlappend=/TEI", resourceInfo.getUrl());
     }
 
     @Test
