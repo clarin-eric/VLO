@@ -17,13 +17,24 @@
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
 import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
-import eu.clarin.cmdi.vlo.ResourceInfo;
+import eu.clarin.cmdi.rasa.links.CheckedLink;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class RasaResourceAvailabilityStatusChecker implements ResourceAvailabilityStatusChecker {
+
+    protected final static Logger logger = LoggerFactory.getLogger(RasaResourceAvailabilityStatusChecker.class);
 
     private final CheckedLinkResource checkedLinkResource;
 
@@ -32,9 +43,16 @@ public class RasaResourceAvailabilityStatusChecker implements ResourceAvailabili
     }
 
     @Override
-    public ResourceInfo checkLinkStatusForRef(ResourceInfo resourceInfo) {
-        return new ResourceInfo(resourceInfo.getUrl(), resourceInfo.getType(), null);
-        //checkedLinkResource.get(resourceInfo.getUrl());
-    }
+    public Map<URI, CheckedLink> getLinkStatusForRefs(Stream<String> hrefs) {
+        final Collection<URI> uris = hrefs.flatMap(href -> {
+            try {
+                return Stream.of(new URI(href));
+            } catch (URISyntaxException ex) {
+                logger.warn("Skipping resource link that violates URI syntax: {}", href, ex);
+                return Stream.empty();
+            }
+        }).collect(Collectors.toSet());
 
+        return checkedLinkResource.get(uris, Optional.empty());
+    }
 }

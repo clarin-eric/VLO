@@ -16,7 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
-import eu.clarin.cmdi.vlo.ResourceInfo;
+import eu.clarin.cmdi.rasa.links.CheckedLink;
+import java.net.URI;
+import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  *
@@ -24,6 +27,5 @@ import eu.clarin.cmdi.vlo.ResourceInfo;
  */
 public interface ResourceAvailabilityStatusChecker {
     
-    ResourceInfo checkLinkStatusForRef(ResourceInfo resourceInfo);
-    
+    Map<URI, CheckedLink> getLinkStatusForRefs(Stream<String> hrefs);
 }

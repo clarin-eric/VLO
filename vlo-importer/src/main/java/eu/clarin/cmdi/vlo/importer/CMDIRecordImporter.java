@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.importer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
+import eu.clarin.cmdi.rasa.links.CheckedLink;
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceInfo;
@@ -39,6 +40,8 @@ import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStore;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 import java.util.Collection;
+import java.net.URI;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -234,7 +237,11 @@ public class CMDIRecordImporter<T> {
                 ? new ArrayList<>(cmdiData.getFieldValues(fieldNameService.getFieldName(FieldKey.FORMAT)))
                 : null;
         cmdiData.removeField(fieldNameService.getFieldName(FieldKey.FORMAT)); //Remove old values they might be overwritten.
-        List<Resource> resources = cmdiData.getDataResources();
+        final List<Resource> resources = cmdiData.getDataResources();
+
+        final Map<URI, CheckedLink> linkStatusMap
+                = availabilityChecker.getLinkStatusForRefs(resources.stream().map(Resource::getResourceName));
+
         for (int i = 0; i < resources.size(); i++) {
             Resource resource = resources.get(i);
             String mimeType = resource.getMimeType();
@@ -252,10 +259,29 @@ public class CMDIRecordImporter<T> {
             if (!mimeType.equals("")) {
                 cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FORMAT), mimeType, true);
             }
-            final ResourceInfo resourceInfo = availabilityChecker.checkLinkStatusForRef(new ResourceInfo(resource.getResourceName(), mimeType, ""));
+
+            final String linkStatus = createLinkStatusValue(linkStatusMap, resource);
+            final ResourceInfo resourceInfo = new ResourceInfo(resource.getResourceName(), mimeType, linkStatus);
+
             cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE), resourceInfo.toJson(objectMapper), false);
         }
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size(), false);
+    }
+
+    /**
+     * Creates a string representing link status, to be embedded in the link
+     * representation in the index
+     *
+     * @param linkStatusMap
+     * @param resource
+     * @return
+     */
+    private String createLinkStatusValue(final Map<URI, CheckedLink> linkStatusMap, Resource resource) {
+        final CheckedLink linkStatus = linkStatusMap.get(URI.create(resource.getResourceName()));
+        if (linkStatus != null) {
+            return Integer.toString(linkStatus.getStatus());
+        }
+        return null;
     }
 
     /**

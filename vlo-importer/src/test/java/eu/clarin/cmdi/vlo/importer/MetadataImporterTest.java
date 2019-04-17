@@ -6,6 +6,7 @@ import eu.clarin.cmdi.vlo.importer.solr.DummySolrBridgeImpl;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceInfo;
 import eu.clarin.cmdi.vlo.config.DataRoot;
+import eu.clarin.cmdi.vlo.importer.linkcheck.NoopResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 
@@ -384,7 +385,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         modifyConfig(rootFile);
 
         final DummySolrBridgeImpl solrBridge = new DummySolrBridgeImpl();
-        final ResourceAvailabilityStatusChecker availabilityChecker = new DummyResourceAvailabilityStatusChecker();
+        final ResourceAvailabilityStatusChecker availabilityChecker = new NoopResourceAvailabilityStatusChecker();
         MetadataImporter importer = new MetadataImporter(config, languageCodeUtils, solrBridge, availabilityChecker) {
             /*
              * Because in the test, the solr server is not assumed to be 
