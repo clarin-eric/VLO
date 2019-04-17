@@ -3,6 +3,11 @@ package eu.clarin.cmdi.vlo.importer;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.internal.MongoClientImpl;
+import eu.clarin.cmdi.rasa.helpers.RasaFactory;
+import eu.clarin.cmdi.rasa.helpers.impl.ACDHRasaFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -27,12 +32,16 @@ import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
+import eu.clarin.cmdi.vlo.ResourceInfo;
 import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph.CmdiVertex;
+import eu.clarin.cmdi.vlo.importer.linkcheck.NoopResourceAvailabilityStatusChecker;
+import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityStatusChecker;
+import eu.clarin.cmdi.vlo.importer.linkcheck.RasaResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.AvailabilityPostNormalizer;
@@ -121,6 +130,29 @@ public class MetadataImporter {
         }
     }
 
+    //new RasaResourceAvailabilityStatusChecker(
+    //    DefaultRasaFactoryFactory.createDefaultRasaFactory(config).getCheckedLinkResource())
+    private static class DefaultResourceAvailabilityFactory {
+
+        static ResourceAvailabilityStatusChecker createDefaultResourceAvailabilityStatusChecker(VloConfig config) {
+
+            if (false) {
+
+                final String mongoConnectionString = "mongoConnectionString";
+                final String mongoDbName = "linkChecker";
+                //TODO: config.getLinkCheckerMongoDbName()
+                //TODO: config.getLinkCheckerMongoConnectionString()
+                final MongoClient mongoClient = MongoClients.create(mongoConnectionString);
+                final ACDHRasaFactory factory = new ACDHRasaFactory(mongoClient, mongoDbName);
+                return new RasaResourceAvailabilityStatusChecker(factory.getCheckedLinkResource());
+            } else {
+                LOG.warn("No mongo configuration - installing a NOOP availability checker. Availability status will NOT be checked!");
+                return new NoopResourceAvailabilityStatusChecker();
+            }
+
+        }
+    }
+
     /**
      * Defines the post-processor associations. At import, for each facet value,
      * this map is checked and all postprocessors associated with the facet
@@ -142,22 +174,22 @@ public class MetadataImporter {
     private final FieldNameServiceImpl fieldNameService;
 
     public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList) {
-        this(config, languageCodeUtils, mappingFactory, marshaller, clDatarootsList, DefaultSolrBridgeFactory.createDefaultSolrBridge(config));
+        this(config, languageCodeUtils, mappingFactory, marshaller, clDatarootsList,
+                DefaultSolrBridgeFactory.createDefaultSolrBridge(config),
+                DefaultResourceAvailabilityFactory.createDefaultResourceAvailabilityStatusChecker(config));
     }
 
-    public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList, SolrBridge solrBrdige) {
+    public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList, SolrBridge solrBrdige, ResourceAvailabilityStatusChecker availabilityChecker) {
         this.config = config;
         this.fieldNameService = new FieldNameServiceImpl(config);
         this.clDatarootsList = clDatarootsList;
         this.postProcessors = registerPostProcessors(config, fieldNameService, languageCodeUtils);
         this.postMappingFilters = registerPostMappingFilters(fieldNameService);
         this.solrBridge = solrBrdige;
-        
 
         final CMDIDataSolrImplFactory cmdiDataFactory = new CMDIDataSolrImplFactory(fieldNameService);
         final CMDIDataProcessor<SolrInputDocument> processor = new CMDIParserVTDXML<>(postProcessors, postMappingFilters, config, mappingFactory, marshaller, cmdiDataFactory, fieldNameService, false);
-        this.recordHandler = new CMDIRecordImporter(processor, solrBrdige, fieldNameService, stats, config.getSignatureFieldNames());
-
+        this.recordHandler = new CMDIRecordImporter(processor, solrBrdige, fieldNameService, availabilityChecker, stats, config.getSignatureFieldNames());
     }
 
     public static Map<String, AbstractPostNormalizer> registerPostProcessors(VloConfig config, FieldNameService fieldNameService, LanguageCodeUtils languageCodeUtils) {
@@ -722,7 +754,8 @@ public class MetadataImporter {
      * Executes am operation on a list of fields identified by key if one or
      * more of these exist
      *
-     * @param consumer operation to execute, only parameter being the list of resolved field names known to exist
+     * @param consumer operation to execute, only parameter being the list of
+     * resolved field names known to exist
      * @param fieldNameService
      * @param key keys of fields to check for and operate on
      */
@@ -731,7 +764,7 @@ public class MetadataImporter {
                 .map(fieldNameService::getFieldName)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-        
+
         if (!fields.isEmpty()) {
             consumer.accept(fields);
         }
@@ -744,7 +777,9 @@ public class MetadataImporter {
      * @param languageCodeUtils
      */
     protected MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils) {
-        this(config, languageCodeUtils, new VLOMarshaller(), DefaultSolrBridgeFactory.createDefaultSolrBridge(config));
+        this(config, languageCodeUtils, new VLOMarshaller(),
+                DefaultSolrBridgeFactory.createDefaultSolrBridge(config),
+                DefaultResourceAvailabilityFactory.createDefaultResourceAvailabilityStatusChecker(config));
     }
 
     /**
@@ -753,13 +788,14 @@ public class MetadataImporter {
      * @param config
      * @param languageCodeUtils
      * @param solrBridge
+     * @param availabilityChecker
      */
-    protected MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, SolrBridge solrBridge) {
-        this(config, languageCodeUtils, new VLOMarshaller(), solrBridge);
+    protected MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, SolrBridge solrBridge, ResourceAvailabilityStatusChecker availabilityChecker) {
+        this(config, languageCodeUtils, new VLOMarshaller(), solrBridge, availabilityChecker);
     }
 
-    private MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, VLOMarshaller marshaller, SolrBridge solrBridge) {
-        this(config, languageCodeUtils, new FacetMappingFactory(config, marshaller), marshaller, null, solrBridge);
+    private MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, VLOMarshaller marshaller, SolrBridge solrBridge, ResourceAvailabilityStatusChecker availabilityChecker) {
+        this(config, languageCodeUtils, new FacetMappingFactory(config, marshaller), marshaller, null, solrBridge, availabilityChecker);
     }
 
 }

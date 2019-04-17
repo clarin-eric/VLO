@@ -23,6 +23,7 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceInfo;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
+import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.normalizer.FormatPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.MultilingualPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.processor.CMDIDataProcessor;
@@ -50,6 +51,7 @@ public class CMDIRecordImporter<T> {
 
     protected final static Logger LOG = LoggerFactory.getLogger(CMDIRecordImporter.class);
     private final FieldNameServiceImpl fieldNameService;
+    private final ResourceAvailabilityStatusChecker availabilityChecker;
     private final CMDIDataProcessor<T> processor;
     private final ImportStatistics stats;
     private final DocumentStore documentStore;
@@ -63,10 +65,11 @@ public class CMDIRecordImporter<T> {
      */
     private final Set<String> processedIds = Sets.newConcurrentHashSet();
 
-    public CMDIRecordImporter(CMDIDataProcessor<T> processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ImportStatistics importStatistics, List<String> signatureFieldNames) {
+    public CMDIRecordImporter(CMDIDataProcessor<T> processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ResourceAvailabilityStatusChecker availabilityChecker, ImportStatistics importStatistics, List<String> signatureFieldNames) {
         this.processor = processor;
         this.documentStore = documentStore;
         this.fieldNameService = fieldNameService;
+        this.availabilityChecker = availabilityChecker;
         this.stats = importStatistics;
         this.signature = new DeduplicationSignature(signatureFieldNames);
         this.objectMapper = new ObjectMapper();
@@ -249,7 +252,7 @@ public class CMDIRecordImporter<T> {
             if (!mimeType.equals("")) {
                 cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FORMAT), mimeType, true);
             }
-            ResourceInfo resourceInfo = new ResourceInfo(resource.getResourceName(), mimeType, "");
+            final ResourceInfo resourceInfo = availabilityChecker.checkLinkStatusForRef(new ResourceInfo(resource.getResourceName(), mimeType, ""));
             cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE), resourceInfo.toJson(objectMapper), false);
         }
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size(), false);

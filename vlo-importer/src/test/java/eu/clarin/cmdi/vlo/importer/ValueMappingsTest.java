@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.importer;
 import eu.clarin.cmdi.vlo.importer.solr.DummySolrBridgeImpl;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.DataRoot;
+import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 
 import java.io.File;
@@ -49,41 +50,40 @@ public class ValueMappingsTest extends ImporterTestcase {
         session += "   </Components>\n";
         session += "</CMD>\n";
         File sessionFile = createCmdiFile("testSession", session);
-        
-        config.setValueMappingsFile(createTmpFile("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
-        		"\n" + 
-        		"<value-mappings>\n" + 
-                "<origin-facet name=\"name\">\n" + 
-                "  <value-map>\n" + 
-                "   <target-value-set>\n" + 
-                "       <source-value isRegex=\"true\">.+</source-value>\n" + 
-                "   </target-value-set>\n" + 
-                "  </value-map>\n" + 
-                "</origin-facet>\n" + 
-        		"<origin-facet name=\"collection\">\n" + 
-        		"  <value-map>\n" + 
-        		"  	<target-value-set>\n" + 
-        		"  		<target-value facet=\"subject\">blabla1</target-value>\n" + 
-        		"  		<target-value facet=\"name\">blabla2</target-value>\n" + 
-        		"  		<target-value facet=\"temporalCoverage\">blabla3</target-value>\n" + 
-        		"  		<source-value>CollectionName</source-value>\n" + 
-        		"  	</target-value-set>\n" + 
-        		"  </value-map>\n" + 
-        		"</origin-facet>\n" + 
-        		"</value-mappings>\n" + 
-        		""));
 
+        config.setValueMappingsFile(createTmpFile("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "\n"
+                + "<value-mappings>\n"
+                + "<origin-facet name=\"name\">\n"
+                + "  <value-map>\n"
+                + "   <target-value-set>\n"
+                + "       <source-value isRegex=\"true\">.+</source-value>\n"
+                + "   </target-value-set>\n"
+                + "  </value-map>\n"
+                + "</origin-facet>\n"
+                + "<origin-facet name=\"collection\">\n"
+                + "  <value-map>\n"
+                + "  	<target-value-set>\n"
+                + "  		<target-value facet=\"subject\">blabla1</target-value>\n"
+                + "  		<target-value facet=\"name\">blabla2</target-value>\n"
+                + "  		<target-value facet=\"temporalCoverage\">blabla3</target-value>\n"
+                + "  		<source-value>CollectionName</source-value>\n"
+                + "  	</target-value-set>\n"
+                + "  </value-map>\n"
+                + "</origin-facet>\n"
+                + "</value-mappings>\n"
+                + ""));
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
         SolrInputDocument doc = docs.get(0);
-        
-        assertEquals("blabla1", getValue(doc, fieldNameService.getFieldName(FieldKey.SUBJECT)));   
+
+        assertEquals("blabla1", getValue(doc, fieldNameService.getFieldName(FieldKey.SUBJECT)));
         assertEquals("blabla2", getValue(doc, fieldNameService.getFieldName(FieldKey.NAME)));
         assertEquals("blabla3", getValue(doc, fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE)));
 
     }
-    
+
     @Test
     public void testKeepSource() throws Exception {
         String content = "";
@@ -116,35 +116,31 @@ public class ValueMappingsTest extends ImporterTestcase {
         content += "</cmd:CMD>\n";
         File sessionFile = createCmdiFile("testSession", content);
 
-        
-        config.setValueMappingsFile(createTmpFile("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
-                "\n" + 
-                "<value-mappings>\n" + 
-                "<origin-facet name=\"projectName\">\n" + 
-                "  <value-map>\n" + 
-                "   <target-value-set>\n" + 
-                "       <target-value facet=\"projectName\" removeSourceValue=\"false\">blabla2</target-value>\n" + 
-                "       <source-value isRegex=\"true\">.+</source-value>\n" + 
-                "   </target-value-set>\n" + 
-                "  </value-map>\n" + 
-                "</origin-facet>\n" + 
-                "</value-mappings>\n" + 
-                ""));
-
+        config.setValueMappingsFile(createTmpFile("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "\n"
+                + "<value-mappings>\n"
+                + "<origin-facet name=\"projectName\">\n"
+                + "  <value-map>\n"
+                + "   <target-value-set>\n"
+                + "       <target-value facet=\"projectName\" removeSourceValue=\"false\">blabla2</target-value>\n"
+                + "       <source-value isRegex=\"true\">.+</source-value>\n"
+                + "   </target-value-set>\n"
+                + "  </value-map>\n"
+                + "</origin-facet>\n"
+                + "</value-mappings>\n"
+                + ""));
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
         SolrInputDocument doc = docs.get(0);
-        
+
         Object[] values = getMultipleValues(doc, fieldNameService.getFieldName(FieldKey.PROJECT_NAME)).toArray();
         assertEquals(2, values.length);
-        
- 
+
         assertEquals("blabla2", values[0]);
         assertEquals("DiDDD-project", values[1]);
 
     }
-
 
     @Test
     public void testRegEx() throws Exception {
@@ -178,23 +174,21 @@ public class ValueMappingsTest extends ImporterTestcase {
         content += "</cmd:CMD>\n";
         File sessionFile = createCmdiFile("testSession", content);
 
-        config.setValueMappingsFile(createTmpFile("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
-        		"\n" + 
-        		"<value-mappings>\n" + 
-        		"<origin-facet name=\"projectName\">\n" + 
-        		"  <value-map>\n" + 
-        		"  	<target-value-set>\n" + 
-        		"  		<target-value facet=\"subject\">blabla1</target-value>\n" + 
-        		"  		<target-value facet=\"projectName\">blabla2</target-value>\n" + 
-        		"  		<target-value facet=\"projectName\">blabla3</target-value>\n" + 
-        		"  		<source-value isRegex=\"true\">DiDDD.+</source-value>\n" + 
-        		"  	</target-value-set>\n" + 
-        		"  </value-map>\n" + 
-        		"</origin-facet>\n" + 
-        		"</value-mappings>\n" + 
-        		""));
-
-
+        config.setValueMappingsFile(createTmpFile("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "\n"
+                + "<value-mappings>\n"
+                + "<origin-facet name=\"projectName\">\n"
+                + "  <value-map>\n"
+                + "  	<target-value-set>\n"
+                + "  		<target-value facet=\"subject\">blabla1</target-value>\n"
+                + "  		<target-value facet=\"projectName\">blabla2</target-value>\n"
+                + "  		<target-value facet=\"projectName\">blabla3</target-value>\n"
+                + "  		<source-value isRegex=\"true\">DiDDD.+</source-value>\n"
+                + "  	</target-value-set>\n"
+                + "  </value-map>\n"
+                + "</origin-facet>\n"
+                + "</value-mappings>\n"
+                + ""));
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
@@ -202,10 +196,10 @@ public class ValueMappingsTest extends ImporterTestcase {
 
         //since this facet permits only one value the value from the cmdi-file should be taken and hence those from the cfm be ignored
         assertEquals("blabla1", getValue(doc, fieldNameService.getFieldName(FieldKey.SUBJECT)));
-        
+
         Object[] values = getMultipleValues(doc, fieldNameService.getFieldName(FieldKey.PROJECT_NAME)).toArray();
         assertEquals(3, values.length);
-        
+
         assertEquals("blabla2", values[0]);
         assertEquals("blabla3", values[1]);
         assertEquals("DiDDD-project", values[2]);
@@ -243,23 +237,21 @@ public class ValueMappingsTest extends ImporterTestcase {
         content += "</cmd:CMD>\n";
         File sessionFile = createCmdiFile("testSession", content);
 
-        config.setValueMappingsFile(createTmpFile("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
-        		"\n" + 
-        		"<value-mappings>\n" + 
-        		"<origin-facet name=\"projectName\">\n" + 
-        		"  <value-map>\n" +
-        		"  <target-facet name=\"subject\" />" + 
-        		"  <target-facet name=\"projectName\" removeSourceValue=\"true\"/>" + 
-        		"  	<target-value-set>\n" + 
-        		"  		<target-value>blabla1</target-value>\n" + 
-        		"  		<source-value isRegex=\"true\">DiDDD.+</source-value>\n" + 
-        		"  	</target-value-set>\n" + 
-        		"  </value-map>\n" + 
-        		"</origin-facet>\n" + 
-        		"</value-mappings>\n" + 
-        		""));
-
-
+        config.setValueMappingsFile(createTmpFile("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "\n"
+                + "<value-mappings>\n"
+                + "<origin-facet name=\"projectName\">\n"
+                + "  <value-map>\n"
+                + "  <target-facet name=\"subject\" />"
+                + "  <target-facet name=\"projectName\" removeSourceValue=\"true\"/>"
+                + "  	<target-value-set>\n"
+                + "  		<target-value>blabla1</target-value>\n"
+                + "  		<source-value isRegex=\"true\">DiDDD.+</source-value>\n"
+                + "  	</target-value-set>\n"
+                + "  </value-map>\n"
+                + "</origin-facet>\n"
+                + "</value-mappings>\n"
+                + ""));
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
@@ -268,10 +260,9 @@ public class ValueMappingsTest extends ImporterTestcase {
         //since this facet permits only one value the value from the cmdi-file should be taken and hence those from the cfm be ignored
         assertEquals("blabla1", getValue(doc, fieldNameService.getFieldName(FieldKey.SUBJECT)));
         assertEquals("blabla1", getValue(doc, fieldNameService.getFieldName(FieldKey.PROJECT_NAME)));
-        
 
     }
-    
+
     @Test
     public void testMapToNull() throws Exception {
         String content = "";
@@ -305,21 +296,19 @@ public class ValueMappingsTest extends ImporterTestcase {
 
         File sessionFile = createCmdiFile("testSession", content);
 
-        config.setValueMappingsFile(createTmpFile("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
-                "\n" + 
-                "<value-mappings>\n" + 
-                "<origin-facet name=\"resourceClass\">\n" + 
-                "  <value-map>\n" +
-                "   <target-value-set>\n" + 
-                "       <target-value facet=\"resourceClass\" removeSourceValue=\"true\"></target-value>\n" + 
-                "       <source-value>Televisie</source-value>\n" + 
-                "   </target-value-set>\n" + 
-                "  </value-map>\n" + 
-                "</origin-facet>\n" + 
-                "</value-mappings>\n" + 
-                ""));
-
-
+        config.setValueMappingsFile(createTmpFile("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "\n"
+                + "<value-mappings>\n"
+                + "<origin-facet name=\"resourceClass\">\n"
+                + "  <value-map>\n"
+                + "   <target-value-set>\n"
+                + "       <target-value facet=\"resourceClass\" removeSourceValue=\"true\"></target-value>\n"
+                + "       <source-value>Televisie</source-value>\n"
+                + "   </target-value-set>\n"
+                + "  </value-map>\n"
+                + "</origin-facet>\n"
+                + "</value-mappings>\n"
+                + ""));
 
         List<SolrInputDocument> docs = importData(sessionFile);
 
@@ -327,8 +316,6 @@ public class ValueMappingsTest extends ImporterTestcase {
 
         //since this facet permits only one value the value from the cmdi-file should be taken and hence those from the cfm be ignored
         assertEquals(null, getValue(doc, fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS)));
-
-        
 
     }
 
@@ -348,14 +335,14 @@ public class ValueMappingsTest extends ImporterTestcase {
     }
 
     private List<SolrInputDocument> importData(File rootFile) throws Exception {
-        
-         /* Read configuration in ImporterTestCase.setup and change the setup to
+
+        /* Read configuration in ImporterTestCase.setup and change the setup to
          * suit the test. */
-         
         modifyConfig(rootFile);
 
         final DummySolrBridgeImpl solrBridge = new DummySolrBridgeImpl();
-        MetadataImporter importer = new MetadataImporter(config, languageCodeUtils, solrBridge) {
+        final ResourceAvailabilityStatusChecker availabilityChecker = new DummyResourceAvailabilityStatusChecker();
+        MetadataImporter importer = new MetadataImporter(config, languageCodeUtils, solrBridge, availabilityChecker) {
             /*
              * Because in the test, the solr server is not assumed to be 
              * available, override the importer's class startImport method by
@@ -390,11 +377,10 @@ public class ValueMappingsTest extends ImporterTestcase {
                                         + " because it is too large.");
                             } else {
                                 LOG.debug("PROCESSING FILE: {}", file.getAbsolutePath());
-                                
-                                 /* Anticipate on the solr exception that will
+
+                                /* Anticipate on the solr exception that will
                                  * never by raised because sendDocs is overriden
                                  * in a suitable way. */
-                                 
                                 try {
                                     getRecordProcessor().importRecord(file, Optional.of(dataRoot), Optional.empty(), Optional.empty());
                                 } catch (DocumentStoreException ex) {
@@ -424,9 +410,7 @@ public class ValueMappingsTest extends ImporterTestcase {
         dataRoot.setPrefix("http://example.com");
         config.setDataRoots(Collections.singletonList(dataRoot));
         config.setFacetConceptsFile(ImporterTestcase.getTestFacetConceptFilePath());
-        
-    }
-    
 
+    }
 
 }
