@@ -1,13 +1,19 @@
 package eu.clarin.cmdi.vlo.importer;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.internal.MongoClientImpl;
 import eu.clarin.cmdi.rasa.helpers.RasaFactory;
+import eu.clarin.cmdi.rasa.helpers.impl.ACDHCheckedLinkFilter;
 import eu.clarin.cmdi.rasa.helpers.impl.ACDHRasaFactory;
+import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
+import eu.clarin.cmdi.rasa.linkResources.impl.ACDHCheckedLinkResource;
+import eu.clarin.cmdi.rasa.links.CheckedLink;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -64,6 +70,7 @@ import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridge;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridgeImpl;
 import java.net.SocketTimeoutException;
+import java.net.URI;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -130,21 +137,19 @@ public class MetadataImporter {
         }
     }
 
-    //new RasaResourceAvailabilityStatusChecker(
-    //    DefaultRasaFactoryFactory.createDefaultRasaFactory(config).getCheckedLinkResource())
     private static class DefaultResourceAvailabilityFactory {
 
         static ResourceAvailabilityStatusChecker createDefaultResourceAvailabilityStatusChecker(VloConfig config) {
+            final String mongoConnectionString = config.getLinkCheckerMongoConnectionString();
+            final String mongoDbName = config.getLinkCheckerMongoDbName();
 
-            if (false) {
-
-                final String mongoConnectionString = "mongoConnectionString";
-                final String mongoDbName = "linkChecker";
-                //TODO: config.getLinkCheckerMongoDbName()
-                //TODO: config.getLinkCheckerMongoConnectionString()
+            if (!Strings.isNullOrEmpty(mongoConnectionString) && !Strings.isNullOrEmpty(mongoDbName)) {
+                LOG.debug("Connecting to Mongo database '{}' for link checker information", mongoDbName);
                 final MongoClient mongoClient = MongoClients.create(mongoConnectionString);
-                final ACDHRasaFactory factory = new ACDHRasaFactory(mongoClient, mongoDbName);
-                return new RasaResourceAvailabilityStatusChecker(factory.getCheckedLinkResource());
+                final MongoDatabase database = mongoClient.getDatabase(mongoDbName);
+                final ACDHRasaFactory factory = new ACDHRasaFactory(database);
+                final ACDHCheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
+                return new RasaResourceAvailabilityStatusChecker(checkedLinkResource);
             } else {
                 LOG.warn("No mongo configuration - installing a NOOP availability checker. Availability status will NOT be checked!");
                 return new NoopResourceAvailabilityStatusChecker();
