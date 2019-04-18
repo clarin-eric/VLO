@@ -27,6 +27,9 @@
         <vloconfig.solrUserReadOnlyPass>PASS_READ_ONLY</vloconfig.solrUserReadOnlyPass>
         <vloconfig.solrUserReadWrite>user_rw</vloconfig.solrUserReadWrite>
         <vloconfig.solrUserReadWritePass>PASS_READ/WRITE</vloconfig.solrUserReadWritePass>
+        <!-- link checker database connection -->
+        <vloconfig.linkCheckerMongoDbName>linkchecker</vloconfig.linkCheckerMongoDbName>
+        <vloconfig.linkCheckerMongoConnectionString>mongo:test123</vloconfig.linkCheckerMongoConnectionString>
         <!-- external service URLs -->
         <vloconfig.conceptRegistryUrl>https://concepts.clarin.eu/ccr/api/find-concepts</vloconfig.conceptRegistryUrl>
         <vloconfig.vocabularyRegistryUrl>http://clavas.clarin.eu/clavas/public/api/find-concepts</vloconfig.vocabularyRegistryUrl>
@@ -34,6 +37,7 @@
         <vloconfig.federatedContentSearchUrl>https://spraakbanken.gu.se/ws/fcs/2.0/aggregator/</vloconfig.federatedContentSearchUrl>
         <vloconfig.lrSwitchboardBaseUrl>https://switchboard.clarin.eu/</vloconfig.lrSwitchboardBaseUrl>        
         <vloconfig.vcrSubmitEndpoint>https://clarin.ids-mannheim.de/vcr/service/submit</vloconfig.vcrSubmitEndpoint>
+        
     </properties>
     
     <build>

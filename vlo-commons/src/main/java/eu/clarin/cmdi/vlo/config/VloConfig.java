@@ -21,7 +21,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * @author keeloo, twagoo
  */
 /**
- * @author @author Wolfgang Walter SAUER (wowasa) &lt;wolfgang.sauer@oeaw.ac.at&gt;
+ * @author @author Wolfgang Walter SAUER (wowasa)
+ * &lt;wolfgang.sauer@oeaw.ac.at&gt;
  *
  */
 @XmlRootElement(name = "VloConfig")
@@ -87,7 +88,7 @@ public class VloConfig {
     private String licenseURIMapUrl;
 
     private String licenseTypeMapUrl;
-    
+
     private String valueMappingsFile = "";
 
     private String countryComponentUrl = "";
@@ -97,8 +98,6 @@ public class VloConfig {
     private String language3LetterCodeComponentUrl = "";
 
     private String silToISO639CodesUrl = "";
-    
-
 
     // services
     @XmlElement(name = "FederatedContentSearchUrl")
@@ -138,15 +137,17 @@ public class VloConfig {
     private int fileProcessingThreads = 2;
 
     private int solrThreads = 2;
-    
-    
-    @XmlJavaTypeAdapter(XmlFieldAdapter.class)
-    private Map<String,String> fields;
-    
-    @XmlJavaTypeAdapter(XmlFieldAdapter.class)
-    @XmlElement(name="deprecatedFields")
-    private Map<String,String> deprecatedFields;
 
+    private String linkCheckerMongoDbName;
+    
+    private String linkCheckerMongoConnectionString;
+
+    @XmlJavaTypeAdapter(XmlFieldAdapter.class)
+    private Map<String, String> fields;
+
+    @XmlJavaTypeAdapter(XmlFieldAdapter.class)
+    @XmlElement(name = "deprecatedFields")
+    private Map<String, String> deprecatedFields;
 
     /**
      * A set of fields to be excluded from display<br><br>
@@ -350,7 +351,7 @@ public class VloConfig {
         solrTimeOut = param;
     }
 
-        /**
+    /**
      * @return the solrUserReadOnly
      */
     public String getSolrUserReadOnly() {
@@ -816,7 +817,6 @@ public class VloConfig {
      *
      * @return the value
      */
-    
     public String getFederatedContentSearchUrl() {
         return federatedContentSearchUrl;
     }
@@ -844,21 +844,20 @@ public class VloConfig {
     public List<String> getFacetFieldKeys() {
         return this.facetField;
     }
-    
+
     /**
      * @return List of resolved field-names
      */
     public List<String> getFacetFieldNames() {
         return this.facetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
     }
-    
+
     /**
      * @return Set of field-keys
      */
     public Set<String> getPrimaryFacetFieldKeys() {
         return this.primaryFacetField;
     }
-
 
     /**
      * @return Set of resolved field-names
@@ -910,7 +909,7 @@ public class VloConfig {
     public void setFacetFieldKeys(List<String> param) {
         facetField = param;
     }
-    
+
     /**
      * @return Collection of field-keys
      */
@@ -946,14 +945,13 @@ public class VloConfig {
     public void setCollectionFacet(String collectionFacet) {
         this.collectionFacet = collectionFacet;
     }
-    
+
     /**
      * @return Set of field-keys
      */
     public Set<String> getIgnoredFieldKeys() {
         return this.ignoredField;
     }
-
 
     /**
      * @return Set of resolved field-names
@@ -965,7 +963,7 @@ public class VloConfig {
     public void setIgnoredFieldKeys(Set<String> ignoredFields) {
         this.ignoredField = ignoredFields;
     }
-    
+
     /**
      * @return Set of field-keys
      */
@@ -1302,29 +1300,28 @@ public class VloConfig {
     public void setSolrThreads(int solrThreads) {
         this.solrThreads = solrThreads;
     }
-    
-    
+
     public String getValueMappingsFile() {
-    	return this.valueMappingsFile;
-    }
-    
-    public void setValueMappingsFile(String valueMappingsFile){
-    	this.valueMappingsFile = valueMappingsFile;
+        return this.valueMappingsFile;
     }
 
-	/**
-	 * @return the fields
-	 */
-	public Map<String, String> getFields() {
-		return fields;
-	}
+    public void setValueMappingsFile(String valueMappingsFile) {
+        this.valueMappingsFile = valueMappingsFile;
+    }
 
-	/**
-	 * @param fields the fields to set
-	 */
-	public void setFields(Map<String, String> fields) {
-		this.fields = fields;
-	}
+    /**
+     * @return the fields
+     */
+    public Map<String, String> getFields() {
+        return fields;
+    }
+
+    /**
+     * @param fields the fields to set
+     */
+    public void setFields(Map<String, String> fields) {
+        this.fields = fields;
+    }
 
     /**
      * @return the dFields
@@ -1339,4 +1336,22 @@ public class VloConfig {
     public void setDeprecatedFields(Map<String, String> deprecatedFields) {
         this.deprecatedFields = deprecatedFields;
     }
+
+    public String getLinkCheckerMongoDbName() {
+        return linkCheckerMongoDbName;
+    }
+
+    public void setLinkCheckerMongoDbName(String linkCheckerMongoDbName) {
+        this.linkCheckerMongoDbName = linkCheckerMongoDbName;
+    }
+
+    public String getLinkCheckerMongoConnectionString() {
+        return linkCheckerMongoConnectionString;
+    }
+
+    public void setLinkCheckerMongoConnectionString(String linkCheckerMongoConnectionString) {
+        this.linkCheckerMongoConnectionString = linkCheckerMongoConnectionString;
+    }
+    
+    
 }
