@@ -208,6 +208,7 @@
 			<xs:enumeration value="NATIONAL_PROJECT" />
 			<xs:enumeration value="RESOURCE_CLASS" />
 			<xs:enumeration value="RESOURCE" />
+			<xs:enumeration value="RESOURCE_AVAILABILITY_SCORE" />
 			<xs:enumeration value="SELF_LINK" />
 			<xs:enumeration value="ID" />
 			<xs:enumeration value="HARVESTER_ROOT" />

@@ -120,6 +120,7 @@
         <field key="OAI_ENDPOINT_URI">_oaiEndpointURI</field>
         <field key="SIGNATURE">_signature</field>
         <field key="RECORD_PID">recordPid</field>
+        <field key="RESOURCE_AVAILABILITY_SCORE">_resourceAvailabilityScore</field>
     </fields>
 
     <deprecatedFields>
@@ -202,6 +203,7 @@
         <technicalField>HARVESTER_ROOT</technicalField>
         <technicalField>HIERARCHY_WEIGHT</technicalField>
         <technicalField>HAS_PART_COUNT</technicalField>
+        <technicalField>RESOURCE_AVAILABILITY_SCORE</technicalField>
     </technicalFields>
 
     <!-- This defines the availability levels shown in the web app and their 
