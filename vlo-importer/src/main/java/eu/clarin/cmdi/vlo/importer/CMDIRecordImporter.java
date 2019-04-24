@@ -260,28 +260,22 @@ public class CMDIRecordImporter<T> {
                 cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FORMAT), mimeType, true);
             }
 
-            final String linkStatus = createLinkStatusValue(linkStatusMap, resource);
-            final ResourceInfo resourceInfo = new ResourceInfo(resource.getResourceName(), mimeType, linkStatus);
+            final ResourceInfo resourceInfo = createResourceInfo(linkStatusMap, resource, mimeType);
 
             cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE), resourceInfo.toJson(objectMapper), false);
         }
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size(), false);
     }
 
-    /**
-     * Creates a string representing link status, to be embedded in the link
-     * representation in the index
-     *
-     * @param linkStatusMap
-     * @param resource
-     * @return
-     */
-    private String createLinkStatusValue(final Map<URI, CheckedLink> linkStatusMap, Resource resource) {
+    private ResourceInfo createResourceInfo(final Map<URI, CheckedLink> linkStatusMap, Resource resource, String mimeType) {
+        //check link status
         final CheckedLink linkStatus = linkStatusMap.get(URI.create(resource.getResourceName()));
-        if (linkStatus != null) {
-            return Integer.toString(linkStatus.getStatus());
+        if (linkStatus == null) {
+            // no link status information to include
+            return new ResourceInfo(resource.getResourceName(), mimeType, null, null);
+        } else {
+            return new ResourceInfo(resource.getResourceName(), mimeType, Integer.toString(linkStatus.getStatus()), linkStatus.getTimestamp());
         }
-        return null;
     }
 
     /**

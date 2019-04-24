@@ -35,12 +35,14 @@ public class ResourceInfo {
     private final String url;
     private final String type;
     private final String status;
+    private final Long lastChecked;
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public ResourceInfo(@JsonProperty("url") String url, @JsonProperty("type") String type, @JsonProperty("status") String status) {
+    public ResourceInfo(@JsonProperty("url") String url, @JsonProperty("type") String type, @JsonProperty("status") String status, @JsonProperty("lastChecked") Long lastChecked) {
         this.url = url;
         this.type = type;
         this.status = status;
+        this.lastChecked = lastChecked;
     }
 
     /**
@@ -70,9 +72,17 @@ public class ResourceInfo {
         return url;
     }
 
+    /**
+     * 
+     * @return timestamp of last availability check
+     */
+    public Long getLastChecked() {
+        return lastChecked;
+    }
+
     @Override
     public String toString() {
-        return "ResourceInfo{" + "url=" + url + ", type=" + type + ", status=" + status + '}';
+        return "ResourceInfo{" + "url=" + url + ", type=" + type + ", status=" + status + ", lastChecked=" + lastChecked + '}';
     }
 
     public String toJson(ObjectMapper objectMapper) {
@@ -88,7 +98,7 @@ public class ResourceInfo {
         if (Strings.isNullOrEmpty(json)) {
             return null;
         }
-        
+
         try {
             return objectMapper.readValue(json, ResourceInfo.class);
         } catch (IOException ex) {

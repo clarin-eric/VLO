@@ -17,6 +17,9 @@
 package eu.clarin.cmdi.vlo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -30,10 +33,12 @@ public class ResourceInfoTest {
     private final static String JSON = "{"
             + "\"url\": \"urlValue\","
             + "\"type\": \"typeValue\","
-            + "\"status\":\"statusValue\""
+            + "\"status\":\"statusValue\","
+            + "\"lastChecked\":1580558400000"
             + "}";
 
-    private final static ResourceInfo RESOURCE_INFO = new ResourceInfo("urlValue", "typeValue", "statusValue");
+    private final static long LAST_CHECKED_TIME = 1580558400000L;
+    private final static ResourceInfo RESOURCE_INFO = new ResourceInfo("urlValue", "typeValue", "statusValue", LAST_CHECKED_TIME);
 
     private ObjectMapper objectMapper;
 
@@ -52,6 +57,8 @@ public class ResourceInfoTest {
         assertTrue(result.contains("typeValue"));
         assertTrue(result.contains("\"status\":"));
         assertTrue(result.contains("statusValue"));
+        assertTrue(result.contains("\"lastChecked\""));
+        assertTrue(result.contains(Long.toString(LAST_CHECKED_TIME)));
     }
 
     @Test
@@ -60,6 +67,7 @@ public class ResourceInfoTest {
         assertEquals(RESOURCE_INFO.getUrl(), result.getUrl());
         assertEquals(RESOURCE_INFO.getType(), result.getType());
         assertEquals(RESOURCE_INFO.getStatus(), result.getStatus());
+        assertEquals(RESOURCE_INFO.getLastChecked(), result.getLastChecked());
     }
 
 }
