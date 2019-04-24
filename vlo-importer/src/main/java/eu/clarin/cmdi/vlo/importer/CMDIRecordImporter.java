@@ -269,13 +269,12 @@ public class CMDIRecordImporter<T> {
 
     private ResourceInfo createResourceInfo(final Map<URI, CheckedLink> linkStatusMap, Resource resource, String mimeType) {
         //check link status
-        final CheckedLink linkStatus = linkStatusMap.get(URI.create(resource.getResourceName()));
-        if (linkStatus == null) {
-            // no link status information to include
-            return new ResourceInfo(resource.getResourceName(), mimeType, null, null);
-        } else {
-            return new ResourceInfo(resource.getResourceName(), mimeType, Integer.toString(linkStatus.getStatus()), linkStatus.getTimestamp());
-        }
+        final Optional<CheckedLink> linkStatus = Optional.ofNullable(linkStatusMap.get(URI.create(resource.getResourceName())));
+        return new ResourceInfo(resource.getResourceName(), mimeType,
+                linkStatus.map(l -> Integer.toString(l.getStatus())).orElse(null),
+                linkStatus.map(l -> l.getTimestamp()).orElse(null)
+        );
+
     }
 
     /**
