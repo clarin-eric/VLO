@@ -105,6 +105,15 @@ public class AvailabilityScoreAccumulatorTest {
 
     @Test
     public void testCalculateAvailabilityScoreSomeUnavailable() {
+        addStatus(400, 404, 200, 301);
+        assert map.size() == 4;
+        
+        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map);
+        assertEquals(ResourceAvailabilityScore.SOME_UNAVAILABLE, result);
+    }
+
+    @Test
+    public void testCalculateAvailabilityScoreSomeUnavailableWithRestricted() {
         addStatus(400, 403, 200, 301);
         assert map.size() == 4;
         
