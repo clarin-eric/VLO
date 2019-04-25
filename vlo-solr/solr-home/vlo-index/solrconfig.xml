@@ -787,8 +787,12 @@
                 <!-- 
                 boost by hierarchy weight (reverse order because lower numbers
                 indicate a higher level), then by number of parts (differentiate
-                up till 50), then by recency of import -->
-                rord(_hierarchyWeight) _hasPartCountWeight^.2  rord(_daysSinceLastSeen)^.05
+                up till 50), then by recency of import 
+                
+                boost by resource availability score (sourced at import from link checker)
+                _resourceAvailabilityScore [-100, 100]
+                -->
+                rord(_hierarchyWeight) _hasPartCountWeight^.2  rord(_daysSinceLastSeen)^.05 linear(_resourceAvailabilityScore,.1,0)^0.5
                 <!-- TODO: prefer CLARIN records over non-CLARIN? -->
             </str>
         
