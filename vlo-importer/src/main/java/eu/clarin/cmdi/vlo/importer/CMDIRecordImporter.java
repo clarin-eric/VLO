@@ -21,6 +21,7 @@ import com.google.common.collect.Sets;
 import eu.clarin.cmdi.rasa.links.CheckedLink;
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
 import eu.clarin.cmdi.vlo.ResourceInfo;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
@@ -264,6 +265,8 @@ public class CMDIRecordImporter<T> {
 
             cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE), resourceInfo.toJson(objectMapper), false);
         }
+
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_AVAILABILITY_SCORE), calculateAvailabilityScore(linkStatusMap).getScoreValue(), false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size(), false);
     }
 
@@ -275,6 +278,10 @@ public class CMDIRecordImporter<T> {
                 linkStatus.map(l -> l.getTimestamp()).orElse(null)
         );
 
+    }
+
+    private ResourceAvailabilityScore calculateAvailabilityScore(Map<URI, CheckedLink> linkStatusMap) {
+        return ResourceAvailabilityScore.UNKNOWN;
     }
 
     /**
