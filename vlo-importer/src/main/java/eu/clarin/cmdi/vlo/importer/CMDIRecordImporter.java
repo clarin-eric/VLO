@@ -44,6 +44,7 @@ import java.util.Collection;
 import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Handles a single record in the import process
@@ -54,6 +55,7 @@ import java.util.Optional;
 public class CMDIRecordImporter<T> {
 
     protected final static Logger LOG = LoggerFactory.getLogger(CMDIRecordImporter.class);
+    private final AvailabilityScoreAccumulator availabilityScoreAccumulator = new AvailabilityScoreAccumulator();
     private final FieldNameServiceImpl fieldNameService;
     private final ResourceAvailabilityStatusChecker availabilityChecker;
     private final CMDIDataProcessor<T> processor;
@@ -266,7 +268,9 @@ public class CMDIRecordImporter<T> {
             cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE), resourceInfo.toJson(objectMapper), false);
         }
 
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_AVAILABILITY_SCORE), calculateAvailabilityScore(linkStatusMap).getScoreValue(), false);
+        final ResourceAvailabilityScore availabilityScore = availabilityScoreAccumulator.calculateAvailabilityScore(linkStatusMap);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_AVAILABILITY_SCORE), availabilityScore.getScoreValue(), false);
+        
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size(), false);
     }
 
@@ -278,10 +282,6 @@ public class CMDIRecordImporter<T> {
                 linkStatus.map(l -> l.getTimestamp()).orElse(null)
         );
 
-    }
-
-    private ResourceAvailabilityScore calculateAvailabilityScore(Map<URI, CheckedLink> linkStatusMap) {
-        return ResourceAvailabilityScore.UNKNOWN;
     }
 
     /**
