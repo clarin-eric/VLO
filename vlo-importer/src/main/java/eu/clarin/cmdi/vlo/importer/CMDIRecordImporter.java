@@ -278,8 +278,8 @@ public class CMDIRecordImporter<T> {
         //check link status
         final Optional<CheckedLink> linkStatus = Optional.ofNullable(linkStatusMap.get(URI.create(resource.getResourceName())));
         return new ResourceInfo(resource.getResourceName(), mimeType,
-                linkStatus.map(l -> Integer.toString(l.getStatus())).orElse(null),
-                linkStatus.map(l -> l.getTimestamp()).orElse(null)
+                linkStatus.map(CheckedLink::getStatus).orElse(null),
+                linkStatus.map(CheckedLink::getTimestamp).orElse(null)
         );
 
     }

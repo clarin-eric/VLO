@@ -33,12 +33,12 @@ public class ResourceInfoTest {
     private final static String JSON = "{"
             + "\"url\": \"urlValue\","
             + "\"type\": \"typeValue\","
-            + "\"status\":\"statusValue\","
+            + "\"status\":999,"
             + "\"lastChecked\":1580558400000"
             + "}";
 
     private final static long LAST_CHECKED_TIME = 1580558400000L;
-    private final static ResourceInfo RESOURCE_INFO = new ResourceInfo("urlValue", "typeValue", "statusValue", LAST_CHECKED_TIME);
+    private final static ResourceInfo RESOURCE_INFO = new ResourceInfo("urlValue", "typeValue", 999, LAST_CHECKED_TIME);
 
     private ObjectMapper objectMapper;
 
@@ -56,7 +56,7 @@ public class ResourceInfoTest {
         assertTrue(result.contains("\"type\":"));
         assertTrue(result.contains("typeValue"));
         assertTrue(result.contains("\"status\":"));
-        assertTrue(result.contains("statusValue"));
+        assertTrue(result.contains("999"));
         assertTrue(result.contains("\"lastChecked\""));
         assertTrue(result.contains(Long.toString(LAST_CHECKED_TIME)));
     }
