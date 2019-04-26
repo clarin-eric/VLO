@@ -27,12 +27,14 @@ public class ResourceInfo implements Serializable {
     private final String href;
     private final String fileName;
     private final String mimeType;
+    private final Integer status;
     private final ResourceType resourceType;
 
-    public ResourceInfo(String href, String fileName, String mimeType, ResourceType resourceType) {
+    public ResourceInfo(String href, String fileName, String mimeType, Integer status, ResourceType resourceType) {
         this.href = href;
         this.fileName = fileName;
         this.mimeType = mimeType;
+        this.status = status;
         this.resourceType = resourceType;
     }
 
@@ -50,6 +52,10 @@ public class ResourceInfo implements Serializable {
 
     public ResourceType getResourceType() {
         return resourceType;
+    }
+
+    public Integer getStatus() {
+        return status;
     }
 
 }

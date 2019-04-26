@@ -41,6 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             </td>
                             <td class="recordresourcename">
                                 <wicket:container wicket:id="pidLabel">[HDL]</wicket:container>
+                                <a wicket:id="availabilityWarningDetailsLink"><span class="badge badge-warning"><span wicket:id="unavailableIcon" class="glyphicon glyphicon-exclamation-sign"></span><span wicket:id="restrictedIcon" class="glyphicon glyphicon-exclamation-sign"></span></span></a>
                                 <a wicket:id="showResource" class="resourcelink">
                                     <wicket:container wicket:id="fileName">resource.txt</wicket:container>
                                 </a>
@@ -67,6 +68,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <td colspan="4">
                                 <p>Mime type: <span wicket:id="mimeType">application/msword</span></p>
                                 <p>Link: <span wicket:id="href">location</span></p>
+                                <p><span class="glyphicon glyphicon-remove"></span> Result of automatic link checking: <strong>resource unavailable (404 Not Found)</strong>. Last check on 24 April 2019 08:14. The resource may not be available at this location.</p>
                             </td>
                         </tr>
                     </wicket:container>

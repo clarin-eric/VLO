@@ -66,12 +66,12 @@ public class ResourceTypeCountingServiceImplTest {
             {
                 exactly(6).of(converter).getResourceInfo(with(any(String.class)));
                 will(onConsecutiveCalls(
-                        returnValue(new ResourceInfo("href1", "fileName1", "video/mpeg", ResourceType.VIDEO)),
-                        returnValue(new ResourceInfo("href2", "fileName2", "video/mpeg", ResourceType.VIDEO)),
-                        returnValue(new ResourceInfo("href3", "fileName3", "audio/ogg", ResourceType.AUDIO)),
-                        returnValue(new ResourceInfo("href4", "fileName4", "audio/ogg", ResourceType.TEXT)),
-                        returnValue(new ResourceInfo("href5", "fileName5", "audio/ogg", ResourceType.ANNOTATION)),
-                        returnValue(new ResourceInfo("href6", "fileName6", "audio/ogg", ResourceType.OTHER))
+                        returnValue(new ResourceInfo("href1", "fileName1", "video/mpeg", 0, ResourceType.VIDEO)),
+                        returnValue(new ResourceInfo("href2", "fileName2", "video/mpeg", 0, ResourceType.VIDEO)),
+                        returnValue(new ResourceInfo("href3", "fileName3", "audio/ogg", 0, ResourceType.AUDIO)),
+                        returnValue(new ResourceInfo("href4", "fileName4", "audio/ogg", 0, ResourceType.TEXT)),
+                        returnValue(new ResourceInfo("href5", "fileName5", "audio/ogg", 0, ResourceType.ANNOTATION)),
+                        returnValue(new ResourceInfo("href6", "fileName6", "audio/ogg", 0, ResourceType.OTHER))
                 ));
             }
         });

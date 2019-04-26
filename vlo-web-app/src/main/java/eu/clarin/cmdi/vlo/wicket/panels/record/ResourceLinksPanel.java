@@ -68,6 +68,7 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
+import java.util.Optional;
 
 /**
  * Panel that shows all resources represented by a collection of resource
@@ -248,7 +249,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             };
 
             // toggle details option
-            columns.add(new ResourceDetailsToggleLink("details", new PropertyModel<String>(resourceInfoModel, "href"))
+            columns.add(new ResourceDetailsToggleLink("details", new PropertyModel<>(resourceInfoModel, "href"))
                     .add(new WebMarkupContainer("show").add(BooleanVisibilityBehavior.visibleOnFalse(itemDetailsShownModel)))
                     .add(new WebMarkupContainer("hide").add(BooleanVisibilityBehavior.visibleOnTrue(itemDetailsShownModel)))
             );
@@ -261,6 +262,29 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             );
 
             columns.add(createOptionsDropdown(linkModel, resourceInfoModel));
+
+            final IModel<Boolean> availabilityWarningModel = new AbstractReadOnlyModel<Boolean>() {
+                @Override
+                public Boolean getObject() {
+                    final Optional<Integer> status = Optional.ofNullable(resourceInfoModel.getObject().getStatus());
+                    return status.map((s) -> (s >= 400)).orElse(false);
+                }
+            };
+            final IModel<Boolean> restrictedAccessWarningModel = new AbstractReadOnlyModel<Boolean>() {
+                @Override
+                public Boolean getObject() {
+                    final Optional<Integer> status = Optional.ofNullable(resourceInfoModel.getObject().getStatus());
+                    return status.map((s) -> (s == 401 || s == 403)).orElse(false);
+                }
+            };
+            final Component availabilityWarningDetailsLink = new ResourceDetailsToggleLink("availabilityWarningDetailsLink", new PropertyModel<>(resourceInfoModel, "href"))
+                    .add(new WebMarkupContainer("restrictedIcon")
+                            .add(BooleanVisibilityBehavior.visibleOnTrue(restrictedAccessWarningModel)))
+                    .add(new WebMarkupContainer("unavailableIcon")
+                            .add(BooleanVisibilityBehavior.visibleOnFalse(restrictedAccessWarningModel)))
+                    .add(BooleanVisibilityBehavior.visibleOnTrue(availabilityWarningModel));
+
+            columns.add(availabilityWarningDetailsLink);
         }
 
         protected Component createOptionsDropdown(final IModel<String> linkModel, final ResourceInfoModel resourceInfoModel) {

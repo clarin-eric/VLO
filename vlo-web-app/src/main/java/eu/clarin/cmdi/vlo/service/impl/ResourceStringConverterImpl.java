@@ -61,13 +61,13 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
     @Override
     public ResourceInfo getResourceInfo(String resourceString) {
         if (resourceString == null) {
-            return new eu.clarin.cmdi.vlo.pojo.ResourceInfo(null, null, null, ResourceType.OTHER);
+            return new eu.clarin.cmdi.vlo.pojo.ResourceInfo(null, null, null, null, ResourceType.OTHER);
         } else {
             // serialize resource string to find href and mime type
             eu.clarin.cmdi.vlo.ResourceInfo resourceInfo = eu.clarin.cmdi.vlo.ResourceInfo.fromJson(objectMapper, resourceString);
             if (resourceInfo == null) {
                 logger.warn("Resource string could not be parsed: {}", resourceString);
-                return new eu.clarin.cmdi.vlo.pojo.ResourceInfo(null, null, null, ResourceType.OTHER);
+                return new eu.clarin.cmdi.vlo.pojo.ResourceInfo(null, null, null, null, ResourceType.OTHER);
             }
             final String mimeType = resourceInfo.getType();
             final String href = resourceInfo.getUrl();
@@ -86,6 +86,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
                     href,
                     (fileName == null || fileName.isEmpty()) ? href : fileName,
                     mimeType,
+                    resourceInfo.getStatus(),
                     resourceType);
         }
     }
