@@ -68,7 +68,10 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Optional;
+import org.apache.wicket.AttributeModifier;
 
 /**
  * Panel that shows all resources represented by a collection of resource
@@ -254,13 +257,6 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                     .add(new WebMarkupContainer("hide").add(BooleanVisibilityBehavior.visibleOnTrue(itemDetailsShownModel)))
             );
 
-            item.add(new WebMarkupContainer("detailsColumns")
-                    .add(new Label("mimeType"))
-                    .add(new Label("href"))
-                    .add(BooleanVisibilityBehavior.visibleOnTrue(itemDetailsShownModel))
-                    .add(new EvenOddClassAppender(itemIndexModel))
-            );
-
             columns.add(createOptionsDropdown(linkModel, resourceInfoModel));
 
             final IModel<Boolean> availabilityWarningModel = new AbstractReadOnlyModel<Boolean>() {
@@ -282,9 +278,59 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                             .add(BooleanVisibilityBehavior.visibleOnTrue(restrictedAccessWarningModel)))
                     .add(new WebMarkupContainer("unavailableIcon")
                             .add(BooleanVisibilityBehavior.visibleOnFalse(restrictedAccessWarningModel)))
-                    .add(BooleanVisibilityBehavior.visibleOnTrue(availabilityWarningModel));
+                    .add(BooleanVisibilityBehavior.visibleOnTrue(availabilityWarningModel))
+                    .add(new AttributeModifier("title", new AbstractReadOnlyModel() {
+                        @Override
+                        public Object getObject() {
+                            if (restrictedAccessWarningModel.getObject()) {
+                                return "Authentication and/or special permissions may be required in order to access the resource. Click to see details.";
+                            } else {
+                                return "The resource may not be available at this location. Click to see details.";
+                            }
+                        }
+                    }));
 
             columns.add(availabilityWarningDetailsLink);
+
+            item.add(new WebMarkupContainer("detailsColumns")
+                    .add(new Label("mimeType"))
+                    .add(new Label("href"))
+                    .add(new WebMarkupContainer("availableStatusDetails")
+                            .add(BooleanVisibilityBehavior.visibleOnFalse(availabilityWarningModel)))
+                    .add(new Label("unavailableStatusDetail", new AbstractReadOnlyModel<String>() {
+                        @Override
+                        public String getObject() {
+                            //TODO: nicer represenation of status
+                            return String.format("resource unavailable (status code %s).", resourceInfoModel.getObject().getStatus());
+                        }
+
+                    })
+                            .add(BooleanVisibilityBehavior.visibleOnTrue(availabilityWarningModel)))
+                    .add(new Label("unavailableStatusMessage", new AbstractReadOnlyModel<String>() {
+                        @Override
+                        public String getObject() {
+                            if (restrictedAccessWarningModel.getObject()) {
+                                return "Authentication and/or special permissions may be required in order to access the resource at this location.";
+                            } else {
+                                return "The resource may not be available at this location.";
+                            }
+                        }
+
+                    })
+                            .add(BooleanVisibilityBehavior.visibleOnTrue(availabilityWarningModel)))
+                    .add(new Label("lastCheckTime", new AbstractReadOnlyModel<String>() {
+                        @Override
+                        public String getObject() {
+                            final Calendar calendar = Calendar.getInstance();
+                            //TODO: get last status check time from resource info
+                            calendar.setTimeInMillis(0);
+                            return DateFormat.getDateTimeInstance().format(calendar.getTime());
+                        }
+
+                    }))
+                    .add(BooleanVisibilityBehavior.visibleOnTrue(itemDetailsShownModel))
+                    .add(new EvenOddClassAppender(itemIndexModel))
+            );
         }
 
         protected Component createOptionsDropdown(final IModel<String> linkModel, final ResourceInfoModel resourceInfoModel) {

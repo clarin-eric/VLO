@@ -68,7 +68,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <td colspan="4">
                                 <p>Mime type: <span wicket:id="mimeType">application/msword</span></p>
                                 <p>Link: <span wicket:id="href">location</span></p>
-                                <p><span class="glyphicon glyphicon-remove"></span> Result of automatic link checking: <strong>resource unavailable (404 Not Found)</strong>. Last check on 24 April 2019 08:14. The resource may not be available at this location.</p>
+                                <p>
+                                    Result of automatic link checking:
+                                    <strong wicket:id="unavailableStatusDetail">resource unavailable (404 Not Found)</strong>
+                                    <span wicket:id="availableStatusDetails">resource available</span>
+                                    <span wicket:id="unavailableStatusMessage">The resource may not be available at this location.</span><br />
+                                    Last check on <span wicket:id="lastCheckTime">24 April 2019 08:14</span>.
+                                </p>
                             </td>
                         </tr>
                     </wicket:container>
