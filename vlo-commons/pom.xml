@@ -150,6 +150,8 @@
                 <vloconfig.solrUserReadOnlyPass>${VLO_DOCKER_SOLR_PASSWORD_READ_ONLY}</vloconfig.solrUserReadOnlyPass>
                 <vloconfig.solrUserReadWrite>${VLO_DOCKER_SOLR_USER_READ_WRITE}</vloconfig.solrUserReadWrite>
                 <vloconfig.solrUserReadWritePass>${VLO_DOCKER_SOLR_PASSWORD_READ_WRITE}</vloconfig.solrUserReadWritePass>
+                <vloconfig.linkCheckerMongoDbName>${VLO_DOCKER_LINK_CHECKER_MONGO_DB_NAME}</vloconfig.linkCheckerMongoDbName>
+                <vloconfig.linkCheckerMongoConnectionString>${VLO_DOCKER_LINK_CHECKER_MONGO_DB_CONNECTION_STRING}</vloconfig.linkCheckerMongoConnectionString>
             </properties>
         </profile>
     </profiles>
