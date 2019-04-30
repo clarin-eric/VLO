@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.importer;
 
+import eu.clarin.cmdi.vlo.importer.linkcheck.AvailabilityScoreAccumulator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import eu.clarin.cmdi.rasa.links.CheckedLink;
