@@ -353,7 +353,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                                         if (statusCode <= 0) {
                                             return "unknown";
                                         } else {
-                                            return String.format("the resource is unavailable (%d %s).",
+                                            return String.format("the resource is unavailable (%d %s)",
                                                     statusCode,
                                                     //look up reason phrase (e.g. Not Found) for code
                                                     Optional.ofNullable(Response.Status.fromStatusCode(statusCode))
@@ -389,7 +389,23 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                         }
 
                     })
-                            .add(BooleanVisibilityBehavior.visibleOnTrue(knownAvailabilityModel)));
+                            .add(BooleanVisibilityBehavior.visibleOnTrue(knownAvailabilityModel)))
+                    .add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
+                        @Override
+                        public String getObject() {
+                            final ResourceInfo info = resourceInfoModel.getObject();
+                            if (info != null) {
+                                if (info.getAvailabilityKnown() && info.getAvailabilityWarning()) {
+                                    if (info.getRestrictedAccessWarning()) {
+                                        return "panel-warn";
+                                    } else {
+                                        return "panel-danger";
+                                    }
+                                }
+                            }
+                            return "panel-default";
+                        }
+                    }, " "));
         }
 
     }

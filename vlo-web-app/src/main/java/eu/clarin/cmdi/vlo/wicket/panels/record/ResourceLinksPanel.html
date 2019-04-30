@@ -66,16 +66,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <tr wicket:id="detailsColumns" class="details">
                             <td></td>
                             <td colspan="4">
-                                <p>Mime type: <span wicket:id="mimeType">application/msword</span></p>
-                                <p>Link: <span wicket:id="href">location</span></p>
-                                <p wicket:id="linkCheckingResult">
-                                    Result of automatic link checking:
-                                    <strong wicket:id="unavailableStatusDetail">resource unavailable (404 Not Found)</strong>
-                                    <span wicket:id="availableStatusDetails">resource available</span>
-                                    <span wicket:id="unknownStatusDetails">not checked or failed to check</span>
-                                    <span wicket:id="unavailableStatusMessage">The resource may not be available at this location.</span><br />
-                                    <wicket:enclosure>Last check: <span wicket:id="lastCheckTime">24 April 2019 08:14</span>.</wicket:enclosure>
-                                </p>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        Resource details
+                                    </div>
+                                    <div class="panel-body">
+                                        <p><strong>Mime type</strong>: <span wicket:id="mimeType">application/msword</span></p>
+                                        <p><strong>Link</strong>: <span wicket:id="href">location</span></p>
+                                        <div wicket:id="linkCheckingResult" class="panel">
+                                            <div class="panel-heading">Automatic link checking</div>
+                                            <div class="panel-body">
+                                                <wicket:enclosure>
+                                                    <p>
+                                                        <span class="glyphicon glyphicon-warning-sign"></span>
+                                                        <strong wicket:id="unavailableStatusMessage">The resource may not be available at this location.</strong>
+                                                    </p>
+                                                </wicket:enclosure>
+                                                <p>
+                                                    <strong>Result of automatic checking</strong>:
+                                                    <span wicket:id="unavailableStatusDetail">resource unavailable (404 Not Found)</span>
+                                                    <span wicket:id="availableStatusDetails">resource available</span>
+                                                    <span wicket:id="unknownStatusDetails">unchecked or failed to check</span>
+                                                </p>
+                                                <wicket:enclosure>
+                                                    <p>
+                                                        <strong>Last check</strong>: <span wicket:id="lastCheckTime">24 April 2019 08:14</span>
+                                                    </p>
+                                                </wicket:enclosure>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     </wicket:container>
