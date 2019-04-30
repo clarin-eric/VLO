@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.pojo;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 /**
  *
@@ -64,4 +65,18 @@ public class ResourceInfo implements Serializable {
         return lastCheckTimestamp;
     }
 
+    public Boolean getAvailabilityKnown() {
+        return Optional.ofNullable(getStatus())
+                .map((s) -> (s != 0)).orElse(false);
+    }
+
+    public Boolean getAvailabilityWarning() {
+        return Optional.ofNullable(getStatus())
+                .map((s) -> (s >= 400)).orElse(false);
+    }
+
+    public Boolean getRestrictedAccessWarning() {
+        return Optional.ofNullable(getStatus())
+                .map((s) -> (s == 401 || s == 403)).orElse(false);
+    }
 }

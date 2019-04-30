@@ -65,6 +65,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
@@ -73,7 +74,6 @@ import java.util.Calendar;
 import java.util.Optional;
 import javax.ws.rs.core.Response;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
  * Panel that shows all resources represented by a collection of resource
@@ -261,27 +261,8 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
             columns.add(createOptionsDropdown(linkModel, resourceInfoModel));
 
-            final IModel<Boolean> knownAvailabilityModel = new LoadableDetachableModel<Boolean>() {
-                @Override
-                public Boolean load() {
-                    final Optional<Integer> status = Optional.ofNullable(resourceInfoModel.getObject().getStatus());
-                    return status.map((s) -> (s != 0)).orElse(false);
-                }
-            };
-            final IModel<Boolean> availabilityWarningModel = new LoadableDetachableModel<Boolean>() {
-                @Override
-                public Boolean load() {
-                    final Optional<Integer> status = Optional.ofNullable(resourceInfoModel.getObject().getStatus());
-                    return status.map((s) -> (s >= 400)).orElse(false);
-                }
-            };
-            final IModel<Boolean> restrictedAccessWarningModel = new LoadableDetachableModel<Boolean>() {
-                @Override
-                public Boolean load() {
-                    final Optional<Integer> status = Optional.ofNullable(resourceInfoModel.getObject().getStatus());
-                    return status.map((s) -> (s == 401 || s == 403)).orElse(false);
-                }
-            };
+            final IModel<Boolean> availabilityWarningModel = new PropertyModel<>(resourceInfoModel, "availabilityWarning");
+            final IModel<Boolean> restrictedAccessWarningModel = new PropertyModel<>(resourceInfoModel, "restrictedAccessWarning");
             final Component availabilityWarningDetailsLink = new ResourceDetailsToggleLink("availabilityWarningDetailsLink", new PropertyModel<>(resourceInfoModel, "href"))
                     .add(new WebMarkupContainer("restrictedIcon")
                             .add(BooleanVisibilityBehavior.visibleOnTrue(restrictedAccessWarningModel)))
@@ -304,60 +285,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             item.add(new WebMarkupContainer("detailsColumns")
                     .add(new Label("mimeType"))
                     .add(new Label("href"))
-                    .add(new WebMarkupContainer("unknownStatusDetails")
-                            .add(BooleanVisibilityBehavior.visibleOnFalse(knownAvailabilityModel)))
-                    .add(new WebMarkupContainer("availableStatusDetails")
-                            .add(BooleanVisibilityBehavior.visibleOnTrue(new AbstractReadOnlyModel<Boolean>() {
-                                @Override
-                                public Boolean getObject() {
-                                    return knownAvailabilityModel.getObject() && !availabilityWarningModel.getObject();
-                                }
-                            })))
-                    .add(new Label("unavailableStatusDetail", new AbstractReadOnlyModel<String>() {
-                        @Override
-                        public String getObject() {
-                            return Optional.ofNullable(resourceInfoModel.getObject().getStatus())
-                                    .map(statusCode -> {
-                                        if (statusCode <= 0) {
-                                            return "unknown";
-                                        } else {
-                                            return String.format("the resource is unavailable (%d %s).",
-                                                    statusCode,
-                                                    //look up reason phrase (e.g. Not Found) for code
-                                                    Optional.ofNullable(Response.Status.fromStatusCode(statusCode))
-                                                            .map(Response.Status::getReasonPhrase)
-                                                            .orElse("-"));
-                                        }
-                                    })
-                                    .orElse("undetermined");
-                        }
-                    })
-                            .add(BooleanVisibilityBehavior.visibleOnTrue(availabilityWarningModel)))
-                    .add(new Label("unavailableStatusMessage", new AbstractReadOnlyModel<String>() {
-                        @Override
-                        public String getObject() {
-                            if (restrictedAccessWarningModel.getObject()) {
-                                return "Authentication and/or special permissions may be required in order to access the resource at this location.";
-                            } else {
-                                return "The resource may not be available at this location.";
-                            }
-                        }
-
-                    })
-                            .add(BooleanVisibilityBehavior.visibleOnTrue(availabilityWarningModel)))
-                    .add(new Label("lastCheckTime", new AbstractReadOnlyModel<String>() {
-                        @Override
-                        public String getObject() {
-                            Optional<Long> lastCheckTimestamp = Optional.ofNullable(resourceInfoModel.getObject().getLastCheckTimestamp());
-                            return lastCheckTimestamp.map(timestamp -> {
-                                final Calendar calendar = Calendar.getInstance();
-                                calendar.setTimeInMillis(timestamp);
-                                return DateFormat.getDateTimeInstance().format(calendar.getTime());
-                            }).orElse("unknown");
-                        }
-
-                    })
-                            .add(BooleanVisibilityBehavior.visibleOnTrue(knownAvailabilityModel)))
+                    .add(createLinkCheckingResult("linkCheckingResult", resourceInfoModel))
                     .add(BooleanVisibilityBehavior.visibleOnTrue(itemDetailsShownModel))
                     .add(new EvenOddClassAppender(itemIndexModel))
             );
@@ -401,6 +329,67 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                 }
             }
             );
+        }
+
+        private Component createLinkCheckingResult(String id, ResourceInfoModel resourceInfoModel) {
+            final IModel<Boolean> knownAvailabilityModel = new PropertyModel<>(resourceInfoModel, "availabilityKnown");
+            final IModel<Boolean> availabilityWarningModel = new PropertyModel<>(resourceInfoModel, "availabilityWarning");
+            return new WebMarkupContainer(id)
+                    .add(new WebMarkupContainer("unknownStatusDetails")
+                            .add(BooleanVisibilityBehavior.visibleOnFalse(knownAvailabilityModel)))
+                    .add(new WebMarkupContainer("availableStatusDetails")
+                            .add(BooleanVisibilityBehavior.visibleOnTrue(new AbstractReadOnlyModel<Boolean>() {
+                                @Override
+                                public Boolean getObject() {
+                                    final ResourceInfo info = resourceInfoModel.getObject();
+                                    return info.getAvailabilityKnown() && !info.getAvailabilityWarning();
+                                }
+                            })))
+                    .add(new Label("unavailableStatusDetail", new AbstractReadOnlyModel<String>() {
+                        @Override
+                        public String getObject() {
+                            return Optional.ofNullable(resourceInfoModel.getObject().getStatus())
+                                    .map(statusCode -> {
+                                        if (statusCode <= 0) {
+                                            return "unknown";
+                                        } else {
+                                            return String.format("the resource is unavailable (%d %s).",
+                                                    statusCode,
+                                                    //look up reason phrase (e.g. Not Found) for code
+                                                    Optional.ofNullable(Response.Status.fromStatusCode(statusCode))
+                                                            .map(Response.Status::getReasonPhrase)
+                                                            .orElse("-"));
+                                        }
+                                    })
+                                    .orElse("undetermined");
+                        }
+                    })
+                            .add(BooleanVisibilityBehavior.visibleOnTrue(availabilityWarningModel)))
+                    .add(new Label("unavailableStatusMessage", new AbstractReadOnlyModel<String>() {
+                        @Override
+                        public String getObject() {
+                            if (resourceInfoModel.getObject().getRestrictedAccessWarning()) {
+                                return "Authentication and/or special permissions may be required in order to access the resource at this location.";
+                            } else {
+                                return "The resource may not be available at this location.";
+                            }
+                        }
+
+                    })
+                            .add(BooleanVisibilityBehavior.visibleOnTrue(availabilityWarningModel)))
+                    .add(new Label("lastCheckTime", new AbstractReadOnlyModel<String>() {
+                        @Override
+                        public String getObject() {
+                            Optional<Long> lastCheckTimestamp = Optional.ofNullable(resourceInfoModel.getObject().getLastCheckTimestamp());
+                            return lastCheckTimestamp.map(timestamp -> {
+                                final Calendar calendar = Calendar.getInstance();
+                                calendar.setTimeInMillis(timestamp);
+                                return DateFormat.getDateTimeInstance().format(calendar.getTime());
+                            }).orElse("unknown");
+                        }
+
+                    })
+                            .add(BooleanVisibilityBehavior.visibleOnTrue(knownAvailabilityModel)));
         }
 
     }
