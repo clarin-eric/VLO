@@ -48,7 +48,7 @@ public class RasaResourceAvailabilityStatusChecker implements ResourceAvailabili
             try {
                 return Stream.of(new URI(href));
             } catch (URISyntaxException ex) {
-                logger.warn("Skipping resource link that violates URI syntax: {}", href, ex);
+                logger.warn("Skipping resource link that violates URI syntax. {}", href, ex.getMessage());
                 return Stream.empty();
             }
         }).collect(Collectors.toSet());
