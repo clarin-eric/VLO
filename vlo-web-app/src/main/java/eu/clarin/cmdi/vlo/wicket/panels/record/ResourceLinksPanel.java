@@ -397,7 +397,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                             if (info != null) {
                                 if (info.getAvailabilityKnown() && info.getAvailabilityWarning()) {
                                     if (info.getRestrictedAccessWarning()) {
-                                        return "panel-warn";
+                                        return "panel-warning";
                                     } else {
                                         return "panel-danger";
                                     }
