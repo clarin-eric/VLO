@@ -186,10 +186,41 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
     private Component createSingleResourceInfo(String id, IModel<String> linkModel) {
         final IsPidModel isPidModel = new IsPidModel(linkModel);
 
-        final WebMarkupContainer availabilityWarning = new WebMarkupContainer("availabilityWarning");
-        availabilityWarning.add(BooleanVisibilityBehavior.visibleOnTrue(new PropertyModel<>(resourceInfoModel, "availabilityWarning")));
+        final WebMarkupContainer resourceInfo = new WebMarkupContainer(id);
 
+        // Resource info for single resource (should not appear if there are more or fewer resources)
+        resourceInfo.add(new ExternalLink("resourceLink", new PIDLinkModel(ResolvingLinkModel.modelFor(resourceInfoModel, getModel())))
+                //resource type icon
+                .add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel<String>(resourceInfoModel, "resourceType"))
+                        //with type name tooltip
+                        .add(new AttributeModifier("title", new StringResourceModel("resourcetype.${resourceType}.singular", this, resourceInfoModel).setDefaultValue(new PropertyModel(resourceInfoModel, "resourceType")))))
+                //resource name below icon
+                .add(new Label("resourceName", new PropertyModel<>(resourceInfoModel, "fileName")))
+        );
+
+        resourceInfo
+                .add(new PIDLinkLabel("pidLabel", linkModel, Model.of(PIDContext.RESOURCE), PID_LABEL_TEXT_LENGTH)
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel)));
+
+        // Resource info gets async update to resolve any handle to a file name
+        resourceInfo.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
+
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                target.add(resourceInfo);
+            }
+        });
+        final AjaxFallbackLink showResourcesLink = new AjaxFallbackLink("showResources") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                switchToTab(RESOURCES_SECTION, target);
+            }
+        };
+
+        final PropertyModel<Boolean> availabilityWarningModel = new PropertyModel<>(resourceInfoModel, "availabilityWarning");
         final IModel<Boolean> restrictedAccessWarningModel = new PropertyModel<>(resourceInfoModel, "restrictedAccessWarning");
+
+        final WebMarkupContainer availabilityWarning = new WebMarkupContainer("availabilityWarning");
         availabilityWarning
                 .add(new WebMarkupContainer("restrictedIcon")
                         .add(BooleanVisibilityBehavior.visibleOnTrue(restrictedAccessWarningModel)))
@@ -206,38 +237,12 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
                     }
                 }));
 
-        final WebMarkupContainer resourceInfo = new WebMarkupContainer(id);
-
-        // Resource info for single resource (should not appear if there are more or fewer resources)
-        resourceInfo.add(new ExternalLink("resourceLink", new PIDLinkModel(ResolvingLinkModel.modelFor(resourceInfoModel, getModel())))
-                //resource type icon
-                .add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel<String>(resourceInfoModel, "resourceType"))
-                        //with type name tooltip
-                        .add(new AttributeModifier("title", new StringResourceModel("resourcetype.${resourceType}.singular", this, resourceInfoModel).setDefaultValue(new PropertyModel(resourceInfoModel, "resourceType")))))
-                //resource name below icon
-                .add(new Label("resourceName", new PropertyModel<>(resourceInfoModel, "fileName")))
-                .add(availabilityWarning)
-        );
-
-        resourceInfo
-                .add(new PIDLinkLabel("pidLabel", linkModel, Model.of(PIDContext.RESOURCE), PID_LABEL_TEXT_LENGTH)
-                        .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel)));
-
-        // Resource info gets async update to resolve any handle to a file name
-        resourceInfo.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                target.add(resourceInfo);
-            }
-        });
-
-        resourceInfo.add(new AjaxFallbackLink("showResources") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                switchToTab(RESOURCES_SECTION, target);
-            }
-        });
+        showResourcesLink
+                .add(new WebMarkupContainer("infoSign")
+                        .add(BooleanVisibilityBehavior.visibleOnFalse(availabilityWarningModel)))
+                .add(availabilityWarning
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(availabilityWarningModel)));
+        resourceInfo.add(showResourcesLink);
 
         resourceInfo.setOutputMarkupId(true);
         return resourceInfo;
