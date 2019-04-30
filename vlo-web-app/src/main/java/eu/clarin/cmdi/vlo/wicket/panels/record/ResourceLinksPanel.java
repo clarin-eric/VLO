@@ -71,7 +71,9 @@ import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Optional;
+import javax.ws.rs.core.Response;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
  * Panel that shows all resources represented by a collection of resource
@@ -259,16 +261,23 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
             columns.add(createOptionsDropdown(linkModel, resourceInfoModel));
 
-            final IModel<Boolean> availabilityWarningModel = new AbstractReadOnlyModel<Boolean>() {
+            final IModel<Boolean> knownAvailabilityModel = new LoadableDetachableModel<Boolean>() {
                 @Override
-                public Boolean getObject() {
+                public Boolean load() {
+                    final Optional<Integer> status = Optional.ofNullable(resourceInfoModel.getObject().getStatus());
+                    return status.map((s) -> (s != 0)).orElse(false);
+                }
+            };
+            final IModel<Boolean> availabilityWarningModel = new LoadableDetachableModel<Boolean>() {
+                @Override
+                public Boolean load() {
                     final Optional<Integer> status = Optional.ofNullable(resourceInfoModel.getObject().getStatus());
                     return status.map((s) -> (s >= 400)).orElse(false);
                 }
             };
-            final IModel<Boolean> restrictedAccessWarningModel = new AbstractReadOnlyModel<Boolean>() {
+            final IModel<Boolean> restrictedAccessWarningModel = new LoadableDetachableModel<Boolean>() {
                 @Override
-                public Boolean getObject() {
+                public Boolean load() {
                     final Optional<Integer> status = Optional.ofNullable(resourceInfoModel.getObject().getStatus());
                     return status.map((s) -> (s == 401 || s == 403)).orElse(false);
                 }
@@ -295,15 +304,33 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             item.add(new WebMarkupContainer("detailsColumns")
                     .add(new Label("mimeType"))
                     .add(new Label("href"))
+                    .add(new WebMarkupContainer("unknownStatusDetails")
+                            .add(BooleanVisibilityBehavior.visibleOnFalse(knownAvailabilityModel)))
                     .add(new WebMarkupContainer("availableStatusDetails")
-                            .add(BooleanVisibilityBehavior.visibleOnFalse(availabilityWarningModel)))
+                            .add(BooleanVisibilityBehavior.visibleOnTrue(new AbstractReadOnlyModel<Boolean>() {
+                                @Override
+                                public Boolean getObject() {
+                                    return knownAvailabilityModel.getObject() && !availabilityWarningModel.getObject();
+                                }
+                            })))
                     .add(new Label("unavailableStatusDetail", new AbstractReadOnlyModel<String>() {
                         @Override
                         public String getObject() {
-                            //TODO: nicer represenation of status
-                            return String.format("resource unavailable (status code %s).", resourceInfoModel.getObject().getStatus());
+                            return Optional.ofNullable(resourceInfoModel.getObject().getStatus())
+                                    .map(statusCode -> {
+                                        if (statusCode <= 0) {
+                                            return "unknown";
+                                        } else {
+                                            return String.format("the resource is unavailable (%d %s).",
+                                                    statusCode,
+                                                    //look up reason phrase (e.g. Not Found) for code
+                                                    Optional.ofNullable(Response.Status.fromStatusCode(statusCode))
+                                                            .map(Response.Status::getReasonPhrase)
+                                                            .orElse("-"));
+                                        }
+                                    })
+                                    .orElse("undetermined");
                         }
-
                     })
                             .add(BooleanVisibilityBehavior.visibleOnTrue(availabilityWarningModel)))
                     .add(new Label("unavailableStatusMessage", new AbstractReadOnlyModel<String>() {
@@ -321,13 +348,16 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                     .add(new Label("lastCheckTime", new AbstractReadOnlyModel<String>() {
                         @Override
                         public String getObject() {
-                            final Calendar calendar = Calendar.getInstance();
-                            //TODO: get last status check time from resource info
-                            calendar.setTimeInMillis(0);
-                            return DateFormat.getDateTimeInstance().format(calendar.getTime());
+                            Optional<Long> lastCheckTimestamp = Optional.ofNullable(resourceInfoModel.getObject().getLastCheckTimestamp());
+                            return lastCheckTimestamp.map(timestamp -> {
+                                final Calendar calendar = Calendar.getInstance();
+                                calendar.setTimeInMillis(timestamp);
+                                return DateFormat.getDateTimeInstance().format(calendar.getTime());
+                            }).orElse("unknown");
                         }
 
-                    }))
+                    })
+                            .add(BooleanVisibilityBehavior.visibleOnTrue(knownAvailabilityModel)))
                     .add(BooleanVisibilityBehavior.visibleOnTrue(itemDetailsShownModel))
                     .add(new EvenOddClassAppender(itemIndexModel))
             );

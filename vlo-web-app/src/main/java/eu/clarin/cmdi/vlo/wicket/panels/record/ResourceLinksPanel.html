@@ -72,8 +72,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                     Result of automatic link checking:
                                     <strong wicket:id="unavailableStatusDetail">resource unavailable (404 Not Found)</strong>
                                     <span wicket:id="availableStatusDetails">resource available</span>
+                                    <span wicket:id="unknownStatusDetails">not checked or failed to check</span>
                                     <span wicket:id="unavailableStatusMessage">The resource may not be available at this location.</span><br />
-                                    Last check on <span wicket:id="lastCheckTime">24 April 2019 08:14</span>.
+                                    <wicket:enclosure>Last check: <span wicket:id="lastCheckTime">24 April 2019 08:14</span>.</wicket:enclosure>
                                 </p>
                             </td>
                         </tr>
