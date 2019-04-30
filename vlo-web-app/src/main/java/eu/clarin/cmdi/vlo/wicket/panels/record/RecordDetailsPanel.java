@@ -51,6 +51,7 @@ import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 
 /**
@@ -185,6 +186,26 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
     private Component createSingleResourceInfo(String id, IModel<String> linkModel) {
         final IsPidModel isPidModel = new IsPidModel(linkModel);
 
+        final WebMarkupContainer availabilityWarning = new WebMarkupContainer("availabilityWarning");
+        availabilityWarning.add(BooleanVisibilityBehavior.visibleOnTrue(new PropertyModel<>(resourceInfoModel, "availabilityWarning")));
+
+        final IModel<Boolean> restrictedAccessWarningModel = new PropertyModel<>(resourceInfoModel, "restrictedAccessWarning");
+        availabilityWarning
+                .add(new WebMarkupContainer("restrictedIcon")
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(restrictedAccessWarningModel)))
+                .add(new WebMarkupContainer("unavailableIcon")
+                        .add(BooleanVisibilityBehavior.visibleOnFalse(restrictedAccessWarningModel)))
+                .add(new AttributeModifier("title", new AbstractReadOnlyModel() {
+                    @Override
+                    public Object getObject() {
+                        if (restrictedAccessWarningModel.getObject()) {
+                            return "Authentication and/or special permissions may be required in order to access the resource. Click to see details.";
+                        } else {
+                            return "The resource may not be available at this location. Click to see details.";
+                        }
+                    }
+                }));
+
         final WebMarkupContainer resourceInfo = new WebMarkupContainer(id);
 
         // Resource info for single resource (should not appear if there are more or fewer resources)
@@ -195,6 +216,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
                         .add(new AttributeModifier("title", new StringResourceModel("resourcetype.${resourceType}.singular", this, resourceInfoModel).setDefaultValue(new PropertyModel(resourceInfoModel, "resourceType")))))
                 //resource name below icon
                 .add(new Label("resourceName", new PropertyModel<>(resourceInfoModel, "fileName")))
+                .add(availabilityWarning)
         );
 
         resourceInfo
