@@ -353,7 +353,14 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                                         if (statusCode <= 0) {
                                             return "unknown";
                                         } else {
-                                            return String.format("the resource is unavailable (%d %s)",
+                                            final String message;
+                                            if (resourceInfoModel.getObject().getRestrictedAccessWarning()) {
+                                                message = "access to the resource is restricted";
+                                            } else {
+                                                message = "the resource is unavailable";
+                                            }
+                                            return String.format("%s (%d %s)",
+                                                    message,
                                                     statusCode,
                                                     //look up reason phrase (e.g. Not Found) for code
                                                     Optional.ofNullable(Response.Status.fromStatusCode(statusCode))
