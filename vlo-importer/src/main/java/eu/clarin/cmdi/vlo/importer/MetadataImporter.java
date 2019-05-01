@@ -128,18 +128,18 @@ public class MetadataImporter {
     private final CMDIRecordImporter<SolrInputDocument> recordHandler;
     private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
 
-    private static class DefaultSolrBridgeFactory {
+    public static class DefaultSolrBridgeFactory {
 
-        static SolrBridge createDefaultSolrBridge(VloConfig config) {
+        public static SolrBridge createDefaultSolrBridge(VloConfig config) {
             final SolrBridgeImpl solrBridge = new BufferingSolrBridgeImpl(config);
             solrBridge.setCommit(true);
             return solrBridge;
         }
     }
 
-    private static class DefaultResourceAvailabilityFactory {
+    public static class DefaultResourceAvailabilityFactory {
 
-        static ResourceAvailabilityStatusChecker createDefaultResourceAvailabilityStatusChecker(VloConfig config) {
+        public static ResourceAvailabilityStatusChecker createDefaultResourceAvailabilityStatusChecker(VloConfig config) {
             final String mongoConnectionString = config.getLinkCheckerMongoConnectionString();
             final String mongoDbName = config.getLinkCheckerMongoDbName();
 
