@@ -17,8 +17,8 @@
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Streams;
 import eu.clarin.cmdi.rasa.links.CheckedLink;
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
 import eu.clarin.cmdi.vlo.ResourceInfo;
@@ -33,14 +33,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.TimeUnit;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -91,14 +86,14 @@ public class AvailabilityStatusUpdater {
 
         final SolrDocumentList recordList = getRecordList();
         logger.info("Query returned {} documents", recordList.getNumFound());
-        final Stream<SolrDocument> docStream = Streams.stream(recordList.iterator());
 
-        processDocs(docStream);
+        //update all of the documents
+        recordList.parallelStream().forEach(this::updateDoc);
     }
 
     private SolrDocumentList getRecordList() throws RuntimeException {
         final SolrQuery recordsQuery = new SolrQuery("*:*");
-        recordsQuery.setRequestHandler("fast");
+        recordsQuery.setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
         recordsQuery.setRows(Integer.MAX_VALUE);
 
         try {
@@ -107,32 +102,6 @@ public class AvailabilityStatusUpdater {
         } catch (SolrServerException | IOException ex) {
             logger.error("Fatal exception while querying index", ex);
             throw new RuntimeException(ex);
-        }
-    }
-
-    private void processDocs(Stream<SolrDocument> docStream) {
-        final ExecutorService processingPool;
-        final int nProcessingThreads = config.getFileProcessingThreads();
-        if (nProcessingThreads > 0) {
-            logger.info("Initiating processing pool with {} threads", nProcessingThreads);
-            processingPool = Executors.newFixedThreadPool(config.getFileProcessingThreads());
-        } else {
-            logger.info("Initiating work stealing pool (0 >= file processing threads in configuration)");
-            processingPool = Executors.newWorkStealingPool();
-            logger.info("Pool was created with parallelism level {}", ((ForkJoinPool) processingPool).getParallelism());
-        }
-        
-        final Stream<Callable<Void>> processors = docStream.map((SolrDocument doc) -> {
-            return (Callable) () -> {
-                updateDoc(doc);
-                return null;
-            };
-        });
-
-        try {
-            processingPool.invokeAll(processors.collect(Collectors.toList()));
-        } catch (InterruptedException ex) {
-            logger.info("Interrupted");
         }
     }
 
@@ -145,9 +114,10 @@ public class AvailabilityStatusUpdater {
             logger.debug("No resouce ref values in document {}", docId);
         } else {
 
-            final Collection<ResourceInfo> resourceInfoObjects = resourceRefValues.stream()
-                    .filter(r -> (r instanceof String))
-                    .map(r -> ResourceInfo.fromJson(objectMapper, (String) r))
+            final Collection<ResourceInfo> resourceInfoObjects = resourceRefValues.parallelStream()
+                    .filter(r -> (r instanceof String)) // filter out null and non-String values
+                    .map(r -> ResourceInfo.fromJson(objectMapper, (String) r)) // deserialise
+                    .filter(Objects::nonNull) //filter out failed deserialisations
                     .collect(Collectors.toSet());
 
             final Map<URI, CheckedLink> statusCheckResults = statusChecker.getLinkStatusForRefs(resourceInfoObjects.stream().map(ResourceInfo::getUrl));
@@ -156,16 +126,34 @@ public class AvailabilityStatusUpdater {
                 try {
                     final URI targetUri = new URI(oldInfo.getUrl());
                     final CheckedLink checkResult = statusCheckResults.get(targetUri);
-                    if (checkResult != null) {
-                        if (checkResult.getStatus() != oldInfo.getStatus() || checkResult.getTimestamp() != oldInfo.getLastChecked()) {
+
+                    final ResourceInfo newInfo;
+                    if (checkResult == null) {
+                        if (oldInfo.getStatus() != null || oldInfo.getLastChecked() != null) {
+                            logger.debug("Old info exists but no new info. Removing checking data from {}", oldInfo);
+                            newInfo = new ResourceInfo(oldInfo.getUrl(), oldInfo.getType(), null, null);
+                        } else {
+                            logger.debug("Info did not change (did and does not exist) for {}", oldInfo);
+                            newInfo = null;
+                        }
+                    } else {
+                        if (!Objects.equals(checkResult.getStatus(), oldInfo.getStatus()) || !Objects.equals(checkResult.getTimestamp(), oldInfo.getLastChecked())) {
+                            logger.debug("Info changed for {}", oldInfo);
                             //replace resource info with new
-                            final ResourceInfo newInfo = new ResourceInfo(oldInfo.getUrl(), oldInfo.getType(), checkResult.getStatus(), checkResult.getTimestamp());
-                            final boolean success = doc.replace(RESOURCE_REF_FIELD, oldInfo.toJson(objectMapper), newInfo.toJson(objectMapper));
-                            if (success) {
-                                changes.incrementAndGet();
-                                logger.debug("Successfully updated resource info for {}", docId);
-                                logger.debug("Old info: {}; ", docId);
-                            }
+                            newInfo = new ResourceInfo(oldInfo.getUrl(), oldInfo.getType(), checkResult.getStatus(), checkResult.getTimestamp());
+                        } else {
+                            logger.debug("Info did not change for {}", oldInfo);
+                            newInfo = null;
+                        }
+                    }
+                    if (newInfo != null) {
+                        final boolean success = doc.replace(RESOURCE_REF_FIELD, oldInfo.toJson(objectMapper), newInfo.toJson(objectMapper));
+                        if (success) {
+                            changes.incrementAndGet();
+                            logger.debug("Successfully updated resource info for {}", docId);
+                            logger.debug("Old info: {} => new info: {}", oldInfo, newInfo);
+                        } else {
+                            logger.error("Failed to replace info for {}. Old info: {} => new info: {}", docId, oldInfo, newInfo);
                         }
                     }
                 } catch (URISyntaxException ex) {
