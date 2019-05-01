@@ -57,7 +57,6 @@ public class AvailabilityStatusUpdater {
 
     private final static Logger logger = LoggerFactory.getLogger(AvailabilityStatusUpdater.class);
 
-    private final VloConfig config;
     private final SolrBridge solrBridge;
     private final ResourceAvailabilityStatusChecker statusChecker;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -70,7 +69,6 @@ public class AvailabilityStatusUpdater {
     private final AtomicInteger updateCount = new AtomicInteger();
 
     public AvailabilityStatusUpdater(VloConfig config, SolrBridge solrBridge, ResourceAvailabilityStatusChecker statusChecker) {
-        this.config = config;
         this.solrBridge = solrBridge;
         this.statusChecker = statusChecker;
 
