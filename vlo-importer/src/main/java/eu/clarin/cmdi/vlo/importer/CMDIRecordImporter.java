@@ -243,7 +243,7 @@ public class CMDIRecordImporter<T> {
         cmdiData.removeField(fieldNameService.getFieldName(FieldKey.FORMAT)); //Remove old values they might be overwritten.
         final List<Resource> resources = cmdiData.getDataResources();
 
-        final Map<URI, CheckedLink> linkStatusMap
+        final Map<String, CheckedLink> linkStatusMap
                 = availabilityChecker.getLinkStatusForRefs(resources.stream().map(Resource::getResourceName));
 
         for (int i = 0; i < resources.size(); i++) {
@@ -271,13 +271,13 @@ public class CMDIRecordImporter<T> {
 
         final ResourceAvailabilityScore availabilityScore = availabilityScoreAccumulator.calculateAvailabilityScore(linkStatusMap);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_AVAILABILITY_SCORE), availabilityScore.getScoreValue(), false);
-        
+
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size(), false);
     }
 
-    private ResourceInfo createResourceInfo(final Map<URI, CheckedLink> linkStatusMap, Resource resource, String mimeType) {
+    private ResourceInfo createResourceInfo(final Map<String, CheckedLink> linkStatusMap, Resource resource, String mimeType) {
         //check link status
-        final Optional<CheckedLink> linkStatus = Optional.ofNullable(linkStatusMap.get(URI.create(resource.getResourceName())));
+        final Optional<CheckedLink> linkStatus = Optional.ofNullable(linkStatusMap.get(resource.getResourceName()));
         return new ResourceInfo(resource.getResourceName(), mimeType,
                 linkStatus.map(CheckedLink::getStatus).orElse(null),
                 linkStatus.map(CheckedLink::getTimestamp).orElse(null)

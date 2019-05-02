@@ -17,7 +17,6 @@
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
 import eu.clarin.cmdi.rasa.links.CheckedLink;
-import java.net.URI;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -26,6 +25,6 @@ import java.util.stream.Stream;
  * @author Twan Goosen <twan@clarin.eu>
  */
 public interface ResourceAvailabilityStatusChecker {
-    
-    Map<URI, CheckedLink> getLinkStatusForRefs(Stream<String> hrefs);
+
+    Map<String, CheckedLink> getLinkStatusForRefs(Stream<String> hrefs);
 }

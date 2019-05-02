@@ -139,7 +139,7 @@ public class AvailabilityStatusUpdater {
                     .filter(Objects::nonNull) //filter out failed deserialisations
                     .collect(Collectors.toSet());
 
-            final Map<URI, CheckedLink> statusCheckResults = statusChecker.getLinkStatusForRefs(resourceInfoObjects.stream().map(ResourceInfo::getUrl));
+            final Map<String, CheckedLink> statusCheckResults = statusChecker.getLinkStatusForRefs(resourceInfoObjects.stream().map(ResourceInfo::getUrl));
             final AtomicInteger changes = new AtomicInteger(0);
             final List<ResourceInfo> newInfos = resourceInfoObjects
                     .stream()
@@ -159,38 +159,32 @@ public class AvailabilityStatusUpdater {
         }
     }
 
-    private Stream<ResourceInfo> updateResourceInfo(Map<URI, CheckedLink> statusCheckResults, ResourceInfo oldInfo, AtomicInteger changes) {
+    private Stream<ResourceInfo> updateResourceInfo(Map<String, CheckedLink> statusCheckResults, ResourceInfo oldInfo, AtomicInteger changes) {
         {
-            try {
-                final URI targetUri = new URI(oldInfo.getUrl());
-                final CheckedLink checkResult = statusCheckResults.get(targetUri);
+            final CheckedLink checkResult = statusCheckResults.get(oldInfo.getUrl());
 
-                if (checkResult == null) {
-                    if (oldInfo.getStatus() != null || oldInfo.getLastChecked() != null) {
-                        final ResourceInfo newInfo = new ResourceInfo(oldInfo.getUrl(), oldInfo.getType(), null, null);
+            if (checkResult == null) {
+                if (oldInfo.getStatus() != null || oldInfo.getLastChecked() != null) {
+                    final ResourceInfo newInfo = new ResourceInfo(oldInfo.getUrl(), oldInfo.getType(), null, null);
 
-                        logger.info("Old info exists but no new info. Removing link checking properties from {} => {}", oldInfo, newInfo);
-                        changes.incrementAndGet();
-                        return Stream.of(newInfo);
-                    } else {
-                        logger.debug("Info did not change (did and does not exist) for {}", oldInfo);
-                        return Stream.of(oldInfo);
-                    }
+                    logger.info("Old info exists but no new info. Removing link checking properties from {} => {}", oldInfo, newInfo);
+                    changes.incrementAndGet();
+                    return Stream.of(newInfo);
                 } else {
-                    if (!Objects.equals(checkResult.getStatus(), oldInfo.getStatus()) || !Objects.equals(checkResult.getTimestamp(), oldInfo.getLastChecked())) {
-                        final ResourceInfo newInfo = new ResourceInfo(oldInfo.getUrl(), oldInfo.getType(), checkResult.getStatus(), checkResult.getTimestamp());
-
-                        logger.info("Info changed for {} => {}", oldInfo, newInfo);
-                        changes.incrementAndGet();
-                        return Stream.of(newInfo);
-                    } else {
-                        logger.debug("Info did not change for {}", oldInfo);
-                        return Stream.of(oldInfo);
-                    }
+                    logger.debug("Info did not change (did and does not exist) for {}", oldInfo);
+                    return Stream.of(oldInfo);
                 }
-            } catch (URISyntaxException ex) {
-                logger.error("Cannot update status for URI: {}", ex.getMessage());
-                return Stream.of(oldInfo);
+            } else {
+                if (!Objects.equals(checkResult.getStatus(), oldInfo.getStatus()) || !Objects.equals(checkResult.getTimestamp(), oldInfo.getLastChecked())) {
+                    final ResourceInfo newInfo = new ResourceInfo(oldInfo.getUrl(), oldInfo.getType(), checkResult.getStatus(), checkResult.getTimestamp());
+
+                    logger.info("Info changed for {} => {}", oldInfo, newInfo);
+                    changes.incrementAndGet();
+                    return Stream.of(newInfo);
+                } else {
+                    logger.debug("Info did not change for {}", oldInfo);
+                    return Stream.of(oldInfo);
+                }
             }
         }
     }

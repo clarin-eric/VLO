@@ -30,7 +30,7 @@ public class NoopResourceAvailabilityStatusChecker implements ResourceAvailabili
 
 
     @Override
-    public Map<URI, CheckedLink> getLinkStatusForRefs(Stream<String> hrefs) {
+    public Map<String, CheckedLink> getLinkStatusForRefs(Stream<String> hrefs) {
         return Collections.emptyMap();
     }
 

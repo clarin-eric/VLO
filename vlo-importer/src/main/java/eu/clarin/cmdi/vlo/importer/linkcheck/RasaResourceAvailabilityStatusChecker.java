@@ -18,9 +18,6 @@ package eu.clarin.cmdi.vlo.importer.linkcheck;
 
 import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
 import eu.clarin.cmdi.rasa.links.CheckedLink;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,16 +40,7 @@ public class RasaResourceAvailabilityStatusChecker implements ResourceAvailabili
     }
 
     @Override
-    public Map<URI, CheckedLink> getLinkStatusForRefs(Stream<String> hrefs) {
-        final Collection<URI> uris = hrefs.flatMap(href -> {
-            try {
-                return Stream.of(new URI(href));
-            } catch (URISyntaxException ex) {
-                logger.warn("Skipping resource link that violates URI syntax. {}", href, ex.getMessage());
-                return Stream.empty();
-            }
-        }).collect(Collectors.toSet());
-
-        return checkedLinkResource.get(uris, Optional.empty());
+    public Map<String, CheckedLink> getLinkStatusForRefs(Stream<String> hrefs) {
+        return checkedLinkResource.get(hrefs.collect(Collectors.toSet()), Optional.empty());
     }
 }
