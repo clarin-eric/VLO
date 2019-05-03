@@ -207,14 +207,17 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
             // set the file name as the link's text content
             link.add(new Label("fileName", new PropertyModel(resourceInfoModel, "fileName")));
-            // make the link update via AJAX with resolved location (in case of handle)
-            link.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
 
-                @Override
-                protected void onUpdate(AjaxRequestTarget target) {
-                    target.add(link);
-                }
-            });
+            // make the link update via AJAX with resolved location (in case of handle)
+            if (resolvingResourceStringConverter.getResolver() != null && resolvingResourceStringConverter.getResolver().canResolve(linkModel.getObject())) {
+                link.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
+
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        target.add(link);
+                    }
+                });
+            }
 
             link.setOutputMarkupId(true);
             columns.add(link);
@@ -473,7 +476,8 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
     /**
      * External link for resources. Ajax indicator aware so that an indicator is
-     * shown while resolving PID link (see {@link LazyResourceInfoUpdateBehavior})
+     * shown while resolving PID link (see
+     * {@link LazyResourceInfoUpdateBehavior})
      */
     private static class ResourceExternalLink extends ExternalLink implements IAjaxIndicatorAware {
 

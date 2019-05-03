@@ -42,7 +42,7 @@ public abstract class LazyResourceInfoUpdateBehavior extends AbstractAjaxTimerBe
      * @param resourceInfoModel model that should be updated
      */
     public LazyResourceInfoUpdateBehavior(ResourceStringConverter converter, ResourceInfoModel resourceInfoModel) {
-        super(Duration.ONE_SECOND);
+        super(Duration.seconds(.2));
         this.converter = converter;
         this.resourceInfoModel = resourceInfoModel;
     }

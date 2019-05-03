@@ -25,4 +25,6 @@ import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
  */
 public interface ResourceStringConverter {
     ResourceInfo getResourceInfo(String resourceString);
+    
+    UriResolver getResolver();
 }
