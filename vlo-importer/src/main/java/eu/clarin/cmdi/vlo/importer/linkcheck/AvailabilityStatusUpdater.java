@@ -57,7 +57,7 @@ public class AvailabilityStatusUpdater {
 
     private final static Logger logger = LoggerFactory.getLogger(AvailabilityStatusUpdater.class);
 
-    public final static int SOLR_REQUEST_PAGE_SIZE = 100;
+    public final static int SOLR_REQUEST_PAGE_SIZE = 1000;
 
     private final SolrBridge solrBridge;
     private final ResourceAvailabilityStatusChecker statusChecker;
@@ -69,6 +69,7 @@ public class AvailabilityStatusUpdater {
     private final String RESOURCE_AVAILABILITY_SCORE_FIELD;
 
     private final AtomicInteger updateCount = new AtomicInteger();
+    
 
     public AvailabilityStatusUpdater(VloConfig config, SolrBridge solrBridge, ResourceAvailabilityStatusChecker statusChecker) {
         this.solrBridge = solrBridge;
@@ -105,14 +106,20 @@ public class AvailabilityStatusUpdater {
         recordsQuery.setSort(SolrQuery.SortClause.asc(ID_FIELD));
 
         // Loop over results, page by page
+        final AtomicInteger seenCount = new AtomicInteger(0);
         queryAndProcess(recordsQuery, (response) -> {
             final SolrDocumentList result = response.getResults();
-            logger.debug("Records retrieved", result.size());
+            
+            final int pageSize = result.size();
+            seenCount.addAndGet(pageSize);
+            logger.debug("Records retrieved", pageSize);
 
             //update all of the documents (parallel stream)
             result.parallelStream().forEach(this::checkAndUpdateRecord);
 
             solrCommit();
+            
+            logger.info("Documents seen thus far: {}. Documents updated thus far: {}", seenCount, updateCount);
         });
 
         logger.info("All documents processed and committed. Shutting down Solr...");
