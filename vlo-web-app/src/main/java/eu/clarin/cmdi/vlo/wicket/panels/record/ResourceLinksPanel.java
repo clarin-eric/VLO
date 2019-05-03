@@ -74,6 +74,8 @@ import java.util.Calendar;
 import java.util.Optional;
 import javax.ws.rs.core.Response;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.IAjaxIndicatorAware;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 
 /**
  * Panel that shows all resources represented by a collection of resource
@@ -201,15 +203,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             // Resource link (and/or link label)
             // Create link that will show the resource when clicked
             final IModel<String> linkModel = ResolvingLinkModel.modelFor(resourceInfoModel, ResourceLinksPanel.this.getModel());
-            final ExternalLink link = new ExternalLink("showResource", linkModel) {
-                @Override
-                protected void onConfigure() {
-                    super.onConfigure();
-                    //hide if no absolute link could be resolved for the resource (see label below for fallback)
-                    setVisible(linkModel.getObject() != null);
-                }
-
-            };
+            final ExternalLink link = new ResourceExternalLink("showResource", linkModel, linkModel);
 
             // set the file name as the link's text content
             link.add(new Label("fileName", new PropertyModel(resourceInfoModel, "fileName")));
@@ -475,6 +469,34 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             }
         }
 
+    }
+
+    /**
+     * External link for resources. Ajax indicator aware so that an indicator is
+     * shown while resolving PID link (see {@link LazyResourceInfoUpdateBehavior})
+     */
+    private static class ResourceExternalLink extends ExternalLink implements IAjaxIndicatorAware {
+
+        private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
+        private final IModel<String> linkModel;
+
+        public ResourceExternalLink(String id, IModel<String> href, IModel<String> linkModel) {
+            super(id, href);
+            this.linkModel = linkModel;
+            add(indicatorAppender);
+        }
+
+        @Override
+        protected void onConfigure() {
+            super.onConfigure();
+            //hide if no absolute link could be resolved for the resource (see label below for fallback)
+            setVisible(linkModel.getObject() != null);
+        }
+
+        @Override
+        public String getAjaxIndicatorMarkupId() {
+            return indicatorAppender.getMarkupId();
+        }
     }
 
     protected abstract void switchToTab(String tab, AjaxRequestTarget target);
