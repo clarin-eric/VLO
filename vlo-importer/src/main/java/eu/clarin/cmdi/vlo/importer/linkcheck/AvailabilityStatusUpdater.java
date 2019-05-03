@@ -83,15 +83,11 @@ public class AvailabilityStatusUpdater {
     }
 
     public void run() {
-        try {
-            logger.info("Initialising Solr connection");
-            solrBridge.init();
-        } catch (IOException ex) {
-            logger.error("Failed to initialise Solr bridge", ex);
-            return;
-        }
-
         updateCount.set(0);
+
+        // Initialise Solr bridge
+        logger.info("Initialising Solr connection");
+        initSolr();
 
         // Prepare Solr query
         final SolrQuery recordsQuery = new SolrQuery("*:*");
@@ -109,14 +105,26 @@ public class AvailabilityStatusUpdater {
         recordsQuery.setSort(SolrQuery.SortClause.asc(ID_FIELD));
 
         // Loop over results, page by page
-        queryAndProcess(recordsQuery, this::checkAndUpdateRecord);
+        queryAndProcess(recordsQuery, (response) -> {
+            final SolrDocumentList result = response.getResults();
+            logger.debug("Records retrieved", result.size());
+
+            //update all of the documents (parallel stream)
+            result.parallelStream().forEach(this::checkAndUpdateRecord);
+
+            solrCommit();
+        });
+
+        logger.info("All documents processed and committed. Shutting down Solr...");
 
         // Commit and tidy up
-        shutdown();
+        shutdownSolr();
+
+        logger.info("Done. Total number of documents updated: {}", updateCount);
 
     }
 
-    public void queryAndProcess(final SolrQuery recordsQuery, Consumer<SolrDocument> recordConsumer) throws RuntimeException {
+    public void queryAndProcess(final SolrQuery recordsQuery, Consumer<QueryResponse> resultPageConsumer) throws RuntimeException {
         String cursorMark = CursorMarkParams.CURSOR_MARK_START;
         boolean done = false;
 
@@ -125,14 +133,8 @@ public class AvailabilityStatusUpdater {
 
             recordsQuery.set(CursorMarkParams.CURSOR_MARK_PARAM, cursorMark);
             final QueryResponse response = getSolrResult(recordsQuery);
-            final SolrDocumentList result = response.getResults();
 
-            logger.debug("Records retrieved", result.size());
-
-            //update all of the documents (parallel stream)
-            result
-                    .parallelStream()
-                    .forEach(recordConsumer);
+            resultPageConsumer.accept(response);
 
             done = (cursorMark.equals(response.getNextCursorMark()));
             cursorMark = response.getNextCursorMark();
@@ -234,16 +236,31 @@ public class AvailabilityStatusUpdater {
         }
     }
 
-    public void shutdown() {
+    private void initSolr() {
+        try {
+            solrBridge.init();
+        } catch (IOException ex) {
+            logger.error("Failed to initialise Solr bridge", ex);
+            throw new RuntimeException("Error while trying to initialise Solr", ex);
+        }
+    }
+
+    public void solrCommit() throws RuntimeException {
         try {
             logger.info("Committing to Solr");
             solrBridge.commit();
+        } catch (IOException | SolrServerException ex) {
+            throw new RuntimeException("Error while trying to commit to Solr index", ex);
+        }
+    }
+
+    public void shutdownSolr() {
+        try {
+            solrCommit();
             solrBridge.shutdown();
 
-            logger.info("Done. Total number of documents updated: {}", updateCount);
-
         } catch (IOException | SolrServerException ex) {
-            logger.error("Failed to commit to Solr", ex);
+            throw new RuntimeException("Error while trying to commit to Solr index", ex);
         }
     }
 
