@@ -28,6 +28,9 @@ import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +45,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final UriResolver resolver;
+    private final ExecutorService preflightPool;
 
     /**
      * creates a converter that does not attempt to resolve
@@ -56,6 +60,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
      */
     public ResourceStringConverterImpl(UriResolver resolver) {
         this.resolver = resolver;
+        preflightPool = Executors.newCachedThreadPool();
     }
 
     @Override
@@ -89,6 +94,21 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
                     resourceInfo.getStatus(),
                     resourceInfo.getLastChecked(),
                     resourceType);
+        }
+    }
+
+    /**
+     * Tries to put handle in cache before it is requested from the client
+     * @param uri 
+     */
+    @Override
+    public void doPreflight(String uri) {
+        if (uri != null && resolver != null) {
+            preflightPool.submit(() -> {
+                logger.debug("Starting preflight resolution of {}", uri);
+                resolver.resolve(uri);
+                logger.debug("Completed preflight resolution of {}", uri);
+            });
         }
     }
 

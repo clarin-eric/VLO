@@ -210,6 +210,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
             // make the link update via AJAX with resolved location (in case of handle)
             if (resolvingResourceStringConverter.getResolver() != null && resolvingResourceStringConverter.getResolver().canResolve(linkModel.getObject())) {
+                resolvingResourceStringConverter.doPreflight(linkModel.getObject());
                 link.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
 
                     @Override
