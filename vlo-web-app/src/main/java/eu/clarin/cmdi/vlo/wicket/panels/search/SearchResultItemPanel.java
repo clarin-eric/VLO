@@ -39,6 +39,8 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
+import java.util.Collection;
+import java.util.Optional;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -56,6 +58,7 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
@@ -134,8 +137,17 @@ public class SearchResultItemPanel extends Panel {
         final ResouceTypeCountDataProvider countProvider = new ResouceTypeCountDataProvider(resourcesModel, countingService);
         // part count model to determine whether a record is a collection record
         final SolrFieldModel<String> partCountModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT));
-        // get model for landing page
-        final IModel<String> landingPageModel = new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
+
+        final SolrFieldModel<Integer> resourceAvailabilityScoreModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE_AVAILABILITY_SCORE));
+        final IModel<Boolean> resourceAvailabilityWarningModel = new LoadableDetachableModel<Boolean>() {
+            @Override
+            public Boolean load() {
+                return Optional.ofNullable(resourceAvailabilityScoreModel.getObject())
+                        .map(Collection::iterator)
+                        .flatMap(i -> (i.hasNext() ? Optional.of(i.next() < 0) : Optional.empty()))
+                        .orElse(false);
+            }
+        };
 
         // add a container for the resource type counts (only visible if there are actual resources)
         add(new WebMarkupContainer("resources")
@@ -165,16 +177,11 @@ public class SearchResultItemPanel extends Panel {
 
                         })
                 )
-                //badge for landing page
-                .add(new WebMarkupContainer("landingPage")
-                        .add(new ExternalLink("pageLink", landingPageModel))
-                        .add(new Behavior() {
-                            @Override
-                            public void onConfigure(Component component) {
-                                component.setVisible(landingPageModel.getObject() != null);
-                            }
-
-                        }))
+                //badge for availability warning
+                .add(new WebMarkupContainer("availabilityWarning")
+                        .add(new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.RESOURCES_SECTION))
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(resourceAvailabilityWarningModel)))
+                //TODO: distinct badge for protected resource only?
         );
 
         add(new SearchResultItemLicensePanel("licenseInfo", documentModel, selectionModel, availabilityOrdering));
@@ -184,7 +191,7 @@ public class SearchResultItemPanel extends Panel {
                 .setVisible(config.isShowResultScores())
         );
 
-        add(new DuplicateSearchResultItemsPanel("duplicateResults", documentExpansionPairModel, new PropertyModel<>(selectionModel,"selection"), duplicateItemsExpansionModel));
+        add(new DuplicateSearchResultItemsPanel("duplicateResults", documentExpansionPairModel, new PropertyModel<>(selectionModel, "selection"), duplicateItemsExpansionModel));
 
         add(createLandingPageLinkContainer("landingPageLinkContainer", documentModel));
 
