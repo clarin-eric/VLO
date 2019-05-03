@@ -31,13 +31,12 @@ import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridge;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -46,6 +45,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.params.CursorMarkParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +56,8 @@ import org.slf4j.LoggerFactory;
 public class AvailabilityStatusUpdater {
 
     private final static Logger logger = LoggerFactory.getLogger(AvailabilityStatusUpdater.class);
+
+    public final static int SOLR_REQUEST_PAGE_SIZE = 100;
 
     private final SolrBridge solrBridge;
     private final ResourceAvailabilityStatusChecker statusChecker;
@@ -89,35 +91,58 @@ public class AvailabilityStatusUpdater {
             return;
         }
 
-        final SolrDocumentList recordList = getRecordList();
-        logger.info("Query returned {} documents", recordList.getNumFound());
-
         updateCount.set(0);
 
-        //update all of the documents (parallel stream)
-        recordList.parallelStream().forEach(this::checkAndUpdateRecord);
+        // Prepare Solr query
+        final SolrQuery recordsQuery = new SolrQuery("*:*");
+        recordsQuery.setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
 
-        try {
-            logger.info("Committing to Solr");
-            solrBridge.commit();
-            solrBridge.shutdown();
-
-            logger.info("Done. Total number of documents updated: {}", updateCount);
-
-        } catch (IOException | SolrServerException ex) {
-            logger.error("Failed to commit to Solr", ex);
+        if (logger.isInfoEnabled()) {
+            // Get result count
+            recordsQuery.setRows(0);
+            logger.info("Found {} documents", getSolrResult(recordsQuery).getResults().getNumFound());
         }
+
+        // Prepare query for processing
+        recordsQuery.setRows(SOLR_REQUEST_PAGE_SIZE);
+        recordsQuery.setFields(ID_FIELD, RESOURCE_REF_FIELD, RESOURCE_AVAILABILITY_SCORE_FIELD);
+        recordsQuery.setSort(SolrQuery.SortClause.asc(ID_FIELD));
+
+        // Loop over results, page by page
+        queryAndProcess(recordsQuery, this::checkAndUpdateRecord);
+
+        // Commit and tidy up
+        shutdown();
 
     }
 
-    private SolrDocumentList getRecordList() throws RuntimeException {
-        final SolrQuery recordsQuery = new SolrQuery("*:*");
-        recordsQuery.setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
-        recordsQuery.setRows(Integer.MAX_VALUE);
+    public void queryAndProcess(final SolrQuery recordsQuery, Consumer<SolrDocument> recordConsumer) throws RuntimeException {
+        String cursorMark = CursorMarkParams.CURSOR_MARK_START;
+        boolean done = false;
 
+        while (!done) {
+            logger.debug("Request result page. Rows: {}; Cursor mark: {}", recordsQuery.getRows(), cursorMark);
+
+            recordsQuery.set(CursorMarkParams.CURSOR_MARK_PARAM, cursorMark);
+            final QueryResponse response = getSolrResult(recordsQuery);
+            final SolrDocumentList result = response.getResults();
+
+            logger.debug("Records retrieved", result.size());
+
+            //update all of the documents (parallel stream)
+            result
+                    .parallelStream()
+                    .forEach(recordConsumer);
+
+            done = (cursorMark.equals(response.getNextCursorMark()));
+            cursorMark = response.getNextCursorMark();
+        }
+    }
+
+    private QueryResponse getSolrResult(SolrQuery recordsQuery) throws RuntimeException {
         try {
-            QueryResponse query = solrBridge.getClient().query(recordsQuery);
-            return query.getResults();
+            QueryResponse response = solrBridge.getClient().query(recordsQuery);
+            return response;
         } catch (SolrServerException | IOException ex) {
             logger.error("Fatal exception while querying index", ex);
             throw new RuntimeException(ex);
@@ -206,6 +231,19 @@ public class AvailabilityStatusUpdater {
             updateCount.incrementAndGet();
         } catch (IOException | DocumentStoreException ex) {
             logger.error("Failed to store document to Solr", ex);
+        }
+    }
+
+    public void shutdown() {
+        try {
+            logger.info("Committing to Solr");
+            solrBridge.commit();
+            solrBridge.shutdown();
+
+            logger.info("Done. Total number of documents updated: {}", updateCount);
+
+        } catch (IOException | SolrServerException ex) {
+            logger.error("Failed to commit to Solr", ex);
         }
     }
 
