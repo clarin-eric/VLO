@@ -71,6 +71,7 @@ import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Optional;
 import javax.ws.rs.core.Response;
 import org.apache.wicket.AttributeModifier;
@@ -99,6 +100,8 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
     private FieldNameService fieldNameService;
 
     private final IModel<List<String>> detailsVisibleModel = new ListModel<>(new ArrayList<String>());
+
+    private final DateFormat dateFormatter = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT, Locale.UK);
 
     /**
      *
@@ -389,7 +392,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                             return lastCheckTimestamp.map(timestamp -> {
                                 final Calendar calendar = Calendar.getInstance();
                                 calendar.setTimeInMillis(timestamp);
-                                return DateFormat.getDateTimeInstance().format(calendar.getTime());
+                                return dateFormatter.format(calendar.getTime());
                             }).orElse("unknown");
                         }
 
