@@ -252,8 +252,7 @@ public class CMDIRecordImporter<T> {
                 fieldValue = null;
             }
 
-            final Resource resource = resources.get(i);
-            final ResourceInfo resourceInfo = createResourceInfo(linkStatusMap, resource, fieldValue);
+            final ResourceInfo resourceInfo = createResourceInfo(linkStatusMap, resources.get(i), fieldValue);
 
             cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE), resourceInfo.toJson(objectMapper), false);
 
@@ -270,23 +269,20 @@ public class CMDIRecordImporter<T> {
     }
 
     private ResourceInfo createResourceInfo(final Map<String, CheckedLink> linkStatusMap, Resource resource, String fieldValue) {
-        //check link status
+        // check link status
         final Optional<CheckedLink> linkStatus = Optional.ofNullable(linkStatusMap.get(resource.getResourceName()));
 
-        String mimeType = resource.getMimeType();
-        if (mimeType == null) {
-            if (fieldValue != null) {
-                mimeType = fieldValue;
-            } else {
-                mimeType = linkStatus
-                        .flatMap(s -> Optional.ofNullable(s.getContentType()))
-                        .orElse("");
-            }
-        }
+        // mime type value fallback chain
+        final String mimeType = Optional.ofNullable(resource.getMimeType()) // prefer value from resource proxies
+                .orElse(Optional.ofNullable(fieldValue) //fall back to value from format field
+                        .orElse(linkStatus
+                                .flatMap(s -> Optional.ofNullable(s.getContentType())) //fall back to value from link checker (if present)
+                                .orElse(""))); // last resort
 
-        mimeType = new FormatPostNormalizer().process(mimeType, null).get(0);
+        // normalize mime type
+        final String postProcessedMimeType = new FormatPostNormalizer().process(mimeType, null).get(0);
 
-        return new ResourceInfo(resource.getResourceName(), mimeType,
+        return new ResourceInfo(resource.getResourceName(), postProcessedMimeType,
                 linkStatus.map(CheckedLink::getStatus).orElse(null),
                 linkStatus.map(CheckedLink::getTimestamp).orElse(null)
         );
