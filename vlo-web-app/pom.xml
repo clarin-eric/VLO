@@ -19,7 +19,7 @@
 
     <properties>
         <wicket.version>7.13.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
-        <spring.version>4.3.21.RELEASE</spring.version>
+        <spring.version>4.3.23.RELEASE</spring.version>
         <jetty.version>8.1.17.v20150415</jetty.version>
         <jackson.version>2.9.8</jackson.version>
         <clarin-basestyle.version>0.3.0</clarin-basestyle.version>
