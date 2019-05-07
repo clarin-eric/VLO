@@ -18,9 +18,9 @@ package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.importer.linkcheck.AvailabilityScoreAccumulator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 import eu.clarin.cmdi.rasa.links.CheckedLink;
-import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
 import eu.clarin.cmdi.vlo.ResourceInfo;
@@ -42,10 +42,8 @@ import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStore;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 import java.util.Collection;
-import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
  * Handles a single record in the import process
@@ -247,26 +245,22 @@ public class CMDIRecordImporter<T> {
                 = availabilityChecker.getLinkStatusForRefs(resources.stream().map(Resource::getResourceName));
 
         for (int i = 0; i < resources.size(); i++) {
-            Resource resource = resources.get(i);
-            String mimeType = resource.getMimeType();
-            if (mimeType == null) {
-                if (fieldValues != null && i < fieldValues.size()) {
-                    mimeType = CommonUtils.normalizeMimeType(fieldValues.get(i).toString());
-                } else {
-                    mimeType = CommonUtils.normalizeMimeType("");
-                }
+            final String fieldValue;
+            if (fieldValues != null && i < fieldValues.size()) {
+                fieldValue = fieldValues.get(i).toString();
+            } else {
+                fieldValue = null;
             }
 
-            mimeType = new FormatPostNormalizer().process(mimeType, null).get(0);
-
-            // TODO check should probably be moved into Solr (by using some minimum length filter)
-            if (!mimeType.equals("")) {
-                cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FORMAT), mimeType, true);
-            }
-
-            final ResourceInfo resourceInfo = createResourceInfo(linkStatusMap, resource, mimeType);
+            final Resource resource = resources.get(i);
+            final ResourceInfo resourceInfo = createResourceInfo(linkStatusMap, resource, fieldValue);
 
             cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE), resourceInfo.toJson(objectMapper), false);
+
+            // TODO check should probably be moved into Solr (by using some minimum length filter)
+            if (!Strings.isNullOrEmpty(resourceInfo.getType())) {
+                cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FORMAT), resourceInfo.getType(), true);
+            }
         }
 
         final ResourceAvailabilityScore availabilityScore = availabilityScoreAccumulator.calculateAvailabilityScore(linkStatusMap);
@@ -275,9 +269,23 @@ public class CMDIRecordImporter<T> {
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size(), false);
     }
 
-    private ResourceInfo createResourceInfo(final Map<String, CheckedLink> linkStatusMap, Resource resource, String mimeType) {
+    private ResourceInfo createResourceInfo(final Map<String, CheckedLink> linkStatusMap, Resource resource, String fieldValue) {
         //check link status
         final Optional<CheckedLink> linkStatus = Optional.ofNullable(linkStatusMap.get(resource.getResourceName()));
+
+        String mimeType = resource.getMimeType();
+        if (mimeType == null) {
+            if (fieldValue != null) {
+                mimeType = fieldValue;
+            } else {
+                mimeType = linkStatus
+                        .flatMap(s -> Optional.ofNullable(s.getContentType()))
+                        .orElse("");
+            }
+        }
+
+        mimeType = new FormatPostNormalizer().process(mimeType, null).get(0);
+
         return new ResourceInfo(resource.getResourceName(), mimeType,
                 linkStatus.map(CheckedLink::getStatus).orElse(null),
                 linkStatus.map(CheckedLink::getTimestamp).orElse(null)
