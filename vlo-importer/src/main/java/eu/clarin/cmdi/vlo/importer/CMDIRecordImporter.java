@@ -20,6 +20,7 @@ import eu.clarin.cmdi.vlo.importer.linkcheck.AvailabilityScoreAccumulator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Streams;
 import eu.clarin.cmdi.rasa.links.CheckedLink;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
@@ -240,9 +241,13 @@ public class CMDIRecordImporter<T> {
                 : null;
         cmdiData.removeField(fieldNameService.getFieldName(FieldKey.FORMAT)); //Remove old values they might be overwritten.
         final List<Resource> resources = cmdiData.getDataResources();
+        final List<Resource> landingPages = cmdiData.getLandingPageResources();
 
         final Map<String, CheckedLink> linkStatusMap
-                = availabilityChecker.getLinkStatusForRefs(resources.stream().map(Resource::getResourceName));
+                = availabilityChecker.getLinkStatusForRefs(
+                        Streams
+                                .concat(resources.stream(), landingPages.stream())
+                                .map(Resource::getResourceName));
 
         for (int i = 0; i < resources.size(); i++) {
             final String fieldValue;

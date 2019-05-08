@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.importer.linkcheck;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Streams;
 import eu.clarin.cmdi.rasa.links.CheckedLink;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.FieldKey;
@@ -35,6 +36,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -66,10 +68,10 @@ public class AvailabilityStatusUpdater {
 
     private final String ID_FIELD;
     private final String RESOURCE_REF_FIELD;
+    private final String LANDING_PAGE_FIELD;
     private final String RESOURCE_AVAILABILITY_SCORE_FIELD;
 
     private final AtomicInteger updateCount = new AtomicInteger();
-    
 
     public AvailabilityStatusUpdater(VloConfig config, SolrBridge solrBridge, ResourceAvailabilityStatusChecker statusChecker) {
         this.solrBridge = solrBridge;
@@ -77,6 +79,7 @@ public class AvailabilityStatusUpdater {
 
         final FieldNameServiceImpl fieldNameService = new FieldNameServiceImpl(config);
         RESOURCE_REF_FIELD = fieldNameService.getFieldName(FieldKey.RESOURCE);
+        LANDING_PAGE_FIELD = fieldNameService.getFieldName(FieldKey.LANDINGPAGE);
         RESOURCE_AVAILABILITY_SCORE_FIELD = fieldNameService.getFieldName(FieldKey.RESOURCE_AVAILABILITY_SCORE);
         ID_FIELD = fieldNameService.getFieldName(FieldKey.ID);
 
@@ -102,14 +105,14 @@ public class AvailabilityStatusUpdater {
 
         // Prepare query for processing
         recordsQuery.setRows(SOLR_REQUEST_PAGE_SIZE);
-        recordsQuery.setFields(ID_FIELD, RESOURCE_REF_FIELD, RESOURCE_AVAILABILITY_SCORE_FIELD);
+        recordsQuery.setFields(ID_FIELD, RESOURCE_REF_FIELD, RESOURCE_AVAILABILITY_SCORE_FIELD, LANDING_PAGE_FIELD);
         recordsQuery.setSort(SolrQuery.SortClause.asc(ID_FIELD));
 
         // Loop over results, page by page
         final AtomicInteger seenCount = new AtomicInteger(0);
         queryAndProcess(recordsQuery, (response) -> {
             final SolrDocumentList result = response.getResults();
-            
+
             final int pageSize = result.size();
             seenCount.addAndGet(pageSize);
             logger.debug("Records retrieved", pageSize);
@@ -118,7 +121,7 @@ public class AvailabilityStatusUpdater {
             result.parallelStream().forEach(this::checkAndUpdateRecord);
 
             solrCommit();
-            
+
             logger.info("Documents seen thus far: {}. Documents updated thus far: {}", seenCount, updateCount);
         });
 
@@ -166,14 +169,24 @@ public class AvailabilityStatusUpdater {
         if (resourceRefValues == null) {
             logger.debug("No resouce ref values in document {}", docId);
         } else {
-
             final Collection<ResourceInfo> resourceInfoObjects = resourceRefValues.parallelStream()
                     .filter(r -> (r instanceof String)) // filter out null and non-String values
                     .map(r -> ResourceInfo.fromJson(objectMapper, (String) r)) // deserialise
                     .filter(Objects::nonNull) //filter out failed deserialisations
                     .collect(Collectors.toSet());
 
-            final Map<String, CheckedLink> statusCheckResults = statusChecker.getLinkStatusForRefs(resourceInfoObjects.stream().map(ResourceInfo::getUrl));
+            final Stream<String> landingPageRefsStream
+                    = Optional.ofNullable(doc.getFieldValues(LANDING_PAGE_FIELD))
+                            .map(Collection::stream)
+                            .orElse(Stream.empty())
+                            .filter(o -> o instanceof String)
+                            .map(o -> ((String) o));
+
+            final Map<String, CheckedLink> statusCheckResults = statusChecker.getLinkStatusForRefs(Streams.concat(//resource URLs
+                    resourceInfoObjects.stream().map(ResourceInfo::getUrl),
+                    //add landing page URL(s?) for score calculation
+                    landingPageRefsStream));
+
             final AtomicInteger changes = new AtomicInteger(0);
             final List<ResourceInfo> newInfos = resourceInfoObjects
                     .stream()
