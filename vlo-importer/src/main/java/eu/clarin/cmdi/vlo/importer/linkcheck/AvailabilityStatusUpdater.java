@@ -165,21 +165,26 @@ public class AvailabilityStatusUpdater {
         final Object docId = doc.getFieldValue(ID_FIELD);
         logger.debug("Current document: {}", docId);
 
-        final Collection<Object> resourceRefValues = doc.getFieldValues(RESOURCE_REF_FIELD);
-        if (resourceRefValues == null) {
+        final Optional<Collection<Object>> resourceRefValues = Optional.ofNullable(doc.getFieldValues(RESOURCE_REF_FIELD));
+        final Optional<Collection<Object>> landingPageValues = Optional.ofNullable(doc.getFieldValues(LANDING_PAGE_FIELD));
+
+        if (!(resourceRefValues.isPresent() || landingPageValues.isPresent())) {
             logger.debug("No resouce ref values in document {}", docId);
         } else {
-            final Collection<ResourceInfo> resourceInfoObjects = resourceRefValues.parallelStream()
-                    .filter(r -> (r instanceof String)) // filter out null and non-String values
-                    .map(r -> ResourceInfo.fromJson(objectMapper, (String) r)) // deserialise
-                    .filter(Objects::nonNull) //filter out failed deserialisations
-                    .collect(Collectors.toSet());
+            final Collection<ResourceInfo> resourceInfoObjects
+                    = resourceRefValues
+                            .map(Collection::parallelStream)
+                            .orElse(Stream.empty())
+                            .filter(r -> (r instanceof String)) // filter out null and non-String values
+                            .map(r -> ResourceInfo.fromJson(objectMapper, (String) r)) // deserialise
+                            .filter(Objects::nonNull) //filter out failed deserialisations
+                            .collect(Collectors.toSet());
 
             final Stream<String> landingPageRefsStream
-                    = Optional.ofNullable(doc.getFieldValues(LANDING_PAGE_FIELD))
+                    = landingPageValues
                             .map(Collection::stream)
                             .orElse(Stream.empty())
-                            .filter(o -> o instanceof String)
+                            .filter(o -> (o instanceof String))
                             .map(o -> ((String) o));
 
             final Map<String, CheckedLink> statusCheckResults = statusChecker.getLinkStatusForRefs(Streams.concat(//resource URLs
@@ -193,15 +198,24 @@ public class AvailabilityStatusUpdater {
                     .flatMap((info) -> updateResourceInfo(statusCheckResults, info, changes))
                     .collect(Collectors.toList());
 
-            if (changes.get() > 0) {
+            if (changes.get() > 0 || landingPageValues.isPresent()) {
                 //calculate new availability score
-                logger.debug("Link check status changed. Calculate document score");
+                logger.debug("Calculate document score");
                 final ResourceAvailabilityScore score = scoreAccumulator.calculateAvailabilityScore(statusCheckResults);
 
-                //update document
-                updateDocument(docId, score, newInfos);
-            } else {
-                logger.debug("Status not changed. Skipping calculation of document score");
+                //TODO: check if different from old one
+                final Integer currentScore = Optional.ofNullable(doc.getFieldValue(RESOURCE_AVAILABILITY_SCORE_FIELD)).filter(v -> (v instanceof Integer)).map(v -> (Integer) v).orElse(ResourceAvailabilityScore.UNKNOWN.getScoreValue());
+                if (score.getScoreValue() != currentScore) {
+                    changes.incrementAndGet();
+                }
+
+                if (changes.get() > 0) {
+                    logger.debug("Link check status changed. Calculate document score");
+                    //update document
+                    updateDocument(docId, score, newInfos);
+                } else {
+                    logger.debug("Status not changed. Skipping calculation of document score");
+                }
             }
         }
     }
@@ -302,5 +316,4 @@ public class AvailabilityStatusUpdater {
             }
         }
     }
-
 }
