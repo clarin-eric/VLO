@@ -66,7 +66,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <li wicket:id="availabilityWarning">
                                 <a wicket:id="recordLink" href="record1.html" title="Some linked resources may not be available or have restricted access">
                                     <span class="badge badge-warning">
-                                        <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+                                        <span wicket:id="unavailableIcon" class="glyphicon glyphicon-exclamation-sign"></span>
+                                        <span wicket:id="restrictedIcon" class="glyphicon glyphicon-lock"></span>
                                     </span>
                                 </a>
                             </li>

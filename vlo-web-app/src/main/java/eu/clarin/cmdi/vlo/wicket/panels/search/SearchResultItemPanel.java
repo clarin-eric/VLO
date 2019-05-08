@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 import eu.clarin.cmdi.vlo.wicket.LandingPageShortLinkLabelConverter;
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
@@ -144,7 +145,17 @@ public class SearchResultItemPanel extends Panel {
             public Boolean load() {
                 return Optional.ofNullable(resourceAvailabilityScoreModel.getObject())
                         .map(Collection::iterator)
-                        .flatMap(i -> (i.hasNext() ? Optional.of(i.next() < 0) : Optional.empty()))
+                        .flatMap(i -> (i.hasNext() ? Optional.of(i.next() < ResourceAvailabilityScore.UNKNOWN.getScoreValue()) : Optional.empty()))
+                        .orElse(false);
+            }
+        };
+
+        final IModel<Boolean> restrictedAccessWarningModel = new LoadableDetachableModel<Boolean>() {
+            @Override
+            public Boolean load() {
+                return Optional.ofNullable(resourceAvailabilityScoreModel.getObject())
+                        .map(Collection::iterator)
+                        .flatMap(i -> (i.hasNext() ? Optional.of(i.next() >= ResourceAvailabilityScore.MOST_RESTRICTED_ACCESS.getScoreValue()) : Optional.empty()))
                         .orElse(false);
             }
         };
@@ -179,9 +190,11 @@ public class SearchResultItemPanel extends Panel {
                 )
                 //badge for availability warning
                 .add(new WebMarkupContainer("availabilityWarning")
-                        .add(new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.RESOURCES_SECTION))
+                        .add(new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.RESOURCES_SECTION)
+                                .add(new WebMarkupContainer("unavailableIcon").add(BooleanVisibilityBehavior.visibleOnFalse(restrictedAccessWarningModel)))
+                                .add(new WebMarkupContainer("restrictedIcon").add(BooleanVisibilityBehavior.visibleOnTrue(restrictedAccessWarningModel)))
+                        )
                         .add(BooleanVisibilityBehavior.visibleOnTrue(resourceAvailabilityWarningModel)))
-                //TODO: distinct badge for protected resource only?
         );
 
         add(new SearchResultItemLicensePanel("licenseInfo", documentModel, selectionModel, availabilityOrdering));
