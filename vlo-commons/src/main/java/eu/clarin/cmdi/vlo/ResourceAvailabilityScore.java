@@ -28,7 +28,7 @@ public enum ResourceAvailabilityScore {
     MOST_RESTRICTED_ACCESS(-20),
     SOME_RESTRICTED_ACCESS(-10),
     UNKNOWN(0),
-    ALL_AVAILABLE(100);
+    ALL_AVAILABLE(10);
 
     private final int scoreValue;
 
