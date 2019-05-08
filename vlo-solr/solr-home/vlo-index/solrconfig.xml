@@ -35,7 +35,7 @@
          that you fully re-index after changing this setting as it can
          affect both how text is indexed and queried.
     -->
-    <luceneMatchVersion>7.3.0</luceneMatchVersion>
+    <luceneMatchVersion>7.6.0</luceneMatchVersion>
 
     <!-- <lib/> directives can be used to instruct Solr to load any Jars
        identified and use them to resolve any "plugins" specified in
@@ -792,7 +792,7 @@
                 boost by resource availability score (sourced at import from link checker)
                 _resourceAvailabilityScore [-100, 100]
                 -->
-                rord(_hierarchyWeight) _hasPartCountWeight^.2  rord(_daysSinceLastSeen)^.05 linear(_resourceAvailabilityScore,.1,0)^0.5
+                rord(_hierarchyWeight) _hasPartCountWeight^.2  rord(_daysSinceLastSeen)^.05 linear(_resourceAvailabilityScore,.1,0)^.2
                 <!-- TODO: prefer CLARIN records over non-CLARIN? -->
             </str>
         
@@ -809,6 +809,11 @@
             <!-- boost fields with a resource -->
             <str name="bq">
                 _hasPart:[* TO *] OR _resourceRef:[* TO *]
+            </str>
+            
+            <!-- boost fields with a landing page -->
+            <str name="bq">
+                _landingPageRef^0.5
             </str>
         
             <!-- boost resources with public availability (but not if combined with another availability level) -->
