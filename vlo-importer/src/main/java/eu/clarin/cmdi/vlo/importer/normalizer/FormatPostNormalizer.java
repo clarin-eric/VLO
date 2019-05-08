@@ -1,16 +1,16 @@
 package eu.clarin.cmdi.vlo.importer.normalizer;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
+import java.util.Collections;
 
 import java.util.regex.Matcher;
 
 public class FormatPostNormalizer extends AbstractPostNormalizer {
 
-    private static final Pattern MIMETYPE_PATTERN = Pattern.compile("^(application|audio|example|image|message|model|multipart|text|video)/.*");
+    private static final Pattern MIMETYPE_PATTERN = Pattern.compile("^((application|audio|example|image|message|model|multipart|text|video)\\/([^\\s;]+))( ?;.*)?");
     private static final String UNKNOWN_STRING = "unknown type";
 
     /**
@@ -21,15 +21,13 @@ public class FormatPostNormalizer extends AbstractPostNormalizer {
      */
     @Override
     public List<String> process(String value, DocFieldContainer cmdiData) {
-        Matcher mimeTypeMatcher = MIMETYPE_PATTERN.matcher(value);
-        List<String> resultList = new ArrayList<String>();
+        final Matcher mimeTypeMatcher = MIMETYPE_PATTERN.matcher(value);
 
-        if (mimeTypeMatcher.matches()) {
-            resultList.add(value);
+        if (mimeTypeMatcher.matches() && mimeTypeMatcher.groupCount() > 0) {
+            return Collections.singletonList((mimeTypeMatcher.group(1)));
         } else {
-            resultList.add(UNKNOWN_STRING);
+            return Collections.singletonList(UNKNOWN_STRING);
         }
-        return resultList;
     }
 
     @Override
