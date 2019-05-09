@@ -201,20 +201,22 @@ public class AvailabilityStatusUpdater {
             if (changes.get() > 0 || landingPageValues.isPresent()) {
                 //calculate new availability score
                 logger.debug("Calculate document score");
-                final ResourceAvailabilityScore score = scoreAccumulator.calculateAvailabilityScore(statusCheckResults);
+                final int resourcesCount = Stream.of(resourceRefValues, landingPageValues)
+                        .mapToInt(o -> o.map(Collection::size).orElse(0))
+                        .sum();
+                final ResourceAvailabilityScore score = scoreAccumulator.calculateAvailabilityScore(statusCheckResults, resourcesCount);
 
-                //TODO: check if different from old one
                 final Integer currentScore = Optional.ofNullable(doc.getFieldValue(RESOURCE_AVAILABILITY_SCORE_FIELD)).filter(v -> (v instanceof Integer)).map(v -> (Integer) v).orElse(ResourceAvailabilityScore.UNKNOWN.getScoreValue());
                 if (score.getScoreValue() != currentScore) {
                     changes.incrementAndGet();
                 }
 
                 if (changes.get() > 0) {
-                    logger.debug("Link check status changed. Calculate document score");
+                    logger.debug("Link check status changed. Document will be updated.");
                     //update document
                     updateDocument(docId, score, newInfos);
                 } else {
-                    logger.debug("Status not changed. Skipping calculation of document score");
+                    logger.debug("Status not changed. No need to update document.");
                 }
             }
         }

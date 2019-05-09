@@ -31,33 +31,34 @@ import java.util.stream.Stream;
  */
 public class AvailabilityScoreAccumulator {
 
-    public ResourceAvailabilityScore calculateAvailabilityScore(Map<?, CheckedLink> linkStatusMap) {
-        final Supplier<Stream<Integer>> knowStatusStreamProvider
+    public ResourceAvailabilityScore calculateAvailabilityScore(Map<?, CheckedLink> linkStatusMap, int allResourcesCount) {
+        final Supplier<Stream<Integer>> knownStatusStreamProvider
                 = () -> linkStatusMap.values().stream()
                         .map(CheckedLink::getStatus)
                         .filter((status) -> (status != null && status > 0));
 
-        if (!knowStatusStreamProvider.get().findAny().isPresent()) {
+        if (!knownStatusStreamProvider.get().findAny().isPresent()) {
             //only unkown status information
             return ResourceAvailabilityScore.UNKNOWN;
         } else {
-            final Collection<Integer> knownStatus = knowStatusStreamProvider.get().collect(Collectors.toList());
-            return calculateScore(knownStatus);
+            final Collection<Integer> knownStatus = knownStatusStreamProvider.get().collect(Collectors.toList());
+            return calculateScore(knownStatus, allResourcesCount);
         }
     }
 
-    public ResourceAvailabilityScore calculateScore(final Collection<Integer> knownStatuses) {
+    private ResourceAvailabilityScore calculateScore(final Collection<Integer> knownStatuses, int allResourcesCount) {
+        final int knownCount = knownStatuses.size();
+
         //any resources that are not openly available?
         if (knownStatuses.stream().anyMatch(this::isNotAvailable)) {
             //no majority of restricted/procted resources; availability?
-            final long knownCount = knownStatuses.size();
 
             if (knownStatuses.stream().filter(this::isNotAvailable).anyMatch(Predicates.not(this::isRestricted))) {
                 //one or more unavailable but not restricted (this takes priority)
                 final long unavailableCount = knownStatuses.stream().filter(this::isNotAvailable).count();
-                if (unavailableCount == knownCount) {
+                if (unavailableCount == allResourcesCount) { //TODO: only if unavailableCount == (knownCount + unknownCount)
                     return ResourceAvailabilityScore.ALL_UNAVAILABLE;
-                } else if (unavailableCount * 2 > knownCount) {
+                } else if (unavailableCount * 2 > allResourcesCount) {
                     return ResourceAvailabilityScore.MOST_UNAVAILABLE;
                 } else {
                     return ResourceAvailabilityScore.SOME_UNAVAILABLE;
@@ -65,7 +66,7 @@ public class AvailabilityScoreAccumulator {
             } else {
                 //all unavailable resources are restricted (i.e. no 404 etc)
                 final long restrictedCount = knownStatuses.stream().filter(this::isRestricted).limit(1 + knownCount / 2).count();
-                if (restrictedCount * 2 > knownCount) {
+                if (restrictedCount * 2 > allResourcesCount) {
                     //more than half are restricted
                     return ResourceAvailabilityScore.MOST_RESTRICTED_ACCESS;
                 } else {
@@ -73,9 +74,12 @@ public class AvailabilityScoreAccumulator {
                     return ResourceAvailabilityScore.SOME_RESTRICTED_ACCESS;
                 }
             }
-        } else {
-            //all are available
+        } else if (knownCount * 2 > allResourcesCount) {
+            //more than half known and all available - assume available
             return ResourceAvailabilityScore.ALL_AVAILABLE;
+        } else {
+            //not enough information to give a score
+            return ResourceAvailabilityScore.UNKNOWN;
         }
     }
 

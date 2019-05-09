@@ -46,7 +46,7 @@ public class AvailabilityScoreAccumulatorTest {
     public void testCalculateAvailabilityScoreNoData() {
         assert map.isEmpty();
 
-        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map);
+        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map, map.size());
         assertEquals(ResourceAvailabilityScore.UNKNOWN, result);
     }
 
@@ -55,7 +55,7 @@ public class AvailabilityScoreAccumulatorTest {
         addStatus(0, 0);
         assert map.size() == 2;
         
-        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map);
+        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map, map.size());
         assertEquals(ResourceAvailabilityScore.UNKNOWN, result);
     }
 
@@ -64,7 +64,7 @@ public class AvailabilityScoreAccumulatorTest {
         addStatus(200, 200, 301, 302, 303);
         assert map.size() == 5;
         
-        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map);
+        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map, map.size());
         assertEquals(ResourceAvailabilityScore.ALL_AVAILABLE, result);
     }
 
@@ -73,7 +73,7 @@ public class AvailabilityScoreAccumulatorTest {
         addStatus(400, 403, 404, 500);
         assert map.size() == 4;
         
-        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map);
+        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map, map.size());
         assertEquals(ResourceAvailabilityScore.ALL_UNAVAILABLE, result);
     }
 
@@ -82,7 +82,7 @@ public class AvailabilityScoreAccumulatorTest {
         addStatus(400, 403, 500, 200, 301);
         assert map.size() == 5;
         
-        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map);
+        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map, map.size());
         assertEquals(ResourceAvailabilityScore.MOST_UNAVAILABLE, result);
     }
     
@@ -91,7 +91,7 @@ public class AvailabilityScoreAccumulatorTest {
         addStatus(401, 401, 403, 200, 200);
         assert map.size() == 5;
         
-        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map);
+        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map, map.size());
         assertEquals(ResourceAvailabilityScore.MOST_RESTRICTED_ACCESS, result);
     }
     
@@ -100,7 +100,7 @@ public class AvailabilityScoreAccumulatorTest {
         addStatus(401, 401, 403, 404, 200);
         assert map.size() == 5;
         
-        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map);
+        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map, map.size());
         assertEquals(ResourceAvailabilityScore.MOST_UNAVAILABLE, result);
     }
 
@@ -109,7 +109,7 @@ public class AvailabilityScoreAccumulatorTest {
         addStatus(400, 404, 200, 301);
         assert map.size() == 4;
         
-        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map);
+        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map, map.size());
         assertEquals(ResourceAvailabilityScore.SOME_UNAVAILABLE, result);
     }
 
@@ -118,7 +118,7 @@ public class AvailabilityScoreAccumulatorTest {
         addStatus(400, 403, 200, 301);
         assert map.size() == 4;
         
-        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map);
+        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map, map.size());
         assertEquals(ResourceAvailabilityScore.SOME_UNAVAILABLE, result);
     }
     
@@ -127,7 +127,7 @@ public class AvailabilityScoreAccumulatorTest {
         addStatus(401, 403, 200, 301, 303);
         assert map.size() == 5;
         
-        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map);
+        ResourceAvailabilityScore result = instance.calculateAvailabilityScore(map, map.size());
         assertEquals(ResourceAvailabilityScore.SOME_RESTRICTED_ACCESS, result);
     }
 
