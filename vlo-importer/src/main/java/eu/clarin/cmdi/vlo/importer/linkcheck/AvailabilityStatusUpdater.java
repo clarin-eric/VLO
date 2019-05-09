@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -171,34 +172,31 @@ public class AvailabilityStatusUpdater {
         if (!(resourceRefValues.isPresent() || landingPageValues.isPresent())) {
             logger.debug("No resouce ref values in document {}", docId);
         } else {
-            final Collection<ResourceInfo> resourceInfoObjects
-                    = resourceRefValues
-                            .map(Collection::parallelStream)
-                            .orElse(Stream.empty())
-                            .filter(r -> (r instanceof String)) // filter out null and non-String values
-                            .map(r -> ResourceInfo.fromJson(objectMapper, (String) r)) // deserialise
-                            .filter(Objects::nonNull) //filter out failed deserialisations
-                            .collect(Collectors.toSet());
+            //Resource refs
+            final Collection<ResourceInfo> resourceInfoObjects = fieldToResourceInfos(resourceRefValues);
+            //Landing pages refs
+            final Collection<ResourceInfo> landingPageInfoObjects = fieldToResourceInfos(landingPageValues);
 
-            final Stream<String> landingPageRefsStream
-                    = landingPageValues
-                            .map(Collection::stream)
-                            .orElse(Stream.empty())
-                            .filter(o -> (o instanceof String))
-                            .map(o -> ((String) o));
-
-            final Map<String, CheckedLink> statusCheckResults = statusChecker.getLinkStatusForRefs(Streams.concat(//resource URLs
-                    resourceInfoObjects.stream().map(ResourceInfo::getUrl),
-                    //add landing page URL(s?) for score calculation
-                    landingPageRefsStream));
+            //check links for both landing page and resource refs
+            final Map<String, CheckedLink> statusCheckResults
+                    = statusChecker.getLinkStatusForRefs(
+                            Streams.concat(resourceInfoObjects.stream(), landingPageInfoObjects.stream())
+                                    .map(ResourceInfo::getUrl)); //extract URLs
 
             final AtomicInteger changes = new AtomicInteger(0);
-            final List<ResourceInfo> newInfos = resourceInfoObjects
+            final List<ResourceInfo> newResourceInfos = resourceInfoObjects
                     .stream()
                     .flatMap((info) -> updateResourceInfo(statusCheckResults, info, changes))
                     .collect(Collectors.toList());
 
-            if (changes.get() > 0 || landingPageValues.isPresent()) {
+            final List<ResourceInfo> newLandingPageInfos = landingPageInfoObjects
+                    .stream()
+                    .flatMap((info) -> updateResourceInfo(statusCheckResults, info, changes))
+                    .collect(Collectors.toList());
+
+            if (changes.get() > 0) {
+                logger.debug("Link check status changed. Document will be updated.");
+
                 //calculate new availability score
                 logger.debug("Calculate document score");
                 final int resourcesCount = Stream.of(resourceRefValues, landingPageValues)
@@ -211,15 +209,22 @@ public class AvailabilityStatusUpdater {
                     changes.incrementAndGet();
                 }
 
-                if (changes.get() > 0) {
-                    logger.debug("Link check status changed. Document will be updated.");
-                    //update document
-                    updateDocument(docId, score, newInfos);
-                } else {
-                    logger.debug("Status not changed. No need to update document.");
-                }
+                //update document
+                updateDocument(docId, score, newResourceInfos, newLandingPageInfos);
+            } else {
+                logger.debug("Status not changed. No need to update document.");
             }
         }
+    }
+
+    private Set<ResourceInfo> fieldToResourceInfos(final Optional<Collection<Object>> landingPageValues) {
+        return landingPageValues
+                .map(Collection::parallelStream)
+                .orElse(Stream.empty())
+                .filter(r -> (r instanceof String)) // filter out null and non-String values
+                .map(r -> ResourceInfo.fromJson(objectMapper, (String) r)) // deserialise
+                .filter(Objects::nonNull) //filter out failed deserialisations
+                .collect(Collectors.toSet());
     }
 
     private Stream<ResourceInfo> updateResourceInfo(Map<String, CheckedLink> statusCheckResults, ResourceInfo oldInfo, AtomicInteger changes) {
@@ -252,16 +257,20 @@ public class AvailabilityStatusUpdater {
         }
     }
 
-    public void updateDocument(final Object docId, final ResourceAvailabilityScore score, final List<ResourceInfo> newInfos) {
+    public void updateDocument(final Object docId, final ResourceAvailabilityScore score, final List<ResourceInfo> newResourceRefInfos, final List<ResourceInfo> newLandingPageInfos) {
         // serialize new resource ref values
-        final List<String> newValue = newInfos.parallelStream()
+        final List<String> newResourceRefValue = newResourceRefInfos.parallelStream()
+                .map((info) -> info.toJson(objectMapper))
+                .collect(Collectors.toList());
+        final List<String> newLandingPageRefValue = newLandingPageInfos.parallelStream()
                 .map((info) -> info.toJson(objectMapper))
                 .collect(Collectors.toList());
 
         // make update document
         final SolrInputDocument solrInputDoc = new SolrInputDocument();
         solrInputDoc.setField(ID_FIELD, docId);
-        solrInputDoc.setField(RESOURCE_REF_FIELD, ImmutableMap.of("set", newValue));
+        solrInputDoc.setField(RESOURCE_REF_FIELD, ImmutableMap.of("set", newResourceRefValue));
+        solrInputDoc.setField(LANDING_PAGE_FIELD, ImmutableMap.of("set", newLandingPageRefValue));
         solrInputDoc.setField(RESOURCE_AVAILABILITY_SCORE_FIELD, ImmutableMap.of("set", score.getScoreValue()));
 
         try {
