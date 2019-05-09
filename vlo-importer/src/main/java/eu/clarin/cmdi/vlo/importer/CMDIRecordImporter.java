@@ -181,9 +181,20 @@ public class CMDIRecordImporter<T> {
         });
 
         // add landing page resource
-        cmdiData.getLandingPageResources().forEach((resource) -> {
-            cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), resource.getResourceName(), false);
-        });
+        final List<Resource> landingPageResources = cmdiData.getLandingPageResources();
+        if (!landingPageResources.isEmpty()) {
+            // get link status information
+            final Map<String, CheckedLink> linkStatusForLandingPages = availabilityChecker.getLinkStatusForRefs(landingPageResources.stream().map(Resource::getResourceName));
+            landingPageResources.forEach((resource) -> {
+                final String url = resource.getResourceName();
+                if (url != null) {
+                    final Optional<Integer> status = Optional.ofNullable(linkStatusForLandingPages.get(url)).map(CheckedLink::getStatus);
+                    //create resource info object representation
+                    final String landingPageValue = new ResourceInfo(url, null, status.orElse(null), null).toJson(objectMapper);
+                    cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), landingPageValue, false);
+                }
+            });
+        }
 
         // add search page resource
         cmdiData.getSearchPageResources().forEach((resource) -> {
