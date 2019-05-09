@@ -20,6 +20,7 @@ import eu.clarin.cmdi.vlo.wicket.LandingPageShortLinkLabelConverter;
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
+import eu.clarin.cmdi.vlo.ResourceInfo;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
@@ -39,6 +40,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
+import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoObjectModel;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import java.util.Collection;
 import java.util.Optional;
@@ -255,7 +257,8 @@ public class SearchResultItemPanel extends Panel {
 
     private Component createLandingPageLinkContainer(String id, IModel<SolrDocument> documentModel) {
         final String landingPageField = fieldNameService.getFieldName(FieldKey.LANDINGPAGE);
-        final SolrFieldStringModel landingPageLinkModel = new SolrFieldStringModel(documentModel, landingPageField);
+        final IModel<ResourceInfo> landingPageResourceInfoModel = new ResourceInfoObjectModel(documentModel, landingPageField);
+        final IModel<String> landingPageLinkModel = new PropertyModel(landingPageResourceInfoModel, "url");
         final IModel<Boolean> isPidModel = new IsPidModel(landingPageLinkModel);
 
         return new WebMarkupContainer(id)

@@ -17,8 +17,6 @@
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
 import eu.clarin.cmdi.vlo.wicket.components.LanguageInfoLink;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
@@ -33,9 +31,9 @@ import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.OrderedListModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
+import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoObjectModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -48,6 +46,7 @@ import java.util.stream.Stream;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -98,7 +97,6 @@ public class FieldsTablePanel extends Panel {
 
         this.SMART_LINK_FIELDS = Stream.of(
                 FieldKey.DESCRIPTION,
-                FieldKey.LANDINGPAGE,
                 FieldKey.SEARCHPAGE,
                 FieldKey.COMPLETE_METADATA,
                 FieldKey.SELF_LINK
@@ -129,6 +127,8 @@ public class FieldsTablePanel extends Panel {
             return new LanguageInfoLink(id, valueModel, facetNameModel);
         } else if (fieldNameService.getFieldName(FieldKey.RECORD_PID).equals(facetNameModel.getObject())) {
             return new PIDLinkLabel(id, valueModel, Model.of(PIDContext.RECORD));
+        } else if (fieldNameService.getFieldName(FieldKey.LANDINGPAGE).equals(facetNameModel.getObject())) {
+            return new SmartLinkLabel(id, new PropertyModel(new ResourceInfoObjectModel(valueModel), "url"));
         } else if (SMART_LINK_FIELDS.contains(fieldName)) {
             // create label that generates links
             return new SmartLinkFieldValueLabel(id, new PIDLinkModel(valueModel), facetNameModel);

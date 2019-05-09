@@ -30,7 +30,6 @@ import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.MapValueModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.StringReplaceModel;
 import java.util.Collection;
 import java.util.Map;
@@ -53,6 +52,7 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.model.util.MapModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoObjectModel;
 
 /**
  *
@@ -232,7 +232,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
 
     public MarkupContainer createOriginalContextContainer(final String id) {
         // get landing page from document
-        final SolrFieldStringModel valueModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
+        final IModel<String> valueModel = new PropertyModel(new ResourceInfoObjectModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)), "url");
         // wrap in model that transforms handle links
         final IModel<String> landingPageHrefModel = new PIDLinkModel(valueModel);
 

@@ -32,7 +32,6 @@ import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import static eu.clarin.cmdi.vlo.wicket.pages.RecordPage.HIERARCHY_SECTION;
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown;
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown.DropdownMenuItem;
@@ -69,6 +68,7 @@ import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
+import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoObjectModel;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -117,7 +117,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                 // wrap in model that transforms handle links
                 = new PIDLinkModel(
                         // get landing page from document
-                        new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
+                        new PropertyModel(new ResourceInfoObjectModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)), "url"));
         final SolrFieldModel<String> partCountModel
                 = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT));
 

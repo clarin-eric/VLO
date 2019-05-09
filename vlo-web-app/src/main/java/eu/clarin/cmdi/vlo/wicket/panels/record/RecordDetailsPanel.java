@@ -45,11 +45,13 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.ResourceInfo;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
+import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoObjectModel;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
@@ -105,7 +107,8 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
     private Component createCoreLinksPanel(String id) {
         final WebMarkupContainer coreLinksContainer = new WebMarkupContainer(id);
 
-        final IModel<String> landingPageLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
+        final IModel<ResourceInfo> landingPageResourceInfoModel = new ResourceInfoObjectModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
+        final IModel<String> landingPageLinkModel = new PropertyModel(landingPageResourceInfoModel, "url");
         final IModel<Boolean> landingPageVisibilityModel = new AbstractReadOnlyModel<Boolean>() {
             @Override
             public Boolean getObject() {
