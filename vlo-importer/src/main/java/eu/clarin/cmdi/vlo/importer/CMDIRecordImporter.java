@@ -188,9 +188,14 @@ public class CMDIRecordImporter<T> {
             landingPageResources.forEach((resource) -> {
                 final String url = resource.getResourceName();
                 if (url != null) {
-                    final Optional<Integer> status = Optional.ofNullable(linkStatusForLandingPages.get(url)).map(CheckedLink::getStatus);
+                    final Optional<CheckedLink> landingPageStatus = Optional.ofNullable(linkStatusForLandingPages.get(url));
                     //create resource info object representation
-                    final String landingPageValue = new ResourceInfo(url, null, status.orElse(null), null).toJson(objectMapper);
+                    final String landingPageValue = new ResourceInfo(
+                            url,
+                            resource.getMimeType(),
+                            landingPageStatus.map(CheckedLink::getStatus).orElse(null),
+                            landingPageStatus.map(CheckedLink::getTimestamp).orElse(null))
+                            .toJson(objectMapper);
                     cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), landingPageValue, false);
                 }
             });
