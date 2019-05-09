@@ -182,6 +182,18 @@
                                 and which availability level (public, academic or restricted), licence and/or usage conditions apply. Hover over the icons to discover the meaning of 
                                 each of the icons. Some of this information may not be present for all records. 
                             </p>
+                            <p>
+                                In some cases, there may be icons 
+                                (<span class="badge badge-warning"><span class="glyphicon glyphicon-exclamation-sign"></span></span> or
+                                <span class="badge badge-warning"><span class="glyphicon glyphicon-lock"></span></span>)
+                                warning you that one or more of the resources the record links to may be unavailable and/or require special permissions to access. This 
+                                information is not provided by the record provider but is based on an automated check that is carried out regularly. If it appears, you can click 
+                                the icon to go to the record page where detailed information can be found. More information about the link checking process and the access status
+                                indication derived from this can be found below in the <a href="#accessing-resources">Accessing Resources</a> section.
+                                More information about the link checking process can also be found in the
+                                <a href="https://www.clarin.eu/faq/why-are-some-my-resources-marked-unavailable-or-having-restricted-access-vlo">FAQ item on this subject</a>.
+                            </p>
+
                             <wicket:link><img src="res/images/search-term-highlighting.png" class="img-responsive center-block" alt="Search term highlighting" /></wicket:link>
                             <p>
                                 You can <strong>expand</strong> a search result item (by pressing the <i aria-hidden="true" class="fa fa-plus-square-o"></i> icon) to see more 
@@ -209,7 +221,7 @@
                                 Above the search results, you will find a number that indicates how many search results are listed that match your query. This number
                                 does not necessarily equal the total number of records matching the query; in some cases, part of the matching records are initially hidden from
                                 the results. More specifically, the VLO groups together records among the search results that <strong>have their exact title and language 
-                                information in common</strong>. The record from this group that ranks highest in terms of relevance, hierarchy and overall quality (see
+                                    information in common</strong>. The record from this group that ranks highest in terms of relevance, hierarchy and overall quality (see
                                 explanation of search result ordering above) is shown among the other search results. Other records from the group are initially hidden but 
                                 can easily be accessed by expanding the box that appears below the shown record:
                             </p>
@@ -231,18 +243,18 @@
                         <div class="help-section">
                             <h2 id="accessing-resources">Accessing resources</h2>
                             <p>
-                                <wicket:link><img src="res/images/record-availability.png" class="img-responsive pull-right" alt="Availability information" /></wicket:link>
+                                <wicket:link><img src="res/images/record-availability.png" class="img-responsive pull-right" alt="Availability information" style="clear: right;" /></wicket:link>
                                 Clicking the title of a search result (or <em>record</em>) brings you to a new page that can we will refer to as the <strong>record page</strong>.
                                 The page is organised into a number of <em>tabs</em>, showing different types of information relating to the record. If you are interested in
                                 obtaining or processing the resources provided by a record in any way, first have a look at the information under the <strong><em>Availability</em> tab</strong>.
                                 This information will tell you what conditions apply to the usage of the resource(s). Some records may not provide clear and complete information. When in doubt,
                                 it is strongly recommended to contact and ask the provider of the resource(s). Use the contact information provided in the <em>All metadata</em> section
-                                of the record page, or navigate to the provider's pages via the <em>Show the original provider's page for this record</em> link if present. If you
+                                of the record page, or navigate to the provider's pages via the <em>&quot;original provider's page for this record&quot;</em> link if present. If you
                                 need to know more and no contact information whatsoever is available in relation to a record, please <a href="mailto:vlo@clarin.eu">contact CLARIN</a>.
                             </p>
                             <p>
-                                <wicket:link><img src="res/images/record-resources.png" class="img-responsive pull-right" alt="Resources table" /></wicket:link>
-                                A list of the actual resource(s) can be found by selecting the <strong><em>Resources</em> tab</strong>. This list is presented as a table, which shows the 
+                                <wicket:link><img src="res/images/record-resources.png" class="img-responsive pull-right" alt="Resources table"  style="clear: right;" /></wicket:link>
+                                A list of all linked resource(s) can be found by selecting the <strong><em>Resources</em> tab</strong>. This list is presented as a table, which shows the 
                                 <strong>file names</strong> of all resources along with their <strong>type</strong>. Additional <strong>details</strong> for an individual resource can 
                                 be found by expanding a row (by clicking <span class="glyphicon glyphicon-chevron-right"></span>). Click a <strong>file name</strong> of a resource to access it
                                 directly. You may be presented with a request to authenticate depending on the accessibility of the file. Be aware that not all files within a record may have 
@@ -250,17 +262,30 @@
                             </p>
                             <p>
                                 Some records have no resources listed under the <em>Resources</em> tab, for example because the record does not represent individually accessible files
-                                but rather an online tool, service or website. In these cases generally there should be one or more of the following <strong>links</strong> below the title of 
+                                but rather an online tool, service or website. In these cases generally there should be a landing page that can be accessed via a link next to the
+                                resource details table ('Record details' tab). There may also be one or more of the following <strong>links</strong> below the title of 
                                 the record (above the tabs):
                                 <ul>
-                                    <li><em>Show the original provider's page for this record</em></li>
                                     <li><em>Search page for this record</em></li>
                                     <li><em>Plain text search via Federated Content Search</em></li>
                                 </ul>
                                 Using these, you will be able to access or use the described resource.
                             </p>
-                            <p>
-                                <wicket:link><img src="res/images/record-hierarchy.png" class="img-responsive pull-right" alt="Record hierarchy ('Hierarchy' tab)" /></wicket:link>
+                            <p style="clear: both;">
+                                <wicket:link><img src="res/images/resources-restricted-detail.png" class="img-responsive pull-right" alt="A resource with restricted access indication"  style="clear: right;" /></wicket:link>
+                                All resources linked to from records that appear in the VLO are <strong>checked for accessibility</strong> at a regular basis as part of the processing by the
+                                <a href="http://curate.acdh.oeaw.ac.at/">CLARIN Curation Module</a>. Resources that have recently been checked and were found to either be
+                                unavailable or require special permissions to access are marked with an icon, either <span class="badge badge-warning"><span class="glyphicon glyphicon-exclamation-sign"></span></span> to
+                                indicate unavailability or <span class="badge badge-warning"><span class="glyphicon glyphicon-lock"></span></span> for restricted access. You can click
+                                this icon to expand the resource details and find more specific information about the checking result and the time of checking. 
+                                Note that it might be the case that at the time of display the resource is actually available despite the warning, since each individual link is checked
+                                only once in a while, and unavailability generally is only temporary. If you find that a resource is in fact unavailable or has restricted access but
+                                would like to access it, contact its provider via the landing page (if available) or look for contact information in the 'All metadata' tab. 
+                                More information about the link checking process can be found in the
+                                <a href="https://www.clarin.eu/faq/why-are-some-my-resources-marked-unavailable-or-having-restricted-access-vlo">FAQ item on this subject</a>.
+                            </p>
+                            <p style="clear: both;">
+                                <wicket:link><img src="res/images/record-hierarchy.png" class="img-responsive pull-right" alt="Record hierarchy ('Hierarchy' tab)"  style="clear: right;" /></wicket:link>
                                 In some cases, you will find resources nor links to related pages. This is often the case for <strong>collection records</strong> that do not point to
                                 resources themselves, but instead are part of a <em>hierarchy</em>. If this is the case, a <strong><em>Hierarchy</em> tab</strong> is available, which 
                                 contains a tree that allows you to browse through this hierarchy and discover underlying records that may contain links to concrete resources or pages.
@@ -268,7 +293,7 @@
                             <p>
                                 If you encounter a record that contains no listed resources, no links to pages and is not part of a hierarchy either you can have a look at the content
                                 under the <strong><em>All metadata</em> tab</strong> to see if the metadata contains any pointers to resources. If this is not the case either, you may
-                                want to report the page (using the <i class="fa fa-exclamation-circle" aria-hidden="true" title="Report an issue"></i> button) or send a report by e-mail
+                                want to report the page (using the <span class="glyphicon glyphicon-flag" aria-hidden="true" title="Report an issue"></span> button) or send a report by e-mail
                                 to <a href="mailto:vlo@clarin.eu">vlo@clarin.eu</a>.
                             </p>
                         </div>
