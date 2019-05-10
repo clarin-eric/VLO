@@ -84,14 +84,12 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
     @SpringBean
     private FieldNameService fieldNameService;
 
-    private final IModel<Integer> itemIndexModel;
     private final IModel<SolrDocument> documentModel;
     private final ResourceInfoModel resourceInfoModel;
     private final IModel<Boolean> itemDetailsShownModel;
 
-    public ResourceLinksPanelItem(String id, ResourceInfoModel resourceInfoModel, IModel<SolrDocument> documentModel, IModel<Integer> itemIndexModel, IModel<Boolean> detailsVisibleModel) {
+    public ResourceLinksPanelItem(String id, ResourceInfoModel resourceInfoModel, IModel<SolrDocument> documentModel, IModel<Boolean> detailsVisibleModel) {
         super(id, resourceInfoModel);
-        this.itemIndexModel = itemIndexModel;
         this.resourceInfoModel = resourceInfoModel;
         this.documentModel = documentModel;
         this.itemDetailsShownModel = detailsVisibleModel;
@@ -102,7 +100,6 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
         super.onInitialize();
 
         final MarkupContainer columns = new WebMarkupContainer("itemColumns");
-        columns.add(new EvenOddClassAppender(itemIndexModel));
         add(columns);
 
         setDefaultModel(new CompoundPropertyModel<>(resourceInfoModel));
@@ -187,7 +184,6 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
                 .add(new Label("href"))
                 .add(createLinkCheckingResult("linkCheckingResult", resourceInfoModel))
                 .add(BooleanVisibilityBehavior.visibleOnTrue(itemDetailsShownModel))
-                .add(new EvenOddClassAppender(itemIndexModel))
         );
     }
 
@@ -401,7 +397,6 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
     @Override
     protected void onDetach() {
         super.onDetach();
-        itemIndexModel.detach();
         documentModel.detach();
         itemDetailsShownModel.detach();
     }

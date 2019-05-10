@@ -127,8 +127,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         final IModel<String> landingPageModel = new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
         final ResourceInfoModel landingPageInfoModel = new ResourceInfoModel(resourceStringConverter, landingPageModel);
         final IModel<Boolean> landingPageDetailsModel = Model.of(Boolean.FALSE);
-        final ResourceLinksPanelItem landingPageItem = new ResourceLinksPanelItem(id,
-                landingPageInfoModel, documentModel, Model.of(0), landingPageDetailsModel) {
+        final ResourceLinksPanelItem landingPageItem = new ResourceLinksPanelItem(id, landingPageInfoModel, documentModel, landingPageDetailsModel) {
             @Override
             protected void onDetailsToggleClick(String id, AjaxRequestTarget target) {
                 landingPageDetailsModel.setObject(!landingPageDetailsModel.getObject());
@@ -152,7 +151,6 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
         @Override
         protected void populateItem(ListItem<String> item) {
-            final Model<Integer> itemIndexModel = Model.of(item.getIndex());
             final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(resourceStringConverter, item.getModel());
 
             //detailed properties?
@@ -163,7 +161,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                 }
             };
 
-            item.add(new ResourceLinksPanelItem("resourceItem", resourceInfoModel, ResourceLinksPanel.this.getModel(), itemIndexModel, itemDetailsShownModel) {
+            item.add(new ResourceLinksPanelItem("resourceItem", resourceInfoModel, ResourceLinksPanel.this.getModel(), itemDetailsShownModel) {
                 @Override
                 protected void onDetailsToggleClick(String id, AjaxRequestTarget target) {
                     final List<String> visible = detailsVisibleModel.getObject();
