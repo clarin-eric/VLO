@@ -44,7 +44,9 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoObjectModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 
@@ -95,6 +97,9 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         resourceListing = new ResourcesListView("resource", new CollectionListModel<>(resourcesModel));
         resourcesTable.add(resourceListing);
 
+        final ResourceLinksPanelItem landingPageItem = createLandingPageItem("landingPageItem", documentModel);
+        resourcesTable.add(landingPageItem);
+
         // pagination
         add(new BootstrapAjaxPagingNavigator("paging", resourceListing) {
 
@@ -116,6 +121,26 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
         //For Ajax updating of resource listing when paging
         setOutputMarkupId(true);
+    }
+
+    private ResourceLinksPanelItem createLandingPageItem(final String id, IModel<SolrDocument> documentModel) {
+        final IModel<String> landingPageModel = new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
+        final ResourceInfoModel landingPageInfoModel = new ResourceInfoModel(resourceStringConverter, landingPageModel);
+        final IModel<Boolean> landingPageDetailsModel = Model.of(Boolean.FALSE);
+        final ResourceLinksPanelItem landingPageItem = new ResourceLinksPanelItem(id,
+                landingPageInfoModel, documentModel, Model.of(0), landingPageDetailsModel) {
+            @Override
+            protected void onDetailsToggleClick(String id, AjaxRequestTarget target) {
+                landingPageDetailsModel.setObject(!landingPageDetailsModel.getObject());
+
+                if (target != null) {
+                    target.add(resourcesTable);
+                }
+            }
+
+        };
+        landingPageItem.add(new InvisibleIfNullBehaviour(landingPageModel));
+        return landingPageItem;
     }
 
     private class ResourcesListView extends PageableListView<String> {
