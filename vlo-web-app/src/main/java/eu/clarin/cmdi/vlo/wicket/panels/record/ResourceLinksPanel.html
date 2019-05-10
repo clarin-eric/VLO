@@ -35,70 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </thead>
                 <tbody>
                     <wicket:container wicket:id="resource">
-                        <tr wicket:id="itemColumns">
-                            <td class="recordresourcetypeicon">                            
-                                <span wicket:id="resourceTypeIcon"></span>
-                            </td>
-                            <td class="recordresourcename">
-                                <wicket:container wicket:id="pidLabel">[HDL]</wicket:container>
-                                <a wicket:id="availabilityWarningDetailsLink"><span class="badge badge-warning"><span wicket:id="unavailableIcon" class="glyphicon glyphicon-exclamation-sign"></span><span wicket:id="restrictedIcon" class="glyphicon glyphicon-lock"></span></span></a>
-                                <a wicket:id="showResource" class="resourcelink">
-                                    <wicket:container wicket:id="fileName">resource.txt</wicket:container>
-                                </a>
-                                <!-- alternative file name container in case the resource URI is not resolvable -->
-                                <span wicket:id="fileNameNotResolvable" title="Resource location could not be resolved">
-                                    <span class="glyphicon glyphicon-warning-sign"></span>
-                                    <span wicket:id="fileName">resource.txt</span>
-                                </span>
-                            </td>
-                            <td wicket:id="resourceType">Text file</td>
-                            <td>
-                                <div wicket:id="dropdown" class="dropdown">[dropdown]</div>
-                            </td>
-                            <td>
-                                <a wicket:id="details" class="pull-right">
-                                    <span wicket:id="show" class="glyphicon glyphicon-chevron-right" title="Show details"></span>
-                                    <span wicket:id="hide" class="glyphicon glyphicon-chevron-down" title="Hide details"></span>
-                                </a>
-                            </td>
-                        </tr>
-
-                        <tr wicket:id="detailsColumns" class="details">
-                            <td></td>
-                            <td colspan="4">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        Resource details
-                                    </div>
-                                    <div class="panel-body">
-                                        <p><strong>Mime type</strong>: <span wicket:id="mimeType">application/msword</span></p>
-                                        <p><strong>Link</strong>: <span wicket:id="href">location</span></p>
-                                        <div wicket:id="linkCheckingResult" class="panel">
-                                            <div class="panel-heading">Automatic link checking</div>
-                                            <div class="panel-body">
-                                                <wicket:enclosure>
-                                                    <p>
-                                                        <span class="glyphicon glyphicon-warning-sign"></span>
-                                                        <strong wicket:id="unavailableStatusMessage">The resource may not be available at this location.</strong>
-                                                    </p>
-                                                </wicket:enclosure>
-                                                <p>
-                                                    <strong>Result of automatic checking</strong>:
-                                                    <span wicket:id="unavailableStatusDetail">resource unavailable (404 Not Found)</span>
-                                                    <span wicket:id="availableStatusDetails">resource available</span>
-                                                    <span wicket:id="unknownStatusDetails">unchecked or failed to check</span>
-                                                </p>
-                                                <wicket:enclosure>
-                                                    <p>
-                                                        <strong>Last check</strong>: <span wicket:id="lastCheckTime">24 April 2019 08:14</span>
-                                                    </p>
-                                                </wicket:enclosure>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
+                        <wicket:container wicket:id="resourceItem"></wicket:container>
                     </wicket:container>
                 </tbody>
 
