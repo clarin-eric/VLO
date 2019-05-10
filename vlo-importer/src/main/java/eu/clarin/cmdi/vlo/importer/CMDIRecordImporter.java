@@ -23,6 +23,7 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.importer.normalizer.FormatPostNormalizer;
+import eu.clarin.cmdi.vlo.importer.normalizer.MultilingualPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.processor.CMDIDataProcessor;
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStore;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -187,6 +189,30 @@ public class CMDIRecordImporter<T> {
 
         // set number of days since last import to '0'
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DAYS_SINCE_LAST_SEEN), 0, false);
+
+        // set value for field languageCount based on the content of languageCode
+        int languageCount;
+        if(cmdiData.getDocField(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)) != null) {
+            Collection<Object> docField = cmdiData.getDocField(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE));
+            docField.remove("code:zxx");
+            languageCount = docField.size();
+            // special case "code:mul" (=one ISO 639-3 code for multiple languages)
+            if(languageCount == 1 && docField.contains("code:mul")) {
+                languageCount = 2; // =arbitrary number larger than 1
+            }
+
+            // consequences if field 'multilingual' has no concept-based content
+            if(cmdiData.getDocField(fieldNameService.getFieldName(FieldKey.MULTILINGUAL)) == null) {
+                if(languageCount > 1) {
+                    cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.MULTILINGUAL), MultilingualPostNormalizer.VALUE_MULTILINGUAL, false);
+                } else {
+                    cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.MULTILINGUAL), MultilingualPostNormalizer.VALUE_NOT_MULTILINGUAL, false);
+                }
+            }
+        } else {
+            languageCount = 0;
+        }
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LANGUAGE_COUNT), languageCount, false);
     }
 
     /**
