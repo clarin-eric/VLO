@@ -44,7 +44,6 @@ import eu.clarin.cmdi.vlo.importer.normalizer.LanguageCodePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.LanguageNamePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.LicensePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.LicenseTypePostNormalizer;
-import eu.clarin.cmdi.vlo.importer.normalizer.LanguageCountPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.MultilingualPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.NamePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.OrganisationPostNormalizer;
