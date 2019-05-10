@@ -211,7 +211,10 @@
 		<blacklistPattern>/c:CMD/c:Components/c:MultimodalCorpus/c:DocumentationLanguages</blacklistPattern>
 		<!-- IMS c:MultimodalCorpus -->
 	</facetConcept>
-        <facetConcept name="availability" description="The usage conditions for the resource or tool" definition="A rough description of the conditions under which the resource or tool can be used.">
+	<facetConcept name="multilingual" allowMultipleValues="false" description="Resource or tool contains/describes/supports more than one language" definition="Information if more than one language is contained/described/supported in the resource or by the tool">
+		<concept>http://hdl.handle.net/11459/CCR_C-2491_e2d90ef0-a2e9-c101-6d35-bf25fc29f901</concept>
+	</facetConcept>
+	<facetConcept name="availability" description="The usage conditions for the resource or tool" definition="A rough description of the conditions under which the resource or tool can be used.">
 		<concept>http://www.isocat.org/datcat/DC-2457</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2457_45bbaa1a-7002-2ecd-ab9d-57a189f694a6</concept>
 		<!-- A description of the licensing conditions... -->
