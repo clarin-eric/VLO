@@ -465,6 +465,7 @@ public class DefaultVloConfigFactoryTest {
     public void testGetFacetFields() {
         List<String> expResult = Arrays.asList(
                 "languageCode",
+                "multilingual",
                 "collection",
                 "resourceClass",
                 "modality",

@@ -78,6 +78,8 @@
         <field key="DESCRIPTION">description</field>
         <field key="COLLECTION">collection</field>
         <field key="LANGUAGE_CODE">languageCode</field>
+        <field key="LANGUAGE_COUNT">_languageCount</field>
+        <field key="MULTILINGUAL">multilingual</field>
         <field key="MODALITY">modality</field>
         <field key="CONTINENT">continent</field>
         <field key="COUNTRY">country</field>
@@ -127,6 +129,7 @@
     <!-- KEYS of fields shown as facets on the search page -->
     <facetFields>
         <facetField>LANGUAGE_CODE</facetField>
+        <facetField>MULTILINGUAL</facetField>
         <facetField>COLLECTION</facetField>
         <facetField>RESOURCE_CLASS</facetField>
         <facetField>MODALITY</facetField>

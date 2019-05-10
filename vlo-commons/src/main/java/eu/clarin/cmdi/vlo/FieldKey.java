@@ -22,6 +22,8 @@ public enum FieldKey {
     ID,
     KEYWORDS,
     LANGUAGE_CODE,
+    LANGUAGE_COUNT,
+    MULTILINGUAL,
     LICENSE,
     MODALITY,
     NAME,

@@ -190,6 +190,8 @@
 			<xs:enumeration value="DESCRIPTION" />
 			<xs:enumeration value="COLLECTION" />
 			<xs:enumeration value="LANGUAGE_CODE" />
+			<xs:enumeration value="LANGUAGE_COUNT" />
+			<xs:enumeration value="MULTILINGUAL" />
 			<xs:enumeration value="MODALITY" />
 			<xs:enumeration value="CONTINENT" />
 			<xs:enumeration value="COUNTRY" />
