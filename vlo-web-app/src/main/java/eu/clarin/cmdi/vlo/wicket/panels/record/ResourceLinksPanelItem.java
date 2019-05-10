@@ -99,10 +99,10 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
     protected void onInitialize() {
         super.onInitialize();
         setDefaultModel(new CompoundPropertyModel<>(resourceInfoModel));
-        
+
         //basic info for items - always shown
         add(createInfoColumns("itemColumns"));
-        
+
         //details for item - only shown if toggled on
         add(createDetailsColumns("detailsColumns")
                 .add(BooleanVisibilityBehavior.visibleOnTrue(itemDetailsShownModel)));
@@ -188,14 +188,6 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
         return columns;
     }
 
-    private Component createDetailsColumns(String id) {
-        final WebMarkupContainer detailsContainer = new WebMarkupContainer(id);
-        detailsContainer.add(new Label("mimeType"));
-        detailsContainer.add(new Label("href"));
-        detailsContainer.add(createLinkCheckingResult("linkCheckingResult", resourceInfoModel));
-        return detailsContainer;
-    }
-
     protected Component createOptionsDropdown(final IModel<String> linkModel, final ResourceInfoModel resourceInfoModel) {
         final List<BootstrapDropdown.DropdownMenuItem> options = createDropDownOptions(linkModel, resourceInfoModel);
 
@@ -234,6 +226,37 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
             }
         }
         );
+    }
+
+    private AjaxPiwikTrackingBehavior.EventTrackingBehavior createLrsActionTrackingBehavior(final ResourceInfoModel resourceInfoModel) {
+        final AjaxPiwikTrackingBehavior.EventTrackingBehavior eventBehavior = new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_LRS, PiwikEventConstants.PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE) {
+            @Override
+            protected String getName(AjaxRequestTarget target) {
+                return "ResourceDropdown";
+            }
+
+            @Override
+            protected String getValue(AjaxRequestTarget target) {
+                return resourceInfoModel.getObject().getHref();
+            }
+
+            @Override
+            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                attributes.setAsynchronous(false);
+                super.updateAjaxAttributes(attributes);
+            }
+
+        };
+        eventBehavior.setAsync(false);
+        return eventBehavior;
+    }
+
+    private Component createDetailsColumns(String id) {
+        final WebMarkupContainer detailsContainer = new WebMarkupContainer(id);
+        detailsContainer.add(new Label("mimeType"));
+        detailsContainer.add(new Label("href"));
+        detailsContainer.add(createLinkCheckingResult("linkCheckingResult", resourceInfoModel));
+        return detailsContainer;
     }
 
     private Component createLinkCheckingResult(String id, ResourceInfoModel resourceInfoModel) {
@@ -320,42 +343,6 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
                 }, " "));
     }
 
-    private AjaxPiwikTrackingBehavior.EventTrackingBehavior createLrsActionTrackingBehavior(final ResourceInfoModel resourceInfoModel) {
-        final AjaxPiwikTrackingBehavior.EventTrackingBehavior eventBehavior = new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_LRS, PiwikEventConstants.PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE) {
-            @Override
-            protected String getName(AjaxRequestTarget target) {
-                return "ResourceDropdown";
-            }
-
-            @Override
-            protected String getValue(AjaxRequestTarget target) {
-                return resourceInfoModel.getObject().getHref();
-            }
-
-            @Override
-            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-                attributes.setAsynchronous(false);
-                super.updateAjaxAttributes(attributes);
-            }
-
-        };
-        eventBehavior.setAsync(false);
-        return eventBehavior;
-    }
-
-    public static class EvenOddClassAppender extends AttributeAppender {
-
-        public EvenOddClassAppender(final IModel<Integer> indexModel) {
-            super("class", new AbstractReadOnlyModel<String>() {
-                @Override
-                public String getObject() {
-                    return indexModel.getObject() % 2 == 0 ? "even" : "odd";
-                }
-            }, " ");
-        }
-
-    }
-
     private class ResourceDetailsToggleLink extends AjaxFallbackLink<String> {
 
         public ResourceDetailsToggleLink(String id, IModel<String> idModel) {
@@ -367,7 +354,6 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
             final String id = getModel().getObject();
             onDetailsToggleClick(id, target);
         }
-
     }
 
     protected void onDetailsToggleClick(String id, AjaxRequestTarget target) {
