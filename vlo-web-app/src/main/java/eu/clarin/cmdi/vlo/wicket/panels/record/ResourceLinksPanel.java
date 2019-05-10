@@ -79,9 +79,6 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
     public ResourceLinksPanel(String id, IModel<SolrDocument> documentModel) {
         super(id, documentModel);
 
-        final SolrFieldModel<String> resourcesModel
-                = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE));
-
         // create table of resources with optional details
         resourcesTable = new WebMarkupContainer("resources") {
             @Override
@@ -92,13 +89,16 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         };
         resourcesTable.setOutputMarkupId(true);
         add(resourcesTable);
+        
+        // special item in table for landing page 'resource'
+        final ResourceLinksPanelItem landingPageItem = createLandingPageItem("landingPageItem");
+        resourcesTable.add(landingPageItem);
 
-        //add the actual listing
+        //add the 'actual' resources listing
+        final SolrFieldModel<String> resourcesModel
+                = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE));
         resourceListing = new ResourcesListView("resource", new CollectionListModel<>(resourcesModel));
         resourcesTable.add(resourceListing);
-
-        final ResourceLinksPanelItem landingPageItem = createLandingPageItem("landingPageItem", documentModel);
-        resourcesTable.add(landingPageItem);
 
         // pagination
         add(new BootstrapAjaxPagingNavigator("paging", resourceListing) {
@@ -110,6 +110,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
         });
 
+        // panel for records with no resources
         add(createNoResourcesContainer("noResources")
                 .add(new Behavior() {
                     @Override
@@ -122,12 +123,20 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         //For Ajax updating of resource listing when paging
         setOutputMarkupId(true);
     }
+    
+    
 
-    private ResourceLinksPanelItem createLandingPageItem(final String id, IModel<SolrDocument> documentModel) {
-        final IModel<String> landingPageModel = new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
+    /**
+     * Special item in the table for the landing page
+     * @param id
+     * @param documentModel
+     * @return 
+     */
+    private ResourceLinksPanelItem createLandingPageItem(final String id) {
+        final IModel<String> landingPageModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
         final ResourceInfoModel landingPageInfoModel = new ResourceInfoModel(resourceStringConverter, landingPageModel);
         final IModel<Boolean> landingPageDetailsModel = Model.of(Boolean.FALSE);
-        final ResourceLinksPanelItem landingPageItem = new ResourceLinksPanelItem(id, landingPageInfoModel, documentModel, landingPageDetailsModel) {
+        final ResourceLinksPanelItem landingPageItem = new ResourceLinksPanelItem(id, landingPageInfoModel, getModel(), landingPageDetailsModel) {
             @Override
             protected void onDetailsToggleClick(String id, AjaxRequestTarget target) {
                 landingPageDetailsModel.setObject(!landingPageDetailsModel.getObject());
@@ -138,46 +147,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             }
 
         };
-        landingPageItem.add(new InvisibleIfNullBehaviour(landingPageModel));
         return landingPageItem;
-    }
-
-    private class ResourcesListView extends PageableListView<String> {
-
-        public ResourcesListView(String id, IModel<? extends List<String>> model) {
-            super(id, model, ITEMS_PER_PAGE);
-            setReuseItems(true);
-        }
-
-        @Override
-        protected void populateItem(ListItem<String> item) {
-            final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(resourceStringConverter, item.getModel());
-
-            //detailed properties?
-            final IModel<Boolean> itemDetailsShownModel = new AbstractReadOnlyModel<Boolean>() {
-                @Override
-                public Boolean getObject() {
-                    return detailsVisibleModel.getObject().contains(resourceInfoModel.getObject().getHref());
-                }
-            };
-
-            item.add(new ResourceLinksPanelItem("resourceItem", resourceInfoModel, ResourceLinksPanel.this.getModel(), itemDetailsShownModel) {
-                @Override
-                protected void onDetailsToggleClick(String id, AjaxRequestTarget target) {
-                    final List<String> visible = detailsVisibleModel.getObject();
-                    if (visible.contains(id)) {
-                        visible.remove(id);
-                    } else {
-                        visible.add(id);
-                    }
-
-                    if (target != null) {
-                        target.add(resourcesTable);
-                    }
-                }
-
-            });
-        }
     }
 
     /**
@@ -216,6 +186,47 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         }));
 
         return container;
+    }
+
+    /**
+     * View for a record's resource refs
+     */
+    private class ResourcesListView extends PageableListView<String> {
+
+        public ResourcesListView(String id, IModel<? extends List<String>> model) {
+            super(id, model, ITEMS_PER_PAGE);
+            setReuseItems(true);
+        }
+
+        @Override
+        protected void populateItem(ListItem<String> item) {
+            final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(resourceStringConverter, item.getModel());
+
+            //detailed properties?
+            final IModel<Boolean> itemDetailsShownModel = new AbstractReadOnlyModel<Boolean>() {
+                @Override
+                public Boolean getObject() {
+                    return detailsVisibleModel.getObject().contains(resourceInfoModel.getObject().getHref());
+                }
+            };
+
+            item.add(new ResourceLinksPanelItem("resourceItem", resourceInfoModel, ResourceLinksPanel.this.getModel(), itemDetailsShownModel) {
+                @Override
+                protected void onDetailsToggleClick(String id, AjaxRequestTarget target) {
+                    final List<String> visible = detailsVisibleModel.getObject();
+                    if (visible.contains(id)) {
+                        visible.remove(id);
+                    } else {
+                        visible.add(id);
+                    }
+
+                    if (target != null) {
+                        target.add(resourcesTable);
+                    }
+                }
+
+            });
+        }
     }
 
     protected abstract void switchToTab(String tab, AjaxRequestTarget target);

@@ -98,12 +98,18 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
     @Override
     protected void onInitialize() {
         super.onInitialize();
-
-        final MarkupContainer columns = new WebMarkupContainer("itemColumns");
-        add(columns);
-
         setDefaultModel(new CompoundPropertyModel<>(resourceInfoModel));
+        
+        //basic info for items - always shown
+        add(createInfoColumns("itemColumns"));
+        
+        //details for item - only shown if toggled on
+        add(createDetailsColumns("detailsColumns")
+                .add(BooleanVisibilityBehavior.visibleOnTrue(itemDetailsShownModel)));
+    }
 
+    private MarkupContainer createInfoColumns(String id) {
+        final MarkupContainer columns = new WebMarkupContainer(id);
         // Resource type icon
         columns.add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel(resourceInfoModel, "resourceType")));
 
@@ -179,12 +185,15 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
 
         columns.add(availabilityWarningDetailsLink);
 
-        add(new WebMarkupContainer("detailsColumns")
-                .add(new Label("mimeType"))
-                .add(new Label("href"))
-                .add(createLinkCheckingResult("linkCheckingResult", resourceInfoModel))
-                .add(BooleanVisibilityBehavior.visibleOnTrue(itemDetailsShownModel))
-        );
+        return columns;
+    }
+
+    private Component createDetailsColumns(String id) {
+        final WebMarkupContainer detailsContainer = new WebMarkupContainer(id);
+        detailsContainer.add(new Label("mimeType"));
+        detailsContainer.add(new Label("href"));
+        detailsContainer.add(createLinkCheckingResult("linkCheckingResult", resourceInfoModel));
+        return detailsContainer;
     }
 
     protected Component createOptionsDropdown(final IModel<String> linkModel, final ResourceInfoModel resourceInfoModel) {
