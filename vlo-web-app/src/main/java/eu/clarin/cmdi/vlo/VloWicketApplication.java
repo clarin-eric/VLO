@@ -35,6 +35,7 @@ import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.FragmentEncodingMountedMapper;
 import eu.clarin.cmdi.vlo.wicket.pages.AboutPage;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
+import eu.clarin.cmdi.vlo.wicket.pages.ContributorsPage;
 import eu.clarin.cmdi.vlo.wicket.pages.ErrorPage;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.HelpPage;
@@ -160,7 +161,9 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         mountPage("/about", AboutPage.class);
         // Help page
         mountPage("/help", HelpPage.class);
-        // Help page
+        // Contributors page
+        mountPage("/contributors", ContributorsPage.class);
+        // Error page
         mountPage("/error/${" + ErrorPage.PAGE_PARAMETER_RESPONSE_CODE + "}", ErrorPage.class);
 
         // Resource that exposes the contents of VloConfig.xml
