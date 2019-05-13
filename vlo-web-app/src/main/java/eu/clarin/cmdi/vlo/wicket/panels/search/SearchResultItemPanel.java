@@ -20,7 +20,6 @@ import eu.clarin.cmdi.vlo.wicket.LandingPageShortLinkLabelConverter;
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
-import eu.clarin.cmdi.vlo.ResourceInfo;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
@@ -43,7 +42,6 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
-import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoObjectModel;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import java.util.Collection;
 import java.util.Optional;
@@ -167,6 +165,20 @@ public class SearchResultItemPanel extends Panel {
             }
         };
 
+        final ResourceAvailabilityWarningBadge resourceAvailabilityWarningBadge
+                = new ResourceAvailabilityWarningBadge("warningBadge", resourceAvailabilityWarningModel, restrictedAccessWarningModel) {
+            @Override
+            protected IModel<String> getResourceUnavailableTooltip() {
+                return Model.of("One or more of the linked resources may not be unavailable or have restricted access");
+            }
+
+            @Override
+            protected IModel<String> getResourceRestrictedTooltip() {
+                return Model.of("One or more of the linked resources may have restricted access");
+            }
+
+        };
+
         // add a container for the resource type counts (only visible if there are actual resources)
         add(new WebMarkupContainer("resources")
                 // view that shows provided counts
@@ -198,7 +210,7 @@ public class SearchResultItemPanel extends Panel {
                 //badge for availability warning
                 .add(new WebMarkupContainer("availabilityWarning")
                         .add(new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.RESOURCES_SECTION)
-                                .add(new ResourceAvailabilityWarningBadge("warningBadge", resourceAvailabilityWarningModel, restrictedAccessWarningModel))
+                                .add(resourceAvailabilityWarningBadge)
                         )
                         .add(BooleanVisibilityBehavior.visibleOnTrue(resourceAvailabilityWarningModel)))
         );
@@ -265,18 +277,18 @@ public class SearchResultItemPanel extends Panel {
         final ResourceInfoModel landingPageResourceInfoModel = new ResourceInfoModel(resourceStringConverter, landingPageModel);
         final IModel<String> landingPageLinkModel = new PropertyModel(landingPageResourceInfoModel, "href");
         final IModel<Boolean> isPidModel = new IsPidModel(landingPageLinkModel);
-        
+
         final ResourceAvailabilityWarningBadge resourceAvailabilityWarningBadge = new ResourceAvailabilityWarningBadge("warningBadge", landingPageResourceInfoModel) {
             @Override
             protected IModel<String> getResourceRestrictedTooltip() {
                 return Model.of("Authentication and/or special permissions may be required in order to access the resource. See record page for details.");
             }
-            
+
             @Override
             protected IModel<String> getResourceUnavailableTooltip() {
                 return Model.of("The resource may not be available at this location. See record page for details.");
             }
-            
+
         };
 
         return new WebMarkupContainer(id)
