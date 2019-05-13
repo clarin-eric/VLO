@@ -31,6 +31,7 @@ import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermScriptFactory;
 import eu.clarin.cmdi.vlo.wicket.components.FacetSelectLink;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
+import eu.clarin.cmdi.vlo.wicket.components.ResourceAvailabilityWarningBadge;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
@@ -193,8 +194,7 @@ public class SearchResultItemPanel extends Panel {
                 //badge for availability warning
                 .add(new WebMarkupContainer("availabilityWarning")
                         .add(new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.RESOURCES_SECTION)
-                                .add(new WebMarkupContainer("unavailableIcon").add(BooleanVisibilityBehavior.visibleOnFalse(restrictedAccessWarningModel)))
-                                .add(new WebMarkupContainer("restrictedIcon").add(BooleanVisibilityBehavior.visibleOnTrue(restrictedAccessWarningModel)))
+                                .add(new ResourceAvailabilityWarningBadge("warningBadge", resourceAvailabilityWarningModel, restrictedAccessWarningModel))
                         )
                         .add(BooleanVisibilityBehavior.visibleOnTrue(resourceAvailabilityWarningModel)))
         );

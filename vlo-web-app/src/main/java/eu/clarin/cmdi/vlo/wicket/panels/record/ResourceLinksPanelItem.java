@@ -28,6 +28,7 @@ import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.LanguageResourceSwitchboardLink;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
+import eu.clarin.cmdi.vlo.wicket.components.ResourceAvailabilityWarningBadge;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
@@ -44,7 +45,6 @@ import java.util.Locale;
 import java.util.Optional;
 import javax.ws.rs.core.Response;
 import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -164,24 +164,10 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
 
         columns.add(createOptionsDropdown(linkModel, resourceInfoModel));
 
-        final IModel<Boolean> availabilityWarningModel = new PropertyModel<>(resourceInfoModel, "availabilityWarning");
-        final IModel<Boolean> restrictedAccessWarningModel = new PropertyModel<>(resourceInfoModel, "restrictedAccessWarning");
-        final Component availabilityWarningDetailsLink = new ResourceDetailsToggleLink("availabilityWarningDetailsLink", new PropertyModel<>(resourceInfoModel, "href"))
-                .add(new WebMarkupContainer("restrictedIcon")
-                        .add(BooleanVisibilityBehavior.visibleOnTrue(restrictedAccessWarningModel)))
-                .add(new WebMarkupContainer("unavailableIcon")
-                        .add(BooleanVisibilityBehavior.visibleOnFalse(restrictedAccessWarningModel)))
-                .add(BooleanVisibilityBehavior.visibleOnTrue(availabilityWarningModel))
-                .add(new AttributeModifier("title", new AbstractReadOnlyModel() {
-                    @Override
-                    public Object getObject() {
-                        if (restrictedAccessWarningModel.getObject()) {
-                            return "Authentication and/or special permissions may be required in order to access the resource. Click to see details.";
-                        } else {
-                            return "The resource may not be available at this location. Click to see details.";
-                        }
-                    }
-                }));
+        final Component availabilityWarningDetailsLink
+                = new ResourceDetailsToggleLink("availabilityWarningDetailsLink", new PropertyModel<>(resourceInfoModel, "href"))
+                        .add(new ResourceAvailabilityWarningBadge("badge", resourceInfoModel))
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(new PropertyModel<>(resourceInfoModel, "availabilityWarning")));
 
         columns.add(availabilityWarningDetailsLink);
 
