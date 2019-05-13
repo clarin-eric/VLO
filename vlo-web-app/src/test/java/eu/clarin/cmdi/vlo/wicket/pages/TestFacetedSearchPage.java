@@ -43,6 +43,7 @@ public class TestFacetedSearchPage extends AbstractWicketTest {
                 atLeast(1).of(facetFieldsService).getFacetFields(with(any(QueryFacetsSelection.class)), with(any(List.class)), with(any(Integer.class)));
                 will(returnValue(Arrays.asList(
                         new FacetField("languageCode"),
+                        new FacetField("multilingual"),
                         new FacetField("collection"),
                         new FacetField("resourceClass"),
                         new FacetField("country"),

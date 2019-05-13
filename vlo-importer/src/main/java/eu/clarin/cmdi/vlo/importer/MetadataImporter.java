@@ -44,6 +44,7 @@ import eu.clarin.cmdi.vlo.importer.normalizer.LanguageCodePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.LanguageNamePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.LicensePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.LicenseTypePostNormalizer;
+import eu.clarin.cmdi.vlo.importer.normalizer.MultilingualPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.NamePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.OrganisationPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.ResourceClassPostNormalizer;
@@ -166,6 +167,7 @@ public class MetadataImporter {
         registerPostProcessor(fieldNameService, imb, FieldKey.CONTINENT, () -> new ContinentNamePostNormalizer());
         registerPostProcessor(fieldNameService, imb, FieldKey.COUNTRY, () -> new CountryNamePostNormalizer(config));
         registerPostProcessor(fieldNameService, imb, FieldKey.LANGUAGE_CODE, () -> new LanguageCodePostNormalizer(config, languageCodeUtils));
+        registerPostProcessor(fieldNameService, imb, FieldKey.MULTILINGUAL, () -> new MultilingualPostNormalizer());
         registerPostProcessor(fieldNameService, imb, FieldKey.LANGUAGE_NAME, () -> new LanguageNamePostNormalizer(languageCodeUtils));
         registerPostProcessor(fieldNameService, imb, FieldKey.AVAILABILITY, () -> new AvailabilityPostNormalizer(config));
         registerPostProcessor(fieldNameService, imb, FieldKey.LICENSE_TYPE, () -> new LicenseTypePostNormalizer(config));

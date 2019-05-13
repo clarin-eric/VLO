@@ -59,7 +59,7 @@ public class FacetConceptsMarshallerTest {
         final FacetConceptsMarshaller instance = new FacetConceptsMarshaller();
 
         final FacetConcepts result = instance.unmarshal(source);
-        assertEquals(24, result.getFacetConcept().size());
+        assertEquals(25, result.getFacetConcept().size());
 
         final FacetConcept concept = result.getFacetConcept().get(3);
         assertEquals("projectName", concept.getName());

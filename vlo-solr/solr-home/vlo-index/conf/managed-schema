@@ -136,6 +136,7 @@
   <field name="_hierarchyWeight" type="int" default="0" multiValued="false" indexed="true" stored="true"/>
   <field name="_isPartOf" type="string" multiValued="true" indexed="true" stored="true"/>
   <field name="_landingPageRef" type="string" multiValued="true" indexed="true" stored="true"/>
+  <field name="_languageCount" type="int" multiValued="false" indexed="true" stored="true"/>
   <field name="_languageName" type="text_general" multiValued="true" indexed="true" stored="true"/>
   <field name="_lastSeen" type="tdate" multiValued="false" indexed="true" stored="true"/>
   <field name="_oaiEndpointURI" type="string" multiValued="false" indexed="true" stored="true"/>
@@ -164,6 +165,7 @@
   <field name="lifeCycleStatus" type="string" multiValued="true" indexed="true" stored="true"/>
   <field name="metadataSource" type="text_general" multiValued="true" indexed="false" stored="true"/>
   <field name="modality" type="string" termVectors="true" multiValued="true" indexed="true" stored="true"/>
+  <field name="multilingual" type="string" multiValued="false" indexed="true" stored="true"/>
   <field name="name" type="text_general" multiValued="true" indexed="true" stored="true"/>
   <field name="nationalProject" type="string" multiValued="true" indexed="true" stored="true"/>
   <field name="organisation" type="string" termVectors="true" multiValued="true" indexed="true" stored="true"/>
