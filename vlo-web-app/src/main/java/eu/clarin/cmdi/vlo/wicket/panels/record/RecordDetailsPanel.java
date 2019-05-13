@@ -45,15 +45,13 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import eu.clarin.cmdi.vlo.FieldKey;
-import eu.clarin.cmdi.vlo.ResourceInfo;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
+import eu.clarin.cmdi.vlo.wicket.components.ResourceAvailabilityWarningBadge;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
-import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoObjectModel;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 
 /**
@@ -80,7 +78,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
     private FieldNameService fieldNameService;
 
     private final SolrFieldModel<String> resourcesModel;
-    private ResourceInfoModel resourceInfoModel;
+    private final ResourceInfoModel resourceInfoModel;
 
     public RecordDetailsPanel(String id, IModel<SolrDocument> model) {
         super(id, model);
@@ -107,17 +105,18 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
     private Component createCoreLinksPanel(String id) {
         final WebMarkupContainer coreLinksContainer = new WebMarkupContainer(id);
 
-        final IModel<ResourceInfo> landingPageResourceInfoModel = new ResourceInfoObjectModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
-        final IModel<String> landingPageLinkModel = new PropertyModel(landingPageResourceInfoModel, "url");
+        final ResourceInfoModel landingPageResourceInfoModel = new ResourceInfoModel(resourceStringConverter, new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
+
         final IModel<Boolean> landingPageVisibilityModel = new AbstractReadOnlyModel<Boolean>() {
             @Override
             public Boolean getObject() {
-                return landingPageLinkModel.getObject() != null;
+                return landingPageResourceInfoModel.getObject() != null
+                        && landingPageResourceInfoModel.getObject().getHref() != null;
             }
         };
 
         coreLinksContainer
-                .add(createLandingPageLink("landingPage", landingPageLinkModel).
+                .add(createLandingPageLink("landingPage", landingPageResourceInfoModel).
                         add(BooleanVisibilityBehavior.visibleOnTrue(landingPageVisibilityModel)));
 
         // resource info for single resource
@@ -167,11 +166,23 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
         return coreLinksContainer;
     }
 
-    private Component createLandingPageLink(String id, IModel<String> linkModel) {
+    private Component createLandingPageLink(String id, ResourceInfoModel resourceModel) {
+        final IModel<String> linkModel = new PropertyModel(resourceModel, "href");
         final IsPidModel isPidModel = new IsPidModel(linkModel);
         final PIDLinkModel pidLinkModel = PIDLinkModel.wrapLinkModel(linkModel);
 
+        final AjaxFallbackLink showResourcesLink = new AjaxFallbackLink("showResources") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                switchToTab(RESOURCES_SECTION, target);
+            }
+        };
+
+        final WebMarkupContainer availabilityWarning = new ResourceAvailabilityWarningBadge("availabilityWarning", resourceModel);
+        showResourcesLink.add(availabilityWarning);
+
         return new WebMarkupContainer(id)
+                .add(showResourcesLink)
                 .add(new ExternalLink("landingPageLink", pidLinkModel)
                         .add(new Label("landingPageLinkLabel", linkModel)
                                 .add(BooleanVisibilityBehavior.visibleOnFalse(isPidModel))))
@@ -220,26 +231,9 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
             }
         };
 
+        final WebMarkupContainer availabilityWarning = new ResourceAvailabilityWarningBadge("availabilityWarning", resourceInfoModel);
+
         final PropertyModel<Boolean> availabilityWarningModel = new PropertyModel<>(resourceInfoModel, "availabilityWarning");
-        final IModel<Boolean> restrictedAccessWarningModel = new PropertyModel<>(resourceInfoModel, "restrictedAccessWarning");
-
-        final WebMarkupContainer availabilityWarning = new WebMarkupContainer("availabilityWarning");
-        availabilityWarning
-                .add(new WebMarkupContainer("restrictedIcon")
-                        .add(BooleanVisibilityBehavior.visibleOnTrue(restrictedAccessWarningModel)))
-                .add(new WebMarkupContainer("unavailableIcon")
-                        .add(BooleanVisibilityBehavior.visibleOnFalse(restrictedAccessWarningModel)))
-                .add(new AttributeModifier("title", new AbstractReadOnlyModel() {
-                    @Override
-                    public Object getObject() {
-                        if (restrictedAccessWarningModel.getObject()) {
-                            return "Authentication and/or special permissions may be required in order to access the resource. Click to see details.";
-                        } else {
-                            return "The resource may not be available at this location. Click to see details.";
-                        }
-                    }
-                }));
-
         showResourcesLink
                 .add(new WebMarkupContainer("infoSign")
                         .add(BooleanVisibilityBehavior.visibleOnFalse(availabilityWarningModel)))
