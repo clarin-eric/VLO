@@ -89,7 +89,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         };
         resourcesTable.setOutputMarkupId(true);
         add(resourcesTable);
-        
+
         // special item in table for landing page 'resource'
         final ResourceLinksPanelItem landingPageItem = createLandingPageItem("landingPageItem");
         resourcesTable.add(landingPageItem);
@@ -123,20 +123,19 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         //For Ajax updating of resource listing when paging
         setOutputMarkupId(true);
     }
-    
-    
 
     /**
      * Special item in the table for the landing page
+     *
      * @param id
      * @param documentModel
-     * @return 
+     * @return
      */
     private ResourceLinksPanelItem createLandingPageItem(final String id) {
         final IModel<String> landingPageModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
         final ResourceInfoModel landingPageInfoModel = new ResourceInfoModel(resourceStringConverter, landingPageModel);
         final IModel<Boolean> landingPageDetailsModel = Model.of(Boolean.FALSE);
-        final ResourceLinksPanelItem landingPageItem = new ResourceLinksPanelItem(id, landingPageInfoModel, getModel(), landingPageDetailsModel) {
+        final ResourceLinksPanelItem landingPageItem = new ResourceLinksLandingPageItem(id, landingPageInfoModel, getModel(), landingPageDetailsModel) {
             @Override
             protected void onDetailsToggleClick(String id, AjaxRequestTarget target) {
                 landingPageDetailsModel.setObject(!landingPageDetailsModel.getObject());
@@ -147,6 +146,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             }
 
         };
+        landingPageItem.add(new InvisibleIfNullBehaviour(landingPageModel));
         return landingPageItem;
     }
 

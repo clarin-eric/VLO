@@ -111,7 +111,7 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
     private MarkupContainer createInfoColumns(String id) {
         final MarkupContainer columns = new WebMarkupContainer(id);
         // Resource type icon
-        columns.add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel(resourceInfoModel, "resourceType")));
+        columns.add(createResourceTypeIcon("resourceTypeIcon"));
 
         // Resource link (and/or link label)
         // Create link that will show the resource when clicked
@@ -154,7 +154,7 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
         }.add(new Label("fileName", new PropertyModel(resourceInfoModel, "fileName"))));
 
         // get the friendly name of the resource type dynamically from the resource bundle
-        columns.add(new Label("resourceType", StringResourceModelMigration.of("resourcetype.${resourceType}.singular", resourceInfoModel, resourceInfoModel.getObject().getResourceType())));
+        columns.add(createResourceTypeLabel("resourceType"));
 
         // toggle details option
         columns.add(new ResourceDetailsToggleLink("details", new PropertyModel<>(resourceInfoModel, "href"))
@@ -186,6 +186,14 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
         columns.add(availabilityWarningDetailsLink);
 
         return columns;
+    }
+
+    protected ResourceTypeIcon createResourceTypeIcon(String id) {
+        return new ResourceTypeIcon(id, new PropertyModel(resourceInfoModel, "resourceType"));
+    }
+
+    protected Label createResourceTypeLabel(String id) {
+        return new Label(id, StringResourceModelMigration.of("resourcetype.${resourceType}.singular", resourceInfoModel, resourceInfoModel.getObject().getResourceType()));
     }
 
     protected Component createOptionsDropdown(final IModel<String> linkModel, final ResourceInfoModel resourceInfoModel) {
