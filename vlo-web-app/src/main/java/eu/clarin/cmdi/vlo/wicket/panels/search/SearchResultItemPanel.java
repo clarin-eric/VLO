@@ -26,6 +26,7 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
+import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermScriptFactory;
@@ -41,6 +42,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
+import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoObjectModel;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import java.util.Collection;
@@ -84,6 +86,8 @@ public class SearchResultItemPanel extends Panel {
     private ResourceTypeCountingService countingService;
     @SpringBean
     private FieldNameService fieldNameService;
+    @SpringBean(name = "resourceStringConverter")
+    private ResourceStringConverter resourceStringConverter;
 
     private final IModel<SearchContext> selectionModel;
     private final IModel<SolrDocument> documentModel;
@@ -257,12 +261,27 @@ public class SearchResultItemPanel extends Panel {
 
     private Component createLandingPageLinkContainer(String id, IModel<SolrDocument> documentModel) {
         final String landingPageField = fieldNameService.getFieldName(FieldKey.LANDINGPAGE);
-        final IModel<ResourceInfo> landingPageResourceInfoModel = new ResourceInfoObjectModel(documentModel, landingPageField);
-        final IModel<String> landingPageLinkModel = new PropertyModel(landingPageResourceInfoModel, "url");
+        final IModel<String> landingPageModel = new SolrFieldStringModel(documentModel, landingPageField);
+        final ResourceInfoModel landingPageResourceInfoModel = new ResourceInfoModel(resourceStringConverter, landingPageModel);
+        final IModel<String> landingPageLinkModel = new PropertyModel(landingPageResourceInfoModel, "href");
         final IModel<Boolean> isPidModel = new IsPidModel(landingPageLinkModel);
+        
+        final ResourceAvailabilityWarningBadge resourceAvailabilityWarningBadge = new ResourceAvailabilityWarningBadge("warningBadge", landingPageResourceInfoModel) {
+            @Override
+            protected IModel<String> getResourceRestrictedTooltip() {
+                return Model.of("Authentication and/or special permissions may be required in order to access the resource. See record page for details.");
+            }
+            
+            @Override
+            protected IModel<String> getResourceUnavailableTooltip() {
+                return Model.of("The resource may not be available at this location. See record page for details.");
+            }
+            
+        };
 
         return new WebMarkupContainer(id)
                 .add(new ExternalLink("landingPageLink", new PIDLinkModel(landingPageLinkModel))
+                        .add(resourceAvailabilityWarningBadge)
                         .add(new WebMarkupContainer("landingPagePidLabel")
                                 .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel))
                         )

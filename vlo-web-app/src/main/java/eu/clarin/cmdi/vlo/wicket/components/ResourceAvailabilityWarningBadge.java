@@ -18,10 +18,12 @@ package eu.clarin.cmdi.vlo.wicket.components;
 
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 /**
@@ -41,8 +43,8 @@ public class ResourceAvailabilityWarningBadge extends Panel {
         this.isRestrictedAccessModel = isRestrictedAccessModel;
 
         add(new WebMarkupContainer("icon")
-                .add(new AttributeModifier("class", new ResourceAvailabilityWarningIconClassModel())))
-                .add(new AttributeModifier("title", new ResourceAvailabilityWarningTitleModel()));
+                .add(new AttributeModifier("class", new ResourceAvailabilityWarningIconClassModel()))
+                .add(new AttributeModifier("title", new ResourceAvailabilityWarningTitleModel())));
     }
 
     public ResourceAvailabilityWarningBadge(String id, IModel<ResourceInfo> model) {
@@ -79,10 +81,18 @@ public class ResourceAvailabilityWarningBadge extends Panel {
         @Override
         public String load() {
             if (isRestrictedAccessModel.getObject()) {
-                return "Authentication and/or special permissions may be required in order to access the resource. Click to see details.";
+                return getResourceRestrictedTooltip().getObject();
             } else {
-                return "The resource may not be available at this location. Click to see details.";
+                return getResourceUnavailableTooltip().getObject();
             }
         }
+    }
+
+    protected IModel<String> getResourceRestrictedTooltip() {
+        return Model.of("Authentication and/or special permissions may be required in order to access the resource. Click to see details.");
+    }
+
+    protected IModel<String> getResourceUnavailableTooltip() {
+        return Model.of("The resource may not be available at this location. Click to see details.");
     }
 }
