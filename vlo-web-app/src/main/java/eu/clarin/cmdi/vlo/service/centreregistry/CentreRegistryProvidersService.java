@@ -20,7 +20,6 @@ import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Comparator;
@@ -28,12 +27,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -41,8 +43,12 @@ import org.json.JSONTokener;
  */
 public class CentreRegistryProvidersService implements EndpointProvidersService {
 
+    private final static Logger logger = LoggerFactory.getLogger(CentreRegistryProvidersService.class);
+
     private final String centresJsonUrl;
     private final String endpointsJsonUrl;
+
+    private final AtomicReference<List<EndpointProvider>> lastResponse = new AtomicReference<>();
 
     public CentreRegistryProvidersService(VloConfig vloConfig) {
         this(vloConfig.getCentreRegistryCentresListJsonUrl(), vloConfig.getCentreRegistryOaiPmhEndpointsListJsonUrl());
@@ -55,13 +61,36 @@ public class CentreRegistryProvidersService implements EndpointProvidersService 
 
     @Override
     public List<EndpointProvider> retrieveCentreEndpoints() throws IOException {
-        final List<EndpointProvider> endpoints = parseEndpoints();
-        fillInCentreDetails(endpoints);
-        endpoints.sort(Comparator.comparing(EndpointProvider::getCentreName));
-        return endpoints;
+        try {
+            return lastResponse.updateAndGet(this::retrieveCentreEndpointsOrOld);
+        } catch (Exception ex) {
+            if (ex.getCause() instanceof IOException) {
+                throw (IOException) ex.getCause();
+            } else {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
-    protected List<EndpointProvider> parseEndpoints() throws MalformedURLException, IOException {
+    private List<EndpointProvider> retrieveCentreEndpointsOrOld(List<EndpointProvider> old) throws RuntimeException {
+        try {
+            final List<EndpointProvider> endpoints = parseEndpoints();
+            fillInCentreDetails(endpoints);
+            endpoints.sort(Comparator.comparing(EndpointProvider::getCentreName));
+            return endpoints;
+        } catch (IOException ex) {
+            // try to return last response
+            if (old != null) {
+                logger.warn("Error while retrieving new OAI-PMH endpoint list. Returning last response.", ex);
+                return old;
+            } else {
+                logger.error("Error while retrieving new OAI-PMH endpoint list. No old response to return.", ex);
+                throw new RuntimeException(ex);
+            }
+        }
+    }
+
+    protected List<EndpointProvider> parseEndpoints() throws IOException {
         final URL url = new URL(endpointsJsonUrl);
         try (InputStream is = url.openStream()) {
             final JSONTokener tokener = new JSONTokener(is);

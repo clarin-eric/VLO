@@ -21,6 +21,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -139,6 +140,47 @@ public class CentreRegistryProvidersServiceTest {
                         && provider.getEndpointUrls().size() == 1))
                         .findAny()
                         .isPresent());
+    }
+
+    @Test
+    public void testOldOnError() throws Exception {
+        final AtomicInteger count = new AtomicInteger();
+
+        instance = new CentreRegistryProvidersService(centreJsonFile.toURI().toString(), endpointJsonFile.toURI().toString()) {
+            @Override
+            protected List<EndpointProvider> parseEndpoints() throws IOException {
+                // first call should succeed, after that an exception is thrown
+                if (count.incrementAndGet() > 1) {
+                    throw new IOException("second call");
+                }
+                return super.parseEndpoints();
+            }
+
+        };
+
+        assertNotNull("first attempt should pass", instance.retrieveCentreEndpoints());
+        assertNotNull("second attempt should also pass", instance.retrieveCentreEndpoints());
+    }
+
+    @Test
+    public void testNoOldOnError() throws Exception {
+        instance = new CentreRegistryProvidersService(centreJsonFile.toURI().toString(), endpointJsonFile.toURI().toString()) {
+            @Override
+            protected List<EndpointProvider> parseEndpoints() throws IOException {
+                throw new IOException("Always fails");
+            }
+
+        };
+
+        try {
+            //call should fail because there is no old response
+            instance.retrieveCentreEndpoints();
+            //this point SHOULD NOT be reached
+            fail("Exception should have been thrown");
+        } catch (Exception ex) {
+            //this point SHOULD be reached
+            assertEquals(IOException.class, ex.getClass());
+        }
     }
 
     private static File getEndpointJsonFile() throws IOException {
